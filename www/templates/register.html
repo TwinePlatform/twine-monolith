@@ -1,0 +1,45 @@
+<ion-view title="Register" hide-back-button="true" id="page10">
+    <ion-content padding="true" class="has-header">
+
+        <div id="messages" ng-show="message">{{ message }}</div>
+
+        <!-- form#register -->
+        <form id="register" class="list" ng-submit="processForm()">
+            <ion-list>
+                <label class="item item-input">
+                    <span class="input-label">Email</span>
+                    <input type="email" placeholder="E.g. jon@smith.com" ng-model="formData.email">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Password</span>
+                    <input type="password" placeholder="" ng-model="formData.password">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Phone</span>
+                    <input type="tel" placeholder="E.g. 07979799799" ng-model="formData.phone">
+                </label>
+            </ion-list>
+            <label class="item item-select">
+                <span class="input-label">Year of birth</span>
+                <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option">
+                    <!--  -->
+                </select>
+            </label>
+            <label class="item item-select">
+                <span class="input-label">Project</span>
+                <select ng-model="formData.project" ng-options="option.name for option in projects track by option.id">
+                    <!--  -->
+                </select>
+            </label>
+            <button type="submit" class="button button-positive button-block">Register</button>
+            <a ui-sref="/dashboard" class="button button-positive button-block button-clear">Skip</a>
+        </form>
+        <!-- /form#register -->
+
+        <a ui-sref="login" class=" button button-positive button-block button-clear">Or log in if you have an account</a>
+
+        <pre>
+            {{ formData }}
+        </pre>
+    </ion-content>
+</ion-view>
