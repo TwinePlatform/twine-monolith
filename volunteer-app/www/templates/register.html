@@ -1,4 +1,4 @@
-<ion-view title="Register" hide-back-button="true" id="page10">
+<ion-view title="Register" hide-back-button="true">
     <ion-content padding="true" class="has-header">
 
         <div id="messages" ng-show="message">{{ message }}</div>
@@ -32,14 +32,14 @@
                 </select>
             </label>
             <button type="submit" class="button button-positive button-block">Register</button>
-            <a ui-sref="/dashboard" class="button button-positive button-block button-clear">Skip</a>
+            <a href="#/tab/dashboard" class="button button-positive button-block button-clear">Skip to app</a>
         </form>
         <!-- /form#register -->
 
         <a ui-sref="login" class=" button button-positive button-block button-clear">Or log in if you have an account</a>
 
-        <pre>
+        <!-- <pre>
             {{ formData }}
-        </pre>
+        </pre> -->
     </ion-content>
 </ion-view>
