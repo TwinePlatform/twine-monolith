@@ -1,18 +1,31 @@
-<ion-view title="Login" hide-back-button="true" id="page8">
+<ion-view title="Login" hide-back-button="true">
     <ion-content padding="true" class="has-header">
-        <form id="login-form2" class="list ">
-            <ion-list id="login-list2">
-                <label class="item item-input " id="login-input3">
-                    <span class="input-label">Username</span>
-                    <input type="text" placeholder="">
+    
+        <img class="logo" src="../img/power-to-change.svg" alt="">
+
+        <p class="text-center padding">Please fill in the form below to login.</p>
+
+        <!-- form#login -->
+        <form id="login" class="list">
+            <ion-list>
+                <label class="item item-input">
+                    <span class="input-label">Email</span>
+                    <input type="text" placeholder="E.g. jon@smith.com">
                 </label>
-                <label class="item item-input " id="login-input4">
+                <label class="item item-input">
                     <span class="input-label">Password</span>
-                    <input type="password" placeholder="">
+                    <input type="password" placeholder="Enter a password">
                 </label>
             </ion-list>
-            <a ui-sref="tabsController.dashboard_tab1" id="login-button3" class=" button button-positive  button-block ">Log in</a>
-            <a ui-sref="register" id="login-button4" class=" button button-positive  button-block button-clear ">Or Register</a>
+            <div class="spacer-10"></div>
+            <a ui-sref="tabsController.dashboard_tab1" class="button button-positive button-block button-outline">Log in</a>
+            <a ui-sref="register" class="button button-positive button-block button-clear">Or register</a>
+
+            <div class="spacer-30"></div>
+
+            <a href="#/tab/dashboard" class="button button-positive button-block button-clear">Skip to app</a>
         </form>
+        <!-- /form#login -->
+
     </ion-content>
 </ion-view>

@@ -1,11 +1,12 @@
-<ion-view title="Settings" id="page5">
+<ion-view title="Settings">
     <ion-content padding="true" class="has-header">
-        <form id="settings-form8" class="list ">
-            <p id="settings-markdown9" style="color:#000000;text-align:center;">Get a reminder to log your hours when you leave the location:</p>
-            <ion-toggle toggle-class="toggle-positive" id="settings-toggle1">Location reminders</ion-toggle>
+        <form class="list">
+            <p class="text-center padding">Get a reminder to log your hours when you leave the location:</p>
+            <ion-toggle toggle-class="toggle-positive">Location reminders</ion-toggle>
         </form>
-        <form id="settings-form9" class="list ">
-            <label class="item item-select " id="settings-select6">
+        <div class="spacer-10"></div>
+        <form class="list">
+            <label class="item item-select">
                 <span class="input-label">Project</span>
                 <select>
                     <option>Regather Co-op</option>
@@ -16,11 +17,11 @@
                 </select>
             </label>
         </form>
-        <ion-list id="settings-list7">
-            <ion-item class="item-icon-right  " id="settings-list-item14" ui-sref="tabsController.termsConditions">Terms &amp; conditions
+        <ion-list>
+            <ion-item class="item-icon-right" ui-sref="tabs.terms-and-conditions">Terms &amp; conditions
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
         </ion-list>
-        <a ui-sref="login" id="settings-button25" class=" button button-positive  button-block button-clear ">Log out</a>
+        <a ui-sref="login" class="button button-positive button-block button-clear">Log out</a>
     </ion-content>
 </ion-view>
