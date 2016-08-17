@@ -1,12 +1,58 @@
 <ion-view title="Dashboard" hide-back-button="true">
-    <ion-content padding="true" class="has-header">
-        <h3>My Total Hours</h3>
-        <p><strong>15</strong></p>
-        <ion-list>
-            <ion-item><strong>Today</strong> - 2 hrs - Regather Co-op</ion-item>
-            <ion-item>This week - 4 hrs</ion-item>
-            <ion-item>Last week - 7 hrs</ion-item>
-        </ion-list>
-        <a ui-sref="tabsController.dashboardLogHours" class="button button-positive button-block icon-left ion-plus">Add hours</a>
+    <ion-content padding="true" scroll="false" class="has-header">
+
+        <img class="logo" src="../img/power-to-change.svg" alt="">
+
+        <div class="spacer-10"></div>
+
+        <h4 class="text-center">My Total Hours</h4>
+
+        <div class="total-hours-container padding row">
+            <div class="col col-33">
+                <span class="total-hours">15</span>
+            </div>
+        </div>
+
+        <div class="hours-summary padding-horizontal">
+            <ion-list>
+                <ion-item class="hours-summary-today">
+                    <div class="row row-no-padding">
+                        <div class="col col-25">
+                            <strong>Today</strong>
+                        </div>
+                        <div class="col col-25">
+                            2 hrs
+                        </div>
+                        <div class="col col-50 text-right">
+                            Regather Co-op
+                        </div>
+                    </div>
+                </ion-item>
+                <ion-item class="hours-summary-other">
+                    <div class="row row-no-padding">
+                        <div class="col">
+                            This week
+                        </div>
+                        <div class="col col-25 text-right">
+                            4 hrs
+                        </div>
+                    </div>
+                </ion-item>
+                <ion-item class="hours-summary-other">
+                    <div class="row row-no-padding">
+                        <div class="col">
+                            Last week
+                        </div>
+                        <div class="col col-25 text-right">
+                            7 hrs
+                        </div>
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+
+        <a ui-sref="tabs.log-hours" class="button button-positive button-block button-outline icon-left ion-plus button-add">
+            <span>Log hours</span>
+        </a>
     </ion-content>
 </ion-view>

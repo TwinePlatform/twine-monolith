@@ -1,15 +1,15 @@
-<ion-view title="Log hours">
+<ion-view title="Edit log">
     <ion-content padding="true" class="has-header">
         <form class="list">
             <label class="item item-input">
                 <span class="input-label">Date</span>
-                <input type="date" placeholder="">
+                <input type="date" placeholder="" value="2016-07-16">
             </label>
             <label class="item item-input">
                 <span class="input-label">Hours</span>
-                <input type="number" placeholder="">
+                <input type="number" placeholder="" value="7">
             </label>
         </form>
-        <button class="button button-positive button-block button-outline">Save</button>
+        <a ui-sref="tabs.view-logs" class=" button button-positive button-block button-outline">Save</a>
     </ion-content>
 </ion-view>

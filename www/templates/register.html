@@ -1,18 +1,26 @@
 <ion-view title="Register" hide-back-button="true">
     <ion-content padding="true" class="has-header">
 
-        <div id="messages" ng-show="message">{{ message }}</div>
+        <img class="logo" src="../img/power-to-change.svg" alt="">
+
+        <!-- <div id="messages" ng-show="message">{{ message }}</div> -->
+
+        <p class="text-center padding">Please fill in the form below to register for Power to Change.</p>
 
         <!-- form#register -->
         <form id="register" class="list" ng-submit="processForm()">
             <ion-list>
+                <label class="item item-input">
+                    <span class="input-label">Name</span>
+                    <input type="text" placeholder="E.g. Jon Smith" ng-model="formData.name">
+                </label>
                 <label class="item item-input">
                     <span class="input-label">Email</span>
                     <input type="email" placeholder="E.g. jon@smith.com" ng-model="formData.email">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Password</span>
-                    <input type="password" placeholder="" ng-model="formData.password">
+                    <input type="password" placeholder="Enter password" ng-model="formData.password">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Phone</span>
@@ -22,21 +30,24 @@
             <label class="item item-select">
                 <span class="input-label">Year of birth</span>
                 <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option">
+                    <option value="">Please select year</option>
                     <!--  -->
                 </select>
             </label>
             <label class="item item-select">
                 <span class="input-label">Project</span>
                 <select ng-model="formData.project" ng-options="option.name for option in projects track by option.id">
+                    <option value="">Please select a project</option>
                     <!--  -->
                 </select>
             </label>
-            <button type="submit" class="button button-positive button-block">Register</button>
-            <a href="#/tab/dashboard" class="button button-positive button-block button-clear">Skip to app</a>
+            <div class="spacer-20"></div>
+            <button type="submit" class="button button-positive button-block button-outline">Register</button>
+            <a ui-sref="login" class=" button button-positive button-block button-clear">Or log in if you have an account</a>
         </form>
         <!-- /form#register -->
 
-        <a ui-sref="login" class=" button button-positive button-block button-clear">Or log in if you have an account</a>
+        <a href="#/tab/dashboard" class="button button-positive button-block button-clear">Skip to app</a>
 
         <!-- <pre>
             {{ formData }}

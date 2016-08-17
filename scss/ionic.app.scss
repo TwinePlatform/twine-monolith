@@ -15,9 +15,84 @@ $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
 
+// color customizations
+$positive: #0378B5 !default;
+
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+// helpers
+$sizes: 10, 20, 30;
+.spacer {
+	@each $size in $sizes {
+		&-#{$size} {
+			height: #{$size}px;
+		}
+	}
+}
+
+// text
+h1, h2, h3, h4 {
+	color: $positive;
+}
+
+// logo
+.logo {
+	margin: 10px auto;
+    display: block;
+    width: 250px;
+}
+
+// dashboard
+.total-hours {
+	font-size: 50px;
+}
+.hours-summary {
+	.hours-summary-today {
+		border: 1px solid #666;
+		margin-bottom: 10px;
+	}
+	.hours-summary-other {
+		border: 1px solid transparent;
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+}
+.button-add {
+	$add-size: 80px;
+	width: $add-size;
+	height: $add-size;
+	border-radius: $add-size;
+	border-width: 3px !important;
+	text-align: center;
+	margin: 30px auto !important;
+	position: absolute;
+	right: 30px;
+	bottom: 10px;
+	z-index: 10;
+	padding: 0;
+	&.activated {
+		span {
+			color: $positive !important;
+		}
+	}
+	&:before {
+		font-size: 60px !important;
+		position: absolute;
+		padding-right: 0 !important;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%);
+	}
+	span {
+		display: block;
+		position: absolute;
+		top: $add-size - 10;
+		font-size: 13px;
+		text-align: center;
+		width: 100%;
+	}
+}
