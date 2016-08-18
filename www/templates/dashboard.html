@@ -1,17 +1,22 @@
 <ion-view title="Dashboard" hide-back-button="true">
     <ion-content padding="true" scroll="false" class="has-header">
 
-        <img class="logo" src="../img/power-to-change.svg" alt="">
+        <img class="logo" src="img/power-to-change.svg" alt="">
 
         <div class="spacer-10"></div>
 
         <h4 class="text-center">My Total Hours</h4>
 
         <div class="total-hours-container padding row">
-            <div class="col col-33">
+            <div class="col col-33 text-center">
                 <span class="total-hours">15</span>
             </div>
+            <div class="col">
+                <canvas id="myChart" class="chart" width="400" height="100"></canvas>
+            </div>
         </div>
+
+        <div class="spacer-10"></div>
 
         <div class="hours-summary padding-horizontal">
             <ion-list>

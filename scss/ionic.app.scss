@@ -47,9 +47,44 @@ h1, h2, h3, h4 {
 }
 
 // dashboard
-.total-hours {
-	font-size: 50px;
+.total-hours-container {
+	.col {
+		position: relative;
+	}
+	.total-hours {
+		font-size: 50px;
+		color: $positive;
+		font-weight: bold;
+		letter-spacing: -0.05em;
+		position: absolute;
+		top: calc(50% + 3px);
+		left: 50%;
+		transform: translate(-50%,-50%);
+	}
+	.chart {
+		max-width: 100%;
+	    // max-height: 40px;
+	}
 }
+
+#chartjs-tooltip {
+	opacity: 1;
+	position: absolute;
+	background: rgba(0, 0, 0, .7);
+	color: white;
+	border-radius: 3px;
+	-webkit-transition: all .1s ease;
+	transition: all .1s ease;
+	pointer-events: none;
+	-webkit-transform: translate(-50%, 0);
+	transform: translate(-50%, 0);
+	z-index: 100;
+	top: 160px;
+	font-size: 10px;
+	width: 130px !important;
+	text-align: center;
+}
+
 .hours-summary {
 	.hours-summary-today {
 		border: 1px solid #666;
@@ -70,7 +105,8 @@ h1, h2, h3, h4 {
 	text-align: center;
 	margin: 30px auto !important;
 	position: absolute;
-	right: 30px;
+	left: 50%;
+	transform: translate(-50%);
 	bottom: 10px;
 	z-index: 10;
 	padding: 0;
