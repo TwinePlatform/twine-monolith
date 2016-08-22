@@ -201,8 +201,51 @@ function ($scope, $stateParams) {
 }])
    
 // > view logs
-.controller('ViewLogsController', ['$scope', '$stateParams',
-function ($scope, $stateParams) {
+.controller('ViewLogsController', ['$scope', '$stateParams', '$state',
+function ($scope, $stateParams, $state) {
+
+	// logs
+	$scope.logs = [
+		{
+			id: 1,
+			hours: 7,
+			date: '2016-07-28',
+			project: 'Regather Co-op'
+		},
+		{
+			id: 2,
+			hours: 6,
+			date: '2016-07-27',
+			project: 'Regather Co-op'
+		},
+		{
+			id: 3,
+			hours: 7,
+			date: '2016-07-26',
+			project: 'Leeds Community Homes'
+		},
+		{
+			id: 4,
+			hours: 5,
+			date: '2016-07-25',
+			project: 'Regather Co-op'
+		},
+		{
+			id: 5,
+			hours: 3,
+			date: '2016-07-24',
+			project: 'Sheffield Renewables'
+		}
+	];
+
+	// edit log
+	$scope.logId = $state.params.id;
+
+	// delete log
+	$scope.delete = function(log) {
+		var index = $scope.logs.indexOf(log);
+		$scope.logs.splice(index, 1);
+	}
 
 }])
 
