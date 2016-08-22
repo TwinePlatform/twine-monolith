@@ -132,3 +132,15 @@ h1, h2, h3, h4 {
 		width: 100%;
 	}
 }
+
+// view logs
+.view-logs {
+	.button-bar {
+		max-width: 230px;
+	    float: right;
+	    .button {
+	    	min-height: 37px;
+	    	margin-bottom: 0;
+	    }
+	}
+}

@@ -9819,3 +9819,10 @@ h1, h2, h3, h4 {
     font-size: 13px;
     text-align: center;
     width: 100%; }
+
+.view-logs .button-bar {
+  max-width: 230px;
+  float: right; }
+  .view-logs .button-bar .button {
+    min-height: 37px;
+    margin-bottom: 0; }

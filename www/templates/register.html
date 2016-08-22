@@ -8,20 +8,26 @@
         <p class="text-center padding">Please fill in the form below to register for Power to Change.</p>
 
         <!-- form#register -->
-        <form id="register" class="list" ng-submit="processForm()">
+        <form id="register" name="register" class="list" ng-submit="processForm()" novalidate>
             <ion-list>
                 <label class="item item-input">
                     <span class="input-label">Name</span>
                     <input type="text" placeholder="E.g. Jon Smith" ng-model="formData.name">
                 </label>
+
                 <label class="item item-input">
                     <span class="input-label">Email</span>
-                    <input type="email" placeholder="E.g. jon@smith.com" ng-model="formData.email">
+                    <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email">
                 </label>
+                 <label class="error block text-right padding assertive" ng-show="register.email.$invalid && !register.email.$pristine" for="email">
+                    Please enter a valid email address
+                </label>
+
                 <label class="item item-input">
                     <span class="input-label">Password</span>
                     <input type="password" placeholder="Enter password" ng-model="formData.password">
                 </label>
+
                 <label class="item item-input">
                     <span class="input-label">Phone</span>
                     <input type="tel" placeholder="E.g. 07979799799" ng-model="formData.phone">
