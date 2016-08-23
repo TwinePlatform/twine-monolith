@@ -21,3 +21,6 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
     }
   });
 })
+
+// controllers module
+angular.module('app.controllers', [])

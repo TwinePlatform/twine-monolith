@@ -4,7 +4,9 @@
             <div ng-repeat="log in logs | filter: { id: logId }">
                 <label class="item item-input">
                     <span class="input-label">Date</span>
-                    <input type="date" placeholder="" value="{{ log.date | date:'yyyy-MM-dd'}}">
+                    <!-- <input type="date" placeholder="" value="2016-08-20"> -->
+                    <!-- <input type="date" placeholder="" ng-value="{{ log.date | date:'yyyy-MM-dd'}}"> -->
+                    <input class="log-date" type="date" placeholder="" data-value="{{ log.date }}">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Hours</span>

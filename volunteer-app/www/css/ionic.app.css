@@ -9748,6 +9748,12 @@ h1, h2, h3, h4 {
   display: block;
   width: 250px; }
 
+.button-faint {
+  opacity: 0.1; }
+
+.register .input-label {
+  font-size: 15px; }
+
 .total-hours-container .col {
   position: relative; }
 
@@ -9826,3 +9832,6 @@ h1, h2, h3, h4 {
   .view-logs .button-bar .button {
     min-height: 37px;
     margin-bottom: 0; }
+
+.settings .input-label {
+  font-size: 15px; }

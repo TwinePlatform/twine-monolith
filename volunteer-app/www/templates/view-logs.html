@@ -6,7 +6,7 @@
             <ion-item class="item-icon-left item-remove-animate" ng-repeat="log in logs">
                 <i class="icon ion-ios-time"></i>
                 <h2>{{ log.hours }} hours</h2>
-                <p>{{ log.date | date:'d MMM yyyy'}} @ {{ log.project }}</p>
+                <p>{{ log.date | date:'d MMM yyyy'}} @ {{ log.organisation }}</p>
                 <div class="button-bar">
                     <a href="#/tab/edit-log/{{ log.id }}" class="button button-positive button-block button-clear icon-left ion-edit">Edit</a>
                     <button class="button button-positive button-block button-clear icon-left ion-android-delete" ng-click="delete(log)">Delete</button>

@@ -1,5 +1,5 @@
 <ion-view title="Register" hide-back-button="true">
-    <ion-content padding="true" class="has-header">
+    <ion-content padding="true" class="has-header register">
 
         <img class="logo" src="img/power-to-change.svg" alt="">
 
@@ -8,52 +8,119 @@
         <p class="text-center padding">Please fill in the form below to register for Power to Change.</p>
 
         <!-- form#register -->
-        <form id="register" name="register" class="list" ng-submit="processForm()" novalidate>
+        <form id="register" name="register" class="list" ng-submit="processForm(register)" novalidate>
             <ion-list>
+
+                <!-- name -->
                 <label class="item item-input">
                     <span class="input-label">Name</span>
-                    <input type="text" placeholder="E.g. Jon Smith" ng-model="formData.name">
+                    <input type="text" name="name" id="name" placeholder="E.g. Jon Smith" ng-model="formData.name" required>
                 </label>
+                <label class="error block text-right padding assertive" ng-show="register.name.$invalid && formSubmitted" for="name">
+                    Please enter a name
+                </label>
+                <!-- /name -->
 
+                <!-- email -->
                 <label class="item item-input">
                     <span class="input-label">Email</span>
-                    <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email">
+                    <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" required>
                 </label>
-                 <label class="error block text-right padding assertive" ng-show="register.email.$invalid && !register.email.$pristine" for="email">
+                <label class="error block text-right padding assertive" ng-show="register.email.$invalid && formSubmitted" for="email">
                     Please enter a valid email address
                 </label>
+                <!-- /email -->
 
+                <!-- password -->     
                 <label class="item item-input">
                     <span class="input-label">Password</span>
-                    <input type="password" placeholder="Enter password" ng-model="formData.password">
+                    <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" required>
                 </label>
+                <label class="error block text-right padding assertive" ng-show="register.password.$invalid && formSubmitted" for="password">
+                    Please enter a password
+                </label>
+                <!-- /password -->
 
+                <div class="spacer-20"></div>
+
+                <!-- phone -->
                 <label class="item item-input">
                     <span class="input-label">Phone</span>
-                    <input type="tel" placeholder="E.g. 07979799799" ng-model="formData.phone">
+                    <input type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" required>
                 </label>
+                <label class="error block text-right padding assertive" ng-show="register.phone.$invalid && formSubmitted" for="phone">
+                    Please enter a phone number
+                </label>
+                <!-- /phone -->
+
+                <!-- year of birth -->
+                <label class="item item-select">
+                    <span class="input-label">Year of birth</span>
+                    <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option" name="yearOfBirth" id="yearOfBirth" required>
+                        <option value="">Select year</option>
+                        <!--  -->
+                    </select>
+                </label>
+                <label class="error block text-right padding assertive" ng-show="register.yearOfBirth.$invalid && formSubmitted" for="yearOfBirth">
+                    Please select your year of birth
+                </label>
+                <!-- /year of birth -->
+
+                <!-- gender -->
+                <label class="item item-select">
+                    <span class="input-label">Gender</span>
+                    <select ng-model="formData.gender" ng-options="option for option in genders track by option" name="gender" id="gender" required>
+                        <option value="">Select gender</option>
+                        <!--  -->
+                    </select>
+                </label>
+                <label class="error block text-right padding assertive" ng-show="register.gender.$invalid && formSubmitted" for="gender">
+                    Please select your gender
+                </label>
+                <!-- /gender -->
+
+                <div class="spacer-20"></div> 
+
+                <!-- region -->
+                <label class="item item-select">
+                    <span class="input-label">Region</span>
+                    <select ng-model="formData.region" ng-options="option for option in regions track by option" name="region" id="region" required>
+                        <option value="">Select region</option>
+                        <!--  -->
+                    </select>
+                </label>
+                <label class="error block text-right padding assertive" ng-show="register.region.$invalid && formSubmitted" for="region">
+                    Please select a region
+                </label>
+                <!-- /region -->
+
+                <!-- organisation -->
+                <label class="item item-select">
+                    <span class="input-label">Organisation</span>
+                    <select ng-model="formData.organisation" ng-options="option.name for option in organisations track by option.id" name="organisation" id="organisation" required>
+                        <option value="">Select organisation</option>
+                        <!--  -->
+                    </select>
+                </label>
+                <label class="error block text-right padding assertive" ng-show="register.organisation.$invalid && formSubmitted" for="organisation">
+                    Please select an organisation
+                </label>
+                <!-- /organisation -->
+
             </ion-list>
-            <label class="item item-select">
-                <span class="input-label">Year of birth</span>
-                <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option">
-                    <option value="">Please select year</option>
-                    <!--  -->
-                </select>
-            </label>
-            <label class="item item-select">
-                <span class="input-label">Project</span>
-                <select ng-model="formData.project" ng-options="option.name for option in projects track by option.id">
-                    <option value="">Please select a project</option>
-                    <!--  -->
-                </select>
-            </label>
+
             <div class="spacer-20"></div>
+
+            <!-- connection error -->
+            <span class="error block padding assertive text-center" ng-show="connectionError">{{ connectionError }}</span>
+
+            <!-- buttons -->
             <button type="submit" class="button button-positive button-block button-outline">Register</button>
             <a ui-sref="login" class=" button button-positive button-block button-clear">Or log in if you have an account</a>
         </form>
         <!-- /form#register -->
 
-        <a href="#/tab/dashboard" class="button button-positive button-block button-clear">Skip to app</a>
+        <a href="#/tab/dashboard" class="button button-positive button-block button-clear button-faint">Skip to app</a>
 
         <!-- <pre>
             {{ formData }}
