@@ -19,14 +19,14 @@
 	> register controller
 */
 
-	angular.module('app').controller('RegisterController', ['$scope', '$stateParams', '$http', '$state',
-	function ($scope, $stateParams, $http, $state) {
+	angular.module('app').controller('RegisterController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup',
+	function ($scope, $stateParams, $http, $state, $ionicPopup) {
 
 		/*
 			>> if user has access token, log straight in
 		*/
 
-			if (localStorage.access_token && localStorage.access_token !== '') {
+			if (localStorage.api_token && localStorage.api_token !== '') {
 				console.log('access token found, log straight in');
 				$state.go('tabs.dashboard');
 			}
@@ -67,9 +67,9 @@
 			$scope.organisations = [];
 			$http({
 				method: 'GET',
-				url: 'http://powertochangeadmin.stage2.reason.digital/api/v1/projects'
+				url: api('organisations')
 			}).success(function (result) {
-				console.log(result.data);
+				// console.log(result.data);
 				$scope.organisations = result.data;
 				// >>> loop through the results and push only required items to $scope.organisations
 				for (var i = 0, len = result.data.length; i < len; i++) {
@@ -101,14 +101,45 @@
 					// >>> submit form
 					$http({
 						method: 'POST',
-						url: 'http://powertochangeadmin.stage2.reason.digital/api/v1/users',
+						url: api('users'),
 						data: $.param($scope.formData),
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-					}).success(function(data) {
+					}).success(function(response) {
 
-						console.log(data);
+						console.log(response);
 
-						// get error or access code from response
+						// registration successful
+						if (response.success) {
+
+							// store api token
+							localStorage.api_token = response.data.api_token;
+
+							// show success popup
+							var alertPopup = $ionicPopup.alert({
+							  	title: 'Registration successful!',
+							  	template: 'Welcome to Power to Change, ' + response.data.name + '!',
+							  	okText: 'Start logging time'
+							});
+
+							alertPopup.then(function(res) {
+							  	$state.go('tabs.dashboard');
+							});
+
+						}
+
+						// registration unsuccessful
+						else {
+
+							// show unsuccess popup
+							var alertPopup = $ionicPopup.alert({
+							  	title: 'Error',
+							  	template: 'Registration unsuccessful: ' + response.message,
+							  	okText: 'OK',
+							  	okType: 'button-assertive',
+							  	cssClass: 'error'
+							});
+
+						}
 
 					}).error(function(data, error) {
 

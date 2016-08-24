@@ -6,26 +6,45 @@
         <p class="text-center padding">Please fill in the form below to login.</p>
 
         <!-- form#login -->
-        <form id="login" class="list">
+        <form id="login" name="login" class="list" ng-submit="processForm(login)" novalidate>
+
             <ion-list>
+
+                <!-- email -->
                 <label class="item item-input">
                     <span class="input-label">Email</span>
-                    <input type="text" placeholder="E.g. jon@smith.com">
+                    <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" required>
                 </label>
+                <label class="error block text-right padding assertive" ng-show="login.email.$invalid && formSubmitted" for="email">
+                    Please enter a valid email address
+                </label>
+                <!-- /email -->
+
+                <!-- password -->
                 <label class="item item-input">
                     <span class="input-label">Password</span>
-                    <input type="password" placeholder="Enter a password">
+                    <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" required>
                 </label>
+                <label class="error block text-right padding assertive" ng-show="login.password.$invalid && formSubmitted" for="password">
+                    Please enter a password
+                </label>
+                <!-- /password -->
+
             </ion-list>
-            <div class="spacer-10"></div>
-            <a ui-sref="tabsController.dashboard_tab1" class="button button-positive button-block button-outline">Log in</a>
+
+            <div class="spacer-20"></div>
+
+            <!-- connection error -->
+            <span class="error block padding assertive text-center" ng-show="connectionError">{{ connectionError }}</span>
+
+            <!-- buttons -->
+            <button type="submit" class="button button-positive button-block button-outline">Log in</button>
             <a ui-sref="register" class="button button-positive button-block button-clear">Or register</a>
 
-            <div class="spacer-30"></div>
-
-            <a href="#/tab/dashboard" class="button button-positive button-block button-clear button-faint">Skip to app</a>
         </form>
         <!-- /form#login -->
+
+        <a href="#/tab/dashboard" class="button button-positive button-block button-clear button-faint">Skip to app</a>
 
     </ion-content>
 </ion-view>

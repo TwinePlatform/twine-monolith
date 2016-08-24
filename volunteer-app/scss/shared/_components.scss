@@ -9,3 +9,8 @@
 .button-faint {
 	opacity: 0.1;
 }
+
+// popups
+.popup-container.error .popup-title {
+    color: $assertive;
+}

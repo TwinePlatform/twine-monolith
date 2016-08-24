@@ -9751,6 +9751,9 @@ h1, h2, h3, h4 {
 .button-faint {
   opacity: 0.1; }
 
+.popup-container.error .popup-title {
+  color: #ef473a; }
+
 .register .input-label {
   font-size: 15px; }
 
