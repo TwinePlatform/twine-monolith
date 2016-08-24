@@ -20,7 +20,7 @@
 			$scope.organisations = [];
 			$http({
 				method: 'GET',
-				url: 'http://powertochangeadmin.stage2.reason.digital/api/v1/projects'
+				url: api('organisations')
 			}).success(function (result) {
 				console.log(result.data);
 				$scope.organisations = result.data;
