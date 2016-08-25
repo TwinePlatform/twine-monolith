@@ -2,7 +2,7 @@
     <ion-content padding="true" class="has-header settings">
         <form class="list">
             <p class="text-center padding">Get a reminder to log your hours when you leave the location:</p>
-            <ion-toggle toggle-class="toggle-positive">Location reminders</ion-toggle>
+            <ion-toggle toggle-class="toggle-positive" ng-click="locationReminders()" ng-model="locationRemindersSwitch">Location reminders</ion-toggle>
         </form>
         <div class="spacer-10"></div>
         <form class="list">
