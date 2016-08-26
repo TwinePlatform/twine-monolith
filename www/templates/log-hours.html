@@ -1,15 +1,48 @@
 <ion-view title="Log hours">
     <ion-content padding="true" class="has-header">
-        <form class="list">
+        
+    <!-- form#createLog -->
+        <form id="createLog" name="createLog" class="list" ng-submit="processForm(createLog)" novalidate>
+
+            <!-- date -->
             <label class="item item-input">
                 <span class="input-label">Date</span>
-                <input type="date" placeholder="" ng-model="today">
+                <input type="date" name="dateRaw" id="dateRaw" ng-model="formData.dateRaw" ng-change="generateFormDate()" required>
+                <input type="text" name="date" id="date" ng-model="formData.date" class="ng-hide">
             </label>
+            <label class="error block text-right padding assertive" ng-show="createLog.date.$invalid && formSubmitted" for="date">
+                Please select a date
+            </label>
+            <!-- /date -->
+
+            <!-- duration -->
             <label class="item item-input">
-                <span class="input-label">Hours</span>
-                <input type="number" placeholder="E.g. 7">
+                <span class="input-label">Duration</span>
+                <input type="number" name="duration" id="duration" ng-model="formData.duration" placeholder="E.g. 7" required>
             </label>
+            <label class="error block text-right padding assertive" ng-show="createLog.duration.$invalid && formSubmitted" for="duration">
+                Please enter a duration (hours)
+            </label>
+            <!-- /duration -->
+
+            <!-- organisation -->
+            <label class="item item-select">
+                <span class="input-label">Organisation</span>
+                <select ng-model="formData.organisation" ng-options="option.name for option in organisations track by option.id" name="organisation" id="organisation" required>
+                    <option value="">Select organisation</option>
+                    <!--  -->
+                </select>
+            </label>
+            <label class="error block text-right padding assertive" ng-show="createLog.organisation.$invalid && formSubmitted" for="organisation">
+                Please select an organisation
+            </label>
+            <!-- /organisation -->
+
+            <!-- buttons -->
+            <button type="submit" class="button button-positive button-block button-outline">Save</button>
+
         </form>
-        <button class="button button-positive button-block button-outline">Save</button>
+        <!-- /form#createLog -->
+
     </ion-content>
 </ion-view>
