@@ -72,7 +72,7 @@
 					}).error(function(data, error) {
 
 						// process connection error
-						$scope.processConnectionError(data, error);
+						processConnectionError(data, error);
 
 					});
 				}
@@ -83,25 +83,5 @@
 
 			};
 
-		/*
-			>> process connection error
-		*/
-
-			$scope.processConnectionError = function(data, error) {
-
-				// no internet connection
-				if (error === 0) {
-					$scope.connectionError = 'Could not connect. Please check your internet connection & try again.';
-				}
-				// resource not found
-				else if (error === 404) {
-					$scope.connectionError = 'Error: the requested resource was not found.';
-				}
-				// other error
-				else {
-					$scope.connectionError = 'Could not connect. Please try again later. Error code: ' + error;
-				}
-
-			}
 
 	}])

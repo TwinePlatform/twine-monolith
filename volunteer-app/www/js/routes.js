@@ -63,6 +63,7 @@ angular.module('app.routes', ['ionicUIRouter'])
 
 			// >> view logs
 			.state('tabs.view-logs', {
+				cache: false,
 				url: '/view-logs',
 				views: {
 					'view-logs-tab': {
@@ -74,11 +75,12 @@ angular.module('app.routes', ['ionicUIRouter'])
 
 				// >>> view logs - edit log
 				.state('tabs.edit-log', {
+					cache: false,
 					url: '/edit-log/:id',
 					views: {
 						'view-logs-tab': {
 							templateUrl: 'templates/edit-log.html',
-							controller: 'ViewLogsController'
+							controller: 'EditLogController'
 						}
 					}
 				})

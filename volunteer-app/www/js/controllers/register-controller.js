@@ -12,7 +12,6 @@
 *   process the form
 *    validate form
 *    submit form
-*   process connection error
 */
 
 /*
@@ -26,7 +25,7 @@
 			>> if user has access token, log straight in
 		*/
 
-			if ($localStorage.user.api_token && $localStorage.user.api_token !== '') {
+			if ($localStorage.user && $localStorage.user.api_token !== '') {
 				console.log('access token found, log straight in');
 				$state.go('tabs.dashboard');
 			}
@@ -78,7 +77,7 @@
 			}).error(function (result, error) {
 				
 				// process connection error
-				$scope.processConnectionError(result, error);
+				processConnectionError(result, error);
 
 			});
 
@@ -153,7 +152,7 @@
 						$ionicLoading.hide();
 
 						// process connection error
-						$scope.processConnectionError(data, error);
+						processConnectionError(data, error);
 
 					});
 				}
@@ -164,25 +163,5 @@
 
 			};
 
-		/*
-			>> process connection error
-		*/
-
-			$scope.processConnectionError = function(data, error) {
-
-				// no internet connection
-				if (error === 0) {
-					$scope.connectionError = 'Could not connect. Please check your internet connection & try again.';
-				}
-				// resource not found
-				else if (error === 404) {
-					$scope.connectionError = 'Error: the requested resource was not found.';
-				}
-				// other error
-				else {
-					$scope.connectionError = 'Could not connect. Please try again later. Error code: ' + error;
-				}
-
-			}
 
 	}])
