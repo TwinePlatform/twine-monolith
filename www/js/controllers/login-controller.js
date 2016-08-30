@@ -48,7 +48,7 @@
 						if (response.success) {
 
 							// store api token
-							localStorage.api_token = response.data.api_token;
+							$localStorage.user.api_token = response.data.api_token;
 
 							// go to dashboard
 							$state.go('tabs.dashboard');

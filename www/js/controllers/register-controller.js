@@ -19,14 +19,14 @@
 	> register controller
 */
 
-	angular.module('app').controller('RegisterController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup',
-	function ($scope, $stateParams, $http, $state, $ionicPopup) {
+	angular.module('app').controller('RegisterController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$ionicLoading', '$localStorage',
+	function ($scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage) {
 
 		/*
 			>> if user has access token, log straight in
 		*/
 
-			if (localStorage.api_token && localStorage.api_token !== '') {
+			if ($localStorage.user.api_token && $localStorage.user.api_token !== '') {
 				console.log('access token found, log straight in');
 				$state.go('tabs.dashboard');
 			}
@@ -98,6 +98,9 @@
 				if (form.$valid) {
 					console.log('form valid');
 
+					// show loader
+					$ionicLoading.show();
+
 					// >>> submit form
 					$http({
 						method: 'POST',
@@ -111,8 +114,11 @@
 						// registration successful
 						if (response.success) {
 
-							// store api token
-							localStorage.api_token = response.data.api_token;
+							// hide loader
+							$ionicLoading.hide();
+
+							// store user information
+							$localStorage.user = response.data;
 
 							// show success popup
 							var alertPopup = $ionicPopup.alert({
@@ -142,6 +148,9 @@
 						}
 
 					}).error(function(data, error) {
+
+						// hide loader
+						$ionicLoading.hide();
 
 						// process connection error
 						$scope.processConnectionError(data, error);

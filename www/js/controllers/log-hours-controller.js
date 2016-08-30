@@ -17,8 +17,8 @@
 	> log hours controller
 */
 
-	angular.module('app').controller('LogHoursController', ['$scope', '$stateParams', '$http', '$filter', '$ionicLoading', 
-	function ($scope, $stateParams, $http, $filter, $ionicLoading) {
+	angular.module('app').controller('LogHoursController', ['$scope', '$stateParams', '$http', '$filter', '$ionicLoading', '$localStorage',  
+	function ($scope, $stateParams, $http, $filter, $ionicLoading, $localStorage) {
 
 		/*
 			>> store the form data
@@ -66,13 +66,35 @@
 				// >>> loop through the results and push only required items to $scope.organisations
 				for (var i = 0, len = result.data.length; i < len; i++) {
 					$scope.organisations[i] = {id: result.data[i].id, name: result.data[i].name};
+
+					// when for loop complete
+					if (i === len - 1) {
+
+						// get user's organisation id
+						var orgId = parseInt($localStorage.user.organisation_id);
+
+						// get position of user's organsation in $scope.organisations array
+						var organisationPosition = $scope.organisations.map(function(x) {return x.id; }).indexOf(orgId);
+						console.log(organisationPosition);
+
+						// set the value of formData.organisation to that item
+						$scope.formData.organisation = $scope.organisations[organisationPosition];
+
+					}
 				}
+
 			}).error(function (result, error) {
 				
 				// process connection error
 				$scope.processConnectionError(result, error);
 
 			});
+
+		/*
+			>> populate user_id field
+		*/
+
+			$scope.formData.user_id = $localStorage.user.id;
 
 		/*
 			>> process the form
@@ -90,8 +112,11 @@
 				if (form.$valid) {
 					console.log('form valid');
 
-					// console.log($scope.formData);
-					// console.log($.param($scope.formData));
+					console.log($scope.formData);
+					console.log($.param($scope.formData));
+
+					// generate organisation_id before we submit form
+					$scope.formData.organisation_id = $scope.formData.organisation.id;
 
 					// show loader
 					$ionicLoading.show();
