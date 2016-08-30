@@ -7,18 +7,18 @@
 *   get today's date for raw date field
 *   populate organisation dropdown
 *    loop through the results and push only required items to $scope.organisations
+*   populate user_id field
 *   process the form
 *    validate form
 *    submit form
-*   process connection error
 */
 
 /*
 	> log hours controller
 */
 
-	angular.module('app').controller('LogHoursController', ['$scope', '$stateParams', '$http', '$filter', '$ionicLoading', '$localStorage',  
-	function ($scope, $stateParams, $http, $filter, $ionicLoading, $localStorage) {
+	angular.module('app').controller('LogHoursController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage',  
+	function ($scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage) {
 
 		/*
 			>> store the form data
@@ -34,7 +34,7 @@
 			// generate a date in the format 2017-08-30 and add to hidden date field
 			$scope.generateFormDate = function() {
 				var formDate = $filter('date')($scope.formData.dateRaw, 'yyyy-MM-dd');
-				$scope.formData.date = formDate;
+				$scope.formData.date_of_log = formDate;
 			}
 
 
@@ -75,7 +75,6 @@
 
 						// get position of user's organsation in $scope.organisations array
 						var organisationPosition = $scope.organisations.map(function(x) {return x.id; }).indexOf(orgId);
-						console.log(organisationPosition);
 
 						// set the value of formData.organisation to that item
 						$scope.formData.organisation = $scope.organisations[organisationPosition];
@@ -86,7 +85,7 @@
 			}).error(function (result, error) {
 				
 				// process connection error
-				$scope.processConnectionError(result, error);
+				processConnectionError(result, error);
 
 			});
 
@@ -112,14 +111,13 @@
 				if (form.$valid) {
 					console.log('form valid');
 
-					console.log($scope.formData);
-					console.log($.param($scope.formData));
-
 					// generate organisation_id before we submit form
 					$scope.formData.organisation_id = $scope.formData.organisation.id;
 
 					// show loader
 					$ionicLoading.show();
+
+					console.log($scope.formData);
 
 					// >>> submit form
 					$http({
@@ -136,15 +134,14 @@
 
 							console.log('create log successful');
 
-							setTimeout(function(){
+							// hide loader
+							$ionicLoading.hide();
 
-								// hide loader
-								$ionicLoading.hide();
+							// go back to dashboard
+							$state.go('tabs.dashboard');
 
-								// shout success
-								shout('Log saved succesfully!');
-
-							}, 200);
+							// shout success
+							shout('Log saved succesfully!');
 
 						}
 
@@ -158,7 +155,7 @@
 					}).error(function(data, error) {
 
 						// process connection error
-						$scope.processConnectionError(data, error);
+						processConnectionError(data, error);
 
 					});
 				}
@@ -168,26 +165,6 @@
 				}
 
 			};
-
-		/*
-			>> process connection error
-		*/
-
-			$scope.processConnectionError = function(data, error) {
-
-				// no internet connection
-				if (error === 0) {
-					$scope.connectionError = 'Could not connect. Please check your internet connection & try again.';
-				}
-				// resource not found
-				else if (error === 404) {
-					$scope.connectionError = 'Error: the requested resource was not found.';
-				}
-				// other error
-				else {
-					$scope.connectionError = 'Could not connect. Please try again later. Error code: ' + error;
-				}
-
-			}
+			
 
 	}])

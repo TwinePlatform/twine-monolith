@@ -104,7 +104,7 @@
 			}).error(function (result, error) {
 				
 				// process connection error
-				$scope.processConnectionError(result, error);
+				processConnectionError(result, error);
 
 			});
 

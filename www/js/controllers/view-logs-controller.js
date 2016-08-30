@@ -3,7 +3,6 @@
 *
 * view logs controller
 *   populate logs
-*   edit log
 *   delete log
 */
 
@@ -11,74 +10,65 @@
 	> view logs controller
 */
 
-	angular.module('app').controller('ViewLogsController', ['$scope', '$stateParams', '$state',
-	function ($scope, $stateParams, $state) {
+	angular.module('app').controller('ViewLogsController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading',
+	function ($scope, $stateParams, $state, $http, $ionicLoading) {
 
 		/*
 			>> populate logs
 		*/
 
-			$scope.logs = [
-				{
-					id: 1,
-					hours: 7,
-					date: '2016-07-28',
-					organisation: 'Regather Co-op'
-				},
-				{
-					id: 2,
-					hours: 6,
-					date: '2016-07-27',
-					organisation: 'Regather Co-op'
-				},
-				{
-					id: 3,
-					hours: 7,
-					date: '2016-07-26',
-					organisation: 'Leeds Community Homes'
-				},
-				{
-					id: 4,
-					hours: 5,
-					date: '2016-07-25',
-					organisation: 'Regather Co-op'
-				},
-				{
-					id: 5,
-					hours: 3,
-					date: '2016-07-24',
-					organisation: 'Sheffield Renewables'
-				}
-			];
+			$http({
+				method: 'GET',
+				url: api('logs')
+			}).success(function (result) {
+				
+				// update logs in view
+				$scope.logs = result.data;
 
+			}).error(function (result, error) {
+				
+				// process connection error
+				processConnectionError(result, error);
 
-		/*
-			>> edit log
-		*/
+			});
 
-			$scope.logId = $state.params.id;
-
-
-			// >>> check for new date and update date input value
-			//	   (there was an issue with using value or ng-value attributes)
-
-			setTimeout(function(){
-
-				$logDate = $('input.log-date');
-
-				if ($logDate.val() !== $logDate.data('value')) {
-					$logDate.val($logDate.data('value'));
-				}
-
-			}, 100);
 
 		/*
 			>> delete log
 		*/
 		
 			$scope.delete = function(log) {
-				var index = $scope.logs.indexOf(log);
-				$scope.logs.splice(index, 1);
+
+				// show loader
+				$ionicLoading.show();
+
+				// get id of log
+				var id = log.id;
+
+				// call api delete log method
+				$http({
+					method: 'DELETE',
+					url: api('logs/' + id)
+				}).success(function (result) {
+					
+					// hide loader
+					$ionicLoading.hide();
+
+					// remove from model & view
+					var index = $scope.logs.indexOf(log);
+					$scope.logs.splice(index, 1);
+
+				}).error(function (result, error) {
+					
+					// hide loader
+					$ionicLoading.hide();
+
+					// process connection error
+					processConnectionError(result, error);
+
+				});
+
 			}
+
 
 	}])

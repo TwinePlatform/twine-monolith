@@ -1,19 +1,50 @@
 <ion-view title="Edit log">
     <ion-content padding="true" class="has-header">
-        <form class="list">
-            <div ng-repeat="log in logs | filter: { id: logId }">
-                <label class="item item-input">
-                    <span class="input-label">Date</span>
-                    <!-- <input type="date" placeholder="" value="2016-08-20"> -->
-                    <!-- <input type="date" placeholder="" ng-value="{{ log.date | date:'yyyy-MM-dd'}}"> -->
-                    <input class="log-date" type="date" placeholder="" data-value="{{ log.date }}">
-                </label>
-                <label class="item item-input">
-                    <span class="input-label">Hours</span>
-                    <input type="number" placeholder="E.g. 7" value="{{ log.hours }}">
-                </label>
-            </div>
+        <form id="editLog" name="editLog" class="list" ng-submit="processForm(editLog)" novalidate>
+
+            <!-- date -->
+            <label class="item item-input">
+                <span class="input-label">Date</span>
+                <input type="date" name="date_of_log" id="date_of_log" ng-model="formData.dateRaw" ng-show="organisationsLoaded && logLoaded" ng-change="generateFormDate()" value="">
+                <input type="text" name="date_of_log" id="date_of_log" ng-model="formData.date_of_log" class="ng-hide">
+            </label>
+            <label class="error block text-right padding assertive" ng-show="createLog.date.$invalid && formSubmitted" for="date">
+                Please select a date
+            </label>
+            <!-- /date -->
+
+            <!-- duration -->
+            <label class="item item-input">
+                <span class="input-label">Duration</span>
+                <input type="number" name="duration" id="duration" ng-model="formData.duration" placeholder="E.g. 7" ng-show="organisationsLoaded && logLoaded" required>
+            </label>
+            <label class="error block text-right padding assertive" ng-show="createLog.duration.$invalid && formSubmitted" for="duration">
+                Please enter a duration (hours)
+            </label>
+            <!-- /duration -->
+
+            <!-- organisation -->
+            <label class="item item-select">
+                <span class="input-label">Organisation</span>
+                <select ng-model="formData.organisation" ng-options="option.name for option in organisations track by option.id" name="organisation" id="organisation" ng-show="organisationsLoaded && logLoaded" required>
+                    <option value="">Select organisation</option>
+                    <!--  -->
+                </select>
+            </label>
+            <label class="error block text-right padding assertive" ng-show="createLog.organisation.$invalid && formSubmitted" for="organisation">
+                Please select an organisation
+            </label>
+            <!-- /organisation -->
+
+            <!-- id -->
+            <label class="item item-input ng-hide">
+                <span class="input-label">Log id</span>
+                <input type="text" ng-model="formData.id" name="user_id" id="user_id" required />
+            </label>
+            <!-- /id -->
+
+            <!-- buttons -->
+            <button type="submit" class="button button-positive button-block button-outline">Save</a>
         </form>
-        <a ui-sref="tabs.view-logs" class=" button button-positive button-block button-outline">Save</a>
     </ion-content>
 </ion-view>
