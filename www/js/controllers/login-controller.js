@@ -8,8 +8,8 @@
 	> login controller
 */
 
-	angular.module('app').controller('LoginController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup',
-	function ($scope, $stateParams, $http, $state, $ionicPopup) {
+	angular.module('app').controller('LoginController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$localStorage', 
+	function ($scope, $stateParams, $http, $state, $ionicPopup, $localStorage) {
 
 		/*
 			>> store the form data
@@ -42,13 +42,14 @@
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 					}).success(function(response) {
 
+						console.log('response:');
 						console.log(response);
 
 						// login successful
 						if (response.success) {
 
-							// store api token
-							$localStorage.user.api_token = response.data.api_token;
+							// store user data
+							$localStorage.user = response.data;
 
 							// go to dashboard
 							$state.go('tabs.dashboard');

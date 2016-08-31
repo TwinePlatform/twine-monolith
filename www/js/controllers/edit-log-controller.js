@@ -10,8 +10,8 @@
 	> edit log controller
 */
 
-	angular.module('app').controller('EditLogController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$filter', '$localStorage', 
-	function ($scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage) {
+	angular.module('app').controller('EditLogController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$filter', '$localStorage', '$rootScope', 
+	function ($scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope) {
 
 		/*
 			>> variables
@@ -34,7 +34,7 @@
 			$scope.organisations = [];
 			$http({
 				method: 'GET',
-				url: api('organisations')
+				url: api('regions/' + $localStorage.region.id + '/organisations')
 			}).success(function (result) {
 				// console.log(result.data);
 				$scope.organisations = result.data;
@@ -173,6 +173,9 @@
 
 							// shout success
 							shout('Log saved succesfully!');
+
+							// refresh dashboard
+							// $rootScope.$broadcast('refreshDashboard');
 
 						}
 

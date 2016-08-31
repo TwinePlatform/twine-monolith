@@ -9,7 +9,7 @@
 
         <div class="total-hours-container padding row">
             <div class="col col-33 text-center">
-                <span class="total-hours">15</span>
+                <span class="total-hours animated fadeIn" ng-class="{'ng-hide': totalHours < 0}" ng-bind="totalHours"></span>
             </div>
             <div class="col">
                 <canvas id="myChart" class="chart" width="400" height="100"></canvas>
@@ -22,41 +22,38 @@
             <ion-list>
                 <ion-item class="hours-summary-today">
                     <div class="row row-no-padding">
-                        <div class="col col-25">
+                        <div class="col">
                             <strong>Today</strong>
                         </div>
-                        <div class="col col-25">
-                            2 hrs
-                        </div>
-                        <div class="col col-50 text-right">
-                            Regather Co-op
+                        <div class="col col-25 text-right">
+                            <strong>0 hrs</strong>
                         </div>
                     </div>
                 </ion-item>
                 <ion-item class="hours-summary-other">
                     <div class="row row-no-padding">
                         <div class="col">
-                            This week
+                            Last 7 days
                         </div>
                         <div class="col col-25 text-right">
-                            4 hrs
+                            0 hrs
                         </div>
                     </div>
                 </ion-item>
                 <ion-item class="hours-summary-other">
                     <div class="row row-no-padding">
                         <div class="col">
-                            Last week
+                            Last 30 days
                         </div>
                         <div class="col col-25 text-right">
-                            7 hrs
+                            0 hrs
                         </div>
                     </div>
                 </ion-item>
             </ion-list>
         </div>
 
-        <a ui-sref="tabs.log-hours" class="button button-positive button-block button-outline icon-left ion-plus button-add">
+        <a ui-sref="tabs.new-log" class="button button-positive button-block button-outline icon-left ion-plus button-add">
             <span>Log hours</span>
         </a>
     </ion-content>

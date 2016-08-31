@@ -1,7 +1,7 @@
 /*
 * CONTENTS
 *
-* log hours controller
+* new log controller
 *   store the form data
 *   function: generate form date
 *   get today's date for raw date field
@@ -14,11 +14,11 @@
 */
 
 /*
-	> log hours controller
+	> new log controller
 */
 
-	angular.module('app').controller('LogHoursController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage',  
-	function ($scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage) {
+	angular.module('app').controller('NewLogController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage',  '$rootScope', 
+	function ($scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope) {
 
 		/*
 			>> store the form data
@@ -134,14 +134,17 @@
 
 							console.log('create log successful');
 
+							// refresh dashboard
+							// $rootScope.$broadcast('refreshDashboard');
+
 							// hide loader
 							$ionicLoading.hide();
 
-							// go back to dashboard
-							$state.go('tabs.dashboard');
-
 							// shout success
 							shout('Log saved succesfully!');
+
+							// go back to dashboard
+							$state.go('tabs.dashboard');
 
 						}
 
@@ -153,6 +156,9 @@
 						}
 
 					}).error(function(data, error) {
+
+						// hide loader
+						$ionicLoading.hide();
 
 						// process connection error
 						processConnectionError(data, error);

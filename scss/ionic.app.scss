@@ -24,6 +24,9 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // ionic
 @import "www/lib/ionic/scss/ionic";
 
+// plugins
+@import 'plugins/animate';
+
 // shared
 @import 'shared/helpers';
 @import 'shared/text';

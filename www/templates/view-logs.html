@@ -1,12 +1,18 @@
 <ion-view title="View logs">
     <ion-content padding="true" class="has-header view-logs">
 
+        <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noLogs">You haven't created any logs yet.</p>
+        
+        <div class="padding text-center" ng-if="!logs">
+            <ion-spinner class="text-center"></ion-spinner>
+        </div>
+
         <ion-list>
 
-            <ion-item class="item-icon-left item-remove-animate" ng-repeat="log in logs | orderBy: '-date_of_log'">
+            <ion-item class="item-icon-left item-remove-animate" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at']">
                 <i class="icon ion-ios-time"></i>
                 <h2>{{ log.duration }} hours</h2>
-                <p>{{ log.date_of_log.split(' ')[0] | date:'d MMM yyyy'}} @ {{ log.organisation }}</p>
+                <p>{{ log.date_of_log.split(' ')[0] | date:'d MMM yyyy'}} @ {{ log.organisation.name }}</p>
                 <div class="button-bar">
                     <a href="#/tab/edit-log/{{ log.id }}" class="button button-positive button-block button-clear icon-left ion-edit">Edit</a>
                     <button class="button button-positive button-block button-clear icon-left ion-android-delete" ng-click="delete(log)">Delete</button>

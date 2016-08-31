@@ -50,3 +50,8 @@
 		}
 	}
 }
+
+// forms
+select[disabled], .item-select-disabled:after {
+	opacity: 0.4;
+}
