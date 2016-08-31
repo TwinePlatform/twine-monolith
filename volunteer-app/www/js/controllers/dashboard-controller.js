@@ -2,15 +2,42 @@
 * CONTENTS
 *
 * dashboard controller
+*   total hours
 *   setup chart
+*   refresh dashboard
 */
 
 /*
 	> dashboard controller
 */
 
-	angular.module('app').controller('DashboardController', ['$scope', '$stateParams',
-	function ($scope, $stateParams) {
+	angular.module('app').controller('DashboardController', ['$scope', '$stateParams', '$http', '$localStorage', '$rootScope', 
+	function ($scope, $stateParams, $http, $localStorage, $rootScope) {
+
+		/*
+			>> total hours
+		*/
+
+			$scope.updateTotalHours = function() {
+
+				$scope.totalHours = -1;
+
+				$http({
+					method: 'GET',
+					url: api('logs/user/' + $localStorage.user.id + '/total')
+				}).success(function (result) {
+					
+					console.log(result);
+					$scope.totalHours = result.data.total;
+
+				}).error(function (result, error) {
+					
+					// process connection error
+					processConnectionError(result, error);
+
+				});
+
+			}
 
 		/*
 			>> setup chart
@@ -121,5 +148,48 @@
 			        }
 			    }
 			});
+
+
+		/*
+			>> on enter view
+			   - fired every time view entered
+		*/
+
+			$scope.$on('$ionicView.enter', function() {
+
+				// update total hours
+				$scope.updateTotalHours();
+
+			})
+
+
+		/*
+			>> on leave view
+			   - fired every time view left
+		*/
+
+			$scope.$on('$ionicView.leave', function() {
+
+				$scope.totalHours = -1;
+
+			})
+
+
+
+
+		/*
+			>> refresh dashboard
+			   - (if 'refreshDashboard' is broadcast from another controller)
+		*/
+
+			/*$scope.$on('refreshDashboard', function() {
+
+				console.log('refreshDashboard');
+
+				// update total hours
+				$scope.updateTotalHours();
+
+			});*/
+
 
 	}])

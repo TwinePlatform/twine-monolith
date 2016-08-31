@@ -82,9 +82,9 @@
                 <div class="spacer-20"></div> 
 
                 <!-- region -->
-                <label class="item item-select">
+                <label class="item item-select" ng-class="{'item-select-disabled': regionsDisabled}">
                     <span class="input-label">Region</span>
-                    <select ng-model="formData.region" ng-options="option for option in regions track by option" name="region" id="region" required>
+                    <select ng-model="formData.region" ng-options="option.name for option in regions track by option.id" name="region" id="region" ng-change="populateOrganisations()" ng-disabled="regionsDisabled" required>
                         <option value="">Select region</option>
                         <!--  -->
                     </select>
@@ -95,9 +95,9 @@
                 <!-- /region -->
 
                 <!-- organisation -->
-                <label class="item item-select">
+                <label class="item item-select" ng-class="{ 'item-select-disabled': organisationsDisabled }">
                     <span class="input-label">Organisation</span>
-                    <select ng-model="formData.organisation" ng-options="option.name for option in organisations track by option.id" name="organisation" id="organisation" required>
+                    <select ng-model="formData.organisation" ng-options="option.name for option in organisations track by option.id" name="organisation" id="organisation" ng-disabled="organisationsDisabled" required>
                         <option value="">Select organisation</option>
                         <!--  -->
                     </select>

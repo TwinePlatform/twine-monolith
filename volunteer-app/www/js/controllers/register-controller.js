@@ -8,7 +8,6 @@
 *   populate gender dropdown
 *   populate region dropdown
 *   populate organisation dropdown
-*    loop through the results and push only required items to $scope.organisations
 *   process the form
 *    validate form
 *    submit form
@@ -57,29 +56,68 @@
 			>> populate region dropdown
 		*/
 
-			$scope.regions = ['East Midlands', 'East of England', 'London', 'North East', 'North West', 'South East', 'South West', 'West Midlands', 'Yorkshire and Humber'];
+			// $scope.regions = ['East Midlands', 'East of England', 'London', 'North East', 'North West', 'South East', 'South West', 'West Midlands', 'Yorkshire and Humber'];
 
-		/*
-			>> populate organisation dropdown
-		*/
+			$scope.regionsDisabled = true;
+			$scope.regions = [];
 
-			$scope.organisations = [];
 			$http({
 				method: 'GET',
-				url: api('organisations')
+				url: api('regions')
 			}).success(function (result) {
-				// console.log(result.data);
-				$scope.organisations = result.data;
-				// >>> loop through the results and push only required items to $scope.organisations
+				
+				// loop through the results and push only required items to $scope.regions
 				for (var i = 0, len = result.data.length; i < len; i++) {
-					$scope.organisations[i] = {id: result.data[i].id, name: result.data[i].name};
+					$scope.regions[i] = {id: result.data[i].id, name: result.data[i].name};
 				}
+
+				// enable regions select
+				$scope.regionsDisabled = false;
+
 			}).error(function (result, error) {
 				
 				// process connection error
 				processConnectionError(result, error);
 
 			});
+
+
+		/*
+			>> populate organisation dropdown
+		*/
+
+			$scope.organisationsDisabled = true;
+			$scope.organisations = [];
+
+			$scope.populateOrganisations = function() {
+
+				// get selected region id
+				$scope.regionId = $scope.formData.region.id;
+
+				// add selected region to localStorage
+				$localStorage.region = $scope.formData.region;
+
+				$http({
+					method: 'GET',
+					url: api('regions/' + $scope.regionId + '/organisations')
+				}).success(function (result) {
+
+					// loop through the results and push only required items to $scope.organisations
+					for (var i = 0, len = result.data.length; i < len; i++) {
+						$scope.organisations[i] = {id: result.data[i].id, name: result.data[i].name};
+					}
+
+					// enable organisation select 
+					$scope.organisationsDisabled = false;
+
+				}).error(function (result, error) {
+					
+					// process connection error
+					processConnectionError(result, error);
+
+				});
+			}
+
 
 		/*
 			>> process the form
@@ -100,11 +138,15 @@
 					// show loader
 					$ionicLoading.show();
 
-					// >>> submit form
+					// sanitise form data (replace region object with region=North West e.g.)
+					$scope.formDataSanitised = $scope.formData;
+					$scope.formDataSanitised.region = $scope.formDataSanitised.region.name;
+
+					// >>> submit sanitised form data
 					$http({
 						method: 'POST',
 						url: api('users'),
-						data: $.param($scope.formData),
+						data: $.param($scope.formDataSanitised),
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 					}).success(function(response) {
 

@@ -5,22 +5,19 @@
             <ion-toggle toggle-class="toggle-positive" ng-click="locationReminders()" ng-model="locationRemindersSwitch">Location reminders</ion-toggle>
         </form>
         <div class="spacer-10"></div>
-        <form class="list">
+        <!-- <form class="list">
 
-            <!-- organisation -->
             <label class="item item-select">
                 <span class="input-label">Organisation</span>
                 <select ng-model="formData.organisation" ng-options="option.name for option in organisations track by option.id" name="organisation" id="organisation" required>
                     <option value="">Select organisation</option>
-                    <!--  -->
                 </select>
             </label>
             <label class="error block text-right padding assertive" ng-cloak ng-show="register.organisation.$invalid && formSubmitted" for="organisation">
                 Please select an organisation
             </label>
-            <!-- /organisation -->
 
-        </form>
+        </form> -->
         <ion-list>
             <ion-item class="item-icon-right" ui-sref="tabs.terms-and-conditions">Terms &amp; conditions
                 <i class="icon ion-chevron-right icon-accessory"></i>

@@ -53,7 +53,7 @@
 		<script src="js/controllers/register-controller.js"></script>
 		<script src="js/controllers/login-controller.js"></script>
 		<script src="js/controllers/dashboard-controller.js"></script>
-		<script src="js/controllers/log-hours-controller.js"></script>
+		<script src="js/controllers/new-log-controller.js"></script>
 		<script src="js/controllers/view-logs-controller.js"></script>
 		<script src="js/controllers/edit-log-controller.js"></script>
 		<script src="js/controllers/settings-controller.js"></script>
@@ -68,7 +68,7 @@
 	</head>
 	<body ng-app="app" animation="slide-left-right-ios7">
 
-		<ion-nav-bar class="bar-positive">
+		<ion-nav-bar class="bar-positive" ng-click="alert('test')">
 			<ion-nav-back-button class="button-icon icon ion-ios-arrow-back">Back</ion-nav-back-button>
 		</ion-nav-bar>
 		<ion-nav-view></ion-nav-view>

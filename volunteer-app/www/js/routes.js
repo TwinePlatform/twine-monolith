@@ -50,13 +50,14 @@ angular.module('app.routes', ['ionicUIRouter'])
 				}
 			})
 
-				// >>> dashboard - log hours
-				.state('tabs.log-hours', {
-					url: '/dashboard/log-hours',
+				// >>> dashboard - new log
+				.state('tabs.new-log', {
+					cache: false,
+					url: '/dashboard/new-log',
 					views: {
 						'dashboard-tab': {
-							templateUrl: 'templates/log-hours.html',
-							controller: 'LogHoursController'
+							templateUrl: 'templates/new-log.html',
+							controller: 'NewLogController'
 						}
 					}
 				})
