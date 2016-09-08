@@ -17,7 +17,7 @@
 	> new log controller
 */
 
-	angular.module('app').controller('NewLogController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage',  '$rootScope', 
+	angular.module('app').controller('NewLogController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage',  '$rootScope',  
 	function ($scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope) {
 
 		/*
@@ -28,28 +28,32 @@
 
 
 		/*
-			>> function: generate form date
+			>> setup datepickers
 		*/
-		
-			// generate a date in the format 2017-08-30 and add to hidden date field
-			$scope.generateFormDate = function() {
-				var formDate = $filter('date')($scope.formData.dateRaw, 'yyyy-MM-dd');
-				$scope.formData.date_of_log = formDate;
-			}
 
+			$('#createLog .datepicker').pickadate({
+				date: new Date(),
+				container: '.datepicker-container',
+				onStart: function () {
+					// set date to today initially
+				    var date = new Date();
+				    this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()] )
+				    console.log(this);
 
-		/*
-			>> get today's date for raw date field
-		*/
-		
-			// get today's date
-			$scope.today = new Date();
+				    // add date to scope in correct format
+				    $scope.formData.date_of_log = $filter('date')(this.component.item.select.pick, 'yyyy-MM-dd');
 
-			// set the raw date field to today
-			$scope.formData.dateRaw = $scope.today;
+				    // add current time
+				    $scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + getCurrentTime();
+				},
+				onSet: function(context) {
+					// add date to scope in correct format
+					$scope.formData.date_of_log = $filter('date')(context.select, 'yyyy-MM-dd');
 
-			// generate the form date
-			$scope.generateFormDate();
+					// add current time
+					$scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + getCurrentTime();
+				}
+			});
 
 
 		/*
@@ -117,6 +121,7 @@
 					// show loader
 					$ionicLoading.show();
 
+					console.log('form data:');
 					console.log($scope.formData);
 
 					// >>> submit form

@@ -14,6 +14,21 @@
 	function ($scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope) {
 
 		/*
+			>> setup datepickers
+		*/
+
+			var $datepickerInput = $('#editLog .datepicker').pickadate({
+				container: '.datepicker-container',
+				onSet: function(context) {
+					// add date to scope in correct format
+					$scope.formData.date_of_log = $filter('date')(context.select, 'yyyy-MM-dd');
+
+					// add current time
+					$scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + getCurrentTime();
+				}
+			});
+
+		/*
 			>> variables
 		*/
 
@@ -34,7 +49,7 @@
 			$scope.organisations = [];
 			$http({
 				method: 'GET',
-				url: api('regions/' + $localStorage.region.id + '/organisations')
+				url: api('regions/' + $localStorage.user.region_id + '/organisations')
 			}).success(function (result) {
 				// console.log(result.data);
 				$scope.organisations = result.data;
@@ -92,11 +107,10 @@
 				url: api('logs/' + $scope.logId)
 			}).success(function (result) {
 				
-				console.log(result);
-
-				// process date items
-				result.data.dateRaw = new Date(result.data.date_of_log);
-				result.data.date_of_log = result.data.date_of_log.split(' ')[0];
+				// set datepicker date
+				var picker = $datepickerInput.pickadate('picker');
+				var dateShort = result.data.date_of_log.substring(0,10)
+				picker.set('select', dateShort, { format: 'yyyy-mm-dd' } );
 
 				console.log(result);
 

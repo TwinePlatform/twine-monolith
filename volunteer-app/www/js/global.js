@@ -87,3 +87,49 @@
 			}
 
 		}
+
+
+	/*
+		sort by - sort an array of objects by object value
+	*/
+
+		var sortBy = function(field, reverse, primer){
+
+		   var key = primer ? 
+		       function(x) {return primer(x[field])} : 
+		       function(x) {return x[field]};
+
+		   reverse = !reverse ? 1 : -1;
+
+		   return function (a, b) {
+		       return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+		     } 
+		}
+
+
+	/*
+		get current time - in string in format HH:MM:SS
+	*/
+
+		var getCurrentTime = function() {
+
+			var timeDate = new Date;
+			var seconds = timeDate.getSeconds().toString();
+			var minutes = timeDate.getMinutes().toString();
+			var hour = timeDate.getHours().toString();
+
+			// add zero padding
+			if (seconds.length === 1) {
+				seconds = '0' + seconds;
+			}
+			if (minutes.length === 1) {
+				minutes = '0' + minutes;
+			}
+			if (hour.length === 1) {
+				hour = '0' + hour;
+			}
+
+			var time = hour + ':' + minutes + ':' + seconds;
+			return time;
+			
+		}

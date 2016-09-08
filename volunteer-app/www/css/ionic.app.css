@@ -12151,6 +12151,9 @@ h1, h2, h3, h4 {
 select[disabled], .item-select-disabled:after {
   opacity: 0.4; }
 
+.datepicker, input[readonly].datepicker {
+  background-color: white; }
+
 .register .input-label {
   font-size: 15px; }
 
@@ -12169,6 +12172,9 @@ select[disabled], .item-select-disabled:after {
 
 .total-hours-container .chart {
   max-width: 100%; }
+
+.chart-container {
+  min-height: 54px; }
 
 #chartjs-tooltip {
   opacity: 1;
