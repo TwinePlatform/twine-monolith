@@ -10,7 +10,7 @@
 *   populate organisation dropdown
 *   process the form
 *    validate form
-*    submit form
+*    submit sanitised form data
 */
 
 /*
@@ -94,9 +94,6 @@
 				// get selected region id
 				$scope.regionId = $scope.formData.region.id;
 
-				// add selected region to localStorage
-				$localStorage.region = $scope.formData.region;
-
 				$http({
 					method: 'GET',
 					url: api('regions/' + $scope.regionId + '/organisations')
@@ -140,7 +137,13 @@
 
 					// sanitise form data (replace region object with region=North West e.g.)
 					$scope.formDataSanitised = $scope.formData;
-					$scope.formDataSanitised.region = $scope.formDataSanitised.region.name;
+					$scope.formDataSanitised.region_id = $scope.formDataSanitised.region.id;
+					$scope.formDataSanitised.region_name = $scope.formDataSanitised.region.name;
+					$scope.formDataSanitised.region = '';
+					$scope.formDataSanitised.organisation_id = $scope.formDataSanitised.organisation.id;
+
+					console.log('sanitised form:');
+					console.log($scope.formDataSanitised);
 
 					// >>> submit sanitised form data
 					$http({

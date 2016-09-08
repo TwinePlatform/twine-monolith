@@ -55,3 +55,8 @@
 select[disabled], .item-select-disabled:after {
 	opacity: 0.4;
 }
+
+// datepickers
+.datepicker, input[readonly].datepicker {
+	background-color: white;
+}

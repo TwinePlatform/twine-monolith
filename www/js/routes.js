@@ -5,7 +5,7 @@
 * login page
 * tabs
 *   dashboard
-*    dashboard - log hours
+*    dashboard - new log
 *   view logs
 *    view logs - edit log
 *   settings
@@ -64,7 +64,7 @@ angular.module('app.routes', ['ionicUIRouter'])
 
 			// >> view logs
 			.state('tabs.view-logs', {
-				cache: false,
+				// cache: false,
 				url: '/view-logs',
 				views: {
 					'view-logs-tab': {

@@ -17,29 +17,33 @@
 			>> populate logs
 		*/
 
-			console.log($localStorage.user.id);
+			$scope.populateLogs = function() {
 
-			$http({
-				method: 'GET',
-				url: api('logs/user/' + $localStorage.user.id)
-			}).success(function (result) {
-				
-				console.log(result);
+				// get logs from api
+				$http({
+					method: 'GET',
+					url: api('logs/user/' + $localStorage.user.id)
+				}).success(function (result) {
+					
+					console.log(result);
 
-				// update logs in view
-				$scope.logs = result.data.logs;
+					// update logs in view
+					$scope.logs = result.data.logs;
 
-				// if no logs
-				if (result.data.logs.length == 0) {
-					$scope.noLogs = true;
-				}
+					// if no logs
+					if (result.data.logs.length == 0) {
+						$scope.noLogs = true;
+					}
 
-			}).error(function (result, error) {
-				
-				// process connection error
-				processConnectionError(result, error);
+				}).error(function (result, error) {
+					
+					// process connection error
+					processConnectionError(result, error);
 
-			});
+				});
+
+			}
+
 
 		/*
 			>> delete log
@@ -80,6 +84,32 @@
 				});
 
 			}
+
+		/*
+			>> beforeEnter
+			   - fired every time view entered
+		*/
+
+			$scope.$on('$ionicView.beforeEnter', function() {
+
+				// populate logs
+				$scope.populateLogs();
+
+			})
+
+		
+		/*
+			>> leave
+			   - fired every time view is fully left
+		*/
+
+			$scope.$on('$ionicView.leave', function() {
+
+				// clear logs
+				$scope.logs = null;
+				$('.view-logs .list .item').remove();
+
+			})
 
 
 	}])

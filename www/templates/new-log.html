@@ -7,8 +7,7 @@
             <!-- date -->
             <label class="item item-input">
                 <span class="input-label">Date</span>
-                <input type="date" name="dateRaw" id="dateRaw" ng-model="formData.dateRaw" ng-change="generateFormDate()" required>
-                <input type="text" name="date_of_log" id="date_of_log" ng-model="formData.date" class="ng-hide">
+                <input type="text" name="date_pretty" id="date_pretty" class="datepicker">
             </label>
             <label class="error block text-right padding assertive" ng-show="createLog.date.$invalid && formSubmitted" for="date">
                 Please select a date
