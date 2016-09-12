@@ -35,6 +35,14 @@
 				if (window.geofence) {
 					window.geofence.initialize().then(function () {
 						console.log("Geofence: Successful initialization");
+
+						// get watched geofences
+						window.geofence.getWatched().then(function (geofencesJson) {
+						    var geofences = JSON.parse(geofencesJson);
+						    console.log('watched geofences:');
+						    console.log(geofences);
+						});
+
 					}, function (error) {
 						console.log("Geofence: Error", error);
 					});
@@ -162,9 +170,17 @@
 							// show alert
 							$ionicPopup.alert({
 							  	title: 'Location reminders enabled',
-							  	template: 'Location reminders have now been enabled. You will now be notified whenever you leave your volunteering location: ' + $scope.lat + ', ' + $scope.long
+							  	template: 'Location reminders have now been enabled. You will now be notified whenever you leave your volunteering location.'
 							});
 							$localStorage.locationRemindersSwitch = true;
+
+							// get watched geofences
+							window.geofence.getWatched().then(function (geofencesJson) {
+							    var geofences = JSON.parse(geofencesJson);
+							    console.log('watched geofences:');
+							    console.log(geofences);
+							});
+
 						}, function (reason) {
 							// show alert
 							$ionicPopup.alert({
@@ -221,13 +237,6 @@
 						});
 					});
 				};
-
-
-
-
-
-
-
 
 
 			/*
