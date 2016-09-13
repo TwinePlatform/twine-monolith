@@ -3,8 +3,7 @@
 *
 * new log controller
 *   store the form data
-*   function: generate form date
-*   get today's date for raw date field
+*   setup datepickers
 *   populate organisation dropdown
 *    loop through the results and push only required items to $scope.organisations
 *   populate user_id field

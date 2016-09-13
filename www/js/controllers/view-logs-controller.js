@@ -4,6 +4,8 @@
 * view logs controller
 *   populate logs
 *   delete log
+*   beforeEnter
+*   leave
 */
 
 /*

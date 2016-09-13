@@ -2,8 +2,16 @@
 * CONTENTS
 *
 * edit log controller
-*   get log
-*    check for new date and update date input value
+*   setup datepickers
+*   variables
+*   show loader
+*   populate organisation dropdown
+*    loop through the results and push only required items to $scope.organisations
+*   get log data
+*   function: generate form date
+*   process the form
+*    validate form
+*    submit form
 */
 
 /*

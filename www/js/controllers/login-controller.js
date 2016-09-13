@@ -2,6 +2,10 @@
 * CONTENTS
 *
 * login controller
+*   store the form data
+*   process the form
+*    validate form
+*    submit form
 */
 
 /*
