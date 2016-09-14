@@ -10,14 +10,15 @@
 *   disable location reminders
 *   populate organisation dropdown
 *    loop through the results and push only required items to $scope.organisations
+*   log out
 */
 
 /* 
 	> settings controller
 */
 
-	angular.module('app').controller('SettingsController', ['$scope', '$stateParams', '$http', '$ionicPopup', '$ionicLoading', '$ionicPlatform', '$localStorage', 
-	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage) {
+	angular.module('app').controller('SettingsController', ['$scope', '$stateParams', '$http', '$ionicPopup', '$ionicLoading', '$ionicPlatform', '$localStorage', '$state', 
+	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state) {
 
 		$ionicPlatform.ready(function() {
 
@@ -260,6 +261,16 @@
 					processConnectionError(result, error);
 
 				});
+
+
+			/*
+				>> log out
+			*/
+
+				$scope.logOut = function() {
+					delete $localStorage.user;
+					$state.go('login');
+				}
 
 		});
 
