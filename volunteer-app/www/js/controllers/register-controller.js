@@ -180,6 +180,9 @@
 						// registration unsuccessful
 						else {
 
+							// hide loader
+							$ionicLoading.hide();
+
 							// show unsuccess popup
 							var alertPopup = $ionicPopup.alert({
 							  	title: 'Error',
