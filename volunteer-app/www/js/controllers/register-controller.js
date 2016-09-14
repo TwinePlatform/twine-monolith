@@ -135,21 +135,11 @@
 					// show loader
 					$ionicLoading.show();
 
-					// sanitise form data (replace region object with region=North West e.g.)
-					$scope.formDataSanitised = $scope.formData;
-					$scope.formDataSanitised.region_id = $scope.formDataSanitised.region.id;
-					$scope.formDataSanitised.region_name = $scope.formDataSanitised.region.name;
-					$scope.formDataSanitised.region = '';
-					$scope.formDataSanitised.organisation_id = $scope.formDataSanitised.organisation.id;
-
-					console.log('sanitised form:');
-					console.log($scope.formDataSanitised);
-
 					// >>> submit sanitised form data
 					$http({
 						method: 'POST',
 						url: api('users'),
-						data: $.param($scope.formDataSanitised),
+						data: $.param($scope.formData),
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 					}).success(function(response) {
 
