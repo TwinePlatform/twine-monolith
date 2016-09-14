@@ -12,8 +12,8 @@
 	> login controller
 */
 
-	angular.module('app').controller('LoginController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$localStorage', 
-	function ($scope, $stateParams, $http, $state, $ionicPopup, $localStorage) {
+	angular.module('app').controller('LoginController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$localStorage', '$ionicLoading', 
+	function ($scope, $stateParams, $http, $state, $ionicPopup, $localStorage, $ionicLoading) {
 
 		/*
 			>> store the form data
@@ -38,6 +38,9 @@
 				if (form.$valid) {
 					console.log('form valid');
 
+					// show loader
+					$ionicLoading.show();
+
 					// >>> submit form
 					$http({
 						method: 'POST',
@@ -52,6 +55,9 @@
 						// login successful
 						if (response.success) {
 
+							// hide loader
+							$ionicLoading.hide();
+
 							// store user data
 							$localStorage.user = response.data;
 
@@ -62,6 +68,9 @@
 
 						// login unsuccessful
 						else {
+
+							// hide loader
+							$ionicLoading.hide();
 
 							// show unsuccess popup
 							var alertPopup = $ionicPopup.alert({
