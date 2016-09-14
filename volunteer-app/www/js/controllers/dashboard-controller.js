@@ -110,8 +110,7 @@
 
 						// sort the logs by date_of_log in reverse
 						logs = logs.sort(sortBy(
-							'date_of_log', 	// field to sort by
-							true			// reverse
+							'date_of_log' 	// field to sort by
 						));
 
 						// if there have been no hours logged, create a chart with dummy data
