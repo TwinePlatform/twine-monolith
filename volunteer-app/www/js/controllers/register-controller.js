@@ -151,7 +151,7 @@
 							// show success popup
 							var alertPopup = $ionicPopup.alert({
 							  	title: 'Registration successful!',
-							  	template: 'Welcome to Power to Change, ' + response.data.name + '!',
+							  	template: 'Welcome to ' + $localStorage.user.organisation.name + ', ' + $localStorage.user.name + '!',
 							  	okText: 'Start logging time'
 							});
 
