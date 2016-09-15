@@ -15,9 +15,13 @@
             <!-- /date -->
 
             <!-- duration -->
-            <label class="item item-input">
+            <label class="item item-select">
                 <span class="input-label">Duration</span>
-                <input type="number" name="duration" id="duration" ng-model="formData.duration" placeholder="E.g. 7" required>
+                <!-- <input type="number" name="duration" id="duration" ng-model="formData.duration" placeholder="E.g. 7" required> -->
+                <select ng-model="formData.duration" ng-options="option.name for option in durations track by option.value" name="duration" id="duration" required>
+                    <option value="">0 hours</option>
+                    <!--  -->
+                </select>
             </label>
             <label class="error block text-right padding assertive" ng-show="createLog.duration.$invalid && formSubmitted" for="duration">
                 Please enter a duration (hours)

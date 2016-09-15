@@ -10,7 +10,7 @@
 *   populate organisation dropdown
 *   process the form
 *    validate form
-*    submit sanitised form data
+*    submit form data
 */
 
 /*
@@ -164,8 +164,6 @@
 
 						// registration successful
 						if (response.success) {
-
-							console.log(response);
 
 							// hide loader
 							$ionicLoading.hide();
