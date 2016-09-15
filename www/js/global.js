@@ -2,13 +2,13 @@
 	global variables & functions used throughout
 */
 
-	/* 
+	/*
 		api urls
 	*/
 
 		var apiBaseUrl = 'http://powertochangeadmin.stage2.reason.digital/api/v1/';
 
-	/* 
+	/*
 		api url generator
 	*/
 
@@ -16,7 +16,7 @@
 			return apiBaseUrl + url;
 		}
 
-	/* 
+	/*
 		shout - show a quick, non-intrusive popup message to the user
 		e.g. shout('<p>Hello!</p>', 1500);
 	*/
@@ -65,7 +65,7 @@
 		} 
 
 
-	/* 
+	/*
 		process connection errors
 	*/
 
@@ -133,3 +133,24 @@
 			return time;
 			
 		}
+
+
+	/*
+		get minutes - get minutes as an integer
+	*/
+
+		var getMinutes = function(hours, minutes) {
+			return (hours * 60) + minutes;
+		}
+
+
+	/*
+		get hours & minutes
+	*/
+
+		var getHoursAndMinutes = function(minutesInteger) {
+			var hours = Math.floor( minutesInteger / 60);          
+		    var minutes = minutesInteger % 60;
+		    return { hours: hours, minutes: minutes};
+		}
+		

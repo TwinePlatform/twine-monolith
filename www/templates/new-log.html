@@ -14,17 +14,33 @@
             </label>
             <!-- /date -->
 
-            <!-- duration -->
+            <!-- hours -->
             <label class="item item-select">
-                <span class="input-label">Duration</span>
-                <!-- <input type="number" name="duration" id="duration" ng-model="formData.duration" placeholder="E.g. 7" required> -->
-                <select ng-model="formData.duration" ng-options="option.name for option in durations track by option.value" name="duration" id="duration" required>
-                    <option value="">0 hours</option>
+                <span class="input-label">Hours</span>
+                <select ng-model="formData.hours" ng-options="option.name for option in hours track by option.value" name="hours" id="hours" ng-change="calculateDuration()">
+                    <option value="" selected>Select hours</option>
                     <!--  -->
                 </select>
             </label>
-            <label class="error block text-right padding assertive" ng-show="createLog.duration.$invalid && formSubmitted" for="duration">
-                Please enter a duration (hours)
+            <!-- /hours -->
+
+            <!-- minutes -->
+            <label class="item item-select">
+                <span class="input-label">Minutes</span>
+                <select ng-model="formData.minutes" ng-options="option.name for option in minutes track by option.value" name="minutes" id="minutes" ng-change="calculateDuration()">
+                    <option value="" selected>Select minutes</option>
+                    <!--  -->
+                </select>
+            </label>
+            <label class="error block text-right padding assertive" ng-show="createLog.duration.$invalid && formSubmitted" for="hours">
+                Please select a duration of at least 5 minutes
+            </label>
+            <!-- /minutes -->
+
+            <!-- duration -->
+            <label class="item item-input ng-hide">
+                <span class="input-label">Duration</span>
+                <input type="number" ng-model="formData.duration" id="duration" name="duration" ng-min="5" required>
             </label>
             <!-- /duration -->
 
