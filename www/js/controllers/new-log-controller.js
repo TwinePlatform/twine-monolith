@@ -55,6 +55,19 @@
 
 
 		/*
+			>> populate hours dropdown
+		*/
+
+			$scope.durations = [];
+			var lowestDuration = 1,
+				highestDuration = 24;
+			while(lowestDuration <= highestDuration) {
+				$scope.durations.push({ value: lowestDuration, name: lowestDuration + ' hours' });
+				lowestDuration++;
+			}
+
+
+		/*
 			>> populate organisation dropdown
 		*/
 
@@ -122,6 +135,8 @@
 
 					// show loader
 					$ionicLoading.show();
+
+					console.log($scope.formData);
 
 					// >>> submit form
 					$http({
