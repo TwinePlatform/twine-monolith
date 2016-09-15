@@ -49,7 +49,30 @@
 			>> populate gender dropdown
 		*/
 
-			$scope.genders = ['Male', 'Female', 'Trans male', 'Trans female', 'Other', 'Non-binary', 'Rather not say'];
+			// $scope.genders = ['Male', 'Female', 'Trans male', 'Trans female', 'Other', 'Non-binary', 'Rather not say'];
+
+			$scope.gendersDisabled = true;
+			$scope.genders = [];
+
+			$http({
+				method: 'GET',
+				url: api('genders')
+			}).success(function (result) {
+				
+				// loop through the results and push only required items to $scope.genders
+				for (var i = 0, len = result.data.length; i < len; i++) {
+					$scope.genders[i] = {id: result.data[i].id, name: result.data[i].name};
+				}
+
+				// enable genders select
+				$scope.gendersDisabled = false;
+
+			}).error(function (result, error) {
+				
+				// process connection error
+				processConnectionError(result, error);
+
+			});			
 
 		/*
 			>> populate region dropdown
@@ -131,7 +154,7 @@
 					// show loader
 					$ionicLoading.show();
 
-					// >>> submit sanitised form data
+					// >>> submit form data
 					$http({
 						method: 'POST',
 						url: api('users'),
@@ -141,6 +164,8 @@
 
 						// registration successful
 						if (response.success) {
+
+							console.log(response);
 
 							// hide loader
 							$ionicLoading.hide();
