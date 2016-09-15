@@ -62,7 +62,7 @@
 			$scope.organisations = [];
 			$http({
 				method: 'GET',
-				url: api('organisations')
+				url: api('regions/' + $localStorage.user.region_id + '/organisations')
 			}).success(function (result) {
 				// console.log(result.data);
 				$scope.organisations = result.data;
@@ -73,16 +73,21 @@
 					// when for loop complete
 					if (i === len - 1) {
 
-						// get user's organisation id
-						var orgId = parseInt($localStorage.user.organisation_id);
+						setTimeout(function(){
 
-						// get position of user's organsation in $scope.organisations array
-						var organisationPosition = $scope.organisations.map(function(x) {return x.id; }).indexOf(orgId);
+							// get user's organisation id
+							var orgId = parseInt($localStorage.user.organisation_id);
 
-						// set the value of formData.organisation to that item
-						$scope.formData.organisation = $scope.organisations[organisationPosition];
+							// get position of user's organsation in $scope.organisations array
+							var organisationPosition = $scope.organisations.map(function(x) {return x.id; }).indexOf(orgId);
+
+							// set the value of formData.organisation to that item
+							$scope.formData.organisation = $scope.organisations[organisationPosition];
+
+						}, 50);
 
 					}
+					
 				}
 
 			}).error(function (result, error) {
@@ -137,9 +142,6 @@
 						if (response.success) {
 
 							console.log('create log successful');
-
-							// refresh dashboard
-							// $rootScope.$broadcast('refreshDashboard');
 
 							// hide loader
 							$ionicLoading.hide();
