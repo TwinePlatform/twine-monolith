@@ -37,7 +37,6 @@
 					// set date to today initially
 				    var date = new Date();
 				    this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()] )
-				    console.log(this);
 
 				    // add date to scope in correct format
 				    $scope.formData.date_of_log = $filter('date')(this.component.item.select.pick, 'yyyy-MM-dd');
@@ -64,7 +63,7 @@
 				method: 'GET',
 				url: api('regions/' + $localStorage.user.region_id + '/organisations')
 			}).success(function (result) {
-				// console.log(result.data);
+
 				$scope.organisations = result.data;
 				// >>> loop through the results and push only required items to $scope.organisations
 				for (var i = 0, len = result.data.length; i < len; i++) {
@@ -87,7 +86,7 @@
 						}, 50);
 
 					}
-					
+
 				}
 
 			}).error(function (result, error) {
@@ -117,16 +116,12 @@
 
 				// form is valid
 				if (form.$valid) {
-					console.log('form valid');
 
 					// generate organisation_id before we submit form
 					$scope.formData.organisation_id = $scope.formData.organisation.id;
 
 					// show loader
 					$ionicLoading.show();
-
-					console.log('form data:');
-					console.log($scope.formData);
 
 					// >>> submit form
 					$http({
@@ -136,12 +131,8 @@
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 					}).success(function(response) {
 
-						console.log(response);
-
 						// create log successful
 						if (response.success) {
-
-							console.log('create log successful');
 
 							// hide loader
 							$ionicLoading.hide();
@@ -157,7 +148,7 @@
 						// create log unsuccessful
 						else {
 
-							console.log('create log unsuccessful');
+							shout('Could not create log.');
 
 						}
 
@@ -173,7 +164,7 @@
 				}
 				// form is invalid
 				else {
-					console.log('form invalid');
+					
 				}
 
 			};
