@@ -54,6 +54,8 @@
 							// hide loader
 							$ionicLoading.hide();
 
+							console.log('response.data: ', response.data);
+
 							// store user data
 							$localStorage.user = response.data;
 
