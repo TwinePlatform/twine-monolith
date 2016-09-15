@@ -35,17 +35,14 @@
 
 				if (window.geofence) {
 					window.geofence.initialize().then(function () {
-						console.log("Geofence: Successful initialization");
 
 						// get watched geofences
 						window.geofence.getWatched().then(function (geofencesJson) {
 						    var geofences = JSON.parse(geofencesJson);
-						    console.log('watched geofences:');
-						    console.log(geofences);
 						});
 
 					}, function (error) {
-						console.log("Geofence: Error", error);
+						shout("Geofence: Error", error);
 					});
 				}
 
@@ -130,13 +127,13 @@
 
 				$scope.enableLocationReminders = function() {
 
-					console.log('enableLocationReminders');
-
-					// >>> get current lat and lon
+					// >>> get current lat and long
 					navigator.geolocation.getCurrentPosition(function(position) {
-						console.log(position);
+
+						// get lat and log
 						$scope.lat = position.coords.latitude;
 						$scope.long = position.coords.longitude;
+
 						// setup geofences
 						$scope.setupGeofences();
 					}, function(error) {
@@ -178,8 +175,6 @@
 							// get watched geofences
 							window.geofence.getWatched().then(function (geofencesJson) {
 							    var geofences = JSON.parse(geofencesJson);
-							    console.log('watched geofences:');
-							    console.log(geofences);
 							});
 
 						}, function (reason) {
@@ -195,8 +190,6 @@
 						// listen for geofence transitions within the app
 						window.geofence.onTransitionReceived = function (geofences) {
 							geofences.forEach(function (geo) {
-								console.log('Geofence transition detected');
-								console.dir(geo);
 								// left location
 								if (geo.id === 'LocationLeave') {
 									$ionicPopup.alert({
@@ -208,8 +201,6 @@
 						};
 
 					}
-
-
 
 				};
 
@@ -249,7 +240,6 @@
 					method: 'GET',
 					url: api('organisations')
 				}).success(function (result) {
-					console.log(result.data);
 					$scope.organisations = result.data;
 					// >>> loop through the results and push only required items to $scope.organisations
 					for (var i = 0, len = result.data.length; i < len; i++) {

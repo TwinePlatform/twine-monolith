@@ -36,7 +36,6 @@
 
 				// form is valid
 				if (form.$valid) {
-					console.log('form valid');
 
 					// show loader
 					$ionicLoading.show();
@@ -48,9 +47,6 @@
 						data: $.param($scope.formData),
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 					}).success(function(response) {
-
-						console.log('response:');
-						console.log(response);
 
 						// login successful
 						if (response.success) {
@@ -92,10 +88,9 @@
 				}
 				// form is invalid
 				else {
-					console.log('form invalid');
+					
 				}
 
 			};
-
 
 	}])

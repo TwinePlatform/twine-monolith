@@ -25,7 +25,6 @@
 		*/
 
 			if ($localStorage.user && $localStorage.user.api_token !== '') {
-				console.log('access token found, log straight in');
 				$state.go('tabs.dashboard');
 			}
 
@@ -55,8 +54,6 @@
 		/*
 			>> populate region dropdown
 		*/
-
-			// $scope.regions = ['East Midlands', 'East of England', 'London', 'North East', 'North West', 'South East', 'South West', 'West Midlands', 'Yorkshire and Humber'];
 
 			$scope.regionsDisabled = true;
 			$scope.regions = [];
@@ -130,7 +127,6 @@
 
 				// form is valid
 				if (form.$valid) {
-					console.log('form valid');
 
 					// show loader
 					$ionicLoading.show();
@@ -142,8 +138,6 @@
 						data: $.param($scope.formData),
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 					}).success(function(response) {
-
-						console.log(response);
 
 						// registration successful
 						if (response.success) {
@@ -196,7 +190,7 @@
 				}
 				// form is invalid
 				else {
-					console.log('form invalid');
+
 				}
 
 			};

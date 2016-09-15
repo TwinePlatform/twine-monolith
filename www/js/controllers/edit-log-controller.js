@@ -59,7 +59,7 @@
 				method: 'GET',
 				url: api('regions/' + $localStorage.user.region_id + '/organisations')
 			}).success(function (result) {
-				// console.log(result.data);
+
 				$scope.organisations = result.data;
 				// >>> loop through the results and push only required items to $scope.organisations
 				for (var i = 0, len = result.data.length; i < len; i++) {
@@ -86,8 +86,6 @@
 
 						}, 50);
 
-
-
 					}
 				}
 
@@ -107,7 +105,6 @@
 
 			// get log id
 			$scope.logId = $state.params.id;
-			console.log($scope.logId);
 
 			// get log from api
 			$http({
@@ -119,8 +116,6 @@
 				var picker = $datepickerInput.pickadate('picker');
 				var dateShort = result.data.date_of_log.substring(0,10)
 				picker.set('select', dateShort, { format: 'yyyy-mm-dd' } );
-
-				console.log(result);
 
 				// add to scope
 				$scope.formData = result.data;
@@ -139,6 +134,7 @@
 				processConnectionError(result, error);
 
 			});
+
 
 		/*
 			>> function: generate form date
@@ -165,12 +161,9 @@
 
 				// form is valid
 				if (form.$valid) {
-					console.log('form valid');
 
 					// show loader
 					$ionicLoading.show();
-
-					console.log($scope.formData);
 
 					// >>> submit form
 					$http({
@@ -180,12 +173,8 @@
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 					}).success(function(response) {
 
-						console.log(response);
-
 						// create log successful
 						if (response.success) {
-
-							console.log('edit log successful');
 
 							// hide loader
 							$ionicLoading.hide();
@@ -195,9 +184,6 @@
 
 							// shout success
 							shout('Log saved succesfully!');
-
-							// refresh dashboard
-							// $rootScope.$broadcast('refreshDashboard');
 
 						}
 
@@ -220,10 +206,9 @@
 				}
 				// form is invalid
 				else {
-					console.log('form invalid');
+					
 				}
 
 			};
-
 
 	}])
