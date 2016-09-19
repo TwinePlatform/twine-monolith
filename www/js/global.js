@@ -154,3 +154,22 @@
 		    return { hours: hours, minutes: minutes};
 		}
 		
+	/*
+		get hours & minutes (as string)
+	*/
+
+		var getHoursAndMinutesAsString = function(minutesInteger) {
+			var hoursAndMinutesObject = getHoursAndMinutes(minutesInteger);
+			var hours = hoursAndMinutesObject.hours;
+			var minutes = hoursAndMinutesObject.minutes;
+			var hoursAndMinutesString = '';
+			// if there's more than 0 hours
+			if (hours > 0) {
+				hoursAndMinutesString += '<span class="hours">' + hours + ' hr</span> ';
+			}
+			// if there's more than 0 minutes
+			if (minutes > 0) {
+				hoursAndMinutesString += '<span class="minutes">' + minutes + ' min</span>';
+			}
+			return hoursAndMinutesString;
+		}
