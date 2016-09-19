@@ -27,6 +27,15 @@
 					url: api('logs/user/' + $localStorage.user.id)
 				}).success(function (result) {
 					
+					// change duration into hours and minutes
+					console.log('result: ', result);
+					for (i = 0; i < result.data.logs.length; i++) {
+						var duration = result.data.logs[i].duration;
+						var hoursAndMinutes = getHoursAndMinutesAsString(duration);
+						// add nice hours and minutes string to object
+						result.data.logs[i].hoursAndMinutes = hoursAndMinutes;
+					}
+
 					// update logs in view
 					$scope.logs = result.data.logs;
 
