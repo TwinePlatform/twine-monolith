@@ -107,9 +107,13 @@
 
             </ion-list>
 
-            <div class="spacer-20"></div>
+            <div class="spacer-10"></div>
 
             <!-- buttons -->
+            <div class="padding-top padding-left padding-right text-center">
+                <small class="text-center">You must read and agree to the terms and conditions before registering</small>
+                <a ng-click="termsShow()" class="button button-small button-positive button-block button-clear">Terms & Conditions</a>
+            </div>
             <button type="submit" class="button button-positive button-block button-outline">Register</button>
             <a ui-sref="login" class=" button button-positive button-block button-clear">Or log in if you have an account</a>
         </form>
