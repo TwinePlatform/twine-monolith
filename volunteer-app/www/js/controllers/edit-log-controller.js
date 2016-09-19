@@ -5,6 +5,8 @@
 *   setup datepickers
 *   variables
 *   show loader
+*   populate hours dropdown
+*   populate minutes dropdown
 *   populate organisation dropdown
 *    loop through the results and push only required items to $scope.organisations
 *   get log data
@@ -49,6 +51,56 @@
 		*/
 
 			$ionicLoading.show();
+
+
+		/*
+			>> populate hours dropdown
+		*/
+
+			$scope.hours = [];
+			var lowestHour = 0,
+				highestHour = 24;
+			while(lowestHour <= highestHour) {
+				$scope.hours.push({ value: lowestHour, name: lowestHour + ' hours' });
+				lowestHour++;
+			}
+
+
+		/*
+			>> populate minutes dropdown
+		*/
+
+			$scope.minutes = [];
+			var lowestMinute = 0,
+				highestMinute = 55;
+			while(lowestMinute <= highestMinute) {
+				$scope.minutes.push({ value: lowestMinute, name: lowestMinute + ' minutes' });
+				lowestMinute += 5;
+			}
+
+		/*
+			>> calculate duration
+		*/
+
+			$scope.calculateDuration = function() {
+				
+				var hours = 0,
+					minutes = 0;
+				
+				// get hours from form
+				if (angular.isDefined($scope.formData.hours) && $scope.formData.hours !== null) {
+					hours = $scope.formData.hours.value;
+				}
+
+				// get minutes from form
+				if (angular.isDefined($scope.formData.minutes) && $scope.formData.minutes !== null) {
+					minutes = $scope.formData.minutes.value;
+				}
+
+				// get total minutes integer & update form
+				$scope.formData.duration = getMinutes(hours, minutes);
+
+			}
 
 		/*
 			>> populate organisation dropdown
@@ -120,6 +172,24 @@
 				// add to scope
 				$scope.formData = result.data;
 
+				// preselect the correct hours and minutes based on duration (in raw minutes)
+				var hoursAndMinutes = getHoursAndMinutes($scope.formData.duration);
+				var hours = hoursAndMinutes.hours;
+				var minutes = hoursAndMinutes.minutes;
+
+				// get position of hour in $scope.hours array
+				var hourPosition = $scope.hours.map(function(x) {return x.value; }).indexOf(hours);
+
+				// set the value of formData.hours to that item
+				$scope.formData.hours = $scope.hours[hourPosition];
+
+				// get position of minute in $scope.minutes array
+				var minutePosition = $scope.minutes.map(function(x) {return x.value; }).indexOf(minutes);
+
+				// set the value of formData.minutes to that item
+				$scope.formData.minutes = $scope.minutes[minutePosition];
+
+				// log data has finished loading
 				$scope.logLoaded = true;
 
 				// hide loader
