@@ -38,6 +38,7 @@
 					}).success(function (result) {
 						
 						$scope.totalHours = result.data.total;
+						$scope.totalHoursString = getHoursAndMinutesAsString(result.data.total);
 
 					}).error(function (result, error) {
 						
@@ -58,7 +59,7 @@
 						url: api('logs/user/' + $localStorage.user.id + '/total/days/7')
 					}).success(function (result) {
 						
-						$scope.last7DaysHours = result.data.total;
+						$scope.last7DaysHours = getHoursAndMinutesAsString(result.data.total);
 
 					}).error(function (result, error) {
 						
@@ -78,7 +79,7 @@
 						url: api('logs/user/' + $localStorage.user.id + '/total/days/30')
 					}).success(function (result) {
 						
-						$scope.last30DaysHours = result.data.total;
+						$scope.last30DaysHours = getHoursAndMinutesAsString(result.data.total);
 
 					}).error(function (result, error) {
 						
@@ -165,6 +166,7 @@
 
 							// add 1 to todaysTotalHours (it starts on -1)
 							$scope.todaysTotalHours++;
+							$scope.todaysTotalHoursString = getHoursAndMinutesAsString($scope.todaysTotalHours);
 
 						}
 
@@ -269,12 +271,16 @@
 				// generate tooltip markup
 				var tooltipMarkup = '',
 					tooltipTitle = tooltip.title[0].substring(4), // remove e.g. [1] from start of string
-					tooltipHours = tooltip.body[0].lines[0];
+					tooltipDuration = tooltip.body[0].lines[0];
 
-				tooltipHours = tooltipHours.replace('Hours: ', '');
-				tooltipHours = tooltipHours + ' hours';
+				tooltipDuration = tooltipDuration.replace('Hours: ', '');
+
+				// convert duration in to hours and minutes
+				tooltipDurationString = getHoursAndMinutesAsString(parseInt(tooltipDuration));
+
+				// tooltipDuration = tooltipDuration + ' hours';
 				tooltipMarkup += tooltipTitle + ': ';
-				tooltipMarkup += '<strong>' + tooltipHours + '</strong>';
+				tooltipMarkup += '<strong>' + tooltipDurationString + '</strong>';
 				$(tooltipEl).html(tooltipMarkup);
 
 				// Find Y Location on page
