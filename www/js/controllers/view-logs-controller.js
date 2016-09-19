@@ -28,7 +28,6 @@
 				}).success(function (result) {
 					
 					// change duration into hours and minutes
-					console.log('result: ', result);
 					for (i = 0; i < result.data.logs.length; i++) {
 						var duration = result.data.logs[i].duration;
 						var hoursAndMinutes = getHoursAndMinutesAsString(duration);

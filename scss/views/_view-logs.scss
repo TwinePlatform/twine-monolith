@@ -1,6 +1,15 @@
 // view logs
 .view-logs {
 
+	.item h2 {
+		font-weight: bold;
+		.hours, .minutes {
+			.unit {
+				font-size: 13px;
+			}
+		}
+	}
+
 	.no-logs {
 		position: absolute;
 		width: 100%;

@@ -12240,6 +12240,11 @@ select[disabled], .item-select-disabled:after {
     text-align: center;
     width: 100%; }
 
+.view-logs .item h2 {
+  font-weight: bold; }
+  .view-logs .item h2 .hours .unit, .view-logs .item h2 .minutes .unit {
+    font-size: 13px; }
+
 .view-logs .no-logs {
   position: absolute;
   width: 100%;
