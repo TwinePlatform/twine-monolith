@@ -12161,14 +12161,18 @@ select[disabled], .item-select-disabled:after {
   position: relative; }
 
 .total-hours-container .total-hours {
-  font-size: 50px;
+  font-size: 30px;
   color: #0378B5;
   font-weight: bold;
   letter-spacing: -0.05em;
   position: absolute;
   top: calc(50% + 3px);
   left: 50%;
-  transform: translate(-50%, -50%); }
+  transform: translate(-50%, -50%);
+  width: 100%; }
+  .total-hours-container .total-hours .hours .unit, .total-hours-container .total-hours .minutes .unit {
+    font-size: 15px;
+    opacity: 0.6; }
 
 .total-hours-container .chart {
   max-width: 100%; }
@@ -12201,6 +12205,10 @@ select[disabled], .item-select-disabled:after {
   border: 1px solid transparent;
   padding-top: 5px;
   padding-bottom: 5px; }
+
+.hours-summary .hours .unit, .hours-summary .minutes .unit {
+  font-size: 12px;
+  opacity: 0.8; }
 
 .button-add {
   width: 80px;
