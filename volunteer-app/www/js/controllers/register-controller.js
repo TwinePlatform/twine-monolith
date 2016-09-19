@@ -11,14 +11,15 @@
 *   process the form
 *    validate form
 *    submit form data
+*   terms & conditions modal
 */
 
 /*
 	> register controller
 */
 
-	angular.module('app').controller('RegisterController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$ionicLoading', '$localStorage',
-	function ($scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage) {
+	angular.module('app').controller('RegisterController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$ionicLoading', '$localStorage', '$ionicModal', 
+	function ($scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage, $ionicModal) {
 
 		/*
 			>> if user has access token, log straight in
@@ -218,5 +219,26 @@
 
 			};
 
+
+		/*
+			>> terms & conditions modal
+		*/
+
+			$ionicModal.fromTemplateUrl('templates/terms-and-conditions-modal.html', {
+			    scope: $scope,
+			    animation: 'slide-in-up'
+			}).then(function(modal) {
+				$scope.modal = modal;
+			});
+
+			// show terms modal
+			$scope.termsShow = function() {
+				$scope.modal.show();
+			};
+
+			// close terms modal
+			$scope.termsClose = function() {
+			    $scope.modal.hide();
+			};
 
 	}])
