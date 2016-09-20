@@ -116,7 +116,7 @@
 			$scope.organisations = [];
 			$http({
 				method: 'GET',
-				url: api('regions/' + $localStorage.user.region_id + '/organisations')
+				url: api('regions/' + $localStorage.user.region.id + '/organisations')
 			}).success(function (result) {
 
 				$scope.organisations = result.data;
@@ -130,7 +130,7 @@
 						setTimeout(function(){
 
 							// get user's organisation id
-							var orgId = parseInt($localStorage.user.organisation_id);
+							var orgId = parseInt($localStorage.user.organisation.id);
 
 							// get position of user's organsation in $scope.organisations array
 							var organisationPosition = $scope.organisations.map(function(x) {return x.id; }).indexOf(orgId);
@@ -171,9 +171,6 @@
 
 				// form is valid
 				if (form.$valid) {
-
-					// generate organisation_id before we submit form
-					$scope.formData.organisation_id = $scope.formData.organisation.id;
 
 					// show loader
 					$ionicLoading.show();
