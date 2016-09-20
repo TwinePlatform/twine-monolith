@@ -7,11 +7,16 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services','ngStorage',])
 
-.run(function($ionicPlatform, $localStorage) {
+.run(function($ionicPlatform, $localStorage, $rootScope) {
 	$ionicPlatform.ready(function() {
 
 		// log localstorage first
 		console.log('$localStorage: ', $localStorage);
+
+		// set organisation subheader title
+		if ($localStorage.user) {
+			$rootScope.organisationName = $localStorage.user.organisation.name;
+		}
 
 		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 		// for form inputs)

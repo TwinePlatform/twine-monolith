@@ -18,8 +18,8 @@
 	> register controller
 */
 
-	angular.module('app').controller('RegisterController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$ionicLoading', '$localStorage', '$ionicModal', 
-	function ($scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage, $ionicModal) {
+	angular.module('app').controller('RegisterController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$ionicLoading', '$localStorage', '$ionicModal', '$rootScope', 
+	function ($scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage, $ionicModal, $rootScope) {
 
 		/*
 			>> if user has access token, log straight in
@@ -171,6 +171,9 @@
 
 							// store user information
 							$localStorage.user = response.data;
+
+							// set organisation subheader title
+							$rootScope.organisationName = $localStorage.user.organisation.name;
 
 							// show success popup
 							var alertPopup = $ionicPopup.alert({

@@ -1,5 +1,8 @@
 <ion-view title="Log hours">
-    <ion-content padding="true" class="has-header">
+
+    <organisation-subheader></organisation-subheader>
+
+    <ion-content padding="true" class="has-header has-subheader-organisation">
         
     <!-- form#createLog -->
         <form id="createLog" name="createLog" class="list" ng-submit="processForm(createLog)" novalidate>
@@ -43,19 +46,6 @@
                 <input type="number" ng-model="formData.duration" id="duration" name="duration" ng-min="5" required>
             </label>
             <!-- /duration -->
-
-            <!-- organisation -->
-            <label class="item item-select">
-                <span class="input-label">Organisation</span>
-                <select ng-model="formData.organisation" ng-options="option.name for option in organisations track by option.id" name="organisation" id="organisation" required>
-                    <option value="">Select organisation</option>
-                    <!--  -->
-                </select>
-            </label>
-            <label class="error block text-right padding assertive" ng-show="createLog.organisation.$invalid && formSubmitted" for="organisation">
-                Please select an organisation
-            </label>
-            <!-- /organisation -->
 
             <!-- user_id -->
             <label class="item item-input hide">

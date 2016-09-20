@@ -1,3 +1,19 @@
+// organisation bar
+.bar-subheader-organisation {
+	background-color: rgba(0,131,186,0.7);
+
+	height: 22px;
+	.title {
+		color: white;
+		height: 21px;
+		line-height: 22px;
+		font-size: 12px;
+	}
+}
+.has-subheader-organisation {
+	top: 66px;
+}
+
 // logo
 .logo {
 	margin: 10px auto;

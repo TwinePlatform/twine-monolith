@@ -22,8 +22,8 @@
 	> settings controller
 */
 
-	angular.module('app').controller('SettingsController', ['$scope', '$stateParams', '$http', '$ionicPopup', '$ionicLoading', '$ionicPlatform', '$localStorage', '$state', 
-	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state) {
+	angular.module('app').controller('SettingsController', ['$scope', '$stateParams', '$http', '$ionicPopup', '$ionicLoading', '$ionicPlatform', '$localStorage', '$state', '$rootScope', 
+	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope) {
 
 		$ionicPlatform.ready(function() {
 
@@ -385,6 +385,9 @@
 
 								// store user information
 								$localStorage.user = response.data;
+
+								// update organisation subheader name
+								$rootScope.organisationName = $localStorage.user.organisation.name;
 
 								// shout success
 								shout('Your region and organisation were updated!');
