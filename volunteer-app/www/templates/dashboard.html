@@ -4,11 +4,9 @@
 
     <ion-content padding="true" scroll="false" class="has-header has-subheader-organisation">
 
-        <div class="spacer-10"></div>
-
         <h4 class="text-center">My Total Hours</h4>
 
-        <div class="total-hours-container padding row">
+        <div class="total-hours-container padding-left padding-right padding-bottom row">
             <div class="col col-50 text-center">
                 <span class="total-hours animated fadeIn" ng-class="{'ng-hide': totalHours < 0}" ng-bind-html="totalHoursString"></span>
             </div>
@@ -24,6 +22,7 @@
             <p class="text-center">Please tap the "Log hours" button below to start logging hours.</p>
         </div>
 
+        <!-- .hours-summary -->
         <div class="hours-summary padding-horizontal" ng-if="totalHours > 0">
             <ion-list>
                 <ion-item class="hours-summary-today">
@@ -60,6 +59,15 @@
                 </ion-item>
             </ion-list>
         </div>
+        <!-- /.hours-summary -->
+
+        <div class="spacer-15"></div>
+
+        <!-- .organisation-summary -->
+        <div class="organisation-summary text-center">
+            Last week, <strong>8 people</strong> gave <strong>27 hours</strong><br>@ <strong>{{ organisationName }}</strong>
+        </div>
+        <!-- /.organisation-summary -->
 
         <a ui-sref="tabs.new-log" class="button button-positive button-block button-outline icon-left ion-plus button-add">
             <span>Log hours</span>

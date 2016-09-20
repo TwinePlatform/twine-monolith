@@ -1,5 +1,5 @@
 // helpers
-$sizes: 10, 20, 30;
+$sizes: 10, 15, 20, 30;
 .spacer {
 	@each $size in $sizes {
 		&-#{$size} {
