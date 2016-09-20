@@ -7,6 +7,7 @@
 *   show loader
 *   populate hours dropdown
 *   populate minutes dropdown
+*   calculate duration
 *   populate organisation dropdown
 *    loop through the results and push only required items to $scope.organisations
 *   get log data
@@ -109,7 +110,7 @@
 			$scope.organisations = [];
 			$http({
 				method: 'GET',
-				url: api('regions/' + $localStorage.user.region_id + '/organisations')
+				url: api('regions/' + $localStorage.user.region.id + '/organisations')
 			}).success(function (result) {
 
 				$scope.organisations = result.data;
@@ -125,7 +126,7 @@
 							$scope.organisationsLoaded = true;
 
 							// get user's organisation id
-							var orgId = parseInt($localStorage.user.organisation_id);
+							var orgId = parseInt($localStorage.user.organisation.id);
 
 							// get position of user's organsation in $scope.organisations array
 							var organisationPosition = $scope.organisations.map(function(x) {return x.id; }).indexOf(orgId);
