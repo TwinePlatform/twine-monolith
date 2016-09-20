@@ -2,12 +2,14 @@
 * CONTENTS
 *
 * settings controller
+*   store the form data
 *   variables
 *   location reminder switch changed
 *   enable location reminders
-*    get current lat and lon
+*    get current lat and long
 *    setup geofences
 *   disable location reminders
+*   populate region dropdown
 *   populate organisation dropdown
 *    loop through the results and push only required items to $scope.organisations
 *   log out
@@ -21,6 +23,13 @@
 	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state) {
 
 		$ionicPlatform.ready(function() {
+
+			/*
+				>> store the form data
+			*/
+
+				$scope.formData = {};
+
 
 			/*
 				>> variables
@@ -232,25 +241,120 @@
 
 
 			/*
-				>> populate organisation dropdown
+				>> populate region dropdown
 			*/
 
-				$scope.organisations = [];
+				$scope.regionsDisabled = true;
+				$scope.regions = [];
+
 				$http({
 					method: 'GET',
-					url: api('organisations')
+					url: api('regions')
 				}).success(function (result) {
-					$scope.organisations = result.data;
-					// >>> loop through the results and push only required items to $scope.organisations
+					
+					// loop through the results and push only required items to $scope.regions
 					for (var i = 0, len = result.data.length; i < len; i++) {
-						$scope.organisations[i] = {id: result.data[i].id, name: result.data[i].name};
+						$scope.regions[i] = {id: result.data[i].id, name: result.data[i].name};
+
+						// when for loop complete
+						if (i === len - 1) {
+
+							// get user's region id
+							var regionId = parseInt($localStorage.user.region.id);
+
+							// get position of user's organsation in $scope.regions array
+							var regionPosition = $scope.regions.map(function(x) {return x.id; }).indexOf(regionId);
+
+							// set the value of formData.region to that item
+							$scope.formData.region = $scope.regions[regionPosition];
+
+						}
 					}
+
+					// enable regions select
+					$scope.regionsDisabled = false;
+
 				}).error(function (result, error) {
 					
 					// process connection error
 					processConnectionError(result, error);
 
 				});
+
+
+			/*
+				>> populate organisation dropdown
+			*/
+
+				$scope.organisationsDisabled = true;
+				$scope.organisations = [];
+
+				$scope.populateOrganisations = function(regionId) {
+
+					// if no region is selected, empty & disable organisations
+					if (regionId === undefined) {
+						$scope.organisations = [];
+						$scope.organisationsDisabled = true;
+					}
+					// otherwise get the organisations
+					else {
+						$http({
+							method: 'GET',
+							url: api('regions/' + regionId + '/organisations')
+						}).success(function (result) {
+
+							$scope.organisations = result.data;
+							// >>> loop through the results and push only required items to $scope.organisations
+							for (var i = 0, len = result.data.length; i < len; i++) {
+								$scope.organisations[i] = {id: result.data[i].id, name: result.data[i].name};
+
+								// when for loop complete
+								if (i === len - 1) {
+
+									$scope.organisationsLoaded = true;
+
+									// get user's organisation id
+									var orgId = parseInt($localStorage.user.organisation.id);
+
+									// get position of user's organsation in $scope.organisations array
+									var organisationPosition = $scope.organisations.map(function(x) {return x.id; }).indexOf(orgId);
+
+									// set the value of formData.organisation to that item
+									$scope.formData.organisation = $scope.organisations[organisationPosition];
+
+									// hide loader
+									$ionicLoading.hide();
+
+								}
+							}
+
+							// enable organisation select 
+							$scope.organisationsDisabled = false;
+
+						}).error(function (result, error) {
+							
+							// hide loader
+							$ionicLoading.hide();
+
+							// process connection error
+							processConnectionError(result, error);
+
+						});
+					}
+
+				}
+
+				// populate on first load by localStorage region id
+				$scope.populateOrganisations($localStorage.user.region.id);
+
+
+			/*
+				>> save user
+			*/
+
+				$scope.saveUser = function() {
+					shout('save some shit!');
+				}
 
 
 			/*
