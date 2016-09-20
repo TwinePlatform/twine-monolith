@@ -5,7 +5,7 @@
             <ion-toggle toggle-class="toggle-positive" ng-click="locationReminders()" ng-model="locationRemindersSwitch">Location reminders</ion-toggle>
         </form>
 
-        <form class="list">
+        <form id="user" name="user" class="list" ng-submit="saveUser(user)" novalidate>
             <p class="text-center padding">Account settings</p>
             <!-- region -->
             <label class="item item-select" ng-class="{'item-select-disabled': regionsDisabled}">
@@ -15,7 +15,7 @@
                     <!--  -->
                 </select>
             </label>
-            <label class="error block text-right padding assertive" ng-show="register.region.$invalid && formSubmitted" for="region">
+            <label class="error block text-right padding assertive" ng-show="user.region.$invalid && formSubmitted" for="region">
                 Please select a region
             </label>
             <!-- /region -->
@@ -28,13 +28,13 @@
                     <!--  -->
                 </select>
             </label>
-            <label class="error block text-right padding assertive" ng-show="createLog.organisation.$invalid && formSubmitted" for="organisation">
+            <label class="error block text-right padding assertive" ng-show="user.organisation.$invalid && formSubmitted" for="organisation">
                 Please select an organisation
             </label>
             <!-- /organisation -->
 
             <!-- buttons -->
-            <button type="submit" class="button button-positive button-block button-outline" ng-click="saveUser()">Save account settings</button>
+            <button type="submit" class="button button-positive button-block button-outline">Save account settings</button>
 
         </form>
 
