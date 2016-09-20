@@ -12,8 +12,8 @@
 	> login controller
 */
 
-	angular.module('app').controller('LoginController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$localStorage', '$ionicLoading', 
-	function ($scope, $stateParams, $http, $state, $ionicPopup, $localStorage, $ionicLoading) {
+	angular.module('app').controller('LoginController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$localStorage', '$ionicLoading', '$rootScope', 
+	function ($scope, $stateParams, $http, $state, $ionicPopup, $localStorage, $ionicLoading, $rootScope) {
 
 		/*
 			>> store the form data
@@ -54,10 +54,11 @@
 							// hide loader
 							$ionicLoading.hide();
 
-							console.log('response.data: ', response.data);
-
 							// store user data
 							$localStorage.user = response.data;
+
+							// set organisation subheader title
+							$rootScope.organisationName = $localStorage.user.organisation.name;
 
 							// go to dashboard
 							$state.go('tabs.dashboard');

@@ -26,6 +26,7 @@
 
 			$scope.refreshDashboard = function() {
 
+
 				/*
 					>>> update overall total hours
 				*/

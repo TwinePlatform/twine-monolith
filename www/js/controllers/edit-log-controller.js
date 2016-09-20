@@ -8,8 +8,6 @@
 *   populate hours dropdown
 *   populate minutes dropdown
 *   calculate duration
-*   populate organisation dropdown
-*    loop through the results and push only required items to $scope.organisations
 *   get log data
 *   function: generate form date
 *   process the form
@@ -44,7 +42,6 @@
 		*/
 
 			$scope.formData = {};
-			$scope.organisationsLoaded = false;
 			$scope.logLoaded = false;
 
 		/*
@@ -102,55 +99,6 @@
 				$scope.formData.duration = getMinutes(hours, minutes);
 
 			}
-
-		/*
-			>> populate organisation dropdown
-		*/
-
-			$scope.organisations = [];
-			$http({
-				method: 'GET',
-				url: api('regions/' + $localStorage.user.region.id + '/organisations')
-			}).success(function (result) {
-
-				$scope.organisations = result.data;
-				// >>> loop through the results and push only required items to $scope.organisations
-				for (var i = 0, len = result.data.length; i < len; i++) {
-					$scope.organisations[i] = {id: result.data[i].id, name: result.data[i].name};
-
-					// when for loop complete
-					if (i === len - 1) {
-
-						setTimeout(function(){
-
-							$scope.organisationsLoaded = true;
-
-							// get user's organisation id
-							var orgId = parseInt($localStorage.user.organisation.id);
-
-							// get position of user's organsation in $scope.organisations array
-							var organisationPosition = $scope.organisations.map(function(x) {return x.id; }).indexOf(orgId);
-
-							// set the value of formData.organisation to that item
-							$scope.formData.organisation = $scope.organisations[organisationPosition];
-
-							// hide loader
-							$ionicLoading.hide();
-
-						}, 50);
-
-					}
-				}
-
-			}).error(function (result, error) {
-				
-				// hide loader
-				$ionicLoading.hide();
-
-				// process connection error
-				processConnectionError(result, error);
-
-			});
 
 		/*
 			>> get log data
@@ -232,6 +180,9 @@
 
 				// form is valid
 				if (form.$valid) {
+
+					// log form data
+					console.log('$scope.formData: ', $scope.formData);
 
 					// show loader
 					$ionicLoading.show();

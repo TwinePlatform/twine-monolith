@@ -12109,6 +12109,18 @@ a.button {
 h1, h2, h3, h4 {
   color: #0378B5; }
 
+.bar-subheader-organisation {
+  background-color: rgba(0, 131, 186, 0.7);
+  height: 22px; }
+  .bar-subheader-organisation .title {
+    color: white;
+    height: 21px;
+    line-height: 22px;
+    font-size: 12px; }
+
+.has-subheader-organisation {
+  top: 66px; }
+
 .logo {
   margin: 10px auto;
   display: block;
@@ -12156,6 +12168,14 @@ select[disabled], .item-select-disabled:after {
 
 .register .input-label {
   font-size: 15px; }
+
+.organisation-title {
+  background: #00BACD;
+  color: white;
+  border-radius: 15px;
+  padding: 6px;
+  font-size: 18px;
+  margin: 0; }
 
 .total-hours-container .col {
   position: relative; }

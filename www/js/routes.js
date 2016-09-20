@@ -88,6 +88,7 @@ angular.module('app.routes', ['ionicUIRouter'])
 
 			// >> settings
 			.state('tabs.settings', {
+				cache: 'false',
 				url: '/settings',
 				views: {
 					'settings-tab': {
