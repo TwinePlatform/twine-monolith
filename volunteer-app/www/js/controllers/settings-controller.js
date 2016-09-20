@@ -12,6 +12,9 @@
 *   populate region dropdown
 *   populate organisation dropdown
 *    loop through the results and push only required items to $scope.organisations
+*   process save user form
+*    validate form
+*    submit form data
 *   log out
 */
 
@@ -349,12 +352,72 @@
 
 
 			/*
-				>> save user
+				>> process save user form
 			*/
 
-				$scope.saveUser = function() {
-					shout('save some shit!');
-				}
+				$scope.formSubmitted = false;
+				$scope.saveUser = function(form) {
+
+					// >>> validate form
+
+					// variable to show that form was submitted
+					$scope.formSubmitted = true;
+
+					// form is valid
+					if (form.$valid) {
+
+						// show loader
+						$ionicLoading.show();
+
+						// >>> submit form data
+						$http({
+							method: 'PUT',
+							url: api('users/' + $localStorage.user.id),
+							data: $.param($scope.formData),
+							headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+						}).success(function(response) {
+
+							// registration successful
+							if (response.success) {
+
+								// hide loader
+								$ionicLoading.hide();
+
+								// store user information
+								$localStorage.user = response.data;
+
+								// shout success
+								shout('Your region and organisation were updated!');
+
+							}
+
+							// registration unsuccessful
+							else {
+
+								// hide loader
+								$ionicLoading.hide();
+
+								// shout error
+								shout('Could not save region and organisation!');
+
+							}
+
+						}).error(function(data, error) {
+
+							// hide loader
+							$ionicLoading.hide();
+
+							// process connection error
+							processConnectionError(data, error);
+
+						});
+					}
+					// form is invalid
+					else {
+
+					}
+
+				};
 
 
 			/*
