@@ -4,13 +4,47 @@
             <p class="text-center padding">Get a reminder to log your hours when you leave the location:</p>
             <ion-toggle toggle-class="toggle-positive" ng-click="locationReminders()" ng-model="locationRemindersSwitch">Location reminders</ion-toggle>
         </form>
-        <div class="spacer-10"></div>
 
-        <ion-list>
+        <form class="list">
+            <p class="text-center padding">Account settings</p>
+            <!-- region -->
+            <label class="item item-select" ng-class="{'item-select-disabled': regionsDisabled}">
+                <span class="input-label">Region</span>
+                <select ng-model="formData.region" ng-options="option.name for option in regions track by option.id" name="region" id="region" ng-change="populateOrganisations(formData.region.id)" ng-disabled="regionsDisabled" required>
+                    <option value="">Select region</option>
+                    <!--  -->
+                </select>
+            </label>
+            <label class="error block text-right padding assertive" ng-show="register.region.$invalid && formSubmitted" for="region">
+                Please select a region
+            </label>
+            <!-- /region -->
+
+            <!-- organisation -->
+            <label class="item item-select">
+                <span class="input-label">Organisation</span>
+                <select ng-model="formData.organisation" ng-options="option.name for option in organisations track by option.id" name="organisation" id="organisation" ng-disabled="organisationsDisabled" required>
+                    <option value="">Select organisation</option>
+                    <!--  -->
+                </select>
+            </label>
+            <label class="error block text-right padding assertive" ng-show="createLog.organisation.$invalid && formSubmitted" for="organisation">
+                Please select an organisation
+            </label>
+            <!-- /organisation -->
+
+            <!-- buttons -->
+            <button type="submit" class="button button-positive button-block button-outline" ng-click="saveUser()">Save account settings</button>
+
+        </form>
+
+        <form class="list">
+            <p class="text-center padding">More...</p>
             <ion-item class="item-icon-right" ui-sref="tabs.terms-and-conditions">Terms &amp; conditions
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
-        </ion-list>
+        </form>
+
         <a ng-click="logOut()" class="button button-positive button-block button-clear">Log out</a>
     </ion-content>
 </ion-view>
