@@ -1,15 +1,30 @@
 /*
-	global variables & functions used throughout
+* CONTENTS
+*
+* global variables & functions used throughout
+*   api urls
+*   api url generator
+*   shout - show a quick, non-intrusive popup message to the user
+*   process connection errors
+*   sort by - sort an array of objects by object value
+*   get current time - in string in format HH:MM:SS
+*   get minutes - get minutes as an integer
+*   get hours & minutes
+*   get hours & minutes (as string)
+*/
+
+/*
+	> global variables & functions used throughout
 */
 
 	/*
-		api urls
+		>> api urls
 	*/
 
 		var apiBaseUrl = 'http://powertochangeadmin.stage2.reason.digital/api/v1/';
 
 	/*
-		api url generator
+		>> api url generator
 	*/
 
 		var api = function(url) {
@@ -17,7 +32,7 @@
 		}
 
 	/*
-		shout - show a quick, non-intrusive popup message to the user
+		>> shout - show a quick, non-intrusive popup message to the user
 		e.g. shout('<p>Hello!</p>', 1500);
 	*/
 
@@ -66,7 +81,7 @@
 
 
 	/*
-		process connection errors
+		>> process connection errors
 	*/
 
 		var processConnectionError = function(data, error) {
@@ -90,7 +105,7 @@
 
 
 	/*
-		sort by - sort an array of objects by object value
+		>> sort by - sort an array of objects by object value
 	*/
 
 		var sortBy = function(field, reverse, primer){
@@ -108,7 +123,7 @@
 
 
 	/*
-		get current time - in string in format HH:MM:SS
+		>> get current time - in string in format HH:MM:SS
 	*/
 
 		var getCurrentTime = function() {
@@ -136,7 +151,7 @@
 
 
 	/*
-		get minutes - get minutes as an integer
+		>> get minutes - get minutes as an integer
 	*/
 
 		var getMinutes = function(hours, minutes) {
@@ -145,7 +160,7 @@
 
 
 	/*
-		get hours & minutes
+		>> get hours & minutes
 	*/
 
 		var getHoursAndMinutes = function(minutesInteger) {
@@ -155,7 +170,7 @@
 		}
 		
 	/*
-		get hours & minutes (as string)
+		>> get hours & minutes (as string)
 	*/
 
 		var getHoursAndMinutesAsString = function(minutesInteger) {
@@ -174,6 +189,10 @@
 			// if there's more than 0 minutes
 			if (minutes > 0) {
 				hoursAndMinutesString += '<span class="minutes">' + minutes + ' <span class="unit">min</span></span>';
+			}
+			// if there are 0 hours or minutes
+			if (hours === 0 && minutes === 0) {
+				hoursAndMinutesString = '<span class="hours">' + hours + ' <span class="unit">hours</span></span>';
 			}
 			return hoursAndMinutesString;
 		}

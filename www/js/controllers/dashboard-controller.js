@@ -119,7 +119,7 @@
 						if (logs.length === 0) {
 							$scope.labels = ['[1] Today', '[2] Wed 17 Aug', '[3] Tue 16 Aug', '[4] Mon 15 Aug', '[5] Sun 14 Aug', '[6] Sat 13 Aug', '[7] Fri 12 Aug'];
 							$scope.hours = [7, 6, 7, 5, 6, 7, 4];
-							$scope.barColor = '#F6F6F6';
+							$scope.barColor = '#dddddd';
 							$scope.tooltipFunction = null;
 						}
 
