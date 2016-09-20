@@ -57,15 +57,20 @@
 	text-align: center;
 }
 
+// hours summary
 .hours-summary {
 	.hours-summary-today {
-		border: 1px solid #666;
+		border: 1px solid rgba(#025783, 0.5);
 		margin-bottom: 10px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		color: #025783;
 	}
 	.hours-summary-other {
 		border: 1px solid transparent;
 		padding-top: 5px;
 		padding-bottom: 5px;
+		font-size: 15px;
 	}
 	.hours, .minutes {
 		.unit {
@@ -74,6 +79,16 @@
 		}
 	}
 }
+
+// organisation summary
+.organisation-summary {
+	background-color: rgba(0, 131, 186, 0.7);
+	padding: 5px;
+	margin-right: 10px;
+	margin-left: 10px;
+	color: white;
+}
+
 .button-add {
 	$add-size: 80px;
 	width: $add-size;
