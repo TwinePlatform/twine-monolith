@@ -26,7 +26,6 @@
 
 			$scope.refreshDashboard = function() {
 
-
 				/*
 					>>> update overall total hours
 				*/
@@ -173,6 +172,34 @@
 
 						// generate the chart
 						$scope.generateChart($scope.labels, $scope.hours);
+
+					}).error(function (result, error) {
+						
+						// process connection error
+						processConnectionError(result, error);
+
+					});
+
+
+				/*
+					>>> update organisation summary
+				*/
+
+					$http({
+						method: 'GET',
+						url: api('organisations/' + $localStorage.user.organisation.id + '/summary')
+					}).success(function (result) {
+						
+						// we got what we wanted
+						if (result.success) {
+							$scope.totalUsers = result.data.totalUsers;
+							$scope.totalVolunteeredMinutes = result.data.totalVolunteeredTime;
+							$scope.totalVolunteeredTime = getHoursAndMinutesAsString(result.data.totalVolunteeredTime);
+						}
+						// we didn't
+						else {
+							shout("Couldn't retrieve organisation summary.");
+						}
 
 					}).error(function (result, error) {
 						
