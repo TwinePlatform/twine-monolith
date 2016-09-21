@@ -4,12 +4,18 @@
 
     <ion-content padding="true" class="has-header has-subheader-organisation settings">
         <form class="list">
-            <p class="text-center padding">Get a reminder to log your hours when you leave the location:</p>
+            <div class="item item-divider">
+                Location reminders
+                <p class="wrap"><small>Get a reminder to log your hours when you leave your volunteering location:</small></p>
+            </div>
             <ion-toggle toggle-class="toggle-positive" ng-click="locationReminders()" ng-model="locationRemindersSwitch">Location reminders</ion-toggle>
         </form>
 
         <form id="user" name="user" class="list" ng-submit="saveUser(user)" novalidate>
-            <p class="text-center padding">Account settings</p>
+            <div class="item item-divider">
+                Account settings
+                <p><small>{{ getUserEmail() }}</small></p>
+            </div>
             <!-- region -->
             <label class="item item-select" ng-class="{'item-select-disabled': regionsDisabled}">
                 <span class="input-label">Region</span>
@@ -37,17 +43,21 @@
             <!-- /organisation -->
 
             <!-- buttons -->
-            <button type="submit" class="button button-positive button-block button-outline">Save account settings</button>
+            <div class="item item-button">
+                <button type="submit" class="button button-positive button-block button-outline">Save account settings</button>
+            </div>
 
         </form>
 
         <form class="list">
-            <p class="text-center padding">More...</p>
+            <div class="item item-divider">
+                Information
+            </div>
             <ion-item class="item-icon-right" ui-sref="tabs.terms-and-conditions">Terms &amp; conditions
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>
         </form>
 
-        <a ng-click="logOut()" class="button button-positive button-block button-clear">Log out</a>
+        <a ng-click="logOut()" class="button button-positive button-block button-clear"><i class="icon ion-log-out"></i> Log out</a>
     </ion-content>
 </ion-view>
