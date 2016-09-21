@@ -28,6 +28,18 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 			// org.apache.cordova.statusbar required
 			StatusBar.styleBlackTranslucent();
 		}
+
+		// app paused (in background)
+		$rootScope.appPaused = false;
+		document.addEventListener('pause', function() {
+			$rootScope.appPaused = true;
+	    }, false);
+
+	    // app resumed
+		document.addEventListener('resume', function() {
+			$rootScope.appPaused = false;
+	    }, false);
+
 	});
 })
 
