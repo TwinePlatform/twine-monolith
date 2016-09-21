@@ -12291,5 +12291,14 @@ select[disabled], .item-select-disabled:after {
     min-height: 37px;
     margin-bottom: 0; }
 
+.settings .item-divider p.wrap {
+  white-space: normal;
+  line-height: 1em;
+  margin-top: 3px;
+  margin-bottom: 3px; }
+
 .settings .input-label {
   font-size: 15px; }
+
+.settings .item-button {
+  padding: 7px 16px; }

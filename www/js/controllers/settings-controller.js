@@ -244,6 +244,14 @@
 
 
 			/*
+				>> get user email
+			*/
+
+				$scope.getUserEmail = function() {
+					return $localStorage.user.email;
+				}
+
+			/*
 				>> populate region dropdown
 			*/
 
