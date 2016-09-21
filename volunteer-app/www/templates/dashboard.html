@@ -64,8 +64,8 @@
         <div class="spacer-15"></div>
 
         <!-- .organisation-summary -->
-        <div class="organisation-summary text-center">
-            Last week, <strong>8 people</strong> gave <strong>27 hours</strong><br>@ <strong>{{ organisationName }}</strong>
+        <div class="organisation-summary text-center" ng-if="totalUsers && totalVolunteeredMinutes">
+            Last week, <strong>{{ totalUsers || 0}} people</strong> gave <strong><span ng-bind-html="totalVolunteeredTime">0 min</span> </strong><br>@ <strong>{{ organisationName }}</strong>
         </div>
         <!-- /.organisation-summary -->
 
