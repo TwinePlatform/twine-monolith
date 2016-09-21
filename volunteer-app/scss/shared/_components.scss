@@ -13,6 +13,9 @@
 .has-subheader-organisation {
 	top: 66px;
 }
+.platform-ios.platform-cordova .has-subheader-organisation {
+	top: 86px !important;
+}
 
 // logo
 .logo {
