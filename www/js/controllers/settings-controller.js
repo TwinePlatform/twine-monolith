@@ -9,6 +9,7 @@
 *    get current lat and long
 *    setup geofences
 *   disable location reminders
+*   get user email
 *   populate region dropdown
 *   populate organisation dropdown
 *    loop through the results and push only required items to $scope.organisations
@@ -49,12 +50,12 @@
 					window.geofence.initialize().then(function () {
 
 						// get watched geofences
-						window.geofence.getWatched().then(function (geofencesJson) {
-						    var geofences = JSON.parse(geofencesJson);
-						});
+						// window.geofence.getWatched().then(function (geofencesJson) {
+						//     var geofences = JSON.parse(geofencesJson);
+						// });
 
 					}, function (error) {
-						shout("Geofence: Error", error);
+						shout("Geofence: Error - " + error);
 					});
 				}
 
@@ -80,7 +81,7 @@
 
 						// ask user if they're in the location where they volunteer
 						var locationRemindersPopup = $ionicPopup.show({
-							template: 'Are you in the location where you volunteer right now?',
+							template: 'Are you at ' + $rootScope.organisationName + ' right now?',
 							title: 'Setup location reminders',
 							scope: $scope,
 							buttons: [
@@ -90,7 +91,7 @@
 										// user tapped no, tell user to try again when at correct location
 										var tryAgainLaterPopup = $ionicPopup.alert({
 										  	title: 'Please try later',
-										  	template: 'Please setup location reminders later, when you are in your volunteering location.'
+										  	template: 'Please setup location reminders later, when you are at ' + $rootScope.organisationName + '.'
 										});
 										tryAgainLaterPopup.then(function(res) {
 										  	// disable switch
@@ -161,26 +162,43 @@
 					// >>> setup geofences
 					$scope.setupGeofences = function() {
 
-						// leaving location geofence
-						window.geofence.addOrUpdate({
+						// location leave geofence options
+						var LocationLeave = {
 							id:             'LocationLeave', //A unique identifier of geofence
 							latitude:       $scope.lat, //Geo latitude of geofence
 							longitude:      $scope.long, //Geo longitude of geofence
 							radius:         $scope.radius, //Radius of geofence in meters
 							transitionType: 2, //Type of transition 1 - Enter, 2 - Exit, 3 - Both
 							notification: {         //Notification object
-								title:          'You just left your volunteering location.', //Title of notification
-								text:           'Did you remember to log your time?', //Text of notification
-								// smallIcon:      String, //Small icon showed in notification area, only res URI
-								// icon:           String, //icon showed in notification drawer
+								title:          'You just left ' + $rootScope.organisationName, //Title of notification
+								text:           'Did you remember to log your time at ' + $rootScope.organisationName + '?', //Text of notification
 								openAppOnClick: true,//is main app activity should be opened after clicking on notification
 								data:           {mydata: 'Left location'}  //Custom object associated with notification
 							}
-						}).then(function () {
+						};
+
+						// location arrive geofence options
+						var LocationArrive = {
+							id:             'LocationArrive', //A unique identifier of geofence
+							latitude:       $scope.lat, //Geo latitude of geofence
+							longitude:      $scope.long, //Geo longitude of geofence
+							radius:         $scope.radius, //Radius of geofence in meters
+							transitionType: 1, //Type of transition 1 - Enter, 2 - Exit, 3 - Both
+							notification: {         //Notification object
+								title:          'You just arrived at ' + $rootScope.organisationName, //Title of notification
+								text:           'Welcome to ' + $rootScope.organisationName + '!', //Text of notification
+								openAppOnClick: true,//is main app activity should be opened after clicking on notification
+								data:           {mydata: 'Arrived at location'}  //Custom object associated with notification
+							}
+						};
+
+						// setup all geofences
+						window.geofence.addOrUpdate([LocationLeave, LocationArrive]).then(function () {
 							// show alert
 							$ionicPopup.alert({
 							  	title: 'Location reminders enabled',
-							  	template: 'Location reminders have now been enabled. You will now be notified whenever you leave your volunteering location.'
+							  	template: 'Location reminders have now been enabled. You will now be notified whenever you leave ' + $rootScope.organisationName + ' @ Lat:' + $scope.lat + ', Lon: ' + $scope.long
+
 							});
 							$localStorage.locationRemindersSwitch = true;
 
@@ -202,11 +220,18 @@
 						// listen for geofence transitions within the app
 						window.geofence.onTransitionReceived = function (geofences) {
 							geofences.forEach(function (geo) {
-								// left location
-								if (geo.id === 'LocationLeave') {
+								// left location and app not paused
+								if (geo.id === 'LocationLeave' && $rootScope.appPaused === false) {
 									$ionicPopup.alert({
 									  	title: geo.notification.title,
 									  	template: geo.notification.text
+									});
+								}
+								// arrived location and app not paused
+								if (geo.id === 'LocationArrive' && $rootScope.appPaused === false) {
+									$ionicPopup.alert({
+										title: geo.notification.title,
+										template: geo.notification.text
 									});
 								}
 							});
