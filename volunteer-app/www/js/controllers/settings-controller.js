@@ -55,7 +55,8 @@
 						// });
 
 					}, function (error) {
-						shout("Geofence: Error - " + error);
+						// shout("Geofence: Error - " + error);
+						console.log("Geofence: Error - " + error);
 					});
 				}
 
