@@ -24,7 +24,7 @@
                     <!--  -->
                 </select>
             </label>
-            <label class="error block text-right padding assertive" ng-show="user.region.$invalid && formSubmitted" for="region">
+            <label class="error block text-right padding assertive ng-hide" ng-show="user.region.$invalid && formSubmitted" for="region">
                 Please select a region
             </label>
             <!-- /region -->
@@ -37,7 +37,7 @@
                     <!--  -->
                 </select>
             </label>
-            <label class="error block text-right padding assertive" ng-show="user.organisation.$invalid && formSubmitted" for="organisation">
+            <label class="error block text-right padding assertive ng-hide" ng-show="user.organisation.$invalid && formSubmitted" for="organisation">
                 Please select an organisation
             </label>
             <!-- /organisation -->
