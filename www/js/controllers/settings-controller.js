@@ -197,7 +197,7 @@
 							// show alert
 							$ionicPopup.alert({
 							  	title: 'Location reminders enabled',
-							  	template: 'Location reminders have now been enabled. You will now be notified whenever you leave ' + $rootScope.organisationName + ' @ Lat:' + $scope.lat + ', Lon: ' + $scope.long
+							  	template: 'Location reminders have now been enabled. You will now be notified whenever you leave ' + $rootScope.organisationName + '<input type="text" value="' + $scope.lat + ', ' + $scope.long + '">'
 
 							});
 							$localStorage.locationRemindersSwitch = true;
@@ -273,7 +273,12 @@
 			*/
 
 				$scope.getUserEmail = function() {
-					return $localStorage.user.email;
+					if ($localStorage.user !== undefined) {
+						return $localStorage.user.email;
+					}
+					else {
+						return '';
+					}
 				}
 
 			/*
