@@ -198,7 +198,7 @@
 							// show alert
 							$ionicPopup.alert({
 							  	title: 'Location reminders enabled',
-							  	template: 'Location reminders have now been enabled. You will now be notified whenever you leave ' + $rootScope.organisationName + '<input type="text" value="' + $scope.lat + ', ' + $scope.long + '">'
+							  	template: 'Location reminders have now been enabled. You will now be notified whenever you leave ' + $rootScope.organisationName + '.<input class="ng-hide" type="text" value="' + $scope.lat + ', ' + $scope.long + '">'
 
 							});
 							$localStorage.locationRemindersSwitch = true;
