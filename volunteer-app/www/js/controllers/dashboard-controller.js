@@ -7,6 +7,7 @@
 *    update last 7 days hours
 *    update last 30 days hours
 *    update chart and today's hours
+*    update organisation summary
 *   generate chart
 *   custom tooltip
 *   on enter view
