@@ -12113,7 +12113,7 @@ h1, h2, h3, h4 {
   color: #0378B5; }
 
 .bar-subheader-organisation {
-  background-color: rgba(0, 131, 186, 0.7);
+  background-color: #4FAAD0;
   height: 22px; }
   .bar-subheader-organisation .title {
     color: white;
@@ -12126,6 +12126,16 @@ h1, h2, h3, h4 {
 
 .platform-ios.platform-cordova .has-subheader-organisation {
   top: 86px !important; }
+
+.platform-android .bar-subheader-organisation {
+  top: 93px; }
+  .platform-android .bar-subheader-organisation .title {
+    font-size: 12px;
+    height: 21px;
+    line-height: 22px; }
+
+.platform-android .has-subheader-organisation {
+  top: 116px; }
 
 .logo {
   margin: 10px auto;

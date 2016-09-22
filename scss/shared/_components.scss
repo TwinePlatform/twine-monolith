@@ -1,7 +1,6 @@
 // organisation bar
 .bar-subheader-organisation {
-	background-color: rgba(0,131,186,0.7);
-
+	background-color: #4FAAD0;
 	height: 22px;
 	.title {
 		color: white;
@@ -10,11 +9,24 @@
 		font-size: 12px;
 	}
 }
+// ios
 .has-subheader-organisation {
 	top: 66px;
 }
 .platform-ios.platform-cordova .has-subheader-organisation {
 	top: 86px !important;
+}
+// android
+.platform-android .bar-subheader-organisation {
+	top: 93px;
+	.title {
+		font-size: 12px;
+		height: 21px;
+		line-height: 22px;
+	}
+}
+.platform-android .has-subheader-organisation {
+	top: 116px;
 }
 
 // logo
