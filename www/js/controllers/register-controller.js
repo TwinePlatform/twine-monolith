@@ -196,7 +196,7 @@
 
 							// show unsuccess popup
 							var alertPopup = $ionicPopup.alert({
-							  	title: 'Error',
+							  	title: 'Registration unsuccessful',
 							  	template: 'Registration unsuccessful: ' + response.message,
 							  	okText: 'OK',
 							  	okType: 'button-assertive',

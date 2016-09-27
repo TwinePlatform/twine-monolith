@@ -12,8 +12,8 @@
 	> view logs controller
 */
 
-	angular.module('app').controller('ViewLogsController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$localStorage', '$rootScope', 
-	function ($scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope) {
+	angular.module('app').controller('ViewLogsController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$localStorage', '$rootScope', '$ionicPopup', 
+	function ($scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup) {
 
 		/*
 			>> populate logs
@@ -59,36 +59,55 @@
 		
 			$scope.delete = function(log) {
 
-				// show loader
-				$ionicLoading.show();
+				// confirm deletion popup
+				$ionicPopup.show({
+					template: 'Are you sure you want to delete this log?',
+					title: 'Delete log',
+					scope: $scope,
+					buttons: [
+						{
+							text: 'No'
+						},
+						{
+						  	text: '<b>Yes</b>',
+						  	type: 'button-positive',
+						  	onTap: function(e) {
+						    	
+						  		// show loader
+						  		$ionicLoading.show();
 
-				// get id of log
-				var id = log.id;
+						  		// get id of log
+						  		var id = log.id;
 
-				// call api delete log method
-				$http({
-					method: 'DELETE',
-					url: api('logs/' + id)
-				}).success(function (result) {
-					
-					// hide loader
-					$ionicLoading.hide();
+						  		// call api delete log method
+						  		$http({
+						  			method: 'DELETE',
+						  			url: api('logs/' + id)
+						  		}).success(function (result) {
+						  			
+						  			// hide loader
+						  			$ionicLoading.hide();
 
-					// remove from model & view
-					var index = $scope.logs.indexOf(log);
-					$scope.logs.splice(index, 1);
+						  			// remove from model & view
+						  			var index = $scope.logs.indexOf(log);
+						  			$scope.logs.splice(index, 1);
 
-					// refresh dashboard
-					// $rootScope.$broadcast('refreshDashboard');
+						  			// shout log deleted
+						  			shout('Log deleted');
 
-				}).error(function (result, error) {
-					
-					// hide loader
-					$ionicLoading.hide();
+						  		}).error(function (result, error) {
+						  			
+						  			// hide loader
+						  			$ionicLoading.hide();
 
-					// process connection error
-					processConnectionError(result, error);
+						  			// process connection error
+						  			processConnectionError(result, error);
 
+						  		});
+
+							}
+						}
+					]
 				});
 
 			}

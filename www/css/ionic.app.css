@@ -12114,28 +12114,28 @@ h1, h2, h3, h4 {
 
 .bar-subheader-organisation {
   background-color: #4FAAD0;
-  height: 22px; }
+  height: 27.4995px; }
   .bar-subheader-organisation .title {
     color: white;
-    height: 21px;
-    line-height: 22px;
-    font-size: 12px; }
+    height: 25.21704px;
+    line-height: 27.4995px;
+    font-size: 15px; }
 
 .has-subheader-organisation {
-  top: 66px; }
+  top: 72px; }
 
 .platform-ios.platform-cordova .has-subheader-organisation {
-  top: 86px !important; }
+  top: 92px !important; }
 
 .platform-android .bar-subheader-organisation {
   top: 93px; }
   .platform-android .bar-subheader-organisation .title {
-    font-size: 12px;
-    height: 21px;
-    line-height: 22px; }
+    font-size: 15px;
+    height: 26.4995px;
+    line-height: 27.4995px; }
 
 .platform-android .has-subheader-organisation {
-  top: 116px; }
+  top: 122px; }
 
 .logo {
   margin: 10px auto;
@@ -12255,7 +12255,8 @@ select[disabled], .item-select-disabled:after {
   padding: 5px;
   margin-right: 10px;
   margin-left: 10px;
-  color: white; }
+  color: white;
+  font-size: 14px; }
 
 .button-add {
   width: 80px;

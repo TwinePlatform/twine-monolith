@@ -34,6 +34,7 @@
 			$('#createLog .datepicker').pickadate({
 				date: new Date(),
 				container: '.datepicker-container',
+				clear: false,
 				onStart: function () {
 					// set date to today initially
 				    var date = new Date();
@@ -100,6 +101,11 @@
 				// get minutes from form
 				if (angular.isDefined($scope.formData.minutes) && $scope.formData.minutes !== null) {
 					minutes = $scope.formData.minutes.value;
+				}
+
+				// set minutes to 0 if hours == 24
+				if (hours === 24) {
+					$scope.formData.minutes = 0;
 				}
 
 				// get total minutes integer & update form
