@@ -28,6 +28,7 @@
 
 			var $datepickerInput = $('#editLog .datepicker').pickadate({
 				container: '.datepicker-container',
+				clear: false,
 				onSet: function(context) {
 					// add date to scope in correct format
 					$scope.formData.date_of_log = $filter('date')(context.select, 'yyyy-MM-dd');
@@ -93,6 +94,11 @@
 				// get minutes from form
 				if (angular.isDefined($scope.formData.minutes) && $scope.formData.minutes !== null) {
 					minutes = $scope.formData.minutes.value;
+				}
+				
+				// set minutes to 0 if hours == 24
+				if (hours === 24) {
+					$scope.formData.minutes = 0;
 				}
 
 				// get total minutes integer & update form

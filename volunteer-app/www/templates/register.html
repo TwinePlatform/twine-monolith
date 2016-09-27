@@ -44,7 +44,7 @@
                 <!-- phone -->
                 <label class="item item-input">
                     <span class="input-label">Phone</span>
-                    <input type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" required>
+                    <input type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" required maxlength="16">
                 </label>
                 <label class="error block text-right padding assertive" ng-show="register.phone.$invalid && formSubmitted" for="phone">
                     Please enter a phone number

@@ -21,7 +21,8 @@
 		>> api urls
 	*/
 
-		var apiBaseUrl = 'http://powertochangeadmin.stage2.reason.digital/api/v1/';
+		var apiBaseUrl = 'http://powertochangeadmindev.stage2.reason.digital/api/v1/'; // dev
+		// var apiBaseUrl = 'http://powertochangeadmin.stage2.reason.digital/api/v1/'; // stage
 
 	/*
 		>> api url generator
@@ -176,11 +177,12 @@
 		var getHoursAndMinutesAsString = function(minutesInteger) {
 			var hoursAndMinutesObject = getHoursAndMinutes(minutesInteger);
 			var hours = hoursAndMinutesObject.hours;
+			var hoursUnit = hours > 1 ? 'hrs' : 'hr';
 			var minutes = hoursAndMinutesObject.minutes;
 			var hoursAndMinutesString = '';
 			// if there's more than 0 hours
 			if (hours > 0) {
-				hoursAndMinutesString += '<span class="hours">' + hours + ' <span class="unit">hr</span></span>';
+				hoursAndMinutesString += '<span class="hours">' + hours + ' <span class="unit">' + hoursUnit + '</span></span>';
 				// if there are minutes as well, add a space at the end
 				if (minutes > 0) {
 					hoursAndMinutesString += ' ';

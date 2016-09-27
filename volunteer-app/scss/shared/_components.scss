@@ -1,32 +1,34 @@
 // organisation bar
+$fontsize: 15px;
+$subsize: $fontsize * 1.8333;
 .bar-subheader-organisation {
 	background-color: #4FAAD0;
-	height: 22px;
+	height: $subsize;
 	.title {
 		color: white;
-		height: 21px;
-		line-height: 22px;
-		font-size: 12px;
+		height: $subsize * 0.917;
+		line-height: $subsize;
+		font-size: $fontsize;
 	}
 }
 // ios
 .has-subheader-organisation {
-	top: 66px;
+	top: 72px;
 }
 .platform-ios.platform-cordova .has-subheader-organisation {
-	top: 86px !important;
+	top: 92px !important;
 }
 // android
 .platform-android .bar-subheader-organisation {
 	top: 93px;
 	.title {
-		font-size: 12px;
-		height: 21px;
-		line-height: 22px;
+		font-size: $fontsize;
+		height: $subsize - 1;
+		line-height: $subsize;
 	}
 }
 .platform-android .has-subheader-organisation {
-	top: 116px;
+	top: 122px;
 }
 
 // logo
