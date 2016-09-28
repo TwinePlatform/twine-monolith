@@ -11,6 +11,7 @@
 *   get minutes - get minutes as an integer
 *   get hours & minutes
 *   get hours & minutes (as string)
+*   click preventer
 */
 
 /*
@@ -197,4 +198,25 @@
 				hoursAndMinutesString = '<span class="hours">' + hours + ' <span class="unit">hours</span></span>';
 			}
 			return hoursAndMinutesString;
+		}
+
+
+	/*
+		>> click preventer
+		   - prevents phantom clicks from happening (e.g. you tap a button 
+		     in a popup, then the select directly underneath would get focussed)
+	*/
+
+		var $clickPreventer = {};
+
+		// show click preventer
+		$clickPreventer.show = function() {
+			$('.click-preventer').removeClass('ng-hide');
+		}
+
+		// hide click preventer
+		$clickPreventer.hide = function() {
+			setTimeout(function(){
+				$('.click-preventer').addClass('ng-hide');
+			}, 300);
 		}

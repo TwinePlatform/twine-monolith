@@ -1,3 +1,14 @@
+// click preventer
+.click-preventer {
+	position: fixed;
+	background: rgba(0,0,0,0);
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	z-index: 100;
+}
+
 // organisation bar
 $fontsize: 15px;
 $subsize: $fontsize * 1.8333;
