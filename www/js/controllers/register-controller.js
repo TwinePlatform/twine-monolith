@@ -149,11 +149,14 @@
 				// variable to show that form was submitted
 				$scope.formSubmitted = true;
 
+				// show click preventer
+				$clickPreventer.show();
+
+				// show loader
+				$ionicLoading.show();
+
 				// form is valid
 				if (form.$valid) {
-
-					// show loader
-					$ionicLoading.show();
 
 					// >>> submit form data
 					$http({
@@ -217,7 +220,11 @@
 				}
 				// form is invalid
 				else {
+					// hide loader
+					$ionicLoading.hide();
 
+					// hide click preventer
+					$clickPreventer.hide();
 				}
 
 			};
@@ -243,5 +250,7 @@
 			$scope.termsClose = function() {
 			    $scope.modal.hide();
 			};
+
+
 
 	}])

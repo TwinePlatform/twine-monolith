@@ -2,3 +2,14 @@
 h1, h2, h3, h4 {
 	color: $positive;
 }
+// content areas
+.content {
+	// ordered list
+	ol {
+		list-style: decimal;
+		li {
+			margin-bottom: 10px;
+			margin-left: 15px;
+		}
+	}
+}

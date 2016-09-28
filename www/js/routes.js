@@ -20,6 +20,7 @@ angular.module('app.routes', ['ionicUIRouter'])
 
 		// > register page
 		.state('register', {
+			cache: false,
 			url: '/register',
 			templateUrl: 'templates/register.html',
 			controller: 'RegisterController'

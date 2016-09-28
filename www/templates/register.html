@@ -44,10 +44,10 @@
                 <!-- phone -->
                 <label class="item item-input">
                     <span class="input-label">Phone</span>
-                    <input type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" required maxlength="16">
+                    <input type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" minlength="6" maxlength="15" ng-pattern="/^([0-9|+|*|#]+)$/" required>
                 </label>
                 <label class="error block text-right padding assertive" ng-show="register.phone.$invalid && formSubmitted" for="phone">
-                    Please enter a phone number
+                    Please enter only digits or these symbols: *+# (between 6 and 15 characters in length)
                 </label>
                 <!-- /phone -->
 
@@ -115,7 +115,7 @@
                 <a ng-click="termsShow()" class="button button-small button-positive button-block button-clear">Terms & Conditions</a>
             </div>
             <button type="submit" class="button button-positive button-block button-outline">Register</button>
-            <a ui-sref="login" class=" button button-positive button-block button-clear">Or log in if you have an account</a>
+            <a ui-sref="login" class=" button button-positive button-block button-clear"><i class="icon ion-log-in"></i> Or log in if you have an account</a>
         </form>
         <!-- /form#register -->
 
