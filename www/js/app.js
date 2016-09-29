@@ -13,6 +13,10 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives
 		// log localstorage first
 		console.log('$localStorage: ', $localStorage);
 
+		// device detection
+		$rootScope.isIOS = ionic.Platform.isIOS();
+		$rootScope.isAndroid = ionic.Platform.isAndroid();
+
 		// set organisation subheader title
 		if ($localStorage.user) {
 			$rootScope.organisationName = $localStorage.user.organisation.name;

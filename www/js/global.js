@@ -22,8 +22,8 @@
 		>> api urls
 	*/
 
-		var apiBaseUrl = 'http://powertochangeadmindev.stage2.reason.digital/api/v1/'; // dev
-		// var apiBaseUrl = 'http://powertochangeadmin.stage2.reason.digital/api/v1/'; // stage
+		// var apiBaseUrl = 'http://powertochangeadmindev.stage2.reason.digital/api/v1/'; // dev
+		var apiBaseUrl = 'http://powertochangeadmin.stage2.reason.digital/api/v1/'; // stage
 
 	/*
 		>> api url generator
