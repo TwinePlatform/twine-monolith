@@ -172,6 +172,9 @@
 							// hide loader
 							$ionicLoading.hide();
 
+							// hide click preventer
+							$clickPreventer.hide();
+
 							// store user information
 							$localStorage.user = response.data;
 
@@ -185,6 +188,7 @@
 							  	okText: 'Start logging time'
 							});
 
+							// go to dashboard
 							alertPopup.then(function(res) {
 							  	$state.go('tabs.dashboard');
 							});
@@ -196,6 +200,9 @@
 
 							// hide loader
 							$ionicLoading.hide();
+
+							// hide click preventer
+							$clickPreventer.hide();
 
 							// show unsuccess popup
 							var alertPopup = $ionicPopup.alert({
@@ -212,6 +219,9 @@
 
 						// hide loader
 						$ionicLoading.hide();
+
+						// hide click preventer
+						$clickPreventer.hide();
 
 						// process connection error
 						processConnectionError(data, error);
