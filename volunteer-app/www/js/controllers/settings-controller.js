@@ -46,18 +46,22 @@
 				initialize geofencing plugin
 			*/
 
-				if (window.geofence) {
-					window.geofence.initialize().then(function () {
+				if (!$rootScope.isIOS) { // disable on iOS
 
-						// get watched geofences
-						// window.geofence.getWatched().then(function (geofencesJson) {
-						//     var geofences = JSON.parse(geofencesJson);
-						// });
+					if (window.geofence) {
+						window.geofence.initialize().then(function () {
 
-					}, function (error) {
-						shout("Geofence: Error - " + error, 10000);
-						console.log("Geofence: Error - " + error);
-					});
+							// get watched geofences
+							// window.geofence.getWatched().then(function (geofencesJson) {
+							//     var geofences = JSON.parse(geofencesJson);
+							// });
+
+						}, function (error) {
+							shout("Geofence: Error - " + error, 10000);
+							console.log("Geofence: Error - " + error);
+						});
+					}
+
 				}
 
 
@@ -198,7 +202,7 @@
 							// show alert
 							$ionicPopup.alert({
 							  	title: 'Location reminders enabled',
-							  	template: 'Location reminders have now been enabled. You will now be notified whenever you leave ' + $rootScope.organisationName + '.<input class="ng-hideZ" type="text" value="' + $scope.lat + ', ' + $scope.long + '">'
+							  	template: 'Location reminders have now been enabled. You will now be notified whenever you leave ' + $rootScope.organisationName + '.<input class="ng-hide" type="text" value="' + $scope.lat + ', ' + $scope.long + '">'
 
 							});
 							$localStorage.locationRemindersSwitch = true;

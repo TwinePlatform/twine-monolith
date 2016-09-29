@@ -3,7 +3,7 @@
     <organisation-subheader></organisation-subheader>
 
     <ion-content padding="true" class="has-header has-subheader-organisation settings">
-        <form class="list">
+        <form class="list" ng-hide="isIOS">
             <div class="item item-divider">
                 Location reminders
                 <p class="wrap"><small>Get a reminder to log your hours when you leave {{ organisationName }}:</small></p>

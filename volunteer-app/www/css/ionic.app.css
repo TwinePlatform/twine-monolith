@@ -12129,12 +12129,13 @@ h1, h2, h3, h4 {
 
 .bar-subheader-organisation {
   background-color: #4FAAD0;
-  height: 27.4995px; }
+  height: 30px; }
   .bar-subheader-organisation .title {
     color: white;
-    height: 25.21704px;
-    line-height: 27.4995px;
-    font-size: 15px; }
+    height: 30px;
+    line-height: 30px;
+    font-size: 15px;
+    font-weight: bold; }
 
 .has-subheader-organisation {
   top: 72px; }
@@ -12146,8 +12147,8 @@ h1, h2, h3, h4 {
   top: 93px; }
   .platform-android .bar-subheader-organisation .title {
     font-size: 15px;
-    height: 26.4995px;
-    line-height: 27.4995px; }
+    height: 29px;
+    line-height: 30px; }
 
 .platform-android .has-subheader-organisation {
   top: 122px; }

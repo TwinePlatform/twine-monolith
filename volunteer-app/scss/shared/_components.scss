@@ -11,15 +11,16 @@
 
 // organisation bar
 $fontsize: 15px;
-$subsize: $fontsize * 1.8333;
+$subsize: $fontsize * 2;
 .bar-subheader-organisation {
 	background-color: #4FAAD0;
 	height: $subsize;
 	.title {
 		color: white;
-		height: $subsize * 0.917;
+		height: $subsize;
 		line-height: $subsize;
 		font-size: $fontsize;
+		font-weight: bold;
 	}
 }
 // ios
