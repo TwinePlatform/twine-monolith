@@ -46,22 +46,18 @@
 				initialize geofencing plugin
 			*/
 
-				if (!$rootScope.isIOS) { // disable on iOS
+				if (window.geofence) {
+					window.geofence.initialize().then(function () {
 
-					if (window.geofence) {
-						window.geofence.initialize().then(function () {
+						// get watched geofences
+						// window.geofence.getWatched().then(function (geofencesJson) {
+						//     var geofences = JSON.parse(geofencesJson);
+						// });
 
-							// get watched geofences
-							// window.geofence.getWatched().then(function (geofencesJson) {
-							//     var geofences = JSON.parse(geofencesJson);
-							// });
-
-						}, function (error) {
-							shout("Geofence: Error - " + error, 10000);
-							console.log("Geofence: Error - " + error);
-						});
-					}
-
+					}, function (error) {
+						shout("Geofence: Error - " + error, 10000);
+						console.log("Geofence: Error - " + error);
+					});
 				}
 
 
