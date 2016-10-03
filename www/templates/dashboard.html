@@ -8,7 +8,7 @@
 
         <div class="total-hours-container padding-left padding-right padding-bottom row">
             <div class="col col-50 text-center">
-                <span class="total-hours animated fadeIn" ng-class="{'ng-hide': totalHours < 0}" ng-bind-html="totalHoursString"></span>
+                <span class="total-hours animated fadeIn" ng-class="{'ng-hide': totalHours < 0}" ng-bind-html="totalHours | hoursAndMinutesAsString"></span>
             </div>
             <div class="col chart-container">
                 <!-- <canvas id="logsChart" class="chart" width="400" height="100"></canvas> -->
@@ -30,7 +30,7 @@
                         </div>
                         <div class="col col-50 text-right">
                             <strong>
-                                <span class="animated fadeIn" ng-class="{'ng-hide': todaysTotalHours < 0}" ng-bind-html="todaysTotalHoursString"></span>
+                                <span class="animated fadeIn" ng-class="{'ng-hide': todaysTotalHours < 0}" ng-bind-html="todaysTotalHours | hoursAndMinutesAsString"></span>
                             </strong>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                             Last 7 days
                         </div>
                         <div class="col col-50 text-right">
-                            <span class="animated fadeIn" ng-class="{'ng-hide': last7DaysHours < 0}" ng-bind-html="last7DaysHours"></span>
+                            <span class="animated fadeIn" ng-class="{'ng-hide': last7DaysHours < 0}" ng-bind-html="last7DaysHours | hoursAndMinutesAsString"></span>
                         </div>
                     </div>
                 </ion-item>
@@ -51,7 +51,7 @@
                             Last 30 days
                         </div>
                         <div class="col col-50 text-right">
-                            <span class="animated fadeIn" ng-class="{'ng-hide': last30DaysHours < 0}" ng-bind-html="last30DaysHours"></span>
+                            <span class="animated fadeIn" ng-class="{'ng-hide': last30DaysHours < 0}" ng-bind-html="last30DaysHours | hoursAndMinutesAsString"></span>
                         </div>
                     </div>
                 </ion-item>
@@ -63,7 +63,7 @@
 
         <!-- .organisation-summary -->
         <div class="organisation-summary text-center" ng-if="totalUsers && totalVolunteeredMinutes">
-            Last week, <strong>{{ totalUsers || 0}} <span ng-if="totalUsers > 1">people</span><span ng-if="totalUsers === 1">person</span></strong> gave <strong><span ng-bind-html="totalVolunteeredTime">0 min</span> </strong>to <strong>{{ organisationName }}</strong>
+            Last week, <strong>{{ totalUsers || 0}} <span ng-if="totalUsers > 1">people</span><span ng-if="totalUsers === 1">person</span></strong> gave <strong><span ng-bind-html="totalVolunteeredMinutes | hoursAndMinutesAsString">0 min</span> </strong>to <strong>{{ organisationName }}</strong>
         </div>
         <!-- /.organisation-summary -->
 

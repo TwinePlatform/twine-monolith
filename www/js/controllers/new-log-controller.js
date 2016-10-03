@@ -17,8 +17,8 @@
 	> new log controller
 */
 
-	angular.module('app').controller('NewLogController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage',  '$rootScope',  
-	function ($scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope) {
+	angular.module('app').controller('NewLogController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage',  '$rootScope', '$$currentTimeAsString', '$$api', '$$form', '$$shout', 
+	function ($scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope, $$currentTimeAsString, $$api, $$form, $$shout) {
 
 		/*
 			>> store the form data
@@ -44,14 +44,14 @@
 				    $scope.formData.date_of_log = $filter('date')(this.component.item.select.pick, 'yyyy-MM-dd');
 
 				    // add current time
-				    $scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + getCurrentTime();
+				    $scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + $$currentTimeAsString();
 				},
 				onSet: function(context) {
 					// add date to scope in correct format
 					$scope.formData.date_of_log = $filter('date')(context.select, 'yyyy-MM-dd');
 
 					// add current time
-					$scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + getCurrentTime();
+					$scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + $$currentTimeAsString();
 				}
 			});
 
@@ -109,7 +109,7 @@
 				}
 
 				// get total minutes integer & update form
-				$scope.formData.duration = getMinutes(hours, minutes);
+				$scope.formData.duration = $filter('minutesFromHoursAndMinutes')(hours, minutes);
 
 			}
 
@@ -145,7 +145,7 @@
 					// >>> submit form
 					$http({
 						method: 'POST',
-						url: api('logs'),
+						url: $$api('logs'),
 						data: $.param($scope.formData),
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 					}).success(function(response) {
@@ -157,7 +157,7 @@
 							$ionicLoading.hide();
 
 							// shout success
-							shout('Log saved succesfully!');
+							$$shout('Log saved succesfully!');
 
 							// go back to dashboard
 							$state.go('tabs.dashboard');
@@ -167,7 +167,7 @@
 						// create log unsuccessful
 						else {
 
-							shout('Could not create log.');
+							$$shout('Could not create log.');
 
 						}
 
@@ -177,7 +177,7 @@
 						$ionicLoading.hide();
 
 						// process connection error
-						processConnectionError(data, error);
+						$$form.processConnectionError(data, error);
 
 					});
 				}

@@ -19,8 +19,8 @@
 	> edit log controller
 */
 
-	angular.module('app').controller('EditLogController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$filter', '$localStorage', '$rootScope', 
-	function ($scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope) {
+	angular.module('app').controller('EditLogController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$filter', '$localStorage', '$rootScope', '$$currentTimeAsString', '$$api', '$$form', '$$shout', 
+	function ($scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope, $$currentTimeAsString, $$api, $$form, $$shout) {
 
 		/*
 			>> setup datepickers
@@ -34,7 +34,7 @@
 					$scope.formData.date_of_log = $filter('date')(context.select, 'yyyy-MM-dd');
 
 					// add current time
-					$scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + getCurrentTime();
+					$scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + $$currentTimeAsString();
 				}
 			});
 
@@ -102,7 +102,7 @@
 				}
 
 				// get total minutes integer & update form
-				$scope.formData.duration = getMinutes(hours, minutes);
+				$scope.formData.duration = $filter('minutesFromHoursAndMinutes')(hours, minutes);
 
 			}
 
@@ -116,7 +116,7 @@
 			// get log from api
 			$http({
 				method: 'GET',
-				url: api('logs/' + $scope.logId)
+				url: $$api('logs/' + $scope.logId)
 			}).success(function (result) {
 				
 				// set datepicker date
@@ -128,7 +128,7 @@
 				$scope.formData = result.data;
 
 				// preselect the correct hours and minutes based on duration (in raw minutes)
-				var hoursAndMinutes = getHoursAndMinutes($scope.formData.duration);
+				var hoursAndMinutes = $filter('hoursAndMinutesAsObject')($scope.formData.duration);
 				var hours = hoursAndMinutes.hours;
 				var minutes = hoursAndMinutes.minutes;
 
@@ -156,7 +156,7 @@
 				$ionicLoading.hide();
 
 				// process connection error
-				processConnectionError(result, error);
+				$$form.processConnectionError(result, error);
 
 			});
 
@@ -196,7 +196,7 @@
 					// >>> submit form
 					$http({
 						method: 'PUT',
-						url: api('logs/' + $scope.formData.id),
+						url: $$api('logs/' + $scope.formData.id),
 						data: $.param($scope.formData),
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 					}).success(function(response) {
@@ -211,14 +211,14 @@
 							$state.go('tabs.view-logs');
 
 							// shout success
-							shout('Log saved succesfully!');
+							$$shout('Log saved succesfully!');
 
 						}
 
 						// create log unsuccessful
 						else {
 
-							shout('Edit log unsuccessful');
+							$$shout('Edit log unsuccessful');
 
 						}
 
@@ -228,7 +228,7 @@
 						$ionicLoading.hide();
 
 						// process connection error
-						processConnectionError(data, error);
+						$$form.processConnectionError(data, error);
 
 					});
 				}
