@@ -18,8 +18,8 @@
 	> dashboard controller
 */
 
-	angular.module('app').controller('DashboardController', ['$scope', '$stateParams', '$http', '$localStorage', '$rootScope', '$filter', 
-	function ($scope, $stateParams, $http, $localStorage, $rootScope, $filter) {
+	angular.module('app').controller('DashboardController', ['$scope', '$stateParams', '$http', '$localStorage', '$rootScope', '$filter', '$$api', '$$form', '$$shout', 
+	function ($scope, $stateParams, $http, $localStorage, $rootScope, $filter, $$api, $$form, $$shout) {
 
 		/*
 			>> refresh dashboard
@@ -35,16 +35,15 @@
 
 					$http({
 						method: 'GET',
-						url: api('logs/user/' + $localStorage.user.id + '/total')
+						url: $$api('logs/user/' + $localStorage.user.id + '/total')
 					}).success(function (result) {
 						
 						$scope.totalHours = result.data.total;
-						$scope.totalHoursString = getHoursAndMinutesAsString(result.data.total);
 
 					}).error(function (result, error) {
 						
 						// process connection error
-						processConnectionError(result, error);
+						$$form.processConnectionError(result, error);
 
 					});
 
@@ -57,15 +56,15 @@
 
 					$http({
 						method: 'GET',
-						url: api('logs/user/' + $localStorage.user.id + '/total/days/7')
+						url: $$api('logs/user/' + $localStorage.user.id + '/total/days/7')
 					}).success(function (result) {
 						
-						$scope.last7DaysHours = getHoursAndMinutesAsString(result.data.total);
+						$scope.last7DaysHours = result.data.total;
 
 					}).error(function (result, error) {
 						
 						// process connection error
-						processConnectionError(result, error);
+						$$form.processConnectionError(result, error);
 
 					});
 
@@ -77,15 +76,15 @@
 
 					$http({
 						method: 'GET',
-						url: api('logs/user/' + $localStorage.user.id + '/total/days/30')
+						url: $$api('logs/user/' + $localStorage.user.id + '/total/days/30')
 					}).success(function (result) {
 						
-						$scope.last30DaysHours = getHoursAndMinutesAsString(result.data.total);
+						$scope.last30DaysHours = result.data.total;
 
 					}).error(function (result, error) {
 						
 						// process connection error
-						processConnectionError(result, error);
+						$$form.processConnectionError(result, error);
 
 					});
 
@@ -98,7 +97,7 @@
 					// get last 7 logs
 					$http({
 						method: 'GET',
-						url: api('logs/user/' + $localStorage.user.id)
+						url: $$api('logs/user/' + $localStorage.user.id)
 					}).success(function (result) {
 						
 						// arrays and variables
@@ -111,9 +110,7 @@
 						var logs = result.data.logs;
 
 						// sort the logs by date_of_log in reverse
-						logs = logs.sort(sortBy(
-							'date_of_log' 	// field to sort by
-						));
+						logs = $filter('orderBy')(logs, 'date_of_log');
 
 						// if there have been no hours logged, create a chart with dummy data
 						if (logs.length === 0) {
@@ -167,7 +164,6 @@
 
 							// add 1 to todaysTotalHours (it starts on -1)
 							$scope.todaysTotalHours++;
-							$scope.todaysTotalHoursString = getHoursAndMinutesAsString($scope.todaysTotalHours);
 
 						}
 
@@ -177,7 +173,7 @@
 					}).error(function (result, error) {
 						
 						// process connection error
-						processConnectionError(result, error);
+						$$form.processConnectionError(result, error);
 
 					});
 
@@ -188,24 +184,23 @@
 
 					$http({
 						method: 'GET',
-						url: api('organisations/' + $localStorage.user.organisation.id + '/summary')
+						url: $$api('organisations/' + $localStorage.user.organisation.id + '/summary')
 					}).success(function (result) {
 						
 						// we got what we wanted
 						if (result.success) {
 							$scope.totalUsers = result.data.totalUsers;
 							$scope.totalVolunteeredMinutes = result.data.totalVolunteeredTime;
-							$scope.totalVolunteeredTime = getHoursAndMinutesAsString(result.data.totalVolunteeredTime);
 						}
 						// we didn't
 						else {
-							shout("Couldn't retrieve organisation summary.");
+							$$shout("Couldn't retrieve organisation summary.");
 						}
 
 					}).error(function (result, error) {
 						
 						// process connection error
-						processConnectionError(result, error);
+						$$form.processConnectionError(result, error);
 
 					});
 
@@ -305,7 +300,7 @@
 				tooltipDuration = tooltipDuration.replace('Hours: ', '');
 
 				// convert duration in to hours and minutes
-				tooltipDurationString = getHoursAndMinutesAsString(parseInt(tooltipDuration));
+				tooltipDurationString = $filter('hoursAndMinutesAsString')(tooltipDuration);
 
 				// tooltipDuration = tooltipDuration + ' hours';
 				tooltipMarkup += tooltipTitle + ': ';

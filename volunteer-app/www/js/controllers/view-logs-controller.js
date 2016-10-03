@@ -12,8 +12,8 @@
 	> view logs controller
 */
 
-	angular.module('app').controller('ViewLogsController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$localStorage', '$rootScope', '$ionicPopup', 
-	function ($scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup) {
+	angular.module('app').controller('ViewLogsController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$localStorage', '$rootScope', '$ionicPopup', '$$api', '$$form', '$$shout', 
+	function ($scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $$api, $$form, $$shout) {
 
 		/*
 			>> populate logs
@@ -24,16 +24,8 @@
 				// get logs from api
 				$http({
 					method: 'GET',
-					url: api('logs/user/' + $localStorage.user.id)
+					url: $$api('logs/user/' + $localStorage.user.id)
 				}).success(function (result) {
-					
-					// change duration into hours and minutes
-					for (i = 0; i < result.data.logs.length; i++) {
-						var duration = result.data.logs[i].duration;
-						var hoursAndMinutes = getHoursAndMinutesAsString(duration);
-						// add nice hours and minutes string to object
-						result.data.logs[i].hoursAndMinutes = hoursAndMinutes;
-					}
 
 					// update logs in view
 					$scope.logs = result.data.logs;
@@ -46,7 +38,7 @@
 				}).error(function (result, error) {
 					
 					// process connection error
-					processConnectionError(result, error);
+					$$form.processConnectionError(result, error);
 
 				});
 
@@ -82,7 +74,7 @@
 						  		// call api delete log method
 						  		$http({
 						  			method: 'DELETE',
-						  			url: api('logs/' + id)
+						  			url: $$api('logs/' + id)
 						  		}).success(function (result) {
 						  			
 						  			// hide loader
@@ -93,7 +85,7 @@
 						  			$scope.logs.splice(index, 1);
 
 						  			// shout log deleted
-						  			shout('Log deleted');
+						  			$$shout('Log deleted');
 
 						  		}).error(function (result, error) {
 						  			
@@ -101,7 +93,7 @@
 						  			$ionicLoading.hide();
 
 						  			// process connection error
-						  			processConnectionError(result, error);
+						  			$$form.processConnectionError(result, error);
 
 						  		});
 

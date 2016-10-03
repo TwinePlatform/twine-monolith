@@ -18,8 +18,8 @@
 	> register controller
 */
 
-	angular.module('app').controller('RegisterController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$ionicLoading', '$localStorage', '$ionicModal', '$rootScope', 
-	function ($scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage, $ionicModal, $rootScope) {
+	angular.module('app').controller('RegisterController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$ionicLoading', '$localStorage', '$ionicModal', '$rootScope', '$$api', '$$clickPreventer', '$$form', 
+	function ($scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage, $ionicModal, $rootScope, $$api, $$clickPreventer, $$form) {
 
 		/*
 			>> if user has access token, log straight in
@@ -57,7 +57,7 @@
 
 			$http({
 				method: 'GET',
-				url: api('genders')
+				url: $$api('genders')
 			}).success(function (result) {
 				
 				// loop through the results and push only required items to $scope.genders
@@ -71,7 +71,7 @@
 			}).error(function (result, error) {
 				
 				// process connection error
-				processConnectionError(result, error);
+				$$form.processConnectionError(result, error);
 
 			});			
 
@@ -84,7 +84,7 @@
 
 			$http({
 				method: 'GET',
-				url: api('regions')
+				url: $$api('regions')
 			}).success(function (result) {
 				
 				// loop through the results and push only required items to $scope.regions
@@ -98,7 +98,7 @@
 			}).error(function (result, error) {
 				
 				// process connection error
-				processConnectionError(result, error);
+				$$form.processConnectionError(result, error);
 
 			});
 
@@ -117,7 +117,7 @@
 
 				$http({
 					method: 'GET',
-					url: api('regions/' + $scope.regionId + '/organisations')
+					url: $$api('regions/' + $scope.regionId + '/organisations')
 				}).success(function (result) {
 
 					// loop through the results and push only required items to $scope.organisations
@@ -131,7 +131,7 @@
 				}).error(function (result, error) {
 					
 					// process connection error
-					processConnectionError(result, error);
+					$$form.processConnectionError(result, error);
 
 				});
 			}
@@ -150,7 +150,7 @@
 				$scope.formSubmitted = true;
 
 				// show click preventer
-				$clickPreventer.show();
+				$$clickPreventer.show();
 
 				// show loader
 				$ionicLoading.show();
@@ -161,7 +161,7 @@
 					// >>> submit form data
 					$http({
 						method: 'POST',
-						url: api('users'),
+						url: $$api('users'),
 						data: $.param($scope.formData),
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 					}).success(function(response) {
@@ -173,7 +173,7 @@
 							$ionicLoading.hide();
 
 							// hide click preventer
-							$clickPreventer.hide();
+							$$clickPreventer.hide();
 
 							// store user information
 							$localStorage.user = response.data;
@@ -202,7 +202,7 @@
 							$ionicLoading.hide();
 
 							// hide click preventer
-							$clickPreventer.hide();
+							$$clickPreventer.hide();
 
 							// show unsuccess popup
 							var alertPopup = $ionicPopup.alert({
@@ -221,10 +221,10 @@
 						$ionicLoading.hide();
 
 						// hide click preventer
-						$clickPreventer.hide();
+						$$clickPreventer.hide();
 
 						// process connection error
-						processConnectionError(data, error);
+						$$form.processConnectionError(data, error);
 
 					});
 				}
@@ -234,7 +234,7 @@
 					$ionicLoading.hide();
 
 					// hide click preventer
-					$clickPreventer.hide();
+					$$clickPreventer.hide();
 				}
 
 			};

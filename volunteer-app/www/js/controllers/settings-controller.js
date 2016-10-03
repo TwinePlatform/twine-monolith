@@ -23,8 +23,8 @@
 	> settings controller
 */
 
-	angular.module('app').controller('SettingsController', ['$scope', '$stateParams', '$http', '$ionicPopup', '$ionicLoading', '$ionicPlatform', '$localStorage', '$state', '$rootScope', 
-	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope) {
+	angular.module('app').controller('SettingsController', ['$scope', '$stateParams', '$http', '$ionicPopup', '$ionicLoading', '$ionicPlatform', '$localStorage', '$state', '$rootScope', '$$api', '$$form', '$$shout', 
+	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope, $$api, $$form, $$shout) {
 
 		$ionicPlatform.ready(function() {
 
@@ -57,7 +57,7 @@
 							// });
 
 						}, function (error) {
-							shout("Geofence: Error - " + error, 10000);
+							$$shout("Geofence: Error - " + error, 10000);
 							console.log("Geofence: Error - " + error);
 						});
 					}
@@ -295,7 +295,7 @@
 
 				$http({
 					method: 'GET',
-					url: api('regions')
+					url: $$api('regions')
 				}).success(function (result) {
 					
 					// loop through the results and push only required items to $scope.regions
@@ -323,7 +323,7 @@
 				}).error(function (result, error) {
 					
 					// process connection error
-					processConnectionError(result, error);
+					$$form.processConnectionError(result, error);
 
 				});
 
@@ -346,7 +346,7 @@
 					else {
 						$http({
 							method: 'GET',
-							url: api('regions/' + regionId + '/organisations')
+							url: $$api('regions/' + regionId + '/organisations')
 						}).success(function (result) {
 
 							$scope.organisations = result.data;
@@ -383,7 +383,7 @@
 							$ionicLoading.hide();
 
 							// process connection error
-							processConnectionError(result, error);
+							$$form.processConnectionError(result, error);
 
 						});
 					}
@@ -415,7 +415,7 @@
 						// >>> submit form data
 						$http({
 							method: 'PUT',
-							url: api('users/' + $localStorage.user.id),
+							url: $$api('users/' + $localStorage.user.id),
 							data: $.param($scope.formData),
 							headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 						}).success(function(response) {
@@ -433,7 +433,7 @@
 								$rootScope.organisationName = $localStorage.user.organisation.name;
 
 								// shout success
-								shout('Your region and organisation were updated!');
+								$$shout('Your region and organisation were updated!');
 
 							}
 
@@ -444,7 +444,7 @@
 								$ionicLoading.hide();
 
 								// shout error
-								shout('Could not save region and organisation!');
+								$$shout('Could not save region and organisation!');
 
 							}
 
@@ -454,7 +454,7 @@
 							$ionicLoading.hide();
 
 							// process connection error
-							processConnectionError(data, error);
+							$$form.processConnectionError(data, error);
 
 						});
 					}

@@ -14,7 +14,7 @@
 
             <ion-item class="item-icon-left item-remove-animate" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at']">
                 <i class="icon ion-ios-time"></i>
-                <h2 ng-bind-html="log.hoursAndMinutes"></h2>
+                <h2 ng-bind-html="log.duration | hoursAndMinutesAsString"></h2>
                 <p>{{ log.date_of_log.split(' ')[0] | date:'d MMM yyyy'}} @ {{ organisationName }}</p>
                 <div class="button-bar">
                     <a href="#/tab/edit-log/{{ log.id }}" class="button button-positive button-block button-clear icon-left ion-edit">Edit</a>
