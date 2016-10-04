@@ -2,17 +2,17 @@
 * CONTENTS
 *
 * edit log controller
-*   setup datepickers
-*   variables
-*   show loader
-*   populate hours dropdown
-*   populate minutes dropdown
-*   calculate duration
-*   get log data
-*   function: generate form date
-*   process the form
-*    validate form
-*    submit form
+*    variables
+*    setup datepickers
+*    show loader
+*    populate hours dropdown
+*    populate minutes dropdown
+*    calculate duration
+*    get log data
+*    function: generate form date
+*    process the form
+*      validate form
+*      submit edit log form
 */
 
 /*
@@ -21,6 +21,13 @@
 
 	angular.module('app').controller('EditLogController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$filter', '$localStorage', '$rootScope', '$$currentTimeAsString', '$$api', '$$form', '$$shout', 
 	function ($scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope, $$currentTimeAsString, $$api, $$form, $$shout) {
+
+		/*
+			>> variables
+		*/
+
+			$scope.formData = {};
+			$scope.logLoaded = false;
 
 		/*
 			>> setup datepickers
@@ -38,12 +45,6 @@
 				}
 			});
 
-		/*
-			>> variables
-		*/
-
-			$scope.formData = {};
-			$scope.logLoaded = false;
 
 		/*
 			>> show loader
@@ -56,49 +57,26 @@
 			>> populate hours dropdown
 		*/
 
-			$scope.hours = [];
-			var lowestHour = 0,
-				highestHour = 24;
-			while(lowestHour <= highestHour) {
-				$scope.hours.push({ value: lowestHour, name: lowestHour + ' hours' });
-				lowestHour++;
-			}
+			$scope.hours = $$form.hours.get();
 
 
 		/*
 			>> populate minutes dropdown
 		*/
 
-			$scope.minutes = [];
-			var lowestMinute = 0,
-				highestMinute = 55;
-			while(lowestMinute <= highestMinute) {
-				$scope.minutes.push({ value: lowestMinute, name: lowestMinute + ' minutes' });
-				lowestMinute += 5;
-			}
+			$scope.minutes = $$form.minutes.get();
 
 		/*
 			>> calculate duration
+			   .. in an integer of minutes based on the hours and minutes dropdowns
 		*/
 
-			$scope.calculateDuration = function() {
-				
-				var hours = 0,
-					minutes = 0;
-				
-				// get hours from form
-				if (angular.isDefined($scope.formData.hours) && $scope.formData.hours !== null) {
-					hours = $scope.formData.hours.value;
-				}
-
-				// get minutes from form
-				if (angular.isDefined($scope.formData.minutes) && $scope.formData.minutes !== null) {
-					minutes = $scope.formData.minutes.value;
-				}
-				
-				// set minutes to 0 if hours == 24
+			$scope.calculateDuration = function(hours, minutes) {
+			
+				// // set minutes to 0 if hours == 24
 				if (hours === 24) {
 					$scope.formData.minutes = 0;
+					minutes = 0;
 				}
 
 				// get total minutes integer & update form
@@ -114,10 +92,7 @@
 			$scope.logId = $state.params.id;
 
 			// get log from api
-			$http({
-				method: 'GET',
-				url: $$api('logs/' + $scope.logId)
-			}).success(function (result) {
+			$$api.logs.getLog($scope.logId).success(function (result) {
 				
 				// set datepicker date
 				var picker = $datepickerInput.pickadate('picker');
@@ -152,9 +127,6 @@
 
 			}).error(function (result, error) {
 				
-				// hide loader
-				$ionicLoading.hide();
-
 				// process connection error
 				$$form.processConnectionError(result, error);
 
@@ -170,7 +142,6 @@
 				var formDate = $filter('date')($scope.formData.dateRaw, 'yyyy-MM-dd');
 				$scope.formData.date_of_log = formDate;
 			}
-			
 
 		/*
 			>> process the form
@@ -193,16 +164,11 @@
 					// show loader
 					$ionicLoading.show();
 
-					// >>> submit form
-					$http({
-						method: 'PUT',
-						url: $$api('logs/' + $scope.formData.id),
-						data: $.param($scope.formData),
-						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-					}).success(function(response) {
+					// >>> submit edit log form
+					$$api.logs.edit($scope.formData.id, $.param($scope.formData)).success(function (result) {
 
 						// create log successful
-						if (response.success) {
+						if (result.success) {
 
 							// hide loader
 							$ionicLoading.hide();
@@ -223,9 +189,6 @@
 						}
 
 					}).error(function(data, error) {
-
-						// hide loader
-						$ionicLoading.hide();
 
 						// process connection error
 						$$form.processConnectionError(data, error);

@@ -2,16 +2,16 @@
 * CONTENTS
 *
 * register controller
-*   if user has access token, log straight in
-*   store the form data
-*   populate year of birth dropdown (current year going down to (current year - 110))
-*   populate gender dropdown
-*   populate region dropdown
-*   populate organisation dropdown
-*   process the form
-*    validate form
-*    submit form data
-*   terms & conditions modal
+*    if user has access token, log straight in
+*    store the form data
+*    populate year of birth dropdown (current year going down to (current year - 110))
+*    populate gender dropdown
+*    populate region dropdown
+*    populate organisation dropdown
+*    process the form
+*      validate form
+*      submit form data
+*    terms & conditions modal
 */
 
 /*
@@ -39,12 +39,7 @@
 			>> populate year of birth dropdown (current year going down to (current year - 110))
 		*/
 
-			$scope.years = [];
-			var highestYear = new Date().getFullYear(),
-				lowestYear = highestYear - 110;
-			while(highestYear >= lowestYear) {
-				$scope.years.push(highestYear--);
-			}
+			$scope.years = $$form.years.get();
 
 		/*
 			>> populate gender dropdown
@@ -55,10 +50,7 @@
 			$scope.gendersDisabled = true;
 			$scope.genders = [];
 
-			$http({
-				method: 'GET',
-				url: $$api('genders')
-			}).success(function (result) {
+			$$api.genders.get().success(function (result) {
 				
 				// loop through the results and push only required items to $scope.genders
 				for (var i = 0, len = result.data.length; i < len; i++) {
@@ -82,10 +74,7 @@
 			$scope.regionsDisabled = true;
 			$scope.regions = [];
 
-			$http({
-				method: 'GET',
-				url: $$api('regions')
-			}).success(function (result) {
+			$$api.regions.get().success(function (result) {
 				
 				// loop through the results and push only required items to $scope.regions
 				for (var i = 0, len = result.data.length; i < len; i++) {
@@ -115,10 +104,7 @@
 				// get selected region id
 				$scope.regionId = $scope.formData.region.id;
 
-				$http({
-					method: 'GET',
-					url: $$api('regions/' + $scope.regionId + '/organisations')
-				}).success(function (result) {
+				$$api.organisations.get($scope.regionId).success(function (result) {
 
 					// loop through the results and push only required items to $scope.organisations
 					for (var i = 0, len = result.data.length; i < len; i++) {
@@ -159,12 +145,7 @@
 				if (form.$valid) {
 
 					// >>> submit form data
-					$http({
-						method: 'POST',
-						url: $$api('users'),
-						data: $.param($scope.formData),
-						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-					}).success(function(response) {
+					$$api.user.register($.param($scope.formData)).success(function(response) {
 
 						// registration successful
 						if (response.success) {
@@ -217,9 +198,6 @@
 
 					}).error(function(data, error) {
 
-						// hide loader
-						$ionicLoading.hide();
-
 						// hide click preventer
 						$$clickPreventer.hide();
 
@@ -244,7 +222,7 @@
 			>> terms & conditions modal
 		*/
 
-			$ionicModal.fromTemplateUrl('templates/terms-and-conditions-modal.html', {
+			$ionicModal.fromTemplateUrl('templates/partials/terms-and-conditions-modal.html', {
 			    scope: $scope,
 			    animation: 'slide-in-up'
 			}).then(function(modal) {
