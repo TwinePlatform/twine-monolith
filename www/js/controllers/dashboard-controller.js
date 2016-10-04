@@ -2,16 +2,16 @@
 * CONTENTS
 *
 * dashboard controller
-*   refresh dashboard
-*    update overall total hours
-*    update last 7 days hours
-*    update last 30 days hours
-*    update chart and today's hours
-*    update organisation summary
-*   generate chart
-*   custom tooltip
-*   on enter view
-*   on leave view
+*    refresh dashboard
+*      update overall total hours
+*      update last 7 days hours
+*      update last 30 days hours
+*      update chart and today's hours
+*      update organisation summary
+*    generate chart
+*    custom tooltip
+*    on enter view
+*    on leave view
 */
 
 /*
@@ -33,10 +33,7 @@
 
 					$scope.totalHours = -1;
 
-					$http({
-						method: 'GET',
-						url: $$api('logs/user/' + $localStorage.user.id + '/total')
-					}).success(function (result) {
+					$$api.user.totalHours($localStorage.user.id).success(function (result) {
 						
 						$scope.totalHours = result.data.total;
 
@@ -54,10 +51,7 @@
 
 					$scope.last7DaysHours = -1;
 
-					$http({
-						method: 'GET',
-						url: $$api('logs/user/' + $localStorage.user.id + '/total/days/7')
-					}).success(function (result) {
+					$$api.user.totalHours($localStorage.user.id, 7).success(function (result) {
 						
 						$scope.last7DaysHours = result.data.total;
 
@@ -74,10 +68,7 @@
 
 					$scope.last30DaysHours = -1;
 
-					$http({
-						method: 'GET',
-						url: $$api('logs/user/' + $localStorage.user.id + '/total/days/30')
-					}).success(function (result) {
+					$$api.user.totalHours($localStorage.user.id, 30).success(function (result) {
 						
 						$scope.last30DaysHours = result.data.total;
 
@@ -95,10 +86,7 @@
 					$scope.todaysTotalHours = -1;
 
 					// get last 7 logs
-					$http({
-						method: 'GET',
-						url: $$api('logs/user/' + $localStorage.user.id)
-					}).success(function (result) {
+					$$api.logs.getLogs($localStorage.user.id).success(function (result) {
 						
 						// arrays and variables
 						$scope.labels = [];
@@ -182,10 +170,7 @@
 					>>> update organisation summary
 				*/
 
-					$http({
-						method: 'GET',
-						url: $$api('organisations/' + $localStorage.user.organisation.id + '/summary')
-					}).success(function (result) {
+					$$api.organisations.summary($localStorage.user.organisation.id).success(function (result) {
 						
 						// we got what we wanted
 						if (result.success) {

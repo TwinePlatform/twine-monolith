@@ -2,17 +2,17 @@
 * CONTENTS
 *
 * login controller
-*   store the form data
-*   process the form
-*    validate form
-*    submit form
+*    store the form data
+*    process the form
+*      validate form
+*      submit login form
 */
 
 /*
 	> login controller
 */
 
-	angular.module('app').controller('LoginController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$localStorage', '$ionicLoading', '$rootScope', '$$api', '$$form', 
+	angular.module('app').controller('LoginController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$localStorage', '$ionicLoading', '$rootScope', '$$api', '$$form',
 	function ($scope, $stateParams, $http, $state, $ionicPopup, $localStorage, $ionicLoading, $rootScope, $$api, $$form) {
 
 		/*
@@ -40,22 +40,17 @@
 					// show loader
 					$ionicLoading.show();
 
-					// >>> submit form
-					$http({
-						method: 'POST',
-						url: $$api('users/login'),
-						data: $.param($scope.formData),
-						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-					}).success(function(response) {
+					// >>> submit login form
+					$$api.user.login($.param($scope.formData)).success(function (result) {
 
 						// login successful
-						if (response.success) {
+						if (result.success) {
 
 							// hide loader
 							$ionicLoading.hide();
 
 							// store user data
-							$localStorage.user = response.data;
+							$localStorage.user = result.data;
 
 							// set organisation subheader title
 							$rootScope.organisationName = $localStorage.user.organisation.name;
@@ -83,9 +78,6 @@
 						}
 
 					}).error(function(data, error) {
-
-						// hide loader
-						$ionicLoading.hide();
 
 						// process connection error
 						$$form.processConnectionError(data, error);

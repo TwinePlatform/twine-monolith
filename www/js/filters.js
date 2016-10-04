@@ -67,6 +67,10 @@ angular.module('app.filters', [])
 
 		.filter('minutesFromHoursAndMinutes', function() {
 			return function(hours, minutes) {
+
+				if (hours === undefined) hours = 0;
+				if (minutes === undefined) minutes = 0;
+
 				return (hours * 60) + minutes;
 			}
 		})

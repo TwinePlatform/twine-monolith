@@ -2,16 +2,41 @@
 * CONTENTS
 *
 * services
-*   options
-*   constants
-*   api
-*   current time as string
-*   click preventer
-*    show
-*    hide
-*   form utilities
-*    process connection error
-*   shout
+*    options
+*    constants
+*    api
+*      url
+*      logs
+*        delete
+*        get logs
+*        get log
+*        edit log
+*        new log
+*      user
+*        login
+*        save user
+*        register user
+*        total hours
+*      genders
+*        get genders
+*      regions
+*        get regions
+*      organisations
+*        get organisations
+*        summary
+*    current time as string
+*    click preventer
+*      show
+*      hide
+*    form utilities
+*      hours
+*        get hours
+*      minutes
+*        get minutes
+*      years
+*        get years
+*      process connection error
+*    shout
 */
 
 /*
@@ -42,14 +67,227 @@
 
 	/*
 		>> api
-		   generates an api url e.g. 'user' returns 'http://powertochangeadmindev.stage2.reason.digital/api/v1/user'
-		   the environment can be set in $$options above
 	*/
 
-		.factory('$$api', function($$options, $$constants) {
-			return function(url) {
-				return $$constants.apiBaseUrl[$$options.environment] + url;
+		.factory('$$api', function($http, $$options, $$constants) {
+
+			var $$api = {
+
+				/*
+					>>> url
+					  generates an api url e.g. 'user' returns 'http://powertochangeadmindev.stage2.reason.digital/api/v1/user'
+		              the environment can be set in $$options above
+				*/
+
+					url: function(url) {
+						return $$constants.apiBaseUrl[$$options.environment] + url;
+					},
+
+				/*
+					>>> logs
+				*/
+
+					logs: {
+
+						/*
+							>>>> delete
+						*/
+
+							delete: function(id) {
+								return $http({
+									method: 'DELETE',
+								  	url: $$api.url('logs/' + id)
+								});
+							},
+
+						/*
+							>>>> get logs
+						*/
+
+							getLogs: function(userId) {
+								return $http({
+									method: 'GET',
+									url: $$api.url('logs/user/' + userId)
+								});
+							},
+
+						/*
+							>>>> get log
+						*/
+
+							getLog: function(logId) {
+								return $http({
+									method: 'GET',
+									url: $$api.url('logs/' + logId)
+								});
+							},
+
+						/*
+							>>>> edit log
+						*/
+
+							edit: function(logId, data) {
+								return $http({
+									method: 'PUT',
+									url: $$api.url('logs/' + logId),
+									data: data,
+									headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+								});
+							},
+
+						/*
+							>>>> new log
+						*/
+
+							new: function(data) {
+								return $http({
+									method: 'POST',
+									url: $$api.url('logs'),
+									data: data,
+									headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+								});
+							},
+
+					},
+
+				/*
+					>>> user
+				*/
+
+					user: {
+
+						/*
+							>>>> login
+						*/
+
+							login: function(data) {
+								return $http({
+									method: 'POST',
+									url: $$api.url('users/login'),
+									data: data,
+									headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+								});
+							},
+
+						/*
+							>>>> save user
+						*/
+
+							save: function(userId, data) {
+								return $http({
+									method: 'PUT',
+									url: $$api.url('users/' + userId),
+									data: data,
+									headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+								});
+							},
+
+						/*
+							>>>> register user
+						*/
+
+							register: function(data) {
+								return $http({
+									method: 'POST',
+									url: $$api.url('users'),
+									data: data,
+									headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+								});
+							},
+
+						/*
+							>>>> total hours
+						*/
+
+							totalHours: function(userId, days) {
+								// if days have been specified, grab last x days
+								if (days) {
+									var url = $$api.url('logs/user/' + userId + '/total/days/' + days)
+								}
+								// else just grab overall total hours
+								else {
+									var url = $$api.url('logs/user/' + userId + '/total')
+								}
+								return $http({
+									method: 'GET',
+									url: url
+								});
+							},
+
+					},
+
+				/*
+					>>> genders
+				*/
+
+					genders: {
+
+						/*
+							>>>> get genders
+						*/
+
+							get: function() {
+								return $http({
+									method: 'GET',
+									url: $$api.url('genders')
+								});
+							}
+
+					},
+
+				/*
+					>>> regions
+				*/
+
+					regions: {
+
+						/*
+							>>>> get regions
+						*/
+
+							get: function() {
+								return $http({
+									method: 'GET',
+									url: $$api.url('regions')
+								});
+							}
+
+					},
+
+				/*
+					>>> organisations
+				*/
+
+					organisations: {
+
+						/*
+							>>>> get organisations
+						*/
+
+							get: function(regionId) {
+								return $http({
+									method: 'GET',
+									url: $$api.url('regions/' + regionId + '/organisations')
+								});
+							},
+
+						/*
+							>>>> summary
+						*/
+
+							summary: function(organisationId) {
+								return $http({
+									method: 'GET',
+									url: $$api.url('organisations/' + organisationId + '/summary')
+								})
+							} 
+
+					},
+
 			}
+
+			return $$api;
+
 		})
 
 
@@ -119,9 +357,82 @@
 		>> form utilities
 	*/
 
-		.factory('$$form', function($$options, $$constants, $$shout) {
+		.factory('$$form', function($ionicLoading, $$options, $$constants, $$shout) {
 
 			return {
+
+				/*
+					>>> hours
+				*/
+
+					hours: {
+
+						/*
+							>>>> get hours
+						*/
+
+							get: function() {
+								var hours = [];
+								var lowestHour = 0,
+									highestHour = 24;
+								while(lowestHour <= highestHour) {
+									hours.push({ value: lowestHour, name: lowestHour + ' hours' });
+									lowestHour++;
+								}
+
+								return hours;
+							}
+
+					},
+
+				/*
+					>>> minutes
+				*/
+
+					minutes: {
+
+						/*
+							>>>> get minutes
+						*/
+
+							get: function() {
+								var minutes = [];
+								var lowestMinute = 0,
+									highestMinute = 55;
+								while(lowestMinute <= highestMinute) {
+									minutes.push({ value: lowestMinute, name: lowestMinute + ' minutes' });
+									lowestMinute += 5;
+								}
+
+								return minutes;
+							}
+
+					},
+
+				/*
+					>>> years
+				*/
+
+					years: {
+
+						/*
+							>>>> get years
+						*/
+
+							get: function() {
+								var years = [];
+
+								var highestYear = new Date().getFullYear(),
+									lowestYear = highestYear - 110;
+
+								while(highestYear >= lowestYear) {
+									years.push(highestYear--);
+								}
+
+								return years;
+							}
+
+					},
 
 				/*
 					>>> process connection error
@@ -129,7 +440,8 @@
 
 					processConnectionError: function(data, error) {
 
-						console.log(error);
+						// hide loader
+						$ionicLoading.hide();
 
 						// no internet connection
 						if (error === 0) {
@@ -202,17 +514,3 @@
 
 			}
 		})
-
-
-
-
-
-
-
-		/*.factory('BlankFactory', [function(){
-
-		}])
-
-		.service('BlankService', [function(){
-
-		}])*/

@@ -2,21 +2,21 @@
 * CONTENTS
 *
 * settings controller
-*   store the form data
-*   variables
-*   location reminder switch changed
-*   enable location reminders
-*    get current lat and long
-*    setup geofences
-*   disable location reminders
-*   get user email
-*   populate region dropdown
-*   populate organisation dropdown
-*    loop through the results and push only required items to $scope.organisations
-*   process save user form
-*    validate form
-*    submit form data
-*   log out
+*    store the form data
+*    variables
+*    location reminder switch changed
+*    enable location reminders
+*      get current lat and long
+*      setup geofences
+*    disable location reminders
+*    get user email
+*    populate region dropdown
+*    populate organisation dropdown
+*      loop through the results and push only required items to $scope.organisations
+*    process save user form
+*      validate form
+*      submit save user form data
+*    log out
 */
 
 /* 
@@ -293,10 +293,7 @@
 				$scope.regionsDisabled = true;
 				$scope.regions = [];
 
-				$http({
-					method: 'GET',
-					url: $$api('regions')
-				}).success(function (result) {
+				$$api.regions.get().success(function (result) {
 					
 					// loop through the results and push only required items to $scope.regions
 					for (var i = 0, len = result.data.length; i < len; i++) {
@@ -344,10 +341,8 @@
 					}
 					// otherwise get the organisations
 					else {
-						$http({
-							method: 'GET',
-							url: $$api('regions/' + regionId + '/organisations')
-						}).success(function (result) {
+
+						$$api.organisations.get(regionId).success(function (result) {
 
 							$scope.organisations = result.data;
 							// >>> loop through the results and push only required items to $scope.organisations
@@ -378,9 +373,6 @@
 							$scope.organisationsDisabled = false;
 
 						}).error(function (result, error) {
-							
-							// hide loader
-							$ionicLoading.hide();
 
 							// process connection error
 							$$form.processConnectionError(result, error);
@@ -412,22 +404,17 @@
 						// show loader
 						$ionicLoading.show();
 
-						// >>> submit form data
-						$http({
-							method: 'PUT',
-							url: $$api('users/' + $localStorage.user.id),
-							data: $.param($scope.formData),
-							headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-						}).success(function(response) {
+						// >>> submit save user form data
+						$$api.user.save($localStorage.user.id, $.param($scope.formData)).success(function (result) {
 
 							// registration successful
-							if (response.success) {
+							if (result.success) {
 
 								// hide loader
 								$ionicLoading.hide();
 
 								// store user information
-								$localStorage.user = response.data;
+								$localStorage.user = result.data;
 
 								// update organisation subheader name
 								$rootScope.organisationName = $localStorage.user.organisation.name;

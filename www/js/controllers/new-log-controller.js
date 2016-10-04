@@ -2,22 +2,22 @@
 * CONTENTS
 *
 * new log controller
-*   store the form data
-*   setup datepickers
-*   populate hours dropdown
-*   populate minutes dropdown
-*   calculate duration
-*   populate user_id field
-*   process the form
-*    validate form
-*    submit form
+*    store the form data
+*    setup datepickers
+*    populate hours dropdown
+*    populate minutes dropdown
+*    calculate duration
+*    populate user_id field
+*    process the form
+*      validate form
+*      submit form
 */
 
 /*
 	> new log controller
 */
 
-	angular.module('app').controller('NewLogController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage',  '$rootScope', '$$currentTimeAsString', '$$api', '$$form', '$$shout', 
+	angular.module('app').controller('NewLogController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage', '$rootScope', '$$currentTimeAsString', '$$api', '$$form', '$$shout',
 	function ($scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope, $$currentTimeAsString, $$api, $$form, $$shout) {
 
 		/*
@@ -60,26 +60,14 @@
 			>> populate hours dropdown
 		*/
 
-			$scope.hours = [];
-			var lowestHour = 0,
-				highestHour = 24;
-			while(lowestHour <= highestHour) {
-				$scope.hours.push({ value: lowestHour, name: lowestHour + ' hours' });
-				lowestHour++;
-			}
+			$scope.hours = $$form.hours.get();
 
 
 		/*
 			>> populate minutes dropdown
 		*/
 
-			$scope.minutes = [];
-			var lowestMinute = 0,
-				highestMinute = 55;
-			while(lowestMinute <= highestMinute) {
-				$scope.minutes.push({ value: lowestMinute, name: lowestMinute + ' minutes' });
-				lowestMinute += 5;
-			}
+			$scope.minutes = $$form.minutes.get();
 
 		/*
 			>> calculate duration
@@ -88,24 +76,12 @@
 
 			$scope.formData.duration = 0;
 
-			$scope.calculateDuration = function() {
+			$scope.calculateDuration = function(hours, minutes) {
 				
-				var hours = 0,
-					minutes = 0;
-				
-				// get hours from form
-				if (angular.isDefined($scope.formData.hours) && $scope.formData.hours !== null) {
-					hours = $scope.formData.hours.value;
-				}
-
-				// get minutes from form
-				if (angular.isDefined($scope.formData.minutes) && $scope.formData.minutes !== null) {
-					minutes = $scope.formData.minutes.value;
-				}
-
 				// set minutes to 0 if hours == 24
 				if (hours === 24) {
 					$scope.formData.minutes = 0;
+					minutes = 0;
 				}
 
 				// get total minutes integer & update form
@@ -143,15 +119,10 @@
 					$ionicLoading.show();
 
 					// >>> submit form
-					$http({
-						method: 'POST',
-						url: $$api('logs'),
-						data: $.param($scope.formData),
-						headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-					}).success(function(response) {
+					$$api.logs.new($.param($scope.formData)).success(function (result) {
 
 						// create log successful
-						if (response.success) {
+						if (result.success) {
 
 							// hide loader
 							$ionicLoading.hide();
@@ -172,9 +143,6 @@
 						}
 
 					}).error(function(data, error) {
-
-						// hide loader
-						$ionicLoading.hide();
 
 						// process connection error
 						$$form.processConnectionError(data, error);

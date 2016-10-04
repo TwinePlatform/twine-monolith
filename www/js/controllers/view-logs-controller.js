@@ -2,10 +2,10 @@
 * CONTENTS
 *
 * view logs controller
-*   populate logs
-*   delete log
-*   beforeEnter
-*   leave
+*    populate logs
+*    delete log
+*    beforeEnter
+*    leave
 */
 
 /*
@@ -22,10 +22,7 @@
 			$scope.populateLogs = function() {
 
 				// get logs from api
-				$http({
-					method: 'GET',
-					url: $$api('logs/user/' + $localStorage.user.id)
-				}).success(function (result) {
+				$$api.logs.getLogs($localStorage.user.id).success(function (result) {
 
 					// update logs in view
 					$scope.logs = result.data.logs;
@@ -72,10 +69,7 @@
 						  		var id = log.id;
 
 						  		// call api delete log method
-						  		$http({
-						  			method: 'DELETE',
-						  			url: $$api('logs/' + id)
-						  		}).success(function (result) {
+						  		$$api.logs.delete(id).success(function (result) {
 						  			
 						  			// hide loader
 						  			$ionicLoading.hide();
@@ -89,9 +83,6 @@
 
 						  		}).error(function (result, error) {
 						  			
-						  			// hide loader
-						  			$ionicLoading.hide();
-
 						  			// process connection error
 						  			$$form.processConnectionError(result, error);
 
