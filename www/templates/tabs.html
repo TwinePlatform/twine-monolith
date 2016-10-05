@@ -1,3 +1,8 @@
+<div class="bar bar-footer bar-subfooter bar-assertive bar-offline-mode ng-hide" ng-show="offlineMode">
+    <div class="title title-left">Offline mode: <span>{{ offlineLogsToPush() }}</span> log<span ng-if="offlineLogsToPush() !== 1">s</span> need<span ng-if="offlineLogsToPush() === 1">s</span> pushing </div>
+    <a href="#" class="button button-small button-light button-outline">Push</a>
+</div>
+
 <ion-tabs class="tabs-positive tabs-icon-top">
 	<!-- <a href="/" onclick="window.location = '/';" style="color: rgba(255,255,255,0.3); text-decoration: none;">H</a> -->
     <ion-tab title="Dashboard" icon="ion-stats-bars" href="#/tab/dashboard">

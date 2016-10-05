@@ -10,7 +10,7 @@
 *    calculate duration
 *    get log data
 *    function: generate form date
-*    process the form
+*    process the edit log form
 *      validate form
 *      submit edit log form
 */
@@ -144,7 +144,7 @@
 			}
 
 		/*
-			>> process the form
+			>> process the edit log form
 		*/
 
 			$scope.formSubmitted = false;

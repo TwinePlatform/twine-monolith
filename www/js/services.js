@@ -24,6 +24,10 @@
 *      organisations
 *        get organisations
 *        summary
+*    offline
+*      enable offline mode
+*      disable offline mode
+*      new log
 *    current time as string
 *    click preventer
 *      show
@@ -292,6 +296,52 @@
 
 
 	/*
+		>> offline
+	*/
+
+		.factory('$$offline', function($rootScope, $localStorage) {
+
+			var $$offline = {
+
+				/*
+					>>> enable offline mode
+				*/
+
+					enable: function() {
+						$rootScope.offlineMode = true;
+						$localStorage.offlineMode = true;
+					},
+
+				/*
+					>>> disable offline mode
+				*/
+
+					disable: function() {
+						$rootScope.offlineMode = false;
+						$localStorage.offlineMode = false;
+					},
+
+				/*
+					>>> new log
+				*/
+
+					newLog: function(data, needs_pushing) {
+						// mark as needs_pushing if necessary
+						if (needs_pushing) {
+							data.needs_pushing = true;
+						}
+						// push to $localStorage array
+						$localStorage.offlineData.logs.push(data);
+					}
+
+			}
+
+			return $$offline;
+
+		})		
+
+
+	/*
 		>> current time as string
 	*/
 
@@ -445,15 +495,15 @@
 
 						// no internet connection
 						if (error === 0) {
-							$$shout('Could not connect. Please check your internet connection & try again.', 3000);
+							// $$shout('Could not connect. Please check your internet connection & try again.', 3000);
 						}
 						// resource not found
 						else if (error === 404) {
-							$$shout('Could not connect. Please check your internet connection & try again.', 3000);
+							// $$shout('Could not connect. Please check your internet connection & try again.', 3000);
 						}
 						// other error
 						else {
-							$$shout('Could not connect. Please check your internet connection & try again.', 3000);
+							// $$shout('Could not connect. Please check your internet connection & try again.', 3000);
 						}
 
 					}

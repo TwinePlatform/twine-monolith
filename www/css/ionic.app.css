@@ -12198,6 +12198,14 @@ select[disabled], .item-select-disabled:after {
 .datepicker, input[readonly].datepicker {
   background-color: white; }
 
+.bar-subfooter.bar-offline-mode {
+  bottom: 49px; }
+  .bar-subfooter.bar-offline-mode .title {
+    font-size: 15px; }
+
+.offline-mode .scroll-content.has-tabs {
+  bottom: 94px; }
+
 .register .input-label {
   font-size: 15px; }
 
@@ -12287,6 +12295,8 @@ select[disabled], .item-select-disabled:after {
   bottom: 10px;
   z-index: 10;
   padding: 0; }
+  .offline-mode .button-add {
+    bottom: 30px; }
   .button-add.activated span {
     color: #0378B5 !important; }
   .button-add:before {

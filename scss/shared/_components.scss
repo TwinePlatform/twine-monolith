@@ -105,3 +105,14 @@ select[disabled], .item-select-disabled:after {
 .datepicker, input[readonly].datepicker {
 	background-color: white;
 }
+
+// offline mode
+.bar-subfooter.bar-offline-mode {
+	bottom: 49px;
+	.title {
+		font-size: 15px;
+	}
+}
+.offline-mode .scroll-content.has-tabs {
+    bottom: 94px;
+}
