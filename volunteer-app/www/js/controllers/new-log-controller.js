@@ -8,17 +8,18 @@
 *    populate minutes dropdown
 *    calculate duration
 *    populate user_id field
-*    process the form
+*    process the new log form
 *      validate form
 *      submit form
+*    push to offline data
 */
 
 /*
 	> new log controller
 */
 
-	angular.module('app').controller('NewLogController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage', '$rootScope', '$$currentTimeAsString', '$$api', '$$form', '$$shout',
-	function ($scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope, $$currentTimeAsString, $$api, $$form, $$shout) {
+	angular.module('app').controller('NewLogController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage', '$rootScope', '$$currentTimeAsString', '$$api', '$$form', '$$shout', '$$offline', 
+	function ($scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope, $$currentTimeAsString, $$api, $$form, $$shout, $$offline) {
 
 		/*
 			>> store the form data
@@ -98,7 +99,7 @@
 
 
 		/*
-			>> process the form
+			>> process the new log form
 		*/
 
 			$scope.formSubmitted = false;
@@ -118,36 +119,54 @@
 					// show loader
 					$ionicLoading.show();
 
-					// >>> submit form
-					$$api.logs.new($.param($scope.formData)).success(function (result) {
+					// if offline mode active, push to offline data
+					if ($rootScope.offlineMode) {
 
-						// create log successful
-						if (result.success) {
+						// push to offline data, mark as 'needs_pushing'
+						$scope.pushToOffline($scope.formData, true, 'Log saved offline.');
+
+					}
+
+					// not offline mode, submit the form
+					else {
+
+						// >>> submit form
+						$$api.logs.new($.param($scope.formData)).success(function (result) {
 
 							// hide loader
 							$ionicLoading.hide();
 
-							// shout success
-							$$shout('Log saved succesfully!');
+							// create log successful
+							if (result.success) {
 
-							// go back to dashboard
-							$state.go('tabs.dashboard');
+								// push to offline data
+								$scope.pushToOffline(result.data);
 
-						}
+								$$shout('Log saved.');
 
-						// create log unsuccessful
-						else {
+							}
 
-							$$shout('Could not create log.');
+							// create log unsuccessful
+							else {
 
-						}
+								$$shout('Could not create log.');
 
-					}).error(function(data, error) {
+							}
 
-						// process connection error
-						$$form.processConnectionError(data, error);
+						}).error(function(data, error) {
 
-					});
+							// enable offline mode
+							$$offline.enable();
+
+							// push to offline data and mark as 'needs_pushing'
+							$scope.pushToOffline($scope.formData, true, 'Log saved offline.');
+
+							// process connection error
+							$$form.processConnectionError(data, error);
+
+						});
+
+					}
 				}
 				// form is invalid
 				else {
@@ -155,6 +174,33 @@
 				}
 
 			};
+
+
+		/*
+			>> push to offline data
+		*/
+
+			$scope.pushToOffline = function(data, needs_pushing, message) {
+
+				// hide loader
+				$ionicLoading.hide();
+
+				if (needs_pushing === undefined) {
+					needs_pushing = false;
+				}
+
+				// push to offline data
+				$$offline.newLog($scope.formData, needs_pushing);
+
+				// shout message
+				if (message !== undefined) {
+					$$shout(message);
+				}
+
+				// go back to dashboard
+				$state.go('tabs.dashboard');
+
+			}
 			
 
 	}])

@@ -2,12 +2,13 @@
 * CONTENTS
 *
 * app
-*   log $localStorage
-*   device detection
-*   set organisation subheader title
-*   hide accessory bar
-*   app paused (in background)
-*   app resumed
+*    log $localStorage
+*    setup offline mode
+*    device detection
+*    set organisation subheader title
+*    hide accessory bar
+*    app paused (in background)
+*    app resumed
 */
 
 /*
@@ -15,7 +16,7 @@
 */
 
 	angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services','app.filters','ngStorage',])
-	.run(function($ionicPlatform, $localStorage, $rootScope) {
+	.run(function($ionicPlatform, $localStorage, $rootScope, $filter) {
 		$ionicPlatform.ready(function() {
 
 			/*
@@ -24,6 +25,34 @@
 
 				console.log('$localStorage: ', $localStorage);
 
+
+			/*
+				>> setup offline mode
+			*/
+
+				// either enable or disable offline mode
+				if ($localStorage.offlineMode) {
+					$rootScope.offlineMode = true;
+				}
+				else {
+					$rootScope.offlineMode = false;
+					$localStorage.offlineMode = false;
+				}
+
+				// setup empty $localStorage array for offline data
+				if (!$localStorage.offlineData) {
+					$localStorage.offlineData = {
+						user_id: $localStorage.user.id,
+						logs: []
+					}
+				}
+
+				// count number of logs that need pushing
+				$rootScope.offlineLogsToPush = function() {
+					// get an array of only the logs that need pushing
+					var logsThatNeedPushing = $filter('filter')($localStorage.offlineData.logs, {'needs_pushing': true})
+					return logsThatNeedPushing.length;
+				}
 
 			/*
 				>> device detection
