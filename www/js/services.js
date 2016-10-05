@@ -28,6 +28,7 @@
 *      enable offline mode
 *      disable offline mode
 *      new log
+*      get logs
 *    current time as string
 *    click preventer
 *      show
@@ -332,6 +333,14 @@
 						}
 						// push to $localStorage array
 						$localStorage.offlineData.logs.push(data);
+					},
+
+				/*
+					>>> get logs
+				*/
+
+					getLogs: function() {
+						return $localStorage.offlineData.logs;
 					}
 
 			}

@@ -12202,6 +12202,8 @@ select[disabled], .item-select-disabled:after {
   bottom: 49px; }
   .bar-subfooter.bar-offline-mode .title {
     font-size: 15px; }
+  .bar-subfooter.bar-offline-mode .button.activated {
+    background-color: #e42112; }
 
 .offline-mode .scroll-content.has-tabs {
   bottom: 94px; }
@@ -12295,8 +12297,6 @@ select[disabled], .item-select-disabled:after {
   bottom: 10px;
   z-index: 10;
   padding: 0; }
-  .offline-mode .button-add {
-    bottom: 30px; }
   .button-add.activated span {
     color: #0378B5 !important; }
   .button-add:before {
@@ -12313,6 +12313,22 @@ select[disabled], .item-select-disabled:after {
     font-size: 13px;
     text-align: center;
     width: 100%; }
+
+.view-logs .item.needs-pushing {
+  background-color: cornsilk; }
+  .view-logs .item.needs-pushing .icon {
+    color: #ef473a;
+    top: -12px; }
+    .view-logs .item.needs-pushing .icon span {
+      font-size: 10px;
+      position: absolute;
+      top: 83px;
+      left: -4px;
+      width: 40px;
+      display: block;
+      white-space: pre-wrap;
+      text-align: center;
+      line-height: 1em; }
 
 .view-logs .item h2 {
   font-weight: bold; }

@@ -12,8 +12,8 @@
 	> view logs controller
 */
 
-	angular.module('app').controller('ViewLogsController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$localStorage', '$rootScope', '$ionicPopup', '$$api', '$$form', '$$shout', 
-	function ($scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $$api, $$form, $$shout) {
+	angular.module('app').controller('ViewLogsController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$localStorage', '$rootScope', '$ionicPopup', '$$api', '$$form', '$$shout', '$$offline', 
+	function ($scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $$api, $$form, $$shout, $$offline) {
 
 		/*
 			>> populate logs
@@ -21,23 +21,39 @@
 
 			$scope.populateLogs = function() {
 
-				// get logs from api
-				$$api.logs.getLogs($localStorage.user.id).success(function (result) {
+				// if offline mode, get and display $localStorage logs
+				if ($scope.offlineMode) {
 
 					// update logs in view
-					$scope.logs = result.data.logs;
+					$scope.logs = $$offline.getLogs();
 
-					// if no logs
-					if (result.data.logs.length == 0) {
-						$scope.noLogs = true;
-					}
+				}
 
-				}).error(function (result, error) {
-					
-					// process connection error
-					$$form.processConnectionError(result, error);
+				// else get logs from api
+				else {
+					$$api.logs.getLogs($localStorage.user.id).success(function (result) {
 
-				});
+						// update logs in view
+						$scope.logs = result.data.logs;
+
+						// if no logs
+						if (result.data.logs.length == 0) {
+							$scope.noLogs = true;
+						}
+
+					}).error(function (result, error) {
+						
+						// enable offline mode
+						$$offline.enable();
+
+						// update logs in view
+						$scope.logs = $$offline.getLogs();
+
+						// process connection error
+						$$form.processConnectionError(result, error);
+
+					});
+				}
 
 			}
 

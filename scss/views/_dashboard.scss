@@ -104,9 +104,6 @@
 	bottom: 10px;
 	z-index: 10;
 	padding: 0;
-	.offline-mode & {
-		bottom: 30px;
-	}
 	&.activated {
 		span {
 			color: $positive !important;

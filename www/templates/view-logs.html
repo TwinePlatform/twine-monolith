@@ -12,8 +12,10 @@
 
         <ion-list>
 
-            <ion-item class="item-icon-left item-remove-animate" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at']">
-                <i class="icon ion-ios-time"></i>
+            <ion-item class="item-icon-left item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at']">
+                <i class="icon" ng-class="{ 'ion-alert': log.needs_pushing, 'ion-ios-time': !log.needs_pushing }">
+                    <span ng-if="log.needs_pushing">Not pushed</span>
+                </i>
                 <h2 ng-bind-html="log.duration | hoursAndMinutesAsString"></h2>
                 <p>{{ log.date_of_log.split(' ')[0] | date:'d MMM yyyy'}} @ {{ organisationName }}</p>
                 <div class="button-bar">
