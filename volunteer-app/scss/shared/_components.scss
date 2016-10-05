@@ -112,6 +112,11 @@ select[disabled], .item-select-disabled:after {
 	.title {
 		font-size: 15px;
 	}
+	.button {
+		&.activated {
+			background-color: darken($assertive, 10);
+		}
+	}
 }
 .offline-mode .scroll-content.has-tabs {
     bottom: 94px;

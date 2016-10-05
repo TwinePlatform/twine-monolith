@@ -1,14 +1,37 @@
 // view logs
 .view-logs {
 
-	.item h2 {
-		font-weight: bold;
-		.hours, .minutes {
-			.unit {
-				font-size: 13px;
+	.item {
+
+		&.needs-pushing {
+			background-color: cornsilk;
+			.icon {
+				color: $assertive;
+				top: -12px;
+				span {
+					font-size: 10px;
+					position: absolute;
+					top: 83px;
+					left: -4px;
+					width: 40px;
+					display: block;
+					white-space: pre-wrap;
+					text-align: center;
+					line-height: 1em;
+				}
+			}
+		}
+
+		h2 {
+			font-weight: bold;
+			.hours, .minutes {
+				.unit {
+					font-size: 13px;
+				}
 			}
 		}
 	}
+
 
 	.no-logs {
 		position: absolute;
