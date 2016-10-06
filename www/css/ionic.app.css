@@ -12330,6 +12330,11 @@ select[disabled], .item-select-disabled:after {
       text-align: center;
       line-height: 1em; }
 
+.view-logs .item.deleted {
+  opacity: 0.5; }
+  .view-logs .item.deleted .button-bar {
+    pointer-events: none; }
+
 .view-logs .item h2 {
   font-weight: bold; }
   .view-logs .item h2 .hours .unit, .view-logs .item h2 .minutes .unit {

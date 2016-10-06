@@ -20,10 +20,26 @@
 		$ionicPlatform.ready(function() {
 
 			/*
+				>> options
+			*/
+
+				$rootScope.options = {
+					environment: 'dev',	// dev | stage
+					apiBaseUrl: {
+						dev:   'http://powertochangeadmindev.stage2.reason.digital/api/v1/',
+						stage: 'http://powertochangeadmin.stage2.reason.digital/api/v1/'
+					}
+				}
+				
+
+			/*
 				>> log $localStorage
 			*/
 
-				console.log('$localStorage: ', $localStorage);
+				// console.log('$localStorage: ', $localStorage);
+				if ($localStorage.offlineData !== undefined) {
+					console.log('$localStorage.offlineData.logs: ', $localStorage.offlineData.logs);
+				}
 
 
 			/*
@@ -40,7 +56,7 @@
 				}
 
 				// setup empty $localStorage array for offline data
-				if (!$localStorage.offlineData) {
+				if (!$localStorage.offlineData && $localStorage.user) {
 					$localStorage.offlineData = {
 						user_id: $localStorage.user.id,
 						logs: []
@@ -107,3 +123,6 @@
 
 	// controllers module
 	angular.module('app.controllers', [])
+
+	// services module
+	angular.module('app.services', [])

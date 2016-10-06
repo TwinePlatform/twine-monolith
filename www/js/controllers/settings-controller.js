@@ -23,8 +23,8 @@
 	> settings controller
 */
 
-	angular.module('app').controller('SettingsController', ['$scope', '$stateParams', '$http', '$ionicPopup', '$ionicLoading', '$ionicPlatform', '$localStorage', '$state', '$rootScope', '$$api', '$$form', '$$shout', 
-	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope, $$api, $$form, $$shout) {
+	angular.module('app.controllers').controller('SettingsController', ['$scope', '$stateParams', '$http', '$ionicPopup', '$ionicLoading', '$ionicPlatform', '$localStorage', '$state', '$rootScope', '$$api', '$$utilities', '$$shout', 
+	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope, $$api, $$utilities, $$shout) {
 
 		$ionicPlatform.ready(function() {
 
@@ -320,7 +320,7 @@
 				}).error(function (result, error) {
 					
 					// process connection error
-					$$form.processConnectionError(result, error);
+					$$utilities.processConnectionError(result, error);
 
 				});
 
@@ -375,7 +375,7 @@
 						}).error(function (result, error) {
 
 							// process connection error
-							$$form.processConnectionError(result, error);
+							$$utilities.processConnectionError(result, error);
 
 						});
 					}
@@ -441,7 +441,7 @@
 							$ionicLoading.hide();
 
 							// process connection error
-							$$form.processConnectionError(data, error);
+							$$utilities.processConnectionError(data, error);
 
 						});
 					}

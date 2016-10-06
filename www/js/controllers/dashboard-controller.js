@@ -18,8 +18,8 @@
 	> dashboard controller
 */
 
-	angular.module('app').controller('DashboardController', ['$scope', '$stateParams', '$http', '$localStorage', '$rootScope', '$filter', '$$api', '$$form', '$$shout', 
-	function ($scope, $stateParams, $http, $localStorage, $rootScope, $filter, $$api, $$form, $$shout) {
+	angular.module('app.controllers').controller('DashboardController', ['$scope', '$stateParams', '$http', '$localStorage', '$rootScope', '$filter', '$$api', '$$utilities', '$$shout', 
+	function ($scope, $stateParams, $http, $localStorage, $rootScope, $filter, $$api, $$utilities, $$shout) {
 
 		/*
 			>> refresh dashboard
@@ -40,7 +40,7 @@
 					}).error(function (result, error) {
 						
 						// process connection error
-						$$form.processConnectionError(result, error);
+						$$utilities.processConnectionError(result, error);
 
 					});
 
@@ -58,7 +58,7 @@
 					}).error(function (result, error) {
 						
 						// process connection error
-						$$form.processConnectionError(result, error);
+						$$utilities.processConnectionError(result, error);
 
 					});
 
@@ -75,7 +75,7 @@
 					}).error(function (result, error) {
 						
 						// process connection error
-						$$form.processConnectionError(result, error);
+						$$utilities.processConnectionError(result, error);
 
 					});
 
@@ -161,7 +161,7 @@
 					}).error(function (result, error) {
 						
 						// process connection error
-						$$form.processConnectionError(result, error);
+						$$utilities.processConnectionError(result, error);
 
 					});
 
@@ -185,7 +185,7 @@
 					}).error(function (result, error) {
 						
 						// process connection error
-						$$form.processConnectionError(result, error);
+						$$utilities.processConnectionError(result, error);
 
 					});
 

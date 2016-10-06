@@ -61,10 +61,16 @@
 		<script src="js/controllers/edit-log-controller.js"></script>
 		<script src="js/controllers/settings-controller.js"></script>
 
-		<!-- routes, directives, services, filters -->
+		<!-- services -->
+		<script src="js/services/api-service.js"></script>
+		<script src="js/services/offline-service.js"></script>
+		<script src="js/services/utilities-service.js"></script>
+		<script src="js/services/click-preventer-service.js"></script>
+		<script src="js/services/shout-service.js"></script>
+
+		<!-- routes, directives, filters -->
 		<script src="js/routes.js"></script>
 		<script src="js/directives.js"></script>
-		<script src="js/services.js"></script>
 		<script src="js/filters.js"></script>
 		
 		<script src="lib/ionicuirouter/ionicUIRouter.js"></script>
@@ -72,7 +78,7 @@
 	</head>
 	<body ng-app="app" animation="slide-left-right-ios7" ng-class="{'offline-mode': offlineMode}">
 
-		<ion-nav-bar class="bar-positive" ng-click="alert('test')">
+		<ion-nav-bar class="bar-positive">
 			<ion-nav-back-button class="button-icon icon ion-ios-arrow-back">Back</ion-nav-back-button>
 		</ion-nav-bar>
 

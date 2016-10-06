@@ -12,8 +12,8 @@
 	> login controller
 */
 
-	angular.module('app').controller('LoginController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$localStorage', '$ionicLoading', '$rootScope', '$$api', '$$form',
-	function ($scope, $stateParams, $http, $state, $ionicPopup, $localStorage, $ionicLoading, $rootScope, $$api, $$form) {
+	angular.module('app.controllers').controller('LoginController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$localStorage', '$ionicLoading', '$rootScope', '$$api', '$$utilities',
+	function ($scope, $stateParams, $http, $state, $ionicPopup, $localStorage, $ionicLoading, $rootScope, $$api, $$utilities) {
 
 		/*
 			>> store the form data
@@ -80,7 +80,7 @@
 					}).error(function(data, error) {
 
 						// process connection error
-						$$form.processConnectionError(data, error);
+						$$utilities.processConnectionError(data, error);
 
 					});
 				}

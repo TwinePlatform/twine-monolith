@@ -18,8 +18,8 @@
 	> new log controller
 */
 
-	angular.module('app').controller('NewLogController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage', '$rootScope', '$$currentTimeAsString', '$$api', '$$form', '$$shout', '$$offline', 
-	function ($scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope, $$currentTimeAsString, $$api, $$form, $$shout, $$offline) {
+	angular.module('app.controllers').controller('NewLogController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage', '$rootScope', '$$api', '$$utilities', '$$shout', '$$offline', 
+	function ($scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope, $$api, $$utilities, $$shout, $$offline) {
 
 		/*
 			>> store the form data
@@ -45,14 +45,14 @@
 				    $scope.formData.date_of_log = $filter('date')(this.component.item.select.pick, 'yyyy-MM-dd');
 
 				    // add current time
-				    $scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + $$currentTimeAsString();
+				    $scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + $$utilities.getCurrentTimeAsString();
 				},
 				onSet: function(context) {
 					// add date to scope in correct format
 					$scope.formData.date_of_log = $filter('date')(context.select, 'yyyy-MM-dd');
 
 					// add current time
-					$scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + $$currentTimeAsString();
+					$scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + $$utilities.getCurrentTimeAsString();
 				}
 			});
 
@@ -61,14 +61,14 @@
 			>> populate hours dropdown
 		*/
 
-			$scope.hours = $$form.hours.get();
+			$scope.hours = $$utilities.getHoursOptions();
 
 
 		/*
 			>> populate minutes dropdown
 		*/
 
-			$scope.minutes = $$form.minutes.get();
+			$scope.minutes = $$utilities.getMinutesOptions();
 
 		/*
 			>> calculate duration
@@ -123,7 +123,7 @@
 					if ($rootScope.offlineMode) {
 
 						// push to offline data, mark as 'needs_pushing'
-						$scope.pushToOffline($scope.formData, true, 'Log saved offline.');
+						$scope.newLogOffline($scope.formData, true, 'Log saved offline.');
 
 					}
 
@@ -133,6 +133,7 @@
 						// >>> submit form
 						$$api.logs.new($.param($scope.formData)).success(function (result) {
 
+
 							// hide loader
 							$ionicLoading.hide();
 
@@ -140,7 +141,7 @@
 							if (result.success) {
 
 								// push to offline data
-								$scope.pushToOffline(result.data);
+								$scope.newLogOffline(result.data);
 
 								$$shout('Log saved.');
 
@@ -159,10 +160,10 @@
 							$$offline.enable();
 
 							// push to offline data and mark as 'needs_pushing'
-							$scope.pushToOffline($scope.formData, true, 'Log saved offline.');
+							$scope.newLogOffline($scope.formData, true, 'Log saved offline.');
 
 							// process connection error
-							$$form.processConnectionError(data, error);
+							$$utilities.processConnectionError(data, error);
 
 						});
 
@@ -180,7 +181,7 @@
 			>> push to offline data
 		*/
 
-			$scope.pushToOffline = function(data, needs_pushing, message) {
+			$scope.newLogOffline = function(data, needs_pushing, message) {
 
 				// hide loader
 				$ionicLoading.hide();
@@ -190,7 +191,7 @@
 				}
 
 				// push to offline data
-				$$offline.newLog($scope.formData, needs_pushing);
+				$$offline.newLog(data, needs_pushing);
 
 				// shout message
 				if (message !== undefined) {
