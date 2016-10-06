@@ -19,8 +19,8 @@
 	> edit log controller
 */
 
-	angular.module('app').controller('EditLogController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$filter', '$localStorage', '$rootScope', '$$currentTimeAsString', '$$api', '$$form', '$$shout', 
-	function ($scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope, $$currentTimeAsString, $$api, $$form, $$shout) {
+	angular.module('app.controllers').controller('EditLogController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$filter', '$localStorage', '$rootScope', '$$api', '$$utilities', '$$shout', 
+	function ($scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope, $$api, $$utilities, $$shout) {
 
 		/*
 			>> variables
@@ -41,7 +41,7 @@
 					$scope.formData.date_of_log = $filter('date')(context.select, 'yyyy-MM-dd');
 
 					// add current time
-					$scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + $$currentTimeAsString();
+					$scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + $$utilities.getCurrentTimeAsString();
 				}
 			});
 
@@ -57,14 +57,14 @@
 			>> populate hours dropdown
 		*/
 
-			$scope.hours = $$form.hours.get();
+			$scope.hours = $$utilities.getHoursOptions();
 
 
 		/*
 			>> populate minutes dropdown
 		*/
 
-			$scope.minutes = $$form.minutes.get();
+			$scope.minutes = $$utilities.getMinutesOptions();
 
 		/*
 			>> calculate duration
@@ -128,7 +128,7 @@
 			}).error(function (result, error) {
 				
 				// process connection error
-				$$form.processConnectionError(result, error);
+				$$utilities.processConnectionError(result, error);
 
 			});
 
@@ -191,7 +191,7 @@
 					}).error(function(data, error) {
 
 						// process connection error
-						$$form.processConnectionError(data, error);
+						$$utilities.processConnectionError(data, error);
 
 					});
 				}

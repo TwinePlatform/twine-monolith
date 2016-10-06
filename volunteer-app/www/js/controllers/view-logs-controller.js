@@ -12,8 +12,8 @@
 	> view logs controller
 */
 
-	angular.module('app').controller('ViewLogsController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$localStorage', '$rootScope', '$ionicPopup', '$$api', '$$form', '$$shout', '$$offline', 
-	function ($scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $$api, $$form, $$shout, $$offline) {
+	angular.module('app.controllers').controller('ViewLogsController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$localStorage', '$rootScope', '$ionicPopup', '$$api', '$$utilities', '$$shout', '$$offline', 
+	function ($scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $$api, $$utilities, $$shout, $$offline) {
 
 		/*
 			>> populate logs
@@ -50,7 +50,7 @@
 						$scope.logs = $$offline.getLogs();
 
 						// process connection error
-						$$form.processConnectionError(result, error);
+						$$utilities.processConnectionError(result, error);
 
 					});
 				}
@@ -81,28 +81,54 @@
 						  		// show loader
 						  		$ionicLoading.show();
 
-						  		// get id of log
-						  		var id = log.id;
+						  		// if offline mode, delete locally
+						  		if ($scope.offlineMode) {
 
-						  		// call api delete log method
-						  		$$api.logs.delete(id).success(function (result) {
-						  			
-						  			// hide loader
-						  			$ionicLoading.hide();
+						  			// delete log offline
+						  			$scope.deleteLogOffline({ id: log.offline_id, idKey: 'offline_id' }, true, 'Log deleted offline.');
 
-						  			// remove from model & view
-						  			var index = $scope.logs.indexOf(log);
-						  			$scope.logs.splice(index, 1);
+						  		}
+						  		// else delete via api 
+						  		else {
 
-						  			// shout log deleted
-						  			$$shout('Log deleted');
+							  		// get id of log
+							  		var id = log.id;
 
-						  		}).error(function (result, error) {
-						  			
-						  			// process connection error
-						  			$$form.processConnectionError(result, error);
+							  		// call api delete log method
+							  		$$api.logs.delete(id).success(function (result) {
+							  			
+							  			// hide loader
+							  			$ionicLoading.hide();
 
-						  		});
+							  			// delete locally 
+										$scope.deleteLogOffline({ id: log.id, idKey: 'id' });
+
+							  			// remove from model & view
+							  			var index = $scope.logs.indexOf(log);
+							  			$scope.logs.splice(index, 1);
+
+							  			// shout log deleted
+							  			$$shout('Log deleted');
+
+							  		}).error(function (result, error) {
+							  			
+							  			// enable offline mode
+							  			$$offline.enable();
+
+							  			// delete log offline
+							  			$scope.deleteLogOffline({ id: id, idKey: 'id'}, true, 'Log deleted offline.');
+
+							  			// make it look deleted & needing to push
+							  			log.deleted_at = $$utilities.getCurrentDateAndTimeAsString();
+							  			log.needs_pushing = true;
+
+							  			// process connection error
+							  			$$utilities.processConnectionError(result, error);
+
+							  		});
+
+						  		}
+
 
 							}
 						}
@@ -110,6 +136,29 @@
 				});
 
 			}
+
+		/*
+			>> delete log offline
+		*/
+
+			$scope.deleteLogOffline = function(idObject, needs_pushing, message) {
+
+				// hide loader
+				$ionicLoading.hide();
+
+				if (needs_pushing === undefined) {
+					needs_pushing = false;
+				}
+
+				// delete log
+				$$offline.deleteLog(idObject, needs_pushing);
+
+				// shout message
+				if (message !== undefined) {
+					$$shout(message);
+				}
+
+			} 
 
 		/*
 			>> beforeEnter

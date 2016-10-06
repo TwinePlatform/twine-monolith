@@ -18,8 +18,8 @@
 	> register controller
 */
 
-	angular.module('app').controller('RegisterController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$ionicLoading', '$localStorage', '$ionicModal', '$rootScope', '$$api', '$$clickPreventer', '$$form', 
-	function ($scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage, $ionicModal, $rootScope, $$api, $$clickPreventer, $$form) {
+	angular.module('app').controller('RegisterController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$ionicLoading', '$localStorage', '$ionicModal', '$rootScope', '$$api', '$$clickPreventer', '$$utilities', 
+	function ($scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage, $ionicModal, $rootScope, $$api, $$clickPreventer, $$utilities) {
 
 		/*
 			>> if user has access token, log straight in
@@ -39,7 +39,7 @@
 			>> populate year of birth dropdown (current year going down to (current year - 110))
 		*/
 
-			$scope.years = $$form.years.get();
+			$scope.years = ['1982', '1981'];
 
 		/*
 			>> populate gender dropdown
@@ -63,7 +63,7 @@
 			}).error(function (result, error) {
 				
 				// process connection error
-				$$form.processConnectionError(result, error);
+				$$utilities.processConnectionError(result, error);
 
 			});			
 
@@ -87,7 +87,7 @@
 			}).error(function (result, error) {
 				
 				// process connection error
-				$$form.processConnectionError(result, error);
+				$$utilities.processConnectionError(result, error);
 
 			});
 
@@ -117,7 +117,7 @@
 				}).error(function (result, error) {
 					
 					// process connection error
-					$$form.processConnectionError(result, error);
+					$$utilities.processConnectionError(result, error);
 
 				});
 			}
@@ -202,7 +202,7 @@
 						$$clickPreventer.hide();
 
 						// process connection error
-						$$form.processConnectionError(data, error);
+						$$utilities.processConnectionError(data, error);
 
 					});
 				}
