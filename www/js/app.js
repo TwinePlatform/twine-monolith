@@ -2,6 +2,7 @@
 * CONTENTS
 *
 * app
+*    options
 *    log $localStorage
 *    setup offline mode
 *    device detection

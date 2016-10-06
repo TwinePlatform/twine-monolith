@@ -2,8 +2,9 @@
 * CONTENTS
 *
 * filters
-*   hours and minutes as string
-*   hours and minutes as object
+*    hours and minutes as string
+*    hours and minutes as object
+*    minutes from hours and minutes
 */
 
 /*

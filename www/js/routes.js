@@ -4,12 +4,12 @@
 * register page
 * login page
 * tabs
-*   dashboard
-*    dashboard - new log
-*   view logs
-*    view logs - edit log
-*   settings
-*    settings - terms & conditions
+*    dashboard
+*      dashboard - new log
+*    view logs
+*      view logs - edit log
+*    settings
+*      settings - terms & conditions
 */
 
 angular.module('app.routes', ['ionicUIRouter'])

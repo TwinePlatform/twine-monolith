@@ -7,6 +7,7 @@
 *    new log
 *    get logs
 *    delete log
+*    generate offline id
 */
 
 /*

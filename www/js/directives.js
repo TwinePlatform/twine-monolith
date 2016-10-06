@@ -2,7 +2,7 @@
 * CONTENTS
 *
 * directives
-*   organisation subheader
+*    organisation subheader
 */
 
 /*

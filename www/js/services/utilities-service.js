@@ -2,6 +2,7 @@
 * CONTENTS
 *
 * utilities service
+*    get years options
 *    get hours options
 *    get minutes options
 *    get current time as string
