@@ -13,8 +13,7 @@
 	> view logs controller
 */
 
-	angular.module('app.controllers').controller('ViewLogsController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$localStorage', '$rootScope', '$ionicPopup', '$$api', '$$utilities', '$$shout', '$$offline', 
-	function ($scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $$api, $$utilities, $$shout, $$offline) {
+	angular.module('app.controllers').controller('ViewLogsController', function ($scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $$api, $$utilities, $$shout, $$offline) {
 
 		/*
 			>> populate logs
@@ -188,4 +187,4 @@
 			})
 
 
-	}])
+	})
