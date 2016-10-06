@@ -12,8 +12,7 @@
 	> login controller
 */
 
-	angular.module('app.controllers').controller('LoginController', ['$scope', '$stateParams', '$http', '$state', '$ionicPopup', '$localStorage', '$ionicLoading', '$rootScope', '$$api', '$$utilities',
-	function ($scope, $stateParams, $http, $state, $ionicPopup, $localStorage, $ionicLoading, $rootScope, $$api, $$utilities) {
+	angular.module('app.controllers').controller('LoginController', function ($scope, $stateParams, $http, $state, $ionicPopup, $localStorage, $ionicLoading, $rootScope, $$api, $$utilities) {
 
 		/*
 			>> store the form data
@@ -91,4 +90,4 @@
 
 			};
 
-	}])
+	})

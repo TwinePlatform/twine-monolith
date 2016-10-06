@@ -23,8 +23,7 @@
 	> settings controller
 */
 
-	angular.module('app.controllers').controller('SettingsController', ['$scope', '$stateParams', '$http', '$ionicPopup', '$ionicLoading', '$ionicPlatform', '$localStorage', '$state', '$rootScope', '$$api', '$$utilities', '$$shout', 
-	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope, $$api, $$utilities, $$shout) {
+	angular.module('app.controllers').controller('SettingsController', function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope, $$api, $$utilities, $$shout) {
 
 		$ionicPlatform.ready(function() {
 
@@ -464,4 +463,4 @@
 
 		});
 
-	}])
+	})

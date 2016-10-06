@@ -18,8 +18,7 @@
 	> new log controller
 */
 
-	angular.module('app.controllers').controller('NewLogController', ['$scope', '$stateParams', '$http', '$state', '$filter', '$ionicLoading', '$localStorage', '$rootScope', '$$api', '$$utilities', '$$shout', '$$offline', 
-	function ($scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope, $$api, $$utilities, $$shout, $$offline) {
+	angular.module('app.controllers').controller('NewLogController', function ($scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope, $$api, $$utilities, $$shout, $$offline) {
 
 		/*
 			>> store the form data
@@ -204,4 +203,4 @@
 			}
 			
 
-	}])
+	})

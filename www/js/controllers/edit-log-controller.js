@@ -19,8 +19,7 @@
 	> edit log controller
 */
 
-	angular.module('app.controllers').controller('EditLogController', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$filter', '$localStorage', '$rootScope', '$$api', '$$utilities', '$$shout', 
-	function ($scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope, $$api, $$utilities, $$shout) {
+	angular.module('app.controllers').controller('EditLogController', function ($scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope, $$api, $$utilities, $$shout) {
 
 		/*
 			>> variables
@@ -202,4 +201,4 @@
 
 			};
 
-	}])
+	})

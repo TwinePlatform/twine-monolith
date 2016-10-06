@@ -18,8 +18,7 @@
 	> dashboard controller
 */
 
-	angular.module('app.controllers').controller('DashboardController', ['$scope', '$stateParams', '$http', '$localStorage', '$rootScope', '$filter', '$$api', '$$utilities', '$$shout', 
-	function ($scope, $stateParams, $http, $localStorage, $rootScope, $filter, $$api, $$utilities, $$shout) {
+	angular.module('app.controllers').controller('DashboardController', function ($scope, $stateParams, $http, $localStorage, $rootScope, $filter, $$api, $$utilities, $$shout) {
 
 		/*
 			>> refresh dashboard
@@ -345,4 +344,4 @@
 			})
 
 
-	}])
+	})
