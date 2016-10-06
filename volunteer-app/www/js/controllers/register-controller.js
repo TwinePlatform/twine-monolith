@@ -39,7 +39,7 @@
 			>> populate year of birth dropdown (current year going down to (current year - 110))
 		*/
 
-			$scope.years = ['1982', '1981'];
+			$scope.years = $$utilities.getYearsOptions();
 
 		/*
 			>> populate gender dropdown

@@ -19,6 +19,20 @@
 		return {
 
 			/*
+				>> get years options
+			*/
+
+				getYearsOptions: function() {
+					years = [];
+					var highestYear = new Date().getFullYear(),
+						lowestYear = highestYear - 110;
+					while(highestYear >= lowestYear) {
+						years.push(highestYear--);
+					}
+					return years;
+				},
+
+			/*
 				>> get hours options
 			*/
 
