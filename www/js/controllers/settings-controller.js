@@ -2,28 +2,29 @@
 * CONTENTS
 *
 * settings controller
-*    store the form data
-*    variables
-*    location reminder switch changed
-*    enable location reminders
-*      get current lat and long
-*      setup geofences
-*    disable location reminders
-*    get user email
-*    populate region dropdown
-*    populate organisation dropdown
-*      loop through the results and push only required items to $scope.organisations
-*    process save user form
-*      validate form
-*      submit save user form data
-*    log out
+*   store the form data
+*   variables
+*   location reminder switch changed
+*   enable location reminders
+*    get current lat and long
+*    setup geofences
+*   disable location reminders
+*   get user email
+*   populate region dropdown
+*   populate organisation dropdown
+*    loop through the results and push only required items to $scope.organisations
+*   process save user form
+*    validate form
+*    submit form data
+*   log out
 */
 
 /* 
 	> settings controller
 */
 
-	angular.module('app.controllers').controller('SettingsController', function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope, $$api, $$utilities, $$shout) {
+	angular.module('app').controller('SettingsController', ['$scope', '$stateParams', '$http', '$ionicPopup', '$ionicLoading', '$ionicPlatform', '$localStorage', '$state', '$rootScope', 
+	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope) {
 
 		$ionicPlatform.ready(function() {
 
@@ -44,24 +45,27 @@
 			/*
 				initialize geofencing plugin
 			*/
+                             
 
-				if (!$rootScope.isIOS) { // disable on iOS
-
-					if (window.geofence) {
-						window.geofence.initialize().then(function () {
-
-							// get watched geofences
-							// window.geofence.getWatched().then(function (geofencesJson) {
-							//     var geofences = JSON.parse(geofencesJson);
-							// });
-
-						}, function (error) {
-							$$shout("Geofence: Error - " + error, 10000);
-							console.log("Geofence: Error - " + error);
-						});
-					}
-
-				}
+//				if (window.geofence) {
+//					window.geofence.initialize().then(function () {
+//
+//						// get watched geofences
+//						 //window.geofence.getWatched().then(function (geofencesJson) {
+//						 //    var geofences = JSON.parse(geofencesJson);
+//						 //});
+//                                                      
+//                        shout("force enable location reminders");
+//                        console.log("force enable location reminders");
+//                        //$scope.enableLocationReminders();
+//                                                      
+//                                                      
+//
+//					}, function (error) {
+//						shout("Geofence  s: Error - " + error, 10000);
+//						console.log("Geofence s: Error - " + error);
+//					});
+//				}
 
 
 			/*
@@ -82,8 +86,11 @@
 
 					// switch turned on
 					if ($this.locationRemindersSwitch) { // FIX THIS ?
-
-						// ask user if they're in the location where they volunteer
+                             
+                             
+                                            window.geofence.initialize().then(function () {
+                                                          
+                                                    // ask user if they're in the location where they volunteer
 						var locationRemindersPopup = $ionicPopup.show({
 							template: 'Are you at ' + $rootScope.organisationName + ' right now?',
 							title: 'Setup location reminders',
@@ -128,6 +135,14 @@
 								}
 							]
 						});
+   
+                                                          
+                                            }, function (error) {
+                                                            shout("Geofence: Error - " + error, 10000);
+                                                            console.log("Geofence: Error - " + error);
+                                            });
+
+						
 
 					}
 					// switch turned off
@@ -150,6 +165,8 @@
 						// get lat and log
 						$scope.lat = position.coords.latitude;
 						$scope.long = position.coords.longitude;
+                                                             
+                                                             
 
 						// setup geofences
 						$scope.setupGeofences();
@@ -292,7 +309,10 @@
 				$scope.regionsDisabled = true;
 				$scope.regions = [];
 
-				$$api.regions.get().success(function (result) {
+				$http({
+					method: 'GET',
+					url: api('regions')
+				}).success(function (result) {
 					
 					// loop through the results and push only required items to $scope.regions
 					for (var i = 0, len = result.data.length; i < len; i++) {
@@ -319,7 +339,7 @@
 				}).error(function (result, error) {
 					
 					// process connection error
-					$$utilities.processConnectionError(result, error);
+					processConnectionError(result, error);
 
 				});
 
@@ -340,8 +360,10 @@
 					}
 					// otherwise get the organisations
 					else {
-
-						$$api.organisations.get(regionId).success(function (result) {
+						$http({
+							method: 'GET',
+							url: api('regions/' + regionId + '/organisations')
+						}).success(function (result) {
 
 							$scope.organisations = result.data;
 							// >>> loop through the results and push only required items to $scope.organisations
@@ -372,9 +394,12 @@
 							$scope.organisationsDisabled = false;
 
 						}).error(function (result, error) {
+							
+							// hide loader
+							$ionicLoading.hide();
 
 							// process connection error
-							$$utilities.processConnectionError(result, error);
+							processConnectionError(result, error);
 
 						});
 					}
@@ -403,23 +428,28 @@
 						// show loader
 						$ionicLoading.show();
 
-						// >>> submit save user form data
-						$$api.user.save($localStorage.user.id, $.param($scope.formData)).success(function (result) {
+						// >>> submit form data
+						$http({
+							method: 'PUT',
+							url: api('users/' + $localStorage.user.id),
+							data: $.param($scope.formData),
+							headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+						}).success(function(response) {
 
 							// registration successful
-							if (result.success) {
+							if (response.success) {
 
 								// hide loader
 								$ionicLoading.hide();
 
 								// store user information
-								$localStorage.user = result.data;
+								$localStorage.user = response.data;
 
 								// update organisation subheader name
 								$rootScope.organisationName = $localStorage.user.organisation.name;
 
 								// shout success
-								$$shout('Your region and organisation were updated!');
+								shout('Your region and organisation were updated!');
 
 							}
 
@@ -430,7 +460,7 @@
 								$ionicLoading.hide();
 
 								// shout error
-								$$shout('Could not save region and organisation!');
+								shout('Could not save region and organisation!');
 
 							}
 
@@ -440,7 +470,7 @@
 							$ionicLoading.hide();
 
 							// process connection error
-							$$utilities.processConnectionError(data, error);
+							processConnectionError(data, error);
 
 						});
 					}
@@ -463,4 +493,4 @@
 
 		});
 
-	})
+	}])
