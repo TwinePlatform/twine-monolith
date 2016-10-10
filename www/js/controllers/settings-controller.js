@@ -45,20 +45,27 @@
 			/*
 				initialize geofencing plugin
 			*/
+                             
 
-				if (window.geofence) {
-					window.geofence.initialize().then(function () {
-
-						// get watched geofences
-						// window.geofence.getWatched().then(function (geofencesJson) {
-						//     var geofences = JSON.parse(geofencesJson);
-						// });
-
-					}, function (error) {
-						shout("Geofence: Error - " + error, 10000);
-						console.log("Geofence: Error - " + error);
-					});
-				}
+//				if (window.geofence) {
+//					window.geofence.initialize().then(function () {
+//
+//						// get watched geofences
+//						 //window.geofence.getWatched().then(function (geofencesJson) {
+//						 //    var geofences = JSON.parse(geofencesJson);
+//						 //});
+//                                                      
+//                        shout("force enable location reminders");
+//                        console.log("force enable location reminders");
+//                        //$scope.enableLocationReminders();
+//                                                      
+//                                                      
+//
+//					}, function (error) {
+//						shout("Geofence  s: Error - " + error, 10000);
+//						console.log("Geofence s: Error - " + error);
+//					});
+//				}
 
 
 			/*
@@ -79,8 +86,11 @@
 
 					// switch turned on
 					if ($this.locationRemindersSwitch) { // FIX THIS ?
-
-						// ask user if they're in the location where they volunteer
+                             
+                             
+                                            window.geofence.initialize().then(function () {
+                                                          
+                                                    // ask user if they're in the location where they volunteer
 						var locationRemindersPopup = $ionicPopup.show({
 							template: 'Are you at ' + $rootScope.organisationName + ' right now?',
 							title: 'Setup location reminders',
@@ -125,6 +135,14 @@
 								}
 							]
 						});
+   
+                                                          
+                                            }, function (error) {
+                                                            shout("Geofence: Error - " + error, 10000);
+                                                            console.log("Geofence: Error - " + error);
+                                            });
+
+						
 
 					}
 					// switch turned off
@@ -147,6 +165,8 @@
 						// get lat and log
 						$scope.lat = position.coords.latitude;
 						$scope.long = position.coords.longitude;
+                                                             
+                                                             
 
 						// setup geofences
 						$scope.setupGeofences();
