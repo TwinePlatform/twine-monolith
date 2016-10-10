@@ -38,9 +38,9 @@
 			*/
 
 				// console.log('$localStorage: ', $localStorage);
-				if ($localStorage.offlineData !== undefined) {
+				/*if ($localStorage.offlineData !== undefined) {
 					console.log('$localStorage.offlineData.logs: ', $localStorage.offlineData.logs);
-				}
+				}*/
 
 
 			/*
@@ -48,7 +48,7 @@
 			*/
 
 				// either enable or disable offline mode
-				if ($localStorage.offlineMode) {
+				/*if ($localStorage.offlineMode) {
 					$rootScope.offlineMode = true;
 				}
 				else {
@@ -62,14 +62,14 @@
 						user_id: $localStorage.user.id,
 						logs: []
 					}
-				}
+				}*/
 
 				// count number of logs that need pushing
-				$rootScope.offlineLogsToPush = function() {
+				/*$rootScope.offlineLogsToPush = function() {
 					// get an array of only the logs that need pushing
 					var logsThatNeedPushing = $filter('filter')($localStorage.offlineData.logs, {'needs_pushing': true})
 					return logsThatNeedPushing.length;
-				}
+				}*/
 
 			/*
 				>> device detection
@@ -77,6 +77,7 @@
 
 				$rootScope.isIOS = ionic.Platform.isIOS();
 				$rootScope.isAndroid = ionic.Platform.isAndroid();
+
 
 			/*
 				>> set organisation subheader title
@@ -118,6 +119,7 @@
 				document.addEventListener('resume', function() {
 					$rootScope.appPaused = false;
 			    }, false);
+
 
 		});
 	})
