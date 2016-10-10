@@ -8,7 +8,7 @@
                 Location reminders
                 <p class="wrap"><small>Get a reminder to log your hours when you leave {{ organisationName }}:</small></p>
             </div>
-            <ion-toggle toggle-class="toggle-positive" ng-click="locationReminders()" ng-model="locationRemindersSwitch">Location reminders</ion-toggle>
+            <ion-toggle toggle-class="toggle-positive" ng-change="locationReminders()" ng-model="locationRemindersSwitch">Location reminders</ion-toggle>
         </form>
 
         <form id="user" name="user" class="list" ng-submit="saveUser(user)" novalidate>
