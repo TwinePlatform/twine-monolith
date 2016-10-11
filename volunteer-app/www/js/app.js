@@ -2,7 +2,6 @@
 * CONTENTS
 *
 * app
-*    options
 *    log $localStorage
 *    setup offline mode
 *    device detection
@@ -21,26 +20,13 @@
 		$ionicPlatform.ready(function() {
 
 			/*
-				>> options
-			*/
-
-				$rootScope.options = {
-					environment: 'dev',	// dev | stage
-					apiBaseUrl: {
-						dev:   'http://powertochangeadmindev.stage2.reason.digital/api/v1/',
-						stage: 'http://powertochangeadmin.stage2.reason.digital/api/v1/'
-					}
-				}
-				
-
-			/*
 				>> log $localStorage
 			*/
 
 				// console.log('$localStorage: ', $localStorage);
-				/*if ($localStorage.offlineData !== undefined) {
+				if ($localStorage.offlineData !== undefined) {
 					console.log('$localStorage.offlineData.logs: ', $localStorage.offlineData.logs);
-				}*/
+				}
 
 
 			/*
@@ -48,7 +34,7 @@
 			*/
 
 				// either enable or disable offline mode
-				/*if ($localStorage.offlineMode) {
+				if ($localStorage.offlineMode) {
 					$rootScope.offlineMode = true;
 				}
 				else {
@@ -62,14 +48,14 @@
 						user_id: $localStorage.user.id,
 						logs: []
 					}
-				}*/
+				}
 
 				// count number of logs that need pushing
-				/*$rootScope.offlineLogsToPush = function() {
+				$rootScope.offlineLogsToPush = function() {
 					// get an array of only the logs that need pushing
 					var logsThatNeedPushing = $filter('filter')($localStorage.offlineData.logs, {'needs_pushing': true})
 					return logsThatNeedPushing.length;
-				}*/
+				}
 
 			/*
 				>> device detection

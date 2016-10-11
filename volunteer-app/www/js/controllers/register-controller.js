@@ -20,8 +20,6 @@
 
 	angular.module('app').controller('RegisterController', function ($scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage, $ionicModal, $rootScope, $$api, $$clickPreventer, $$utilities) {
 
-			console.log('TEST TEST TEST');
-
 		/*
 			>> if user has access token, log straight in
 		*/
