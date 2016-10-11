@@ -35,11 +35,12 @@
 			/*
 				>> url
 				  generates an api url e.g. 'user' returns 'http://powertochangeadmindev.stage2.reason.digital/api/v1/user'
-	              the environment can be set in $rootScope.options in app.js
+	              the environment can be set in options in options.js
 			*/
 
 				url: function(url) {
-					return $rootScope.options.apiBaseUrl[$rootScope.options.environment] + url;
+					return options.apiBaseUrl[options.environment] + url;
+					// return 'http://powertochangeadmindev.stage2.reason.digital/api/v1/' + url;
 				},
 
 			/*
