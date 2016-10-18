@@ -3,6 +3,7 @@
 *
 * view logs controller
 *    populate logs
+*    edit log
 *    delete log
 *    delete log offline
 *    beforeEnter
@@ -13,7 +14,10 @@
 	> view logs controller
 */
 
-	angular.module('app.controllers').controller('ViewLogsController', function ($scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $$api, $$utilities, $$shout, $$offline) {
+	angular.module('app.controllers').controller('ViewLogsController', function (
+		$scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, 
+		$$api, $$utilities, $$shout, $$offline
+	) {
 
 		/*
 			>> populate logs
@@ -22,10 +26,12 @@
 			$scope.populateLogs = function() {
 
 				// if offline mode, get and display $localStorage logs
-				if ($scope.offlineMode) {
+				if ($rootScope.offlineMode) {
 
 					// update logs in view
 					$scope.logs = $$offline.getLogs();
+
+					console.log('$scope.logs: ', $scope.logs);
 
 				}
 
@@ -53,6 +59,32 @@
 						$$utilities.processConnectionError(result, error);
 
 					});
+				}
+
+			}
+
+
+		/*
+			>> edit log
+		*/
+		
+			$scope.edit = function(log) {
+
+				// if offline mode, edit local log
+				if ($rootScope.offlineMode) {
+
+					$state.go('tabs.edit-log-offline', {
+						offline_id: log.offline_id
+					});
+
+				}
+				// else edit via api 
+				else {
+
+					$state.go('tabs.edit-log', {
+						id: log.id
+					});
+
 				}
 
 			}
@@ -182,7 +214,9 @@
 
 				// clear logs
 				$scope.logs = null;
-				$('.view-logs .list .item').remove();
+				if (!$rootScope.offlineMode) {
+					$('.view-logs .list .item').remove();
+				}
 
 			})
 

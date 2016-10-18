@@ -18,7 +18,10 @@
 	> dashboard controller
 */
 
-	angular.module('app.controllers').controller('DashboardController', function ($scope, $stateParams, $http, $localStorage, $rootScope, $filter, $$api, $$utilities, $$shout) {
+	angular.module('app.controllers').controller('DashboardController', function (
+		$scope, $stateParams, $http, $localStorage, $rootScope, $filter, 
+		$$api, $$utilities, $$shout, $$offline
+	) {
 
 		/*
 			>> refresh dashboard
@@ -32,16 +35,27 @@
 
 					$scope.totalHours = -1;
 
-					$$api.user.totalHours($localStorage.user.id).success(function (result) {
-						
-						$scope.totalHours = result.data.total;
+					// if offline mode, get offline total hours
+					if ($rootScope.offlineMode) {
 
-					}).error(function (result, error) {
-						
-						// process connection error
-						$$utilities.processConnectionError(result, error);
+						$scope.totalHours = $$offline.totalHours($localStorage.user.organisation.id);
 
-					});
+					}
+					// else get total hours from api
+					else {
+
+						$$api.user.totalHours($localStorage.user.id).success(function (result) {
+							
+							$scope.totalHours = result.data.total;
+
+						}).error(function (result, error) {
+							
+							// process connection error
+							$$utilities.processConnectionError(result, error);
+
+						});
+
+					}
 
 
 				/* 
@@ -84,8 +98,9 @@
 
 					$scope.todaysTotalHours = -1;
 
-					// get last 7 logs
-					$$api.logs.getLogs($localStorage.user.id).success(function (result) {
+					$scope.updateChart = function(result) {
+
+						console.log('result: ', result);
 						
 						// arrays and variables
 						$scope.labels = [];
@@ -157,12 +172,27 @@
 						// generate the chart
 						$scope.generateChart($scope.labels, $scope.hours);
 
-					}).error(function (result, error) {
-						
-						// process connection error
-						$$utilities.processConnectionError(result, error);
+					}
 
-					});
+					// if offline mode, get offline logs
+					if ($rootScope.offlineMode) {
+						result = {
+							data: {
+								logs: $$offline.getLogs()
+							}
+						}
+						$scope.updateChart(result);
+					}
+					// else get logs from api
+					else {
+						// get last 7 logs
+						$$api.logs.getLogs($localStorage.user.id).success(function (result) {
+							$scope.updateChart(result);
+						}).error(function (result, error) {
+							// process connection error
+							$$utilities.processConnectionError(result, error);
+						});
+					}
 
 
 				/*
@@ -170,6 +200,8 @@
 				*/
 
 					$$api.organisations.summary($localStorage.user.organisation.id).success(function (result) {
+
+						console.log('result: ', result);
 						
 						// we got what we wanted
 						if (result.success) {

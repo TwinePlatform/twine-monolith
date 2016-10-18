@@ -8,6 +8,7 @@
 *    populate hours dropdown
 *    populate minutes dropdown
 *    calculate duration
+*    display log data
 *    get log data
 *    function: generate form date
 *    process the edit log form
@@ -19,7 +20,10 @@
 	> edit log controller
 */
 
-	angular.module('app.controllers').controller('EditLogController', function ($scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope, $$api, $$utilities, $$shout) {
+	angular.module('app.controllers').controller('EditLogController', function (
+		$scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope, 
+		$$api, $$utilities, $$shout, $$offline
+	) {
 
 		/*
 			>> variables
@@ -32,7 +36,7 @@
 			>> setup datepickers
 		*/
 
-			var $datepickerInput = $('#editLog .datepicker').pickadate({
+			var $datepickerInput = $('.editLog .datepicker').pickadate({
 				container: '.datepicker-container',
 				clear: false,
 				onSet: function(context) {
@@ -83,23 +87,22 @@
 
 			}
 
+
 		/*
-			>> get log data
+			>> display log data
 		*/
 
-			// get log id
-			$scope.logId = $state.params.id;
+			$scope.displayLogData = function(result) {
 
-			// get log from api
-			$$api.logs.getLog($scope.logId).success(function (result) {
-				
 				// set datepicker date
 				var picker = $datepickerInput.pickadate('picker');
-				var dateShort = result.data.date_of_log.substring(0,10)
+				var dateShort = result.data.date_of_log.substring(0,10);
 				picker.set('select', dateShort, { format: 'yyyy-mm-dd' } );
 
 				// add to scope
 				$scope.formData = result.data;
+
+				console.log($scope.formData);
 
 				// preselect the correct hours and minutes based on duration (in raw minutes)
 				var hoursAndMinutes = $filter('hoursAndMinutesAsObject')($scope.formData.duration);
@@ -124,12 +127,46 @@
 				// hide loader
 				$ionicLoading.hide();
 
-			}).error(function (result, error) {
-				
-				// process connection error
-				$$utilities.processConnectionError(result, error);
+			}
 
-			});
+
+		/*
+			>> get log data
+		*/
+
+			// if offline mode, edit offline log
+			if ($rootScope.offlineMode) {
+
+				var result = $$offline.getLog($state.params.offline_id);
+
+				setTimeout(function(){
+					$scope.displayLogData(result);
+				}, 100);
+
+			}
+
+			// else get log from api
+			else {
+
+				// get log id
+				$scope.logId = $state.params.id;
+
+				// get log from api
+				$$api.logs.getLog($scope.logId).success(function (result) {
+					
+					$scope.displayLogData(result);
+
+				}).error(function (result, error) {
+					
+					// couldn't connect, send back to view logs and enable offline mode
+					$state.go('tabs.view-logs');
+
+					// process connection error
+					$$utilities.processConnectionError(result, error);
+
+				});
+
+			}
 
 
 		/*
@@ -163,36 +200,70 @@
 					// show loader
 					$ionicLoading.show();
 
-					// >>> submit edit log form
-					$$api.logs.edit($scope.formData.id, $.param($scope.formData)).success(function (result) {
+					// if offline mode, save to offline data and marks as needs_pushing
+					if ($rootScope.offlineMode) {
 
-						// create log successful
-						if (result.success) {
+						// save offline
+						$$offline.edit({ id: $scope.formData.offline_id, idKey: 'offline_id' }, $scope.formData, true);
 
-							// hide loader
-							$ionicLoading.hide();
+						// hide loader
+						$ionicLoading.hide();
+
+						// go back to view logs
+						$state.go('tabs.view-logs');
+
+						// shout success
+						$$shout('Log saved locally!');
+
+					}
+
+					// else save to api
+					else {
+
+						// >>> submit edit log form
+						$$api.logs.edit($scope.formData.id, $.param($scope.formData)).success(function (result) {
+
+							// create log successful
+							if (result.success) {
+
+								// hide loader
+								$ionicLoading.hide();
+
+								// save offline
+								$$offline.edit({ id: $scope.formData.id, idKey: 'id' }, result.data);
+
+								// go back to view logs
+								$state.go('tabs.view-logs');
+
+								// shout success
+								$$shout('Log saved succesfully!');
+
+							}
+
+							// create log unsuccessful
+							else {
+
+								$$shout('Edit log unsuccessful');
+
+							}
+
+						}).error(function(data, error) {
+
+							$$shout('Could not edit log. Please try again in offline mode.');
+
+							// enable offline mode
+							$$offline.enable();
 
 							// go back to view logs
 							$state.go('tabs.view-logs');
 
-							// shout success
-							$$shout('Log saved succesfully!');
+							// process connection error
+							$$utilities.processConnectionError(data, error);
 
-						}
+						});
 
-						// create log unsuccessful
-						else {
+					}
 
-							$$shout('Edit log unsuccessful');
-
-						}
-
-					}).error(function(data, error) {
-
-						// process connection error
-						$$utilities.processConnectionError(data, error);
-
-					});
 				}
 				// form is invalid
 				else {

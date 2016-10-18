@@ -63,6 +63,50 @@
 				},
 
 			/*
+				>> get log
+			*/
+
+				getLog: function(offline_id) {
+					var logData = $filter('filter')($localStorage.offlineData.logs, {'offline_id': offline_id});
+					var result = {
+						data: logData[0]
+					}
+					return result;
+				},
+
+			/*
+				>> edit log
+			*/
+
+				edit: function(idObject, data, needs_pushing) {
+
+					// mark as needs_pushing if necessary
+					if (needs_pushing) {
+						data.needs_pushing = true;
+					}
+
+					// remove old item from $localStorage array, but grab offline_id first
+					for (var i = 0; i < $localStorage.offlineData.logs.length; i++) {
+					    if ($localStorage.offlineData.logs[i][idObject.idKey] === idObject.id) { 
+					    	// grab offline id for later
+					    	var offline_id = $localStorage.offlineData.logs[i].offline_id;
+					    	console.log('offline_id: ', offline_id);
+					    	// delete it
+					        $localStorage.offlineData.logs.splice(i,1);
+					        break;
+					    }
+					}
+
+					// add offline_id to data if there isn't one
+					if (idObject.idKey === 'id') {
+						data.offline_id = offline_id;
+					}
+
+					// push new data back into $localStorage array
+					$localStorage.offlineData.logs.push(data);
+				},
+
+			/*
 				>> delete log
 			*/
 
@@ -91,6 +135,24 @@
 
 				generateOfflineId: function(offline_id) {
 					return $localStorage.offlineData.logs.length + 1;
+				},
+
+			/*
+				>> total hours
+			*/
+
+				totalHours: function(organisation_id) {
+
+					var totalDuration = 0;
+
+					// loop through all offline logs and add up duration
+					for (var i = 0; i < $localStorage.offlineData.logs.length; i++) {
+						if ($localStorage.offlineData.logs[i].organisation_id == organisation_id) {
+							totalDuration += $localStorage.offlineData.logs[i].duration;
+						}
+					}
+
+					return totalDuration;
 				}
 
 		}

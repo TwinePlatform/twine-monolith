@@ -39,7 +39,7 @@
 			*/
 
 				url: function(url) {
-					return options.apiBaseUrl[options.environment] + url;
+					return $rootScope.options.apiBaseUrl[$rootScope.options.environment] + url;
 					// return 'http://powertochangeadmindev.stage2.reason.digital/api/v1/' + url;
 				},
 

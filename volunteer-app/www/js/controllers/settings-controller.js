@@ -5,6 +5,7 @@
 *    store the form data
 *    variables
 *    location reminder switch changed
+*    initialize geofence plugin
 *    enable location reminders
 *      get current lat and long
 *      setup geofences
@@ -23,8 +24,10 @@
 	> settings controller
 */
 
-	angular.module('app').controller('SettingsController', ['$scope', '$stateParams', '$http', '$ionicPopup', '$ionicLoading', '$ionicPlatform', '$localStorage', '$state', '$rootScope', '$$api', '$$shout', 
-	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope, $$api, $$shout) {
+	angular.module('app').controller('SettingsController', 
+	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope, $$api, $$shout
+	) {
+
 
 		$ionicPlatform.ready(function() {
 
@@ -34,38 +37,11 @@
 
 				$scope.formData = {};
 
-
 			/*
 				>> variables
 			*/
 
 				$scope.radius = 100;
-
-
-			/*
-				initialize geofencing plugin
-			*/
-                             
-
-//				if (window.geofence) {
-//					window.geofence.initialize().then(function () {
-//
-//						// get watched geofences
-//						 //window.geofence.getWatched().then(function (geofencesJson) {
-//						 //    var geofences = JSON.parse(geofencesJson);
-//						 //});
-//                                                      
-//                        $$shout("force enable location reminders");
-//                        console.log("force enable location reminders");
-//                        //$scope.enableLocationReminders();
-//                                                      
-//                                                      
-//
-//					}, function (error) {
-//						shout("Geofence  s: Error - " + error, 10000);
-//						console.log("Geofence s: Error - " + error);
-//					});
-//				}
 
 
 			/*
@@ -87,10 +63,7 @@
 					// switch turned on
 					if ($this.locationRemindersSwitch) { // FIX THIS ?
                              
-                             
-                                            window.geofence.initialize().then(function () {
-                                                          
-                                                    // ask user if they're in the location where they volunteer
+	                    // ask user if they're in the location where they volunteer
 						var locationRemindersPopup = $ionicPopup.show({
 							template: 'Are you at ' + $rootScope.organisationName + ' right now?',
 							title: 'Setup location reminders',
@@ -116,7 +89,8 @@
 								  	onTap: function(e) {
 								    	// user tapped yes, setup location reminders if geofencing supported
 										if (window.geofence) {
-									    	$scope.enableLocationReminders();
+									    	$scope.initializeGeofencePlugin();
+									    	// $scope.enableLocationReminders();
 									  	}
 										// else inform user to use real device
 										else {
@@ -135,14 +109,6 @@
 								}
 							]
 						});
-   
-                                                          
-                                            }, function (error) {
-                                                            shout("Geofence: Error - " + error, 10000);
-                                                            console.log("Geofence: Error - " + error);
-                                            });
-
-						
 
 					}
 					// switch turned off
@@ -150,6 +116,28 @@
 						// disable location reminders
 						$scope.disableLocationReminders();
 					}
+				}
+
+
+			/*
+				>> initialize geofence plugin
+			*/
+
+				$scope.initializeGeofencePlugin = function() {
+
+					if (window.geofence) {
+	                    window.geofence.initialize().then(function () {
+
+	                    	$scope.enableLocationReminders();
+
+                        }, function (error) {
+
+                            $$shout("Geofence: Error - " + error, 10000);
+                            console.log("Geofence: Error - " + error);
+
+                        });
+	                }
+
 				}
 
 
@@ -165,8 +153,6 @@
 						// get lat and log
 						$scope.lat = position.coords.latitude;
 						$scope.long = position.coords.longitude;
-                                                             
-                                                             
 
 						// setup geofences
 						$scope.setupGeofences();
@@ -309,10 +295,7 @@
 				$scope.regionsDisabled = true;
 				$scope.regions = [];
 
-				$http({
-					method: 'GET',
-					url: $$api.url('regions')
-				}).success(function (result) {
+				$$api.regions.get($localStorage.user.organisation.id).success(function (result) {
 					
 					// loop through the results and push only required items to $scope.regions
 					for (var i = 0, len = result.data.length; i < len; i++) {
@@ -360,10 +343,8 @@
 					}
 					// otherwise get the organisations
 					else {
-						$http({
-							method: 'GET',
-							url: $$api.url('regions/' + regionId + '/organisations')
-						}).success(function (result) {
+
+						$$api.organisations.get(regionId).success(function (result) {
 
 							$scope.organisations = result.data;
 							// >>> loop through the results and push only required items to $scope.organisations
@@ -428,28 +409,27 @@
 						// show loader
 						$ionicLoading.show();
 
+						console.log('$scope.formData: ', $scope.formData);
+
 						// >>> submit form data
-						$http({
-							method: 'PUT',
-							url: $$api.url('users/' + $localStorage.user.id),
-							data: $.param($scope.formData),
-							headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-						}).success(function(response) {
+						$$api.user.save($localStorage.user.id, $.param($scope.formData)).success(function (result) {
+
+							console.log('result: ', result);
 
 							// registration successful
-							if (response.success) {
+							if (result.success) {
 
 								// hide loader
 								$ionicLoading.hide();
 
 								// store user information
-								$localStorage.user = response.data;
+								$localStorage.user = result.data;
 
 								// update organisation subheader name
 								$rootScope.organisationName = $localStorage.user.organisation.name;
 
 								// shout success
-								shout('Your region and organisation were updated!');
+								$$shout('Your region and organisation were updated!');
 
 							}
 
@@ -460,7 +440,7 @@
 								$ionicLoading.hide();
 
 								// shout error
-								shout('Could not save region and organisation!');
+								$$shout('Could not save region and organisation!');
 
 							}
 
@@ -493,4 +473,4 @@
 
 		});
 
-	}])
+	})

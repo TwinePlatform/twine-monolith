@@ -20,7 +20,8 @@
                 <h2 ng-bind-html="log.duration | hoursAndMinutesAsString"></h2>
                 <p>{{ log.date_of_log.split(' ')[0] | date:'d MMM yyyy'}} @ {{ organisationName }}</p>
                 <div class="button-bar">
-                    <a ng-if="!log.deleted_at" href="#/tab/edit-log/{{ log.id }}" class="button button-positive button-block button-clear icon-left ion-edit">Edit</a>
+                    <!-- <a ng-if="!log.deleted_at" href="#/tab/edit-log/{{ log.id }}" class="button button-positive button-block button-clear icon-left ion-edit">Edit</a> -->
+                    <a ng-if="!log.deleted_at" class="button button-positive button-block button-clear icon-left ion-edit" ng-click="edit(log)">Edit</a>
                     <button ng-if="!log.deleted_at" class="button button-positive button-block button-clear icon-left ion-android-delete" ng-click="delete(log)">Delete</button>
                     <span ng-if="log.deleted_at" class="button button-positive button-block button-clear">Deleted</span>
                 </div>

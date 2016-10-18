@@ -18,7 +18,10 @@
 	> register controller
 */
 
-	angular.module('app').controller('RegisterController', function ($scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage, $ionicModal, $rootScope, $$api, $$clickPreventer, $$utilities) {
+	angular.module('app').controller('RegisterController', function (
+		$scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage, $ionicModal, $rootScope, 
+		$$api, $$clickPreventer, $$utilities
+	) {
 
 		/*
 			>> if user has access token, log straight in
