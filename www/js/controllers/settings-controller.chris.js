@@ -5,7 +5,6 @@
 *    store the form data
 *    variables
 *    location reminder switch changed
-*    initialize geofence plugin
 *    enable location reminders
 *      get current lat and long
 *      setup geofences
@@ -25,8 +24,10 @@
 */
 
 	angular.module('app').controller('SettingsController', 
-		function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope, $$api, $$shout) {
-
+	function (
+		$scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope, 
+		$$api, $$shout
+	) {
 
 		$ionicPlatform.ready(function() {
 
@@ -36,11 +37,38 @@
 
 				$scope.formData = {};
 
+
 			/*
 				>> variables
 			*/
 
 				$scope.radius = 100;
+
+
+			/*
+				initialize geofencing plugin
+			*/
+                             
+
+//				if (window.geofence) {
+//					window.geofence.initialize().then(function () {
+//
+//						// get watched geofences
+//						 //window.geofence.getWatched().then(function (geofencesJson) {
+//						 //    var geofences = JSON.parse(geofencesJson);
+//						 //});
+//                                                      
+//                        $$shout("force enable location reminders");
+//                        console.log("force enable location reminders");
+//                        //$scope.enableLocationReminders();
+//                                                      
+//                                                      
+//
+//					}, function (error) {
+//						shout("Geofence  s: Error - " + error, 10000);
+//						console.log("Geofence s: Error - " + error);
+//					});
+//				}
 
 
 			/*
@@ -62,7 +90,10 @@
 					// switch turned on
 					if ($this.locationRemindersSwitch) { // FIX THIS ?
                              
-	                    // ask user if they're in the location where they volunteer
+                             
+                                            window.geofence.initialize().then(function () {
+                                                          
+                                                    // ask user if they're in the location where they volunteer
 						var locationRemindersPopup = $ionicPopup.show({
 							template: 'Are you at ' + $rootScope.organisationName + ' right now?',
 							title: 'Setup location reminders',
@@ -88,8 +119,7 @@
 								  	onTap: function(e) {
 								    	// user tapped yes, setup location reminders if geofencing supported
 										if (window.geofence) {
-									    	$scope.initializeGeofencePlugin();
-									    	// $scope.enableLocationReminders();
+									    	$scope.enableLocationReminders();
 									  	}
 										// else inform user to use real device
 										else {
@@ -108,6 +138,14 @@
 								}
 							]
 						});
+   
+                                                          
+                                            }, function (error) {
+                                                            $$shout("Geofence: Error - " + error, 10000);
+                                                            console.log("Geofence: Error - " + error);
+                                            });
+
+						
 
 					}
 					// switch turned off
@@ -115,28 +153,6 @@
 						// disable location reminders
 						$scope.disableLocationReminders();
 					}
-				}
-
-
-			/*
-				>> initialize geofence plugin
-			*/
-
-				$scope.initializeGeofencePlugin = function() {
-
-					if (window.geofence) {
-	                    window.geofence.initialize().then(function () {
-
-	                    	$scope.enableLocationReminders();
-
-                        }, function (error) {
-
-                            $$shout("Geofence: Error - " + error, 10000);
-                            console.log("Geofence: Error - " + error);
-
-                        });
-	                }
-
 				}
 
 
@@ -152,6 +168,8 @@
 						// get lat and log
 						$scope.lat = position.coords.latitude;
 						$scope.long = position.coords.longitude;
+                                                             
+                                                             
 
 						// setup geofences
 						$scope.setupGeofences();
@@ -416,7 +434,7 @@
 						// >>> submit form data
 						$http({
 							method: 'PUT',
-							url: api('users/' + $localStorage.user.id),
+							url: $$api.url('users/' + $localStorage.user.id),
 							data: $.param($scope.formData),
 							headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 						}).success(function(response) {

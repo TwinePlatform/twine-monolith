@@ -50,7 +50,7 @@
 		<script src="js/libs/Chart.min.js"></script>
 
 		<!-- options -->
-		<script src="js/options.js"></script>
+		<!-- <script src="js/options.js"></script> -->
 
 		<!-- app -->
 		<script src="js/app.js"></script>
@@ -70,6 +70,7 @@
 		<script src="js/controllers/view-logs-controller.js"></script>
 		<script src="js/controllers/edit-log-controller.js"></script>
 		<script src="js/controllers/settings-controller.js"></script>
+		<script src="js/controllers/debug-controller.js"></script>
 
 		<!-- routes, directives, filters -->
 		<script src="js/routes.js"></script>
@@ -83,7 +84,12 @@
 	<body ng-app="app" animation="slide-left-right-ios7" ng-class="{'offline-mode': offlineMode}">
 
 		<ion-nav-bar class="bar-positive">
-			<ion-nav-back-button class="button-icon icon ion-ios-arrow-back">Back</ion-nav-back-button>
+			<ion-nav-back-button class="button-icon icon ion-ios-arrow-back" ng-cloak>Back</ion-nav-back-button>
+			<ion-nav-buttons side="right">
+		        <button class="button" ng-click="debugModal.show()" ng-if="options.debug" ng-cloak>
+		            Debug
+		        </button>
+		    </ion-nav-buttons>
 		</ion-nav-bar>
 
 		<ion-nav-view></ion-nav-view>

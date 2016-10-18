@@ -1,0 +1,45 @@
+<ion-modal-view>
+    <ion-header-bar class="bar-positive">
+        <h1 class="title">Debug</h1>
+        <button class="button button-icon icon ion-ios-close-empty" ng-click="debugModal.hide()"></button>
+    </ion-header-bar>
+    <ion-content class="padding" ng-controller="DebugController">
+        <form class="list">
+            <div class="item item-divider">
+                Offline Mode
+            </div>
+            <ion-toggle toggle-class="toggle-positive" ng-change="offlineModeSwitchChanged()" ng-model="offlineModeSwitch">
+                Offline mode
+            </ion-toggle>
+
+            <div class="spacer-20"></div>
+
+            <div class="item item-divider">
+                Local Storage
+            </div>
+            <ion-item class="item-icon-right" ng-click="clearLocalStorage('offlineData')">
+                Delete offlineData
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class="item-icon-right" ng-click="clearLocalStorage('user')">
+                Delete user
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            <ion-item class="item-icon-right" ng-click="clearLocalStorage()">
+                Delete all
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+            
+            <div class="spacer-20"></div>
+
+            <div class="item item-divider">
+                More
+            </div>
+            <ion-item class="item-icon-right" ng-click="restartApp()">
+                Restart app
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+
+        </form>
+    </ion-content>
+</ion-modal-view>

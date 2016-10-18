@@ -87,6 +87,18 @@ angular.module('app.routes', ['ionicUIRouter'])
 					}
 				})
 
+				// >>> view logs - edit log offline
+				.state('tabs.edit-log-offline', {
+					cache: false,
+					url: '/edit-log-offline/:offline_id',
+					views: {
+						'view-logs-tab': {
+							templateUrl: 'templates/edit-log.html',
+							controller: 'EditLogController'
+						}
+					}
+				})
+
 			// >> settings
 			.state('tabs.settings', {
 				// cache: 'false',

@@ -35,7 +35,7 @@
                         </div>
                     </div>
                 </ion-item>
-                <ion-item class="hours-summary-other">
+                <ion-item class="hours-summary-other" ng-if="!offlineMode">
                     <div class="row row-no-padding">
                         <div class="col">
                             Last 7 days
@@ -45,7 +45,7 @@
                         </div>
                     </div>
                 </ion-item>
-                <ion-item class="hours-summary-other">
+                <ion-item class="hours-summary-other" ng-if="!offlineMode">
                     <div class="row row-no-padding">
                         <div class="col">
                             Last 30 days
@@ -62,7 +62,7 @@
         <div class="spacer-10"></div>
 
         <!-- .organisation-summary -->
-        <div class="organisation-summary text-center" ng-if="totalUsers && totalVolunteeredMinutes">
+        <div class="organisation-summary text-center" ng-if="totalUsers && totalVolunteeredMinutes && !offlineMode">
             Last week, <strong>{{ totalUsers || 0}} <span ng-if="totalUsers > 1">people</span><span ng-if="totalUsers === 1">person</span></strong> gave <strong><span ng-bind-html="totalVolunteeredMinutes | hoursAndMinutesAsString">0 min</span> </strong>to <strong>{{ organisationName }}</strong>
         </div>
         <!-- /.organisation-summary -->

@@ -16,14 +16,40 @@
 */
 
 	angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services','app.filters','ngStorage',])
-	.run(function($ionicPlatform, $localStorage, $rootScope, $filter) {
+	.run(function($ionicPlatform, $localStorage, $rootScope, $filter, $ionicModal) {
 		$ionicPlatform.ready(function() {
+
+			/*
+				>> options
+			*/
+
+				$rootScope.options = {
+					debug: true,
+					environment: 'dev',	// dev | stage
+					apiBaseUrl: {
+						dev:   'http://powertochangeadmindev.stage2.reason.digital/api/v1/',
+						stage: 'http://powertochangeadmin.stage2.reason.digital/api/v1/'
+					}
+				}
+
+
+			/*
+				>> debug modal
+			*/
+
+				$ionicModal.fromTemplateUrl('templates/partials/debug-modal.html', {
+				    scope: $rootScope,
+				    animation: 'slide-in-up'
+				}).then(function(modal) {
+					$rootScope.debugModal = modal;
+				});
+
 
 			/*
 				>> log $localStorage
 			*/
 
-				// console.log('$localStorage: ', $localStorage);
+				console.log('$localStorage: ', $localStorage);
 				if ($localStorage.offlineData !== undefined) {
 					console.log('$localStorage.offlineData.logs: ', $localStorage.offlineData.logs);
 				}
@@ -53,8 +79,13 @@
 				// count number of logs that need pushing
 				$rootScope.offlineLogsToPush = function() {
 					// get an array of only the logs that need pushing
-					var logsThatNeedPushing = $filter('filter')($localStorage.offlineData.logs, {'needs_pushing': true})
-					return logsThatNeedPushing.length;
+					if ($localStorage.offlineData !== undefined) {
+						var logsThatNeedPushing = $filter('filter')($localStorage.offlineData.logs, {'needs_pushing': true})
+						return logsThatNeedPushing.length;
+					}
+					else {
+						return 0;
+					}
 				}
 
 			/*
