@@ -11,43 +11,18 @@
             <ion-toggle toggle-class="toggle-positive" ng-change="locationReminders()" ng-model="locationRemindersSwitch">Location reminders</ion-toggle>
         </form>
 
-        <form id="user" name="user" class="list" ng-submit="saveUser(user)" novalidate>
+        <!-- account settings -->
+        <div class="list">
             <div class="item item-divider">
                 Account settings
                 <p><small>{{ getUserEmail() }}</small></p>
             </div>
-            <!-- region -->
-            <label class="item item-select" ng-class="{'item-select-disabled': regionsDisabled}">
-                <span class="input-label">Region</span>
-                <select ng-model="formData.region" ng-options="option.name for option in regions track by option.id" name="region" id="region" ng-change="populateOrganisations(formData.region.id)" ng-disabled="regionsDisabled" required>
-                    <option value="">Select region</option>
-                    <!--  -->
-                </select>
-            </label>
-            <label class="error block text-right padding assertive ng-hide" ng-show="user.region.$invalid && formSubmitted" for="region">
-                Please select a region
-            </label>
-            <!-- /region -->
-
-            <!-- organisation -->
-            <label class="item item-select">
-                <span class="input-label">Organisation</span>
-                <select ng-model="formData.organisation" ng-options="option.name for option in organisations track by option.id" name="organisation" id="organisation" ng-disabled="organisationsDisabled" required>
-                    <option value="">Select organisation</option>
-                    <!--  -->
-                </select>
-            </label>
-            <label class="error block text-right padding assertive ng-hide" ng-show="user.organisation.$invalid && formSubmitted" for="organisation">
-                Please select an organisation
-            </label>
-            <!-- /organisation -->
-
-            <!-- buttons -->
-            <div class="item item-button">
-                <button type="submit" class="button button-positive button-block button-outline">Save account settings</button>
-            </div>
-
-        </form>
+            <ion-item class="item-icon-right" ui-sref="tabs.profile">
+                My profile
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+        </div>
+        <!-- /account settings -->
 
         <form class="list">
             <div class="item item-divider">

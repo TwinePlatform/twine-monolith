@@ -111,6 +111,17 @@ angular.module('app.routes', ['ionicUIRouter'])
 				}
 			})
 
+				// >>> settings - profile
+				.state('tabs.profile', {
+					url: '/profile',
+					views: {
+						'settings-tab': {
+							templateUrl: 'templates/profile.html',
+							controller: 'ProfileController'
+						}
+					}
+				})
+
 				// >>> settings - terms & conditions
 				.state('tabs.terms-and-conditions', {
 					url: '/terms-and-conditions',

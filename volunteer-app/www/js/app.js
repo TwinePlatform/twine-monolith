@@ -120,6 +120,23 @@
 
 
 			/*
+				>> sync offline data
+			*/
+
+				$rootScope.syncOfflineData = function() {
+					var allLogs = $localStorage.offlineData.logs,
+						logsByOrganisation = $filter('filter')(allLogs, {'organisation_id' : $localStorage.user.organisation.id})
+						logsThatNeedPushing = $filter('filter')(logsByOrganisation, {'needs_pushing' : true});
+					$rootScope.logsThatNeedPushing = logsThatNeedPushing;
+					console.log('logsThatNeedPushing: ', logsThatNeedPushing);
+
+					var data = {
+						logs: logsThatNeedPushing
+					}
+					// console.log($.param(data));
+				}
+
+			/*
 				>> app paused (in background)
 			*/
 
