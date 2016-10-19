@@ -47,8 +47,15 @@
 					if (needs_pushing) {
 						data.needs_pushing = true;
 					}
+
 					// generate an offline id
 					data.offline_id = $$offline.generateOfflineId();
+
+					// add organisation id
+					data.organisation_id = $localStorage.user.organisation.id;
+
+					// set id to null
+					data.id = null;
 
 					// push to $localStorage array
 					$localStorage.offlineData.logs.push(data);
@@ -59,7 +66,9 @@
 			*/
 
 				getLogs: function() {
-					return $localStorage.offlineData.logs;
+					var allLogs = $localStorage.offlineData.logs,
+						filteredLogs = $filter('filter')(allLogs, {'organisation_id': $localStorage.user.organisation.id});
+					return filteredLogs;
 				},
 
 			/*
