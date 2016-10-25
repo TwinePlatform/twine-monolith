@@ -115,9 +115,6 @@
 				// form is valid
 				if (form.$valid) {
 
-					// log sent form data
-					console.log('$scope.formData: ', $scope.formData);
-
 					// show loader
 					$ionicLoading.show();
 
@@ -141,6 +138,8 @@
 
 							// create log successful
 							if (result.success) {
+
+								console.log('result.data: ', result.data);
 
 								// push to offline data
 								$scope.newLogOffline(result.data);

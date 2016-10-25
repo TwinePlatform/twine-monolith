@@ -54,8 +54,8 @@
 					// add organisation id
 					data.organisation_id = $localStorage.user.organisation.id;
 
-					// set id to null
-					data.id = null;
+					// set id to empty string
+					data.id = '';
 
 					// push to $localStorage array
 					$localStorage.offlineData.logs.push(data);

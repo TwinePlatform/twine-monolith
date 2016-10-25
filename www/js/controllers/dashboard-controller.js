@@ -100,8 +100,6 @@
 
 					$scope.updateChart = function(result) {
 
-						console.log('result: ', result);
-						
 						// arrays and variables
 						$scope.labels = [];
 						$scope.hours = [];
@@ -201,8 +199,6 @@
 
 					$$api.organisations.summary($localStorage.user.organisation.id).success(function (result) {
 
-						console.log('result: ', result);
-						
 						// we got what we wanted
 						if (result.success) {
 							$scope.totalUsers = result.data.totalUsers;

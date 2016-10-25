@@ -15,7 +15,7 @@
 */
 
 	angular.module('app.controllers').controller('ViewLogsController', function (
-		$scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, 
+		$scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $timeout, 
 		$$api, $$utilities, $$shout, $$offline
 	) {
 
@@ -31,7 +31,7 @@
 					// update logs in view
 					$scope.logs = $$offline.getLogs();
 
-					console.log('$scope.logs: ', $scope.logs);
+					// console.log('$scope.logs: ', $scope.logs);
 
 				}
 

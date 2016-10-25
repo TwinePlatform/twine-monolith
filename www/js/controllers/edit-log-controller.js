@@ -186,6 +186,9 @@
 			$scope.formSubmitted = false;
 			$scope.processForm = function(form) {
 
+				// log form data
+				console.log('$scope.formData: ', $scope.formData);
+				
 				// >>> validate form
 
 				// variable to show that form was submitted
@@ -194,8 +197,8 @@
 				// form is valid
 				if (form.$valid) {
 
-					// log form data
-					console.log('$scope.formData: ', $scope.formData);
+					console.log('form is valid');
+
 
 					// show loader
 					$ionicLoading.show();
@@ -267,7 +270,7 @@
 				}
 				// form is invalid
 				else {
-					
+					console.log('form invalid!!');
 				}
 
 			};

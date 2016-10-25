@@ -2,7 +2,6 @@
 * CONTENTS
 *
 * settings controller
-*    store the form data
 *    variables
 *    location reminder switch changed
 *    initialize geofence plugin
@@ -11,12 +10,6 @@
 *      setup geofences
 *    disable location reminders
 *    get user email
-*    populate region dropdown
-*    populate organisation dropdown
-*      loop through the results and push only required items to $scope.organisations
-*    process save user form
-*      validate form
-*      submit form data
 *    log out
 */
 
