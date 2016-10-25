@@ -16,7 +16,10 @@
 */
 
 	angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services','app.filters','ngStorage',])
-	.run(function($ionicPlatform, $localStorage, $rootScope, $filter, $ionicModal) {
+	.run(function(
+		$ionicPlatform, $localStorage, $rootScope, $filter, $ionicModal, $ionicLoading, $state, 
+		$$api, $$offline, $$shout
+	) {
 		$ionicPlatform.ready(function() {
 
 			/*
@@ -49,11 +52,12 @@
 				>> log $localStorage
 			*/
 
-				console.log('$localStorage: ', $localStorage);
+				console.log('%c$localStorage: ', 'background: lightblue', $localStorage);
 				if ($localStorage.offlineData !== undefined) {
-					console.log('$localStorage.offlineData.logs: ', $localStorage.offlineData.logs);
+					console.log('%c$localStorage.offlineData.logs: ', 'background: lightblue', $localStorage.offlineData.logs);
+					// console.log(JSON.stringify($localStorage.offlineData.logs));
 				}
-
+				
 
 			/*
 				>> setup offline mode
@@ -87,6 +91,7 @@
 						return 0;
 					}
 				}
+
 
 			/*
 				>> device detection
@@ -124,17 +129,134 @@
 			*/
 
 				$rootScope.syncOfflineData = function() {
-					var allLogs = $localStorage.offlineData.logs,
-						logsByOrganisation = $filter('filter')(allLogs, {'organisation_id' : $localStorage.user.organisation.id})
-						logsThatNeedPushing = $filter('filter')(logsByOrganisation, {'needs_pushing' : true});
-					$rootScope.logsThatNeedPushing = logsThatNeedPushing;
+					// get all offline logs
+					var allLogs = $localStorage.offlineData.logs;
+					// filter by current organisation id
+					var logsByOrganisation = $filter('filter')(allLogs, {'organisation_id' : $localStorage.user.organisation.id});
+					// filter by 'needs_pushing'
+					var logsThatNeedPushing = $filter('filter')(logsByOrganisation, {'needs_pushing' : true});
+					// $rootScope.logsThatNeedPushing = logsThatNeedPushing;
 					console.log('logsThatNeedPushing: ', logsThatNeedPushing);
 
-					var data = {
+					var logsData = {
 						logs: logsThatNeedPushing
 					}
-					// console.log($.param(data));
+
+					// remove $$hasKey items
+					logsData = angular.copy(logsData);
+
+					console.log('logsData: ', logsData);
+
+					// sync offline logs
+					$$api.logs.sync($.param(logsData)).success(function(response) {
+						console.log('response: ', response);
+
+						if (response.success) {
+
+							/// dummy response data - remove once syed has got the response sending back all the logs
+							var response = {
+								success: true,
+								message: "Logs processed successfully",
+								data: [
+									{  
+										"date_of_log":"2016-10-24 12:02:12",
+										"duration":60,
+										"user_id":"14",
+										"organisation_id":11,
+										"id":64
+									},
+									{  
+										"date_of_log":"2016-10-24 12:02:16",
+										"duration":120,
+										"user_id":"14",
+										"organisation_id":11,
+										"id":65
+									},
+									{  
+										"date_of_log":"2016-10-24 12:02:20",
+										"duration":180,
+										"user_id":"14",
+										"organisation_id":11,
+										"id":66
+									},
+									{  
+										"id":67,
+										"updated_at":"2016-10-24 12:35:31",
+										"created_at":"2016-10-24 11:02:41",
+										"duration":195,
+										"date_of_log":"2016-10-24 12:02:20",
+										"user_id":14,
+										"organisation_id":11,
+										"deleted_at":null
+									}
+								]
+							}
+
+							// show loader
+							$ionicLoading.show('Syncing');
+
+							// clear offline data
+							$localStorage.offlineData.logs = [];
+
+							// setup an empty logs array
+							var newOfflineLogs = [];
+
+							// loop through each log in the response and put back into offline data with a unique offline_id
+							for (i = 0; i < response.data.length; i++) {
+
+								// duplicate the current log
+								var newOfflineLog = response.data[i];
+
+								// add an offline_id to the log
+								newOfflineLog.offline_id = i + 1;
+
+								// push the log to $localStorage
+								$localStorage.offlineData.logs.push(newOfflineLog);
+
+							}
+
+							// switch offline mode off
+							$$offline.disable();
+
+							// reload current page
+							$state.reload();
+
+							// hide loader
+							$ionicLoading.hide();
+
+							// inform user
+							$$shout('Data synced successfully!');
+
+						}
+
+
+					}).error(function(data, error) {
+
+						// process connection error
+						// $$utilities.processConnectionError(data, error);
+
+					});
+
+
 				}
+
+
+			/*
+				>> check for internet connection
+			*/
+
+				// online
+				if (navigator.onLine) {
+					// if app is in offline mode, attempt to sync offline data
+					if ($rootScope.offlineMode) {
+						$rootScope.syncOfflineData();
+					}
+				}
+				// offline
+				else {
+					console.log('offline');
+				}
+
 
 			/*
 				>> app paused (in background)

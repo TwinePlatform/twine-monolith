@@ -9,6 +9,7 @@
 *      get log
 *      edit log
 *      new log
+*      sync
 *    user
 *      login
 *      save user
@@ -109,6 +110,21 @@
 								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 							});
 						},
+
+					/*
+						>>> sync
+					*/
+
+						sync: function(data) {
+							console.log('data: ', data);
+							return $http({
+								method: 'POST',
+								url: $$api.url('logs/sync'),
+								data: data,
+								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+							});
+						},
+
 
 				},
 
