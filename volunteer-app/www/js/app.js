@@ -2,11 +2,15 @@
 * CONTENTS
 *
 * app
+*    options
+*    debug modal
 *    log $localStorage
 *    setup offline mode
 *    device detection
 *    set organisation subheader title
 *    hide accessory bar
+*    sync offline data
+*    check for internet connection
 *    app paused (in background)
 *    app resumed
 */
@@ -20,21 +24,21 @@
 		$ionicPlatform, $localStorage, $rootScope, $filter, $ionicModal, $ionicLoading, $state, 
 		$$api, $$offline, $$shout
 	) {
-		$ionicPlatform.ready(function() {
 
-			/*
-				>> options
-			*/
+		/*
+			>> options
+		*/
 
-				$rootScope.options = {
-					debug: true,
-					environment: 'dev',	// dev | stage
-					apiBaseUrl: {
-						dev:   'http://powertochangeadmindev.stage2.reason.digital/api/v1/',
-						stage: 'http://powertochangeadmin.stage2.reason.digital/api/v1/'
-					}
+			$rootScope.options = {
+				debug: true,
+				environment: 'dev',	// dev | stage
+				apiBaseUrl: {
+					dev:   'http://powertochangeadmindev.stage2.reason.digital/api/v1/',
+					stage: 'http://powertochangeadmin.stage2.reason.digital/api/v1/'
 				}
+			}
 
+		$ionicPlatform.ready(function() {
 
 			/*
 				>> debug modal

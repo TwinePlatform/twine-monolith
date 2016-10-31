@@ -54,8 +54,11 @@
 					// add organisation id
 					data.organisation_id = $localStorage.user.organisation.id;
 
-					// set id to empty string
-					data.id = '';
+					// set id to empty string if it doesn't exist
+					if (data.id === undefined) {
+						console.log('data.id undefined, set it to ""');
+						data.id = '';
+					}
 
 					// push to $localStorage array
 					$localStorage.offlineData.logs.push(data);
