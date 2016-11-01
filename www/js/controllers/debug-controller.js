@@ -1,31 +1,19 @@
 /*
 * CONTENTS
 *
-* settings controller
-*    store the form data
-*    variables
-*    location reminder switch changed
-*    enable location reminders
-*      get current lat and long
-*      setup geofences
-*    disable location reminders
-*    get user email
-*    populate region dropdown
-*    populate organisation dropdown
-*      loop through the results and push only required items to $scope.organisations
-*    process save user form
-*      validate form
-*      submit form data
-*    log out
+* debug controller
+* offline mode
+* clear local storage
+* restart app
 */
 
 /* 
-	> settings controller
+	> debug controller
 */
 
 	angular.module('app').controller('DebugController', 
 	function (
-		$scope, $stateParams, $http, $localStorage, $ionicHistory, 
+		$scope, $state, $stateParams, $http, $localStorage, $ionicHistory, $window, $timeout, $rootScope, 
 		$$shout
 	) {
 
@@ -81,8 +69,14 @@
 				// clear cache
 				$ionicHistory.clearCache();
 
+				// hide debug modal 
+				$rootScope.debugModal.hide();
+
 				// go to app root
-				window.location = '/';
+				$state.go('register');
+				$timeout(function(){
+					$window.location.reload();
+				}, 200);
 
 			}
 
