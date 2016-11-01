@@ -39,8 +39,15 @@
 				else {
 					$$api.logs.getLogs($localStorage.user.id).success(function (result) {
 
+						console.log('getLogs');
+
 						// update logs in view
 						$scope.logs = result.data.logs;
+
+						// save logs offline
+						// $timeout(function(){
+						// 	$$offline.saveLogs(result.data.logs);
+						// }, 15000);
 
 						// if no logs
 						if (result.data.logs.length == 0) {

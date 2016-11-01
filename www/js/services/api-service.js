@@ -101,8 +101,6 @@
 					*/
 
 						new: function(data) {
-							console.log('$$api.url("logs"): ', $$api.url('logs'));
-							console.log('data: ', data);
 							return $http({
 								method: 'POST',
 								url: $$api.url('logs'),
@@ -116,7 +114,6 @@
 					*/
 
 						sync: function(data) {
-							console.log('data: ', data);
 							return $http({
 								method: 'POST',
 								url: $$api.url('logs/sync'),

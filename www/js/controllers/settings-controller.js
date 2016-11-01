@@ -28,7 +28,12 @@
 				>> variables
 			*/
 
-				$scope.radius = 100;
+				if ($rootScope.options.debug) {
+					$scope.radius = 100;
+				}
+				else {
+					$scope.radius = 250;
+				}
 
 
 			/*
