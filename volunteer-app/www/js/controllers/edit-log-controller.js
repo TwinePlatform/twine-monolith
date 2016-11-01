@@ -102,8 +102,6 @@
 				// add to scope
 				$scope.formData = result.data;
 
-				console.log($scope.formData);
-
 				// preselect the correct hours and minutes based on duration (in raw minutes)
 				var hoursAndMinutes = $filter('hoursAndMinutesAsObject')($scope.formData.duration);
 				var hours = hoursAndMinutes.hours;
@@ -186,9 +184,6 @@
 			$scope.formSubmitted = false;
 			$scope.processForm = function(form) {
 
-				// log form data
-				console.log('$scope.formData: ', $scope.formData);
-				
 				// >>> validate form
 
 				// variable to show that form was submitted
@@ -196,9 +191,6 @@
 
 				// form is valid
 				if (form.$valid) {
-
-					console.log('form is valid');
-
 
 					// show loader
 					$ionicLoading.show();

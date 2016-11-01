@@ -6,8 +6,11 @@
 *    disable offline mode
 *    new log
 *    get logs
+*    get log
+*    edit log
 *    delete log
 *    generate offline id
+*    total hours
 */
 
 /*
@@ -15,7 +18,10 @@
 	  - handles all offline data interactions
 */
 
-	angular.module('app.services').factory('$$offline', function($rootScope, $localStorage, $filter, $$utilities) {
+	angular.module('app.services').factory('$$offline', function(
+		$rootScope, $localStorage, $filter, 
+		$$utilities
+	) {
 
 		var $$offline = {
 
@@ -139,6 +145,48 @@
 
 					    }
 					});
+				},
+
+			/*
+				>> save logs
+			*/
+
+				saveLogs: function(logs) {
+
+					console.log('logs: ', logs);
+
+					// clear offline logs data
+					$localStorage.offlineData.logs = [];
+
+					// filter out deleted logs
+					logs = $filter('filter')(logs, {
+						'deleted_at': null
+					});
+
+					console.log('logs: (filtered out deleted): ', logs );
+
+					// filter by organisation id
+					logs = $filter('filter')(logs, { 
+						'organisation_id': $localStorage.user.organisation_id
+					});
+					console.log('logs: (filtered by organisation_id): ', logs );
+
+					// loop through each log in the response and put back into offline data with a unique offline_id
+					for (i = 0; i < logs.length; i++) {
+
+						// duplicate the current log
+						var newOfflineLog = logs[i];
+
+						// add an offline_id to the log
+						newOfflineLog.offline_id = i + 1;
+
+						// push the log to $localStorage
+						$localStorage.offlineData.logs.push(newOfflineLog);
+
+					}
+
+					console.log('$localStorage.offlineData.logs: ', $localStorage.offlineData.logs);
+
 				},
 
 			/*

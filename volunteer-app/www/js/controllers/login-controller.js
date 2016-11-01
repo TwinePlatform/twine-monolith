@@ -74,7 +74,7 @@
 							// show unsuccess popup
 							var alertPopup = $ionicPopup.alert({
 							  	title: 'Error',
-							  	template: 'Login unsuccessful: ' + response.message,
+							  	template: 'Login unsuccessful: ' + result.message,
 							  	okText: 'OK',
 							  	okType: 'button-assertive',
 							  	cssClass: 'error'

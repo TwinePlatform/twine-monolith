@@ -131,8 +131,6 @@
 						var logsByOrganisation = $filter('filter')(allLogs, {'organisation_id' : $localStorage.user.organisation.id});
 						// filter by 'needs_pushing'
 						var logsThatNeedPushing = $filter('filter')(logsByOrganisation, {'needs_pushing' : true});
-						// $rootScope.logsThatNeedPushing = logsThatNeedPushing;
-						console.log('logsThatNeedPushing: ', logsThatNeedPushing);
 
 						var logsData = {
 							logs: logsThatNeedPushing
@@ -147,83 +145,17 @@
 						$$api.logs.sync($.param(logsData)).success(function(response) {
 							console.log('response: ', response);
 
+							// successful response
 							if (response.success) {
-
-								/*/// dummy response data - remove once syed has got the response sending back all the logs
-								var response = {
-									success: true,
-									message: "Logs processed successfully",
-									data: [
-										{  
-											"date_of_log":"2016-10-24 12:02:12",
-											"duration":60,
-											"user_id":"14",
-											"organisation_id":11,
-											"id":64
-										},
-										{  
-											"date_of_log":"2016-10-24 12:02:16",
-											"duration":120,
-											"user_id":"14",
-											"organisation_id":11,
-											"id":65
-										},
-										{  
-											"date_of_log":"2016-10-24 12:02:20",
-											"duration":180,
-											"user_id":"14",
-											"organisation_id":11,
-											"id":66
-										},
-										{  
-											"id":67,
-											"updated_at":"2016-10-24 12:35:31",
-											"created_at":"2016-10-24 11:02:41",
-											"duration":195,
-											"date_of_log":"2016-10-24 12:02:20",
-											"user_id":14,
-											"organisation_id":11,
-											"deleted_at":null
-										}
-									]
-								}*/
 
 								// show loader
 								$ionicLoading.show('Syncing');
 
-								// clear offline data
-								$localStorage.offlineData.logs = [];
-
 								// get response logs
 								var responseLogs = response.data;
 
-								console.log('responseLogs: ', responseLogs);
-
-								// filter out deleted logs
-								// responseLogs = $filter('filter')(responseLogs, '!deleted_at');
-
-								// filter by organisation id
-								responseLogs = $filter('filter')(responseLogs, {organisation_id: 14})
-								console.log('responseLogs filtered by organisation_id: ', responseLogs);
-
-								// setup an empty logs array
-								var newOfflineLogs = [];
-
-								// loop through each log in the response and put back into offline data with a unique offline_id
-								for (i = 0; i < responseLogs.length; i++) {
-
-									// duplicate the current log
-									var newOfflineLog = responseLogs[i];
-
-									// add an offline_id to the log
-									newOfflineLog.offline_id = i + 1;
-
-									// push the log to $localStorage
-									$localStorage.offlineData.logs.push(newOfflineLog);
-
-								}
-
-								console.log('$localStorage.offlineData.logs: ', $localStorage.offlineData.logs);
+								// save logs offline
+								$$offline.saveLogs(responseLogs);
 
 								// switch offline mode off
 								$$offline.disable();
@@ -238,12 +170,15 @@
 								$$shout('Data synced successfully!');
 
 							}
+							// unsuccessful response
+							else {
+								$$shout('Couldn\'t sync offline data');
+							}
 
 
 						}).error(function(data, error) {
 
-							// process connection error
-							// $$utilities.processConnectionError(data, error);
+							$$shout('Couldn\'t sync offline data');
 
 						});
 
@@ -264,7 +199,7 @@
 					}
 					// offline
 					else {
-						console.log('offline');
+						
 					}
 
 
