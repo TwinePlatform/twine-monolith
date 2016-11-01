@@ -2,6 +2,7 @@
 * CONTENTS
 *
 * utilities service
+*    setup localstorage
 *    get years options
 *    get hours options
 *    get minutes options
@@ -15,9 +16,37 @@
 	  - general utility functions
 */
 
-	angular.module('app.services').factory('$$utilities', function($ionicLoading, $filter, $$shout) {
+	angular.module('app.services').factory('$$utilities', function(
+		$localStorage, $ionicLoading, $filter, $rootScope, 
+		$$shout
+	) {
 
 		return {
+
+			/*
+				>> setup localstorage
+			*/
+
+				setupLocalStorage: function() {
+
+					// either enable or disable offline mode
+					if ($localStorage.offlineMode) {
+						$rootScope.offlineMode = true;
+					}
+					else {
+						$rootScope.offlineMode = false;
+						$localStorage.offlineMode = false;
+					}
+
+					// setup empty $localStorage array for offline data
+					if (!$localStorage.offlineData && $localStorage.user) {
+						$localStorage.offlineData = {
+							user_id: $localStorage.user.id,
+							logs: []
+						}
+					}
+
+				},			
 
 			/*
 				>> get years options

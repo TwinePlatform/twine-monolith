@@ -9,6 +9,30 @@
 
 		<!-- cordova script (this will be a 404 during development) -->
 		<script src="cordova.js"></script>
+		<script>
+		    // device live reload
+		    // to use, replace ip address below with your computer's ip address, 
+		    // set enabled to true, rebuild and run 'ionic serve --address [ip address]'
+		    var deviceLiveReload = {
+		        enabled:    false, // set to true only while in development
+		        ipAddress:  '10.0.1.46',
+		        port:       '8100'
+		    }
+		    // if device live reload is enabled (above)
+		    if (deviceLiveReload.enabled) {
+		    	// if we're not browsing your computer's ip address and port (i.e we're on the device's local file system)..
+		        if (window.location.href.indexOf('http://' + deviceLiveReload.ipAddress) === -1) {
+		        	// .. redirect to your local ip address and port
+		            window.location.href='http://' + deviceLiveReload.ipAddress + ':' + deviceLiveReload.port;
+		        }
+
+		        // if we are browsing your computer's local ip address AND we're on a mobile device, include the cordova files (so cordova plugins etc will work)
+		        var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+		        if (iOS && window.location.href.indexOf('http://' + deviceLiveReload.ipAddress) >= 0) {
+		            document.write('<script src="cordova-files/cordova.js"></scr' + 'ipt>');
+		        }
+		    }
+		</script>
 
     	<!-- compiled css output -->
 		<link href="css/ionic.app.css" rel="stylesheet">
