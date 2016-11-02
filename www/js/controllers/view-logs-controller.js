@@ -45,9 +45,7 @@
 						$scope.logs = result.data.logs;
 
 						// save logs offline
-						// $timeout(function(){
-						// 	$$offline.saveLogs(result.data.logs);
-						// }, 15000);
+						$$offline.saveLogs(result.data.logs);
 
 						// if no logs
 						if (result.data.logs.length == 0) {
@@ -80,6 +78,15 @@
 				// if offline mode, edit local log
 				if ($rootScope.offlineMode) {
 
+					$state.go('tabs.edit-log-offline', {
+						offline_id: log.offline_id
+					});
+
+				}
+				// if no internet connection, edit local log and enable offline mode
+				else if (!navigator.onLine) {
+
+					$$offline.enable();
 					$state.go('tabs.edit-log-offline', {
 						offline_id: log.offline_id
 					});

@@ -41,6 +41,7 @@ $subsize: $fontsize * 2;
 }
 .platform-android .has-subheader-organisation {
 	top: 122px;
+	bottom: 0;
 }
 
 // logo
@@ -109,6 +110,11 @@ select[disabled], .item-select-disabled:after {
 // offline mode
 .bar-subfooter.bar-offline-mode {
 	bottom: 49px;
+
+	.platform-android & {
+		bottom: 0;
+	}
+
 	.title {
 		font-size: 15px;
 	}
@@ -118,6 +124,9 @@ select[disabled], .item-select-disabled:after {
 		}
 	}
 }
-.offline-mode .scroll-content.has-tabs {
+.offline-mode.platform-ios .scroll-content.has-tabs {
     bottom: 94px;
+}
+.offline-mode.platform-android .scroll-content.has-tabs-top {
+    bottom: 44px;
 }

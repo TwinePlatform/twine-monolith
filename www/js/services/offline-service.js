@@ -120,6 +120,11 @@
 						data.offline_id = offline_id;
 					}
 
+					// remove delete_at attribute if equal to nothing (as this was causing logs to be deleted at the server side on subsequent syncs)
+					if (data.deleted_at === null) {
+						delete data.deleted_at;
+					}
+
 					// push new data back into $localStorage array
 					$localStorage.offlineData.logs.push(data);
 				},
@@ -163,13 +168,10 @@
 						'deleted_at': null
 					});
 
-					console.log('logs: (filtered out deleted): ', logs );
-
 					// filter by organisation id
 					logs = $filter('filter')(logs, { 
 						'organisation_id': $localStorage.user.organisation_id
 					});
-					console.log('logs: (filtered by organisation_id): ', logs );
 
 					// loop through each log in the response and put back into offline data with a unique offline_id
 					for (i = 0; i < logs.length; i++) {
@@ -180,12 +182,15 @@
 						// add an offline_id to the log
 						newOfflineLog.offline_id = i + 1;
 
+						// remove delete_at attribute if equal to nothing (as this was causing logs to be deleted at the server side on subsequent syncs)
+						if (newOfflineLog.deleted_at === null) {
+							delete newOfflineLog.deleted_at;
+						}
+
 						// push the log to $localStorage
 						$localStorage.offlineData.logs.push(newOfflineLog);
 
 					}
-
-					console.log('$localStorage.offlineData.logs: ', $localStorage.offlineData.logs);
 
 				},
 

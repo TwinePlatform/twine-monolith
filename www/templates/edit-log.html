@@ -46,11 +46,18 @@
             <!-- /duration -->
 
             <!-- id -->
-            <label class="item item-input ng-hideZ">
+            <label class="item item-input" ng-show="options.debug">
                 <span class="input-label">Log id</span>
-                <input type="text" ng-model="formData.id" name="user_id" id="user_id" />
+                <input type="text" ng-model="formData.id" name="id" id="id" />
             </label>
             <!-- /id -->
+
+            <!-- offline id -->
+            <label class="item item-input" ng-show="options.debug">
+                <span class="input-label">Offline id</span>
+                <input type="text" ng-model="formData.offline_id" name="offline_id" id="offline_id" />
+            </label>
+            <!-- /offline id -->
 
             <!-- buttons -->
             <button type="submit" class="button button-positive button-block button-outline">Save</a>
