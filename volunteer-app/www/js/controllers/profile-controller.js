@@ -222,7 +222,10 @@
 				// form is valid
 				if (form.$valid) {
 
-					// console.log('$scope.formData: ', $scope.formData);
+					console.log('form valid');
+
+					console.log('$localStorage.user.id: ', $localStorage.user.id);
+					console.log('$scope.formData: ', $scope.formData);
 
 					// >>> submit form data
 					$$api.user.save($localStorage.user.id, $.param($scope.formData)).success(function(response) {
@@ -263,6 +266,9 @@
 
 					}).error(function(data, error) {
 
+						// shout error
+						$$shout('Your account has not been approved'); // this is not specific enough
+
 						// hide click preventer
 						$$clickPreventer.hide();
 
@@ -273,6 +279,9 @@
 				}
 				// form is invalid
 				else {
+
+					console.log('form invalid');
+
 					// hide loader
 					$ionicLoading.hide();
 

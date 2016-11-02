@@ -94,6 +94,8 @@
 
 			$scope.displayLogData = function(result) {
 
+				console.log('result: ', result);
+
 				// set datepicker date
 				var picker = $datepickerInput.pickadate('picker');
 				var dateShort = result.data.date_of_log.substring(0,10);
@@ -118,6 +120,10 @@
 
 				// set the value of formData.minutes to that item
 				$scope.formData.minutes = $scope.minutes[minutePosition];
+
+				// get the offline_id for this log from $localStorage
+				var offlineLog =  $.grep($localStorage.offlineData.logs, function(e){ return e.id === $scope.formData.id; });
+				$scope.formData.offline_id = offlineLog[0].offline_id;
 
 				// log data has finished loading
 				$scope.logLoaded = true;
@@ -192,8 +198,15 @@
 				// form is valid
 				if (form.$valid) {
 
+					console.log('$scope.formData: ', $scope.formData);
+
 					// show loader
 					$ionicLoading.show();
+
+					// if no internet connection, switch to offline mode
+					if (!navigator.onLine) {
+						$$offline.enable();
+					}
 
 					// if offline mode, save to offline data and marks as needs_pushing
 					if ($rootScope.offlineMode) {

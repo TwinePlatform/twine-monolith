@@ -12151,7 +12151,8 @@ h1, h2, h3, h4 {
     line-height: 30px; }
 
 .platform-android .has-subheader-organisation {
-  top: 122px; }
+  top: 122px;
+  bottom: 0; }
 
 .logo {
   margin: 10px auto;
@@ -12200,13 +12201,18 @@ select[disabled], .item-select-disabled:after {
 
 .bar-subfooter.bar-offline-mode {
   bottom: 49px; }
+  .platform-android .bar-subfooter.bar-offline-mode {
+    bottom: 0; }
   .bar-subfooter.bar-offline-mode .title {
     font-size: 15px; }
   .bar-subfooter.bar-offline-mode .button.activated {
     background-color: #e42112; }
 
-.offline-mode .scroll-content.has-tabs {
+.offline-mode.platform-ios .scroll-content.has-tabs {
   bottom: 94px; }
+
+.offline-mode.platform-android .scroll-content.has-tabs-top {
+  bottom: 44px; }
 
 .register .input-label {
   font-size: 15px; }

@@ -22,7 +22,7 @@
 
 	angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services','app.filters','ngStorage',])
 	.run(function(
-		$ionicPlatform, $localStorage, $rootScope, $filter, $ionicModal, $ionicLoading, $state, 
+		$ionicPlatform, $localStorage, $rootScope, $filter, $ionicModal, $ionicLoading, $state, $window, 
 		$$api, $$offline, $$shout, $$utilities
 	) {
 
@@ -31,8 +31,8 @@
 		*/
 
 			$rootScope.options = {
-				debug: true,
-				environment: 'dev',	// dev | stage
+				debug: false,
+				environment: 'stage',	// dev | stage
 				apiBaseUrl: {
 					dev:   'http://powertochangeadmindev.stage2.reason.digital/api/v1/',
 					stage: 'http://powertochangeadmin.stage2.reason.digital/api/v1/'
@@ -141,47 +141,58 @@
 
 						console.log('logsData: ', logsData);
 
-						// sync offline logs
-						$$api.logs.sync($.param(logsData)).success(function(response) {
-							console.log('response: ', response);
+						console.log('$.param(logsData): ', $.param(logsData));
 
-							// successful response
-							if (response.success) {
+						// if we have logs that need syncing, sync them
+						if (logsData.logs.length > 0) {
 
-								// show loader
-								$ionicLoading.show('Syncing');
+							// sync offline logs
+							$$api.logs.sync($.param(logsData)).success(function(response) {
+								console.log('response: ', response);
 
-								// get response logs
-								var responseLogs = response.data;
+								// successful response
+								if (response.success) {
 
-								// save logs offline
-								$$offline.saveLogs(responseLogs);
+									// show loader
+									$ionicLoading.show('Syncing');
 
-								// switch offline mode off
-								$$offline.disable();
+									// get response logs
+									var responseLogs = response.data;
 
-								// reload current page
-								$state.reload();
+									// save logs offline
+									$$offline.saveLogs(responseLogs);
 
-								// hide loader
-								$ionicLoading.hide();
+									// switch offline mode off
+									$$offline.disable();
 
-								// inform user
-								$$shout('Data synced successfully!');
+									// reload current page
+									$state.reload();
 
-							}
-							// unsuccessful response
-							else {
+									// hide loader
+									$ionicLoading.hide();
+
+									// inform user
+									$$shout('Data synced successfully!');
+
+								}
+								// unsuccessful response
+								else {
+									$$shout('Couldn\'t sync offline data');
+								}
+
+
+							}).error(function(data, error) {
+
 								$$shout('Couldn\'t sync offline data');
-							}
 
+							});
 
-						}).error(function(data, error) {
-
-							$$shout('Couldn\'t sync offline data');
-
-						});
-
+						}
+						// if we don't have logs that need syncing, switch offline mode off (if we can)
+						else if (navigator.onLine) {
+							$$offline.disable();
+							$window.location.reload(true);
+						}
 
 					}
 

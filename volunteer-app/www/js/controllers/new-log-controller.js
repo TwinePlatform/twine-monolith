@@ -132,6 +132,7 @@
 						// >>> submit form
 						$$api.logs.new($.param($scope.formData)).success(function (result) {
 
+							console.log('result: ', result);
 
 							// hide loader
 							$ionicLoading.hide();
@@ -151,7 +152,7 @@
 							// create log unsuccessful
 							else {
 
-								$$shout('Could not create log.');
+								$$shout(result.message);
 
 							}
 
