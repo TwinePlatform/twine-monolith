@@ -12196,6 +12196,16 @@ h1, h2, h3, h4 {
 select[disabled], .item-select-disabled:after {
   opacity: 0.4; }
 
+.input-label {
+  font-size: 15px;
+  font-weight: 600; }
+
+.item-checkbox {
+  background-color: #eee;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0378B5; }
+
 .datepicker, input[readonly].datepicker {
   background-color: white; }
 
@@ -12213,9 +12223,6 @@ select[disabled], .item-select-disabled:after {
 
 .offline-mode.platform-android .scroll-content.has-tabs-top {
   bottom: 44px; }
-
-.register .input-label {
-  font-size: 15px; }
 
 .organisation-title {
   background: #00BACD;
@@ -12357,6 +12364,8 @@ select[disabled], .item-select-disabled:after {
   .view-logs .button-bar .button {
     min-height: 37px;
     margin-bottom: 0; }
+    .view-logs .button-bar .button:before {
+      margin-top: -2px; }
 
 .settings .item-divider p.wrap {
   white-space: normal;
