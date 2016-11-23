@@ -101,6 +101,16 @@ $subsize: $fontsize * 2;
 select[disabled], .item-select-disabled:after {
 	opacity: 0.4;
 }
+.input-label {
+	font-size: 15px;
+	font-weight: 600;
+}
+.item-checkbox {
+	background-color: #eee;
+	font-size: 15px;
+	font-weight: 600;
+	color: $positive;
+}
 
 // datepickers
 .datepicker, input[readonly].datepicker {

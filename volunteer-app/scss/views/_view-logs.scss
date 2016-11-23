@@ -52,6 +52,9 @@
 	    .button {
 	    	min-height: 37px;
 	    	margin-bottom: 0;
+	    	&:before {
+	    		margin-top: -2px;
+	    	}
 	    }
 	}
 }
