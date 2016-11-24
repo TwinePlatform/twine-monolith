@@ -6,7 +6,8 @@
 *      update overall total hours
 *      update last 7 days hours
 *      update last 30 days hours
-*      update chart and today's hours
+*      update chart
+*      update today's total hours
 *      update organisation summary
 *    generate chart
 *    custom tooltip
@@ -93,10 +94,8 @@
 					});
 
 				/*
-					>>> update chart and today's hours
+					>>> update chart
 				*/
-
-					$scope.todaysTotalHours = -1;
 
 					$scope.updateChart = function(result) {
 
@@ -139,9 +138,6 @@
 									var todaysDateCheck = new Date();
 									if (rawDateCheck.setHours(0,0,0,0) === todaysDateCheck.setHours(0,0,0,0)) {
 										var niceDate = counter + 'Today';
-
-										// add to todays total hours
-										$scope.todaysTotalHours += logs[i].duration;
 									}
 									// otherwise, use format Mon 5 Aug
 									else {
@@ -161,9 +157,6 @@
 									$scope.hours.push(0);
 								}
 							}
-
-							// add 1 to todaysTotalHours (it starts on -1)
-							$scope.todaysTotalHours++;
 
 						}
 
@@ -191,6 +184,20 @@
 							$$utilities.processConnectionError(result, error);
 						});
 					}
+
+
+				/*
+					>>> update today's total hours
+				*/
+
+					$scope.todaysTotalHours = -1;
+
+					$$api.user.totalHoursToday($localStorage.user.id).success(function (result) {
+						console.log('result: ', result);
+						$scope.todaysTotalHours = result.data.duration;
+					}).error(function (result, error) {
+						console.log('result: ', result);
+					});
 
 
 				/*

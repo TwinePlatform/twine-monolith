@@ -8,6 +8,7 @@
 *    get minutes options
 *    get current time as string
 *    get current date and time as string
+*    get date - first of month
 *    process connection error
 */
 
@@ -53,9 +54,10 @@
 			*/
 
 				getYearsOptions: function() {
-					years = [];
-					var highestYear = new Date().getFullYear(),
-						lowestYear = highestYear - 110;
+					var years = [],
+						minAge = 16,
+						highestYear = (new Date().getFullYear()) - minAge,
+						lowestYear = highestYear - (110 - minAge);
 					while(highestYear >= lowestYear) {
 						years.push(highestYear--);
 					}
@@ -128,6 +130,20 @@
 				getCurrentDateAndTimeAsString: function() {
 					var date = new Date();
 					return $filter('date')(date, 'yyyy-MM-dd HH:mm:ss');
+				},
+
+			/*
+				>> get date - first of month
+				   - gets the first date of the current month, e.g if it's 23rd December 2016, it'll return:
+				   - new Date(2016,11,1);
+			*/
+
+				getDateFirstOfMonth: function() {
+					var d = new Date(),
+						currentMonth = d.getMonth(),
+						currentYear = d.getFullYear(),
+						dateFirstOfMonth = new Date(currentYear,currentMonth,1);
+					return dateFirstOfMonth;
 				},
 
 			/*

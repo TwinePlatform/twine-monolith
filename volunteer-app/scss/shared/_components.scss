@@ -111,6 +111,13 @@ select[disabled], .item-select-disabled:after {
 	font-weight: 600;
 	color: $positive;
 }
+.item-input {
+	input, textarea {
+		&.text-right {
+			padding-right: 21px !important;
+		}
+	}
+}
 
 // datepickers
 .datepicker, input[readonly].datepicker {

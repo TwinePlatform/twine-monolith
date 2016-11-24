@@ -189,6 +189,18 @@
 							});
 						},
 
+					/*
+						>>> total hours today
+					*/
+
+						totalHoursToday: function(userId) {
+							var url = $$api.url('logs/user/' + userId + '/total/today')
+							return $http({
+								method: 'GET',
+								url: url
+							});
+						}
+
 				},
 
 			/*
