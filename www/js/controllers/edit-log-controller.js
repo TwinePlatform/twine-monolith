@@ -37,6 +37,7 @@
 		*/
 
 			var $datepickerInput = $('.editLog .datepicker').pickadate({
+				min: $$utilities.getDateFirstOfMonth(),
 				container: '.datepicker-container',
 				clear: false,
 				onSet: function(context) {

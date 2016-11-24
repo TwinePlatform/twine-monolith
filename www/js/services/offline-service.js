@@ -9,6 +9,7 @@
 *    get log
 *    edit log
 *    delete log
+*    save logs
 *    generate offline id
 *    total hours
 */

@@ -13,7 +13,7 @@
                 <!-- email -->
                 <label class="item item-input">
                     <span class="input-label">Email</span>
-                    <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" required>
+                    <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" ng-pattern="/^[\w.%+\-]+@[\w.\-]+\.[A-Za-z]{2,6}$/" required>
                 </label>
                 <label class="error block text-right padding assertive" ng-show="login.email.$invalid && formSubmitted" for="email">
                     Please enter a valid email address
@@ -23,10 +23,10 @@
                 <!-- password -->
                 <label class="item item-input">
                     <span class="input-label">Password</span>
-                    <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" required>
+                    <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="6" required>
                 </label>
                 <label class="error block text-right padding assertive" ng-show="login.password.$invalid && formSubmitted" for="password">
-                    Please enter a password
+                    Please enter at least 6 characters
                 </label>
                 <!-- /password -->
 

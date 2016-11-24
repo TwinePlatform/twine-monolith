@@ -14,7 +14,7 @@
 	    	            <span class="input-label">Full name</span>
 	    	            <input type="text" name="name" id="name" placeholder="E.g. Jon Smith" ng-model="formData.name" required>
 	    	        </label>
-	    	        <label class="error block text-right padding assertive" ng-show="register.name.$invalid && formSubmitted" for="name">
+	    	        <label class="error block text-right padding assertive" ng-show="user.name.$invalid && formSubmitted" for="name">
 	    	            Please enter your full name
 	    	        </label>
 	    	        <!-- /name -->
@@ -22,9 +22,9 @@
 	    	        <!-- email -->
 	    	        <label class="item item-input">
 	    	            <span class="input-label">Email</span>
-	    	            <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" required>
+	    	            <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" ng-pattern="/^[\w.%+\-]+@[\w.\-]+\.[A-Za-z]{2,6}$/" required>
 	    	        </label>
-	    	        <label class="error block text-right padding assertive" ng-show="register.email.$invalid && formSubmitted" for="email">
+	    	        <label class="error block text-right padding assertive" ng-show="user.email.$invalid && formSubmitted" for="email">
 	    	            Please enter a valid email address
 	    	        </label>
 	    	        <!-- /email -->
@@ -36,10 +36,10 @@
 	    	        <!-- password -->     
 	    	        <label class="item item-input" ng-if="changePassword">
 	    	            <span class="input-label">New password</span>
-	    	            <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" required>
+	    	            <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="6" required>
 	    	        </label>
-	    	        <label class="error block text-right padding assertive" ng-show="register.password.$invalid && formSubmitted" for="password">
-	    	            Please enter a password
+	    	        <label class="error block text-right padding assertive" ng-show="user.password.$invalid && formSubmitted" for="password">
+	    	            Please enter at least 6 characters
 	    	        </label>
 	    	        <!-- /password -->
 
@@ -48,10 +48,10 @@
 	    	        <!-- phone -->
 	    	        <label class="item item-input">
 	    	            <span class="input-label">Phone</span>
-	    	            <input type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" minlength="6" maxlength="15" ng-pattern="/^([0-9|+|*|#]+)$/" required>
+	    	            <input class="text-right" type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" minlength="6" maxlength="15" ng-pattern="/^([0-9|+|*|#|\-]+)$/" required>
 	    	        </label>
-	    	        <label class="error block text-right padding assertive" ng-show="register.phone.$invalid && formSubmitted" for="phone">
-	    	            Please enter only digits or these symbols: *+# (between 6 and 15 characters in length)
+	    	        <label class="error block text-right padding assertive" ng-show="user.phone.$invalid && formSubmitted" for="phone">
+	    	            Please enter only digits or these symbols: *+#- (between 6 and 15 characters in length)
 	    	        </label>
 	    	        <!-- /phone -->
 
@@ -63,7 +63,7 @@
 	    	                <!--  -->
 	    	            </select>
 	    	        </label>
-	    	        <label class="error block text-right padding assertive" ng-show="register.yearOfBirth.$invalid && formSubmitted" for="yearOfBirth">
+	    	        <label class="error block text-right padding assertive" ng-show="user.yearOfBirth.$invalid && formSubmitted" for="yearOfBirth">
 	    	            Please select your year of birth
 	    	        </label>
 	    	        <!-- /year of birth -->
@@ -76,7 +76,7 @@
 	    	                <!--  -->
 	    	            </select>
 	    	        </label>
-	    	        <label class="error block text-right padding assertive" ng-show="register.gender.$invalid && formSubmitted" for="gender">
+	    	        <label class="error block text-right padding assertive" ng-show="user.gender.$invalid && formSubmitted" for="gender">
 	    	            Please select your gender
 	    	        </label>
 	    	        <!-- /gender -->
@@ -91,7 +91,7 @@
 	    	                <!--  -->
 	    	            </select>
 	    	        </label>
-	    	        <label class="error block text-right padding assertive" ng-show="register.region.$invalid && formSubmitted" for="region">
+	    	        <label class="error block text-right padding assertive" ng-show="user.region.$invalid && formSubmitted" for="region">
 	    	            Please select a region
 	    	        </label>
 	    	        <!-- /region -->
@@ -104,7 +104,7 @@
 	    	                <!--  -->
 	    	            </select>
 	    	        </label>
-	    	        <label class="error block text-right padding assertive" ng-show="register.organisation.$invalid && formSubmitted" for="organisation">
+	    	        <label class="error block text-right padding assertive" ng-show="user.organisation.$invalid && formSubmitted" for="organisation">
 	    	            Please select an organisation
 	    	        </label>
 	    	        <!-- /organisation -->

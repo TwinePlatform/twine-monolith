@@ -35,6 +35,7 @@
 		*/
 
 			$('#createLog .datepicker').pickadate({
+				min: $$utilities.getDateFirstOfMonth(),
 				date: new Date(),
 				container: '.datepicker-container',
 				clear: false,
@@ -71,6 +72,7 @@
 		*/
 
 			$scope.minutes = $$utilities.getMinutesOptions();
+
 
 		/*
 			>> calculate duration

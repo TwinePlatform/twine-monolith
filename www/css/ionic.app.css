@@ -12206,6 +12206,9 @@ select[disabled], .item-select-disabled:after {
   font-weight: 600;
   color: #0378B5; }
 
+.item-input input.text-right, .item-input textarea.text-right {
+  padding-right: 21px !important; }
+
 .datepicker, input[readonly].datepicker {
   background-color: white; }
 
