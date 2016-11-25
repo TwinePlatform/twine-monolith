@@ -44,6 +44,21 @@
 						// update logs in view
 						$scope.logs = result.data.logs;
 
+						// loop through each log and disable logs from previous months
+						var dateFirstOfMonth = $$utilities.getDateFirstOfMonth();
+						for (i = 0; i < $scope.logs.length; i++) {
+							console.log('$scope.logs[i]: ', $scope.logs[i]);
+							// convert sql date to js date so we can compare with dateFirstOfMonth
+							var sqlDateOfLog = $scope.logs[i].date_of_log;
+							var jsDateOfLog = $$utilities.sqlDateToJSDate(sqlDateOfLog);
+							console.log('sqlDateOfLog: ', sqlDateOfLog);
+							console.log('jsDateOfLog: ', jsDateOfLog);
+							// if log date is less than dateFirstOfMonth, flag it as previous month
+							if (jsDateOfLog < dateFirstOfMonth) {
+								$scope.logs[i].previous_month = true;
+							}
+						}
+
 						// save logs offline
 						$$offline.saveLogs(result.data.logs);
 

@@ -15,6 +15,7 @@
 *      save user
 *      register user
 *      total hours
+*      total hours today
 *    genders
 *      get genders
 *    regions

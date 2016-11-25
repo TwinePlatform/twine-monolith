@@ -22,8 +22,8 @@
                 <p ng-if="options.debug">id: {{ log.id }}</p>
                 <div class="button-bar">
                     <!-- <a ng-if="!log.deleted_at" href="#/tab/edit-log/{{ log.id }}" class="button button-positive button-block button-clear icon-left ion-edit">Edit</a> -->
-                    <a ng-if="!log.deleted_at" class="button button-positive button-block button-clear icon-left ion-edit" ng-click="edit(log)">Edit</a>
-                    <button ng-if="!log.deleted_at" class="button button-positive button-block button-clear icon-left ion-android-delete" ng-click="delete(log)">Delete</button>
+                    <a ng-if="!log.deleted_at" class="button button-positive button-block button-clear icon-left ion-edit" ng-click="edit(log)" ng-disabled="log.previous_month">Edit</a>
+                    <button ng-if="!log.deleted_at" class="button button-positive button-block button-clear icon-left ion-android-delete" ng-click="delete(log)" ng-disabled="log.previous_month">Delete</button>
                     <span ng-if="log.deleted_at" class="button button-positive button-block button-clear">Deleted</span>
                 </div>
             </ion-item>

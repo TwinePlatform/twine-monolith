@@ -25,6 +25,12 @@
 	) {
 
 		/*
+			>> get a link to $localStorage
+		*/
+
+			$scope.$storage = $localStorage;
+
+		/*
 			>> refresh dashboard
 		*/
 
@@ -193,7 +199,6 @@
 					$scope.todaysTotalHours = -1;
 
 					$$api.user.totalHoursToday($localStorage.user.id).success(function (result) {
-						console.log('result: ', result);
 						$scope.todaysTotalHours = result.data.duration;
 					}).error(function (result, error) {
 						console.log('result: ', result);

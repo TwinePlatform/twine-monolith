@@ -147,6 +147,21 @@
 				},
 
 			/*
+				>> sql date to js date
+				   - e.g. an input of 2016-11-25 13:12:01 will return new Date(2016,10,25,13,12,01)
+			*/
+
+				sqlDateToJSDate: function(sqlDate) {
+					// split timestamp into [ Y, M, D, h, m, s ]
+					var sqlDateArray = sqlDate.split(/[- :]/);
+
+					// apply each elemetn to the date function
+					var jsDate = new Date(Date.UTC(sqlDateArray[0], sqlDateArray[1]-1, sqlDateArray[2], sqlDateArray[3], sqlDateArray[4], sqlDateArray[5]));
+
+					return jsDate;
+				},
+
+			/*
 				>> process connection error
 			*/
 

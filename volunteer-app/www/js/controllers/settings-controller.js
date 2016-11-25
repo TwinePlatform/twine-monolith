@@ -287,6 +287,7 @@
 
 				$scope.logOut = function() {
 					delete $localStorage.user;
+					delete $localStorage.offlineData;
 					$state.go('login');
 				}
 

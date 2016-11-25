@@ -37,6 +37,10 @@
 				apiBaseUrl: {
 					dev:   'http://powertochangeadmindev.stage2.reason.digital/api/v1/',
 					stage: 'http://powertochangeadmin.stage2.reason.digital/api/v1/'
+				},
+				adminBaseUrl: {
+					dev:   'http://powertochangeadmindev.stage2.reason.digital/',
+					stage: 'http://powertochangeadmin.stage2.reason.digital/'
 				}
 			}
 			
