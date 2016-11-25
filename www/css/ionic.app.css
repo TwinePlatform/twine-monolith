@@ -12292,13 +12292,15 @@ select[disabled], .item-select-disabled:after {
   font-size: 12px;
   opacity: 0.8; }
 
-.organisation-summary {
+.summary-box {
   background-color: rgba(0, 131, 186, 0.7);
   padding: 5px;
   margin-right: 10px;
   margin-left: 10px;
   color: white;
   font-size: 14px; }
+  .summary-box i {
+    font-size: 16px; }
 
 .button-add {
   width: 80px;

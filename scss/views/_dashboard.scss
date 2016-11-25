@@ -80,14 +80,17 @@
 	}
 }
 
-// organisation summary
-.organisation-summary {
+// summary box
+.summary-box {
 	background-color: rgba(0, 131, 186, 0.7);
 	padding: 5px;
 	margin-right: 10px;
 	margin-left: 10px;
 	color: white;
 	font-size: 14px;
+	i {
+		font-size: 16px;
+	}
 }
 
 .button-add {

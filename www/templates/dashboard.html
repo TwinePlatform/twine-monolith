@@ -61,11 +61,18 @@
 
         <div class="spacer-10"></div>
 
-        <!-- .organisation-summary -->
-        <div class="organisation-summary text-center" ng-if="totalUsers && totalVolunteeredMinutes && !offlineMode">
+        <!-- .summary-box -->
+        <div class="summary-box text-center" ng-if="totalUsers && totalVolunteeredMinutes && !offlineMode && $storage.user.status !== 'pending'">
             Last week, <strong>{{ totalUsers || 0}} <span ng-if="totalUsers > 1">people</span><span ng-if="totalUsers === 1">person</span></strong> gave <strong><span ng-bind-html="totalVolunteeredMinutes | hoursAndMinutesAsString">0 min</span> </strong>to <strong>{{ organisationName }}</strong>
         </div>
-        <!-- /.organisation-summary -->
+        <!-- /.summary-box -->
+
+        <!-- pending approval box -->
+        <div class="summary-box text-center" ng-if="$storage.user.status === 'pending'">
+            <i class="ion-information-circled"></i>
+            Your account is pending approval by {{ organisationName }}
+        </div>
+        <!-- /.pending approval box -->
 
         <a ui-sref="tabs.new-log" class="button button-positive button-block button-outline icon-left ion-plus button-add">
             <span>Log hours</span>
