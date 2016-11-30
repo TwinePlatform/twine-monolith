@@ -6,6 +6,7 @@
 *    process the form
 *      validate form
 *      submit login form
+*    forgot password
 */
 
 /*
@@ -105,7 +106,7 @@
 
 				if (window.cordova) {
 					var forgotPasswordUrl = $rootScope.options.adminBaseUrl[$rootScope.options.environment] + 'password/reset';
-					window.open(forgotPasswordUrl, '_blank', 'location=no');
+					window.open(forgotPasswordUrl, '_blank', 'location=no,clearcache=yes,clearsessioncache=yes');
 				}
 
 			};

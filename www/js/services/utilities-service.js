@@ -9,7 +9,11 @@
 *    get current time as string
 *    get current date and time as string
 *    get date - first of month
+*    sql date to js date
+*    js date to sql date
+*    js date to sql date and time
 *    process connection error
+*    zero pad number
 */
 
 /*
@@ -18,11 +22,11 @@
 */
 
 	angular.module('app.services').factory('$$utilities', function(
-		$localStorage, $ionicLoading, $filter, $rootScope, 
+		$localStorage, $ionicLoading, $filter, $rootScope, $state, 
 		$$shout
 	) {
 
-		return {
+		var $$utilities = {
 
 			/*
 				>> setup localstorage
@@ -162,29 +166,105 @@
 				},
 
 			/*
+				>> js date to sql date
+				   - e.g. an input of new Date(2016,10,25,13,12,01) will return 2016-11-25
+			*/
+
+				jsDateToSqlDate: function(jsDate) {
+					
+					var year = jsDate.getFullYear(),
+						month = $$utilities.zeroPad(jsDate.getMonth() + 1, 2),
+						day = $$utilities.zeroPad(jsDate.getDate(), 2),
+						hours = $$utilities.zeroPad(jsDate.getHours(), 2),
+						minutes = $$utilities.zeroPad(jsDate.getMinutes(), 2),
+						seconds = $$utilities.zeroPad(jsDate.getSeconds(), 2);
+
+					sqlDate = year + '-' + month + '-' + day;
+
+					return sqlDate;
+				},
+
+			/*
+				>> js date to sql date and time
+				   - e.g. an input of new Date(2016,10,25,13,12,01) will return 2016-11-25 13:12:01
+			*/
+
+				jsDateToSqlDateAndTime: function(jsDate) {
+					
+					var year = jsDate.getFullYear(),
+						month = $$utilities.zeroPad(jsDate.getMonth() + 1, 2),
+						day = $$utilities.zeroPad(jsDate.getDate(), 2),
+						hours = $$utilities.zeroPad(jsDate.getHours(), 2),
+						minutes = $$utilities.zeroPad(jsDate.getMinutes(), 2),
+						seconds = $$utilities.zeroPad(jsDate.getSeconds(), 2);
+
+					sqlDate = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+
+					return sqlDateAndTime;
+				},
+
+			/*
+				>> log out
+			*/
+
+				logOut: function(message) {
+					$ionicLoading.hide();
+					if (message) {
+						$$shout(message);
+					}
+					delete $localStorage.user;
+					delete $localStorage.offlineData;
+					$state.go('login');
+				},
+
+
+			/*
 				>> process connection error
 			*/
 
-				processConnectionError: function(data, error) {
+				processConnectionError: function(result, error) {
 
 					// hide loader
 					$ionicLoading.hide();
 
-					// no internet connection
-					if (error === 0) {
-						// $$shout('Could not connect. Please check your internet connection & try again.', 3000);
+					// if user does not exist, log user out
+					if (error === 404) {
+						$$utilities.logOut('This user account no longer exists.');
 					}
-					// resource not found
-					else if (error === 404) {
-						// $$shout('Could not connect. Please check your internet connection & try again.', 3000);
-					}
-					// other error
 					else {
-						// $$shout('Could not connect. Please check your internet connection & try again.', 3000);
+
+						// no internet connection
+						if (error === 0) {
+							// $$shout('Could not connect. Please check your internet connection & try again.', 3000);
+						}
+						// resource not found
+						else if (error === 404) {
+							// $$shout('Could not connect. Please check your internet connection & try again.', 3000);
+						}
+						// other error
+						else {
+							// $$shout('Could not connect. Please check your internet connection & try again.', 3000);
+						}
+
 					}
 
+				},
+
+			/*
+				>> zero pad number
+				   - adds leading zeroes to a number
+			*/
+
+				zeroPad: function(num, count) {
+					var numZeropad = num + '';
+					while(numZeropad.length < count) {
+						numZeropad = "0" + numZeropad;
+					}
+					return numZeropad;
 				}
 
 		}
+
+		return $$utilities;
 
 	})

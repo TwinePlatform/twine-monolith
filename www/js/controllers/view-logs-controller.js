@@ -31,15 +31,11 @@
 					// update logs in view
 					$scope.logs = $$offline.getLogs();
 
-					// console.log('$scope.logs: ', $scope.logs);
-
 				}
 
 				// else get logs from api
 				else {
 					$$api.logs.getLogs($localStorage.user.id).success(function (result) {
-
-						console.log('getLogs');
 
 						// update logs in view
 						$scope.logs = result.data.logs;
@@ -47,12 +43,9 @@
 						// loop through each log and disable logs from previous months
 						var dateFirstOfMonth = $$utilities.getDateFirstOfMonth();
 						for (i = 0; i < $scope.logs.length; i++) {
-							console.log('$scope.logs[i]: ', $scope.logs[i]);
 							// convert sql date to js date so we can compare with dateFirstOfMonth
 							var sqlDateOfLog = $scope.logs[i].date_of_log;
 							var jsDateOfLog = $$utilities.sqlDateToJSDate(sqlDateOfLog);
-							console.log('sqlDateOfLog: ', sqlDateOfLog);
-							console.log('jsDateOfLog: ', jsDateOfLog);
 							// if log date is less than dateFirstOfMonth, flag it as previous month
 							if (jsDateOfLog < dateFirstOfMonth) {
 								$scope.logs[i].previous_month = true;
@@ -68,15 +61,23 @@
 						}
 
 					}).error(function (result, error) {
-						
-						// enable offline mode
-						$$offline.enable();
 
-						// update logs in view
-						$scope.logs = $$offline.getLogs();
+						// if user does not exist, log user out
+						if (error === 404) {
+							$$utilities.logOut('This user account no longer exists.');
+						}
+						else {
 
-						// process connection error
-						$$utilities.processConnectionError(result, error);
+							// enable offline mode
+							$$offline.enable();
+
+							// update logs in view
+							$scope.logs = $$offline.getLogs();
+
+							// process connection error
+							$$utilities.processConnectionError(result, error);
+							
+						}
 
 					});
 				}
@@ -172,19 +173,27 @@
 							  			$$shout('Log deleted');
 
 							  		}).error(function (result, error) {
-							  			
-							  			// enable offline mode
-							  			$$offline.enable();
 
-							  			// delete log offline
-							  			$scope.deleteLogOffline({ id: id, idKey: 'id'}, true, 'Log deleted offline.');
+	  									// if user does not exist, log user out
+										if (error === 404) {
+											$$utilities.logOut('This user account no longer exists.');
+										}
+										else {
 
-							  			// make it look deleted & needing to push
-							  			log.deleted_at = $$utilities.getCurrentDateAndTimeAsString();
-							  			log.needs_pushing = true;
+								  			// enable offline mode
+								  			$$offline.enable();
 
-							  			// process connection error
-							  			$$utilities.processConnectionError(result, error);
+								  			// delete log offline
+								  			$scope.deleteLogOffline({ id: id, idKey: 'id'}, true, 'Log deleted offline.');
+
+								  			// make it look deleted & needing to push
+								  			log.deleted_at = $$utilities.getCurrentDateAndTimeAsString();
+								  			log.needs_pushing = true;
+
+								  			// process connection error
+								  			$$utilities.processConnectionError(result, error);
+
+								  		}
 
 							  		});
 

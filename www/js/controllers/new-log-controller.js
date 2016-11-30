@@ -3,6 +3,7 @@
 *
 * new log controller
 *    store the form data
+*    update total duration logged this date
 *    setup datepickers
 *    populate hours dropdown
 *    populate minutes dropdown
@@ -19,7 +20,7 @@
 */
 
 	angular.module('app.controllers').controller('NewLogController', function (
-		$scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope, 
+		$scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope, $timeout, 
 		$$api, $$utilities, $$shout, $$offline
 	) {
 
@@ -29,6 +30,23 @@
 
 			$scope.formData = {};
 
+
+		/*
+			>> update total duration logged this date 
+		*/
+
+			$scope.calculateTotalDurationThisDate = function() {
+				
+				var sqlDate = $scope.formData.date_of_log.split(' ')[0];
+
+				$$api.user.totalHoursForDay($localStorage.user.id, sqlDate).success(function(result) {
+					if ($scope.formData.duration === undefined) {
+						$scope.formData.duration = 0;
+					}
+					$scope.formData.totalDurationThisDate = result.data.duration + $scope.formData.duration;
+				});
+
+			}
 
 		/*
 			>> setup datepickers
@@ -56,6 +74,10 @@
 
 					// add current time
 					$scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + $$utilities.getCurrentTimeAsString();
+
+					$timeout(function() {
+						$scope.calculateTotalDurationThisDate();
+					}, 300);
 				}
 			});
 
@@ -91,6 +113,9 @@
 
 				// get total minutes integer & update form
 				$scope.formData.duration = $filter('minutesFromHoursAndMinutes')(hours, minutes);
+
+				// update total duration for this date
+				$scope.calculateTotalDurationThisDate();
 
 			}
 
@@ -134,15 +159,11 @@
 						// >>> submit form
 						$$api.logs.new($.param($scope.formData)).success(function (result) {
 
-							console.log('result: ', result);
-
 							// hide loader
 							$ionicLoading.hide();
 
 							// create log successful
 							if (result.success) {
-
-								console.log('result.data: ', result.data);
 
 								// push to offline data
 								$scope.newLogOffline(result.data);

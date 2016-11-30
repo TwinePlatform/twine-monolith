@@ -2,7 +2,9 @@
 * CONTENTS
 *
 * dashboard controller
+*    get a link to $localStorage
 *    refresh dashboard
+*      update status (pending / approved)
 *      update overall total hours
 *      update last 7 days hours
 *      update last 30 days hours
@@ -35,6 +37,21 @@
 		*/
 
 			$scope.refreshDashboard = function() {
+
+				/*
+					>>> update status (pending / approved)
+				*/
+
+					$$api.user.get($localStorage.user.id).success(function(result) {
+						$scope.$storage.user.status = result.data.status;
+					}).error(function (result, error) {
+							
+						// process connection error
+						$$utilities.processConnectionError(result, error);
+
+					});
+
+
 
 				/*
 					>>> update overall total hours
@@ -198,10 +215,12 @@
 
 					$scope.todaysTotalHours = -1;
 
-					$$api.user.totalHoursToday($localStorage.user.id).success(function (result) {
+					// get today's date in sql format yyyy-mm-dd
+					var todaysDate = $$utilities.jsDateToSqlDate(new Date());
+
+					$$api.user.totalHoursForDay($localStorage.user.id, todaysDate).success(function (result) {
 						$scope.todaysTotalHours = result.data.duration;
 					}).error(function (result, error) {
-						console.log('result: ', result);
 					});
 
 

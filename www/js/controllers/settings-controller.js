@@ -18,7 +18,9 @@
 */
 
 	angular.module('app').controller('SettingsController', 
-	function ($scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope, $$api, $$shout
+	function (
+		$scope, $stateParams, $http, $ionicPopup, $ionicLoading, $ionicPlatform, $localStorage, $state, $rootScope,
+		$$api, $$shout, $$utilities
 	) {
 
 
@@ -284,11 +286,8 @@
 			/*
 				>> log out
 			*/
-
 				$scope.logOut = function() {
-					delete $localStorage.user;
-					delete $localStorage.offlineData;
-					$state.go('login');
+					$$utilities.logOut();
 				}
 
 		});

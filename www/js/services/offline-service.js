@@ -63,7 +63,6 @@
 
 					// set id to empty string if it doesn't exist
 					if (data.id === undefined) {
-						console.log('data.id undefined, set it to ""');
 						data.id = '';
 					}
 
@@ -109,7 +108,6 @@
 					    if ($localStorage.offlineData.logs[i][idObject.idKey] === idObject.id) { 
 					    	// grab offline id for later
 					    	var offline_id = $localStorage.offlineData.logs[i].offline_id;
-					    	console.log('offline_id: ', offline_id);
 					    	// delete it
 					        $localStorage.offlineData.logs.splice(i,1);
 					        break;
@@ -158,8 +156,6 @@
 			*/
 
 				saveLogs: function(logs) {
-
-					console.log('logs: ', logs);
 
 					// clear offline logs data
 					$localStorage.offlineData.logs = [];
