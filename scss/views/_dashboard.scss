@@ -60,11 +60,12 @@
 // hours summary
 .hours-summary {
 	.hours-summary-today {
-		border: 1px solid rgba(#025783, 0.5);
+		border: none;
+		background-color: $grey-light;
 		margin-bottom: 10px;
 		padding-top: 10px;
 		padding-bottom: 10px;
-		color: #025783;
+		color: $positive;
 	}
 	.hours-summary-other {
 		border: 1px solid transparent;
@@ -82,12 +83,13 @@
 
 // summary box
 .summary-box {
-	background-color: rgba(0, 131, 186, 0.7);
+	background-color: #666;
 	padding: 5px;
 	margin-right: 10px;
 	margin-left: 10px;
 	color: white;
 	font-size: 14px;
+	font-weight: 700;
 	i {
 		font-size: 16px;
 	}
@@ -124,7 +126,7 @@
 		display: block;
 		position: absolute;
 		top: $add-size - 10;
-		font-size: 13px;
+		font-size: 11px;
 		text-align: center;
 		width: 100%;
 	}

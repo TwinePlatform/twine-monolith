@@ -2,6 +2,10 @@
 .view-logs {
 
 	.item {
+	
+		.icon {
+			color: $positive;
+		}
 
 		&.needs-pushing {
 			background-color: cornsilk;

@@ -16,7 +16,11 @@ $dark:                            #444 !default;
 */
 
 // color customizations
-$positive: #0378B5 !default;
+// $positive: #0378B5 !default;
+$positive: #8000ff !default;
+$energized: #ffbe00 !default;
+$grey-light: #f8f8f9;
+$grey-medium: #706f6f;
 
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
@@ -28,6 +32,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 @import 'plugins/animate';
 
 // shared
+@import 'shared/fonts';
 @import 'shared/helpers';
 @import 'shared/text';
 @import 'shared/components';
