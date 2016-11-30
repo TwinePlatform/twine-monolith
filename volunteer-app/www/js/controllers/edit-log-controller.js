@@ -3,6 +3,7 @@
 *
 * edit log controller
 *    variables
+*    update total duration logged this date
 *    setup datepickers
 *    show loader
 *    populate hours dropdown
@@ -21,7 +22,7 @@
 */
 
 	angular.module('app.controllers').controller('EditLogController', function (
-		$scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope, 
+		$scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope, $timeout, 
 		$$api, $$utilities, $$shout, $$offline
 	) {
 
@@ -31,6 +32,25 @@
 
 			$scope.formData = {};
 			$scope.logLoaded = false;
+
+
+		/*
+			>> update total duration logged this date 
+		*/
+
+			$scope.calculateTotalDurationThisDate = function() {
+				
+				var sqlDate = $scope.formData.date_of_log.split(' ')[0];
+
+				$$api.user.totalHoursForDay($localStorage.user.id, sqlDate).success(function(result) {
+					if ($scope.formData.duration === undefined) {
+						$scope.formData.duration = 0;
+					}
+					$scope.formData.totalDurationThisDate = result.data.duration - $scope.initialDuration + $scope.formData.duration;
+				});
+
+			}
+
 
 		/*
 			>> setup datepickers
@@ -46,6 +66,10 @@
 
 					// add current time
 					$scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + $$utilities.getCurrentTimeAsString();
+
+					$timeout(function() {
+						$scope.calculateTotalDurationThisDate();
+					}, 300);
 				}
 			});
 
@@ -85,6 +109,9 @@
 
 				// get total minutes integer & update form
 				$scope.formData.duration = $filter('minutesFromHoursAndMinutes')(hours, minutes);
+
+				// update total duration for this date
+				$scope.calculateTotalDurationThisDate();
 
 			}
 
@@ -159,6 +186,11 @@
 				// get log from api
 				$$api.logs.getLog($scope.logId).success(function (result) {
 					
+					// set initial duration (used for making sure user can't log more than 24 hours)
+					if (angular.isUndefined($scope.initialDuration)) {
+						$scope.initialDuration = result.data.duration;
+					}
+
 					$scope.displayLogData(result);
 
 				}).error(function (result, error) {
@@ -232,6 +264,8 @@
 						// >>> submit edit log form
 						$$api.logs.edit($scope.formData.id, $.param($scope.formData)).success(function (result) {
 
+							console.log($scope.formData);
+
 							// create log successful
 							if (result.success) {
 
@@ -256,18 +290,26 @@
 
 							}
 
-						}).error(function(data, error) {
+						}).error(function(result, error) {
 
-							$$shout('Could not edit log. Please try again in offline mode.');
+							// if user does not exist, log user out
+							if (error === 404) {
+								$$utilities.logOut('This user account no longer exists.');
+							}
+							else {
 
-							// enable offline mode
-							$$offline.enable();
+								$$shout('Could not edit log. Please try again in offline mode.');
 
-							// go back to view logs
-							$state.go('tabs.view-logs');
+								// enable offline mode
+								$$offline.enable();
 
-							// process connection error
-							$$utilities.processConnectionError(data, error);
+								// go back to view logs
+								$state.go('tabs.view-logs');
+
+								// process connection error
+								$$utilities.processConnectionError(data, error);
+
+							}
 
 						});
 

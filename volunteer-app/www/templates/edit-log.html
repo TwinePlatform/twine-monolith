@@ -10,7 +10,7 @@
                 <span class="input-label">Date</span>
                 <input type="text" name="date_pretty" id="date_pretty" ng-model="formData.date_pretty" class="datepicker">
             </label>
-            <label class="error block text-right padding assertive" ng-show="createLog.date.$invalid && formSubmitted" for="date">
+            <label class="error block text-right padding assertive" ng-show="editLog.date.$invalid && formSubmitted" for="date">
                 Please select a date
             </label>
             <!-- /date -->
@@ -36,7 +36,17 @@
             <label class="error block text-right padding assertive" ng-show="editLog.duration.$invalid && formSubmitted" for="hours">
                 Please select a duration of at least 5 minutes
             </label>
+            <label class="error block text-right padding assertive" ng-show="editLog.totalDurationToday.$invalid && formSubmitted" for="hours">
+                You cannot log more than 24 hours in a day.
+            </label>
             <!-- /minutes -->
+
+            <!-- total logged on this date -->
+            <label class="item item-input ng-hide">
+                <span class="input-label">Total logged on this date</span>
+                <input type="number" ng-model="formData.totalDurationThisDate" id="totalDurationToday" name="totalDurationToday" ng-max="24 * 60">
+            </label>
+            <!-- /total logged on this date -->
 
             <!-- duration -->
             <label class="item item-input ng-hide">

@@ -15,7 +15,7 @@
 *      save user
 *      register user
 *      total hours
-*      total hours today
+*      total hours for a day
 *    genders
 *      get genders
 *    regions
@@ -133,6 +133,18 @@
 				user: {
 
 					/*
+						>>> get
+					*/
+
+						get: function(userId) {
+							return $http({
+								method: 'GET',
+								url: $$api.url('users/' + userId),
+								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+							});
+						},
+
+					/*
 						>>> login
 					*/
 
@@ -191,11 +203,11 @@
 						},
 
 					/*
-						>>> total hours today
+						>>> total hours for a day
 					*/
 
-						totalHoursToday: function(userId) {
-							var url = $$api.url('logs/user/' + userId + '/total/today')
+						totalHoursForDay: function(userId, date) {
+							var url = $$api.url('logs/user/' + userId + '/total/date/' + date)
 							return $http({
 								method: 'GET',
 								url: url

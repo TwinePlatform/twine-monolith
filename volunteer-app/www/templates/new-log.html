@@ -38,7 +38,17 @@
             <label class="error block text-right padding assertive" ng-show="createLog.duration.$invalid && formSubmitted" for="hours">
                 Please select a duration of at least 5 minutes
             </label>
+            <label class="error block text-right padding assertive" ng-show="createLog.totalDurationToday.$invalid && formSubmitted" for="hours">
+                You cannot log more than 24 hours in a day.
+            </label>
             <!-- /minutes -->
+
+            <!-- total logged on this date -->
+            <label class="item item-input ng-hide">
+                <span class="input-label">Total logged on this date</span>
+                <input type="number" ng-model="formData.totalDurationThisDate" id="totalDurationToday" name="totalDurationToday" ng-max="24 * 60">
+            </label>
+            <!-- /total logged on this date -->
 
             <!-- duration -->
             <label class="item item-input ng-hide">
