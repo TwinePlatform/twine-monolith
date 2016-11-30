@@ -14,7 +14,7 @@
 
             <!-- <ion-item class="item-icon-left item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at'] | filter: {deleted_at : '!'}"> -->
             <ion-item class="item-icon-left item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at']">
-                <i class="icon" ng-class="{ 'ion-alert': log.needs_pushing, 'ion-ios-time': !log.needs_pushing }">
+                <i class="icon" ng-class="{ 'ion-alert': log.needs_pushing, 'ion-ios-clock-outline': !log.needs_pushing }">
                     <span ng-if="log.needs_pushing">Not pushed</span>
                 </i>
                 <h2 ng-bind-html="log.duration | hoursAndMinutesAsString"></h2>

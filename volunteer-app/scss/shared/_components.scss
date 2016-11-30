@@ -9,18 +9,33 @@
 	z-index: 100;
 }
 
+// header
+.bar.bar-positive {
+	background-image: none;
+	.title {
+		color: white;
+		font-size: 20px;
+		text-transform: uppercase;
+		font-weight: 700;
+	}
+}
+
 // organisation bar
 $fontsize: 15px;
 $subsize: $fontsize * 2;
 .bar-subheader-organisation {
-	background-color: #4FAAD0;
+	// background-color: #4FAAD0;
+	// background-color: $grey-light;
+	background-color: $positive;
+	background-image: none;
 	height: $subsize;
 	.title {
 		color: white;
+		color: $energized;
 		height: $subsize;
 		line-height: $subsize;
 		font-size: $fontsize;
-		font-weight: bold;
+		font-weight: 700;
 	}
 }
 // ios
@@ -48,15 +63,22 @@ $subsize: $fontsize * 2;
 .logo {
 	margin: 10px auto;
     display: block;
-    width: 250px;
+    width: 90px;
 }
 
 // buttons
+.button {
+	font-weight: 700;
+	text-transform: uppercase;
+}
 .button-faint {
 	opacity: 0.1;
 }
 
 // popups
+.popup-title {
+	font-weight: 700;
+}
 .popup-container.error .popup-title {
     color: $assertive;
 }
@@ -98,6 +120,9 @@ $subsize: $fontsize * 2;
 }
 
 // forms
+.item-divider {
+	font-weight: 700;
+}
 select[disabled], .item-select-disabled:after {
 	opacity: 0.4;
 }
@@ -146,4 +171,13 @@ select[disabled], .item-select-disabled:after {
 }
 .offline-mode.platform-android .scroll-content.has-tabs-top {
     bottom: 44px;
+}
+
+// tabs
+.tabs-icon-top > .tabs .tab-item, .tabs-icon-top.tabs .tab-item, .tabs-icon-bottom > .tabs .tab-item, .tabs-icon-bottom.tabs .tab-item {
+	text-transform: uppercase;
+	font-weight: 700;
+}
+.tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
+	background-color: darken($positive, 5);
 }

@@ -125,7 +125,7 @@
 						// arrays and variables
 						$scope.labels = [];
 						$scope.hours = [];
-						$scope.barColor = '#0378B5';
+						$scope.barColor = '#8000ff';
 						$scope.tooltipFunction = customTooltip;
 
 						// get logs
