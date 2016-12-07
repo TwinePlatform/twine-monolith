@@ -220,6 +220,8 @@
 			>> process the edit log form
 		*/
 
+			console.log('$$offline.checkConnection(): ', $$offline.checkConnection());
+
 			$scope.formSubmitted = false;
 			$scope.processForm = function(form) {
 
@@ -237,7 +239,7 @@
 					$ionicLoading.show();
 
 					// if no internet connection, switch to offline mode
-					if (!navigator.onLine) {
+					if (!$$offline.checkConnection()) {
 						$$offline.enable();
 					}
 
@@ -265,6 +267,8 @@
 						$$api.logs.edit($scope.formData.id, $.param($scope.formData)).success(function (result) {
 
 							console.log($scope.formData);
+
+							console.log('result: ', result);
 
 							// create log successful
 							if (result.success) {

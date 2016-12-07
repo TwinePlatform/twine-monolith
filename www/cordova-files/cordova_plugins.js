@@ -25,22 +25,6 @@ module.exports = [
         ]
     },
     {
-        "id": "cordova-plugin-geofence.TransitionType",
-        "file": "plugins/cordova-plugin-geofence/www/TransitionType.js",
-        "pluginId": "cordova-plugin-geofence",
-        "clobbers": [
-            "TransitionType"
-        ]
-    },
-    {
-        "id": "cordova-plugin-geofence.geofence",
-        "file": "plugins/cordova-plugin-geofence/www/geofence.js",
-        "pluginId": "cordova-plugin-geofence",
-        "clobbers": [
-            "geofence"
-        ]
-    },
-    {
         "id": "cordova-plugin-splashscreen.SplashScreen",
         "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
         "pluginId": "cordova-plugin-splashscreen",
@@ -70,6 +54,48 @@ module.exports = [
         "file": "plugins/es6-promise-plugin/www/promise.js",
         "pluginId": "es6-promise-plugin",
         "runs": true
+    },
+    {
+        "id": "cordova-plugin-geofence.TransitionType",
+        "file": "plugins/cordova-plugin-geofence/www/TransitionType.js",
+        "pluginId": "cordova-plugin-geofence",
+        "clobbers": [
+            "TransitionType"
+        ]
+    },
+    {
+        "id": "cordova-plugin-geofence.geofence",
+        "file": "plugins/cordova-plugin-geofence/www/geofence.js",
+        "pluginId": "cordova-plugin-geofence",
+        "clobbers": [
+            "geofence"
+        ]
+    },
+    {
+        "id": "cordova-plugin-inappbrowser.inappbrowser",
+        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+        "pluginId": "cordova-plugin-inappbrowser",
+        "clobbers": [
+            "cordova.InAppBrowser.open",
+            "window.open"
+        ]
+    },
+    {
+        "id": "cordova-plugin-network-information.network",
+        "file": "plugins/cordova-plugin-network-information/www/network.js",
+        "pluginId": "cordova-plugin-network-information",
+        "clobbers": [
+            "navigator.connection",
+            "navigator.network.connection"
+        ]
+    },
+    {
+        "id": "cordova-plugin-network-information.Connection",
+        "file": "plugins/cordova-plugin-network-information/www/Connection.js",
+        "pluginId": "cordova-plugin-network-information",
+        "clobbers": [
+            "Connection"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -77,14 +103,15 @@ module.exports.metadata =
 {
     "cordova-plugin-console": "1.0.4",
     "cordova-plugin-device": "1.1.3",
-    "cordova-plugin-geofence": "0.6.0",
-    "cordova-plugin-ios-disableshaketoedit": "1.0.0",
     "cordova-plugin-splashscreen": "3.2.2",
     "cordova-plugin-statusbar": "2.1.3",
     "cordova-plugin-whitelist": "1.2.2",
     "ionic-plugin-keyboard": "2.2.1",
     "cordova-plugin-compat": "1.0.0",
-    "es6-promise-plugin": "3.0.2"
+    "es6-promise-plugin": "3.0.2",
+    "cordova-plugin-geofence": "0.6.0",
+    "cordova-plugin-inappbrowser": "1.5.0",
+    "cordova-plugin-network-information": "1.3.0"
 };
 // BOTTOM OF METADATA
 });

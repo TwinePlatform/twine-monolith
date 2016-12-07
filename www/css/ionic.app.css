@@ -12255,6 +12255,10 @@ select[disabled], .item-select-disabled:after {
   font-size: 15px;
   font-weight: 600; }
 
+.platform-ios .input-label {
+  top: -2px;
+  position: relative; }
+
 .item-checkbox {
   background-color: #eee;
   font-size: 15px;
@@ -12336,6 +12340,9 @@ select[disabled], .item-select-disabled:after {
   font-size: 10px;
   width: 130px !important;
   text-align: center; }
+
+.dashboard .padding p:last-child {
+  margin-bottom: 0; }
 
 .hours-summary .hours-summary-today {
   border: none;
