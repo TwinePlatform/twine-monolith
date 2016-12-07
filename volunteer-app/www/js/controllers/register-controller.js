@@ -161,6 +161,9 @@
 							// store user information
 							$localStorage.user = response.data;
 
+							// setup localstorage
+							$$utilities.setupLocalStorage();
+
 							// set organisation subheader title
 							$rootScope.organisationName = $localStorage.user.organisation.name;
 

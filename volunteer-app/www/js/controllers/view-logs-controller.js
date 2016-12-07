@@ -100,7 +100,7 @@
 
 				}
 				// if no internet connection, edit local log and enable offline mode
-				else if (!navigator.onLine) {
+				else if (!$$offline.checkConnection()) {
 
 					$$offline.enable();
 					$state.go('tabs.edit-log-offline', {

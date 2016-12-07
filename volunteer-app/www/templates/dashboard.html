@@ -2,7 +2,7 @@
 
     <organisation-subheader></organisation-subheader>
 
-    <ion-content padding="true" scroll="false" class="has-header has-subheader-organisation">
+    <ion-content padding="true" scroll="false" class="has-header has-subheader-organisation dashboard">
 
         <h4 class="text-center">My Total Hours</h4>
 
@@ -18,6 +18,7 @@
         <div class="padding" ng-if="totalHours === 0">
             <p class="text-center">You haven't logged any hours yet.</p>
             <p class="text-center">Please tap the "Log hours" button below to start logging hours.</p>
+            <p class="text-center"><small><strong>Note:</strong> You can only log hours in the current month. Previous months will be locked.</small></p>
         </div>
 
         <!-- .hours-summary -->
@@ -70,7 +71,7 @@
         <!-- pending approval box -->
         <div class="summary-box text-center" ng-if="$storage.user.status === 'pending'">
             <i class="ion-information-circled"></i>
-            Your account is pending approval by {{ organisationName }}
+            Your account is pending approval
         </div>
         <!-- /.pending approval box -->
 

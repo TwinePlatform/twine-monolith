@@ -57,6 +57,13 @@
 	text-align: center;
 }
 
+// text content
+.dashboard .padding p {
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
 // hours summary
 .hours-summary {
 	.hours-summary-today {

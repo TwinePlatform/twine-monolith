@@ -130,6 +130,11 @@ select[disabled], .item-select-disabled:after {
 	font-size: 15px;
 	font-weight: 600;
 }
+// ios label misalignment fix
+.platform-ios .input-label {
+	top: -2px;
+	position: relative;
+}
 .item-checkbox {
 	background-color: #eee;
 	font-size: 15px;

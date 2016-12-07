@@ -33,7 +33,7 @@
 			$rootScope.options = {
 				appName: 'Twine',
 				debug: false,
-				environment: 'dev',	// dev | stage
+				environment: 'stage',	// dev | stage
 				apiBaseUrl: {
 					dev:   'http://powertochangeadmindev.stage2.reason.digital/api/v1/',
 					stage: 'http://powertochangeadmin.stage2.reason.digital/api/v1/'
@@ -194,7 +194,7 @@
 
 						}
 						// if we don't have logs that need syncing, switch offline mode off (if we can)
-						else if (navigator.onLine) {
+						else if ($$offline.checkConnection()) {
 							$$offline.disable();
 							$window.location.reload(true);
 						}
@@ -207,7 +207,7 @@
 				*/
 
 					// online
-					if (navigator.onLine) {
+					if ($$offline.checkConnection()) {
 						// if app is in offline mode, attempt to sync offline data
 						if ($rootScope.offlineMode) {
 							$rootScope.syncOfflineData();
