@@ -1,0 +1,72 @@
+.login {
+	background-size: cover;
+	background-position: top center;
+	background-color: black;
+	transition: all 0.3s;
+	.scroll {
+		// height: 100%;
+	}
+	&-form {
+		position: relative;
+		bottom: 10px;
+		left: 0;
+		right: 0;
+		top: 232px;
+		@include breakpoint($iphone6) {
+			top: 330px;
+		}
+		@include breakpoint($iphone6plus) {
+			top: 398px;
+		}
+		@include breakpoint($tablet) {
+			top: 588px;
+		}
+		@include breakpoint($tablet-large) {
+			top: 918px;
+		}
+	}
+	.item {
+		background: transparent;
+		border-color: rgba(255,255,255,0.2);
+		padding-left: 30px;
+		@include breakpoint($tablet) {
+			padding-left: 140px;
+		}
+		&:last-child {
+			border-top: 0;
+		}
+		.input-label {
+			color: $energized;
+		}
+		input[type=email], input[type=password] {
+			color: white;
+			font-weight: 700;
+			padding-right: 30px;
+			@include breakpoint($tablet) {
+				padding-right: 140px;
+			}
+		}
+	}
+	.error {
+		padding-right: 30px;
+		padding-left: 30px;
+		text-align: left;
+		font-weight: 700;
+		background-color: rgba($assertive,0.3);
+		color: white;
+		@include breakpoint($tablet) {
+			padding-left: 140px;
+			padding-right: 140px;
+		}
+	}
+	.buttons {
+		padding: 10px 30px 0;
+		@include breakpoint($tablet) {
+			padding: 10px 140px;
+		}
+		.button {
+			min-height: 40px;
+			line-height: 40px;
+		}
+	}
+}

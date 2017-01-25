@@ -12211,6 +12211,9 @@ h1, h2, h3, h4 {
 .button-faint {
   opacity: 0.1; }
 
+.button-energized:not(.button-clear) {
+  color: #444 !important; }
+
 .popup-title {
   font-weight: 700; }
 
@@ -12457,3 +12460,64 @@ select[disabled], .item-select-disabled:after {
 
 .settings .item-button {
   padding: 7px 16px; }
+
+.login {
+  background-size: cover;
+  background-position: top center;
+  background-color: black;
+  transition: all 0.3s; }
+  .login-form {
+    position: relative;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    top: 232px; }
+    @media (min-width: 375px) {
+      .login-form {
+        top: 330px; } }
+    @media (min-width: 414px) {
+      .login-form {
+        top: 398px; } }
+    @media (min-width: 768px) {
+      .login-form {
+        top: 588px; } }
+    @media (min-width: 1024px) {
+      .login-form {
+        top: 918px; } }
+  .login .item {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.2);
+    padding-left: 30px; }
+    @media (min-width: 768px) {
+      .login .item {
+        padding-left: 140px; } }
+    .login .item:last-child {
+      border-top: 0; }
+    .login .item .input-label {
+      color: #ffbe00; }
+    .login .item input[type=email], .login .item input[type=password] {
+      color: white;
+      font-weight: 700;
+      padding-right: 30px; }
+      @media (min-width: 768px) {
+        .login .item input[type=email], .login .item input[type=password] {
+          padding-right: 140px; } }
+  .login .error {
+    padding-right: 30px;
+    padding-left: 30px;
+    text-align: left;
+    font-weight: 700;
+    background-color: rgba(239, 71, 58, 0.3);
+    color: white; }
+    @media (min-width: 768px) {
+      .login .error {
+        padding-left: 140px;
+        padding-right: 140px; } }
+  .login .buttons {
+    padding: 10px 30px 0; }
+    @media (min-width: 768px) {
+      .login .buttons {
+        padding: 10px 140px; } }
+    .login .buttons .button {
+      min-height: 40px;
+      line-height: 40px; }
