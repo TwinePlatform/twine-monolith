@@ -74,6 +74,9 @@ $subsize: $fontsize * 2;
 .button-faint {
 	opacity: 0.1;
 }
+.button-energized:not(.button-clear) {
+	color: $dark !important;
+}
 
 // popups
 .popup-title {

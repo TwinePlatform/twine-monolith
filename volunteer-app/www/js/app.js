@@ -33,14 +33,16 @@
 			$rootScope.options = {
 				appName: 'Twine',
 				debug: false,
-				environment: 'stage',	// dev | stage
+				environment: 'live',	// dev | stage | live
 				apiBaseUrl: {
 					dev:   'http://powertochangeadmindev.stage2.reason.digital/api/v1/',
-					stage: 'http://powertochangeadmin.stage2.reason.digital/api/v1/'
+					stage: 'http://powertochangeadmin.stage2.reason.digital/api/v1/',
+					live:  'http://dashboard.twine-together.com/api/v1/'
 				},
 				adminBaseUrl: {
 					dev:   'http://powertochangeadmindev.stage2.reason.digital/',
-					stage: 'http://powertochangeadmin.stage2.reason.digital/'
+					stage: 'http://powertochangeadmin.stage2.reason.digital/',
+					live:  'http://dashboard.twine-together.com/'
 				}
 			}
 			

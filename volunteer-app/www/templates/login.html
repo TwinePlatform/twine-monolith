@@ -1,12 +1,8 @@
 <ion-view title="Login" hide-back-button="true">
-    <ion-content padding="true" class="has-header">
+    <ion-content padding="false" scroll="true" class="login has-header" style="background-image: url(img/login-bg.jpg)">
     
-        <img class="logo" src="img/twine.svg" alt="">
-
-        <p class="text-center padding">Please fill in the form below to login.</p>
-
         <!-- form#login -->
-        <form id="login" name="login" class="list" ng-submit="processForm(login)" novalidate>
+        <form id="login" name="login" class="login-form list" ng-submit="processForm(login)" novalidate>
 
             <ion-list>
 
@@ -15,7 +11,7 @@
                     <span class="input-label">Email</span>
                     <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" ng-pattern="/^[\w.%+\-]+@[\w.\-]+\.[A-Za-z]{2,6}$/" required>
                 </label>
-                <label class="error block text-right padding assertive" ng-show="login.email.$invalid && formSubmitted" for="email">
+                <label class="error block text-right padding assertive" ng-if="login.email.$invalid && formSubmitted" for="email">
                     Please enter a valid email address
                 </label>
                 <!-- /email -->
@@ -25,7 +21,7 @@
                     <span class="input-label">Password</span>
                     <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="6" required>
                 </label>
-                <label class="error block text-right padding assertive" ng-show="login.password.$invalid && formSubmitted" for="password">
+                <label class="error block text-right padding assertive" ng-if="login.password.$invalid && formSubmitted" for="password">
                     Please enter at least 6 characters
                 </label>
                 <!-- /password -->
@@ -33,9 +29,11 @@
             </ion-list>
 
             <!-- buttons -->
-            <button type="submit" class="button button-positive button-block">Log in</button>
-            <a ng-click="forgotPassword()" class="button button-positive button-block button-clear button-small">I forgot my password</a>
-            <a ui-sref="register" class="button button-positive button-block button-clear">Or register</a>
+            <div class="buttons">
+                <button type="submit" class="button button-energized button-block">Login</button>
+                <a ui-sref="register" class="button button-dark button-block">Or register here</a>
+                <a ng-click="forgotPassword()" class="button button-energized button-block button-clear button-small">I forgot my password</a>
+            </div>
 
         </form>
         <!-- /form#login -->

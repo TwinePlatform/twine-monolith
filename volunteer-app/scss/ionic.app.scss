@@ -25,6 +25,12 @@ $grey-medium: #706f6f;
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
+// responsive
+$iphone6: 375px;
+$iphone6plus: 414px;
+$tablet: 768px;
+$tablet-large: 1024px;
+
 // ionic
 @import "www/lib/ionic/scss/ionic";
 
@@ -32,6 +38,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 @import 'plugins/animate';
 
 // shared
+@import 'shared/mixins';
 @import 'shared/fonts';
 @import 'shared/helpers';
 @import 'shared/text';
@@ -41,3 +48,4 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 @import 'views/dashboard';
 @import 'views/view-logs';
 @import 'views/settings';
+@import 'views/login';
