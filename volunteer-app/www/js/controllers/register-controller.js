@@ -146,6 +146,14 @@
 				// form is valid
 				if (form.$valid) {
 
+					// if no gender selected, setup an object with empty values
+					if ($scope.formData.gender == null) {
+						$scope.formData.gender = {
+							id: '',
+							name: ''
+						}
+					}
+
 					// >>> submit form data
 					$$api.user.register($.param($scope.formData)).success(function(response) {
 

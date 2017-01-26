@@ -56,27 +56,21 @@
 
                 <!-- year of birth -->
                 <label class="item item-select">
-                    <span class="input-label">Year of birth</span>
-                    <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option" name="yearOfBirth" id="yearOfBirth" required>
+                    <span class="input-label">Year of birth<br>(optional)</span>
+                    <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option" name="yearOfBirth" id="yearOfBirth">
                         <option value="">Select year</option>
                         <!--  -->
                     </select>
-                </label>
-                <label class="error block text-right padding assertive" ng-show="register.yearOfBirth.$invalid && formSubmitted" for="yearOfBirth">
-                    Please select your year of birth
                 </label>
                 <!-- /year of birth -->
 
                 <!-- gender -->
                 <label class="item item-select" ng-class="{'item-select-disabled': gendersDisabled}">
-                    <span class="input-label">Gender</span>
-                    <select ng-model="formData.gender" ng-options="option.name for option in genders track by option.id" name="gender" id="gender" ng-disabled="gendersDisabled" required>
+                    <span class="input-label">Gender<br>(optional)</span>
+                    <select ng-model="formData.gender" ng-options="option.name for option in genders track by option.id" name="gender" id="gender" ng-disabled="gendersDisabled">
                         <option value="">Select gender</option>
                         <!--  -->
                     </select>
-                </label>
-                <label class="error block text-right padding assertive" ng-show="register.gender.$invalid && formSubmitted" for="gender">
-                    Please select your gender
                 </label>
                 <!-- /gender -->
 
