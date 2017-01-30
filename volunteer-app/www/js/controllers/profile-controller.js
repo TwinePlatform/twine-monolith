@@ -77,14 +77,19 @@
 						// enable genders select
 						$scope.gendersDisabled = false;
 
-						// get user's gender
-						var gender = $localStorage.user.gender.name;
+						// if theres a gender in localstorage
+						if ($localStorage.user.gender !== undefined) {
 
-						// get position of user's gender in $scope.years array
-						var genderPosition = $scope.genders.map(function(x) {return x.name; }).indexOf(gender);
+							// get user's gender
+							var gender = $localStorage.user.gender.name;
 
-						// set the value of formData.gender to that item
-						$scope.formData.gender = $scope.genders[genderPosition];
+							// get position of user's gender in $scope.years array
+							var genderPosition = $scope.genders.map(function(x) {return x.name; }).indexOf(gender);
+
+							// set the value of formData.gender to that item
+							$scope.formData.gender = $scope.genders[genderPosition];
+
+						}
 
 					}
 				}
@@ -222,10 +227,13 @@
 				// form is valid
 				if (form.$valid) {
 
-					console.log('form valid');
-
-					console.log('$localStorage.user.id: ', $localStorage.user.id);
-					console.log('$scope.formData: ', $scope.formData);
+					// if no gender selected, setup an object with empty values
+					if ($scope.formData.gender == null) {
+						$scope.formData.gender = {
+							id: '',
+							name: ''
+						}
+					}
 
 					// >>> submit form data
 					$$api.user.save($localStorage.user.id, $.param($scope.formData)).success(function(response) {
