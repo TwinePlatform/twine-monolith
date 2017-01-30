@@ -11,6 +11,7 @@
 *      new log
 *      sync
 *    user
+*      get
 *      login
 *      save user
 *      register user

@@ -52,7 +52,6 @@
 					});
 
 
-
 				/*
 					>>> update overall total hours
 				*/
