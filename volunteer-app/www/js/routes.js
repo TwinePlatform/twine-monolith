@@ -67,20 +67,30 @@ angular.module('app.routes', ['ionicUIRouter'])
 			.state('tabs.view-logs', {
 				// cache: false,
 				url: '/view-logs',
-				views: {
-					'view-logs-tab': {
-						templateUrl: 'templates/view-logs.html',
-						controller: 'ViewLogsController'
-					}
-				}
+        views: {
+          'view-logs-tab': {
+            templateUrl: 'templates/view-logs.html'
+          }
+        }
 			})
+      	// >> view logs - hours
+				.state('tabs.view-logs.hours', {
+					// cache: false,
+					url: '/hours',
+					views: {
+						'view-logs-hours-tab@tabs.view-logs': {
+							templateUrl: 'templates/view-logs-hours.html',
+							controller: 'ViewLogsHoursController'
+						}
+					}
+				})
 
 				// >>> view logs - edit log
 				.state('tabs.edit-log', {
 					cache: false,
 					url: '/edit-log/:id',
 					views: {
-						'view-logs-tab': {
+						'view-logs-hours-tab@tabs.view-logs': {
 							templateUrl: 'templates/edit-log.html',
 							controller: 'EditLogController'
 						}
@@ -95,6 +105,18 @@ angular.module('app.routes', ['ionicUIRouter'])
 						'view-logs-tab': {
 							templateUrl: 'templates/edit-log.html',
 							controller: 'EditLogController'
+						}
+					}
+				})
+
+        // >> view logs - meetings
+				.state('tabs.view-logs.meetings', {
+					// cache: false,
+					url: '/meetings',
+					views: {
+						'view-logs-meetings-tab@tabs.view-logs': {
+							templateUrl: 'templates/view-logs-meetings.html',
+							controller: 'ViewLogsMeetingsController'
 						}
 					}
 				})

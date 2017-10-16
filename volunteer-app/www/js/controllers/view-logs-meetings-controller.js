@@ -14,7 +14,7 @@
 	> view logs controller
 */
 
-	angular.module('app.controllers').controller('ViewLogsController', function (
+	angular.module('app.controllers').controller('ViewLogsMeetingsController', function (
 		$scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $timeout, 
 		$$api, $$utilities, $$shout, $$offline
 	) {
