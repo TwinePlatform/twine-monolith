@@ -8,5 +8,7 @@
   "watchPatterns": [
     "www/**/*",
     "!www/lib/**/*"
-  ]
+  ],
+  "integrations": {},
+  "type": "ionic1"
 }
