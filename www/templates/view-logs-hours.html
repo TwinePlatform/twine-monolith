@@ -1,11 +1,11 @@
 <ion-view title="View logs hours">
-    
+
     <organisation-subheader></organisation-subheader>
 
     <ion-content padding="true" class="padding has-header has-subfooter has-subheader-organisation view-logs">
 
         <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noLogs">You haven't created any logs yet.</p>
-        
+
         <div class="padding text-center" ng-if="!logs">
             <ion-spinner class="text-center"></ion-spinner>
         </div>
@@ -31,5 +31,7 @@
         </ion-list>
 
     </ion-content>
-
+    <a ui-sref="tabs.new-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
+        <span>Log hours</span>
+    </a>
 </ion-view>
