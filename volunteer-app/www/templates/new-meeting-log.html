@@ -1,0 +1,37 @@
+<ion-view title="Log hours">
+
+    <organisation-subheader></organisation-subheader>
+
+    <ion-content padding="true" class="has-header has-subheader-organisation">
+
+    <!-- form#createLog -->
+        <form id="createLog" name="createLog" class="list" ng-submit="processForm(createLog)" novalidate>
+
+            <!-- date -->
+            <label class="item item-input">
+                <span class="input-label">Date</span>
+                <input type="text" name="date_pretty" id="date_pretty" class="datepicker">
+            </label>
+            <label class="error block text-right padding assertive" ng-show="createLog.date.$invalid && formSubmitted" for="date">
+                Please select a date
+            </label>
+            <!-- /date -->
+
+            <!-- meeting type -->
+            <label class="item item-select">
+                <span class="input-label">Meeting type</span>
+                <select ng-model="formData.gender" ng-options="option.name for option in genders track by option.id" name="gender" id="gender" ng-disabled="gendersDisabled">
+                    <option value="">Select type</option>
+                    <!--  -->
+                </select>
+            </label>
+            <!-- /meeting type -->
+
+            <!-- buttons -->
+            <button type="submit" class="button button-energized button-block">Save</button>
+
+        </form>
+        <!-- /form#createLog -->
+
+    </ion-content>
+</ion-view>

@@ -109,7 +109,7 @@ angular.module('app.routes', ['ionicUIRouter'])
 					}
 				})
 
-        // >> view logs - meetings
+				// >> view logs - meetings
 				.state('tabs.view-logs.meetings', {
 					// cache: false,
 					url: '/meetings',
@@ -120,7 +120,17 @@ angular.module('app.routes', ['ionicUIRouter'])
 						}
 					}
 				})
-
+                // >>> view logs - meetings - new log
+				.state('tabs.view-logs.new-meeting-log', {
+					cache: false,
+					url: '/new-log',
+					views: {
+						'view-logs-meetings-tab@tabs.view-logs': {
+							templateUrl: 'templates/new-meeting-log.html',
+							controller: 'NewMeetingLogController'
+						}
+					}
+				})
 			// >> settings
 			.state('tabs.settings', {
 				// cache: 'false',

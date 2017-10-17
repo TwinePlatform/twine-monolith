@@ -12392,6 +12392,9 @@ select[disabled], .item-select-disabled:after {
   bottom: 10px;
   z-index: 10;
   padding: 0; }
+.button-add.view-logs-button {
+  bottom: 58px;
+}
   .button-add.activated span {
     color: #8000ff !important; }
   .button-add:before {
