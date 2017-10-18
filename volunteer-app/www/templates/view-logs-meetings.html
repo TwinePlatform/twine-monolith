@@ -14,7 +14,7 @@
                 <i class="icon" ng-class="{ 'ion-alert': meeting.needs_pushing, 'icon-custom-clock': !meeting.needs_pushing }">
                     <span ng-if="meeting.needs_pushing">Not pushed</span>
                 </i>
-                <h2>{{meeting | json}}</h2>
+                <h2>{{meeting.type.name}}</h2>
                 <p>{{ meeting.date.split(' ')[0] | date:'d MMM yyyy'}} @ {{ organisationName }}</p>
                 <p ng-if="options.debug">id: {{ meeting.id }}</p>
                 <div class="button-bar">

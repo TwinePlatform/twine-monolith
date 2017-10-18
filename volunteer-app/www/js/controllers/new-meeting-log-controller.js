@@ -186,8 +186,8 @@
 					$$shout(message);
 				}
 
-				// go back to dashboard
-				$state.go('tabs.dashboard');
+				// go back to metting list
+				$state.go('tabs.view-logs.meetings');
 
 			}
 

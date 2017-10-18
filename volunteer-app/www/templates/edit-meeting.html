@@ -1,0 +1,45 @@
+<ion-view title="Edit meeting">
+
+    <organisation-subheader></organisation-subheader>
+
+    <ion-content padding="true" class="has-header has-subheader-organisation has-header-tabs">
+
+    <!-- form#editMeeting -->
+        <form id="editMeeting" name="editMeeting" class="editLog list" ng-submit="processForm(editMeeting)" novalidate>
+
+            <!-- date -->
+            <label class="item item-input">
+                <span class="input-label">Date</span>
+                <input type="text" name="date_pretty" id="date_pretty" class="datepicker">
+            </label>
+            <label class="error block text-right padding assertive" ng-show="editMeeting.date.$invalid && formSubmitted" for="date_pretty">
+                Please select a date
+            </label>
+            <!-- /date -->
+
+            <!-- meeting type -->
+            <label class="item item-select">
+                <span class="input-label">Meeting type</span>
+                <select ng-model="formData.type" ng-options="option.name for option in meetingTypes track by option.id"
+                        name="meetingType" id="meetingType" ng-if="!meetingTypesDisabled">
+                    <option value="">Select type</option>
+                    <!--  -->
+                </select>
+            </label>
+            <!-- /meeting type -->
+
+            <!-- meeting partner -->
+            <label class="item item-input">
+                <span class="input-label">Meeting partner</span>
+                <input type="text" name="partner" id="partner" placeholder="E.g. Jon Smith" ng-model="formData.partner">
+            </label>
+            <!-- /name -->
+
+            <!-- buttons -->
+            <button type="submit" class="button button-energized button-block">Save</button>
+
+        </form>
+        <!-- /form#editMeeting -->
+
+    </ion-content>
+</ion-view>

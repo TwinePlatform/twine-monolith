@@ -196,7 +196,7 @@
 				}).error(function (result, error) {
 
 					// couldn't connect, send back to view logs and enable offline mode
-					$state.go('tabs.view-logs');
+					$state.go('tabs.view-logs.hours');
 
 					// process connection error
 					$$utilities.processConnectionError(result, error);
@@ -253,7 +253,7 @@
 						$ionicLoading.hide();
 
 						// go back to view logs
-						$state.go('tabs.view-logs');
+						$state.go('tabs.view-logs.hours');
 
 						// shout success
 						$$shout('Log saved locally!');
@@ -280,7 +280,7 @@
 								$$offline.editLog({ id: $scope.formData.id, idKey: 'id' }, result.data);
 
 								// go back to view logs
-								$state.go('tabs.view-logs');
+								$state.go('tabs.view-logs.hours');
 
 								// shout success
 								$$shout('Log saved succesfully!');
@@ -308,7 +308,7 @@
 								$$offline.enable();
 
 								// go back to view logs
-								$state.go('tabs.view-logs');
+								$state.go('tabs.view-logs.hours');
 
 								// process connection error
 								$$utilities.processConnectionError(data, error);

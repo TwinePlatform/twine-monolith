@@ -85,7 +85,7 @@ angular.module('app.routes', ['ionicUIRouter'])
 					}
 				})
 
-                // >> view logs - meetings
+				// >> view logs - meetings
 				.state('tabs.view-logs.meetings', {
 					cache: false,
 					url: '/meetings',
@@ -104,6 +104,17 @@ angular.module('app.routes', ['ionicUIRouter'])
 						'view-logs-meetings-tab@tabs.view-logs': {
 							templateUrl: 'templates/new-meeting-log.html',
 							controller: 'NewMeetingLogController'
+						}
+					}
+				})
+				// >>> view logs - meetings - new log
+				.state('tabs.edit-meeting', {
+					cache: false,
+					url: '/edit-meeting/:id',
+					views: {
+						'view-logs-meetings-tab@tabs.view-logs': {
+							templateUrl: 'templates/edit-meeting.html',
+							controller: 'EditMeetingController'
 						}
 					}
 				})
