@@ -65,22 +65,45 @@ angular.module('app.routes', ['ionicUIRouter'])
 
 			// >> view logs
 			.state('tabs.view-logs', {
-				// cache: false,
+				cache: false,
 				url: '/view-logs',
-        views: {
-          'view-logs-tab': {
-            templateUrl: 'templates/view-logs.html'
-          }
-        }
+				views: {
+				  'view-logs-tab': {
+					templateUrl: 'templates/view-logs.html'
+				  }
+				}
 			})
       	// >> view logs - hours
 				.state('tabs.view-logs.hours', {
-					// cache: false,
+					cache: false,
 					url: '/hours',
 					views: {
 						'view-logs-hours-tab@tabs.view-logs': {
 							templateUrl: 'templates/view-logs-hours.html',
 							controller: 'ViewLogsHoursController'
+						}
+					}
+				})
+
+                // >> view logs - meetings
+				.state('tabs.view-logs.meetings', {
+					cache: false,
+					url: '/meetings',
+					views: {
+						'view-logs-meetings-tab@tabs.view-logs': {
+							templateUrl: 'templates/view-logs-meetings.html',
+							controller: 'ViewLogsMeetingsController'
+						}
+					}
+				})
+				// >>> view logs - meetings - new log
+				.state('tabs.new-meeting-log', {
+					cache: false,
+					url: '/new-meeting-log',
+					views: {
+						'view-logs-meetings-tab@tabs.view-logs': {
+							templateUrl: 'templates/new-meeting-log.html',
+							controller: 'NewMeetingLogController'
 						}
 					}
 				})
@@ -105,29 +128,6 @@ angular.module('app.routes', ['ionicUIRouter'])
 						'view-logs-tab': {
 							templateUrl: 'templates/edit-log.html',
 							controller: 'EditLogController'
-						}
-					}
-				})
-
-				// >> view logs - meetings
-				.state('tabs.view-logs.meetings', {
-					// cache: false,
-					url: '/meetings',
-					views: {
-						'view-logs-meetings-tab@tabs.view-logs': {
-							templateUrl: 'templates/view-logs-meetings.html',
-							controller: 'ViewLogsMeetingsController'
-						}
-					}
-				})
-                // >>> view logs - meetings - new log
-				.state('tabs.view-logs.new-meeting-log', {
-					cache: false,
-					url: '/new-log',
-					views: {
-						'view-logs-meetings-tab@tabs.view-logs': {
-							templateUrl: 'templates/new-meeting-log.html',
-							controller: 'NewMeetingLogController'
 						}
 					}
 				})

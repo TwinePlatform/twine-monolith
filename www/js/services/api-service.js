@@ -128,6 +128,87 @@
 				},
 
 			/*
+				>> Meetings
+			*/
+
+				meetings: {
+
+					/*
+						>>> delete
+					*/
+
+						delete: function(id) {
+							return $http({
+								method: 'DELETE',
+							  	url: $$api.url('meetings/' + id)
+							});
+						},
+
+					/*
+						>>> get Meetings
+					*/
+
+						getMeetings: function(userId) {
+							return $http({
+								method: 'GET',
+								url: $$api.url('meetings/user/' + userId)
+							});
+						},
+
+					/*
+						>>> get Meeting
+					*/
+
+						getMeeting: function(meetingId) {
+							return $http({
+								method: 'GET',
+								url: $$api.url('meetings/' + meetingId)
+							});
+						},
+
+					/*
+						>>> edit Meeting
+					*/
+
+						edit: function(meetingId, data) {
+							return $http({
+								method: 'PUT',
+								url: $$api.url('meetings/' + meetingId),
+								data: data,
+								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+							});
+						},
+
+					/*
+						>>> new Meeting
+					*/
+
+						new: function(data) {
+							return $http({
+								method: 'POST',
+								url: $$api.url('meetings'),
+								data: data,
+								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+							});
+						},
+
+					/*
+						>>> sync
+					*/
+
+						sync: function(data) {
+							return $http({
+								method: 'POST',
+								url: $$api.url('meetings/sync'),
+								data: data,
+								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+							});
+						},
+
+
+				},
+
+			/*
 				>> user
 			*/
 
@@ -237,6 +318,25 @@
 				},
 
 			/*
+				>> meetingTypes
+			*/
+
+				meetingTypes: {
+
+					/*
+						>>> get genders
+					*/
+
+						get: function() {
+							return $http({
+								method: 'GET',
+								url: $$api.url('meetingTypes')
+							});
+						}
+
+				},
+
+			/*
 				>> regions
 			*/
 
@@ -281,7 +381,7 @@
 								method: 'GET',
 								url: $$api.url('organisations/' + organisationId + '/summary')
 							})
-						} 
+						}
 
 				},
 

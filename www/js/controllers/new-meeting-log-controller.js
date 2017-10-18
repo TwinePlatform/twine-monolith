@@ -1,22 +1,21 @@
 /*
 * CONTENTS
 *
-* new log controller
+* new meeting controller
 *    store the form data
-*    update total duration logged this date
 *    setup datepickers
 *    populate hours dropdown
 *    populate minutes dropdown
 *    calculate duration
 *    populate user_id field
-*    process the new log form
+*    process the new meeting form
 *      validate form
 *      submit form
 *    push to offline data
 */
 
 /*
-	> new log controller
+	> new meeting controller
 */
 
 	angular.module('app.controllers').controller('NewMeetingLogController', function (
@@ -24,35 +23,40 @@
 		$$api, $$utilities, $$shout, $$offline
 	) {
 
-		/*
-			>> store the form data
-		*/
+        /*
+            >> populate meetingTypes dropdown
+        */
+
+        $scope.meetingTypesDisabled = true;
+        $scope.meetingTypes = [];
+
+        $$api.meetingTypes.get().success(function (result) {
+            // loop through the results and push only required items to $scope.meetingTypes
+            for (var i = 0, len = result.data.length; i < len; i++) {
+                $scope.meetingTypes[i] = {id: result.data[i].id, name: result.data[i].name};
+            }
+            // enable meetingTypes select
+            $scope.meetingTypesDisabled = false;
+
+        }).error(function (result, error) {
+
+            // process connection error
+            $$utilities.processConnectionError(result, error);
+
+        });
+
+        /*
+            >> store the form data
+        */
 
 			$scope.formData = {};
 
 
 		/*
-			>> update total duration logged this date
-		*/
-
-			$scope.calculateTotalDurationThisDate = function() {
-
-				var sqlDate = $scope.formData.date_of_log.split(' ')[0];
-
-				$$api.user.totalHoursForDay($localStorage.user.id, sqlDate).success(function(result) {
-					if ($scope.formData.duration === undefined) {
-						$scope.formData.duration = 0;
-					}
-					$scope.formData.totalDurationThisDate = result.data.duration + $scope.formData.duration;
-				});
-
-			}
-
-		/*
 			>> setup datepickers
 		*/
 
-			$('#createLog .datepicker').pickadate({
+			$('#createMeeting .datepicker').pickadate({
 				min: $$utilities.getDateFirstOfMonth(),
 				date: new Date(),
 				container: '.datepicker-container',
@@ -63,21 +67,18 @@
 				    this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()] )
 
 				    // add date to scope in correct format
-				    $scope.formData.date_of_log = $filter('date')(this.component.item.select.pick, 'yyyy-MM-dd');
+				    $scope.formData.date = $filter('date')(this.component.item.select.pick, 'yyyy-MM-dd');
 
 				    // add current time
-				    $scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + $$utilities.getCurrentTimeAsString();
+				    $scope.formData.date = $scope.formData.date + ' ' + $$utilities.getCurrentTimeAsString();
 				},
 				onSet: function(context) {
 					// add date to scope in correct format
-					$scope.formData.date_of_log = $filter('date')(context.select, 'yyyy-MM-dd');
+					$scope.formData.date = $filter('date')(context.select, 'yyyy-MM-dd');
 
 					// add current time
-					$scope.formData.date_of_log = $scope.formData.date_of_log + ' ' + $$utilities.getCurrentTimeAsString();
+					$scope.formData.date = $scope.formData.date + ' ' + $$utilities.getCurrentTimeAsString();
 
-					$timeout(function() {
-						$scope.calculateTotalDurationThisDate();
-					}, 300);
 				}
 			});
 
@@ -90,7 +91,7 @@
 
 
 		/*
-			>> process the new log form
+			>> process the new meeting form
 		*/
 
 			$scope.formSubmitted = false;
@@ -111,7 +112,7 @@
 					if ($rootScope.offlineMode) {
 
 						// push to offline data, mark as 'needs_pushing'
-						$scope.newLogOffline($scope.formData, true, 'Log saved offline.');
+						$scope.newMeetingOffline($scope.formData, true, 'Meeting saved offline.');
 
 					}
 
@@ -119,22 +120,22 @@
 					else {
 
 						// >>> submit form
-						$$api.logs.new($.param($scope.formData)).success(function (result) {
+						$$api.meetings.new($.param($scope.formData)).success(function (result) {
 
 							// hide loader
 							$ionicLoading.hide();
 
-							// create log successful
+							// create meeting successful
 							if (result.success) {
 
 								// push to offline data
-								$scope.newLogOffline(result.data);
+								$scope.newMeetingOffline(result.data);
 
-								$$shout('Log saved.');
+								$$shout('Meeting saved.');
 
 							}
 
-							// create log unsuccessful
+							// create meeting unsuccessful
 							else {
 
 								$$shout(result.message);
@@ -147,7 +148,7 @@
 							$$offline.enable();
 
 							// push to offline data and mark as 'needs_pushing'
-							$scope.newLogOffline($scope.formData, true, 'Log saved offline.');
+							$scope.newMeetingOffline($scope.formData, true, 'Meeting saved offline.');
 
 							// process connection error
 							$$utilities.processConnectionError(data, error);
@@ -168,7 +169,7 @@
 			>> push to offline data
 		*/
 
-			$scope.newLogOffline = function(data, needs_pushing, message) {
+			$scope.newMeetingOffline = function(data, needs_pushing, message) {
 
 				// hide loader
 				$ionicLoading.hide();
@@ -178,13 +179,13 @@
 				}
 
 				// push to offline data
-				$$offline.newLog(data, needs_pushing);
+				$$offline.newMeeting(data, needs_pushing);
 
 				// shout message
 				if (message !== undefined) {
 					$$shout(message);
 				}
-				console.log('fuck');
+
 				// go back to dashboard
 				$state.go('tabs.dashboard');
 

@@ -22,7 +22,7 @@
 */
 
 	angular.module('app.controllers').controller('EditLogController', function (
-		$scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope, $timeout, 
+		$scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope, $timeout,
 		$$api, $$utilities, $$shout, $$offline
 	) {
 
@@ -35,11 +35,11 @@
 
 
 		/*
-			>> update total duration logged this date 
+			>> update total duration logged this date
 		*/
 
 			$scope.calculateTotalDurationThisDate = function() {
-				
+
 				var sqlDate = $scope.formData.date_of_log.split(' ')[0];
 
 				$$api.user.totalHoursForDay($localStorage.user.id, sqlDate).success(function(result) {
@@ -100,7 +100,7 @@
 		*/
 
 			$scope.calculateDuration = function(hours, minutes) {
-			
+
 				// // set minutes to 0 if hours == 24
 				if (hours === 24) {
 					$scope.formData.minutes = 0;
@@ -185,7 +185,7 @@
 
 				// get log from api
 				$$api.logs.getLog($scope.logId).success(function (result) {
-					
+
 					// set initial duration (used for making sure user can't log more than 24 hours)
 					if (angular.isUndefined($scope.initialDuration)) {
 						$scope.initialDuration = result.data.duration;
@@ -194,7 +194,7 @@
 					$scope.displayLogData(result);
 
 				}).error(function (result, error) {
-					
+
 					// couldn't connect, send back to view logs and enable offline mode
 					$state.go('tabs.view-logs');
 
@@ -209,7 +209,7 @@
 		/*
 			>> function: generate form date
 		*/
-		
+
 			// generate a date in the format 2017-08-30 and add to hidden date field
 			$scope.generateFormDate = function() {
 				var formDate = $filter('date')($scope.formData.dateRaw, 'yyyy-MM-dd');
@@ -247,7 +247,7 @@
 					if ($rootScope.offlineMode) {
 
 						// save offline
-						$$offline.edit({ id: $scope.formData.offline_id, idKey: 'offline_id' }, $scope.formData, true);
+						$$offline.editLog({ id: $scope.formData.offline_id, idKey: 'offline_id' }, $scope.formData, true);
 
 						// hide loader
 						$ionicLoading.hide();
@@ -277,7 +277,7 @@
 								$ionicLoading.hide();
 
 								// save offline
-								$$offline.edit({ id: $scope.formData.id, idKey: 'id' }, result.data);
+								$$offline.editLog({ id: $scope.formData.id, idKey: 'id' }, result.data);
 
 								// go back to view logs
 								$state.go('tabs.view-logs');
