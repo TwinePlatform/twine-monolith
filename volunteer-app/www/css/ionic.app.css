@@ -12187,6 +12187,9 @@ h1, h2, h3, h4 {
 .has-subheader-organisation.view-logs {
   top: 92px;
 }
+.has-subheader-organisation.has-header-tabs {
+  top: 100px;
+}
 
 .platform-ios.platform-cordova .has-subheader-organisation {
   top: 92px !important; }

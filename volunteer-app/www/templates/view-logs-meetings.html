@@ -1,11 +1,33 @@
-<ion-view title="View logs meetings">
+<ion-view title="View meetings">
 
     <ion-content padding="true" class="has-header has-subfooter has-subheader-organisation view-logs">
 
-        <p class="no-logs text-center padding animate fadeIn absolute">You haven't created any meetings yet.</p>
+        <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noMeetings">You haven't created any meetings yet.</p>
+
+        <div class="padding text-center" ng-if="!meetings">
+            <ion-spinner class="text-center"></ion-spinner>
+        </div>
+
+        <ion-list>
+
+            <ion-item class="item-icon-left item-remove-animate" ng-class="{ 'needs-pushing': meeting.needs_pushing, 'deleted': meeting.deleted_at }" ng-repeat="meeting in meetings | orderBy: ['-date','-updated_at']">
+                <i class="icon" ng-class="{ 'ion-alert': meeting.needs_pushing, 'icon-custom-clock': !meeting.needs_pushing }">
+                    <span ng-if="meeting.needs_pushing">Not pushed</span>
+                </i>
+                <h2>{{meeting | json}}</h2>
+                <p>{{ meeting.date.split(' ')[0] | date:'d MMM yyyy'}} @ {{ organisationName }}</p>
+                <p ng-if="options.debug">id: {{ meeting.id }}</p>
+                <div class="button-bar">
+                    <a ng-if="!meeting.deleted_at" class="button button-positive button-block button-clear" ng-click="edit(meeting)" ng-disabled="meeting.previous_month"><i class="icon-custom-edit"></i> Edit</a>
+                    <button ng-if="!meeting.deleted_at" class="button button-positive button-block button-clear" ng-click="delete(meeting)" ng-disabled="meeting.previous_month"><i class="icon-custom-delete"></i> Delete</button>
+                    <span ng-if="meeting.deleted_at" class="button button-positive button-block button-clear">Deleted</span>
+                </div>
+            </ion-item>
+
+        </ion-list>
 
     </ion-content>
-    <a ui-sref="tabs.view-logs.new-meeting-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
+    <a ui-sref="tabs.new-meeting-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
         <span>Add New</span>
     </a>
 </ion-view>

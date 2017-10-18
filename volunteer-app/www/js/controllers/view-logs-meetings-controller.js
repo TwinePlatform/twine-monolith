@@ -1,68 +1,68 @@
 /*
 * CONTENTS
 *
-* view logs controller
-*    populate logs
-*    edit log
-*    delete log
-*    delete log offline
+* view meeting controller
+*    populate meetings
+*    edit meeting
+*    delete meeting
+*    delete meeting offline
 *    beforeEnter
 *    leave
 */
 
 /*
-	> view logs controller
+	> view meetings controller
 */
 
 	angular.module('app.controllers').controller('ViewLogsMeetingsController', function (
-		$scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $timeout, 
+		$scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $timeout,
 		$$api, $$utilities, $$shout, $$offline
 	) {
 
 		/*
-			>> populate logs
+			>> populate meetings
 		*/
 
-			$scope.populateLogs = function() {
+			$scope.populateMeetings = function() {
 
-				// if offline mode, get and display $localStorage logs
+				// if offline mode, get and display $localStorage meetings
 				if ($rootScope.offlineMode) {
 
-					// update logs in view
-					$scope.logs = $$offline.getLogs();
+					// update meetings in view
+					$scope.meetings = $$offline.getMeetings();
 
 				}
 
-				// else get logs from api
+				// else get meetings from api
 				else {
-					$$api.logs.getLogs($localStorage.user.id).success(function (result) {
+					$$api.meetings.getMeetings($localStorage.user.id).success(function (result) {
 
-						// update logs in view
-						$scope.logs = result.data.logs;
+						// update meetings in view
+						$scope.meetings = result.data.meetings;
 
-						// loop through each log and disable logs from previous months
+						// loop through each meeting and disable meetings from previous months
 						var dateFirstOfMonth = $$utilities.getDateFirstOfMonth();
-						for (i = 0; i < $scope.logs.length; i++) {
+						for (i = 0; i < $scope.meetings.length; i++) {
 							// convert sql date to js date so we can compare with dateFirstOfMonth
-							var sqlDateOfLog = $scope.logs[i].date_of_log;
-							var jsDateOfLog = $$utilities.sqlDateToJSDate(sqlDateOfLog);
-							// if log date is less than dateFirstOfMonth, flag it as previous month
-							if (jsDateOfLog < dateFirstOfMonth) {
-								$scope.logs[i].previous_month = true;
+							var sqlDateOfMeeting = $scope.meetings[i].date;
+							var jsDateOfMeeting = $$utilities.sqlDateToJSDate(sqlDateOfMeeting);
+							// if meeting date is less than dateFirstOfMonth, flag it as previous month
+							if (jsDateOfMeeting < dateFirstOfMonth) {
+								$scope.meetings[i].previous_month = true;
 							}
 						}
 
-						// save logs offline
-						$$offline.saveLogs(result.data.logs);
+						// save meetings offline
+						$$offline.saveMeetings(result.data.meetings);
 
-						// if no logs
-						if (result.data.logs.length == 0) {
-							$scope.noLogs = true;
+						// if no meetings
+						if (result.data.meetings.length == 0) {
+							$scope.noMeetings = true;
 						}
 
 					}).error(function (result, error) {
 
-						// if user does not exist, log user out
+						// if user does not exist, meeting user out
 						if (error === 404) {
 							$$utilities.logOut('This user account no longer exists.');
 						}
@@ -71,12 +71,12 @@
 							// enable offline mode
 							$$offline.enable();
 
-							// update logs in view
-							$scope.logs = $$offline.getLogs();
+							// update meetings in view
+							$scope.meetings = $$offline.getMeetings();
 
 							// process connection error
 							$$utilities.processConnectionError(result, error);
-							
+
 						}
 
 					});
@@ -86,33 +86,33 @@
 
 
 		/*
-			>> edit log
+			>> edit meeting
 		*/
-		
-			$scope.edit = function(log) {
 
-				// if offline mode, edit local log
+			$scope.edit = function(meeting) {
+
+				// if offline mode, edit local meeting
 				if ($rootScope.offlineMode) {
 
-					$state.go('tabs.edit-log-offline', {
-						offline_id: log.offline_id
+					$state.go('tabs.edit-meeting-offline', {
+						offline_id: meeting.offline_id
 					});
 
 				}
-				// if no internet connection, edit local log and enable offline mode
+				// if no internet connection, edit local meeting and enable offline mode
 				else if (!$$offline.checkConnection()) {
 
 					$$offline.enable();
-					$state.go('tabs.edit-log-offline', {
-						offline_id: log.offline_id
+					$state.go('tabs.edit-meeting-offline', {
+						offline_id: meeting.offline_id
 					});
 
 				}
-				// else edit via api 
+				// else edit via api
 				else {
 
-					$state.go('tabs.edit-log', {
-						id: log.id
+					$state.go('tabs.edit-meeting', {
+						id: meeting.id
 					});
 
 				}
@@ -121,15 +121,15 @@
 
 
 		/*
-			>> delete log
+			>> delete meeting
 		*/
-		
-			$scope.delete = function(log) {
+
+			$scope.delete = function(meeting) {
 
 				// confirm deletion popup
 				$ionicPopup.show({
-					template: 'Are you sure you want to delete this log?',
-					title: 'Delete log',
+					template: 'Are you sure you want to delete this meeting?',
+					title: 'Delete meeting',
 					scope: $scope,
 					buttons: [
 						{
@@ -139,38 +139,38 @@
 						  	text: '<b>Yes</b>',
 						  	type: 'button-positive',
 						  	onTap: function(e) {
-						    	
+
 						  		// show loader
 						  		$ionicLoading.show();
 
 						  		// if offline mode, delete locally
 						  		if ($scope.offlineMode) {
 
-						  			// delete log offline
-						  			$scope.deleteLogOffline({ id: log.offline_id, idKey: 'offline_id' }, true, 'Log deleted offline.');
+						  			// delete meeting offline
+						  			$scope.deleteMeetingOffline({ id: meeting.offline_id, idKey: 'offline_id' }, true, 'Meeting deleted offline.');
 
 						  		}
-						  		// else delete via api 
+						  		// else delete via api
 						  		else {
 
-							  		// get id of log
-							  		var id = log.id;
+							  		// get id of meeting
+							  		var id = meeting.id;
 
-							  		// call api delete log method
-							  		$$api.logs.delete(id).success(function (result) {
-							  			
+							  		// call api delete meeting method
+							  		$$api.meetings.delete(id).success(function (result) {
+
 							  			// hide loader
 							  			$ionicLoading.hide();
 
-							  			// delete locally 
-										$scope.deleteLogOffline({ id: log.id, idKey: 'id' });
+							  			// delete locally
+										$scope.deleteMeetingOffline({ id: meeting.id, idKey: 'id' });
 
 							  			// remove from model & view
-							  			var index = $scope.logs.indexOf(log);
-							  			$scope.logs.splice(index, 1);
+							  			var index = $scope.meetings.indexOf(meeting);
+							  			$scope.meetings.splice(index, 1);
 
-							  			// shout log deleted
-							  			$$shout('Log deleted');
+							  			// shout meeting deleted
+							  			$$shout('Meeting deleted');
 
 							  		}).error(function (result, error) {
 
@@ -183,12 +183,12 @@
 								  			// enable offline mode
 								  			$$offline.enable();
 
-								  			// delete log offline
-								  			$scope.deleteLogOffline({ id: id, idKey: 'id'}, true, 'Log deleted offline.');
+								  			// delete meeting offline
+								  			$scope.deleteMeetingOffline({ id: id, idKey: 'id'}, true, 'Meeting deleted offline.');
 
 								  			// make it look deleted & needing to push
-								  			log.deleted_at = $$utilities.getCurrentDateAndTimeAsString();
-								  			log.needs_pushing = true;
+								  			meeting.deleted_at = $$utilities.getCurrentDateAndTimeAsString();
+								  			meeting.needs_pushing = true;
 
 								  			// process connection error
 								  			$$utilities.processConnectionError(result, error);
@@ -208,10 +208,10 @@
 			}
 
 		/*
-			>> delete log offline
+			>> delete meeting offline
 		*/
 
-			$scope.deleteLogOffline = function(idObject, needs_pushing, message) {
+			$scope.deleteMeetingOffline = function(idObject, needs_pushing, message) {
 
 				// hide loader
 				$ionicLoading.hide();
@@ -220,15 +220,15 @@
 					needs_pushing = false;
 				}
 
-				// delete log
-				$$offline.deleteLog(idObject, needs_pushing);
+				// delete meeting
+				$$offline.deleteMeeting(idObject, needs_pushing);
 
 				// shout message
 				if (message !== undefined) {
 					$$shout(message);
 				}
 
-			} 
+			}
 
 		/*
 			>> beforeEnter
@@ -237,12 +237,12 @@
 
 			$scope.$on('$ionicView.beforeEnter', function() {
 
-				// populate logs
-				$scope.populateLogs();
+				// populate meetings
+				$scope.populateMeetings();
 
 			})
 
-		
+
 		/*
 			>> leave
 			   - fired every time view is fully left
@@ -250,8 +250,8 @@
 
 			$scope.$on('$ionicView.leave', function() {
 
-				// clear logs
-				$scope.logs = null;
+				// clear meetings
+				$scope.meetings = null;
 				if (!$rootScope.offlineMode) {
 					$('.view-logs .list .item').remove();
 				}

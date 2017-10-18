@@ -1,18 +1,18 @@
-<ion-view title="Log hours">
+<ion-view title="Add meeting">
 
     <organisation-subheader></organisation-subheader>
 
-    <ion-content padding="true" class="has-header has-subheader-organisation">
+    <ion-content padding="true" class="has-header has-subheader-organisation has-header-tabs">
 
-    <!-- form#createLog -->
-        <form id="createLog" name="createLog" class="list" ng-submit="processForm(createLog)" novalidate>
+    <!-- form#createMeeting -->
+        <form id="createMeeting" name="createMeeting" class="list" ng-submit="processForm(createMeeting)" novalidate>
 
             <!-- date -->
             <label class="item item-input">
                 <span class="input-label">Date</span>
                 <input type="text" name="date_pretty" id="date_pretty" class="datepicker">
             </label>
-            <label class="error block text-right padding assertive" ng-show="createLog.date.$invalid && formSubmitted" for="date">
+            <label class="error block text-right padding assertive" ng-show="createMeeting.date.$invalid && formSubmitted" for="date_pretty">
                 Please select a date
             </label>
             <!-- /date -->
@@ -20,18 +20,26 @@
             <!-- meeting type -->
             <label class="item item-select">
                 <span class="input-label">Meeting type</span>
-                <select ng-model="formData.gender" ng-options="option.name for option in genders track by option.id" name="gender" id="gender" ng-disabled="gendersDisabled">
+                <select ng-model="formData.meetingType" ng-options="option.name for option in meetingTypes track by option.id"
+                        name="meetingType" id="meetingType" ng-disabled="meetingTypesDisabled">
                     <option value="">Select type</option>
                     <!--  -->
                 </select>
             </label>
             <!-- /meeting type -->
 
+            <!-- meeting partner -->
+            <label class="item item-input">
+                <span class="input-label">Meeting partner</span>
+                <input type="text" name="partner" id="partner" placeholder="E.g. Jon Smith" ng-model="formData.partner">
+            </label>
+            <!-- /name -->
+
             <!-- buttons -->
             <button type="submit" class="button button-energized button-block">Save</button>
 
         </form>
-        <!-- /form#createLog -->
+        <!-- /form#createMeeting -->
 
     </ion-content>
 </ion-view>

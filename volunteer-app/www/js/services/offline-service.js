@@ -21,7 +21,7 @@
 */
 
 	angular.module('app.services').factory('$$offline', function(
-		$rootScope, $localStorage, $filter, 
+		$rootScope, $localStorage, $filter,
 		$$utilities
 	) {
 
@@ -63,7 +63,7 @@
 					}
 
 				    return connectionAvailable;
-				    
+
 				},
 
 			/*
@@ -96,7 +96,7 @@
 					}
 
 					// generate an offline id
-					data.offline_id = $$offline.generateOfflineId();
+					data.offline_id = $$offline.generateLogOfflineId();
 
 					// add organisation id
 					data.organisation_id = $localStorage.user.organisation.id;
@@ -136,7 +136,7 @@
 				>> edit log
 			*/
 
-				edit: function(idObject, data, needs_pushing) {
+				editLog: function(idObject, data, needs_pushing) {
 
 					// mark as needs_pushing if necessary
 					if (needs_pushing) {
@@ -145,7 +145,7 @@
 
 					// remove old item from $localStorage array, but grab offline_id first
 					for (var i = 0; i < $localStorage.offlineData.logs.length; i++) {
-					    if ($localStorage.offlineData.logs[i][idObject.idKey] === idObject.id) { 
+					    if ($localStorage.offlineData.logs[i][idObject.idKey] === idObject.id) {
 					    	// grab offline id for later
 					    	var offline_id = $localStorage.offlineData.logs[i].offline_id;
 					    	// delete it
@@ -206,7 +206,7 @@
 					});
 
 					// filter by organisation id
-					logs = $filter('filter')(logs, { 
+					logs = $filter('filter')(logs, {
 						'organisation_id': $localStorage.user.organisation_id
 					});
 
@@ -235,9 +235,165 @@
 				>> generate offline id
 			*/
 
-				generateOfflineId: function(offline_id) {
+				generateLogOfflineId: function(offline_id) {
 					return $localStorage.offlineData.logs.length + 1;
 				},
+
+
+            /*
+                >> new Meeting
+            */
+
+            newMeeting: function(data, needs_pushing) {
+
+                // mark as needs_pushing if necessary
+                if (needs_pushing) {
+                    data.needs_pushing = true;
+                }
+
+                // generate an offline id
+                data.offline_id = $$offline.generateMeetingOfflineId();
+
+                // add organisation id
+                data.organisation_id = $localStorage.user.organisation.id;
+
+                // set id to empty string if it doesn't exist
+                if (data.id === undefined) {
+                    data.id = '';
+                }
+
+                // push to $localStorage array
+                $localStorage.offlineData.meetings.push(data);
+            },
+
+            /*
+                >> get Meetings
+            */
+
+            getMeetings: function() {
+                var allMeetings = $localStorage.offlineData.meetings,
+                    filteredMeetings = $filter('filter')(allMeetings, {'organisation_id': $localStorage.user.organisation.id});
+                return filteredMeetings;
+            },
+
+            /*
+                >> get Meeting
+            */
+
+            getMeeting: function(offline_id) {
+                var meetingData = $filter('filter')($localStorage.offlineData.meetings, {'offline_id': offline_id});
+                var result = {
+                    data: meetingData[0]
+                }
+                return result;
+            },
+
+            /*
+                >> edit Meeting
+            */
+
+            editMeeting: function(idObject, data, needs_pushing) {
+
+                // mark as needs_pushing if necessary
+                if (needs_pushing) {
+                    data.needs_pushing = true;
+                }
+
+                // remove old item from $localStorage array, but grab offline_id first
+                for (var i = 0; i < $localStorage.offlineData.meetings.length; i++) {
+                    if ($localStorage.offlineData.meetings[i][idObject.idKey] === idObject.id) {
+                        // grab offline id for later
+                        var offline_id = $localStorage.offlineData.meetings[i].offline_id;
+                        // delete it
+                        $localStorage.offlineData.meetings.splice(i,1);
+                        break;
+                    }
+                }
+
+                // add offline_id to data if there isn't one
+                if (idObject.idKey === 'id') {
+                    data.offline_id = offline_id;
+                }
+
+                // remove delete_at attribute if equal to nothing (as this was causing Meetings to be deleted at the server side on subsequent syncs)
+                if (data.deleted_at === null) {
+                    delete data.deleted_at;
+                }
+
+                // push new data back into $localStorage array
+                $localStorage.offlineData.meetings.push(data);
+            },
+
+            /*
+                >> delete Meeting
+            */
+
+            deleteMeeting: function(idObject, needs_pushing) {
+
+                // loop through the offline Meetings
+                $.each($localStorage.offlineData.meetings, function(i, el){
+
+                    if (this[idObject.idKey] === idObject.id){
+
+                        // mark as deleted_at
+                        this.deleted_at = $$utilities.getCurrentDateAndTimeAsString();
+
+                        // mark as needs_pushing if necessary
+                        if (needs_pushing) {
+                            this.needs_pushing = true;
+                        }
+
+                    }
+                });
+            },
+
+            /*
+                >> save Meetings
+            */
+
+            saveMeetings: function(meetings) {
+
+                // clear offline Meetings data
+                $localStorage.offlineData.meetings = [];
+
+                // filter out deleted meetings
+                meetings = $filter('filter')(meetings, {
+                    'deleted_at': null
+                });
+
+                // filter by organisation id
+                meetings = $filter('filter')(meetings, {
+                    'organisation_id': $localStorage.user.organisation_id
+                });
+
+                // loop through each meeting in the response and put back into offline data with a unique offline_id
+                for (i = 0; i < meetings.length; i++) {
+
+                    // duplicate the current meeting
+                    var newOfflineMeeting = meetings[i];
+
+                    // add an offline_id to the meeting
+                    newOfflineMeeting.offline_id = i + 1;
+
+                    // remove delete_at attribute if equal to nothing (as this was causing meetings to be deleted at the server side on subsequent syncs)
+                    if (newOfflineMeeting.deleted_at === null) {
+                        delete newOfflineMeeting.deleted_at;
+                    }
+
+                    // push the meeting to $localStorage
+                    $localStorage.offlineData.meetings.push(newOfflineMeeting);
+
+                }
+
+            },
+
+            /*
+                >> generate offline id
+            */
+
+            generateMeetingOfflineId: function(offline_id) {
+                return $localStorage.offlineData.meetings.length + 1;
+            },
 
 			/*
 				>> total hours
