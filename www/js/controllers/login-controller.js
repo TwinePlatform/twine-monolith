@@ -61,8 +61,14 @@
 							// set organisation subheader title
 							$rootScope.organisationName = $localStorage.user.organisation.name;
 
-							// go to dashboard
-							$state.go('tabs.dashboard');
+              if ($localStorage.user.role_id===2) {
+                console.log($localStorage.user);
+                // go to volunteers
+                $state.go('tabs.view-volunteers');
+              } else {
+                // go to dashboard
+                $state.go('tabs.dashboard');
+							}
 
 						}
 
