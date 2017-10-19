@@ -3,16 +3,27 @@
     <a href="#" class="button button-small button-light button-outline" ng-click="syncOfflineData()">Sync</a>
 </div>
 
-<ion-tabs class="tabs-positive tabs-icon-top">
-	<!-- <a href="/" onclick="window.location = '/';" style="color: rgba(255,255,255,0.3); text-decoration: none;">H</a> -->
+<ion-tabs ng-if="currentUser.role_id===1" class="tabs-positive tabs-icon-top">
     <ion-tab title="Dashboard" icon="icon-custom-dashboard" href="#/tab/dashboard">
         <ion-nav-view name="dashboard-tab" ng-init="refreshDashboard()"></ion-nav-view>
+    </ion-tab>
+    <ion-tab ng-show="currentUser.role_id===2" title="View volunteers" icon="icon-custom-logs" href="#/tab/volunteers">
+        <ion-nav-view name="view-volunteers-tab"></ion-nav-view>
     </ion-tab>
     <ion-tab title="View logs" icon="icon-custom-logs" href="#/tab/view-logs">
         <ion-nav-view name="view-logs-tab"></ion-nav-view>
     </ion-tab>
+    <ion-tab title="Settings" icon="icon-custom-settings" href="#/tab/settings">
+        <ion-nav-view name="settings-tab"></ion-nav-view>
+    </ion-tab>
+</ion-tabs>
+
+<ion-tabs ng-if="currentUser.role_id===2" class="tabs-positive tabs-icon-top">
     <ion-tab title="View volunteers" icon="icon-custom-logs" href="#/tab/volunteers">
         <ion-nav-view name="view-volunteers-tab"></ion-nav-view>
+    </ion-tab>
+    <ion-tab title="View logs" icon="icon-custom-logs" href="#/tab/view-logs">
+        <ion-nav-view name="view-logs-tab"></ion-nav-view>
     </ion-tab>
     <ion-tab title="Settings" icon="icon-custom-settings" href="#/tab/settings">
         <ion-nav-view name="settings-tab"></ion-nav-view>
