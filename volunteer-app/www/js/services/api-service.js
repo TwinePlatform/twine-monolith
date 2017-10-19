@@ -298,6 +298,74 @@
 
 				},
 
+      /*
+        >> Volunteers
+      */
+
+      volunteers: {
+
+        /*
+          >>> delete
+        */
+
+        delete: function(id) {
+          return $http({
+            method: 'DELETE',
+            url: $$api.url('volunteers/' + id)
+          });
+        },
+
+        /*
+          >>> get Volunteers
+        */
+
+        getVolunteers: function(organisationId) {
+          return $http({
+            method: 'GET',
+            url: $$api.url('volunteers/organisation/' + organisationId)
+          });
+        },
+
+        /*
+          >>> get Volunteer
+        */
+
+        getVolunteer: function(volunteerId) {
+          return $http({
+            method: 'GET',
+            url: $$api.url('volunteers/' + volunteerId)
+          });
+        },
+
+        /*
+          >>> edit Volunteer
+        */
+
+        edit: function(volunteerId, data) {
+          return $http({
+            method: 'PUT',
+            url: $$api.url('volunteers/' + volunteerId),
+            data: data,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+          });
+        },
+
+        /*
+          >>> new Volunteer
+        */
+
+        new: function(data) {
+          return $http({
+            method: 'POST',
+            url: $$api.url('volunteers'),
+            data: data,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+          });
+        },
+
+
+      },
+
 			/*
 				>> genders
 			*/

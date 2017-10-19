@@ -28,7 +28,7 @@
 			$scope.populateVolunteers = function() {
 
 				if (!$rootScope.offlineMode) {
-					$$api.volunteers.getVolunteers($localStorage.user.id).success(function (result) {
+					$$api.volunteers.getVolunteers($localStorage.user.organisation_id).success(function (result) {
 
 						// update volunteers in view
 						$scope.volunteers = result.data.volunteers;
