@@ -142,6 +142,18 @@ angular.module('app.routes', ['ionicUIRouter'])
 						}
 					}
 				})
+
+        // >> volunteers
+				.state('tabs.view-volunteers', {
+					// cache: 'false',
+					url: '/volunteers',
+					views: {
+						'view-volunteers-tab': {
+							templateUrl: 'templates/view-volunteers.html',
+							controller: 'ViewVolunteersController'
+						}
+					}
+				})
 			// >> settings
 			.state('tabs.settings', {
 				// cache: 'false',

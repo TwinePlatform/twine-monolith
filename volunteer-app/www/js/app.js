@@ -111,7 +111,16 @@
 				*/
 
 					if ($localStorage.user) {
-						$rootScope.organisationName = $localStorage.user.organisation.name;
+            $$api.user.get($localStorage.user.id).success(function(result) {
+              $localStorage.user = result.data;
+              $rootScope.organisationName = $localStorage.user.organisation.name;
+            }).error(function (result, error) {
+              $localStorage.user = null;
+              // process connection error
+              $$utilities.processConnectionError(result, error);
+
+            });
+
 					}
 
 
