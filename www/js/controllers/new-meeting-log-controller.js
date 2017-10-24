@@ -186,7 +186,7 @@
 					$$shout(message);
 				}
 
-				// go back to metting list
+				// go back to meeting list
 				$state.go('tabs.view-logs.meetings');
 
 			}
