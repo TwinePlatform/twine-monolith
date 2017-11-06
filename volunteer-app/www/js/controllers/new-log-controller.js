@@ -30,6 +30,12 @@
 
 			$scope.formData = {};
 
+			$scope.volunteers = [];
+
+			$scope.activities = [];
+
+			$scope.isAdmin = $rootScope.isAdmin;
+
 
 		/*
 			>> update total duration logged this date 
@@ -47,6 +53,52 @@
 				});
 
 			}
+
+
+        /*
+            >> fill Volonters
+
+        */
+			$scope.fillVolonters = function () {
+				$$api.volunteers.getVolunteers($rootScope.currentUser.organisation_id)
+					.success(function (result) {
+						console.log(result);
+						if (result !== null && result !== undefined && result.data.volunteers !== null && result.data.volunteers !== undefined)
+						$scope.volunteers = result.data.volunteers;
+                    })
+            };
+
+        	$scope.fillVolonters();
+
+        /*
+            >> fill Activities
+
+        */
+
+        $scope.fillActivities = function () {
+            $$api.activities.get()
+                .success(function (result) {
+                    console.log(result);
+                    if (result !== null && result !== undefined && result.data !== null && result.data !== undefined)
+                        $scope.activities = result.data;
+                })
+        };
+
+        $scope.fillActivities();
+
+
+        $scope.calculateTotalDurationThisDate = function() {
+
+            var sqlDate = $scope.formData.date_of_log.split(' ')[0];
+
+            $$api.user.totalHoursForDay($localStorage.user.id, sqlDate).success(function(result) {
+                if ($scope.formData.duration === undefined) {
+                    $scope.formData.duration = 0;
+                }
+                $scope.formData.totalDurationThisDate = result.data.duration + $scope.formData.duration;
+            });
+
+        }
 
 		/*
 			>> setup datepickers
@@ -120,11 +172,16 @@
 			}
 
 
+
 		/*
 			>> populate user_id field
 		*/
 
-			$scope.formData.user_id = $localStorage.user.id;
+			if ($rootScope.currentUser.role_id !== 2) {
+                $scope.formData.user_id = $localStorage.user.id;
+            } else {
+                $scope.formData.user_id = null;
+			}
 
 
 		/*
@@ -157,6 +214,7 @@
 					else {
 
 						// >>> submit form
+
 						$$api.logs.new($.param($scope.formData)).success(function (result) {
 
 							// hide loader
@@ -169,6 +227,8 @@
 								$scope.newLogOffline(result.data);
 
 								$$shout('Log saved.');
+
+								$state.go('tabs.view-logs.hours');
 
 							}
 

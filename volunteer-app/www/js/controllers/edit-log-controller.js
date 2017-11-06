@@ -32,6 +32,24 @@
 
 			$scope.formData = {};
 			$scope.logLoaded = false;
+			$scope.activities = [];
+
+
+        /*
+            >> fill Activities
+
+        */
+
+        $scope.fillActivities = function () {
+            $$api.activities.get()
+                .success(function (result) {
+                    console.log(result);
+                    if (result !== null && result !== undefined && result.data !== null && result.data !== undefined)
+                        $scope.activities = result.data;
+                })
+        };
+
+        $scope.fillActivities();
 
 
 		/*

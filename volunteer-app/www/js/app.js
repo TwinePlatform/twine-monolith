@@ -35,13 +35,13 @@
 				debug: false,
 				environment: 'local',	// dev | stage | live
 				apiBaseUrl: {
-					local:   'http://localhost:8000/api/v1/',
+					local:   'http://46.101.50.90/api/v1/',
 					dev:   'http://powertochangeadmindev.stage2.reason.digital/api/v1/',
 					stage: 'http://powertochangeadmin.stage2.reason.digital/api/v1/',
 					live:  'http://dashboard.twine-together.com/api/v1/'
 				},
 				adminBaseUrl: {
-          local:   'http://localhost:8000/',
+					local:   'http://localhost:8000/',
 					dev:   'http://powertochangeadmindev.stage2.reason.digital/',
 					stage: 'http://powertochangeadmin.stage2.reason.digital/',
 					live:  'http://dashboard.twine-together.com/'
@@ -251,9 +251,20 @@
 						$rootScope.appPaused = false;
 				    }, false);
 
-
+				/*
+					>>> root access
+				 */
+					$rootScope.$watch('currentUser',function (user) {
+						if (user !== undefined && user !== null) {
+                            if (user.role_id !== undefined && user.role_id === 2) {
+                                $rootScope.isAdmin = true;
+                            } else {
+                                $rootScope.isAdmin = false;
+                            }
+						}
+					})
 			});
-	})
+	});
 
 	// controllers module
 	angular.module('app.controllers', [])

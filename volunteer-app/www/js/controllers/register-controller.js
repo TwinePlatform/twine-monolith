@@ -169,6 +169,8 @@
 							// store user information
 							$localStorage.user = response.data;
 
+                            $rootScope.currentUser = response.data;
+
 							// setup localstorage
 							$$utilities.setupLocalStorage();
 

@@ -1,26 +1,38 @@
 <ion-view title="Add meeting">
 
-    <organisation-subheader></organisation-subheader>
+    <!--<organisation-subheader></organisation-subheader>-->
 
     <ion-content padding="true" class="has-header has-subheader-organisation has-header-tabs">
 
     <!-- form#createMeeting -->
         <form id="createMeeting" name="createMeeting" class="list" ng-submit="processForm(createMeeting)" novalidate>
 
-            <!-- date -->
-            <label class="item item-input">
-                <span class="input-label">Date</span>
-                <input type="text" name="date_pretty" id="date_pretty" class="datepicker">
+            <!-- organisation -->
+            <h4 style="color: black"> What is your organisation's big project for outreach?</h4>
+            <label class="item item-select">
+                <select ng-model="formData.outreach" name="outreach" id="outreach" convert-to-number>
+                    <option  value="" disabled selected>Select outreach</option>
+                    <option ng-repeat="option in outreachTypes" value="{{option.id}}">{{option.name}}</option>
+                    <!--  -->
+                </select>
             </label>
-            <label class="error block text-right padding assertive" ng-show="createMeeting.date.$invalid && formSubmitted" for="date_pretty">
-                Please select a date
-            </label>
-            <!-- /date -->
 
+            <!-- /organisation -->
+            <div ng-hide="formData.outreach === null">
+
+                <!-- date -->
+                <label class="item item-input">
+                    <span class="input-label">Date</span>
+                    <input type="text" name="date_pretty" id="date_pretty" class="datepicker">
+                </label>
+                <label class="error block text-right padding assertive" ng-show="createLog.date.$invalid && formSubmitted" for="date">
+                    Please select a date
+                </label>
+                <!-- /date -->
             <!-- meeting type -->
             <label class="item item-select">
-                <span class="input-label">Meeting type</span>
-                <select ng-model="formData.meetingType" ng-options="option.name for option in meetingTypes track by option.id"
+                <span class="input-label">Interaction type</span>
+                <select ng-model="formData.type" ng-options="option.name for option in meetingTypes track by option.id"
                         name="meetingType" id="meetingType" ng-disabled="meetingTypesDisabled">
                     <option value="">Select type</option>
                     <!--  -->
@@ -29,14 +41,19 @@
             <!-- /meeting type -->
 
             <!-- meeting partner -->
-            <label class="item item-input">
-                <span class="input-label">Meeting partner</span>
-                <input type="text" name="partner" id="partner" placeholder="E.g. Jon Smith" ng-model="formData.partner">
+            <label class="item item-select">
+                <span class="input-label">Interaction with</span>
+                <select ng-model="formData.outreachChild" name="outreachChild" id="outreachChild" convert-to-number>
+                    <option  value="" disabled>Select partner</option>
+                    <option ng-repeat="option in outreachChildTypes" value="{{option.id}}">{{option.name}}</option>
+                    <!--  -->
+                </select>
             </label>
             <!-- /name -->
 
             <!-- buttons -->
             <button type="submit" class="button button-energized button-block">Save</button>
+            </div>
 
         </form>
         <!-- /form#createMeeting -->
