@@ -85,6 +85,13 @@
 							});
 						},
 
+						getAdminLogs : function (userId) {
+							return $http({
+								method: 'GET',
+								url: $$api.url('logs/admin/' + userId)
+							});
+						},
+
 					/*
 						>>> edit log
 					*/
@@ -403,6 +410,51 @@
 						}
 
 				},
+
+            /*
+                >> meetingTypes
+            */
+
+            outreach: {
+
+                /*
+                    >>> get outreach types
+                */
+
+                getTypes: function() {
+                    return $http({
+                        method: 'GET',
+                        url: $$api.url('outreachTypes')
+                    });
+                },
+
+                getChildTypes: function(outreach_id) {
+                    return $http({
+                        method: 'GET',
+                        url: $$api.url('outreachChildTypes/parent/' + outreach_id)
+                    });
+                }
+
+            },
+
+            /*
+                >> Activities
+            */
+
+            activities: {
+
+                /*
+                    >>> get genders
+                */
+
+                get: function() {
+                    return $http({
+                        method: 'GET',
+                        url: $$api.url('activities')
+                    });
+                }
+
+            },
 
 			/*
 				>> regions

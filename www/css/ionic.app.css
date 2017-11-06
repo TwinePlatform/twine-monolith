@@ -12202,8 +12202,9 @@ h1, h2, h3, h4 {
     line-height: 30px; }
 
 .platform-android .has-subheader-organisation {
-  top: 122px;
-  bottom: 0; }
+  top: 95px;
+  bottom: 0px;
+}
 
 .logo {
   margin: 10px auto;
@@ -12530,3 +12531,9 @@ select[disabled], .item-select-disabled:after {
     .login .buttons .button {
       min-height: 40px;
       line-height: 40px; }
+
+    .platform-android .logs-tabs .tab-nav {
+      margin-top: 50px;
+    }.platform-android .logs-tabs ion-view  {
+      margin-top: 50px;
+    }

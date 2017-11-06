@@ -1,11 +1,27 @@
 <ion-view title="Log hours">
 
-    <organisation-subheader></organisation-subheader>
+    <!--<organisation-subheader></organisation-subheader>-->
 
     <ion-content padding="true" class="has-header has-subheader-organisation">
         
     <!-- form#createLog -->
         <form id="createLog" name="createLog" class="list" ng-submit="processForm(createLog)" novalidate>
+
+            <!-- name -->
+            <div ng-if="isAdmin">
+                <label class="item item-select">
+                    <span class="input-label">Name</span>
+                    <select ng-model="formData.user_id" name="volunteers" id="volunteers" convert-to-number>
+                        <option  value="" selected>Select volunteer</option>
+                        <option ng-repeat="option in volunteers" value="{{option.id}}">{{option.name}}</option>
+                        <!--  -->
+                    </select>
+                </label>
+                <!--<label class="error block text-right padding assertive" for="volunteers">-->
+                    <!--Please select a name-->
+                <!--</label>-->
+            </div>
+            <!-- /name -->
 
             <!-- date -->
             <label class="item item-input">
@@ -42,6 +58,20 @@
                 You cannot log more than 24 hours in a day.
             </label>
             <!-- /minutes -->
+
+            <!-- Activity -->
+            <label class="item item-select">
+                <span class="input-label">Activity</span>
+                <select ng-model="formData.activity_id" name="activities" id="activities" convert-to-number>
+                    <option  value="" selected>Select activity</option>
+                    <option ng-repeat="option in activities" value="{{option.id}}">{{option.name}}</option>
+                    <!--  -->
+                </select>
+            </label>
+            <!--<label class="error block text-right padding assertive" for="activities">-->
+                <!--Please select a activity-->
+            <!--</label>-->
+            <!-- /Activity -->
 
             <!-- total logged on this date -->
             <label class="item item-input ng-hide">

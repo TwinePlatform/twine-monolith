@@ -50,19 +50,27 @@ angular.module('app.routes', ['ionicUIRouter'])
                     }
                 }
             })
-
             // >>> dashboard - new log
-            .state('tabs.new-log', {
+            .state('tabs.view-logs.new-log', {
                 cache: false,
-                url: '/dashboard/new-log',
+                url: '/new-log',
                 views: {
-                    'dashboard-tab': {
+                    'view-logs-hours-tab@tabs.view-logs': {
                         templateUrl: 'templates/new-log.html',
                         controller: 'NewLogController'
                     }
                 }
             })
-
+            .state('tabs.new-log',{
+            cache: false,
+            url: '/new-log',
+            views: {
+                'dashboard-tab': {
+                    templateUrl: 'templates/new-log.html',
+                    controller: 'NewLogController'
+                }
+            }
+            })
             // >> view logs
             .state('tabs.view-logs', {
                 cache: false,

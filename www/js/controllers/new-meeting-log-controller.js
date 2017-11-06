@@ -29,6 +29,12 @@
 
         $scope.meetingTypesDisabled = true;
         $scope.meetingTypes = [];
+        $scope.outreachTypes = [];
+        $scope.outreachChildTypes = [];
+        $scope.formData = {
+            outreach : null,
+            outreachChild : null
+		};
 
         $$api.meetingTypes.get().success(function (result) {
             // loop through the results and push only required items to $scope.meetingTypes
@@ -45,12 +51,34 @@
 
         });
 
-        /*
-            >> store the form data
-        */
+        $$api.outreach.getTypes().success(function (result) {
+        	console.log(result);
+            if (result !== undefined && result !== null) {
+            	$scope.outreachTypes = result.data;
+			}
+        }).error(function (result, error) {
 
-			$scope.formData = {};
+        	console.log(error);
 
+            // process connection error
+            $$utilities.processConnectionError(result, error);
+
+        });
+
+        $scope.$watch('formData', function (newVal) {
+        	if (newVal !== null && newVal !== undefined && newVal.outreach !== undefined && newVal.outreach !== null) {
+        		$$api.outreach.getChildTypes(newVal.outreach)
+					.success(function (result) {
+						if (result !== undefined && result !== null && result.data !== undefined && result.data !== null) {
+							$scope.outreachChildTypes = result.data;
+							$scope.partner = null;
+						}
+                    })
+					.error(function (result,error) {
+						console.log(error);
+                    })
+			}
+		},true);
 
 		/*
 			>> setup datepickers
@@ -119,8 +147,18 @@
 					// not offline mode, submit the form
 					else {
 
+						console.log($scope.formData);
+
+						$scope.sendData = {
+							type : $scope.formData.type.id,
+							partner : $scope.formData.outreachChild,
+							user_id : $rootScope.currentUser.id,
+							organisation_id : $scope.formData.outreach,
+							date: $scope.formData.date
+						};
+
 						// >>> submit form
-						$$api.meetings.new($.param($scope.formData)).success(function (result) {
+						$$api.meetings.new($.param($scope.sendData)).success(function (result) {
 
 							// hide loader
 							$ionicLoading.hide();

@@ -15,9 +15,11 @@
 */
 
 	angular.module('app.controllers').controller('ViewLogsHoursController', function (
-		$scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $timeout, 
+		$scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $timeout,
 		$$api, $$utilities, $$shout, $$offline
 	) {
+
+		$scope.isAdmin = $rootScope.isAdmin;
 
 		/*
 			>> populate logs
@@ -35,51 +37,90 @@
 
 				// else get logs from api
 				else {
-					$$api.logs.getLogs($localStorage.user.id).success(function (result) {
 
-						// update logs in view
-						$scope.logs = result.data.logs;
+					if ($rootScope.isAdmin) {
 
-						// loop through each log and disable logs from previous months
-						var dateFirstOfMonth = $$utilities.getDateFirstOfMonth();
-						for (i = 0; i < $scope.logs.length; i++) {
-							// convert sql date to js date so we can compare with dateFirstOfMonth
-							var sqlDateOfLog = $scope.logs[i].date_of_log;
-							var jsDateOfLog = $$utilities.sqlDateToJSDate(sqlDateOfLog);
-							// if log date is less than dateFirstOfMonth, flag it as previous month
-							if (jsDateOfLog < dateFirstOfMonth) {
-								$scope.logs[i].previous_month = true;
-							}
-						}
+						$$api.logs.getAdminLogs($rootScope.currentUser.id).success(function (result) {
 
-						// save logs offline
-						$$offline.saveLogs(result.data.logs);
+							console.log(result);
+                            // update logs in view
+                            $scope.logs = result.data.logs;
 
-						// if no logs
-						if (result.data.logs.length == 0) {
-							$scope.noLogs = true;
-						}
+                            if (result.data.logs.length == 0) {
+                                $scope.noLogs = true;
+                            }
 
-					}).error(function (result, error) {
+                            $$offline.saveLogs(result.data.logs);
 
-						// if user does not exist, log user out
-						if (error === 404) {
-							$$utilities.logOut('This user account no longer exists.');
-						}
-						else {
+                        }).error(function (result, error) {
 
-							// enable offline mode
-							$$offline.enable();
+                            // if user does not exist, log user out
+                            if (error === 404) {
+                                $$utilities.logOut('This user account no longer exists.');
+                            }
+                            else {
 
-							// update logs in view
-							$scope.logs = $$offline.getLogs();
+                                // enable offline mode
+                                $$offline.enable();
 
-							// process connection error
-							$$utilities.processConnectionError(result, error);
-							
-						}
+                                // update logs in view
+                                $scope.logs = $$offline.getLogs();
 
-					});
+                                // process connection error
+                                $$utilities.processConnectionError(result, error);
+
+                            }
+
+                        });
+
+					} else {
+
+                        $$api.logs.getLogs($localStorage.user.id).success(function (result) {
+
+                            // update logs in view
+                            $scope.logs = result.data.logs;
+
+                            // loop through each log and disable logs from previous months
+                            var dateFirstOfMonth = $$utilities.getDateFirstOfMonth();
+                            for (i = 0; i < $scope.logs.length; i++) {
+                                // convert sql date to js date so we can compare with dateFirstOfMonth
+                                var sqlDateOfLog = $scope.logs[i].date_of_log;
+                                var jsDateOfLog = $$utilities.sqlDateToJSDate(sqlDateOfLog);
+                                // if log date is less than dateFirstOfMonth, flag it as previous month
+                                if (jsDateOfLog < dateFirstOfMonth) {
+                                    $scope.logs[i].previous_month = true;
+                                }
+                            }
+
+                            // save logs offline
+                            $$offline.saveLogs(result.data.logs);
+
+                            // if no logs
+                            if (result.data.logs.length == 0) {
+                                $scope.noLogs = true;
+                            }
+
+                        }).error(function (result, error) {
+
+                            // if user does not exist, log user out
+                            if (error === 404) {
+                                $$utilities.logOut('This user account no longer exists.');
+                            }
+                            else {
+
+                                // enable offline mode
+                                $$offline.enable();
+
+                                // update logs in view
+                                $scope.logs = $$offline.getLogs();
+
+                                // process connection error
+                                $$utilities.processConnectionError(result, error);
+
+                            }
+
+                        });
+                    }
 				}
 
 			}

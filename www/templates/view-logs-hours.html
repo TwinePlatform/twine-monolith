@@ -1,6 +1,5 @@
 <ion-view title="View logs hours">
-
-    <organisation-subheader></organisation-subheader>
+    <!--<organisation-subheader></organisation-subheader>-->
 
     <ion-content padding="true" class="padding has-header has-subfooter has-subheader-organisation view-logs">
 
@@ -13,11 +12,12 @@
         <ion-list>
 
             <!-- <ion-item class="item-icon-left item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at'] | filter: {deleted_at : '!'}"> -->
-            <ion-item class="item-icon-left item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at']">
+            <ion-item style="margin-bottom: 20px" class="item-icon-left item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at']">
                 <i class="icon" ng-class="{ 'ion-alert': log.needs_pushing, 'icon-custom-clock': !log.needs_pushing }">
                     <span ng-if="log.needs_pushing">Not pushed</span>
                 </i>
-                <h2 ng-bind-html="log.duration | hoursAndMinutesAsString"></h2>
+                <h1 ng-bind-html="log.duration | hoursAndMinutesAsString"></h1>
+                <h2 ng-if="isAdmin"> {{log.user.name}}</h2>
                 <p>{{ log.date_of_log.split(' ')[0] | date:'d MMM yyyy'}} @ {{ organisationName }}</p>
                 <p ng-if="options.debug">id: {{ log.id }}</p>
                 <div class="button-bar">
@@ -31,7 +31,7 @@
         </ion-list>
 
     </ion-content>
-    <a ui-sref="tabs.new-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
+    <a ui-sref="tabs.view-logs.new-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
         <span>Log hours</span>
     </a>
 </ion-view>

@@ -55,6 +55,8 @@
 							// store user data
 							$localStorage.user = result.data;
 
+							$rootScope.currentUser = result.data;
+
 							// setup local storage
 							$$utilities.setupLocalStorage();
 
