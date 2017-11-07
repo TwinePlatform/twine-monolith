@@ -2,25 +2,27 @@
 
     <ion-content padding="true" class="has-header has-subfooter has-subheader-organisation view-logs">
 
-        <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noMeetings">You haven't created any meetings yet.</p>
+        <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noOutreach">You haven't created any meetings yet.</p>
 
-        <div class="padding text-center" ng-if="!meetings">
+        <div class="padding text-center" ng-if="!outreaches">
             <ion-spinner class="text-center"></ion-spinner>
         </div>
 
         <ion-list>
 
-            <ion-item class="item-icon-left item-remove-animate" ng-class="{ 'needs-pushing': meeting.needs_pushing, 'deleted': meeting.deleted_at }" ng-repeat="meeting in meetings | orderBy: ['-date','-updated_at']">
+            <ion-item style="margin-bottom: 20px" class="item-icon-left item-remove-animate" ng-class="{ 'needs-pushing': outreach.needs_pushing, 'deleted': outreach.deleted_at }" ng-repeat="outreach in outreaches | orderBy: ['-date','-updated_at']">
                 <i class="icon" ng-class="{ 'ion-alert': meeting.needs_pushing, 'icon-custom-clock': !meeting.needs_pushing }">
-                    <span ng-if="meeting.needs_pushing">Not pushed</span>
+                    <span ng-if="outreach.needs_pushing">Not pushed</span>
                 </i>
-                <h2>{{meeting.type.name}}</h2>
-                <p>{{ meeting.date.split(' ')[0] | date:'d MMM yyyy'}} @ {{ organisationName }}</p>
-                <p ng-if="options.debug">id: {{ meeting.id }}</p>
+                <h2>{{outreach.outreach_type.name}}</h2>
+                <h3 style="color: black">{{outreach.outreach_child_type.name}}</h3>
+                <p>{{ outreach.date.split(' ')[0] | date:'d MMM yyyy'}} @ {{ outreach.organisation_id.name }}</p>
+                <p ng-if="options.debug">id: {{ outreach.id }}</p>
+                <p>{{outreach.interaction_type.name}}</p>
                 <div class="button-bar">
-                    <a ng-if="!meeting.deleted_at" class="button button-positive button-block button-clear" ng-click="edit(meeting)" ng-disabled="meeting.previous_month"><i class="icon-custom-edit"></i> Edit</a>
-                    <button ng-if="!meeting.deleted_at" class="button button-positive button-block button-clear" ng-click="delete(meeting)" ng-disabled="meeting.previous_month"><i class="icon-custom-delete"></i> Delete</button>
-                    <span ng-if="meeting.deleted_at" class="button button-positive button-block button-clear">Deleted</span>
+                    <a ng-if="!outreach.deleted_at" class="button button-positive button-block button-clear" ng-click="edit(outreach)" ng-disabled="meeting.previous_month"><i class="icon-custom-edit"></i> Edit</a>
+                    <button ng-if="!outreach.deleted_at" class="button button-positive button-block button-clear" ng-click="delete(outreach)" ng-disabled="meeting.previous_month"><i class="icon-custom-delete"></i> Delete</button>
+                    <span ng-if="outreach.deleted_at" class="button button-positive button-block button-clear">Deleted</span>
                 </div>
             </ion-item>
 

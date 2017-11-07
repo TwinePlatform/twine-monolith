@@ -42,7 +42,6 @@
 
 						$$api.logs.getAdminLogs($rootScope.currentUser.id).success(function (result) {
 
-							console.log(result);
                             // update logs in view
                             $scope.logs = result.data.logs;
 

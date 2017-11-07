@@ -421,6 +421,45 @@
                     >>> get outreach types
                 */
 
+                get : function (id) {
+                    return $http({
+                        method: 'GET',
+                        url: $$api.url('outreaches/' + id)
+                    });
+                },
+
+                getByType : function (outreach_type) {
+					return $http({
+						method: 'GET',
+						url: $$api.url('outreaches/bytype/' + outreach_type)
+					});
+                },
+
+                delete: function(id) {
+                    return $http({
+                        method: 'DELETE',
+                        url: $$api.url('outreaches/' + id)
+                    });
+                },
+
+                edit: function(meetingId, data) {
+                    return $http({
+                        method: 'PUT',
+                        url: $$api.url('outreaches/' + meetingId),
+                        data: data,
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                    });
+                },
+
+				new : function (data) {
+                    return $http({
+                        method: 'POST',
+                        url: $$api.url('outreaches'),
+                        data: data,
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                    });
+                },
+
                 getTypes: function() {
                     return $http({
                         method: 'GET',
