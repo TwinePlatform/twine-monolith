@@ -241,10 +241,10 @@
 
 
             /*
-                >> new Meeting
+                >> new Outreach
             */
 
-            newMeeting: function(data, needs_pushing) {
+            newOutreach: function(data, needs_pushing) {
 
                 // mark as needs_pushing if necessary
                 if (needs_pushing) {
@@ -252,7 +252,7 @@
                 }
 
                 // generate an offline id
-                data.offline_id = $$offline.generateMeetingOfflineId();
+                data.offline_id = $$offline.generateOutreachOfflineId();
 
                 // add organisation id
                 data.organisation_id = $localStorage.user.organisation.id;
@@ -263,36 +263,36 @@
                 }
 
                 // push to $localStorage array
-                $localStorage.offlineData.meetings.push(data);
+                $localStorage.offlineData.outreach.push(data);
             },
 
             /*
-                >> get Meetings
+                >> get Outreach
             */
 
-            getMeetings: function() {
-                var allMeetings = $localStorage.offlineData.meetings,
-                    filteredMeetings = $filter('filter')(allMeetings, {'organisation_id': $localStorage.user.organisation.id});
-                return filteredMeetings;
+            getOutreaches: function() {
+                var allOutreach = $localStorage.offlineData.outreach,
+                    filteredOutreach = $filter('filter')(allOutreach, {'outreach_type': $localStorage.outreach_type});
+                return filteredOutreach;
             },
 
             /*
-                >> get Meeting
+                >> get Outreach
             */
 
-            getMeeting: function(offline_id) {
-                var meetingData = $filter('filter')($localStorage.offlineData.meetings, {'offline_id': offline_id});
+            getOutreach: function(offline_id) {
+                var outreachData = $filter('filter')($localStorage.offlineData.outreach, {'offline_id': offline_id});
                 var result = {
-                    data: meetingData[0]
+                    data: outreachData[0]
                 }
                 return result;
             },
 
             /*
-                >> edit Meeting
+                >> edit Outreach
             */
 
-            editMeeting: function(idObject, data, needs_pushing) {
+            editOutreach: function(idObject, data, needs_pushing) {
 
                 // mark as needs_pushing if necessary
                 if (needs_pushing) {
@@ -300,12 +300,12 @@
                 }
 
                 // remove old item from $localStorage array, but grab offline_id first
-                for (var i = 0; i < $localStorage.offlineData.meetings.length; i++) {
-                    if ($localStorage.offlineData.meetings[i][idObject.idKey] === idObject.id) {
+                for (var i = 0; i < $localStorage.offlineData.outreach.length; i++) {
+                    if ($localStorage.offlineData.outreach[i][idObject.idKey] === idObject.id) {
                         // grab offline id for later
-                        var offline_id = $localStorage.offlineData.meetings[i].offline_id;
+                        var offline_id = $localStorage.offlineData.outreach[i].offline_id;
                         // delete it
-                        $localStorage.offlineData.meetings.splice(i,1);
+                        $localStorage.offlineData.outreach.splice(i,1);
                         break;
                     }
                 }
@@ -315,23 +315,23 @@
                     data.offline_id = offline_id;
                 }
 
-                // remove delete_at attribute if equal to nothing (as this was causing Meetings to be deleted at the server side on subsequent syncs)
+                // remove delete_at attribute if equal to nothing (as this was causing Outreach to be deleted at the server side on subsequent syncs)
                 if (data.deleted_at === null) {
                     delete data.deleted_at;
                 }
 
                 // push new data back into $localStorage array
-                $localStorage.offlineData.meetings.push(data);
+                $localStorage.offlineData.outreach.push(data);
             },
 
             /*
-                >> delete Meeting
+                >> delete Outreach
             */
 
-            deleteMeeting: function(idObject, needs_pushing) {
+            deleteOutreach: function(idObject, needs_pushing) {
 
-                // loop through the offline Meetings
-                $.each($localStorage.offlineData.meetings, function(i, el){
+                // loop through the offline Outreach
+                $.each($localStorage.offlineData.outreach, function(i, el){
 
                     if (this[idObject.idKey] === idObject.id){
 
@@ -348,40 +348,38 @@
             },
 
             /*
-                >> save Meetings
+                >> save Outreach
             */
 
-            saveMeetings: function(meetings) {
+            saveOutreach: function(outreach) {
 
-                // clear offline Meetings data
-                $localStorage.offlineData.meetings = [];
+            	console.log('from offline ', outreach);
 
-                // filter out deleted meetings
-                meetings = $filter('filter')(meetings, {
+                // clear offline Outreach data
+                $localStorage.offlineData.outreach = [];
+
+                // filter out deleted Outreach
+                outreach = $filter('filter')(outreach, {
                     'deleted_at': null
                 });
 
-                // filter by organisation id
-                meetings = $filter('filter')(meetings, {
-                    'organisation_id': $localStorage.user.organisation_id
-                });
 
-                // loop through each meeting in the response and put back into offline data with a unique offline_id
-                for (i = 0; i < meetings.length; i++) {
+                // loop through each Outreach in the response and put back into offline data with a unique offline_id
+                for (i = 0; i < outreach.length; i++) {
 
-                    // duplicate the current meeting
-                    var newOfflineMeeting = meetings[i];
+                    // duplicate the current Outreach
+                    var newOfflineOutreach = outreach[i];
 
-                    // add an offline_id to the meeting
-                    newOfflineMeeting.offline_id = i + 1;
+                    // add an offline_id to the Outreach
+                    newOfflineOutreach.offline_id = i + 1;
 
-                    // remove delete_at attribute if equal to nothing (as this was causing meetings to be deleted at the server side on subsequent syncs)
-                    if (newOfflineMeeting.deleted_at === null) {
-                        delete newOfflineMeeting.deleted_at;
+                    // remove delete_at attribute if equal to nothing (as this was causing Outreach to be deleted at the server side on subsequent syncs)
+                    if (newOfflineOutreach.deleted_at === null) {
+                        delete newOfflineOutreach.deleted_at;
                     }
 
-                    // push the meeting to $localStorage
-                    $localStorage.offlineData.meetings.push(newOfflineMeeting);
+                    // push the Outreach to $localStorage
+                    $localStorage.offlineData.outreach.push(newOfflineOutreach);
 
                 }
 
@@ -391,8 +389,8 @@
                 >> generate offline id
             */
 
-            generateMeetingOfflineId: function(offline_id) {
-                return $localStorage.offlineData.meetings.length + 1;
+            generateOutreachOfflineId: function(offline_id) {
+                return $localStorage.offlineData.outreach.length + 1;
             },
 
 			/*

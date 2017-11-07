@@ -35,7 +35,8 @@
 				debug: false,
 				environment: 'local',	// dev | stage | live
 				apiBaseUrl: {
-					local:   'http://46.101.50.90/api/v1/',
+					// TODO remote: 'http://46.101.50.90/api/v1/',
+					local:   'http://localhost:8000/api/v1/',
 					dev:   'http://powertochangeadmindev.stage2.reason.digital/api/v1/',
 					stage: 'http://powertochangeadmin.stage2.reason.digital/api/v1/',
 					live:  'http://dashboard.twine-together.com/api/v1/'

@@ -24,25 +24,29 @@
 	) {
 
         /*
-            >> populate meetingTypes dropdown
+            >> store data
         */
 
-        $scope.meetingTypesDisabled = true;
         $scope.meetingTypes = [];
         $scope.outreachTypes = [];
         $scope.outreachChildTypes = [];
+        $scope.organisations = [];
+
         $scope.formData = {
-            outreach : null,
-            outreachChild : null
+        	organisation_id : null,
+            outreach_type : $localStorage.outreach_type ? $localStorage.outreach_type : null,
+            outreach_child_type : null
 		};
+
+        /*
+           >> populate meetingTypes dropdown
+       */
 
         $$api.meetingTypes.get().success(function (result) {
             // loop through the results and push only required items to $scope.meetingTypes
             for (var i = 0, len = result.data.length; i < len; i++) {
                 $scope.meetingTypes[i] = {id: result.data[i].id, name: result.data[i].name};
             }
-            // enable meetingTypes select
-            $scope.meetingTypesDisabled = false;
 
         }).error(function (result, error) {
 
@@ -65,13 +69,29 @@
 
         });
 
-        $scope.$watch('formData', function (newVal) {
-        	if (newVal !== null && newVal !== undefined && newVal.outreach !== undefined && newVal.outreach !== null) {
-        		$$api.outreach.getChildTypes(newVal.outreach)
+        $$api.organisations.get($rootScope.currentUser.region_id).success(function (result) {
+            console.log(result);
+            if (result !== undefined && result !== null) {
+                $scope.organisations = result.data;
+            }
+        }).error(function (result, error) {
+
+            console.log(error);
+
+            // process connection error
+            $$utilities.processConnectionError(result, error);
+
+        });
+
+        $scope.firstWatch = true;
+        $scope.$watch('formData', function (newVal, oldVal) {
+        	if (newVal !== null && newVal !== undefined && newVal.outreach_type !== undefined && newVal.outreach_type !== null && newVal.outreach_type !== oldVal.outreach_type || $scope.firstWatch) {
+                $scope.firstWatch = false;
+        		$$api.outreach.getChildTypes(newVal.outreach_type)
 					.success(function (result) {
 						if (result !== undefined && result !== null && result.data !== undefined && result.data !== null) {
 							$scope.outreachChildTypes = result.data;
-							$scope.partner = null;
+							$scope.formData.outreach_child_type = null;
 						}
                     })
 					.error(function (result,error) {
@@ -119,7 +139,7 @@
 
 
 		/*
-			>> process the new meeting form
+			>> process the new outreach form
 		*/
 
 			$scope.formSubmitted = false;
@@ -140,40 +160,41 @@
 					if ($rootScope.offlineMode) {
 
 						// push to offline data, mark as 'needs_pushing'
-						$scope.newMeetingOffline($scope.formData, true, 'Meeting saved offline.');
+						$scope.newOutreachOffline($scope.formData, true, 'Outreach saved offline.');
 
 					}
 
 					// not offline mode, submit the form
 					else {
 
-						console.log($scope.formData);
-
-						$scope.sendData = {
-							type : $scope.formData.type.id,
-							partner : $scope.formData.outreachChild,
+						var sendData = {
+							interaction_type : $scope.formData.type.id,
+							outreach_child_type : $scope.formData.outreach_child_type,
+							outreach_type :  $scope.formData.outreach_type,
 							user_id : $rootScope.currentUser.id,
-							organisation_id : $scope.formData.outreach,
+							organisation_id : $scope.formData.organisation_id,
 							date: $scope.formData.date
 						};
 
 						// >>> submit form
-						$$api.meetings.new($.param($scope.sendData)).success(function (result) {
+						$$api.outreach.new($.param(sendData)).success(function (result) {
 
 							// hide loader
 							$ionicLoading.hide();
 
-							// create meeting successful
+							// create outreach successful
 							if (result.success) {
 
 								// push to offline data
-								$scope.newMeetingOffline(result.data);
+								$scope.newOutreachOffline(result.data);
 
-								$$shout('Meeting saved.');
+								$$shout('Outreach saved.');
+
+								$localStorage.outreach_type = $scope.formData.outreach_type;
 
 							}
 
-							// create meeting unsuccessful
+							// create outreach unsuccessful
 							else {
 
 								$$shout(result.message);
@@ -186,7 +207,7 @@
 							$$offline.enable();
 
 							// push to offline data and mark as 'needs_pushing'
-							$scope.newMeetingOffline($scope.formData, true, 'Meeting saved offline.');
+							$scope.newOutreachOffline($scope.formData, true, 'Outreach saved offline.');
 
 							// process connection error
 							$$utilities.processConnectionError(data, error);
@@ -207,7 +228,7 @@
 			>> push to offline data
 		*/
 
-			$scope.newMeetingOffline = function(data, needs_pushing, message) {
+			$scope.newOutreachOffline = function(data, needs_pushing, message) {
 
 				// hide loader
 				$ionicLoading.hide();
@@ -217,14 +238,14 @@
 				}
 
 				// push to offline data
-				$$offline.newMeeting(data, needs_pushing);
+				$$offline.newOutreach(data, needs_pushing);
 
 				// shout message
 				if (message !== undefined) {
 					$$shout(message);
 				}
 
-				// go back to meeting list
+				// go back to outreach list
 				$state.go('tabs.view-logs.meetings');
 
 			}

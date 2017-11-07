@@ -7,18 +7,29 @@
     <!-- form#createMeeting -->
         <form id="createMeeting" name="createMeeting" class="list" ng-submit="processForm(createMeeting)" novalidate>
 
-            <!-- organisation -->
+            <!-- outreach type -->
             <h4 style="color: black"> What is your organisation's big project for outreach?</h4>
             <label class="item item-select">
-                <select ng-model="formData.outreach" name="outreach" id="outreach" convert-to-number>
+                <select ng-model="formData.outreach_type" name="outreach" id="outreach" convert-to-number>
                     <option  value="" disabled selected>Select outreach</option>
-                    <option ng-repeat="option in outreachTypes" value="{{option.id}}">{{option.name}}</option>
+                    <option ng-repeat="option in outreachTypes" ng-selected="option.id === formData.outreach_type" value="{{option.id}}">{{option.name}}</option>
                     <!--  -->
                 </select>
             </label>
 
             <!-- /organisation -->
-            <div ng-hide="formData.outreach === null">
+            <div ng-hide="formData.outreach_type === null">
+
+                <!-- organisation -->
+                <label class="item item-select">
+                    <span class="input-label">Organisation</span>
+                    <select required ng-model="formData.organisation_id" name="organisation" id="organisation" convert-to-number>
+                        <option  value="" disabled selected>Select organisation</option>
+                        <option ng-repeat="option in organisations" value="{{option.id}}">{{option.name}}</option>
+                        <!--  -->
+                    </select>
+                </label>
+                <!--  -->
 
                 <!-- date -->
                 <label class="item item-input">
@@ -32,22 +43,28 @@
             <!-- meeting type -->
             <label class="item item-select">
                 <span class="input-label">Interaction type</span>
-                <select ng-model="formData.type" ng-options="option.name for option in meetingTypes track by option.id"
-                        name="meetingType" id="meetingType" ng-disabled="meetingTypesDisabled">
+                <select required ng-model="formData.type" ng-options="option.name for option in meetingTypes track by option.id"
+                        name="meetingType" id="meetingType">
                     <option value="">Select type</option>
                     <!--  -->
                 </select>
+                <label class="error block text-right padding assertive" ng-show="createLog.type.$invalid && formSubmitted" for="meetingType">
+                    Please select a type
+                </label>
             </label>
             <!-- /meeting type -->
 
             <!-- meeting partner -->
             <label class="item item-select">
                 <span class="input-label">Interaction with</span>
-                <select ng-model="formData.outreachChild" name="outreachChild" id="outreachChild" convert-to-number>
+                <select required ng-model="formData.outreach_child_type" name="outreachChild" id="outreachChild" convert-to-number>
                     <option  value="" disabled>Select partner</option>
                     <option ng-repeat="option in outreachChildTypes" value="{{option.id}}">{{option.name}}</option>
                     <!--  -->
                 </select>
+                <label class="error block text-right padding assertive" ng-show="createLog.outreach_child_type.$invalid && formSubmitted" for="meetingType">
+                    Please select a partner
+                </label>
             </label>
             <!-- /name -->
 

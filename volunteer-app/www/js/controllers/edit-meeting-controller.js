@@ -25,20 +25,76 @@ angular.module('app.controllers').controller('EditMeetingController', function (
                                                                                 $$api, $$utilities, $$shout, $$offline) {
 
     /*
-				>> populate meetingTypes dropdown
-		*/
+				>> store Outreach data
+	*/
 
-    $scope.meetingTypesDisabled = true;
     $scope.meetingTypes = [];
+    $scope.outreachTypes = [];
+    $scope.outreachChildTypes = [];
+    $scope.organisations = [];
 
+    $scope.formData = {
+    };
 
     /*
-        >> variables
-    */
+				>>> populate Selects
+	*/
 
-    $scope.formData = {};
-    $scope.meetingLoaded = false;
+    $$api.meetingTypes.get().success(function (result) {
+        // loop through the results and push only required items to $scope.meetingTypes
+        for (var i = 0, len = result.data.length; i < len; i++) {
+            $scope.meetingTypes[i] = {id: result.data[i].id, name: result.data[i].name};
+        }
 
+    }).error(function (result, error) {
+
+        // process connection error
+        $$utilities.processConnectionError(result, error);
+
+    });
+
+    $$api.outreach.getTypes().success(function (result) {
+
+        if (result !== undefined && result !== null) {
+            $scope.outreachTypes = result.data;
+        }
+    }).error(function (result, error) {
+
+        console.log(error);
+
+        // process connection error
+        $$utilities.processConnectionError(result, error);
+
+    });
+
+    $$api.organisations.get($rootScope.currentUser.region_id).success(function (result) {
+
+        if (result !== undefined && result !== null) {
+            $scope.organisations = result.data;
+        }
+    }).error(function (result, error) {
+
+        console.log(error);
+
+        // process connection error
+        $$utilities.processConnectionError(result, error);
+
+    });
+
+
+    $scope.$watch('formData', function (newVal, oldVal) {
+        if (newVal !== null && newVal !== undefined && newVal.outreach_type !== undefined && newVal.outreach_type !== null && newVal.outreach_type !== oldVal.outreach_type) {
+            $$api.outreach.getChildTypes(newVal.outreach_type)
+                .success(function (result) {
+                    if (result !== undefined && result !== null && result.data !== undefined && result.data !== null) {
+                        $scope.outreachChildTypes = result.data;
+                    }
+                })
+                .error(function (result,error) {
+                    console.log(error);
+                })
+        }
+    },true);
 
     /*
         >> setup datepickers
@@ -66,10 +122,10 @@ angular.module('app.controllers').controller('EditMeetingController', function (
 
 
     /*
-        >> display meeting data
+        >> display Outreach data
     */
 
-    $scope.displayMeetingData = function (mainResult) {
+    $scope.displayOutreachData = function (mainResult) {
 
         console.log('result: ', mainResult);
 
@@ -77,75 +133,51 @@ angular.module('app.controllers').controller('EditMeetingController', function (
         var picker = $datepickerInput.pickadate('picker');
         var dateShort = mainResult.data.date.substring(0, 10);
         picker.set('select', dateShort, {format: 'yyyy-mm-dd'});
-        $$api.meetingTypes.get().success(function (result) {
-            $scope.formData = mainResult.data;
-            // loop through the results and push only required items to $scope.meetingTypes
-            for (var i = 0, len = result.data.length; i < len; i++) {
-                $scope.meetingTypes[i] = {id: result.data[i].id, name: result.data[i].name};
-                if ($scope.formData.type === result.data[i].id) {
-                    $scope.formData.type = result.data[i];
-                }
-            }
-            // enable meetingTypes select
-            $scope.meetingTypesDisabled = false;
 
-            // add to scope
-            $scope.formData = mainResult.data;
-            // get the offline_id for this meeting from $localStorage
-            var offlineMeeting = $.grep($localStorage.offlineData.meetings, function (e) {
-                return e.id === $scope.formData.id;
-            });
-            $scope.formData.offline_id = offlineMeeting[0].offline_id;
-
-            // meeting data has finished loading
-            $scope.meetingLoaded = true;
-
-            // hide loader
-            $ionicLoading.hide();
-        }).error(function (result, error) {
-
-            // process connection error
-            $$utilities.processConnectionError(result, error);
-
+        // add to scope
+        $scope.formData = mainResult.data;
+        // get the offline_id for this outreach from $localStorage
+        var offlineOutreach = $.grep($localStorage.offlineData.outreach, function (e) {
+            return e.id === $scope.formData.id;
         });
+        $scope.formData.offline_id = offlineOutreach[0].offline_id;
 
-    }
+        // hide loader
+        $ionicLoading.hide();
+
+    };
 
 
     /*
-        >> get meeting data
+        >> get outreach data
     */
 
-    // if offline mode, edit offline meeting
+    // if offline mode, edit offline outreach
     if ($rootScope.offlineMode) {
 
-        var result = $$offline.getMeeting($state.params.offline_id);
+        var result = $$offline.getOutreach($state.params.offline_id);
 
         setTimeout(function () {
-            $scope.displayMeetingData(result);
+            $scope.displayOutreachData(result);
         }, 100);
 
     }
 
-    // else get meeting from api
+    // else get outreach from api
     else {
 
-        // get meeting id
-        $scope.meetingId = $state.params.id;
+        // get outreach id
+        $scope.outreachId = $state.params.id;
 
-        // get meeting from api
-        $$api.meetings.getMeeting($scope.meetingId).success(function (result) {
+        // get outreach from api
+        $$api.outreach.get($scope.outreachId).success(function (result) {
 
-            // set initial duration (used for making sure user can't meeting more than 24 hours)
-            if (angular.isUndefined($scope.initialDuration)) {
-                $scope.initialDuration = result.data.duration;
-            }
-
-            $scope.displayMeetingData(result);
+            // set initial duration (used for making sure user can't outreach more than 24 hours)
+            $scope.displayOutreachData(result);
 
         }).error(function (result, error) {
 
-            // couldn't connect, send back to view meetings and enable offline mode
+            // couldn't connect, send back to view outreach and enable offline mode
             $state.go('tabs.view-logs.meetings');
 
             // process connection error
@@ -167,7 +199,7 @@ angular.module('app.controllers').controller('EditMeetingController', function (
     }
 
     /*
-        >> process the edit meeting form
+        >> process the edit outreach form
     */
 
     console.log('$$offline.checkConnection(): ', $$offline.checkConnection());
@@ -197,67 +229,65 @@ angular.module('app.controllers').controller('EditMeetingController', function (
             if ($rootScope.offlineMode) {
 
                 // save offline
-                $$offline.editMeeting({id: $scope.formData.offline_id, idKey: 'offline_id'}, $scope.formData, true);
+                $$offline.editOutreach({id: $scope.formData.offline_id, idKey: 'offline_id'}, $scope.formData, true);
 
                 // hide loader
                 $ionicLoading.hide();
 
-                // go back to view meetings
+                // go back to view outreach
                 $state.go('tabs.view-logs.meetings');
 
                 // shout success
-                $$shout('Meeting saved locally!');
+                $$shout('Outreach saved locally!');
 
             }
 
             // else save to api
             else {
 
-                // >>> submit edit meeting form
-                $$api.meetings.edit($scope.formData.id, $.param($scope.formData)).success(function (result) {
+                // >>> submit edit outreach form
+                $$api.outreach.edit($scope.formData.id, $.param($scope.formData)).success(function (result) {
 
-                    console.log($scope.formData);
-
-                    console.log('result: ', result);
-
-                    // create meeting successful
+                    // create outreach successful
                     if (result.success) {
 
                         // hide loader
                         $ionicLoading.hide();
 
                         // save offline
-                        $$offline.editMeeting({id: $scope.formData.id, idKey: 'id'}, result.data);
+                        $$offline.editOutreach({id: $scope.formData.id, idKey: 'id'}, result.data);
 
-                        // go back to view meetings
+                        $localStorage.outreach_type = $scope.formData.outreach_type;
+
+                        // go back to view outreach
                         $state.go('tabs.view-logs.meetings');
 
                         // shout success
-                        $$shout('Meeting saved succesfully!');
+                        $$shout('Outreach saved succesfully!');
 
                     }
 
-                    // create meeting unsuccessful
+                    // create outreach unsuccessful
                     else {
 
-                        $$shout('Edit meeting unsuccessful');
+                        $$shout('Edit outreach unsuccessful');
 
                     }
 
                 }).error(function (result, error) {
 
-                    // if user does not exist, meeting user out
+                    // if user does not exist, outreach user out
                     if (error === 404) {
                         $$utilities.logOut('This user account no longer exists.');
                     }
                     else {
 
-                        $$shout('Could not edit meeting. Please try again in offline mode.');
+                        $$shout('Could not edit outreach. Please try again in offline mode.');
 
                         // enable offline mode
                         $$offline.enable();
 
-                        // go back to view meetings
+                        // go back to view outreach
                         $state.go('tabs.view-logs.meetings');
 
                         // process connection error
