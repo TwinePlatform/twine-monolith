@@ -1,7 +1,7 @@
-<ion-view title="View logs hours">
+<ion-view hide-nav-bar="true" title="View logs hours">
     <!--<organisation-subheader></organisation-subheader>-->
 
-    <ion-content padding="true" class="padding has-header has-subfooter has-subheader-organisation view-logs">
+    <ion-content padding="true" class="has-header view-logs">
 
         <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noLogs">You haven't created any logs yet.</p>
 
@@ -12,18 +12,20 @@
         <ion-list>
 
             <!-- <ion-item class="item-icon-left item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at'] | filter: {deleted_at : '!'}"> -->
-            <ion-item style="margin-bottom: 20px" class="item-icon-left item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at']">
-                <i class="icon" ng-class="{ 'ion-alert': log.needs_pushing, 'icon-custom-clock': !log.needs_pushing }">
+            <ion-item style="margin-bottom: 20px" class="item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at']">
+                <i class="icon" ng-class="{ 'ion-alert': log.needs_pushing}">
                     <span ng-if="log.needs_pushing">Not pushed</span>
                 </i>
+                <div style="max-width: 200px;float: left; overflow: hidden">
                 <h1 ng-bind-html="log.duration | hoursAndMinutesAsString"></h1>
-                <h2 ng-if="isAdmin"> {{log.user.name}}</h2>
+                <h3 style="color: black" ng-if="isAdmin"> {{log.user.name}}</h3>
                 <p>{{ log.date_of_log.split(' ')[0] | date:'d MMM yyyy'}} @ {{ organisationName }}</p>
                 <p ng-if="options.debug">id: {{ log.id }}</p>
+                </div>
                 <div class="button-bar">
                     <!-- <a ng-if="!log.deleted_at" href="#/tab/edit-log/{{ log.id }}" class="button button-positive button-block button-clear icon-left ion-edit">Edit</a> -->
-                    <a ng-if="!log.deleted_at" class="button button-positive button-block button-clear" ng-click="edit(log)" ng-disabled="log.previous_month"><i class="icon-custom-edit"></i> Edit</a>
-                    <button ng-if="!log.deleted_at" class="button button-positive button-block button-clear" ng-click="delete(log)" ng-disabled="log.previous_month"><i class="icon-custom-delete"></i> Delete</button>
+                    <a ng-if="!log.deleted_at" class="button button-positive button-block button-clear" ng-click="edit(log)" ng-disabled="log.previous_month"><i class="icon-custom-edit"></i> </a>
+                    <button ng-if="!log.deleted_at" class="button button-positive button-block button-clear" ng-click="delete(log)" ng-disabled="log.previous_month"><i class="icon-custom-delete"></i> </button>
                     <span ng-if="log.deleted_at" class="button button-positive button-block button-clear">Deleted</span>
                 </div>
             </ion-item>
@@ -31,7 +33,9 @@
         </ion-list>
 
     </ion-content>
+    <div ng-if="noLogs" class="button-block button-add" style="min-width: 50%; left: 40%!important;">
+        <p>Click on this button to start adding volunteer hours</p>
+    </div>
     <a ui-sref="tabs.view-logs.new-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
-        <span>Log hours</span>
     </a>
 </ion-view>

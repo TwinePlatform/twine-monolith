@@ -36,7 +36,7 @@ angular.module('app.filters', [])
 				}
 				// if there's more than 0 minutes
 				if (minutes > 0) {
-					hoursAndMinutesString += '<span class="minutes">' + minutes + ' <span class="unit">min</span></span>';
+					hoursAndMinutesString += '<span class="minutes">' + minutes + '<span class="unit">min</span></span>';
 				}
 				// if there are 0 hours or minutes
 				if (hours === 0 && minutes === 0) {
