@@ -353,8 +353,6 @@
 
             saveOutreach: function(outreach) {
 
-            	console.log('from offline ', outreach);
-
                 // clear offline Outreach data
                 $localStorage.offlineData.outreach = [];
 

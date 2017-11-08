@@ -1,6 +1,6 @@
-<ion-view title="View volunteers">
+<ion-view hide-nav-bar="true" title="View volunteers">
 
-    <ion-content padding="true" class="has-header has-subfooter has-subheader-organisation view-logs">
+    <ion-content padding="true" class="view-logs">
 
         <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noVolunteers">You haven't created any volunteers yet.</p>
         <p class="no-logs text-center padding animate fadeIn absolute" ng-if="isOfflineMode">You can't manage volunteers offline.</p>
@@ -10,22 +10,26 @@
         </div>
 
         <ion-list>
-
-            <ion-item class="item-icon-left item-remove-animate" ng-repeat="volunteer in volunteers | orderBy: ['-date','-updated_at']">
+            <ion-item style="margin-bottom: 20px" class=" item-remove-animate" ng-repeat="volunteer in volunteers | orderBy: ['-date','-updated_at']">
+                <div style="float: left">
                 <h2>{{volunteer.name}}</h2>
-                <p>@ {{ organisationName }}</p>
+                <p> Joined {{volunteer.created_at}}</p>
                 <p ng-if="options.debug">id: {{ volunteer.id }}</p>
+                </div>
                 <div class="button-bar">
-                    <a ng-if="!volunteer.deleted_at" class="button button-positive button-block button-clear" ng-click="edit(volunteer)" ng-disabled="volunteer.previous_month"><i class="icon-custom-edit"></i> Edit</a>
-                    <button ng-if="!volunteer.deleted_at" class="button button-positive button-block button-clear" ng-click="delete(volunteer)" ng-disabled="volunteer.previous_month"><i class="icon-custom-delete"></i> Delete</button>
-                    <span ng-if="volunteer.deleted_at" class="button button-positive button-block button-clear">Deleted</span>
+                    <a ng-if="!volunteer.deleted_at" class="button button-positive  button-clear" ng-click="edit(volunteer)" ng-disabled="volunteer.previous_month"><i class="icon-custom-edit"></i></a>
+                    <button ng-if="!volunteer.deleted_at" class="button button-positive  button-clear" ng-click="delete(volunteer)" ng-disabled="volunteer.previous_month"><i class="icon-custom-delete"></i></button>
+                    <span ng-if="volunteer.deleted_at" class="button button-positive  button-clear">Deleted</span>
                 </div>
             </ion-item>
 
         </ion-list>
 
     </ion-content>
+    <div ng-if="noVolunteers" class="button-block button-add" style="min-width: 50%; left: 40%!important;">
+        <p>Click on this button to start adding volunteers</p>
+    </div>
     <a ui-sref="tabs.new-volunteer" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
-        <span>Add New</span>
     </a>
+
 </ion-view>

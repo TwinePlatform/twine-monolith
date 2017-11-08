@@ -37,6 +37,7 @@
 			$scope.isAdmin = $rootScope.isAdmin;
 
 
+
 		/*
 			>> update total duration logged this date 
 		*/

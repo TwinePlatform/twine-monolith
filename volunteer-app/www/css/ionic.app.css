@@ -3531,10 +3531,10 @@ ion-infinite-scroll {
 
 .has-tabs,
 .bar-footer.has-tabs {
-  bottom: 49px; }
+  bottom: 21px; }
   .has-tabs.pane,
   .bar-footer.has-tabs.pane {
-    bottom: 49px;
+    bottom: 21px;
     height: auto; }
 
 .bar-subfooter.has-tabs {
@@ -3550,8 +3550,12 @@ ion-infinite-scroll {
   transition-duration: 0;
   z-index: 1; }
 
-.view {
+.view {..
   z-index: 1; }
+
+.pane {
+  background-image: url("../img/background.png");
+}
 
 .pane,
 .view {
@@ -3570,6 +3574,10 @@ ion-infinite-scroll {
   display: block;
   width: 100%;
   height: 100%; }
+
+#createMeeting h4 {
+  color: black
+}
 
 /**
  * Typography
@@ -3936,10 +3944,11 @@ a.subdued {
       color: #444; }
     .bar.bar-stable.bar-footer {
       background-image: linear-gradient(180deg, #b2b2b2, #b2b2b2 50%, transparent 50%); }
-  .bar.bar-positive {
-    border-color: #6600cc;
-    background-color: #8000ff;
-    background-image: linear-gradient(0deg, #6600cc, #6600cc 50%, transparent 50%);
+.bar.bar-positive {
+    /*display: none;*/
+    border-color: #b2b2b2;
+    background-color: #fff;
+    /*background-image: linear-gradient(0deg, #6600cc, #6600cc 50%, transparent 50%);*/
     color: #fff; }
     .bar.bar-positive .title {
       color: #fff; }
@@ -4139,7 +4148,7 @@ a.subdued {
 .bar-positive .button {
   border-color: transparent;
   background-color: #8000ff;
-  color: #fff; }
+}
   .bar-positive .button:hover {
     color: #fff;
     text-decoration: none; }
@@ -4392,10 +4401,9 @@ a.subdued {
 
 .tabs-positive > .tabs,
 .tabs.tabs-positive {
-  border-color: #6600cc;
-  background-color: #8000ff;
-  background-image: linear-gradient(0deg, #6600cc, #6600cc 50%, transparent 50%);
-  color: #fff; }
+  border-color: #9e9e9e38;
+  background-color: #fff;
+  color: #555555; }
   .tabs-positive > .tabs .tab-item .badge,
   .tabs.tabs-positive .tab-item .badge {
     background-color: #fff;
@@ -4478,13 +4486,17 @@ a.subdued {
   margin-top: -2px;
   border-style: solid;
   border-width: 2px 0 0 0;
-  border-color: #444; }
+  border-color: #fcc726; }
   .tabs-striped .tab-item.tab-item-active .badge, .tabs-striped .tab-item.active .badge, .tabs-striped .tab-item.activated .badge {
     top: 2px;
     opacity: 1; }
 
 .tabs-striped.tabs-light .tabs {
   background-color: #fff; }
+
+.logs-tabs a {
+  max-width:100% !important;
+}
 
 .tabs-striped.tabs-light .tab-item {
   color: rgba(68, 68, 68, 0.4);
@@ -8917,7 +8929,7 @@ a.button {
   -moz-flex: 1;
   -ms-flex: 1;
   flex: 1;
-  width: 100%; }
+ }
   .button-bar.button-bar-inline {
     display: block;
     width: auto;
@@ -12165,7 +12177,7 @@ h1, h2, h3, h4 {
 .bar.bar-positive {
   background-image: none; }
   .bar.bar-positive .title {
-    color: white;
+    color: black;
     font-size: 20px;
     text-transform: uppercase;
     font-weight: 700; }
@@ -12301,7 +12313,14 @@ select[disabled], .item-select-disabled:after {
   font-weight: 700; }
 
 .tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
-  background-color: #7300e6; }
+  color: #8000ff;
+}
+
+
+.logs-tabs .tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
+  color: #000 !important;
+  font-weight: bold;
+}
 
 .organisation-title {
   background: #00BACD;
@@ -12391,13 +12410,13 @@ select[disabled], .item-select-disabled:after {
   text-align: center;
   margin: 30px auto !important;
   position: absolute;
-  left: 50%;
+  left: 85%;
   transform: translate(-50%);
   bottom: 10px;
   z-index: 10;
   padding: 0; }
 .button-add.view-logs-button {
-  bottom: 58px;
+  bottom: 30px;
 }
   .button-add.activated span {
     color: #8000ff !important; }
@@ -12440,9 +12459,9 @@ select[disabled], .item-select-disabled:after {
   .view-logs .item.deleted .button-bar {
     pointer-events: none; }
 
-.view-logs .item h2 {
+.view-logs .item h1 {
   font-weight: bold; }
-  .view-logs .item h2 .hours .unit, .view-logs .item h2 .minutes .unit {
+  .view-logs .item h1 .hours .unit, .view-logs .item h1 .minutes .unit {
     font-size: 13px; }
 
 .view-logs .no-logs {
@@ -12531,9 +12550,3 @@ select[disabled], .item-select-disabled:after {
     .login .buttons .button {
       min-height: 40px;
       line-height: 40px; }
-
-    .platform-android .logs-tabs .tab-nav {
-      margin-top: 50px;
-    }.platform-android .logs-tabs ion-view  {
-      margin-top: 50px;
-    }

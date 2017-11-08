@@ -2,7 +2,7 @@
 
     <!--<organisation-subheader></organisation-subheader>-->
 
-    <ion-content padding="true" scroll="false" class="has-header has-subheader-organisation dashboard">
+    <ion-content scroll="false" class="has-header dashboard">
 
         <h4 class="text-center">My Total Hours</h4>
 
@@ -74,9 +74,10 @@
             Your account is pending approval
         </div>
         <!-- /.pending approval box -->
-
+        <div ng-if="noLogs" class="button-block button-add" style="min-width: 50%; left: 40%!important;">
+            <p>Click on this button to start adding volunteer hours</p>
+        </div>
         <a ui-sref="tabs.new-log" class="button button-energized button-block icon-left ion-plus button-add">
-            <span>Log hours</span>
         </a>
     </ion-content>
 </ion-view>

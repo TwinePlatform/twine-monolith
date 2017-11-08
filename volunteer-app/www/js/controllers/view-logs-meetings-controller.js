@@ -19,6 +19,7 @@
 		$$api, $$utilities, $$shout, $$offline
 	) {
 
+		$scope.test = $localStorage.outreach_type;
 		/*
 			>> populate Outreaches
 		*/
@@ -85,6 +86,8 @@
 						});
                     } else {
                         $scope.noOutreach = true;
+                        $scope.outreaches = [];
+                        $$offline.saveOutreach($scope.outreaches);
 					}
 				}
 

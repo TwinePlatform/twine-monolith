@@ -1,9 +1,9 @@
 <ion-view title="Settings">
 
-    <organisation-subheader></organisation-subheader>
+    <!--<organisation-subheader></organisation-subheader>-->
 
-    <ion-content padding="true" class="has-header has-subheader-organisation settings">
-        <form class="list">
+    <ion-content padding="true" class="has-header settings">
+        <form ng-if="!isAdmin" class="list">
             <div class="item item-divider">
                 Location reminders
                 <p class="wrap"><small>Get a reminder to log your hours when you leave {{ organisationName }}:</small></p>

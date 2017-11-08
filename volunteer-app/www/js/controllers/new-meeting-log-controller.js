@@ -192,6 +192,8 @@
 
 								$localStorage.outreach_type = $scope.formData.outreach_type;
 
+								$state.go('tabs.view-logs.meetings');
+
 							}
 
 							// create outreach unsuccessful
