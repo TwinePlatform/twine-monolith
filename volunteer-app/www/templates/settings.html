@@ -4,19 +4,13 @@
 
     <ion-content padding="true" class="has-header settings">
         <form ng-if="!isAdmin" class="list">
-            <div class="item item-divider">
-                Location reminders
-                <p class="wrap"><small>Get a reminder to log your hours when you leave {{ organisationName }}:</small></p>
-            </div>
-            <ion-toggle toggle-class="toggle-positive" ng-change="locationReminders()" ng-model="locationRemindersSwitch">Location reminders</ion-toggle>
+            <label class="input-label">Location reminders</label>
+            <ion-toggle toggle-class="toggle-positive" ng-change="locationReminders()" ng-model="locationRemindersSwitch">Recive a reminder to log your hours <br> when you leave {{ organisationName }}</ion-toggle>
         </form>
 
         <!-- account settings -->
+        <label class="input-label">Account settings</label>
         <div class="list">
-            <div class="item item-divider">
-                Account settings
-                <p><small>{{ getUserEmail() }}</small></p>
-            </div>
             <ion-item class="item-icon-right" ui-sref="tabs.profile">
                 My profile
                 <i class="icon ion-chevron-right icon-accessory"></i>
@@ -25,9 +19,7 @@
         <!-- /account settings -->
 
         <form class="list">
-            <div class="item item-divider">
-                Information
-            </div>
+            <label class="input-label">Information</label>
             <ion-item class="item-icon-right" ui-sref="tabs.terms-and-conditions">Terms &amp; conditions
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </ion-item>

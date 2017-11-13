@@ -1,6 +1,6 @@
-<ion-view hide-nav-bar="true" title="View meetings">
+<ion-view hide-nav-bar="true" title="Log outreach">
 
-    <ion-content padding="true" class="has-header view-logs">
+    <ion-content padding="true" overflow-scroll="false" has-bouncing="true" class="has-header view-logs">
 
         <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noOutreach">You haven't created any meetings yet.</p>
 
@@ -10,11 +10,11 @@
 
         <ion-list>
 
-            <ion-item style="margin-bottom: 20px" class="item-remove-animate" ng-class="{ 'needs-pushing': outreach.needs_pushing, 'deleted': outreach.deleted_at }" ng-repeat="outreach in outreaches | orderBy: ['-date','-updated_at']">
+            <ion-item style="margin-bottom: 10px" class="item-remove-animate" ng-class="{ 'needs-pushing': outreach.needs_pushing, 'deleted': outreach.deleted_at }" ng-repeat="outreach in outreaches | orderBy: ['-date','-updated_at']">
                 <i class="icon" ng-class="{ 'ion-alert': meeting.needs_pushing}">
                     <span ng-if="outreach.needs_pushing">Not pushed</span>
                 </i>
-                <div style="float: left; max-width: 200px;overflow: hidden">
+                <div style="float: left; max-width: 60%;overflow: hidden">
                 <h2>{{outreach.outreach_type.name}}</h2>
                 <h3 style="color: black">{{outreach.outreach_child_type.name}}</h3>
                 <p>{{ outreach.date.split(' ')[0] | date:'d MMM yyyy'}} @ {{ outreach.organisation_id.name }}</p>
@@ -28,12 +28,14 @@
                 </div>
             </ion-item>
 
+            <div class="spacer-100"></div>
+
         </ion-list>
 
     </ion-content>
     <div ng-if="noOutreach" class="button-block button-add" style="min-width: 50%; left: 40%!important;">
         <p>Click on this button to start logging interactions</p>
     </div>
-    <a ui-sref="tabs.new-meeting-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
+    <a ui-sref="tabs.view-logs.new-meeting-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
     </a>
 </ion-view>

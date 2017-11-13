@@ -2535,6 +2535,7 @@ $dark:                            #444 !default;
   content: ""; }
 
 .ion-plus:before {
+  zoom: 50%;
   content: ""; }
 
 .ion-plus-circled:before {
@@ -3517,14 +3518,18 @@ ion-infinite-scroll {
 .has-subheader {
   top: 88px; }
 
-.has-tabs-top {
-  top: 93px; }
+/*.has-tabs-top {*/
+  /*top: 40px; }*/
 
 .has-header.has-subheader.has-tabs-top {
   top: 137px; }
 
 .has-footer {
   bottom: 44px; }
+
+.displaynone {
+  display: none!important;
+}
 
 .has-subfooter {
   bottom: 88px; }
@@ -3575,9 +3580,6 @@ ion-infinite-scroll {
   width: 100%;
   height: 100%; }
 
-#createMeeting h4 {
-  color: black
-}
 
 /**
  * Typography
@@ -5219,8 +5221,8 @@ ion-tabs.tabs-color-active-dark .tab-item {
 .nav-bar-tabs-top.hide ~ .view-container .tabs-top .tabs {
   top: 0; }
 
-.pane[hide-nav-bar="true"] .has-tabs-top {
-  top: 49px; }
+/*.pane[hide-nav-bar="true"] .has-tabs-top {*/
+  /*top: 49px; }*/
 
 /**
  * Menus
@@ -7620,10 +7622,14 @@ textarea {
 .input-label {
   display: table;
   padding: 7px 10px 7px 0px;
-  max-width: 200px;
-  width: 35%;
+  max-width: 550px;
+  width: 80%;
   color: #444;
   font-size: 16px; }
+
+.login-label {
+  width: 40%;
+}
 
 .placeholder-icon {
   color: #aaa; }
@@ -8137,7 +8143,7 @@ input:checked + .checkbox-icon:after {
 
 .item-toggle .toggle {
   position: absolute;
-  top: 10px;
+  top: 20px;
   right: 16px;
   z-index: 3; }
 
@@ -8580,7 +8586,7 @@ progress {
     padding-left: .2em; }
   .button.button-block, .button.button-full {
     margin-top: 10px;
-    margin-bottom: 10px; }
+    margin-bottom: 30px; }
   .button.button-light {
     border-color: transparent;
     background-color: #fff;
@@ -8644,7 +8650,7 @@ progress {
       border-color: transparent;
       background: none;
       box-shadow: none;
-      color: #8000ff; }
+      color: #000; }
     .button.button-positive.button-icon {
       border-color: transparent;
       background: none; }
@@ -8954,7 +8960,7 @@ a.button {
   flex: 1;
   display: block;
   overflow: hidden;
-  padding: 0 16px;
+  padding: 0 0 0 0;
   width: 0;
   border-width: 1px 0px 1px 1px;
   border-radius: 0;
@@ -12151,6 +12157,9 @@ a.button {
 .spacer-30 {
   height: 30px; }
 
+.spacer-100 {
+  height: 100px; }
+
 body, .ionic-body, input, button, select, textarea, h1, h2, h3, h4, h5, h6 {
   font-family: -apple-system;
   font-family: "Quicksand", "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
@@ -12330,6 +12339,7 @@ select[disabled], .item-select-disabled:after {
   font-size: 18px;
   margin: 0; }
 
+
 .total-hours-container .col {
   position: relative; }
 
@@ -12486,6 +12496,10 @@ select[disabled], .item-select-disabled:after {
 
 .settings .input-label {
   font-size: 15px; }
+
+.label {
+  color: black;
+}
 
 .settings .item-button {
   padding: 7px 16px; }

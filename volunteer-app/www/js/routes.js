@@ -14,7 +14,7 @@
 
 angular.module('app.routes', ['ionicUIRouter'])
 
-    .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+    .config(function ($stateProvider, $urlRouterProvider,$ionicConfigProvider) {
 
         $ionicConfigProvider.tabs.position('bottom');
 
@@ -107,7 +107,7 @@ angular.module('app.routes', ['ionicUIRouter'])
                 }
             })
             // >>> view logs - meetings - new log
-            .state('tabs.new-meeting-log', {
+            .state('tabs.view-logs.new-meeting-log', {
                 cache: false,
                 url: '/new-meeting-log',
                 views: {

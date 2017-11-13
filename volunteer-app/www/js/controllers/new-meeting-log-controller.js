@@ -251,6 +251,4 @@
 				$state.go('tabs.view-logs.meetings');
 
 			}
-
-
 	})

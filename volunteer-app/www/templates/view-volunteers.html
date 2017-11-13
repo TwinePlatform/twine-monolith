@@ -1,6 +1,6 @@
 <ion-view hide-nav-bar="true" title="View volunteers">
 
-    <ion-content padding="true" class="view-logs">
+    <ion-content overflow-scroll="false" has-bouncing="true" padding="true" class="view-logs">
 
         <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noVolunteers">You haven't created any volunteers yet.</p>
         <p class="no-logs text-center padding animate fadeIn absolute" ng-if="isOfflineMode">You can't manage volunteers offline.</p>
@@ -10,7 +10,8 @@
         </div>
 
         <ion-list>
-            <ion-item style="margin-bottom: 20px" class=" item-remove-animate" ng-repeat="volunteer in volunteers | orderBy: ['-date','-updated_at']">
+
+            <ion-item style="margin-bottom: 5px" class=" item-remove-animate" ng-repeat="volunteer in volunteers | orderBy: ['-date','-updated_at']">
                 <div style="float: left">
                 <h2>{{volunteer.name}}</h2>
                 <p> Joined {{volunteer.created_at}}</p>
@@ -22,6 +23,8 @@
                     <span ng-if="volunteer.deleted_at" class="button button-positive  button-clear">Deleted</span>
                 </div>
             </ion-item>
+
+            <div class="spacer-100"></div>
 
         </ion-list>
 

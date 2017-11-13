@@ -265,6 +265,9 @@
 						}
 					})
 			});
+	})
+    .config(function( $ionicConfigProvider) {
+            $ionicConfigProvider.navBar.alignTitle('center');
 	});
 
 	// controllers module

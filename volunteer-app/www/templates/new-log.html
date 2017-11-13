@@ -2,17 +2,17 @@
 
     <!--<organisation-subheader></organisation-subheader>-->
 
-    <ion-content padding="true" class="has-header ">
+    <ion-content padding="true" class="has-header">
         
     <!-- form#createLog -->
         <form id="createLog" name="createLog" class="list" ng-submit="processForm(createLog)" novalidate>
 
             <!-- name -->
+            <span  ng-if="isAdmin" class="input-label">Volunter name</span>
             <div ng-if="isAdmin">
                 <label class="item item-select">
-                    <span class="input-label">Name</span>
                     <select ng-model="formData.user_id" name="volunteers" id="volunteers" convert-to-number>
-                        <option  value="" selected>Select volunteer</option>
+                        <option  value="" selected disabled>John Smith</option>
                         <option ng-repeat="option in volunteers" value="{{option.id}}">{{option.name}}</option>
                         <!--  -->
                     </select>
@@ -24,8 +24,8 @@
             <!-- /name -->
 
             <!-- date -->
+            <span class="input-label">Date</span>
             <label class="item item-input">
-                <span class="input-label">Date</span>
                 <input type="text" name="date_pretty" id="date_pretty" class="datepicker">
             </label>
             <label class="error block text-right padding assertive" ng-show="createLog.date.$invalid && formSubmitted" for="date">
@@ -34,8 +34,8 @@
             <!-- /date -->
 
             <!-- hours -->
+            <span class="input-label">Hours</span>
             <label class="item item-select">
-                <span class="input-label">Hours</span>
                 <select ng-model="formData.hours" ng-options="option.name for option in hours track by option.value" name="hours" id="hours" ng-change="calculateDuration(formData.hours.value, formData.minutes.value)">
                     <option value="" selected>Select hours</option>
                     <!--  -->
@@ -44,8 +44,8 @@
             <!-- /hours -->
 
             <!-- minutes -->
+            <span class="input-label">Minutes</span>
             <label class="item item-select">
-                <span class="input-label">Minutes</span>
                 <select ng-model="formData.minutes" ng-options="option.name for option in minutes track by option.value" name="minutes" id="minutes" ng-change="calculateDuration(formData.hours.value, formData.minutes.value)" ng-disabled="formData.hours.value == 24">
                     <option value="" selected>Select minutes</option>
                     <!--  -->
@@ -60,8 +60,8 @@
             <!-- /minutes -->
 
             <!-- Activity -->
+            <span class="input-label">Activity</span>
             <label class="item item-select">
-                <span class="input-label">Activity</span>
                 <select ng-model="formData.activity_id" name="activities" id="activities" convert-to-number>
                     <option  value="" selected>Select activity</option>
                     <option ng-repeat="option in activities" value="{{option.id}}">{{option.name}}</option>
@@ -95,7 +95,7 @@
             <!-- /user_id -->
 
             <!-- buttons -->
-            <button type="submit" class="button button-energized button-block">Save</button>
+            <button type="submit" ng-disabled="createLog.$invalid" class="button button-energized button-block">Log Hours</button>
 
         </form>
         <!-- /form#createLog -->

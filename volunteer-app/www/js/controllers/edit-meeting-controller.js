@@ -307,4 +307,10 @@ angular.module('app.controllers').controller('EditMeetingController', function (
 
     };
 
+
+    /*
+    >> beforeEnter
+   - fired every time view entered
+    */
+
 })

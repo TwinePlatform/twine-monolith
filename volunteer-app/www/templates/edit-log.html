@@ -6,8 +6,8 @@
         <form class="editLog" name="editLog" class="list" ng-submit="processForm(editLog)" novalidate>
 
             <!-- date -->
+            <span class="input-label">Date</span>
             <label class="item item-input">
-                <span class="input-label">Date</span>
                 <input type="text" name="date_pretty" id="date_pretty" ng-model="formData.date_pretty" class="datepicker">
             </label>
             <label class="error block text-right padding assertive" ng-show="editLog.date.$invalid && formSubmitted" for="date">
@@ -16,8 +16,8 @@
             <!-- /date -->
 
            <!-- hours -->
+            <span class="input-label">Hours</span>
             <label class="item item-select">
-                <span class="input-label">Hours</span>
                 <select ng-model="formData.hours" ng-options="option.name for option in hours track by option.value" name="hours" id="hours" ng-change="calculateDuration(formData.hours.value, formData.minutes.value)">
                     <option value="">Select hours</option>
                     <!--  -->
@@ -26,8 +26,8 @@
             <!-- /hours -->
 
             <!-- minutes -->
+            <span class="input-label">Minutes</span>
             <label class="item item-select">
-                <span class="input-label">Minutes</span>
                 <select ng-model="formData.minutes" ng-options="option.name for option in minutes track by option.value" name="minutes" id="minutes" ng-change="calculateDuration(formData.hours.value, formData.minutes.value)" ng-disabled="formData.hours.value == 24">
                     <option value="">Select minutes</option>
                     <!--  -->
@@ -42,8 +42,8 @@
             <!-- /minutes -->
 
             <!-- Activity -->
+            <span class="input-label">Activity</span>
             <label class="item item-select">
-                <span class="input-label">Activity</span>
                 <select ng-model="formData.activity_id" name="activities" id="activities" convert-to-number>
                     <option ng-repeat="option in activities" ng-selected="option.id === formData.activity_id" value="{{option.id}}">{{option.name}}</option>
                     <!--  -->
@@ -83,7 +83,7 @@
             <!-- /offline id -->
 
             <!-- buttons -->
-            <button type="submit" class="button button-energized button-block">Save</a>
+            <button type="submit" class="button button-energized button-block">Save</button>
         </form>
     </ion-content>
 </ion-view>
