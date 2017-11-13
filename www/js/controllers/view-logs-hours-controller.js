@@ -21,9 +21,10 @@
 
 		$scope.isAdmin = $rootScope.isAdmin;
 
-		/*
-			>> populate logs
-		*/
+
+        /*
+            >> populate logs
+        */
 
 			$scope.populateLogs = function() {
 
@@ -279,8 +280,13 @@
 
 				// populate logs
 				$scope.populateLogs();
+				if ($rootScope.isAdmin) {
+                    document.querySelector('#tabs .tab-nav').style.display = 'flex';
+				} else {
+                    $('#tabs .tab-nav').addClass('displaynone');
+                }
 
-			})
+			});
 
 		
 		/*
@@ -289,13 +295,15 @@
 		*/
 
 			$scope.$on('$ionicView.leave', function() {
-
 				// clear logs
 				$scope.logs = null;
 				if (!$rootScope.offlineMode) {
 					$('.view-logs .list .item').remove();
 				}
+			})
 
+			$scope.$on('$ionicView.beforeLeave', function() {
+				document.querySelector('#tabs .tab-nav').style.display = 'none';
 			})
 
 

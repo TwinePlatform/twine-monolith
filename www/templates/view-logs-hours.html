@@ -1,7 +1,7 @@
-<ion-view hide-nav-bar="true" title="View logs hours">
+<ion-view hide-nav-bar="{{isAdmin}}" title="View logs">
     <!--<organisation-subheader></organisation-subheader>-->
 
-    <ion-content padding="true" class="has-header view-logs">
+    <ion-content padding="true" overflow-scroll="false" has-bouncing="true" ng-class="{'has-header' : isAdmin}" class="view-logs" >
 
         <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noLogs">You haven't created any logs yet.</p>
 
@@ -10,9 +10,8 @@
         </div>
 
         <ion-list>
-
             <!-- <ion-item class="item-icon-left item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at'] | filter: {deleted_at : '!'}"> -->
-            <ion-item style="margin-bottom: 20px" class="item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at']">
+            <ion-item style="margin-bottom: 10px" class="item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at']">
                 <i class="icon" ng-class="{ 'ion-alert': log.needs_pushing}">
                     <span ng-if="log.needs_pushing">Not pushed</span>
                 </i>
@@ -29,6 +28,8 @@
                     <span ng-if="log.deleted_at" class="button button-positive button-block button-clear">Deleted</span>
                 </div>
             </ion-item>
+
+            <div class="spacer-100"></div>
 
         </ion-list>
 

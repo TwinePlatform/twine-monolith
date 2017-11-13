@@ -8,7 +8,7 @@
 
                 <!-- email -->
                 <label class="item item-input">
-                    <span class="input-label">Email</span>
+                    <span class="input-label login-label">Email</span>
                     <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" ng-pattern="/^[\w.%+\-]+@[\w.\-]+\.[A-Za-z]{2,6}$/" required>
                 </label>
                 <label class="error block text-right padding assertive" ng-if="login.email.$invalid && formSubmitted" for="email">
@@ -18,7 +18,7 @@
 
                 <!-- password -->
                 <label class="item item-input">
-                    <span class="input-label">Password</span>
+                    <span class="input-label login-label">Password</span>
                     <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="6" required>
                 </label>
                 <label class="error block text-right padding assertive" ng-if="login.password.$invalid && formSubmitted" for="password">

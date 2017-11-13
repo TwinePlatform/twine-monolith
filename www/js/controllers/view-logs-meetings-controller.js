@@ -248,6 +248,9 @@
 
 				// populate meetings
 				$scope.populateOutreaches();
+                if ($rootScope.isAdmin) {
+                    document.querySelector('#tabs .tab-nav').style.display = 'flex';
+                }
 
 			})
 
@@ -267,5 +270,10 @@
 
 			})
 
+			$scope.$on('$ionicView.beforeLeave', function() {
+				document.querySelector('#tabs .tab-nav').style.display = 'none';
+			})
 
-	})
+
+
+    })

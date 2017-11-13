@@ -38,6 +38,9 @@
 
 
 
+
+
+
 		/*
 			>> update total duration logged this date 
 		*/
@@ -288,6 +291,7 @@
 				$state.go('tabs.dashboard');
 
 			}
+
 			
 
 	})

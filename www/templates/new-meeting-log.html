@@ -1,4 +1,4 @@
-<ion-view title="Add meeting">
+<ion-view title="Log outreach">
 
     <!--<organisation-subheader></organisation-subheader>-->
 
@@ -8,7 +8,7 @@
         <form id="createMeeting" name="createMeeting" class="list" ng-submit="processForm(createMeeting)" novalidate>
 
             <!-- outreach type -->
-            <h4> What is your organisation's big project for outreach?</h4>
+            <span class="input-label">What is your organisation's big project for outreach?</span>
             <label class="item item-select">
                 <select ng-model="formData.outreach_type" name="outreach" id="outreach" convert-to-number>
                     <option  value="" disabled selected>Select outreach</option>
@@ -21,7 +21,7 @@
             <div ng-hide="formData.outreach_type === null">
 
                 <!-- organisation -->
-                <h4>Organisation</h4>
+                <span class="input-label">Organisation</span>
                 <label class="item item-select">
                     <select required ng-model="formData.organisation_id" name="organisation" id="organisation" convert-to-number>
                         <option  value="" disabled selected>Select organisation</option>
@@ -32,7 +32,7 @@
                 <!--  -->
 
                 <!-- date -->
-                <h4>Date</h4>
+                <span class="input-label">Date</span>
                 <label class="item item-input">
                     <input type="text" name="date_pretty" id="date_pretty" class="datepicker">
                 </label>
@@ -41,7 +41,7 @@
                 </label>
                 <!-- /date -->
                 <!-- meeting type -->
-                <h4>Interaction type</h4>
+                <span class="input-label">Interaction type</span>
                 <label class="item item-select">
                     <select required ng-model="formData.type" ng-options="option.name for option in meetingTypes track by option.id"
                             name="meetingType" id="meetingType">
@@ -54,7 +54,7 @@
                 </label>
                 <!-- /meeting type -->
                 <!-- meeting partner -->
-                <h4>Interaction with</h4>
+                <span class="input-label">Interaction with</span>
                 <label class="item item-select">
                     <select required ng-model="formData.outreach_child_type" name="outreachChild" id="outreachChild" convert-to-number>
                         <option  value="" disabled>Select partner</option>
@@ -68,7 +68,7 @@
                 <!-- /name -->
 
                 <!-- buttons -->
-                <button type="submit" class="button button-energized button-block">Save</button>
+                <button type="submit" ng-disabled="createMeeting.$invalid" class="button button-energized button-block">Log outreach</button>
                 </div>
 
         </form>

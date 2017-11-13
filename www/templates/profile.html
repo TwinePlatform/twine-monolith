@@ -10,8 +10,8 @@
 	    	    <ion-list>
 
 	    	        <!-- name -->
-	    	        <label class="item item-input">
 	    	            <span class="input-label">Full name</span>
+	    	        <label class="item item-input">
 	    	            <input type="text" name="name" id="name" placeholder="E.g. Jon Smith" ng-model="formData.name" required>
 	    	        </label>
 	    	        <label class="error block text-right padding assertive" ng-show="user.name.$invalid && formSubmitted" for="name">
@@ -20,8 +20,8 @@
 	    	        <!-- /name -->
 
 	    	        <!-- email -->
-	    	        <label class="item item-input">
 	    	            <span class="input-label">Email</span>
+	    	        <label class="item item-input">
 	    	            <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" ng-pattern="/^[\w.%+\-]+@[\w.\-]+\.[A-Za-z]{2,6}$/" required>
 	    	        </label>
 	    	        <label class="error block text-right padding assertive" ng-show="user.email.$invalid && formSubmitted" for="email">
@@ -31,11 +31,12 @@
 
 	    	        <div class="spacer-20"></div>
 
-					<ion-checkbox class="item-checkbox-right" ng-model="changePassword">Change password</ion-checkbox>
+					<ion-checkbox class="item-checkbox-right" ng-model="changePassword"><span class="input-label">Change password</span></ion-checkbox>
 
 	    	        <!-- password -->     
+
 	    	        <label class="item item-input" ng-if="changePassword">
-	    	            <span class="input-label">New password</span>
+						<span class="input-label" style="width: 50% !important;">New password</span>
 	    	            <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="6" required>
 	    	        </label>
 	    	        <label class="error block text-right padding assertive" ng-show="user.password.$invalid && formSubmitted" for="password">
@@ -46,8 +47,8 @@
 	    	        <div class="spacer-20"></div>
 
 	    	        <!-- phone -->
-	    	        <label class="item item-input">
 	    	            <span class="input-label">Phone</span>
+	    	        <label class="item item-input">
 	    	            <input class="text-right" type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" minlength="6" maxlength="15" ng-pattern="/^([0-9|+|*|#|\-]+)$/" required>
 	    	        </label>
 	    	        <label class="error block text-right padding assertive" ng-show="user.phone.$invalid && formSubmitted" for="phone">
@@ -56,8 +57,8 @@
 	    	        <!-- /phone -->
 
 	    	        <!-- year of birth -->
-	    	        <label class="item item-select">
 	    	            <span class="input-label">Year of birth<br>(optional)</span>
+	    	        <label class="item item-select">
 	    	            <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option" name="yearOfBirth" id="yearOfBirth">
 	    	                <option value="">Select year</option>
 	    	                <!--  -->
@@ -66,8 +67,8 @@
 	    	        <!-- /year of birth -->
 
 	    	        <!-- gender -->
-	    	        <label class="item item-select" ng-class="{'item-select-disabled': gendersDisabled}">
 	    	            <span class="input-label">Gender<br>(optional)</span>
+	    	        <label class="item item-select" ng-class="{'item-select-disabled': gendersDisabled}">
 	    	            <select ng-model="formData.gender" ng-options="option.name for option in genders track by option.id" name="gender" id="gender" ng-disabled="gendersDisabled">
 	    	                <option value="">Select gender</option>
 	    	                <!--  -->
@@ -78,8 +79,8 @@
 	    	        <div class="spacer-20"></div> 
 
 	    	        <!-- region -->
-	    	        <label class="item item-select" ng-class="{'item-select-disabled': regionsDisabled}">
 	    	            <span class="input-label">Region</span>
+	    	        <label class="item item-select" ng-class="{'item-select-disabled': regionsDisabled}">
 	    	            <select ng-model="formData.region" ng-options="option.name for option in regions track by option.id" name="region" id="region" ng-change="populateOrganisations(formData.region.id)" ng-disabled="regionsDisabled" required>
 	    	                <option value="">Select region</option>
 	    	                <!--  -->
@@ -91,8 +92,8 @@
 	    	        <!-- /region -->
 
 	    	        <!-- organisation -->
-	    	        <label class="item item-select" ng-class="{ 'item-select-disabled': organisationsDisabled }">
 	    	            <span class="input-label">Organisation</span>
+	    	        <label class="item item-select" ng-class="{ 'item-select-disabled': organisationsDisabled }">
 	    	            <select ng-model="formData.organisation" ng-options="option.name for option in organisations track by option.id" name="organisation" id="organisation" ng-disabled="organisationsDisabled" required>
 	    	                <option value="">Select organisation</option>
 	    	                <!--  -->

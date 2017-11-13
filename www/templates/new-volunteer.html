@@ -6,8 +6,8 @@
             <ion-list>
 
                 <!-- name -->
+                <span class="input-label">Full name</span>
                 <label class="item item-input">
-                    <span class="input-label">Full name</span>
                     <input type="text" name="name" id="name" placeholder="E.g. Jon Smith" ng-model="formData.name" required>
                 </label>
                 <label class="error block text-right padding assertive" ng-show="register.name.$invalid && formSubmitted" for="name">
@@ -16,8 +16,8 @@
                 <!-- /name -->
 
                 <!-- email -->
+                <span class="input-label">Email</span>
                 <label class="item item-input">
-                    <span class="input-label">Email</span>
                     <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" ng-pattern="/^[\w.%+\-]+@[\w.\-]+\.[A-Za-z]{2,6}$/" required>
                 </label>
                 <label class="error block text-right padding assertive" ng-show="register.email.$invalid && formSubmitted" for="email">
@@ -26,8 +26,8 @@
                 <!-- /email -->
 
                 <!-- password -->
+                <span class="input-label">Password</span>
                 <label class="item item-input">
-                    <span class="input-label">Password</span>
                     <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="6" required>
                 </label>
                 <label class="error block text-right padding assertive" ng-show="register.password.$invalid && formSubmitted" for="password">
@@ -38,8 +38,8 @@
                 <div class="spacer-20"></div>
 
                 <!-- phone -->
+                <span class="input-label">Phone</span>
                 <label class="item item-input">
-                    <span class="input-label">Phone</span>
                     <input class="text-right" type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" minlength="6" maxlength="15" ng-pattern="/^([0-9|+|*|#|\-]+)$/" required>
                 </label>
                 <label class="error block text-right padding assertive" ng-show="register.phone.$invalid && formSubmitted" for="phone">
@@ -48,8 +48,8 @@
                 <!-- /phone -->
 
                 <!-- year of birth -->
+                <span class="input-label">Year of birth<br>(optional)</span>
                 <label class="item item-select">
-                    <span class="input-label">Year of birth<br>(optional)</span>
                     <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option" name="yearOfBirth" id="yearOfBirth">
                         <option value="">Select year</option>
                         <!--  -->
@@ -58,8 +58,8 @@
                 <!-- /year of birth -->
 
                 <!-- gender -->
+                <span class="input-label">Gender<br>(optional)</span>
                 <label class="item item-select" ng-class="{'item-select-disabled': gendersDisabled}">
-                    <span class="input-label">Gender<br>(optional)</span>
                     <select ng-model="formData.gender" ng-options="option.name for option in genders track by option.id" name="gender" id="gender" ng-disabled="gendersDisabled">
                         <option value="">Select gender</option>
                         <!--  -->
@@ -75,7 +75,10 @@
 
             <div class="spacer-10"></div>
 
-            <button type="submit" class="button button-energized button-block">Add</button>
+            <button type="submit" class="button button-energized button-block">Add volunteer</button>
+
+            <div class="spacer-20"></div>
+
         </form>
         <!-- /form#register -->
 

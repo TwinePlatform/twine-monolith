@@ -1,4 +1,4 @@
-<ion-view title="Edit meeting">
+<ion-view title="Edit outreach">
 
     <!--<organisation-subheader></organisation-subheader>-->
 
@@ -8,7 +8,7 @@
         <form id="editMeeting" name="editMeeting" class="editLog list" ng-submit="processForm(editMeeting)" novalidate>
 
             <!-- outreach type -->
-            <h4 style="color: black"> What is your organisation's big project for outreach?</h4>
+            <span class="input-label"> What is your organisation's big project for outreach?</span>
             <label class="item item-select">
                 <select ng-model="formData.outreach_type" name="outreach" id="outreach" convert-to-number>
                     <option  value="" disabled selected>Select outreach</option>
@@ -21,8 +21,8 @@
             <div ng-hide="formData.outreach_type === null">
 
                 <!-- organisation -->
+                <span class="input-label">Organisation</span>
                 <label class="item item-select">
-                    <span class="input-label">Organisation</span>
                     <select ng-model="formData.organisation_id" name="organisation" id="organisation" convert-to-number>
                         <option  value="" disabled selected>Select organisation</option>
                         <option ng-repeat="option in organisations"  ng-selected="option.id == formData.organisation_id" value="{{option.id}}">{{option.name}}</option>
@@ -32,8 +32,8 @@
                 <!--  -->
 
                 <!-- date -->
+                <span class="input-label">Date</span>
                 <label class="item item-input">
-                    <span class="input-label">Date</span>
                     <input type="text" name="date_pretty" id="date_pretty" class="datepicker">
                 </label>
                 <label class="error block text-right padding assertive" ng-show="createLog.date.$invalid && formSubmitted" for="date">
@@ -41,8 +41,8 @@
                 </label>
                 <!-- /date -->
                 <!-- meeting type -->
+                <span class="input-label">Interaction type</span>
                 <label class="item item-select">
-                    <span class="input-label">Interaction type</span>
                     <select ng-model="formData.interaction_type" name="interaction" id="interaction" convert-to-number>
                         <option  value="" disabled selected>Select type</option>
                         <option ng-repeat="option in meetingTypes" ng-selected="option.id == formData.interaction_type" value="{{option.id}}">{{option.name}}</option>
@@ -52,8 +52,8 @@
                 <!-- /meeting type -->
 
                 <!-- meeting partner -->
+                <span class="input-label">Interaction with</span>
                 <label class="item item-select">
-                    <span class="input-label">Interaction with</span>
                     <select ng-model="formData.outreach_child_type" name="outreachChild" id="outreachChild" convert-to-number>
                         <option  value="" disabled>Select partner</option>
                         <option ng-repeat="option in outreachChildTypes"  ng-selected="option.id == formData.outreach_child_type" value="{{option.id}}">{{option.name}}</option>
