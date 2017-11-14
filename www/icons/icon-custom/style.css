@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'icon-custom';
   src:
-    url('fonts/icon-custom.ttf?77s293') format('truetype'),
-    url('fonts/icon-custom.woff?77s293') format('woff'),
-    url('fonts/icon-custom.svg?77s293#icon-custom') format('svg');
+    url('fonts/icon-custom.ttf?u7v6b3') format('truetype'),
+    url('fonts/icon-custom.woff?u7v6b3') format('woff'),
+    url('fonts/icon-custom.svg?u7v6b3#icon-custom') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -23,14 +23,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-custom-volunteers:before {
+  content: "\e906";
+  zoom: 83%;
+}
 .icon-custom-clock:before {
   content: "\e900";
 }
 .icon-custom-delete:before {
-  content: "\e901";
+  content: url('./trash.svg');
 }
 .icon-custom-edit:before {
-  content: "\e902";
+  content: url('./edit.svg');
 }
 .icon-custom-logs:before {
   content: "\e903";
@@ -41,4 +45,3 @@
 .icon-custom-dashboard:before {
   content: "\e904";
 }
-
