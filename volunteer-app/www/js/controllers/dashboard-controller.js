@@ -183,7 +183,7 @@
 						}
 
 						// generate the chart
-						$scope.generateChart($scope.labels, $scope.hours);
+						// $scope.generateChart($scope.labels, $scope.hours);
 
 					}
 
@@ -252,52 +252,52 @@
 			>> generate chart
 		*/
 
-			$scope.generateChart = function(labels, hours) {
-
-				// destroy chart
-				$('#logsChart').remove();
-				$('.chart-container').append('<canvas id="logsChart" class="chart" width="400" height="100"></canvas>');
-
-				// create chart
-				var ctx = document.getElementById("logsChart");
-				var logsChart = new Chart(ctx, {
-				    type: 'bar',
-				    data: {
-				        // labels: ['Today', 'Wed 17 Aug', 'Tue 16 Aug', 'Mon 15 Aug', 'Sun 14 Aug', 'Sat 13 Aug', 'Fri 12 Aug'],
-				        labels: labels,
-				        datasets: [{
-				            label: 'Hours',
-				            // data: [7, 6, 7, 5, 6, 7, 4],
-				            data: hours,
-				            backgroundColor: $scope.barColor,
-				            borderColor: $scope.barColor,
-				            borderWidth: 1
-				        }]
-				    },
-				    options: {
-				    	tooltips: {
-				    		enabled: false,
-				    		custom: $scope.tooltipFunction
-				    	},
-				    	legend: {
-				    		display: false
-				    	},
-				        scales: {
-					       	xAxes: [
-					       		{
-					       			display: false
-					       		}
-					       	],
-				            yAxes: [
-				            	{
-				                	display: false
-				            	}
-				            ]
-				        }
-				    }
-				});
-
-			}
+			// $scope.generateChart = function(labels, hours) {
+            //
+			// 	// destroy chart
+			// 	$('#logsChart').remove();
+			// 	$('.chart-container').append('<canvas id="logsChart" class="chart" width="400" height="100"></canvas>');
+            //
+			// 	// create chart
+			// 	var ctx = document.getElementById("logsChart");
+			// 	var logsChart = new Chart(ctx, {
+			// 	    type: 'bar',
+			// 	    data: {
+			// 	        // labels: ['Today', 'Wed 17 Aug', 'Tue 16 Aug', 'Mon 15 Aug', 'Sun 14 Aug', 'Sat 13 Aug', 'Fri 12 Aug'],
+			// 	        labels: labels,
+			// 	        datasets: [{
+			// 	            label: 'Hours',
+			// 	            // data: [7, 6, 7, 5, 6, 7, 4],
+			// 	            data: hours,
+			// 	            backgroundColor: $scope.barColor,
+			// 	            borderColor: $scope.barColor,
+			// 	            borderWidth: 1
+			// 	        }]
+			// 	    },
+			// 	    options: {
+			// 	    	tooltips: {
+			// 	    		enabled: false,
+			// 	    		custom: $scope.tooltipFunction
+			// 	    	},
+			// 	    	legend: {
+			// 	    		display: false
+			// 	    	},
+			// 	        scales: {
+			// 		       	xAxes: [
+			// 		       		{
+			// 		       			display: false
+			// 		       		}
+			// 		       	],
+			// 	            yAxes: [
+			// 	            	{
+			// 	                	display: false
+			// 	            	}
+			// 	            ]
+			// 	        }
+			// 	    }
+			// 	});
+            //
+			// }
 
 		/*
 			>> custom tooltip

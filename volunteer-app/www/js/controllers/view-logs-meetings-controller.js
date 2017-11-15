@@ -93,6 +93,16 @@
 
 			}
 
+        /*
+    		>> if the last log deleted set nologs true
+   		*/
+        $scope.$watch('outreaches', function (newVal) {
+            if ( newVal !== null && newVal !== undefined && newVal.length === 0) {
+                console.log(newVal);
+                $scope.noOutreach = true;
+            }
+        },true);
+
 
 		/*
 			>> edit Outreach

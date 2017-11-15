@@ -30,7 +30,6 @@
         $scope.meetingTypes = [];
         $scope.outreachTypes = [];
         $scope.outreachChildTypes = [];
-        $scope.organisations = [];
 
         $scope.formData = {
         	organisation_id : null,
@@ -69,19 +68,19 @@
 
         });
 
-        $$api.organisations.get($rootScope.currentUser.region_id).success(function (result) {
-            console.log(result);
-            if (result !== undefined && result !== null) {
-                $scope.organisations = result.data;
-            }
-        }).error(function (result, error) {
-
-            console.log(error);
-
-            // process connection error
-            $$utilities.processConnectionError(result, error);
-
-        });
+        // $$api.organisations.get($rootScope.currentUser.region_id).success(function (result) {
+        //     console.log(result);
+        //     if (result !== undefined && result !== null) {
+        //         $scope.organisations = result.data;
+        //     }
+        // }).error(function (result, error) {
+        //
+        //     console.log(error);
+        //
+        //     // process connection error
+        //     $$utilities.processConnectionError(result, error);
+        //
+        // });
 
         $scope.firstWatch = true;
         $scope.$watch('formData', function (newVal, oldVal) {
@@ -172,7 +171,7 @@
 							outreach_child_type : $scope.formData.outreach_child_type,
 							outreach_type :  $scope.formData.outreach_type,
 							user_id : $rootScope.currentUser.id,
-							organisation_id : $scope.formData.organisation_id,
+							organisation_id : $scope.currentUser.organisation_id,
 							date: $scope.formData.date
 						};
 

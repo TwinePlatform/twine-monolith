@@ -20,7 +20,6 @@
 
 		$scope.isOfflineMode = $rootScope.offlineMode;
 
-
 		/*
 			>> populate volunteers
 		*/
@@ -32,6 +31,7 @@
 
 						// update volunteers in view
 						$scope.volunteers = result.data.volunteers;
+						$scope.copyVolunteers = result.data.volunteers;
 
 						// if no volunteers
 						if (result.data.volunteers.length == 0) {
@@ -59,6 +59,27 @@
 
 			};
 
+        /*
+        >> search volunteer
+    	*/
+
+        $scope.search = function (event) {
+        	if (event.target.value === '') {
+        		$scope.volunteers = $scope.copyVolunteers;
+			} else {
+        		$scope.volunteers = [];
+        		$scope.copyVolunteers.forEach(function (volunteer) {
+					if (volunteer.name.indexOf(event.target.value) !== -1){
+						$scope.volunteers.push(volunteer);
+					}
+                })
+			}
+        }
+
+        $scope.clearSearch = function () {
+            $scope.volunteers = $scope.copyVolunteers;
+            $scope.searchParam = '';
+        }
 
 		/*
 			>> edit volunteer
@@ -146,6 +167,15 @@
 				});
 
 			};
+
+        /*
+            >> date format changer
+        */
+
+        $scope.normalDate = function (date) {
+            date = new Date(date).toLocaleDateString('en',{day: 'numeric',month: 'long',year: 'numeric'}).replace(',','');
+            return date;
+        }
 
 		/*
 			>> beforeEnter

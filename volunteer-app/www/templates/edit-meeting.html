@@ -1,4 +1,4 @@
-<ion-view title="Edit outreach">
+<ion-view hide-back-button="{{isAndroid}}" title="Edit outreach">
 
     <!--<organisation-subheader></organisation-subheader>-->
 
@@ -21,14 +21,14 @@
             <div ng-hide="formData.outreach_type === null">
 
                 <!-- organisation -->
-                <span class="input-label">Organisation</span>
-                <label class="item item-select">
-                    <select ng-model="formData.organisation_id" name="organisation" id="organisation" convert-to-number>
-                        <option  value="" disabled selected>Select organisation</option>
-                        <option ng-repeat="option in organisations"  ng-selected="option.id == formData.organisation_id" value="{{option.id}}">{{option.name}}</option>
-                        <!--  -->
-                    </select>
-                </label>
+                <!--<span class="input-label">Organisation</span>-->
+                <!--<label class="item item-select">-->
+                    <!--<select ng-model="formData.organisation_id" name="organisation" id="organisation" convert-to-number>-->
+                        <!--<option  value="" disabled selected>Select organisation</option>-->
+                        <!--<option ng-repeat="option in organisations"  ng-selected="option.id == formData.organisation_id" value="{{option.id}}">{{option.name}}</option>-->
+                        <!--&lt;!&ndash;  &ndash;&gt;-->
+                    <!--</select>-->
+                <!--</label>-->
                 <!--  -->
 
                 <!-- date -->

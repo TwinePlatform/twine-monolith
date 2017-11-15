@@ -1,9 +1,10 @@
 <ion-view hide-nav-bar="{{isAdmin}}" title="View logs">
     <!--<organisation-subheader></organisation-subheader>-->
+    <div ng-if="noLogs" class="noResults">
+        <h4 class="text-center label">You haven't created any logs yet.</h4>
+    </div>
 
     <ion-content padding="true" overflow-scroll="false" has-bouncing="true" ng-class="{'has-header' : isAdmin}" class="view-logs" >
-
-        <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noLogs">You haven't created any logs yet.</p>
 
         <div class="padding text-center" ng-if="!logs">
             <ion-spinner class="text-center"></ion-spinner>
@@ -34,8 +35,9 @@
         </ion-list>
 
     </ion-content>
-    <div ng-if="noLogs" class="button-block button-add" style="min-width: 50%; left: 40%!important;">
-        <p>Click on this button to start adding volunteer hours</p>
+    <div ng-if="noLogs" class="button-add-message view-logs-button">
+        <p ng-if="!isAdmin">Click on this button to start adding hours</p>
+        <p  ng-if="isAdmin">Click on this button to start adding volunteer hours</p>
     </div>
     <a ui-sref="tabs.view-logs.new-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
     </a>

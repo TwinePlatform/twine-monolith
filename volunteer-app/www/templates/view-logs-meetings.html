@@ -1,8 +1,10 @@
 <ion-view hide-nav-bar="true" title="Log outreach">
 
-    <ion-content padding="true" overflow-scroll="false" has-bouncing="true" class="has-header view-logs">
+    <div ng-if="noOutreach" class="noResults">
+        <h4 class="text-center label">You haven't created any meetings yet.</h4>
+    </div>
 
-        <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noOutreach">You haven't created any meetings yet.</p>
+    <ion-content padding="true" overflow-scroll="false" has-bouncing="true" class="has-header view-logs">
 
         <div class="padding text-center" ng-if="!outreaches">
             <ion-spinner class="text-center"></ion-spinner>
@@ -14,8 +16,8 @@
                 <i class="icon" ng-class="{ 'ion-alert': meeting.needs_pushing}">
                     <span ng-if="outreach.needs_pushing">Not pushed</span>
                 </i>
-                <div style="float: left; max-width: 60%;overflow: hidden">
-                <h2>{{outreach.outreach_type.name}}</h2>
+                <div style="float: left; max-width: 70%;overflow: hidden">
+                <h2>{{outreach.outreach_type.name}}</h2><div class="spacer-10"></div>
                 <h3 style="color: black">{{outreach.outreach_child_type.name}}</h3>
                 <p>{{ outreach.date.split(' ')[0] | date:'d MMM yyyy'}} @ {{ outreach.organisation_id.name }}</p>
                 <p ng-if="options.debug">id: {{ outreach.id }}</p>
@@ -33,8 +35,8 @@
         </ion-list>
 
     </ion-content>
-    <div ng-if="noOutreach" class="button-block button-add" style="min-width: 50%; left: 40%!important;">
-        <p>Click on this button to start logging interactions</p>
+    <div ng-if="noOutreach" class="button-add-message view-logs-button">
+        <p>Click on this button to start adding volunteer hours</p>
     </div>
     <a ui-sref="tabs.view-logs.new-meeting-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
     </a>

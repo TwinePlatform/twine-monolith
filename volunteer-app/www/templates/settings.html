@@ -5,7 +5,9 @@
     <ion-content padding="true" class="has-header settings">
         <form ng-if="!isAdmin" class="list">
             <label class="input-label">Location reminders</label>
-            <ion-toggle toggle-class="toggle-positive" ng-change="locationReminders()" ng-model="locationRemindersSwitch">Recive a reminder to log your hours <br> when you leave {{ organisationName }}</ion-toggle>
+            <ion-toggle toggle-class="toggle-positive" ng-change="locationReminders()" ng-model="locationRemindersSwitch">
+                <p style="text-overflow: clip; white-space: normal;">Recive a reminder to log your hours when you leave {{ organisationName }}</p>
+            </ion-toggle>
         </form>
 
         <!-- account settings -->
@@ -25,6 +27,6 @@
             </ion-item>
         </form>
 
-        <a ng-click="logOut()" class="button button-positive button-block button-clear"><i class="icon ion-log-out"></i> Log out</a>
+        <a ng-click="logOut()" class="button-loguot bold">Log out</a>
     </ion-content>
 </ion-view>
