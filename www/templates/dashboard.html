@@ -1,24 +1,20 @@
 <ion-view title="Dashboard" hide-back-button="true">
 
     <!--<organisation-subheader></organisation-subheader>-->
+    <div class="noResults fadeIn" ng-if="totalHours === 0">
+        <h4 class="text-center label">You haven't logged any hours yet.</h4>
+    </div>
 
     <ion-content scroll="false" overflow-scroll="false" has-bouncing="true" class="has-header dashboard">
 
-        <h4 class="text-center">My Total Hours</h4>
-
         <div class="total-hours-container padding-left padding-right padding-bottom row">
-            <div class="col col-50 text-center">
+            <div class="col text-center" style="background-color: white; border: 1px solid gainsboro;">
+                <h4 class="dashboard-label">Total Hours</h4>
                 <span class="total-hours animated fadeIn" ng-class="{'ng-hide': totalHours < 0}" ng-bind-html="totalHours | hoursAndMinutesAsString"></span>
             </div>
-            <div class="col chart-container">
-                <!-- <canvas id="logsChart" class="chart" width="400" height="100"></canvas> -->
-            </div>
-        </div>
-
-        <div class="padding" ng-if="totalHours === 0">
-            <p class="text-center">You haven't logged any hours yet.</p>
-            <p class="text-center">Please tap the "Log hours" button below to start logging hours.</p>
-            <p class="text-center"><small><strong>Note:</strong> You can only log hours in the current month. Previous months will be locked.</small></p>
+            <!--<div class="col chart-container">-->
+                <!--&lt;!&ndash; <canvas id="logsChart" class="chart" width="400" height="100"></canvas> &ndash;&gt;-->
+            <!--</div>-->
         </div>
 
         <!-- .hours-summary -->
@@ -27,32 +23,32 @@
                 <ion-item class="hours-summary-today">
                     <div class="row row-no-padding">
                         <div class="col">
-                            <strong>Today</strong>
-                        </div>
-                        <div class="col col-50 text-right">
                             <strong>
                                 <span class="animated fadeIn" ng-class="{'ng-hide': todaysTotalHours < 0}" ng-bind-html="todaysTotalHours | hoursAndMinutesAsString"></span>
                             </strong>
                         </div>
+                        <div class="col text-right">
+                            <span class="bold">Today</span>
+                        </div>
                     </div>
                 </ion-item>
                 <ion-item class="hours-summary-other" ng-if="!offlineMode">
                     <div class="row row-no-padding">
                         <div class="col">
-                            Last 7 days
-                        </div>
-                        <div class="col col-50 text-right">
                             <span class="animated fadeIn" ng-class="{'ng-hide': last7DaysHours < 0}" ng-bind-html="last7DaysHours | hoursAndMinutesAsString"></span>
                         </div>
+                        <div class="col text-right">
+                            Last 7 days
+                        </div>
                     </div>
                 </ion-item>
                 <ion-item class="hours-summary-other" ng-if="!offlineMode">
                     <div class="row row-no-padding">
                         <div class="col">
-                            Last 30 days
-                        </div>
-                        <div class="col col-50 text-right">
                             <span class="animated fadeIn" ng-class="{'ng-hide': last30DaysHours < 0}" ng-bind-html="last30DaysHours | hoursAndMinutesAsString"></span>
+                        </div>
+                        <div class="col text-right">
+                            Last 30 days
                         </div>
                     </div>
                 </ion-item>
@@ -74,10 +70,9 @@
             Your account is pending approval
         </div>
         <!-- /.pending approval box -->
-        <div ng-if="noLogs" class="button-block button-add" style="min-width: 50%; left: 40%!important;">
-            <p>Click on this button to start adding volunteer hours</p>
-        </div>
-        <a ui-sref="tabs.new-log" class="button button-energized button-block icon-left ion-plus button-add">
-        </a>
+            <div ng-if="totalHours === 0" class="button-add-message">
+                <p>Click on this button to start adding hours</p>
+            </div>
+            <a ui-sref="tabs.new-log" class="button button-energized button-block icon-left ion-plus button-add"></a>
     </ion-content>
 </ion-view>

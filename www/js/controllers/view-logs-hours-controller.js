@@ -122,8 +122,17 @@
                         });
                     }
 				}
-
 			}
+
+        /*
+        >> if the last log deleted set nologs true
+    	*/
+			$scope.$watch('logs', function (newVal) {
+				console.log(newVal);
+				if ( newVal !== null && newVal !== undefined && newVal.length === 0) {
+					$scope.noLogs = true;
+				}
+			},true);
 
 
 		/*

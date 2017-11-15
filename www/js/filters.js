@@ -28,7 +28,7 @@ angular.module('app.filters', [])
 				var hoursAndMinutesString = '';
 				// if there's more than 0 hours
 				if (hours > 0) {
-					hoursAndMinutesString += '<span class="hours">' + hours + ' <span class="unit">' + hoursUnit + '</span></span>';
+					hoursAndMinutesString += '<span class="hours"><span class="bold">' + hours + ' </span><span class="unit">' + hoursUnit + '</span></span>';
 					// if there are minutes as well, add a space at the end
 					if (minutes > 0) {
 						hoursAndMinutesString += ' ';
@@ -36,11 +36,11 @@ angular.module('app.filters', [])
 				}
 				// if there's more than 0 minutes
 				if (minutes > 0) {
-					hoursAndMinutesString += '<span class="minutes">' + minutes + '<span class="unit">min</span></span>';
+					hoursAndMinutesString += '<span class="minutes"><span class="bold">' + minutes + ' </span><span class="unit"> min</span></span>';
 				}
 				// if there are 0 hours or minutes
 				if (hours === 0 && minutes === 0) {
-					hoursAndMinutesString = '<span class="hours">' + hours + ' <span class="unit">hours</span></span>';
+					hoursAndMinutesString = '<span class="hours"><span class="bold">' + hours + ' </span><span class="unit"> hours</span></span>';
 				}
 				return hoursAndMinutesString;
 

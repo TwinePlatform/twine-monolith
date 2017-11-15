@@ -1,4 +1,4 @@
-<ion-view title="My Profile">
+<ion-view hide-back-button="{{isAndroid}} title="My Profile">
 
 	<!--<organisation-subheader></organisation-subheader>-->
 
@@ -49,7 +49,7 @@
 	    	        <!-- phone -->
 	    	            <span class="input-label">Phone</span>
 	    	        <label class="item item-input">
-	    	            <input class="text-right" type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" minlength="6" maxlength="15" ng-pattern="/^([0-9|+|*|#|\-]+)$/" required>
+	    	            <input type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" minlength="6" maxlength="15" ng-pattern="/^([0-9|+|*|#|\-]+)$/" required>
 	    	        </label>
 	    	        <label class="error block text-right padding assertive" ng-show="user.phone.$invalid && formSubmitted" for="phone">
 	    	            Please enter only digits or these symbols: *+#- (between 6 and 15 characters in length)

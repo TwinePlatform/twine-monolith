@@ -31,7 +31,6 @@ angular.module('app.controllers').controller('EditMeetingController', function (
     $scope.meetingTypes = [];
     $scope.outreachTypes = [];
     $scope.outreachChildTypes = [];
-    $scope.organisations = [];
 
     $scope.formData = {
     };
@@ -67,19 +66,19 @@ angular.module('app.controllers').controller('EditMeetingController', function (
 
     });
 
-    $$api.organisations.get($rootScope.currentUser.region_id).success(function (result) {
-
-        if (result !== undefined && result !== null) {
-            $scope.organisations = result.data;
-        }
-    }).error(function (result, error) {
-
-        console.log(error);
-
-        // process connection error
-        $$utilities.processConnectionError(result, error);
-
-    });
+    // $$api.organisations.get($rootScope.currentUser.region_id).success(function (result) {
+    //
+    //     if (result !== undefined && result !== null) {
+    //         $scope.organisations = result.data;
+    //     }
+    // }).error(function (result, error) {
+    //
+    //     console.log(error);
+    //
+    //     // process connection error
+    //     $$utilities.processConnectionError(result, error);
+    //
+    // });
 
 
     $scope.$watch('formData', function (newVal, oldVal) {

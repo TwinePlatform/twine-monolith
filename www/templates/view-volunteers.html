@@ -1,20 +1,23 @@
 <ion-view hide-nav-bar="true" title="View volunteers">
-
-    <ion-content overflow-scroll="false" has-bouncing="true" padding="true" class="view-logs">
-
+    <div class="bar bar-header item-input-inset">
+        <label class="item-input-wrapper">
+            <i class="icon ion-ios-search placeholder-icon"></i>
+            <input type="search" ng-model="searchParam" placeholder="Search" ng-keyup="search($event)">
+        </label>
+    </div>
+    <ion-content overflow-scroll="false" has-bouncing="true" padding="true" class="view-logs has-search">
         <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noVolunteers">You haven't created any volunteers yet.</p>
         <p class="no-logs text-center padding animate fadeIn absolute" ng-if="isOfflineMode">You can't manage volunteers offline.</p>
 
         <div class="padding text-center" ng-if="!volunteers">
             <ion-spinner class="text-center"></ion-spinner>
         </div>
-
         <ion-list>
 
             <ion-item style="margin-bottom: 5px" class=" item-remove-animate" ng-repeat="volunteer in volunteers | orderBy: ['-date','-updated_at']">
                 <div style="float: left">
                 <h2>{{volunteer.name}}</h2>
-                <p> Joined {{volunteer.created_at}}</p>
+                <p> Joined {{ normalDate(volunteer.created_at) }}</p>
                 <p ng-if="options.debug">id: {{ volunteer.id }}</p>
                 </div>
                 <div class="button-bar">

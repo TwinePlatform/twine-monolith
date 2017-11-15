@@ -33,6 +33,21 @@ $dark:                            #444 !default;
   font-weight: normal;
   font-style: normal; }
 
+@font-face {
+  font-family: 'Montserrat-light';
+  src: url('../fonts/Montserrat/Montserrat-Light.ttf') format('truetype'); /* IE9 Compat Modes */
+}
+
+@font-face {
+  font-family: 'Montserrat-bold';
+  src: url('../fonts/Montserrat/Montserrat-Bold.ttf') format('truetype'); /* IE9 Compat Modes */
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../fonts/Montserrat/Montserrat-Regular.ttf') format('truetype'); /* IE9 Compat Modes */
+}
+
 .ion, .ionicons,
 .ion-alert:before,
 .ion-alert-circled:before,
@@ -3953,6 +3968,7 @@ a.subdued {
     /*background-image: linear-gradient(0deg, #6600cc, #6600cc 50%, transparent 50%);*/
     color: #fff; }
     .bar.bar-positive .title {
+      font-family: Montserrat-bold;
       color: #fff; }
     .bar.bar-positive.bar-footer {
       background-image: linear-gradient(180deg, #6600cc, #6600cc 50%, transparent 50%); }
@@ -4484,14 +4500,14 @@ a.subdued {
   border-bottom: 1px solid #ddd;
   padding-top: 2px; }
 
-.tabs-striped .tab-item.tab-item-active, .tabs-striped .tab-item.active, .tabs-striped .tab-item.activated {
-  margin-top: -2px;
-  border-style: solid;
-  border-width: 2px 0 0 0;
-  border-color: #fcc726; }
-  .tabs-striped .tab-item.tab-item-active .badge, .tabs-striped .tab-item.active .badge, .tabs-striped .tab-item.activated .badge {
-    top: 2px;
-    opacity: 1; }
+/*.tabs-striped .tab-item.tab-item-active, .tabs-striped .tab-item.active, .tabs-striped .tab-item.activated {*/
+  /*margin-top: -2px;*/
+  /*border-style: solid;*/
+  /*border-width: 2px 0 0 0;*/
+  /*border-color: #fcc726; }*/
+  /*.tabs-striped .tab-item.tab-item-active .badge, .tabs-striped .tab-item.active .badge, .tabs-striped .tab-item.activated .badge {*/
+    /*top: 2px;*/
+    /*opacity: 1; }*/
 
 .tabs-striped.tabs-light .tabs {
   background-color: #fff; }
@@ -5031,6 +5047,7 @@ ion-tabs.tabs-color-active-dark .tab-item {
     .tabs-top.tabs-striped .tab-item.tab-item-active, .tabs-top.tabs-striped .tab-item.active, .tabs-top.tabs-striped .tab-item.activated {
       margin-top: 1px;
       border-width: 0px 0px 2px 0px !important;
+      border-color: #ffbe00;
       border-style: solid; }
       .tabs-top.tabs-striped .tab-item.tab-item-active > .badge, .tabs-top.tabs-striped .tab-item.tab-item-active > i, .tabs-top.tabs-striped .tab-item.active > .badge, .tabs-top.tabs-striped .tab-item.active > i, .tabs-top.tabs-striped .tab-item.activated > .badge, .tabs-top.tabs-striped .tab-item.activated > i {
         margin-top: -1px; }
@@ -5083,8 +5100,8 @@ ion-tabs.tabs-color-active-dark .tab-item {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 400;
-  font-size: 14px;
-  font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+  font-size: 18px;
+  font-family: Montserrat;
   opacity: 0.7; }
   .tab-item:hover {
     cursor: pointer; }
@@ -5105,8 +5122,9 @@ ion-tabs.tabs-color-active-dark .tab-item {
 .tab-item .icon {
   display: block;
   margin: 0 auto;
-  height: 32px;
-  font-size: 32px; }
+  padding-top: 4px;
+  height: 30px;
+  font-size: 26px; }
 
 .tabs-icon-left.tabs .tab-item,
 .tabs-icon-left > .tabs .tab-item,
@@ -5755,6 +5773,13 @@ ion-tabs.tabs-color-active-dark .tab-item {
 .list-borderless .item,
 .item-borderless {
   border-width: 0; }
+
+.button-loguot{
+  position: absolute;
+  left: 5%;
+  top: 85%;
+  font-size: 18px;
+}
 
 .item.active,
 .item.activated,
@@ -7625,7 +7650,9 @@ textarea {
   max-width: 550px;
   width: 80%;
   color: #444;
-  font-size: 16px; }
+  font-size: 16px;
+  letter-spacing: 1px;
+}
 
 .login-label {
   width: 40%;
@@ -7653,7 +7680,9 @@ textarea {
   border-radius: 2px;
   padding: 4px 8px 3px 0;
   border: none;
-  background-color: #fff; }
+  background-color: #fff;
+  font-family: Montserrat-light;
+}
 
 .item-stacked-label input {
   overflow: hidden;
@@ -7701,7 +7730,7 @@ input[type="tel"],
 input[type="color"] {
   display: block;
   padding-top: 2px;
-  padding-left: 0;
+  padding-left: 15px;
   height: 34px;
   color: #111;
   vertical-align: middle;
@@ -8443,12 +8472,11 @@ input:checked + .checkbox-icon:after {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    position: absolute;
     top: 0;
     bottom: 0;
     right: 0;
     padding: 0 48px 0 16px;
-    max-width: 65%;
+    max-width: 100%;
     border: none;
     background: #fff;
     color: #333;
@@ -8457,7 +8485,7 @@ input:checked + .checkbox-icon:after {
     white-space: nowrap;
     font-size: 14px;
     cursor: pointer;
-    direction: rtl; }
+  }
   .item-select select::-ms-expand {
     display: none; }
   .item-select option {
@@ -8543,7 +8571,7 @@ progress {
   display: inline-block;
   margin: 0;
   padding: 0 12px;
-  min-width: 52px;
+  min-width: 40px;
   min-height: 47px;
   border-width: 1px;
   border-style: solid;
@@ -12161,8 +12189,7 @@ a.button {
   height: 100px; }
 
 body, .ionic-body, input, button, select, textarea, h1, h2, h3, h4, h5, h6 {
-  font-family: -apple-system;
-  font-family: "Quicksand", "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+  font-family: Montserrat;
   font-weight: 400; }
 
 h1, h2, h3, h4 {
@@ -12188,7 +12215,7 @@ h1, h2, h3, h4 {
   .bar.bar-positive .title {
     color: black;
     font-size: 20px;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
     font-weight: 700; }
 
 .bar-subheader-organisation {
@@ -12286,6 +12313,12 @@ select[disabled], .item-select-disabled:after {
   font-size: 15px;
   font-weight: 600; }
 
+.dashboard-label {
+  color: black;
+  padding-top: 20px;
+  padding-bottom: 80px;
+}
+
 .platform-ios .input-label {
   top: -2px;
   position: relative; }
@@ -12300,7 +12333,9 @@ select[disabled], .item-select-disabled:after {
   padding-right: 21px !important; }
 
 .datepicker, input[readonly].datepicker {
-  background-color: white; }
+  background-color: white;
+  margin-left: 0px;
+}
 
 .bar-subfooter.bar-offline-mode {
   bottom: 49px; }
@@ -12341,6 +12376,7 @@ select[disabled], .item-select-disabled:after {
 
 
 .total-hours-container .col {
+  margin-top: 20px;
   position: relative; }
 
 .total-hours-container .total-hours {
@@ -12352,7 +12388,10 @@ select[disabled], .item-select-disabled:after {
   top: calc(50% + 3px);
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100%; }
+  width: 100%;
+  padding-top: 40px;
+  zoom: 140%;
+}
   .total-hours-container .total-hours .hours .unit, .total-hours-container .total-hours .minutes .unit {
     font-size: 15px;
     opacity: 0.6; }
@@ -12383,6 +12422,10 @@ select[disabled], .item-select-disabled:after {
 .dashboard .padding p:last-child {
   margin-bottom: 0; }
 
+.dashboard .padding-more {
+  padding-top: 100px;
+}
+
 .hours-summary .hours-summary-today {
   border: none;
   background-color: #f8f8f9;
@@ -12396,6 +12439,10 @@ select[disabled], .item-select-disabled:after {
   padding-top: 5px;
   padding-bottom: 5px;
   font-size: 15px; }
+
+.has-search {
+  margin-top: 40px;
+}
 
 .hours-summary .hours .unit, .hours-summary .minutes .unit {
   font-size: 12px;
@@ -12413,21 +12460,75 @@ select[disabled], .item-select-disabled:after {
     font-size: 16px; }
 
 .button-add {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border-radius: 80px;
   border-width: 3px !important;
   text-align: center;
   margin: 30px auto !important;
   position: absolute;
-  left: 85%;
+  left: 90%;
   transform: translate(-50%);
   bottom: 10px;
   z-index: 10;
+  box-shadow: 0px 3px 3px #ccc;
   padding: 0; }
 .button-add.view-logs-button {
   bottom: 30px;
 }
+
+.noResults {
+  position: absolute;
+  top: 45%;
+  margin-left: 5%;
+  margin-right: 5%;
+  min-width: 90%;
+}
+
+.button-add-message {
+  position: absolute;
+  height: 60px;
+  width: 60%;
+  text-align: center;
+  left: 17%;
+  bottom : 40px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid gainsboro;
+}
+.button-add-message:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 19px;
+  left: 100%;
+  width: 0;
+  height: 0;
+  border-color: transparent transparent transparent gainsboro;
+  border-style: solid;
+  border-width: 10px;
+}
+.button-add-message:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 19px;
+  left: 99%;
+  width: 0;
+  height: 0;
+  border-color: transparent transparent transparent white;
+  border-style: solid;
+  border-width: 10px;
+}
+.button-add-message.view-logs-button {
+  bottom: 60px;
+}
+.button-add-message p{
+  margin-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
   .button-add.activated span {
     color: #8000ff !important; }
   .button-add:before {
@@ -12469,10 +12570,12 @@ select[disabled], .item-select-disabled:after {
   .view-logs .item.deleted .button-bar {
     pointer-events: none; }
 
-.view-logs .item h1 {
-  font-weight: bold; }
   .view-logs .item h1 .hours .unit, .view-logs .item h1 .minutes .unit {
     font-size: 13px; }
+
+ .hours .bold, .minutes .bold, .bold {
+    font-family: Montserrat-bold
+  }
 
 .view-logs .no-logs {
   position: absolute;
