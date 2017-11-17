@@ -117,7 +117,10 @@ angular.module('app').controller('NewVolunteerController', function ($scope, $st
                 // adding unsuccessful
                 else {
 
-                    $$shout(result.message);
+                    $$shout(response.message);
+
+                    // hide loader
+                    $ionicLoading.hide();
 
                 }
 

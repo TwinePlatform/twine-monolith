@@ -7,9 +7,9 @@
             <ion-list>
 
                 <!-- email -->
-                <label class="item item-input">
-                    <span class="input-label login-label">Email</span>
-                    <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" ng-pattern="/^[\w.%+\-]+@[\w.\-]+\.[A-Za-z]{2,6}$/" required>
+                <span class="input-label item login-label">Email</span>
+                <label class="item item-input" style="border: none">
+                    <input class="login-input" type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" ng-pattern="/^[\w.%+\-]+@[\w.\-]+\.[A-Za-z]{2,6}$/" required>
                 </label>
                 <label class="error block text-right padding assertive" ng-if="login.email.$invalid && formSubmitted" for="email">
                     Please enter a valid email address
@@ -17,22 +17,24 @@
                 <!-- /email -->
 
                 <!-- password -->
-                <label class="item item-input">
-                    <span class="input-label login-label">Password</span>
-                    <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="6" required>
+                <span class="input-label item login-label">Password</span>
+                <label class="item item-input" style="border: none">
+                    <input class="login-input" type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="6" required>
                 </label>
                 <label class="error block text-right padding assertive" ng-if="login.password.$invalid && formSubmitted" for="password">
                     Please enter at least 6 characters
+                </label>
+                <label align="right">
+                    <a ng-click="forgotPassword()" class="item forgot" >Forgot your password?</a>
                 </label>
                 <!-- /password -->
 
             </ion-list>
 
             <!-- buttons -->
-            <div class="buttons">
-                <button type="submit" class="button button-energized button-block">Login</button>
-                <a ui-sref="register" class="button button-dark button-block">Or register here</a>
-                <a ng-click="forgotPassword()" class="button button-energized button-block button-clear button-small">I forgot my password</a>
+            <div class="buttons" align="center">
+                <button type="submit" style="margin-bottom: 10px" class="button button-energized button-block">Login</button>
+                <a ui-sref="register" class="register">Or register <span style="text-decoration: underline; font-weight: bold">here</span></a>
             </div>
 
         </form>

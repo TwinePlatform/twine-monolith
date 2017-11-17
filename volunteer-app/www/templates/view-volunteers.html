@@ -5,8 +5,10 @@
             <input type="search" ng-model="searchParam" placeholder="Search" ng-keyup="search($event)">
         </label>
     </div>
+    <div class="noResults fadeIn" ng-if="noVolunteers">
+        <h4 class="text-center label">Your currently haven't got any volunteers is your organisation.</h4>
+    </div>
     <ion-content overflow-scroll="false" has-bouncing="true" padding="true" class="view-logs has-search">
-        <p class="no-logs text-center padding animate fadeIn absolute" ng-if="noVolunteers">You haven't created any volunteers yet.</p>
         <p class="no-logs text-center padding animate fadeIn absolute" ng-if="isOfflineMode">You can't manage volunteers offline.</p>
 
         <div class="padding text-center" ng-if="!volunteers">
@@ -32,7 +34,7 @@
         </ion-list>
 
     </ion-content>
-    <div ng-if="noVolunteers" class="button-block button-add" style="min-width: 50%; left: 40%!important;">
+    <div ng-if="noVolunteers" class="button-add-message view-logs-button">
         <p>Click on this button to start adding volunteers</p>
     </div>
     <a ui-sref="tabs.new-volunteer" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">

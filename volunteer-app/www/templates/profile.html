@@ -29,25 +29,20 @@
 	    	        </label>
 	    	        <!-- /email -->
 
-	    	        <div class="spacer-20"></div>
 
-					<ion-checkbox class="item-checkbox-right" ng-model="changePassword"><span class="input-label">Change password</span></ion-checkbox>
+	    	        <!-- password -->
 
-	    	        <!-- password -->     
-
-	    	        <label class="item item-input" ng-if="changePassword">
-						<span class="input-label" style="width: 50% !important;">New password</span>
-	    	            <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="6" required>
+					<span class="input-label">Change password</span>
+					<label class="item item-input">
+	    	            <input type="password" name="password" id="password" placeholder="&#9679 &#9679 &#9679 &#9679 &#9679 &#9679" ng-model="formData.password" minlength="6" required>
 	    	        </label>
 	    	        <label class="error block text-right padding assertive" ng-show="user.password.$invalid && formSubmitted" for="password">
 	    	            Please enter at least 6 characters
 	    	        </label>
 	    	        <!-- /password -->
 
-	    	        <div class="spacer-20"></div>
-
 	    	        <!-- phone -->
-	    	            <span class="input-label">Phone</span>
+	    	            <span class="input-label">Phone number</span>
 	    	        <label class="item item-input">
 	    	            <input type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" minlength="6" maxlength="15" ng-pattern="/^([0-9|+|*|#|\-]+)$/" required>
 	    	        </label>
@@ -57,7 +52,7 @@
 	    	        <!-- /phone -->
 
 	    	        <!-- year of birth -->
-	    	            <span class="input-label">Year of birth<br>(optional)</span>
+	    	            <span class="input-label">Year of birth (optional)</span>
 	    	        <label class="item item-select">
 	    	            <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option" name="yearOfBirth" id="yearOfBirth">
 	    	                <option value="">Select year</option>
@@ -67,7 +62,7 @@
 	    	        <!-- /year of birth -->
 
 	    	        <!-- gender -->
-	    	            <span class="input-label">Gender<br>(optional)</span>
+	    	            <span class="input-label">Gender (optional)</span>
 	    	        <label class="item item-select" ng-class="{'item-select-disabled': gendersDisabled}">
 	    	            <select ng-model="formData.gender" ng-options="option.name for option in genders track by option.id" name="gender" id="gender" ng-disabled="gendersDisabled">
 	    	                <option value="">Select gender</option>
@@ -76,7 +71,6 @@
 	    	        </label>
 	    	        <!-- /gender -->
 
-	    	        <div class="spacer-20"></div> 
 
 	    	        <!-- region -->
 	    	            <span class="input-label">Region</span>

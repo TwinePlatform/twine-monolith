@@ -17,7 +17,6 @@
 		$scope, $stateParams, $http, $state, $ionicPopup, $localStorage, $ionicLoading, $rootScope, 
 		$$api, $$utilities
 	) {
-
 		/*
 			>> store the form data
 		*/
@@ -118,5 +117,20 @@
 				}
 
 			};
+
+        /*
+      		>> set login page custom styles
+  		*/
+        $scope.$on('$ionicView.beforeEnter', function() {
+            document.getElementsByClassName('bar-header')[1].style.backgroundColor = '#7407ff';
+            document.getElementsByClassName('bar-header')[1].style.border = 'none';
+            document.getElementsByClassName('title-center')[0].style.color = 'white';
+        });
+
+        $scope.$on('$ionicView.beforeLeave', function() {
+            document.getElementsByClassName('bar-header')[1].style.backgroundColor = '';
+            document.getElementsByClassName('bar-header')[1].style.border = '';
+            document.getElementsByClassName('title-center')[0].style.color = '';
+        });
 
 	})
