@@ -1,12 +1,7 @@
-<ion-view title="Register" hide-back-button="true">
+<ion-view title="Registration" hide-back-button="true">
     <ion-content padding="true" class="has-header register">
 
         <img class="logo" src="img/twine.svg" alt="">
-
-        <p class="text-center padding">
-            Please fill in the form below to register for {{ options.appName }}. <br>
-            <b>Note:</b> only registered members can use the app
-        </p>
 
         <!-- form#register -->
         <form id="register" name="register" class="list" ng-submit="processForm(register)" novalidate>
@@ -33,7 +28,7 @@
                 <!-- /email -->
 
                 <!-- password -->     
-                    <span class="input-label">Password</span>
+                    <span class="input-label">Create password</span>
                 <label class="item item-input">
                     <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="6" required>
                 </label>
@@ -43,7 +38,7 @@
                 <!-- /password -->
 
                 <!-- phone -->
-                    <span class="input-label">Phone</span>
+                    <span class="input-label">Phone number</span>
                 <label class="item item-input">
                     <input type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" minlength="6" maxlength="15" ng-pattern="/^([0-9|+|*|#|\-]+)$/" required>
                 </label>
@@ -53,7 +48,7 @@
                 <!-- /phone -->
 
                 <!-- year of birth -->
-                    <span class="input-label">Year of birth (optional)</span>
+                <span class="input-label" style="max-width: 100%; width: 100%"><span style="width: 90%; display: inline-block">Year of birth (optional)</span><span align="right" style="width: 10%; display: inline-block"><i class="icon ion-help-circled"></i></span></span>
                 <label class="item item-select">
                     <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option" name="yearOfBirth" id="yearOfBirth">
                         <option value="">Select year</option>
@@ -63,7 +58,7 @@
                 <!-- /year of birth -->
 
                 <!-- gender -->
-                    <span class="input-label">Gender (optional)</span>
+                <span class="input-label" style="max-width: 100%; width: 100%"><span style="width: 90%; display: inline-block">Gender (optional)</span><span align="right" style="width: 10%; display: inline-block"><i class="icon ion-help-circled"></i></span></span>
                 <label class="item item-select" ng-class="{'item-select-disabled': gendersDisabled}">
                     <select ng-model="formData.gender" ng-options="option.name for option in genders track by option.id" name="gender" id="gender" ng-disabled="gendersDisabled">
                         <option value="">Select gender</option>
@@ -98,12 +93,10 @@
                 </label>
                 <!-- /organisation -->
 
-                <div class="spacer-20"></div>
-
                 <!-- code -->
-                    <span class="input-label">Code</span>
+                <span class="input-label" style="width: 100%; max-width: 100%">Admin access code (not applicable to volunteers)</span>
                 <label class="item item-input">
-                    <input type="password" name="code" id="code" placeholder="Enter code" ng-model="formData.code">
+                    <input type="password" name="code" id="code" placeholder="000000" ng-model="formData.code">
                 </label>
                 <!-- /code -->
 
@@ -115,12 +108,19 @@
 
             <!-- buttons -->
             <div class="padding-top padding-left padding-right text-center">
-                <small class="text-center">You must read and agree to the terms and conditions before registering</small>
-                <a ng-click="termsShow()" class="button button-small button-positive button-block button-clear">Terms & Conditions</a>
+                <span style="color: rgba(0,0,0,0.4)">Be registering you agree to the
+                    <a ng-click="termsShow()" style="text-decoration: underline; color: rgba(0,0,0,0.4)">Terms & Conditions</a>
+                </span>
             </div>
-            <button type="submit" class="button button-energized button-block">Register</button>
-            <a ui-sref="login" class=" button button-small button-positive button-block button-clear"><i class="icon ion-log-in"></i> Or log in if you have an account</a>
+            <button type="submit" class="button button-energized button-block" style="margin-bottom: 10px">Register</button>
+            <div class="padding-top padding-left padding-right text-center">
+                <span  class="text-center" style="color: rgba(0,0,0,0.6)">Already have an account?
+                    <a ui-sref="login" style="color: rgba(0,0,0,0.8); text-decoration: underline; font-weight: bold">Log In</a>
+                </span>
+            </div>
         </form>
+        <div class="spacer-10"></div>
+
         <!-- /form#register -->
 
         <!-- <a href="#/tab/dashboard" class="button button-positive button-block button-clear button-faint">Skip to app</a> -->

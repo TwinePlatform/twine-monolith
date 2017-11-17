@@ -232,7 +232,7 @@
 
 								$$shout('Log saved.');
 
-								$state.go('tabs.view-logs.hours');
+                                $state.go('tabs.dashboard');
 
 							}
 
@@ -292,6 +292,5 @@
 
 			}
 
-			
 
 	})

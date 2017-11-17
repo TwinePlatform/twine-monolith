@@ -1,10 +1,8 @@
-<ion-view hide-back-button="{{isAndroid}}" title="New Volunteer">
-    <!--<organisation-subheader></organisation-subheader>-->
+<ion-view hide-back-button="{{isAndroid}}" title="Register Volunteer">
     <ion-content padding="true" class="has-header register">
         <!-- form#register -->
         <form id="register" name="register" class="list" ng-submit="processForm(register)" novalidate>
             <ion-list>
-
                 <!-- name -->
                 <span class="input-label">Full name</span>
                 <label class="item item-input">
@@ -26,7 +24,7 @@
                 <!-- /email -->
 
                 <!-- password -->
-                <span class="input-label">Password</span>
+                <span class="input-label">Create password</span>
                 <label class="item item-input">
                     <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="6" required>
                 </label>
@@ -38,7 +36,7 @@
                 <div class="spacer-20"></div>
 
                 <!-- phone -->
-                <span class="input-label">Phone</span>
+                <span class="input-label">Phone number</span>
                 <label class="item item-input">
                     <input type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phone" minlength="6" maxlength="15" ng-pattern="/^([0-9|+|*|#|\-]+)$/" required>
                 </label>
@@ -66,6 +64,15 @@
                     </select>
                 </label>
                 <!-- /gender -->
+
+                <!-- organisationName -->
+                <span class="input-label">Organisation</span>
+                <label class="item item-select">
+                    <select disabled>
+                        <option selected>{{organisationName}}</option>
+                    </select>
+                </label>
+                <!-- /organisationName -->
 
                 <div class="spacer-20"></div>
 

@@ -250,6 +250,8 @@
 							// store user information
 							$localStorage.user = response.data;
 
+                            $rootScope.currentUser = response.data;
+
 							// set organisation subheader title
 							$rootScope.organisationName = $localStorage.user.organisation.name;
 

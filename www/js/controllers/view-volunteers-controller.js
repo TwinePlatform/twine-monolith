@@ -169,6 +169,16 @@
 			};
 
         /*
+    	>> if the last volunteer deleted set nologs true
+    	*/
+        $scope.$watch('volunteers', function (newVal) {
+            if ( newVal !== null && newVal !== undefined && newVal.length === 0) {
+                $scope.noVolunteers = true;
+            } else {
+            	$scope.noVolunteers = false;
+			}
+        },true);
+        /*
             >> date format changer
         */
 

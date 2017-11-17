@@ -178,16 +178,7 @@
 							$rootScope.organisationName = $localStorage.user.organisation.name;
 
 							// show success popup
-							var alertPopup = $ionicPopup.alert({
-							  	title: 'Registration successful!',
-							  	template: 'Welcome to ' + $localStorage.user.organisation.name + ', ' + $localStorage.user.name + '!',
-							  	okText: 'Start logging time'
-							});
-
-							// go to dashboard
-							alertPopup.then(function(res) {
-							  	$state.go('tabs.dashboard');
-							});
+                            $state.go('tabs.dashboard');
 
 						}
 
