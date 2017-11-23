@@ -125,12 +125,14 @@
             document.getElementsByClassName('bar-header')[1].style.backgroundColor = '#7407ff';
             document.getElementsByClassName('bar-header')[1].style.border = 'none';
             document.getElementsByClassName('title-center')[0].style.color = 'white';
+            document.getElementsByClassName('title-center')[1].style.color = 'white';
         });
 
         $scope.$on('$ionicView.beforeLeave', function() {
             document.getElementsByClassName('bar-header')[1].style.backgroundColor = '';
             document.getElementsByClassName('bar-header')[1].style.border = '';
             document.getElementsByClassName('title-center')[0].style.color = '';
+            document.getElementsByClassName('title-center')[1].style.color = '';
         });
 
 	})

@@ -33,10 +33,6 @@ $dark:                            #444 !default;
   font-weight: normal;
   font-style: normal; }
 
-@font-face {
-  font-family: 'Montserrat-light';
-  src: url('../fonts/Montserrat/Montserrat-Light.ttf') format('truetype'); /* IE9 Compat Modes */
-}
 
 @font-face {
   font-family: 'Montserrat-bold';
