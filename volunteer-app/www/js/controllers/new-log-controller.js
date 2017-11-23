@@ -16,6 +16,7 @@
 */
 
 /*
+/*
 	> new log controller
 */
 
@@ -66,9 +67,12 @@
 			$scope.fillVolonters = function () {
 				$$api.volunteers.getVolunteers($rootScope.currentUser.organisation_id)
 					.success(function (result) {
-						console.log(result);
 						if (result !== null && result !== undefined && result.data.volunteers !== null && result.data.volunteers !== undefined)
 						$scope.volunteers = result.data.volunteers;
+						var me = angular.copy($rootScope.currentUser);
+						me.name += ' (you)';
+						console.log($rootScope.currentUser, me);
+						$scope.volunteers.unshift(me);
                     })
             };
 
@@ -232,7 +236,11 @@
 
 								$$shout('Log saved.');
 
-                                $state.go('tabs.dashboard');
+								if ($rootScope.isAdmin) {
+                                    $state.go('tabs.view-logs.hours');
+								} else {
+                                    $state.go('tabs.dashboard');
+                                }
 
 							}
 
