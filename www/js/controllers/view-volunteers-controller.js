@@ -30,6 +30,9 @@
 					$$api.volunteers.getVolunteers($localStorage.user.organisation_id).success(function (result) {
 
 						// update volunteers in view
+						result.data.volunteers.forEach(function (vol) {
+							vol.created_at = $scope.normalDate(vol.created_at);
+						});
 						$scope.volunteers = result.data.volunteers;
 						$scope.copyVolunteers = result.data.volunteers;
 
@@ -183,6 +186,10 @@
         */
 
         $scope.normalDate = function (date) {
+        	var first = date[0]+date[1];
+        	var second = date[3]+date[4];
+        	date = date.replace(first,second);
+            date = date.slice(0,2) + date.slice(2, date.length).replace(second,first);
             date = new Date(date).toLocaleDateString('en',{day: 'numeric',month: 'long',year: 'numeric'}).replace(',','');
             return date;
         }

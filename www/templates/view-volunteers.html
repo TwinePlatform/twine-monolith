@@ -19,7 +19,7 @@
             <ion-item style="margin-bottom: 5px" class=" item-remove-animate" ng-repeat="volunteer in volunteers | orderBy: ['-date','-updated_at']">
                 <div style="float: left">
                 <h2>{{volunteer.name}}</h2>
-                <p> Joined {{ normalDate(volunteer.created_at) }}</p>
+                <p> Joined {{ volunteer.created_at }}</p>
                 <p ng-if="options.debug">id: {{ volunteer.id }}</p>
                 </div>
                 <div class="button-bar">
