@@ -48,7 +48,7 @@
                 <!-- /phone -->
 
                 <!-- year of birth -->
-                <span class="input-label" style="max-width: 100%; width: 100%"><span style="width: 90%; display: inline-block">Year of birth (optional)</span><span align="right" style="width: 10%; display: inline-block"><i class="icon ion-help-circled"></i></span></span>
+                <span class="input-label" style="max-width: 100%; width: 100%"><span style="width: 90%; display: inline-block">Year of birth (optional)</span><span align="right" style="width: 10%; display: inline-block"><i ng-click="yearsShow()" class="icon ion-help-circled"></i></span></span>
                 <label class="item item-select">
                     <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option" name="yearOfBirth" id="yearOfBirth">
                         <option value="">Select year</option>
@@ -58,7 +58,7 @@
                 <!-- /year of birth -->
 
                 <!-- gender -->
-                <span class="input-label" style="max-width: 100%; width: 100%"><span style="width: 90%; display: inline-block">Gender (optional)</span><span align="right" style="width: 10%; display: inline-block"><i class="icon ion-help-circled"></i></span></span>
+                <span class="input-label" style="max-width: 100%; width: 100%"><span style="width: 90%; display: inline-block">Gender (optional)</span><span align="right" style="width: 10%; display: inline-block"><i ng-click="genderShow()" class="icon ion-help-circled"></i></span></span>
                 <label class="item item-select" ng-class="{'item-select-disabled': gendersDisabled}">
                     <select ng-model="formData.gender" ng-options="option.name for option in genders track by option.id" name="gender" id="gender" ng-disabled="gendersDisabled">
                         <option value="">Select gender</option>

@@ -27,7 +27,6 @@ angular.module('app.routes', ['ionicUIRouter'])
                 templateUrl: 'templates/register.html',
                 controller: 'RegisterController'
             })
-
             // > login page
             .state('login', {
                 url: '/login',

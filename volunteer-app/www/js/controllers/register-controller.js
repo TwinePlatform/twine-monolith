@@ -235,7 +235,8 @@
 				$scope.modal = modal;
 			});
 
-			// show terms modal
+
+        // show terms modal
 			$scope.termsShow = function() {
 				$scope.modal.show();
 			};
@@ -245,6 +246,40 @@
 			    $scope.modal.hide();
 			};
 
+
+			$ionicModal.fromTemplateUrl('templates/partials/years-modal.html', {
+				scope: $scope,
+				animation: 'slide-in-left'
+			}).then(function(modal) {
+				$scope.yearsModal = modal;
+			});
+
+			// show terms modal
+			$scope.yearsShow = function() {
+				$scope.yearsModal.show();
+			};
+
+			// close terms modal
+			$scope.yearsClose = function() {
+				$scope.yearsModal.hide();
+			};
+
+			$ionicModal.fromTemplateUrl('templates/partials/gender-modal.html', {
+				scope: $scope,
+				animation: 'slide-in-left'
+			}).then(function(modal) {
+				$scope.genderModal = modal;
+			});
+
+			// show terms modal
+			$scope.genderShow = function() {
+				$scope.genderModal.show();
+			};
+
+			// close terms modal
+			$scope.genderClose = function() {
+				$scope.genderModal.hide();
+			};
 
 
 	})
