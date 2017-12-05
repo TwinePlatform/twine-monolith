@@ -9,6 +9,8 @@
     "www/**/*",
     "!www/lib/**/*"
   ],
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "ionic1"
 }
