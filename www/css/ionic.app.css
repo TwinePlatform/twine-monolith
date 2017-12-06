@@ -5777,11 +5777,12 @@ ion-tabs.tabs-color-active-dark .tab-item {
   font-size: 18px;
 }
 
-.ios .button-logout{
+.platform-ios .button-logout{
   position: absolute;
   left: 5%;
-  top: 85%;
+  top: 110%;
   font-size: 18px;
+  z-index: 999;
 }
 
 .item.active,
@@ -6324,6 +6325,10 @@ button.item.item-button-right {
     width: 100%;
     height: 100%;
     border-radius: 50%; }
+
+  .platform-ios .space-top {
+    margin-top: 60px;
+  }
 
 .item-thumbnail-left,
 .item-thumbnail-left .item-content {
@@ -9572,9 +9577,9 @@ a.button {
   .platform-ios.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) > * {
     margin-top: 20px; }
 
-.platform-ios.platform-cordova:not(.fullscreen) .tabs-top > .tabs,
-.platform-ios.platform-cordova:not(.fullscreen) .tabs.tabs-top {
-  top: 64px; }
+/*.platform-ios.platform-cordova:not(.fullscreen) .tabs-top > .tabs,*/
+/*.platform-ios.platform-cordova:not(.fullscreen) .tabs.tabs-top {*/
+  /*top: 64px; }*/
 
 .platform-ios.platform-cordova:not(.fullscreen) .has-header,
 .platform-ios.platform-cordova:not(.fullscreen) .bar-subheader {
@@ -12553,6 +12558,12 @@ select[disabled], .item-select-disabled:after {
   margin-top: 10px;
   padding-left: 20px;
   padding-right: 20px;
+}
+.platform-ios .button-add-message p{
+  font-weight: bold;
+  margin-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
   .button-add.activated span {

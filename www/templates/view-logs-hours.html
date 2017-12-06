@@ -16,7 +16,7 @@
                 <i class="icon" ng-class="{ 'ion-alert': log.needs_pushing}">
                     <span ng-if="log.needs_pushing">Not pushed</span>
                 </i>
-                <div style="max-width: 200px;float: left; overflow: hidden">
+                <div style="max-width: 70%;float: left; overflow: hidden">
                 <h1 ng-bind-html="log.duration | hoursAndMinutesAsString"></h1>
                     <h3 style="color: black" ng-if="isAdmin"> {{log.user.name}} <span style="font-size: 10px; color: gray">{{log.user.id === currentUser.id ? 'me': ''}}</span></h3>
                 <p>{{ log.date_of_log.split(' ')[0] | date:'d MMM yyyy'}} @ {{ organisationName }}</p>

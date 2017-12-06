@@ -116,6 +116,12 @@
               $localStorage.user = result.data;
               $rootScope.currentUser = $localStorage.user;
               $rootScope.organisationName = $localStorage.user.organisation.name;
+              if (result.data.role_id !== undefined && result.data.role_id == 2) {
+                $rootScope.isAdmin = true;
+              } else {
+                $rootScope.isAdmin = false;
+              }
+
             }).error(function (result, error) {
               $localStorage.user = null;
               // process connection error
@@ -257,7 +263,7 @@
 				 */
 					$rootScope.$watch('currentUser',function (user) {
 						if (user !== undefined && user !== null) {
-                            if (user.role_id !== undefined && user.role_id === 2) {
+                            if (user.role_id !== undefined && user.role_id == 2) {
                                 $rootScope.isAdmin = true;
                             } else {
                                 $rootScope.isAdmin = false;
