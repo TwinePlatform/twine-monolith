@@ -19,9 +19,6 @@
 		$$api, $$utilities, $$shout, $$offline
 	) {
 
-		$scope.isAdmin = $rootScope.isAdmin;
-
-
         /*
             >> populate logs
         */
