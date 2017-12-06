@@ -19,9 +19,6 @@
 		$$api, $$utilities, $$shout, $$offline
 	) {
 
-		$scope.isAdmin = $rootScope.isAdmin;
-
-
         /*
             >> populate logs
         */
@@ -140,10 +137,8 @@
 		*/
 		
 			$scope.edit = function(log) {
-
 				// if offline mode, edit local log
 				if ($rootScope.offlineMode) {
-
 					$state.go('tabs.edit-log-offline', {
 						offline_id: log.offline_id
 					});
@@ -151,16 +146,14 @@
 				}
 				// if no internet connection, edit local log and enable offline mode
 				else if (!$$offline.checkConnection()) {
-
 					$$offline.enable();
 					$state.go('tabs.edit-log-offline', {
 						offline_id: log.offline_id
 					});
 
 				}
-				// else edit via api 
+				// else edit via api
 				else {
-
 					$state.go('tabs.edit-log', {
 						id: log.id
 					});

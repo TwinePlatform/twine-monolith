@@ -34,9 +34,9 @@
 				checkConnection: function() {
 
 					var connectionAvailable;
-
 					if (window.cordova) {
 						var networkState = navigator.connection.type;
+
 
 
 					    var states = {};
