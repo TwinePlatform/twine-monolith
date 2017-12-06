@@ -56,6 +56,12 @@
 
 							$rootScope.currentUser = result.data;
 
+              if (result.data.role_id !== undefined && result.data.role_id == 2) {
+                $rootScope.isAdmin = true;
+              } else {
+                $rootScope.isAdmin = false;
+              }
+
 							// setup local storage
 							$$utilities.setupLocalStorage();
 

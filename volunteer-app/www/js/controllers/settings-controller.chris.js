@@ -491,6 +491,8 @@
 
 				$scope.logOut = function() {
 					delete $localStorage.user;
+					delete $rootScope.currentUser;
+					delete $rootScope.isAdmin;
 					$state.go('login');
 				}
 
