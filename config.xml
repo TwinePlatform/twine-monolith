@@ -7,7 +7,7 @@
     <author email="hello@reasondigital.com" href="http://reasondigital.com">
       Reason Digital
     </author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.0.105:8100" />
     <access origin="*" />
     <allow-navigation href="*" />
     <preference name="webviewbounce" value="false" />
@@ -73,6 +73,7 @@
     <allow-navigation href="http://192.168.0.115:8100" />
     <allow-navigation href="http://192.168.0.105:8100" />
     <allow-navigation href="http://192.168.0.106:8100" />
+    <plugin name="cordova-plugin-network-information" spec="~1.3.4" />
     <engine name="browser" spec="~4.1.0" />
     <engine name="android" spec="~5.2.2" />
 </widget>
