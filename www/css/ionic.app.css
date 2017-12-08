@@ -3523,6 +3523,10 @@ ion-infinite-scroll {
 .has-header {
   top: 44px; }
 
+.platform-ios .has-header.log-hours {
+  top: 44px !important;
+}
+
 .no-header {
   top: 0; }
 
@@ -5776,11 +5780,13 @@ ion-tabs.tabs-color-active-dark .tab-item {
   top: 85%;
   font-size: 18px;
 }
-
+.platform-ios .scroll {
+  min-height: 100%;
+}
 .platform-ios .button-logout{
   position: absolute;
   left: 5%;
-  top: 110%;
+  bottom: 10%;
   font-size: 18px;
   z-index: 999;
 }
@@ -9577,9 +9583,10 @@ a.button {
   .platform-ios.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader) > * {
     margin-top: 20px; }
 
-/*.platform-ios.platform-cordova:not(.fullscreen) .tabs-top > .tabs,*/
-/*.platform-ios.platform-cordova:not(.fullscreen) .tabs.tabs-top {*/
-  /*top: 64px; }*/
+.platform-ios.platform-cordova:not(.fullscreen) .tabs.tabs-top {
+  padding-top: 20px;
+  height: 64px;
+}
 
 .platform-ios.platform-cordova:not(.fullscreen) .has-header,
 .platform-ios.platform-cordova:not(.fullscreen) .bar-subheader {
