@@ -12363,9 +12363,7 @@ select[disabled], .item-select-disabled:after {
 }
 
 .bar-subfooter.bar-offline-mode {
-  bottom: 49px; }
-  .platform-android .bar-subfooter.bar-offline-mode {
-    bottom: 0; }
+  top: 49px; }
   .bar-subfooter.bar-offline-mode .title {
     font-size: 15px; }
   .bar-subfooter.bar-offline-mode .button.activated {

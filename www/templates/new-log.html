@@ -62,7 +62,7 @@
             <!-- Activity -->
             <span class="input-label">Activity</span>
             <label class="item item-select">
-                <select ng-model="formData.activity_id" name="activities" id="activities" convert-to-number>
+                <select required ng-model="formData.activity_id" name="activities" id="activities" convert-to-number>
                     <option  value="" selected>Select activity</option>
                     <option ng-repeat="option in activities" value="{{option.id}}">{{option.name}}</option>
                     <!--  -->
