@@ -12455,6 +12455,10 @@ select[disabled], .item-select-disabled:after {
   padding-top: 100px;
 }
 
+.platform-android .dashboard {
+  top: 30px;
+}
+
 .hours-summary {
   border-left: 1px solid gainsboro;
   border-right: 1px solid gainsboro;
