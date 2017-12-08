@@ -7,7 +7,7 @@
     <author email="hello@reasondigital.com" href="http://reasondigital.com">
       Reason Digital
     </author>
-    <content original-src="index.html" src="http://192.168.0.105:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="*" />
     <preference name="webviewbounce" value="false" />
