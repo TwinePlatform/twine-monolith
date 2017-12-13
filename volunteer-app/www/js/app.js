@@ -105,6 +105,7 @@
 
 					$rootScope.isIOS = ionic.Platform.isIOS();
 					$rootScope.isAndroid = ionic.Platform.isAndroid();
+        	// ionic.Platform.fullScreen();
 
 
 				/*
@@ -261,6 +262,7 @@
 				/*
 					>>> root access
 				 */
+
 					$rootScope.$watch('currentUser',function (user) {
 						if (user !== undefined && user !== null) {
                             if (user.role_id !== undefined && user.role_id == 2) {

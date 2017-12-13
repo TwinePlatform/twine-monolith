@@ -5774,11 +5774,15 @@ ion-tabs.tabs-color-active-dark .tab-item {
 .item-borderless {
   border-width: 0; }
 
+.platform-android .scroll {
+  min-height: 100%;
+}
 .platform-android .button-logout{
   position: absolute;
   left: 5%;
-  top: 85%;
+  bottom: 10%;
   font-size: 18px;
+  z-index: 999;
 }
 .platform-ios .scroll {
   min-height: 100%;
@@ -5789,6 +5793,11 @@ ion-tabs.tabs-color-active-dark .tab-item {
   bottom: 10%;
   font-size: 18px;
   z-index: 999;
+}
+
+.platform-android .bar.bar-header.search-bar {
+  height: 50px;
+  border-bottom: none;
 }
 
 .item.active,
@@ -12359,9 +12368,7 @@ select[disabled], .item-select-disabled:after {
 }
 
 .bar-subfooter.bar-offline-mode {
-  bottom: 49px; }
-  .platform-android .bar-subfooter.bar-offline-mode {
-    bottom: 0; }
+  top: 49px; }
   .bar-subfooter.bar-offline-mode .title {
     font-size: 15px; }
   .bar-subfooter.bar-offline-mode .button.activated {
@@ -12451,6 +12458,10 @@ select[disabled], .item-select-disabled:after {
   padding-top: 100px;
 }
 
+.platform-android .dashboard {
+  top: 30px;
+}
+
 .hours-summary {
   border-left: 1px solid gainsboro;
   border-right: 1px solid gainsboro;
@@ -12483,7 +12494,7 @@ select[disabled], .item-select-disabled:after {
   font-size: 15px; }
 
 .has-search {
-  margin-top: 40px;
+  margin-top: 45px;
 }
 
 .hours-summary .hours .unit, .hours-summary .minutes .unit {
