@@ -145,7 +145,7 @@ angular.module('app.routes', ['ionicUIRouter'])
                 cache: false,
                 url: '/edit-log-offline/:offline_id',
                 views: {
-                    'view-logs-tab': {
+                    'view-logs-hours-tab@tabs.view-logs': {
                         templateUrl: 'templates/edit-log.html',
                         controller: 'EditLogController'
                     }

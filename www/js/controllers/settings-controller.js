@@ -25,10 +25,9 @@
 
 
 		$ionicPlatform.ready(function() {
-
-			/*
-				>> variables
-			*/
+      /*
+        >> variables
+      */
 
 				if ($rootScope.options.debug) {
 					$scope.radius = 100;
