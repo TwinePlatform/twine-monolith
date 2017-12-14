@@ -3524,7 +3524,7 @@ ion-infinite-scroll {
   top: 44px; }
 
 .platform-ios .has-header.log-hours {
-  top: 44px !important;
+  top: 64px !important;
 }
 
 .no-header {
@@ -9593,6 +9593,11 @@ a.button {
     margin-top: 20px; }
 
 .platform-ios.platform-cordova:not(.fullscreen) .tabs.tabs-top {
+  padding-top: 20px;
+  height: 64px;
+}
+
+.platform-ios.platform-cordova:not(.fullscreen) .tabs-top .tabs.tab-nav {
   padding-top: 20px;
   height: 64px;
 }
