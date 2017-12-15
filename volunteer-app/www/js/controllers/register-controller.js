@@ -20,15 +20,18 @@
 
 	angular.module('app').controller('RegisterController', function (
 		$scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage, $ionicModal, $rootScope, 
-		$$api, $$clickPreventer, $$utilities
+		$$api, $$clickPreventer, $$utilities, $$offline
 	) {
 
 		/*
 			>> if user has access token, log straight in
 		*/
-
 			if ($localStorage.user && $localStorage.user.api_token !== '') {
-				$state.go('tabs.dashboard');
+				if ($localStorage.user.role_id === 2) {
+					$state.go('tabs.view-volunteers')
+                } else {
+                    $state.go('tabs.dashboard');
+                }
 			}
 
 		/*
@@ -36,6 +39,7 @@
 		*/
 
 			$scope.formData = {};
+			$scope.syncOfflineData =  $rootScope.syncOfflineData;
 
 		/*
 			>> populate year of birth dropdown (current year going down to (current year - 110))
