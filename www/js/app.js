@@ -42,7 +42,7 @@
 					live:  'http://dashboard.twine-together.com/api/v1/'
 				},
 				adminBaseUrl: {
-					local:   'http://localhost:8000/',
+					local:   'http://46.101.50.90/',
 					dev:   'http://powertochangeadmindev.stage2.reason.digital/',
 					stage: 'http://powertochangeadmin.stage2.reason.digital/',
 					live:  'http://dashboard.twine-together.com/'
@@ -153,7 +153,7 @@
 
 					$rootScope.syncOfflineData = function() {
 						// get all offline logs
-						var allLogs = $localStorage.offlineData.logs;
+						var allLogs = $localStorage.offlineData ? $localStorage.offlineData.logs : [];
 						// filter by current organisation id
 						var logsByOrganisation = $filter('filter')(allLogs, {'organisation_id' : $localStorage.user.organisation.id});
 						// filter by 'needs_pushing'
@@ -217,8 +217,10 @@
 						}
 						// if we don't have logs that need syncing, switch offline mode off (if we can)
 						else if ($$offline.checkConnection()) {
-							$$offline.disable();
-							$window.location.reload(true);
+                            $$shout('Data synced successfully!');
+                            $$offline.disable();
+						} else {
+                            $$shout('No internet connection!');
 						}
 
 					}
@@ -237,7 +239,8 @@
 					}
 					// offline
 					else {
-						
+                        $rootScope.offlineMode = true;
+                        $state.go('register');
 					}
 
 
@@ -272,6 +275,8 @@
                             }
 						}
 					})
+
+                    // $ionicPlatform.on('resume', function(){
 			});
 	})
     .config(function( $ionicConfigProvider) {
