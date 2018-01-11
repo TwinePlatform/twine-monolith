@@ -12747,3 +12747,6 @@ select[disabled], .item-select-disabled:after {
     .login .buttons .button {
       min-height: 40px;
       line-height: 40px; }
+    .ion-help-circled.large {
+      font-size: 24px;
+    }
