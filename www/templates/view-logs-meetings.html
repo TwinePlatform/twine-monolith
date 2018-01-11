@@ -17,8 +17,8 @@
                     <span ng-if="outreach.needs_pushing">Not pushed</span>
                 </i>
                 <div style="float: left; max-width: 70%;overflow: hidden">
-                <h2>{{outreach.outreach_type.name}}</h2><div class="spacer-10"></div>
-                <h3 style="color: black">{{outreach.outreach_child_type.name}}</h3>
+                <h2>{{outreach.outreach_child_type.name}}</h2><div class="spacer-10"></div>
+                <h3 style="color: black">{{outreach.outreach_type.name}}</h3>
                 <p>{{ outreach.date.split(' ')[0] | date:'d MMM yyyy'}} @ {{ outreach.organisation_id.name }}</p>
                 <p ng-if="options.debug">id: {{ outreach.id }}</p>
                 <p>{{outreach.interaction_type.name}}</p>
