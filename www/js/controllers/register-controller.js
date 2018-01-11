@@ -285,5 +285,11 @@
 				$scope.genderModal.hide();
 			};
 
+			$scope.terms = function () {
+				$scope.yearsClose();
+				$scope.genderClose();
+				$scope.termsShow();
+			};
+
 
 	})
