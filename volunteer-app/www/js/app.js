@@ -33,18 +33,18 @@
 			$rootScope.options = {
 				appName: 'Twine',
 				debug: false,
-				environment: 'local',	// dev | stage | live
+				environment: 'stage',	// dev | stage | live
 				apiBaseUrl: {
 					// TODO remote: 'http://46.101.50.90/api/v1/',
-					local:   'http://46.101.50.90/api/v1/',
-					dev:   'http://powertochangeadmindev.stage2.reason.digital/api/v1/',
-					stage: 'http://powertochangeadmin.stage2.reason.digital/api/v1/',
+					local:   'http://127.0.0.1/api/v1/',
+					dev:   'http://46.101.50.90/api/v1/',
+					stage: 'http://borne-power-to-change.stage2.reason.digital/api/v1/',
 					live:  'http://dashboard.twine-together.com/api/v1/'
 				},
 				adminBaseUrl: {
-					local:   'http://46.101.50.90/',
-					dev:   'http://powertochangeadmindev.stage2.reason.digital/',
-					stage: 'http://powertochangeadmin.stage2.reason.digital/',
+					local:   'http://127.0.0.1',
+					dev:   'http://46.101.50.90/',
+					stage: 'http://borne-power-to-change.stage2.reason.digital/',
 					live:  'http://dashboard.twine-together.com/'
 				}
 			}
