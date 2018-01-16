@@ -268,6 +268,24 @@
 				$scope.yearsModal.hide();
 			};
 
+			$ionicModal.fromTemplateUrl('templates/partials/code-modal.html', {
+				scope: $scope,
+				animation: 'slide-in-left'
+			}).then(function(modal) {
+				$scope.codeModal = modal;
+			});
+
+			// show terms modal
+			$scope.codeShow = function() {
+				$scope.codeModal.show();
+			};
+
+			// close terms modal
+			$scope.codeClose = function() {
+				$scope.codeModal.hide();
+			};
+
+
 			$ionicModal.fromTemplateUrl('templates/partials/gender-modal.html', {
 				scope: $scope,
 				animation: 'slide-in-left'
