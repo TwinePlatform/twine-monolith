@@ -14,7 +14,8 @@
                 <!-- /name -->
 
                 <!-- email -->
-                <span class="input-label">Email</span>
+                <span class="input-label" style="max-width: 100%; width: 100%"><span style="width: 90%; display: inline-block">Email</span><span align="right" style="width: 10%; display: inline-block"><i ng-click="infoShow()" class="icon ion-help-circled large"></i></span></span>
+
                 <label class="item item-input">
                     <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" ng-pattern="/^[\w.%+\-]+@[\w.\-]+\.[A-Za-z]{2,6}$/" required>
                 </label>
@@ -24,7 +25,8 @@
                 <!-- /email -->
 
                 <!-- password -->
-                <span class="input-label">Create password</span>
+                <span class="input-label" style="max-width: 100%; width: 100%"><span style="width: 90%; display: inline-block">Create password</span><span align="right" style="width: 10%; display: inline-block"><i ng-click="infoShow()" class="icon ion-help-circled large"></i></span></span>
+
                 <label class="item item-input">
                     <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="6" required>
                 </label>
