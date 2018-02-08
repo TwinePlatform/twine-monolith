@@ -64,6 +64,17 @@ angular.module('app').controller('NewVolunteerController', function ($scope, $st
 
     });
 
+    $ionicModal.fromTemplateUrl('templates/partials/pass-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-left'
+    }).then(function(modal) {
+        $scope.passModal = modal;
+    });
+
+    $scope.infoShow = function () {
+        $scope.passModal.show();
+    };
+
 
     /*
         >> process the form
@@ -117,10 +128,15 @@ angular.module('app').controller('NewVolunteerController', function ($scope, $st
                 // adding unsuccessful
                 else {
 
-                    $$shout(response.message);
-
                     // hide loader
                     $ionicLoading.hide();
+
+                    // hide click preventer
+                    $$clickPreventer.hide();
+
+
+                    $$shout(response.message);
+
 
                 }
 
@@ -142,6 +158,8 @@ angular.module('app').controller('NewVolunteerController', function ($scope, $st
             // hide click preventer
             $$clickPreventer.hide();
         }
+
+
 
     };
 
