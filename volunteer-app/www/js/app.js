@@ -33,7 +33,7 @@
 			$rootScope.options = {
 				appName: 'Twine',
 				debug: false,
-				environment: 'dev',	// dev | stage | live
+				environment: 'stage',	// dev | stage | live
 				apiBaseUrl: {
 					// TODO remote: 'http://46.101.50.90/api/v1/',
 					local:   'http://127.0.0.1/api/v1/',
