@@ -45,7 +45,7 @@
                 <label class="item item-select">
                     <select required ng-model="formData.type" ng-options="option.name for option in meetingTypes track by option.id"
                             name="meetingType" id="meetingType">
-                        <option value="">Select type</option>
+                        <option disabled value="">Select type</option>
                         <!--  -->
                     </select>
                     <label class="error block text-right padding assertive" ng-show="createLog.type.$invalid && formSubmitted" for="meetingType">
