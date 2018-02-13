@@ -51,7 +51,7 @@
                 <span class="input-label" style="max-width: 100%; width: 100%"><span style="width: 90%; display: inline-block">Year of birth (optional)</span><span align="right" style="width: 10%; display: inline-block"><i ng-click="yearsShow()" class="icon ion-help-circled large"></i></span></span>
                 <label class="item item-select">
                     <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option" name="yearOfBirth" id="yearOfBirth">
-                        <option value="">Select year</option>
+                        <option disabled value="">Select year</option>
                         <!--  -->
                     </select>
                 </label>
@@ -61,7 +61,7 @@
                 <span class="input-label" style="max-width: 100%; width: 100%"><span style="width: 90%; display: inline-block">Gender (optional)</span><span align="right" style="width: 10%; display: inline-block"><i ng-click="genderShow()" class="icon ion-help-circled large"></i></span></span>
                 <label class="item item-select" ng-class="{'item-select-disabled': gendersDisabled}">
                     <select ng-model="formData.gender" ng-options="option.name for option in genders track by option.id" name="gender" id="gender" ng-disabled="gendersDisabled">
-                        <option value="">Select gender</option>
+                        <option disabled value="">Select gender</option>
                         <!--  -->
                     </select>
                 </label>
@@ -71,7 +71,7 @@
                     <span class="input-label">Region</span>
                 <label class="item item-select" ng-class="{'item-select-disabled': regionsDisabled}">
                     <select ng-model="formData.region" ng-options="option.name for option in regions track by option.id" name="region" id="region" ng-change="populateOrganisations()" ng-disabled="regionsDisabled" required>
-                        <option value="">Select region</option>
+                        <option disabled value="">Select region</option>
                         <!--  -->
                     </select>
                 </label>
@@ -84,7 +84,7 @@
                     <span class="input-label">Organisation</span>
                 <label class="item item-select" ng-class="{ 'item-select-disabled': organisationsDisabled }">
                     <select ng-model="formData.organisation" ng-options="option.name for option in organisations track by option.id" name="organisation" id="organisation" ng-disabled="organisationsDisabled" required>
-                        <option value="">Select organisation</option>
+                        <option disabled value="">Select organisation</option>
                         <!--  -->
                     </select>
                 </label>

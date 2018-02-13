@@ -3,7 +3,7 @@
     <!--<organisation-subheader></organisation-subheader>-->
 
     <ion-content padding="true" class="has-header settings">
-        <form ng-if="!isAdmin" class="list">
+        <form class="list">
             <label class="input-label">Location reminders</label>
             <ion-toggle toggle-class="toggle-positive" ng-change="locationReminders()" ng-model="locationRemindersSwitch">
                 <p style="text-overflow: clip; white-space: normal;">Recive a reminder to log your hours when you leave {{ organisationName }}</p>

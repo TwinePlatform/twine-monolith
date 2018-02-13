@@ -37,7 +37,7 @@
             <span class="input-label">Hours</span>
             <label class="item item-select">
                 <select ng-model="formData.hours" ng-options="option.name for option in hours track by option.value" name="hours" id="hours" ng-change="calculateDuration(formData.hours.value, formData.minutes.value)">
-                    <option value="" selected>Select hours</option>
+                    <option disabled value="" selected>Select hours</option>
                     <!--  -->
                 </select>
             </label>
@@ -47,7 +47,7 @@
             <span class="input-label">Minutes</span>
             <label class="item item-select">
                 <select ng-model="formData.minutes" ng-options="option.name for option in minutes track by option.value" name="minutes" id="minutes" ng-change="calculateDuration(formData.hours.value, formData.minutes.value)" ng-disabled="formData.hours.value == 24">
-                    <option value="" selected>Select minutes</option>
+                    <option disabled value="" selected>Select minutes</option>
                     <!--  -->
                 </select>
             </label>
@@ -63,7 +63,7 @@
             <span class="input-label">Activity</span>
             <label class="item item-select">
                 <select required ng-model="formData.activity_id" name="activities" id="activities" convert-to-number>
-                    <option  value="" selected>Select activity</option>
+                    <option  value="" disabled selected>Select activity</option>
                     <option ng-repeat="option in activities" value="{{option.id}}">{{option.name}}</option>
                     <!--  -->
                 </select>
