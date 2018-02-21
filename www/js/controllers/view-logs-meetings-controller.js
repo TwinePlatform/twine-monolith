@@ -113,7 +113,7 @@
 				// if offline mode, edit local meeting
 				if ($rootScope.offlineMode) {
 
-					$state.go('tabs.edit-meeting-offline', {
+					$state.go('tabs.view-logs.edit-meeting-offline', {
 						offline_id: outreach.offline_id
 					});
 
@@ -122,7 +122,7 @@
 				else if (!$$offline.checkConnection()) {
 
 					$$offline.enable();
-					$state.go('tabs.edit-meeting-offline', {
+					$state.go('tabs.view-logs.edit-meeting-offline', {
 						offline_id: outreach.offline_id
 					});
 
@@ -130,7 +130,7 @@
 				// else edit via api
 				else {
 
-					$state.go('tabs.edit-meeting', {
+					$state.go('tabs.view-logs.edit-meeting', {
 						id: outreach.id
 					});
 
