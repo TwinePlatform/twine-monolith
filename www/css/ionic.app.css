@@ -6685,7 +6685,8 @@ button.item.item-button-right {
 .list-inset .item:last-child,
 .padding > .list .item:last-child {
   border-bottom-right-radius: 2px;
-  border-bottom-left-radius: 2px; }
+  border-bottom-left-radius: 2px;
+}
   .card .item:last-child .item-content,
   .list-inset .item:last-child .item-content,
   .padding > .list .item:last-child .item-content {

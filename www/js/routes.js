@@ -117,7 +117,7 @@ angular.module('app.routes', ['ionicUIRouter'])
                 }
             })
             // >>> view logs - meetings - new log
-            .state('tabs.edit-meeting', {
+            .state('tabs.view-logs.edit-meeting', {
                 cache: false,
                 url: '/edit-meeting/:id',
                 views: {
