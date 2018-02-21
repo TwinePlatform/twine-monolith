@@ -20,9 +20,8 @@
 		/*
 			>> store the form data
 		*/
-
-			$scope.formData = {};
-
+			var formData = JSON.parse(localStorage.getItem('lastAuth'));
+			$scope.formData = (formData !== undefined && formData !== null && formData !== '') ? formData : {};
 
 		/*
 			>> process the form
@@ -48,6 +47,8 @@
 						// login successful
 						if (result.success) {
 
+							localStorage.setItem('lastAuth', JSON.stringify($scope.formData));
+
 							// hide loader
 							$ionicLoading.hide();
 
@@ -56,11 +57,11 @@
 
 							$rootScope.currentUser = result.data;
 
-              if (result.data.role_id !== undefined && result.data.role_id == 2) {
-                $rootScope.isAdmin = true;
-              } else {
-                $rootScope.isAdmin = false;
-              }
+							  if (result.data.role_id !== undefined && result.data.role_id == 2) {
+								$rootScope.isAdmin = true;
+							  } else {
+								$rootScope.isAdmin = false;
+							  }
 
 							// setup local storage
 							$$utilities.setupLocalStorage();
@@ -68,14 +69,14 @@
 							// set organisation subheader title
 							$rootScope.organisationName = $localStorage.user.organisation.name;
 
-              if ($localStorage.user.role_id===2) {
-                console.log($localStorage.user);
-                // go to volunteers
-                $state.go('tabs.view-volunteers');
-              } else {
-                // go to dashboard
-                $state.go('tabs.dashboard');
-							}
+							  if ($localStorage.user.role_id===2) {
+								console.log($localStorage.user);
+								// go to volunteers
+								$state.go('tabs.view-volunteers');
+							  } else {
+								// go to dashboard
+								$state.go('tabs.dashboard');
+											}
 
 						}
 
