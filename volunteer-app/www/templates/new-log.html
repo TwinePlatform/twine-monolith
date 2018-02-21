@@ -12,7 +12,7 @@
             <div ng-if="isAdmin">
                 <label class="item item-select">
                     <select ng-model="formData.user_id" name="volunteers" id="volunteers" convert-to-number>
-                        <option  value="" selected disabled>John Smith</option>
+                        <option  value="" selected disabled>Select volunter</option>
                         <option ng-repeat="option in volunteers" value="{{option.id}}">{{option.name}}</option>
                         <!--  -->
                     </select>

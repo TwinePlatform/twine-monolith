@@ -257,12 +257,12 @@ angular.module('app.controllers').controller('EditMeetingController', function (
                         $$offline.editOutreach({id: $scope.formData.id, idKey: 'id'}, result.data);
 
                         $localStorage.outreach_type = $scope.formData.outreach_type;
-
                         // go back to view outreach
-                        $state.go('tabs.view-logs.meetings');
 
                         // shout success
                         $$shout('Outreach saved succesfully!');
+
+                        $state.go('tabs.view-logs.meetings');
 
                     }
 
