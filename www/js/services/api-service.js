@@ -428,10 +428,10 @@
                     });
                 },
 
-                getByType : function (outreach_type) {
+                getByType : function (outreach_type, organisationId) {
 					return $http({
 						method: 'GET',
-						url: $$api.url('outreaches/bytype/' + outreach_type)
+						url: $$api.url('outreaches/' + organisationId + '/bytype/' + outreach_type)
 					});
                 },
 

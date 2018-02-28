@@ -39,7 +39,7 @@
 
 					if ($localStorage.outreach_type !== null && $localStorage.outreach_type !== undefined) {
 
-						$$api.outreach.getByType($localStorage.outreach_type).success(function (result) {
+						$$api.outreach.getByType($localStorage.outreach_type, $rootScope.currentUser.organisation_id).success(function (result) {
 
 							// update meetings in view
 							$scope.outreaches = result.data;
