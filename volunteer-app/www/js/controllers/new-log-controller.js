@@ -59,6 +59,16 @@
 
 			}
 
+			function alpabeticalSort(a, b) {
+				if (a.name.slice(0,3).toLowerCase() > b.name[0].slice(0,3).toLowerCase()) {
+					return 1;
+				} else if (a.name.slice(0,3).toLowerCase() < b.name[0].slice(0,3).toLowerCase()){
+					return -1;
+				} else {
+					return 0;
+				}
+			}
+
 
         /*
             >> fill Volonters
@@ -69,6 +79,8 @@
 					.success(function (result) {
 						if (result !== null && result !== undefined && result.data.volunteers !== null && result.data.volunteers !== undefined)
 						$scope.volunteers = result.data.volunteers;
+						console.log('luteers',$scope.volunteers)
+                        $scope.volunteers = $scope.volunteers.sort(alpabeticalSort);
 						var me = angular.copy($rootScope.currentUser);
 						me.name += ' (you)';
 						console.log($rootScope.currentUser, me);
