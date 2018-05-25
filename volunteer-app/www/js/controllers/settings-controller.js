@@ -111,6 +111,10 @@
 					}
 				}
 
+            $scope.browse = function (url) {
+                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+            }
+
 
 			/*
 				>> initialize geofence plugin
