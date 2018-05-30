@@ -231,6 +231,10 @@
 		/*
 			>> terms & conditions modal
 		*/
+			$scope.browse = function (url) {
+                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+            }
+
 
 			$ionicModal.fromTemplateUrl('templates/partials/terms-and-conditions-modal.html', {
 			    scope: $scope,

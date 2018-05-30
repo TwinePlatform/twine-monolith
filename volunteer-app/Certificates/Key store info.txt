@@ -1,3 +1,0 @@
-Key alias: Twine
-
-Key password: twineapp
