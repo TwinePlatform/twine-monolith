@@ -1,0 +1,26 @@
+{
+  "private": true,
+  "name": "twine-api",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": "10.x",
+    "npm": "6.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TwinePlatform/twine-api.git"
+  },
+  "contributors": [
+    "Elias Malik <elias@foundersandcoders.com>",
+    "Aisha Nasir <aisha@foundersandcoders.com>"
+  ],
+  "bugs": {
+    "url": "https://github.com/TwinePlatform/twine-api/issues"
+  },
+  "homepage": "https://github.com/TwinePlatform/twine-api#readme",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
