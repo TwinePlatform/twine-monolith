@@ -215,7 +215,8 @@ angular.module('app.routes', ['ionicUIRouter'])
                 url: '/terms-and-conditions',
                 views: {
                     'settings-tab': {
-                        templateUrl: 'templates/terms-and-conditions.html'
+                        templateUrl: 'templates/terms-and-conditions.html',
+                        controller: 'SettingsController'
                     }
                 }
             })

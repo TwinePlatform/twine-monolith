@@ -111,6 +111,10 @@
 					}
 				}
 
+            $scope.browse = function (url) {
+                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+            }
+
 
 			/*
 				>> initialize geofence plugin
@@ -120,14 +124,9 @@
 
 					if (window.geofence) {
 	                    window.geofence.initialize().then(function () {
-
 	                    	$scope.enableLocationReminders();
-
                         }, function (error) {
-
-                            $$shout("Geofence: Error - " + error, 10000);
-                            console.log("Geofence: Error - " + error);
-
+                            $$shout("In order to work the location reminders in the background mode, turn on your location settings into \"Always\"", 7000);
                         });
 	                }
 

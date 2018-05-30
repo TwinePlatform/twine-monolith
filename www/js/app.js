@@ -46,7 +46,7 @@
 					stage: 'http://power-to-change-borne-stageing.default.ecox.uk0.bigv.io/',
 					live:  'http://volunteerapp.default.twine.uk0.bigv.io/'
 				}
-			}
+			};
 			
 
 		/*
