@@ -1,4 +1,4 @@
-ALTER SEQUENCE volunteer_activity_seq RESTART WITH 1;
+TRUNCATE volunteer_activity RESTART IDENTITY;
 
 INSERT INTO volunteer_activity
   (activity_name)

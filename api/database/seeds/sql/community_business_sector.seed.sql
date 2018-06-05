@@ -1,6 +1,6 @@
-TRUNCATE organisation_sector RESTART IDENTITY;
+TRUNCATE community_business_sector RESTART IDENTITY;
 
-INSERT INTO organisation_sector
+INSERT INTO community_business_sector
   (sector_name)
 VALUES
   ("Art centre or facility"),
@@ -16,6 +16,4 @@ VALUES
   ("Sport & leisure"),
   ("Transport"),
   ("Visitor facilities or tourism"),
-  ("Waste reduction, reuse or recycling")
-;
-
+  ("Waste reduction, reuse or recycling");

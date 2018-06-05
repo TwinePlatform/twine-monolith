@@ -1,4 +1,4 @@
-ALTER SEQUENCE outreach_type_seq RESTART WITH 1;
+TRUNCATE outreach_type RESTART IDENTITY;
 
 INSERT INTO outreach_type
   (outreach_type_name)

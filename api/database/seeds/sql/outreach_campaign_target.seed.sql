@@ -1,4 +1,4 @@
-TRUNCATE outreach_campaign_target RESTART IDENTITY CASCADE;
+TRUNCATE outreach_campaign_target RESTART IDENTITY;
 
 INSERT INTO outreach_campaign_target
   (target_name)

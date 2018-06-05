@@ -1,6 +1,6 @@
-TRUNCATE organisation_region RESTART IDENTITY;
+TRUNCATE community_business_region RESTART IDENTITY;
 
-INSERT INTO organisation_region
+INSERT INTO community_business_region
   (region_name)
 VALUES
   ("North East"),
@@ -9,5 +9,4 @@ VALUES
   ("Wales"),
   ("South West"),
   ("South East"),
-  ("Greater London")
-;
+  ("Greater London");

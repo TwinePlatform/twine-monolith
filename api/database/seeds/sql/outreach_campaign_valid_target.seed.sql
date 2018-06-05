@@ -1,4 +1,4 @@
-TRUNCATE outreach_campaign_valid_target;
+TRUNCATE outreach_campaign_valid_target RESTART IDENTITY;
 
 INSERT INTO outreach_campaign_valid_target
   (outreact_campaign_target_id, outreach_type_id)

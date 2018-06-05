@@ -1,4 +1,4 @@
-ALTER SEQUENCE visit_activity_category_seq RESTART WITH 1;
+TRUNCATE visit_activity_category RESTART IDENTITY;
 
 INSERT INTO visit_activity_category
   (category_name)

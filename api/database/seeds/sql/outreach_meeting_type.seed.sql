@@ -1,4 +1,4 @@
-ALTER SEQUENCE outreach_meeting_type_seq RESTART WITH 1;
+TRUNCATE outreach_meeting_type RESTART IDENTITY;
 
 INSERT INTO outreach_meeting_type
   (meeting_type_name)
