@@ -70,7 +70,7 @@ CREATE TABLE community_business (
   deleted_at                   TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT community_business_pk                              PRIMARY KEY (community_business_id),
-  CONSTRAINT community_business_to_organisation_fk              FOREIGN KEY (organisation_id)              REFERENCES organisation ON DELETE CASCADE
+  CONSTRAINT community_business_to_organisation_fk              FOREIGN KEY (organisation_id)              REFERENCES organisation ON DELETE CASCADE,
   CONSTRAINT community_business_to_community_business_sector_fk FOREIGN KEY (community_business_sector_id) REFERENCES community_business_sector,
-  CONSTRAINT community_business_to_community_business_region_fk FOREIGN KEY (community_business_region_id) REFERENCES community_business_region,
+  CONSTRAINT community_business_to_community_business_region_fk FOREIGN KEY (community_business_region_id) REFERENCES community_business_region
 );

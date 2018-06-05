@@ -18,7 +18,7 @@ CREATE TABLE user_account (
   deleted_at                       TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT user_account_pk                  PRIMARY KEY (user_account_id),
-  CONSTRAINT user_account_sensible_birth_year CHECK       (birth_year > 1890)
+  CONSTRAINT user_account_sensible_birth_year CHECK       (birth_year > 1890 AND birth_year < date_part('year', CURRENT_DATE))
 );
 
 
