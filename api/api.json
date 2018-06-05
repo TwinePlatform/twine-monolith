@@ -1,0 +1,284 @@
+{
+  "title": "twine-api",
+  "version": "0.1",
+  "routes": {
+    "/sectors": {
+      "description": "",
+      "/": {
+        "GET": {
+          "description": "Retrieve all users accessible with the given scopes",
+          "auth": {},
+          "scope": {},
+          "query": {},
+          "response": {}
+        }
+      }
+    },
+    "/regions": {},
+    "/genders": {},
+    "/organisations": {
+      "description": "",
+      "/": {
+        "GET": {
+          "description": "",
+          "auth": {},
+          "scope": {},
+          "query": {},
+          "response": {}
+        }
+      },
+      "/:id||me": {
+        "GET": {
+          "description": "",
+          "auth": {},
+          "scope": {},
+          "query": {},
+          "response": {}
+        }
+      },
+      "/:id/visit_activities": {
+        "GET": {
+          "description": "Retrieve all visit activities for an organistion",
+          "auth": true,
+          "scope": [],
+          "query": { 
+            "filter": "today",
+            "deleted": "Boolean"
+          },
+          "response": [{
+            "id": "Number",
+            "name": "String",
+            "category": "String",
+            "monday?": "Boolean",
+            "tuesday?": "Boolean",
+            "wednesday?": "Boolean",
+            "thursday?": "Boolean",
+            "friday?": "Boolean",
+            "saturday?": "Boolean",
+            "sunday?": "Boolean",
+            "deleted?": "Boolean"
+          }]
+        },
+        "POST": {
+          "description": "Add visit activities for an organistion",
+          "auth": true,
+          "scope": [],
+          "query": { 
+            "name": "String",
+            "category": "String",
+            "monday?": "Boolean",
+            "tuesday?": "Boolean",
+            "wednesday?": "Boolean",
+            "thursday?": "Boolean",
+            "friday?": "Boolean",
+            "saturday?": "Boolean",
+            "sunday?": "Boolean"
+          },
+          "response": {
+            "id": "Number",
+            "name": "String",
+            "category": "String",
+            "monday?": "Boolean",
+            "tuesday?": "Boolean",
+            "wednesday?": "Boolean",
+            "thursday?": "Boolean",
+            "friday?": "Boolean",
+            "saturday?": "Boolean",
+            "sunday?": "Boolean"
+          }
+        }
+      },
+      "/:id/visit_activities/:id": {
+        "GET": {
+          "description": "Retrieve single visit activity for an organistion",
+          "auth": true,
+          "scope": [],
+          "query": {},
+          "response": {
+            "id": "Number",
+            "name": "String",
+            "category": "String",
+            "monday?": "Boolean",
+            "tuesday?": "Boolean",
+            "wednesday?": "Boolean",
+            "thursday?": "Boolean",
+            "friday?": "Boolean",
+            "saturday?": "Boolean",
+            "sunday?": "Boolean",
+            "deleted": "Boolean"
+          }
+        },
+        "PUT": {
+          "description": "Update visit activity for an organistion",
+          "auth": true,
+          "scope": [],
+          "query": { 
+            "name": "String",
+            "category": "String",
+            "monday": "Boolean",
+            "tuesday": "Boolean",
+            "wednesday": "Boolean",
+            "thursday": "Boolean",
+            "friday": "Boolean",
+            "saturday": "Boolean",
+            "sunday": "Boolean"
+          },
+          "response": {
+            "id": "Number",
+            "name": "String",
+            "category": "String",
+            "monday?": "Boolean",
+            "tuesday?": "Boolean",
+            "wednesday?": "Boolean",
+            "thursday?": "Boolean",
+            "friday?": "Boolean",
+            "saturday?": "Boolean",
+            "sunday?": "Boolean"
+          }
+        },
+        "DELETE": {
+          "description": "Soft delete visit activity for an organistion",
+          "auth": true,
+          "scope": [],
+          "query": { 
+            "name": "String",
+            "category": "String",
+            "monday?": "Boolean",
+            "tuesday?": "Boolean",
+            "wednesday?": "Boolean",
+            "thursday?": "Boolean",
+            "friday?": "Boolean",
+            "saturday?": "Boolean",
+            "sunday?": "Boolean"
+          },
+          "response": {
+            "id": "Number",
+            "name": "String",
+            "category": "String",
+            "monday?": "Boolean",
+            "tuesday?": "Boolean",
+            "wednesday?": "Boolean",
+            "thursday?": "Boolean",
+            "friday?": "Boolean",
+            "saturday?": "Boolean",
+            "sunday?": "Boolean"
+          }
+        }
+      },
+      "/:id/feedback": {},
+      "/:id/users": {
+        "GET": {
+          "description": "Retreive all users in an organisation",
+          "auth": {},
+          "scope": {},
+          "query": {
+            "page": "Number",
+            "offset": "Number",
+            "sort": "String",
+            "gender": "String",
+            "age": "String",
+            "emailConsent": "Boolean",
+            "smsConsent": "Boolean"
+          },
+          "response": [{
+            "id": "Number",
+            "name": "String",
+            "gender": "String",
+            "birthYear": "String",
+            "email": "String",
+            "phoneNumber": "String",
+            "emailConsent": "Boolean",
+            "smsConsent": "Boolean"
+          }]
+        }
+      },
+      "/:id/visits": {
+        "GET": {
+          "description": "Retreive all visit data for an organisation",
+          "auth": true,
+          "scope": {},
+          "query": {
+            "filter": ["String"],
+            "sort": "String",
+            "page": "Number",
+            "offset": "Number",
+            "gender": "String",
+            "age": "String",
+            "activity": "String"
+          },
+          "response": {}
+        }
+      }
+    },
+    "/users": {
+      "description": "",
+      "/": {
+        "GET": {
+          "description": "Retrieve all users accessible with the given scopes",
+          "auth": {},
+          "scope": {},
+          "query": {},
+          "response": {}
+        },
+        "POST": {}
+      },
+      "/register": {
+        "POST": {
+          "auth": null,
+          "scope": null,
+          "body": {},
+          "response": {}
+        }
+      },
+      "/login": {
+        "POST": {
+          "auth": null,
+          "scope": null,
+          "body": {},
+          "response": {}
+        }
+      },
+      "/me": {
+        "GET": {
+          "auth": "any",
+          "scope": "",
+          "query": {}
+        }
+      },
+      "/:id": {
+        "GET": {
+          "description": "Retrieve details of a specific user",
+          "auth": true,
+          "scope": {},
+          "query": {
+            "filter": [],
+            "qrHash": "String"
+          },
+          "response": {
+            "id": "Number",
+            "name": "String",
+            "regionId": "Number",
+            "sectorId": "Number",
+            "organisationId": "Number",
+            "gender": "String",
+            "birthYear": "String",
+            "email": "String",
+            "phoneNumber": "String",
+            "emailConsent": "Boolean",
+            "smsConsent": "Boolean",
+            "qrCodeUrl": "String",
+            "registeredAt": "String",
+            "lastActiveAt": "String"
+          }
+        }
+      },
+      "/:id/password/reset": {}
+    },
+    "/volunteers": {
+      "description": "Alias for /users/** where user role is VOLUNTEER"
+    },
+    "/visitors": {
+      "description": "Alias for /users/** where user role is VISITOR"
+    }
+  }
+}
