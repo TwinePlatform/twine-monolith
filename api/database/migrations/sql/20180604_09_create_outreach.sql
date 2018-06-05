@@ -65,3 +65,14 @@ CREATE TABLE outreach_campaign_valid_target (
   CONSTRAINT outreach_campaign_valid_target_to_outreach_type_fk            FOREIGN KEY (outreach_type_id)            REFERENCES outreach_type            ON DELETE CASCADE,
   CONSTRAINT outreach_campaign_valid_target_is_not_redundant               UNIQUE      (outreach_campaign_target_id, outreach_type_id)
 );
+
+
+
+/*
+ * Triggers
+ */
+CREATE TRIGGER update_outreach_campaign_modified_at BEFORE UPDATE ON outreach_campaign
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_outreach_meeting_modified_at BEFORE UPDATE ON outreach_meeting
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();

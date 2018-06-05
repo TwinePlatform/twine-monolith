@@ -42,5 +42,16 @@ CREATE TABLE volunteer_admin_one_time_code (
   CONSTRAINT volunteer_admin_one_time_code_pk           PRIMARY KEY (volunteer_admin_one_time_code_id),
   CONSTRAINT volunteer_admin_one_time_code_to_user_fk   FOREIGN KEY (user_account_id) REFERENCES user_account ON DELETE CASCADE,
   CONSTRAINT volunteer_admin_one_time_code_valid_expiry CHECK       (expires_at > created_at)
+  CONSTRAINT volunteer_admin_one_time_code_valid_usage  CHECK       (used_at IS NULL OR (used_at < expires_at AND used_at > created_at))
 );
 
+
+
+/*
+ * Triggers
+ */
+CREATE TRIGGER update_volunteer_activity_modified_at BEFORE UPDATE ON volunteer_activity
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_volunteer_hours_log_modified_at BEFORE UPDATE ON volunteer_hours_log
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();

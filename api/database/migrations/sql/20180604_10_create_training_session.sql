@@ -22,3 +22,14 @@ CREATE TABLE training_session_organisation (
   CONSTRAINT training_session_organisation_to_training_session_fk FOREIGN KEY (training_session_id) REFERENCES training_session ON DELETE CASCADE,
   CONSTRAINT training_session_organisation_to_organisation_fk     FOREIGN KEY (organisation_id)     REFERENCES organisation     ON DELETE CASCADE,
 )
+
+
+
+/*
+ * Triggers
+ */
+CREATE TRIGGER update_training_session_modified_at BEFORE UPDATE ON training_session
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_training_session_organisation_modified_at BEFORE UPDATE ON training_session_organisation
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();

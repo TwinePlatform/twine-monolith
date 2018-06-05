@@ -58,3 +58,17 @@ CREATE TABLE visit_feedback (
   CONSTRAINT visit_feedback_to_community_business_fk FOREIGN KEY (community_business_id) REFERENCES community_business ON DELETE CASCADE,
   CONSTRAINT visit_activity_valid_score              CHECK       (score > -2 AND score < 2)
 );
+
+
+
+/*
+ * Triggers
+ */
+CREATE TRIGGER update_visit_activity_modified_at BEFORE UPDATE ON visit_activity
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_visit_modified_at BEFORE UPDATE ON visit
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_visit_feedback_modified_at BEFORE UPDATE ON visit_feedback
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();

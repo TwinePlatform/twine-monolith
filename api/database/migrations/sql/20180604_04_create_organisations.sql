@@ -18,6 +18,9 @@ CREATE TABLE organisation (
 CREATE TABLE funding_body (
   funding_body_id SERIAL NOT NULL UNIQUE,
   organisation_id INT NOT NULL UNIQUE,
+  created_at         TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at        TIMESTAMP WITH TIME ZONE,
+  deleted_at         TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT funding_body_pk                 PRIMARY KEY (funding_body_id),
   CONSTRAINT funding_body_to_organisation_fk FOREIGN KEY (organisation_id) REFERENCES organisation ON DELETE CASCADE
@@ -74,3 +77,21 @@ CREATE TABLE community_business (
   CONSTRAINT community_business_to_community_business_sector_fk FOREIGN KEY (community_business_sector_id) REFERENCES community_business_sector,
   CONSTRAINT community_business_to_community_business_region_fk FOREIGN KEY (community_business_region_id) REFERENCES community_business_region
 );
+
+
+
+/*
+ * Triggers
+ */
+CREATE TRIGGER update_organisation_modified_at BEFORE UPDATE ON organisation
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_funding_programme_modified_at BEFORE UPDATE ON funding_programme
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_funding_body_modified_at BEFORE UPDATE ON funding_body
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_community_business_modified_at BEFORE UPDATE ON community_business
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+

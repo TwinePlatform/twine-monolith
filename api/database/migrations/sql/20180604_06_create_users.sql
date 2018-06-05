@@ -73,12 +73,13 @@ CREATE TABLE user_secret_reset (
   reset_token          VARCHAR NOT NULL UNIQUE,
   created_at           TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   expires_at           TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP + interval '1 day',
-  modified_at          TIMESTAMP WITH TIME ZONE,
+  used_at              TIMESTAMP WITH TIME ZONE,
   deleted_at           TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT user_secret_reset_pk                 PRIMARY KEY (user_secret_reset_id),
   CONSTRAINT user_secret_reset_to_user_account_fk FOREIGN KEY (user_account_id) REFERENCES user_account ON DELETE CASCADE,
-  CONSTRAINT user_secret_reset_valid_expiry       CHECK       (expires_at > created_at)
+  CONSTRAINT user_secret_reset_valid_expiry       CHECK       (expires_at > created_at),
+  CONSTRAINT user_secret_reset_valid_usage        CHECK       (used_at IS NULL OR (used_at < expires_at AND used_at > created_at))
 );
 
 
@@ -102,3 +103,17 @@ CREATE TABLE login_event (
   CONSTRAINT login_event_pk         PRIMARY KEY (login_event_id),
   CONSTRAINT login_event_to_user_fk FOREIGN KEY (user_account_id) REFERENCES user_account ON DELETE CASCADE
 );
+
+
+
+/*
+ * Triggers
+ */
+CREATE TRIGGER update_user_account_modified_at BEFORE UPDATE ON user_account
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_user_account_access_role_modified_at BEFORE UPDATE ON user_account_access_role
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_user_invitation_modified_at BEFORE UPDATE ON user_invitation
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
