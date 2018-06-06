@@ -12,10 +12,91 @@
           "query": {},
           "response": {}
         }
+      },
+      "/:id/organisations": {
+        "GET": {
+          "description": "",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "fields": ["String"]
+          },
+          "response": {
+            "totalOrganisations": "Number",
+            "organisationsList":[{
+              "id": "Number",
+              "name": "String",
+              "logo_url": "String",
+              "address1": "String",
+              "address2": "String",
+              "townCity": "String",
+              "postCode": "String",
+              "coordinates": "String",
+              "region": "String",
+              "sector": "String",
+              "registeredAt": "String",
+              "lastActiveAt": "String",
+              "modifiedAt": "String",
+              "turnoverBand": "String",
+              "360GivingId": "String",
+              "fundingProgramme": "String",
+              "fundingBody": "String",
+              "parentOrganisation": "String",
+              "childOrganisations": ["String"],
+              "subscription": "String",
+              "trainingSessions": [{
+                "trainingSessionAttendees": ["Number"],
+                "trainingSessionNotes": "String",
+                "eventDate": "String"
+              }]
+            }]
+          }
+        }
       }
     },
-    "/regions": {},
-    "/genders": {},
+    "/regions": {
+      "description": "",
+      "/:id/organisations": {
+        "GET": {
+          "description": "",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "fields": ["String"]
+          },
+          "response": {
+            "totalOrganisations": "Number",
+            "organisationsList":[{
+              "id": "Number",
+              "name": "String",
+              "logo_url": "String",
+              "address1": "String",
+              "address2": "String",
+              "townCity": "String",
+              "postCode": "String",
+              "coordinates": "String",
+              "region": "String",
+              "sector": "String",
+              "registeredAt": "String",
+              "lastActiveAt": "String",
+              "modifiedAt": "String",
+              "turnoverBand": "String",
+              "360GivingId": "String",
+              "fundingProgramme": "String",
+              "fundingBody": "String",
+              "parentOrganisation": "String",
+              "childOrganisations": ["String"],
+              "subscription": "String",
+              "trainingSessions": [{
+                "trainingSessionAttendees": ["Number"],
+                "trainingSessionNotes": "String",
+                "eventDate": "String"
+              }]
+            }]
+          }
+        }
+      }
+    },
     "/organisations": {
       "description": "",
       "/": {
@@ -29,11 +110,88 @@
       },
       "/:id||me": {
         "GET": {
-          "description": "",
-          "auth": {},
-          "scope": {},
-          "query": {},
-          "response": {}
+          "description": "Retrieve information about a single organisation",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "fields": ["String"]
+          },
+          "response": {
+            "id": "Number",
+            "name": "String",
+            "logo_url": "String",
+            "address1": "String",
+            "address2": "String",
+            "townCity": "String",
+            "postCode": "String",
+            "coordinates": "String",
+            "region": "String",
+            "sector": "String",
+            "registeredAt": "String",
+            "lastActiveAt": "String",
+            "modifiedAt": "String",
+            "turnoverBand": "String",
+            "360GivingId": "String",
+            "fundingProgramme": "String",
+            "fundingBody": "String",
+            "parentOrganisation": "String",
+            "childOrganisations": ["String"],
+            "subscription": "String",
+            "trainingSessions": [{
+              "trainingSessionAttendees": ["Number"],
+              "trainingSessionNotes": "String",
+              "eventDate": "String"
+            }]
+          }
+        },
+        "PUT": {
+          "description": "Update information about a single organisation",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "id": "Number",
+            "name": "String",
+            "logo_url": "String",
+            "address1": "String",
+            "address2": "String",
+            "townCity": "String",
+            "postCode": "String",
+            "coordinates": "String",
+            "region": "String",
+            "sector": "String",
+            "registeredAt": "String",
+            "lastActiveAt": "String",
+            "modifiedAt": "String",
+            "turnoverBand": "String",
+            "360GivingId": "String",
+            "fundingProgramme": "String",
+            "fundingBody": "String",
+            "parentOrganisation": "String",
+            "childOrganisations": ["String"],
+            "subscription": "String"
+          },
+          "response": {
+            "id": "Number",
+            "name": "String",
+            "logo_url": "String",
+            "address1": "String",
+            "address2": "String",
+            "townCity": "String",
+            "postCode": "String",
+            "coordinates": "String",
+            "region": "String",
+            "sector": "String",
+            "registeredAt": "String",
+            "lastActiveAt": "String",
+            "modifiedAt": "String",
+            "turnoverBand": "String",
+            "360GivingId": "String",
+            "fundingProgramme": "String",
+            "fundingBody": "String",
+            "parentOrganisation": "String",
+            "childOrganisations": ["String"],
+            "subscription": "String"
+          }
         }
       },
       "/:id/visit_activities": {
@@ -42,7 +200,7 @@
           "auth": true,
           "scope": [],
           "query": { 
-            "filter": "today",
+            "fields": "today",
             "deleted": "Boolean"
           },
           "response": [{
@@ -165,7 +323,37 @@
           }
         }
       },
-      "/:id/feedback": {},
+      "/:id/feedback": {
+        "GET": {
+          "description": "Retreive feedback for one organisation",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "since": "String",
+            "until": "String"
+          },
+          "response": {
+            "-1": "Number",
+            "0": "Number",
+            "1": "Number",
+            "since": "String",
+            "until": "String"
+          }
+        },
+        "POST": {
+          "description": "Send feedback for one organisation",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "feedbackScore": "Number"
+          },
+          "response": {
+            "feedbackScore": "Number",
+            "organisationId": "Number"
+
+          }
+        }
+      },
       "/:id/users": {
         "GET": {
           "description": "Retreive all users in an organisation",
@@ -198,7 +386,7 @@
           "auth": true,
           "scope": {},
           "query": {
-            "filter": ["String"],
+            "fields": ["String"],
             "sort": "String",
             "page": "Number",
             "offset": "Number",
@@ -208,6 +396,62 @@
           },
           "response": {}
         }
+      },
+      "/:id/volunteers": {
+        "GET": {
+          "description": "Retrieve volunteer details for a single organisation",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "fields": ["String"],
+            "filter": {
+              "since": "String",
+              "until": "String"
+            }
+          },
+          "response": {
+            "totalVolunteers": "Number",
+            "totalVolunteerHours": "Number",
+            "volunteerLogs": [{
+              "volunteerLogId": "Number",
+              "userId": "Number",
+              "volunteerActivity": "String",
+              "duration": "Number",
+              "loggedAt": "String"
+            }]
+          }
+        }
+      },
+      "/:id/outreach": {
+        "GET": {
+          "description": "Retrieve all outreach campaings and meetings for a specific organisation",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "fields": ["String"],
+            "filter": {
+              "outreachType": "String"
+            }
+          },
+          "response": {
+            "result?": [{
+              "outreachCampaignId": "Number",
+              "organisationName": "String",
+              "userOwner": "String",
+              "outreachCampaignType": "String",
+              "outreachCampaignTarget": ["String"],
+              "createdAt": "String",
+              "modifiedAt": "String",
+              "meetings": [{
+                "meetingId": "Number",
+                "meetingType": "String",
+                "outreachPartner": "String",
+                "createdAt": "String",
+                "modifiedAt": "String"
+              }]
+            }]
+          }
+        }
       }
     },
     "/users": {
@@ -215,19 +459,57 @@
       "/": {
         "GET": {
           "description": "Retrieve all users accessible with the given scopes",
-          "auth": {},
-          "scope": {},
-          "query": {},
-          "response": {}
+          "auth": true,
+          "scope": [],
+          "query": {
+            "fields": ["String"]
+          },
+          "response": {
+            "id": "Number",
+            "name": "String",
+            "gender": "String",
+            "birthYear": "String",
+            "email": "String",
+            "phoneNumber": "String",
+            "postCode": "String",
+            "emailConsent": "Boolean",
+            "smsConsent": "Boolean",
+            "qrCodeUrl": "String",
+            "registeredAt": "String",
+            "lastActiveAt": "String",
+            "modifiedAt": "String"
+          }
         },
         "POST": {}
       },
       "/register": {
         "POST": {
-          "auth": null,
-          "scope": null,
-          "body": {},
-          "response": {}
+          "auth": "Maybe - orgs/volunteers don't need auth but visitors do",
+          "scope": [],
+          "body": {
+            "organisationId": "Number",
+            "name": "String",
+            "gender": "String",
+            "birthYear": "String",
+            "email": "String",
+            "phoneNumber": "String",
+            "postCode": "String",
+            "emailConsent": "Boolean",
+            "smsConsent": "Boolean"
+          },
+          "response": {
+            "id": "Number",
+            "name": "String",
+            "gender": "String",
+            "birthYear": "String",
+            "email": "String",
+            "phoneNumber": "String",
+            "postCode": "String",
+            "emailConsent": "Boolean",
+            "smsConsent": "Boolean",
+            "qrCodeUrl": "String",
+            "registeredAt": "String"
+          }
         }
       },
       "/login": {
@@ -238,21 +520,48 @@
           "response": {}
         }
       },
-      "/me": {
-        "GET": {
-          "auth": "any",
-          "scope": "",
-          "query": {}
-        }
-      },
-      "/:id": {
+      "/:id||me": {
         "GET": {
           "description": "Retrieve details of a specific user",
           "auth": true,
           "scope": {},
           "query": {
-            "filter": [],
-            "qrHash": "String"
+            "fields": [],
+          },
+          "response": {
+            "id": "Number",
+            "name": "String",
+            "qrSecret": "String",
+            "regionId": "Number",
+            "sectorId": "Number",
+            "organisationId": "Number",
+            "gender": "String",
+            "birthYear": "String",
+            "email": "String",
+            "phoneNumber": "String",
+            "emailConsent": "Boolean",
+            "smsConsent": "Boolean",
+            "qrCode": "String",
+            "registeredAt": "String",
+            "lastActiveAt": "String"
+          }
+        },
+        "POST": {
+          "description": "Create a new user",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "name": "String",
+            "regionId": "Number",
+            "sectorId": "Number",
+            "organisationId": "Number",
+            "gender": "String",
+            "birthYear": "String",
+            "email": "String",
+            "phoneNumber": "String",
+            "emailConsent": "Boolean",
+            "smsConsent": "Boolean",
+            "qrCode": "String"
           },
           "response": {
             "id": "Number",
@@ -266,13 +575,148 @@
             "phoneNumber": "String",
             "emailConsent": "Boolean",
             "smsConsent": "Boolean",
-            "qrCodeUrl": "String",
+            "qrCode": "String",
             "registeredAt": "String",
             "lastActiveAt": "String"
           }
+        },
+        "PUT": {
+        "description": "Update details of a specific user",
+        "auth": true,
+        "scope": [],
+        "query": {
+          "name": "String",
+          "regionId": "Number",
+          "sectorId": "Number",
+          "organisationId": "Number",
+          "gender": "String",
+          "birthYear": "String",
+          "email": "String",
+          "phoneNumber": "String",
+          "emailConsent": "Boolean",
+          "smsConsent": "Boolean",
+          "qrCode": "String",
+          "delete": "Boolean"
+        },
+        "response": {
+          "id": "Number",
+          "name": "String",
+          "regionId": "Number",
+          "sectorId": "Number",
+          "organisationId": "Number",
+          "gender": "String",
+          "birthYear": "String",
+          "email": "String",
+          "phoneNumber": "String",
+          "emailConsent": "Boolean",
+          "smsConsent": "Boolean",
+          "qrCode": "String",
+          "registeredAt": "String",
+          "lastActiveAt": "String"
         }
       },
-      "/:id/password/reset": {}
+      "/:id/password/reset": {
+        "POST": {
+          "description": "Reset password for a single user",
+          "auth": true,
+          "scope": [],
+          "body": {
+            "userId": "Number",
+            "email": "String",
+            "password": "String",
+            "confirmPassword": "String"
+          },
+          "response": {}
+        }
+      }
+      },
+     "/:id/visit_activities/:id": {
+      "POST": {
+        "description": "",
+        "auth": true,
+        "scope": [],
+        "query": {},
+        "response": {}
+      }
+      },
+      "/:id/volunteers": {
+        "GET": {
+          "description": "Retreive volunteer information for a user",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "fields": ["String"],
+            "since": "String",
+            "until": "String"
+          },
+          "response": {
+            "totalVolunteerHours": "Number",
+            "volunteerLogs": [{
+              "volunteerLogId": "Number",
+              "volunteerActivity": "String",
+              "duration": "Number",
+              "loggedAt": "String"
+            }]
+          }
+        },
+        "POST": {
+          "description": "",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "organisationId":"Number",
+            "volunteerActvity": "String",
+            "duration": "Number",
+            "loggedAt": "String"
+          },
+          "response": {
+            "volunteerLogId": "Number",
+            "volunteerActvity": "String",
+            "duration": "Number",
+            "loggedAt": "String"
+          }
+        }
+      },
+      "/:id/outreach": {
+        "GET": {
+          "description": "Retrieve all outreach campaings and meetings for a specific user",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "fields": ["String"],
+            "filter": {
+              "outreachType": "String"
+            }
+          },
+          "response": {
+            "result?": [{
+              "outreachCampaignId": "Number",
+              "organisationName": "String",
+              "outreachCampaignType": "String",
+              "outreachCampaignTarget": ["String"],
+              "createdAt": "String",
+              "modifiedAt": "String",
+              "meetings": [{
+                "meetingId": "Number",
+                "meetingType": "String",
+                "outreachPartner": "String",
+                "createdAt": "String",
+                "modifiedAt": "String"
+              }]
+            }]
+          }
+        }
+    },
+    "/email": {
+      "/template/:id": {
+        "POST": {
+          "description": "",
+          "auth": true,
+          "scope": [],
+          "query": {},
+          "response": {}
+        }
+      }
     },
     "/volunteers": {
       "description": "Alias for /users/** where user role is VOLUNTEER"
@@ -280,5 +724,38 @@
     "/visitors": {
       "description": "Alias for /users/** where user role is VISITOR"
     }
+  
+  
+    },
+    "/genders": {},
+    "/outreach": {
+      "/outreach/type/:id": {
+        "GET": {
+          "description": "",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "fields": ["String"]
+          },
+          "response": {
+            "outreachCampaignTargets": ["String"]
+          }
+        }
+      }
+    }
   }
 }
+
+
+{
+  "description": "",
+  "/": {
+    "GET": {
+      "description": "",
+      "auth": true,
+      "scope": [],
+      "query": {},
+      "response": {}
+    }
+  }
+},
