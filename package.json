@@ -1,0 +1,29 @@
+{
+  "private": true,
+  "name": "eslint-config-twine",
+  "version": "1.0.0",
+  "description": "ESLint config for all Twine Projects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TwinePlatform/eslint-config-twine.git"
+  },
+  "contributors": [
+    "Elias Malik <elias@foundersandcoders.com>",
+    "Aisha Nasir <aisha@foundersandcoders.com>"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TwinePlatform/eslint-config-twine/issues"
+  },
+  "homepage": "https://github.com/TwinePlatform/eslint-config-twine#readme",
+  "peerDependencies": {
+    "eslint": "^4.19.1"
+  },
+  "dependencies": {
+    "eslint-config-airbnb": "^16.1.0"
+  }
+}
