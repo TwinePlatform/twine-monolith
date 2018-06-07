@@ -18,7 +18,6 @@ New API can be found in [json format here](./api.json)
 ## /organisations
 /organisations
 /organisations/:id || me
-`GET` replaces /api/users/cb-name 👣 visitor app 
 
 `PUT` replaces `/api/cb/details/update` 👣 visitor app
 
@@ -74,6 +73,8 @@ New API can be found in [json format here](./api.json)
 
 `PUT` replaces `/api/qr/generator` 👣 visitor app  
 
+### /users/me/organisation
+`GET` replaces /api/users/cb-name 👣 visitor app 
 
 ### /users/:id/password_reset
 `POST` replaces `/api/cb/pwd/change` 👣 visitor app  
