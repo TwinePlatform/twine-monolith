@@ -83,17 +83,6 @@ CREATE TABLE user_secret_reset (
 );
 
 
-CREATE TABLE user_invitation (
-  user_invitation_id SERIAL NOT NULL UNIQUE,
-  invitation_status  ENUM_invitation_status NOT NULL,
-  created_at         TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  modified_at        TIMESTAMP WITH TIME ZONE,
-  deleted_at         TIMESTAMP WITH TIME ZONE,
-
-  CONSTRAINT user_invitation_pk PRIMARY KEY (user_invitation_id)
-);
-
-
 CREATE TABLE login_event (
   login_event_id  SERIAL NOT NULL UNIQUE,
   user_account_id INT NOT NULL,
@@ -113,7 +102,4 @@ CREATE TRIGGER update_user_account_modified_at BEFORE UPDATE ON user_account
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
 
 CREATE TRIGGER update_user_account_access_role_modified_at BEFORE UPDATE ON user_account_access_role
-  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
-
-CREATE TRIGGER update_user_invitation_modified_at BEFORE UPDATE ON user_invitation
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
