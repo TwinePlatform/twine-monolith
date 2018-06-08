@@ -2,7 +2,7 @@
   "title": "twine-api",
   "version": "0.1",
   "types": {
-    "organisation": {
+    "organisationDetails": {
       "id": "Number",
       "name": "String",
       "logoUrl": "String",
@@ -20,16 +20,50 @@
       "360GivingId": "String",
       "fundingProgramme": "String",
       "fundingBody": "String",
-      "childOrganisations": ["String"],
-      "subscription": "String",
-      "trainingSessions": [{
-        "trainingSessionAttendees": ["Number"],
-        "trainingSessionNotes": "String",
-        "eventDate": "String"
-        }] 
+      "subscription": "String"
     },
-    "user": {
+    "organisationTrainingSession": {
+      "trainingSessionAttendees": ["Number"],
+      "trainingSessionNotes": "String",
+      "eventDate": "String"
+    },
+    "adminUser": {
       "id": "Number",
+      "userType": "String",
+      "name": "String",
+      "gender": "String",
+      "birthYear": "String",
+      "email": "String",
+      "phoneNumber": "String",
+      "postCode": "String",
+      "emailConsent": "Boolean",
+      "smsConsent": "Boolean",
+      "registeredAt": "String",
+      "lastActiveAt": "String",
+      "modifiedAt": "String",
+      "organisation": {
+        "organisationId": "Number",
+        "organisationName": "String"
+      }
+    },
+    "visitorUser": {
+      "id": "Number",
+      "userType": "String",
+      "name": "String",
+      "gender": "String",
+      "birthYear": "String",
+      "email": "String",
+      "phoneNumber": "String",
+      "postCode": "String",
+      "emailConsent": "Boolean",
+      "smsConsent": "Boolean",
+      "registeredAt": "String",
+      "lastActiveAt": "String",
+      "modifiedAt": "String"
+    },
+    "volunteerUser": {
+      "id": "Number",
+      "userType": "String",
       "name": "String",
       "gender": "String",
       "birthYear": "String",
@@ -47,14 +81,19 @@
       "id": "Number",
       "name": "String",
       "category": "String",
-      "monday?": "Boolean",
-      "tuesday?": "Boolean",
-      "wednesday?": "Boolean",
-      "thursday?": "Boolean",
-      "friday?": "Boolean",
-      "saturday?": "Boolean",
-      "sunday?": "Boolean",
-      "deleted?": "Boolean"
+      "monday": "Boolean",
+      "tuesday": "Boolean",
+      "wednesday": "Boolean",
+      "thursday": "Boolean",
+      "friday": "Boolean",
+      "saturday": "Boolean",
+      "sunday": "Boolean",
+      "deleted": "Boolean"
+    },
+    "visit": {
+      "id": "Number",
+      "activity": "String",
+      "visitDate": "String"
     },
     "outreach": {
       "id": "Number",
@@ -82,14 +121,49 @@
   },
   "routes": {
     "/sectors": {
-      "description": "",
       "/": {
         "GET": {
-          "description": "",
-          "auth": {},
-          "scope": {},
+          "description": "Retrieve all sectors",
+          "auth": true,
+          "scope": [],
           "query": {},
-          "response": {}
+          "response": [{
+            "id": "String",
+            "sectorName": "String"
+          }]
+        },
+        "POST": {
+          "description": "Add a new sector",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "sectorName": "String"
+          },
+          "response": [{
+            "id": "String",
+            "sectorName": "String"
+          }]
+        },
+        "PUT": {
+          "description": "Update a sector",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "sectorName": "String"
+          },
+          "response": [{
+            "id": "String",
+            "sectorName": "String"
+          }]
+        },
+        "DELETE": {
+          "description": "Delete a sector",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "sectorName": "String"
+          },
+          "response": null
         }
       },
       "/:id/organisations": {
@@ -102,37 +176,99 @@
           },
           "response": {
             "totalOrganisations": "Number",
-            "organisationsList":["types.organisation"]
+            "organisationsList": [{
+              "organisationDetails": "types.organisationDetails",
+              "childOrganisations": [{
+                "id": "Number",
+                "name": "String"
+              }],
+              "trainingSessionsList": "types.organisationTrainingDetails"
             }]
           }
         }
+      }
     },
     "/regions": {
-        "description": "",
-        "/:id/organisations": {
-          "GET": {
-            "description": "",
-            "auth": true,
-            "scope": [],
-            "query": {
-              "fields": ["String"]
-            },
-            "response": {
-              "totalOrganisations": "Number",
-              "organisationsList":["types.organisation"]
-              }]
-            }
-          }
-    },
-    "/organisations": {
-      "description": "Retreive list of all organisations",
       "/": {
         "GET": {
-          "description": "",
+          "description": "Retrieve all regions",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "fields": ["String"]
+          },
+          "response": [{
+            "id": "String",
+            "regionName": "String"
+          }]
+        },
+        "POST": {
+          "description": "Add a new region",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "regionName": "String"
+          },
+          "response": [{
+            "id": "String",
+            "regionName": "String"
+          }]
+        },
+        "PUT": {
+          "description": "Update a region",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "regionName": "String"
+          },
+          "response": [{
+            "id": "String",
+            "regionName": "String"
+          }]
+        },
+        "DELETE": {
+          "description": "Delete a region",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "regionName": "String"
+          },
+          "response": null
+        }
+      },
+      "/:id/organisations": {
+        "GET": {
+          "description": "Retrieve all organisations within a region",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "fields": ["String"]
+          },
+          "response": {
+            "totalOrganisations": "Number",
+            "organisationsList": [{
+              "organisationDetails": "types.organisationDetails",
+              "childOrganisations": [{
+                "id": "Number",
+                "name": "String"
+              }],
+              "trainingSessionsList": "types.organisationTrainingDetails"
+            }]
+          }
+        }
+      }
+    },
+    "/organisations": {
+      "/": {
+        "GET": {
+          "description": "Retreive list of all organisations",
           "auth": {},
           "scope": ["twine_admin"],
           "query": {},
-          "response": {}
+          "response": {
+            "totalOrganisations": "Number",
+            "organisationsList": ["types.organisation"]
+          }
         }
       },
       "/:id": {
@@ -142,6 +278,34 @@
           "scope": [],
           "query": {
             "fields": ["String"]
+          },
+          "response": "types.organisation"
+        },
+        "POST": {
+          "description": "Add a single organisation",
+          "auth": true,
+          "scope": [],
+          "query": {
+            "id": "Number",
+            "name": "String",
+            "logo_url": "String",
+            "address1": "String",
+            "address2": "String",
+            "townCity": "String",
+            "postCode": "String",
+            "coordinates": "String",
+            "region": "String",
+            "sector": "String",
+            "registeredAt": "String",
+            "lastActiveAt": "String",
+            "modifiedAt": "String",
+            "turnoverBand": "String",
+            "360GivingId": "String",
+            "fundingProgramme": "String",
+            "fundingBody": "String",
+            "parentOrganisation": "String",
+            "childOrganisations": ["String"],
+            "subscription": "String"
           },
           "response": "types.organisation"
         },
@@ -172,6 +336,13 @@
             "subscription": "String"
           },
           "response": "types.organisation"
+        },
+        "DELETE": {
+          "description": "Delete a single organisation",
+          "auth": true,
+          "scope": [],
+          "query": {},
+          "response": null
         }
       },
       "/:id/visit_activities": {
@@ -183,7 +354,10 @@
             "fields": "today",
             "deleted": "Boolean"
           },
-          "response": ["types.visitActivity"]
+          "response": {
+            "totalVisitActivities": "Number",
+            "visitActivitiesList": ["types.visitActivity"]
+          }
         },
         "POST": {
           "description": "Add visit activities for an organistion",
@@ -192,27 +366,27 @@
           "query": { 
             "name": "String",
             "category": "String",
-            "monday?": "Boolean",
-            "tuesday?": "Boolean",
-            "wednesday?": "Boolean",
-            "thursday?": "Boolean",
-            "friday?": "Boolean",
-            "saturday?": "Boolean",
-            "sunday?": "Boolean"
+            "monday": "Boolean",
+            "tuesday": "Boolean",
+            "wednesday": "Boolean",
+            "thursday": "Boolean",
+            "friday": "Boolean",
+            "saturday": "Boolean",
+            "sunday": "Boolean"
           },
           "response": "types.visitActivity"
         }
       },
       "/:id/visit_activities/:id": {
         "GET": {
-          "description": "Retrieve single visit activity for an organistion",
+          "description": "Retrieve a single visit activity for an organistion",
           "auth": true,
           "scope": [],
           "query": {},
           "response": "types.visitActivity"
         },
         "PUT": {
-          "description": "Update visit activity for an organistion",
+          "description": "Update a visit activity for an organistion",
           "auth": true,
           "scope": [],
           "query": { 
@@ -243,7 +417,7 @@
             "saturday?": "Boolean",
             "sunday?": "Boolean"
           },
-          "response": {}
+          "response": null
         }
       },
       "/:id/feedback": {
@@ -255,7 +429,13 @@
             "since": "String",
             "until": "String"
           },
-          "response": "types.feedback"
+          "response": {
+            "cbId": "Number",
+            "totalFeedback": "Number",
+            "-1": "Number",
+            "0": "Number",
+            "1": "Number"
+          }
         },
         "POST": {
           "description": "Send feedback for one organisation",
@@ -265,6 +445,7 @@
             "feedbackScore": "Number"
           },
           "response": {
+            "id": "Number",
             "feedbackScore": "Number",
             "organisationId": "Number"
           }
@@ -274,34 +455,52 @@
         "GET": {
           "description": "Retreive all users in an organisation",
           "auth": {},
-          "scope": {},
+          "scope": [],
           "query": {
-            "page": "Number",
-            "offset": "Number",
-            "sort": "String",
-            "gender": "String",
-            "age": "String",
-            "emailConsent": "Boolean",
-            "smsConsent": "Boolean"
+            "filter":{
+              "page": "Number",
+              "offset": "Number",
+              "sort": "String",
+              "gender": "String",
+              "age": "String",
+              "emailConsent": "Boolean",
+              "smsConsent": "Boolean"
+            }
           },
-          "response": ["types.user"]
+          "response": {
+            "totalUsers": "Number",
+            "totalVolunteerUsers": "Number",
+            "totalVisitorUsers": "Number",
+            "volunteerUsersList": ["types.volunteerUser"],
+            "visitorUsersList": ["types.visitorUser"]
+          }
         }
       },
       "/:id/visits": {
         "GET": {
           "description": "Retreive all visit data for an organisation",
           "auth": true,
-          "scope": {},
+          "scope": [],
           "query": {
             "fields": ["String"],
-            "sort": "String",
-            "page": "Number",
-            "offset": "Number",
-            "gender": "String",
-            "age": "String",
-            "activity": "String"
+            "filter": {
+              "sort": "String",
+              "page": "Number",
+              "offset": "Number",
+              "gender": "String",
+              "age": "String",
+              "activity": "String",
+              "since": "String",
+              "until": "String"
+            }
           },
-          "response": {}
+          "response": {
+            "totalVisits": "Number",
+            "aggregatedVisitsList": [{
+              "activitiyName": "String",
+              "visitsList": ["types.visits"]
+            }]
+          }
         }
       },
       "/:id/volunteerLogs": {
@@ -323,7 +522,7 @@
           }
         }
       },
-      "/:id/outreach": {
+      "/:id/outreach": { //this may want to be split out to /:id/outreach & /:id/outreach/meetings
         "GET": {
           "description": "Retrieve all outreach campaings and meetings for a specific organisation",
           "auth": true,
@@ -335,27 +534,65 @@
             }
           },
           "response": {
-            "result?": ["types.outreach"]
+            "totalOutreachCampaigns": "Number",
+            "outreachCampaignList": ["types.outreach"]
           }
         }
       }
     },
     "/users": {
-      "description": "",
       "/": {
         "GET": {
-          "description": "Retrieve all users accessible with the given scopes",
+          "description": "Retrieve all users",
           "auth": true,
           "scope": [],
           "query": {
-            "fields": ["String"]
+            "fields": ["String"],
+            "filter": {
+              "sort": "String",
+              "page": "Number",
+              "offset": "Number",
+              "gender": "String",
+              "age": "String",
+              "activity": "String",
+              "since": "String",
+              "until": "String"
+            }
           },
-          "response": ["types.user"]
+          "response": {
+            "totalUsers": "Number",
+            "totalVolunteers": "Number",
+            "totalVisitors": "Number",
+            "totalOrganisations": "Number",
+            "volunteerUsersList": ["types.volunteerUser"],
+            "visitorUsersList": ["types.visitorUser"],
+            "adminUsersList": ["types.adminUser"]
+          }
         }
       },
-      "/register": {
+      "/register/volunteer": {
         "POST": {
-          "auth": "Maybe - orgs/volunteers don't need auth but visitors do",
+          "auth": null,
+          "scope": [],
+          "body": {
+            "organisationId": "Number",
+            "name": "String",
+            "gender": "String",
+            "birthYear": "String",
+            "email": "String",
+            "phoneNumber": "String",
+            "postCode": "String",
+            "emailConsent": "Boolean",
+            "smsConsent": "Boolean",
+            "secret": "String",
+            "invitationCode":"String"
+          },
+          "response": "types.volunteerUser"
+        }
+      },
+      "/register/visitor": {
+        "POST": {
+          "auth": true,
           "scope": [],
           "body": {
             "organisationId": "Number",
@@ -368,14 +605,46 @@
             "emailConsent": "Boolean",
             "smsConsent": "Boolean"
           },
-          "response": "types.user"
+          "response": "types.visitorUser"
+        }
+      },
+      "/register/admin": {
+        "POST": {
+          "auth": null,
+          "scope": [],
+          "body": {
+            "organisationId": "Number",
+            "name": "String",
+            "gender": "String",
+            "birthYear": "String",
+            "email": "String",
+            "phoneNumber": "String",
+            "postCode": "String",
+            "emailConsent": "Boolean",
+            "smsConsent": "Boolean",
+            "invitationCode": "String"
+          },
+          "response": "types.adminUser"
+        }
+      },
+      "/login/visitor": {
+        "POST": {
+          "auth": true,
+          "scope": null,
+          "body": {
+            "secret": "String"
+          },
+          "response": "types.visitorUser"
         }
       },
       "/login": {
         "POST": {
           "auth": null,
           "scope": null,
-          "body": {},
+          "body": {
+            "userName": "String",
+            "secret": "String"
+          },
           "response": {}
         }
       },
@@ -387,7 +656,7 @@
           "query": {
             "fields": ["String"]
           },
-          "response": "types.user"
+          "response": "types.visitorUser || types.volunteerUser || types.adminUser"
         },
         "PUT": {
         "description": "Update details of a specific user",
@@ -407,9 +676,10 @@
           "qrCode": "String",
           "delete": "Boolean"
         },
-        "response": "types.user"
+        "response": "types.visitorUser || types.volunteerUser || types.adminUser"
+      }
       },
-      "/:id/password/reset": {
+      "/password/reset": {
         "POST": {
           "description": "Reset password for a single user",
           "auth": true,
@@ -420,11 +690,88 @@
             "password": "String",
             "confirmPassword": "String"
           },
-          "response": {}
+          "response": null
         }
-      }
       },
-      "/me": { //this probs wants to be split into /volunteers/me || /visitors/me
+      "/admin/me": {
+        "GET": {
+          "description": "Retrieve details of your own admin user account",
+          "auth": true,
+          "scope": {},
+          "query": {
+            "fields": ["String"]
+          },
+          "response": "types.adminUser"
+        },
+        "PUT": {
+        "description": "Update details of a your own admin user account",
+        "auth": true,
+        "scope": [],
+        "query": {
+          "name": "String",
+          "regionId": "Number",
+          "sectorId": "Number",
+          "organisationId": "Number",
+          "gender": "String",
+          "birthYear": "String",
+          "email": "String",
+          "phoneNumber": "String",
+          "emailConsent": "Boolean",
+          "smsConsent": "Boolean",
+          "delete": "Boolean"
+        },
+        "response": "types.adminUser"
+        },
+        "DELETE": {
+          "description": "Delete your own admin user account",
+          "auth": true,
+          "scope": {},
+          "body": {
+            "userName": "String"
+          },
+          "response": null
+        }
+      },
+      "/volunteers/me": {
+        "GET": {
+          "description": "Retrieve details of your own volunteer user account",
+          "auth": true,
+          "scope": {},
+          "query": {
+            "fields": ["String"]
+          },
+          "response": "types.volunteerUser"
+        },
+        "PUT": {
+        "description": "Update details of a your own volunteer user account",
+        "auth": true,
+        "scope": [],
+        "query": {
+          "name": "String",
+          "regionId": "Number",
+          "sectorId": "Number",
+          "organisationId": "Number",
+          "gender": "String",
+          "birthYear": "String",
+          "email": "String",
+          "phoneNumber": "String",
+          "emailConsent": "Boolean",
+          "smsConsent": "Boolean",
+          "delete": "Boolean"
+        },
+        "response": "types.volunteerUser"
+        },
+        "DELETE": {
+          "description": "Delete your own volunteer user account",
+          "auth": true,
+          "scope": {},
+          "body": {
+            "userName": "String"
+          },
+          "response": null
+        }
+      },
+      "/visitors/me": {
         "GET": {
           "description": "Retrieve details of your own user account",
           "auth": true,
@@ -432,10 +779,10 @@
           "query": {
             "fields": ["String"]
           },
-          "response": "types.user"
+          "response": "types.visitorUser"
         },
         "PUT": {
-        "description": "Update details of a your own user account",
+        "description": "Update details of a your own visitor user account",
         "auth": true,
         "scope": [],
         "query": {
@@ -452,49 +799,51 @@
           "qrCode": "String",
           "delete": "Boolean"
         },
-        "response": "types.user"
-        }
-      },
-      "/:id/password/reset": {
-        "POST": {
-          "description": "Reset password for a single user",
+        "response": "types.visitorUser"
+        },
+        "DELETE": {
+          "description": "Delete your own visitor user account",
           "auth": true,
-          "scope": [],
+          "scope": {},
           "body": {
-            "userId": "Number",
-            "email": "String",
-            "password": "String",
-            "confirmPassword": "String"
+            "userName": "String"
           },
-          "response": {}
+          "response": null
         }
       },
       "/:id/visit_activities/:id": {
       "POST": {
-        "description": "",
+        "description": "Adds a visit for a visitor",
         "auth": true,
         "scope": [],
-        "query": {},
-        "response": {}
+        "body": {
+          "userId": "Number",
+          "activityId": "Number"
+        },
+        "response": "types.visit"
       }
       },
-      "/:id/volunteers": {
+      "/:id/volunteer_logs": {
         "GET": {
           "description": "Retreive volunteer information for a user",
           "auth": true,
           "scope": [],
           "query": {
             "fields": ["String"],
-            "since": "String",
-            "until": "String"
+            "filter": {
+              "since": "String",
+              "until": "String"
+            }
           },
           "response": {
             "totalVolunteerHours": "Number",
             "volunteerLogs": ["types.volunteerLog"]
           }
-        },
+        }
+      },
+      "/:me/volunteer_logs": {
         "POST": {
-          "description": "",
+          "description": "Add volunteer log for your user account",
           "auth": true,
           "scope": [],
           "query": {
@@ -504,6 +853,33 @@
             "loggedAt": "String"
           },
           "response": "types.volunteerLog"
+        }
+      },
+      "/me/volunteer_logs/:id": {
+        "PUT": {
+          "description": "Update volunteer log for your user account",
+          "auth": true,
+          "scope": [],
+          "body": {
+            "organisationId":"Number",
+            "volunteerActvity": "String",
+            "duration": "Number",
+            "loggedAt": "String"
+          },
+          "response": "types.volunteerLog"
+        },
+        "DELETE": {
+          "description": "Delete volunteer log for your user account",
+          "auth": true,
+          "scope": [],
+          "body": {
+            "organisationId":"Number",
+            "volunteerActvity": "String",
+            "duration": "Number",
+            "loggedAt": "String",
+            "delete": "Boolean"
+          },
+          "response": null
         }
       },
       "/:id/outreach": {
@@ -529,11 +905,24 @@
     "/visitors": {
       "description": "Alias for /users/** where user role is VISITOR"
     },
-    "/genders": {},
-    "/outreach": {
-      "/outreach/type/:id": {
+    "/genders": {
+      "/": {
         "GET": {
-          "description": "",
+          "description": "Retrieve gender catagories",
+          "auth": true,
+          "scope": [],
+          "query": {
+          },
+          "response": {
+            "genders": ["String"]
+          }
+        }
+      }
+    },
+    "/outreach": {
+      "/outreach/type/:id/campaing_targets": {
+        "GET": {
+          "description": "Retrieve campaign targets for an outreach type",
           "auth": true,
           "scope": [],
           "query": {
@@ -547,18 +936,3 @@
     }
   }
 }
-
-
-
-{
-  "description": "",
-  "/": {
-    "GET": {
-      "description": "",
-      "auth": true,
-      "scope": [],
-      "query": {},
-      "response": {}
-    }
-  }
-},

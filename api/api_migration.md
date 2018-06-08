@@ -17,7 +17,8 @@ New API can be found in [json format here](./api.json)
 
 ## /organisations
 /organisations
-/organisations/:id || me
+/organisations/:id
+### /organisations/me
 
 `PUT` replaces `/api/cb/details/update` 👣 visitor app
 
@@ -46,8 +47,7 @@ New API can be found in [json format here](./api.json)
 `GET` replaces `/api/users/filtered`  👣 visitor app   
 `GET` replaces `/api/users/chart-all`  👣 visitor app  
 
-### /organisations/:id/volunteers 
-🤔 volunteers here reffers to volunteer logs. In two minds whether this is a better category over `/volunteer_logs`  
+### /organisations/:id/volunteer_logs
 `GET` replaces `/organisations/{organisation}/summary` ⏱ volunteer app  
 `GET` replaces `/logs/admin/{user}` ⏱ volunteer app  
 
@@ -66,7 +66,10 @@ New API can be found in [json format here](./api.json)
 `POST` replaces `/api/admin/login` 👣 visitor app  
 `POST` replaces `/users/login`  ⏱ volunteer app  
 
-### /users/:id || me
+### /users/:id 
+### /users/me/volunteers
+
+### /users/me/visitors
 `GET` replaces `/api/user/details` 👣 visitor app  
 `GET` replaces `/api/admin/check` 👣 visitor app  
 `GET` replaces `/api/user/name-from-scan` 👣 visitor app   🤔 not sure if this should be covered here with qr params or under a `/users/:id/qr_code` route.  
@@ -76,7 +79,7 @@ New API can be found in [json format here](./api.json)
 ### /users/me/organisation
 `GET` replaces /api/users/cb-name 👣 visitor app 
 
-### /users/:id/password_reset
+### /users/password_reset
 `POST` replaces `/api/cb/pwd/change` 👣 visitor app  
 `POST` replaces `/api/cb/pwd/reset` 👣 visitor app
 
