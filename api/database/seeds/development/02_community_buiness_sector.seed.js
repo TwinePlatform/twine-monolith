@@ -1,6 +1,5 @@
 exports.seed = (knex) =>
   knex('community_business_sector')
-    .truncate()
     .insert([
       { sector_name: 'Art centre or facility' },
       { sector_name: 'Community hub, facility or space' },

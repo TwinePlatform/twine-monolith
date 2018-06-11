@@ -1,6 +1,5 @@
 exports.seed = (knex) =>
   knex('volunteer_activity')
-    .truncate()
     .insert([
       { volunteer_activity_name: 'Helping with raising funds (shop, events…)' },
       { volunteer_activity_name: 'Outdoor and practical work' },
