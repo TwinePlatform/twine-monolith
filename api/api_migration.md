@@ -51,7 +51,7 @@ New API can be found in [json format here](./api.json)
 `GET` replaces `/organisations/{organisation}/summary` ⏱ volunteer app  
 `GET` replaces `/logs/admin/{user}` ⏱ volunteer app  
 
-/organisations/:id/meetings (🤔 i don't think we need this)
+/organisations/:id/meetings
 
 ### /organisations/:id/outreach
 `GET` replaces `/outreaches/{organisation}/bytype/{id}` ⏱ volunteer app
@@ -72,7 +72,7 @@ New API can be found in [json format here](./api.json)
 ### /users/me/visitors
 `GET` replaces `/api/user/details` 👣 visitor app  
 `GET` replaces `/api/admin/check` 👣 visitor app  
-`GET` replaces `/api/user/name-from-scan` 👣 visitor app   🤔 not sure if this should be covered here with qr params or under a `/users/:id/qr_code` route.  
+`GET` replaces `/api/user/name-from-scan` 👣 visitor app
 
 `PUT` replaces `/api/qr/generator` 👣 visitor app  
 
@@ -88,7 +88,7 @@ New API can be found in [json format here](./api.json)
 ### /users/:id/visit_activities/:id
 `POST` replaces `/api/visit/add` 👣 visitor app  
 
-### /users/:id/volunteers
+### /users/:id/volunteer_logs
 `GET` replaces `/logs/user/{user}/total` ⏱ volunteer app  
 `GET` replaces `/logs/user/{user}/total/days/{days}` ⏱ volunteer app  
 
@@ -98,8 +98,7 @@ New API can be found in [json format here](./api.json)
 
 `POST` replaces `/logs/sync` ⏱ volunteer app 🤔 this could _potentially_ need its own route depending on how offline syncing is set up in the app
 
-/users/:id/volunteers/:id  
-🤔 volunteers here reffers to volunteer logs. In two minds whether this is a better category over volunteers
+/users/:id/volunteer_logs/:id  
 
 ### /users/:id/outreach
 `GET` replaces `/meetings/user/{user}` ⏱ volunteer app  NB: this route is currently not being used
@@ -116,8 +115,8 @@ New API can be found in [json format here](./api.json)
 /genders
 
 ## /outreach
-### /outreach/type/:id
-`GET` replaces `/outreachChildTypes/parent/{id}` ⏱ volunteer app 🤔 return outreact types campaign targets
+### /outreach/type/:id/campaing_targets
+`GET` replaces `/outreachChildTypes/parent/{id}` ⏱ volunteer app
 
 ## DEPRECATED Routes
 `/survey-answers` ⏱ volunteer app - data to be stored and retrieved from frontline  
