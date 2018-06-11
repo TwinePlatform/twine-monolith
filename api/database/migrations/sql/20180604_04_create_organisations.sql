@@ -79,16 +79,6 @@ CREATE TABLE community_business (
 );
 
 
-CREATE TABLE organisation_invitation (
-  organisation_invitation_id SERIAL NOT NULL UNIQUE,
-  invitation_status          ENUM_invitation_status NOT NULL,
-  created_at                 TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  modified_at                TIMESTAMP WITH TIME ZONE,
-  deleted_at                 TIMESTAMP WITH TIME ZONE,
-
-  CONSTRAINT organisation_invitation_pk PRIMARY KEY (organisation_invitation_id)
-);
-
 /*
  * Triggers
  */
@@ -102,7 +92,4 @@ CREATE TRIGGER update_funding_body_modified_at BEFORE UPDATE ON funding_body
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
 
 CREATE TRIGGER update_community_business_modified_at BEFORE UPDATE ON community_business
-  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
-
-CREATE TRIGGER update_organisation_invitation_modified_at BEFORE UPDATE ON organisation_invitation
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();

@@ -6,11 +6,12 @@ CREATE TABLE user_account (
   user_account_id                  SERIAL NOT NULL UNIQUE,
   user_name                        VARCHAR(100) NOT NULL,
   user_secret                      VARCHAR(64) NOT NULL,
+  qr_code                          VARCHAR,
   gender                           ENUM_gender NOT NULL DEFAULT 'prefer not to say',
-  email                            VARCHAR(100),
+  email                            VARCHAR(100) NOT NULL UNIQUE,
   phone_number                     VARCHAR(20),
   post_code                        VARCHAR(10),
-  birth_year                       INT NOT NULL,
+  birth_year                       INT,
   is_email_contact_consent_granted BOOLEAN NOT NULL DEFAULT false,
   is_sms_contact_consent_granted   BOOLEAN NOT NULL DEFAULT false,
   created_at                       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -18,15 +19,15 @@ CREATE TABLE user_account (
   deleted_at                       TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT user_account_pk                  PRIMARY KEY (user_account_id),
-  CONSTRAINT user_account_sensible_birth_year CHECK       (birth_year > 1890 AND birth_year < date_part('year', CURRENT_DATE))
+  CONSTRAINT user_account_sensible_birth_year CHECK       (birth_year IS NULL OR (birth_year > 1890 AND birth_year < date_part('year', CURRENT_DATE)))
 );
 
 
-CREATE TABLE user_role (
-  user_role_id   SERIAL NOT NULL UNIQUE,
-  user_role_name VARCHAR NOT NULL UNIQUE,
+CREATE TABLE access_role (
+  access_role_id   SERIAL NOT NULL UNIQUE,
+  access_role_name VARCHAR NOT NULL UNIQUE,
 
-  CONSTRAINT user_role_pk PRIMARY KEY (user_role_id)
+  CONSTRAINT access_role_pk PRIMARY KEY (access_role_id)
 );
 
 
@@ -63,23 +64,6 @@ CREATE TABLE access_role_permission (
   CONSTRAINT access_role_permission_to_access_role_fk FOREIGN KEY (access_role_id) REFERENCES access_role ON DELETE CASCADE,
   CONSTRAINT access_role_permission_to_permission_fk  FOREIGN KEY (permission_id)  REFERENCES permission  ON DELETE CASCADE,
   CONSTRAINT access_role_permission_unique_row        UNIQUE      (access_role_id, permission_id)
-);
-
-
-
-CREATE TABLE user_secret_reset (
-  user_secret_reset_id SERIAL NOT NULL UNIQUE,
-  user_account_id      INT NOT NULL,
-  reset_token          VARCHAR NOT NULL UNIQUE,
-  created_at           TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  expires_at           TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP + interval '1 day',
-  used_at              TIMESTAMP WITH TIME ZONE,
-  deleted_at           TIMESTAMP WITH TIME ZONE,
-
-  CONSTRAINT user_secret_reset_pk                 PRIMARY KEY (user_secret_reset_id),
-  CONSTRAINT user_secret_reset_to_user_account_fk FOREIGN KEY (user_account_id) REFERENCES user_account ON DELETE CASCADE,
-  CONSTRAINT user_secret_reset_valid_expiry       CHECK       (expires_at > created_at),
-  CONSTRAINT user_secret_reset_valid_usage        CHECK       (used_at IS NULL OR (used_at < expires_at AND used_at > created_at))
 );
 
 

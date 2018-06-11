@@ -38,6 +38,7 @@ CREATE TABLE outreach_meeting (
   outreach_campaign_id     INT NOT NULL,
   outreach_meeting_type_id INT NOT NULL,
   outreach_partner         VARCHAR(100) NOT NULL,
+  meeting_subject          VARCHAR(240) NOT NULL,
   created_at               TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at              TIMESTAMP WITH TIME ZONE,
   deleted_at               TIMESTAMP WITH TIME ZONE,
@@ -49,7 +50,7 @@ CREATE TABLE outreach_meeting (
 );
 
 
-CREATE TABLE outreach_campaign_target (
+CREATE TABLE outreach_campaign_target_type (
   outreach_campaign_target_id   SERIAL NOT NULL UNIQUE,
   outreach_campaign_target_name VARCHAR NOT NULL UNIQUE,
 
@@ -57,7 +58,7 @@ CREATE TABLE outreach_campaign_target (
 );
 
 
-CREATE TABLE outreach_campaign_valid_target (
+CREATE TABLE outreach_campaign_target (
   outreach_campaign_target_id INT NOT NULL,
   outreach_type_id            INT NOT NULL,
 
