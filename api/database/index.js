@@ -1,18 +1,22 @@
 const fs = require('fs');
 const path = require('path');
-const { compose, apply, last } = require('ramda');
+const { compose, last, head } = require('ramda');
 
 const MIGRATIONS_BASE_PATH = path.resolve(__dirname, 'migrations');
-// const SEEDS_BASE_PATH = path.resolve(__dirname, 'seeds');
+
+// readFile :: String -> String
+const readFile = (fpath) => fs.readFileSync(fpath, 'utf8');
 
 // buildQuery :: String -> KnexClient -> Promise ()
-exports.buildQuery =
-  (path) =>
-    (knex) =>
-      compose(knex.raw, fs.readFileSync, apply(path.resolve))(path);
+exports.buildQuery = (path) => (knex) => compose(knex.raw, readFile)(path);
 
 // buildPath :: String -> String
-exports.buildPath = (fname) => [MIGRATIONS_BASE_PATH, 'sql', fname.replace('.js', '.sql')];
+exports.buildPath = (fname) =>
+  head(fname
+    .split('/')
+    .slice(-1)
+    .map((s) => s.replace('.js', '.sql'))
+    .map((s) => path.resolve(MIGRATIONS_BASE_PATH, 'sql', s)));
 
 // buildQueryFromFile :: String -> KnexClient -> Promise ()
 exports.buildQueryFromFile = compose(exports.buildQuery, exports.buildPath);
@@ -30,6 +34,7 @@ const templates = {
   js: [
     'const { buildQueryFromFile } = require(\'..\');',
     'exports.up = buildQueryFromFile(__filename);',
+    'exports.down = () => {};',
   ].join('\n'),
 };
 
@@ -40,7 +45,7 @@ exports.migrate = {
     const newVersion = Number(last(files).split('_')[1]) + 1;
     const newFilename = `${date}_${newVersion}_${name.toLowerCase().replace(/\s/g, '_')}`;
 
-    write(path.resolve(__dirname, 'migrations', 'sql', `${newFilename}.sql`), templates.sql);
-    write(path.resolve(__dirname, 'migrations', `${newFilename}.js`), templates.js);
+    write(path.resolve(MIGRATIONS_BASE_PATH, 'sql', `${newFilename}.sql`), templates.sql);
+    write(path.resolve(MIGRATIONS_BASE_PATH, `${newFilename}.js`), templates.js);
   },
 };
