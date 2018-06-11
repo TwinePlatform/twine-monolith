@@ -41,4 +41,7 @@ module.exports = {
       directory: Joi.string().min(1).required(),
     }),
   }),
+  email: Joi.object({
+    postmark_key: Joi.string().required(),
+  }),
 };

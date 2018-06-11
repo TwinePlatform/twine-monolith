@@ -18,4 +18,7 @@ module.exports = {
       directory: path.resolve(__dirname, '..', 'database', 'seeds', 'development'),
     },
   },
+  email: {
+    postmark_key: process.env.POSTMARK_KEY_DEVELOPMENT,
+  },
 };
