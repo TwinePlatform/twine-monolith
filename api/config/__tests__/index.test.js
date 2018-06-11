@@ -35,51 +35,23 @@ describe('Config', () => {
     fs.unlinkSync(fpath);
   });
 
-  test(`readConfig | ${DEVELOPMENT} | without SSL`, () => {
-    const temp = process.env.DATABASE_URL_DEV;
-    process.env.DATABASE_URL_DEV = temp.replace('ssl=true', '');
-
-    const config = readConfig(DEVELOPMENT);
-
-    expect(config.psql.ssl).toBe(false);
-
-    process.env.DATABASE_URL_DEV = temp;
-  });
-
-  test(`readConfig | ${DEVELOPMENT} | with SSL`, () => {
-    const temp = process.env.DATABASE_URL_DEV;
-    process.env.DATABASE_URL_DEV = `${temp.replace(/\?.*/, '')}?ssl=true`;
-
-    const config = readConfig(DEVELOPMENT);
-
-    expect(config.psql.ssl).toBe(true);
-
-    process.env.DATABASE_URL_DEV = temp;
-  });
-
   test('Config | validateConfig | valid config', () => {
     const cfg = {
+      root: __dirname,
       env: DEVELOPMENT,
       web: {
         host: 'localhost',
         port: 1000,
         tls: null,
       },
-      psql: {
-        host: 'localhost',
-        port: 5432,
-        database: 'postgres',
-        user: 'foo',
-      },
-      email: {
-        postmark_key: 'hello',
-        twine_email: 'visitor@twineplatform.org',
-      },
-      session: {
-        standard_jwt_secret: 'secretstring20202020',
-        cb_admin_jwt_secret: 'secretstring20202020',
-        hmac_secret: 'secretstringagain202020',
-        ttl: 108000000,
+      knex: {
+        client: 'pg',
+        connection: {
+          host: 'localhost',
+          port: 5432,
+          database: 'postgres',
+          user: 'foo',
+        },
       },
     };
 
@@ -94,21 +66,13 @@ describe('Config', () => {
         port: 1000,
         tls: null,
       },
-      psql: {
-        host: 'localhost',
-        port: 5432,
-        database: 'postgres',
-        user: 'foo',
-      },
-      email: {
-        postmark_key: null,
-        twine_email: null,
-      },
-      session: {
-        standard_jwt_secret: null,
-        cb_admin_jwt_secret: null,
-        hmac_secret: null,
-        ttl: 108000000,
+      knex: {
+        connection: {
+          host: 'localhost',
+          port: 5432,
+          database: 'postgres',
+          user: 'foo',
+        },
       },
     };
 

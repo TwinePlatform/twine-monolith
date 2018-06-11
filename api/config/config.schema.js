@@ -3,7 +3,6 @@
  *
  * Specifies the required shape and content of the configuration object.
  */
-const path = require('path');
 const Joi = require('joi');
 const { DEVELOPMENT, TESTING, PRODUCTION } = require('./environments');
 
@@ -28,30 +27,18 @@ module.exports = {
       port: Joi.number().min(0).max(65535).required(),
       database: Joi.string().min(1).replace(/^\//, '').required(),
       user: Joi.string().min(1).required(),
-      password: Joi.string(),
+      password: Joi.string().optional(),
       ssl: Joi.bool().default(false),
     }),
     pool: Joi.object({
       min: 3,
     }),
     migrations: Joi.object({
-      tableName: 'knex_migrations',
-      directory: path.resolve(__dirname, '..', 'database', 'migrations'),
+      tableName: Joi.string().min(1).required(),
+      directory: Joi.string().min(1).required(),
     }),
     seeds: Joi.object({
-      directory: path.resolve(__dirname, '..', 'database', 'seeds', 'development'),
+      directory: Joi.string().min(1).required(),
     }),
-  }),
-  email: Joi.object({
-    postmark_key: Joi.string().required(),
-  }),
-  session: Joi.object({
-    standard_jwt_secret: Joi.string().min(20).required(),
-    cb_admin_jwt_secret: Joi.string().min(20).required(),
-    hmac_secret: Joi.string().min(20).required(),
-    ttl: Joi.number().integer().min(0).max(3e10), // milliseconds
-  }),
-  validation: Joi.object({
-    options: Joi.object(),
   }),
 };

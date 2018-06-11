@@ -16,27 +16,14 @@ module.exports = {
     port: 1000,
     tls: null,
   },
-  psql: {
-    host: null,
-    port: null,
-    database: null,
-    user: null,
-    password: null,
-    ssl: false,
-  },
-  email: {
-    postmark_key: null,
-  },
-  session: {
-    standard_jwt_secret: process.env.STANDARD_JWT_SECRET,
-    cb_admin_jwt_secret: process.env.CB_ADMIN_JWT_SECRET,
-    hmac_secret: process.env.HMAC_SECRET,
-    ttl: 30 * 60 * 1000, // 30 minutes in ms
-  },
-  validation: {
-    options: {
-      abortEarly: false,
-      stripUnknown: false,
+  knex: {
+    client: 'pg',
+    connection: {
+      host: null,
+      port: null,
+      database: null,
+      user: null,
+      ssl: false,
     },
   },
 };
