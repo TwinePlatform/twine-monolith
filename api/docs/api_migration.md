@@ -122,3 +122,6 @@ New API can be found in [json format here](./api.json)
 `/survey-answers` ⏱ volunteer app - data to be stored and retrieved from frontline  
 `/organisations/{organisation}/financial-data` ⏱ volunteer app - data to be stored and retrieved from frontline
 
+## References
+- [RESTful API Design Guidelines](https://hackernoon.com/restful-api-designing-guidelines-the-best-practices-60e1d954e7c9)
+- [Best Practices for Pragmatic RESTful API](https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
