@@ -1,4 +1,6 @@
 # Twine API Project Documentation
 
 ## Contents
-* [Data model](./data_model.md)
+* [Database](./database.md)
+* [Getting started](./getting_started.md)
+* [Configuration](./configuration.md)
