@@ -1,28 +1,30 @@
 const fs = require('fs');
 const path = require('path');
-const { readConfig, validateConfig, DEVELOPMENT, TESTING, PRODUCTION } = require('..');
+const {
+  readConfig, validateConfig, DEVELOPMENT, TESTING, PRODUCTION,
+} = require('..');
 
 
 describe('Config', () => {
-  test(`readConfig | ${DEVELOPMENT} | undefined path`, (t) => {
+  test(`readConfig | ${DEVELOPMENT} | undefined path`, () => {
     const config = readConfig(DEVELOPMENT);
 
     expect(config.web).toEqual({ port: 4000, host: 'localhost', tls: null });
   });
 
-  test(`readConfig | ${TESTING} | undefined path`, (t) => {
+  test(`readConfig | ${TESTING} | undefined path`, () => {
     const config = readConfig(TESTING);
 
     expect(config.web).toEqual({ port: 4001, host: 'localhost', tls: null });
   });
 
-  test(`readConfig | ${PRODUCTION} | undefined path`, (t) => {
+  test(`readConfig | ${PRODUCTION} | undefined path`, () => {
     const config = readConfig(PRODUCTION);
 
     expect(config.web).toEqual({ port: 4002, host: 'localhost', tls: null });
   });
 
-  test(`readConfig | ${DEVELOPMENT} | defined path`, (t) => {
+  test(`readConfig | ${DEVELOPMENT} | defined path`, () => {
     const fpath = path.join(__dirname, 'foo.json');
 
     fs.writeFileSync(fpath, JSON.stringify({ web: { port: 1000 } }));
@@ -33,7 +35,7 @@ describe('Config', () => {
     fs.unlinkSync(fpath);
   });
 
-  test(`readConfig | ${DEVELOPMENT} | without SSL`, (t) => {
+  test(`readConfig | ${DEVELOPMENT} | without SSL`, () => {
     const temp = process.env.DATABASE_URL_DEV;
     process.env.DATABASE_URL_DEV = temp.replace('ssl=true', '');
 
@@ -44,7 +46,7 @@ describe('Config', () => {
     process.env.DATABASE_URL_DEV = temp;
   });
 
-  test(`readConfig | ${DEVELOPMENT} | with SSL`, (t) => {
+  test(`readConfig | ${DEVELOPMENT} | with SSL`, () => {
     const temp = process.env.DATABASE_URL_DEV;
     process.env.DATABASE_URL_DEV = `${temp.replace(/\?.*/, '')}?ssl=true`;
 
@@ -55,7 +57,7 @@ describe('Config', () => {
     process.env.DATABASE_URL_DEV = temp;
   });
 
-  test('Config | validateConfig | valid config', (t) => {
+  test('Config | validateConfig | valid config', () => {
     const cfg = {
       env: DEVELOPMENT,
       web: {
@@ -81,11 +83,10 @@ describe('Config', () => {
       },
     };
 
-    t.doesNotThrow(() => validateConfig(cfg));
-    t.end();
+    expect(() => validateConfig(cfg)).not.toThrow();
   });
 
-  test('Config | validateConfig | invalid config', (t) => {
+  test('Config | validateConfig | invalid config', () => {
     const cfg = {
       env: DEVELOPMENT,
       web: {
@@ -111,8 +112,7 @@ describe('Config', () => {
       },
     };
 
-    t.throws(() => validateConfig(cfg));
-    t.end();
+    expect(() => validateConfig(cfg)).toThrow();
   });
 
 });

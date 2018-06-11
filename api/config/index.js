@@ -35,7 +35,9 @@ const parseDbUrl = (str) => {
 
   const [user, password] = auth.split(':');
 
-  return { database: database.slice(1), host, port, user, password, ssl: Boolean(ssl) };
+  return {
+    database: database.slice(1), host, port, user, password, ssl: Boolean(ssl),
+  };
 };
 
 
@@ -97,6 +99,7 @@ const getConfig = (env, path) => validateConfig(readConfig(env, path));
 
 
 module.exports = {
+  parseDbUrl,
   readConfig,
   validateConfig,
   getConfig,

@@ -3,6 +3,7 @@
  *
  * Specifies the required shape and content of the configuration object.
  */
+const path = require('path');
 const Joi = require('joi');
 const { DEVELOPMENT, TESTING, PRODUCTION } = require('./environments');
 
