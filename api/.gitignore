@@ -70,3 +70,8 @@ Thumbs.db
 
 # local vs code settigns
 .vscode
+
+# Application configuration
+config.development.js
+config.testing.js
+config.production.js
