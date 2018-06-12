@@ -23,7 +23,7 @@
       "subscription": "String"
     },
     "organisationTrainingSession": {
-      "trainingSessionAttendees": ["Number"],
+      "trainingSessionAttendees": "Number",
       "trainingSessionNotes": "String",
       "eventDate": "String"
     },
@@ -46,7 +46,7 @@
         "organisationName": "String"
       }
     },
-    "visitorUser": {
+    "volunteerUser": {
       "id": "Number",
       "userType": "String",
       "name": "String",
@@ -61,7 +61,7 @@
       "lastActiveAt": "String",
       "modifiedAt": "String"
     },
-    "volunteerUser": {
+    "visitorUser": {
       "id": "Number",
       "userType": "String",
       "name": "String",
@@ -88,7 +88,9 @@
       "friday": "Boolean",
       "saturday": "Boolean",
       "sunday": "Boolean",
-      "deleted": "Boolean"
+      "createdAt": "String",
+      "modifiedAt": "String",
+      "deletedAt": "Boolean"
     },
     "visit": {
       "id": "Number",
@@ -98,7 +100,6 @@
     "outreach": {
       "id": "Number",
       "organisationName": "String",
-      "userOwner": "String",
       "outreachCampaignType": "String",
       "outreachCampaignTarget": ["String"],
       "createdAt": "String",
@@ -107,6 +108,7 @@
     },
     "meeting": {
       "id": "Number",
+      "userId": "String",
       "meetingType": "String",
       "outreachPartner": "String",
       "createdAt": "String",
@@ -132,42 +134,6 @@
             "id": "String",
             "sectorName": "String"
           }]
-        },
-        "POST": {
-          "description": "Add a new sector",
-          "auth": true,
-          "intendedFor": ["twineAdmin"],
-          "scope": ["dropdown_options:write"],
-          "body": {
-            "sectorName": "String"
-          },
-          "response": [{
-            "id": "String",
-            "sectorName": "String"
-          }]
-        },
-        "PUT": {
-          "description": "Update a sector",
-          "auth": true,
-          "intendedFor": ["twineAdmin"],
-          "scope": ["dropdown_options:write"],
-          "body": {
-            "sectorName": "String"
-          },
-          "response": [{
-            "id": "String",
-            "sectorName": "String"
-          }]
-        },
-        "DELETE": {
-          "description": "Delete a sector",
-          "auth": true,
-          "intendedFor": ["twineAdmin"],
-          "scope": ["dropdown_options:delete"],
-          "query": {
-            "sectorName": "String"
-          },
-          "response": null
         }
       },
       "/:id/organisations": {
@@ -182,12 +148,7 @@
           "response": {
             "totalOrganisations": "Number",
             "organisationsList": [{
-              "organisationDetails": "types.organisationDetails",
-              "childOrganisations": [{
-                "id": "Number",
-                "name": "String"
-              }],
-              "trainingSessionsList": "types.organisationTrainingDetails"
+              "organisationDetails": "types.organisationDetails"
             }]
           }
         }
@@ -207,42 +168,6 @@
             "id": "String",
             "regionName": "String"
           }]
-        },
-        "POST": {
-          "description": "Add a new region",
-          "auth": true,
-          "intendedFor": ["twineAdmin"],
-          "scope": ["dropdown_options:write"],
-          "query": {
-            "regionName": "String"
-          },
-          "response": [{
-            "id": "String",
-            "regionName": "String"
-          }]
-        },
-        "PUT": {
-          "description": "Update a region",
-          "auth": true,
-          "intendedFor": ["twineAdmin"],
-          "scope": ["dropdown_options:write"],
-          "query": {
-            "regionName": "String"
-          },
-          "response": [{
-            "id": "String",
-            "regionName": "String"
-          }]
-        },
-        "DELETE": {
-          "description": "Delete a region",
-          "auth": true,
-          "intendedFor": ["twineAdmin"],
-          "scope": ["dropdown_options:delete"],
-          "query": {
-            "regionName": "String"
-          },
-          "response": null
         }
       },
       "/:id/organisations": {
@@ -256,14 +181,7 @@
           },
           "response": {
             "totalOrganisations": "Number",
-            "organisationsList": [{
-              "organisationDetails": "types.organisationDetails",
-              "childOrganisations": [{
-                "id": "Number",
-                "name": "String"
-              }],
-              "trainingSessionsList": "types.organisationTrainingDetails"
-            }]
+            "organisationsList": ["types.organisationDetails"]
           }
         }
       }
@@ -275,11 +193,40 @@
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody"],
           "scope": ["organisations_details-children:read"],
-          "query": {},
+          "query": {
+            "fields": ["String"]
+          },
           "response": {
             "totalOrganisations": "Number",
             "organisationsList": ["types.organisation"]
           }
+        },
+        "POST": {
+          "description": "Add a single organisation",
+          "auth": true,
+          "intendedFor": ["twineAdmin", "fundingBody"],
+          "scope": ["organisations_details-children:write"],
+          "query": {
+            "id": "Number",
+            "name": "String",
+            "logo_url": "String",
+            "address1": "String",
+            "address2": "String",
+            "townCity": "String",
+            "postCode": "String",
+            "coordinates": "String",
+            "region": "String",
+            "sector": "String",
+            "registeredAt": "String",
+            "lastActiveAt": "String",
+            "modifiedAt": "String",
+            "turnoverBand": "String",
+            "360GivingId": "String",
+            "fundingProgramme": "String",
+            "fundingBody": "String",
+            "subscription": "String"
+          },
+          "response": "types.organisation"
         }
       },
       "/:id": {
@@ -292,40 +239,11 @@
           },
           "response": "types.organisation"
         },
-        "POST": {
-          "description": "Add a single organisation",
-          "auth": true,
-          "intendedFor": ["twineAdmin", "fundingBody"],
-          "scope": ["organisations_details-all:write"],
-          "query": {
-            "id": "Number",
-            "name": "String",
-            "logo_url": "String",
-            "address1": "String",
-            "address2": "String",
-            "townCity": "String",
-            "postCode": "String",
-            "coordinates": "String",
-            "region": "String",
-            "sector": "String",
-            "registeredAt": "String",
-            "lastActiveAt": "String",
-            "modifiedAt": "String",
-            "turnoverBand": "String",
-            "360GivingId": "String",
-            "fundingProgramme": "String",
-            "fundingBody": "String",
-            "parentOrganisation": "String",
-            "childOrganisations": ["String"],
-            "subscription": "String"
-          },
-          "response": "types.organisation"
-        },
         "PUT": {
           "description": "Update information about a single organisation",
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody"],
-          "scope": ["organisations_details-all:write"],
+          "scope": ["organisations_details-children:write"],
           "query": {
             "id": "Number",
             "name": "String",
@@ -344,16 +262,14 @@
             "360GivingId": "String",
             "fundingProgramme": "String",
             "fundingBody": "String",
-            "parentOrganisation": "String",
-            "childOrganisations": ["String"],
             "subscription": "String"
           },
           "response": "types.organisation"
         },
         "DELETE": {
-          "description": "Delete a single organisation",
+          "description": "Delete a single organisation that has no subscriptions",
           "intendedFor": ["twineAdmin", "fundingBody"],
-          "scope": ["organisations_details-all:delete"],
+          "scope": ["organisations_details-children:delete"],
           "query": {},
           "response": null
         }
@@ -365,8 +281,10 @@
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "visitor"],
           "scope": ["visit_activies-own:read", "visit_activies-children:read", "visit_activties-parent:read"],
           "query": { 
-            "fields": "today",
-            "deleted": "Boolean"
+            "fields":{
+              "today": "Boolean",
+              "deleted": "Boolean"
+            }
           },
           "response": {
             "totalVisitActivities": "Number",
@@ -425,15 +343,7 @@
           "intendedFor": ["cbAdmin"],
           "scope": ["visit_activies-own:delete"],
           "query": { 
-            "name": "String",
-            "category": "String",
-            "monday?": "Boolean",
-            "tuesday?": "Boolean",
-            "wednesday?": "Boolean",
-            "thursday?": "Boolean",
-            "friday?": "Boolean",
-            "saturday?": "Boolean",
-            "sunday?": "Boolean"
+            "name": "String"
           },
           "response": null
         }
@@ -459,7 +369,7 @@
         "POST": {
           "description": "Send feedback for one organisation",
           "auth": true,
-          "intendedFor": ["visitors"],
+          "intendedFor": ["cb"],
           "scope": ["organisations_feedback-parent:write"],
           "query": {
             "feedbackScore": "Number"
@@ -478,6 +388,7 @@
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["users_details-children:read"],
           "query": {
+            "fields": ["String"],
             "filter":{
               "page": "Number",
               "offset": "Number",
@@ -497,7 +408,7 @@
           }
         }
       },
-      "/:id/visits": {
+      "/:id/visits/aggregates": {
         "GET": {
           "description": "Retreive all visit data for an organisation",
           "auth": true,
@@ -519,7 +430,7 @@
           "response": {
             "totalVisits": "Number",
             "aggregatedVisitsList": {
-              "filterType": [{
+              "[filterType]": [{
                 "activitiyName": "String",
                 "visitsList": ["types.visits"]
               }]
@@ -527,7 +438,7 @@
           }
         }
       },
-      "/:id/volunteerLogs": {
+      "/:id/volunteer_logs": {
         "GET": {
           "description": "Retrieve volunteer logs for a single organisation",
           "auth": true,
@@ -547,7 +458,7 @@
           }
         }
       },
-      "/:id/outreach": { //this may want to be split out to /:id/outreach & /:id/outreach/meetings
+      "/:id/outreach_campaigns": { //this may want to be split out to /:id/outreach & /:id/outreach/meetings
         "GET": {
           "description": "Retrieve all outreach campaings and meetings for a specific organisation",
           "auth": true,
@@ -612,7 +523,7 @@
             "emailConsent": "Boolean",
             "smsConsent": "Boolean",
             "secret": "String",
-            "invitationCode":"String"
+            "adminCode":"String"
           },
           "response": "types.volunteerUser"
         }
@@ -711,9 +622,7 @@
         "description": "Delete a specific user",
         "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
         "scope": ["users_details-children:write"],
-        "body": {
-          "userId": "Number"
-        },
+        "body": {},
         "response": null
         }
       },
@@ -724,7 +633,7 @@
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "visitor", "volunteer", "volunteerAdmin"],
           "scope": ["user_details-own:write"],
           "body": {
-            "userId": "Number",
+            "token": "String",
             "email": "String",
             "password": "String",
             "confirmPassword": "String"
@@ -769,7 +678,8 @@
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["user_details-own:delete"],
           "body": {
-            "userName": "String"
+            "userName": "String",
+            "secret": "String"
           },
           "response": null
         }
@@ -811,7 +721,8 @@
           "intendedFor": ["volunteer"],
           "scope": ["user_details-own:delete"],
           "body": {
-            "userName": "String"
+            "userName": "String",
+            "secret": "String"
           },
           "response": null
         }
@@ -854,23 +765,24 @@
           "intendedFor": ["visitor"],
           "scope": ["user_details-own:delete"],
           "body": {
-            "userName": "String"
+            "userName": "String",
+            "password": "String"
           },
           "response": null
         }
       },
       "/:id/visit_activities/:id": {
-      "POST": {
-        "description": "Adds a visit for a visitor",
-        "auth": true,
-        "intendedFor": ["visitor"],
-        "scope": ["visit_logs-parent:write"],
-        "body": {
-          "userId": "Number",
-          "activityId": "Number"
-        },
-        "response": "types.visit"
-      }
+        "POST": {
+          "description": "Adds a visit for a visitor",
+          "auth": true,
+          "intendedFor": ["visitor"],
+          "scope": ["visit_logs-parent:write"],
+          "body": {
+            "userId": "Number",
+            "activityId": "Number"
+          },
+          "response": "types.visit"
+        }
       },
       "/:id/volunteer_logs": {
         "GET": {
@@ -891,13 +803,13 @@
           }
         }
       },
-      "/:me/volunteer_logs": {
+      "/me/volunteer_logs": {
         "POST": {
           "description": "Add volunteer log for your user account",
           "auth": true,
           "intendedFor": ["volunteer"],
           "scope": ["volunteer_logs-parent:write"],
-          "query": {
+          "body": {
             "organisationId":"Number",
             "volunteerActvity": "String",
             "duration": "Number",
@@ -925,17 +837,11 @@
           "auth": true,
           "intendedFor": ["volunteer"],
           "scope": ["volunteer_logs-parent:delete"],
-          "body": {
-            "organisationId":"Number",
-            "volunteerActvity": "String",
-            "duration": "Number",
-            "loggedAt": "String",
-            "delete": "Boolean"
-          },
+          "body": {},
           "response": null
         }
       },
-      "/:id/outreach": {
+      "/:id/outreach_campaigns": {
         "GET": {
           "description": "Retrieve all outreach campaigns and meetings for a specific user",
           "auth": true,
@@ -971,49 +877,11 @@
           "response": {
             "genders": ["String"]
           }
-        },
-        "POST": {
-          "description": "Add gender catagory",
-          "auth": true,
-          "intendedFor": ["twineAdmin"],
-          "scope": ["dropdown_options:write"],
-          "body": {
-            "gender": "String"
-          },
-          "response": {
-            "genders": ["String"]
-          }
-        },
-        "PUT": {
-          "description": "Update gender catagory",
-          "auth": true,
-          "intendedFor": ["twineAdmin"],
-          "scope": ["dropdown_options:write"],
-          "body": {
-            "genderId": "Number",
-            "gender": "String"
-          },
-          "response": {
-            "genders": ["String"]
-          }
-        },
-        "DELETE": {
-          "description": "Delete gender catagory",
-          "auth": true,
-          "intendedFor": ["twineAdmin"],
-          "scope": ["dropdown_options:delete"],
-          "body": {
-            "genderId": "Number",
-            "gender": "String"
-          },
-          "response": {
-            "genders": ["String"]
-          }
         }
       }
     },
     "/outreach": {
-      "/outreach/type/:id/campaing_targets": {
+      "/outreach/type/:id/campaign_targets": {
         "GET": {
           "description": "Retrieve campaign targets for an outreach type",
           "auth": true,

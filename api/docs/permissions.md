@@ -1,8 +1,7 @@
 # Permissions
 
 ## permission flags
-*-all - all data related to resource
-*-children - data of all child catagories
+*-children - data of all child catagories or ones directly owned
 *-parent - data of all parent catagories
 *-own - data directly owned by user
 
