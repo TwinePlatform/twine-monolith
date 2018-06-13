@@ -17,13 +17,8 @@ const prodConfig = require('./config.production');
 const { DEVELOPMENT, TESTING, PRODUCTION } = require('./environments');
 
 
-/**
- * Parses database connection string into connection object
- * used by node-postgres Client constructor
- *
- * @param   {String} str Database URL to parse
- * @returns {Object}     Database connection parameters
- */
+// Parses database connection string into object used by node-postgres Client constructor
+// parseDbUrl :: String -> Object
 const parseDbUrl = (str) => {
   const {
     auth,
@@ -46,24 +41,22 @@ const parseDbUrl = (str) => {
  * in the various supported deployment environments
  */
 const nodeEnvs = {
+  // :: Config -> Config
   [DEVELOPMENT]: (cfg) => mergeDeepRight(cfg, devConfig),
 
+  // :: Config -> Config
   [TESTING]: (cfg) => mergeDeepRight(cfg, testConfig),
 
+  // :: Config -> Config
   [PRODUCTION]: (cfg) => mergeDeepRight(cfg, prodConfig),
 };
 
 
-/**
- * Given the deployment environment, applies the appropriate
- * transformations to the default config.
- *
- * Allows an optional filepath for a config override JSON file.
- *
- * @param   {String} [env=dev] Environment for which to get config
- * @param   {String} [path]    Path from which to read optional config file
- * @returns {Object}           Fully merged configuration object
- */
+// Given the deployment environment, applies the appropriate
+// transformations to the default config.
+//
+// Allows an optional filepath for a config override JSON file.
+// readConfig :: (String, String) -> Config
 const readConfig = (env = DEVELOPMENT, path) => {
   const config = path
     ? JSON.parse(fs.readFileSync(path, 'utf8'))
@@ -73,12 +66,8 @@ const readConfig = (env = DEVELOPMENT, path) => {
 };
 
 
-/**
- * Validates the given configuration object against the default schema
- *
- * @param   {Object} cfg Configuration object to validate
- * @returns {Object}     Parsed and validated configuration object
- */
+// Validates the given configuration object against the default schema
+// validateConfig! :: Config -> Config
 const validateConfig = (cfg) => {
   const { error, value } = Joi.validate(cfg, schema);
 
@@ -89,12 +78,9 @@ const validateConfig = (cfg) => {
   return value;
 };
 
-/**
- * Utility shortcut for reading and validating configuration
- * @param   {String} env    Deployment environment
- * @param   {String} [path] Optional path for configuration override file
- * @returns {Object}        Validated configuration object
- */
+
+// Utility shortcut for reading and validating configuration
+// getConfig :: (String, String) -> Config
 const getConfig = (env, path) => validateConfig(readConfig(env, path));
 
 
