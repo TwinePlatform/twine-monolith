@@ -1,7 +1,7 @@
 # Permissions
 
 ## permission flags
-*-children - data of all child catagories or ones directly owned
+*-children - data of all child catagories
 *-parent - data of all parent catagories
 *-own - data directly owned by user
 
@@ -20,6 +20,7 @@ organisations_outreach
 
 ### users
 users_details
+users_details_anonymised //not currently used but may be needed for funding bodies to access anonymised user datas
 
 ### volunteers
 volunteer_activities
