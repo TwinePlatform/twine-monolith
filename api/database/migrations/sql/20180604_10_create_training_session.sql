@@ -20,8 +20,8 @@ CREATE TABLE training_session_organisation (
   deleted_at          TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT training_session_organisation_to_training_session_fk FOREIGN KEY (training_session_id) REFERENCES training_session ON DELETE CASCADE,
-  CONSTRAINT training_session_organisation_to_organisation_fk     FOREIGN KEY (organisation_id)     REFERENCES organisation     ON DELETE CASCADE,
-)
+  CONSTRAINT training_session_organisation_to_organisation_fk     FOREIGN KEY (organisation_id)     REFERENCES organisation     ON DELETE CASCADE
+);
 
 
 

@@ -54,7 +54,7 @@ CREATE TABLE outreach_campaign_target_type (
   outreach_campaign_target_type_id SERIAL NOT NULL UNIQUE,
   outreach_campaign_target_name    VARCHAR NOT NULL UNIQUE,
 
-  CONSTRAINT outreach_campaign_target_pk PRIMARY KEY (outreach_campaign_target_type_id)
+  CONSTRAINT outreach_campaign_target_type_pk PRIMARY KEY (outreach_campaign_target_type_id)
 );
 
 
@@ -62,9 +62,9 @@ CREATE TABLE outreach_campaign_target (
   outreach_campaign_target_type_id INT NOT NULL,
   outreach_type_id                 INT NOT NULL,
 
-  CONSTRAINT outreach_campaign_valid_target_to_outreach_campaign_target_fk FOREIGN KEY (outreach_campaign_target_id) REFERENCES outreach_campaign_target ON DELETE CASCADE,
-  CONSTRAINT outreach_campaign_valid_target_to_outreach_type_fk            FOREIGN KEY (outreach_type_id)            REFERENCES outreach_type            ON DELETE CASCADE,
-  CONSTRAINT outreach_campaign_valid_target_is_not_redundant               UNIQUE      (outreach_campaign_target_id, outreach_type_id)
+  CONSTRAINT outreach_campaign_target_to_outreach_campaign_target_type_fk FOREIGN KEY (outreach_campaign_target_type_id) REFERENCES outreach_campaign_target_type ON DELETE CASCADE,
+  CONSTRAINT outreach_campaign_target_to_outreach_type_fk                 FOREIGN KEY (outreach_type_id)                 REFERENCES outreach_type                 ON DELETE CASCADE,
+  CONSTRAINT outreach_campaign_target_is_not_redundant                    UNIQUE      (outreach_campaign_target_type_id, outreach_type_id)
 );
 
 

@@ -21,6 +21,28 @@
   "homepage": "https://github.com/TwinePlatform/twine-api#readme",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "migrate:latest": "knex migrate:latest",
+    "migrate:make": "node ./bin/db.js migrate:make",
+    "seed:make": "knex seed:make",
+    "seed:run": "knex seed:run"
+  },
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "joi": "^13.4.0",
+    "knex": "^0.14.6",
+    "minimist": "^1.2.0",
+    "pg": "^7.4.3",
+    "ramda": "^0.25.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.9.1",
+    "jest": "^23.1.0"
   }
 }
