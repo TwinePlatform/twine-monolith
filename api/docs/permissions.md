@@ -7,8 +7,8 @@
 
 ## resources
 
-### dropdown_options
-dropdown_options (sectors/regions/gender)
+### constants
+constants (sectors/regions/gender/outreach types/meeting types/etc)
 
 ### organisations
 organisations_details
@@ -31,7 +31,6 @@ visit_activites
 visit_logs
 
 ## Permissions module
-
 Permissions and roles will have a many to many relationship documented in the datebase under the `role_permission` linking table.
 Roles and users will have a many to many relationship documented in the database under the `user_account_access_role` linking table.
 A module can be created for easily updating and checking these relationships.
@@ -56,8 +55,8 @@ const User = require('../user');
 // Roles.userHas :: User -> Promise Boolean
 
 // Examples:
-Permissions.grant(Permissions.WRITE, 'visitor', Roles.ORG_ADMIN);
-Permissions.revoke(Permissions.DELETE, 'volunteer_hours', Roles.VOLUNTEER);
+Permissions.grant(Resouce.ORG_DETAILS_CHILD, Permission.WRITE, Roles.ORG_ADMIN);
+Permissions.revoke(Resource.VOLUNTEER_LOGS_OWN, Permissions.DELETE, Roles.VOLUNTEER);
 
 User.byId(1).then(user => Roles.add(Roles.VOLUNTEER, user));
 User.byEmail('foo@bar.com').then(user => Roles.remove(Roles.VISITOR, user));
@@ -69,5 +68,5 @@ User.byEmail('foo@bar.com').then(user => Roles.remove(Roles.VISITOR, user));
 - [Best practices for an authentication system](https://cybersecurity.ieee.org/blog/2016/06/02/design-best-practices-for-an-authentication-system/)
 - [Authorization and authentication in microservices](https://initiate.andela.com/how-we-solved-authentication-and-authorization-in-our-microservice-architecture-994539d1b6e6)
 - [Access control in nodejs](https://blog.nodeswat.com/implement-access-control-in-node-js-8567e7b484d1)
-- [Designing an enterprise RBAC system](https://hackernoon.com/designing-an-enterprise-role-based-access-control-rbac-system-96e645c659b7)  
+- [Designing an enterprise RBAC system](https://hackernoon.com/designing-an-enterprise-role-based-access-control-rbac-system-96e645c659b7)
 - [How To Structure Permissions In A SaaS App](https://heapanalytics.com/blog/engineering/structure-permissions-saas-app)

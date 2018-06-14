@@ -103,7 +103,7 @@
       "sunday": "Boolean",
       "createdAt": "String",
       "modifiedAt": "String",
-      "deletedAt": "Boolean"
+      "deletedAt": "String"
     },
     "visit": {
       "id": "Number",
@@ -121,7 +121,7 @@
     },
     "meeting": {
       "id": "Number",
-      "userId": "String",
+      "userId": "Number",
       "meetingType": "String",
       "outreachPartner": "String",
       "createdAt": "String",
@@ -141,10 +141,10 @@
           "description": "Retrieve all sectors",
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "visitors", "volunteers", "volunteerAdmin"],
-          "scope": ["dropdown_options:read"],
+          "scope": ["constants:read"],
           "query": {},
           "response": [{
-            "id": "String",
+            "id": "Number",
             "sectorName": "String"
           }]
         }
@@ -173,12 +173,12 @@
           "description": "Retrieve all regions",
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "visitors", "volunteers", "volunteerAdmin"],
-          "scope": ["dropdown_options:read"],
+          "scope": ["constants:read"],
           "query": {
             "fields": ["String"]
           },
           "response": [{
-            "id": "String",
+            "id": "Number",
             "regionName": "String"
           }]
         }
@@ -360,7 +360,7 @@
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "visitor"],
           "scope": ["visit_activies-own:read", "visit_activies-children:read", "visit_activties-parent:read"],
-          "query": { 
+          "query": {
             "fields": ["String"],
             "filter":{
               "today": "Boolean",
@@ -377,7 +377,7 @@
           "auth": true,
           "intendedFor": ["cbAdmin"],
           "scope": ["visit_activies-own:write"],
-          "query": { 
+          "query": {
             "name": "String",
             "category": "String",
             "monday": "Boolean",
@@ -405,7 +405,7 @@
           "auth": true,
           "intendedFor": ["cbAdmin"],
           "scope": ["visit_activies-own:write"],
-          "query": { 
+          "query": {
             "name": "String",
             "category": "String",
             "monday": "Boolean",
@@ -423,9 +423,7 @@
           "auth": true,
           "intendedFor": ["cbAdmin"],
           "scope": ["visit_activies-own:delete"],
-          "query": { 
-            "name": "String"
-          },
+          "query": {},
           "response": null
         }
       },
@@ -717,7 +715,7 @@
             "userPostCode": "String",
             "emailConsent": "Boolean",
             "smsConsent": "Boolean",
-            "secret": "String",
+            "password": "String",
             "adminCode":"String",
             "organisationName": "String",
             "logoUrl": "String",
@@ -784,7 +782,7 @@
             "postCode": "String",
             "emailConsent": "Boolean",
             "smsConsent": "Boolean",
-            "secret": "String",
+            "password": "String",
             "adminCode":"String"
           },
           "response": "types.volunteerUser"
@@ -835,7 +833,7 @@
           "intendedFor": ["cbStandardLogin"],
           "scope": [],
           "body": {
-            "secret": "String"
+            "qr_code": "String"
           },
           "response": "types.visitorUser"
         }
@@ -846,7 +844,7 @@
           "scope": null,
           "body": {
             "userName": "String",
-            "secret": "String"
+            "password": "String"
           },
           "response": {}
         }
@@ -942,7 +940,7 @@
           "scope": ["user_details-own:delete"],
           "body": {
             "userName": "String",
-            "secret": "String"
+            "password": "String"
           },
           "response": null
         }
@@ -996,7 +994,7 @@
           "description": "Retrieve gender catagories",
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "volunteer", "visitor", "volunteerAdmin"],
-          "scope": ["dropdown_options:read"],
+          "scope": ["constants:read"],
           "query": {
           },
           "response": {
@@ -1011,7 +1009,7 @@
           "description": "Retrieve campaign targets for an outreach type",
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "volunteerAdmin"],
-          "scope": ["dropdown_options:read"],
+          "scope": ["constants:read"],
           "query": {
             "fields": ["String"]
           },
@@ -1023,7 +1021,7 @@
           "description": "Add campaign targets for an outreach type",
           "auth": true,
           "intendedFor": ["twineAdmin"],
-          "scope": ["dropdown_options:write"],
+          "scope": ["constants:write"],
           "body": {
             "gender": "String"
           },
@@ -1035,7 +1033,7 @@
           "description": "Update campaign targets for an outreach type",
           "auth": true,
           "intendedFor": ["twineAdmin"],
-          "scope": ["dropdown_options:write"],
+          "scope": ["constants:write"],
           "body": {
             "genderId": "Number",
             "gender": "String"
@@ -1048,7 +1046,7 @@
           "description": "Delete campaign targets for an outreach type",
           "auth": true,
           "intendedFor": ["twineAdmin"],
-          "scope": ["dropdown_options:delete"],
+          "scope": ["constants:delete"],
           "body": {
             "genderId": "Number",
             "gender": "String"
