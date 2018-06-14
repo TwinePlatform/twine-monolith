@@ -36,6 +36,12 @@ npm i
 
 This will install dependencies for both the server and client apps.
 
+Next...
+```
+npm i -g typescript
+```
+This will install typescript globally which will compile the project to `./built`
+
 ## Database
 
 Start the postgres server.

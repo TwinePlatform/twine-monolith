@@ -29,13 +29,17 @@
     "seed:make": "knex seed:make",
     "seed:run": "knex seed:run",
     "cover": "jest --coverage",
-    "cover:report": "jest --coverage"
+    "cover:report": "jest --coverage",
+    "dev": "nodemon ./built/index.js"
   },
   "jest": {
     "coverageDirectory": "./coverage"
   },
   "dependencies": {
     "dotenv": "^6.0.0",
+    "hapi": "^17.5.1",
+    "hapi-pino": "^4.0.4",
+    "jest": "^23.1.0",
     "joi": "^13.4.0",
     "knex": "^0.14.6",
     "minimist": "^1.2.0",
@@ -48,6 +52,8 @@
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.9.1",
-    "jest": "^23.1.0"
+    "@types/hapi": "^17.0.12",
+    "typescript": "^2.9.1",
+    "nodemon": "^1.17.5"
   }
 }
