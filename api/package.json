@@ -27,7 +27,12 @@
     "migrate:latest": "knex migrate:latest",
     "migrate:make": "node ./bin/db.js migrate:make",
     "seed:make": "knex seed:make",
-    "seed:run": "knex seed:run"
+    "seed:run": "knex seed:run",
+    "cover": "jest --coverage",
+    "cover:report": "jest --coverage"
+  },
+  "jest": {
+    "coverageDirectory": "./coverage"
   },
   "dependencies": {
     "dotenv": "^6.0.0",
