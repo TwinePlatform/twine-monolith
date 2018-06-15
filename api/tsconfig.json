@@ -10,7 +10,7 @@
     "sourceMap": true
   },
   "include": [
-      "server/**/*"
+      "src/**/*"
   ],
   "exclude": [
     "node_modules"

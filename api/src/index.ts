@@ -11,10 +11,10 @@ server.route(router);
 const init :()=> Promise <void>=  async () => {
   try {
     await server.register({
-    plugin: require('hapi-pino'),
-    options: {
-      prettyPrint: true
-    }
+      plugin: require('hapi-pino'),
+      options: {
+        prettyPrint: true
+      }
   })
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
