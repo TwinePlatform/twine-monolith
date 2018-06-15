@@ -24,7 +24,7 @@ This is just a sketch
 ## Diagram
 ![[application architecture]](./assets/architecture.png)
 
-## Directory Structure
+## Directory Structure
 ```
 /
 |- bin
