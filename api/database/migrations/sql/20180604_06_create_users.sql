@@ -7,7 +7,7 @@ CREATE TABLE user_account (
   user_name                        VARCHAR(100) NOT NULL,
   user_secret                      VARCHAR(64) NOT NULL,
   qr_code                          VARCHAR,
-  gender                           ENUM_gender NOT NULL DEFAULT 'prefer not to say',
+  gender_id                        INT NOT NULL,
   email                            VARCHAR(100) NOT NULL UNIQUE,
   phone_number                     VARCHAR(20),
   post_code                        VARCHAR(10),
@@ -19,6 +19,7 @@ CREATE TABLE user_account (
   deleted_at                       TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT user_account_pk                  PRIMARY KEY (user_account_id),
+  CONSTRAINT user_account_to_gender_fk        FOREIGN KEY (gender_id) REFERENCES gender ON DELETE CASCADE
   CONSTRAINT user_account_sensible_birth_year CHECK       (birth_year IS NULL OR (birth_year > 1890 AND birth_year < date_part('year', CURRENT_DATE)))
 );
 
@@ -32,11 +33,10 @@ CREATE TABLE access_role (
 
 
 CREATE TABLE permission (
-  permission_id SERIAL NOT NULL UNIQUE,
-  entity        VARCHAR NOT NULL UNIQUE,
-  read_access   ENUM_permission_type NOT NULL,
-  write_access  ENUM_permission_type NOT NULL,
-  delete_access ENUM_permission_type NOT NULL,
+  permission_id      SERIAL NOT NULL UNIQUE,
+  entity             VARCHAR NOT NULL UNIQUE,
+  permission_type    ENUM_permission_type NOT NULL,
+  permission_access  ENUM_permission_access NOT NULL,
 
   CONSTRAINT permission_pk PRIMARY KEY (permission_id)
 );
@@ -77,6 +77,12 @@ CREATE TABLE login_event (
   CONSTRAINT login_event_to_user_fk FOREIGN KEY (user_account_id) REFERENCES user_account ON DELETE CASCADE
 );
 
+CREATE TABLE gender (
+  gender_id    SERIAL       NOT NULL UNIQUE,
+  gender_name  VARCHAR(100) NOT NULL UNIQUE,
+
+  CONSTRAINT gender PRIMARY KEY (gender_id)
+);
 
 
 /*
