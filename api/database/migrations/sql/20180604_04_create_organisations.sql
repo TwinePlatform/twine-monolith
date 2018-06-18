@@ -5,7 +5,6 @@
 CREATE TABLE organisation (
   organisation_id    SERIAL NOT NULL UNIQUE,
   organisation_name  VARCHAR(100) NOT NULL,
-  organisation_type  ENUM_organisation_type NOT NULL,
   _360_giving_id     VARCHAR NOT NULL UNIQUE,
   created_at         TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at        TIMESTAMP WITH TIME ZONE,

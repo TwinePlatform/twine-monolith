@@ -1,6 +1,5 @@
 exports.seed = (knex) =>
   knex('outreach_type')
-    .truncate()
     .insert([
       { outreach_type_name: 'Community Share Issue' },
       { outreach_type_name: 'Crowdfunding (donations)' },
