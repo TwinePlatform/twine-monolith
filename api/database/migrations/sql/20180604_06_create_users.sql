@@ -19,7 +19,7 @@ CREATE TABLE user_account (
   deleted_at                       TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT user_account_pk                  PRIMARY KEY (user_account_id),
-  CONSTRAINT user_account_to_gender_fk        FOREIGN KEY (gender_id) REFERENCES gender ON DELETE CASCADE
+  CONSTRAINT user_account_to_gender_fk        FOREIGN KEY (gender_id) REFERENCES gender,
   CONSTRAINT user_account_sensible_birth_year CHECK       (birth_year IS NULL OR (birth_year > 1890 AND birth_year < date_part('year', CURRENT_DATE)))
 );
 
@@ -34,7 +34,7 @@ CREATE TABLE access_role (
 
 CREATE TABLE permission (
   permission_id      SERIAL NOT NULL UNIQUE,
-  entity             VARCHAR NOT NULL UNIQUE,
+  permission_entity  VARCHAR NOT NULL,
   permission_type    ENUM_permission_type NOT NULL,
   permission_access  ENUM_permission_access NOT NULL,
 
