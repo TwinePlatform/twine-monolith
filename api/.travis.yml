@@ -10,7 +10,7 @@ cache:
     - "node_modules"
 
 install:
-  - npm install -g codecov
+  - npm install -g codecov typescript
   - npm install
 
 
@@ -19,6 +19,7 @@ script:
   - npm run cover
   - npm run cover:report
   - codecov
+  - tsc
 
 notifications:
   email:

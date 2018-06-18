@@ -4,10 +4,11 @@
 
 1.  [Pre-requisites](#prerequisites)
 2.  [Getting started](#getting-started)
-3.  [Database](#database)
-4.  [Configuration](#configuration)
-5.  [Server app](#server-app)
-6.  [Client app](#client-app)
+3.  [Running the server](#running-the-server)
+4.  [Database](#database)
+5.  [Configuration](#configuration)
+6.  [Server app](#server-app)
+7.  [Client app](#client-app)
 
 ## Pre-requisites
 
@@ -42,6 +43,27 @@ npm i -g typescript
 ```
 This will install typescript globally which will compile the project to `./built`
 
+## Running the server
+
+### Dev Mode 
+👀 The following scripts are setup to watch changes made and automatically restart the server. Run the following two commands in separate terminals:
+
+```
+npm run watch
+```
+This will make typescript compile whenever a change is made.
+
+```
+npm run dev
+```
+This will restart the server whenever a change is made.
+
+### Production
+The following scripts start the server once.
+ ```
+ npm run build
+ npm run start
+ ```
 ## Database
 
 Start the postgres server.
