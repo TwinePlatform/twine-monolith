@@ -1,6 +1,5 @@
 exports.seed = (knex) =>
   knex('community_business_region')
-    .truncate()
     .insert([
       { region_name: 'East Midlands' },
       { region_name: 'East of England' },

@@ -1,6 +1,5 @@
 exports.seed = (knex) =>
   knex('visit_activity_category')
-    .truncate()
     .insert([
       { visit_activity_category_name: 'Sports' },
       { visit_activity_category_name: 'Arts, Craft, and Music' },
