@@ -15,7 +15,7 @@ const init :()=> Promise <void>=  async () => {
       options: {
         prettyPrint: true
       }
-  })
+    })
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
   } catch (error) {
@@ -23,4 +23,5 @@ const init :()=> Promise <void>=  async () => {
     process.exit(1)
   }
 };
+
 export {server, init}

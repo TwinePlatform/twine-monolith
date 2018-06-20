@@ -43,7 +43,7 @@ describe('route testing', () => {
         method: fixture.method,
         url: fixture.url,
       })
-    expect(response.statusCode).toBe(404);
+    expect(response.statusCode).toBe(fixture.statusCode);
     });
   })
 })
