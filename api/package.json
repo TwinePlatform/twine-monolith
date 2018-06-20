@@ -36,7 +36,21 @@
     "build": "tsc"
   },
   "jest": {
-    "coverageDirectory": "./coverage"
+    "verbose": true,
+    "coverageDirectory": "./coverage",
+    "testPathIgnorePatterns": ["built"],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   },
   "dependencies": {
     "dotenv": "^6.0.0",
@@ -50,13 +64,15 @@
     "ramda": "^0.25.0"
   },
   "devDependencies": {
+    "@types/hapi": "^17.0.12",
+    "@types/jest": "^23.1.1",
     "eslint": "^4.19.1",
     "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.9.1",
-    "@types/hapi": "^17.0.12",
+    "nodemon": "^1.17.5",
     "typescript": "^2.9.1",
-    "nodemon": "^1.17.5"
+    "ts-jest": "^22.4.6"
   }
 }
