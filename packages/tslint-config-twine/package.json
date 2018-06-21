@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "eslint-config-twine",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "ESLint config for all Twine Projects",
   "main": "index.js",
   "scripts": {
@@ -20,10 +20,11 @@
     "url": "https://github.com/TwinePlatform/eslint-config-twine/issues"
   },
   "homepage": "https://github.com/TwinePlatform/eslint-config-twine#readme",
-  "peerDependencies": {
-    "eslint": "^4.19.1"
-  },
   "dependencies": {
-    "eslint-config-airbnb": "^16.1.0"
+    "tslint-config-airbnb": "^5.9.2",
+    "tslint": "^5.10.0",
+    "tslint-consistent-codestyle": "^1.13.1",
+    "tslint-eslint-rules": "^5.3.1",
+    "tslint-microsoft-contrib": "^5.0.3"
   }
 }

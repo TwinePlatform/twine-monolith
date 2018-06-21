@@ -11,11 +11,11 @@ First install the config
 > npm install TwinePlatform/eslint-config-twine
 ```
 
-Then add an `.eslintrc` file that extends the config:
+Then add an `tslint.json` file that extends the config:
 
 ```
 {
-  "extends": "twine"
+    "extends": "eslint-config-twine"
 }
 ```
 
