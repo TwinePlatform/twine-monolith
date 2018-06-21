@@ -22,8 +22,8 @@
   "main": "src/index.js",
   "scripts": {
     "test": "jest",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "tslint --project tsconfig.json",
+    "lint:fix": "tslint --project tsconfig.json --fix",
     "migrate:latest": "knex migrate:latest",
     "migrate:make": "node ./bin/db.js migrate:make",
     "seed:make": "knex seed:make",
@@ -38,7 +38,9 @@
   "jest": {
     "verbose": true,
     "coverageDirectory": "./coverage",
-    "testPathIgnorePatterns": ["built"],
+    "testPathIgnorePatterns": [
+      "built"
+    ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
@@ -64,15 +66,12 @@
     "ramda": "^0.25.0"
   },
   "devDependencies": {
+    "@fimbul/bifrost": "^0.9.0",
     "@types/hapi": "^17.0.12",
     "@types/jest": "^23.1.1",
-    "eslint": "^4.19.1",
     "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
-    "eslint-plugin-import": "^2.12.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.9.1",
     "nodemon": "^1.17.5",
-    "typescript": "^2.9.1",
-    "ts-jest": "^22.4.6"
+    "ts-jest": "^22.4.6",
+    "typescript": "^2.9.1"
   }
 }

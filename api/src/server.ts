@@ -1,5 +1,5 @@
-import * as Hapi from 'hapi'
-import router from './router'
+import * as Hapi from 'hapi';
+import router from './router';
 
 const server :Hapi.Server = new Hapi.Server({
   port: 3000,
@@ -8,20 +8,20 @@ const server :Hapi.Server = new Hapi.Server({
 
 server.route(router);
 
-const init :()=> Promise <void>=  async () => {
+const init :() => Promise <void> =  async () => {
   try {
     await server.register({
       plugin: require('hapi-pino'),
       options: {
-        prettyPrint: true
-      }
-    })
+        prettyPrint: true,
+      },
+    });
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
   } catch (error) {
-    console.log(error)
-    process.exit(1)
+    console.log(error);
+    process.exit(1);
   }
 };
 
-export {server, init}
+export { server, init };
