@@ -65,7 +65,6 @@
     "ramda": "^0.25.0"
   },
   "devDependencies": {
-    "@fimbul/bifrost": "^0.9.0",
     "@types/hapi": "^17.0.12",
     "@types/jest": "^23.1.1",
     "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
