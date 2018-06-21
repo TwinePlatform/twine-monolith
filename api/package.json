@@ -29,7 +29,6 @@
     "seed:make": "knex seed:make",
     "seed:run": "knex seed:run",
     "cover": "jest --coverage",
-    "cover:report": "jest --coverage",
     "dev": "nodemon ./built/index.js",
     "start": "node ./built/index.js",
     "watch": "tsc -w",
