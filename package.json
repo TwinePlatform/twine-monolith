@@ -20,10 +20,11 @@
     "url": "https://github.com/TwinePlatform/eslint-config-twine/issues"
   },
   "homepage": "https://github.com/TwinePlatform/eslint-config-twine#readme",
-  "peerDependencies": {
-    "tslint": "^5.10.0"
-  },
   "dependencies": {
-    "tslint-config-airbnb": "^5.9.2"
+    "tslint-config-airbnb": "^5.9.2",
+    "tslint": "^5.10.0",
+    "tslint-consistent-codestyle": "^1.13.1",
+    "tslint-eslint-rules": "^5.3.1",
+    "tslint-microsoft-contrib": "^5.0.3"
   }
 }
