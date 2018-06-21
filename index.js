@@ -1,5 +1,5 @@
 module.exports = {
-  "extends": "airbnb",
+  "extends": "tslint-config-airbnb",
   "env": {
     "node": true,
     "jest": true
