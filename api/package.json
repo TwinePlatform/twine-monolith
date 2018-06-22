@@ -64,11 +64,14 @@
     "knex": "^0.14.6",
     "minimist": "^1.2.0",
     "pg": "^7.4.3",
+    "postmark": "^1.6.1",
     "ramda": "^0.25.0"
   },
   "devDependencies": {
     "@types/hapi": "^17.0.12",
     "@types/jest": "^23.1.1",
+    "@types/postmark": "^1.4.0",
+    "@types/ramda": "^0.25.34",
     "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
     "nodemon": "^1.17.5",
     "ts-jest": "^22.4.6",

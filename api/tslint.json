@@ -3,6 +3,8 @@
     "rules": {
         "object-shorthand-properties-first": { 
             "severity": "off"
-        }
+        },
+
+        "align": [ false ]
     } 
 }
