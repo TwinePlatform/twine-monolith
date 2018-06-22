@@ -22,21 +22,36 @@
   "main": "src/index.js",
   "scripts": {
     "test": "jest",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "tslint --project tsconfig.json",
+    "lint:fix": "tslint --project tsconfig.json --fix",
     "migrate:latest": "knex migrate:latest",
     "migrate:make": "node ./bin/db.js migrate:make",
     "seed:make": "knex seed:make",
     "seed:run": "knex seed:run",
     "cover": "jest --coverage",
-    "cover:report": "jest --coverage",
     "dev": "nodemon ./built/index.js",
     "start": "node ./built/index.js",
     "watch": "tsc -w",
     "build": "tsc"
   },
   "jest": {
-    "coverageDirectory": "./coverage"
+    "verbose": true,
+    "coverageDirectory": "./coverage",
+    "testPathIgnorePatterns": [
+      "built"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   },
   "dependencies": {
     "dotenv": "^6.0.0",
@@ -50,13 +65,11 @@
     "ramda": "^0.25.0"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
-    "eslint-plugin-import": "^2.12.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.9.1",
     "@types/hapi": "^17.0.12",
-    "typescript": "^2.9.1",
-    "nodemon": "^1.17.5"
+    "@types/jest": "^23.1.1",
+    "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
+    "nodemon": "^1.17.5",
+    "ts-jest": "^22.4.6",
+    "typescript": "^2.9.1"
   }
 }

@@ -139,6 +139,7 @@
       "/": {
         "GET": {
           "description": "Retrieve all sectors",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "visitors", "volunteers", "volunteerAdmin"],
           "scope": ["constants:read"],
@@ -152,6 +153,7 @@
       "/:id/organisations": {
         "GET": {
           "description": "Retrieve all organisations within a sector",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody"],
           "scope": ["organisations_details-children:read"],
@@ -171,6 +173,7 @@
       "/": {
         "GET": {
           "description": "Retrieve all regions",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "visitors", "volunteers", "volunteerAdmin"],
           "scope": ["constants:read"],
@@ -186,6 +189,7 @@
       "/:id/organisations": {
         "GET": {
           "description": "Retrieve all organisations within a region",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody"],
           "scope": ["organisations_details-children:read"],
@@ -203,6 +207,7 @@
       "/": {
         "GET": {
           "description": "Retreive list of all organisations",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody"],
           "scope": ["organisations_details-children:read"],
@@ -216,6 +221,7 @@
         },
         "POST": {
           "description": "Add a single organisation",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody"],
           "scope": ["organisations_details-children:write"],
@@ -245,6 +251,7 @@
       "/:id": {
         "GET": {
           "description": "Retrieve information about a single organisation",
+          "isImplemented": false,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["organisations_details-children:read", "organisations_details-own:read"],
           "query": {
@@ -254,6 +261,7 @@
         },
         "PUT": {
           "description": "Update information about a single organisation",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["organisations_details-children:write", "organisations_details-own:write"],
@@ -281,6 +289,8 @@
         },
         "DELETE": {
           "description": "Delete a single organisation that has no subscriptions",
+          "isImplemented": false,
+          "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["organisations_details-children:delete", "organisations_details-own:delete"],
           "query": {},
@@ -290,6 +300,8 @@
       "/:id/subscriptions": {
         "POST": {
           "description": "Add subscription for a single funding body organisation",
+          "isImplemented": false,
+          "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody"],
           "scope": ["organisations_subscriptions-children:read"],
           "body": {
@@ -302,6 +314,8 @@
       "/:id/children": {
         "GET": {
           "description": "Retrieve all children organisations for a single organisation",
+          "isImplemented": false,
+          "auth":true,
           "intendedFor": ["twineAdmin", "fundingBody"],
           "scope": ["organisations_details-children:read"],
           "query": {
@@ -316,6 +330,8 @@
       "/:id/training_sessions": {
         "GET": {
           "description": "Retrieve all training sessions for a single organisation",
+          "isImplemented": false,
+          "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["organisations_training-children:read", "organisations_training-own:read"],
           "query": {
@@ -328,6 +344,8 @@
         },
         "POST": {
           "description": "Create a training sessions for a single organisation",
+          "isImplemented": false,
+          "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["organisations_training-children:read", "organisations_training-own:read"],
           "query": {
@@ -339,6 +357,8 @@
       "/:id/training_sessions/:id": {
         "PUT": {
           "description": "Update a training sessions for a single organisation",
+          "isImplemented": false,
+          "auth":true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["organisations_training:read", "organisations_training:read"],
           "query": {
@@ -348,6 +368,8 @@
         },
         "DELETE": {
           "description": "Delete training sessions for a single organisation",
+          "isImplemented": false,
+          "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["organisations_training-own:delete"],
           "query": {},
@@ -357,6 +379,7 @@
       "/:id/visit_activities": {
         "GET": {
           "description": "Retrieve all visit activities for an organistion",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "visitor"],
           "scope": ["visit_activies-own:read", "visit_activies-children:read", "visit_activties-parent:read"],
@@ -374,6 +397,7 @@
         },
         "POST": {
           "description": "Add visit activities for an organistion",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["cbAdmin"],
           "scope": ["visit_activies-own:write"],
@@ -394,6 +418,7 @@
       "/:id/visit_activities/:id": {
         "GET": {
           "description": "Retrieve a single visit activity for an organistion",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["visit_activies-own:read", "visit_activies-children:read"],
@@ -402,6 +427,7 @@
         },
         "PUT": {
           "description": "Update a visit activity for an organistion",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["cbAdmin"],
           "scope": ["visit_activies-own:write"],
@@ -420,6 +446,7 @@
         },
         "DELETE": {
           "description": "Soft delete visit activity for an organistion",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["cbAdmin"],
           "scope": ["visit_activies-own:delete"],
@@ -430,6 +457,7 @@
       "/:id/feedback": {
         "GET": {
           "description": "Retreive feedback for one organisation",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["organisations_feedback-children:read", "organisations_feedback-own:read"],
@@ -450,6 +478,7 @@
         },
         "POST": {
           "description": "Send feedback for one organisation",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["cb"],
           "scope": ["organisations_feedback-parent:write"],
@@ -466,6 +495,7 @@
       "/:id/feedback/aggregates": {
         "GET": {
           "description": "Retreive aggregated feedback for one organisation",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["organisations_feedback-children:read", "organisations_feedback-own:read"],
@@ -487,7 +517,8 @@
       "/:id/users/admins": {
         "GET": {
           "description": "Retreive all admin users in an organisation",
-          "auth": {},
+          "isImplemented": false,
+          "auth": true,
           "intendedFor": ["twineAdmin", "cbAdmin"],
           "scope": ["users_details-children:read"],
           "query": {
@@ -511,7 +542,8 @@
       "/:id/users/aggregates": {
         "GET": {
           "description": "Retreive aggregated users in an organisation",
-          "auth": {},
+          "isImplemented": false,
+          "auth": true,
           "intendedFor": ["twineAdmin", "cbAdmin"],
           "scope": ["users_details-children:read"],
           "query": {
@@ -537,7 +569,8 @@
       "/:id/users/visitors": {
         "GET": {
           "description": "Retreive all visitor users in an organisation",
-          "auth": {},
+          "isImplemented": false,
+          "auth": true,
           "intendedFor": ["twineAdmin", "cbAdmin"],
           "scope": ["users_details-children:read"],
           "query": {
@@ -561,7 +594,8 @@
       "/:id/users/volunteers": {
         "GET": {
           "description": "Retreive all volunteer users in an organisation",
-          "auth": {},
+          "isImplemented": false,
+          "auth": true,
           "intendedFor": ["twineAdmin", "cbAdmin"],
           "scope": ["users_details-children:read"],
           "query": {
@@ -585,6 +619,7 @@
       "/:id/visits/aggregates": {
         "GET": {
           "description": "Retreive all visit data for an organisation",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["visit_logs-children:read", "visit_logs-own:read"],
@@ -615,6 +650,7 @@
       "/:id/volunteer_logs": {
         "GET": {
           "description": "Retrieve volunteer logs for a single organisation",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["volunteer_logs-children:read", "volunteer_logs-own:read"],
@@ -635,6 +671,7 @@
       "/:id/volunteer_logs/me": {
         "POST": {
           "description": "Add volunteer log for your user account",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["volunteer"],
           "scope": ["volunteer_logs-parent:write"],
@@ -650,6 +687,7 @@
       "/:id/volunteer_logs/me/:id": {
         "PUT": {
           "description": "Update volunteer log for your user account",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["volunteer"],
           "scope": ["volunteer_logs-parent:write"],
@@ -663,6 +701,7 @@
         },
         "DELETE": {
           "description": "Delete volunteer log for your user account",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["volunteer"],
           "scope": ["volunteer_logs-parent:delete"],
@@ -673,6 +712,7 @@
       "/:id/visit_logs": {
         "POST": {
           "description": "For users to adds a visit to their community business",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["visitor"],
           "scope": ["visit_logs-parent:write"],
@@ -686,6 +726,7 @@
       "/:id/outreach_campaigns": {
         "GET": {
           "description": "Retrieve all outreach campaings and meetings for a specific organisation",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["organisations_outreach-children:read", "organisations_outreach-own:read"],
@@ -704,6 +745,7 @@
       "/register": {
         "POST": {
           "description": "Create an organisation and admin account",
+          "isImplemented": false,
           "auth": null,
           "scope": [],
           "body": {
@@ -740,6 +782,7 @@
       "/": {
         "GET": {
           "description": "Retrieve all users",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin"],
           "scope": ["user_details-children:read"],
@@ -770,6 +813,7 @@
       "/register/volunteer": {
         "POST": {
           "description": "Create a volunteer account",
+          "isImplemented": false,
           "auth": null,
           "scope": [],
           "body": {
@@ -790,6 +834,8 @@
       },
       "/register/visitor": {
         "POST": {
+          "description": "Create a visitor account",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["cbStandardLogin"],
           "scope": [],
@@ -809,6 +855,8 @@
       },
       "/register/admin": {
         "POST": {
+          "description": "Create an adim account",
+          "isImplemented": false,
           "auth": null,
           "scope": [],
           "body": {
@@ -829,6 +877,8 @@
       },
       "/login/visitor": {
         "POST": {
+          "description": "Login as visitor",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["cbStandardLogin"],
           "scope": [],
@@ -840,6 +890,8 @@
       },
       "/login": {
         "POST": {
+          "description": "Login all accounts apart from visitor",
+          "isImplemented": false,
           "auth": null,
           "scope": null,
           "body": {
@@ -852,6 +904,7 @@
       "/:id": {
         "GET": {
           "description": "Retrieve details of a specific user",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["users_details-children:read"],
@@ -862,6 +915,8 @@
         },
         "PUT": {
         "description": "Update details of a specific user",
+        "isImplemented": false,
+        "auth": true,
         "intendedFor": ["twineAdmin", "cbAdmin"],
         "scope": ["users_details-children:write"],
         "body": {
@@ -881,6 +936,8 @@
         },
         "DELETE": {
         "description": "Delete a specific user",
+        "isImplemented": false,
+        "auth": true,
         "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
         "scope": ["users_details-children:write"],
         "body": {},
@@ -890,6 +947,7 @@
       "/password/reset": {
         "POST": {
           "description": "Reset password for a single user",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "visitor", "volunteer", "volunteerAdmin"],
           "scope": ["user_details-own:write"],
@@ -905,6 +963,7 @@
       "/me": {
         "GET": {
           "description": "Retrieve details of your own user account",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "visitor", "volunteer", "volunteerAdmin"],
           "scope": ["user_details-own:read"],
@@ -915,6 +974,7 @@
         },
         "PUT": {
         "description": "Update details of a your own user account",
+        "isImplemented": false,
         "auth": true,
         "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "visitor", "volunteer", "volunteerAdmin"],
         "scope": ["user_details-own:write"],
@@ -935,6 +995,7 @@
         },
         "DELETE": {
           "description": "Delete your own admin user account",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["user_details-own:delete"],
@@ -948,6 +1009,7 @@
       "/:id/volunteer_logs": {
         "GET": {
           "description": "Retreive volunteer information for a user",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "volunteer"],
           "scope": ["volunteer_logs-child:read", "volunteer_logs-own:read"],
@@ -967,6 +1029,7 @@
       "/:id/outreach_campaigns": {
         "GET": {
           "description": "Retrieve all outreach campaigns and meetings for a specific user",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "volunteerAdmin"],
           "scope": ["organisations_outreach-children:read", "organisations_outreach-own:read"],
@@ -982,16 +1045,11 @@
         }
       }
     },
-    "/volunteers": {
-      "description": "Alias for /users/** where user role is VOLUNTEER"
-    },
-    "/visitors": {
-      "description": "Alias for /users/** where user role is VISITOR"
-    },
     "/genders": {
       "/": {
         "GET": {
           "description": "Retrieve gender catagories",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "volunteer", "visitor", "volunteerAdmin"],
           "scope": ["constants:read"],
@@ -1007,6 +1065,7 @@
       "/type/:id/campaign_targets": {
         "GET": {
           "description": "Retrieve campaign targets for an outreach type",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin", "volunteerAdmin"],
           "scope": ["constants:read"],
@@ -1019,6 +1078,7 @@
         },
         "POST": {
           "description": "Add campaign targets for an outreach type",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin"],
           "scope": ["constants:write"],
@@ -1031,6 +1091,7 @@
         },
         "PUT": {
           "description": "Update campaign targets for an outreach type",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin"],
           "scope": ["constants:write"],
@@ -1044,6 +1105,7 @@
         },
         "DELETE": {
           "description": "Delete campaign targets for an outreach type",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin"],
           "scope": ["constants:delete"],
@@ -1059,6 +1121,7 @@
       "/:id/meetings": {
         "GET": {
           "description": "Retrieve all meetings for a specific outreach campaign",
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["twineAdmin", "fundingBody", "cbAdmin"],
           "scope": ["organisations_outreach-children:read"],
@@ -1074,6 +1137,14 @@
           }
         }
       }
+    }
+  },
+  "aliases": {
+    "/volunteers": {
+      "description": "Alias for /users/** where user role is VOLUNTEER"
+    },
+    "/visitors": {
+      "description": "Alias for /users/** where user role is VISITOR"
     }
   }
 }

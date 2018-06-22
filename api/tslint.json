@@ -1,0 +1,8 @@
+{
+    "extends": "eslint-config-twine",
+    "rules": {
+        "object-shorthand-properties-first": { 
+            "severity": "off"
+        }
+    } 
+}
