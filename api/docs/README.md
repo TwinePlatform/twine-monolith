@@ -1,9 +1,11 @@
 # Twine API Project Documentation
 
 ## Contents
-1. [Database](./database.md)
-2. [Getting started](./getting_started.md)
-3. [Configuration](./configuration.md)
-4. [Permissions](./permissions.md)
-5. [API Specification](./api.json)
-6. [API Migration](./api_migration.md)
+1. [API Specification](./api.json)
+2. [API Migration](./api_migration.md)
+3. [Architecture](./architecture.md)
+4. [Configuration](./configuration.md)
+5. [Database](./database.md)
+6. [Getting started](./getting_started.md)
+7. [Permissions](./permissions.md)
+8. [Stack](./stack.md)
