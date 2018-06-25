@@ -70,7 +70,6 @@
   "devDependencies": {
     "@types/hapi": "^17.0.12",
     "@types/jest": "^23.1.1",
-    "@types/postmark": "^1.4.0",
     "@types/ramda": "^0.25.34",
     "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
     "nodemon": "^1.17.5",

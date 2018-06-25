@@ -4,7 +4,7 @@
         "object-shorthand-properties-first": { 
             "severity": "off"
         },
-
-        "align": [ false ]
-    } 
+        "align": [ false ],
+        "ter-arrow-parens": [true, "always"] 
+    }
 }

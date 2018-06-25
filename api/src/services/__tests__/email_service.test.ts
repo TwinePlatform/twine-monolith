@@ -1,9 +1,9 @@
 import { emailService } from '../email_service';
-
+import { VisitorEmailTemplate } from '../templates';
 const emailOptions = {
   to: 'hi@hello.com',
   from: 'bye@seeya.com',
-  templateId: '001',
+  templateId: VisitorEmailTemplate.WELCOME_CB,
   templateModel: {},
 };
 
@@ -21,7 +21,7 @@ describe('Email Service', () => {
     try {
       await email.sendBatch([emailOptions, emailOptions]);
     } catch (error) {
-      expect(error.map((x) => x.code)).toBe(expect.arrayContaining([1101, 1101]));
+      expect(error.map((x: any) => x.code)).toBe(expect.arrayContaining([1101, 1101]));
     }
   });
 });
