@@ -1,9 +1,9 @@
 # Permissions
 
 ## permission flags
-*-children - data of all child catagories
-*-parent - data of all parent catagories
-*-own - data directly owned by user
+*-children - data of all child catagories  
+*-parent - data of all parent catagories  
+*-own - data directly owned by user  
 
 ## resources
 
@@ -11,24 +11,24 @@
 constants (sectors/regions/gender/outreach types/meeting types/etc)
 
 ### organisations
-organisations_details
-organisations_subscriptions
-organisations_feedback
-organisations_training
-organisations_invitations
-organisations_outreach
+organisations_details  
+organisations_subscriptions  
+organisations_feedback  
+organisations_training  
+organisations_invitations  
+organisations_outreach  
 
 ### users
-users_details
-users_details_anonymised //not currently used but may be needed for funding bodies to access anonymised user datas
+users_details  
+users_details_anonymised //not currently used but may be needed for funding bodies to access anonymised user datas  
 
 ### volunteers
-volunteer_activities
-volunteer_logs
+volunteer_activities  
+volunteer_logs  
 
 ### visit_activities
-visit_activites
-visit_logs
+visit_activites  
+visit_logs  
 
 ## Permissions module
 Permissions and roles will have a many to many relationship documented in the datebase under the `role_permission` linking table.
