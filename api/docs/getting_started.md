@@ -78,6 +78,12 @@ createdb <DB_NAME>
 CREATE DATABASE <DB_NAME>;
 ```
 
+The database uses a PostGIS extention for handling location queries. If not already installed instructions can be found [here](https://postgis.net/install/). To enable PostGIS, connect to your database and run the following command:
+
+```SQL
+CREATE EXTENSION postgis;
+```
+
 ## Configuration
 
 To configure the application see the [configuration guide](./configuration.md).
