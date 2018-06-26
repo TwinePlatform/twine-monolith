@@ -73,7 +73,7 @@ exports.migrate = {
         'ENUM_gender',
         'ENUM_turnover_band',
         'ENUM_permission_type',
-        'ENUM_permission_access',
+        'ENUM_access_type',
         'ENUM_invitation_status',
         'ENUM_organisation_type',
         'ENUM_subscription_status',

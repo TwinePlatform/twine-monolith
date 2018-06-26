@@ -13,7 +13,7 @@ CREATE TABLE single_use_token (
   CONSTRAINT single_use_token_pk           PRIMARY KEY (single_use_token_id),
   CONSTRAINT single_use_token_valid_expiry CHECK       (expires_at > created_at),
   CONSTRAINT single_use_token_valid_usage  CHECK       (used_at IS NULL OR (used_at < expires_at AND used_at > created_at))
-)
+);
 
 CREATE TABLE user_secret_reset (
   user_secret_reset_id SERIAL NOT NULL UNIQUE,
