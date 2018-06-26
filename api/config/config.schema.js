@@ -22,14 +22,17 @@ module.exports = {
   }),
   knex: Joi.object({
     client: Joi.string().required(),
-    connection: Joi.object({
-      host: Joi.string().min(1).required(),
-      port: Joi.number().min(0).max(65535).required(),
-      database: Joi.string().min(1).replace(/^\//, '').required(),
-      user: Joi.string().min(1).required(),
-      password: Joi.string().optional(),
-      ssl: Joi.bool().default(false),
-    }),
+    connection: Joi.alternatives().try(
+      Joi.object({
+        host: Joi.string().min(1).required(),
+        port: Joi.number().min(0).max(65535).required(),
+        database: Joi.string().min(1).replace(/^\//, '').required(),
+        user: Joi.string().min(1).required(),
+        password: Joi.string().optional(),
+        ssl: Joi.bool().default(false),
+      }),
+      Joi.string().min('psql://localhost:5432'.length),
+    ),
     pool: Joi.object({
       min: 3,
     }),
