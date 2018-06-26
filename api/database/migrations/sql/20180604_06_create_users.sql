@@ -1,6 +1,13 @@
 /*
  * User related tables
  */
+CREATE TABLE gender (
+  gender_id    SERIAL NOT NULL UNIQUE,
+  gender_name  VARCHAR(100) NOT NULL UNIQUE,
+
+  CONSTRAINT gender_pk PRIMARY KEY (gender_id)
+);
+
 
 CREATE TABLE user_account (
   user_account_id                  SERIAL NOT NULL UNIQUE,
@@ -75,13 +82,6 @@ CREATE TABLE login_event (
 
   CONSTRAINT login_event_pk         PRIMARY KEY (login_event_id),
   CONSTRAINT login_event_to_user_fk FOREIGN KEY (user_account_id) REFERENCES user_account ON DELETE CASCADE
-);
-
-CREATE TABLE gender (
-  gender_id    SERIAL       NOT NULL UNIQUE,
-  gender_name  VARCHAR(100) NOT NULL UNIQUE,
-
-  CONSTRAINT gender PRIMARY KEY (gender_id)
 );
 
 
