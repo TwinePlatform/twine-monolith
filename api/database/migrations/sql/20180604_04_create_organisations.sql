@@ -58,8 +58,8 @@ CREATE TABLE community_business_sector (
 CREATE TABLE community_business (
   community_business_id        SERIAL NOT NULL UNIQUE,
   organisation_id              INT NOT NULL UNIQUE,
-  community_business_region_id INT NOT NULL,
-  community_business_sector_id INT NOT NULL,
+  community_business_region_id INT,
+  community_business_sector_id INT,
   address_1                    VARCHAR(100),
   address_2                    VARCHAR(100),
   town_city                    VARCHAR(100),

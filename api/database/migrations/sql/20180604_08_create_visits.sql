@@ -13,8 +13,8 @@ CREATE TABLE visit_activity_category (
 CREATE TABLE visit_activity (
   visit_activity_id          SERIAL NOT NULL UNIQUE,
   community_business_id      INT NOT NULL,
-  visit_activity_category_id INT NOT NULL,
   visit_activity_name        VARCHAR(100) NOT NULL,
+  visit_activity_category_id INT,
   monday                     BOOLEAN NOT NULL DEFAULT false,
   tuesday                    BOOLEAN NOT NULL DEFAULT false,
   wednesday                  BOOLEAN NOT NULL DEFAULT false,

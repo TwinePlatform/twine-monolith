@@ -12,10 +12,10 @@ CREATE TABLE gender (
 CREATE TABLE user_account (
   user_account_id                  SERIAL NOT NULL UNIQUE,
   user_name                        VARCHAR(100) NOT NULL,
-  user_secret                      VARCHAR(64) NOT NULL,
   qr_code                          VARCHAR,
+  user_password                    VARCHAR(64),
   gender_id                        INT NOT NULL,
-  email                            VARCHAR(100) NOT NULL UNIQUE,
+  email                            VARCHAR(100) UNIQUE,
   phone_number                     VARCHAR(20),
   post_code                        VARCHAR(10),
   birth_year                       INT,
