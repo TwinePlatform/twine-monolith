@@ -4,6 +4,8 @@
 
 ![[Current data model]](./assets/data_model.png)
 
+Note: the data types in the diagram are for illustration purposes only. For the real data types, see the [migrations](../database/migrations/sql).
+
 This diagram was generated using [DB designer](https://dbdesigner.net). Ask for login details to edit the diagram.
 
 
