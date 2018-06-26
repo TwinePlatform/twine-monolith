@@ -1,10 +1,4 @@
 {
     "extends": "eslint-config-twine",
-    "rules": {
-        "object-shorthand-properties-first": { 
-            "severity": "off"
-        },
-        "align": [ false ],
-        "ter-arrow-parens": [true, "always"] 
-    }
+    "rules": {}
 }
