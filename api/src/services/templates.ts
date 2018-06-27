@@ -1,4 +1,4 @@
-enum VisitorEmailTemplate {
+enum EmailTemplate {
   WELCOME_CB = 4010082,
   WELCOME_VISITOR = 3843402,
   NEW_VISITOR_FOR_TWINE =  4251043,
@@ -6,4 +6,4 @@ enum VisitorEmailTemplate {
   PASSWORD_RESET = 4148361,
 }
 
-export { VisitorEmailTemplate };
+export { EmailTemplate };

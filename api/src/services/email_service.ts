@@ -1,14 +1,12 @@
-/// <postmark-module path="./postmark" />
-
 import * as Postmark from 'postmark';
 import { renameKeys } from '../utils/ramdaHelpers';
 import { pipe, curry, evolve } from 'ramda';
-import { VisitorEmailTemplate } from './templates';
+import { EmailTemplate } from './templates';
 
 type Email = {
   from: string,
   to: string,
-  templateId: VisitorEmailTemplate,
+  templateId: EmailTemplate,
   templateModel?: object,
   attachements?: [{
     name: string,
@@ -17,7 +15,7 @@ type Email = {
   }],
 };
 
-type EmailConfig = {
+type EmailServiceConfig = {
   apiKey: string,
 };
 
@@ -27,10 +25,10 @@ type EmailService = {
 };
 
 type EmailInitialiser = {
-  init: (config: EmailConfig) => EmailService,
+  init: (config: EmailServiceConfig) => EmailService,
 };
 
-const getTemplateId = (id: any):any => VisitorEmailTemplate[id];
+const getTemplateId = (id: any):any => EmailTemplate[id];
 
 const emailKeyMap: any = renameKeys({
   to: 'To',
@@ -40,13 +38,12 @@ const emailKeyMap: any = renameKeys({
   attachements: 'Attachments',
 });
 
-const emailService: EmailInitialiser = {
-  init: (config: EmailConfig) => {
+const emailInitialiser: EmailInitialiser = {
+  init: (config: EmailServiceConfig) => {
     const emailClient = new Postmark.Client(config.apiKey);
     const emailInterface = {
       send: async (emailOptions: Email) => {
-        const postmarkOptions: Postmark.PostmarkMessageWithTemplate =
-          emailKeyMap(emailOptions);
+        const postmarkOptions: Postmark.PostmarkMessageWithTemplate = emailKeyMap(emailOptions);
 
         return  emailClient.sendEmailWithTemplate(postmarkOptions);
       },
@@ -60,4 +57,4 @@ const emailService: EmailInitialiser = {
   },
 };
 
-export { emailService };
+export { emailInitialiser };
