@@ -21,7 +21,7 @@
   "homepage": "https://github.com/TwinePlatform/twine-api#readme",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest",
+    "test": "NODE_ENV=testing jest",
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --project tsconfig.json --fix",
     "migrate:latest": "knex migrate:latest",
