@@ -7,6 +7,7 @@ module.exports = {
     },
     "ter-arrow-parens": [true, "always"],
     "arrow-parens": true,
+    "no-else-after-return": false,
     "trailing-comma": [true, {
       "multiline": {
         "objects": "always",
