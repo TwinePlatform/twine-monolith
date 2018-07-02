@@ -5,7 +5,7 @@ const { compose, last, head, tap } = require('ramda');
 const { getConfig } = require('../config');
 
 // lazyPromiseSeries :: [PromiseLike (a)] -> Promise ([a])
-const lazyPromiseSeries = (ps) => ps.reduce((acc, p) => p.then((res) => [].concat(acc ? acc : []).concat(res)))
+const lazyPromiseSeries = (ps) => ps.reduce((fp, p) => fp.then(res => p.then(rp => res.concat(rp))), Promise.resolve([]))
 
 const MIGRATIONS_BASE_PATH = path.resolve(__dirname, 'migrations');
 
