@@ -33,9 +33,19 @@
 
 			$scope.volunteers = [];
 
+        	$scope.displayedVolunteers = [];
+
+			$scope.volunteerNameFilter = '';
+
 			$scope.activities = [];
 
 			$scope.isAdmin = $rootScope.isAdmin;
+
+			$scope.selectedVolunteers = [];
+
+			$scope.selectedUser = {
+			    id : ''
+            };
 
 
 
@@ -57,7 +67,60 @@
 					$scope.formData.totalDurationThisDate = result.data.duration + $scope.formData.duration;
 				});
 
-			}
+			};
+
+        /*
+        >> volunteers selector filtrationa
+    	*/
+
+        	$scope.filterVolunteersByName = function (matchString) {
+				if (volunteers.length !== 0) {
+                    $scope.displayedVolunteers = $scope.volunteers.filter(function (each) {
+						return each.name.toLowerCase().indexOf(matchString.toLowerCase()) !== -1
+					});
+					if ($scope.displayedVolunteers.length === 0) {
+                        $scope.displayedVolunteers = $scope.volunteers;
+                        $scope.noNameMatches = true;
+					} else {
+                        $scope.noNameMatches = false;
+					}
+					$scope.selectedUser.id = '';
+				}
+            };
+
+        	$scope.removeFromSelected = function (id) {
+        		console.log($scope.volunteerNameFilter);
+				$scope.selectedVolunteers = $scope.selectedVolunteers.filter(function (value) {
+					return value.id !== id;
+				})
+            };
+
+        	$scope.volunteerSelected = function (id) {
+        		if ($scope.isAdmin) {
+        			for (var i = 0; i < $scope.selectedVolunteers.length; i++) {
+        				if ($scope.selectedVolunteers[i].id === id) {
+        					return;
+						}
+					}
+                    $scope.displayedVolunteers.forEach(function (value) {
+                        if (value.id === id) {
+                            $scope.selectedVolunteers.push({id : value.id, name: value.name});
+                        }
+                    });
+                    $scope.selectedUser.id = '';
+				}
+            };
+
+        	$scope.isSelected = function (id) {
+                for (var i = 0; i < $scope.selectedVolunteers.length; i++) {
+                    if ($scope.selectedVolunteers[i].id === id) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+
 
 
         /*
@@ -67,12 +130,14 @@
 			$scope.fillVolonters = function () {
 				$$api.volunteers.getVolunteers($rootScope.currentUser.organisation_id)
 					.success(function (result) {
-						if (result !== null && result !== undefined && result.data.volunteers !== null && result.data.volunteers !== undefined)
-						$scope.volunteers = result.data.volunteers;
-						var me = angular.copy($rootScope.currentUser);
-						me.name += ' (you)';
-						console.log($rootScope.currentUser, me);
-						$scope.volunteers.unshift(me);
+						if (result !== null && result !== undefined && result.data.volunteers !== null && result.data.volunteers !== undefined) {
+                            $scope.volunteers = result.data.volunteers;
+                            var me = angular.copy($rootScope.currentUser);
+                            me.name += ' (you)';
+                            console.log($rootScope.currentUser, me);
+                            $scope.volunteers.unshift(me);
+                            $scope.displayedVolunteers = $scope.volunteers;
+						}
                     })
             };
 
@@ -209,6 +274,14 @@
 
 					// show loader
 					$ionicLoading.show();
+
+					if ($scope.isAdmin) {
+					    var selectedIds = [];
+					    $scope.selectedVolunteers.forEach(function (value) {
+					        selectedIds.push(value.id);
+                        });
+                        $scope.formData.user_id = selectedIds.join(',');
+                    }
 
 					// if offline mode active, push to offline data
 					if ($rootScope.offlineMode) {
