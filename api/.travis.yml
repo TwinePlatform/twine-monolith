@@ -9,6 +9,16 @@ cache:
   directories:
     - "node_modules"
 
+addons:
+  postgresql: "9.4"
+
+services:
+- postgresql
+
+before_script:
+  - psql -c 'create database twine_api_test;' -U postgres
+  - psql -U postgres -c "create extension postgis"
+
 install:
   - npm install -g codecov typescript 
   - npm install
