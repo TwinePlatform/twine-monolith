@@ -4,7 +4,7 @@
 
 CREATE TABLE organisation (
   organisation_id    SERIAL NOT NULL UNIQUE,
-  organisation_name  VARCHAR(100) NOT NULL,
+  organisation_name  VARCHAR(255) NOT NULL,
   _360_giving_id     VARCHAR UNIQUE,
   created_at         TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at        TIMESTAMP WITH TIME ZONE,
@@ -29,7 +29,7 @@ CREATE TABLE funding_body (
 CREATE TABLE funding_programme (
   funding_programme_id   SERIAL NOT NULL UNIQUE,
   funding_body_id        INT NOT NULL,
-  funding_programme_name VARCHAR(100) NOT NULL,
+  funding_programme_name VARCHAR(255) NOT NULL,
   created_at             TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at            TIMESTAMP WITH TIME ZONE,
   deleted_at             TIMESTAMP WITH TIME ZONE,
@@ -60,10 +60,10 @@ CREATE TABLE community_business (
   organisation_id              INT NOT NULL UNIQUE,
   community_business_region_id INT,
   community_business_sector_id INT,
-  address_1                    VARCHAR(100),
-  address_2                    VARCHAR(100),
-  town_city                    VARCHAR(100),
-  postcode                     VARCHAR(10),
+  address_1                    VARCHAR(255),
+  address_2                    VARCHAR(255),
+  town_city                    VARCHAR(255),
+  post_code                    VARCHAR(10),
   coordinates                  GEOGRAPHY(POINT, 4326),
   logo_url                     VARCHAR,
   turnover_band                ENUM_turnover_band,

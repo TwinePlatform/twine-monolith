@@ -4,7 +4,7 @@
 
 CREATE TABLE visit_activity_category (
   visit_activity_category_id   SERIAL NOT NULL UNIQUE,
-  visit_activity_category_name VARCHAR(100) NOT NULL,
+  visit_activity_category_name VARCHAR(255) NOT NULL,
 
   CONSTRAINT visit_activity_category_pk PRIMARY KEY (visit_activity_category_id)
 );
@@ -13,8 +13,8 @@ CREATE TABLE visit_activity_category (
 CREATE TABLE visit_activity (
   visit_activity_id          SERIAL NOT NULL UNIQUE,
   community_business_id      INT NOT NULL,
-  visit_activity_name        VARCHAR(100) NOT NULL,
   visit_activity_category_id INT,
+  visit_activity_name        VARCHAR(255) NOT NULL,
   monday                     BOOLEAN NOT NULL DEFAULT false,
   tuesday                    BOOLEAN NOT NULL DEFAULT false,
   wednesday                  BOOLEAN NOT NULL DEFAULT false,
