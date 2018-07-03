@@ -40,12 +40,12 @@ const Permissions = require('./permissions');
 const Roles = require('./roles');
 const User = require('../user');
 
-// Permissions.grant :: Resource -> Operation -> Role -> Promise ()
-// Permissions.revoke :: Resource -> Operation -> Role -> Promise ()
+// Permissions.grant :: Resource -> Operation -> PermissionLevel -> Role -> Promise ()
+// Permissions.revoke :: Resource -> Operation -> PermissionLevel -> Role -> Promise ()
 // Permissions.grantAll :: Resource -> Role -> Promise ()
 // Permissions.revokeAll :: Resource -> Role -> Promise ()
-// Permissions.roleHas :: Resource -> Operation -> Role -> Promise Boolean
-// Permissions.userHas :: Resource -> Operation -> User -> Promise Boolean
+// Permissions.roleHas :: Resource -> Operation -> PermissionLevel -> Role -> Promise Boolean
+// Permissions.userHas :: Resource -> Operation -> PermissionLevel -> User -> Promise Boolean
 
 // Roles.add :: Role -> User -> Promise ()
 // Roles.remove :: Role -> User -> Promise ()

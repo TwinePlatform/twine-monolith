@@ -7,7 +7,7 @@ const getPermissionIds: GetPermissionIds = ({ client, resource, permissionLevel,
     .table('permission')
     .where({
       ['permission_entity']: resource,
-      ['permission_type']: permissionLevel,
+      ['permission_level']: permissionLevel,
       ['access_type']: access,
     });
 
@@ -69,7 +69,7 @@ const permissionsInitialiser: PermissionsInitialiser = (config) => {
             .returning('permission_id')
             .insert({
               ['permission_entity']: resource,
-              ['permission_type']: permissionLevel,
+              ['permission_level']: permissionLevel,
               ['access_type']: access,
             });
 
@@ -127,7 +127,7 @@ const permissionsInitialiser: PermissionsInitialiser = (config) => {
             ['access_role.access_role_name']: role,
             ['permission.access_type']: access,
             ['permission.permission_entity']: resource,
-            ['permission.permission_type']: permissionLevel,
+            ['permission.permission_level']: permissionLevel,
           });
       const roleHasPermission = client.raw('SELECT EXISTS ?', [inner]);
       const result = await roleHasPermission;
@@ -151,7 +151,7 @@ const permissionsInitialiser: PermissionsInitialiser = (config) => {
           ['user_account_access_role.user_account_id']: userId,
           ['permission.access_type']: access,
           ['permission.permission_entity']: resource,
-          ['permission.permission_type']: permissionLevel,
+          ['permission.permission_level']: permissionLevel,
         });
       const userHasPermission = client.raw('SELECT EXISTS ?', [inner]);
       const result = await userHasPermission;

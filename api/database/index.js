@@ -73,7 +73,7 @@ exports.migrate = {
       .map((tablename) => client.raw(`DROP TABLE IF EXISTS "${tablename}" CASCADE`))
       .concat([
         'ENUM_turnover_band',
-        'ENUM_permission_type',
+        'ENUM_permission_level',
         'ENUM_access_type',
         'ENUM_invitation_status',
         'ENUM_subscription_status',

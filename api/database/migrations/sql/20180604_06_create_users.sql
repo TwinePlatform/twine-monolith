@@ -64,7 +64,7 @@ CREATE TABLE access_role (
 CREATE TABLE permission (
   permission_id      SERIAL NOT NULL UNIQUE,
   permission_entity  VARCHAR NOT NULL,
-  permission_type    ENUM_permission_type NOT NULL,
+  permission_level    ENUM_permission_level NOT NULL,
   access_type        ENUM_access_type NOT NULL,
 
   CONSTRAINT permission_pk PRIMARY KEY (permission_id)
