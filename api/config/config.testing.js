@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  env: 'testing',
   web: {
     port: 4001,
   },

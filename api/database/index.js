@@ -67,7 +67,9 @@ exports.migrate = {
     const queries = tables
       .map((t) => t.tablename)
       .filter((t) => t !== 'spatial_ref_sys')
-      .map(tap((t) => console.log(`Dropping table ${t}`)))
+      .map(tap((t) => { 
+        if(config.env !== 'testing') console.log(`Dropping table ${t}`)
+      }))
       .map((tablename) => client.raw(`DROP TABLE IF EXISTS "${tablename}" CASCADE`))
       .concat([
         'ENUM_turnover_band',
@@ -76,7 +78,9 @@ exports.migrate = {
         'ENUM_invitation_status',
         'ENUM_subscription_status',
       ]
-        .map(tap((t) => console.log(`Dropping type ${t}`)))
+        .map(tap((t) => {
+          if(config.env !== 'testing') console.log(`Dropping type ${t}`)
+        }))
         .map((e) => client.raw(`DROP TYPE IF EXISTS ${e} CASCADE`))
       );
 
