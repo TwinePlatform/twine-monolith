@@ -19,6 +19,7 @@ CREATE TABLE volunteer_hours_log (
   user_account_id        INT NOT NULL,
   community_business_id  INT NOT NULL,
   duration               INTERVAL DAY TO SECOND NOT NULL,
+  started_at             TIMESTAMP WITH TIME ZONE NOT NULL,
   created_at             TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at            TIMESTAMP WITH TIME ZONE,
   deleted_at             TIMESTAMP WITH TIME ZONE,

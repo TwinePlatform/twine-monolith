@@ -14,7 +14,7 @@ CREATE TABLE frontline_account (
   frontline_account_id   SERIAL NOT NULL UNIQUE,
   frontline_api_key      VARCHAR(100) NOT NULL,
   frontline_workspace_id VARCHAR(100) NOT NULL,
-  nexmo_number           VARCHAR(100) NOT NULL,
+  nexmo_number           VARCHAR(100),
   created_at             TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at            TIMESTAMP WITH TIME ZONE,
   deleted_at             TIMESTAMP WITH TIME ZONE,
