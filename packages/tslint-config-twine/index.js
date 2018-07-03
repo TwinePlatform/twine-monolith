@@ -2,8 +2,8 @@ module.exports = {
   "extends": "tslint-config-airbnb",
   "rules": {
     "align": [false],
-    "object-shorthand-properties-first": { 
-        "severity": "off"
+    "object-shorthand-properties-first": {
+      "severity": "off"
     },
     "ter-arrow-parens": [true, "always"],
     "arrow-parens": true,
@@ -16,6 +16,8 @@ module.exports = {
         "typeLiterals": "ignore"
       },
       "esSpecCompliant": true
-    }]
+    }],
+    "no-consecutive-blank-lines": [true, 2],
+    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"]
   }
 };
