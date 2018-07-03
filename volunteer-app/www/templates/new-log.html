@@ -10,16 +10,19 @@
             <!-- name -->
             <span  ng-if="isAdmin" class="input-label">Volunter name</span>
             <div ng-if="isAdmin">
+                <label class="item item-input">
+                    <input type="text" placeholder="Search"  ng-model="volunteerNameFilter" ng-change="filterVolunteersByName(this.volunteerNameFilter)">
+                </label>
                 <label class="item item-select">
-                    <select ng-model="formData.user_id" name="volunteers" id="volunteers" convert-to-number>
-                        <option  value="" selected disabled>Select volunter</option>
-                        <option ng-repeat="option in volunteers" value="{{option.id}}">{{option.name}}</option>
-                        <!--  -->
+                    <select  name="volunteers" id="volunteers" ng-model="selectedUser.id" ng-change="volunteerSelected(this.selectedUser.id)" convert-to-number>
+                        <option value="" selected disabled>{{noNameMatches ? 'No search matches' : 'Select volunteer'}}</option>
+                        <option ng-if="!isSelected(option.id)" ng-repeat="option in displayedVolunteers" value="{{option.id}}">{{option.name}}</option>
                     </select>
                 </label>
-                <!--<label class="error block text-right padding assertive" for="volunteers">-->
-                    <!--Please select a name-->
-                <!--</label>-->
+                <div class="selectedVolunteers" ng-repeat="option in selectedVolunteers">
+                    <span>{{option.name}}</span>
+                    <i ng-click="removeFromSelected(option.id)" class="icon ion-close-circled large"></i>
+                </div>
             </div>
             <!-- /name -->
 
@@ -87,15 +90,17 @@
             </label>
             <!-- /duration -->
 
-            <!-- user_id -->
-            <label class="item item-input hide">
-                <span class="input-label">User id</span>
-                <input type="text" ng-model="formData.user_id" name="user_id" id="user_id" required />
-            </label>
-            <!-- /user_id -->
+            <!--&lt;!&ndash; user_id &ndash;&gt;-->
+            <!--<label class="item item-input hide">-->
+                <!--<span class="input-label">User id</span>-->
+                <!--<input type="text" ng-model="formData.user_id" name="user_id" id="user_id" required />-->
+            <!--</label>-->
+            <!--&lt;!&ndash; /user_id &ndash;&gt;-->
 
             <!-- buttons -->
-            <button type="submit" ng-disabled="createLog.$invalid" class="button button-energized button-block">Log Hours</button>
+            <button type="submit" ng-disabled="createLog.$invalid || (isAdmin && selectedVolunteers.length === 0)" class="button button-energized button-block">Log Hours</button>
+
+            <div class="log-spacer"></div>
 
         </form>
         <!-- /form#createLog -->
