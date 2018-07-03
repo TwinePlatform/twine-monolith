@@ -39,20 +39,6 @@ CREATE TABLE funding_programme (
 );
 
 
-CREATE TABLE funding_programme_community_business (
-  funding_programme_id  INT NOT NULL,
-  community_business_id INT NOT NULL,
-  membership_status     VARCHAR NOT NULL,
-  created_at            TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  modified_at           TIMESTAMP WITH TIME ZONE,
-  deleted_at            TIMESTAMP WITH TIME ZONE,
-
-  CONSTRAINT funding_programme_community_business_to_funding_programme_fk  FOREIGN KEY (funding_programme_id)  REFERENCES funding_programme ON DELETE CASCADE,
-  CONSTRAINT funding_programme_community_business_to_community_business_fk FOREIGN KEY (community_business_id) REFERENCES community_business ON DELETE CASCADE,
-
-)
-
-
 CREATE TABLE community_business_region (
   community_business_region_id SERIAL NOT NULL UNIQUE,
   region_name                  VARCHAR(80) NOT NULL UNIQUE,
@@ -89,6 +75,19 @@ CREATE TABLE community_business (
   CONSTRAINT community_business_to_organisation_fk              FOREIGN KEY (organisation_id)              REFERENCES organisation ON DELETE CASCADE,
   CONSTRAINT community_business_to_community_business_sector_fk FOREIGN KEY (community_business_sector_id) REFERENCES community_business_sector,
   CONSTRAINT community_business_to_community_business_region_fk FOREIGN KEY (community_business_region_id) REFERENCES community_business_region
+);
+
+
+CREATE TABLE funding_programme_community_business (
+  funding_programme_id  INT NOT NULL,
+  community_business_id INT NOT NULL,
+  membership_status     VARCHAR NOT NULL,
+  created_at            TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at           TIMESTAMP WITH TIME ZONE,
+  deleted_at            TIMESTAMP WITH TIME ZONE,
+
+  CONSTRAINT funding_programme_community_business_to_funding_programme_fk  FOREIGN KEY (funding_programme_id)  REFERENCES funding_programme ON DELETE CASCADE,
+  CONSTRAINT funding_programme_community_business_to_community_business_fk FOREIGN KEY (community_business_id) REFERENCES community_business ON DELETE CASCADE
 );
 
 

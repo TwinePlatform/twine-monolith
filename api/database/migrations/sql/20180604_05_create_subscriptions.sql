@@ -40,7 +40,6 @@ CREATE TABLE subscription (
   CONSTRAINT subscription_to_beneficiary_fk       FOREIGN KEY (beneficiary_id)       REFERENCES organisation,
   CONSTRAINT subscription_to_frontline_account_fk FOREIGN KEY (frontline_account_id) REFERENCES frontline_account,
   CONSTRAINT subscription_to_subscription_type_fk FOREIGN KEY (subscription_type_id) REFERENCES subscription_type,
-  CONSTRAINT subscription_to_funding_programme_fk FOREIGN KEY (funding_programme_id) REFERENCES funding_programme,
   CONSTRAINT subscription_valid_expiry            CHECK       (expires_at > created_at)
 );
 
