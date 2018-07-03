@@ -72,4 +72,4 @@ Thumbs.db
 .vscode
 
 # Typescript compiled code
-built/
+build

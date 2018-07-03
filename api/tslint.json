@@ -1,4 +1,3 @@
 {
-    "extends": "eslint-config-twine",
-    "rules": {}
+    "extends": "eslint-config-twine"
 }
