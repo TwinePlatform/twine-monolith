@@ -29,7 +29,6 @@ CREATE TABLE subscription (
   beneficiary_id       INT DEFAULT NULL,
   frontline_account_id INT NOT NULL,
   subscription_type_id INT NOT NULL,
-  funding_programme_id INT DEFAULT NULL,
   subscription_status  ENUM_subscription_status NOT NULL,
   expires_at           TIMESTAMP WITH TIME ZONE NOT NULL,
   created_at           TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,

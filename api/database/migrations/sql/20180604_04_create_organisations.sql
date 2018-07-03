@@ -17,9 +17,9 @@ CREATE TABLE organisation (
 CREATE TABLE funding_body (
   funding_body_id SERIAL NOT NULL UNIQUE,
   organisation_id INT NOT NULL UNIQUE,
-  created_at         TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  modified_at        TIMESTAMP WITH TIME ZONE,
-  deleted_at         TIMESTAMP WITH TIME ZONE,
+  created_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at     TIMESTAMP WITH TIME ZONE,
+  deleted_at      TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT funding_body_pk                 PRIMARY KEY (funding_body_id),
   CONSTRAINT funding_body_to_organisation_fk FOREIGN KEY (organisation_id) REFERENCES organisation ON DELETE CASCADE
@@ -37,6 +37,20 @@ CREATE TABLE funding_programme (
   CONSTRAINT funding_programme_pk                 PRIMARY KEY (funding_programme_id),
   CONSTRAINT funding_programme_to_funding_body_fk FOREIGN KEY (funding_body_id) REFERENCES funding_body ON DELETE CASCADE
 );
+
+
+CREATE TABLE funding_programme_community_business (
+  funding_programme_id  INT NOT NULL,
+  community_business_id INT NOT NULL,
+  membership_status     VARCHAR NOT NULL,
+  created_at            TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at           TIMESTAMP WITH TIME ZONE,
+  deleted_at            TIMESTAMP WITH TIME ZONE,
+
+  CONSTRAINT funding_programme_community_business_to_funding_programme_fk  FOREIGN KEY (funding_programme_id)  REFERENCES funding_programme ON DELETE CASCADE,
+  CONSTRAINT funding_programme_community_business_to_community_business_fk FOREIGN KEY (community_business_id) REFERENCES community_business ON DELETE CASCADE,
+
+)
 
 
 CREATE TABLE community_business_region (
