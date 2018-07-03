@@ -12,13 +12,15 @@ CREATE TABLE gender (
 CREATE TABLE user_account (
   user_account_id                  SERIAL NOT NULL UNIQUE,
   user_name                        VARCHAR(100) NOT NULL,
-  qr_code                          VARCHAR,
   user_password                    VARCHAR(64),
+  qr_code                          VARCHAR UNIQUE,
   gender_id                        INT NOT NULL,
   email                            VARCHAR(100) UNIQUE,
   phone_number                     VARCHAR(20),
   post_code                        VARCHAR(10),
   birth_year                       INT,
+  is_email_confirmed               BOOLEAN NOT NULL DEFAULT false,
+  is_phone_number_confirmed        BOOLEAN NOT NULL DEFAULT false,
   is_email_contact_consent_granted BOOLEAN NOT NULL DEFAULT false,
   is_sms_contact_consent_granted   BOOLEAN NOT NULL DEFAULT false,
   created_at                       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -27,7 +29,7 @@ CREATE TABLE user_account (
 
   CONSTRAINT user_account_pk                  PRIMARY KEY (user_account_id),
   CONSTRAINT user_account_to_gender_fk        FOREIGN KEY (gender_id) REFERENCES gender,
-  CONSTRAINT user_account_sensible_birth_year CHECK       (birth_year IS NULL OR (birth_year > 1890 AND birth_year < date_part('year', CURRENT_DATE)))
+  CONSTRAINT user_account_sensible_birth_year CHECK       (birth_year IS NULL OR (birth_year > 1890 AND birth_year <= date_part('year', CURRENT_DATE)))
 );
 
 
