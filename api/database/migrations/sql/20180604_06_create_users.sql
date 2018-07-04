@@ -67,7 +67,8 @@ CREATE TABLE permission (
   permission_level    ENUM_permission_level NOT NULL,
   access_type        ENUM_access_type NOT NULL,
 
-  CONSTRAINT permission_pk PRIMARY KEY (permission_id)
+  CONSTRAINT permission_pk          PRIMARY KEY (permission_id),
+  CONSTRAINT permission_unique_row  UNIQUE      (permission_entity, permission_level, access_type)
 );
 
 
