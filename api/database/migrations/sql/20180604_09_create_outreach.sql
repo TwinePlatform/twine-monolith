@@ -39,6 +39,7 @@ CREATE TABLE outreach_meeting (
   outreach_meeting_type_id INT NOT NULL,
   outreach_partner         VARCHAR(100) NOT NULL,
   meeting_subject          VARCHAR(240) NOT NULL,
+  scheduled_at             TIMESTAMP WITH TIME ZONE,
   created_at               TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at              TIMESTAMP WITH TIME ZONE,
   deleted_at               TIMESTAMP WITH TIME ZONE,
