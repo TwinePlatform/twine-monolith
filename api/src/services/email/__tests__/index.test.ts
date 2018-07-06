@@ -1,6 +1,6 @@
-import { emailInitialiser } from '../email_service';
+import { emailInitialiser } from '../index';
 import { EmailTemplate } from '../templates';
-import { getConfig } from '../../../config';
+const { getConfig } = require('../../../../config');
 
 const config = getConfig(process.env.NODE_ENV);
 

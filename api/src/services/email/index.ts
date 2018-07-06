@@ -1,6 +1,4 @@
 import * as Postmark from 'postmark';
-import { renameKeys } from '../utils/ramdaHelpers';
-import { pipe, curry, evolve } from 'ramda';
 import { EmailTemplate } from './templates';
 
 type Email = {
@@ -28,32 +26,29 @@ type EmailInitialiser = {
   init: (config: EmailServiceConfig) => EmailService,
 };
 
-const getTemplateId = (id: any):any => EmailTemplate[id];
-
-const emailKeyMap: any = renameKeys({
-  to: 'To',
-  from: 'From',
-  templateId: 'TemplateId',
-  templateModel: 'TemplateModel',
-  attachements: 'Attachments',
+const emailKeyMap = (a: Email): Postmark.PostmarkMessageWithTemplate => ({
+  To: a.to,
+  From: a.from,
+  TemplateId: a.templateId,
+  TemplateModel: a.templateModel,
 });
 
 const emailInitialiser: EmailInitialiser = {
   init: (config: EmailServiceConfig) => {
     const emailClient = new Postmark.Client(config.apiKey);
-    const emailInterface = {
+
+    return {
       send: async (emailOptions: Email) => {
         const postmarkOptions: Postmark.PostmarkMessageWithTemplate = emailKeyMap(emailOptions);
 
         return  emailClient.sendEmailWithTemplate(postmarkOptions);
       },
       sendBatch: async(emails: Email []) => {
-        const postmarkEmails: Postmark.PostmarkMessage[] = emails.map(emailKeyMap);
+        const postmarkEmails: Postmark.PostmarkMessageWithTemplate[] = emails.map(emailKeyMap);
 
         return emailClient.sendEmailBatch(postmarkEmails);
       },
     };
-    return emailInterface;
   },
 };
 
