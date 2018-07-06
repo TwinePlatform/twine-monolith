@@ -5,6 +5,8 @@ exports.seed = (knex) =>
       user_password: 'tobereplacedwhenauthissetup',
       qr_code: 'tobereplacedwhenqrgenissetup',
       gender_id: 1,
+      disability_id: 2,
+      ethnicity_id: 2,
       email: '1498@aperturescience.com',
       phone_number: '+1 425-450-4464',
       post_code: '49829',
