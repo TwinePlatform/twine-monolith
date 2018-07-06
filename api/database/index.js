@@ -57,12 +57,11 @@ exports.migrate = {
     return 1;
   },
 
-  teardown: async (name, env = process.env.NODE_ENV) => {
+  teardown: async ({env = process.env.NODE_ENV, client} = {}) => { 
     const config = getConfig(env);
-
-    const client = knex(config.knex);
-
-    const tables = await client('pg_catalog.pg_tables').select('tablename').where({ schemaname: 'public' });
+    const teardownClient = client ? client : knex(config.knex);
+    
+    const tables = await teardownClient('pg_catalog.pg_tables').select('tablename').where({ schemaname: 'public' });
 
     const queries = tables
       .map((t) => t.tablename)
@@ -70,7 +69,7 @@ exports.migrate = {
       .map(tap((t) => { 
         if(config.env !== 'testing') console.log(`Dropping table ${t}`)
       }))
-      .map((tablename) => client.raw(`DROP TABLE IF EXISTS "${tablename}" CASCADE`))
+      .map((tablename) => teardownClient.raw(`DROP TABLE IF EXISTS "${tablename}" CASCADE`))
       .concat([
         'ENUM_turnover_band',
         'ENUM_permission_level',
@@ -81,15 +80,30 @@ exports.migrate = {
         .map(tap((t) => {
           if(config.env !== 'testing') console.log(`Dropping type ${t}`)
         }))
-        .map((e) => client.raw(`DROP TYPE IF EXISTS ${e} CASCADE`))
+        .map((e) => teardownClient.raw(`DROP TYPE IF EXISTS ${e} CASCADE`))
       );
 
-    await client.transaction((trx) =>
+    await teardownClient.transaction((trx) =>
       lazyPromiseSeries(queries.map((q) => q.transacting(trx)))
         .then(trx.commit)
         .catch(trx.rollback)
     )
 
-    return client.destroy();
+    return client ? null : teardownClient.destroy();
   },
+
+  truncate: async ({env = process.env.NODE_ENV, client} = {}) => { 
+    const config = getConfig(env);
+    const truncateClient = client ? client : knex(config.knex);
+    
+    const tables = await truncateClient('pg_catalog.pg_tables')
+    .select('tablename')
+    .where({ schemaname: 'public' })
+    .whereNot({ tablename:'spatial_ref_sys' });
+
+    const queries = tables.map((x) => truncateClient.raw(`TRUNCATE ${x.tablename} RESTART IDENTITY CASCADE`));
+
+    await Promise.all(queries);
+    return client ? null : truncateClient.destroy();
+  }
 };
