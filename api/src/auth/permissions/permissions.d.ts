@@ -46,26 +46,10 @@ type ProductionConnection = {
 
 type DevelopmentConnection = string
 
-type PermissionsConfig = {
-  client: string,
-  connection: ProductionConnection | DevelopmentConnection,
-  pool?: {
-    min: number
-  },
-  migrations?: {
-    tableName: string,
-    directory: string
-  },
-  seeds?: {
-    directory: string
-  }
-}
-
-
 type ReturningQueryResponse = Error | Dictionary<any>
 type ExistsQueryResponse = { exists: boolean }
  
-type PermissionsInterface = {
+export type PermissionsInitialiser = (client: Knex) => {
   grantExisting: (a: {
     resource: Resource, 
     permissionLevel: PermissionLevel, 
@@ -99,8 +83,6 @@ type PermissionsInterface = {
     access: Access, 
   }) => Promise<ExistsQueryResponse>,
 };
-
-export type PermissionsInitialiser = (config: PermissionsConfig) => PermissionsInterface
 
 export type GetPermissionIds =
 (a: {

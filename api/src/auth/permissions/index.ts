@@ -1,113 +1,93 @@
-import * as knex from 'knex';
 import { PermissionsInitialiser, GetPermissionIds, GetRoleId } from './permissions';
 
-const getPermissionIds: GetPermissionIds = ({ client, resource, permissionLevel, access }) =>
-  client
-    .select('permission_id')
-    .table('permission')
-    .where({
-      ['permission_entity']: resource,
-      ['permission_level']: permissionLevel,
-      ['access_type']: access,
-    });
-
-const getRoleId: GetRoleId = async({ client, role }) =>
-  client
-    .select('access_role_id')
-    .table('access_role')
-    .where({ ['access_role_name']: role })
-    .then((res) => res[0].access_role_id);
-
-const permissionsInitialiser: PermissionsInitialiser = (config) => {
-  const client = knex(config);
+const permissionsInitialiser: PermissionsInitialiser = (client) => {
   return {
-    grantExisting: async ({ resource, permissionLevel, access, role }) => {
-      const roleId = await getRoleId({ client, role });
-
-      const permissionIds = await getPermissionIds({
-        client,
-        resource,
-        permissionLevel,
-        access });
-
-      if (permissionIds.length === 1) {
-        const permissionId = permissionIds[0].permission_id;
-
-        const insertPermission = await client('access_role_permission')
-            .returning('*')
-            .insert(
-              client.select({
-                ['access_role_id']: roleId,
-                ['permission_id']: permissionId,
-              })
-                .whereNotExists(client('access_role_permission').where({
-                  ['access_role_id']: roleId,
-                  ['permission_id']: permissionId,
-                }))
-            );
-        if (insertPermission.length === 0) {
-          throw new Error('Permission entry is already associated to this role');
+    grantNew: async ({ resource, permissionLevel, access, role }) => {
+      try {
+        return await client.with('new_permission_id', (qb) => {
+          qb
+          .table('permission')
+          .returning('permission_id')
+          .insert({
+            ['permission_entity']: resource,
+            ['permission_level']: permissionLevel,
+            ['access_type']: access,
+          });
+        })
+        .insert({
+          ['access_role_id']: client.select('access_role_id')
+          .table('access_role')
+          .where({ ['access_role_name']: role }),
+          ['permission_id']: client.select('permission_id').from('new_permission_id'),
+        })
+        .into('access_role_permission')
+        .returning('*');
+      } catch (error) {
+        switch (error.code) {
+          case '23505':
+            throw new Error('Permission already exists, please use grantExisting method');
+          default:
+            throw error;
         }
-        client.destroy();
-        return insertPermission;
-      } else {
-        client.destroy();
-        throw new Error('Permission entry does not exists, please use grantNew method');
       }
     },
-    grantNew: async ({ resource, permissionLevel, access, role }) => {
-      const roleId = await getRoleId({ client, role });
-
-      const permissionIds = await getPermissionIds({
-        client,
-        resource,
-        permissionLevel,
-        access });
-
-      if (permissionIds.length === 0) {
-        const createPermissionId = await client('permission')
-            .returning('permission_id')
-            .insert({
+    grantExisting: async ({ resource, permissionLevel, access, role }) => {
+      try {
+        return await client.insert({
+          ['access_role_id']: client.select('access_role_id')
+            .table('access_role')
+            .where({ ['access_role_name']: role }),
+          ['permission_id']: client.select('permission_id')
+            .from('permission')
+            .where({
               ['permission_entity']: resource,
               ['permission_level']: permissionLevel,
               ['access_type']: access,
-            });
-
-        const permissionId = createPermissionId[0];
-        const insertPermission = await client('access_role_permission')
-            .returning('*')
-            .insert({
-              ['access_role_id']: roleId,
-              ['permission_id']: permissionId,
-            });
-        client.destroy();
-        return insertPermission;
-      } else {
-        throw new Error('Permission already exists, please use grantExisting method');
-        client.destroy();
+            }),
+        })
+        .into('access_role_permission')
+        .returning('*');
+      } catch (error) {
+        switch (error.code) {
+          case '23502':
+            throw new Error('Permission entry or role does not exist, please use grantNew method');
+          case '23505':
+            throw new Error('Permission entry is already associated to this role');
+          default:
+            throw error;
+        }
       }
     },
     revoke: async ({ resource, permissionLevel, access, role }) => {
-      const roleId = await getRoleId({ client, role });
+      const roleId = await  client
+        .select('access_role_id')
+        .table('access_role')
+        .where({ ['access_role_name']: role })
+        .then((res) => res[0].access_role_id);
 
-      const permissionIds = await getPermissionIds({
-        client,
-        resource,
-        permissionLevel,
-        access });
+      const permissionIds = await  client
+        .select('permission_id')
+        .table('permission')
+        .where({
+          ['permission_entity']: resource,
+          ['permission_level']: permissionLevel,
+          ['access_type']: access,
+        });
 
       if (permissionIds.length === 1) {
         const permissionId = permissionIds[0].permission_id;
 
         const deleteRow = await client('access_role_permission')
-            .where({
-              ['access_role_id']: roleId,
-              ['permission_id']: permissionId,
-            })
-            .del();
+          .where({
+            ['access_role_id']: roleId,
+            ['permission_id']: permissionId,
+          })
+          .del();
 
-        if (deleteRow === 1) return deleteRow;
-        throw new Error('Permission entry is not linked to role');
+        if (deleteRow === 0) throw new Error('Permission entry is not linked to role');
+        return deleteRow;
+      } else {
+        throw new Error('Permission entry does not exist');
       }
     },
       // todo - currently no definitive list of permission entries
@@ -131,7 +111,6 @@ const permissionsInitialiser: PermissionsInitialiser = (config) => {
           });
       const roleHasPermission = client.raw('SELECT EXISTS ?', [inner]);
       const result = await roleHasPermission;
-      client.destroy();
       return result.rows[0];
     },
     userHas: async({ resource, permissionLevel, access, userId }) => {
@@ -155,7 +134,6 @@ const permissionsInitialiser: PermissionsInitialiser = (config) => {
         });
       const userHasPermission = client.raw('SELECT EXISTS ?', [inner]);
       const result = await userHasPermission;
-      client.destroy();
       return result.rows[0];
     },
   };
