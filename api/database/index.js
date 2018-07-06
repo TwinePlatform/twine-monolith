@@ -70,12 +70,10 @@ exports.migrate = {
       .map(tap((t) => console.log(`Dropping table ${t}`)))
       .map((tablename) => client.raw(`DROP TABLE IF EXISTS "${tablename}" CASCADE`))
       .concat([
-        'ENUM_gender',
         'ENUM_turnover_band',
         'ENUM_permission_type',
         'ENUM_access_type',
         'ENUM_invitation_status',
-        'ENUM_organisation_type',
         'ENUM_subscription_status',
       ]
         .map(tap((t) => console.log(`Dropping type ${t}`)))
