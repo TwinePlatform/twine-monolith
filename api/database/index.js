@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const knex = require('knex');
 const { compose, last, head, tap } = require('ramda');
-const { getConfig } = require('../config');
+const { getConfig, TESTING } = require('../config');
 
 // lazyPromiseSeries :: [PromiseLike (a)] -> Promise ([a])
 const lazyPromiseSeries = (ps) => ps.reduce((fp, p) => fp.then(res => p.then(rp => res.concat(rp))), Promise.resolve([]))
@@ -67,7 +67,7 @@ exports.migrate = {
       .map((t) => t.tablename)
       .filter((t) => t !== 'spatial_ref_sys')
       .map(tap((t) => { 
-        if(config.env !== 'testing') console.log(`Dropping table ${t}`)
+        if(config.env !== TESTING) console.log(`Dropping table ${t}`)
       }))
       .map((tablename) => teardownClient.raw(`DROP TABLE IF EXISTS "${tablename}" CASCADE`))
       .concat([
@@ -78,7 +78,7 @@ exports.migrate = {
         'ENUM_subscription_status',
       ]
         .map(tap((t) => {
-          if(config.env !== 'testing') console.log(`Dropping type ${t}`)
+          if(config.env !== TESTING) console.log(`Dropping type ${t}`)
         }))
         .map((e) => teardownClient.raw(`DROP TYPE IF EXISTS ${e} CASCADE`))
       );
