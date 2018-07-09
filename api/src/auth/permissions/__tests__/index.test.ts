@@ -1,4 +1,5 @@
-import { permissionsInitialiser } from '../index';
+import { permissionsInitialiser } from '..';
+import { PermissionLevel, Resource, Role, Access } from '../permissions';
 const { getConfig } = require('../../../../config');
 const { migrate } = require('../../../../database');
 import * as knexInit from 'knex';
@@ -10,7 +11,6 @@ describe('Permisions Module', () => {
   beforeAll(async() => {
     await migrate.teardown({ client: knex });
     await knex.migrate.latest();
-    await knex.seed.run();
   });
   beforeEach(async () => {
     await migrate.truncate({ client: knex });
@@ -25,10 +25,10 @@ describe('Permisions Module', () => {
     test('SUCCESS - Grant a role a permission entry that doesn\'t already exist', async() => {
       try {
         const query = await permissionsInterface.grantNew({
-          resource: 'constants',
-          access:'read',
-          permissionLevel: 'child',
-          role:'VISITOR' });
+          resource: Resource.CONSTANTS,
+          access: Access.READ,
+          permissionLevel: PermissionLevel.CHILD,
+          role:Role.VISITOR});
         expect(query).toEqual(expect.arrayContaining([{ access_role_id: 1, permission_id: 2 }]));
       } catch (error) {
         expect(error).toBeFalsy();
@@ -38,10 +38,10 @@ describe('Permisions Module', () => {
       expect.assertions(1);
       try {
         const query = await permissionsInterface.grantNew({
-          resource: 'constants',
-          access:'read',
-          permissionLevel: 'own',
-          role:'VOLUNTEER' });
+          resource: Resource.CONSTANTS,
+          access: Access.READ,
+          permissionLevel: PermissionLevel.OWN,
+          role: Role.VOLUNTEER });
         expect(query).toBe(false);
 
       } catch (error) {
@@ -54,10 +54,10 @@ describe('Permisions Module', () => {
     test('SUCCESS - Grant a role a permission entry that already exists', async() => {
       try {
         const query = await permissionsInterface.grantExisting({
-          resource: 'constants',
-          access:'read',
-          permissionLevel: 'own',
-          role:'VOLUNTEER' });
+          resource: Resource.CONSTANTS,
+          access: Access.READ,
+          permissionLevel: PermissionLevel.OWN,
+          role: Role.VOLUNTEER });
         expect(query).toEqual(expect.arrayContaining([{ access_role_id: 2, permission_id: 1 }]));
       } catch (error) {
         expect(error).toBeFalsy();
@@ -67,10 +67,10 @@ describe('Permisions Module', () => {
       expect.assertions(1);
       try {
         const query = await permissionsInterface.grantExisting({
-          resource: 'constants',
-          access:'read',
-          permissionLevel: 'parent',
-          role:'VISITOR' });
+          resource: Resource.CONSTANTS,
+          access: Access.READ,
+          permissionLevel: PermissionLevel.PARENT,
+          role: Role.VISITOR });
       } catch (error) {
         expect(error.message).toBe(
           'Permission entry or role does not exist, please use grantNew method');
@@ -80,10 +80,10 @@ describe('Permisions Module', () => {
       expect.assertions(1);
       try {
         const query = await permissionsInterface.grantExisting({
-          resource: 'constants',
-          access:'read',
-          permissionLevel: 'own',
-          role:'VISITOR' });
+          resource: Resource.CONSTANTS,
+          access: Access.READ,
+          permissionLevel: PermissionLevel.OWN,
+          role: Role.VISITOR });
       } catch (error) {
         expect(error.message).toBe('Permission entry is already associated to this role');
       }
@@ -95,10 +95,10 @@ describe('Permisions Module', () => {
       expect.assertions(1);
       try {
         const query = await permissionsInterface.revoke({
-          resource: 'constants',
-          access:'read',
-          permissionLevel: 'own',
-          role:'VISITOR' });
+          resource: Resource.CONSTANTS,
+          access: Access.READ,
+          permissionLevel: PermissionLevel.OWN,
+          role: Role.VISITOR });
         expect(query).toBe(1);
       } catch (error) {
         expect(error).toBeFalsy();
@@ -109,10 +109,10 @@ describe('Permisions Module', () => {
       expect.assertions(1);
       try {
         const query = await permissionsInterface.revoke({
-          resource: 'constants',
-          access:'read',
-          permissionLevel: 'own',
-          role:'VOLUNTEER' });
+          resource: Resource.CONSTANTS,
+          access: Access.READ,
+          permissionLevel: PermissionLevel.OWN,
+          role: Role.VOLUNTEER });
         expect(query).toBe(false);
       } catch (error) {
         expect(error.message).toBe('Permission entry is not linked to role');
@@ -123,10 +123,10 @@ describe('Permisions Module', () => {
       expect.assertions(1);
       try {
         const query = await permissionsInterface.revoke({
-          resource: 'organisations_details',
-          access:'read',
-          permissionLevel: 'child',
-          role:'VOLUNTEER' });
+          resource: Resource.ORG_DETAILS,
+          access: Access.READ,
+          permissionLevel: PermissionLevel.CHILD,
+          role: Role.VOLUNTEER });
       } catch (error) {
         expect(error.message).toBe('Permission entry does not exist');
       }
@@ -137,10 +137,10 @@ describe('Permisions Module', () => {
     test('SUCCESS - returns false for non matching permissions & user', async() => {
       try {
         const query = await permissionsInterface.roleHas({
-          resource: 'constants',
-          access:'read',
-          permissionLevel: 'own',
-          role:'VOLUNTEER' });
+          resource: Resource.CONSTANTS,
+          access: Access.READ,
+          permissionLevel: PermissionLevel.OWN,
+          role: Role.VOLUNTEER });
         expect(query.exists).toBe(false);
       } catch (error) {
         expect(error).toBeFalsy();
@@ -149,10 +149,10 @@ describe('Permisions Module', () => {
     test('SUCCESS - returns true for matching permissions & user', async() => {
       try {
         const query = await permissionsInterface.roleHas({
-          resource: 'constants',
-          access:'read',
-          permissionLevel: 'own',
-          role:'VISITOR' });
+          resource: Resource.CONSTANTS,
+          access: Access.READ,
+          permissionLevel: PermissionLevel.OWN,
+          role: Role.VISITOR });
         expect(query.exists).toBe(true);
       } catch (error) {
         expect(error).toBeFalsy();
@@ -163,9 +163,9 @@ describe('Permisions Module', () => {
   describe('::userHas', () => {
     test('SUCCESS - returns false for non matching permissions & user', async() => {
       try {
-        const query = await permissionsInterface.userHas({ resource: 'constants',
-          access:'read',
-          permissionLevel: 'child',
+        const query = await permissionsInterface.userHas({ resource: Resource.CONSTANTS,
+          access: Access.READ,
+          permissionLevel: PermissionLevel.CHILD,
           userId:1 });
         expect(query.exists).toBe(false);
       } catch (error) {
@@ -174,9 +174,9 @@ describe('Permisions Module', () => {
     });
     test('SUCCESS - returns true for matching permissions & user', async() => {
       try {
-        const query = await permissionsInterface.userHas({ resource: 'constants',
-          access:'read',
-          permissionLevel: 'own',
+        const query = await permissionsInterface.userHas({ resource: Resource.CONSTANTS,
+          access: Access.READ,
+          permissionLevel: PermissionLevel.OWN,
           userId:1 });
         expect(query.exists).toBe(true);
       } catch (error) {
