@@ -1,27 +1,42 @@
+/*
+ * Server initialisation and configuration
+ */
 import * as Hapi from 'hapi';
-import router from './router';
+import * as Pino from 'hapi-pino';
+import * as Knex from 'knex';
+import v1 from './api/v1';
+import setup from './setup';
 
-const server :Hapi.Server = new Hapi.Server({
-  port: 3000,
-  host: 'localhost',
-});
-
-server.route(router);
-
-const init :() => Promise <void> =  async () => {
-  try {
-    await server.register({
-      plugin: require('hapi-pino'),
-      options: {
-        prettyPrint: true,
-      },
-    });
-    await server.start();
-    console.log(`Server running at: ${server.info.uri}`);
-  } catch (error) {
-    console.log(error);
-    process.exit(1);
+/*
+ * Extend declaration from hapi
+ */
+declare module 'hapi' {
+  interface ApplicationState {
+    config: any;
+    knex: Knex;
   }
+}
+
+const init = async (config: any): Promise<Hapi.Server> => {
+
+  const server = new Hapi.Server(config.web);
+
+  setup(server);
+
+  await server.register([
+    {
+      plugin: Pino,
+      options: { prettyPrint: true },
+    },
+    v1,
+  ]);
+
+  return server;
 };
 
-export { server, init };
+const start = async (server: Hapi.Server) => {
+  await server.start();
+  return server;
+};
+
+export { init, start };

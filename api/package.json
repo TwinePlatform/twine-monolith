@@ -75,7 +75,7 @@
   "devDependencies": {
     "@types/hapi": "^17.0.12",
     "@types/jest": "^23.1.1",
-    "@types/knex": "^0.14.14",
+    "@types/knex": "^0.14.15",
     "@types/ramda": "^0.25.34",
     "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
     "nodemon": "^1.17.5",
