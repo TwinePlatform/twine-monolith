@@ -109,9 +109,8 @@ const permissionsInitialiser: PermissionsInitialiser = (client) => {
             ['permission.permission_entity']: resource,
             ['permission.permission_level']: permissionLevel,
           });
-      const roleHasPermission = client.raw('SELECT EXISTS ?', [inner]);
-      const result = await roleHasPermission;
-      return result.rows[0];
+      const roleHasPermission = await client.raw('SELECT EXISTS ?', [inner]);
+      return roleHasPermission.rows[0];
     },
     userHas: async({ resource, permissionLevel, access, userId }) => {
       const inner = client
@@ -132,9 +131,8 @@ const permissionsInitialiser: PermissionsInitialiser = (client) => {
           ['permission.permission_entity']: resource,
           ['permission.permission_level']: permissionLevel,
         });
-      const userHasPermission = client.raw('SELECT EXISTS ?', [inner]);
-      const result = await userHasPermission;
-      return result.rows[0];
+      const userHasPermission = await client.raw('SELECT EXISTS ?', [inner]);
+      return userHasPermission.rows[0];
     },
   };
 };
