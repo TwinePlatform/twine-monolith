@@ -1,5 +1,6 @@
 import * as Knex from 'knex';
-import { Dictionary } from '../../utils/types'
+
+type Dictionary<T> = { [k: string]: T }
 
 type Role = 
   'VISITOR'

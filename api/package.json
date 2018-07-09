@@ -45,7 +45,7 @@
     "verbose": true,
     "coverageDirectory": "./coverage",
     "testPathIgnorePatterns": [
-      "built"
+      "<rootDir>/build/"
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"

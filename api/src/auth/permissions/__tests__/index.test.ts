@@ -1,11 +1,10 @@
 import { permissionsInitialiser } from '../index';
-import { getConfig } from '../../../../config';
-import { migrate } from '../../../../database';
+const { getConfig } = require('../../../../config');
+const { migrate } = require('../../../../database');
 import * as knexInit from 'knex';
 
 describe('Permisions Module', () => {
   const config = getConfig(process.env.NODE_ENV);
-  // config.knex.debug = true;
   const knex = knexInit(config.knex);
   const permissionsInterface = permissionsInitialiser(knex);
   beforeAll(async() => {
