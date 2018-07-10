@@ -18,6 +18,7 @@ module.exports = {
       "esSpecCompliant": true
     }],
     "no-consecutive-blank-lines": [true, 2],
-    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"]
+    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"],
+    'import-name': false
   }
 };
