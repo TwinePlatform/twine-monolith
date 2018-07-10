@@ -3,12 +3,12 @@
  *
  * Specifies the required shape and content of the configuration object.
  */
-const Joi = require('joi');
-const { DEVELOPMENT, TESTING, PRODUCTION } = require('./environments');
+import * as Joi from 'joi';
+import { Environment } from './types';
 
-module.exports = {
+export default {
   root: Joi.string().min(1).required(),
-  env: Joi.string().only(DEVELOPMENT, TESTING, PRODUCTION),
+  env: Joi.string().only(Object.values(Environment)),
   web: Joi.object({
     host: Joi.string().min(1),
     port: Joi.number().min(0).max(65535).required(),
@@ -17,7 +17,7 @@ module.exports = {
       Joi.object({
         key: Joi.string().required(),
         cert: Joi.string().required(),
-      }),
+      })
     ),
   }),
   knex: Joi.object({
@@ -31,7 +31,7 @@ module.exports = {
         password: Joi.string().optional(),
         ssl: Joi.bool().default(false),
       }),
-      Joi.string().min('psql://localhost:5432'.length),
+      Joi.string().min('psql://localhost:5432'.length)
     ),
     pool: Joi.object({
       min: 3,

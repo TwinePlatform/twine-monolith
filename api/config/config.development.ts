@@ -1,6 +1,8 @@
-const path = require('path');
+import * as path from 'path';
+import { Environment } from './types';
 
-module.exports = {
+export default {
+  env: Environment.DEVELOPMENT,
   web: {
     port: 4000,
   },

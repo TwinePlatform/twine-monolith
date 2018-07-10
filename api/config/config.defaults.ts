@@ -4,13 +4,12 @@
  * Can also hold non-secret, environment-invariant configuration
  * Merged into environment-specific configurations
  */
-const path = require('path');
-const { DEVELOPMENT } = require('./environments');
+import * as path from 'path';
+import { Environment } from './types';
 
-
-module.exports = {
+export default {
   root: path.resolve(__dirname, '..'),
-  env: DEVELOPMENT,
+  env: Environment.DEVELOPMENT,
   web: {
     host: 'localhost',
     port: 1000,
