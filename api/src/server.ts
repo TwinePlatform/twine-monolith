@@ -5,6 +5,7 @@ import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import v1 from './api/v1';
 import setup from './setup';
+import routes from './routes';
 import { Config } from '../config/types';
 
 // Extend declaration from hapi
@@ -24,6 +25,8 @@ const init = async (config: Config): Promise<Hapi.Server> => {
   await server.register([
     v1,
   ]);
+
+  server.route(routes);
 
   return server;
 };
