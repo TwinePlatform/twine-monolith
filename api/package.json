@@ -64,7 +64,6 @@
     "dotenv": "^6.0.0",
     "hapi": "^17.5.1",
     "hapi-pino": "^4.0.4",
-    "jest": "^23.1.0",
     "joi": "^13.4.0",
     "knex": "^0.14.6",
     "minimist": "^1.2.0",
@@ -78,6 +77,7 @@
     "@types/knex": "^0.14.15",
     "@types/ramda": "^0.25.34",
     "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
+    "jest": "^23.3.0",
     "nodemon": "^1.17.5",
     "ts-jest": "^22.4.6",
     "typescript": "^2.9.1"
