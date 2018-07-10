@@ -14,10 +14,10 @@ export default {
     },
     migrations: {
       tableName: 'knex_migrations',
-      directory: path.resolve(__dirname, '..', 'database', 'migrations'),
+      directory: path.resolve(process.cwd(), 'database', 'migrations'),
     },
     seeds: {
-      directory: path.resolve(__dirname, '..', 'database', 'seeds', 'testing'),
+      directory: path.resolve(process.cwd(), 'database', 'seeds', 'testing'),
     },
   },
   email: {
