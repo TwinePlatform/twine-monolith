@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "eslint-config-twine",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "ESLint config for all Twine Projects",
   "main": "index.js",
   "scripts": {
