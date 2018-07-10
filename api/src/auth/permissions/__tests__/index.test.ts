@@ -1,5 +1,5 @@
-import { permissionsInitialiser } from '..';
-import { PermissionLevel, Resource, Role, Access } from '../permissions';
+import permissionsInitialiser from '..';
+import { PermissionLevel, Resource, Role, Access } from '../types';
 const { getConfig } = require('../../../../config');
 const { migrate } = require('../../../../database');
 import * as knexInit from 'knex';

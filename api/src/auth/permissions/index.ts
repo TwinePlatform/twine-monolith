@@ -1,4 +1,7 @@
-import { PermissionsInitialiser, GetPermissionIds, GetRoleId } from './permissions';
+import {
+  PermissionsInitialiser,
+  GetPermissionIds,
+  GetRoleId } from './types';
 
 const permissionsInitialiser: PermissionsInitialiser = (client) => {
   return {
@@ -137,13 +140,4 @@ const permissionsInitialiser: PermissionsInitialiser = (client) => {
   };
 };
 
-const roles = {
-  add: () => {},
-  remove: () => {},
-  move: () => {},
-  removeUserFromAll: () => {},
-  hasPermission: () => {},
-  userHas: () => {},
-};
-
-export { permissionsInitialiser };
+export default permissionsInitialiser;

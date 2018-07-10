@@ -1,4 +1,4 @@
-import { emailInitialiser } from '../index';
+import { emailInitialiser } from '..';
 import { EmailTemplate } from '../templates';
 const { getConfig } = require('../../../../config');
 
