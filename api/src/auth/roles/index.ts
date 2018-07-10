@@ -1,0 +1,126 @@
+import { RolesInitialiser } from './types';
+const { lazyPromiseSeries } = require('../../../database');
+import * as knex from 'knex';
+
+const rolesInitialiser: RolesInitialiser = (client) => {
+  return  {
+    add: async({ role, userId, orgId }) => {
+      try {
+        const query = await client.insert({
+          user_account_id: userId,
+          organisation_id: orgId,
+          access_role_id: client.select('access_role_id')
+            .table('access_role')
+            .where({ ['access_role_name']: role }),
+        })
+        .into('user_account_access_role')
+        .returning('*');
+        return await  query[0];
+      } catch (error) {
+        switch (error.code){
+          case '23505':
+            throw new Error('User is already associated with this role at this organistion');
+
+          case '23503':
+            throw new Error(`Foreign key does not exist: ${error.detail}`);
+
+          default:
+            throw error;
+        }
+      }
+    },
+    remove: async ({ role, userId, orgId }) => {
+      const deleteRow = await client('user_account_access_role')
+        .where({ user_account_id: userId,
+          organisation_id: orgId,
+          access_role_id: client.select('access_role_id')
+            .table('access_role')
+            .where({ ['access_role_name']: role }),
+        })
+        .del()
+        .returning('*');
+
+      if (deleteRow.length === 0) {
+        throw new Error('This user is not associated to this role at this organisation');
+      }
+      return deleteRow[0];
+    },
+    move: async({ to, from , userId, orgId }) => {
+      const inner = client('user_account_access_role')
+        .select()
+        .where({
+          user_account_id: userId,
+          organisation_id: orgId,
+          access_role_id: client('access_role')
+            .select('access_role_id').where({ access_role_name: from }),
+        });
+
+      const checkFromExists = await client.raw('SELECT EXISTS ?', [inner]);
+
+      if (!checkFromExists.rows[0].exists) {
+        throw new Error(`From role is not associated associated to this user`);
+      }
+
+      const deleteRow = client('user_account_access_role')
+        .where({ user_account_id: userId,
+          organisation_id: orgId,
+          access_role_id: client.select('access_role_id')
+          .table('access_role')
+          .where({ ['access_role_name']: from }),
+        })
+        .del();
+
+      const addRow = client.insert({
+        user_account_id: userId,
+        organisation_id: orgId,
+        access_role_id: client.select('access_role_id')
+          .table('access_role')
+          .where({ ['access_role_name']: to }),
+      })
+      .into('user_account_access_role');
+      try {
+        return await client.transaction((trx) => {
+          lazyPromiseSeries([deleteRow, addRow].map((q) => q.transacting(trx)))
+          .then(trx.commit)
+          .catch(trx.rollback);
+        });
+      } catch (error) {
+        switch (error.code) {
+          case '23505':
+            throw new Error(
+              'User is already associated with this \'from\' role at this organistion');
+
+          default:
+            throw error;
+        }
+      }
+    },
+    removeUserFromAll: async({ userId, orgId }) => {
+      const deleteRow = await client('user_account_access_role')
+        .where({ user_account_id: userId,
+          organisation_id: orgId,
+        })
+        .del()
+        .returning('*');
+
+      if (deleteRow.length === 0) {
+        throw new Error('This user is not associated to any roles at this organisation');
+      }
+      return deleteRow;
+    },
+    userHas: async({ role, userId, orgId }) => {
+      const inner = client('user_account_access_role')
+      .select()
+      .where({
+        user_account_id: userId,
+        organisation_id: orgId,
+        access_role_id: client('access_role')
+          .select('access_role_id').where({ access_role_name: role }),
+      });
+      const result = await client.raw('SELECT EXISTS ?', [inner]);
+      return result.rows[0];
+    },
+  };
+};
+
+export default rolesInitialiser;

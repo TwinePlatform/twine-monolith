@@ -5,7 +5,7 @@ const { compose, last, head, tap } = require('ramda');
 const { getConfig, TESTING } = require('../config');
 
 // lazyPromiseSeries :: [PromiseLike (a)] -> Promise ([a])
-const lazyPromiseSeries = (ps) => ps.reduce((fp, p) => fp.then(res => p.then(rp => res.concat(rp))), Promise.resolve([]))
+exports.lazyPromiseSeries = (ps) => ps.reduce((fp, p) => fp.then(res => p.then(rp => res.concat(rp))), Promise.resolve([]))
 
 const MIGRATIONS_BASE_PATH = path.resolve(__dirname, 'migrations');
 
@@ -84,7 +84,7 @@ exports.migrate = {
       );
 
     await teardownClient.transaction((trx) =>
-      lazyPromiseSeries(queries.map((q) => q.transacting(trx)))
+      exports.lazyPromiseSeries(queries.map((q) => q.transacting(trx)))
         .then(trx.commit)
         .catch(trx.rollback)
     )

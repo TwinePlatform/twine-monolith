@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { Dictionary } from '../../types/internal';
+import { Dictionary } from 'ramda';
 
 export enum Role {
   VISITOR = 'VISITOR',
