@@ -4,7 +4,13 @@
 import { inspect } from 'util';
 import { compose, tap } from 'ramda';
 import { init, start } from './server';
-const { getConfig } = require('../config');
+import { getConfig } from '../config';
+
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Promise Rejection');
+  console.error(reason);
+  process.exit(1);
+});
 
 const logConfig = (config: any) => {
   console.log(`Attempting to start twine-api in "${config.env}" environment.`);

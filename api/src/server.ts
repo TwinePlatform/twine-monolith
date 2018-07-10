@@ -2,32 +2,26 @@
  * Server initialisation and configuration
  */
 import * as Hapi from 'hapi';
-import * as Pino from 'hapi-pino';
 import * as Knex from 'knex';
 import v1 from './api/v1';
 import setup from './setup';
+import { Config } from '../config/types';
 
-/*
- * Extend declaration from hapi
- */
+// Extend declaration from hapi
 declare module 'hapi' {
   interface ApplicationState {
-    config: any;
+    config: Config;
     knex: Knex;
   }
 }
 
-const init = async (config: any): Promise<Hapi.Server> => {
+const init = async (config: Config): Promise<Hapi.Server> => {
 
   const server = new Hapi.Server(config.web);
 
-  setup(server);
+  setup(server, config);
 
   await server.register([
-    {
-      plugin: Pino,
-      options: { prettyPrint: true },
-    },
     v1,
   ]);
 
