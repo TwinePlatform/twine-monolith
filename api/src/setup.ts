@@ -10,4 +10,15 @@ export default (server: Hapi.Server, config: Config) => {
   server.app.knex = Knex(config.knex);
 
   server.decorate('request', 'knex', server.app.knex);
+
+  server.decorate('server', 'shutdown', async (graceful) => {
+    if (graceful) {
+      await server.app.knex.destroy();
+      return server.stop();
+
+    } else {
+      return process.exit(1);
+
+    }
+  });
 };
