@@ -36,8 +36,8 @@
     "db:reset": "npm run migrate:teardown && npm run migrate:latest && npm run seed:run",
     "db:reset:test": "npm run migrate:teardown:test && npm run migrate:latest:test && npm run seed:run:test",
     "cover": "jest --coverage",
-    "dev": "nodemon ./built/index.js",
-    "start": "node ./built/index.js",
+    "dev": "nodemon ./build/src/index.js",
+    "start": "node ./build/src/index.js",
     "watch": "tsc -w",
     "build": "tsc"
   },

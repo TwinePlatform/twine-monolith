@@ -12,10 +12,10 @@
       "es2017"
     ],
   },
-  "include": [
-      "src/**/*"
-  ],
   "exclude": [
+    "bin",
+    "database",
+    "docs",
     "node_modules"
   ]
 }
