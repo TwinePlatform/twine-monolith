@@ -2,6 +2,7 @@ exports.seed = (knex) =>
   knex('ethnicity').del()
     .then(() =>
       knex('ethnicity').insert([
+        { ethnicity_name: 'prefer not to say' },
         { ethnicity_name: '🎶' },
         { ethnicity_name: 'cos' },
         { ethnicity_name: 'it' },
