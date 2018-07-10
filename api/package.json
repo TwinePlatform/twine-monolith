@@ -21,7 +21,9 @@
   "homepage": "https://github.com/TwinePlatform/twine-api#readme",
   "main": "src/index.js",
   "scripts": {
-    "test": "NODE_ENV=testing jest",
+    "test": "npm run test:parallel && npm run test:series",
+    "test:parallel": "NODE_ENV=testing jest '.test.ts$'",
+    "test:series": "NODE_ENV=testing jest '.test.series.ts$' --runInBand",
     "test:watch": "NODE_ENV=testing jest --watch",
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --project tsconfig.json --fix",
@@ -35,9 +37,9 @@
     "seed:run:test": "NODE_ENV=testing knex seed:run",
     "db:reset": "npm run migrate:teardown && npm run migrate:latest && npm run seed:run",
     "db:reset:test": "npm run migrate:teardown:test && npm run migrate:latest:test && npm run seed:run:test",
-    "cover": "jest --coverage",
-    "dev": "nodemon ./build/src/index.js",
-    "start": "node ./build/src/index.js",
+    "cover": "jest --runInBand --coverage",
+    "dev": "nodemon ./build/index.js",
+    "start": "node ./build/index.js",
     "watch": "tsc -w",
     "build": "tsc"
   },
@@ -50,7 +52,7 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testRegex": "__tests__/.*",
     "moduleFileExtensions": [
       "ts",
       "tsx",
