@@ -4,8 +4,7 @@
   "version": "1.0.0",
   "description": "",
   "engines": {
-    "node": "10.x",
-    "npm": "6.x"
+    "node": "10.x"
   },
   "repository": {
     "type": "git",
@@ -25,6 +24,7 @@
     "test:parallel": "NODE_ENV=testing jest '.test.ts$'",
     "test:series": "NODE_ENV=testing jest '.test.series.ts$' --runInBand",
     "test:watch": "NODE_ENV=testing jest --watch",
+    "cover": "NODE_ENV=testing jest --runInBand --coverage",
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --project tsconfig.json --fix",
     "migrate:latest": "knex migrate:latest",
@@ -32,16 +32,16 @@
     "migrate:make": "node ./bin/db.js migrate:make",
     "migrate:teardown": "node ./bin/db.js migrate:teardown",
     "migrate:teardown:test": "NODE_ENV=testing node ./bin/db.js migrate:teardown",
+    "migrate:reset": "npm run migrate:teardown && npm run migrate:latest && npm run seed:run",
+    "migrate:reset:test": "npm run migrate:teardown:test && npm run migrate:latest:test && npm run seed:run:test",
     "seed:make": "knex seed:make",
     "seed:run": "knex seed:run",
     "seed:run:test": "NODE_ENV=testing knex seed:run",
-    "db:reset": "npm run migrate:teardown && npm run migrate:latest && npm run seed:run",
-    "db:reset:test": "npm run migrate:teardown:test && npm run migrate:latest:test && npm run seed:run:test",
-    "cover": "jest --runInBand --coverage",
     "dev": "nodemon ./build/src/index.js",
     "start": "node ./build/src/index.js",
     "watch": "tsc -w",
-    "build": "tsc"
+    "build": "tsc",
+    "heroku-postbuild": "npm run build && npm run migrate:latest"
   },
   "jest": {
     "verbose": true,
