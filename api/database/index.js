@@ -54,16 +54,16 @@ exports.migrate = {
     return 1;
   },
 
-  teardown: async ({env = process.env.NODE_ENV, client} = {}) => { 
+  teardown: async ({env = process.env.NODE_ENV, client} = {}) => {
     const config = getConfig(env);
     const teardownClient = client ? client : knex(config.knex);
-    
+
     const tables = await teardownClient('pg_catalog.pg_tables').select('tablename').where({ schemaname: 'public' });
 
     const queries = tables
       .map((t) => t.tablename)
       .filter((t) => t !== 'spatial_ref_sys')
-      .map(tap((t) => { 
+      .map(tap((t) => {
         if(config.env !== TESTING) console.log(`Dropping table ${t}`)
       }))
       .map((tablename) => teardownClient.raw(`DROP TABLE IF EXISTS "${tablename}" CASCADE`))
@@ -89,10 +89,10 @@ exports.migrate = {
     return client ? null : teardownClient.destroy();
   },
 
-  truncate: async ({env = process.env.NODE_ENV, client} = {}) => { 
+  truncate: async ({env = process.env.NODE_ENV, client} = {}) => {
     const config = getConfig(env);
     const truncateClient = client ? client : knex(config.knex);
-    
+
     const tables = await truncateClient('pg_catalog.pg_tables')
     .select('tablename')
     .where({ schemaname: 'public' })
