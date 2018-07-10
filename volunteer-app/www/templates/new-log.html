@@ -13,15 +13,15 @@
                 <label class="item item-input">
                     <input type="text" placeholder="Search"  ng-model="volunteerNameFilter" ng-change="filterVolunteersByName(this.volunteerNameFilter)">
                 </label>
-                <label class="item item-select">
+                <label class="item item-select" style="margin-bottom: 8px">
                     <select  name="volunteers" id="volunteers" ng-model="selectedUser.id" ng-change="volunteerSelected(this.selectedUser.id)" convert-to-number>
                         <option value="" selected disabled>{{noNameMatches ? 'No search matches' : 'Select volunteer'}}</option>
                         <option ng-if="!isSelected(option.id)" ng-repeat="option in displayedVolunteers" value="{{option.id}}">{{option.name}}</option>
                     </select>
                 </label>
                 <div class="selectedVolunteers" ng-repeat="option in selectedVolunteers">
-                    <span>{{option.name}}</span>
                     <i ng-click="removeFromSelected(option.id)" class="icon ion-close-circled large"></i>
+                    <span class="input-label">{{option.name}}</span>
                 </div>
             </div>
             <!-- /name -->

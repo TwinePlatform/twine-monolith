@@ -12705,10 +12705,10 @@ select[disabled], .item-select-disabled:after {
   right: 4px;
 }
 .selectedVolunteers span {
-  font-size: 24px;
+  margin-top: 2px;
 }
 .selectedVolunteers {
-  margin: 8px;
+  margin: 0 8px;
 }
 #volunteers .selected {
   background-color: lightgoldenrodyellow;
