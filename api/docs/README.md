@@ -1,7 +1,7 @@
 # Twine API Project Documentation
 
 ## Contents
-1. [API Specification](./api.json)
+1. [API Specification](../src/api/v1/api.json)
 2. [API Migration](./api_migration.md)
 3. [Architecture](./architecture.md)
 4. [Configuration](./configuration.md)

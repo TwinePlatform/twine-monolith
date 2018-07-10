@@ -1,5 +1,7 @@
-import { server } from '../server';
-const apiJson = require('../../docs/api.json');
+import * as Hapi from 'hapi';
+import { init } from '../server';
+import { getConfig } from '../../config';
+const apiJson = require('../api/v1/api.json');
 
 type HttpMethod =
   'GET'
@@ -32,18 +34,21 @@ const routeTestFixtures: RouteTestFixture [] = Object.keys(apiJson.routes)
           };
         });
         return [... nestedAcc, ...testObj];
-      },      []);
+      }, []);
     return [...acc, ...fullRoute];
-  },      []);
+  }, []);
 
 describe('API Specification', () => {
-  routeTestFixtures.forEach((fixture) => {
-    test(fixture.testName, async () => {
-      const response = await server.inject({
-        method: fixture.method,
-        url: fixture.url,
-      });
-      expect(response.statusCode).toBe(fixture.statusCode);
+  let server: Hapi.Server;
+
+  beforeAll(async () => {
+    server = await init(getConfig(process.env.NODE_ENV));
+  });
+
+  routeTestFixtures.forEach(({ testName, method, url, statusCode }) => {
+    test(testName, async () => {
+      const response = await server.inject({ method, url });
+      expect(response.statusCode).toBe(statusCode);
     });
   });
 });
