@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const knex = require('knex');
 const { compose, last, head, tap } = require('ramda');
-const { getConfig, TESTING } = require('../config');
+const { getConfig, Environment: { TESTING } } = require('../build/config');
 const { lazyPromiseSeries } = require('../src/utils');
 const MIGRATIONS_BASE_PATH = path.resolve(__dirname, 'migrations');
 
