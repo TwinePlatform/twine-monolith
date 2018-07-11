@@ -26,5 +26,5 @@ const up = compose(
 );
 
 up(process.env.NODE_ENV)
-  .then((server) => `twine-api listening on ${server.info.uri}`)
+  .then((server) => console.log(`\n\ntwine-api listening on ${server.info.uri}`))
   .catch(console.error);

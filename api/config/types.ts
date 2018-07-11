@@ -8,7 +8,7 @@ export enum Environment {
 
 type WebConfig = {
   host: string,
-  port: number,
+  port: number | string,
   tls: null | { key: string, cert: string }
 };
 

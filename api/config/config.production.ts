@@ -4,7 +4,8 @@ import { Environment } from './types';
 export default {
   env: Environment.PRODUCTION,
   web: {
-    port: 4002,
+    host: process.env.HOST || '0.0.0.0',
+    port: process.env.PORT || 4002,
   },
   knex: {
     client: 'pg',
