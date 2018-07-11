@@ -16,7 +16,7 @@ describe('Config', () => {
   test(`readConfig | ${Environment.PRODUCTION}`, () => {
     const config = readConfig(Environment.PRODUCTION);
 
-    expect(config.web).toEqual({ port: 4002, host: 'localhost', tls: null });
+    expect(config.web).toEqual({ port: 4002, host: '0.0.0.0', tls: null });
   });
 
   test('Config | validateConfig | valid config', () => {
