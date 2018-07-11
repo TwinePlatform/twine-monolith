@@ -1,6 +1,5 @@
 import * as Knex from 'knex';
-
-type Dictionary<T> = { [k: string]: T };
+import { Dictionary } from '../../types/internal';
 
 export enum Role {
   VISITOR = 'VISITOR',
