@@ -9,3 +9,4 @@
 6. [Getting started](./getting_started.md)
 7. [Permissions](./permissions.md)
 8. [Stack](./stack.md)
+9. [Deployment](./deployment.md)
