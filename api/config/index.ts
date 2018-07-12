@@ -5,7 +5,7 @@
  */
 require('dotenv').config({ path: './config/.env' });
 import * as Joi from 'joi';
-import { mergeDeepLeft, mergeDeepRight, compose, converge, identity } from 'ramda';
+import { mergeDeepLeft, compose, converge, identity } from 'ramda';
 import configSchema from './config.schema';
 import configDefaults from './config.defaults';
 import configDevelopment from './config.development';

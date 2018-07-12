@@ -1,7 +1,4 @@
-import {
-  PermissionsInitialiser,
-  GetPermissionIds,
-  GetRoleId } from './types';
+import { PermissionsInitialiser } from './types';
 
 const permissionsInitialiser: PermissionsInitialiser = (client) => {
   return {
@@ -115,7 +112,7 @@ const permissionsInitialiser: PermissionsInitialiser = (client) => {
       const roleHasPermission = await client.raw('SELECT EXISTS ?', [inner]);
       return roleHasPermission.rows[0];
     },
-    userHas: async({ resource, permissionLevel, access, userId }) => {
+    userHas: async ({ resource, permissionLevel, access, userId }) => {
       const inner = client
         .select()
         .table('permission')

@@ -14,7 +14,7 @@ const emailOptions = {
 describe('Email Service', () => {
   const emailService = emailInitialiser.init({ apiKey: config.email.postmark_key });
   describe('::send', () => {
-    test('Correct email options throws error due to non existent template', async() => {
+    test('Correct email options throws error due to non existent template', async () => {
       try {
         await emailService.send(emailOptions);
       } catch (error) {
@@ -24,7 +24,7 @@ describe('Email Service', () => {
   });
 
   describe('::sendBatch', () => {
-    test('Correct email options throws error due to non existent template', async() => {
+    test('Correct email options throws error due to non existent template', async () => {
       try {
         await emailService.sendBatch([emailOptions, emailOptions]);
       } catch (error) {

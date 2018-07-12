@@ -33,7 +33,7 @@ const routeTestFixtures: RouteTestFixture [] = Object.keys(apiJson.routes)
             statusCode,
           };
         });
-        return [... nestedAcc, ...testObj];
+        return [...nestedAcc, ...testObj];
       }, []);
     return [...acc, ...fullRoute];
   }, []);

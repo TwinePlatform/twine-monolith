@@ -8,33 +8,35 @@ describe('Permisions Module', () => {
   const config = getConfig(process.env.NODE_ENV);
   const knex = knexInit(config.knex);
   const permissionsInterface = permissionsInitialiser(knex);
-  beforeAll(async() => {
+
+  beforeAll(async () => {
     await migrate.teardown({ client: knex });
     await knex.migrate.latest();
   });
+
   beforeEach(async () => {
     await migrate.truncate({ client: knex });
     await knex.seed.run();
   });
 
-  afterAll(async() => {
+  afterAll(async () => {
     await knex.destroy();
   });
 
   describe('::grantNew', () => {
-    test('SUCCESS - Grant a role a permission entry that doesn\'t already exist', async() => {
+    test('SUCCESS - Grant a role a permission entry that doesn\'t already exist', async () => {
       try {
         const query = await permissionsInterface.grantNew({
           resource: Resource.CONSTANTS,
           access: Access.READ,
           permissionLevel: PermissionLevel.CHILD,
-          role:Role.VISITOR});
+          role: Role.VISITOR});
         expect(query).toEqual(expect.arrayContaining([{ access_role_id: 1, permission_id: 2 }]));
       } catch (error) {
         expect(error).toBeFalsy();
       }
     });
-    test('ERROR - Cannot grant a role a permission entry that already exists', async() => {
+    test('ERROR - Cannot grant a role a permission entry that already exists', async () => {
       expect.assertions(1);
       try {
         const query = await permissionsInterface.grantNew({
@@ -51,7 +53,7 @@ describe('Permisions Module', () => {
   });
 
   describe('::grantExisting', () => {
-    test('SUCCESS - Grant a role a permission entry that already exists', async() => {
+    test('SUCCESS - Grant a role a permission entry that already exists', async () => {
       try {
         const query = await permissionsInterface.grantExisting({
           resource: Resource.CONSTANTS,
@@ -63,10 +65,10 @@ describe('Permisions Module', () => {
         expect(error).toBeFalsy();
       }
     });
-    test('ERROR - Cannot grant a permission that doesn\'t already exist', async() => {
+    test('ERROR - Cannot grant a permission that doesn\'t already exist', async () => {
       expect.assertions(1);
       try {
-        const query = await permissionsInterface.grantExisting({
+        await permissionsInterface.grantExisting({
           resource: Resource.CONSTANTS,
           access: Access.READ,
           permissionLevel: PermissionLevel.PARENT,
@@ -76,10 +78,10 @@ describe('Permisions Module', () => {
           'Permission entry or role does not exist, please use grantNew method');
       }
     });
-    test('ERROR - Duplicate link between role and permission entry', async() => {
+    test('ERROR - Duplicate link between role and permission entry', async () => {
       expect.assertions(1);
       try {
-        const query = await permissionsInterface.grantExisting({
+        await permissionsInterface.grantExisting({
           resource: Resource.CONSTANTS,
           access: Access.READ,
           permissionLevel: PermissionLevel.OWN,
@@ -91,7 +93,7 @@ describe('Permisions Module', () => {
   });
 
   describe('::revoke', () => {
-    test('SUCCESS - deletes existing link between a permission entry and role', async() => {
+    test('SUCCESS - deletes existing link between a permission entry and role', async () => {
       expect.assertions(1);
       try {
         const query = await permissionsInterface.revoke({
@@ -105,7 +107,7 @@ describe('Permisions Module', () => {
       }
     });
 
-    test('ERROR - cannot delete when permission entry and role are not linked', async() => {
+    test('ERROR - cannot delete when permission entry and role are not linked', async () => {
       expect.assertions(1);
       try {
         const query = await permissionsInterface.revoke({
@@ -119,10 +121,10 @@ describe('Permisions Module', () => {
       }
     });
 
-    test('ERROR - cannot delete when permission entry does not exist', async() => {
+    test('ERROR - cannot delete when permission entry does not exist', async () => {
       expect.assertions(1);
       try {
-        const query = await permissionsInterface.revoke({
+        await permissionsInterface.revoke({
           resource: Resource.ORG_DETAILS,
           access: Access.READ,
           permissionLevel: PermissionLevel.CHILD,
@@ -134,7 +136,7 @@ describe('Permisions Module', () => {
   });
 
   describe('::roleHas', () => {
-    test('SUCCESS - returns false for non matching permissions & user', async() => {
+    test('SUCCESS - returns false for non matching permissions & user', async () => {
       try {
         const query = await permissionsInterface.roleHas({
           resource: Resource.CONSTANTS,
@@ -146,7 +148,7 @@ describe('Permisions Module', () => {
         expect(error).toBeFalsy();
       }
     });
-    test('SUCCESS - returns true for matching permissions & user', async() => {
+    test('SUCCESS - returns true for matching permissions & user', async () => {
       try {
         const query = await permissionsInterface.roleHas({
           resource: Resource.CONSTANTS,
@@ -161,23 +163,23 @@ describe('Permisions Module', () => {
   });
 
   describe('::userHas', () => {
-    test('SUCCESS - returns false for non matching permissions & user', async() => {
+    test('SUCCESS - returns false for non matching permissions & user', async () => {
       try {
         const query = await permissionsInterface.userHas({ resource: Resource.CONSTANTS,
           access: Access.READ,
           permissionLevel: PermissionLevel.CHILD,
-          userId:1 });
+          userId: 1 });
         expect(query.exists).toBe(false);
       } catch (error) {
         expect(error).toBeFalsy();
       }
     });
-    test('SUCCESS - returns true for matching permissions & user', async() => {
+    test('SUCCESS - returns true for matching permissions & user', async () => {
       try {
         const query = await permissionsInterface.userHas({ resource: Resource.CONSTANTS,
           access: Access.READ,
           permissionLevel: PermissionLevel.OWN,
-          userId:1 });
+          userId: 1 });
         expect(query.exists).toBe(true);
       } catch (error) {
         expect(error).toBeFalsy();

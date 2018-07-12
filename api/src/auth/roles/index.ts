@@ -1,10 +1,10 @@
 import { RolesInitialiser } from './types';
-const { lazyPromiseSeries } = require('../../utils');
-import * as knex from 'knex';
+import { lazyPromiseSeries } from '../../utils';
+
 
 const rolesInitialiser: RolesInitialiser = (client) => {
-  return  {
-    add: async({ role, userId, organisationId }) => {
+  return {
+    add: async ({ role, userId, organisationId }) => {
       try {
         const query = await client.insert({
           user_account_id: userId,
@@ -15,7 +15,9 @@ const rolesInitialiser: RolesInitialiser = (client) => {
         })
         .into('user_account_access_role')
         .returning('*');
+
         return query[0];
+
       } catch (error) {
         switch (error.code){
           case '23505':
@@ -29,6 +31,7 @@ const rolesInitialiser: RolesInitialiser = (client) => {
         }
       }
     },
+
     remove: async ({ role, userId, organisationId }) => {
       const deleteRow = await client('user_account_access_role')
         .where({ user_account_id: userId,
@@ -45,7 +48,8 @@ const rolesInitialiser: RolesInitialiser = (client) => {
       }
       return deleteRow[0];
     },
-    move: async({ to, from , userId, organisationId }) => {
+
+    move: async ({ to, from , userId, organisationId }) => {
       const inner = client('user_account_access_role')
         .select()
         .where({
@@ -78,12 +82,13 @@ const rolesInitialiser: RolesInitialiser = (client) => {
           .where({ ['access_role_name']: to }),
       })
       .into('user_account_access_role');
+
       try {
-        return await client.transaction((trx) => {
+        return await client.transaction((trx) =>
           lazyPromiseSeries([deleteRow, addRow].map((q) => q.transacting(trx)))
             .then(trx.commit)
-            .catch(trx.rollback);
-        });
+            .catch(trx.rollback)
+        );
       } catch (error) {
         switch (error.code) {
           case '23505':
@@ -95,7 +100,8 @@ const rolesInitialiser: RolesInitialiser = (client) => {
         }
       }
     },
-    removeUserFromAll: async({ userId, organisationId }) => {
+
+    removeUserFromAll: async ({ userId, organisationId }) => {
       const deleteRow = await client('user_account_access_role')
         .where({
           user_account_id: userId,
@@ -109,15 +115,17 @@ const rolesInitialiser: RolesInitialiser = (client) => {
       }
       return deleteRow;
     },
-    userHas: async({ role, userId, organisationId }) => {
+
+    userHas: async ({ role, userId, organisationId }) => {
       const inner = client('user_account_access_role')
-      .select()
-      .where({
-        user_account_id: userId,
-        organisation_id: organisationId,
-        access_role_id: client('access_role')
-          .select('access_role_id').where({ access_role_name: role }),
-      });
+        .select()
+        .where({
+          user_account_id: userId,
+          organisation_id: organisationId,
+          access_role_id: client('access_role')
+            .select('access_role_id')
+            .where({ access_role_name: role }),
+        });
       const result = await client.raw('SELECT EXISTS ?', [inner]);
       return result.rows[0];
     },

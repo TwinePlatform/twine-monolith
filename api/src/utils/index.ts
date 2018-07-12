@@ -1,9 +1,8 @@
-type LazyPromiseSeries =
-  (a: Promise <any>[]) => Promise <any[] >;
-
-const lazyPromiseSeries :LazyPromiseSeries =
-  (ps) => ps.reduce((fp, p) =>
-    fp.then((res) => p.then((rp) => res.concat(rp))), Promise.resolve([]));
-
-
-export { lazyPromiseSeries };
+export const lazyPromiseSeries = (ps: PromiseLike<any>[]): Promise<any[]> =>
+  Promise.resolve()
+    .then(() =>
+      ps.reduce(
+        (fp, p) => fp.then((res) => p.then((rp) => res.concat(rp))),
+        Promise.resolve([])
+      )
+    );
