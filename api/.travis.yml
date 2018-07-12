@@ -20,6 +20,7 @@ services:
 - postgresql
 
 install:
+  - npm install -g codecov
   - npm install
 
 jobs:
@@ -42,6 +43,7 @@ jobs:
       script:
         - npm run build
         - npm run cover:$TEST_SUITE
+        - codecov
 
     - # Also Build and Test
       env: TEST_SUITE=unit
@@ -49,10 +51,7 @@ jobs:
       services: skip
       script:
         - npm run cover:$TEST_SUITE
-
-    - stage: coverage
-      install: npm install -g codecov
-      script: codecov
+        - codecov
 
 notifications:
   email:
