@@ -3,10 +3,7 @@ const path = require('path');
 const knex = require('knex');
 const { compose, last, head, tap } = require('ramda');
 const { getConfig, TESTING } = require('../config');
-
-// lazyPromiseSeries :: [PromiseLike (a)] -> Promise ([a])
-exports.lazyPromiseSeries = (ps) => ps.reduce((fp, p) => fp.then(res => p.then(rp => res.concat(rp))), Promise.resolve([]))
-
+const { lazyPromiseSeries } = require('../src/utils');
 const MIGRATIONS_BASE_PATH = path.resolve(__dirname, 'migrations');
 
 // readFile :: String -> String
@@ -84,7 +81,7 @@ exports.migrate = {
       );
 
     await teardownClient.transaction((trx) =>
-      exports.lazyPromiseSeries(queries.map((q) => q.transacting(trx)))
+      lazyPromiseSeries(queries.map((q) => q.transacting(trx)))
         .then(trx.commit)
         .catch(trx.rollback)
     )

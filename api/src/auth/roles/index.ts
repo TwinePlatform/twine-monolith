@@ -1,21 +1,21 @@
 import { RolesInitialiser } from './types';
-const { lazyPromiseSeries } = require('../../../database');
+const { lazyPromiseSeries } = require('../../utils');
 import * as knex from 'knex';
 
 const rolesInitialiser: RolesInitialiser = (client) => {
   return  {
-    add: async({ role, userId, orgId }) => {
+    add: async({ role, userId, organisationId }) => {
       try {
         const query = await client.insert({
           user_account_id: userId,
-          organisation_id: orgId,
+          organisation_id: organisationId,
           access_role_id: client.select('access_role_id')
             .table('access_role')
             .where({ ['access_role_name']: role }),
         })
         .into('user_account_access_role')
         .returning('*');
-        return await  query[0];
+        return query[0];
       } catch (error) {
         switch (error.code){
           case '23505':
@@ -29,10 +29,10 @@ const rolesInitialiser: RolesInitialiser = (client) => {
         }
       }
     },
-    remove: async ({ role, userId, orgId }) => {
+    remove: async ({ role, userId, organisationId }) => {
       const deleteRow = await client('user_account_access_role')
         .where({ user_account_id: userId,
-          organisation_id: orgId,
+          organisation_id: organisationId,
           access_role_id: client.select('access_role_id')
             .table('access_role')
             .where({ ['access_role_name']: role }),
@@ -45,12 +45,12 @@ const rolesInitialiser: RolesInitialiser = (client) => {
       }
       return deleteRow[0];
     },
-    move: async({ to, from , userId, orgId }) => {
+    move: async({ to, from , userId, organisationId }) => {
       const inner = client('user_account_access_role')
         .select()
         .where({
           user_account_id: userId,
-          organisation_id: orgId,
+          organisation_id: organisationId,
           access_role_id: client('access_role')
             .select('access_role_id').where({ access_role_name: from }),
         });
@@ -63,16 +63,16 @@ const rolesInitialiser: RolesInitialiser = (client) => {
 
       const deleteRow = client('user_account_access_role')
         .where({ user_account_id: userId,
-          organisation_id: orgId,
+          organisation_id: organisationId,
           access_role_id: client.select('access_role_id')
-          .table('access_role')
-          .where({ ['access_role_name']: from }),
+            .table('access_role')
+            .where({ ['access_role_name']: from }),
         })
         .del();
 
       const addRow = client.insert({
         user_account_id: userId,
-        organisation_id: orgId,
+        organisation_id: organisationId,
         access_role_id: client.select('access_role_id')
           .table('access_role')
           .where({ ['access_role_name']: to }),
@@ -81,8 +81,8 @@ const rolesInitialiser: RolesInitialiser = (client) => {
       try {
         return await client.transaction((trx) => {
           lazyPromiseSeries([deleteRow, addRow].map((q) => q.transacting(trx)))
-          .then(trx.commit)
-          .catch(trx.rollback);
+            .then(trx.commit)
+            .catch(trx.rollback);
         });
       } catch (error) {
         switch (error.code) {
@@ -95,10 +95,11 @@ const rolesInitialiser: RolesInitialiser = (client) => {
         }
       }
     },
-    removeUserFromAll: async({ userId, orgId }) => {
+    removeUserFromAll: async({ userId, organisationId }) => {
       const deleteRow = await client('user_account_access_role')
-        .where({ user_account_id: userId,
-          organisation_id: orgId,
+        .where({
+          user_account_id: userId,
+          organisation_id: organisationId,
         })
         .del()
         .returning('*');
@@ -108,12 +109,12 @@ const rolesInitialiser: RolesInitialiser = (client) => {
       }
       return deleteRow;
     },
-    userHas: async({ role, userId, orgId }) => {
+    userHas: async({ role, userId, organisationId }) => {
       const inner = client('user_account_access_role')
       .select()
       .where({
         user_account_id: userId,
-        organisation_id: orgId,
+        organisation_id: organisationId,
         access_role_id: client('access_role')
           .select('access_role_id').where({ access_role_name: role }),
       });
