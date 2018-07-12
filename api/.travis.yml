@@ -21,7 +21,7 @@ services:
 
 install:
   - npm install -g codecov
-  - npm install
+  - npm ci
 
 jobs:
   include:
