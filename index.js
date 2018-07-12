@@ -58,6 +58,7 @@ module.exports = {
       "method": "always",
       "constructor": "always"
     }],
-    "object-curly-spacing": [true, "always"]
+    "object-curly-spacing": [true, "always"],
+    "no-multi-spaces": true
   }
 };
