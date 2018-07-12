@@ -18,13 +18,14 @@
     "url": "https://github.com/TwinePlatform/twine-api/issues"
   },
   "homepage": "https://github.com/TwinePlatform/twine-api#readme",
-  "main": "src/index.js",
   "scripts": {
-    "test": "npm run test:parallel && npm run test:series",
-    "test:parallel": "NODE_ENV=testing jest '.test.ts$'",
-    "test:series": "NODE_ENV=testing jest '.test.series.ts$' --runInBand",
-    "test:watch": "NODE_ENV=testing jest --watch",
-    "cover": "NODE_ENV=testing jest --runInBand --coverage",
+    "test:unit": "NODE_ENV=testing jest --config=jest.unit.config.js",
+    "test:integration": "NODE_ENV=testing jest --config=jest.integration.config.js --runInBand",
+    "test": "npm run test:unit && npm run test:integration",
+    "cover:unit": "npm run test:unit -- --coverage",
+    "cover:integration": "npm run test:integration -- --coverage",
+    "cover:merge": "istanbul-merge --out coverage/coverage-final.json coverage/unit/coverage-final.json coverage/integration/coverage-final.json",
+    "cover": "npm run cover:unit && npm run cover:integration && npm run cover:merge",
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --project tsconfig.json --fix",
     "migrate:latest": "knex migrate:latest",
@@ -42,25 +43,6 @@
     "watch": "tsc -w",
     "build": "tsc",
     "heroku-postbuild": "npm run build && npm run migrate:latest"
-  },
-  "jest": {
-    "verbose": true,
-    "coverageDirectory": "./coverage",
-    "testPathIgnorePatterns": [
-      "<rootDir>/build/"
-    ],
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "__tests__/.*",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
   },
   "dependencies": {
     "@types/hapi": "^17.0.12",
@@ -80,6 +62,7 @@
   },
   "devDependencies": {
     "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
+    "istanbul-merge": "^1.1.1",
     "jest": "^23.3.0",
     "nodemon": "^1.17.5",
     "ts-jest": "^22.4.6"
