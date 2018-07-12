@@ -27,9 +27,6 @@ jobs:
     - stage: lint
       addons: skip
       services: skip
-      install:
-        - npm uninstall TwinePlatform/eslint-config-twine
-        - npm install TwinePlatform/eslint-config-twine
       script: npm run build
 
     - stage: build
