@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const db = require('..');
+const db = require('../util');
 
 describe('Database support functions', () => {
   describe('buildQueryFromFile', () => {

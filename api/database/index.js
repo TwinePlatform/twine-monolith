@@ -1,30 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 const knex = require('knex');
-const { compose, last, head, tap } = require('ramda');
+const { last, tap } = require('ramda');
 const { getConfig, Environment: { TESTING } } = require('../build/config');
+const { write } = require('./util')
 const { lazyPromiseSeries } = require('../src/utils');
-const MIGRATIONS_BASE_PATH = path.resolve(__dirname, 'migrations');
 
-// readFile :: String -> String
-const readFile = (fpath) => fs.readFileSync(fpath, 'utf8');
-
-// buildQuery :: String -> KnexClient -> Promise ()
-exports.buildQuery = (path) => (knex) => compose(knex.raw, readFile)(path);
-
-// buildPath :: String -> String
-exports.buildPath = (fname) =>
-  head(fname
-    .split('/')
-    .slice(-1)
-    .map((s) => s.replace('.js', '.sql'))
-    .map((s) => path.resolve(MIGRATIONS_BASE_PATH, 'sql', s)));
-
-// buildQueryFromFile :: String -> KnexClient -> Promise ()
-exports.buildQueryFromFile = compose(exports.buildQuery, exports.buildPath);
-
-// write :: (String, String) -> ()
-const write = (fpath, data) => fs.writeFileSync(fpath, data, { flag: 'wx' });
 
 const templates = {
   sql: [
@@ -34,7 +15,7 @@ const templates = {
   ].join('\n'),
 
   js: [
-    'const { buildQueryFromFile } = require(\'..\');',
+    'const { buildQueryFromFile } = require(\'../util\');',
     'exports.up = buildQueryFromFile(__filename);',
     'exports.down = () => {};',
     '',
@@ -51,22 +32,24 @@ exports.migrate = {
     write(path.resolve(MIGRATIONS_BASE_PATH, 'sql', `${newFilename}.sql`), templates.sql);
     write(path.resolve(MIGRATIONS_BASE_PATH, `${newFilename}.js`), templates.js);
 
-    return 1;
+    return 0;
   },
 
-  teardown: async ({env = process.env.NODE_ENV, client} = {}) => {
+  teardown: async ({ env = process.env.NODE_ENV, client: _client } = {}) => {
     const config = getConfig(env);
-    const teardownClient = client ? client : knex(config.knex);
+    const client = _client ? _client : knex(config.knex);
 
-    const tables = await teardownClient('pg_catalog.pg_tables').select('tablename').where({ schemaname: 'public' });
+    const tables = await client('pg_catalog.pg_tables')
+      .select('tablename')
+      .where({ schemaname: 'public' })
+      .whereNot({ tablename:'spatial_ref_sys' });
 
     const queries = tables
       .map((t) => t.tablename)
-      .filter((t) => t !== 'spatial_ref_sys')
       .map(tap((t) => {
-        if(config.env !== TESTING) console.log(`Dropping table ${t}`)
+        if (config.env !== TESTING) console.log(`Dropping table ${t}`)
       }))
-      .map((tablename) => teardownClient.raw(`DROP TABLE IF EXISTS "${tablename}" CASCADE`))
+      .map((tablename) => client.raw(`DROP TABLE IF EXISTS "${tablename}" CASCADE`))
       .concat([
         'ENUM_turnover_band',
         'ENUM_permission_level',
@@ -75,32 +58,34 @@ exports.migrate = {
         'ENUM_subscription_status',
       ]
         .map(tap((t) => {
-          if(config.env !== TESTING) console.log(`Dropping type ${t}`)
+          if (config.env !== TESTING) console.log(`Dropping type ${t}`)
         }))
-        .map((e) => teardownClient.raw(`DROP TYPE IF EXISTS ${e} CASCADE`))
+        .map((e) => client.raw(`DROP TYPE IF EXISTS ${e} CASCADE`))
       );
 
-    await teardownClient.transaction((trx) =>
+    await client.transaction((trx) =>
       lazyPromiseSeries(queries.map((q) => q.transacting(trx)))
         .then(trx.commit)
         .catch(trx.rollback)
     )
 
-    return client ? null : teardownClient.destroy();
+    return client ? null : client.destroy();
   },
 
-  truncate: async ({env = process.env.NODE_ENV, client} = {}) => {
+  truncate: async ({ env = process.env.NODE_ENV, client: _client } = {}) => {
     const config = getConfig(env);
-    const truncateClient = client ? client : knex(config.knex);
+    const client = _client ? _client : knex(config.knex);
 
-    const tables = await truncateClient('pg_catalog.pg_tables')
-    .select('tablename')
-    .where({ schemaname: 'public' })
-    .whereNot({ tablename:'spatial_ref_sys' });
+    const tables = await client('pg_catalog.pg_tables')
+      .select('tablename')
+      .where({ schemaname: 'public' })
+      .whereNot({ tablename:'spatial_ref_sys' });
 
-    const queries = tables.map((x) => truncateClient.raw(`TRUNCATE ${x.tablename} RESTART IDENTITY CASCADE`));
+    await Promise.all(
+      tables
+        .map((x) =>
+          client.raw(`TRUNCATE ${x.tablename} RESTART IDENTITY CASCADE`)));
 
-    await Promise.all(queries);
-    return client ? null : truncateClient.destroy();
+    return client ? null : client.destroy();
   }
 };
