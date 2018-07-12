@@ -26,16 +26,6 @@ install:
 jobs:
   include:
     - stage: Build and Test
-      addons: skip
-      services: skip
-      script: npm run lint
-
-    - # Also Build and Test
-      addons: skip
-      services: skip
-      script: npm run build
-
-    - # Also Build and Test
       env: TEST_SUITE=integration
       before_script:
         - psql -c 'create database twine_api_test;' -U postgres
@@ -50,6 +40,7 @@ jobs:
       addons: skip
       services: skip
       script:
+        - npm run lint
         - npm run cover:$TEST_SUITE
         - codecov
 
