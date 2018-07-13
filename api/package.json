@@ -24,8 +24,7 @@
     "test": "npm run test:unit && npm run test:integration",
     "cover:unit": "npm run test:unit -- --coverage",
     "cover:integration": "npm run test:integration -- --coverage",
-    "cover:merge": "istanbul-merge --out coverage/coverage-final.json coverage/unit/coverage-final.json coverage/integration/coverage-final.json",
-    "cover": "npm run cover:unit && npm run cover:integration && npm run cover:merge",
+    "cover": "npm run cover:unit && npm run cover:integration",
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --project tsconfig.json --fix",
     "migrate:latest": "knex migrate:latest",
@@ -61,10 +60,9 @@
     "typescript": "^2.9.1"
   },
   "devDependencies": {
-    "tslint-config-twine": "github:TwinePlatform/tslint-config-twine#2.1.0",
-    "istanbul-merge": "^1.1.1",
     "jest": "^23.3.0",
     "nodemon": "^1.17.5",
-    "ts-jest": "^22.4.6"
+    "ts-jest": "^22.4.6",
+    "tslint-config-twine": "github:TwinePlatform/tslint-config-twine#2.1.0"
   }
 }
