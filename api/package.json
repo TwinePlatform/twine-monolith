@@ -61,7 +61,7 @@
     "typescript": "^2.9.1"
   },
   "devDependencies": {
-    "eslint-config-twine": "github:TwinePlatform/tslint-config-twine#2.1.0",
+    "tslint-config-twine": "github:TwinePlatform/tslint-config-twine#2.1.0",
     "istanbul-merge": "^1.1.1",
     "jest": "^23.3.0",
     "nodemon": "^1.17.5",
