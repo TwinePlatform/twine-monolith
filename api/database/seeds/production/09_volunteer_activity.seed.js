@@ -8,5 +8,6 @@ exports.seed = (knex) =>
       { volunteer_activity_name: 'Office support' },
       { volunteer_activity_name: 'Support and Care for vulnerable community members' },
       { volunteer_activity_name: 'Professional pro bono work (Legal, IT, Research)' },
+      { volunteer_activity_name: 'Shop/Cafe work' },
       { volunteer_activity_name: 'Other' },
     ]);
