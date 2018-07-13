@@ -59,13 +59,13 @@ const permissionsInitialiser: PermissionsInitialiser = (client) => {
       }
     },
     revoke: async ({ resource, permissionLevel, access, role }) => {
-      const roleId = await  client
+      const roleId = await client
         .select('access_role_id')
         .table('access_role')
         .where({ ['access_role_name']: role })
         .then((res) => res[0].access_role_id);
 
-      const permissionIds = await  client
+      const permissionIds = await client
         .select('permission_id')
         .table('permission')
         .where({

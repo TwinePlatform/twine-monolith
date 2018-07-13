@@ -41,7 +41,7 @@ const emailInitialiser: EmailInitialiser = {
       send: async (emailOptions: Email) => {
         const postmarkOptions: Postmark.PostmarkMessageWithTemplate = emailKeyMap(emailOptions);
 
-        return  emailClient.sendEmailWithTemplate(postmarkOptions);
+        return emailClient.sendEmailWithTemplate(postmarkOptions);
       },
       sendBatch: async (emails: Email []) => {
         const postmarkEmails: Postmark.PostmarkMessageWithTemplate[] = emails.map(emailKeyMap);

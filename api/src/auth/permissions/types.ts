@@ -19,7 +19,7 @@ export enum Access {
 export enum Resource {
   CONSTANTS = 'constants',
   ORG_DETAILS = 'organisations_details',
-  ORG_SUBSCRIPTIONS =  'organisations_subscriptions',
+  ORG_SUBSCRIPTIONS = 'organisations_subscriptions',
   ORG_FEEDBACK = 'organisations_feedback',
   ORG_TRAINING = 'organisations_training',
   ORG_INVITATIONS = 'organisations_invitations',
