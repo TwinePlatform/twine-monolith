@@ -46,6 +46,7 @@
   "dependencies": {
     "@types/hapi": "^17.0.12",
     "@types/jest": "^23.1.1",
+    "@types/jsonwebtoken": "^7.2.8",
     "@types/knex": "^0.14.15",
     "@types/ramda": "^0.25.34",
     "dotenv": "^6.0.0",
@@ -57,6 +58,7 @@
     "hapi-auth-jwt2": "^8.1.0",
     "hapi-pino": "^4.0.4",
     "joi": "^13.4.0",
+    "jsonwebtoken": "^8.3.0",
     "knex": "^0.14.6",
     "minimist": "^1.2.0",
     "pg": "^7.4.3",

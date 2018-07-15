@@ -23,4 +23,7 @@ export default {
   email: {
     postmark_key: process.env.POSTMARK_KEY_DEVELOPMENT,
   },
+  secret: {
+    jwt_secret: process.env.JWT_SECRET_DEVELOPMENT,
+  },
 };

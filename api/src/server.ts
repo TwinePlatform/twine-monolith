@@ -25,16 +25,20 @@ const init = async (config: Config): Promise<Hapi.Server> => {
   setup(server, config);
 
   await server.register([
-    twineAuth,
     v1,
   ]);
 
-  await server.register({
-    plugin:logger,
-    options: {
-      env: config.env,
+  await server.register([
+    { plugin:logger,
+      options: {
+        env: config.env,
+      },
     },
-  });
+    { plugin: twineAuth,
+      options: {
+        jwtSecret: config.secret.jwt_secret,
+      },
+    }]);
 
   server.route(routes);
 

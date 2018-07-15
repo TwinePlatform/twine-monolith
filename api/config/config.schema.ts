@@ -47,4 +47,7 @@ export default {
   email: Joi.object({
     postmark_key: Joi.string().required(),
   }),
+  secret: Joi.object({
+    jwt_secret: Joi.string().required(),
+  }).required(),
 };

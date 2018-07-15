@@ -40,6 +40,9 @@ describe('Config', () => {
       email: {
         postmark_key: 'foo',
       },
+      secret: {
+        jwt_secret: 'lol',
+      },
     };
 
     expect(() => validateConfig(cfg)).not.toThrow();
@@ -64,6 +67,9 @@ describe('Config', () => {
       },
       email: {
         postmark_key: '',
+      },
+      secret: {
+        jwt_secret: '',
       },
     };
 
