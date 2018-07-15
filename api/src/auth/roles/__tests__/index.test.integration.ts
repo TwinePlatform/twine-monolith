@@ -159,4 +159,41 @@ describe('Roles Module', () => {
       expect(result.exists).toEqual(false);
     });
   });
+
+  describe('::getUserRole', () => {
+    test('SUCCESS - returns users role id', async () => {
+      const result = await rolesInterface.getUserRole({ userId: 1, organisationId: 1 });
+      expect(result).toEqual({ access_role_id: 1 });
+    });
+
+    test('Error - returns error if userId does not exist', async () => {
+      expect.assertions(1);
+      try {
+        await rolesInterface.getUserRole({ userId: 2, organisationId: 1 });
+      } catch (error) {
+        expect(error.message).toEqual('User does not exist');
+      }
+    });
+  });
+
+  describe('::getRolePermissions', () => {
+    test('SUCCESS - returns all permissions associated with role', async () => {
+      const result = await rolesInterface.getRolePermissions({ roleId: 1 });
+      expect(result).toEqual([{
+        access_role_id: 1,
+        access_type: 'read',
+        permission_entity: 'constants',
+        permission_id: 1,
+        permission_level: 'own' }]);
+    });
+
+    test('ERROR - returns error if role id does not exist', async () => {
+      expect.assertions(1);
+      try {
+        await rolesInterface.getRolePermissions({ roleId: 10  });
+      } catch (error) {
+        expect(error.message).toEqual('Role does not exist or has no associated permissions');
+      }
+    });
+  });
 });

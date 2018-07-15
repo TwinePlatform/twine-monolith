@@ -20,6 +20,8 @@ type RolesInterface = {
 
   userHas: (a: { role: Role, userId: number, organisationId: number }) =>
     Promise<ExistsQueryResponse>,
+  getUserRole: (a: { userId: number, organisationId: number}) => Promise<QueryResponse>,
+  getRolePermissions: (a: { roleId: number}) => Promise<QueryResponse []>,
 };
 
 export type RolesInitialiser = (client: Knex) => RolesInterface;

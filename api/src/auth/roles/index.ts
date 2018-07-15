@@ -129,6 +129,30 @@ const rolesInitialiser: RolesInitialiser = (client) => {
       const result = await client.raw('SELECT EXISTS ?', [inner]);
       return result.rows[0];
     },
+    getUserRole: async({ userId, organisationId }) => {
+      const query = await client('user_account_access_role')
+        .select('access_role_id')
+        .where({ user_account_id: userId, organisation_id: organisationId });
+      if (query.length === 0) {
+        throw new Error('User does not exist');
+      }
+      return query[0];
+    },
+    getRolePermissions: async({ roleId }) => {
+      const query = await client('permission')
+       .innerJoin(
+        'access_role_permission',
+        'permission.permission_id',
+        'access_role_permission.permission_id')
+      .select()
+      .where({ 'access_role_permission.access_role_id': roleId });
+
+      if (query.length === 0) {
+        throw new Error('Role does not exist or has no associated permissions');
+      }
+      return query;
+
+    },
   };
 };
 
