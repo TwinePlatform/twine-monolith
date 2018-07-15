@@ -10,9 +10,6 @@ declare module 'hapi' {
   interface Server {
     shutdown: (a?: boolean) => Promise<void>;
   }
-}
-
-declare module 'hapi' {
   interface Request {
     knex: Knex;
   }
