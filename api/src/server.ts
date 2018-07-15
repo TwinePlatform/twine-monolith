@@ -7,6 +7,7 @@ import v1 from './api/v1';
 import setup from './setup';
 import routes from './routes';
 import { Config } from '../config/types';
+import twineAuth from './auth/scheme';
 
 // Extend declaration from hapi
 declare module 'hapi' {
@@ -23,6 +24,7 @@ const init = async (config: Config): Promise<Hapi.Server> => {
   setup(server, config);
 
   await server.register([
+    twineAuth,
     v1,
   ]);
 

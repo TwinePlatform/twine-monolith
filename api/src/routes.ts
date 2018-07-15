@@ -6,6 +6,7 @@ export default [
     path: '/',
     options: {
       description: 'A splash page, of sorts',
+      auth: false,
     },
     handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
       return 'This is the Twine API Home page';
