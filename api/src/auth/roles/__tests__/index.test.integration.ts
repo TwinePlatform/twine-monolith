@@ -190,7 +190,7 @@ describe('Roles Module', () => {
     test('ERROR - returns error if role id does not exist', async () => {
       expect.assertions(1);
       try {
-        await rolesInterface.getRolePermissions({ roleId: 10  });
+        await rolesInterface.getRolePermissions({ roleId: 10 });
       } catch (error) {
         expect(error.message).toEqual('Role does not exist or has no associated permissions');
       }

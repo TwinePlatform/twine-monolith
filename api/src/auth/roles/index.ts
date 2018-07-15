@@ -129,7 +129,7 @@ const rolesInitialiser: RolesInitialiser = (client) => {
       const result = await client.raw('SELECT EXISTS ?', [inner]);
       return result.rows[0];
     },
-    getUserRole: async({ userId, organisationId }) => {
+    getUserRole: async ({ userId, organisationId }) => {
       const query = await client('user_account_access_role')
         .select('access_role_id')
         .where({ user_account_id: userId, organisation_id: organisationId });
@@ -138,7 +138,7 @@ const rolesInitialiser: RolesInitialiser = (client) => {
       }
       return query[0];
     },
-    getRolePermissions: async({ roleId }) => {
+    getRolePermissions: async ({ roleId }) => {
       const query = await client('permission')
        .innerJoin(
         'access_role_permission',

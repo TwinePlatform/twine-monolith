@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import rolesInitialiser from '../roles';
 
-type CreateScopeName = (a:{
+type CreateScopeName = (a: {
   access_type: string,
   permission_entity: string,
   permission_level: string
@@ -16,18 +16,19 @@ const createScopeName: CreateScopeName = ({
   `${permission_entity}-${permission_level}:${access_type}`;
 
 
-type Credentials =  {
+type Credentials = {
   userId: number,
   organisationId?: number,
   roleId: number
   scope: string []
 };
 
-type ValidateUser = (a:{userId:number, organisationId: number}, b: Hapi.Request)
+type ValidateUser = (a: {userId: number, organisationId: number}, b: Hapi.Request)
   => Promise <{credentials?: Credentials, isValid: boolean } | Boom<null>>;
 
 const validateUser: ValidateUser = async (decoded, request) => {
   try {
+
     const { userId, organisationId } = decoded;
     if (userId && organisationId) {
 
