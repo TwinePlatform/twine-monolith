@@ -8,6 +8,7 @@ import setup from './setup';
 import routes from './routes';
 import { Config } from '../config/types';
 import twineAuth from './auth/scheme';
+import logger from './logger';
 
 // Extend declaration from hapi
 declare module 'hapi' {
@@ -27,6 +28,13 @@ const init = async (config: Config): Promise<Hapi.Server> => {
     twineAuth,
     v1,
   ]);
+
+  await server.register({
+    plugin:logger,
+    options: {
+      env: config.env,
+    },
+  });
 
   server.route(routes);
 
