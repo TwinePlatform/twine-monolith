@@ -25,11 +25,7 @@ const init = async (config: Config): Promise<Hapi.Server> => {
   setup(server, config);
 
   await server.register([
-    v1,
-  ]);
-
-  await server.register([
-    { plugin:logger,
+    { plugin: logger,
       options: {
         env: config.env,
       },
@@ -39,6 +35,10 @@ const init = async (config: Config): Promise<Hapi.Server> => {
         jwtSecret: config.secret.jwt_secret,
       },
     }]);
+
+  await server.register([
+    v1,
+  ]);
 
   server.route(routes);
 

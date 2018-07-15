@@ -1,4 +1,5 @@
 import * as Hapi from 'hapi';
+import * as Boom from 'boom';
 import rolesInitialiser from '../roles';
 
 type CreateScopeName = (a:{
@@ -22,27 +23,33 @@ type Credentials =  {
   scope: string []
 };
 
-type ValidateUser = (a:{userId:number}, b: Hapi.Request)
-  => Promise <{credentials?: Credentials, isValid: boolean }>;
+type ValidateUser = (a:{userId:number, organisationId: number}, b: Hapi.Request)
+  => Promise <{credentials?: Credentials, isValid: boolean } | Boom<null>>;
 
-const validateUser:ValidateUser = async (decoded, request) => {
-  const { userId } = decoded;
-  const rolesInterface = rolesInitialiser(request.knex);
-  const getRoleId = await rolesInterface.getUserRole({ userId });
-  const roleId = getRoleId.access_role_id;
+const validateUser: ValidateUser = async (decoded, request) => {
+  try {
+    const { userId, organisationId } = decoded;
+    if (userId && organisationId) {
 
-  const getPermissions = await rolesInterface.getRolePermissions({ roleId });
-  const scope = getPermissions.map(createScopeName);
-  if (userId) {
-    return {
-      credentials: {
-        userId,
-        roleId,
-        scope,
-      },
-      isValid: true };
+      const rolesInterface = rolesInitialiser(request.knex);
+      const getRoleId = await rolesInterface.getUserRole({ userId, organisationId });
+      const roleId = getRoleId.access_role_id;
+
+      const getPermissions = await rolesInterface.getRolePermissions({ roleId });
+      const scope = getPermissions.map(createScopeName);
+      return {
+        credentials: {
+          userId,
+          roleId,
+          scope,
+        },
+        isValid: true };
+    }
+    return { isValid: false };
+  } catch (error) {
+    console.log(error);
+    return Boom.badImplementation('Error with server authentication');
   }
-  return { isValid: false };
 };
 
 export default validateUser;
