@@ -1,6 +1,6 @@
 import * as Hapi from 'hapi';
 
-export default [
+const routes: Hapi.ServerRoute [] = [
   {
     method: 'GET',
     path: '/',
@@ -13,3 +13,5 @@ export default [
     },
   },
 ];
+
+export default routes;
