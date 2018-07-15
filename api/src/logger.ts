@@ -1,8 +1,8 @@
 import * as Hapi from 'hapi';
-const { Environment: { TESTING } } = require('../build/config');
+import { Environment } from '../config/types';
 
 const getOption = (env: string) => {
-  const reporters = env === TESTING
+  const reporters = env === Environment.TESTING
     ? {}
     : {
       myConsoleReporter: [{

@@ -12,6 +12,12 @@ declare module 'hapi' {
   }
 }
 
+declare module 'hapi' {
+  interface Request {
+    knex: Knex;
+  }
+}
+
 export default (server: Hapi.Server, config: Config) => {
   server.app.config = config;
   server.app.knex = Knex(config.knex);
