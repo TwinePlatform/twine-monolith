@@ -37,7 +37,7 @@
     "seed:make": "knex seed:make",
     "seed:run": "knex seed:run",
     "seed:run:test": "NODE_ENV=testing knex seed:run",
-    "dev": "nodemon ./build/src/index.js",
+    "dev": "tsc -w & nodemon ./build/src/index.js",
     "start": "node ./build/src/index.js",
     "watch": "tsc -w",
     "build": "tsc",
