@@ -7,7 +7,6 @@ import v1 from './api/v1';
 import setup from './setup';
 import routes from './routes';
 import { Config } from '../config/types';
-import twineAuth from './auth/scheme';
 import logger from './logger';
 
 // Extend declaration from hapi
@@ -30,15 +29,11 @@ const init = async (config: Config): Promise<Hapi.Server> => {
         env: config.env,
       },
     },
-    { plugin: twineAuth,
+    { plugin: v1,
       options: {
         jwtSecret: config.secret.jwt_secret,
       },
     }]);
-
-  await server.register([
-    v1,
-  ]);
 
   server.route(routes);
 
