@@ -5,7 +5,6 @@ import * as jwt from 'hapi-auth-jwt2';
 
 export default {
   name: 'Twine API v1',
-  version: '1.0.0',
   register: async (server: Hapi.Server, options: { jwtSecret: string }) => {
     await server.register({
       plugin: jwt,
