@@ -1,3 +1,14 @@
+/*
+ * Twine API v1
+ *
+ * The API is written as a self-contained plugin. The API tries
+ * to minimise its dependencies on other plugins, providing its
+ * own authentication strategies, request lifecycle hooks, route
+ * definitions, etc.
+ *
+ * See also
+ * - api.json
+ */
 import * as Hapi from 'hapi';
 import organisations from './organisations';
 import surveys from './surveys';
