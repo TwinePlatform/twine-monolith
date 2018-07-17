@@ -51,7 +51,7 @@ const validateUser: ValidateUser = async (decoded, request) => {
     return { isValid: false };
   } catch (error) {
     console.log(error);
-    return Boom.badImplementation('Error with server authentication');
+    return Boom.badImplementation('Error with route authentication for users');
   }
 };
 

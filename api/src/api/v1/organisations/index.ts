@@ -17,4 +17,17 @@ export default [
       return '';
     },
   },
+  {
+    method: 'GET',
+    path: '/cls',
+    options: {
+      description: 'Retreive cls data',
+      auth: {
+        strategy: 'frontline',
+      },
+    },
+    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+      return '';
+    },
+  },
 ];

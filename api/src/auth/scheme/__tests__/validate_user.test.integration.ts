@@ -4,7 +4,7 @@ import { init } from '../../../server';
 import { getConfig } from '../../../../config';
 
 
-describe('Auth scheme', () => {
+describe('Internal auth scheme', () => {
   let server: Hapi.Server;
   const config = getConfig(process.env.NODE_ENV);
 
