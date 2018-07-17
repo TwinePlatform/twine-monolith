@@ -186,4 +186,25 @@ describe('Permisions Module', () => {
       }
     });
   });
+
+  describe('::getRolePermissions', () => {
+    test('SUCCESS - returns all permissions associated with role', async () => {
+      const result = await permissionsInterface.permissionsForRole({ roleId: 1 });
+      expect(result).toEqual([{
+        access_role_id: 1,
+        access_type: 'read',
+        permission_entity: 'constants',
+        permission_id: 1,
+        permission_level: 'own' }]);
+    });
+
+    test('ERROR - returns error if role id does not exist', async () => {
+      expect.assertions(1);
+      try {
+        await permissionsInterface.permissionsForRole({ roleId: 10 });
+      } catch (error) {
+        expect(error.message).toEqual('Role does not exist or has no associated permissions');
+      }
+    });
+  });
 });

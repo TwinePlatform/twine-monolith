@@ -1,6 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import rolesInitialiser from '../roles';
+import permissionsInitialiser from '../permissions';
 
 type CreateScopeName = (a: {
   access_type: string,
@@ -33,10 +34,11 @@ const validateUser: ValidateUser = async (decoded, request) => {
     if (userId && organisationId) {
 
       const rolesInterface = rolesInitialiser(request.knex);
+      const permissionsInterface = permissionsInitialiser(request.knex);
       const getRoleId = await rolesInterface.getUserRole({ userId, organisationId });
       const roleId = getRoleId.access_role_id;
 
-      const getPermissions = await rolesInterface.getRolePermissions({ roleId });
+      const getPermissions = await permissionsInterface.permissionsForRole({ roleId });
       const scope = getPermissions.map(createScopeName);
       return {
         credentials: {

@@ -37,7 +37,7 @@ export enum PermissionLevel {
   PARENT = 'parent',
 }
 
-type ReturningQueryResponse = Error | Dictionary<any>;
+type QueryResponse = Error | Dictionary<any>;
 type ExistsQueryResponse = { exists: boolean };
 
 export type PermissionsInitialiser = (client: Knex) => {
@@ -46,19 +46,19 @@ export type PermissionsInitialiser = (client: Knex) => {
     permissionLevel: PermissionLevel,
     access: Access,
     role: Role
-  }) => Promise<ReturningQueryResponse>,
+  }) => Promise<QueryResponse>,
   grantNew: (a: {
     resource: Resource,
     permissionLevel: PermissionLevel,
     access: Access,
     role: Role
-  }) => Promise<ReturningQueryResponse>,
+  }) => Promise<QueryResponse>,
   revoke: (a: {
     resource: Resource,
     permissionLevel: PermissionLevel,
     access: Access,
     role: Role
-  }) => Promise<ReturningQueryResponse>,
+  }) => Promise<QueryResponse>,
   // grantAll: (a: {resource: Resource, role: Role}) => {},
   // revokeAll: (a: {resource: Resource, role: Role}) => {},
   roleHas: (a: {
@@ -73,6 +73,7 @@ export type PermissionsInitialiser = (client: Knex) => {
     permissionLevel: PermissionLevel,
     access: Access,
   }) => Promise<ExistsQueryResponse>,
+  permissionsForRole: (a: { roleId: number}) => Promise<QueryResponse []>,
 };
 
 export type GetPermissionIds =

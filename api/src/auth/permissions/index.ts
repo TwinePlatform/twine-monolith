@@ -134,6 +134,21 @@ const permissionsInitialiser: PermissionsInitialiser = (client) => {
       const userHasPermission = await client.raw('SELECT EXISTS ?', [inner]);
       return userHasPermission.rows[0];
     },
+    permissionsForRole: async ({ roleId }) => {
+      const query = await client('permission')
+       .innerJoin(
+        'access_role_permission',
+        'permission.permission_id',
+        'access_role_permission.permission_id')
+      .select()
+      .where({ 'access_role_permission.access_role_id': roleId });
+
+      if (query.length === 0) {
+        throw new Error('Role does not exist or has no associated permissions');
+      }
+      return query;
+
+    },
   };
 };
 
