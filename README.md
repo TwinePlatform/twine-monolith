@@ -1,6 +1,6 @@
-# eslint-config-twine
+# tslint-config-twine
 
-ESLint config for all Twine Projects
+TSLint config for all Twine Projects
 
 <hr>
 
@@ -8,14 +8,14 @@ ESLint config for all Twine Projects
 First install the config
 
 ```
-> npm install TwinePlatform/eslint-config-twine
+> npm install TwinePlatform/tslint-config-twine
 ```
 
 Then add an `tslint.json` file that extends the config:
 
 ```
 {
-    "extends": "eslint-config-twine"
+    "extends": "tslint-config-twine"
 }
 ```
 
