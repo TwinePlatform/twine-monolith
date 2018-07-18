@@ -1,12 +1,31 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import { compare } from 'bcrypt';
-import { identity as id, zip, pipe, filter, flatten, head } from 'ramda';
+
+type ExternalStrategyResponse =
+  Promise <{ isValid: boolean, credentials: { scope: string } | {} } | Boom<null>>;
 
 type ValidateExternal = (request: Hapi.Request, token: string, h: Hapi.ResponseToolkit)
-  => Promise <{ isValid: boolean, credentials: any } | Boom<null>>;
+  => ExternalStrategyResponse;
 
-const filterNoMatches: R.Filter<any> = filter((x) => x[1]);
+type TokenResponse = { api_token: string, api_token_access: string };
+
+
+const findMatching = async (xs: TokenResponse [], token: string): ExternalStrategyResponse => {
+  if (xs.length < 1) return { isValid: false, credentials: {} };
+
+  const { api_token: apiToken = null, api_token_access: scope = null } = xs[0];
+
+  if (!apiToken || !scope) throw new Error('Error collecting api token data from database');
+
+  const match = await compare(token, apiToken);
+
+  return match
+  ? {
+    isValid: true,
+    credentials: { scope }, }
+  : findMatching(xs.slice(1), token);
+};
 
 const validateExternal: ValidateExternal = async ({ knex }, token, h) => {
   try {
@@ -15,29 +34,7 @@ const validateExternal: ValidateExternal = async ({ knex }, token, h) => {
       throw new Error('No api token data in database');
     }
 
-    const comparePromises: Promise<boolean>[] = tokenResponses.map((tokenHash: any) => {
-      const { api_token: apiToken } = tokenHash;
-
-      if (!apiToken) {
-        throw new Error('Error collecting api token data from database');
-      }
-      return compare(token, apiToken);
-    });
-
-    const matches = await Promise.all(comparePromises);
-
-    const findMatching: (a: boolean []) => any = pipe(
-      zip(tokenResponses),
-      filterNoMatches,
-      flatten,
-      head
-    );
-
-    return matches.some(id)
-      ? { isValid: true, credentials: {
-        scope: findMatching(matches).api_token_access,
-      } }
-      : { isValid: false, credentials: {} };
+    return findMatching(tokenResponses, token);
   } catch (error) {
     console.log(error);
     return Boom.badImplementation('Error with route authentication for 3rd party clients');
