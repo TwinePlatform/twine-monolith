@@ -31,7 +31,7 @@ const validateExternal: ValidateExternal = async ({ knex }, token, h) => {
   try {
     const tokenResponses = await knex('api_token').select(['api_token', 'api_token_access']);
     if (tokenResponses.length === 0) {
-      throw new Error('No api token data in database');
+      Boom.unauthorized('No stored api token data');
     }
 
     return findMatching(tokenResponses, token);
