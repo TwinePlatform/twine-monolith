@@ -15,6 +15,7 @@ export type UserRow = {
   qr_code: string
   birth_year: number
   post_code: string
+  phone_number: string
   is_email_confirmed: boolean
   is_phone_number_confirmed: boolean
   is_email_contact_consent_granted: boolean

@@ -21,6 +21,7 @@ const ColumnToModel: Map<keyof UserRow, keyof User> = {
   qr_code: 'qrCode',
   birth_year: 'birthYear',
   post_code: 'postCode',
+  phone_number: 'phoneNumber',
   is_email_confirmed: 'isEmailConfirmed',
   is_phone_number_confirmed: 'isPhoneNumberConfirmed',
   is_email_contact_consent_granted: 'isEmailConsentGranted',
@@ -69,6 +70,7 @@ export const Users: UserCollection = {
       qr_code: o.qrCode,
       birth_year: o.birthYear,
       post_code: o.postCode,
+      phone_number: o.phoneNumber,
       is_email_confirmed: o.isEmailConfirmed,
       is_phone_number_confirmed: o.isPhoneNumberConfirmed,
       is_email_contact_consent_granted: o.isEmailConsentGranted,
@@ -83,7 +85,7 @@ export const Users: UserCollection = {
   },
 
   async get (client: Knex, q: Partial<User> = {}, opts: QueryOptions<User> = {}) {
-    return applyQueryModifiers(
+    const res = await applyQueryModifiers(
       client
         .select(opts.fields ? pick(opts.fields, ModelToColumn) : ModelToColumn)
         .from('user_account')
@@ -93,6 +95,8 @@ export const Users: UserCollection = {
         .where(Users.toColumnNames(q)),
       opts
     );
+
+    return res.map(Users.create);
   },
 
   serialise (user: User) {
