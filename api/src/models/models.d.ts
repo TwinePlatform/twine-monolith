@@ -7,6 +7,12 @@ export type Coordinates = {
   lng: number
 }
 
+type CommonTimestamps = {
+  createdAt: string
+  modifiedAt?: string
+  deletedAt?: string
+}
+
 export type UserRow = {
   user_account_id: string
   user_name: string
@@ -37,7 +43,7 @@ export type OrganisationRow = {
   deleted_at: 'deletedAt',
 };
 
-export type UserBase = {
+export type UserBase = CommonTimestamps & {
   id?: number
   name: string
   email?: string
@@ -53,21 +59,15 @@ export type UserBase = {
   isPhoneNumberConfirmed: boolean
   isEmailConsentGranted: boolean
   isSMSConsentGranted: boolean
-  createdAt: string
-  modifiedAt?: string
-  deletedAt?: string
 }
 
-export type OrganisationBase = {
+export type OrganisationBase = CommonTimestamps & {
   id: number
   name: string
   _360GivingId: string
-  createdAt: string
-  modifiedAt: string
-  deletedAt: string
 }
 
-export type CommunityBusinessBase = {
+export type CommunityBusinessBase = CommonTimestamps & {
   id: number
   name: string
   _360GivingId: string
@@ -80,22 +80,16 @@ export type CommunityBusinessBase = {
   postCode: string
   coordinates: Coordinates
   turnoverBand: string
-  createdAt: string
-  modifiedAt: string
-  deletedAt: string
 }
 
-export type Subscription = {
+export type Subscription = CommonTimestamps & {
   id: number
   type: string
   status: string
   expiresAt: string
-  createdAt: string
-  modifiedAt: string
-  deletedAt: string
 }
 
-export type VisitActivity = {
+export type VisitActivity = CommonTimestamps & {
   id: number
   name: string
   category: string
@@ -106,37 +100,25 @@ export type VisitActivity = {
   friday: boolean
   saturday: boolean
   sunday: boolean
-  createdAt: string
-  modifiedAt: string
-  deletedAt: string
 }
 
-export type VisitEvent = {
+export type VisitEvent = CommonTimestamps & {
   id: number
-  createdAt: string
-  modifiedAt: string
-  deletedAt: string
 }
 
-export type OutreachMeetingBase = {
+export type OutreachMeetingBase = CommonTimestamps & {
   id: number
   partner: string
   subject: string
   scheduledAt: string
-  createdAt: string
-  modifiedAt: string
-  deletedAt: string
 }
 
-export type OutreachCampaignBase = {
+export type OutreachCampaignBase = CommonTimestamps & {
   id: number
   type: string
   targets: string[]
   startsAt: string
   endsAt: string
-  createdAt: string
-  modifiedAt: string
-  deletedAt: string
 }
 
 export type User = Readonly<UserBase>
@@ -170,14 +152,14 @@ export type Relation = UserRelations | OrganisationRelations
 export type Collection<T extends Model, K extends ChangeSet, V extends Relation> = {
   toColumnNames: (a: Partial<T>) => Dictionary<any>
   create: (a: Partial<T>) => T
-  get: (client: Knex, a?: Partial<T>, opts?: QueryOptions<T>) => Promise<T[]>
-  // getOne: (a: Partial<T>) => Promise<Maybe<T>>
+  get: (c: Knex, a?: ModelQuery<T>, opts?: QueryOptions<T>) => Promise<T[]>
+  getOne: (c: Knex, a?: ModelQuery<T>, opts?: QueryOptions<T>) => Promise<Maybe<T>>
   // has: (a: Model) => Promise<boolean>
   // hasOne: (a: Model) => Promise<boolean>
   // hasMany: (a: Model) => Promise<boolean>
-  // update: (a: T, b: V) => Promise<T>
-  // add: (a: V) => Promise<T>
-  // destroy: (a: T) => Promise<void>
+  update: (c: Knex, a: T, b: K) => Promise<T>
+  add: (c: Knex, a: Partial<T>) => Promise<T>
+  destroy: (c: Knex, a: ModelQuery<T>) => Promise<void>
   serialise: (a: T) => Maybe<Json>
   // deserialise: (a: Json) => Maybe<T>
   // toJSON: (a: T) => Maybe<Json>
@@ -185,6 +167,17 @@ export type Collection<T extends Model, K extends ChangeSet, V extends Relation>
 }
 export type UserCollection = Collection<User, UserChangeSet, UserRelations>
 export type OrganisationCollection = Collection<Organisation, OrganisationChangeSet, OrganisationRelations>
+
+type TimestampQuery = {
+  lt?: string
+  gt?: string
+}
+
+export type ModelQuery<T extends Model> = Partial<T> | Partial<{
+  createdAt: TimestampQuery
+  modifiedAt: TimestampQuery
+  deletedAt: TimestampQuery
+}>
 
 export type CommonQueryOptions = Partial<{
   limit: number

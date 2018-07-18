@@ -2,10 +2,11 @@
  * User Model
  */
 import * as Knex from 'knex';
-import { omit, filter, pick, invertObj } from 'ramda';
+import { compose, omit, filter, pick, invertObj, evolve } from 'ramda';
 import { Dictionary, Map } from '../types/internal';
-import { User, UserRow, UserCollection, QueryOptions } from './models';
-import { applyQueryModifiers } from './util';
+import { User, UserRow, UserCollection, UserChangeSet, QueryOptions, ModelQuery } from './models';
+import { applyQueryModifiers, processTimestampQueries } from './util';
+import { renameKeys } from '../utils';
 
 /*
  * Field name mappings
@@ -85,19 +86,112 @@ export const Users: UserCollection = {
     });
   },
 
-  async get (client: Knex, q: Partial<User> = {}, opts: QueryOptions<User> = {}) {
+  async get (client: Knex, q: ModelQuery<User> = {}, opts: QueryOptions<User> = {}) {
+    const { query, options } = processTimestampQueries(q, opts);
+
     const res = await applyQueryModifiers(
       client
-        .select(opts.fields ? pick(opts.fields, ModelToColumn) : ModelToColumn)
+        .select(options.fields ? pick(options.fields, ModelToColumn) : ModelToColumn)
         .from('user_account')
         .leftOuterJoin('gender', 'user_account.gender_id', 'gender.gender_id')
         .leftOuterJoin('ethnicity', 'user_account.ethnicity_id', 'ethnicity.ethnicity_id')
         .leftOuterJoin('disability', 'user_account.disability_id', 'disability.disability_id')
-        .where(Users.toColumnNames(q)),
-      opts
+        .where(Users.toColumnNames(query)),
+      options
     );
 
     return res.map(Users.create);
+  },
+
+  async getOne (client: Knex, q: ModelQuery<User> = {}, opts: QueryOptions<User> = {}) {
+    const res = await Users.get(client, q, opts);
+    return res[0] || null;
+  },
+
+  async add (client: Knex, u: UserChangeSet) {
+    const addSubQueries = compose(
+      evolve({
+        gender_id: (v: string) =>
+          client('gender').select('gender_id').where({ gender_name: v }),
+        disability_id: (v: string) =>
+          client('disability').select('disability_id').where({ disability_name: v }),
+        ethnicity_id: (v: string) =>
+          client('ethnicity').select('ethnicity_id').where({ ethnicity_name: v }),
+      }),
+      renameKeys({
+        gender: 'gender_id',
+        ethnicity: 'ethnicity_id',
+        disability: 'disability_id',
+      }),
+      (o: UserChangeSet) => ({
+        ...o,
+        gender: o.gender || 'prefer not to say',
+        ethnicity: o.ethnicity || 'prefer not to say',
+        disability: o.disability || 'prefer not to say',
+      })
+    );
+
+    const [id] = await client('user_account')
+      .insert(addSubQueries(Users.toColumnNames(u)))
+      .returning('user_account_id');
+
+    return Users.getOne(client, { id });
+  },
+
+  async update (client: Knex, u: User, c: UserChangeSet) {
+    const dropFields = omit([
+      'gender',
+      'ethnicity',
+      'disability',
+      'createdAt',
+      'modifiedAt',
+      'deletedAt',
+    ]);
+
+    const addSubQueries = compose(
+      evolve({
+        gender_id: (v: string) =>
+          client('gender').select('gender_id').where({ gender_name: v }),
+        disability_id: (v: string) =>
+          client('disability').select('disability_id').where({ disability_name: v }),
+        ethnicity_id: (v: string) =>
+          client('ethnicity').select('ethnicity_id').where({ ethnicity_name: v }),
+      }),
+      renameKeys({
+        'gender.gender_name': 'gender_id',
+        'ethnicity.ethnicity_name': 'ethnicity_id',
+        'disability.disability_name': 'disability_id',
+      })
+    );
+
+    const [id] = await client('user_account')
+      .update(addSubQueries(Users.toColumnNames(c)))
+      .where(Users.toColumnNames(dropFields(u)))
+      .returning('user_account_id');
+
+    return Users.getOne(client, { id });
+  },
+
+  async destroy (client: Knex, u: ModelQuery<User>) {
+    const addSubQueries = compose(
+      evolve({
+        gender_id: (v: string) =>
+          client('gender').select('gender_id').where({ gender_name: v }),
+        disability_id: (v: string) =>
+          client('disability').select('disability_id').where({ disability_name: v }),
+        ethnicity_id: (v: string) =>
+          client('ethnicity').select('ethnicity_id').where({ ethnicity_name: v }),
+      }),
+      renameKeys({
+        'gender.gender_name': 'gender_id',
+        'ethnicity.ethnicity_name': 'ethnicity_id',
+        'disability.disability_name': 'disability_id',
+      })
+    );
+
+    return client('user_account')
+      .where(addSubQueries(Users.toColumnNames(u)))
+      .update({ deleted_at: new Date() });
   },
 
   serialise (user: User) {
