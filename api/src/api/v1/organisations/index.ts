@@ -23,7 +23,10 @@ export default [
     options: {
       description: 'Retreive cls data',
       auth: {
-        strategy: 'frontline',
+        strategy: 'external',
+        access: {
+          scope: ['frontline'],
+        },
       },
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {

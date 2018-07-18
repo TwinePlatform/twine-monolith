@@ -22,7 +22,7 @@ export default {
         verifyOptions: { algorithms: ['HS256'] },
       });
 
-    server.auth.strategy('frontline', 'bearer-access-token',
+    server.auth.strategy('external', 'bearer-access-token',
       { validate: validateExternal });
 
     server.auth.default('standard');
