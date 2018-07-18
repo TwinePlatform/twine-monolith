@@ -3,13 +3,13 @@ import * as Hapi from 'hapi';
 export default [
   {
     method: 'GET',
-    path: '/organisations',
+    path: '/surveys/cls',
     options: {
-      description: 'Retreive list of all organisations',
+      description: 'Retreive cls data',
       auth: {
-        strategy: 'standard',
+        strategy: 'external',
         access: {
-          scope: ['constants-own:read'],
+          scope: ['frontline'],
         },
       },
     },
