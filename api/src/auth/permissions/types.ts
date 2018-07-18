@@ -73,7 +73,7 @@ export type PermissionsInitialiser = (client: Knex) => {
     permissionLevel: PermissionLevel,
     access: Access,
   }) => Promise<ExistsQueryResponse>,
-  permissionsForRole: (a: { roleId: number}) => Promise<QueryResponse []>,
+  permissionsForRole: (a: { roleId: number }) => Promise<QueryResponse []>,
 };
 
 export type GetPermissionIds =

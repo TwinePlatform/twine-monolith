@@ -20,7 +20,7 @@ describe('Internal auth scheme', () => {
     const token = jwt.sign({ userId: 1, organisationId: 1 }, config.secret.jwt_secret);
     const response = await server.inject({
       method: 'GET',
-      url: '/organisations',
+      url: '/api/v1/organisations',
       headers: { authorization: token },
     });
     expect(response.statusCode).toBe(200);
@@ -30,7 +30,7 @@ describe('Internal auth scheme', () => {
     const token = jwt.sign({ }, config.secret.jwt_secret);
     const response = await server.inject({
       method: 'GET',
-      url: '/organisations',
+      url: '/api/v1/organisations',
       headers: { authorization: token },
     });
     expect(response.statusCode).toBe(401);

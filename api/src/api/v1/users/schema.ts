@@ -1,11 +1,5 @@
 /*
  * Route validation schema for User routes
  */
-import { query } from '../schema/request';
-import { response } from '../schema/response';
-
-
-export default {
-  query,
-  response,
-};
+export { query } from '../schema/request';
+export { response } from '../schema/response';

@@ -26,6 +26,7 @@ const permissionsInitialiser: PermissionsInitialiser = (client) => {
         switch (error.code) {
           case '23505':
             throw new Error('Permission already exists, please use grantExisting method');
+          /* istanbul ignore next */
           default:
             throw error;
         }
@@ -53,6 +54,7 @@ const permissionsInitialiser: PermissionsInitialiser = (client) => {
             throw new Error('Permission entry or role does not exist, please use grantNew method');
           case '23505':
             throw new Error('Permission entry is already associated to this role');
+          /* istanbul ignore next */
           default:
             throw error;
         }

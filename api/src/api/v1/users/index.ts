@@ -5,8 +5,17 @@
  * - /api/v1/api.json
  */
 import * as Hapi from 'hapi';
+import { Dictionary } from 'ramda';
 import { Users } from '../../../models';
-import schema from './schema';
+import { query, response } from './schema';
+import { Response } from '../schema/response';
+
+
+const toApiResponse = (payload: Dictionary<any>, meta?: Dictionary<any>): Response => ({
+  data: payload,
+  meta,
+});
+
 
 export default [
   {
@@ -14,14 +23,15 @@ export default [
     path: '/users',
     options: {
       description: 'Retreive list of all users',
-      validation: schema,
+      validate: { query },
+      response: { schema: response },
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
       const { knex } = request;
 
       const users = await Users.get(knex);
 
-      return users.map(Users.serialise);
+      return toApiResponse(users.map(Users.serialise));
     },
   },
 ];

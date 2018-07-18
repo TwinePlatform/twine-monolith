@@ -11,16 +11,17 @@ import { Dictionary } from 'ramda';
 
 
 export type Response = {
-  data: Dictionary<any>,
-  error: {
-    statusCode: number,
-    type: string,
+  data?: Dictionary<any>
+  error?: {
+    statusCode: number
+    type: string
     message: string
   }
+  meta?: Dictionary<any>
 };
 
 export const response = {
-  data: Joi.object(),
+  data: Joi.alternatives(Joi.object(), Joi.array()),
   error: Joi.object({
     statusCode: Joi.number().integer().min(200).max(599),
     type: Joi.string().min(1).max(255),

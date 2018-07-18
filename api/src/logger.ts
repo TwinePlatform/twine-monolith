@@ -1,7 +1,10 @@
 import * as Hapi from 'hapi';
 import { Environment } from '../config/types';
+const good = require('good');
 
-const getOption = (env: string) => {
+
+const getOption = (env: Environment) => {
+  /* istanbul ignore next */
   const reporters = env === Environment.TESTING
     ? {}
     : {
@@ -23,9 +26,9 @@ const getOption = (env: string) => {
 
 export default {
   name: 'twine-logger',
-  register: async (server: Hapi.Server, options: {env: string}) => {
+  register: async (server: Hapi.Server, options: {env: Environment}) => {
     await server.register({
-      plugin: require('good'),
+      plugin: good,
       options: getOption(options.env),
     });
     return;

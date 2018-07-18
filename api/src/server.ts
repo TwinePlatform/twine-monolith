@@ -24,16 +24,16 @@ const init = async (config: Config): Promise<Hapi.Server> => {
   setup(server, config);
 
   await server.register([
-    { plugin: logger,
-      options: {
-        env: config.env,
-      },
+    {
+      plugin: logger,
+      options: { env: config.env },
     },
-    { plugin: v1,
-      options: {
-        jwtSecret: config.secret.jwt_secret,
-      },
-    }]);
+    {
+      plugin: v1,
+      options: { jwtSecret: config.secret.jwt_secret },
+      routes: { prefix: '/api/v1' },
+    },
+  ]);
 
   server.route(routes);
 

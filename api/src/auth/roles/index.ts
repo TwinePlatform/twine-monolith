@@ -26,6 +26,7 @@ const rolesInitialiser: RolesInitialiser = (client) => {
           case '23503':
             throw new Error(`Foreign key does not exist: ${error.detail}`);
 
+          /* istanbul ignore next */
           default:
             throw error;
         }
@@ -95,6 +96,7 @@ const rolesInitialiser: RolesInitialiser = (client) => {
             throw new Error(
               'User is already associated with this \'from\' role at this organistion');
 
+          /* istanbul ignore next */
           default:
             throw error;
         }

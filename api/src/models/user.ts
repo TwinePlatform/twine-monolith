@@ -41,6 +41,7 @@ const ModelToColumn = invertObj(ColumnToModel);
 export const Users: UserCollection = {
   create (a: Partial<User>): User {
     return {
+      id: a.id,
       name: a.name,
       email: a.email,
       phoneNumber: a.phoneNumber,
