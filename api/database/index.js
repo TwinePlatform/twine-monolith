@@ -3,9 +3,8 @@ const path = require('path');
 const knex = require('knex');
 const { last, tap } = require('ramda');
 const { getConfig, Environment: { TESTING } } = require('../build/config');
-const { write } = require('./util')
-const { lazyPromiseSeries } = require('../src/utils');
 const { write } = require('./utils')
+const { lazyPromiseSeries } = require('../build/src/utils');
 
 
 const templates = {
@@ -69,8 +68,7 @@ exports.migrate = {
         .then(trx.commit)
         .catch(trx.rollback)
     )
-
-    return client ? null : client.destroy();
+    return _client ? null : client.destroy();
   },
 
   truncate: async ({ env = process.env.NODE_ENV, client: _client } = {}) => {
@@ -87,6 +85,6 @@ exports.migrate = {
         .map((x) =>
           client.raw(`TRUNCATE ${x.tablename} RESTART IDENTITY CASCADE`)));
 
-    return client ? null : client.destroy();
+    return _client ? null : client.destroy();
   }
 };
