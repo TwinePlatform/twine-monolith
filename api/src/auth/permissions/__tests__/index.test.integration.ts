@@ -75,6 +75,8 @@ describe('Permisions Module', () => {
         expect(query)
           .toEqual(expect.arrayContaining([{ access_role_id: 2, permission_id: permissionId }]));
       } catch (error) {
+        console.log(error);
+
         expect(error).toBeFalsy();
       }
     });
@@ -223,12 +225,14 @@ describe('Permisions Module', () => {
           permission_level: 'own',
         },
         {
-          access_role_id: 1, access_type: 'read',
+          access_role_id: 1,
+          access_type: 'read',
           permission_entity: 'user_details',
           permission_level: 'own',
         },
         {
-          access_role_id: 1, access_type: 'write',
+          access_role_id: 1,
+          access_type: 'write',
           permission_entity: 'visit_logs',
           permission_level: 'parent',
         }].map((x) => expect.objectContaining(x)));
