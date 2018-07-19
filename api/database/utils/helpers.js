@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { compose, head } = require('ramda');
 
-const MIGRATIONS_BASE_PATH = path.resolve(__dirname, 'migrations');
+const MIGRATIONS_BASE_PATH = path.resolve(__dirname, '..', 'migrations');
 
 // readFile :: String -> String
 const readFile = (fpath) => fs.readFileSync(fpath, 'utf8');
