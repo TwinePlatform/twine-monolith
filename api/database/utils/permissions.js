@@ -43,6 +43,7 @@ const accessRolePermissionsRows = (client) => Object.entries(permissionsForRoles
     }),
     permission_id: client('permission').select('permission_id').where(scopeToPermission(x)),
   }))
+  
   return [...acc, ...rows]
 }
 ,[])

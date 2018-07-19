@@ -1,13 +1,28 @@
 exports.seed = (knex) =>
   knex('user_account')
     .insert([
-      {
+      { 
         user_name: 'Chell',
         qr_code: 'tobereplacedwhenqrgenissetup',
+        gender_id: 1,
+        disability_id: 2,
+        ethnicity_id: 2,
         email: '1498@aperturescience.com',
         phone_number: '+1 425-450-4464',
         post_code: '49829',
-        birth_year: 1988,
+        birth_year: '1988',
+        is_email_confirmed: false,
+        is_phone_number_confirmed: false,
+        is_email_contact_consent_granted: false,
+        is_sms_contact_consent_granted: false },
+      { 
+        user_name: 'GlaDos',
+        user_password: 'tobereplacedwhenauthissetup2',
+        qr_code: 'tobereplacedwhenqrgenissetup2',
+        email: '1@aperturescience.com',
+        phone_number: '+1 425-450-4464',
+        post_code: '49829',
+        birth_year: '1900',
         is_email_confirmed: false,
         is_phone_number_confirmed: false,
         is_email_contact_consent_granted: false,

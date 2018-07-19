@@ -9,7 +9,7 @@ export default [
       auth: {
         strategy: 'standard',
         access: {
-          scope: ['constants-own:read'],
+          scope: ['organisations_details-child:read'],
         },
       },
     },

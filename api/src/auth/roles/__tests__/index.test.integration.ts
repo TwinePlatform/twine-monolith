@@ -94,11 +94,15 @@ describe('Roles Module', () => {
       await rolesInterface.move(
         { to: Role.VOLUNTEER, from: Role.VISITOR, userId: 1, organisationId: 1 });
       const result = await knex('user_account_access_role').select();
-      expect(result[0]).toEqual(expect.objectContaining({
-        access_role_id: 2,
-        organisation_id: 1,
-        user_account_id: 1,
-      }));
+      expect(result).toEqual(expect.arrayContaining(
+        [
+          expect.objectContaining({
+            access_role_id: 2,
+            organisation_id: 1,
+            user_account_id: 1,
+          }),
+        ]
+    ));
     });
 
     test('ERROR - throws error if from entry doesn\'t exist', async () => {
@@ -132,7 +136,7 @@ describe('Roles Module', () => {
         { access_role_id: 1, organisation_id: 1, user_account_id: 1 },
         { access_role_id: 2, organisation_id: 1, user_account_id: 1 },
       ].map(expect.objectContaining)
-    ));
+      ));
     });
 
     test('ERROR - throws error if user has no roles at organisation', async () => {
@@ -169,7 +173,7 @@ describe('Roles Module', () => {
     test('Error - returns error if userId does not exist', async () => {
       expect.assertions(1);
       try {
-        await rolesInterface.getUserRole({ userId: 2, organisationId: 1 });
+        await rolesInterface.getUserRole({ userId: 20, organisationId: 1 });
       } catch (error) {
         expect(error.message).toEqual('User does not exist');
       }

@@ -6,6 +6,7 @@ export enum Role {
   VOLUNTEER = 'VOLUNTEER',
   VOLUNTEER_ADMIN = 'VOLUNTEER_ADMIN',
   ORG_ADMIN = 'ORG_ADMIN',
+  ORG_NON_ADMIN = 'ORG_NON_ADMIN',
   TWINE_ADMIN = 'TWINE_ADMIN',
   SYS_ADMIN = 'SYS_ADMIN',
 }
@@ -13,7 +14,7 @@ export enum Role {
 export enum Access {
   READ = 'read',
   WRITE = 'write',
-  DEETE = 'delete',
+  DELETE = 'delete',
 }
 
 export enum Resource {
@@ -35,6 +36,7 @@ export enum PermissionLevel {
   OWN = 'own',
   CHILD = 'child',
   PARENT = 'parent',
+  ALL = 'all',
 }
 
 type QueryResponse = Error | Dictionary<any>;
