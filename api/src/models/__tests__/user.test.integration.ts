@@ -20,10 +20,10 @@ describe('User Model', () => {
       await knex.seed.run();
     });
 
-    test('get :: no arguments gets all users non-deleted users', async () => {
+    test('get :: no arguments gets all users', async () => {
       const users = await Users.get(knex);
 
-      expect(users.length).toBe(1);
+      expect(users.length).toBe(3);
       expect(users[0]).toEqual(expect.objectContaining({
         name: 'Chell',
         gender: 'female',
@@ -36,12 +36,34 @@ describe('User Model', () => {
     });
 
     test('get :: filter users by ID | non-existent ID resolves to empty array', async () => {
-      const users = await Users.get(knex, { id: 5 });
+      const users = await Users.get(knex, { where: { id: 5 } });
       expect(users).toEqual([]);
     });
 
     test('get :: get deleted users only when specifically asked for', async () => {
-      const users = await Users.get(knex, { deletedAt: { lt: '', gt: '' } });
+      const users = await Users.get(knex, { whereNot: { deletedAt: null } });
+      expect(users).toEqual([
+        expect.objectContaining({
+          id: 2,
+          name: 'Gordon',
+        }),
+      ]);
+    });
+
+    test('get :: limit results', async () => {
+      const users = await Users.get(knex, { limit: 1 });
+      expect(users.length).toBe(1);
+    });
+
+    test('get :: order results', async () => {
+      const users = await Users.get(knex, { order: ['name', 'desc'] });
+      expect(users.map((u) => u.name)).toEqual(['Gordon', 'Chell', 'Barney']);
+    });
+
+    test('get :: offset results', async () => {
+      const users = await Users.get(knex, { offset: 2 });
+      expect(users.length).toBe(1);
+      expect(users[0].name).toBe('Barney');
     });
   });
 
@@ -52,7 +74,7 @@ describe('User Model', () => {
     });
 
     test('update :: successful update of non-foreign-key column', async () => {
-      const user = await Users.getOne(knex, { id: 1 });
+      const user = await Users.getOne(knex, { where: { id: 1 } });
       const changes = { name: 'GLaDOS' };
       const omitter = omit(['name', 'modifiedAt']);
 
@@ -63,7 +85,7 @@ describe('User Model', () => {
     });
 
     test('update :: successful update of foreign-key column', async () => {
-      const user = await Users.getOne(knex, { id: 1 });
+      const user = await Users.getOne(knex, { where: { id: 1 } });
       const changes = { gender: 'male' };
       const omitter = omit(['gender', 'modifiedAt']);
 
@@ -86,13 +108,13 @@ describe('User Model', () => {
       }));
     });
 
-    test('destroy :: remove existing record', async () => {
+    test('destroy :: mark existing record as deleted', async () => {
       const users = await Users.get(knex);
 
       await Users.destroy(knex, users[0]);
 
-      const usersAfterDel = await Users.get(knex);
-      const deletedUser = await Users.get(knex, users[0]);
+      const usersAfterDel = await Users.get(knex, { where: { deletedAt: null } });
+      const deletedUser = await Users.get(knex, { where: users[0] });
 
       expect(users.length).toBe(usersAfterDel.length + 1);
       expect(deletedUser).toEqual([]);

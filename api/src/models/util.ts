@@ -1,6 +1,6 @@
 import * as Knex from 'knex';
 import { intersection, compose } from 'ramda';
-import { CommonQueryOptions } from './models';
+import { ModelQuery } from './models';
 
 
 export const Utils: {
@@ -9,13 +9,17 @@ export const Utils: {
   limit: (n: number) => (q: Knex.QueryBuilder) => q.limit(n),
   offset: (n: number) => (q: Knex.QueryBuilder) => q.offset(n),
   order: (c: string, d: string) => (q: Knex.QueryBuilder) => q.orderBy(c, d),
+  where: (o: any) => (q: Knex.QueryBuilder) => q.where(o),
+  whereNot: (o: any) => (q: Knex.QueryBuilder) => q.whereNot(o),
 };
 
-export const applyQueryModifiers = (p: Knex.QueryBuilder, opts: CommonQueryOptions) => {
-  const modifiers = intersection(Object.keys(opts), Object.keys(Utils));
+export const applyQueryModifiers =
+  <T>(p: Knex.QueryBuilder, opts: ModelQuery<T>): Knex.QueryBuilder => {
 
-  const query = modifiers
-    .reduce((acc, k: keyof CommonQueryOptions) => {
+    const modifiers = intersection(Object.keys(opts), Object.keys(Utils));
+
+    const query = modifiers
+    .reduce((acc, k: keyof ModelQuery<T>) => {
       if (k === 'limit') {
         return compose(Utils.limit(opts.limit), acc);
 
@@ -25,11 +29,18 @@ export const applyQueryModifiers = (p: Knex.QueryBuilder, opts: CommonQueryOptio
       } else if (k === 'order') {
         return compose(Utils.order(...opts.order), acc);
 
+      } else if (k === 'where') {
+        return compose(Utils.where(opts.where), acc);
+
+      } else if (k === 'whereNot') {
+        return compose(Utils.whereNot(opts.whereNot), acc);
+
       } else {
+        /* istanbul ignore next */
         return acc;
 
       }
     }, (a?: any) => p);
 
-  return query();
-};
+    return query();
+  };

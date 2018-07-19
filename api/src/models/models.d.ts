@@ -152,39 +152,29 @@ export type Relation = UserRelations | OrganisationRelations
 export type Collection<T extends Model, K extends ChangeSet, V extends Relation> = {
   toColumnNames: (a: Partial<T>) => Dictionary<any>
   create: (a: Partial<T>) => T
-  get: (c: Knex, a?: ModelQuery<T>, opts?: QueryOptions<T>) => Promise<T[]>
-  getOne: (c: Knex, a?: ModelQuery<T>, opts?: QueryOptions<T>) => Promise<Maybe<T>>
-  // has: (a: Model) => Promise<boolean>
-  // hasOne: (a: Model) => Promise<boolean>
-  // hasMany: (a: Model) => Promise<boolean>
+  get: (c: Knex, a?: ModelQuery<T>) => Promise<T[]>
+  getOne: (c: Knex, a?: ModelQuery<T>) => Promise<Maybe<T>>
   update: (c: Knex, a: T, b: K) => Promise<T>
   add: (c: Knex, a: Partial<T>) => Promise<T>
-  destroy: (c: Knex, a: ModelQuery<T>) => Promise<void>
+  destroy: (c: Knex, a: Partial<T>) => Promise<void>
   serialise: (a: T) => Maybe<Json>
-  // deserialise: (a: Json) => Maybe<T>
-  // toJSON: (a: T) => Maybe<Json>
-  // fromJSON: (a: Json) => Maybe<T>
+  deserialise: (a: Json) => Maybe<T>
 }
 export type UserCollection = Collection<User, UserChangeSet, UserRelations>
 export type OrganisationCollection = Collection<Organisation, OrganisationChangeSet, OrganisationRelations>
 
-type TimestampQuery = {
-  lt?: string
-  gt?: string
+
+type WhereQuery<T> = Partial<T>
+type WhereBetweenQuery<T> = {
+  [k in keyof T]?: [string, string]
 }
-
-export type ModelQuery<T extends Model> = Partial<T> | Partial<{
-  createdAt: TimestampQuery
-  modifiedAt: TimestampQuery
-  deletedAt: TimestampQuery
-}>
-
-export type CommonQueryOptions = Partial<{
+export type ModelQuery<T> = Partial<{
+  where: WhereQuery<T>
+  whereNot: WhereQuery<T>
+  whereBetween: WhereBetweenQuery<T>
+  whereNotBetween: WhereBetweenQuery<T>
   limit: number
   offset: number
   order: [string, 'asc' | 'desc']
-}>
-
-export type QueryOptions<T> = CommonQueryOptions & Partial<{
   fields: (keyof T)[]
 }>
