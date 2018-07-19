@@ -71,6 +71,7 @@
     "typescript": "^2.9.1"
   },
   "devDependencies": {
+    "factory-girl": "^5.0.2",
     "jest": "^23.3.0",
     "nodemon": "^1.17.5",
     "ts-jest": "^22.4.6",
