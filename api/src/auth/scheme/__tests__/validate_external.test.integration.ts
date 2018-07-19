@@ -18,7 +18,7 @@ describe('External auth scheme', () => {
   test('SUCCESS - Token needed for authorised routes', async () => {
     const response = await server.inject({
       method: 'GET',
-      url: '/surveys/cls',
+      url: '/api/v1/surveys/cls',
       headers: { authorization: 'bearer goodtoken' },
     });
     expect(response.statusCode).toBe(200);
@@ -27,7 +27,7 @@ describe('External auth scheme', () => {
   test('FAIL - Fake token is unauthorised', async () => {
     const response = await server.inject({
       method: 'GET',
-      url: '/surveys/cls',
+      url: '/api/v1/surveys/cls',
       headers: { authorization: 'bearer faketoken' },
     });
     expect(response.statusCode).toBe(401);
@@ -36,7 +36,7 @@ describe('External auth scheme', () => {
   test('FAIL - No token is unauthorised', async () => {
     const response = await server.inject({
       method: 'GET',
-      url: '/surveys/cls',
+      url: '/api/v1/surveys/cls',
       headers: { authorization: '' },
     });
     expect(response.statusCode).toBe(401);
