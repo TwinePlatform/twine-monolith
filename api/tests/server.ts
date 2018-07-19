@@ -1,5 +1,5 @@
 /*
- * Test utility to create a slightweight server object
+ * Test utility to create a lightweight server object
  *
  * Mostly useful if you need a server but dont want to instantiate the
  * actual server
