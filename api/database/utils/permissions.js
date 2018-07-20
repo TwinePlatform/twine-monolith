@@ -44,12 +44,12 @@ const scopeToPermission = ((permission) => {
 
 const accessRolePermissionsRows = (client) => 
   Object.entries(permissionsForRoles)
-  .reduce((acc, el) => {
-    const rows = Array.from(el[1])
+  .reduce((acc, [roles, permissions]) => {
+    const rows = Array.from(permissions)
     .map(x=> ({
       access_role_id: client('access_role')
         .select('access_role_id')
-        .where({access_role_name: el[0]}),
+        .where({access_role_name: roles}),
       permission_id: client('permission')
         .select('permission_id')
         .where(scopeToPermission(x)),
@@ -63,8 +63,6 @@ const permissionsJson = () => JSON.stringify({
   'permissions': Array.from(allPermissions),
   'permissionsForRoles': map((x) => Array.from(x), permissionsForRoles)
 })
-
-console.log(permissionsJson());
 
 module.exports = {
   permissionRows: Array.from(allPermissions).map(scopeToPermission),

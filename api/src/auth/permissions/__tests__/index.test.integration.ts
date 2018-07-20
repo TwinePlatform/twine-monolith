@@ -26,10 +26,9 @@ describe('Permisions Module', () => {
   describe('::grantNew', () => {
     test('SUCCESS - Grant a role a permission entry that doesn\'t already exist', async () => {
       try {
-        const currentPermissions = await knex('permission')
+        const [{ count: permissionsCount }] = await knex('permission')
           .select('')
-          .count()
-          .then((res) => Number(res[0].count));
+          .count();
         const query = await permissionsInterface.grantNew({
           resource: Resource.CONSTANTS,
           access: Access.READ,
@@ -37,7 +36,7 @@ describe('Permisions Module', () => {
           role: Role.VISITOR});
 
         expect(query)
-          .toEqual([{ access_role_id: 1, permission_id: currentPermissions + 1 }]);
+          .toEqual([{ access_role_id: 1, permission_id: Number(permissionsCount) + 1 }]);
       } catch (error) {
         expect(error).toBeFalsy();
       }
@@ -61,11 +60,12 @@ describe('Permisions Module', () => {
   describe('::grantExisting', () => {
     test('SUCCESS - Grant a role a permission entry that already exists', async () => {
       try {
-        const permissionId = await knex('permission').select('permission_id').where({
+        const [{ permission_id: permissionId }] = await knex('permission')
+        .select('permission_id').where({
           permission_entity: Resource.CONSTANTS,
           access_type: Access.WRITE,
           permission_level: PermissionLevel.ALL,
-        }).then((x) => x[0].permission_id);
+        });
 
         const query = await permissionsInterface.grantExisting({
           resource: Resource.CONSTANTS,
@@ -208,32 +208,29 @@ describe('Permisions Module', () => {
           access_role_id: 1,
           access_type: 'read',
           permission_entity: 'constants',
-          permission_id: 1,
           permission_level: 'all',
         },
         {
           access_role_id: 1,
           access_type: 'read',
           permission_entity: 'visit_activies',
-          permission_id: 8, permission_level: 'own',
+          permission_level: 'own',
         },
         {
           access_role_id: 1, access_type: 'write',
           permission_entity: 'user_details',
-          permission_id: 16, permission_level: 'own',
+          permission_level: 'own',
         },
         {
           access_role_id: 1, access_type: 'read',
           permission_entity: 'user_details',
-          permission_id: 17,
           permission_level: 'own',
         },
         {
           access_role_id: 1, access_type: 'write',
           permission_entity: 'visit_logs',
-          permission_id: 24,
           permission_level: 'parent',
-        }]);
+        }].map((x) => expect.objectContaining(x)));
     });
 
     test('ERROR - returns error if role id does not exist', async () => {
