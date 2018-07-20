@@ -298,12 +298,24 @@
         }
       },
       "/:id/subscriptions": {
+        "GET": {
+          "description": "Retreive subscriptions for a single funding body organisation",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
+          "scope": ["organisations_subscriptions-child:read"],
+          "body": {
+            "subscriptionType": "String",
+            "beneficiaryId": "Number"
+          },
+          "response": "types.subscription"
+        },
         "POST": {
           "description": "Add subscription for a single funding body organisation",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
-          "scope": ["organisations_subscriptions-child:read"],
+          "scope": ["organisations_subscriptions-child:write"],
           "body": {
             "subscriptionType": "String",
             "beneficiaryId": "Number"
@@ -653,7 +665,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
-          "scope": ["volunteer_logs-child:read", "volunteer_logs-own:read"],
+          "scope": ["volunteer_logs-child:read"],
           "query": {
             "fields": ["String"],
             "filter": {
@@ -673,8 +685,8 @@
           "description": "Add volunteer log for your user account",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["VOLUNTEER"],
-          "scope": ["volunteer_logs-parent:write"],
+          "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": ["volunteer_logs-own:write"],
           "body": {
             "organisationId":"Number",
             "volunteerActvity": "String",
@@ -689,8 +701,8 @@
           "description": "Update volunteer log for your user account",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["VOLUNTEER"],
-          "scope": ["volunteer_logs-parent:write"],
+          "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": ["volunteer_logs-own:write"],
           "body": {
             "organisationId":"Number",
             "volunteerActvity": "String",
@@ -703,8 +715,8 @@
           "description": "Delete volunteer log for your user account",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["VOLUNTEER"],
-          "scope": ["volunteer_logs-parent:delete"],
+          "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": ["volunteer_logs-own:delete"],
           "body": {},
           "response": null
         }
@@ -1021,8 +1033,8 @@
           "description": "Retreive volunteer information for a user",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER"],
-          "scope": ["volunteer_logs-child:read", "volunteer_logs-own:read"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
+          "scope": ["volunteer_logs-child:read"],
           "query": {
             "fields": ["String"],
             "filter": {

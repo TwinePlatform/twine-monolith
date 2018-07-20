@@ -1,10 +1,11 @@
-{ 
+{
   "permissions": [
     "constants-all:read",
     "organisations_details-child:read",
     "organisations_details-child:write",
     "organisations_details-child:delete",
     "organisations_subscriptions-child:read",
+    "organisations_subscriptions-child:write",
     "organisations_training-child:read",
     "organisations_training-own:delete",
     "visit_activies-own:read",
@@ -24,8 +25,8 @@
     "visit_activies-own:delete",
     "organisations_feedback-parent:write",
     "visit_logs-parent:write",
-    "volunteer_logs-parent:write",
-    "volunteer_logs-parent:delete"
+    "volunteer_logs-own:write",
+    "volunteer_logs-own:delete"
   ],
   "permissionsForRoles": {
     "TWINE_ADMIN": [
@@ -34,6 +35,7 @@
       "organisations_details-child:write",
       "organisations_details-child:delete",
       "organisations_subscriptions-child:read",
+      "organisations_subscriptions-child:write",
       "organisations_training-child:read",
       "organisations_training-own:delete",
       "visit_activies-own:read",
@@ -56,6 +58,7 @@
       "organisations_details-child:write",
       "organisations_details-child:delete",
       "organisations_subscriptions-child:read",
+      "organisations_subscriptions-child:write",
       "organisations_training-child:read",
       "organisations_training-own:delete",
       "visit_activies-own:read",
@@ -67,7 +70,7 @@
       "users_details-child:write",
       "user_details-own:write",
       "user_details-own:read",
-      "user_details-own:delete" 
+      "user_details-own:delete"
     ],
     "ORG_ADMIN": [
       "constants-all:read",
@@ -88,7 +91,7 @@
       "users_details-child:write",
       "user_details-own:write",
       "user_details-own:read",
-      "user_details-own:delete" 
+      "user_details-own:delete"
     ],
     "ORG_NON_ADMIN": [],
     "VISITOR": [
@@ -96,21 +99,22 @@
       "visit_activies-own:read",
       "visit_logs-parent:write",
       "user_details-own:write",
-      "user_details-own:read" 
+      "user_details-own:read"
     ],
     "VOLUNTEER": [
       "constants-all:read",
-      "volunteer_logs-parent:write",
-      "volunteer_logs-parent:delete",
+      "volunteer_logs-own:write",
+      "volunteer_logs-own:delete",
       "user_details-own:write",
-      "user_details-own:read",
-      "volunteer_logs-child:read" 
+      "user_details-own:read"
     ],
     "VOLUNTEER_ADMIN": [
       "constants-all:read",
+      "volunteer_logs-own:write",
+      "volunteer_logs-own:delete",
       "user_details-own:write",
       "user_details-own:read",
-      "organisations_outreach-child:read" 
-    ] 
-  } 
+      "organisations_outreach-child:read"
+    ]
+  }
 }

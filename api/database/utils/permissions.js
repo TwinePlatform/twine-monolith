@@ -1,4 +1,5 @@
 const api = require('../../src/api/v1/api.json');
+const { map } = require('ramda');
 
 const permissionsForRoles = Object.values(api.routes)
   .reduce((acc, nestedRoutes) => {
@@ -57,6 +58,13 @@ const accessRolePermissionsRows = (client) =>
     return [...acc, ...rows]
   }
 ,[]);
+
+const permissionsJson = () => JSON.stringify({
+  'permissions': Array.from(allPermissions),
+  'permissionsForRoles': map((x) => Array.from(x), permissionsForRoles)
+})
+
+console.log(permissionsJson());
 
 module.exports = {
   permissionRows: Array.from(allPermissions).map(scopeToPermission),
