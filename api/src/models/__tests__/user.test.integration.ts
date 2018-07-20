@@ -40,7 +40,7 @@ describe('User Model', () => {
       expect(users).toEqual([]);
     });
 
-    test('get :: get deleted users only when specifically asked for', async () => {
+    test('get :: get deleted users', async () => {
       const users = await Users.get(knex, { whereNot: { deletedAt: null } });
       expect(users).toEqual([
         expect.objectContaining({

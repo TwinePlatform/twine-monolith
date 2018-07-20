@@ -58,7 +58,7 @@ const replaceModelFieldsWithForeignKeys = renameKeys({
   disability: 'disability_id',
 });
 
-const transformConstantValuesToSubQueries = (client: Knex) => evolve({
+const transformForeignKeysToSubQueries = (client: Knex) => evolve({
   gender_id: (v: string) =>
     client('gender').select('gender_id').where({ gender_name: v }),
   disability_id: (v: string) =>
@@ -134,7 +134,7 @@ export const Users: UserCollection = {
 
     return applyQueryModifiers(
       client
-        .select(q.fields ? pick(q.fields, ModelToColumn) : ModelToColumn)
+        .select(query.fields ? pick(query.fields, ModelToColumn) : ModelToColumn)
         .from('user_account')
         .leftOuterJoin('gender', 'user_account.gender_id', 'gender.gender_id')
         .leftOuterJoin('ethnicity', 'user_account.ethnicity_id', 'ethnicity.ethnicity_id')
@@ -150,7 +150,7 @@ export const Users: UserCollection = {
 
   async add (client: Knex, u: UserChangeSet) {
     const addSubQueries = compose(
-      transformConstantValuesToSubQueries(client),
+      transformForeignKeysToSubQueries(client),
       replaceModelFieldsWithForeignKeys,
       applyDefaultConstants
     );
@@ -169,7 +169,7 @@ export const Users: UserCollection = {
     );
 
     const preProcessChangeSet = compose(
-      transformConstantValuesToSubQueries(client),
+      transformForeignKeysToSubQueries(client),
       replaceConstantsWithForeignKeys,
       Users.toColumnNames
     );
@@ -184,7 +184,7 @@ export const Users: UserCollection = {
 
   async destroy (client: Knex, u: Partial<User>) {
     const preProcessUser = compose(
-      transformConstantValuesToSubQueries(client),
+      transformForeignKeysToSubQueries(client),
       replaceConstantsWithForeignKeys,
       Users.toColumnNames
     );
