@@ -22,7 +22,7 @@ describe('API /users', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
-        data: [
+        data: expect.arrayContaining([
           expect.objectContaining({
             id: 1,
             name: 'Chell',
@@ -56,7 +56,7 @@ describe('API /users', () => {
             deletedAt: null,
             modifiedAt: null,
           }),
-        ],
+        ]),
       });
     });
   });
