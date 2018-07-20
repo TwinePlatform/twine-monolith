@@ -14,12 +14,12 @@ describe('User Model', () => {
     await knex.destroy();
   });
 
-  describe('Read', () => {
-    beforeEach(async () => {
-      await migrate.truncate({ client: knex });
-      await knex.seed.run();
-    });
+  beforeEach(async () => {
+    await migrate.truncate({ client: knex });
+    await knex.seed.run();
+  });
 
+  describe('Read', () => {
     test('get :: no arguments gets all users', async () => {
       const users = await Users.get(knex);
 
@@ -61,18 +61,13 @@ describe('User Model', () => {
     });
 
     test('get :: offset results', async () => {
-      const users = await Users.get(knex, { offset: 2 });
+      const users = await Users.get(knex, { offset: 2, order: ['id', 'asc'] });
       expect(users.length).toBe(1);
       expect(users[0].name).toBe('Barney');
     });
   });
 
   describe('Write', () => {
-    beforeEach(async () => {
-      await migrate.truncate({ client: knex });
-      await knex.seed.run();
-    });
-
     test('update :: successful update of non-foreign-key column', async () => {
       const user = await Users.getOne(knex, { where: { id: 1 } });
       const changes = { name: 'GLaDOS' };

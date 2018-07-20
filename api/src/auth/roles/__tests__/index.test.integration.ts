@@ -52,11 +52,11 @@ describe('Roles Module', () => {
     test('ERROR - throws error if user id does not exists', async () => {
       expect.assertions(1);
       try {
-        await rolesInterface.add({ role: Role.VISITOR, userId: 3, organisationId: 1 });
+        await rolesInterface.add({ role: Role.VISITOR, userId: 45, organisationId: 1 });
       } catch (error) {
         expect(error.message).toEqual(
           /* tslint:disable */
-          `Foreign key does not exist: Key (user_account_id)=(3) is not present in table \"user_account\".`
+          `Foreign key does not exist: Key (user_account_id)=(45) is not present in table \"user_account\".`
           /* tslint:enable */
         );
       }

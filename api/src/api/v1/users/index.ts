@@ -29,7 +29,7 @@ export default [
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
       const { knex } = request;
 
-      const users = await Users.get(knex);
+      const users = await Users.get(knex, { where: { deletedAt: null } });
 
       return toApiResponse(users.map(Users.serialise));
     },
