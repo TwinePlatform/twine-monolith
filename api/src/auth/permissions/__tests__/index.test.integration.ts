@@ -26,7 +26,10 @@ describe('Permisions Module', () => {
   describe('::grantNew', () => {
     test('SUCCESS - Grant a role a permission entry that doesn\'t already exist', async () => {
       try {
-        const currentPermissions = await knex('permission').select('*');
+        const currentPermissions = await knex('permission')
+          .select('')
+          .count()
+          .then((res) => Number(res[0].count));
         const query = await permissionsInterface.grantNew({
           resource: Resource.CONSTANTS,
           access: Access.READ,
@@ -34,7 +37,7 @@ describe('Permisions Module', () => {
           role: Role.VISITOR});
 
         expect(query)
-          .toEqual([{ access_role_id: 1, permission_id: currentPermissions.length + 1 }]);
+          .toEqual([{ access_role_id: 1, permission_id: currentPermissions + 1 }]);
       } catch (error) {
         expect(error).toBeFalsy();
       }
@@ -63,6 +66,7 @@ describe('Permisions Module', () => {
           access_type: Access.WRITE,
           permission_level: PermissionLevel.ALL,
         }).then((x) => x[0].permission_id);
+
         const query = await permissionsInterface.grantExisting({
           resource: Resource.CONSTANTS,
           access: Access.WRITE,
@@ -71,8 +75,6 @@ describe('Permisions Module', () => {
         expect(query)
           .toEqual(expect.arrayContaining([{ access_role_id: 2, permission_id: permissionId }]));
       } catch (error) {
-        console.log(error);
-
         expect(error).toBeFalsy();
       }
     });
