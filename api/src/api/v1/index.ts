@@ -12,6 +12,7 @@
 import * as Hapi from 'hapi';
 import organisations from './organisations';
 import surveys from './surveys';
+import constants from './constants';
 import validateUser from '../../auth/scheme/validate_user';
 import validateExternal from '../../auth/scheme/validate_external';
 import * as AuthJwt from 'hapi-auth-jwt2';
@@ -38,7 +39,7 @@ export default {
       { validate: validateExternal });
 
     server.auth.default('standard');
-    server.route([...organisations, ...surveys]);
+    server.route([...organisations, ...surveys, ...constants]);
     return;
   },
 };
