@@ -68,6 +68,7 @@ exports.migrate = {
         .then(trx.commit)
         .catch(trx.rollback)
     )
+
     return _client ? null : client.destroy();
   },
 
