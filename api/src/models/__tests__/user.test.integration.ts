@@ -21,7 +21,7 @@ describe('User Model', () => {
 
   describe('Read', () => {
     test('get :: no arguments gets all users', async () => {
-      const users = await Users.get(knex);
+      const users = await Users.get(knex, { order: ['id', 'asc'] });
 
       expect(users.length).toBe(4);
       expect(users[0]).toEqual(expect.objectContaining({
