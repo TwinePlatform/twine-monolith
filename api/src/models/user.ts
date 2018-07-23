@@ -144,20 +144,21 @@ export const Users: UserCollection = {
   },
 
   async getOne (client: Knex, q: ModelQuery<User> = {}) {
-    const res = await Users.get(client, q);
-    return res[0] || null;
+    const [res] = await Users.get(client, { ...q, limit: 1 });
+    return res || null;
   },
 
   async add (client: Knex, u: UserChangeSet) {
     const addSubQueries = compose(
       mapKeys((k) => k.replace('user_account.', '')),
       transformForeignKeysToSubQueries(client),
-      replaceModelFieldsWithForeignKeys,
+      replaceConstantsWithForeignKeys,
+      Users.toColumnNames,
       applyDefaultConstants
     );
 
     const [id] = await client('user_account')
-      .insert(addSubQueries(Users.toColumnNames(u)))
+      .insert(addSubQueries(u))
       .returning('user_account_id');
 
     return Users.getOne(client, { where: { id } });
