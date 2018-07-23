@@ -225,7 +225,7 @@
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
           "scope": ["organisations_details-child:write"],
-          "query": {
+          "body": {
             "id": "Number",
             "name": "String",
             "logo_url": "String",
@@ -252,6 +252,7 @@
         "GET": {
           "description": "Retrieve information about a single organisation",
           "isImplemented": false,
+          "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
           "scope": ["organisations_details-child:read", "organisations_details-own:read"],
           "query": {
@@ -265,7 +266,7 @@
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
           "scope": ["organisations_details-child:write", "organisations_details-own:write"],
-          "query": {
+          "body": {
             "id": "Number",
             "name": "String",
             "logo_url": "String",
@@ -293,7 +294,7 @@
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
           "scope": ["organisations_details-child:delete", "organisations_details-own:delete"],
-          "query": {},
+          "body": {},
           "response": null
         }
       },
@@ -304,7 +305,7 @@
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
           "scope": ["organisations_subscriptions-child:read"],
-          "body": {
+          "query": {
             "subscriptionType": "String",
             "beneficiaryId": "Number"
           },
@@ -360,7 +361,7 @@
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
           "scope": ["organisations_training-child:read", "organisations_training-own:read"],
-          "query": {
+          "body": {
             "notes": "String"
           },
           "response": "types.organisationTrainingSession"
@@ -373,7 +374,7 @@
           "auth":true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
           "scope": ["organisations_training-child:read", "organisations_training-child:read"],
-          "query": {
+          "body": {
             "notes": "String"
           },
           "response": "types.organisationTrainingSession"
@@ -384,7 +385,7 @@
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
           "scope": ["organisations_training-own:delete"],
-          "query": {},
+          "body": {},
           "response": null
         }
       },
@@ -413,7 +414,7 @@
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["visit_activies-own:write"],
-          "query": {
+          "body": {
             "name": "String",
             "category": "String",
             "monday": "Boolean",
@@ -443,7 +444,7 @@
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["visit_activies-own:write"],
-          "query": {
+          "body": {
             "name": "String",
             "category": "String",
             "monday": "Boolean",
@@ -462,7 +463,7 @@
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["visit_activies-own:delete"],
-          "query": {},
+          "body": {},
           "response": null
         }
       },
@@ -494,7 +495,7 @@
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["organisations_feedback-parent:write"],
-          "query": {
+          "body": {
             "feedbackScore": "Number"
           },
           "response": {
@@ -758,9 +759,9 @@
         "POST": {
           "description": "Create an organisation and admin account",
           "isImplemented": false,
-          "auth": null,
-          "scope": [],
+          "auth": false,
           "intendedFor": ["FUNDING_BODY", "ORG_ADMIN"],
+          "scope": [],
           "body": {
             "name": "String",
             "gender": "String",
@@ -827,9 +828,9 @@
         "POST": {
           "description": "Create a volunteer account",
           "isImplemented": false,
-          "auth": null,
-          "scope": [],
+          "auth": false,
           "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": [],
           "body": {
             "organisationId": "Number",
             "name": "String",
@@ -871,9 +872,9 @@
         "POST": {
           "description": "Create an admin account",
           "isImplemented": false,
-          "auth": null,
-          "scope": [],
+          "auth": false,
           "intendedFor": ["ORG_ADMIN"],
+          "scope": [],
           "body": {
             "organisationId": "Number",
             "name": "String",
@@ -907,8 +908,7 @@
         "POST": {
           "description": "Login all accounts apart from visitor",
           "isImplemented": false,
-          "auth": null,
-          "scope": [],
+          "auth": false,
           "intendedFor": [
             "ORG_ADMIN",
             "FUNDING_BODY",
@@ -916,6 +916,7 @@
             "VOLUNTEER",
             "VOLUNTEER_ADMIN"
           ],
+          "scope": [],
           "body": {
             "userName": "String",
             "password": "String"
@@ -1000,7 +1001,7 @@
         "auth": true,
         "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VISITOR", "VOLUNTEER", "VOLUNTEER_ADMIN"],
         "scope": ["user_details-own:write"],
-        "query": {
+        "body": {
           "name": "String",
           "regionId": "Number",
           "sectorId": "Number",
