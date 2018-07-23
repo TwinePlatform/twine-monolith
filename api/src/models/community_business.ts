@@ -185,11 +185,6 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       omit(['name', '_360GivingId'])
     );
 
-    const preProcessOrg = compose(
-      Organisations.toColumnNames,
-      pick(['name', '_360GivingId'])
-    );
-
     const orgChangeset = preProcessOrgChangeset(c);
     const cbChangeset = preProcessCbChangeset(c);
 

@@ -52,12 +52,6 @@ const replaceConstantsWithForeignKeys = renameKeys({
   'disability.disability_name': 'disability_id',
 });
 
-const replaceModelFieldsWithForeignKeys = renameKeys({
-  gender: 'gender_id',
-  ethnicity: 'ethnicity_id',
-  disability: 'disability_id',
-});
-
 const transformForeignKeysToSubQueries = (client: Knex) => evolve({
   gender_id: (v: string) =>
     client('gender').select('gender_id').where({ gender_name: v }),
@@ -149,7 +143,7 @@ export const Users: UserCollection = {
   },
 
   async add (client: Knex, u: UserChangeSet) {
-    const addSubQueries = compose(
+    const preProcessUser = compose(
       mapKeys((k) => k.replace('user_account.', '')),
       transformForeignKeysToSubQueries(client),
       replaceConstantsWithForeignKeys,
@@ -158,7 +152,7 @@ export const Users: UserCollection = {
     );
 
     const [id] = await client('user_account')
-      .insert(addSubQueries(u))
+      .insert(preProcessUser(u))
       .returning('user_account_id');
 
     return Users.getOne(client, { where: { id } });

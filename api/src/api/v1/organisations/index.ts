@@ -5,8 +5,10 @@
  * - /api/v1/api.json
  */
 import * as Hapi from 'hapi';
+import { Dictionary } from 'ramda';
 import { Organisations } from '../../../models';
 import { query, response } from './schema';
+import { Response } from '../schema/response';
 
 
 const toApiResponse = (payload: Dictionary<any>, meta?: Dictionary<any>): Response => ({
