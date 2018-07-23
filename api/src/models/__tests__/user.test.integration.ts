@@ -23,7 +23,7 @@ describe('User Model', () => {
     test('get :: no arguments gets all users', async () => {
       const users = await Users.get(knex);
 
-      expect(users.length).toBe(3);
+      expect(users.length).toBe(4);
       expect(users[0]).toEqual(expect.objectContaining({
         name: 'Chell',
         gender: 'female',
@@ -44,7 +44,7 @@ describe('User Model', () => {
       const users = await Users.get(knex, { whereNot: { deletedAt: null } });
       expect(users).toEqual([
         expect.objectContaining({
-          id: 2,
+          id: 3,
           name: 'Gordon',
         }),
       ]);
@@ -57,11 +57,11 @@ describe('User Model', () => {
 
     test('get :: order results', async () => {
       const users = await Users.get(knex, { order: ['name', 'desc'] });
-      expect(users.map((u) => u.name)).toEqual(['Gordon', 'Chell', 'Barney']);
+      expect(users.map((u) => u.name)).toEqual(['Gordon', 'GlaDos', 'Chell', 'Barney']);
     });
 
     test('get :: offset results', async () => {
-      const users = await Users.get(knex, { offset: 2, order: ['id', 'asc'] });
+      const users = await Users.get(knex, { offset: 3, order: ['id', 'asc'] });
       expect(users.length).toBe(1);
       expect(users[0].name).toBe('Barney');
     });

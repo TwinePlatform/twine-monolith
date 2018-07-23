@@ -59,5 +59,3 @@ describe('Api.json structure', () => {
     });
   });
 });
-
-// console.log(flatRoutes);

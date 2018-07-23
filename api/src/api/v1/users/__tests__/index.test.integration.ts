@@ -41,7 +41,7 @@ describe('API /users', () => {
           }),
 
           expect.objectContaining({
-            id: 3,
+            id: 4,
             name: 'Barney',
             email: '2305@blackmesaresearch.com',
             postCode: '82394',
