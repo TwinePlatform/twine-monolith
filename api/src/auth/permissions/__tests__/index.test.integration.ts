@@ -75,8 +75,6 @@ describe('Permisions Module', () => {
         expect(query)
           .toEqual(expect.arrayContaining([{ access_role_id: 2, permission_id: permissionId }]));
       } catch (error) {
-        console.log(error);
-
         expect(error).toBeFalsy();
       }
     });

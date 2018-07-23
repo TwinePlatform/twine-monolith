@@ -9,6 +9,7 @@ export enum Environment {
 type WebConfig = {
   host: string,
   port: number | string,
+  router: { stripTrailingSlash: boolean }
   tls: null | { key: string, cert: string }
 };
 

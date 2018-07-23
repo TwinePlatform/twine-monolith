@@ -35,7 +35,6 @@ const routeTestFixtures: RouteTestFixture [] = Object.keys(apiJson.routes)
             url,
             method,
             statusCode,
-            auth: routesProps.auth,
           };
         });
         return [...nestedAcc, ...testObj];

@@ -4,25 +4,43 @@ describe('Config', () => {
   test(`getConfig | ${Environment.DEVELOPMENT}`, () => {
     const config = getConfig(Environment.DEVELOPMENT);
 
-    expect(config.web).toEqual({ port: 4000, host: 'localhost', tls: null });
+    expect(config.web).toEqual({
+      host: 'localhost',
+      port: 4000,
+      router: { stripTrailingSlash: true },
+      tls: null });
   });
 
   test(`getConfig | ${Environment.TESTING}`, () => {
     const config = getConfig(Environment.TESTING);
 
-    expect(config.web).toEqual({ port: 4001, host: 'localhost', tls: null });
+    expect(config.web).toEqual({
+      host: 'localhost',
+      port: 4001,
+      router: { stripTrailingSlash: true },
+      tls: null });
   });
 
   test(`getConfig | ${Environment.PRODUCTION}`, () => {
     const config = getConfig(Environment.PRODUCTION);
 
-    expect(config.web).toEqual({ port: 4002, host: '0.0.0.0', tls: null });
+
+    expect(config.web).toEqual({
+      host: '0.0.0.0',
+      port: 4002,
+      router: { stripTrailingSlash: true },
+      tls: null });
+
   });
 
   test(`getConfig | Invalid environment defaults to ${Environment.DEVELOPMENT}`, () => {
     const config = getConfig('foo');
 
-    expect(config.web).toEqual({ port: 4000, host: 'localhost', tls: null });
+    expect(config.web).toEqual({
+      host: 'localhost',
+      port: 4000,
+      router: { stripTrailingSlash: true },
+      tls: null });
   });
 
   test('Config | validateConfig | valid config', () => {
@@ -32,6 +50,7 @@ describe('Config', () => {
       web: {
         host: 'localhost',
         port: 1000,
+        router: { stripTrailingSlash: true },
         tls: null,
       },
       knex: {
@@ -61,6 +80,7 @@ describe('Config', () => {
       web: {
         host: 'localhost',
         port: -1,
+        router: null,
         tls: null,
       },
       knex: {
