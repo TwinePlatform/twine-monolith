@@ -22,15 +22,20 @@ const routeTestFixtures: RouteTestFixture [] = Object.keys(apiJson.routes)
       .reduce((nestedAcc, [nestedRoute, methods]) => {
         const testObj = Object.entries(methods)
         .map(([method, routesProps]) => {
-          const url = (resource + nestedRoute).replace(':id', '1');
+          const url = '/api/v1'.concat(resource, nestedRoute).replace(':id', '1');
+
           const statusCode = routesProps.isImplemented
-            ? 200
+            ? routesProps.auth
+              ? 401
+              : 200
             : 404;
+
           return {
             testName: `${method} ${url}`,
             url,
             method,
             statusCode,
+            auth: routesProps.auth,
           };
         });
         return [...nestedAcc, ...testObj];
@@ -40,9 +45,14 @@ const routeTestFixtures: RouteTestFixture [] = Object.keys(apiJson.routes)
 
 describe('API Specification', () => {
   let server: Hapi.Server;
+  const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
-    server = await init(getConfig(process.env.NODE_ENV));
+    server = await init(config);
+  });
+
+  afterAll(async () => {
+    await server.shutdown(true);
   });
 
   routeTestFixtures.forEach(({ testName, method, url, statusCode }) => {

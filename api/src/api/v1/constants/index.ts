@@ -1,20 +1,28 @@
 import * as Hapi from 'hapi';
 
-const createConstantRoute = (resource: string): Hapi.ServerRoute => (
-{
-  method: 'GET',
-  path: `/${resource}`,
-  options: {
-    description: `Retreive list of ${resource}`,
-    auth: false,
-  },
-  handler: async ({ knex }: Hapi.Request, h: Hapi.ResponseToolkit) => {
-    const [resourceName] = resource.split('community_business_').slice(-1);
-    const query = await knex(resource).select();
-    const response = query.map((row: any) => row[`${resourceName}_name`]);
-    return { [resource]: response };
-  },
-});
+const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
+  const [resourceName] = tableName.split('community_business_').slice(-1);
+  const resourceNamePlural = resourceName.slice(-1) === 'y'
+    ? resourceName.replace('y', 'ies')
+    : resourceName.concat('s');
+
+  return {
+    method: 'GET',
+    path: `/${ tableName === 'outreach_type'
+      ? 'outreach_campaigns/types'
+      : resourceNamePlural }`,
+    options: {
+      description: `Retreive list of ${resourceNamePlural}`,
+      auth: false,
+    },
+    handler: async ({ knex }: Hapi.Request, h: Hapi.ResponseToolkit) => {
+      const query = await knex(tableName).select();
+      const response = query.map((row: any) => row[`${resourceName}_name`]);
+
+      return { [resourceNamePlural]: response };
+    },
+  };
+};
 
 const constants =
   [

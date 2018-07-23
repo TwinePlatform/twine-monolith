@@ -139,8 +139,8 @@
       "/": {
         "GET": {
           "description": "Retrieve all sectors",
-          "isImplemented": false,
-          "auth": true,
+          "isImplemented": true,
+          "auth": false,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VISITOR", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": ["constants-all:read"],
           "query": {},
@@ -173,8 +173,8 @@
       "/": {
         "GET": {
           "description": "Retrieve all regions",
-          "isImplemented": false,
-          "auth": true,
+          "isImplemented": true,
+          "auth": false,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VISITOR", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": ["constants-all:read"],
           "query": {
@@ -207,7 +207,7 @@
       "/": {
         "GET": {
           "description": "Retreive list of all organisations",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
           "scope": ["organisations_details-child:read"],
@@ -1072,8 +1072,56 @@
       "/": {
         "GET": {
           "description": "Retrieve gender catagories",
-          "isImplemented": false,
-          "auth": true,
+          "isImplemented": true,
+          "auth": false,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VISITOR", "VOLUNTEER_ADMIN"],
+          "scope": ["constants-all:read"],
+          "query": {
+          },
+          "response": {
+            "genders": ["String"]
+          }
+        }
+      }
+    },
+    "/ethnicities": {
+      "/": {
+        "GET": {
+          "description": "Retrieve ethnicity catagories",
+          "isImplemented": true,
+          "auth": false,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VISITOR", "VOLUNTEER_ADMIN"],
+          "scope": ["constants-all:read"],
+          "query": {
+          },
+          "response": {
+            "genders": ["String"]
+          }
+        }
+      }
+    },
+    "/disabilities": {
+      "/": {
+        "GET": {
+          "description": "Retrieve disability catagories",
+          "isImplemented": true,
+          "auth": false,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VISITOR", "VOLUNTEER_ADMIN"],
+          "scope": ["constants-all:read"],
+          "query": {
+          },
+          "response": {
+            "genders": ["String"]
+          }
+        }
+      }
+    },
+    "/subscription_types": {
+      "/": {
+        "GET": {
+          "description": "Retrieve subscription type catagories",
+          "isImplemented": true,
+          "auth": false,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VISITOR", "VOLUNTEER_ADMIN"],
           "scope": ["constants-all:read"],
           "query": {
@@ -1085,6 +1133,20 @@
       }
     },
     "/outreach_campaigns": {
+      "/types": {
+        "GET": {
+          "description": "Retrieve subscription type catagories",
+          "isImplemented": true,
+          "auth": false,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VISITOR", "VOLUNTEER_ADMIN"],
+          "scope": ["constants-all:read"],
+          "query": {
+          },
+          "response": {
+            "genders": ["String"]
+          }
+        }
+      },
       "/type/:id/campaign_targets": {
         "GET": {
           "description": "Retrieve campaign targets for an outreach type",
