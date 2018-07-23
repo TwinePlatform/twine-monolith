@@ -6,7 +6,7 @@ import { compose, omit, filter, pick, invertObj, evolve } from 'ramda';
 import { Dictionary, Map } from '../types/internal';
 import { User, UserRow, UserCollection, UserChangeSet, ModelQuery } from './models';
 import { applyQueryModifiers } from './util';
-import { renameKeys } from '../utils';
+import { renameKeys, mapKeys } from '../utils';
 
 /*
  * Field name mappings
@@ -14,22 +14,22 @@ import { renameKeys } from '../utils';
  * ColumnToModel - DB column names       -> keys of the User type
  * ModelToColumn - keys of the User type -> DB column names
  */
-const ColumnToModel: Map<keyof UserRow, keyof User> = {
-  user_account_id: 'id',
-  user_name: 'name',
-  user_password: 'password',
-  email: 'email',
-  qr_code: 'qrCode',
-  birth_year: 'birthYear',
-  post_code: 'postCode',
-  phone_number: 'phoneNumber',
-  is_email_confirmed: 'isEmailConfirmed',
-  is_phone_number_confirmed: 'isPhoneNumberConfirmed',
-  is_email_contact_consent_granted: 'isEmailConsentGranted',
-  is_sms_contact_consent_granted: 'isSMSConsentGranted',
-  created_at: 'createdAt',
-  modified_at: 'modifiedAt',
-  deleted_at: 'deletedAt',
+export const ColumnToModel: Map<keyof UserRow, keyof User> = {
+  'user_account.user_account_id': 'id',
+  'user_account.user_name': 'name',
+  'user_account.user_password': 'password',
+  'user_account.email': 'email',
+  'user_account.qr_code': 'qrCode',
+  'user_account.birth_year': 'birthYear',
+  'user_account.post_code': 'postCode',
+  'user_account.phone_number': 'phoneNumber',
+  'user_account.is_email_confirmed': 'isEmailConfirmed',
+  'user_account.is_phone_number_confirmed': 'isPhoneNumberConfirmed',
+  'user_account.is_email_contact_consent_granted': 'isEmailConsentGranted',
+  'user_account.is_sms_contact_consent_granted': 'isSMSConsentGranted',
+  'user_account.created_at': 'createdAt',
+  'user_account.modified_at': 'modifiedAt',
+  'user_account.deleted_at': 'deletedAt',
   'gender.gender_name': 'gender',
   'ethnicity.ethnicity_name': 'ethnicity',
   'disability.disability_name': 'disability',
@@ -105,21 +105,21 @@ export const Users: UserCollection = {
 
   toColumnNames (o: Partial<User>): Dictionary<any> {
     return filter((a) => typeof a !== 'undefined', {
-      user_account_id: o.id,
-      user_name: o.name,
-      user_password: o.password,
-      email: o.email,
-      qr_code: o.qrCode,
-      birth_year: o.birthYear,
-      post_code: o.postCode,
-      phone_number: o.phoneNumber,
-      is_email_confirmed: o.isEmailConfirmed,
-      is_phone_number_confirmed: o.isPhoneNumberConfirmed,
-      is_email_contact_consent_granted: o.isEmailConsentGranted,
-      is_sms_contact_consent_granted: o.isSMSConsentGranted,
-      created_at: o.createdAt,
-      modified_at: o.modifiedAt,
-      deleted_at: o.deletedAt,
+      'user_account.user_account_id': o.id,
+      'user_account.user_name': o.name,
+      'user_account.user_password': o.password,
+      'user_account.email': o.email,
+      'user_account.qr_code': o.qrCode,
+      'user_account.birth_year': o.birthYear,
+      'user_account.post_code': o.postCode,
+      'user_account.phone_number': o.phoneNumber,
+      'user_account.is_email_confirmed': o.isEmailConfirmed,
+      'user_account.is_phone_number_confirmed': o.isPhoneNumberConfirmed,
+      'user_account.is_email_contact_consent_granted': o.isEmailConsentGranted,
+      'user_account.is_sms_contact_consent_granted': o.isSMSConsentGranted,
+      'user_account.created_at': o.createdAt,
+      'user_account.modified_at': o.modifiedAt,
+      'user_account.deleted_at': o.deletedAt,
       'gender.gender_name': o.gender,
       'ethnicity.ethnicity_name': o.ethnicity,
       'disability.disability_name': o.disability,
@@ -150,6 +150,7 @@ export const Users: UserCollection = {
 
   async add (client: Knex, u: UserChangeSet) {
     const addSubQueries = compose(
+      mapKeys((k) => k.replace('user_account.', '')),
       transformForeignKeysToSubQueries(client),
       replaceModelFieldsWithForeignKeys,
       applyDefaultConstants
@@ -169,6 +170,7 @@ export const Users: UserCollection = {
     );
 
     const preProcessChangeSet = compose(
+      mapKeys((k) => k.replace('user_account.', '')),
       transformForeignKeysToSubQueries(client),
       replaceConstantsWithForeignKeys,
       Users.toColumnNames
