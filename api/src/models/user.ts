@@ -34,7 +34,7 @@ export const ColumnToModel: Map<keyof UserRow, keyof User> = {
   'ethnicity.ethnicity_name': 'ethnicity',
   'disability.disability_name': 'disability',
 };
-const ModelToColumn = invertObj(ColumnToModel);
+export const ModelToColumn = invertObj(ColumnToModel);
 
 /*
  * Helpers for transforming query objects
