@@ -1,10 +1,5 @@
 const apiJson = require('../api.json');
-
-declare module 'jest' {
-  interface Expect {
-    not: any;
-  }
-}
+import { identity as id } from 'ramda';
 
 const flatRoutes = Object.entries(apiJson.routes)
   .reduce((acc, [resource, routes]) => {
@@ -48,11 +43,15 @@ describe('Api.json structure', () => {
         expect(typeof route.isImplemented).toEqual('boolean');
         expect(typeof route.auth).toEqual('boolean');
         expect(Array.isArray(route.intendedFor)).toBeTruthy();
-        expect(route.intendedFor.map((x: string) => typeof x === 'string'))
-          .toEqual(expect.not.arrayContaining([false]));
+        expect(route.intendedFor
+            .map((x: string) => typeof x === 'string')
+            .every(id))
+          .toBeTruthy();
         expect(Array.isArray(route.scope)).toBeTruthy();
-        expect(route.scope.map((x: string) => x.split(rx).length === 3))
-          .toEqual(expect.not.arrayContaining([false]));
+        expect(route.scope
+            .map((x: string) => x.split(rx).length === 3)
+            .every(id))
+          .toBeTruthy();
         expect(typeof route[requestType]).toEqual('object');
         expect(typeof route.response === 'object' || 'string').toBeTruthy();
       });
