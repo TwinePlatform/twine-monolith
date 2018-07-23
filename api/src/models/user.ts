@@ -67,7 +67,7 @@ const transformForeignKeysToSubQueries = (client: Knex) => evolve({
     client('ethnicity').select('ethnicity_id').where({ ethnicity_name: v }),
 });
 
-const dropUnWhereableUserFields = omit([
+const dropUnwhereableUserFields = omit([
   'gender',
   'ethnicity',
   'disability',
@@ -165,7 +165,7 @@ export const Users: UserCollection = {
   async update (client: Knex, u: User, c: UserChangeSet) {
     const preProcessUser = compose(
       Users.toColumnNames,
-      dropUnWhereableUserFields
+      dropUnwhereableUserFields
     );
 
     const preProcessChangeSet = compose(
