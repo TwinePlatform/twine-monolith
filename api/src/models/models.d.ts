@@ -14,33 +14,51 @@ type CommonTimestamps = {
 }
 
 export type UserRow = {
-  user_account_id: string
-  user_name: string
-  user_password: string
-  email: string
-  qr_code: string
-  birth_year: number
-  post_code: string
-  phone_number: string
-  is_email_confirmed: boolean
-  is_phone_number_confirmed: boolean
-  is_email_contact_consent_granted: boolean
-  is_sms_contact_consent_granted: boolean
-  created_at: string
-  modified_at: string
-  deleted_at: string
+  'user_account.user_account_id': string
+  'user_account.user_name': string
+  'user_account.user_password': string
+  'user_account.email': string
+  'user_account.qr_code': string
+  'user_account.birth_year': number
+  'user_account.post_code': string
+  'user_account.phone_number': string
+  'user_account.is_email_confirmed': boolean
+  'user_account.is_phone_number_confirmed': boolean
+  'user_account.is_email_contact_consent_granted': boolean
+  'user_account.is_sms_contact_consent_granted': boolean
+  'user_account.created_at': string
+  'user_account.modified_at': string
+  'user_account.deleted_at': string
   'gender.gender_name': string
   'ethnicity.ethnicity_name': string
   'disability.disability_name': string
 };
 
 export type OrganisationRow = {
-  organisation_id: 'id',
-  organisation_name: 'name',
-  _360_giving_id: '_360GivingId',
-  created_at: 'createdAt',
-  modified_at: 'modifiedAt',
-  deleted_at: 'deletedAt',
+  organisation_id: string
+  organisation_name: string
+  _360_giving_id: string
+  created_at: string
+  modified_at: string
+  deleted_at: string
+};
+
+export type CommunityBusinessRow = {
+  community_business_id: string
+  'organisation.organisation_name': string
+  'organisation._360_giving_id': string
+  'community_business_region.region_name': string,
+  'community_business_sector.sector_name': string,  
+  logo_url: string
+  address_1: string
+  address_2: string
+  town_city: string
+  post_code: string
+  coordinates: string
+  turnover_band: string
+  'community_business.created_at': string
+  'community_business.modified_at': string
+  'community_business.deleted_at': string
 };
 
 export type UserBase = CommonTimestamps & {
@@ -67,10 +85,7 @@ export type OrganisationBase = CommonTimestamps & {
   _360GivingId: string
 }
 
-export type CommunityBusinessBase = CommonTimestamps & {
-  id: number
-  name: string
-  _360GivingId: string
+export type CommunityBusinessBase = CommonTimestamps & OrganisationBase & {
   region: string
   sector: string
   logoUrl: string
@@ -145,9 +160,23 @@ export type OrganisationRelations =
   | User
   | Subscription
 
-export type Model = User | Organisation | CommunityBusiness
-export type ChangeSet = UserChangeSet | OrganisationChangeSet
-export type Relation = UserRelations | OrganisationRelations
+export type CommunityBusinessRelations =
+  Subscription
+  | OutreachCampaign
+
+export type Model =
+  User
+  | Organisation
+  | CommunityBusiness
+
+export type ChangeSet =
+  UserChangeSet
+  | OrganisationChangeSet
+
+export type Relation =
+  UserRelations
+  | OrganisationRelations
+  | CommunityBusinessRelations
 
 export type Collection<T extends Model, K extends ChangeSet, V extends Relation> = {
   toColumnNames: (a: Partial<T>) => Dictionary<any>
@@ -162,7 +191,7 @@ export type Collection<T extends Model, K extends ChangeSet, V extends Relation>
 }
 export type UserCollection = Collection<User, UserChangeSet, UserRelations>
 export type OrganisationCollection = Collection<Organisation, OrganisationChangeSet, OrganisationRelations>
-
+export type CommunityBusinessCollection = Collection<CommunityBusiness, CommunityBusinessChangeSet, CommunityBusinessRelations>
 
 type WhereQuery<T> = Partial<T>
 type WhereBetweenQuery<T> = {
