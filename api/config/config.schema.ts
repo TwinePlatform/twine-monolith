@@ -19,6 +19,9 @@ export default {
         cert: Joi.string().required(),
       })
     ),
+    router: Joi.object({
+      stripTrailingSlash: Joi.boolean().required(),
+    }),
   }),
   knex: Joi.object({
     client: Joi.string().required(),

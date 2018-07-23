@@ -14,6 +14,9 @@ export default {
     host: 'localhost',
     port: 1000,
     tls: null,
+    router: {
+      stripTrailingSlash: true,
+    },
   },
   knex: {
     client: 'pg',
