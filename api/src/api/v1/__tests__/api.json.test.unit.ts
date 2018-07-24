@@ -1,5 +1,17 @@
 const apiJson = require('../api.json');
 import { identity as id } from 'ramda';
+import * as Joi from 'joi';
+
+const routeSchema = {
+  description: Joi.string().required(),
+  isImplemented: Joi.boolean().required(),
+  auth: Joi.boolean().required(),
+  intendedFor: Joi.array().items(Joi.string()).required(),
+  scope : Joi.array().items(Joi.string()).required(),
+  query : Joi.object(),
+  body : Joi.object(),
+  response : Joi.alternatives().try(Joi.object(), Joi.string(), Joi.array()).allow(null).required(),
+};
 
 const flatRoutes = Object.entries(apiJson.routes)
   .reduce((acc, [resource, routes]) => {
@@ -39,21 +51,11 @@ describe('Api.json structure', () => {
       });
 
       test('correct values', () => {
-        expect(typeof route.description).toEqual('string');
-        expect(typeof route.isImplemented).toEqual('boolean');
-        expect(typeof route.auth).toEqual('boolean');
-        expect(Array.isArray(route.intendedFor)).toBeTruthy();
-        expect(route.intendedFor
-            .map((x: string) => typeof x === 'string')
-            .every(id))
-          .toBeTruthy();
-        expect(Array.isArray(route.scope)).toBeTruthy();
+        expect(Joi.validate(route, routeSchema).error).toBeNull();
         expect(route.scope
             .map((x: string) => x.split(rx).length === 3)
             .every(id))
           .toBeTruthy();
-        expect(typeof route[requestType]).toEqual('object');
-        expect(typeof route.response === 'object' || 'string').toBeTruthy();
       });
     });
   });
