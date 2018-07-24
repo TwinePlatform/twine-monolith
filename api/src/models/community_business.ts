@@ -189,24 +189,24 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     const cbChangeset = preProcessCbChangeset(c);
 
     const [{ community_business_id: id }] = await client.transaction(async (trx) => {
-      const yurWhere = preProcessCb(trx)(o);
+      const cbQuery = preProcessCb(trx)(o);
 
       if (Object.keys(orgChangeset).length > 0) {
         await trx('organisation')
           .update(orgChangeset)
           .where({
-            organisation_id: trx('community_business').select('organisation_id').where(yurWhere),
+            organisation_id: trx('community_business').select('organisation_id').where(cbQuery),
           });
       }
 
       if (Object.keys(cbChangeset).length > 0) {
         return trx('community_business')
           .update(cbChangeset)
-          .where(yurWhere)
+          .where(cbQuery)
           .returning('*');
       }
 
-      return trx('community_business').select('community_business_id').limit(1);
+      return trx('community_business').select('community_business_id').where(cbQuery).limit(1);
     });
 
     return CommunityBusinesses.getOne(client, { where: { id } });
