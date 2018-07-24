@@ -21,18 +21,20 @@ describe('User Model', () => {
 
   describe('Read', () => {
     test('get :: no arguments gets all users', async () => {
-      const users = await Users.get(knex, { order: ['id', 'asc'] });
+      const users = await Users.get(knex);
 
       expect(users.length).toBe(4);
-      expect(users[0]).toEqual(expect.objectContaining({
-        name: 'Chell',
-        gender: 'female',
-        disability: 'no',
-        ethnicity: 'prefer not to say',
-        email: '1498@aperturescience.com',
-        birthYear: 1988,
-        isEmailConfirmed: false,
-      }));
+      expect(users).toEqual(expect.arrayContaining(
+        [expect.objectContaining({
+          name: 'Chell',
+          gender: 'female',
+          disability: 'no',
+          ethnicity: 'prefer not to say',
+          email: '1498@aperturescience.com',
+          birthYear: 1988,
+          isEmailConfirmed: false,
+        })]
+      ));
     });
 
     test('get :: filter users by ID | non-existent ID resolves to empty array', async () => {
