@@ -28,8 +28,8 @@ describe('User Model', () => {
       const users = await Users.get(context.trx);
 
       expect(users.length).toBe(4);
-      expect(users).toEqual(expect.arrayContaining(
-        [expect.objectContaining({
+      expect(users).toEqual(expect.arrayContaining([
+        expect.objectContaining({
           name: 'Chell',
           gender: 'female',
           disability: 'no',
@@ -37,8 +37,8 @@ describe('User Model', () => {
           email: '1498@aperturescience.com',
           birthYear: 1988,
           isEmailConfirmed: false,
-        })]
-      ));
+        })
+      ]));
     });
 
     test('get :: filter users by ID | non-existent ID resolves to empty array', async () => {
@@ -119,6 +119,24 @@ describe('User Model', () => {
 
       expect(users.length).toBe(usersAfterDel.length + 1);
       expect(deletedUser).toEqual([]);
+    });
+  });
+
+  describe('Serialisation', () => {
+    test('serialise :: returns model object without secrets', async () => {
+      const user = await Users.getOne(knex);
+
+      const serialised = Users.serialise(user);
+
+      expect(serialised).toEqual(omit(['password', 'qrCode'], user));
+    });
+
+    test('deserialise :: inverse of serialise', async () => {
+      const user = await Users.getOne(knex);
+
+      const unchanged = Users.deserialise(Users.serialise(user));
+
+      expect(unchanged).toEqual(omit(['password', 'qrCode'], user));
     });
   });
 });

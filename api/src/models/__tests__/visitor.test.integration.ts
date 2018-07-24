@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { Dictionary } from 'ramda';
+import { Dictionary, omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/factory';
 import { Visitors } from '..';
@@ -78,6 +78,24 @@ describe('Visitor model', () => {
       } catch (error) {
         expect(error).toBeTruthy();
       }
+    });
+  });
+
+  describe('Serialisation', () => {
+    test('serialise :: returns model object without secrets', async () => {
+      const visitor = await Visitors.getOne(knex);
+
+      const serialised = Visitors.serialise(visitor);
+
+      expect(serialised).toEqual(omit(['password', 'qrCode'], visitor));
+    });
+
+    test('deserialise :: inverse of serialise', async () => {
+      const visitor = await Visitors.getOne(knex);
+
+      const unchanged = Visitors.deserialise(Visitors.serialise(visitor));
+
+      expect(unchanged).toEqual(omit(['password', 'qrCode'], visitor));
     });
   });
 });

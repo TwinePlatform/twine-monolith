@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { Dictionary } from 'ramda';
+import { Dictionary, omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/factory';
 import { CbAdmin } from '..';
@@ -80,6 +80,36 @@ describe('CbAdmin model', () => {
       } catch (error) {
         expect(error).toBeTruthy();
       }
+    });
+
+    test('destroy :: marks record as deleted', async () => {
+      const admins = await CbAdmin.get(context.trx);
+
+      await CbAdmin.destroy(context.trx, admins[0]);
+
+      const adminsAfterDel = await CbAdmin.get(context.trx, { where: { deletedAt: null } });
+      const deletedAdmin = await CbAdmin.get(context.trx, { where: admins[0] });
+
+      expect(admins.length).toBe(adminsAfterDel.length + 1);
+      expect(deletedAdmin).toEqual([]);
+    });
+  });
+
+  describe('Serialisation', () => {
+    test('serialise :: returns model object without secrets', async () => {
+      const admin = await CbAdmin.getOne(knex);
+
+      const serialised = CbAdmin.serialise(admin);
+
+      expect(serialised).toEqual(omit(['password', 'qrCode'], admin));
+    });
+
+    test('deserialise :: inverse of serialise', async () => {
+      const admin = await CbAdmin.getOne(knex);
+
+      const unchanged = CbAdmin.deserialise(CbAdmin.serialise(admin));
+
+      expect(unchanged).toEqual(omit(['password', 'qrCode'], admin));
     });
   });
 });
