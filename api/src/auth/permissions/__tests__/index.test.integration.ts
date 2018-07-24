@@ -217,7 +217,8 @@ describe('Permisions Module', () => {
           permission_level: 'own',
         },
         {
-          access_role_id: 1, access_type: 'write',
+          access_role_id: 1,
+          access_type: 'write',
           permission_entity: 'user_details',
           permission_level: 'own',
         },
