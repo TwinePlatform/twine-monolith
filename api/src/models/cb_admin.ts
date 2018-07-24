@@ -44,7 +44,7 @@ export const CbAdmin: UserCollection = {
             .select('access_role_id')
             .where({ access_role_name: Role.ORG_ADMIN }),
         }),
-    query
+      query
     );
   },
 

@@ -44,7 +44,7 @@ const ModelToColumn = invertObj(ColumnToModel);
 /*
  * Helpers
  */
-export const transformForeignKeysToSubQueries = (client: Knex | Knex.QueryBuilder) => evolve({
+const transformForeignKeysToSubQueries = (client: Knex | Knex.QueryBuilder) => evolve({
   community_business_region_id: (v: string) =>
     client
       .table('community_business_region')
@@ -63,6 +63,20 @@ const dropUnwhereableCbFields = omit([
   'deletedAt',
 ]);
 
+const pickOrgFields = pick(['name', '_360GivingId']);
+const pickCbFields = omit(['name', '_360GivingId']);
+
+const preProcessOrgChangeset = compose(
+  Organisations.toColumnNames,
+  pickOrgFields
+);
+
+const preProcessCb = (qb: Knex | Knex.QueryBuilder) => compose(
+  transformForeignKeysToSubQueries(qb),
+  CommunityBusinesses.toColumnNames,
+  dropUnwhereableCbFields,
+  pickCbFields
+);
 
 /*
  * Implementation of the CommunityBusinessCollection type
@@ -140,8 +154,13 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
   },
 
   async add (client: Knex, o: CommunityBusinessChangeSet) {
-    const orgChangeset = Organisations.toColumnNames(pick(['name', '_360GivingId'], o));
-    const cbChangeset = CommunityBusinesses.toColumnNames(omit(['name', '_360GivingId'], o));
+    const preProcessCbChangeset = compose(
+      CommunityBusinesses.toColumnNames,
+      pickCbFields
+    );
+
+    const orgChangeset = preProcessOrgChangeset(o);
+    const cbChangeset = preProcessCbChangeset(o);
 
     const [id] = await client
       .with('new_organisation', (qb) =>
@@ -168,21 +187,9 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
   },
 
   async update (client: Knex, o: CommunityBusiness, c: CommunityBusinessChangeSet) {
-    const preProcessOrgChangeset = compose(
-      Organisations.toColumnNames,
-      pick(['name', '_360GivingId'])
-    );
-
     const preProcessCbChangeset = compose(
       CommunityBusinesses.toColumnNames,
-      omit(['name', '_360GivingId'])
-    );
-
-    const preProcessCb = (qb: Knex | Knex.QueryBuilder) => compose(
-      transformForeignKeysToSubQueries(qb),
-      CommunityBusinesses.toColumnNames,
-      dropUnwhereableCbFields,
-      omit(['name', '_360GivingId'])
+      pickCbFields
     );
 
     const orgChangeset = preProcessOrgChangeset(c);
@@ -213,16 +220,9 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
   },
 
   async destroy (client: Knex, o: CommunityBusiness) {
-    const preProcessCb = compose(
-      transformForeignKeysToSubQueries(client),
-      CommunityBusinesses.toColumnNames,
-      dropUnwhereableCbFields,
-      omit(['name', '_360GivingId'])
-    );
-
     return client('community_business')
       .update({ deleted_at: new Date() })
-      .where(preProcessCb(o));
+      .where(preProcessCb(client)(o));
   },
 
   serialise (org: CommunityBusiness) {

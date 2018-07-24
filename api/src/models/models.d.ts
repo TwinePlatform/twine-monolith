@@ -5,13 +5,13 @@ import { Maybe, Json, Dictionary } from '../types/internal';
 export type Coordinates = {
   lat: number
   lng: number
-}
+};
 
 type CommonTimestamps = {
   createdAt: string
   modifiedAt?: string
   deletedAt?: string
-}
+};
 
 export type UserRow = {
   'user_account.user_account_id': string
@@ -47,8 +47,8 @@ export type CommunityBusinessRow = {
   community_business_id: string
   'organisation.organisation_name': string
   'organisation._360_giving_id': string
-  'community_business_region.region_name': string,
-  'community_business_sector.sector_name': string,  
+  'community_business_region.region_name': string
+  'community_business_sector.sector_name': string
   logo_url: string
   address_1: string
   address_2: string
@@ -77,13 +77,13 @@ export type UserBase = CommonTimestamps & {
   isPhoneNumberConfirmed: boolean
   isEmailConsentGranted: boolean
   isSMSConsentGranted: boolean
-}
+};
 
 export type OrganisationBase = CommonTimestamps & {
   id: number
   name: string
   _360GivingId: string
-}
+};
 
 export type CommunityBusinessBase = CommonTimestamps & OrganisationBase & {
   region: string
@@ -95,14 +95,14 @@ export type CommunityBusinessBase = CommonTimestamps & OrganisationBase & {
   postCode: string
   coordinates: Coordinates
   turnoverBand: string
-}
+};
 
 export type Subscription = CommonTimestamps & {
   id: number
   type: string
   status: string
   expiresAt: string
-}
+};
 
 export type VisitActivity = CommonTimestamps & {
   id: number
@@ -115,18 +115,18 @@ export type VisitActivity = CommonTimestamps & {
   friday: boolean
   saturday: boolean
   sunday: boolean
-}
+};
 
 export type VisitEvent = CommonTimestamps & {
   id: number
-}
+};
 
 export type OutreachMeetingBase = CommonTimestamps & {
   id: number
   partner: string
   subject: string
   scheduledAt: string
-}
+};
 
 export type OutreachCampaignBase = CommonTimestamps & {
   id: number
@@ -134,49 +134,49 @@ export type OutreachCampaignBase = CommonTimestamps & {
   targets: string[]
   startsAt: string
   endsAt: string
-}
+};
 
-export type User = Readonly<UserBase>
-export type UserChangeSet = Partial<UserBase>
+export type User = Readonly<UserBase>;
+export type UserChangeSet = Partial<UserBase>;
 
-export type Organisation = Readonly<OrganisationBase>
-export type OrganisationChangeSet = Partial<OrganisationBase>
+export type Organisation = Readonly<OrganisationBase>;
+export type OrganisationChangeSet = Partial<OrganisationBase>;
 
-export type CommunityBusiness = Readonly<CommunityBusinessBase>
-export type CommunityBusinessChangeSet = Partial<CommunityBusinessBase>
+export type CommunityBusiness = Readonly<CommunityBusinessBase>;
+export type CommunityBusinessChangeSet = Partial<CommunityBusinessBase>;
 
-export type OutreachMeeting = Readonly<OutreachMeetingBase>
-export type OutreachMeetingChangeSet = Partial<OutreachMeetingBase>
+export type OutreachMeeting = Readonly<OutreachMeetingBase>;
+export type OutreachMeetingChangeSet = Partial<OutreachMeetingBase>;
 
-export type OutreachCampaign = Readonly<OutreachCampaignBase>
-export type OutreachCampaignChangeSet = Partial<OutreachCampaignBase>
+export type OutreachCampaign = Readonly<OutreachCampaignBase>;
+export type OutreachCampaignChangeSet = Partial<OutreachCampaignBase>;
 
 export type UserRelations =
   OutreachMeeting
-  | Organisation
+  | Organisation;
 
 export type OrganisationRelations =
   CommunityBusiness
   | User
-  | Subscription
+  | Subscription;
 
 export type CommunityBusinessRelations =
   Subscription
-  | OutreachCampaign
+  | OutreachCampaign;
 
 export type Model =
   User
   | Organisation
-  | CommunityBusiness
+  | CommunityBusiness;
 
 export type ChangeSet =
   UserChangeSet
-  | OrganisationChangeSet
+  | OrganisationChangeSet;
 
 export type Relation =
   UserRelations
   | OrganisationRelations
-  | CommunityBusinessRelations
+  | CommunityBusinessRelations;
 
 export type Collection<T extends Model, K extends ChangeSet, V extends Relation> = {
   toColumnNames: (a: Partial<T>) => Dictionary<any>
@@ -188,15 +188,19 @@ export type Collection<T extends Model, K extends ChangeSet, V extends Relation>
   destroy: (c: Knex, a: Partial<T>) => Promise<void>
   serialise: (a: T) => Maybe<Json>
   deserialise: (a: Json) => Maybe<T>
-}
-export type UserCollection = Collection<User, UserChangeSet, UserRelations>
-export type OrganisationCollection = Collection<Organisation, OrganisationChangeSet, OrganisationRelations>
-export type CommunityBusinessCollection = Collection<CommunityBusiness, CommunityBusinessChangeSet, CommunityBusinessRelations>
+};
 
-type WhereQuery<T> = Partial<T>
+export type UserCollection =
+  Collection<User, UserChangeSet, UserRelations>;
+export type OrganisationCollection =
+  Collection<Organisation, OrganisationChangeSet, OrganisationRelations>;
+export type CommunityBusinessCollection =
+  Collection<CommunityBusiness, CommunityBusinessChangeSet, CommunityBusinessRelations>;
+
+type WhereQuery<T> = Partial<T>;
 type WhereBetweenQuery<T> = {
   [k in keyof T]?: [string, string]
-}
+};
 export type ModelQuery<T> = Partial<{
   where: WhereQuery<T>
   whereNot: WhereQuery<T>
@@ -206,4 +210,4 @@ export type ModelQuery<T> = Partial<{
   offset: number
   order: [string, 'asc' | 'desc']
   fields: (keyof T)[]
-}>
+}>;
