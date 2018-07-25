@@ -22,6 +22,7 @@ export default (server: Hapi.Server, config: Config) => {
   server.decorate('request', 'knex', server.app.knex);
 
   server.decorate('server', 'shutdown', async (graceful) => {
+    /* istanbul ignore else */
     if (graceful) {
       await server.app.knex.destroy();
       return server.stop();

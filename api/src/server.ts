@@ -40,6 +40,7 @@ const init = async (config: Config): Promise<Hapi.Server> => {
   return server;
 };
 
+/* istanbul ignore next */
 const start = async (server: Hapi.Server) => {
   await server.start();
   return server;

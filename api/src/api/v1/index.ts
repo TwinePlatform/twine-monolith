@@ -40,6 +40,5 @@ export default {
 
     server.auth.default('standard');
     server.route([...organisations, ...surveys, ...constants]);
-    return;
   },
 };
