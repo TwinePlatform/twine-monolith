@@ -122,8 +122,4 @@ export const Organisations: OrganisationCollection = {
   serialise (org: Organisation) {
     return org;
   },
-
-  deserialise (a: Dictionary<any>) {
-    return Organisations.create(a);
-  },
 };

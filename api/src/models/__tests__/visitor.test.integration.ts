@@ -89,13 +89,5 @@ describe('Visitor model', () => {
 
       expect(serialised).toEqual(omit(['password', 'qrCode'], visitor));
     });
-
-    test('deserialise :: inverse of serialise', async () => {
-      const visitor = await Visitors.getOne(knex);
-
-      const unchanged = Visitors.deserialise(Visitors.serialise(visitor));
-
-      expect(unchanged).toEqual(omit(['password', 'qrCode'], visitor));
-    });
   });
 });

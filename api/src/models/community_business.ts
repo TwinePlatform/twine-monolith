@@ -228,8 +228,4 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
   serialise (org: CommunityBusiness) {
     return org;
   },
-
-  deserialise (a: Dictionary<any>) {
-    return CommunityBusinesses.create(a);
-  },
 };

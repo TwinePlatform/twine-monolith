@@ -103,13 +103,5 @@ describe('CbAdmin model', () => {
 
       expect(serialised).toEqual(omit(['password', 'qrCode'], admin));
     });
-
-    test('deserialise :: inverse of serialise', async () => {
-      const admin = await CbAdmin.getOne(knex);
-
-      const unchanged = CbAdmin.deserialise(CbAdmin.serialise(admin));
-
-      expect(unchanged).toEqual(omit(['password', 'qrCode'], admin));
-    });
   });
 });

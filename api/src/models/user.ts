@@ -194,8 +194,4 @@ export const Users: UserCollection = {
   serialise (user: User) {
     return omit(['password', 'qrCode'], user);
   },
-
-  deserialise (a: Dictionary<any>) {
-    return Users.create(a);
-  },
 };

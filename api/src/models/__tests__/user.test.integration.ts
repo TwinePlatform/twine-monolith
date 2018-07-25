@@ -37,7 +37,7 @@ describe('User Model', () => {
           email: '1498@aperturescience.com',
           birthYear: 1988,
           isEmailConfirmed: false,
-        })
+        }),
       ]));
     });
 
@@ -129,14 +129,6 @@ describe('User Model', () => {
       const serialised = Users.serialise(user);
 
       expect(serialised).toEqual(omit(['password', 'qrCode'], user));
-    });
-
-    test('deserialise :: inverse of serialise', async () => {
-      const user = await Users.getOne(knex);
-
-      const unchanged = Users.deserialise(Users.serialise(user));
-
-      expect(unchanged).toEqual(omit(['password', 'qrCode'], user));
     });
   });
 });

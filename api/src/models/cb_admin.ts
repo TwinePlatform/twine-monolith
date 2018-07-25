@@ -68,8 +68,4 @@ export const CbAdmin: UserCollection = {
   serialise (user: User) {
     return omit(['password', 'qrCode'], user);
   },
-
-  deserialise (a: Dictionary<any>) {
-    return CbAdmin.create(a);
-  },
 };
