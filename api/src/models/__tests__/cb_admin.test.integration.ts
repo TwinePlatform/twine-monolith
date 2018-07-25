@@ -26,19 +26,30 @@ describe('CbAdmin model', () => {
   describe('Read', () => {
     test('get :: returns only those users with a cb-admin role', async () => {
       const admins = await CbAdmin.get(knex);
-      expect(admins).toHaveLength(1);
-      expect(admins).toEqual([expect.objectContaining({ id: 2, name: 'Gordon' })]);
+      expect(admins).toHaveLength(2);
+      expect(admins).toEqual(expect.arrayContaining([
+        expect.objectContaining({
+          name: 'Gordon',
+          email: '1998@blackmesaresearch.com',
+        }),
+      ]));
     });
 
     test('get :: fetch deleted users', async () => {
       const admins = await CbAdmin.get(knex, { whereNot: { deletedAt: null } });
       expect(admins).toHaveLength(1);
-      expect(admins).toEqual([expect.objectContaining({ id: 2, name: 'Gordon' })]);
+      expect(admins).toEqual([expect.objectContaining({
+        name: 'Gordon',
+        email: '1998@blackmesaresearch.com',
+      })]);
     });
 
     test('getOne :: returns first user with cb-admin role', async () => {
       const admin = await CbAdmin.getOne(knex);
-      expect(admin).toEqual(expect.objectContaining({ id: 2, name: 'Gordon' }));
+      expect(admin).toEqual(expect.objectContaining({
+        name: 'GlaDos',
+        email: '1@aperturescience.com',
+      }));
     });
   });
 
