@@ -17,7 +17,10 @@ export type Response = {
     type: string
     message: string
   }
-  meta?: Dictionary<any>
+  meta?: {
+    offset: number
+    total: number
+  }
 };
 
 export const response = {
@@ -27,5 +30,8 @@ export const response = {
     type: Joi.string().min(1).max(255),
     message: Joi.string().min(1).max(255),
   }),
-  meta: Joi.object(),
+  meta: Joi.object({
+    offset: Joi.number().integer().min(0),
+    total: Joi.number().integer().min(0),
+  }),
 };
