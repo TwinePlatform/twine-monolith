@@ -173,11 +173,7 @@ describe('Roles Module', () => {
     test('Error - returns error if userId does not exist', async () => {
       expect.assertions(1);
       try {
-<<<<<<< HEAD
         await rolesInterface.getUserRole({ userId: 20, organisationId: 1 });
-=======
-        await rolesInterface.getUserRole({ userId: 2000, organisationId: 1 });
->>>>>>> ✅ fix tests
       } catch (error) {
         expect(error.message).toEqual('User does not exist');
       }
