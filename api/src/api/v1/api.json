@@ -533,7 +533,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
-          "scope": ["users_details-child:read"],
+          "scope": ["user_details-child:read"],
           "query": {
             "fields": ["String"],
             "filter":{
@@ -558,7 +558,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
-          "scope": ["users_details-child:read"],
+          "scope": ["user_details-child:read"],
           "query": {
             "fields": ["String"],
             "filter":{
@@ -585,7 +585,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
-          "scope": ["users_details-child:read"],
+          "scope": ["user_details-child:read"],
           "query": {
             "fields": ["String"],
             "filter": {
@@ -610,7 +610,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
-          "scope": ["users_details-child:read"],
+          "scope": ["user_details-child:read"],
           "query": {
             "fields": ["String"],
             "filter":{
@@ -930,7 +930,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
-          "scope": ["users_details-child:read"],
+          "scope": ["user_details-child:read"],
           "query": {
             "fields": ["String"]
           },
@@ -941,7 +941,7 @@
         "isImplemented": false,
         "auth": true,
         "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
-        "scope": ["users_details-child:write"],
+        "scope": ["user_details-child:write"],
         "body": {
           "name": "String",
           "regionId": "Number",
@@ -962,7 +962,7 @@
         "isImplemented": false,
         "auth": true,
         "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
-        "scope": ["users_details-child:write"],
+        "scope": ["user_details-child:write"],
         "body": {},
         "response": null
         }
