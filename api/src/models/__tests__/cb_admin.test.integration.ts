@@ -94,15 +94,27 @@ describe('CbAdmin model', () => {
     });
 
     test('destroy :: marks record as deleted', async () => {
-      const admins = await CbAdmin.get(context.trx);
+      const admins = await CbAdmin.get(context.trx, { where: { deletedAt: null } });
 
       await CbAdmin.destroy(context.trx, admins[0]);
-
       const adminsAfterDel = await CbAdmin.get(context.trx, { where: { deletedAt: null } });
-      const deletedAdmin = await CbAdmin.get(context.trx, { where: admins[0] });
+      const deletedAdmins = await CbAdmin.get(context.trx, { whereNot: { deletedAt: null } });
+      const deletedAdmin = await CbAdmin.getOne(context.trx, { where: { id: admins[0].id } });
 
       expect(admins.length).toBe(adminsAfterDel.length + 1);
-      expect(deletedAdmin).toEqual([]);
+      expect(deletedAdmins).toEqual(expect.arrayContaining([
+        expect.objectContaining(
+          {
+            ...omit(['deletedAt', 'modifiedAt'], admins[0]),
+            email: null,
+            name: 'none',
+            phoneNumber: null,
+            postCode: null,
+            qrCode: null,
+          }
+        ),
+      ]));
+      expect(deletedAdmin.modifiedAt).not.toEqual(admins[0].modifiedAt);
     });
   });
 

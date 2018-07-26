@@ -183,12 +183,20 @@ export const Users: UserCollection = {
     const preProcessUser = compose(
       transformForeignKeysToSubQueries(client),
       replaceConstantsWithForeignKeys,
-      Users.toColumnNames
+      Users.toColumnNames,
+      dropUnwhereableUserFields
     );
 
     return client('user_account')
       .where(preProcessUser(u))
-      .update({ deleted_at: new Date() });
+      .update({
+        user_name: 'none',
+        email: null,
+        phone_number: null,
+        post_code: null,
+        qr_code: null,
+        deleted_at: new Date(),
+      });
   },
 
   serialise (user: User) {

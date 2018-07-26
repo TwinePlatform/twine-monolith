@@ -110,15 +110,27 @@ describe('User Model', () => {
     });
 
     test('destroy :: mark existing record as deleted', async () => {
-      const users = await Users.get(context.trx);
+      const users = await Users.get(context.trx, { where: { deletedAt: null } });
 
       await Users.destroy(context.trx, users[0]);
-
       const usersAfterDel = await Users.get(context.trx, { where: { deletedAt: null } });
-      const deletedUser = await Users.get(context.trx, { where: users[0] });
+      const deletedUsers = await Users.get(context.trx, { whereNot: { deletedAt: null } });
+      const deletedUser = await Users.getOne(context.trx, { where: { id: users[0].id } });
 
       expect(users.length).toBe(usersAfterDel.length + 1);
-      expect(deletedUser).toEqual([]);
+      expect(deletedUsers).toEqual(expect.arrayContaining([
+        expect.objectContaining(
+          {
+            ...omit(['deletedAt', 'modifiedAt'], users[0]),
+            email: null,
+            name: 'none',
+            phoneNumber: null,
+            postCode: null,
+            qrCode: null,
+          }
+        ),
+      ]));
+      expect(deletedUser.modifiedAt).not.toEqual(users[0].modifiedAt);
     });
   });
 
