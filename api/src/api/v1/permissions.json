@@ -12,7 +12,7 @@
     "organisations_feedback-child:read",
     "user_details-child:read",
     "visit_logs-child:read",
-    "volunteer_logs-child:read",
+    "volunteer_logs-own:read",
     "organisations_outreach-child:read",
     "user_details-child:write",
     "user_details-own:write",
@@ -24,8 +24,8 @@
     "visit_activies-own:delete",
     "organisations_feedback-parent:write",
     "visit_logs-parent:write",
-    "volunteer_logs-own:write",
-    "volunteer_logs-own:delete"
+    "volunteer_logs-parent:write",
+    "volunteer_logs-parent:delete"
   ],
   "permissionsForRoles": {
     "TWINE_ADMIN": [
@@ -41,7 +41,7 @@
       "organisations_feedback-child:read",
       "user_details-child:read",
       "visit_logs-child:read",
-      "volunteer_logs-child:read",
+      "volunteer_logs-own:read",
       "organisations_outreach-child:read",
       "user_details-child:write",
       "user_details-own:write",
@@ -62,7 +62,7 @@
       "visit_activies-own:read",
       "organisations_feedback-child:read",
       "visit_logs-child:read",
-      "volunteer_logs-child:read",
+      "volunteer_logs-own:read",
       "organisations_outreach-child:read",
       "user_details-child:read",
       "user_details-child:write",
@@ -84,7 +84,7 @@
       "organisations_feedback-parent:write",
       "user_details-child:read",
       "visit_logs-child:read",
-      "volunteer_logs-child:read",
+      "volunteer_logs-own:read",
       "organisations_outreach-child:read",
       "user_details-child:write",
       "user_details-own:write",
@@ -101,15 +101,15 @@
     ],
     "VOLUNTEER": [
       "constants-all:read",
-      "volunteer_logs-own:write",
-      "volunteer_logs-own:delete",
+      "volunteer_logs-parent:write",
+      "volunteer_logs-parent:delete",
       "user_details-own:write",
       "user_details-own:read"
     ],
     "VOLUNTEER_ADMIN": [
       "constants-all:read",
-      "volunteer_logs-own:write",
-      "volunteer_logs-own:delete",
+      "volunteer_logs-parent:write",
+      "volunteer_logs-parent:delete",
       "user_details-own:write",
       "user_details-own:read",
       "organisations_outreach-child:read"

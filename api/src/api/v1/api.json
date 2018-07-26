@@ -666,7 +666,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
-          "scope": ["volunteer_logs-child:read"],
+          "scope": ["volunteer_logs-own:read"],
           "query": {
             "fields": ["String"],
             "filter": {
@@ -687,7 +687,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
-          "scope": ["volunteer_logs-own:write"],
+          "scope": ["volunteer_logs-parent:write"],
           "body": {
             "organisationId":"Number",
             "volunteerActvity": "String",
@@ -703,7 +703,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
-          "scope": ["volunteer_logs-own:write"],
+          "scope": ["volunteer_logs-parent:write"],
           "body": {
             "organisationId":"Number",
             "volunteerActvity": "String",
@@ -717,7 +717,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
-          "scope": ["volunteer_logs-own:delete"],
+          "scope": ["volunteer_logs-parent:delete"],
           "body": {},
           "response": null
         }
@@ -1035,7 +1035,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
-          "scope": ["volunteer_logs-child:read"],
+          "scope": ["volunteer_logs-own:read"],
           "query": {
             "fields": ["String"],
             "filter": {
