@@ -1,12 +1,15 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import rolesInitialiser from '../roles';
-import permissionsInitialiser from '../permissions';
+import { Users, User, Organisations, Organisation } from '../../models';
+import { RoleEnum } from '../types';
+import Roles from '../roles';
+import Permissions from '../permissions';
+
 
 type CreateScopeName = (a: {
   access_type: string,
   permission_entity: string,
-  permission_level: string
+  permission_level: string,
 }) => string;
 
 const createScopeName: CreateScopeName = ({
@@ -16,11 +19,10 @@ const createScopeName: CreateScopeName = ({
 }) =>
   `${permission_entity}-${permission_level}:${access_type}`;
 
-
 type Credentials = {
-  userId: number,
-  organisationId?: number,
-  roleId: number
+  user: User
+  organisation: Organisation
+  role: RoleEnum
   scope: string []
 };
 
@@ -29,26 +31,36 @@ type ValidateUser = (a: {userId: number, organisationId: number}, b: Hapi.Reques
 
 const validateUser: ValidateUser = async (decoded, request) => {
   try {
-
+    const { knex } = request;
     const { userId, organisationId } = decoded;
-    if (userId && organisationId) {
 
-      const rolesInterface = rolesInitialiser(request.knex);
-      const permissionsInterface = permissionsInitialiser(request.knex);
-      const getRoleId = await rolesInterface.getUserRole({ userId, organisationId });
-      const roleId = getRoleId.access_role_id;
-
-      const getPermissions = await permissionsInterface.permissionsForRole({ roleId });
-      const scope = getPermissions.map(createScopeName);
-      return {
-        credentials: {
-          userId,
-          roleId,
-          scope,
-        },
-        isValid: true };
+    if (!userId || !organisationId) {
+      return { isValid: false };
     }
-    return { isValid: false };
+
+    const [
+      user,
+      organisation,
+      userRole,
+    ] = await Promise.all([
+      Users.getOne(knex, { where: { id: userId } }),
+      Organisations.getOne(knex, { where: { id: organisationId } }),
+      Roles.fromUser(knex, { userId, organisationId }),
+    ]);
+
+    const permissions = await Permissions.forRole(knex, userRole);
+    const scope = permissions.map(createScopeName);
+
+    return {
+      credentials: {
+        user,
+        organisation,
+        role: userRole,
+        scope,
+      },
+      isValid: true,
+    };
+
   } catch (error) {
     console.log(error);
     return Boom.badImplementation('Error with route authentication for users');
