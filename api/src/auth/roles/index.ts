@@ -1,5 +1,4 @@
 import { RoleEnum, RolesInterface } from '../types';
-import { lazyPromiseSeries } from '../../utils';
 
 
 const Roles: RolesInterface = {
@@ -22,7 +21,7 @@ const Roles: RolesInterface = {
         case '23505':
           throw new Error(
             `User ${userId} is already associated with ` +
-            `role ${role} at organistion ${organisationId}`,
+            `role ${role} at organistion ${organisationId}`
           );
 
         case '23503':
