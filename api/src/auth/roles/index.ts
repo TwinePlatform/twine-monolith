@@ -2,145 +2,137 @@ import { RoleEnum, RolesInterface } from '../types';
 import { lazyPromiseSeries } from '../../utils';
 
 
-const rolesInitialiser: RolesInitialiser = (client) => {
-  return {
-    add: async ({ role, userId, organisationId }) => {
-      try {
-        const query = await client.insert({
-          user_account_id: userId,
-          organisation_id: organisationId,
-          access_role_id: client.select('access_role_id')
-            .table('access_role')
-            .where({ ['access_role_name']: role }),
-        })
-        .into('user_account_access_role')
-        .returning('*');
-
-        return query[0];
-
-      } catch (error) {
-        switch (error.code){
-          case '23505':
-            throw new Error('User is already associated with this role at this organistion');
-
-          case '23503':
-            throw new Error(`Foreign key does not exist: ${error.detail}`);
-
-          /* istanbul ignore next */
-          default:
-            throw error;
-        }
-      }
-    },
-
-    remove: async ({ role, userId, organisationId }) => {
-      const deleteRow = await client('user_account_access_role')
-        .where({ user_account_id: userId,
-          organisation_id: organisationId,
-          access_role_id: client.select('access_role_id')
-            .table('access_role')
-            .where({ ['access_role_name']: role }),
-        })
-        .del()
-        .returning('*');
-
-      if (deleteRow.length === 0) {
-        throw new Error('This user is not associated to this role at this organisation');
-      }
-      return deleteRow[0];
-    },
-
-    move: async ({ to, from , userId, organisationId }) => {
-      const inner = client('user_account_access_role')
-        .select()
-        .where({
-          user_account_id: userId,
-          organisation_id: organisationId,
-          access_role_id: client('access_role')
-            .select('access_role_id').where({ access_role_name: from }),
-        });
-
-      const checkFromExists = await client.raw('SELECT EXISTS ?', [inner]);
-
-      if (!checkFromExists.rows[0].exists) {
-        throw new Error(`From role is not associated associated to this user`);
-      }
-
-      const deleteRow = client('user_account_access_role')
-        .where({ user_account_id: userId,
-          organisation_id: organisationId,
-          access_role_id: client.select('access_role_id')
-            .table('access_role')
-            .where({ ['access_role_name']: from }),
-        })
-        .del();
-
-      const addRow = client.insert({
+const Roles: RolesInterface = {
+  add: async (client, { role, userId, organisationId }) => {
+    try {
+      const [result] = await client.insert({
         user_account_id: userId,
         organisation_id: organisationId,
         access_role_id: client.select('access_role_id')
           .table('access_role')
-          .where({ ['access_role_name']: to }),
+          .where({ ['access_role_name']: role }),
       })
-      .into('user_account_access_role');
+      .into('user_account_access_role')
+      .returning('*');
 
-      try {
-        return await client.transaction((trx) =>
-          lazyPromiseSeries([deleteRow, addRow].map((q) => q.transacting(trx)))
-            .then(trx.commit)
-            .catch(trx.rollback)
-        );
-      } catch (error) {
-        switch (error.code) {
-          case '23505':
-            throw new Error(
-              'User is already associated with this \'from\' role at this organistion');
+      return result;
 
-          /* istanbul ignore next */
-          default:
-            throw error;
-        }
+    } catch (error) {
+      switch (error.code) {
+        case '23505':
+          throw new Error(
+            `User ${userId} is already associated with ` +
+            `role ${role} at organistion ${organisationId}`,
+          );
+
+        case '23503':
+          throw new Error(`Foreign key does not exist: ${error.detail}`);
+
+        /* istanbul ignore next */
+        default:
+          throw error;
       }
-    },
+    }
+  },
 
-    removeUserFromAll: async ({ userId, organisationId }) => {
-      const deleteRow = await client('user_account_access_role')
-        .where({
-          user_account_id: userId,
-          organisation_id: organisationId,
-        })
-        .del()
-        .returning('*');
+  remove: async (client, { role, userId, organisationId }) => {
+    const deleteRow = await client('user_account_access_role')
+      .where({
+        user_account_id: userId,
+        organisation_id: organisationId,
+        access_role_id: client.select('access_role_id')
+          .table('access_role')
+          .where({ ['access_role_name']: role }),
+      })
+      .del()
+      .returning('*');
 
-      if (deleteRow.length === 0) {
-        throw new Error('This user is not associated to any roles at this organisation');
+    if (deleteRow.length === 0) {
+      throw new Error(
+        `User ${userId} is not associated with role ${role} at organisation ${organisationId}`
+      );
+    }
+    return deleteRow[0];
+  },
+
+  move: async (client, { to, from , userId, organisationId }) => {
+    const userHasSourceRole = await Roles.userHas(client, { role: from, userId, organisationId });
+
+    if (! userHasSourceRole) {
+      throw new Error(`"from" role ${from} is not associated with user ${userId}`);
+    }
+
+    try {
+      return await client.transaction((trx) =>
+        Roles.remove(trx, { role: from, userId, organisationId })
+          .then(() => Roles.add(trx, { role: to, userId, organisationId }))
+          .then(trx.commit)
+          .catch(trx.rollback)
+      );
+    } catch (error) {
+      switch (error.code) {
+        case '23505':
+          throw new Error(
+            `User ${userId} is already associated with ` +
+            `role ${from} at organistion ${organisationId}`
+          );
+
+        /* istanbul ignore next */
+        default:
+          throw error;
       }
-      return deleteRow;
-    },
+    }
+  },
 
-    userHas: async ({ role, userId, organisationId }) => {
-      const inner = client('user_account_access_role')
-        .select()
-        .where({
-          user_account_id: userId,
-          organisation_id: organisationId,
-          access_role_id: client('access_role')
-            .select('access_role_id')
-            .where({ access_role_name: role }),
-        });
-      const result = await client.raw('SELECT EXISTS ?', [inner]);
-      return result.rows[0];
-    },
-    getUserRole: async ({ userId, organisationId }) => {
-      const query = await client('user_account_access_role')
-        .select('access_role_id')
-        .where({ user_account_id: userId, organisation_id: organisationId });
-      if (query.length === 0) {
-        throw new Error('User does not exist');
-      }
-      return query[0];
-    },
-  };
+  removeUserFromAll: async (client, { userId, organisationId }) => {
+    const deleteRow = await client('user_account_access_role')
+      .where({
+        user_account_id: userId,
+        organisation_id: organisationId,
+      })
+      .del()
+      .returning('*');
+
+    if (deleteRow.length === 0) {
+      throw new Error(
+        `User ${userId} is not associated to any roles at organisation ${organisationId}`
+      );
+    }
+    return deleteRow;
+  },
+
+  userHas: async (client, { role, userId, organisationId }) => {
+    const inner = client('user_account_access_role')
+      .select()
+      .where({
+        user_account_id: userId,
+        organisation_id: organisationId,
+        access_role_id: client('access_role')
+          .select('access_role_id')
+          .where({ access_role_name: role }),
+      });
+    const { rows } = await client.raw('SELECT EXISTS ?', [inner]);
+    return rows[0].exists;
+  },
+
+  fromUser: async (client, { userId, organisationId }) => {
+    const result = await client('access_role')
+      .select('access_role_name')
+      .where({
+        access_role_id: client('user_account_access_role')
+          .select('access_role_id')
+          .where({
+            user_account_id: userId,
+            organisation_id: organisationId,
+          }),
+      });
+
+    if (result.length === 0) {
+      throw new Error(`User ${userId} does not exist`);
+    }
+
+    return result[0].access_role_name as RoleEnum;
+  },
 };
 
-export default rolesInitialiser;
+export default Roles;
