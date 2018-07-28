@@ -1,4 +1,4 @@
-import { PermissionsInitialiser } from './types';
+import { PermissionInterface } from '../types';
 
 const permissionsInitialiser: PermissionsInitialiser = (client) => {
   return {

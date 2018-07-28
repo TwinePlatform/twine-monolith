@@ -1,4 +1,4 @@
-import { RolesInitialiser } from './types';
+import { RoleEnum, RolesInterface } from '../types';
 import { lazyPromiseSeries } from '../../utils';
 
 
