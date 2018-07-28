@@ -1,6 +1,7 @@
 module.exports = {
   coverageDirectory: '<rootDir>/coverage/integration',
   errorOnDeprecated: true,
+  globalSetup: '<rootDir>/tests/global_setup.js',
   testPathIgnorePatterns: [
     '<rootDir>/build/',
     '<rootDir>/tests/utils/',
