@@ -239,7 +239,11 @@ describe('Permisions Module', () => {
     test('ERROR - returns error if role id does not exist', async () => {
       expect.assertions(1);
       try {
-        await Permissions.forRole(context.trx, { roleId: 10 });
+        await context.trx('access_role')
+          .del()
+          .where({ access_role_name: RoleEnum.VISITOR });
+
+        await Permissions.forRole(context.trx, RoleEnum.VISITOR);
       } catch (error) {
         expect(error.message).toEqual('Role does not exist or has no associated permissions');
       }
