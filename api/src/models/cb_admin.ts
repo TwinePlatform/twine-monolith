@@ -4,9 +4,9 @@
 import * as Knex from 'knex';
 import { omit, pick, evolve } from 'ramda';
 import { Dictionary } from '../types/internal';
-import { User, UserCollection, UserChangeSet, ModelQuery } from './models';
+import { User, UserCollection, UserChangeSet, ModelQuery } from './types';
 import { Users, ModelToColumn } from './user';
-import { Role } from '../auth/permissions/types';
+import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './util';
 
 
@@ -42,7 +42,7 @@ export const CbAdmin: UserCollection = {
         .where({
           ['user_account_access_role.access_role_id']: client('access_role')
             .select('access_role_id')
-            .where({ access_role_name: Role.ORG_ADMIN }),
+            .where({ access_role_name: RoleEnum.ORG_ADMIN }),
         }),
       query
     );

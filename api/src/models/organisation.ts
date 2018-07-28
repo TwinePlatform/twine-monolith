@@ -10,7 +10,7 @@ import {
   OrganisationRow,
   OrganisationChangeSet,
   ModelQuery,
-} from './models';
+} from './types';
 import { applyQueryModifiers } from './util';
 
 

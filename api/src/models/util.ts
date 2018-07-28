@@ -1,6 +1,6 @@
 import * as Knex from 'knex';
 import { intersection, compose } from 'ramda';
-import { ModelQuery } from './models';
+import { ModelQuery } from './types';
 
 
 export const Utils: {
