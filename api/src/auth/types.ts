@@ -1,5 +1,6 @@
 import * as Knex from 'knex';
 import { Dictionary } from 'ramda';
+import { Omit } from '../types/internal';
 
 
 export enum RoleEnum {
@@ -57,64 +58,32 @@ export type GetRoleId =
   }) => Promise<string>; // this should be number, potentially a problem with Knex types
 
 type PermissionQuery = {
-  resource: ResourceEnum,
-  permissionLevel: PermissionLevelEnum,
-  access: AccessEnum,
+  resource: ResourceEnum
+  permissionLevel: PermissionLevelEnum
+  access: AccessEnum
   role: RoleEnum
 };
 
-type UserPermissionQuery = Exclude<PermissionQuery, 'role'> & { userId: number };
+type UserPermissionQuery = Omit<PermissionQuery, 'role'> & { userId: number };
+
+type RoleQuery = {
+  role: RoleEnum
+  userId: number
+  organisationId: number
+};
+
+type MoveRoleQuery = Omit<RoleQuery, 'role'> & { from: RoleEnum, to: RoleEnum };
 
 export type PermissionInterface = {
-  grantExisting: (
-    k: Knex,
-    a: {
-      resource: ResourceEnum,
-      permissionLevel: PermissionLevelEnum,
-      access: AccessEnum,
-      role: RoleEnum
-    }
-  ) => Promise<QueryResponse>
+  grantExisting: (k: Knex, a: PermissionQuery) => Promise<QueryResponse>
 
-  grantNew: (
-    k: Knex,
-    a: {
-      resource: ResourceEnum,
-      permissionLevel: PermissionLevelEnum,
-      access: AccessEnum,
-      role: RoleEnum
-    }
-  ) => Promise<QueryResponse>
+  grantNew: (k: Knex, a: PermissionQuery) => Promise<QueryResponse>
 
-  revoke: (
-    k: Knex,
-    a: {
-      resource: ResourceEnum,
-      permissionLevel: PermissionLevelEnum,
-      access: AccessEnum,
-      role: RoleEnum
-    }
-  ) => Promise<QueryResponse>
+  revoke: (k: Knex, a: PermissionQuery) => Promise<QueryResponse>
 
-  roleHas: (
-    k: Knex,
-    a: {
-      resource: ResourceEnum,
-      permissionLevel: PermissionLevelEnum,
-      access: AccessEnum,
-      role: RoleEnum
-    }
-  ) => Promise<boolean>
+  roleHas: (k: Knex, a: PermissionQuery) => Promise<boolean>
 
-  userHas: (
-    k: Knex,
-    a: {
-      userId: number,
-      resource: ResourceEnum,
-      permissionLevel: PermissionLevelEnum,
-      access: AccessEnum,
-    }
-  ) => Promise<boolean>
+  userHas: (k: Knex, a: UserPermissionQuery) => Promise<boolean>
 
   forRole: (k: Knex, r: RoleEnum) => Promise<QueryResponse[]>,
 };
