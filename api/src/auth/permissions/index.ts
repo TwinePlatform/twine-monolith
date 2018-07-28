@@ -1,5 +1,6 @@
 import { PermissionInterface } from '../types';
 
+
 const Permissions: PermissionInterface = {
   grantNew: async (client, { resource, permissionLevel, access, role }) => {
     try {

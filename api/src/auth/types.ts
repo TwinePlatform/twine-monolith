@@ -3,6 +3,10 @@ import { Dictionary } from 'ramda';
 import { Omit } from '../types/internal';
 
 
+/*
+ * Enumerations
+ */
+
 export enum RoleEnum {
   VISITOR = 'VISITOR',
   VOLUNTEER = 'VOLUNTEER',
@@ -41,21 +45,12 @@ export enum PermissionLevelEnum {
   ALL = 'all',
 }
 
+
+/*
+ * Input query types
+ */
+
 type QueryResponse = Dictionary<any>;
-
-export type GetPermissionIds =
-  (a: {
-    client: Knex,
-    resource: ResourceEnum,
-    permissionLevel: PermissionLevelEnum,
-    access: AccessEnum,
-  }) => Knex.QueryBuilder;
-
-export type GetRoleId =
-  (a: {
-    client: Knex,
-    role: RoleEnum,
-  }) => Promise<string>; // this should be number, potentially a problem with Knex types
 
 type PermissionQuery = {
   resource: ResourceEnum
@@ -63,7 +58,6 @@ type PermissionQuery = {
   access: AccessEnum
   role: RoleEnum
 };
-
 type UserPermissionQuery = Omit<PermissionQuery, 'role'> & { userId: number };
 
 type RoleQuery = {
@@ -71,8 +65,13 @@ type RoleQuery = {
   userId: number
   organisationId: number
 };
-
 type MoveRoleQuery = Omit<RoleQuery, 'role'> & { from: RoleEnum, to: RoleEnum };
+type UserRoleQuery = Omit<RoleQuery, 'role'>;
+
+
+/*
+ * Module interfaces
+ */
 
 export type PermissionInterface = {
   grantExisting: (k: Knex, a: PermissionQuery) => Promise<QueryResponse>
@@ -89,23 +88,15 @@ export type PermissionInterface = {
 };
 
 export type RolesInterface = {
-  add: (k: Knex, a: { role: RoleEnum, userId: number, organisationId: number }) =>
-    Promise<QueryResponse>,
+  add: (k: Knex, a: RoleQuery) => Promise<QueryResponse>,
 
-  remove: (k: Knex, a: { role: RoleEnum, userId: number, organisationId: number }) =>
-    Promise<QueryResponse>,
+  remove: (k: Knex, a: RoleQuery) => Promise<QueryResponse>,
 
-  move: (k: Knex, a: { to: RoleEnum, from: RoleEnum, userId: number, organisationId: number }) =>
-    Promise<QueryResponse>,
+  move: (k: Knex, a: MoveRoleQuery) => Promise<QueryResponse>,
 
-  removeUserFromAll: (k: Knex, a: { userId: number, organisationId: number }) =>
-    Promise<QueryResponse[]>,
+  removeUserFromAll: (k: Knex, a: UserRoleQuery) => Promise<QueryResponse[]>,
 
-  userHas: (k: Knex, a: { role: RoleEnum, userId: number, organisationId: number }) =>
-    Promise<boolean>,
+  userHas: (k: Knex, a: RoleQuery) => Promise<boolean>,
 
-  fromUser: (k: Knex, a: { userId: number, organisationId: number}) =>
-    Promise<RoleEnum>,
+  fromUser: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum>,
 };
-
-export type RolesInitialiser = (client: Knex) => RolesInterface;

@@ -4,7 +4,6 @@ import Roles from '..';
 import { RoleEnum } from '../../types';
 import { getConfig } from '../../../../config';
 import { getTrx } from '../../../../tests/database';
-const { migrate } = require('../../../../database');
 
 
 describe('Roles Module', () => {

@@ -4,7 +4,7 @@ import { getTrx } from '../../../../tests/database';
 import Permissions from '..';
 import { PermissionLevelEnum, ResourceEnum, RoleEnum, AccessEnum } from '../../types';
 const { getConfig } = require('../../../../config');
-const { migrate } = require('../../../../database');
+
 
 describe('Permisions Module', () => {
   const config = getConfig(process.env.NODE_ENV);
