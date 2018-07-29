@@ -41,21 +41,21 @@ const validateUser: ValidateUser = async (decoded, request) => {
     const [
       user,
       organisation,
-      userRole,
+       role,
     ] = await Promise.all([
       Users.getOne(knex, { where: { id: userId, deletedAt: null } }),
       Organisations.getOne(knex, { where: { id: organisationId, deletedAt: null } }),
       Roles.fromUser(knex, { userId, organisationId }),
     ]);
 
-    const permissions = await Permissions.forRole(knex, userRole);
+    const permissions = await Permissions.forRole(knex, { role });
     const scope = permissions.map(createScopeName);
 
     return {
       credentials: {
         user,
         organisation,
-        role: userRole,
+        role,
         scope,
       },
       isValid: true,

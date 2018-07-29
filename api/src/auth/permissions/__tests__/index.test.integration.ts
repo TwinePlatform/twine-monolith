@@ -202,7 +202,7 @@ describe('Permisions Module', () => {
 
   describe('::forRole', () => {
     test('SUCCESS - returns all permissions associated with role', async () => {
-      const result = await Permissions.forRole(context.trx, RoleEnum.VISITOR);
+      const result = await Permissions.forRole(context.trx, { role: RoleEnum.VISITOR });
       expect(result).toEqual([
         {
           access_role_id: 1,
@@ -243,7 +243,7 @@ describe('Permisions Module', () => {
           .del()
           .where({ access_role_name: RoleEnum.VISITOR });
 
-        await Permissions.forRole(context.trx, RoleEnum.VISITOR);
+        await Permissions.forRole(context.trx, { role: RoleEnum.VISITOR });
       } catch (error) {
         expect(error.message).toEqual('Role does not exist or has no associated permissions');
       }

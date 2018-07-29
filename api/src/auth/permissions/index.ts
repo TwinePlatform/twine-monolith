@@ -142,7 +142,7 @@ const Permissions: PermissionInterface = {
     return rows[0].exists;
   },
 
-  forRole: async (client, role) => {
+  forRole: async (client, { role }) => {
     const query = await client('permission')
       .innerJoin(
         'access_role_permission',

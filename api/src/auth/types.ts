@@ -59,6 +59,7 @@ type PermissionQuery = {
   role: RoleEnum
 };
 type UserPermissionQuery = Omit<PermissionQuery, 'role'> & { userId: number };
+type RolePermissionQuery = { role: RoleEnum };
 
 type RoleQuery = {
   role: RoleEnum
@@ -84,7 +85,7 @@ export type PermissionInterface = {
 
   userHas: (k: Knex, a: UserPermissionQuery) => Promise<boolean>
 
-  forRole: (k: Knex, r: RoleEnum) => Promise<QueryResponse[]>,
+  forRole: (k: Knex, a: RolePermissionQuery) => Promise<QueryResponse[]>,
 };
 
 export type RolesInterface = {
