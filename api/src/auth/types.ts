@@ -99,5 +99,5 @@ export type RolesInterface = {
 
   userHas: (k: Knex, a: RoleQuery) => Promise<boolean>,
 
-  fromUser: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum>,
+  oneFromUser: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum>,
 };

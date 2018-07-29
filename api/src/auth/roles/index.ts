@@ -114,7 +114,7 @@ const Roles: RolesInterface = {
     return rows[0].exists;
   },
 
-  fromUser: async (client, { userId, organisationId }) => {
+  oneFromUser: async (client, { userId, organisationId }) => {
     const result = await client('access_role')
       .select('access_role_name')
       .where({

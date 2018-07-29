@@ -163,16 +163,16 @@ describe('Roles Module', () => {
     });
   });
 
-  describe('::fromUser', () => {
+  describe('::oneFromUser', () => {
     test('SUCCESS - returns users role id', async () => {
-      const result = await Roles.fromUser(context.trx, { userId: 1, organisationId: 1 });
+      const result = await Roles.oneFromUser(context.trx, { userId: 1, organisationId: 1 });
       expect(result).toEqual(RoleEnum.VISITOR);
     });
 
     test('Error - returns error if userId does not exist', async () => {
       expect.assertions(1);
       try {
-        await Roles.fromUser(context.trx, { userId: 20, organisationId: 1 });
+        await Roles.oneFromUser(context.trx, { userId: 20, organisationId: 1 });
       } catch (error) {
         expect(error.message).toEqual('User 20 does not exist');
       }
