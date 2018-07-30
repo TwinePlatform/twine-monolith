@@ -16,7 +16,7 @@ import surveys from './surveys';
 import constants from './constants';
 import validateUser from '../../auth/scheme/validate_user';
 import validateExternal from '../../auth/scheme/validate_external';
-import addHookOnPostHandler from './hooks/onPostHandler';
+import addLifecycleHooks from './hooks';
 const AuthBearer = require('hapi-auth-bearer-token');
 
 export default {
@@ -46,7 +46,7 @@ export default {
     /*
      * Server request lifecycle hooks
      */
-    addHookOnPostHandler(server);
+    addLifecycleHooks(server);
 
     /*
      * API Routes

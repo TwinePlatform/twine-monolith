@@ -1,36 +1,31 @@
+/*
+ * onPostHandler Lifecycle hook
+ *
+ * This hook runs immediately after the handler returns, and before
+ * any validation of the response is performed.
+ *
+ * Its purpose is to ensure the response is correctly formatted before
+ * being passed to the validation stage.
+ *
+ * It essentially provides a shortcut for handlers; if there is no
+ * meta-data required in the response, they can simply return the
+ * `data` value, instead of manually wrapping the data in a correctly
+ * formatted object.
+ *
+ * Similarly, if the handler returns a Boom object, the hook will format
+ * this object correctly.
+ *
+ * See also: https://hapijs.com/api#request-lifecycle
+ */
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import { Dictionary } from 'ramda';
-import { response } from '../schema/response';
-import { renameKeys } from '../../../utils/';
+import { Response } from '../schema/response';
+import { formatBoom, formatResponse } from '../utils';
 
 
-const formatBoom = (b: Boom<any>) => ({
-  error: renameKeys({ error: 'type' }, b.output.payload),
-  meta: {},
-});
-
-const formatResponse = (r: Hapi.ResponseObject) => {
-  if (r.hasOwnProperty('data') && r.hasOwnProperty('meta')) {
-    return { ...r };
-  }
-
-  return {
-    data: r,
-    meta: {},
-  };
-};
-
-
-export default (server: Hapi.Server) => {
-  server.ext('onPostHandler', async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-    // intercept errors
-    if ((<Boom<any>> request.response).isBoom) {
-      return formatBoom(<Boom<any>> request.response);
-    }
-
+export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) =>
+  ((<Boom<any>> request.response).isBoom)
+    // error formatting handled in onPreResponse
+    ? formatBoom(<Boom<any>> request.response)
     // correctly format response payload
-    return formatResponse(<Hapi.ResponseObject> request.response);
-
-  }, { sandbox: 'plugin' });
-};
+    : formatResponse(<Hapi.ResponseObject> request.response);
