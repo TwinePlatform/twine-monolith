@@ -7,20 +7,20 @@ import { getTrx } from '../../../tests/database';
 
 
 describe('CbAdmin model', () => {
+  let trx: Knex.Transaction;
   const config = getConfig(process.env.NODE_ENV);
   const knex = Knex(config.knex);
-  const context: Dictionary<any> = {};
 
   afterAll(async () => {
     await knex.destroy();
   });
 
   beforeEach(async () => {
-    await getTrx(context, knex);
+    trx = await getTrx(knex);
   });
 
   afterEach(async () => {
-    await context.trx.rollback();
+    await trx.rollback();
   });
 
   describe('Read', () => {
@@ -57,25 +57,25 @@ describe('CbAdmin model', () => {
     test('add :: create new record using minimal information', async () => {
       const changeset = await factory.build('cbAdmin');
 
-      const admin = await CbAdmin.add(context.trx, changeset);
+      const admin = await CbAdmin.add(trx, changeset);
 
       expect(admin).toEqual(expect.objectContaining(changeset));
     });
 
     test('update :: non-foreign key column', async () => {
       const changeset = { email: 'newmail@foo.com' };
-      const admin = await CbAdmin.getOne(context.trx, { where: { id: 2 } });
+      const admin = await CbAdmin.getOne(trx, { where: { id: 2 } });
 
-      const updatedAdmin = await CbAdmin.update(context.trx, admin, changeset);
+      const updatedAdmin = await CbAdmin.update(trx, admin, changeset);
 
       expect(updatedAdmin).toEqual(expect.objectContaining(changeset));
     });
 
     test('update :: foreign key column', async () => {
       const changeset = { disability: 'no' };
-      const admin = await CbAdmin.getOne(context.trx, { where: { id: 2 } });
+      const admin = await CbAdmin.getOne(trx, { where: { id: 2 } });
 
-      const updatedAdmin = await CbAdmin.update(context.trx, admin, changeset);
+      const updatedAdmin = await CbAdmin.update(trx, admin, changeset);
 
       expect(updatedAdmin).toEqual(expect.objectContaining(changeset));
     });
@@ -84,22 +84,22 @@ describe('CbAdmin model', () => {
       expect.assertions(1);
 
       const changeset = { gender: 'non-existent' };
-      const admin = await CbAdmin.getOne(context.trx, { where: { id: 2 } });
+      const admin = await CbAdmin.getOne(trx, { where: { id: 2 } });
 
       try {
-        await CbAdmin.update(context.trx, admin, changeset);
+        await CbAdmin.update(trx, admin, changeset);
       } catch (error) {
         expect(error).toBeTruthy();
       }
     });
 
     test('destroy :: marks record as deleted', async () => {
-      const admins = await CbAdmin.get(context.trx, { where: { deletedAt: null } });
+      const admins = await CbAdmin.get(trx, { where: { deletedAt: null } });
 
-      await CbAdmin.destroy(context.trx, admins[0]);
-      const adminsAfterDel = await CbAdmin.get(context.trx, { where: { deletedAt: null } });
-      const deletedAdmins = await CbAdmin.get(context.trx, { whereNot: { deletedAt: null } });
-      const deletedAdmin = await CbAdmin.getOne(context.trx, { where: { id: admins[0].id } });
+      await CbAdmin.destroy(trx, admins[0]);
+      const adminsAfterDel = await CbAdmin.get(trx, { where: { deletedAt: null } });
+      const deletedAdmins = await CbAdmin.get(trx, { whereNot: { deletedAt: null } });
+      const deletedAdmin = await CbAdmin.getOne(trx, { where: { id: admins[0].id } });
 
       expect(admins.length).toBe(adminsAfterDel.length + 1);
       expect(deletedAdmins).toEqual(expect.arrayContaining([

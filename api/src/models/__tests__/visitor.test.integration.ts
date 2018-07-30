@@ -7,20 +7,20 @@ import { getTrx } from '../../../tests/database';
 
 
 describe('Visitor model', () => {
+  let trx: Knex.Transaction;
   const config = getConfig(process.env.NODE_ENV);
   const knex = Knex(config.knex);
-  const context: Dictionary<any> = {};
 
   afterAll(async () => {
     await knex.destroy();
   });
 
   beforeEach(async () => {
-    await getTrx(context, knex);
+    trx = await getTrx(knex);
   });
 
   afterEach(async () => {
-    await context.trx.rollback();
+    await trx.rollback();
   });
 
   describe('Read', () => {
@@ -44,25 +44,25 @@ describe('Visitor model', () => {
     test('add :: create new record using minimal information', async () => {
       const changeset = await factory.build('visitor');
 
-      const visitor = await Visitors.add(context.trx, changeset);
+      const visitor = await Visitors.add(trx, changeset);
 
       expect(visitor).toEqual(expect.objectContaining(changeset));
     });
 
     test('update :: non-foreign key column', async () => {
       const changeset = { email: 'newmail@foo.com' };
-      const visitor = await Visitors.getOne(context.trx, { where: { id: 1 } });
+      const visitor = await Visitors.getOne(trx, { where: { id: 1 } });
 
-      const updatedVisitor = await Visitors.update(context.trx, visitor, changeset);
+      const updatedVisitor = await Visitors.update(trx, visitor, changeset);
 
       expect(updatedVisitor).toEqual(expect.objectContaining(changeset));
     });
 
     test('update :: foreign key column', async () => {
       const changeset = { disability: 'no' };
-      const visitor = await Visitors.getOne(context.trx, { where: { id: 1 } });
+      const visitor = await Visitors.getOne(trx, { where: { id: 1 } });
 
-      const updatedVisitor = await Visitors.update(context.trx, visitor, changeset);
+      const updatedVisitor = await Visitors.update(trx, visitor, changeset);
 
       expect(updatedVisitor).toEqual(expect.objectContaining(changeset));
     });
@@ -71,10 +71,10 @@ describe('Visitor model', () => {
       expect.assertions(1);
 
       const changeset = { gender: 'non-existent' };
-      const visitor = await Visitors.getOne(context.trx, { where: { id: 1 } });
+      const visitor = await Visitors.getOne(trx, { where: { id: 1 } });
 
       try {
-        await Visitors.update(context.trx, visitor, changeset);
+        await Visitors.update(trx, visitor, changeset);
       } catch (error) {
         expect(error).toBeTruthy();
       }

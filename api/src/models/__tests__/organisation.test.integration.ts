@@ -7,20 +7,20 @@ import { Organisations } from '..';
 
 
 describe('Organisation Model', () => {
+  let trx: Knex.Transaction;
   const config = getConfig(process.env.NODE_ENV);
   const knex = Knex(config.knex);
-  const context: Dictionary<any> = {};
 
   afterAll(async () => {
     await knex.destroy();
   });
 
   beforeEach(async () => {
-    await getTrx(context, knex);
+    trx = await getTrx(knex);
   });
 
   afterEach(async () => {
-    await context.trx.rollback();
+    await trx.rollback();
   });
 
   describe('Read', () => {
@@ -58,16 +58,16 @@ describe('Organisation Model', () => {
     test('add :: create new record using minimal changeset', async () => {
       const changeset = await factory.build('organisation');
 
-      const org = await Organisations.add(context.trx, changeset);
+      const org = await Organisations.add(trx, changeset);
 
       expect(org).toEqual(expect.objectContaining(changeset));
     });
 
     test('update :: modify existing record', async () => {
       const changeset = { _360GivingId: 'foo' };
-      const org = await Organisations.getOne(context.trx, { where: { id: 1 } });
+      const org = await Organisations.getOne(trx, { where: { id: 1 } });
 
-      const updatedOrg = await Organisations.update(context.trx, org, changeset);
+      const updatedOrg = await Organisations.update(trx, org, changeset);
 
       expect(updatedOrg.name).toEqual(org.name);
       expect(updatedOrg._360GivingId).toEqual('foo');
@@ -75,12 +75,12 @@ describe('Organisation Model', () => {
     });
 
     test('destroy :: mark existing record as deleted', async () => {
-      const org = await Organisations.getOne(context.trx, { where: { id: 1 } });
+      const org = await Organisations.getOne(trx, { where: { id: 1 } });
 
-      await Organisations.destroy(context.trx, org);
+      await Organisations.destroy(trx, org);
 
-      const orgsAfterDelete = await Organisations.get(context.trx, { where: { deletedAt: null } });
-      const deletedOrgs = await Organisations.get(context.trx, { whereNot: { deletedAt: null } });
+      const orgsAfterDelete = await Organisations.get(trx, { where: { deletedAt: null } });
+      const deletedOrgs = await Organisations.get(trx, { whereNot: { deletedAt: null } });
 
       expect(orgsAfterDelete).toHaveLength(0);
       expect(deletedOrgs).toHaveLength(1);
@@ -90,7 +90,7 @@ describe('Organisation Model', () => {
 
   describe('Serialisation', () => {
     test('serialise :: return full model', async () => {
-      const org = await Organisations.getOne(context.trx);
+      const org = await Organisations.getOne(trx);
 
       const orgJson = Organisations.serialise(org);
 
