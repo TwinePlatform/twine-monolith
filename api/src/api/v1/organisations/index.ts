@@ -11,12 +11,6 @@ import { query, response } from './schema';
 import { Response } from '../schema/response';
 
 
-const toApiResponse = (payload: Dictionary<any>, meta?: Dictionary<any>): Response => ({
-  data: payload,
-  meta: meta ? { offset: meta.offset, total: meta.total } : undefined,
-});
-
-
 export default [
   {
     method: 'GET',
@@ -37,7 +31,7 @@ export default [
 
       const org = await Organisations.get(knex);
 
-      return toApiResponse(org.map(Organisations.serialise));
+      return org.map(Organisations.serialise);
     },
   },
 ];
