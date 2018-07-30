@@ -5,10 +5,8 @@
  * - /api/v1/api.json
  */
 import * as Hapi from 'hapi';
-import { Dictionary } from 'ramda';
 import { Users } from '../../../models';
 import { query, response } from './schema';
-import { Response } from '../schema/response';
 
 
 export default [

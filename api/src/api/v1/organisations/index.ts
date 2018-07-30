@@ -13,7 +13,7 @@ import { Response } from '../schema/response';
 
 const toApiResponse = (payload: Dictionary<any>, meta?: Dictionary<any>): Response => ({
   data: payload,
-  meta,
+  meta: meta ? { offset: meta.offset, total: meta.total } : undefined,
 });
 
 

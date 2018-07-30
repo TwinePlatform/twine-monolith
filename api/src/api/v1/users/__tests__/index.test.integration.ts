@@ -1,14 +1,22 @@
 /*
  * User API functional tests
  */
+import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import routes from '..';
 import { init } from '../../../../../tests/server';
+import addHooks from '../../hooks';
 import { getConfig } from '../../../../../config';
 
 describe('API /users', () => {
+  let server: Hapi.Server;
   const config = getConfig(process.env.NODE_ENV);
   const knex = Knex(config.knex);
+
+  beforeEach(async () => {
+    server = await init(config, { routes, knex });
+    addHooks(server);
+  });
 
   afterAll(async () => {
     await knex.destroy();
@@ -16,8 +24,6 @@ describe('API /users', () => {
 
   describe('GET /users', () => {
     test('happy path', async () => {
-      const server = await init(config, { routes, knex });
-
       const res = await server.inject({ method: 'GET', url: '/users' });
 
       expect(res.statusCode).toBe(200);

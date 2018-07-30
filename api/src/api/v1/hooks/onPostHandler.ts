@@ -19,13 +19,14 @@
  */
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import { Response } from '../schema/response';
 import { formatBoom, formatResponse } from '../utils';
 
 
-export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) =>
-  ((<Boom<any>> request.response).isBoom)
-    // error formatting handled in onPreResponse
-    ? formatBoom(<Boom<any>> request.response)
-    // correctly format response payload
-    : formatResponse(<Hapi.ResponseObject> request.response);
+export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+  if ((<Boom<any>> request.response).isBoom) {
+    const err = <Boom<any>> request.response;
+    return h.response(formatBoom(err)).code(err.output.statusCode);
+  } else {
+    return formatResponse(<Hapi.ResponseObject> request.response);
+  }
+};
