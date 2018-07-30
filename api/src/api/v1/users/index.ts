@@ -11,12 +11,6 @@ import { query, response } from './schema';
 import { Response } from '../schema/response';
 
 
-const toApiResponse = (payload: Dictionary<any>, meta?: Dictionary<any>): Response => ({
-  data: payload,
-  meta,
-});
-
-
 export default [
   {
     method: 'GET',
@@ -31,7 +25,7 @@ export default [
 
       const users = await Users.get(knex, { where: { deletedAt: null } });
 
-      return toApiResponse(users.map(Users.serialise));
+      return users.map(Users.serialise);
     },
   },
 ];
