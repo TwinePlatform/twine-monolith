@@ -11,7 +11,7 @@ import { Dictionary } from 'ramda';
 
 
 export type Response = {
-  data?: Dictionary<any>
+  data?: Dictionary<any> | any[]
   error?: {
     statusCode: number
     type: string
