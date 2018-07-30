@@ -12699,6 +12699,23 @@ select[disabled], .item-select-disabled:after {
   border: 1px solid;
   border-color: rgba(255, 255, 255, 0.2);
 }
+.selectedVolunteers i {
+  zoom: 2;
+  position: absolute;
+  right: 4px;
+}
+.selectedVolunteers span {
+  margin-top: 2px;
+}
+.selectedVolunteers {
+  margin: 0 8px;
+}
+#volunteers .selected {
+  background-color: lightgoldenrodyellow;
+}
+.log-spacer {
+    height: 20px;
+}
 .login .forgot {
   padding: 0; border: none; color: rgba(255,255,255,0.5); text-decoration: underline;
   margin-right: 30px;
