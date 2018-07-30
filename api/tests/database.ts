@@ -2,7 +2,6 @@
  * Utility methods for tests that touch the database
  */
 import * as Knex from 'knex';
-import { Dictionary } from 'ramda';
 
 
 /*

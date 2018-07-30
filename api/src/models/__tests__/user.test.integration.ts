@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { omit, Dictionary } from 'ramda';
+import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/factory';
 import { getTrx } from '../../../tests/database';

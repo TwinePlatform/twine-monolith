@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { Dictionary, omit } from 'ramda';
+import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/factory';
 import { CbAdmin } from '..';
