@@ -3,7 +3,7 @@
  */
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import { Response } from './schema/response';
+import { ApiResponse } from './schema/response';
 
 
 /*
@@ -15,7 +15,7 @@ import { Response } from './schema/response';
  * but the compiler complains because it can't infer the
  * correct keys
  */
-export const formatBoom = ({ output: { payload } }: Boom<any>): Response => ({
+export const formatBoom = ({ output: { payload } }: Boom<any>): ApiResponse => ({
   error: {
     statusCode: payload.statusCode,
     type: payload.error,
@@ -28,11 +28,11 @@ export const formatBoom = ({ output: { payload } }: Boom<any>): Response => ({
  * Otherwise if the response has meta-data attached to it (and
  * is therefore correctly formatted) it is simply passed through
  */
-export const formatResponse = (res: Hapi.ResponseObject): Response => {
+export const formatResponse = (res: Hapi.ResponseObject): ApiResponse => {
   const r: any = res.source;
 
   if (r.hasOwnProperty('data') && r.hasOwnProperty('meta')) {
-    return { ...r } as Response;
+    return { ...r } as ApiResponse;
   }
 
   return {

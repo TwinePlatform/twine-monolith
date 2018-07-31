@@ -9,6 +9,8 @@
  * Used, overridden and extended by individual routes
  */
 import * as Joi from 'joi';
+import { Dictionary } from 'ramda';
+
 
 export type ApiRequestQuery = {
   fields: string[]
@@ -17,6 +19,8 @@ export type ApiRequestQuery = {
   offset: number
   limit: number
 };
+
+export type ApiRequestBody = Dictionary<any>;
 
 export const query = {
   fields: Joi.array().items(Joi.string().min(1).max(255)),

@@ -10,7 +10,7 @@ import * as Joi from 'joi';
 import { Dictionary } from 'ramda';
 
 
-export type Response = {
+export type ApiResponse = {
   data?: Dictionary<any> | any[]
   error?: {
     statusCode: number
