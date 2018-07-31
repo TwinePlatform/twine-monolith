@@ -395,7 +395,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VISITOR"],
-          "scope": ["visit_activies-own:read", "visit_activies-child:read", "visit_activties-parent:read"],
+          "scope": ["visit_activities-own:read", "visit_activities-child:read", "visit_activties-parent:read"],
           "query": {
             "fields": ["String"],
             "filter":{
@@ -413,7 +413,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
-          "scope": ["visit_activies-own:write"],
+          "scope": ["visit_activities-own:write"],
           "body": {
             "name": "String",
             "category": "String",
@@ -434,7 +434,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
-          "scope": ["visit_activies-own:read", "visit_activies-child:read"],
+          "scope": ["visit_activities-own:read", "visit_activities-child:read"],
           "query": {},
           "response": "types.visitActivity"
         },
@@ -443,7 +443,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
-          "scope": ["visit_activies-own:write"],
+          "scope": ["visit_activities-own:write"],
           "body": {
             "name": "String",
             "category": "String",
@@ -462,7 +462,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
-          "scope": ["visit_activies-own:delete"],
+          "scope": ["visit_activities-own:delete"],
           "body": {},
           "response": null
         }

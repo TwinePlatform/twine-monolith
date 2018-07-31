@@ -34,7 +34,7 @@ export enum ResourceEnum {
   USERS_DETAILS = 'users_details',
   VOLUNTEER_ACTIVITIES = 'volunteer_activities',
   VOLUNTEER_LOGS = 'volunteer_logs',
-  VISIT_ACTIVITIES = 'visit_activites',
+  VISIT_ACTIVITIES = 'visit_activities',
   VISIT_LOGS = 'visit_logs',
 }
 

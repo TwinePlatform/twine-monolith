@@ -97,11 +97,12 @@ describe('Permisions Module', () => {
     test('ERROR - Duplicate link between role and permission entry', async () => {
       expect.assertions(1);
       try {
-          resource: ResourceEnum.CONSTANTS,
         await Permissions.grantExisting(trx, {
+          resource: ResourceEnum.VISIT_ACTIVITIES,
           access: AccessEnum.READ,
-          permissionLevel: PermissionLevelEnum.ALL,
-          role: RoleEnum.VISITOR });
+          permissionLevel: PermissionLevelEnum.OWN,
+          role: RoleEnum.VISITOR,
+        });
       } catch (error) {
         expect(error.message).toBe('Permission entry is already associated to this role');
       }
@@ -112,11 +113,12 @@ describe('Permisions Module', () => {
     test('SUCCESS - deletes existing link between a permission entry and role', async () => {
       expect.assertions(1);
       try {
-          resource: ResourceEnum.CONSTANTS,
         const query = await Permissions.revoke(trx, {
+          resource: ResourceEnum.ORG_DETAILS,
           access: AccessEnum.READ,
-          permissionLevel: PermissionLevelEnum.ALL,
-          role: RoleEnum.VISITOR });
+          permissionLevel: PermissionLevelEnum.CHILD,
+          role: RoleEnum.ORG_ADMIN,
+        });
         expect(query).toBe(1);
       } catch (error) {
         expect(error).toBeFalsy();
@@ -169,11 +171,12 @@ describe('Permisions Module', () => {
     });
     test('SUCCESS - returns true for matching permissions & user', async () => {
       try {
-          resource: ResourceEnum.CONSTANTS,
         const query = await Permissions.roleHas(trx, {
+          resource: ResourceEnum.ORG_OUTREACH,
           access: AccessEnum.READ,
-          permissionLevel: PermissionLevelEnum.ALL,
-          role: RoleEnum.VISITOR });
+          permissionLevel: PermissionLevelEnum.CHILD,
+          role: RoleEnum.VOLUNTEER_ADMIN,
+        });
         expect(query).toBe(true);
       } catch (error) {
         expect(error).toBeFalsy();
@@ -197,11 +200,12 @@ describe('Permisions Module', () => {
     });
     test('SUCCESS - returns true for matching permissions & user', async () => {
       try {
-          access: AccessEnum.READ,
-          permissionLevel: PermissionLevelEnum.ALL,
-          userId: 1 });
         const query = await Permissions.userHas(trx, {
           resource: ResourceEnum.VISIT_LOGS,
+          access: AccessEnum.WRITE,
+          permissionLevel: PermissionLevelEnum.PARENT,
+          userId: 1,
+        });
         expect(query).toBe(true);
       } catch (error) {
         expect(error).toBeFalsy();
@@ -216,13 +220,7 @@ describe('Permisions Module', () => {
         {
           access_role_id: 1,
           access_type: 'read',
-          permission_entity: 'constants',
-          permission_level: 'all',
-        },
-        {
-          access_role_id: 1,
-          access_type: 'read',
-          permission_entity: 'visit_activies',
+          permission_entity: 'visit_activities',
           permission_level: 'own',
         },
         {
