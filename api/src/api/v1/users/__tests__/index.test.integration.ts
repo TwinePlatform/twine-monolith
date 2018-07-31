@@ -4,7 +4,7 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import routes from '..';
-import { init } from '../../../../../tests/server';
+import { init } from '../../../../../tests/utils/server';
 import addHooks from '../../hooks';
 import { getConfig } from '../../../../../config';
 

@@ -6,7 +6,7 @@
  */
 import * as Knex from 'knex';
 import * as Hapi from 'hapi';
-import { Config } from '../config';
+import { Config } from '../../config';
 
 type Options = {
   routes?: Hapi.ServerRoute[]

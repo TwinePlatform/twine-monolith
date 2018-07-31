@@ -1,9 +1,9 @@
 import * as Knex from 'knex';
 import { omit } from 'ramda';
 import { getConfig } from '../../../config';
-import factory from '../../../tests/factory';
+import factory from '../../../tests/utils/factory';
+import { getTrx } from '../../../tests/utils/database';
 import { CbAdmin } from '..';
-import { getTrx } from '../../../tests/database';
 
 
 describe('CbAdmin model', () => {

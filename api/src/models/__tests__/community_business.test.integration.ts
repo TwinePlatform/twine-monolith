@@ -1,6 +1,6 @@
 import * as Knex from 'knex';
 import { getConfig } from '../../../config';
-import factory from '../../../tests/factory';
+import factory from '../../../tests/utils/factory';
 import { CommunityBusinesses } from '..';
 const { migrate } = require('../../../database');
 

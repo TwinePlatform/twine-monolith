@@ -1,7 +1,7 @@
 import * as Knex from 'knex';
 import { getConfig } from '../../../config';
-import { getTrx } from '../../../tests/database';
-import factory from '../../../tests/factory';
+import { getTrx } from '../../../tests/utils/database';
+import factory from '../../../tests/utils/factory';
 import { Organisations } from '..';
 
 

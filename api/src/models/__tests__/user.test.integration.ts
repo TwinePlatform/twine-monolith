@@ -1,8 +1,8 @@
 import * as Knex from 'knex';
 import { omit } from 'ramda';
 import { getConfig } from '../../../config';
-import factory from '../../../tests/factory';
-import { getTrx } from '../../../tests/database';
+import factory from '../../../tests/utils/factory';
+import { getTrx } from '../../../tests/utils/database';
 import { Users } from '..';
 
 
