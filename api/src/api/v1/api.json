@@ -579,7 +579,7 @@
           }
         }
       },
-      "/:id/users/VISITOR": {
+      "/:id/visitors": {
         "GET": {
           "description": "Retreive all visitor users in an organisation",
           "isImplemented": false,
@@ -604,7 +604,7 @@
           }
         }
       },
-      "/:id/users/VOLUNTEER": {
+      "/:id/volunteers": {
         "GET": {
           "description": "Retreive all volunteer users in an organisation",
           "isImplemented": false,
