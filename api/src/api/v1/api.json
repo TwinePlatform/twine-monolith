@@ -937,34 +937,34 @@
           "response": "types.visitorUser || types.volunteerUser || types.adminUser"
         },
         "PUT": {
-        "description": "Update details of a specific user",
-        "isImplemented": false,
-        "auth": true,
-        "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
-        "scope": ["user_details-child:write"],
-        "body": {
-          "name": "String",
-          "regionId": "Number",
-          "sectorId": "Number",
-          "organisationId": "Number",
-          "gender": "String",
-          "birthYear": "String",
-          "email": "String",
-          "phoneNumber": "String",
-          "emailConsent": "Boolean",
-          "smsConsent": "Boolean",
-          "qrCode": "String"
-        },
-        "response": "types.visitorUser || types.volunteerUser || types.adminUser"
+          "description": "Update details of a specific user",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
+          "scope": ["user_details-child:write"],
+          "body": {
+            "name": "String",
+            "regionId": "Number",
+            "sectorId": "Number",
+            "organisationId": "Number",
+            "gender": "String",
+            "birthYear": "String",
+            "email": "String",
+            "phoneNumber": "String",
+            "emailConsent": "Boolean",
+            "smsConsent": "Boolean",
+            "qrCode": "String"
+          },
+          "response": "types.visitorUser || types.volunteerUser || types.adminUser"
         },
         "DELETE": {
-        "description": "Delete a specific user",
-        "isImplemented": false,
-        "auth": true,
-        "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
-        "scope": ["user_details-child:write"],
-        "body": {},
-        "response": null
+          "description": "Delete a specific user",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
+          "scope": ["user_details-child:write"],
+          "body": {},
+          "response": null
         }
       },
       "/password/reset": {
@@ -996,25 +996,25 @@
           "response": "types.user"
         },
         "PUT": {
-        "description": "Update details of a your own user account",
-        "isImplemented": false,
-        "auth": true,
-        "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VISITOR", "VOLUNTEER", "VOLUNTEER_ADMIN"],
-        "scope": ["user_details-own:write"],
-        "body": {
-          "name": "String",
-          "regionId": "Number",
-          "sectorId": "Number",
-          "organisationId": "Number",
-          "gender": "String",
-          "birthYear": "String",
-          "email": "String",
-          "phoneNumber": "String",
-          "emailConsent": "Boolean",
-          "smsConsent": "Boolean",
-          "delete": "Boolean"
-        },
-        "response": "types.user"
+          "description": "Update details of a your own user account",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VISITOR", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": ["user_details-own:write"],
+          "body": {
+            "name": "String",
+            "regionId": "Number",
+            "sectorId": "Number",
+            "organisationId": "Number",
+            "gender": "String",
+            "birthYear": "String",
+            "email": "String",
+            "phoneNumber": "String",
+            "emailConsent": "Boolean",
+            "smsConsent": "Boolean",
+            "delete": "Boolean"
+          },
+          "response": "types.user"
         },
         "DELETE": {
           "description": "Delete your own admin user account",
