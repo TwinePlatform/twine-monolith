@@ -1,44 +1,31 @@
-const apiJson = require('../api.json');
-import { identity as id } from 'ramda';
 import * as Joi from 'joi';
+import { identity as id } from 'ramda';
+import { HttpMethod } from '../types';
+import { collapseUrls, splitMethodAndUrl } from './utils';
+const apiJson = require('../api.json');
+
 
 const routeSchema = {
   description: Joi.string().required(),
   isImplemented: Joi.boolean().required(),
   auth: Joi.boolean().required(),
   intendedFor: Joi.array().items(Joi.string()).required(),
-  scope : Joi.array().items(Joi.string()).required(),
-  query : Joi.object(),
-  body : Joi.object(),
-  response : Joi.alternatives().try(Joi.object(), Joi.string(), Joi.array()).allow(null).required(),
+  scope: Joi.array().items(Joi.string()).required(),
+  query: Joi.object(),
+  body: Joi.object(),
+  response: Joi.alternatives().try(Joi.object(), Joi.string(), Joi.array()).allow(null).required(),
 };
 
-const flatRoutes = Object.entries(apiJson.routes)
-  .reduce((acc, [resource, routes]) => {
-    const flatRoutes = Object.entries(routes)
-      .reduce((acc2, [endpoint, routeObjectsWithMethod]) => {
-        const flatRouteObjectsWithMedod = Object.entries(routeObjectsWithMethod)
-          .reduce((acc3, [method, routeObject]) => {
-            const flatRoute = {
-              path: `${resource}${endpoint}`,
-              method: `${method}`,
-              route: routeObject,
-            };
-            return [...acc3, flatRoute];
-          }, []);
-        return [...acc2, ...flatRouteObjectsWithMedod];
-      }, []);
-    return [...acc, ...flatRoutes];
-  }, []);
+const flatRoutes = Object.entries(collapseUrls(apiJson.routes))
+  .reduce((acc, [url, route]) => acc.concat({ url, route }), []);
 
 const rx = new RegExp('[-:]');
 
 describe('Api.json structure', () => {
-  flatRoutes.forEach(({ path, method, route }) => {
-    describe(`::${method} ${path}`, () => {
-      const requestType = (method === 'GET')
-        ? 'query'
-        : 'body';
+  flatRoutes.forEach(({ url, route }) => {
+    describe(`::${url}`, () => {
+      const [method] = splitMethodAndUrl(url);
+
       test('correct keys', () => {
         expect(Object.keys(route)).toEqual([
           'description',
@@ -46,8 +33,9 @@ describe('Api.json structure', () => {
           'auth',
           'intendedFor',
           'scope',
-          requestType,
-          'response']);
+          (method === HttpMethod.GET) ? 'query' : 'body',
+          'response',
+        ]);
       });
 
       test('correct values', () => {
