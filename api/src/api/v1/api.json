@@ -142,7 +142,7 @@
           "isImplemented": true,
           "auth": false,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VISITOR", "VOLUNTEER", "VOLUNTEER_ADMIN"],
-          "scope": ["constants-all:read"],
+          "scope": [],
           "query": {},
           "response": [{
             "id": "Number",
@@ -176,7 +176,7 @@
           "isImplemented": true,
           "auth": false,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VISITOR", "VOLUNTEER", "VOLUNTEER_ADMIN"],
-          "scope": ["constants-all:read"],
+          "scope": [],
           "query": {
             "fields": ["String"]
           },
@@ -1075,7 +1075,7 @@
           "isImplemented": true,
           "auth": false,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VISITOR", "VOLUNTEER_ADMIN"],
-          "scope": ["constants-all:read"],
+          "scope": [],
           "query": {
           },
           "response": {
@@ -1091,7 +1091,7 @@
           "isImplemented": true,
           "auth": false,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VISITOR", "VOLUNTEER_ADMIN"],
-          "scope": ["constants-all:read"],
+          "scope": [],
           "query": {
           },
           "response": {
@@ -1107,7 +1107,7 @@
           "isImplemented": true,
           "auth": false,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VISITOR", "VOLUNTEER_ADMIN"],
-          "scope": ["constants-all:read"],
+          "scope": [],
           "query": {
           },
           "response": {
@@ -1123,7 +1123,7 @@
           "isImplemented": true,
           "auth": false,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VISITOR", "VOLUNTEER_ADMIN"],
-          "scope": ["constants-all:read"],
+          "scope": [],
           "query": {
           },
           "response": {
@@ -1139,7 +1139,7 @@
           "isImplemented": true,
           "auth": false,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VISITOR", "VOLUNTEER_ADMIN"],
-          "scope": ["constants-all:read"],
+          "scope": [],
           "query": {
           },
           "response": {
