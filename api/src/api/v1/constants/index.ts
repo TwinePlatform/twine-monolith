@@ -1,4 +1,5 @@
 import * as Hapi from 'hapi';
+import { query, response } from './schema';
 
 
 const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
@@ -15,6 +16,8 @@ const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
     options: {
       description: `Retreive list of ${resourceNamePlural}`,
       auth: false,
+      validate: { query },
+      response: { schema: response },
     },
     handler: async ({ knex }: Hapi.Request, h: Hapi.ResponseToolkit) => {
       const query = await knex(tableName).select();
