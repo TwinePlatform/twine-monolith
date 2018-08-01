@@ -83,7 +83,9 @@ CREATE TABLE user_account_access_role (
   CONSTRAINT user_account_access_role_to_user_fk         FOREIGN KEY (user_account_id) REFERENCES user_account ON DELETE CASCADE,
   CONSTRAINT user_account_access_role_to_access_role_fk  FOREIGN KEY (access_role_id)  REFERENCES access_role  ON DELETE CASCADE,
   CONSTRAINT user_account_access_role_to_organisation_fk FOREIGN KEY (organisation_id) REFERENCES organisation ON DELETE CASCADE,
-  CONSTRAINT user_account_access_role_unique_row         UNIQUE      (user_account_id, access_role_id, organisation_id)
+  CONSTRAINT user_account_access_role_unique_row         UNIQUE      (user_account_id, access_role_id, organisation_id),
+  CONSTRAINT user_account_access_role_one_role_per_user  UNIQUE      (user_account_id, access_role_id),
+  CONSTRAINT user_account_access_role_one_org_per_user   UNIQUE      (user_account_id, organisation_id)
 );
 
 

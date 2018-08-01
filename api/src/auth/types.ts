@@ -95,8 +95,6 @@ export type RolesInterface = {
 
   move: (k: Knex, a: MoveRoleQuery) => Promise<QueryResponse>,
 
-  removeUserFromAll: (k: Knex, a: UserRoleQuery) => Promise<QueryResponse[]>,
-
   userHas: (k: Knex, a: RoleQuery) => Promise<boolean>,
 
   oneFromUser: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum>,

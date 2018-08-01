@@ -20,8 +20,9 @@ const Roles: RolesInterface = {
       switch (error.code) {
         case '23505':
           throw new Error(
-            `User ${userId} is already associated with ` +
-            `role ${role} at organistion ${organisationId}`
+            `Constraint violation: ${error.constraint}\n` +
+            `Tried to associate User ${userId} with role ${role} ` +
+            `at organistion ${organisationId}`
           );
 
         case '23503':
@@ -81,23 +82,6 @@ const Roles: RolesInterface = {
           throw error;
       }
     }
-  },
-
-  removeUserFromAll: async (client, { userId, organisationId }) => {
-    const deleteRow = await client('user_account_access_role')
-      .where({
-        user_account_id: userId,
-        organisation_id: organisationId,
-      })
-      .del()
-      .returning('*');
-
-    if (deleteRow.length === 0) {
-      throw new Error(
-        `User ${userId} is not associated to any roles at organisation ${organisationId}`
-      );
-    }
-    return deleteRow;
   },
 
   userHas: async (client, { role, userId, organisationId }) => {

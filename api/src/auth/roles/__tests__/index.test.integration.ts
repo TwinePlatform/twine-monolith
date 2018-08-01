@@ -25,13 +25,17 @@ describe('Roles Module', () => {
   describe('::add', () => {
     test('SUCCESS - adds role for a user', async () => {
       try {
-        const result = await Roles.add(trx,
-          { role: RoleEnum.VOLUNTEER, userId: 1, organisationId: 1 });
-        expect(result).toEqual(expect.objectContaining(
-          { access_role_id: 2,
-            organisation_id: 1,
-            user_account_id: 1 }
-        ));
+        const result = await Roles.add(trx, {
+          role: RoleEnum.VOLUNTEER,
+          userId: 4,
+          organisationId: 1,
+        });
+
+        expect(result).toEqual(expect.objectContaining({
+          access_role_id: 2,
+          organisation_id: 1,
+          user_account_id: 4,
+        }));
       } catch (error) {
         expect(error).toBeFalsy();
       }
@@ -43,7 +47,9 @@ describe('Roles Module', () => {
         await Roles.add(trx, { role: RoleEnum.VISITOR, userId: 1, organisationId: 1 });
       } catch (error) {
         expect(error.message)
-          .toBe('User 1 is already associated with role VISITOR at organistion 1');
+          .toBe(
+            'Constraint violation: user_account_access_role_unique_row\n' +
+            'Tried to associate User 1 with role VISITOR at organistion 1');
       }
     });
 
@@ -59,6 +65,34 @@ describe('Roles Module', () => {
         );
       }
     });
+
+    test('ERROR - throws if user already has role at same organisation', async () => {
+      expect.assertions(1);
+
+      try {
+        await Roles.add(trx, { role: RoleEnum.VOLUNTEER, userId: 1, organisationId: 1 });
+      } catch (error) {
+        expect(error.message)
+          .toEqual(
+            'Constraint violation: user_account_access_role_one_org_per_user\n' +
+            'Tried to associate User 1 with role VOLUNTEER at organistion 1'
+          );
+      }
+    });
+
+    test('ERROR - throws if user already has role at different organisation', async () => {
+      expect.assertions(1);
+
+      try {
+        await Roles.add(trx, { role: RoleEnum.VOLUNTEER, userId: 2, organisationId: 1 });
+      } catch (error) {
+        expect(error.message).toEqual(
+          'Constraint violation: user_account_access_role_one_org_per_user\n' +
+            'Tried to associate User 2 with role VOLUNTEER at organistion 1'
+        );
+      }
+    });
+
   });
 
   describe('::remove', () => {
@@ -121,29 +155,8 @@ describe('Roles Module', () => {
           { to: RoleEnum.VOLUNTEER, from: RoleEnum.VISITOR, userId: 1, organisationId: 1 });
       } catch (error) {
         expect(error.message).toEqual(
-          'User 1 is already associated with role VOLUNTEER at organistion 1');
-      }
-    });
-  });
-
-  describe('::removeUserFromAll', () => {
-    test('SUCCESS - returns all roles that are deleted', async () => {
-      await Roles.add(trx, { role: RoleEnum.VOLUNTEER, userId: 1, organisationId: 1 });
-      const result = await Roles.removeUserFromAll(trx, { userId: 1, organisationId: 1 });
-      expect(result).toEqual(([
-        { access_role_id: 1, organisation_id: 1, user_account_id: 1 },
-        { access_role_id: 2, organisation_id: 1, user_account_id: 1 },
-      ].map(expect.objectContaining)
-      ));
-    });
-
-    test('ERROR - throws error if user has no roles at organisation', async () => {
-      expect.assertions(1);
-      try {
-        await Roles.removeUserFromAll(trx, { userId: 1, organisationId: 2 });
-      } catch (error) {
-        expect(error.message).toEqual(
-          'User 1 is not associated to any roles at organisation 2');
+          'Constraint violation: user_account_access_role_one_org_per_user\n' +
+          'Tried to associate User 1 with role VOLUNTEER at organistion 1');
       }
     });
   });
