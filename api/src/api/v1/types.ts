@@ -6,7 +6,7 @@ import { ApiResponse } from './schema/response';
 /*
  * api.json related types
  */
-export enum HttpMethod {
+export enum HttpMethodEnum {
   GET = 'GET',
   POST = 'POST',
   PUT = 'PUT',
@@ -34,7 +34,7 @@ export type RouteTestFixture = {
   teardown?: (server: Hapi.Server) => Promise<void>
   inject: {
     url: string
-    method: HttpMethod
+    method: HttpMethodEnum
     credentials?: object
     payload?: object
   }

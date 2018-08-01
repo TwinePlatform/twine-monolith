@@ -2,11 +2,11 @@ import * as Hapi from 'hapi';
 import { init } from '../../../server';
 import { getConfig } from '../../../../config';
 import { collapseUrls, splitMethodAndUrl } from './utils';
-import { RouteTestFixture, HttpMethod } from '../types';
+import { RouteTestFixture, HttpMethodEnum } from '../types';
 const APISpecification = require('../api.json');
 
 
-const createNotFoundTest = (method: HttpMethod, url: string) => ({
+const createNotFoundTest = (method: HttpMethodEnum, url: string) => ({
   name: `${method} ${url} || Not found`,
   inject: { method, url },
   expect: {
@@ -15,7 +15,7 @@ const createNotFoundTest = (method: HttpMethod, url: string) => ({
   },
 });
 
-const createUnauthenticatedTest = (method: HttpMethod, url: string) => ({
+const createUnauthenticatedTest = (method: HttpMethodEnum, url: string) => ({
   name: `${method} ${url} || Unauthenticated`,
   inject: { method, url },
   expect: {
@@ -26,7 +26,7 @@ const createUnauthenticatedTest = (method: HttpMethod, url: string) => ({
   },
 });
 
-const createUnauthorisedTest = (method: HttpMethod, url: string) => ({
+const createUnauthorisedTest = (method: HttpMethodEnum, url: string) => ({
   name: `${method} ${url} || Unauthorised`,
   inject: { method, url, credentials: { scope: '' } },
   expect: {

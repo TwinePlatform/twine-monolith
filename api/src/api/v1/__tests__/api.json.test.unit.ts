@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 import { identity as id } from 'ramda';
-import { HttpMethod } from '../types';
+import { HttpMethodEnum } from '../types';
 import { collapseUrls, splitMethodAndUrl } from './utils';
 const apiJson = require('../api.json');
 
@@ -33,7 +33,7 @@ describe('Api.json structure', () => {
           'auth',
           'intendedFor',
           'scope',
-          (method === HttpMethod.GET) ? 'query' : 'body',
+          (method === HttpMethodEnum.GET) ? 'query' : 'body',
           'response',
         ]);
       });
