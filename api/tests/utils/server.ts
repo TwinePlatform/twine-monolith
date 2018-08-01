@@ -8,10 +8,12 @@ import * as Knex from 'knex';
 import * as Hapi from 'hapi';
 import { Config } from '../../config';
 
+
 type Options = {
   routes?: Hapi.ServerRoute[]
   plugins?: Hapi.Plugin<any>[]
   knex?: Knex,
+  hooks?: ((s: Hapi.Server) => void)[]
 };
 
 export const init = async (config: Config, options: Options = {}): Promise<Hapi.Server> => {
@@ -28,6 +30,10 @@ export const init = async (config: Config, options: Options = {}): Promise<Hapi.
 
   if (options.plugins) {
     await server.register(options.plugins);
+  }
+
+  if (options.hooks) {
+    options.hooks.forEach((hook) => hook(server));
   }
 
   return server;

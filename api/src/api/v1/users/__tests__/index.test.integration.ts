@@ -14,8 +14,7 @@ describe('API /users', () => {
   const knex = Knex(config.knex);
 
   beforeEach(async () => {
-    server = await init(config, { routes, knex });
-    addHooks(server);
+    server = await init(config, { routes, knex, hooks: [addHooks] });
   });
 
   afterAll(async () => {
