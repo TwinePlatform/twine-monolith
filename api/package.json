@@ -44,14 +44,17 @@
     "heroku-postbuild": "npm run build && npm run migrate:latest"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/bcrypt": "^2.0.0",
     "@types/hapi": "^17.0.12",
     "@types/hapi-auth-jwt2": "^8.0.1",
     "@types/jest": "^23.1.1",
     "@types/jsonwebtoken": "^7.2.8",
     "@types/knex": "^0.14.15",
+    "@types/pdfmake": "^0.1.1",
     "@types/qrcode": "^1.2.0",
     "@types/ramda": "^0.25.34",
+    "axios": "^0.18.0",
     "bcrypt": "^3.0.0",
     "boom": "^7.2.0",
     "dotenv": "^6.0.0",
@@ -66,6 +69,7 @@
     "jsonwebtoken": "^8.3.0",
     "knex": "^0.15.2",
     "minimist": "^1.2.0",
+    "pdfmake": "^0.1.37",
     "pg": "^7.4.3",
     "postmark": "^1.6.1",
     "qrcode": "^1.2.2",
@@ -73,6 +77,7 @@
     "typescript": "^3.0.1"
   },
   "devDependencies": {
+    "axios-mock-adapter": "^1.15.0",
     "factory-girl": "^5.0.2",
     "jest": "^23.3.0",
     "nodemon": "^1.17.5",
