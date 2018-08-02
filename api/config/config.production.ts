@@ -24,7 +24,4 @@ export default {
   email: {
     postmark_key: process.env.POSTMARK_KEY_PRODUCTION,
   },
-  qrcode: {
-    secret: process.env.QRCODE_HMAC_SECRET,
-  },
 };

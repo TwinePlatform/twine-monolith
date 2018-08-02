@@ -68,6 +68,9 @@ describe('Config', () => {
       secret: {
         jwt_secret: 'lol',
       },
+      qrcode: {
+        secret: '',
+      },
     };
 
     expect(() => validateConfig(cfg)).not.toThrow();
@@ -96,6 +99,9 @@ describe('Config', () => {
       },
       secret: {
         jwt_secret: '',
+      },
+      qrcode: {
+        secret: '',
       },
     };
 
