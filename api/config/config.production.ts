@@ -24,9 +24,6 @@ export default {
   email: {
     postmark_key: process.env.POSTMARK_KEY_PRODUCTION,
   },
-  secret: {
-    jwt_secret: process.env.JWT_SECRET_PRODUCTION,
-  },
   qrcode: {
     secret: process.env.QRCODE_HMAC_SECRET,
   },
