@@ -26,7 +26,7 @@ describe('Organisation Model', () => {
     test('get :: no arguments gets all orgs', async () => {
       const orgs = await Organisations.get(knex);
 
-      expect(orgs.length).toBe(1);
+      expect(orgs.length).toBe(2);
       expect(orgs[0]).toEqual(expect.objectContaining({
         name: 'Aperture Science',
         _360GivingId: '01111000',
@@ -34,7 +34,7 @@ describe('Organisation Model', () => {
     });
 
     test('get :: filter orgs by ID | non-existent ID resolves to empty array', async () => {
-      const orgs = await Organisations.get(knex, { where: { id: 2 } });
+      const orgs = await Organisations.get(knex, { where: { id: 2000 } });
       expect(orgs).toEqual([]);
     });
 
@@ -81,7 +81,7 @@ describe('Organisation Model', () => {
       const orgsAfterDelete = await Organisations.get(trx, { where: { deletedAt: null } });
       const deletedOrgs = await Organisations.get(trx, { whereNot: { deletedAt: null } });
 
-      expect(orgsAfterDelete).toHaveLength(0);
+      expect(orgsAfterDelete).toHaveLength(1);
       expect(deletedOrgs).toHaveLength(1);
       expect(deletedOrgs[0].id).toBe(1);
     });

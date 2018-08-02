@@ -69,7 +69,7 @@ describe('Config', () => {
         jwt_secret: 'lol',
       },
       qrcode: {
-        secret: '',
+        secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
       },
     };
 
@@ -101,7 +101,7 @@ describe('Config', () => {
         jwt_secret: '',
       },
       qrcode: {
-        secret: '',
+        secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
       },
     };
 
