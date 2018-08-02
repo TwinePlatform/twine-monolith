@@ -9,10 +9,10 @@ describe('QRCode Service', () => {
   describe('create', () => {
     test('Creates a signed HMAC and corresponding QR code data URL', async () => {
       const raw = 'foo';
-      const { payload, dataURL } = await QRCode.create(raw);
+      const { payload, dataUrl } = await QRCode.create(raw);
 
       expect(payload).toBe(createHmac('sha256', config.qrcode.secret).update(raw).digest('hex'));
-      expect(typeof dataURL).toBe('string');
+      expect(typeof dataUrl).toBe('string');
     });
   });
 });
