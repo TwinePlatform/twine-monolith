@@ -21,6 +21,10 @@ type SecretConfig = {
   jwt_secret: string
 };
 
+type QrCodeConfig = {
+  secret: string
+};
+
 export type Config = {
   root: string
   env: Environment
@@ -28,4 +32,5 @@ export type Config = {
   knex: Knex.Config
   email: EmailConfig
   secret: SecretConfig
+  qrcode: QrCodeConfig
 };

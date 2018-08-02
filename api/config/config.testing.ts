@@ -26,4 +26,7 @@ export default {
   secret: {
     jwt_secret: process.env.JWT_SECRET_TESTING,
   },
+  qrcode: {
+    secret: process.env.QRCODE_HMAC_SECRET,
+  },
 };

@@ -53,4 +53,7 @@ export default {
   secret: Joi.object({
     jwt_secret: Joi.string().required(),
   }).required(),
+  qrcode: Joi.object({
+    secret: Joi.string().min(32).required(),
+  }).required(),
 };
