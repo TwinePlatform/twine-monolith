@@ -50,6 +50,7 @@
     "@types/jest": "^23.1.1",
     "@types/jsonwebtoken": "^7.2.8",
     "@types/knex": "^0.14.15",
+    "@types/qrcode": "^1.2.0",
     "@types/ramda": "^0.25.34",
     "bcrypt": "^3.0.0",
     "boom": "^7.2.0",
@@ -67,14 +68,15 @@
     "minimist": "^1.2.0",
     "pg": "^7.4.3",
     "postmark": "^1.6.1",
+    "qrcode": "^1.2.2",
     "ramda": "^0.25.0",
-    "typescript": "^2.9.1"
+    "typescript": "^3.0.1"
   },
   "devDependencies": {
     "factory-girl": "^5.0.2",
     "jest": "^23.3.0",
     "nodemon": "^1.17.5",
-    "ts-jest": "^22.4.6",
+    "ts-jest": "^23.0.1",
     "tslint-config-twine": "github:TwinePlatform/tslint-config-twine#2.1.0"
   }
 }
