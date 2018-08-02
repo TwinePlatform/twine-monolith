@@ -1,10 +1,9 @@
 /*
  * QRCode service to generate qr codes
  */
-import * as QRCode from 'qrcode';
 import { createHmac } from 'crypto';
 import { getConfig } from '../../../config';
-
+const QRCode = require('qrcode');
 
 const { qrcode: { secret } } = getConfig(process.env.NODE_ENV);
 

@@ -19,15 +19,15 @@ const createScopeName: CreateScopeName = ({
 }) =>
   `${permission_entity}-${permission_level}:${access_type}`;
 
-type Credentials = {
+export type UserCredentials = {
   user: User
-  organisation: Organisation
+  organisation?: Organisation
   role: RoleEnum
-  scope: string []
+  scope: string[]
 };
 
 type ValidateUser = (a: {userId: number, organisationId: number}, b: Hapi.Request)
-  => Promise <{credentials?: Credentials, isValid: boolean } | Boom<null>>;
+  => Promise <{credentials?: UserCredentials, isValid: boolean } | Boom<null>>;
 
 const validateUser: ValidateUser = async (decoded, request) => {
   try {
@@ -41,7 +41,7 @@ const validateUser: ValidateUser = async (decoded, request) => {
     const [
       user,
       organisation,
-       role,
+      role,
     ] = await Promise.all([
       Users.getOne(knex, { where: { id: userId, deletedAt: null } }),
       Organisations.getOne(knex, { where: { id: organisationId, deletedAt: null } }),
@@ -58,7 +58,7 @@ const validateUser: ValidateUser = async (decoded, request) => {
         role,
         scope,
       },
-      isValid: true,
+      isValid: Boolean(user && organisation && role),
     };
 
   } catch (error) {

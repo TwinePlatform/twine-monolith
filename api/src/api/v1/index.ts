@@ -14,10 +14,16 @@ import * as AuthJwt from 'hapi-auth-jwt2';
 import organisations from './organisations';
 import surveys from './surveys';
 import constants from './constants';
-import validateUser from '../../auth/scheme/validate_user';
+import validateUser, { UserCredentials } from '../../auth/scheme/validate_user';
 import validateExternal from '../../auth/scheme/validate_external';
 import addLifecycleHooks from './hooks';
 const AuthBearer = require('hapi-auth-bearer-token');
+
+
+declare module 'hapi' {
+  interface AuthCredentials extends UserCredentials {}
+}
+
 
 export default {
   name: 'Twine API v1',

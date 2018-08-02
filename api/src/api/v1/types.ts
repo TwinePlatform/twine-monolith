@@ -35,7 +35,7 @@ export type RouteTestFixture = {
   inject: {
     url: string
     method: HttpMethodEnum
-    credentials?: object
+    credentials?: Hapi.AuthCredentials
     payload?: object
   }
   expect: {

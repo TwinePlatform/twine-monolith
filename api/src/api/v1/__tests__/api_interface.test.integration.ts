@@ -1,9 +1,16 @@
 import * as Hapi from 'hapi';
 import { init } from '../../../server';
 import { getConfig } from '../../../../config';
+import factory from '../../../../tests/utils/factory';
 import { collapseUrls, splitMethodAndUrl } from './utils';
 import { RouteTestFixture, HttpMethodEnum } from '../types';
+import { RoleEnum } from '../../../auth/types';
 const APISpecification = require('../api.json');
+
+const dummyUsers: any[] = [];
+(async () => {
+  dummyUsers.push(await factory.build('user'));
+})();
 
 
 const createNotFoundTest = (method: HttpMethodEnum, url: string) => ({
@@ -28,7 +35,11 @@ const createUnauthenticatedTest = (method: HttpMethodEnum, url: string) => ({
 
 const createUnauthorisedTest = (method: HttpMethodEnum, url: string) => ({
   name: `${method} ${url} || Unauthorised`,
-  inject: { method, url, credentials: { scope: '' } },
+  inject: {
+    method,
+    url,
+    credentials: { scope: [''], user: dummyUsers[0], role: RoleEnum.VOLUNTEER },
+  },
   expect: {
     statusCode: 403,
     payload: { error: { statusCode: 403, type: 'Forbidden', message: 'Insufficient scope' } },
@@ -36,7 +47,7 @@ const createUnauthorisedTest = (method: HttpMethodEnum, url: string) => ({
 });
 
 const testSpec = Object.entries(collapseUrls(APISpecification.routes, '/api/v1'))
-  .filter(([endpoint, routeSpec]) => routeSpec.isImplemented)
+  .filter(([, routeSpec]) => routeSpec.isImplemented)
   .map(([endpoint, routeSpec]): [string, RouteTestFixture[]] => {
     const [method, url] = splitMethodAndUrl(endpoint);
     const tests: RouteTestFixture[] = [];
@@ -68,7 +79,7 @@ const testSpec = Object.entries(collapseUrls(APISpecification.routes, '/api/v1')
       inject: {
         method,
         url: url.concat('?fakeQueryParam=foo'),
-        credentials: { scope: routeSpec.scope[0] },
+        credentials: { scope: routeSpec.scope[0], user: dummyUsers[0], role: RoleEnum.TWINE_ADMIN },
       },
       expect: { statusCode: 400 },
     });
@@ -77,7 +88,7 @@ const testSpec = Object.entries(collapseUrls(APISpecification.routes, '/api/v1')
       inject: {
         method,
         url: url.concat('?limit=foo&fields=1'),
-        credentials: { scope: routeSpec.scope[0] },
+        credentials: { scope: routeSpec.scope[0], user: dummyUsers[0], role: RoleEnum.TWINE_ADMIN },
       },
       expect: { statusCode: 400 },
     });
@@ -91,7 +102,11 @@ const testSpec = Object.entries(collapseUrls(APISpecification.routes, '/api/v1')
         inject: {
           method,
           url,
-          credentials: { scope: routeSpec.scope[0] },
+          credentials: {
+            scope: routeSpec.scope[0],
+            user: dummyUsers[0],
+            role: RoleEnum.TWINE_ADMIN,
+          },
           payload: { thisKeyWillNeverExistInTheSpec: 'foo' },
         },
         expect: { statusCode: 400 },
