@@ -149,8 +149,8 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
   },
 
   async getOne (client: Knex, q: ModelQuery<CommunityBusiness>) {
-    const res = await CommunityBusinesses.get(client, q);
-    return res[0] || null;
+    const [res] = await CommunityBusinesses.get(client, { ...q, limit: 1 });
+    return res || null;
   },
 
   async exists (client: Knex, q: ModelQuery<CommunityBusiness>) {

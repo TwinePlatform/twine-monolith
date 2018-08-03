@@ -56,8 +56,8 @@ export const Visitors: UserCollection & CustomMethods = {
   },
 
   async getOne (client: Knex, q: ModelQuery<User> = {}) {
-    const res = await Visitors.get(client, q);
-    return res[0] || null;
+    const [res] = await Visitors.get(client, { ...q, limit: 1 });
+    return res || null;
   },
 
   async exists (client: Knex, q: ModelQuery<User>) {
