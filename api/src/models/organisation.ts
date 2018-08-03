@@ -86,6 +86,11 @@ export const Organisations: OrganisationCollection = {
     return res || null;
   },
 
+  async exists (client: Knex, q: ModelQuery<Organisation>) {
+    const res = await Organisations.getOne(client, q);
+    return res !== null;
+  },
+
   async add (client: Knex, o: OrganisationChangeSet) {
     const [id] = await client('organisation')
       .insert(Organisations.toColumnNames(o))

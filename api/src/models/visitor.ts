@@ -60,6 +60,11 @@ export const Visitors: UserCollection & CustomMethods = {
     return res[0] || null;
   },
 
+  async exists (client: Knex, q: ModelQuery<User>) {
+    const res = await Visitors.getOne(client, q);
+    return res !== null;
+  },
+
   async add (client: Knex, u: UserChangeSet) {
     return Users.add(client, u);
   },

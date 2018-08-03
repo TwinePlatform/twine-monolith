@@ -52,6 +52,20 @@ describe('Community Business Model', () => {
       const org = await CommunityBusinesses.getOne(knex, { where: { id: 300 } });
       expect(org).toEqual(null);
     });
+
+    test('exists :: returns true for existent user', async () => {
+      const exists = await CommunityBusinesses.exists(knex, {
+        where: { name: 'Aperture Science' },
+      });
+      expect(exists).toBe(true);
+    });
+
+    test('exists :: returns false for non-existent user', async () => {
+      const exists = await CommunityBusinesses.exists(knex, {
+        where: { name: 'Black Mesa Research' },
+      });
+      expect(exists).toBe(false);
+    });
   });
 
   describe('Write', () => {

@@ -51,6 +51,16 @@ describe('CbAdmin model', () => {
         email: '1@aperturescience.com',
       }));
     });
+
+    test('exists :: returns true for existent cb-admin', async () => {
+      const exists = await CbAdmins.exists(knex, { where: { name: 'Gordon' } });
+      expect(exists).toBe(true);
+    });
+
+    test('exists :: returns false for non-existent cb-admin', async () => {
+      const exists = await CbAdmins.exists(knex, { where: { name: 'Chell' } });
+      expect(exists).toBe(false);
+    });
   });
 
   describe('Write', () => {

@@ -38,6 +38,16 @@ describe('Visitor model', () => {
       const visitor = await Visitors.getOne(knex);
       expect(visitor).toEqual(expect.objectContaining({ id: 1, name: 'Chell' }));
     });
+
+    test('exists :: returns true for existent visitor', async () => {
+      const exists = await Visitors.exists(knex, { where: { name: 'Chell' } });
+      expect(exists).toBe(true);
+    });
+
+    test('exists :: returns false for non-existent visitor', async () => {
+      const exists = await Visitors.exists(knex, { where: { name: 'Gordon' } });
+      expect(exists).toBe(false);
+    });
   });
 
   describe('Write', () => {

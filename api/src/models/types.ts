@@ -181,6 +181,7 @@ export type Relation =
 export type Collection<T extends Model, K extends ChangeSet, V extends Relation> = {
   toColumnNames: (a: Partial<T>) => Dictionary<any>
   create: (a: Partial<T>) => T
+  exists: (c: Knex, a?: ModelQuery<T>) => Promise<boolean>
   get: (c: Knex, a?: ModelQuery<T>) => Promise<T[]>
   getOne: (c: Knex, a?: ModelQuery<T>) => Promise<Maybe<T>>
   update: (c: Knex, a: T, b: K) => Promise<T>

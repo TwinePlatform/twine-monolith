@@ -151,6 +151,11 @@ export const Users: UserCollection & CustomMethods = {
     return res || null;
   },
 
+  async exists (client: Knex, q: ModelQuery<User>) {
+    const res = await Users.getOne(client, q);
+    return res !== null;
+  },
+
   async add (client: Knex, u: UserChangeSet) {
     const preProcessUser = compose(
       mapKeys((k) => k.replace('user_account.', '')),

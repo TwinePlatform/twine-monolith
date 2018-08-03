@@ -51,6 +51,16 @@ describe('Organisation Model', () => {
       const org = await Organisations.getOne(knex, { where: { id: 300 } });
       expect(org).toEqual(null);
     });
+
+    test('exists :: returns true for existent user', async () => {
+      const exists = await Organisations.exists(knex, { where: { name: 'Aperture Science' } });
+      expect(exists).toBe(true);
+    });
+
+    test('exists :: returns false for non-existent user', async () => {
+      const exists = await Organisations.exists(knex, { where: { name: 'foo' } });
+      expect(exists).toBe(false);
+    });
   });
 
   describe('Write', () => {

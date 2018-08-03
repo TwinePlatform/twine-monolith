@@ -60,6 +60,11 @@ export const CbAdmins: UserCollection & CustomMethods = {
     return res[0] || null;
   },
 
+  async exists (client: Knex, q: ModelQuery<User> = {}) {
+    const res = await CbAdmins.getOne(client, q);
+    return res !== null;
+  },
+
   async add (client: Knex, u: UserChangeSet) {
     return Users.add(client, u);
   },

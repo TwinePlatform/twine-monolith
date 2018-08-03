@@ -71,6 +71,16 @@ describe('User Model', () => {
       expect(users.length).toBe(1);
       expect(users[0].name).toBe('Barney');
     });
+
+    test('exists :: returns true for existent user', async () => {
+      const exists = await Users.exists(knex, { where: { name: 'Gordon' } });
+      expect(exists).toBe(true);
+    });
+
+    test('exists :: returns false for non-existent user', async () => {
+      const exists = await Users.exists(knex, { where: { name: 'foo' } });
+      expect(exists).toBe(false);
+    });
   });
 
   describe('Write', () => {

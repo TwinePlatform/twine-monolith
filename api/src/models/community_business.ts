@@ -153,6 +153,11 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return res[0] || null;
   },
 
+  async exists (client: Knex, q: ModelQuery<CommunityBusiness>) {
+    const res = await CommunityBusinesses.getOne(client, q);
+    return res !== null;
+  },
+
   async add (client: Knex, o: CommunityBusinessChangeSet) {
     const preProcessCbChangeset = compose(
       CommunityBusinesses.toColumnNames,
