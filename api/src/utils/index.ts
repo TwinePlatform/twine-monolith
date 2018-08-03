@@ -27,7 +27,7 @@ export const renameKeys: RenameKeys<Dictionary<any>, Dictionary<string>> =
       .reduce((acc, k) => assoc(map[k] || k, o[k], acc), {})
 );
 
-export const pipeToPromise = (stream: stream.Readable): Promise<Buffer[]> =>
+export const pipeStreamToPromise = (stream: stream.Readable): Promise<Buffer[]> =>
   new Promise((resolve, reject) => {
     const data: Buffer[] = [];
 

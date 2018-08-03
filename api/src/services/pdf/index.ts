@@ -5,7 +5,7 @@
  * to allow others to be added.
  */
 import { Dictionary } from 'ramda';
-import { pipeToPromise } from '../../utils';
+import { pipeStreamToPromise } from '../../utils';
 import { PdfTemplateEnum } from './types';
 import visitorQrCodeTemplate from './templates/visitor_qr_code';
 const PdfMake = require('pdfmake');
@@ -28,7 +28,7 @@ export const fromTemplate = async (templateType: PdfTemplateEnum, model: Diction
   const printer = new PdfMake(fontDescriptors);
   const template = await createTemplate(model);
   const document = printer.createPdfKitDocument(template);
-  const pData = pipeToPromise(document);
+  const pData = pipeStreamToPromise(document);
   document.end();
   const data = await pData;
 
