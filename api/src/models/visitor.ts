@@ -1,13 +1,15 @@
 /*
  * Visitor Model
  */
+import { createHmac } from 'crypto';
 import * as Knex from 'knex';
-import { omit, pick, evolve } from 'ramda';
+import { omit, pick, evolve, compose } from 'ramda';
 import { Dictionary } from '../types/internal';
 import { User, UserCollection, UserChangeSet, ModelQuery } from './types';
 import { Users, ModelToColumn } from './user';
 import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './util';
+import { getConfig } from '../../config';
 
 
 /*
@@ -17,12 +19,22 @@ type CustomMethods = {
   recordLogin: (k: Knex, u: User) => Promise<void>
 };
 
+
+const { qrcode: { secret } } = getConfig(process.env.NODE_ENV);
+
+const hashVisitor: (visitor: Partial<User>) => string = compose(
+  (s: string) => createHmac('sha256', secret).update(s).digest('hex'),
+  (s: string[]) => s.join(':'),
+  Object.values,
+  pick(['email', 'name', 'gender', 'disability', 'ethnicity'])
+);
+
 /*
  * Implementation of the UserCollection type for Visitors
  */
 export const Visitors: UserCollection & CustomMethods = {
   create (a: Partial<User>): User {
-    return Users.create(a);
+    return Users.create({ ...a, qrCode: hashVisitor(a) });
   },
 
   toColumnNames (o: Partial<User>): Dictionary<any> {
