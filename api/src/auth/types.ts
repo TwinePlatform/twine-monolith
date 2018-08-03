@@ -31,7 +31,7 @@ export enum ResourceEnum {
   ORG_TRAINING = 'organisations_training',
   ORG_INVITATIONS = 'organisations_invitations',
   ORG_OUTREACH = 'organisations_outreach',
-  USERS_DETAILS = 'users_details',
+  USER_DETAILS = 'user_details',
   VOLUNTEER_ACTIVITIES = 'volunteer_activities',
   VOLUNTEER_LOGS = 'volunteer_logs',
   VISIT_ACTIVITIES = 'visit_activities',
@@ -51,13 +51,13 @@ export enum PermissionLevelEnum {
  */
 
 type QueryResponse = Dictionary<any>;
-
-type PermissionQuery = {
-  resource: ResourceEnum
+type PermissionTuple = {
   permissionLevel: PermissionLevelEnum
   access: AccessEnum
-  role: RoleEnum
+  resource: ResourceEnum
 };
+
+type PermissionQuery = PermissionTuple & { role: RoleEnum };
 type UserPermissionQuery = Omit<PermissionQuery, 'role'> & { userId: number };
 type RolePermissionQuery = { role: RoleEnum };
 
@@ -85,7 +85,7 @@ export type PermissionInterface = {
 
   userHas: (k: Knex, a: UserPermissionQuery) => Promise<boolean>
 
-  forRole: (k: Knex, a: RolePermissionQuery) => Promise<QueryResponse[]>,
+  forRole: (k: Knex, a: RolePermissionQuery) => Promise<PermissionTuple[]>
 };
 
 export type RolesInterface = {

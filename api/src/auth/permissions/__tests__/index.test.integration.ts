@@ -218,29 +218,25 @@ describe('Permisions Module', () => {
       const result = await Permissions.forRole(trx, { role: RoleEnum.VISITOR });
       expect(result).toEqual([
         {
-          access_role_id: 1,
-          access_type: 'read',
-          permission_entity: 'visit_activities',
-          permission_level: 'own',
+          access: AccessEnum.READ,
+          resource: ResourceEnum.VISIT_ACTIVITIES,
+          permissionLevel: PermissionLevelEnum.OWN,
         },
         {
-          access_role_id: 1,
-          access_type: 'write',
-          permission_entity: 'user_details',
-          permission_level: 'own',
+          access: AccessEnum.WRITE,
+          resource: ResourceEnum.USER_DETAILS,
+          permissionLevel: PermissionLevelEnum.OWN,
         },
         {
-          access_role_id: 1,
-          access_type: 'read',
-          permission_entity: 'user_details',
-          permission_level: 'own',
+          access: AccessEnum.READ,
+          resource: ResourceEnum.USER_DETAILS,
+          permissionLevel: PermissionLevelEnum.OWN,
         },
         {
-          access_role_id: 1,
-          access_type: 'write',
-          permission_entity: 'visit_logs',
-          permission_level: 'parent',
-        }].map((x) => expect.objectContaining(x)));
+          access: AccessEnum.WRITE,
+          resource: ResourceEnum.VISIT_LOGS,
+          permissionLevel: PermissionLevelEnum.PARENT,
+        }].map(expect.objectContaining));
     });
 
     test('ERROR - returns error if role id does not exist', async () => {

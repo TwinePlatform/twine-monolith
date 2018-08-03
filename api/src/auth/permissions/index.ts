@@ -148,7 +148,11 @@ const Permissions: PermissionInterface = {
         'access_role_permission',
         'permission.permission_id',
         'access_role_permission.permission_id')
-      .select()
+      .select({
+        access: 'access_type',
+        resource: 'permission_entity',
+        permissionLevel: 'permission_level',
+      })
       .where({
         ['access_role_permission.access_role_id']: client('access_role')
           .select('access_role_id')
