@@ -59,12 +59,17 @@ const accessRolePermissionsRows = (client) =>
   }
 ,[]);
 
-const permissionsJson = () => JSON.stringify({
-  'permissions': Array.from(allPermissions),
-  'permissionsForRoles': map((x) => Array.from(x), permissionsForRoles)
-})
-
 module.exports = {
   permissionRows: Array.from(allPermissions).map(scopeToPermission),
   accessRolePermissionsRows,
+}
+
+
+if (require.main === module) {
+  console.log(
+    JSON.stringify({
+      'permissions': Array.from(allPermissions),
+      'permissionsForRoles': map((x) => Array.from(x), permissionsForRoles)
+    })
+  );
 }
