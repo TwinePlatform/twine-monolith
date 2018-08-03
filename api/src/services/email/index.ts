@@ -17,7 +17,7 @@ type EmailServiceConfig = {
   apiKey: string,
 };
 
-type EmailService = {
+export type EmailService = {
   send: (emailOptions: Email) => Promise <Postmark.SendStatus>,
   sendBatch: (emailOptions: Email []) => Promise <Postmark.SendStatus[]>,
 };
@@ -46,7 +46,7 @@ const emailInitialiser: EmailInitialiser = {
       sendBatch: async (emails: Email []) => {
         const postmarkEmails: Postmark.PostmarkMessageWithTemplate[] = emails.map(emailKeyMap);
 
-        return emailClient.sendEmailBatch(postmarkEmails);
+        return emailClient.sendEmailBatchWithTemplates(postmarkEmails);
       },
     };
   },

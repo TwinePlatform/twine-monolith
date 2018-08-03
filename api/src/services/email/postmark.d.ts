@@ -120,7 +120,10 @@ declare module 'postmark'{
     
           sendEmailBatch(message: PostmarkMessage[]): Promise<SendStatus[]>;
           sendEmailBatch(message: PostmarkMessage[], callback: PostmarkCallback<SendStatus[]>): undefined;
-    
+
+          sendEmailBatchWithTemplates(message: PostmarkMessageWithTemplate[]): Promise<SendStatus[]>;
+          sendEmailBatchWithTemplates(message: PostmarkMessageWithTemplate[], callback: PostmarkCallback<SendStatus[]>): undefined;
+
           // stats
           getDeliveryStatistics(): Promise<DeliveryStats>;
           getDeliveryStatistics(callback: PostmarkCallback<DeliveryStats>): undefined;
