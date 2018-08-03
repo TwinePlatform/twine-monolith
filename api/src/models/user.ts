@@ -8,6 +8,15 @@ import { User, UserRow, UserCollection, UserChangeSet, ModelQuery } from './type
 import { applyQueryModifiers } from './util';
 import { renameKeys, mapKeys } from '../utils';
 
+
+/*
+ * Declarations for methods specific to this model
+ */
+type CustomMethods = {
+  recordLogin: (k: Knex, u: User) => Promise<void>
+};
+
+
 /*
  * Field name mappings
  *
@@ -73,7 +82,7 @@ const dropUnwhereableUserFields = omit([
 /*
  * Implementation of the UserCollection type
  */
-export const Users: UserCollection = {
+export const Users: UserCollection & CustomMethods = {
   create (a: Partial<User>): User {
     return {
       id: a.id,
@@ -197,6 +206,11 @@ export const Users: UserCollection = {
         qr_code: null,
         deleted_at: new Date(),
       });
+  },
+
+  async recordLogin (client: Knex, u: User) {
+    return client('login_event')
+      .insert({ user_account_id: u.id });
   },
 
   serialise (user: User) {

@@ -11,9 +11,16 @@ import { applyQueryModifiers } from './util';
 
 
 /*
+ * Declarations for methods specific to this model
+ */
+type CustomMethods = {
+  recordLogin: (k: Knex, u: User) => Promise<void>
+};
+
+/*
  * Implementation of the UserCollection type for CbAdmin
  */
-export const CbAdmin: UserCollection = {
+export const CbAdmins: UserCollection & CustomMethods = {
   create (a: Partial<User>): User {
     return Users.create(a);
   },
@@ -24,8 +31,8 @@ export const CbAdmin: UserCollection = {
 
   async get (client: Knex, q: ModelQuery<User> = {}) {
     const query = evolve({
-      where: CbAdmin.toColumnNames,
-      whereNot: CbAdmin.toColumnNames,
+      where: CbAdmins.toColumnNames,
+      whereNot: CbAdmins.toColumnNames,
     }, q);
 
     return applyQueryModifiers(
@@ -49,7 +56,7 @@ export const CbAdmin: UserCollection = {
   },
 
   async getOne (client: Knex, q: ModelQuery<User> = {}) {
-    const res = await CbAdmin.get(client, q);
+    const res = await CbAdmins.get(client, { ...q, limit: 1 });
     return res[0] || null;
   },
 
@@ -63,6 +70,10 @@ export const CbAdmin: UserCollection = {
 
   async destroy (client: Knex, u: Partial<User>) {
     return Users.destroy(client, u);
+  },
+
+  async recordLogin (client: Knex, u: User) {
+    return Users.recordLogin(client, u);
   },
 
   serialise (user: User) {

@@ -11,9 +11,16 @@ import { applyQueryModifiers } from './util';
 
 
 /*
+ * Declarations for methods specific to this model
+ */
+type CustomMethods = {
+  recordLogin: (k: Knex, u: User) => Promise<void>
+};
+
+/*
  * Implementation of the UserCollection type for Visitors
  */
-export const Visitors: UserCollection = {
+export const Visitors: UserCollection & CustomMethods = {
   create (a: Partial<User>): User {
     return Users.create(a);
   },
@@ -63,6 +70,10 @@ export const Visitors: UserCollection = {
 
   async destroy (client: Knex, u: Partial<User>) {
     return Users.destroy(client, u);
+  },
+
+  async recordLogin (client: Knex, u: User) {
+    return Users.recordLogin(client, u);
   },
 
   serialise (user: User) {
