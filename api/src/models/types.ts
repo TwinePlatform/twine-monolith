@@ -44,7 +44,7 @@ export type OrganisationRow = {
 };
 
 export type CommunityBusinessRow = {
-  community_business_id: string
+  'community_business.organisation_id': string
   'organisation.organisation_name': string
   'organisation._360_giving_id': string
   'community_business_region.region_name': string
@@ -80,7 +80,7 @@ export type UserBase = CommonTimestamps & {
 };
 
 export type OrganisationBase = CommonTimestamps & {
-  id: number
+  organisationId: number
   name: string
   _360GivingId: string
 };

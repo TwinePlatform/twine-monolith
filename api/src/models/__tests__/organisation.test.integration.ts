@@ -34,7 +34,7 @@ describe('Organisation Model', () => {
     });
 
     test('get :: filter orgs by ID | non-existent ID resolves to empty array', async () => {
-      const orgs = await Organisations.get(knex, { where: { id: 2000 } });
+      const orgs = await Organisations.get(knex, { where: { organisationId: 2000 } });
       expect(orgs).toEqual([]);
     });
 
@@ -48,7 +48,7 @@ describe('Organisation Model', () => {
     });
 
     test('getOne :: returns null for non-existent organisation', async () => {
-      const org = await Organisations.getOne(knex, { where: { id: 300 } });
+      const org = await Organisations.getOne(knex, { where: { organisationId: 300 } });
       expect(org).toEqual(null);
     });
 
@@ -74,7 +74,7 @@ describe('Organisation Model', () => {
 
     test('update :: modify existing record', async () => {
       const changeset = { _360GivingId: 'foo' };
-      const org = await Organisations.getOne(trx, { where: { id: 1 } });
+      const org = await Organisations.getOne(trx, { where: { organisationId: 1 } });
 
       const updatedOrg = await Organisations.update(trx, org, changeset);
 
@@ -84,7 +84,7 @@ describe('Organisation Model', () => {
     });
 
     test('destroy :: mark existing record as deleted', async () => {
-      const org = await Organisations.getOne(trx, { where: { id: 1 } });
+      const org = await Organisations.getOne(trx, { where: { organisationId: 1 } });
 
       const orgsBeforeDelete = await Organisations.get(trx, { where: { deletedAt: null } });
       await Organisations.destroy(trx, org);

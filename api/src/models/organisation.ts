@@ -21,7 +21,7 @@ import { applyQueryModifiers } from './util';
  * ModelToColumn - keys of the User type -> DB column names
  */
 const ColumnToModel: Map<keyof OrganisationRow, keyof Organisation> = {
-  organisation_id: 'id',
+  organisation_id: 'organisationId',
   organisation_name: 'name',
   _360_giving_id: '_360GivingId',
   created_at: 'createdAt',
@@ -47,7 +47,7 @@ export const dropUnWhereableOrgFields = omit([
 export const Organisations: OrganisationCollection = {
   create (a: Partial<Organisation>): Organisation {
     return {
-      id: a.id,
+      organisationId: a.organisationId,
       name: a.name,
       _360GivingId: a._360GivingId,
       createdAt: a.createdAt,
@@ -58,7 +58,7 @@ export const Organisations: OrganisationCollection = {
 
   toColumnNames (a: Partial<Organisation>): Dictionary<any> {
     return filter((a) => typeof a !== 'undefined', {
-      organisation_id: a.id,
+      organisation_id: a.organisationId,
       organisation_name: a.name,
       _360_giving_id: a._360GivingId,
       created_at: a.createdAt,
@@ -92,11 +92,11 @@ export const Organisations: OrganisationCollection = {
   },
 
   async add (client: Knex, o: OrganisationChangeSet) {
-    const [id] = await client('organisation')
+    const [organisationId] = await client('organisation')
       .insert(Organisations.toColumnNames(o))
       .returning('organisation_id');
 
-    return Organisations.getOne(client, { where: { id } });
+    return Organisations.getOne(client, { where: { organisationId } });
   },
 
   async update (client: Knex, o: Organisation, c: OrganisationChangeSet) {
@@ -105,12 +105,12 @@ export const Organisations: OrganisationCollection = {
       dropUnWhereableOrgFields
     );
 
-    const [id] = await client('organisation')
+    const [organisationId] = await client('organisation')
       .update(Organisations.toColumnNames(c))
       .where(preProcessOrg(o))
       .returning('organisation_id');
 
-    return Organisations.getOne(client, { where: { id } });
+    return Organisations.getOne(client, { where: { organisationId } });
   },
 
   async destroy (client: Knex, o: Organisation) {

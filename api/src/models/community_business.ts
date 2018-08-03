@@ -18,11 +18,11 @@ import { applyQueryModifiers } from './util';
 /*
  * Field name mappings
  *
- * ColumnToModel - DB column names       -> keys of the User type
- * ModelToColumn - keys of the User type -> DB column names
+ * ColumnToModel - DB column names       -> keys of the CommunityBusiness type
+ * ModelToColumn - keys of the CommunityBusiness type -> DB column names
  */
 const ColumnToModel: Map<keyof CommunityBusinessRow, keyof CommunityBusiness> = {
-  community_business_id: 'id',
+  'community_business.organisation_id': 'organisationId',
   'organisation.organisation_name': 'name',
   'organisation._360_giving_id': '_360GivingId',
   'community_business_region.region_name': 'region',
@@ -84,7 +84,7 @@ const preProcessCb = (qb: Knex | Knex.QueryBuilder) => compose(
 export const CommunityBusinesses: CommunityBusinessCollection = {
   create (a: Partial<CommunityBusiness>): CommunityBusiness {
     return {
-      id: a.id,
+      organisationId: a.organisationId,
       name: a.name,
       _360GivingId: a._360GivingId,
       createdAt: a.createdAt,
@@ -104,7 +104,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   toColumnNames (a: Partial<CommunityBusiness>): Dictionary<any> {
     return filter((a) => typeof a !== 'undefined', {
-      community_business_id: a.id,
+      'community_business.organisation_id': a.organisationId,
       'organisation.organisation_name': a.name,
       'organisation._360_giving_id': a._360GivingId,
       'community_business.created_at': a.createdAt,
@@ -167,7 +167,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     const orgChangeset = preProcessOrgChangeset(o);
     const cbChangeset = preProcessCbChangeset(o);
 
-    const [id] = await client
+    const [organisationId] = await client
       .with('new_organisation', (qb) =>
         qb
           .table('organisation')
@@ -186,9 +186,9 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
           .where({ sector_name: cbChangeset.community_business_sector_id }),
       })
       .into('community_business')
-      .returning('community_business_id');
+      .returning('organisation_id');
 
-    return CommunityBusinesses.getOne(client, { where: { id } });
+    return CommunityBusinesses.getOne(client, { where: { organisationId } });
   },
 
   async update (client: Knex, o: CommunityBusiness, c: CommunityBusinessChangeSet) {
@@ -200,7 +200,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     const orgChangeset = preProcessOrgChangeset(c);
     const cbChangeset = preProcessCbChangeset(c);
 
-    const [{ community_business_id: id }] = await client.transaction(async (trx) => {
+    const [{ organisation_id: organisationId }] = await client.transaction(async (trx) => {
       const cbQuery = preProcessCb(trx)(o);
 
       if (Object.keys(orgChangeset).length > 0) {
@@ -218,10 +218,10 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
           .returning('*');
       }
 
-      return trx('community_business').select('community_business_id').where(cbQuery).limit(1);
+      return trx('community_business').select('organisation_id').where(cbQuery).limit(1);
     });
 
-    return CommunityBusinesses.getOne(client, { where: { id } });
+    return CommunityBusinesses.getOne(client, { where: { organisationId } });
   },
 
   async destroy (client: Knex, o: CommunityBusiness) {
@@ -234,3 +234,4 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return org;
   },
 };
+
