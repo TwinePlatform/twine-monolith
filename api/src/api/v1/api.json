@@ -1225,11 +1225,14 @@
     }
   },
   "aliases": {
-    "/VOLUNTEER": {
+    "/volunteer": {
       "description": "Alias for /users/** where user role is VOLUNTEER"
     },
-    "/VISITOR": {
+    "/visitor": {
       "description": "Alias for /users/** where user role is VISITOR"
+    },
+    "/community_businesses": {
+      "description": "Alias for /organisations/** where organisation is a communtiy business"
     }
   }
 }
