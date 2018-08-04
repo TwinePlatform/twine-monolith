@@ -27,11 +27,15 @@ describe('Community Business Model', () => {
     test('get :: no arguments gets all orgs', async () => {
       const orgs = await CommunityBusinesses.get(knex);
 
-      expect(orgs.length).toBe(1);
-      expect(orgs[0]).toEqual(expect.objectContaining({
-        name: 'Aperture Science',
-        _360GivingId: '01111000',
-      }));
+      expect(orgs.length).toBe(2);
+      expect(orgs).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'Aperture Science',
+            _360GivingId: '01111000',
+          }),
+        ])
+      );
     });
 
     test('get :: filter orgs by ID | non-existent ID resolves to empty array', async () => {
@@ -62,7 +66,7 @@ describe('Community Business Model', () => {
 
     test('exists :: returns false for non-existent user', async () => {
       const exists = await CommunityBusinesses.exists(knex, {
-        where: { name: 'Black Mesa Research' },
+        where: { name: 'Umbrella Corporation' },
       });
       expect(exists).toBe(false);
     });
@@ -101,6 +105,9 @@ describe('Community Business Model', () => {
     test('destroy :: mark existing record as deleted', async () => {
       const org = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
 
+      const orgsBeforeDelete =
+        await CommunityBusinesses.get(knex, { where: { deletedAt: null } });
+
       await CommunityBusinesses.destroy(knex, org);
 
       const orgsAfterDelete =
@@ -108,9 +115,11 @@ describe('Community Business Model', () => {
       const deletedOrgs =
         await CommunityBusinesses.get(knex, { whereNot: { deletedAt: null } });
 
-      expect(orgsAfterDelete).toHaveLength(0);
+      expect(orgsAfterDelete).toHaveLength(orgsBeforeDelete.length - 1);
       expect(deletedOrgs).toHaveLength(1);
       expect(deletedOrgs[0].id).toBe(1);
+      expect(deletedOrgs[0].modifiedAt).not.toEqual(null);
+      expect(deletedOrgs[0].deletedAt).not.toEqual(null);
     });
   });
 

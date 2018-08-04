@@ -130,6 +130,7 @@ describe('CbAdmin model', () => {
         ),
       ]));
       expect(deletedAdmin.modifiedAt).not.toEqual(admins[0].modifiedAt);
+      expect(deletedAdmin.deletedAt).not.toEqual(null);
     });
   });
 

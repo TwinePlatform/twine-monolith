@@ -141,6 +141,7 @@ describe('User Model', () => {
         ),
       ]));
       expect(deletedUser.modifiedAt).not.toEqual(users[0].modifiedAt);
+      expect(deletedUser.deletedAt).not.toEqual(null);
     });
   });
 

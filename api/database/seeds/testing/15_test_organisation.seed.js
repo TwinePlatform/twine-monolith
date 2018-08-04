@@ -9,4 +9,8 @@ exports.seed = (knex) =>
         organisation_name: 'Black Mesa Research',
         _360_giving_id: '01111001',
       },
+      {
+        organisation_name: 'Umbrella Corporation',
+        _360_giving_id: '01111002',
+      },
     ]);

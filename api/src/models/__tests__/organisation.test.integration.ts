@@ -26,7 +26,7 @@ describe('Organisation Model', () => {
     test('get :: no arguments gets all orgs', async () => {
       const orgs = await Organisations.get(knex);
 
-      expect(orgs.length).toBe(2);
+      expect(orgs.length).toBe(3);
       expect(orgs[0]).toEqual(expect.objectContaining({
         name: 'Aperture Science',
         _360GivingId: '01111000',
@@ -86,14 +86,17 @@ describe('Organisation Model', () => {
     test('destroy :: mark existing record as deleted', async () => {
       const org = await Organisations.getOne(trx, { where: { id: 1 } });
 
+      const orgsBeforeDelete = await Organisations.get(trx, { where: { deletedAt: null } });
       await Organisations.destroy(trx, org);
 
       const orgsAfterDelete = await Organisations.get(trx, { where: { deletedAt: null } });
       const deletedOrgs = await Organisations.get(trx, { whereNot: { deletedAt: null } });
 
-      expect(orgsAfterDelete).toHaveLength(1);
+      expect(orgsAfterDelete).toHaveLength(orgsBeforeDelete.length - 1);
       expect(deletedOrgs).toHaveLength(1);
       expect(deletedOrgs[0].id).toBe(1);
+      expect(deletedOrgs[0].modifiedAt).not.toEqual(null);
+      expect(deletedOrgs[0].deletedAt).not.toEqual(null);
     });
   });
 
