@@ -61,6 +61,11 @@ describe('CbAdmin model', () => {
       const exists = await CbAdmins.exists(knex, { where: { name: 'Chell' } });
       expect(exists).toBe(false);
     });
+
+    test('fromOrganisation :: returns admin for given organisation', async () => {
+      const [admin] = await CbAdmins.fromOrganisation(knex, { id: 1 });
+      expect(admin).toEqual(expect.objectContaining({ name: 'GlaDos' }));
+    });
   });
 
   describe('Write', () => {
