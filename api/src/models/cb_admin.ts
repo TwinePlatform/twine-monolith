@@ -90,6 +90,7 @@ export const CbAdmins: UserCollection & CustomMethods = {
           'user_account.user_account_id',
           'user_account_access_role.user_account_id')
         .where({
+          'user_account.deleted_at': null,
           ['user_account_access_role.access_role_id']: client('access_role')
             .select('access_role_id')
             .where({ access_role_name: RoleEnum.ORG_ADMIN }),
