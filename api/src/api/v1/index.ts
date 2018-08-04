@@ -11,9 +11,10 @@
  */
 import * as Hapi from 'hapi';
 import * as AuthJwt from 'hapi-auth-jwt2';
+import constants from './constants';
+import users from './users';
 import organisations from './organisations';
 import surveys from './surveys';
-import constants from './constants';
 import validateUser, { UserCredentials } from '../../auth/scheme/validate_user';
 import validateExternal from '../../auth/scheme/validate_external';
 import addLifecycleHooks from './hooks';
@@ -59,6 +60,7 @@ export default {
      */
     server.route([
       ...constants,
+      ...users,
       ...organisations,
       ...surveys,
     ]);

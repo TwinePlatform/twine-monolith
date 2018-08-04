@@ -18,7 +18,7 @@ describe('API /users', () => {
   });
 
   afterAll(async () => {
-    await knex.destroy();
+    await server.shutdown(true);
   });
 
   describe('GET /users', () => {
