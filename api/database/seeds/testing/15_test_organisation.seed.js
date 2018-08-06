@@ -3,11 +3,11 @@ exports.seed = (knex) =>
     .insert([
       {
         organisation_name: 'Aperture Science',
-        _360_giving_id: '01111000',
+        _360_giving_id: 'GB-COH-3205',
       },
       {
         organisation_name: 'Black Mesa Research',
-        _360_giving_id: '01111001',
+        _360_giving_id: 'GB-COH-9302',
       },
       {
         organisation_name: 'Umbrella Corporation',

@@ -4,9 +4,10 @@
 CREATE TABLE frontline_survey_question (
   frontline_survey_question_id SERIAL NOT NULL UNIQUE,
   activity_key                 VARCHAR NOT NULL UNIQUE,
-  frontline_survey_id          INT NOT NULL UNIQUE,
-  frontline_question_id        INT NOT NULL UNIQUE,
-  question_text                VARCHAR NOT NULL UNIQUE,
+  frontline_question_uuid      VARCHAR NOT NULL UNIQUE,
+  frontline_survey_uuid        VARCHAR NOT NULL,
+  frontline_question_sequence  INT NOT NULL,
+  question_text                VARCHAR NOT NULL,
   created_at                   TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at                  TIMESTAMP WITH TIME ZONE,
   deleted_at                   TIMESTAMP WITH TIME ZONE,

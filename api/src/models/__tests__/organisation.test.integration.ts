@@ -29,7 +29,7 @@ describe('Organisation Model', () => {
       expect(orgs.length).toBe(3);
       expect(orgs[0]).toEqual(expect.objectContaining({
         name: 'Aperture Science',
-        _360GivingId: '01111000',
+        _360GivingId: 'GB-COH-3205',
       }));
     });
 
@@ -43,7 +43,7 @@ describe('Organisation Model', () => {
 
       expect(org).toEqual(expect.objectContaining({
         name: 'Aperture Science',
-        _360GivingId: '01111000',
+        _360GivingId: 'GB-COH-3205',
       }));
     });
 
