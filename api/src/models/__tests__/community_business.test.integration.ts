@@ -39,7 +39,7 @@ describe('Community Business Model', () => {
     });
 
     test('get :: filter orgs by ID | non-existent ID resolves to empty array', async () => {
-      const orgs = await CommunityBusinesses.get(knex, { where: { organisationId: 200 } });
+      const orgs = await CommunityBusinesses.get(knex, { where: { id: 200 } });
       expect(orgs).toEqual([]);
     });
 
@@ -53,7 +53,7 @@ describe('Community Business Model', () => {
     });
 
     test('getOne :: returns null for non-existent organisation', async () => {
-      const org = await CommunityBusinesses.getOne(knex, { where: { organisationId: 300 } });
+      const org = await CommunityBusinesses.getOne(knex, { where: { id: 300 } });
       expect(org).toEqual(null);
     });
 
@@ -83,7 +83,7 @@ describe('Community Business Model', () => {
 
     test('update :: modify value in local table', async () => {
       const changeset = { logoUrl: 'foo' };
-      const org = await CommunityBusinesses.getOne(knex, { where: { organisationId: 1 } });
+      const org = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
 
       const updatedOrg = await CommunityBusinesses.update(knex, org, changeset);
 
@@ -94,7 +94,7 @@ describe('Community Business Model', () => {
 
     test('update :: modify foreign value', async () => {
       const changeset = { _360GivingId: 'foo' };
-      const org = await CommunityBusinesses.getOne(knex, { where: { organisationId: 1 } });
+      const org = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
 
       const updatedOrg = await CommunityBusinesses.update(knex, org, changeset);
       expect(updatedOrg.name).toEqual(org.name);
@@ -103,7 +103,7 @@ describe('Community Business Model', () => {
     });
 
     test('destroy :: mark existing record as deleted', async () => {
-      const org = await CommunityBusinesses.getOne(knex, { where: { organisationId: 1 } });
+      const org = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
 
       const orgsBeforeDelete =
         await CommunityBusinesses.get(knex, { where: { deletedAt: null } });

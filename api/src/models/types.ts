@@ -80,7 +80,7 @@ export type UserBase = CommonTimestamps & {
 };
 
 export type OrganisationBase = CommonTimestamps & {
-  organisationId: number
+  id: number
   name: string
   _360GivingId: string
 };
