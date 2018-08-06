@@ -20,10 +20,10 @@ const createScopeName: CreateScopeName = ({
   `${resource}-${permissionLevel}:${access}`;
 
 export type UserCredentials = {
-  user: User
-  organisation?: Organisation
-  role: RoleEnum
   scope: string[]
+  user?: User
+  organisation?: Organisation
+  role?: RoleEnum
 };
 
 type ValidateUser = (a: {userId: number, organisationId: number}, b: Hapi.Request)
