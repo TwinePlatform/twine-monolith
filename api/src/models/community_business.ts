@@ -10,9 +10,18 @@ import {
   CommunityBusinessRow,
   CommunityBusinessChangeSet,
   ModelQuery,
+  Organisation,
 } from './types';
 import { Organisations } from './organisation';
 import { applyQueryModifiers } from './util';
+
+
+/*
+ * Declarations for methods specific to this model
+ */
+type CustomMethods = {
+  fromOrganisation: (k: Knex, o: Organisation) => Promise<CommunityBusiness[]>
+};
 
 
 /*
@@ -81,7 +90,7 @@ const preProcessCb = (qb: Knex | Knex.QueryBuilder) => compose(
 /*
  * Implementation of the CommunityBusinessCollection type
  */
-export const CommunityBusinesses: CommunityBusinessCollection = {
+export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = {
   create (a: Partial<CommunityBusiness>): CommunityBusiness {
     return {
       id: a.id,
@@ -228,6 +237,14 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return client('community_business')
       .update({ deleted_at: new Date() })
       .where(preProcessCb(client)(o));
+  },
+
+  async fromOrganisation (client: Knex, o: Organisation) {
+    const [{ community_business_id: id }] = await client('community_business')
+      .select('community_business_id')
+      .where({ organisation_id: o.id });
+
+    return CommunityBusinesses.get(client, { where: { id } });
   },
 
   serialise (org: CommunityBusiness) {
