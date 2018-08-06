@@ -2,12 +2,17 @@ module.exports = {
   "extends": "tslint-config-airbnb",
   "rules": {
     "align": [false],
+    "arrow-parens": true,
     "object-shorthand-properties-first": {
       "severity": "off"
     },
-    "ter-arrow-parens": [true, "always"],
-    "arrow-parens": true,
+    "no-consecutive-blank-lines": [true, 2],
     "no-else-after-return": false,
+    "no-multi-spaces": true,
+    "no-unused-variable": true,
+    "import-name": false,
+    "object-curly-spacing": [true, "always"],
+    "ter-arrow-parens": [true, "always"],
     "trailing-comma": [true, {
       "multiline": {
         "objects": "always",
@@ -17,23 +22,13 @@ module.exports = {
       },
       "esSpecCompliant": true
     }],
-    "no-consecutive-blank-lines": [true, 2],
-    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"],
-    "import-name": false,
-    "whitespace": [
-      true,
-      "check-branch",
-      "check-decl",
-      "check-operator",
-      "check-module",
-      "check-separator",
-      "check-rest-spread",
-      "check-type",
-      "check-typecast",
-      "check-type-operator",
-      "check-preblock"
-    ],
-    "no-unused-variable": true,
+    "space-before-function-paren": [true, {
+      "anonymous": "always",
+      "named": "always",
+      "asyncArrow": "always",
+      "method": "always",
+      "constructor": "always"
+    }],
     "typedef-whitespace": [
       true,
       {
@@ -51,14 +46,19 @@ module.exports = {
         "variable-declaration": "onespace"
       }
     ],
-    "space-before-function-paren": [true, {
-      "anonymous": "always",
-      "named": "always",
-      "asyncArrow": "always",
-      "method": "always",
-      "constructor": "always"
-    }],
-    "object-curly-spacing": [true, "always"],
-    "no-multi-spaces": true
+    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case"],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-module",
+      "check-separator",
+      "check-rest-spread",
+      "check-type",
+      "check-typecast",
+      "check-type-operator",
+      "check-preblock"
+    ],
   }
 };
