@@ -21,13 +21,13 @@ CREATE TABLE outreach_meeting_type (
 CREATE TABLE outreach_campaign (
   outreach_campaign_id  SERIAL NOT NULL UNIQUE,
   outreach_type_id      INT NOT NULL,
-  community_business_id INT NOT NULL,
+  organisation_id       INT NOT NULL,
   created_at            TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at           TIMESTAMP WITH TIME ZONE,
   deleted_at            TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT outreach_campaign_pk                       PRIMARY KEY (outreach_campaign_id),
-  CONSTRAINT outreach_campaign_to_community_business_fk FOREIGN KEY (community_business_id) REFERENCES community_business ON DELETE CASCADE,
+  CONSTRAINT outreach_campaign_to_community_business_fk FOREIGN KEY (organisation_id)       REFERENCES organisation ON DELETE CASCADE,
   CONSTRAINT outreach_campaign_to_outreach_type_fk      FOREIGN KEY (outreach_type_id)      REFERENCES outreach_type
 );
 

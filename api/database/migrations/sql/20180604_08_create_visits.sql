@@ -12,7 +12,7 @@ CREATE TABLE visit_activity_category (
 
 CREATE TABLE visit_activity (
   visit_activity_id          SERIAL NOT NULL UNIQUE,
-  community_business_id      INT NOT NULL,
+  organisation_id      INT NOT NULL,
   visit_activity_category_id INT,
   visit_activity_name        VARCHAR(255) NOT NULL,
   monday                     BOOLEAN NOT NULL DEFAULT false,
@@ -27,7 +27,7 @@ CREATE TABLE visit_activity (
   deleted_at                 TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT visit_activity_pk                            PRIMARY KEY (visit_activity_id),
-  CONSTRAINT visit_activity_to_community_business_fk      FOREIGN KEY (community_business_id)      REFERENCES community_business ON DELETE CASCADE,
+  CONSTRAINT visit_activity_to_community_business_fk      FOREIGN KEY (organisation_id)            REFERENCES organisation ON DELETE CASCADE,
   CONSTRAINT visit_activity_to_visit_activity_category_fk FOREIGN KEY (visit_activity_category_id) REFERENCES visit_activity_category
 );
 
@@ -48,14 +48,14 @@ CREATE TABLE visit (
 
 CREATE TABLE visit_feedback (
   visit_feedback_id     SERIAL NOT NULL UNIQUE,
-  community_business_id INT NOT NULL,
+  organisation_id       INT NOT NULL,
   score                 INT NOT NULL,
   created_at            TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at           TIMESTAMP WITH TIME ZONE,
   deleted_at            TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT visit_feedback_pk                       PRIMARY KEY (visit_feedback_id),
-  CONSTRAINT visit_feedback_to_community_business_fk FOREIGN KEY (community_business_id) REFERENCES community_business ON DELETE CASCADE,
+  CONSTRAINT visit_feedback_to_community_business_fk FOREIGN KEY (organisation_id) REFERENCES organisation ON DELETE CASCADE,
   CONSTRAINT visit_activity_valid_score              CHECK       (score > -2 AND score < 2)
 );
 

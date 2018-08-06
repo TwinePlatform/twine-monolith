@@ -17,7 +17,7 @@ CREATE TABLE frontline_survey_question (
 CREATE TABLE frontline_survey_answer (
   frontline_survey_answer_id   SERIAL NOT NULL UNIQUE,
   frontline_survey_question_id INT NOT NULL,
-  community_business_id        INT NOT NULL,
+  organisation_id              INT NOT NULL,
   answer_text                  VARCHAR(255) NOT NULL,
   created_at                   TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at                  TIMESTAMP WITH TIME ZONE,
@@ -25,7 +25,7 @@ CREATE TABLE frontline_survey_answer (
 
   CONSTRAINT frontline_survey_answer_pk                              PRIMARY KEY (frontline_survey_answer_id),
   CONSTRAINT frontline_survey_answer_to_frontline_survey_question_fk FOREIGN KEY (frontline_survey_question_id) REFERENCES frontline_survey_question ON DELETE CASCADE,
-  CONSTRAINT frontline_survey_answer_to_community_business_fk        FOREIGN KEY (community_business_id)        REFERENCES community_business ON DELETE CASCADE
+  CONSTRAINT frontline_survey_answer_to_community_business_fk        FOREIGN KEY (organisation_id)              REFERENCES organisation ON DELETE CASCADE
 );
 
 
