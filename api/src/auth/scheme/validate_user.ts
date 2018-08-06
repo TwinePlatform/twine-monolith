@@ -44,7 +44,7 @@ const validateUser: ValidateUser = async (decoded, request) => {
       role,
     ] = await Promise.all([
       Users.getOne(knex, { where: { id: userId, deletedAt: null } }),
-      Organisations.getOne(knex, { where: { id: organisationId, deletedAt: null } }),
+      Organisations.getOne(knex, { where: { organisationId, deletedAt: null } }),
       Roles.oneFromUser(knex, { userId, organisationId }),
     ]);
 
