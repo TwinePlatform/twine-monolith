@@ -10,8 +10,17 @@ import {
   OrganisationRow,
   OrganisationChangeSet,
   ModelQuery,
+  User
 } from './types';
 import { applyQueryModifiers } from './util';
+import { Users } from './user';
+
+/*
+ * Declarations for methods specific to this model
+ */
+type CustomMethods = {
+  fromUser: (k: Knex, q: Partial<User>) => Promise<Organisation>
+};
 
 
 /*
@@ -44,7 +53,7 @@ export const dropUnWhereableOrgFields = omit([
 /*
  * Implementation of the OrganisationCollection type
  */
-export const Organisations: OrganisationCollection = {
+export const Organisations: OrganisationCollection & CustomMethods = {
   create (a: Partial<Organisation>): Organisation {
     return {
       id: a.id,
@@ -84,6 +93,23 @@ export const Organisations: OrganisationCollection = {
   async getOne (client: Knex, q: ModelQuery<Organisation>) {
     const [res] = await Organisations.get(client, { ...q, limit: 1 });
     return res || null;
+  },
+
+  async fromUser (client: Knex, q: ModelQuery<User>) {
+    return client.transaction(async (trx) => {
+
+      const exists = await Users.exists(trx, q);
+      if (!exists) throw new Error('User does not exist');
+
+      const { id } = await Users.getOne(trx, q);
+      const [{ organisation_id }] = await trx('user_account_access_role')
+        .select('organisation_id')
+        .where({ user_account_id: id });
+
+      const [org] = await Organisations.get(trx, { where: { id : organisation_id } });
+      if (!org) throw new Error('No organisation is associated to this user');
+      return org;
+    });
   },
 
   async exists (client: Knex, q: ModelQuery<Organisation>) {
