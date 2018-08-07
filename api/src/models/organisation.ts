@@ -124,7 +124,7 @@ export const Organisations: OrganisationCollection = {
       .where(preProcessOrg(o));
   },
 
-  serialise (org: Organisation) {
+  async serialise (org: Organisation) {
     return org;
   },
 };

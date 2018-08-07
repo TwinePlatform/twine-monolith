@@ -10,6 +10,7 @@ import { Users, ModelToColumn } from './user';
 import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './util';
 import { getConfig } from '../../config';
+import * as QRCode from '../services/qrcode';
 
 
 /*
@@ -93,7 +94,8 @@ export const Visitors: UserCollection & CustomMethods = {
     return Users.recordLogin(client, u);
   },
 
-  serialise (user: User) {
-    return omit(['password', 'qrCode'], user);
+  async serialise (user: User) {
+    const qrCode = await QRCode.create(user.qrCode);
+    return { ...omit(['password', 'qrCode'], user), qrCode };
   },
 };

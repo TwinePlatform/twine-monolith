@@ -95,7 +95,7 @@ describe('Visitor model', () => {
     test('serialise :: returns model object without secrets', async () => {
       const visitor = await Visitors.getOne(knex);
 
-      const serialised = Visitors.serialise(visitor);
+      const serialised = await Visitors.serialise(visitor);
 
       expect(serialised).toEqual(omit(['password', 'qrCode'], visitor));
     });

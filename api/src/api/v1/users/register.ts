@@ -150,7 +150,7 @@ export default [
       /*
        * Response payload
        */
-      return visitor;
+      return Visitors.serialise(visitor);
     },
   },
 ] as Hapi.ServerRoute[];

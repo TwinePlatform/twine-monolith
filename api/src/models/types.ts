@@ -187,7 +187,7 @@ export type Collection<T extends Model, K extends ChangeSet, V extends Relation>
   update: (c: Knex, a: T, b: K) => Promise<T>
   add: (c: Knex, a: Partial<T>) => Promise<T>
   destroy: (c: Knex, a: Partial<T>) => Promise<void>
-  serialise: (a: T) => Maybe<Json>
+  serialise: (a: T) => Promise<Json>
 };
 
 export type UserCollection =

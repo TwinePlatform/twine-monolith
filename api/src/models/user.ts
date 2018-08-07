@@ -218,7 +218,7 @@ export const Users: UserCollection & CustomMethods = {
       .insert({ user_account_id: u.id });
   },
 
-  serialise (user: User) {
+  async serialise (user: User) {
     return omit(['password', 'qrCode'], user);
   },
 };

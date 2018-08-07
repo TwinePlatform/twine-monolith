@@ -138,7 +138,7 @@ describe('CbAdmin model', () => {
     test('serialise :: returns model object without secrets', async () => {
       const admin = await CbAdmins.getOne(knex);
 
-      const serialised = CbAdmins.serialise(admin);
+      const serialised = await CbAdmins.serialise(admin);
 
       expect(serialised).toEqual(omit(['password', 'qrCode'], admin));
     });

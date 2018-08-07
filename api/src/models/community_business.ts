@@ -230,7 +230,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       .where(preProcessCb(client)(o));
   },
 
-  serialise (org: CommunityBusiness) {
+  async serialise (org: CommunityBusiness) {
     return org;
   },
 };

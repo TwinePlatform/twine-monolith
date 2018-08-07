@@ -102,7 +102,7 @@ export const CbAdmins: UserCollection & CustomMethods = {
     return Users.recordLogin(client, u);
   },
 
-  serialise (user: User) {
+  async serialise (user: User) {
     return omit(['password', 'qrCode'], user);
   },
 };
