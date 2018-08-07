@@ -216,7 +216,7 @@ describe('Permisions Module', () => {
   describe('::forRole', () => {
     test('SUCCESS - returns all permissions associated with role', async () => {
       const result = await Permissions.forRole(trx, { role: RoleEnum.VISITOR });
-      expect(result).toEqual([
+      expect(result).toEqual(expect.arrayContaining([
         {
           access: AccessEnum.READ,
           resource: ResourceEnum.VISIT_ACTIVITIES,
@@ -236,7 +236,7 @@ describe('Permisions Module', () => {
           access: AccessEnum.WRITE,
           resource: ResourceEnum.VISIT_LOGS,
           permissionLevel: PermissionLevelEnum.PARENT,
-        }].map(expect.objectContaining));
+        }].map(expect.objectContaining)));
     });
 
     test('ERROR - returns error if role id does not exist', async () => {
