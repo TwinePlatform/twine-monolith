@@ -1,3 +1,6 @@
+const { hashSync } = require('bcrypt')
+const gladosPassword = hashSync('CakeisaLi3!', 12)
+
 exports.seed = (knex) =>
   knex('user_account')
     .insert([
@@ -18,7 +21,7 @@ exports.seed = (knex) =>
       },
       { 
         user_name: 'GlaDos',
-        user_password: 'tobereplacedwhenauthissetup2',
+        user_password: gladosPassword,
         qr_code: 'tobereplacedwhenqrgenissetup2',
         email: '1@aperturescience.com',
         phone_number: '+1 425-450-4464',
