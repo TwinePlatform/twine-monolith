@@ -853,7 +853,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["ORG_NON_ADMIN"],
-          "scope": [],
+          "scope": ["user_details-child:write"],
           "body": {
             "organisationId": "Number",
             "name": "String",

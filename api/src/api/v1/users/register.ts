@@ -43,7 +43,10 @@ export default [
     method: 'POST',
     path: '/users/register/visitor',
     options: {
-      auth: false,
+      auth: {
+        strategy: 'standard',
+        scope: ['user_details-child:write'],
+      },
       validate: {
         payload: {
           organisationId: id.required(),
