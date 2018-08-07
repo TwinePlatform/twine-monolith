@@ -3,7 +3,6 @@
  */
 import * as Joi from 'joi';
 
-
 export { query, gender, id } from '../schema/request';
 export { response } from '../schema/response';
 
@@ -27,6 +26,11 @@ export const birthYear =
 export const email =
   Joi.string()
     .email();
+
+export const password =
+  Joi.string()
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/, 'strong_pwd')
+    .options({ language: { string: { regex: { name: 'is too weak' } } } });
 
 export const phoneNumber =
   Joi.string()

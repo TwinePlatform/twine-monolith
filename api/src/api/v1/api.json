@@ -907,7 +907,7 @@
       "/login": {
         "POST": {
           "description": "Login all accounts apart from visitor",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": false,
           "intendedFor": [
             "ORG_ADMIN",
@@ -918,7 +918,7 @@
           ],
           "scope": [],
           "body": {
-            "userName": "String",
+            "email": "String",
             "password": "String"
           },
           "response": {}
