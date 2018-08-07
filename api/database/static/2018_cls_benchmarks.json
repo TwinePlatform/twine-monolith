@@ -1,5 +1,5 @@
 {
-  "strust-1": {
+  "g": {
     "North East": 1.861,
     "North West": 1.957,
     "Yorkshire and the Humber": 1.976,
@@ -11,7 +11,7 @@
     "South West": 1.751
   },
 
-  "slocsat-1": {
+  "i": {
     "North East": 2.053,
     "North West": 2.2,
     "Yorkshire and the Humber": 2.197,
@@ -23,7 +23,7 @@
     "South West": 1.837
   },
 
-  "satasset-2": {
+  "j": {
     "North East": 2.166,
     "North West": 2.165,
     "Yorkshire and the Humber": 2.05,
@@ -35,7 +35,7 @@
     "South West": 2.018
   },
 
-  "stogeth-1": {
+  "af": {
     "North East": 2.139,
     "North West": 2.077,
     "Yorkshire and the Humber": 2.163,
@@ -47,7 +47,7 @@
     "South West": 2.005
   },
 
-  "wellb1-1": {
+  "ac": {
     "North East": 6.836,
     "North West": 6.999,
     "Yorkshire and the Humber": 6.94,
@@ -59,7 +59,7 @@
     "South West": 7.299
   },
 
-  "wellb3-2": {
+  "ad": {
     "North East": 3.601,
     "North West": 3.4,
     "Yorkshire and the Humber": 3.485,
@@ -71,7 +71,7 @@
     "South West": 3.069
   },
 
-  "wellb4-3": {
+  "ae": {
     "North East": 7.007,
     "North West": 7.288,
     "Yorkshire and the Humber": 7.119,
@@ -83,7 +83,7 @@
     "South West": 7.442
   },
 
-  "spull-1": {
+  "av": {
     "North East": 2.386,
     "North West": 2.435,
     "Yorkshire and the Humber": 2.489,
@@ -95,7 +95,7 @@
     "South West": 2.367
   },
 
-  "locatt-2": {
+  "aw": {
     "North East": 2.606,
     "North West": 2.504,
     "Yorkshire and the Humber": 2.542,

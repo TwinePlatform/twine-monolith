@@ -18,7 +18,7 @@ describe('API v1 :: Organisations :: Questions', () => {
   test('CLS benchmarks :: use DB ID', async () => {
     const res = await server.inject({
       method: 'GET',
-      url: '/api/v1/organisations/1/questions/strust-1/cls',
+      url: '/api/v1/organisations/1/questions/g/cls',
       credentials: { scope: ['frontline'] },
     });
 
@@ -30,7 +30,7 @@ describe('API v1 :: Organisations :: Questions', () => {
   test('CLS benchmarks :: use 360 Giving ID', async () => {
     const res = await server.inject({
       method: 'GET',
-      url: '/api/v1/organisations/GB-COH-3205/questions/wellb1-1/cls',
+      url: '/api/v1/organisations/GB-COH-3205/questions/ac/cls',
       credentials: { scope: ['frontline'] },
     });
 
@@ -42,7 +42,7 @@ describe('API v1 :: Organisations :: Questions', () => {
   test('NPS benchmarks :: use DB ID', async () => {
     const res = await server.inject({
       method: 'GET',
-      url: '/api/v1/organisations/1/questions/nps/cls',
+      url: '/api/v1/organisations/1/questions/e/cls',
       credentials: { scope: ['frontline'] },
     });
 
@@ -59,7 +59,7 @@ describe('API v1 :: Organisations :: Questions', () => {
   test('NPS benchmarks :: use 360 Giving ID', async () => {
     const res = await server.inject({
       method: 'GET',
-      url: '/api/v1/organisations/GB-COH-3205/questions/nps/cls',
+      url: '/api/v1/organisations/GB-COH-3205/questions/e/cls',
       credentials: { scope: ['frontline'] },
     });
 
