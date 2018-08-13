@@ -106,9 +106,9 @@ export default [
       const qrCode = await QRCode.create(visitor.qrCode);
       // // create PDF blob
       const document = await PdfService.fromTemplate(
-          PdfService.PdfTemplateEnum.VISITOR_QR_CODE,
-          { qrCodeDataUrl: qrCode }
-        );
+        PdfService.PdfTemplateEnum.VISITOR_QR_CODE,
+        { qrCodeDataUrl: qrCode }
+      );
 
       // // send email to visitor QR code attached
       // // send sign-up notification to cb-admin
