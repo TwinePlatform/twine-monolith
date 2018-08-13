@@ -3,7 +3,7 @@ import * as Knex from 'knex';
 import { init } from '../../../../../tests/utils/server';
 import factory from '../../../../../tests/utils/factory';
 import { getConfig } from '../../../../../config';
-import pre from '../getOrganisation';
+import pre from '../get_organisation';
 import { Organisations } from '../../../../models';
 
 

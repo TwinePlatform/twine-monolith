@@ -1,4 +1,4 @@
-import getOrganisation from './getOrganisation';
+import getOrganisation from './get_organisation';
 
 export {
   getOrganisation,
