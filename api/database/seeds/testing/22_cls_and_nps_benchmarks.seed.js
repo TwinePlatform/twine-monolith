@@ -16,6 +16,7 @@ exports.seed = (knex) => {
               community_business_region_id: knex('community_business_region')
                 .select('community_business_region_id')
                 .where({ region_name: region }),
+              benchmark_year: 2018,
             }))
         )
       , []);
@@ -28,6 +29,7 @@ exports.seed = (knex) => {
           frontline_survey_question_id: knex('frontline_survey_question')
             .select('frontline_survey_question_id')
             .where({ frontline_question_uuid: questionId }),
+          benchmark_year: 2018,
         })
       , []);
 

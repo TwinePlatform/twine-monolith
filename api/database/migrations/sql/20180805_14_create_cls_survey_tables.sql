@@ -7,6 +7,7 @@ CREATE TABLE cls_survey_benchmark_data (
   frontline_survey_question_id INT NOT NULL,
   community_business_region_id INT NOT NULL,
   score                        FLOAT NOT NULL,
+  benchmark_year               INT NOT NULL,
   created_at                   TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at                  TIMESTAMP WITH TIME ZONE,
   deleted_at                   TIMESTAMP WITH TIME ZONE,
@@ -14,7 +15,8 @@ CREATE TABLE cls_survey_benchmark_data (
   CONSTRAINT cls_survey_benchmark_data_pk                           PRIMARY KEY (cls_survey_benchmark_data_id),
   CONSTRAINT cls_survey_benchmark_data_frontline_survey_question_fk FOREIGN KEY (frontline_survey_question_id) REFERENCES frontline_survey_question ON DELETE CASCADE,
   CONSTRAINT cls_survey_benchmark_data_community_business_region_fk FOREIGN KEY (community_business_region_id) REFERENCES community_business_region ON DELETE CASCADE,
-  CONSTRAINT cls_benchmark_data_unique_per_region_per_question      UNIQUE (frontline_survey_question_id, community_business_region_id)
+  CONSTRAINT cls_benchmark_data_unique_per_region_per_question      UNIQUE (frontline_survey_question_id, community_business_region_id),
+  CONSTRAINT cls_benchmark_data_sensible_year                       CHECK (benchmark_year > 1900)
 );
 
 CREATE TABLE nps_survey_benchmark_data (
@@ -23,12 +25,14 @@ CREATE TABLE nps_survey_benchmark_data (
   detractors                   FLOAT NOT NULL,
   passives                     FLOAT NOT NULL,
   promoters                    FLOAT NOT NULL,
+  benchmark_year               INT NOT NULL,
   created_at                   TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at                  TIMESTAMP WITH TIME ZONE,
   deleted_at                   TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT nps_survey_benchmark_data_pk                           PRIMARY KEY (nps_survey_benchmark_data_id),
-  CONSTRAINT nps_survey_benchmark_data_frontline_survey_question_fk FOREIGN KEY (frontline_survey_question_id) REFERENCES frontline_survey_question ON DELETE CASCADE
+  CONSTRAINT nps_survey_benchmark_data_frontline_survey_question_fk FOREIGN KEY (frontline_survey_question_id) REFERENCES frontline_survey_question ON DELETE CASCADE,
+  CONSTRAINT nps_benchmark_data_sensible_year                       CHECK (benchmark_year > 1900)
 );
 
 

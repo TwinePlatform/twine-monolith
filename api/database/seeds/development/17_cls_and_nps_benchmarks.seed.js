@@ -14,6 +14,7 @@ exports.seed = (knex) => {
                 .select('community_business_region_id')
                 .where({ region_name: region }),
               score,
+              benchmark_year: 2018,
             }))
         )
       , []);
@@ -24,6 +25,7 @@ exports.seed = (knex) => {
         acc.concat({
           frontline_survey_question_id: questionId,
           ...scores,
+          benchmark_year: 2018,
         })
       , []);
 
