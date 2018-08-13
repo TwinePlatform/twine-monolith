@@ -3,7 +3,7 @@
  */
 CREATE TABLE frontline_survey_question (
   frontline_survey_question_id SERIAL NOT NULL UNIQUE,
-  activity_key                 VARCHAR NOT NULL UNIQUE,
+  activity_key                 VARCHAR NOT NULL,
   frontline_question_uuid      VARCHAR NOT NULL UNIQUE,
   frontline_survey_uuid        VARCHAR NOT NULL,
   frontline_question_sequence  INT NOT NULL,
