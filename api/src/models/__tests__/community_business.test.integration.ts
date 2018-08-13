@@ -27,11 +27,12 @@ describe('Community Business Model', () => {
     test('get :: no arguments gets all orgs', async () => {
       const orgs = await CommunityBusinesses.get(knex);
 
-      expect(orgs.length).toBe(1);
-      expect(orgs[0]).toEqual(expect.objectContaining({
-        name: 'Aperture Science',
-        _360GivingId: 'GB-COH-3205',
-      }));
+      expect(orgs.length).toBe(2);
+      expect(orgs).toEqual(expect.arrayContaining([
+        expect.objectContaining({
+          name: 'Aperture Science',
+          _360GivingId: 'GB-COH-3205',
+        })]));
     });
 
     test('get :: filter orgs by ID | non-existent ID resolves to empty array', async () => {
