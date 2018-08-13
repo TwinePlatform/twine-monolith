@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import { getOrganisation } from '../prerequisites';
-import { Organisation, CommunityBusinesses } from '../../../models';
+import { getCommunityBusiness } from '../prerequisites';
+import { CommunityBusiness } from '../../../models';
 
 
 export default [
@@ -14,17 +14,17 @@ export default [
         scope: ['frontline'],
       },
       pre: [
-        { method: getOrganisation, assign: 'organisation' },
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
       const {
         server: { app: { knex } },
-        pre: { organisation },
         params: { questionId },
+        pre: { communityBusiness },
       } = request;
 
-      const [cb] = await CommunityBusinesses.fromOrganisation(knex, <Organisation> organisation);
+      const cb = <CommunityBusiness> communityBusiness;
 
       const res = await knex('cls_survey_benchmark_data')
         .select('score')
