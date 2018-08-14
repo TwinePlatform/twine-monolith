@@ -24,16 +24,16 @@ export const init = async (config: Config, options: Options = {}): Promise<Hapi.
     server.decorate('request', 'knex', options.knex);
   }
 
-  if (options.routes) {
-    server.route(options.routes);
-  }
-
   if (options.plugins) {
     await server.register(options.plugins);
   }
 
   if (options.hooks) {
     options.hooks.forEach((hook) => hook(server));
+  }
+
+  if (options.routes) {
+    server.route(options.routes);
   }
 
   return server;

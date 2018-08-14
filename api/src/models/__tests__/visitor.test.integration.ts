@@ -97,7 +97,11 @@ describe('Visitor model', () => {
 
       const serialised = await Visitors.serialise(visitor);
 
-      expect(serialised).toEqual(omit(['password', 'qrCode'], visitor));
+      const { qrCode: qrCodeOriginal, ...restVisitorOriginal } = visitor;
+      const { qrCode: qrCodeSerialised, ...restVisitorSerialised } = <any> serialised;
+
+      expect(restVisitorSerialised).toEqual(omit(['password'], restVisitorOriginal));
+      expect(qrCodeOriginal).not.toEqual(qrCodeSerialised);
     });
   });
 });

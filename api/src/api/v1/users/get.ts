@@ -17,7 +17,7 @@ export default [
 
       const users = await Users.get(knex, { where: { deletedAt: null } });
 
-      return users.map(Users.serialise);
+      return Promise.all(users.map(Users.serialise));
     },
   },
 ];

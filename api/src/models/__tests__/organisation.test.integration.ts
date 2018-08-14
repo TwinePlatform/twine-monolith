@@ -104,7 +104,7 @@ describe('Organisation Model', () => {
     test('serialise :: return full model', async () => {
       const org = await Organisations.getOne(trx);
 
-      const orgJson = Organisations.serialise(org);
+      const orgJson = await Organisations.serialise(org);
 
       expect(orgJson).toEqual(org);
     });

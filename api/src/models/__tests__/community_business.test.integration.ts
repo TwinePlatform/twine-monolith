@@ -124,7 +124,7 @@ describe('Community Business Model', () => {
     test('serialise :: return full model', async () => {
       const org = await CommunityBusinesses.getOne(knex);
 
-      const orgJson = CommunityBusinesses.serialise(org);
+      const orgJson = await CommunityBusinesses.serialise(org);
 
       expect(orgJson).toEqual(org);
     });

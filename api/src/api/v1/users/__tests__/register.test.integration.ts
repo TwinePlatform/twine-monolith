@@ -1,6 +1,8 @@
 import * as Hapi from 'hapi';
 import { init } from '../../../../server';
+import factory from '../../../../../tests/utils/factory';
 import { getConfig } from '../../../../../config';
+import { RoleEnum } from '../../../../auth/types';
 const { migrate } = require('../../../../../database');
 
 
@@ -22,6 +24,7 @@ describe('POST /users/register/visitor', () => {
   });
 
   test('user already exists', async () => {
+    const user = await factory.build('user');
     const res = await server.inject({
       method: 'POST',
       url: '/api/v1/users/register/visitor',
@@ -32,6 +35,11 @@ describe('POST /users/register/visitor', () => {
         birthYear: 1988,
         email: '1498@aperturescience.com',
       },
+      credentials: {
+        user,
+        scope: ['user_details-child:write'],
+        role: RoleEnum.ORG_NON_ADMIN,
+      },
     });
 
     expect(res.statusCode).toBe(409);
@@ -39,6 +47,7 @@ describe('POST /users/register/visitor', () => {
   });
 
   test('non-existent community business', async () => {
+    const user = await factory.build('user');
     const res = await server.inject({
       method: 'POST',
       url: '/api/v1/users/register/visitor',
@@ -48,6 +57,11 @@ describe('POST /users/register/visitor', () => {
         gender: 'female',
         birthYear: 1988,
         email: '13542@google.com',
+      },
+      credentials: {
+        user,
+        scope: ['user_details-child:write'],
+        role: RoleEnum.ORG_NON_ADMIN,
       },
     });
 
@@ -60,6 +74,7 @@ describe('POST /users/register/visitor', () => {
      * Organisation 2 (Black Mesa Research) has an ORG_ADMIN (Gordon) who is
      * marked as deleted, and therefore will not be fetched from the DB
      */
+    const user = await factory.build('user');
     const res = await server.inject({
       method: 'POST',
       url: '/api/v1/users/register/visitor',
@@ -70,6 +85,11 @@ describe('POST /users/register/visitor', () => {
         birthYear: 1988,
         email: '13542@google.com',
       },
+      credentials: {
+        user,
+        scope: ['user_details-child:write'],
+        role: RoleEnum.ORG_NON_ADMIN,
+      },
     });
 
     expect(res.statusCode).toBe(422);
@@ -77,6 +97,7 @@ describe('POST /users/register/visitor', () => {
   });
 
   test('happy path', async () => {
+    const user = await factory.build('user');
     const res = await server.inject({
       method: 'POST',
       url: '/api/v1/users/register/visitor',
@@ -86,6 +107,11 @@ describe('POST /users/register/visitor', () => {
         gender: 'female',
         birthYear: 1988,
         email: '13542@google.com',
+      },
+      credentials: {
+        user,
+        scope: ['user_details-child:write'],
+        role: RoleEnum.ORG_NON_ADMIN,
       },
     });
 
