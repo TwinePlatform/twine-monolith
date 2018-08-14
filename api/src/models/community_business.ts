@@ -17,14 +17,6 @@ import { applyQueryModifiers } from './util';
 
 
 /*
- * Declarations for methods specific to this model
- */
-type CustomMethods = {
-  fromOrganisation: (k: Knex, o: Organisation) => Promise<CommunityBusiness[]>
-};
-
-
-/*
  * Field name mappings
  *
  * ColumnToModel - DB column names       -> keys of the CommunityBusiness type
@@ -90,7 +82,7 @@ const preProcessCb = (qb: Knex | Knex.QueryBuilder) => compose(
 /*
  * Implementation of the CommunityBusinessCollection type
  */
-export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = {
+export const CommunityBusinesses: CommunityBusinessCollection = {
   create (a: Partial<CommunityBusiness>): CommunityBusiness {
     return {
       id: a.id,
@@ -237,14 +229,6 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return client('community_business')
       .update({ deleted_at: new Date() })
       .where(preProcessCb(client)(o));
-  },
-
-  async fromOrganisation (client: Knex, o: Organisation) {
-    const [{ community_business_id: id }] = await client('community_business')
-      .select('community_business_id')
-      .where({ organisation_id: o.id });
-
-    return CommunityBusinesses.get(client, { where: { id } });
   },
 
   serialise (org: CommunityBusiness) {
