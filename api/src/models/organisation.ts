@@ -19,7 +19,7 @@ import { Users } from './user';
  * Declarations for methods specific to this model
  */
 type CustomMethods = {
-  fromUser: (k: Knex, q: Partial<User>) => Promise<Organisation>
+  fromUser: (k: Knex, q: ModelQuery<User>) => Promise<Organisation>
 };
 
 
