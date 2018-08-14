@@ -6,10 +6,10 @@
  */
 import get from './get';
 import register from './register';
-import login from './login';
+import adminLogin from './login_admin';
 
 export default [
   ...register,
   ...get,
-  ...login,
+  ...adminLogin,
 ];

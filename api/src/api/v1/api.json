@@ -904,10 +904,26 @@
           "response": "types.visitorUser"
         }
       },
+      "/login/admin": {
+        "POST": {
+          "description": "Login admin accounts",
+          "isImplemented": true,
+          "auth": false,
+          "intendedFor": [
+            "ORG_ADMIN"
+          ],
+          "scope": [],
+          "body": {
+            "email": "String",
+            "password": "String"
+          },
+          "response": {}
+        }
+      },
       "/login": {
         "POST": {
-          "description": "Login all accounts apart from visitor",
-          "isImplemented": true,
+          "description": "Generic login route",
+          "isImplemented": false,
           "auth": false,
           "intendedFor": [
             "ORG_ADMIN",

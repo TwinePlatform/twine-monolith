@@ -20,7 +20,7 @@ const { secret: { jwt_secret: jwtSecret } } = getConfig(process.env.NODE_ENV);
 const route: Hapi.ServerRoute[] = [
   {
     method: 'POST',
-    path: '/users/login',
+    path: '/users/login/admin',
     options: {
       description: 'Login all accounts apart from visitor',
       auth: false,
