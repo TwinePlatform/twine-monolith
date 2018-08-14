@@ -1,5 +1,6 @@
 module.exports = {
   coverageDirectory: '<rootDir>/coverage/unit',
+  coveragePathIgnorePatterns: ["<rootDir>/build/", "<rootDir>/node_modules/"],
   errorOnDeprecated: true,
   testPathIgnorePatterns: [
     '<rootDir>/build/'
