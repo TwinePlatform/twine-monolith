@@ -10,7 +10,6 @@ import {
   CommunityBusinessRow,
   CommunityBusinessChangeSet,
   ModelQuery,
-  Organisation,
 } from './types';
 import { Organisations } from './organisation';
 import { applyQueryModifiers } from './util';
