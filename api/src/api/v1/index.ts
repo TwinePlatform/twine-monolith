@@ -10,20 +10,12 @@
  * - api.json
  */
 import * as Hapi from 'hapi';
-import * as AuthJwt from 'hapi-auth-jwt2';
 import constants from './constants';
 import users from './users';
 import organisations from './organisations';
 import communityBusinesses from './community_businesses';
-import validateUser, { UserCredentials } from '../../auth/scheme/validate_user';
-import validateExternal from '../../auth/scheme/validate_external';
 import addLifecycleHooks from './hooks';
-const AuthBearer = require('hapi-auth-bearer-token');
-
-
-declare module 'hapi' {
-  interface AuthCredentials extends UserCredentials {}
-}
+import setupAuthentication from './auth';
 
 
 export default {
@@ -32,23 +24,7 @@ export default {
     /*
      * Authentication Strategies
      */
-    await server.register([
-      { plugin: AuthJwt, once: true },
-      { plugin: AuthBearer, once: true },
-    ]);
-
-    server.auth.strategy('standard', 'jwt', {
-      key: options.jwtSecret,
-      validate: validateUser,
-      verifyOptions: { algorithms: ['HS256'] },
-    });
-
-    server.auth.strategy('external', 'bearer-access-token', {
-      validate: validateExternal,
-    });
-
-    server.auth.default('standard');
-
+    setupAuthentication(server, { jwtSecret: options.jwtSecret });
 
     /*
      * Server request lifecycle hooks

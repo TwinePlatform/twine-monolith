@@ -2,6 +2,13 @@ import * as Hapi from 'hapi';
 import { Dictionary } from 'ramda';
 import { ApiRequestQuery, ApiRequestBody } from './schema/request';
 import { ApiResponse } from './schema/response';
+import { UserCredentials } from '../../auth/scheme/validate_user';
+
+
+declare module 'hapi' {
+  interface AuthCredentials extends UserCredentials {}
+}
+
 
 /*
  * api.json related types
