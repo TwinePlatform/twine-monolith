@@ -24,6 +24,14 @@ export type ApiRouteSpec = {
   response: ApiResponse,
 };
 
+/*
+ * Request types
+ */
+export interface OrganisationRequest extends Hapi.Request {
+  params: {
+    organisationId: string
+  };
+}
 
 /*
  * Test related types

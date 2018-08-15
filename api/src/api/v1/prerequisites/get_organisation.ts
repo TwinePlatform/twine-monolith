@@ -9,13 +9,7 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import { Organisations } from '../../../models';
-
-
-export interface OrganisationRequest extends Hapi.Request {
-  params: {
-    organisationId: string
-  };
-}
+import { OrganisationRequest } from '../types';
 
 
 const is360GivingId = (s: string) => isNaN(parseInt(s, 10));
