@@ -14,6 +14,7 @@ import * as AuthJwt from 'hapi-auth-jwt2';
 import constants from './constants';
 import users from './users';
 import organisations from './organisations';
+import communityBusinesses from './community_businesses';
 import validateUser, { UserCredentials } from '../../auth/scheme/validate_user';
 import validateExternal from '../../auth/scheme/validate_external';
 import addLifecycleHooks from './hooks';
@@ -61,6 +62,7 @@ export default {
       ...constants,
       ...users,
       ...organisations,
+      ...communityBusinesses,
     ]);
   },
 };
