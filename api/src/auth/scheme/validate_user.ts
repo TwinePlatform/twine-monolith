@@ -62,7 +62,7 @@ const validateUser: ValidateUser = async (decoded, request) => {
     };
 
   } catch (error) {
-    console.log(error);
+    request.log('error', error);
     return Boom.badImplementation('Error with route authentication for users');
   }
 };
