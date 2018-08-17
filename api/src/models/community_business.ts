@@ -9,6 +9,7 @@ import {
   CommunityBusinessCollection,
   CommunityBusinessRow,
   CommunityBusinessChangeSet,
+  LinkedFeedback,
   ModelQuery,
   DateTimeQuery
 } from './types';
@@ -21,6 +22,10 @@ import { applyQueryModifiers } from './util';
  */
 type CustomMethods = {
   addFeedback: (k: Knex, c: CommunityBusiness, score: Int) => Promise<void>
+  getFeedback: (k: Knex, c: CommunityBusiness, bw?: DateTimeQuery) =>
+    Promise<LinkedFeedback[]>
+};
+
 /*
  * Field name mappings
  *
@@ -243,6 +248,22 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
   async addFeedback (client: Knex, c: CommunityBusiness, score: number) {
     return client('visit_feedback')
       .insert({ score, organisation_id: c.id });
+  },
+
+  async getFeedback (client: Knex, c: CommunityBusiness, bw?: DateTimeQuery) {
+    const baseQuery = client('visit_feedback')
+      .select({
+        id: 'visit_feedback_id',
+        score: 'score',
+        createdAt: 'created_at',
+      })
+      .where({ organisation_id: c.id, deleted_at: null });
+
+    const query = bw
+        ? baseQuery.whereBetween('created_at', [bw.since, bw.until])
+        : baseQuery;
+
+    return query;
   },
 };
 

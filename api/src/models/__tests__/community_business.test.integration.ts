@@ -141,5 +141,48 @@ describe('Community Business Model', () => {
       expect(res).toHaveLength(1);
       expect(res[0].score).toBe(1);
     });
+
+    test('getFeedback :: retrieve all added feedback', async () => {
+      const org = await CommunityBusinesses.getOne(knex);
+      await CommunityBusinesses.addFeedback(knex, org, 1);
+      await CommunityBusinesses.addFeedback(knex, org, 0);
+      await CommunityBusinesses.addFeedback(knex, org, 0);
+      await CommunityBusinesses.addFeedback(knex, org, -1);
+
+      const feedback = await CommunityBusinesses.getFeedback(knex, org);
+
+      expect(feedback).toHaveLength(4);
+      expect(feedback[0].score).toBe(1);
+    });
+
+    test('getFeedback :: retrieve feedback added between timestamps', async () => {
+      const org = await CommunityBusinesses.getOne(knex);
+
+      const d1 = Date.now();
+      await CommunityBusinesses.addFeedback(knex, org, 1);
+      await CommunityBusinesses.addFeedback(knex, org, 0);
+      await CommunityBusinesses.addFeedback(knex, org, -1);
+
+      const d2 = Date.now();
+      await CommunityBusinesses.addFeedback(knex, org, 0);
+
+      const d3 = Date.now();
+
+      const feedback12 = await CommunityBusinesses.getFeedback(
+        knex, org, { since: new Date(d1), until: new Date(d2) });
+      const feedback13 = await CommunityBusinesses.getFeedback(
+        knex, org, { since: new Date(d1), until: new Date(d3) });
+      const feedback23 = await CommunityBusinesses.getFeedback(
+        knex, org, { since: new Date(d2), until: new Date(d3) });
+
+      expect(feedback12).toHaveLength(3);
+      expect(feedback12.map((f) => f.score)).toEqual([1, 0, -1]);
+
+      expect(feedback13).toHaveLength(4);
+      expect(feedback13.map((f) => f.score)).toEqual([1, 0, -1, 0]);
+
+      expect(feedback23).toHaveLength(1);
+      expect(feedback23.map((f) => f.score)).toEqual([0]);
+    });
   });
 });
