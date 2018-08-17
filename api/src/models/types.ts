@@ -1,10 +1,15 @@
+/*
+ * Type declarations for the models
+ */
 import * as Knex from 'knex';
-import { Maybe, Json, Dictionary } from '../types/internal';
+import { Maybe, Json, Dictionary, Float, Int } from '../types/internal';
 
-
+/*
+ * Common and utility types
+ */
 export type Coordinates = {
-  lat: number
-  lng: number
+  lat: Float
+  lng: Float
 };
 
 type CommonTimestamps = {
@@ -13,6 +18,9 @@ type CommonTimestamps = {
   deletedAt?: string
 };
 
+/*
+ * Database row definitions
+ */
 export type UserRow = {
   'user_account.user_account_id': string
   'user_account.user_name': string
@@ -61,8 +69,14 @@ export type CommunityBusinessRow = {
   'community_business.deleted_at': string
 };
 
+/*
+ * Base declarations
+ *
+ * Declarations of the basic shape of each model. Not used directly
+ * but combined with other declarations
+ */
 export type UserBase = CommonTimestamps & {
-  id?: number
+  id?: Int
   name: string
   email?: string
   phoneNumber?: string
@@ -71,7 +85,7 @@ export type UserBase = CommonTimestamps & {
   gender: string
   disability: string
   ethnicity: string
-  birthYear?: number
+  birthYear?: Int
   postCode?: string
   isEmailConfirmed: boolean
   isPhoneNumberConfirmed: boolean
@@ -80,7 +94,7 @@ export type UserBase = CommonTimestamps & {
 };
 
 export type OrganisationBase = CommonTimestamps & {
-  id: number
+  id: Int
   name: string
   _360GivingId: string
 };
@@ -97,15 +111,15 @@ export type CommunityBusinessBase = CommonTimestamps & OrganisationBase & {
   turnoverBand: string
 };
 
-export type Subscription = CommonTimestamps & {
-  id: number
+export type SubscriptionBase = CommonTimestamps & {
+  id: Int
   type: string
   status: string
   expiresAt: string
 };
 
-export type VisitActivity = CommonTimestamps & {
-  id: number
+export type VisitActivityBase = CommonTimestamps & {
+  id: Int
   name: string
   category: string
   monday: boolean
@@ -117,40 +131,65 @@ export type VisitActivity = CommonTimestamps & {
   sunday: boolean
 };
 
-export type VisitEvent = CommonTimestamps & {
-  id: number
+export type VisitEventBase = CommonTimestamps & {
+  id: Int
+};
+
+export type FeedbackBase = CommonTimestamps & {
+  id: Int
+  score: -1 | 0 | 1
+};
+
+export type LinkedFeedbackBase = FeedbackBase & {
+  organisationId: Int
 };
 
 export type OutreachMeetingBase = CommonTimestamps & {
-  id: number
+  id: Int
   partner: string
   subject: string
   scheduledAt: string
 };
 
 export type OutreachCampaignBase = CommonTimestamps & {
-  id: number
+  id: Int
   type: string
   targets: string[]
   startsAt: string
   endsAt: string
 };
 
+/*
+ * Read-only model declarations
+ *
+ * Used directly as model representations
+ */
 export type User = Readonly<UserBase>;
-export type UserChangeSet = Partial<UserBase>;
-
 export type Organisation = Readonly<OrganisationBase>;
-export type OrganisationChangeSet = Partial<OrganisationBase>;
-
 export type CommunityBusiness = Readonly<CommunityBusinessBase>;
-export type CommunityBusinessChangeSet = Partial<CommunityBusinessBase>;
-
+export type Subscription = Readonly<SubscriptionBase>;
+export type VisitActivity = Readonly<VisitActivityBase>;
+export type Feedback = Readonly<FeedbackBase>;
+export type LinkedFeedback = Readonly<LinkedFeedbackBase>;
 export type OutreachMeeting = Readonly<OutreachMeetingBase>;
-export type OutreachMeetingChangeSet = Partial<OutreachMeetingBase>;
-
 export type OutreachCampaign = Readonly<OutreachCampaignBase>;
+
+/*
+ * Change-set declarations
+ *
+ * Used directly to describe changes to be made to existing models
+ */
+export type UserChangeSet = Partial<UserBase>;
+export type OrganisationChangeSet = Partial<OrganisationBase>;
+export type CommunityBusinessChangeSet = Partial<CommunityBusinessBase>;
+export type OutreachMeetingChangeSet = Partial<OutreachMeetingBase>;
 export type OutreachCampaignChangeSet = Partial<OutreachCampaignBase>;
 
+/*
+ * Model relations declarations
+ *
+ * Declare which models have relations to other models
+ */
 export type UserRelations =
   OutreachMeeting
   | Organisation;
@@ -178,6 +217,13 @@ export type Relation =
   | OrganisationRelations
   | CommunityBusinessRelations;
 
+
+/*
+ * Model collection declaration
+ *
+ * Defines a common interface through which to operate on a
+ * collection of model objects
+ */
 export type Collection<T extends Model, K extends ChangeSet, V extends Relation> = {
   toColumnNames: (a: Partial<T>) => Dictionary<any>
   create: (a: Partial<T>) => T
@@ -197,9 +243,17 @@ export type OrganisationCollection =
 export type CommunityBusinessCollection =
   Collection<CommunityBusiness, CommunityBusinessChangeSet, CommunityBusinessRelations>;
 
-type WhereQuery<T> = Partial<T>;
-type WhereBetweenQuery<T> = {
+
+/*
+ * Model query declarations
+ */
+export type WhereQuery<T> = Partial<T>;
+export type WhereBetweenQuery<T> = {
   [k in keyof T]?: [string, string]
+};
+export type DateTimeQuery = {
+  since: Date
+  until: Date
 };
 export type ModelQuery<T> = Partial<{
   where: WhereQuery<T>
