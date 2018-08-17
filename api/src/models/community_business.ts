@@ -3,22 +3,28 @@
  */
 import * as Knex from 'knex';
 import { compose, omit, evolve, filter, pick, invertObj } from 'ramda';
-import { Dictionary, Map } from '../types/internal';
+import { Dictionary, Map, Int } from '../types/internal';
 import {
   CommunityBusiness,
   CommunityBusinessCollection,
   CommunityBusinessRow,
   CommunityBusinessChangeSet,
   ModelQuery,
+  DateTimeQuery
 } from './types';
 import { Organisations } from './organisation';
 import { applyQueryModifiers } from './util';
 
 
 /*
+ * Custom methods
+ */
+type CustomMethods = {
+  addFeedback: (k: Knex, c: CommunityBusiness, score: Int) => Promise<void>
+/*
  * Field name mappings
  *
- * ColumnToModel - DB column names       -> keys of the CommunityBusiness type
+ * ColumnToModel - DB column names                    -> keys of the CommunityBusiness type
  * ModelToColumn - keys of the CommunityBusiness type -> DB column names
  */
 const ColumnToModel: Map<keyof CommunityBusinessRow, keyof CommunityBusiness> = {
@@ -81,7 +87,7 @@ const preProcessCb = (qb: Knex | Knex.QueryBuilder) => compose(
 /*
  * Implementation of the CommunityBusinessCollection type
  */
-export const CommunityBusinesses: CommunityBusinessCollection = {
+export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = {
   create (a: Partial<CommunityBusiness>): CommunityBusiness {
     return {
       id: a.id,
@@ -232,6 +238,11 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   async serialise (org: CommunityBusiness) {
     return org;
+  },
+
+  async addFeedback (client: Knex, c: CommunityBusiness, score: number) {
+    return client('visit_feedback')
+      .insert({ score, organisation_id: c.id });
   },
 };
 

@@ -129,4 +129,17 @@ describe('Community Business Model', () => {
       expect(orgJson).toEqual(org);
     });
   });
+
+  describe('Feedback', () => {
+    test('addFeedback :: insert positive feedback', async () => {
+      const org = await CommunityBusinesses.getOne(knex);
+
+      await CommunityBusinesses.addFeedback(knex, org, 1);
+
+      const res = await knex('visit_feedback').select().where({ organisation_id: org.id });
+
+      expect(res).toHaveLength(1);
+      expect(res[0].score).toBe(1);
+    });
+  });
 });
