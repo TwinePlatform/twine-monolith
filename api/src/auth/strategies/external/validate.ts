@@ -24,7 +24,7 @@ const findMatching = async (xs: TokenResponse [], token: string): ExternalStrate
   : findMatching(xs.slice(1), token);
 };
 
-const validateExternal: ValidateExternal = async ({ knex }, token, h) => {
+const validateExternal: ValidateExternal = async ({ knex, log }, token, h) => {
   try {
     const tokenResponses = await knex('api_token').select(['api_token', 'api_token_access']);
     if (tokenResponses.length === 0) {
@@ -33,7 +33,7 @@ const validateExternal: ValidateExternal = async ({ knex }, token, h) => {
 
     return findMatching(tokenResponses, token);
   } catch (error) {
-    console.log(error);
+    log('error', error);
     return Boom.badImplementation('Error with route authentication for 3rd party clients');
   }
 };

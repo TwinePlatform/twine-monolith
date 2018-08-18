@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import { Dictionary } from 'ramda';
 import { ApiRequestQuery, ApiRequestBody } from './schema/request';
 import { ApiResponse } from './schema/response';
-import { UserCredentials } from '../../auth/scheme/validate_user';
+import { UserCredentials } from '../../auth/strategies/standard';
 
 
 declare module 'hapi' {

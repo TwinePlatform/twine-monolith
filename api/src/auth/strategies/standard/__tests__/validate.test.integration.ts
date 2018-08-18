@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 import * as jwt from 'jsonwebtoken';
-import { init } from '../../../server';
-import { getConfig } from '../../../../config';
+import { init } from '../../../../server';
+import { getConfig } from '../../../../../config';
 
 
 describe('Internal auth scheme', () => {

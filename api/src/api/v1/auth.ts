@@ -3,8 +3,8 @@
  */
 import * as Hapi from 'hapi';
 import * as AuthJwt from 'hapi-auth-jwt2';
-import validateUser from '../../auth/scheme/validate_user';
-import validateExternal from '../../auth/scheme/validate_external';
+import * as standardStrategy from '../../auth/strategies/standard';
+import * as externalStrategy from '../../auth/strategies/external';
 const AuthBearer = require('hapi-auth-bearer-token');
 
 
@@ -16,12 +16,12 @@ export default async (server: Hapi.Server, { jwtSecret }: { jwtSecret: string })
 
   server.auth.strategy('standard', 'jwt', {
     key: jwtSecret,
-    validate: validateUser,
+    validate: standardStrategy.validate,
     verifyOptions: { algorithms: ['HS256'] },
   });
 
   server.auth.strategy('external', 'bearer-access-token', {
-    validate: validateExternal,
+    validate: externalStrategy.validate,
   });
 
   server.auth.default('standard');

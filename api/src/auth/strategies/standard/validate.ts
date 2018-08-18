@@ -1,23 +1,11 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import { Users, User, Organisations, Organisation } from '../../models';
-import { RoleEnum, AccessEnum, ResourceEnum, PermissionLevelEnum } from '../types';
-import Roles from '../roles';
-import Permissions from '../permissions';
+import { Users, User, Organisations, Organisation } from '../../../models';
+import { RoleEnum } from '../../types';
+import Roles from '../../roles';
+import Permissions from '../../permissions';
+import { scopeToString } from '../../scopes';
 
-
-type CreateScopeName = (a: {
-  access: AccessEnum,
-  resource: ResourceEnum,
-  permissionLevel: PermissionLevelEnum,
-}) => string;
-
-const createScopeName: CreateScopeName = ({
-  access,
-  resource,
-  permissionLevel,
-}) =>
-  `${resource}-${permissionLevel}:${access}`;
 
 export type UserCredentials = {
   scope: string[]
@@ -49,7 +37,7 @@ const validateUser: ValidateUser = async (decoded, request) => {
     ]);
 
     const permissions = await Permissions.forRole(knex, { role });
-    const scope = permissions.map(createScopeName);
+    const scope = permissions.map(scopeToString);
 
     return {
       credentials: {
