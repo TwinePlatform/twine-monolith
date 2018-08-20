@@ -31,7 +31,7 @@ export default (server: Hapi.Server, config: Config) => {
   server.app.EmailService = emailInitialiser.init({ apiKey: config.email.postmark_key });
 
   server.state('token', {
-    ttl: null,
+    ttl: 24 * 60 * 60 * 1000,
     isSecure: false,
     isHttpOnly: true,
     isSameSite: 'Lax',

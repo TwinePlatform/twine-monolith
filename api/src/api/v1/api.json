@@ -940,6 +940,23 @@
           "response": {}
         }
       },
+      "/logout": {
+        "GET": {
+          "description": "Logout all users",
+          "isImplemented": true,
+          "auth": false,
+          "intendedFor": [
+            "ORG_ADMIN",
+            "FUNDING_BODY",
+            "TWINE_ADMIN",
+            "VOLUNTEER",
+            "VOLUNTEER_ADMIN"
+          ],
+          "scope": [],
+          "query": {},
+          "response": {}
+        }
+      },
       "/:id": {
         "GET": {
           "description": "Retrieve details of a specific user",
