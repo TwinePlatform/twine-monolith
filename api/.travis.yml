@@ -28,10 +28,13 @@ jobs:
     - stage: Build and Test
       env: TEST_SUITE=integration
       before_script:
-        - psql -c 'create database twine_api_test;' -U postgres
-        - psql -U postgres -c "create extension postgis"
+        - psql -U postgres -c 'create database twine_api_test;'
+        - psql -U postgres -c 'create extension postgis'
       script:
         - npm run build
+        - NODE_ENV=development npm run migrate:reset
+        - NODE_ENV=testing npm run migrate:reset
+        - NODE_ENV=production npm run migrate:reset
         - npm run cover:$TEST_SUITE
         - codecov
 
