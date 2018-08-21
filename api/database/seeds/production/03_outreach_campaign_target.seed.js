@@ -10,7 +10,7 @@ exports.seed = (knex) =>
       { outreach_campaign_target_name: 'Local media' },
       { outreach_campaign_target_name: 'National media' },
       { outreach_campaign_target_name: 'Corporate' },
-      { outreach_campaign_target_name: 'Larger Corporate' },
+      { outreach_campaign_target_name: 'Larger corporate' },
       { outreach_campaign_target_name: 'Local authority – elected member' },
       { outreach_campaign_target_name: 'Local authority – officer – asset management' },
       { outreach_campaign_target_name: 'Local authority – officer – other' },

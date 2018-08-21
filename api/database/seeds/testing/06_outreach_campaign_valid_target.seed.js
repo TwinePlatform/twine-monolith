@@ -9,7 +9,6 @@ exports.seed = (knex) => {
       .select('outreach_campaign_target_type_id')
       .where({ outreach_campaign_target_name: name });
 
-
   return knex('outreach_campaign_target')
     .truncate()
     .insert([
