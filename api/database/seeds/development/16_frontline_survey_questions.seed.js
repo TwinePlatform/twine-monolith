@@ -429,4 +429,25 @@ exports.seed = (knex) =>
         frontline_question_sequence: 3,
         question_text: '',
       },
+      {
+        activity_key: '23.3q_survey.wellbeing_benchmark.ckbk',
+        frontline_question_uuid: "bf",
+        frontline_survey_uuid: 23,
+        frontline_question_sequence: 1,
+        question_text: '',
+      },
+      {
+        activity_key: '23.3q_survey.wellbeing_benchmark.ckbk',
+        frontline_question_uuid: "bg",
+        frontline_survey_uuid: 23,
+        frontline_question_sequence: 2,
+        question_text: '',
+      },
+      {
+        activity_key: '23.3q_survey.wellbeing_benchmark.ckbk',
+        frontline_question_uuid: "bh",
+        frontline_survey_uuid: 23,
+        frontline_question_sequence: 3,
+        question_text: '',
+      },
     ]);
