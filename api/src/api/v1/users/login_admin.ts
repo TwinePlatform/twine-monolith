@@ -29,11 +29,6 @@ const route: Hapi.ServerRoute[] = [
         password: password.required(),
       } },
       response: { schema: response },
-      cors: {
-        origin: ['http://localhost:3000'],
-        credentials: true,
-        additionalExposedHeaders: ['set-cookie'],
-      },
     },
     handler: async (request: RequestLogin, h: Hapi.ResponseToolkit) => {
       const { knex } = request;

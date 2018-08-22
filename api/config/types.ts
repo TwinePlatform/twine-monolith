@@ -1,4 +1,5 @@
 import * as Knex from 'knex';
+import * as Hapi from 'hapi';
 
 export enum Environment {
   DEVELOPMENT = 'development',
@@ -10,6 +11,13 @@ type WebConfig = {
   host: string,
   port: number | string,
   router: { stripTrailingSlash: boolean }
+  routes: {
+    cors: {
+      origin: string[],
+      credentials: boolean,
+      additionalExposedHeaders: string[],
+    },
+  },
   tls: null | { key: string, cert: string }
 };
 
@@ -25,6 +33,14 @@ type QrCodeConfig = {
   secret: string
 };
 
+type CookieOptions = {
+  ttl?: number
+  isSecure?: boolean,
+  isHttpOnly?: boolean,
+  isSameSite?: false | 'Strict' | 'Lax',
+  path?: string,
+};
+
 export type Config = {
   root: string
   env: Environment
@@ -33,4 +49,7 @@ export type Config = {
   email: EmailConfig
   secret: SecretConfig
   qrcode: QrCodeConfig
+  cookies: {
+    token: CookieOptions
+  }
 };

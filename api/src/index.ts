@@ -15,7 +15,7 @@ process.on('unhandledRejection', (reason) => {
 const logConfig = (config: any) => {
   console.log(`Attempting to start twine-api in "${config.env}" environment.`);
   console.log('Using the following configuration');
-  console.log(inspect(config, { depth: 3 }));
+  console.log(inspect(config, { depth: 4 }));
 };
 
 const up = compose(

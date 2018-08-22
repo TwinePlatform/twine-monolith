@@ -21,8 +21,15 @@ export default {
     ),
     router: Joi.object({
       stripTrailingSlash: Joi.boolean().required(),
-    }),
-  }),
+    }).required(),
+    routes: Joi.object({
+      cors: Joi.object({
+        origin: Joi.array().items(Joi.string()),
+        credentials: Joi.boolean(),
+        additionalExposedHeaders: Joi.array().items(Joi.string()),
+      }).required(),
+    }).required(),
+  }).required(),
   knex: Joi.object({
     client: Joi.string().required(),
     connection: Joi.alternatives().try(
@@ -33,7 +40,7 @@ export default {
         user: Joi.string().min(1).required(),
         password: Joi.string().optional(),
         ssl: Joi.bool().default(false),
-      }),
+      }).required(),
       Joi.string().min('psql://localhost:5432'.length)
     ),
     pool: Joi.object({
@@ -42,18 +49,27 @@ export default {
     migrations: Joi.object({
       tableName: Joi.string().min(1).required(),
       directory: Joi.string().min(1).required(),
-    }),
+    }).required(),
     seeds: Joi.object({
       directory: Joi.string().min(1).required(),
-    }),
-  }),
+    }).required(),
+  }).required(),
   email: Joi.object({
     postmark_key: Joi.string().required(),
-  }),
+  }).required(),
   secret: Joi.object({
     jwt_secret: Joi.string().required(),
   }).required(),
   qrcode: Joi.object({
     secret: Joi.string().min(32).required(),
+  }).required(),
+  cookies: Joi.object({
+    token: Joi.object({
+      ttl: Joi.number().positive(),
+      isSecure: Joi.boolean(),
+      isHttpOnly: Joi.boolean(),
+      isSameSite: Joi.alternatives().try(Joi.boolean(), Joi.string().allow('Lax', 'Strict')),
+      path: Joi.string().required(),
+    }).required(),
   }).required(),
 };

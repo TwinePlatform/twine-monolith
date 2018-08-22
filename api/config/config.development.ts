@@ -5,6 +5,11 @@ export default {
   env: Environment.DEVELOPMENT,
   web: {
     port: 4000,
+    routes: {
+      cors: {
+        origin: ['http://localhost:3000'],
+      },
+    },
   },
   knex: {
     client: 'pg',
@@ -22,5 +27,10 @@ export default {
   },
   email: {
     postmark_key: process.env.POSTMARK_KEY_DEVELOPMENT,
+  },
+  cookies: {
+    token : {
+      isSecure: false,
+    },
   },
 };

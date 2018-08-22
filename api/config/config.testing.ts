@@ -5,6 +5,11 @@ export default {
   env: Environment.TESTING,
   web: {
     port: 4001,
+    routes: {
+      cors: {
+        origin: ['http://localhost:3000'],
+      },
+    },
   },
   knex: {
     client: 'pg',
@@ -22,5 +27,10 @@ export default {
   },
   email: {
     postmark_key: process.env.POSTMARK_KEY_TESTING,
+  },
+  cookies: {
+    token : {
+      isSecure: false,
+    },
   },
 };

@@ -8,6 +8,13 @@ describe('Config', () => {
       host: 'localhost',
       port: 4000,
       router: { stripTrailingSlash: true },
+      routes: {
+        cors: {
+          origin: ['http://localhost:3000'],
+          credentials: true,
+          additionalExposedHeaders: ['set-cookie'],
+        },
+      },
       tls: null });
   });
 
@@ -18,6 +25,13 @@ describe('Config', () => {
       host: 'localhost',
       port: 4001,
       router: { stripTrailingSlash: true },
+      routes: {
+        cors: {
+          origin: ['http://localhost:3000'],
+          credentials: true,
+          additionalExposedHeaders: ['set-cookie'],
+        },
+      },
       tls: null });
   });
 
@@ -29,6 +43,13 @@ describe('Config', () => {
       host: '0.0.0.0',
       port: 4002,
       router: { stripTrailingSlash: true },
+      routes: {
+        cors: {
+          origin: ['https://visitor.twinetogether.com'],
+          credentials: true,
+          additionalExposedHeaders: ['set-cookie'],
+        },
+      },
       tls: null });
 
   });
@@ -40,6 +61,13 @@ describe('Config', () => {
       host: 'localhost',
       port: 4000,
       router: { stripTrailingSlash: true },
+      routes: {
+        cors: {
+          origin: ['http://localhost:3000'],
+          credentials: true,
+          additionalExposedHeaders: ['set-cookie'],
+        },
+      },
       tls: null });
   });
 
@@ -51,6 +79,13 @@ describe('Config', () => {
         host: 'localhost',
         port: 1000,
         router: { stripTrailingSlash: true },
+        routes: {
+          cors: {
+            origin: ['http://localhost:3000'],
+            credentials: true,
+            additionalExposedHeaders: ['set-cookie'],
+          },
+        },
         tls: null,
       },
       knex: {
@@ -61,6 +96,13 @@ describe('Config', () => {
           database: 'postgres',
           user: 'foo',
         },
+        migrations: {
+          tableName: 'thisplace',
+          directory: 'here',
+        },
+        seeds: {
+          directory: 'where',
+        },
       },
       email: {
         postmark_key: 'foo',
@@ -70,6 +112,15 @@ describe('Config', () => {
       },
       qrcode: {
         secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
+      },
+      cookies: {
+        token : {
+          ttl: 24 * 60 * 60 * 1000,
+          isSecure: true,
+          isHttpOnly: true,
+          isSameSite: 'Lax',
+          path: '/',
+        },
       },
     };
 
@@ -85,6 +136,13 @@ describe('Config', () => {
         port: -1,
         router: null,
         tls: null,
+        routes: {
+          cors: {
+            origin: ['http://lost.com'],
+            credentials: true,
+            additionalExposedHeaders: ['set-cookie'],
+          },
+        },
       },
       knex: {
         connection: {
@@ -102,6 +160,15 @@ describe('Config', () => {
       },
       qrcode: {
         secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
+      },
+      cookies: {
+        token : {
+          ttl: 24 * 60 * 60 * 1000,
+          isSecure: true,
+          isHttpOnly: true,
+          isSameSite: 'Lax',
+          path: '/',
+        },
       },
     };
 

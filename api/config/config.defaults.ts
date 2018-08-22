@@ -17,6 +17,13 @@ export default {
     router: {
       stripTrailingSlash: true,
     },
+    routes: {
+      cors: {
+        origin: ['https://visitor.twinetogether.com'],
+        credentials: true,
+        additionalExposedHeaders: ['set-cookie'],
+      },
+    },
   },
   knex: {
     client: 'pg',
@@ -33,5 +40,14 @@ export default {
   },
   qrcode: {
     secret: process.env.QRCODE_HMAC_SECRET,
+  },
+  cookies: {
+    token : {
+      ttl: 24 * 60 * 60 * 1000,
+      isSecure: true,
+      isHttpOnly: true,
+      isSameSite: 'Lax',
+      path: '/',
+    },
   },
 };

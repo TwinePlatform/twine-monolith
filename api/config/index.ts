@@ -29,7 +29,7 @@ const Configs: { [k in Environment]: DeepPartial<Config> } = {
 //
 // Allows an optional filepath for a config override JSON file.
 const readConfig = (env = Environment.DEVELOPMENT): Partial<Config> =>
-  mergeDeepLeft(Configs[env], configDefaults);
+  mergeDeepLeft(Configs[env], configDefaults) as Partial<Config>;
 
 // Validates the given configuration object against the default schema
 const validateConfig = (cfg: Partial<Config>): Config => {
