@@ -30,12 +30,12 @@ type CustomMethods = {
  * ModelToColumn - keys of the User type -> DB column names
  */
 const ColumnToModel: Map<keyof OrganisationRow, keyof Organisation> = {
-  organisation_id: 'id',
-  organisation_name: 'name',
-  _360_giving_id: '_360GivingId',
-  created_at: 'createdAt',
-  modified_at: 'modifiedAt',
-  deleted_at: 'deletedAt',
+  'organisation.organisation_id': 'id',
+  'organisation.organisation_name': 'name',
+  'organisation._360_giving_id': '_360GivingId',
+  'organisation.created_at': 'createdAt',
+  'organisation.modified_at': 'modifiedAt',
+  'organisation.deleted_at': 'deletedAt',
 };
 const ModelToColumn = invertObj(ColumnToModel);
 
@@ -96,20 +96,25 @@ export const Organisations: OrganisationCollection & CustomMethods = {
   },
 
   async fromUser (client: Knex, q: ModelQuery<User>) {
-    return client.transaction(async (trx) => {
+    const query = evolve({
+      where: Users.toColumnNames,
+      whereNot: Users.toColumnNames,
+    }, q);
 
-      const exists = await Users.exists(trx, q);
-      if (!exists) throw new Error('User does not exist');
+    const [user] = await applyQueryModifiers(
+      client('organisation')
+        .innerJoin(
+          'user_account_access_role',
+          'user_account_access_role.organisation_id',
+          'organisation.organisation_id')
+        .innerJoin(
+          'user_account',
+          'user_account_access_role.user_account_id',
+          'user_account.user_account_id')
+        .select(ModelToColumn),
+      query);
 
-      const { id } = await Users.getOne(trx, q);
-      const [{ organisation_id }] = await trx('user_account_access_role')
-        .select('organisation_id')
-        .where({ user_account_id: id });
-
-      const [org] = await Organisations.get(trx, { where: { id : organisation_id } });
-      if (!org) throw new Error('No organisation is associated to this user');
-      return org;
-    });
+    return user || null;
   },
 
   async exists (client: Knex, q: ModelQuery<Organisation>) {

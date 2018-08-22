@@ -35,12 +35,12 @@ export type UserRow = {
 };
 
 export type OrganisationRow = {
-  organisation_id: string
-  organisation_name: string
-  _360_giving_id: string
-  created_at: string
-  modified_at: string
-  deleted_at: string
+  'organisation.organisation_id': string
+  'organisation.organisation_name': string
+  'organisation._360_giving_id': string
+  'organisation.created_at': string
+  'organisation.modified_at': string
+  'organisation.deleted_at': string
 };
 
 export type CommunityBusinessRow = {

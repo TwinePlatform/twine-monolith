@@ -62,20 +62,17 @@ describe('Organisation Model', () => {
       expect(exists).toBe(false);
     });
 
-    test('fromUser :: throws error for non-existing user email', async () => {
+    test('fromUser :: returns organisation details for existing user email', async () => {
       const result =
         await Organisations.fromUser(knex, { where: { email: '1498@aperturescience.com' } });
       expect(result).toEqual(
-        expect.objectContaining({ _360GivingId: '01111000', name: 'Aperture Science' }));
+        expect.objectContaining({ _360GivingId: 'GB-COH-3205', name: 'Aperture Science' }));
     });
 
-    test('fromUser :: returns organisation details for existing user email', async () => {
-      expect.assertions(1);
-      try {
-        await Organisations.fromUser(knex, { where: { email: 'freedom@aperturescience.com' } });
-      } catch (error) {
-        expect(error.message).toEqual('User does not exist');
-      }
+    test('fromUser :: returns null for non-existing user email', async () => {
+      const result =
+          await Organisations.fromUser(knex, { where: { email: 'freedom@aperturescience.com' } });
+      expect(result).toBeNull();
     });
   });
 

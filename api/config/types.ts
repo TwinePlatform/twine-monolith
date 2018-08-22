@@ -1,5 +1,4 @@
 import * as Knex from 'knex';
-import * as Hapi from 'hapi';
 
 export enum Environment {
   DEVELOPMENT = 'development',

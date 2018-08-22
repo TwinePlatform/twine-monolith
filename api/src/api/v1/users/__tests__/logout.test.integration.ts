@@ -4,7 +4,7 @@ import { getConfig } from '../../../../../config';
 const { migrate } = require('../../../../../database');
 
 
-describe('POST /users/login/admin', () => {
+describe('GET /users/logout', () => {
   let server: Hapi.Server;
   const config = getConfig(process.env.NODE_ENV);
 
@@ -21,13 +21,12 @@ describe('POST /users/login/admin', () => {
     await server.app.knex.seed.run();
   });
 
-  test(':: successful login', async () => {
+  test(':: successful logout', async () => {
     const res = await server.inject({
-      method: 'POST',
-      url: '/api/v1/users/login/admin',
-      payload: {
-        email: '1@aperturescience.com',
-        password: 'CakeisaLi3!',
+      method: 'GET',
+      url: '/api/v1/users/logout',
+      credentials: {
+        scope: ['access'],
       },
     });
 
