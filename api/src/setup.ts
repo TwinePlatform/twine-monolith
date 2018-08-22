@@ -35,6 +35,7 @@ export default (server: Hapi.Server, config: Config) => {
     isSecure: false,
     isHttpOnly: true,
     isSameSite: 'Lax',
+    path: '/',
   });
 
   server.decorate('request', 'knex', server.app.knex);
