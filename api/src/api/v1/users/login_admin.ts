@@ -44,6 +44,8 @@ const route: Hapi.ServerRoute[] = [
       if (!isAdmin) return Boom.unauthorized('User is not admin');
 
       const organisation = await Organisations.fromUser(knex, { where: { email } });
+      if (!organisation) return Boom.unauthorized('User has no associated organisation');
+
       const token =
         await jwt.sign({ userId: user.id, organisationId: organisation.id }, jwtSecret);
 

@@ -19,7 +19,7 @@ export default {
     },
     routes: {
       cors: {
-        origin: ['https://visitor.twinetogether.com'],
+        origin: ['https://visitor.twine-together.com'],
         credentials: true,
         additionalExposedHeaders: ['set-cookie'],
       },
