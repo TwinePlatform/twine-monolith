@@ -31,11 +31,11 @@ export const formatBoom = ({ output: { payload } }: Boom<any>): ApiResponse => (
 export const formatResponse = (res: Hapi.ResponseObject): ApiResponse => {
   const r: any = res.source;
 
-  if (r.hasOwnProperty('data') && r.hasOwnProperty('meta')) {
+  if (r.hasOwnProperty('result') && r.hasOwnProperty('meta')) {
     return { ...r } as ApiResponse;
   }
 
   return {
-    data: r,
+    result: r,
   };
 };

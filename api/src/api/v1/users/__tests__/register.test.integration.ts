@@ -38,7 +38,7 @@ describe('POST /users/register/visitor', () => {
       credentials: {
         user,
         scope: ['user_details-child:write'],
-        role: RoleEnum.ORG_NON_ADMIN,
+        role: RoleEnum.ORG_ADMIN,
       },
     });
 
@@ -61,7 +61,7 @@ describe('POST /users/register/visitor', () => {
       credentials: {
         user,
         scope: ['user_details-child:write'],
-        role: RoleEnum.ORG_NON_ADMIN,
+        role: RoleEnum.ORG_ADMIN,
       },
     });
 
@@ -88,7 +88,7 @@ describe('POST /users/register/visitor', () => {
       credentials: {
         user,
         scope: ['user_details-child:write'],
-        role: RoleEnum.ORG_NON_ADMIN,
+        role: RoleEnum.ORG_ADMIN,
       },
     });
 
@@ -111,12 +111,12 @@ describe('POST /users/register/visitor', () => {
       credentials: {
         user,
         scope: ['user_details-child:write'],
-        role: RoleEnum.ORG_NON_ADMIN,
+        role: RoleEnum.ORG_ADMIN,
       },
     });
 
     expect(res.statusCode).toBe(200);
-    expect((<any> res.result).data).toEqual(expect.objectContaining({
+    expect((<any> res.result).result).toEqual(expect.objectContaining({
       name: 'foo',
       gender: 'female',
       birthYear: 1988,

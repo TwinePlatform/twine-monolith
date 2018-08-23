@@ -27,7 +27,7 @@ describe('API /users', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
-        data: expect.arrayContaining([
+        result: expect.arrayContaining([
           expect.objectContaining({
             id: 1,
             name: 'Chell',

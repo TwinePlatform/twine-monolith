@@ -53,9 +53,9 @@ describe('GET /community-businesses', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
-        data: expect.objectContaining({ _360GivingId: 'GB-COH-3205' }),
+        result: expect.objectContaining({ _360GivingId: 'GB-COH-3205' }),
       });
-      expect(Object.keys((<any> res.result).data)).toHaveLength(15);
+      expect(Object.keys((<any> res.result).result)).toHaveLength(15);
     });
   });
 
@@ -75,9 +75,9 @@ describe('GET /community-businesses', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
-        data: expect.objectContaining({ _360GivingId: 'GB-COH-9302' }),
+        result: expect.objectContaining({ _360GivingId: 'GB-COH-9302' }),
       });
-      expect(Object.keys((<any> res.result).data)).toHaveLength(15);
+      expect(Object.keys((<any> res.result).result)).toHaveLength(15);
     });
 
     test('Returns 403 if user is not authorised', async () => {

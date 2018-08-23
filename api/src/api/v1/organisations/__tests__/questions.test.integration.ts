@@ -23,7 +23,7 @@ describe('API v1 :: Organisations :: Questions', () => {
     });
 
     expect(res.statusCode).toBe(200);
-    expect((<any> res.result).data)
+    expect((<any> res.result).result)
       .toEqual({ region: 'London', mean_score: 2.001 });
   });
 
@@ -35,7 +35,7 @@ describe('API v1 :: Organisations :: Questions', () => {
     });
 
     expect(res.statusCode).toBe(200);
-    expect((<any> res.result).data)
+    expect((<any> res.result).result)
       .toEqual({ region: 'London', mean_score: 6.935 });
   });
 
@@ -47,7 +47,7 @@ describe('API v1 :: Organisations :: Questions', () => {
     });
 
     expect(res.statusCode).toBe(200);
-    expect((<any> res.result).data).toEqual({
+    expect((<any> res.result).result).toEqual({
       score: {
         detractors: { range: [0, 6], percentage: 0.24 },
         passives: { range: [7, 8], percentage: 0.21 },
@@ -64,7 +64,7 @@ describe('API v1 :: Organisations :: Questions', () => {
     });
 
     expect(res.statusCode).toBe(200);
-    expect((<any> res.result).data).toEqual({
+    expect((<any> res.result).result).toEqual({
       score: {
         detractors: { range: [0, 6], percentage: 0.24 },
         passives: { range: [7, 8], percentage: 0.21 },

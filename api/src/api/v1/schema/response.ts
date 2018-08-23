@@ -11,7 +11,7 @@ import { Dictionary } from 'ramda';
 
 
 export type ApiResponse = {
-  data?: Dictionary<any> | any[]
+  result?: Dictionary<any> | any[]
   error?: {
     statusCode: number
     type: string
@@ -24,7 +24,7 @@ export type ApiResponse = {
 };
 
 export const response = {
-  data: Joi.alternatives(Joi.object(), Joi.array()),
+  result: Joi.alternatives(Joi.object(), Joi.array()),
   error: Joi.object({
     statusCode: Joi.number().integer().min(200).max(599),
     type: Joi.string().min(1).max(255),
