@@ -23,7 +23,7 @@ const init = async (config: Config): Promise<Hapi.Server> => {
     {
       plugin: v1,
       options: { jwtSecret: config.secret.jwt_secret },
-      routes: { prefix: '/api/v1' },
+      routes: { prefix: '/v1' },
     },
   ]);
 

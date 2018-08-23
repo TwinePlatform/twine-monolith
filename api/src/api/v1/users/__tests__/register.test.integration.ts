@@ -27,7 +27,7 @@ describe('POST /users/register/visitor', () => {
     const user = await factory.build('user');
     const res = await server.inject({
       method: 'POST',
-      url: '/api/v1/users/register/visitor',
+      url: '/v1/users/register/visitor',
       payload: {
         organisationId: 1,
         name: 'Chell',
@@ -50,7 +50,7 @@ describe('POST /users/register/visitor', () => {
     const user = await factory.build('user');
     const res = await server.inject({
       method: 'POST',
-      url: '/api/v1/users/register/visitor',
+      url: '/v1/users/register/visitor',
       payload: {
         organisationId: 9352,
         name: 'foo',
@@ -77,7 +77,7 @@ describe('POST /users/register/visitor', () => {
     const user = await factory.build('user');
     const res = await server.inject({
       method: 'POST',
-      url: '/api/v1/users/register/visitor',
+      url: '/v1/users/register/visitor',
       payload: {
         organisationId: 2,
         name: 'foo',
@@ -100,7 +100,7 @@ describe('POST /users/register/visitor', () => {
     const user = await factory.build('user');
     const res = await server.inject({
       method: 'POST',
-      url: '/api/v1/users/register/visitor',
+      url: '/v1/users/register/visitor',
       payload: {
         organisationId: 1,
         name: 'foo',

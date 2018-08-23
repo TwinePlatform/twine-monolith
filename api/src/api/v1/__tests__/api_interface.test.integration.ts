@@ -46,7 +46,7 @@ const createUnauthorisedTest = (method: HttpMethodEnum, url: string) => ({
   },
 });
 
-const testSpec = Object.entries(collapseUrls(APISpecification.routes, '/api/v1'))
+const testSpec = Object.entries(collapseUrls(APISpecification.routes, '/v1'))
   .filter(([, routeSpec]) => routeSpec.isImplemented)
   .map(([endpoint, routeSpec]): [string, RouteTestFixture[]] => {
     const [method, url] = splitMethodAndUrl(endpoint);
