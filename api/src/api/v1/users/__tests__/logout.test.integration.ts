@@ -24,7 +24,7 @@ describe('GET /users/logout', () => {
   test(':: successful logout', async () => {
     const res = await server.inject({
       method: 'GET',
-      url: '/api/v1/users/logout',
+      url: '/v1/users/logout',
       credentials: {
         scope: ['access'],
       },

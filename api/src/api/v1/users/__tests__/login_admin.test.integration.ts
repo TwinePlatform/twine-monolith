@@ -24,7 +24,7 @@ describe('POST /users/login/admin', () => {
   test(':: successful login', async () => {
     const res = await server.inject({
       method: 'POST',
-      url: '/api/v1/users/login/admin',
+      url: '/v1/users/login/admin',
       payload: {
         email: '1@aperturescience.com',
         password: 'CakeisaLi3!',

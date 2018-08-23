@@ -4,10 +4,10 @@
  * See also:
  * - /api/v1/api.json
  */
-import Questions from './questions';
-import Get from './get';
+import questions from './questions';
+import get from './get';
 
 export default [
-  ...Get,
-  ...Questions,
+  ...get,
+  ...questions,
 ];
