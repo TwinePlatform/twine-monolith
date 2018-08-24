@@ -203,10 +203,10 @@
         }
       }
     },
-    "/organisations": {
+    "/community-businesses": {
       "/": {
         "GET": {
-          "description": "Retreive list of all organisations",
+          "description": "Retreive list of all community businesses",
           "isImplemented": true,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
@@ -220,7 +220,7 @@
           }
         },
         "POST": {
-          "description": "Add a single organisation",
+          "description": "Add a single community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
@@ -250,7 +250,7 @@
       },
       "/:id": {
         "GET": {
-          "description": "Retrieve information about a single organisation",
+          "description": "Retrieve information about a single community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
@@ -261,7 +261,7 @@
           "response": "types.organisation"
         },
         "PUT": {
-          "description": "Update information about a single organisation",
+          "description": "Update information about a single community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
@@ -289,7 +289,7 @@
           "response": "types.organisation"
         },
         "DELETE": {
-          "description": "Delete a single organisation that has no subscriptions",
+          "description": "Delete a single community business that has no subscriptions",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
@@ -298,51 +298,9 @@
           "response": null
         }
       },
-      "/:id/subscriptions": {
+      "/:id/training-sessions": {
         "GET": {
-          "description": "Retreive subscriptions for a single funding body organisation",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
-          "scope": ["organisations_subscriptions-child:read"],
-          "query": {
-            "subscriptionType": "String",
-            "beneficiaryId": "Number"
-          },
-          "response": "types.subscription"
-        },
-        "POST": {
-          "description": "Add subscription for a single funding body organisation",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
-          "scope": ["organisations_subscriptions-child:write"],
-          "body": {
-            "subscriptionType": "String",
-            "beneficiaryId": "Number"
-          },
-          "response": "types.subscription"
-        }
-      },
-      "/:id/child": {
-        "GET": {
-          "description": "Retrieve all child organisations for a single organisation",
-          "isImplemented": false,
-          "auth":true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
-          "scope": ["organisations_details-child:read"],
-          "query": {
-            "fields": ["String"]
-          },
-          "response": {
-            "organisationId": "Number",
-            "numberOfchildOrganisations": "Number",
-            "childOrganisationsList": ["types.organisation"]}
-        }
-      },
-      "/:id/training_sessions": {
-        "GET": {
-          "description": "Retrieve all training sessions for a single organisation",
+          "description": "Retrieve all training sessions for a single community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
@@ -356,7 +314,7 @@
             "trainingSessionsList": ["types.organisationTrainingSession"]}
         },
         "POST": {
-          "description": "Create a training sessions for a single organisation",
+          "description": "Create a training sessions for a single community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
@@ -367,9 +325,9 @@
           "response": "types.organisationTrainingSession"
         }
       },
-      "/:id/training_sessions/:id": {
+      "/:id/training-sessions/:id": {
         "PUT": {
-          "description": "Update a training sessions for a single organisation",
+          "description": "Update a training sessions for a single community business",
           "isImplemented": false,
           "auth":true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
@@ -380,7 +338,7 @@
           "response": "types.organisationTrainingSession"
         },
         "DELETE": {
-          "description": "Delete training sessions for a single organisation",
+          "description": "Delete training sessions for a single community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
@@ -389,87 +347,9 @@
           "response": null
         }
       },
-      "/:id/visit_activities": {
-        "GET": {
-          "description": "Retrieve all visit activities for an organistion",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VISITOR"],
-          "scope": ["visit_activities-own:read", "visit_activities-child:read", "visit_activties-parent:read"],
-          "query": {
-            "fields": ["String"],
-            "filter":{
-              "today": "Boolean",
-              "deleted": "Boolean"
-            }
-          },
-          "response": {
-            "totalVisitActivities": "Number",
-            "visitActivitiesList": ["types.visitActivity"]
-          }
-        },
-        "POST": {
-          "description": "Add visit activities for an organistion",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
-          "scope": ["visit_activities-own:write"],
-          "body": {
-            "name": "String",
-            "category": "String",
-            "monday": "Boolean",
-            "tuesday": "Boolean",
-            "wednesday": "Boolean",
-            "thursday": "Boolean",
-            "friday": "Boolean",
-            "saturday": "Boolean",
-            "sunday": "Boolean"
-          },
-          "response": "types.visitActivity"
-        }
-      },
-      "/:id/visit_activities/:id": {
-        "GET": {
-          "description": "Retrieve a single visit activity for an organistion",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
-          "scope": ["visit_activities-own:read", "visit_activities-child:read"],
-          "query": {},
-          "response": "types.visitActivity"
-        },
-        "PUT": {
-          "description": "Update a visit activity for an organistion",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
-          "scope": ["visit_activities-own:write"],
-          "body": {
-            "name": "String",
-            "category": "String",
-            "monday": "Boolean",
-            "tuesday": "Boolean",
-            "wednesday": "Boolean",
-            "thursday": "Boolean",
-            "friday": "Boolean",
-            "saturday": "Boolean",
-            "sunday": "Boolean"
-          },
-          "response": "types.visitActivity"
-        },
-        "DELETE": {
-          "description": "Soft delete visit activity for an organistion",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
-          "scope": ["visit_activities-own:delete"],
-          "body": {},
-          "response": null
-        }
-      },
       "/:id/feedback": {
         "GET": {
-          "description": "Retreive feedback for one organisation",
+          "description": "Retreive feedback for one community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
@@ -490,11 +370,11 @@
           }
         },
         "POST": {
-          "description": "Send feedback for one organisation",
+          "description": "Send feedback for one community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
-          "scope": ["organisations_feedback-child:write"],
+          "scope": ["organisations_feedback-own:write"],
           "body": {
             "feedbackScore": "Number"
           },
@@ -507,7 +387,7 @@
       },
       "/:id/feedback/aggregates": {
         "GET": {
-          "description": "Retreive aggregated feedback for one organisation",
+          "description": "Retreive aggregated feedback for one community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
@@ -527,34 +407,9 @@
           }
         }
       },
-      "/:id/users/admins": {
-        "GET": {
-          "description": "Retreive all admin users in an organisation",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
-          "scope": ["user_details-child:read"],
-          "query": {
-            "fields": ["String"],
-            "filter":{
-              "page": "Number",
-              "offset": "Number",
-              "sort": "String",
-              "gender": "String",
-              "age": "String",
-              "emailConsent": "Boolean",
-              "smsConsent": "Boolean"
-            }
-          },
-          "response": {
-            "totalAdminUsers": "Number",
-            "adminUsersList": ["types.adminUser"]
-          }
-        }
-      },
       "/:id/users/aggregates": {
         "GET": {
-          "description": "Retreive aggregated users in an organisation",
+          "description": "Retreive aggregated users in an community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
@@ -579,9 +434,34 @@
           }
         }
       },
+      "/:id/admins": {
+        "GET": {
+          "description": "Retreive all admin users in an community business",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
+          "scope": ["user_details-child:read"],
+          "query": {
+            "fields": ["String"],
+            "filter":{
+              "page": "Number",
+              "offset": "Number",
+              "sort": "String",
+              "gender": "String",
+              "age": "String",
+              "emailConsent": "Boolean",
+              "smsConsent": "Boolean"
+            }
+          },
+          "response": {
+            "totalAdminUsers": "Number",
+            "adminUsersList": ["types.adminUser"]
+          }
+        }
+      },
       "/:id/visitors": {
         "GET": {
-          "description": "Retreive all visitor users in an organisation",
+          "description": "Retreive all visitor users in an community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
@@ -604,34 +484,101 @@
           }
         }
       },
-      "/:id/volunteers": {
+      "/:id/visit-activities": {
         "GET": {
-          "description": "Retreive all volunteer users in an organisation",
+          "description": "Retrieve all visit activities for an community business",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
-          "scope": ["user_details-child:read"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VISITOR"],
+          "scope": ["visit_activities-own:read", "visit_activities-child:read", "visit_activties-parent:read"],
           "query": {
             "fields": ["String"],
             "filter":{
-              "page": "Number",
-              "offset": "Number",
-              "sort": "String",
-              "gender": "String",
-              "age": "String",
-              "emailConsent": "Boolean",
-              "smsConsent": "Boolean"
+              "today": "Boolean",
+              "deleted": "Boolean"
             }
           },
           "response": {
-            "totalVolunteerUsers": "Number",
-            "volunteerUsersList": ["types.adminUser"]
+            "totalVisitActivities": "Number",
+            "visitActivitiesList": ["types.visitActivity"]
           }
+        },
+        "POST": {
+          "description": "Add visit activities for an community business",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["ORG_ADMIN"],
+          "scope": ["visit_activities-own:write"],
+          "body": {
+            "name": "String",
+            "category": "String",
+            "monday": "Boolean",
+            "tuesday": "Boolean",
+            "wednesday": "Boolean",
+            "thursday": "Boolean",
+            "friday": "Boolean",
+            "saturday": "Boolean",
+            "sunday": "Boolean"
+          },
+          "response": "types.visitActivity"
         }
       },
-      "/:id/visits/aggregates": {
+      "/:id/visit-activities/:id": {
         "GET": {
-          "description": "Retreive all visit data for an organisation",
+          "description": "Retrieve a single visit activity for an community business",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
+          "scope": ["visit_activities-own:read", "visit_activities-child:read"],
+          "query": {},
+          "response": "types.visitActivity"
+        },
+        "PUT": {
+          "description": "Update a visit activity for an community business",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["ORG_ADMIN"],
+          "scope": ["visit_activities-own:write"],
+          "body": {
+            "name": "String",
+            "category": "String",
+            "monday": "Boolean",
+            "tuesday": "Boolean",
+            "wednesday": "Boolean",
+            "thursday": "Boolean",
+            "friday": "Boolean",
+            "saturday": "Boolean",
+            "sunday": "Boolean"
+          },
+          "response": "types.visitActivity"
+        },
+        "DELETE": {
+          "description": "Soft delete visit activity for an community business",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["ORG_ADMIN"],
+          "scope": ["visit_activities-own:delete"],
+          "body": {},
+          "response": null
+        }
+      },
+      "/:id/visit-logs": {
+        "POST": {
+          "description": "For users to adds a visit to their community business",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["VISITOR"],
+          "scope": ["visit_logs-parent:write"],
+          "body": {
+            "userId": "Number",
+            "activityId": "Number"
+          },
+          "response": "types.visit"
+        }
+      },
+      "/:id/visit-logs/aggregates": {
+        "GET": {
+          "description": "Retreive all visit data for an community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
@@ -660,9 +607,34 @@
           }
         }
       },
+      "/:id/volunteers": {
+        "GET": {
+          "description": "Retreive all volunteer users in an community business",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
+          "scope": ["user_details-child:read"],
+          "query": {
+            "fields": ["String"],
+            "filter":{
+              "page": "Number",
+              "offset": "Number",
+              "sort": "String",
+              "gender": "String",
+              "age": "String",
+              "emailConsent": "Boolean",
+              "smsConsent": "Boolean"
+            }
+          },
+          "response": {
+            "totalVolunteerUsers": "Number",
+            "volunteerUsersList": ["types.adminUser"]
+          }
+        }
+      },
       "/:id/volunteer_logs": {
         "GET": {
-          "description": "Retrieve volunteer logs for a single organisation",
+          "description": "Retrieve volunteer logs for a single community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
@@ -681,23 +653,7 @@
           }
         }
       },
-      "/:id/volunteer_logs/me": {
-        "POST": {
-          "description": "Add volunteer log for your user account",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
-          "scope": ["volunteer_logs-parent:write"],
-          "body": {
-            "organisationId":"Number",
-            "volunteerActvity": "String",
-            "duration": "Number",
-            "loggedAt": "String"
-          },
-          "response": "types.volunteerLog"
-        }
-      },
-      "/:id/volunteer_logs/me/:id": {
+      "/:id/volunteer_logs/:id": {
         "PUT": {
           "description": "Update volunteer log for your user account",
           "isImplemented": false,
@@ -722,23 +678,9 @@
           "response": null
         }
       },
-      "/:id/visit_logs": {
-        "POST": {
-          "description": "For users to adds a visit to their community business",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["VISITOR"],
-          "scope": ["visit_logs-parent:write"],
-          "body": {
-            "userId": "Number",
-            "activityId": "Number"
-          },
-          "response": "types.visit"
-        }
-      },
       "/:id/outreach_campaigns": {
         "GET": {
-          "description": "Retrieve all outreach campaings and meetings for a specific organisation",
+          "description": "Retrieve all outreach campaings and meetings for a specific community business",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
@@ -791,6 +733,54 @@
           }
         }
       }
+    },
+    "/funding-bodies": {
+      "/": {},
+      "/:id": {},
+      "/:id/subscriptions": {
+        "GET": {
+          "description": "Retreive subscriptions for a single funding body",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
+          "scope": ["organisations_subscriptions-child:read"],
+          "query": {
+            "subscriptionType": "String",
+            "beneficiaryId": "Number"
+          },
+          "response": "types.subscription"
+        },
+        "POST": {
+          "description": "Add subscription for a single funding body",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
+          "scope": ["organisations_subscriptions-child:write"],
+          "body": {
+            "subscriptionType": "String",
+            "beneficiaryId": "Number"
+          },
+          "response": "types.subscription"
+        }
+      },
+      "/:id/child": {
+        "GET": {
+          "description": "Retrieve all child organisations for a single funding bodies",
+          "isImplemented": false,
+          "auth":true,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
+          "scope": ["organisations_details-child:read"],
+          "query": {
+            "fields": ["String"]
+          },
+          "response": {
+            "organisationId": "Number",
+            "numberOfchildOrganisations": "Number",
+            "childOrganisationsList": ["types.organisation"]}
+        }
+      },
+      "/:id/training-sessions": {},
+      "/:id/training-sessions/:id": {}
     },
     "/users": {
       "/": {
@@ -852,7 +842,7 @@
           "description": "Create a visitor account",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["ORG_NON_ADMIN"],
+          "intendedFor": ["ORG_ADMIN"],
           "scope": ["user_details-child:write"],
           "body": {
             "organisationId": "Number",
@@ -896,7 +886,7 @@
           "description": "Login as visitor",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["ORG_NON_ADMIN"],
+          "intendedFor": ["ORG_ADMIN"],
           "scope": [],
           "body": {
             "qr_code": "String"
@@ -1263,9 +1253,6 @@
     },
     "/visitor": {
       "description": "Alias for /users/** where user role is VISITOR"
-    },
-    "/community_businesses": {
-      "description": "Alias for /organisations/** where organisation is a communtiy business"
     }
   }
 }
