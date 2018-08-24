@@ -26,6 +26,10 @@ describe('Pre-requisite :: is_parent_organisation', () => {
     });
   });
 
+  afterAll(async () => {
+    await knex.destroy();
+  });
+
   test('pre-req returns false when user is admin for community business', async () => {
     const res = await server.inject({
       method: 'GET',
