@@ -21,7 +21,7 @@ import { applyQueryModifiers } from './util';
  * Custom methods
  */
 type CustomMethods = {
-  addFeedback: (k: Knex, c: CommunityBusiness, score: Int) => Promise<void>
+  addFeedback: (k: Knex, c: CommunityBusiness, score: Int) => Promise<LinkedFeedback>
   getFeedback: (k: Knex, c: CommunityBusiness, bw?: DateTimeQuery) =>
     Promise<LinkedFeedback[]>
 };
@@ -246,8 +246,15 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
   },
 
   async addFeedback (client: Knex, c: CommunityBusiness, score: number) {
-    return client('visit_feedback')
-      .insert({ score, organisation_id: c.id });
+    const [res] = await client('visit_feedback')
+      .insert({ score, organisation_id: c.id })
+      .returning([
+        'score',
+        'organisation_id AS organisationId',
+        'visit_feedback_id AS id',
+      ]);
+
+    return res;
   },
 
   async getFeedback (client: Knex, c: CommunityBusiness, bw?: DateTimeQuery) {
