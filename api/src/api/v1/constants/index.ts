@@ -5,7 +5,7 @@ import { query, response } from './schema';
 const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
   const [resourceName] = tableName.split('community_business_').slice(-1);
   const resourceNamePlural = resourceName.slice(-1) === 'y'
-    ? resourceName.replace('y', 'ies')
+    ? resourceName.replace(/y$/, 'ies')
     : resourceName.concat('s');
 
   return {
@@ -20,7 +20,10 @@ const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
       response: { schema: response },
     },
     handler: async ({ knex }: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      const query = await knex(tableName).select();
+      const query = await knex(tableName)
+        .select()
+        .orderBy(`${resourceName}_name`);
+
       return query.map((row: any) => row[`${resourceName}_name`]);
     },
   };
@@ -34,5 +37,6 @@ export default [
   'subscription_type',
   'community_business_sector',
   'community_business_region',
+  'visit_activity_category',
 ]
   .map(createConstantRoute);

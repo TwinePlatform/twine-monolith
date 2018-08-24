@@ -11,7 +11,8 @@ import {
   CommunityBusinessChangeSet,
   LinkedFeedback,
   ModelQuery,
-  DateTimeQuery
+  DateTimeQuery,
+  VisitActivity,
 } from './types';
 import { Organisations } from './organisation';
 import { applyQueryModifiers } from './util';
@@ -28,6 +29,7 @@ type CustomMethods = {
     bw?: DateTimeQuery & Pick<ModelQuery<LinkedFeedback>, 'limit' | 'offset' | 'order'>
   ) =>
     Promise<LinkedFeedback[]>
+  getVisitActivities: (c: Knex, a: Partial<CommunityBusiness>) => Promise<VisitActivity>
 };
 
 /*
@@ -117,7 +119,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     };
   },
 
-  toColumnNames (a: Partial<CommunityBusiness>): Dictionary<any> {
+  toColumnNames (a: Partial<CommunityBusiness>): Dictionary < any > {
     return filter((a) => typeof a !== 'undefined', {
       'community_business.organisation_id': a.id,
       'organisation.organisation_name': a.name,
@@ -137,7 +139,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     });
   },
 
-  async get (client: Knex, q: ModelQuery<CommunityBusiness> = {}) {
+  async get (client: Knex, q: ModelQuery < CommunityBusiness > = {}) {
     const query = evolve({
       where: CommunityBusinesses.toColumnNames,
       whereNot: CommunityBusinesses.toColumnNames,
@@ -278,6 +280,11 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         : baseQuery;
 
     return query;
+  },
+
+  async getVisitActivities (client: Knex, o: CommunityBusiness) {
+    return client('visit_activity')
+      .where({ organisation_id: o.id, deleted_at: null });
   },
 };
 
