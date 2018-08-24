@@ -24,7 +24,7 @@ export default {
     /*
      * Authentication Strategies
      */
-    setupAuthentication(server, { jwtSecret: options.jwtSecret });
+    await setupAuthentication(server, { jwtSecret: options.jwtSecret });
 
     /*
      * Server request lifecycle hooks
