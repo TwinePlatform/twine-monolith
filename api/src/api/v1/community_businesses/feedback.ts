@@ -12,11 +12,11 @@ export default [
     method: 'GET',
     path: '/community-businesses/{organisationId}/feedback',
     options: {
-      description: 'Retrieve information about users own community business',
+      description: 'Retrieve information about a specific community business',
       auth: {
         strategy: 'standard',
         access: {
-          scope: ['organisations_details-own:read'],
+          scope: ['organisations_feedback-child:read', 'organisations_feedback-own:read'],
         },
       },
       validate: { query: { since, until } },
