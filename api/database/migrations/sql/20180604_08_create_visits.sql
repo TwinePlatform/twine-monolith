@@ -12,7 +12,7 @@ CREATE TABLE visit_activity_category (
 
 CREATE TABLE visit_activity (
   visit_activity_id          SERIAL NOT NULL UNIQUE,
-  organisation_id      INT NOT NULL,
+  organisation_id            INT NOT NULL,
   visit_activity_category_id INT,
   visit_activity_name        VARCHAR(255) NOT NULL,
   monday                     BOOLEAN NOT NULL DEFAULT false,
