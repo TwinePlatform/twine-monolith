@@ -37,8 +37,8 @@ const getOrg = async (request: OrganisationRequest, h: Hapi.ResponseToolkit) => 
 };
 
 export default async (request: OrganisationRequest, h: Hapi.ResponseToolkit) => {
-  const { auth: { credentials }, pre, server: { app: { knex } } } = request;
-  const { role, user, organisation } = credentials;
+  const { auth: { credentials }, server: { app: { knex } } } = request;
+  const { role, user } = credentials;
 
   if (role === RoleEnum.TWINE_ADMIN) {
     return true;
