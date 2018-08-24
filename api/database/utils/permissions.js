@@ -4,8 +4,8 @@ const { map } = require('ramda');
 const permissionsForRoles = Object.values(api.routes)
   .reduce((acc, nestedRoutes) => {
     const route = Object.values(nestedRoutes)
-      .reduce((accRouteValues, routeObject) => 
-        [...accRouteValues, ...Object.values(routeObject)] 
+      .reduce((accRouteValues, routeObject) =>
+        [...accRouteValues, ...Object.values(routeObject)]
       ,[])
       .map(({ scope, intendedFor, description }) => ({ scope, intendedFor, description }))
     return [...acc, ...route]
@@ -19,7 +19,6 @@ const permissionsForRoles = Object.values(api.routes)
   TWINE_ADMIN: new Set(),
   FUNDING_BODY: new Set(),
   ORG_ADMIN: new Set(),
-  ORG_NON_ADMIN: new Set(),
   VISITOR: new Set(),
   VOLUNTEER: new Set(),
   VOLUNTEER_ADMIN: new Set(),
@@ -42,7 +41,7 @@ const scopeToPermission = ((permission) => {
   }
 });
 
-const accessRolePermissionsRows = (client) => 
+const accessRolePermissionsRows = (client) =>
   Object.entries(permissionsForRoles)
   .reduce((acc, [roles, permissions]) => {
     const rows = Array.from(permissions)
@@ -54,7 +53,7 @@ const accessRolePermissionsRows = (client) =>
         .select('permission_id')
         .where(scopeToPermission(x)),
     }))
-  
+
     return [...acc, ...rows]
   }
 ,[]);

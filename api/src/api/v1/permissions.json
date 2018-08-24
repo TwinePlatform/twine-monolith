@@ -91,7 +91,6 @@
       "user_details-own:delete",
       "constants-all:read"
     ],
-    "ORG_NON_ADMIN": [],
     "VISITOR": [
       "visit_activities-own:read",
       "visit_logs-parent:write",
