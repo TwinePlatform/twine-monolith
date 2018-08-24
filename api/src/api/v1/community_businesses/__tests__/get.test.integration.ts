@@ -41,7 +41,7 @@ describe('GET /community-businesses', () => {
     test('Returns CB that user is authenticated against', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/api/v1/community-businesses/me',
+        url: '/v1/community-businesses/me',
         credentials: {
           scope: ['organisations_details-own:read'],
           user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
@@ -63,7 +63,7 @@ describe('GET /community-businesses', () => {
     test('Returns requested CB if user is authorised', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/api/v1/community-businesses/2',
+        url: '/v1/community-businesses/2',
         credentials: {
           scope: ['organisations_details-child:read'],
           user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
@@ -83,7 +83,7 @@ describe('GET /community-businesses', () => {
     test('Returns 403 if user is not authorised', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/api/v1/community-businesses/1',
+        url: '/v1/community-businesses/1',
         credentials: {
           scope: ['organisations_details-child:read'],
           user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
