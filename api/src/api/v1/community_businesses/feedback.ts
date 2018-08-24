@@ -4,7 +4,7 @@ import * as Joi from 'joi';
 import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 import { PostFeedbackRequest } from '../types';
-import { query, response, since, until } from './schema';
+import { response, since, until } from './schema';
 
 
 export default [
