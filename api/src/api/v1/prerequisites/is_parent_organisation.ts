@@ -39,7 +39,7 @@ export default async (request: OrganisationRequest, h: Hapi.ResponseToolkit) => 
   const { user } = credentials;
 
   // TODO: Funding body case is unimplemented
-  //       See: https:github.com/TwinePlatform/twine-api/issues/XXX
+  //       See: https:github.com/TwinePlatform/twine-api/issues/120
   const org = await getOrg(request, h);
 
   const isVolunteer = await Roles.userHas(knex, {
@@ -59,7 +59,7 @@ export default async (request: OrganisationRequest, h: Hapi.ResponseToolkit) => 
   });
 
   // TODO: Funding body case is unimplemented
-  //       See: https:github.com/TwinePlatform/twine-api/issues/XXX
+  //       See: https:github.com/TwinePlatform/twine-api/issues/120
 
   return isVisitor;
 };
