@@ -1,8 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import { CommunityBusinesses, CommunityBusiness } from '../../../models';
-import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
+import { CommunityBusinesses } from '../../../models';
 import { PostFeedbackRequest } from '../types';
 import { response, since, until } from './schema';
 
@@ -29,13 +28,13 @@ export default [
 
   {
     method: 'POST',
-    path: '/community-businesses/{organisationId}/feedback',
+    path: '/community-businesses/me/feedback',
     options: {
       description: 'Send feedback for one organisation',
       auth: {
         strategy: 'standard',
         access: {
-          scope: ['organisations_feedback-child:write'],
+          scope: ['organisations_feedback-own:write'],
         },
       },
       validate: {
@@ -44,25 +43,15 @@ export default [
         },
       },
       response: { schema: response },
-      pre: [
-        { method: getCommunityBusiness, assign: 'communityBusiness' },
-        { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
-      ],
     },
     handler: async (request: PostFeedbackRequest, h: Hapi.ResponseToolkit) => {
-      const { communityBusiness, isChild } = request.pre;
       const { knex } = request.server.app;
       const { feedbackScore } = request.payload;
+      const { id } = request.auth.credentials.organisation;
 
-      if (! isChild) {
-        return Boom.forbidden('Insufficient permissions to perform this action');
-      }
+      const communityBusiness = await CommunityBusinesses.getOne(knex, { where: { id } });
 
-      return CommunityBusinesses.addFeedback(
-        knex,
-        <CommunityBusiness> communityBusiness,
-        feedbackScore
-      );
+      return CommunityBusinesses.addFeedback(knex, communityBusiness, feedbackScore);
     },
   },
 

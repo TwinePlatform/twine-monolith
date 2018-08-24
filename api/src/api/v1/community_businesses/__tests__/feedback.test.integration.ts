@@ -27,7 +27,7 @@ describe('POST /community-businesses/{id}/feedback', () => {
       credentials: {
         user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
         organisation: await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } }),
-        scope: ['organisations_feedback-child:write'],
+        scope: ['organisations_feedback-own:write'],
       },
     });
 
