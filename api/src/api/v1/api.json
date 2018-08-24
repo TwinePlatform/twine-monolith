@@ -494,7 +494,7 @@
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
-          "scope": ["organisations_feedback-parent:write"],
+          "scope": ["organisations_feedback-child:write"],
           "body": {
             "feedbackScore": "Number"
           },
