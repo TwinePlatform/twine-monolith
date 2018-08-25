@@ -3,6 +3,7 @@ import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { Users, Organisations } from '../../../../models';
+import { RoleEnum } from '../../../../auth/types';
 
 
 describe('GET /community-businesses', () => {
@@ -65,11 +66,8 @@ describe('GET /community-businesses', () => {
         method: 'GET',
         url: '/v1/community-businesses/2',
         credentials: {
+          role: RoleEnum.TWINE_ADMIN,
           scope: ['organisations_details-child:read'],
-          user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
-          organisation: await Organisations.getOne(knex, {
-            where: { name: 'Black Mesa Research' },
-          }),
         },
       });
 

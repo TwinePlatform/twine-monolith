@@ -7,6 +7,8 @@
  * Conditions under which this is true for organisation X:
  * - User is a visitor for X
  * - User is a volunteer for X
+ * - User is a admin for a community business which is owned by organisation
+ *   (funding-body) X
  *
  * Assumptions:
  * - This route pre-requisite is run _AFTER_ the organisation in question
