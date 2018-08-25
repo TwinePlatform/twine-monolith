@@ -159,17 +159,19 @@ describe('Community Business Model', () => {
     });
 
     test('getFeedback :: retrieve feedback added between timestamps', async () => {
+      const wait = (n: number, cb: () => number): Promise<number> =>
+        new Promise((resolve) => setTimeout(() => resolve(cb()), n));
       const org = await CommunityBusinesses.getOne(knex);
 
-      const d1 = Date.now();
+      const d1 = await wait(0, () => Date.now());
       await CommunityBusinesses.addFeedback(knex, org, 1);
       await CommunityBusinesses.addFeedback(knex, org, 0);
       await CommunityBusinesses.addFeedback(knex, org, -1);
 
-      const d2 = Date.now();
+      const d2 = await wait(0, () => Date.now());
       await CommunityBusinesses.addFeedback(knex, org, 0);
 
-      const d3 = Date.now();
+      const d3 = await wait(0, () => Date.now());
 
       const feedback12 = await CommunityBusinesses.getFeedback(
         knex, org, { since: new Date(d1), until: new Date(d2) });
