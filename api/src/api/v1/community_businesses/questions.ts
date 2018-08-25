@@ -7,7 +7,7 @@ import { CommunityBusiness } from '../../../models';
 export default [
   {
     method: 'GET',
-    path: '/organisations/{organisationId}/questions/{questionId}/cls',
+    path: '/community-businesses/{organisationId}/questions/{questionId}/cls',
     options: {
       auth: {
         strategy: 'external',
