@@ -32,12 +32,8 @@ describe('POST /community-businesses/{id}/feedback', () => {
     });
 
     expect(res.statusCode).toBe(200);
-    expect(res.result).toEqual(expect.objectContaining({
-      result: {
-        id: 1,
-        score: 1,
-        organisationId: 2,
-      },
-    }));
+    expect(res.result).toEqual({
+      result: expect.objectContaining({ score: 1, organisationId: 2 }),
+    });
   });
 });

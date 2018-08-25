@@ -133,17 +133,20 @@ describe('Community Business Model', () => {
   describe('Feedback', () => {
     test('addFeedback :: insert positive feedback', async () => {
       const org = await CommunityBusinesses.getOne(knex);
+      const fb = await knex('visit_feedback').select().where({ organisation_id: org.id });
 
       await CommunityBusinesses.addFeedback(knex, org, 1);
 
       const res = await knex('visit_feedback').select().where({ organisation_id: org.id });
 
-      expect(res).toHaveLength(1);
-      expect(res[0].score).toBe(1);
+      expect(res).toHaveLength(fb.length + 1);
+      expect(res.slice(-1)[0].score).toBe(1);
     });
 
     test('getFeedback :: retrieve all added feedback', async () => {
       const org = await CommunityBusinesses.getOne(knex);
+      const fb = await knex('visit_feedback').select().where({ organisation_id: org.id });
+
       await CommunityBusinesses.addFeedback(knex, org, 1);
       await CommunityBusinesses.addFeedback(knex, org, 0);
       await CommunityBusinesses.addFeedback(knex, org, 0);
@@ -151,8 +154,8 @@ describe('Community Business Model', () => {
 
       const feedback = await CommunityBusinesses.getFeedback(knex, org);
 
-      expect(feedback).toHaveLength(4);
-      expect(feedback[0].score).toBe(1);
+      expect(feedback).toHaveLength(fb.length + 4);
+      expect(feedback.slice(-4)[0].score).toBe(1);
     });
 
     test('getFeedback :: retrieve feedback added between timestamps', async () => {
