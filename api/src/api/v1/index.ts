@@ -12,7 +12,6 @@
 import * as Hapi from 'hapi';
 import constants from './constants';
 import users from './users';
-import organisations from './organisations';
 import communityBusinesses from './community_businesses';
 import addLifecycleHooks from './hooks';
 import setupAuthentication from './auth';
@@ -37,7 +36,6 @@ export default {
     server.route([
       ...constants,
       ...users,
-      ...organisations,
       ...communityBusinesses,
     ]);
   },
