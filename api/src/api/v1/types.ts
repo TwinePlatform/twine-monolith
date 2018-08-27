@@ -46,6 +46,19 @@ export interface PostFeedbackRequest extends Hapi.Request {
   };
 }
 
+export interface LoginRequest extends Hapi.Request {
+  payload: {
+    email: string,
+    password: string,
+  };
+}
+
+export interface EscalateRequest extends Hapi.Request {
+  payload: {
+    password: string
+  };
+}
+
 /*
  * Test related types
  */

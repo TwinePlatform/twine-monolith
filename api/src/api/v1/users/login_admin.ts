@@ -1,21 +1,12 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import * as jwt from 'jsonwebtoken';
-
 import { compare } from 'bcrypt';
 import { Users, Organisations } from '../../../models';
 import { email, password, response } from './schema';
 import { CbAdmins } from '../../../models/cb_admin';
-import { getConfig } from '../../../../config';
+import { Session } from '../../../auth/strategies/standard';
+import { LoginRequest, EscalateRequest } from '../types';
 
-interface RequestLogin extends Hapi.Request {
-  payload: {
-    email: string,
-    password: string,
-  };
-}
-
-const { secret: { jwt_secret: jwtSecret } } = getConfig(process.env.NODE_ENV);
 
 const route: Hapi.ServerRoute[] = [
   {
@@ -24,13 +15,15 @@ const route: Hapi.ServerRoute[] = [
     options: {
       description: 'Login all accounts apart from visitor',
       auth: false,
-      validate: { payload: {
-        email: email.required(),
-        password: password.required(),
-      } },
+      validate: {
+        payload: {
+          email: email.required(),
+          password: password.required(),
+        },
+      },
       response: { schema: response },
     },
-    handler: async (request: RequestLogin, h: Hapi.ResponseToolkit) => {
+    handler: async (request: LoginRequest, h: Hapi.ResponseToolkit) => {
       const { knex } = request;
       const { email, password } = request.payload;
 
@@ -46,11 +39,53 @@ const route: Hapi.ServerRoute[] = [
       const organisation = await Organisations.fromUser(knex, { where: { email } });
       if (!organisation) return Boom.unauthorized('User has no associated organisation');
 
-      const token =
-        await jwt.sign({ userId: user.id, organisationId: organisation.id }, jwtSecret);
+      return Session.create(
+        request,
+        h.response({}),
+        { userId: user.id, organisationId: organisation.id },
+        request.headers.origin === 'visitor.twine-together.com' ? 'restricted' : 'full'
+      );
+    },
+  },
 
-      h.state('token', token);
-      return { };
+  {
+    method: 'POST',
+    path: '/users/login/escalate',
+    options: {
+      auth: {
+        strategy: 'standard',
+      },
+      validate: {
+        payload: {
+          password: password.required(),
+        },
+      },
+      response: { schema: response },
+    },
+    handler: async (request: EscalateRequest, h: Hapi.ResponseToolkit) => {
+      const { payload: { password }, auth: { credentials } } = request;
+
+      const matches = await compare(password, credentials.user.password);
+
+      if (!matches) {
+        return Boom.unauthorized('Password invalid');
+      }
+
+      return Session.escalate(request, h.response({}));
+    },
+  },
+
+  {
+    method: 'POST',
+    path: '/users/login/de-escalate',
+    options: {
+      auth: {
+        strategy: 'standard',
+      },
+      response: { schema: response },
+    },
+    handler: async (request: EscalateRequest, h: Hapi.ResponseToolkit) => {
+      return Session.deescalate(request, h.response({}));
     },
   },
 ];

@@ -1,4 +1,5 @@
 import * as stream from 'stream';
+import * as Shot from 'shot';
 import axios from 'axios';
 import { Dictionary, CurriedFunction2, assoc, curry } from 'ramda';
 
@@ -47,4 +48,9 @@ export const toDataUrl = async (url: string) => {
   const result = await axios.get(pngUrl, { responseType: 'arraybuffer' });
   const content = Buffer.from(result.data, 'binary').toString('base64');
   return `data:image/png;base64,${content}`;
+};
+
+export const getCookie = (res: Shot.ResponseObject) => {
+  const setCookie = res.headers['set-cookie'];
+  return setCookie[0].split('; ')[0].split('=')[1];
 };

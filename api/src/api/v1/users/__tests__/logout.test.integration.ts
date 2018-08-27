@@ -1,6 +1,7 @@
 import * as Hapi from 'hapi';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
+import { getCookie } from '../../../../utils';
 const { migrate } = require('../../../../../database');
 
 
@@ -32,5 +33,6 @@ describe('GET /users/logout', () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.headers).toHaveProperty('set-cookie');
+    expect(getCookie(res)).toEqual('');
   });
 });

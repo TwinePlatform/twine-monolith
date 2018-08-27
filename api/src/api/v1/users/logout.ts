@@ -1,5 +1,6 @@
 import * as Hapi from 'hapi';
 import { query, response } from './schema';
+import { Session } from '../../../auth/strategies/standard';
 
 
 export default [
@@ -12,8 +13,7 @@ export default [
       response: { schema: response },
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      h.unstate('token');
-      return {};
+      return Session.destroy(request, h.response({}));
     },
   },
 ];
