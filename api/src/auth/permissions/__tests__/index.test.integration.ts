@@ -29,14 +29,18 @@ describe('Permisions Module', () => {
           .select('')
           .count();
         const query = await Permissions.grantNew(trx, {
-          resource: ResourceEnum.CONSTANTS,
-          access: AccessEnum.READ,
-          permissionLevel: PermissionLevelEnum.CHILD,
-          role: RoleEnum.VISITOR,
+          resource: ResourceEnum.USER_DETAILS,
+          access: AccessEnum.WRITE,
+          permissionLevel: PermissionLevelEnum.PARENT,
+          role: RoleEnum.VOLUNTEER,
         });
 
         expect(query)
-          .toEqual([{ access_role_id: 1, permission_id: Number(permissionsCount) + 1 }]);
+          .toEqual([{
+            access_role_id: 2,
+            permission_id: Number(permissionsCount) + 1,
+            access_mode: 'full',
+          }]);
       } catch (error) {
         expect(error).toBeFalsy();
       }
@@ -75,7 +79,11 @@ describe('Permisions Module', () => {
           role: RoleEnum.VOLUNTEER,
         });
         expect(query)
-          .toEqual(expect.arrayContaining([{ access_role_id: 2, permission_id: permissionId }]));
+          .toEqual(expect.arrayContaining([{
+            access_role_id: 2,
+            permission_id: permissionId,
+            access_mode: 'full',
+          }]));
       } catch (error) {
         expect(error).toBeFalsy();
       }
@@ -87,7 +95,7 @@ describe('Permisions Module', () => {
           resource: ResourceEnum.CONSTANTS,
           access: AccessEnum.READ,
           permissionLevel: PermissionLevelEnum.PARENT,
-          role: RoleEnum.VISITOR,
+          role: RoleEnum.VOLUNTEER,
         });
       } catch (error) {
         expect(error.message).toBe(
@@ -101,7 +109,7 @@ describe('Permisions Module', () => {
           resource: ResourceEnum.VISIT_ACTIVITIES,
           access: AccessEnum.READ,
           permissionLevel: PermissionLevelEnum.OWN,
-          role: RoleEnum.VISITOR,
+          role: RoleEnum.ORG_ADMIN,
         });
       } catch (error) {
         expect(error.message).toBe('Permission entry is already associated to this role');
@@ -114,7 +122,7 @@ describe('Permisions Module', () => {
       expect.assertions(1);
       try {
         const query = await Permissions.revoke(trx, {
-          resource: ResourceEnum.ORG_DETAILS,
+          resource: ResourceEnum.USER_DETAILS,
           access: AccessEnum.READ,
           permissionLevel: PermissionLevelEnum.CHILD,
           role: RoleEnum.ORG_ADMIN,
@@ -188,9 +196,9 @@ describe('Permisions Module', () => {
     test('SUCCESS - returns false for non matching permissions & user', async () => {
       try {
         const query = await Permissions.userHas(trx, {
-          resource: ResourceEnum.CONSTANTS,
-          access: AccessEnum.WRITE,
-          permissionLevel: PermissionLevelEnum.ALL,
+          resource: ResourceEnum.VOLUNTEER_LOGS,
+          access: AccessEnum.READ,
+          permissionLevel: PermissionLevelEnum.OWN,
           userId: 1,
         });
         expect(query).toBe(false);
@@ -201,10 +209,10 @@ describe('Permisions Module', () => {
     test('SUCCESS - returns true for matching permissions & user', async () => {
       try {
         const query = await Permissions.userHas(trx, {
-          resource: ResourceEnum.VISIT_LOGS,
-          access: AccessEnum.WRITE,
-          permissionLevel: PermissionLevelEnum.PARENT,
-          userId: 1,
+          resource: ResourceEnum.USER_DETAILS,
+          access: AccessEnum.READ,
+          permissionLevel: PermissionLevelEnum.OWN,
+          userId: 2,
         });
         expect(query).toBe(true);
       } catch (error) {
@@ -215,14 +223,9 @@ describe('Permisions Module', () => {
 
   describe('::forRole', () => {
     test('SUCCESS - returns all permissions associated with role', async () => {
-      const result = await Permissions.forRole(trx, { role: RoleEnum.VISITOR });
+      const result = await Permissions.forRole(trx, { role: RoleEnum.VOLUNTEER });
       expect(result).toEqual(expect.arrayContaining([
         {
-          access: AccessEnum.READ,
-          resource: ResourceEnum.VISIT_ACTIVITIES,
-          permissionLevel: PermissionLevelEnum.OWN,
-        },
-        {
           access: AccessEnum.WRITE,
           resource: ResourceEnum.USER_DETAILS,
           permissionLevel: PermissionLevelEnum.OWN,
@@ -234,7 +237,12 @@ describe('Permisions Module', () => {
         },
         {
           access: AccessEnum.WRITE,
-          resource: ResourceEnum.VISIT_LOGS,
+          resource: ResourceEnum.VOLUNTEER_LOGS,
+          permissionLevel: PermissionLevelEnum.PARENT,
+        },
+        {
+          access: AccessEnum.DELETE,
+          resource: ResourceEnum.VOLUNTEER_LOGS,
           permissionLevel: PermissionLevelEnum.PARENT,
         }].map(expect.objectContaining)));
     });
@@ -244,9 +252,9 @@ describe('Permisions Module', () => {
       try {
         await trx('access_role')
           .del()
-          .where({ access_role_name: RoleEnum.VISITOR });
+          .where({ access_role_name: RoleEnum.VOLUNTEER });
 
-        await Permissions.forRole(trx, { role: RoleEnum.VISITOR });
+        await Permissions.forRole(trx, { role: RoleEnum.VOLUNTEER });
       } catch (error) {
         expect(error.message).toEqual('Role does not exist or has no associated permissions');
       }
