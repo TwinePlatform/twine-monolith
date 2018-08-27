@@ -23,7 +23,7 @@ describe('Auth flow', () => {
       const resLogin = await server.inject({
         method: 'POST',
         url: '/v1/users/login/admin',
-        headers: { origin: 'dashboard.twine-together.com' },
+        headers: { origin: 'https://dashboard.twine-together.com' },
         payload: {
           email: '1@aperturescience.com',
           password: 'CakeisaLi3!',
@@ -51,7 +51,7 @@ describe('Auth flow', () => {
       const resLogin = await server.inject({
         method: 'POST',
         url: '/v1/users/login/admin',
-        headers: { origin: 'visitor.twine-together.com' },
+        headers: { origin: 'https://visitor.twine-together.com' },
         payload: {
           email: '1@aperturescience.com',
           password: 'CakeisaLi3!',
