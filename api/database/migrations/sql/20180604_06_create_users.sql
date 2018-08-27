@@ -92,10 +92,11 @@ CREATE TABLE user_account_access_role (
 CREATE TABLE access_role_permission (
   access_role_id INT NOT NULL,
   permission_id  INT NOT NULL,
+  access_mode    VARCHAR NOT NULL DEFAULT 'full',
 
   CONSTRAINT access_role_permission_to_access_role_fk FOREIGN KEY (access_role_id) REFERENCES access_role ON DELETE CASCADE,
   CONSTRAINT access_role_permission_to_permission_fk  FOREIGN KEY (permission_id)  REFERENCES permission  ON DELETE CASCADE,
-  CONSTRAINT access_role_permission_unique_row        UNIQUE      (access_role_id, permission_id)
+  CONSTRAINT access_role_permission_unique_row        UNIQUE      (access_role_id, permission_id, access_mode)
 );
 
 

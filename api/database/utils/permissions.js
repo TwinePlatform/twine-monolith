@@ -1,6 +1,16 @@
 const api = require('../../src/api/v1/api.json');
 const { map } = require('ramda');
 
+const restrictedScopes = {
+  ORG_ADMIN: [
+    "organisations_details-own:read",
+    "organisations_feedback-own:write",
+    "visit_activities-own:read",
+    "visit_logs-own:write",
+    "constants-all:read"
+  ]
+}
+
 const permissionsForRoles = Object.values(api.routes)
   .reduce((acc, nestedRoutes) => {
     const route = Object.values(nestedRoutes)
@@ -19,7 +29,6 @@ const permissionsForRoles = Object.values(api.routes)
   TWINE_ADMIN: new Set(),
   FUNDING_BODY: new Set(),
   ORG_ADMIN: new Set(),
-  VISITOR: new Set(),
   VOLUNTEER: new Set(),
   VOLUNTEER_ADMIN: new Set(),
 });
@@ -41,6 +50,21 @@ const scopeToPermission = ((permission) => {
   }
 });
 
+const queryRestrictedPermissions = (client) =>
+  Object.entries(restrictedScopes)
+  .map(([role, scopes]) =>
+    scopes.map((scope) => ({
+      access_role_id: client('access_role')
+        .select('access_role_id')
+        .where({access_role_name: role }),
+      permission_id: client('permission')
+        .select('permission_id')
+        .where(scopeToPermission(scope)),
+      access_mode: 'restricted',
+    }))
+  )
+  .reduce((acc, x) => acc.concat(x), []);
+
 const accessRolePermissionsRows = (client) =>
   Object.entries(permissionsForRoles)
   .reduce((acc, [roles, permissions]) => {
@@ -55,8 +79,8 @@ const accessRolePermissionsRows = (client) =>
     }))
 
     return [...acc, ...rows]
-  }
-,[]);
+  }, []).concat(queryRestrictedPermissions(client));
+
 
 module.exports = {
   permissionRows: Array.from(allPermissions).map(scopeToPermission),
@@ -67,8 +91,8 @@ module.exports = {
 if (require.main === module) {
   console.log(
     JSON.stringify({
-      'permissions': Array.from(allPermissions),
-      'permissionsForRoles': map((x) => Array.from(x), permissionsForRoles)
+      'permissions': Array.from(allPermissions).sort(),
+      'permissionsForRoles': map((x) => Array.from(x).sort(), permissionsForRoles)
     })
   );
 }
