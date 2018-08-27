@@ -251,7 +251,7 @@
       "/me": {
         "GET": {
           "description": "Retrieve information about a single community business",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["organisations_details-own:read"],
@@ -301,7 +301,7 @@
       "/:id": {
         "GET": {
           "description": "Retrieve information about a single community business",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
           "scope": ["organisations_details-child:read"],
@@ -470,7 +470,7 @@
         },
         "POST": {
           "description": "Send feedback for one community business",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["organisations_feedback-own:write"],
@@ -946,6 +946,20 @@
             "organisationAccount": "types.organisation"
           }
         }
+      },
+      "/:id/questions/:question_id/cls": {
+        "GET": {
+          "description": "Create an organisation and admin account",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": [],
+          "scope": [],
+          "query": {},
+          "response": {
+            "region": "String",
+            "mean_score": "Number"
+          }
+        }
       }
     },
     "/funding-bodies": {
@@ -1054,7 +1068,7 @@
       "/register/visitor": {
         "POST": {
           "description": "Create a visitor account",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["user_details-child:write"],
@@ -1161,6 +1175,30 @@
           "response": {}
         }
       },
+      "/login/escalate": {
+        "POST": {
+          "description": "Used to increase privilege level of current user session",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["ORG_ADMIN"],
+          "scope": [],
+          "body": {
+            "password": "String"
+          },
+          "response": {}
+        }
+      },
+      "/login/de-escalate": {
+        "POST": {
+          "description": "Used to decrease privilege level of current user session",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["ORG_ADMIN"],
+          "scope": [],
+          "body": {},
+          "response": {}
+        }
+      },
       "/:id": {
         "GET": {
           "description": "Retrieve details of a specific user",
@@ -1223,7 +1261,7 @@
       "/me": {
         "GET": {
           "description": "Retrieve details of your own user account",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": ["user_details-own:read"],
