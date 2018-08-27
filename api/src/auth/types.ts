@@ -58,7 +58,7 @@ type PermissionTuple = {
 
 type PermissionQuery = PermissionTuple & { role: RoleEnum };
 type UserPermissionQuery = Omit<PermissionQuery, 'role'> & { userId: number };
-type RolePermissionQuery = { role: RoleEnum };
+type RolePermissionQuery = { role: RoleEnum, accessMode?: 'full' | 'restricted' };
 
 type RoleQuery = {
   role: RoleEnum
