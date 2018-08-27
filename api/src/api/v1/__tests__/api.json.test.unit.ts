@@ -8,7 +8,7 @@ const apiJson = require('../api.json');
 const routeSchema = {
   description: Joi.string().required(),
   isImplemented: Joi.boolean().required(),
-  auth: Joi.boolean().required(),
+  auth: Joi.alt([Joi.boolean(), Joi.string()]).required(),
   intendedFor: Joi.array().items(Joi.string()).required(),
   scope: Joi.array().items(Joi.string()).required(),
   query: Joi.object(),
@@ -40,10 +40,13 @@ describe('Api.json structure', () => {
 
       test('correct values', () => {
         expect(Joi.validate(route, routeSchema).error).toBeNull();
-        expect(route.scope
+
+        if (route.auth !== 'external') {
+          expect(route.scope
             .map((x: string) => x.split(rx).length === 3)
             .every(id))
           .toBeTruthy();
+        }
       });
     });
   });
