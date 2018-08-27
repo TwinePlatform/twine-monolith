@@ -8,6 +8,18 @@ import { Session } from '../../../auth/strategies/standard';
 import { LoginRequest, EscalateRequest } from '../types';
 
 
+const inferPrivilegeLevel = (request: Hapi.Request) => {
+  const { origin } = request.headers;
+
+  switch (origin) {
+    case 'https://visitor.twine-together.com':
+    case 'http://localhost:3000':
+      return 'restricted';
+    default:
+      return 'full';
+  }
+};
+
 const route: Hapi.ServerRoute[] = [
   {
     method: 'POST',
@@ -43,7 +55,7 @@ const route: Hapi.ServerRoute[] = [
         request,
         h.response({}),
         { userId: user.id, organisationId: organisation.id },
-        request.headers.origin === 'visitor.twine-together.com' ? 'restricted' : 'full'
+        inferPrivilegeLevel(request)
       );
     },
   },
