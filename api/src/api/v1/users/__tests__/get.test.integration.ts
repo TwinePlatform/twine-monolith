@@ -2,28 +2,28 @@
  * User API functional tests
  */
 import * as Hapi from 'hapi';
-import * as Knex from 'knex';
-import routes from '../get';
-import { init } from '../../../../../tests/utils/server';
-import addHooks from '../../hooks';
+import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 
 describe('API /users', () => {
   let server: Hapi.Server;
   const config = getConfig(process.env.NODE_ENV);
-  const knex = Knex(config.knex);
 
-  beforeEach(async () => {
-    server = await init(config, { routes, knex, hooks: [addHooks] });
+  beforeAll(async () => {
+    server = await init(config);
   });
 
   afterAll(async () => {
-    await knex.destroy();
+    await server.shutdown(true);
   });
 
   describe('GET /users', () => {
     test('happy path', async () => {
-      const res = await server.inject({ method: 'GET', url: '/users' });
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/users',
+        credentials: { scope: ['users_details-child:read'] },
+      });
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({

@@ -1,7 +1,6 @@
 import * as Hapi from 'hapi';
 import { User, Organisation } from '../../../models';
 import { RoleEnum } from '../../types';
-import { Omit } from '../../../types/internal';
 
 
 export type UserCredentials = {
