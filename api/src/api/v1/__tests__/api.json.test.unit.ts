@@ -11,9 +11,9 @@ const routeSchema = {
   auth: Joi.alt([Joi.boolean(), Joi.string()]).required(),
   intendedFor: Joi.array().items(Joi.string()).required(),
   scope: Joi.array().items(Joi.string()).required(),
-  query: Joi.object(),
-  body: Joi.object(),
-  response: Joi.alternatives().try(Joi.object(), Joi.string(), Joi.array()).allow(null).required(),
+  query: Joi.alt([Joi.allow(null), Joi.object()]),
+  body: Joi.alt([Joi.allow(null), Joi.object()]),
+  response: Joi.alt().try(Joi.object(), Joi.string(), Joi.array()).allow(null).required(),
 };
 
 const flatRoutes = Object.entries(collapseUrls(apiJson.routes))

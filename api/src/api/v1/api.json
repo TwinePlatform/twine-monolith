@@ -953,8 +953,8 @@
           "isImplemented": true,
           "auth": "external",
           "intendedFor": [],
-          "scope": [],
-          "query": {},
+          "scope": ["frontline"],
+          "query": null,
           "response": {
             "region": "String",
             "mean_score": "Number"
@@ -1182,6 +1182,7 @@
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": [],
+          "query": null,
           "body": {
             "password": "String"
           },
@@ -1195,7 +1196,8 @@
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": [],
-          "body": {},
+          "query": null,
+          "body": null,
           "response": {}
         }
       },
