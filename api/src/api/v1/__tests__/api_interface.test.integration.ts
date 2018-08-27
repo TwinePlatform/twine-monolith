@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import { init } from '../../../server';
 import { getConfig } from '../../../../config';
 import factory from '../../../../tests/utils/factory';
-import { collapseUrls, splitMethodAndUrl } from './utils';
+import { collapseUrls, splitMethodAndUrl, fillPathParams } from './utils';
 import { RouteTestFixture, HttpMethodEnum } from '../types';
 import { RoleEnum } from '../../../auth/types';
 const APISpecification = require('../api.json');
@@ -52,7 +52,7 @@ const createUnauthorisedTest = (method: HttpMethodEnum, url: string) => ({
 const testSpec = Object.entries(collapseUrls(APISpecification.routes, '/v1'))
   .filter(([, routeSpec]) => routeSpec.isImplemented)
   .map(([endpoint, routeSpec]): [string, RouteTestFixture[]] => {
-    const [method, url] = splitMethodAndUrl(endpoint);
+    const [method, url] = splitMethodAndUrl(fillPathParams(endpoint));
     const tests: RouteTestFixture[] = [];
 
     /*

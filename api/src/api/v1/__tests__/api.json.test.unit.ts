@@ -24,20 +24,6 @@ const rx = new RegExp('[-:]');
 describe('Api.json structure', () => {
   flatRoutes.forEach(({ url, route }) => {
     describe(`::${url}`, () => {
-      const [method] = splitMethodAndUrl(url);
-
-      test('correct keys', () => {
-        expect(Object.keys(route)).toEqual([
-          'description',
-          'isImplemented',
-          'auth',
-          'intendedFor',
-          'scope',
-          (method === HttpMethodEnum.GET) ? 'query' : 'body',
-          'response',
-        ]);
-      });
-
       test('correct values', () => {
         expect(Joi.validate(route, routeSchema).error).toBeNull();
 

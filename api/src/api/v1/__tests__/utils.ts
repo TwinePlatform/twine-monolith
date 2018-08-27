@@ -15,3 +15,29 @@ export const splitMethodAndUrl = (endpoint: string): [HttpMethodEnum, string] =>
   const [method, url] = endpoint.split(' ');
   return [method as HttpMethodEnum, url];
 };
+
+/*
+ * Replace express-router-style path parameters (e.g. :id)
+ * with default values. Simply add cases to the switch statement.
+ */
+export const fillPathParams = (url: string) =>
+  url.split('/').map((fragment) => {
+    if (/\:\w+/.test(fragment)) {
+      return fragment.replace(/\:(\w+)/, (_, p1) => {
+        switch (p1) {
+          case 'id':
+            return '1';
+
+          case 'question_id':
+            return 'g';
+
+          default:
+            return '1';
+        }
+      });
+    } else {
+      return fragment;
+    }
+  })
+  .join('/');
+
