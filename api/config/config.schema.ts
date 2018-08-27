@@ -6,7 +6,8 @@
 import * as Joi from 'joi';
 import { Environment } from './types';
 
-export default {
+
+export default Joi.object({
   root: Joi.string().min(1).required(),
   env: Joi.string().only(Object.values(Environment)),
   web: Joi.object({
@@ -57,19 +58,32 @@ export default {
   email: Joi.object({
     postmark_key: Joi.string().required(),
   }).required(),
-  secret: Joi.object({
-    jwt_secret: Joi.string().required(),
+  auth: Joi.object({
+    standard: {
+      jwt: Joi.object({
+        secret: Joi.string().required(),
+        signOptions: Joi.object({
+          algorithm: Joi.string(),
+          expiresIn: Joi.alt([Joi.string(), Joi.number().integer().positive()]),
+        }),
+        verifyOptions: Joi.object({
+          algorithms: Joi.array().items(Joi.string()),
+          maxAge: Joi.alt([Joi.string(), Joi.number().integer().positive()]),
+        }),
+      }),
+      cookie: Joi.object({
+        name: Joi.string().required(),
+        options: Joi.object({
+          ttl: Joi.number().integer().positive(),
+          isSecure: Joi.boolean(),
+          isHttpOnly: Joi.boolean(),
+          isSameSite: Joi.only([false, 'Lax', 'Strict']),
+          path: Joi.string().required(),
+        }).required(),
+      }).required(),
+    },
   }).required(),
   qrcode: Joi.object({
     secret: Joi.string().min(32).required(),
   }).required(),
-  cookies: Joi.object({
-    token: Joi.object({
-      ttl: Joi.number().positive(),
-      isSecure: Joi.boolean(),
-      isHttpOnly: Joi.boolean(),
-      isSameSite: Joi.alternatives().try(Joi.boolean(), Joi.string().allow('Lax', 'Strict')),
-      path: Joi.string().required(),
-    }).required(),
-  }).required(),
-};
+});

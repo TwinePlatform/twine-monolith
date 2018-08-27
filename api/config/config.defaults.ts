@@ -35,19 +35,32 @@ export default {
       ssl: false,
     },
   },
-  secret: {
-    jwt_secret: process.env.JWT_SECRET,
+  auth: {
+    standard: {
+      jwt: {
+        secret: process.env.JWT_SECRET,
+        signOptions: {
+          algorithm: 'HS256',
+          expiresIn: '7 days',
+        },
+        verifyOptions: {
+          algorithms: ['HS256'],
+          maxAge: '6 days',
+        },
+      },
+      cookie: {
+        name: 'tw-api-session',
+        options: {
+          ttl: 1000 * 60 * 60 * 24 * 7, // A week
+          isSecure: true,
+          isHttpOnly: true,
+          isSameSite: 'Lax',
+          path: '/',
+        },
+      },
+    },
   },
   qrcode: {
     secret: process.env.QRCODE_HMAC_SECRET,
-  },
-  cookies: {
-    token : {
-      ttl: 24 * 60 * 60 * 1000,
-      isSecure: true,
-      isHttpOnly: true,
-      isSameSite: 'Lax',
-      path: '/',
-    },
   },
 };

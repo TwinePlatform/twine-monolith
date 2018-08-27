@@ -107,20 +107,25 @@ describe('Config', () => {
       email: {
         postmark_key: 'foo',
       },
-      secret: {
-        jwt_secret: 'lol',
+      auth: {
+        standard: {
+          jwt: {
+            secret: 'lol',
+          },
+          cookie: {
+            name: 'foo',
+            options : {
+              ttl: 24 * 60 * 60 * 1000,
+              isSecure: true,
+              isHttpOnly: true,
+              isSameSite: 'Lax',
+              path: '/',
+            },
+          },
+        },
       },
       qrcode: {
         secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
-      },
-      cookies: {
-        token : {
-          ttl: 24 * 60 * 60 * 1000,
-          isSecure: true,
-          isHttpOnly: true,
-          isSameSite: 'Lax',
-          path: '/',
-        },
       },
     };
 
@@ -155,20 +160,25 @@ describe('Config', () => {
       email: {
         postmark_key: '',
       },
-      secret: {
-        jwt_secret: '',
+      auth: {
+        standard: {
+          jwt: {
+            secret: '',
+          },
+          cookie: {
+            name: '',
+            options: {
+              ttl: 24 * 60 * 60 * 1000,
+              isSecure: true,
+              isHttpOnly: true,
+              isSameSite: 'Lax',
+              path: '/',
+            },
+          },
+        },
       },
       qrcode: {
         secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
-      },
-      cookies: {
-        token : {
-          ttl: 24 * 60 * 60 * 1000,
-          isSecure: true,
-          isHttpOnly: true,
-          isSameSite: 'Lax',
-          path: '/',
-        },
       },
     };
 
