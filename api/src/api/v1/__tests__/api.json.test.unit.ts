@@ -1,7 +1,6 @@
 import * as Joi from 'joi';
 import { identity as id } from 'ramda';
-import { HttpMethodEnum } from '../types';
-import { collapseUrls, splitMethodAndUrl } from './utils';
+import { collapseUrls } from './utils';
 const apiJson = require('../api.json');
 
 

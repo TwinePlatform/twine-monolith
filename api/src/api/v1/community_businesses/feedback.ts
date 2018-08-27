@@ -9,13 +9,32 @@ import { response, since, until } from './schema';
 export default [
   {
     method: 'GET',
+    path: '/community-businesses/me/feedback',
+    options: {
+      description: 'Retrieve information about own community business',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['organisations_feedback-own:read'],
+        },
+      },
+      validate: { query: { since, until } },
+      response: { schema: response },
+    },
+    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+      return Boom.notFound('Not implemented');
+    },
+  },
+
+  {
+    method: 'GET',
     path: '/community-businesses/{organisationId}/feedback',
     options: {
       description: 'Retrieve information about a specific community business',
       auth: {
         strategy: 'standard',
         access: {
-          scope: ['organisations_feedback-child:read', 'organisations_feedback-own:read'],
+          scope: ['organisations_feedback-child:read'],
         },
       },
       validate: { query: { since, until } },
