@@ -30,6 +30,10 @@ type CustomMethods = {
   ) =>
     Promise<LinkedFeedback[]>
   getVisitActivities: (c: Knex, a: Partial<CommunityBusiness>) => Promise<VisitActivity>
+  addVisitActivity: (client: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>)
+    => Promise<VisitActivity>
+  updateVisitActivity: (c: Knex, a: Partial<CommunityBusiness>) => Promise<VisitActivity>
+  deleteVisitActivity: (c: Knex, i: Int) => Promise<VisitActivity>
 };
 
 /*
@@ -284,7 +288,95 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
 
   async getVisitActivities (client: Knex, o: CommunityBusiness) {
     return client('visit_activity')
+    .innerJoin(
+      'visit_activity_category',
+      'visit_activity_category.visit_activity_category_id',
+      'visit_activity.visit_activity_id')
+    .select({
+      id: 'visit_activity_id',
+      name: 'visit_activity_name',
+      category: 'visit_activity_category.visit_activity_category_name',
+      monday: 'monday',
+      tuesday: 'tuesday',
+      wednesday: 'wednesday',
+      thursday: 'thursday',
+      friday: 'friday',
+      saturday: 'saturday',
+      sunday: 'sunday',
+      createdAt: 'created_at',
+      modified_at: 'modified_at',
+    })
       .where({ organisation_id: o.id, deleted_at: null });
+  },
+
+  async addVisitActivity (client: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>) {
+    const [res] = await client('visit_activity')
+    .insert({
+      visit_activity_name: v.name,
+      visit_activity_category_id: client('visit_activity_category')
+        .select('visit_activity_category_id')
+        .where({ visit_activity_category_name: v.category }),
+      organisation_id: c.id,
+    })
+    .returning([
+      'visit_activity_id AS id',
+      'visit_activity_name AS name',
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday',
+      'created_at AS createdAt',
+      'modified_at as modifiedAt',
+    ]);
+    return res || null;
+  },
+
+  async updateVisitActivity (client: Knex, v: Partial<VisitActivity>) {
+    const [res] = await client('visit_activity')
+    .innerJoin(
+      'visit_activity_category',
+      'visit_activity_category.visit_activity_category_id',
+      'visit_activity.visit_activity_id')
+      .where({ visit_activity_id: v.id, deleted_at: null })
+      .update(omit(['id'], v))
+      .returning([
+        'visit_activity_id AS id',
+        'visit_activity_name AS name',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+        'created_at AS createdAt',
+        'modified_at as modifiedAt',
+      ]);
+    return res || null;
+  },
+
+  async deleteVisitActivity (client: Knex, id: Int) {
+    const [res] = await client('visit_activity')
+      .where({ visit_activity_id: id, deleted_at: null })
+      .update({ deleted_at: new Date() })
+      .returning([
+        'visit_activity_id AS id',
+        'visit_activity_name AS name',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+        'created_at AS createdAt',
+        'modified_at as modifiedAt',
+        'deleted_at as deletedAt',
+      ]);
+    return res || null;
   },
 };
 
