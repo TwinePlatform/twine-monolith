@@ -3,7 +3,6 @@ import * as moment from 'moment' ;
 import { CommunityBusinesses } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import {
-  query,
   response,
   visitActivitiesPostPayload,
   visitActivitiesPutPayload,
@@ -100,7 +99,7 @@ export default [
       response: { schema: response },
     },
     handler: async (request: PostOrPutRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, pre: { communityBusiness }, params: { visitActivityId }, payload } = request;
+      const { knex, payload } = request;
 
       return CommunityBusinesses.updateVisitActivity(knex, payload);
     },
