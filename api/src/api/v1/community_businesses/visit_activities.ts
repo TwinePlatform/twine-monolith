@@ -1,14 +1,23 @@
 import * as Hapi from 'hapi';
+import * as moment from 'moment' ;
 import { CommunityBusinesses } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import {
   query,
   response,
-  visitActivitiesPostQuery,
-  visitActivitiesPutQuery,
+  visitActivitiesPostPayload,
+  visitActivitiesPutPayload,
   id,
-  meOrId } from './schema';
+  meOrId,
+  visitActivitiesGetQuery } from './schema';
 import { VisitActivity } from '../../../models/types';
+import { Day } from '../../../types/internal';
+
+interface GetRequest extends Hapi.Request {
+  query: {
+    day: Day
+  };
+}
 
 interface PostOrPutRequest extends Hapi.Request {
   payload: Partial<VisitActivity>;
@@ -34,14 +43,18 @@ export default [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
       validate: {
-        query,
+        query: visitActivitiesGetQuery,
         params: { communityBusinessId: meOrId },
       },
       response: { schema: response },
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      const { knex, pre: { communityBusiness } } = request;
-      return CommunityBusinesses.getVisitActivities(knex, communityBusiness);
+    handler: async (request: GetRequest, h: Hapi.ResponseToolkit) => {
+      const { knex, pre: { communityBusiness }, query: { day: _day = null } } = request;
+      const day = _day === 'today'
+        ? <Day> moment().format('dddd').toLowerCase()
+        : _day;
+
+      return CommunityBusinesses.getVisitActivities(knex, communityBusiness, day);
     },
   },
   {
@@ -59,7 +72,7 @@ export default [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
       validate: {
-        payload: visitActivitiesPostQuery,
+        payload: visitActivitiesPostPayload,
         params: { communityBusinessId: meOrId },
       },
       response: { schema: response },
@@ -83,7 +96,7 @@ export default [
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
-      validate: { payload: visitActivitiesPutQuery },
+      validate: { payload: visitActivitiesPutPayload },
       response: { schema: response },
     },
     handler: async (request: PostOrPutRequest, h: Hapi.ResponseToolkit) => {

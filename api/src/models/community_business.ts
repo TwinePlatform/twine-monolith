@@ -3,7 +3,7 @@
  */
 import * as Knex from 'knex';
 import { compose, omit, evolve, filter, pick, invertObj } from 'ramda';
-import { Dictionary, Map, Int } from '../types/internal';
+import { Dictionary, Map, Int, Day } from '../types/internal';
 import {
   CommunityBusiness,
   CommunityBusinessCollection,
@@ -29,7 +29,7 @@ type CustomMethods = {
     bw?: DateTimeQuery & Pick<ModelQuery<LinkedFeedback>, 'limit' | 'offset' | 'order'>
   ) =>
     Promise<LinkedFeedback[]>
-  getVisitActivities: (c: Knex, a: Partial<CommunityBusiness>) => Promise<VisitActivity>
+  getVisitActivities: (c: Knex, a: Partial<CommunityBusiness>, d?: Day) => Promise<VisitActivity>
   addVisitActivity: (client: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>)
     => Promise<VisitActivity>
   updateVisitActivity: (c: Knex, a: Partial<CommunityBusiness>) => Promise<VisitActivity>
@@ -286,8 +286,8 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return query;
   },
 
-  async getVisitActivities (client: Knex, o: CommunityBusiness) {
-    return client('visit_activity')
+  async getVisitActivities (client: Knex, o: CommunityBusiness, d?: Day) {
+    const baseQuery = client('visit_activity')
     .innerJoin(
       'visit_activity_category',
       'visit_activity_category.visit_activity_category_id',
@@ -307,6 +307,12 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
       modified_at: 'modified_at',
     })
       .where({ organisation_id: o.id, deleted_at: null });
+
+    const query = d
+      ? baseQuery.where({ [d]: true })
+      : baseQuery;
+
+    return query;
   },
 
   async addVisitActivity (client: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>) {
