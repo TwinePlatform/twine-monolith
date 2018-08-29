@@ -42,4 +42,4 @@ export const visitActivitiesPutPayload = {
 };
 
 export const id = Joi.number().positive().required();
-export const meOrId = Joi.number().positive().allow('me').required();
+export const meOrId = id.allow('me').required();

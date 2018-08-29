@@ -36,7 +36,6 @@ export type Day =
   | 'friday'
   | 'saturday'
   | 'sunday'
-  | 'today'
 
 /*
  * Aliases

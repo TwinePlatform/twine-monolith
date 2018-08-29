@@ -14,7 +14,7 @@ import { Day } from '../../../types/internal';
 
 interface GetRequest extends Hapi.Request {
   query: {
-    day: Day
+    day: Day | 'today'
   };
 }
 
