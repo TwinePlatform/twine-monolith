@@ -1,11 +1,11 @@
 module.exports = {
   coverageDirectory: '<rootDir>/coverage/integration',
-  coveragePathIgnorePatterns: ["<rootDir>/build/", "<rootDir>/node_modules/"],
+  coveragePathIgnorePatterns: ['<rootDir>/build/', '<rootDir>/node_modules/', '<rootDir>/tests/utils/'],
   errorOnDeprecated: true,
   globalSetup: '<rootDir>/tests/global_setup.js',
   testPathIgnorePatterns: [
     '<rootDir>/build/',
-    '<rootDir>/tests/utils/',
+    '<rootDir>/tests/utils',
   ],
   moduleFileExtensions: [
     'ts',

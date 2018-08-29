@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 /*
  * Test utility to create a lightweight server object
  *
