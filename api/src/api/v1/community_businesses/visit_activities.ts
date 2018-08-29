@@ -17,8 +17,13 @@ interface GetRequest extends Hapi.Request {
     day: Day | 'today'
   };
 }
-
-interface PostOrPutRequest extends Hapi.Request {
+interface PostRequest extends Hapi.Request {
+  payload: {
+    name: string,
+    category: string
+  };
+}
+interface PutRequest extends Hapi.Request {
   payload: Partial<VisitActivity>;
 }
 
@@ -70,7 +75,7 @@ export default [
       },
       response: { schema: response },
     },
-    handler: async (request: PostOrPutRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request: PostRequest, h: Hapi.ResponseToolkit) => {
       const { knex, payload: visitActivity, pre: { communityBusiness } } = request;
       return CommunityBusinesses.addVisitActivity(knex, visitActivity, communityBusiness);
     },
@@ -92,7 +97,7 @@ export default [
       validate: { payload: visitActivitiesPutPayload },
       response: { schema: response },
     },
-    handler: async (request: PostOrPutRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request: PutRequest, h: Hapi.ResponseToolkit) => {
       const { knex, payload } = request;
 
       return CommunityBusinesses.updateVisitActivity(knex, payload);
