@@ -446,84 +446,6 @@
           "response": null
         }
       },
-      "/:id/visit_activities": {
-        "GET": {
-          "description": "Retrieve all visit activities for an organistion",
-          "isImplemented": true,
-          "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VISITOR"],
-          "scope": ["visit_activities-own:read", "visit_activities-child:read", "visit_activties-parent:read"],
-          "query": {
-            "fields": ["String"],
-            "filter":{
-              "today": "Boolean",
-              "deleted": "Boolean"
-            }
-          },
-          "response": {
-            "totalVisitActivities": "Number",
-            "visitActivitiesList": ["types.visitActivity"]
-          }
-        },
-        "POST": {
-          "description": "Add visit activities for an organistion",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
-          "scope": ["visit_activities-own:write"],
-          "body": {
-            "name": "String",
-            "category": "String",
-            "monday": "Boolean",
-            "tuesday": "Boolean",
-            "wednesday": "Boolean",
-            "thursday": "Boolean",
-            "friday": "Boolean",
-            "saturday": "Boolean",
-            "sunday": "Boolean"
-          },
-          "response": "types.visitActivity"
-        }
-      },
-      "/:id/visit_activities/:id": {
-        "GET": {
-          "description": "Retrieve a single visit activity for an organistion",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
-          "scope": ["visit_activities-own:read", "visit_activities-child:read"],
-          "query": {},
-          "response": "types.visitActivity"
-        },
-        "PUT": {
-          "description": "Update a visit activity for an organistion",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
-          "scope": ["visit_activities-own:write"],
-          "body": {
-            "name": "String",
-            "category": "String",
-            "monday": "Boolean",
-            "tuesday": "Boolean",
-            "wednesday": "Boolean",
-            "thursday": "Boolean",
-            "friday": "Boolean",
-            "saturday": "Boolean",
-            "sunday": "Boolean"
-          },
-          "response": "types.visitActivity"
-        },
-        "DELETE": {
-          "description": "Soft delete visit activity for an organistion",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
-          "scope": ["visit_activities-own:delete"],
-          "body": {},
-          "response": null
-        }
-      },
       "/me/feedback": {
         "GET": {
           "description": "Retreive feedback for one community business",
@@ -703,7 +625,7 @@
       "/me/visit-activities": {
         "GET": {
           "description": "Retrieve all visit activities for an community business",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["visit_activities-own:read"],
@@ -721,7 +643,7 @@
         },
         "POST": {
           "description": "Add visit activities for an community business",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["visit_activities-own:write"],
@@ -739,10 +661,49 @@
           "response": "types.visitActivity"
         }
       },
+      "/me/visit-activities/:id": {
+        "GET": {
+          "description": "Retrieve a single visit activity for an community business",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["ORG_ADMIN"],
+          "scope": ["visit_activities-own:read"],
+          "query": {},
+          "response": "types.visitActivity"
+        },
+        "PUT": {
+          "description": "Update a visit activity for an community business",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["ORG_ADMIN"],
+          "scope": ["visit_activities-own:write"],
+          "body": {
+            "name": "String",
+            "category": "String",
+            "monday": "Boolean",
+            "tuesday": "Boolean",
+            "wednesday": "Boolean",
+            "thursday": "Boolean",
+            "friday": "Boolean",
+            "saturday": "Boolean",
+            "sunday": "Boolean"
+          },
+          "response": "types.visitActivity"
+        },
+        "DELETE": {
+          "description": "Soft delete visit activity for an community business",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["ORG_ADMIN"],
+          "scope": ["visit_activities-own:delete"],
+          "body": {},
+          "response": null
+        }
+      },
       "/:id/visit-activities": {
         "GET": {
           "description": "Retrieve all visit activities for an community business",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
           "scope": ["visit_activities-child:read"],
@@ -764,38 +725,10 @@
           "description": "Retrieve a single visit activity for an community business",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
-          "scope": ["visit_activities-own:read", "visit_activities-child:read"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
+          "scope": ["visit_activities-child:read"],
           "query": {},
           "response": "types.visitActivity"
-        },
-        "PUT": {
-          "description": "Update a visit activity for an community business",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
-          "scope": ["visit_activities-own:write"],
-          "body": {
-            "name": "String",
-            "category": "String",
-            "monday": "Boolean",
-            "tuesday": "Boolean",
-            "wednesday": "Boolean",
-            "thursday": "Boolean",
-            "friday": "Boolean",
-            "saturday": "Boolean",
-            "sunday": "Boolean"
-          },
-          "response": "types.visitActivity"
-        },
-        "DELETE": {
-          "description": "Soft delete visit activity for an community business",
-          "isImplemented": false,
-          "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
-          "scope": ["visit_activities-own:delete"],
-          "body": {},
-          "response": null
         }
       },
       "/:id/visit-logs": {

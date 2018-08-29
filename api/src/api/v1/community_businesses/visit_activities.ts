@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 import * as moment from 'moment' ;
 import { CommunityBusinesses } from '../../../models';
-import { getCommunityBusiness } from '../prerequisites';
+import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 import {
   response,
   visitActivitiesPostPayload,
@@ -25,17 +25,13 @@ interface PostOrPutRequest extends Hapi.Request {
 export default [
   {
     method: 'GET',
-    path: '/community-businesses/{communityBusinessId}/visit_activities',
+    path: '/community-businesses/me/visit_activities',
     options: {
       description: 'Retrieve all visit activities for a community business',
       auth: {
         strategy: 'standard',
         access: {
-          scope: [
-            'visit_activities-own:read',
-            'visit_activities-child:read',
-            'visit_activties-parent:read',
-          ],
+          scope: ['visit_activities-own:read'],
         },
       },
       pre: [
@@ -43,7 +39,6 @@ export default [
       ],
       validate: {
         query: visitActivitiesGetQuery,
-        params: { communityBusinessId: meOrId },
       },
       response: { schema: response },
     },
@@ -58,7 +53,7 @@ export default [
   },
   {
     method: 'POST',
-    path: '/community-businesses/{communityBusinessId}/visit_activities',
+    path: '/community-businesses/me/visit_activities',
     options: {
       description: 'Retrieve all visit activities for a community business',
       auth: {
@@ -72,7 +67,6 @@ export default [
       ],
       validate: {
         payload: visitActivitiesPostPayload,
-        params: { communityBusinessId: meOrId },
       },
       response: { schema: response },
     },
@@ -83,7 +77,7 @@ export default [
   },
   {
     method: 'PUT',
-    path: '/community-businesses/{communityBusinessId}/visit_activities/{visitActivityId}',
+    path: '/community-businesses/me/visit_activities/{visitActivityId}',
     options: {
       description: 'Retrieve all visit activities for a community business',
       auth: {
@@ -106,7 +100,7 @@ export default [
   },
   {
     method: 'DELETE',
-    path: '/community-businesses/{communityBusinessId}/visit_activities/{visitActivityId}',
+    path: '/community-businesses/me/visit_activities/{visitActivityId}',
     options: {
       description: 'Retrieve all visit activities for a community business',
       auth: {
@@ -125,6 +119,36 @@ export default [
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
       const { knex, params: { visitActivityId } } = request;
       return CommunityBusinesses.deleteVisitActivity(knex, Number(visitActivityId));
+    },
+  },
+  {
+    method: 'GET',
+    path: '/community-businesses/{communityBusinessId}/visit_activities',
+    options: {
+      description: 'Retrieve all visit activities for a community business',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['visit_activities-child:read'],
+        },
+      },
+      pre: [
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
+        { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
+      ],
+      validate: {
+        query: visitActivitiesGetQuery,
+        params: { communityBusinessId: id },
+      },
+      response: { schema: response },
+    },
+    handler: async (request: GetRequest, h: Hapi.ResponseToolkit) => {
+      const { knex, pre: { communityBusiness }, query: { day: _day = null } } = request;
+      const day = _day === 'today'
+        ? <Day> moment().format('dddd').toLowerCase()
+        : _day;
+
+      return CommunityBusinesses.getVisitActivities(knex, communityBusiness, day);
     },
   },
 ];

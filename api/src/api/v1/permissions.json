@@ -47,6 +47,7 @@
       "organisations_details-child:write",
       "organisations_feedback-child:read",
       "organisations_outreach-child:read",
+      "organisations_outreach-own:read",
       "organisations_subscriptions-child:read",
       "organisations_subscriptions-child:write",
       "organisations_training-child:delete",
@@ -58,7 +59,6 @@
       "user_details-own:read",
       "user_details-own:write",
       "visit_activities-child:read",
-      "visit_activities-own:read",
       "visit_logs-child:read",
       "volunteer_logs-own:read"
     ],
@@ -69,6 +69,7 @@
       "organisations_details-child:write",
       "organisations_feedback-child:read",
       "organisations_outreach-child:read",
+      "organisations_outreach-own:read",
       "organisations_subscriptions-child:read",
       "organisations_subscriptions-child:write",
       "organisations_training-child:delete",
@@ -80,7 +81,6 @@
       "user_details-own:read",
       "user_details-own:write",
       "visit_activities-child:read",
-      "visit_activities-own:read",
       "visit_logs-child:read",
       "volunteer_logs-own:read"
     ],
@@ -116,6 +116,7 @@
     "VOLUNTEER_ADMIN": [
       "constants-all:read",
       "organisations_outreach-child:read",
+      "organisations_outreach-own:read",
       "user_details-own:read",
       "user_details-own:write",
       "volunteer_logs-parent:delete",
