@@ -13,14 +13,24 @@ describe('Prerequisites :: getCommunityBusiness', () => {
 
   beforeAll(async () => {
     server = await init(config, { knex });
-    server.route({
-      method: 'GET',
-      path: '/foo/{organisationId}',
-      options: {
-        pre: [{ method: pre, assign: 'community_business' }],
+    server.route([
+      {
+        method: 'GET',
+        path: '/foo/{organisationId}',
+        options: {
+          pre: [{ method: pre, assign: 'community_business' }],
+        },
+        handler: async (request, h) => request.pre.community_business,
       },
-      handler: async (request, h) => request.pre.community_business,
-    });
+      {
+        method: 'GET',
+        path: '/poo',
+        options: {
+          pre: [{ method: pre, assign: 'community_business' }],
+        },
+        handler: async (request, h) => request.pre.community_business,
+      },
+    ]);
   });
 
   afterAll(async () => await knex.destroy());
@@ -69,6 +79,25 @@ describe('Prerequisites :: getCommunityBusiness', () => {
     });
 
     const res = await server.inject({ method: 'GET', url: '/foo/GB-COH-3205' });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.result).toEqual(communityBusiness);
+  });
+
+  test('no path parameter defaults to getting CB from credentials', async () => {
+    const organisation =
+      await Organisations.getOne(knex, { where: { _360GivingId: 'GB-COH-3205' } });
+    const communityBusiness =
+      await CommunityBusinesses.getOne(knex, { where: { id: organisation.id } });
+
+    const res = await server.inject({
+      method: 'GET',
+      url: '/poo',
+      credentials: {
+        scope: [],
+        organisation,
+      },
+    });
 
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual(communityBusiness);

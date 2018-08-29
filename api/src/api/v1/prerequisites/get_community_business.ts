@@ -8,6 +8,7 @@
  */
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
+import { isNil } from 'ramda';
 import { CommunityBusinesses } from '../../../models';
 
 
@@ -29,7 +30,7 @@ export default async (request: CommunityBusinessRequest, h: Hapi.ResponseToolkit
   const { params: { organisationId: id }, server: { app: { knex } } } = request;
 
   const communityBusiness =
-    (id === 'me')
+    (id === 'me' || isNil(id))
       ? await getCbFromCredentials(request)
       : (is360GivingId(id))
         ? await CommunityBusinesses.getOne(knex, { where: { _360GivingId: id } })
