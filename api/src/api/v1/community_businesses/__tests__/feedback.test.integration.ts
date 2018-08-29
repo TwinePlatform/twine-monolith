@@ -93,6 +93,22 @@ describe('/community-business/{id}/feedback', () => {
       });
     });
 
+    test('Get 400 when requesting invalid date limits', async () => {
+      const since = 'nope';
+      const until = 'never';
+
+      const res = await server.inject({
+        method: 'GET',
+        url: `/v1/community-businesses/me/feedback?since=${since}&until=${until}`,
+        credentials: {
+          user: users.glados,
+          organisation: orgs.aperture,
+          scope: ['organisations_feedback-own:read'],
+        },
+      });
+      expect(res.statusCode).toBe(400);
+    });
+
     test('Get empty feedback for child org as TWINE_ADMIN when no data', async () => {
       const res = await server.inject({
         method: 'GET',
@@ -148,6 +164,38 @@ describe('/community-business/{id}/feedback', () => {
         expect([-1, 0, 1].includes(feedback.score)).toBeTruthy();
       });
     });
+
+    test('Get 400 when requesting invalid date limits as TWINE_ADMIN', async () => {
+      const since = 'nope';
+      const until = 'never';
+
+      const res = await server.inject({
+        method: 'GET',
+        url: `/v1/community-businesses/1/feedback?since=${since}&until=${until}`,
+        credentials: {
+          user: users.glados,
+          organisation: orgs.aperture,
+          scope: ['organisations_feedback-child:read'],
+        },
+      });
+
+      expect(res.statusCode).toBe(400);
+    });
+
+    test('Get 403 when organisation is not a "child" of user', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: `/v1/community-businesses/1/feedback`,
+        credentials: {
+          user: users.glados,
+          organisation: orgs.aperture,
+          scope: ['organisations_feedback-child:read'],
+          role: RoleEnum.ORG_ADMIN,
+        },
+      });
+
+      expect(res.statusCode).toBe(403);
+    });
   });
 
   describe('GET /community-businesses/{id}/feedback/aggregates', () => {
@@ -169,6 +217,63 @@ describe('/community-business/{id}/feedback', () => {
         0: 0,
         1: 0,
       });
+    });
+
+    test('Get summary results for own organisation', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/feedback/aggregates',
+        credentials: {
+          user: users.glados,
+          organisation: orgs.aperture,
+          scope: ['organisations_feedback-own:read'],
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toEqual({
+        totalFeedback: 9,
+        '-1': 2,
+        0: 4,
+        1: 3,
+      });
+    });
+
+    test('Get summary results for own organisation between date limits', async () => {
+      const since = '2018-07-01T10:43:22.231';
+      const until = '2018-07-31T10:43:22.231';
+
+      const res = await server.inject({
+        method: 'GET',
+        url: `/v1/community-businesses/me/feedback/aggregates?since=${since}&until=${until}`,
+        credentials: {
+          user: users.glados,
+          organisation: orgs.aperture,
+          scope: ['organisations_feedback-own:read'],
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toEqual({
+        totalFeedback: 5,
+        '-1': 1,
+        0: 2,
+        1: 2,
+      });
+    });
+
+    test('Get 400 for invalid date limits', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/feedback/aggregates?since=nope&until=never',
+        credentials: {
+          user: users.glados,
+          organisation: orgs.aperture,
+          scope: ['organisations_feedback-own:read'],
+        },
+      });
+
+      expect(res.statusCode).toBe(400);
     });
   });
 

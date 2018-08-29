@@ -31,10 +31,6 @@ export default [
       const since = new Date(query.since);
       const until = new Date(query.until);
 
-      if (Number.isNaN(since.valueOf()) || Number.isNaN(until.valueOf())) {
-        return Boom.badRequest('Invalid date representation');
-      }
-
       return CommunityBusinesses.getFeedback(
         knex,
         <CommunityBusiness> communityBusiness,
@@ -70,10 +66,6 @@ export default [
 
       const since = new Date(query.since);
       const until = new Date(query.until);
-
-      if (Number.isNaN(since.valueOf()) || Number.isNaN(until.valueOf())) {
-        return Boom.badRequest('Invalid date representation');
-      }
 
       return CommunityBusinesses.getFeedback(
         knex,
@@ -136,13 +128,10 @@ export default [
       const since = new Date(query.since);
       const until = new Date(query.until);
 
-      if (Number.isNaN(since.valueOf()) || Number.isNaN(until.valueOf())) {
-        return Boom.badRequest('Invalid date representation');
-      }
-
       const res: { score: string, count: string }[] = await knex('visit_feedback')
         .select('score', knex.raw('count (*)'))
         .where({ organisation_id: communityBusiness.id })
+        .whereBetween('created_at', [since, until])
         .groupBy('score');
 
       return res
