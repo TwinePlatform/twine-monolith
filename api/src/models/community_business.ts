@@ -22,7 +22,11 @@ import { applyQueryModifiers } from './util';
  */
 type CustomMethods = {
   addFeedback: (k: Knex, c: CommunityBusiness, score: Int) => Promise<LinkedFeedback>
-  getFeedback: (k: Knex, c: CommunityBusiness, bw?: DateTimeQuery) =>
+  getFeedback: (
+    k: Knex,
+    c: CommunityBusiness,
+    bw?: DateTimeQuery & Pick<ModelQuery<LinkedFeedback>, 'limit' | 'offset' | 'order'>
+  ) =>
     Promise<LinkedFeedback[]>
 };
 
@@ -257,14 +261,17 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return res;
   },
 
-  async getFeedback (client: Knex, c: CommunityBusiness, bw?: DateTimeQuery) {
-    const baseQuery = client('visit_feedback')
-      .select({
-        id: 'visit_feedback_id',
-        score: 'score',
-        createdAt: 'created_at',
-      })
-      .where({ organisation_id: c.id, deleted_at: null });
+  async getFeedback (client: Knex, c: CommunityBusiness, bw?) {
+    const baseQuery = applyQueryModifiers(
+      client('visit_feedback')
+        .select({
+          id: 'visit_feedback_id',
+          score: 'score',
+          createdAt: 'created_at',
+        })
+        .where({ organisation_id: c.id, deleted_at: null }),
+      bw || {}
+    );
 
     const query = bw
         ? baseQuery.whereBetween('created_at', [bw.since, bw.until])
