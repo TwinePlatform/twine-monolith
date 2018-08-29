@@ -1,6 +1,8 @@
 import * as Hapi from 'hapi';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
+import { CommunityBusinesses } from '../../../../models';
+import { VisitActivity } from '../../../../models/types';
 
 
 describe('API v1 :: Community Businesses :: Visit Activities', () => {
@@ -19,7 +21,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: successfully gets all activities for a cb', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/community-businesses/1/visit_activities',
+        url: '/v1/community-businesses/me/visit-activities',
         credentials: { scope: ['visit_activities-own:read'] },
       });
 
@@ -27,7 +29,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       expect(res.result).toEqual({ result: expect.arrayContaining(
         [
           expect.objectContaining({
-            category: 'Arts, Craft, and Music',
+            category: 'Socialising',
             id: 2,
             name: 'Wear Pink',
             monday: false,
@@ -41,7 +43,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
           expect.objectContaining({
             id: 3,
             name: 'Free Running',
-            category: 'Physical health and wellbeing',
+            category: 'Sports',
             monday: false,
             tuesday: true,
             wednesday: true,
@@ -58,7 +60,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: successfully updates a visit activity', async () => {
       const res = await server.inject({
         method: 'PUT',
-        url: '/v1/community-businesses/1/visit_activities/1',
+        url: '/v1/community-businesses/me/visit-activities/1',
         payload: {
           id: 2,
           monday: true,
@@ -88,7 +90,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: successfully add a new activity', async () => {
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/community-businesses/1/visit_activities',
+        url: '/v1/community-businesses/me/visit-activities',
         payload: {
           name: 'Base Jumping',
           category: 'Adult skills building',
@@ -115,15 +117,22 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
   });
 
   describe('DELETE', () => {
-    test(':: successfully add a new activity', async () => {
+    test(':: successfully deletes an activity', async () => {
       const res = await server.inject({
         method: 'DELETE',
-        url: '/v1/community-businesses/1/visit_activities/1',
+        url: '/v1/community-businesses/me/visit-activities/1',
         credentials: { scope: ['visit_activities-own:delete'] },
       });
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result.deletedAt).toBeTruthy();
+      const doubleCheck = await CommunityBusinesses.getVisitActivities(server.app.knex, { id: 1 });
+      expect(doubleCheck).toEqual(
+        (<any> expect).not.arrayContaining([
+          expect.objectContaining({
+            name: 'Absailing',
+          }),
+        ]));
     });
   });
 });

@@ -25,7 +25,7 @@ interface PostOrPutRequest extends Hapi.Request {
 export default [
   {
     method: 'GET',
-    path: '/community-businesses/me/visit_activities',
+    path: '/community-businesses/me/visit-activities',
     options: {
       description: 'Retrieve all visit activities for a community business',
       auth: {
@@ -53,7 +53,7 @@ export default [
   },
   {
     method: 'POST',
-    path: '/community-businesses/me/visit_activities',
+    path: '/community-businesses/me/visit-activities',
     options: {
       description: 'Retrieve all visit activities for a community business',
       auth: {
@@ -77,7 +77,7 @@ export default [
   },
   {
     method: 'PUT',
-    path: '/community-businesses/me/visit_activities/{visitActivityId}',
+    path: '/community-businesses/me/visit-activities/{visitActivityId}',
     options: {
       description: 'Retrieve all visit activities for a community business',
       auth: {
@@ -100,7 +100,7 @@ export default [
   },
   {
     method: 'DELETE',
-    path: '/community-businesses/me/visit_activities/{visitActivityId}',
+    path: '/community-businesses/me/visit-activities/{visitActivityId}',
     options: {
       description: 'Retrieve all visit activities for a community business',
       auth: {
@@ -111,7 +111,6 @@ export default [
       },
       validate: {
         params: {
-          communityBusinessId: meOrId,
           visitActivityId: id},
       },
       response: { schema: response },
@@ -123,7 +122,7 @@ export default [
   },
   {
     method: 'GET',
-    path: '/community-businesses/{communityBusinessId}/visit_activities',
+    path: '/community-businesses/{communityBusinessId}/visit-activities',
     options: {
       description: 'Retrieve all visit activities for a community business',
       auth: {

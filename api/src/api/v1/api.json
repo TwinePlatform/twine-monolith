@@ -664,7 +664,7 @@
       "/me/visit-activities/:id": {
         "GET": {
           "description": "Retrieve a single visit activity for an community business",
-          "isImplemented": true,
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["visit_activities-own:read"],
