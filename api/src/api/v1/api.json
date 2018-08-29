@@ -1398,7 +1398,7 @@
         }
       }
     },
-    "/subscription_types": {
+    "/subscription-types": {
       "/": {
         "GET": {
           "description": "Retrieve subscription type catagories",
@@ -1414,7 +1414,7 @@
         }
       }
     },
-    "/outreach_campaigns": {
+    "/outreach-campaigns": {
       "/types": {
         "GET": {
           "description": "Retrieve subscription type catagories",

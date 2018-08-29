@@ -5,13 +5,13 @@ import { query, response } from './schema';
 const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
   const [resourceName] = tableName.split('community_business_').slice(-1);
   const resourceNamePlural = resourceName.slice(-1) === 'y'
-    ? resourceName.replace(/y$/, 'ies')
-    : resourceName.concat('s');
+    ? resourceName.replace(/y$/, 'ies').replace('_', '-')
+    : resourceName.concat('s').replace('_', '-');
 
   return {
     method: 'GET',
     path: `/${ tableName === 'outreach_type'
-      ? 'outreach_campaigns/types'
+      ? 'outreach-campaigns/types'
       : resourceNamePlural }`,
     options: {
       description: `Retreive list of ${resourceNamePlural}`,
