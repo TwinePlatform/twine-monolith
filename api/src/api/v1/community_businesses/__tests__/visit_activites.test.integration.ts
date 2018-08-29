@@ -2,8 +2,6 @@ import * as Hapi from 'hapi';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { CommunityBusinesses } from '../../../../models';
-import { VisitActivity } from '../../../../models/types';
-
 
 describe('API v1 :: Community Businesses :: Visit Activities', () => {
   let server: Hapi.Server;

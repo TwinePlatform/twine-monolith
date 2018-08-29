@@ -7,7 +7,6 @@ import {
   visitActivitiesPostPayload,
   visitActivitiesPutPayload,
   id,
-  meOrId,
   visitActivitiesGetQuery } from './schema';
 import { VisitActivity } from '../../../models/types';
 import { Day } from '../../../types/internal';
@@ -155,4 +154,4 @@ export default [
       return CommunityBusinesses.getVisitActivities(knex, communityBusiness, day);
     },
   },
-];
+] as Hapi.ServerRoute[];
