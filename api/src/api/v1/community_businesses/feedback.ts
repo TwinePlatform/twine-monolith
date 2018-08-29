@@ -1,9 +1,10 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import { CommunityBusinesses } from '../../../models';
-import { PostFeedbackRequest } from '../types';
-import { response, since, until } from './schema';
+import { CommunityBusinesses, CommunityBusiness } from '../../../models';
+import { GetFeedbackRequest, PostFeedbackRequest } from '../types';
+import { query, response, since, until } from './schema';
+import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 
 
 export default [
@@ -18,11 +19,27 @@ export default [
           scope: ['organisations_feedback-own:read'],
         },
       },
-      validate: { query: { since, until } },
+      validate: { query: { since, until, ...query } },
       response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness , assign: 'communityBusiness' },
+      ],
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      return Boom.notFound('Not implemented');
+    handler: async (request: GetFeedbackRequest, h: Hapi.ResponseToolkit) => {
+      const { knex, pre: { communityBusiness }, query } = request;
+
+      const since = new Date(query.since);
+      const until = new Date(query.until);
+
+      if (Number.isNaN(since.valueOf()) || Number.isNaN(until.valueOf())) {
+        return Boom.badRequest('Invalid date representation');
+      }
+
+      return CommunityBusinesses.getFeedback(
+        knex,
+        <CommunityBusiness> communityBusiness,
+        { since, until, limit: query.limit, offset: query.offset }
+      );
     },
   },
 
@@ -39,9 +56,30 @@ export default [
       },
       validate: { query: { since, until } },
       response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness , assign: 'communityBusiness' },
+        { method: isChildOrganisation , assign: 'isChild' },
+      ],
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      return Boom.notFound('Not implemented');
+    handler: async (request: GetFeedbackRequest, h: Hapi.ResponseToolkit) => {
+      const { knex, pre: { communityBusiness, isChild }, query } = request;
+
+      if (!isChild) {
+        return Boom.forbidden('Cannot access this organisation');
+      }
+
+      const since = new Date(query.since);
+      const until = new Date(query.until);
+
+      if (Number.isNaN(since.valueOf()) || Number.isNaN(until.valueOf())) {
+        return Boom.badRequest('Invalid date representation');
+      }
+
+      return CommunityBusinesses.getFeedback(
+        knex,
+        <CommunityBusiness> communityBusiness,
+        { since, until, limit: query.limit, offset: query.offset }
+      );
     },
   },
 
@@ -71,6 +109,48 @@ export default [
       const communityBusiness = await CommunityBusinesses.getOne(knex, { where: { id } });
 
       return CommunityBusinesses.addFeedback(knex, communityBusiness, feedbackScore);
+    },
+  },
+
+  {
+    method: 'GET',
+    path: '/community-businesses/me/feedback/aggregates',
+    options: {
+      description: 'Retrieve information about own community business',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['organisations_feedback-own:read'],
+        },
+      },
+      validate: { query: { since, until, ...query } },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness , assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request: GetFeedbackRequest, h: Hapi.ResponseToolkit) => {
+      const { knex, query } = request;
+      const communityBusiness = <CommunityBusiness> request.pre.communityBusiness;
+
+      const since = new Date(query.since);
+      const until = new Date(query.until);
+
+      if (Number.isNaN(since.valueOf()) || Number.isNaN(until.valueOf())) {
+        return Boom.badRequest('Invalid date representation');
+      }
+
+      const res: { score: string, count: string }[] = await knex('visit_feedback')
+        .select('score', knex.raw('count (*)'))
+        .where({ organisation_id: communityBusiness.id })
+        .groupBy('score');
+
+      return res
+        .reduce((acc: { [k: string]: number, totalFeedback: number }, row) => {
+          acc[row.score] = Number(row.count);
+          acc.totalFeedback = (acc.totalFeedback || 0) + Number(row.count);
+          return acc;
+        }, { totalFeedback: 0, '-1': 0, 0: 0, 1: 0 });
     },
   },
 

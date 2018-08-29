@@ -449,7 +449,7 @@
       "/me/feedback": {
         "GET": {
           "description": "Retreive feedback for one community business",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["organisations_feedback-own:read"],
@@ -457,16 +457,13 @@
             "since": "String",
             "until": "String"
           },
-          "response": {
-            "cbId": "Number",
-            "totalFeedback": "Number",
-            "feedbackList": [{
-              "score": "Number",
-              "createdAt": "String",
-              "modifiedAt": "String",
-              "deletedAt": "String"
-            }]
-          }
+          "response": [{
+            "organisationId": "Number",
+            "score": "Number",
+            "createdAt": "String",
+            "modifiedAt": "String",
+            "deletedAt": "String"
+          }]
         },
         "POST": {
           "description": "Send feedback for one community business",
@@ -487,7 +484,7 @@
       "/:id/feedback": {
         "GET": {
           "description": "Retreive feedback for one community business",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
           "scope": ["organisations_feedback-child:read"],
@@ -496,7 +493,6 @@
             "until": "String"
           },
           "response": {
-            "cbId": "Number",
             "totalFeedback": "Number",
             "feedbackList": [{
               "score": "Number",
@@ -510,7 +506,7 @@
       "/me/feedback/aggregates": {
         "GET": {
           "description": "Retreive aggregated feedback for own community business",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["organisations_feedback-own:read"],
@@ -521,7 +517,6 @@
             }
           },
           "response": {
-            "cbId": "Number",
             "totalFeedback": "Number",
             "-1": "Number",
             "0": "Number",
@@ -543,7 +538,6 @@
             }
           },
           "response": {
-            "cbId": "Number",
             "totalFeedback": "Number",
             "-1": "Number",
             "0": "Number",

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /*
  * Test utility to create a lightweight server object
  *
@@ -19,23 +20,19 @@ type Options = {
 export const init = async (config: Config, options: Options = {}): Promise<Hapi.Server> => {
   const server = new Hapi.Server(config.web);
 
-  /* istanbul ignore next */
   if (options.knex) {
     server.app.knex = options.knex;
     server.decorate('request', 'knex', options.knex);
   }
 
-  /* istanbul ignore next */
   if (options.plugins) {
     await server.register(options.plugins);
   }
 
-  /* istanbul ignore next */
   if (options.hooks) {
     options.hooks.forEach((hook) => hook(server));
   }
 
-  /* istanbul ignore next */
   if (options.routes) {
     server.route(options.routes);
   }

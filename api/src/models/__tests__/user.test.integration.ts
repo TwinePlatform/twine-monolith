@@ -64,7 +64,7 @@ describe('User Model', () => {
     test('get :: order results', async () => {
       const users = await Users.get(trx, { order: ['name', 'desc'] });
       expect(users.map((u) => u.name).sort())
-        .toEqual(['Barney', 'Big Boss', 'Chell', 'GlaDos', 'Gordon',]);
+        .toEqual(['Barney', 'Big Boss', 'Chell', 'GlaDos', 'Gordon']);
     });
 
     test('get :: offset results', async () => {
