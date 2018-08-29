@@ -22,7 +22,9 @@ const permissionsForRoles = Object.values(api.routes)
   }, [])
   .reduce((acc, el) => {
     el.intendedFor.forEach(x => {
-      if (el.scope.length > 0 && el.auth !== 'external') acc[x].add(...el.scope)
+      if (el.scope.length > 0 && el.auth !== 'external') {
+        el.scope.forEach(y => acc[x].add(y))
+      }
     })
     return acc
   }, {
@@ -87,6 +89,7 @@ module.exports = {
   accessRolePermissionsRows,
 }
 
+// permissionsForRoles
 
 if (require.main === module) {
   console.log(
