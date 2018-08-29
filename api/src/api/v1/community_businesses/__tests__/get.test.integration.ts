@@ -54,7 +54,7 @@ describe('GET /community-businesses', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
-        result: expect.objectContaining({ _360GivingId: 'GB-COH-3205' }),
+        result: expect.objectContaining({ _360GivingId: 'GB-COH-9302' }),
       });
       expect(Object.keys((<any> res.result).result)).toHaveLength(15);
     });
