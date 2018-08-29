@@ -4,6 +4,7 @@ import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { Users, Organisations, LinkedFeedback, User, Organisation } from '../../../../models';
 import { RoleEnum } from '../../../../auth/types';
+const { migrate } = require('../../../../../database');
 
 
 describe('/community-business/{id}/feedback', () => {
@@ -16,6 +17,9 @@ describe('/community-business/{id}/feedback', () => {
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
+
+    await migrate.truncate({ client: knex });
+    await knex.seed.run();
 
     users.gordon = await Users.getOne(knex, { where: { name: 'Gordon' } });
     users.glados = await Users.getOne(knex, { where: { name: 'GlaDos' } });
