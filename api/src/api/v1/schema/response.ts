@@ -11,7 +11,7 @@ import { Dictionary } from 'ramda';
 
 
 export type ApiResponse = {
-  result?: Dictionary<any> | any[]
+  result?: Dictionary<any> | any[] | null
   error?: {
     statusCode: number
     type: string
