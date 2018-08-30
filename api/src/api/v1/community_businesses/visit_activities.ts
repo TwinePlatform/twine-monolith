@@ -114,6 +114,7 @@ export default [
         },
       },
       validate: {
+        query: null,
         params: {
           visitActivityId: id},
       },
