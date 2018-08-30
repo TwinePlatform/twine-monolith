@@ -8,10 +8,12 @@ import get from './get';
 import register from './register';
 import adminLogin from './login_admin';
 import logout from './logout';
+import visitors from './visitors';
 
 export default [
   ...register,
   ...get,
   ...adminLogin,
   ...logout,
+  ...visitors,
 ];

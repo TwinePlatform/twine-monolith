@@ -1143,7 +1143,7 @@
           "intendedFor": ["ORG_ADMIN"],
           "scope": [],
           "body": {
-            "qr_code": "String"
+            "qrCode": "String"
           },
           "response": "types.visitorUser"
         }
@@ -1385,6 +1385,21 @@
           },
           "response": {
             "result": ["types.outreach"]
+          }
+        }
+      },
+      "/visitors/search": {
+        "POST": {
+          "description": "Search for visitors of own organisation by QR code",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["ORG_ADMIN"],
+          "scope": ["user_details-child:read"],
+          "body": {
+            "qrCode": "String"
+          },
+          "response": {
+            "result": ["types.user"]
           }
         }
       }
