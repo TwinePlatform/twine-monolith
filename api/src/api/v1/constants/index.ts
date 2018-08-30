@@ -5,8 +5,8 @@ import { query, response } from './schema';
 const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
   const [resourceName] = tableName.split('community_business_').slice(-1);
   const resourceNamePlural = resourceName.slice(-1) === 'y'
-    ? resourceName.replace(/y$/, 'ies').replace('_', '-')
-    : resourceName.concat('s').replace('_', '-');
+    ? resourceName.replace(/y$/, 'ies').replace(/_/g, '-')
+    : resourceName.concat('s').replace(/_/g, '-');
 
   return {
     method: 'GET',
