@@ -24,7 +24,7 @@ export type ApiResponse = {
 };
 
 export const response = {
-  result: Joi.alternatives(Joi.object(), Joi.array()),
+  result: Joi.alternatives(Joi.object(), Joi.array()).allow(null),
   error: Joi.object({
     statusCode: Joi.number().integer().min(200).max(599),
     type: Joi.string().min(1).max(255),

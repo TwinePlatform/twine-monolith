@@ -1,9 +1,11 @@
 import * as Hapi from 'hapi';
+import * as Joi from 'joi';
 import * as moment from 'moment' ;
 import { CommunityBusinesses } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 import {
   response,
+  query,
   visitActivitiesPostPayload,
   visitActivitiesPutPayload,
   id,
@@ -93,7 +95,12 @@ export default [
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
-      validate: { payload: visitActivitiesPutPayload },
+      validate: {
+        payload: visitActivitiesPutPayload,
+        params: {
+          visitActivityId: id,
+        },
+      },
       response: { schema: response },
     },
     handler: async (request: PutRequest, h: Hapi.ResponseToolkit) => {
@@ -114,7 +121,8 @@ export default [
         },
       },
       validate: {
-        query: null,
+        payload: Joi.any().valid(null),
+        query,
         params: {
           visitActivityId: id},
       },

@@ -31,6 +31,10 @@ export const formatBoom = ({ output: { payload } }: Boom<any>): ApiResponse => (
 export const formatResponse = (res: Hapi.ResponseObject): ApiResponse => {
   const r: any = res.source;
 
+  if (r === null) {
+    return { result: null } as ApiResponse;
+  }
+
   if (r.hasOwnProperty('result') && r.hasOwnProperty('meta')) {
     return { ...r } as ApiResponse;
   }
