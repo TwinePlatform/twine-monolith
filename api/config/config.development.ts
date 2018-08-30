@@ -28,4 +28,13 @@ export default {
   email: {
     postmark_key: process.env.POSTMARK_KEY_DEVELOPMENT,
   },
+  auth: {
+    standard: {
+      cookie: {
+        options: {
+          isSecure: false,
+        },
+      },
+    },
+  },
 };

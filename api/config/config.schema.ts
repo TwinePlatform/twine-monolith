@@ -79,6 +79,7 @@ export default Joi.object({
           isHttpOnly: Joi.boolean(),
           isSameSite: Joi.only([false, 'Lax', 'Strict']),
           path: Joi.string().required(),
+          domain: Joi.string(),
         }).required(),
       }).required(),
     },
