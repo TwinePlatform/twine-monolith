@@ -3,6 +3,7 @@ import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { CommunityBusinesses } from '../../../../models';
 
+
 describe('API v1 :: Community Businesses :: Visit Activities', () => {
   let server: Hapi.Server;
   const config = getConfig(process.env.NODE_ENV);
@@ -17,10 +18,13 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
 
   describe('GET', () => {
     test(':: successfully gets all activities for a cb', async () => {
-      const res = await server.inject({
+      const res = await (<any> server).inject({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-activities',
-        credentials: { scope: ['visit_activities-own:read'] },
+        credentials: {
+          user: 1 ,
+          organisation: 1 ,
+          scope: ['visit_activities-own:read'] },
       });
 
       expect(res.statusCode).toBe(200);
@@ -56,14 +60,18 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
   });
   describe('PUT', () => {
     test(':: successfully updates a visit activity', async () => {
-      const res = await server.inject({
+      const res = await (<any> server).inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/visit-activities/1',
         payload: {
           id: 2,
           monday: true,
         },
-        credentials: { scope: ['visit_activities-own:write'] },
+        credentials: {
+          user: 1 ,
+          organisation: 1 ,
+          scope: ['visit_activities-own:write'],
+        },
       });
 
       expect(res.statusCode).toBe(200);
@@ -86,14 +94,18 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
 
   describe('POST', () => {
     test(':: successfully add a new activity', async () => {
-      const res = await server.inject({
+      const res = await (<any> server).inject({
         method: 'POST',
         url: '/v1/community-businesses/me/visit-activities',
         payload: {
           name: 'Base Jumping',
           category: 'Adult skills building',
         },
-        credentials: { scope: ['visit_activities-own:write'] },
+        credentials: {
+          user: 1 ,
+          organisation: 1 ,
+          scope: ['visit_activities-own:write'],
+        },
       });
 
       expect(res.statusCode).toBe(200);
@@ -116,10 +128,14 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
 
   describe('DELETE', () => {
     test(':: successfully deletes an activity', async () => {
-      const res = await server.inject({
+      const res = await (<any> server).inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/visit-activities/1',
-        credentials: { scope: ['visit_activities-own:delete'] },
+        credentials: {
+          user: 1 ,
+          organisation: 1 ,
+          scope: ['visit_activities-own:delete'],
+        },
       });
 
       expect(res.statusCode).toBe(200);
