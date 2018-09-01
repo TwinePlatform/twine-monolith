@@ -1,0 +1,5 @@
+/*
+ * Migration template
+ *
+ * DELIBERATELY EMPTY
+ */
