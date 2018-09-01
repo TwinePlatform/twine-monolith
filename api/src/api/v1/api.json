@@ -832,12 +832,12 @@
           }
         }
       },
-      "/:id/volunteer_logs": {
+      "/me/volunteer-logs": {
         "GET": {
-          "description": "Retrieve volunteer logs for a single community business",
+          "description": "Retrieve volunteer logs for own community business",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
+          "intendedFor": ["ORG_ADMIN"],
           "scope": ["volunteer_logs-own:read"],
           "query": {
             "fields": ["String"],
@@ -853,7 +853,28 @@
           }
         }
       },
-      "/:id/volunteer_logs/:id": {
+      "/:id/volunteer-logs": {
+        "GET": {
+          "description": "Retrieve volunteer logs for a single community business",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
+          "scope": ["volunteer_logs-child:read"],
+          "query": {
+            "fields": ["String"],
+            "filter": {
+              "since": "String",
+              "until": "String"
+            }
+          },
+          "response": {
+            "totalVOLUNTEER": "Number",
+            "totalVolunteerHours": "Number",
+            "volunteerLogs": ["types.volunteerLog"]
+          }
+        }
+      },
+      "/:id/volunteer-logs/:id": {
         "PUT": {
           "description": "Update volunteer log for your user account",
           "isImplemented": false,
@@ -878,7 +899,7 @@
           "response": null
         }
       },
-      "/me/outreach_campaigns": {
+      "/me/outreach-campaigns": {
         "GET": {
           "description": "Retrieve all outreach campaings and meetings for own community business",
           "isImplemented": false,
@@ -897,7 +918,7 @@
           }
         }
       },
-      "/:id/outreach_campaigns": {
+      "/:id/outreach-campaigns": {
         "GET": {
           "description": "Retrieve all outreach campaings and meetings for a specific community business",
           "isImplemented": false,
@@ -1331,13 +1352,31 @@
           }
         }
       },
-      "/:id/outreach_campaigns": {
+      "/me/outreach-campaigns": {
+        "GET": {
+          "description": "Retrieve all outreach campaigns and meetings for self",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["ORG_ADMIN", "VOLUNTEER_ADMIN"],
+          "scope": ["organisations_outreach-own:read", "organisations_outreach-parent:read"],
+          "query": {
+            "fields": ["String"],
+            "filter": {
+              "outreachType": "String"
+            }
+          },
+          "response": {
+            "result": ["types.outreach"]
+          }
+        }
+      },
+      "/:id/outreach-campaigns": {
         "GET": {
           "description": "Retrieve all outreach campaigns and meetings for a specific user",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER_ADMIN"],
-          "scope": ["organisations_outreach-child:read", "organisations_outreach-own:read"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY"],
+          "scope": ["organisations_outreach-child:read"],
           "query": {
             "fields": ["String"],
             "filter": {
@@ -1360,9 +1399,7 @@
           "scope": [],
           "query": {
           },
-          "response": {
-            "genders": ["String"]
-          }
+          "response": ["String"]
         }
       }
     },
@@ -1376,9 +1413,7 @@
           "scope": [],
           "query": {
           },
-          "response": {
-            "genders": ["String"]
-          }
+          "response": ["String"]
         }
       }
     },
@@ -1392,25 +1427,7 @@
           "scope": [],
           "query": {
           },
-          "response": {
-            "genders": ["String"]
-          }
-        }
-      }
-    },
-    "/subscription-types": {
-      "/": {
-        "GET": {
-          "description": "Retrieve subscription type catagories",
-          "isImplemented": true,
-          "auth": false,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
-          "scope": [],
-          "query": {
-          },
-          "response": {
-            "genders": ["String"]
-          }
+          "response": ["String"]
         }
       }
     },
@@ -1429,13 +1446,13 @@
           }
         }
       },
-      "/type/:id/campaign_targets": {
+      "/types/:id/campaign-targets": {
         "GET": {
           "description": "Retrieve campaign targets for an outreach type",
           "isImplemented": false,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER_ADMIN"],
-          "scope": ["constants-all:read"],
+          "scope": [],
           "query": {
             "fields": ["String"]
           },
@@ -1502,6 +1519,48 @@
             "totalOutreachCampaigns": "Number",
             "outreachCampaignList": ["types.outreach"]
           }
+        }
+      }
+    },
+    "/subscription-types": {
+      "/": {
+        "GET": {
+          "description": "Retrieve subscription type catagories",
+          "isImplemented": true,
+          "auth": false,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": [],
+          "query": {
+          },
+          "response": ["String"]
+        }
+      }
+    },
+    "/visit-activity-categories": {
+      "/": {
+        "GET": {
+          "description": "Retrieve visit activity catagories",
+          "isImplemented": true,
+          "auth": false,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": [],
+          "query": {
+          },
+          "response": ["String"]
+        }
+      }
+    },
+    "/volunteer-activity-categories": {
+      "/": {
+        "GET": {
+          "description": "Retrieve volunteer activity catagories",
+          "isImplemented": true,
+          "auth": false,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": [],
+          "query": {
+          },
+          "response": ["String"]
         }
       }
     }
