@@ -1,5 +1,5 @@
 const path = require('path');
-const { getEnvironment } = require('../../build/config')
+const { getEnvironment, Environment } = require('../../build/config')
 
 
 exports.up = (knex) => {
@@ -23,14 +23,18 @@ exports.up = (knex) => {
     .then(() => require(path.join(basePath, '15_access_role_permission.seed.js')).seed(knex))
     .then(() => require(path.join(basePath, '16_frontline_survey_questions.seed.js')).seed(knex))
     .then(() => require(path.join(basePath, '17_cls_and_nps_benchmarks.seed.js')).seed(knex))
-    .then(() => require(path.join(basePath, '18_test_user.seed.js')).seed(knex))
-    .then(() => require(path.join(basePath, '19_test_organisation.seed.js')).seed(knex))
-    .then(() => require(path.join(basePath, '20_test_user_role.seed.js')).seed(knex))
-    .then(() => require(path.join(basePath, '21_test_api_token.seed.js')).seed(knex))
-    .then(() => require(path.join(basePath, '22_test_community_business.seed.js')).seed(knex))
-    .then(() => require(path.join(basePath, '23_test_visit_activity.seed.js')).seed(knex))
-    .then(() => require(path.join(basePath, '24_test_visit.seed.js')).seed(knex))
-    .then(() => require(path.join(basePath, '25_test_visit_feedback.seed.js')).seed(knex))
+    .then(() =>
+        NODE_ENV !== Environment.PRODUCTION
+          ? require(path.join(basePath, '18_test_user.seed.js')).seed(knex)
+              .then(() => require(path.join(basePath, '19_test_organisation.seed.js')).seed(knex))
+              .then(() => require(path.join(basePath, '20_test_user_role.seed.js')).seed(knex))
+              .then(() => require(path.join(basePath, '21_test_api_token.seed.js')).seed(knex))
+              .then(() => require(path.join(basePath, '22_test_community_business.seed.js')).seed(knex))
+              .then(() => require(path.join(basePath, '23_test_visit_activity.seed.js')).seed(knex))
+              .then(() => require(path.join(basePath, '24_test_visit.seed.js')).seed(knex))
+              .then(() => require(path.join(basePath, '25_test_visit_feedback.seed.js')).seed(knex))
+          : Promise.resolve()
+    )
 };
 
 exports.down = (knex) => {
