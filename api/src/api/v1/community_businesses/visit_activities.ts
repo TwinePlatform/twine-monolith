@@ -1,7 +1,8 @@
 import * as Hapi from 'hapi';
+import * as Boom from 'boom';
 import * as Joi from 'joi';
 import * as moment from 'moment' ;
-import { CommunityBusinesses } from '../../../models';
+import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 import {
   response,
@@ -19,10 +20,7 @@ interface GetRequest extends Hapi.Request {
   };
 }
 interface PostRequest extends Hapi.Request {
-  payload: {
-    name: string,
-    category: string
-  };
+  payload: Pick<VisitActivity, 'name' | 'category'>;
 }
 interface PutRequest extends Hapi.Request {
   payload: Partial<VisitActivity>;
@@ -49,7 +47,9 @@ export default [
       response: { schema: response },
     },
     handler: async (request: GetRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, pre: { communityBusiness }, query: { day: _day = null } } = request;
+      const { knex, pre, query: { day: _day = null } } = request;
+      const communityBusiness = <CommunityBusiness> pre.communityBusiness;
+
       const day = _day === 'today'
         ? <Day> moment().format('dddd').toLowerCase()
         : _day;
@@ -104,9 +104,24 @@ export default [
       response: { schema: response },
     },
     handler: async (request: PutRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, payload } = request;
+      const { knex, payload, pre, params: { visitActivityId } } = request;
+      const communityBusiness = <CommunityBusiness> pre.communityBusiness;
 
-      return CommunityBusinesses.updateVisitActivity(knex, payload);
+      const visitActivity =
+        await CommunityBusinesses.getVisitActivityById(knex, communityBusiness, +visitActivityId);
+
+      if (!visitActivity) {
+        return Boom.forbidden('Access to this visit activity is forbidden');
+      }
+
+      const updatedActivity = await CommunityBusinesses.updateVisitActivity(
+        knex,
+        { ...visitActivity, ...payload }
+      );
+
+      return updatedActivity
+        ? updatedActivity
+        : Boom.badImplementation('Update failed');
     },
   },
   {
@@ -124,7 +139,8 @@ export default [
         payload: Joi.any().valid(null),
         query,
         params: {
-          visitActivityId: id},
+          visitActivityId: id,
+        },
       },
       response: { schema: response },
     },
@@ -135,7 +151,7 @@ export default [
   },
   {
     method: 'GET',
-    path: '/community-businesses/{communityBusinessId}/visit-activities',
+    path: '/community-businesses/{organisationId}/visit-activities',
     options: {
       description: 'Retrieve all visit activities for a community business',
       auth: {
@@ -150,15 +166,21 @@ export default [
       ],
       validate: {
         query: visitActivitiesGetQuery,
-        params: { communityBusinessId: id },
+        params: { organisationId: id },
       },
       response: { schema: response },
     },
     handler: async (request: GetRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, pre: { communityBusiness }, query: { day: _day = null } } = request;
+      const { knex, pre, query: { day: _day = null } } = request;
+      const communityBusiness = <CommunityBusiness> pre.communityBusiness;
+
+      if (!pre.isChild) {
+        return Boom.forbidden('Access to this resource is forbidden');
+      }
+
       const day = _day === 'today'
-        ? <Day> moment().format('dddd').toLowerCase()
-        : _day;
+          ? <Day> moment().format('dddd').toLowerCase()
+          : _day;
 
       return CommunityBusinesses.getVisitActivities(knex, communityBusiness, day);
     },

@@ -31,7 +31,7 @@ export const visitActivitiesPostPayload = {
 };
 
 export const visitActivitiesPutPayload = {
-  id: Joi.number().positive(),
+  category: Joi.string().min(3),
   monday: Joi.boolean(),
   tuesday: Joi.boolean(),
   wednesday: Joi.boolean(),

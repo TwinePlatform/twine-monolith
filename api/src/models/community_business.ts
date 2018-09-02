@@ -16,6 +16,7 @@ import {
 } from './types';
 import { Organisations } from './organisation';
 import { applyQueryModifiers } from './util';
+import { renameKeys } from '../utils';
 
 
 /*
@@ -29,11 +30,12 @@ type CustomMethods = {
     bw?: DateTimeQuery & Pick<ModelQuery<LinkedFeedback>, 'limit' | 'offset' | 'order'>
   ) =>
     Promise<LinkedFeedback[]>
-  getVisitActivities: (c: Knex, a: Partial<CommunityBusiness>, d?: Day) => Promise<VisitActivity>
-  addVisitActivity: (client: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>)
+  getVisitActivities: (k: Knex, c: CommunityBusiness, d?: Day) => Promise<VisitActivity>
+  getVisitActivityById: (k: Knex, c: CommunityBusiness, id: Int) => Promise<VisitActivity>
+  addVisitActivity: (k: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>)
     => Promise<VisitActivity>
-  updateVisitActivity: (c: Knex, a: Partial<CommunityBusiness>) => Promise<VisitActivity>
-  deleteVisitActivity: (c: Knex, i: Int) => Promise<VisitActivity>
+  updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<VisitActivity>
+  deleteVisitActivity: (k: Knex, i: Int) => Promise<VisitActivity>
 };
 
 /*
@@ -304,7 +306,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         saturday: 'saturday',
         sunday: 'sunday',
         createdAt: 'created_at',
-        modified_at: 'modified_at',
+        modifiedAt: 'modified_at',
       })
       .where({ organisation_id: o.id, deleted_at: null });
 
@@ -313,6 +315,34 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
       : baseQuery;
 
     return query;
+  },
+
+  async getVisitActivityById (client: Knex, c: CommunityBusiness, id: number) {
+    const [visitActivity] = await client('visit_activity')
+        .innerJoin(
+          'visit_activity_category',
+          'visit_activity_category.visit_activity_category_id',
+          'visit_activity.visit_activity_category_id')
+        .select({
+          id: 'visit_activity_id',
+          name: 'visit_activity_name',
+          category: 'visit_activity_category.visit_activity_category_name',
+          monday: 'monday',
+          tuesday: 'tuesday',
+          wednesday: 'wednesday',
+          thursday: 'thursday',
+          friday: 'friday',
+          saturday: 'saturday',
+          sunday: 'sunday',
+          createdAt: 'created_at',
+          modifiedAt: 'modified_at',
+        })
+        .where({
+          visit_activity_id: id,
+          deleted_at: null,
+          organisation_id: c.id,
+        });
+    return visitActivity;
   },
 
   async addVisitActivity (client: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>) {
@@ -337,31 +367,48 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         'created_at AS createdAt',
         'modified_at as modifiedAt',
       ]);
-    return res || null;
+    return res;
   },
 
   async updateVisitActivity (client: Knex, v: Partial<VisitActivity>) {
+    const transformToColumns = compose(
+      evolve({
+        visit_activity_category_id: (n) =>
+          client('visit_activity_category')
+            .select('visit_activity_category_id')
+            .where({ visit_activity_category_name: n }),
+      }),
+      renameKeys({
+        name: 'visit_activity_name',
+        category: 'visit_activity_category_id',
+        createdAt: 'created_at',
+        modifiedAt: 'modified_at',
+      }),
+      omit(['id'])
+    );
+
     const [res] = await client('visit_activity')
-      .innerJoin(
-        'visit_activity_category',
-        'visit_activity_category.visit_activity_category_id',
-        'visit_activity.visit_activity_category_id')
-        .where({ visit_activity_id: v.id, deleted_at: null })
-        .update(omit(['id'], v))
-        .returning([
-          'visit_activity_id AS id',
-          'visit_activity_name AS name',
-          'monday',
-          'tuesday',
-          'wednesday',
-          'thursday',
-          'friday',
-          'saturday',
-          'sunday',
-          'created_at AS createdAt',
-          'modified_at as modifiedAt',
-        ]);
-    return res || null;
+      .update(transformToColumns(v))
+      .where({ visit_activity_id: v.id, deleted_at: null })
+      .returning([
+        'visit_activity_id AS id',
+        'visit_activity_name AS name',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+        'created_at AS createdAt',
+        'modified_at AS modifiedAt',
+      ]);
+
+    if (!res) {
+      return null;
+    }
+
+    return { ...res, category: v.category };
   },
 
   async deleteVisitActivity (client: Knex, id: Int) {
@@ -379,10 +426,10 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         'saturday',
         'sunday',
         'created_at AS createdAt',
-        'modified_at as modifiedAt',
-        'deleted_at as deletedAt',
+        'modified_at AS modifiedAt',
+        'deleted_at AS deletedAt',
       ]);
-    return res || null;
+    return res;
   },
 };
 
