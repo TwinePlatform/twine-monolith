@@ -256,9 +256,9 @@ describe('/community-business/{id}/feedback', () => {
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual({
         totalFeedback: 5,
-        '-1': 1,
+        '-1': 2,
         0: 2,
-        1: 2,
+        1: 1,
       });
     });
 

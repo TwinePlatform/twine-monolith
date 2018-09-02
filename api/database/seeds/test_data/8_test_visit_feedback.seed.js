@@ -1,5 +1,5 @@
 const moment = require('moment');
-const today = moment();
+const day = moment('2018-08-05T10:43:22.231');
 
 exports.seed = (knex) =>
   knex('visit_feedback')
@@ -7,46 +7,46 @@ exports.seed = (knex) =>
       {
         organisation_id: knex('organisation').select('organisation_id').where({organisation_name: 'Aperture Science'}),
         score: -1,
-        created_at: today.day(-7).toISOString(),
+        created_at: day.day(-7).toISOString(),
       },
       {
         organisation_id: knex('organisation').select('organisation_id').where({organisation_name: 'Aperture Science'}),
         score: 0,
-        created_at: today.day(-7).toISOString(),
+        created_at: day.day(-7).toISOString(),
       },
       {
         organisation_id: knex('organisation').select('organisation_id').where({organisation_name: 'Aperture Science'}),
         score: 0,
-        created_at: today.day(-6).toISOString(),
+        created_at: day.day(-6).toISOString(),
       },
       {
         organisation_id: knex('organisation').select('organisation_id').where({organisation_name: 'Aperture Science'}),
         score: 1,
-        created_at: today.day(-6).toISOString(),
+        created_at: day.day(-6).toISOString(),
       },
       {
         organisation_id: knex('organisation').select('organisation_id').where({organisation_name: 'Aperture Science'}),
         score: -1,
-        created_at: today.day(-5).toISOString(),
+        created_at: day.day(-5).toISOString(),
       },
       {
         organisation_id: knex('organisation').select('organisation_id').where({organisation_name: 'Aperture Science'}),
         score: 0,
-        created_at: today.day(-5).toISOString(),
+        created_at: day.day(-5).toISOString(),
       },
       {
         organisation_id: knex('organisation').select('organisation_id').where({organisation_name: 'Aperture Science'}),
         score: 0,
-        created_at: today.day(-4).toISOString(),
+        created_at: day.day(-4).toISOString(),
       },
       {
         organisation_id: knex('organisation').select('organisation_id').where({organisation_name: 'Aperture Science'}),
         score: 1,
-        created_at: today.day(-3).toISOString(),
+        created_at: day.day(-3).toISOString(),
       },
       {
         organisation_id: knex('organisation').select('organisation_id').where({organisation_name: 'Aperture Science'}),
         score: 1,
-        created_at: today.day(-2).toISOString(),
+        created_at: day.day(-2).toISOString(),
       },
   ]);
