@@ -3,7 +3,7 @@
  */
 import * as Knex from 'knex';
 import { compose, omit, evolve, filter, pick, invertObj } from 'ramda';
-import { Dictionary, Map, Int, Day } from '../types/internal';
+import { Dictionary, Map, Int, Day, Maybe } from '../types/internal';
 import {
   CommunityBusiness,
   CommunityBusinessCollection,
@@ -31,11 +31,11 @@ type CustomMethods = {
   ) =>
     Promise<LinkedFeedback[]>
   getVisitActivities: (k: Knex, c: CommunityBusiness, d?: Day) => Promise<VisitActivity>
-  getVisitActivityById: (k: Knex, c: CommunityBusiness, id: Int) => Promise<VisitActivity>
+  getVisitActivityById: (k: Knex, c: CommunityBusiness, id: Int) => Promise<Maybe<VisitActivity>>
   addVisitActivity: (k: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>)
-    => Promise<VisitActivity>
-  updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<VisitActivity>
-  deleteVisitActivity: (k: Knex, i: Int) => Promise<VisitActivity>
+    => Promise<Maybe<VisitActivity>>
+  updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>
+  deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>
 };
 
 /*
@@ -342,7 +342,8 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
           deleted_at: null,
           organisation_id: c.id,
         });
-    return visitActivity;
+
+    return visitActivity || null;
   },
 
   async addVisitActivity (client: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>) {
@@ -404,11 +405,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         'modified_at AS modifiedAt',
       ]);
 
-    if (!res) {
-      return null;
-    }
-
-    return { ...res, category: v.category };
+    return res ? { ...res, category: v.category } : null;
   },
 
   async deleteVisitActivity (client: Knex, id: Int) {
@@ -429,7 +426,8 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         'modified_at AS modifiedAt',
         'deleted_at AS deletedAt',
       ]);
-    return res;
+
+    return res || null;
   },
 };
 
