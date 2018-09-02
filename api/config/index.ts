@@ -42,7 +42,7 @@ const validateConfig = (cfg: Partial<Config>): Config => {
   return value as Config;
 };
 
-const validateEnvironment = (env: string): Environment => {
+const getEnvironment = (env: string): Environment => {
   switch (env) {
     case Environment.DEVELOPMENT:
       return Environment.DEVELOPMENT;
@@ -62,13 +62,14 @@ const validateEnvironment = (env: string): Environment => {
 const getConfig: (env: string, path?: string) => Config =
   converge(
     compose(validateConfig, readConfig),
-    [validateEnvironment, identity]
+    [getEnvironment, identity]
   );
 
 export {
   readConfig,
   validateConfig,
   getConfig,
+  getEnvironment,
   Environment,
   Config,
 };

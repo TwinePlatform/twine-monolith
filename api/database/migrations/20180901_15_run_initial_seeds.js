@@ -1,5 +1,8 @@
+const { getEnvironment } = require('../../build/config')
+
+
 exports.up = (knex) => {
-  const { NODE_ENV } = process.env;
+  const NODE_ENV = getEnvironment(process.env.NODE_ENV);
 
   return require(`/Users/elias/wk/twine/twine-api/database/seeds/${NODE_ENV}/01_community_business_region.seed.js`).seed(knex)
     .then(() => require(`/Users/elias/wk/twine/twine-api/database/seeds/${NODE_ENV}/02_community_buiness_sector.seed.js`).seed(knex))
