@@ -3,6 +3,7 @@ import { Dictionary } from 'ramda';
 import { ApiRequestQuery, ApiRequestBody } from './schema/request';
 import { ApiResponse } from './schema/response';
 import { UserCredentials } from '../../auth/strategies/standard';
+import { GenderEnum } from '../../models';
 
 
 declare module 'hapi' {
@@ -63,6 +64,18 @@ export interface LoginRequest extends Hapi.Request {
 export interface EscalateRequest extends Hapi.Request {
   payload: {
     password: string
+  };
+}
+
+export interface GetVisitorsRequest extends Hapi.Request {
+  query: ApiRequestQuery & {
+    [k: string]: any
+    filter?: {
+      age?: [number, number]
+      gender?: GenderEnum
+      activity?: string
+    }
+    visits: boolean
   };
 }
 

@@ -2,6 +2,7 @@
  * Route validation schema for User routes
  */
 import * as Joi from 'joi';
+import { gender } from '../schema/request';
 
 export { query, gender, id } from '../schema/request';
 export { response } from '../schema/response';
@@ -47,3 +48,14 @@ export const emailConsent =
 
 export const smsConsent =
   Joi.boolean();
+
+/*
+ *
+ */
+export const filterQuery = {
+  filter: Joi.object({
+    age: Joi.array().length(2).items(Joi.number().integer().min(0)),
+    activity: Joi.string(),
+    gender,
+  }),
+};
