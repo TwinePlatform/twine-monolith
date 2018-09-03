@@ -98,7 +98,7 @@ describe('CbAdmin model', () => {
     test('update :: failed update on foreign key column', async () => {
       expect.assertions(1);
 
-      const changeset = { gender: 'non-existent' };
+      const changeset = <any> { gender: 'non-existent' };
       const admin = await CbAdmins.getOne(trx, { where: { id: 2 } });
 
       try {

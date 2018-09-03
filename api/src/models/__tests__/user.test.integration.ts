@@ -3,7 +3,7 @@ import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
-import { Users } from '..';
+import { Users, GenderEnum } from '..';
 
 
 describe('User Model', () => {
@@ -98,7 +98,7 @@ describe('User Model', () => {
 
     test('update :: successful update of foreign-key column', async () => {
       const user = await Users.getOne(trx, { where: { id: 1 } });
-      const changes = { gender: 'male' };
+      const changes = { gender: GenderEnum.MALE };
       const omitter = omit(['gender', 'modifiedAt']);
 
       const updatedUser = await Users.update(trx, user, changes);

@@ -87,7 +87,7 @@ describe('Visitor model', () => {
     test('update :: failed update on foreign key column', async () => {
       expect.assertions(1);
 
-      const changeset = { gender: 'non-existent' };
+      const changeset = <any> { gender: 'non-existent' };
       const visitor = await Visitors.getOne(trx, { where: { id: 1 } });
 
       try {

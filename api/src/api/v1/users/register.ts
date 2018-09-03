@@ -15,7 +15,7 @@ import {
   gender,
   response
 } from './schema';
-import { Visitors, CommunityBusinesses, CbAdmins } from '../../../models';
+import { Visitors, CommunityBusinesses, CbAdmins, GenderEnum } from '../../../models';
 import * as QRCode from '../../../services/qrcode';
 import * as PdfService from '../../../services/pdf';
 import { EmailTemplate } from '../../../services/email/templates';
@@ -27,7 +27,7 @@ interface RegisterRequest extends Hapi.Request {
   payload: {
     organisationId: number
     name: string
-    gender: string
+    gender: GenderEnum
     birthYear: number
     email: string
     phoneNumber: string

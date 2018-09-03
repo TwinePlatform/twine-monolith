@@ -4,7 +4,7 @@
 import * as Knex from 'knex';
 import { compose, omit, filter, pick, invertObj, evolve } from 'ramda';
 import { Dictionary, Map } from '../types/internal';
-import { User, UserRow, UserCollection, UserChangeSet, ModelQuery } from './types';
+import { User, UserRow, UserCollection, UserChangeSet, ModelQuery, GenderEnum } from './types';
 import { applyQueryModifiers } from './util';
 import { renameKeys, mapKeys } from '../utils';
 
@@ -50,7 +50,7 @@ export const ModelToColumn = invertObj(ColumnToModel);
  */
 const applyDefaultConstants = (o: UserChangeSet) => ({
   ...o,
-  gender: o.gender || 'prefer not to say',
+  gender: o.gender || GenderEnum.PREFER_NOT_TO_SAY,
   ethnicity: o.ethnicity || 'prefer not to say',
   disability: o.disability || 'prefer not to say',
 });

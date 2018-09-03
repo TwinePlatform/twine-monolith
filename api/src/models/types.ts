@@ -12,11 +12,17 @@ export type Coordinates = {
   lng: Float
 };
 
-type CommonTimestamps = {
+export type CommonTimestamps = {
   createdAt: string
   modifiedAt?: string
   deletedAt?: string
 };
+
+export enum GenderEnum {
+  MALE = 'male',
+  FEMALE = 'female',
+  PREFER_NOT_TO_SAY = 'prefer not to say',
+}
 
 /*
  * Database row definitions
@@ -82,7 +88,7 @@ export type UserBase = CommonTimestamps & {
   phoneNumber?: string
   password?: string
   qrCode?: string
-  gender: string
+  gender: GenderEnum
   disability: string
   ethnicity: string
   birthYear?: Int
@@ -135,6 +141,10 @@ export type VisitEventBase = CommonTimestamps & {
   id: Int
 };
 
+export type LinkedVisitEventBase = VisitEventBase & {
+  visitActivity: string
+};
+
 export type FeedbackBase = CommonTimestamps & {
   id: Int
   score: -1 | 0 | 1
@@ -169,6 +179,8 @@ export type Organisation = Readonly<OrganisationBase>;
 export type CommunityBusiness = Readonly<CommunityBusinessBase>;
 export type Subscription = Readonly<SubscriptionBase>;
 export type VisitActivity = Readonly<VisitActivityBase>;
+export type VisitEvent = Readonly<VisitEventBase>;
+export type LinkedVisitEvent = Readonly<LinkedVisitEventBase>;
 export type Feedback = Readonly<FeedbackBase>;
 export type LinkedFeedback = Readonly<LinkedFeedbackBase>;
 export type OutreachMeeting = Readonly<OutreachMeetingBase>;
