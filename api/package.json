@@ -64,6 +64,7 @@
     "hapi-auth-bearer-token": "^6.1.0",
     "hapi-auth-jwt2": "^8.1.0",
     "hapi-pino": "^4.0.4",
+    "hapi-qs": "^2.0.1",
     "joi": "^13.6.0",
     "jsonwebtoken": "^8.3.0",
     "knex": "^0.15.2",
