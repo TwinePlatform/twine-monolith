@@ -3,9 +3,9 @@
  */
 import { createHmac } from 'crypto';
 import * as Knex from 'knex';
-import { omit, pick, evolve, compose } from 'ramda';
+import { assoc, omit, pick, evolve, compose } from 'ramda';
 import { Dictionary } from '../types/internal';
-import { User, UserCollection, UserChangeSet, ModelQuery, CommunityBusiness } from './types';
+import { User, UserCollection, UserChangeSet, ModelQuery, LinkedVisitEvent } from './types';
 import { Users, ModelToColumn } from './user';
 import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './util';
@@ -16,9 +16,12 @@ import * as QRCode from '../services/qrcode';
 /*
  * Declarations for methods specific to this model
  */
+type UserWithVisits = User & {
+  visits: LinkedVisitEvent[]
+};
 type CustomMethods = {
   recordLogin: (k: Knex, u: User) => Promise<void>
-  fromCommunityBusiness: (k: Knex, c: CommunityBusiness) => Promise<User[]>
+  getWithVisits: (k: Knex, q?: ModelQuery<User>) => Promise<UserWithVisits[]>
 };
 
 
@@ -95,9 +98,35 @@ export const Visitors: UserCollection & CustomMethods = {
     return Users.recordLogin(client, u);
   },
 
-  async fromCommunityBusiness (client: Knex, c: CommunityBusiness) {
-    return client
-        .select(ModelToColumn)
+  async serialise (user: Partial<User>) {
+    const strippedUser = omit(['password', 'qrCode'], user);
+    const serialisedUser = user.qrCode
+      ? assoc('qrCode', await QRCode.create(user.qrCode), strippedUser)
+      : strippedUser;
+
+    return serialisedUser;
+  },
+
+  async getWithVisits (client: Knex, q: ModelQuery<User> = {}) {
+    const query = evolve({
+      where: Visitors.toColumnNames,
+      whereNot: Visitors.toColumnNames,
+    }, q);
+
+    const additionalColumnMap = {
+      visitId: 'visit.visit_id',
+      visitCreatedAt: 'visit.created_at',
+      visitModifiedAt: 'visit.modified_at',
+      visitDeletedAt: 'visit.deleted_at',
+      visitActivityName: 'visit_activity.visit_activity_name',
+    };
+
+    const rows = await applyQueryModifiers(
+      client
+        .select({
+          ...(query.fields ? pick(query.fields, ModelToColumn) : ModelToColumn),
+          ...additionalColumnMap,
+        })
         .from('user_account')
         .leftOuterJoin('gender', 'user_account.gender_id', 'gender.gender_id')
         .leftOuterJoin('ethnicity', 'user_account.ethnicity_id', 'ethnicity.ethnicity_id')
@@ -106,16 +135,65 @@ export const Visitors: UserCollection & CustomMethods = {
           'user_account_access_role',
           'user_account.user_account_id',
           'user_account_access_role.user_account_id')
+        .leftOuterJoin(
+          'visit',
+          'visit.user_account_id',
+          'user_account.user_account_id')
+        .leftOuterJoin(
+          'visit_activity',
+          'visit.visit_activity_id',
+          'visit_activity.visit_activity_id')
         .where({
           ['user_account_access_role.access_role_id']: client('access_role')
             .select('access_role_id')
             .where({ access_role_name: RoleEnum.VISITOR }),
-          ['user_account_access_role.organisation_id']: c.id,
-        });
-  },
+        }),
+      query
+    );
 
-  async serialise (user: User) {
-    const qrCode = await QRCode.create(user.qrCode);
-    return { ...omit(['password', 'qrCode'], user), qrCode };
+    return Object.values(
+      rows.reduce((
+        acc: Dictionary<UserWithVisits>,
+        row: User & {
+          visitId: number
+          visitCreatedAt: string
+          visitModifiedAt: string
+          visitDeletedAt: string
+          visitActivityName: string
+        }
+      ) => {
+        const {
+          visitCreatedAt,
+          visitModifiedAt,
+          visitDeletedAt,
+          visitActivityName,
+          visitId,
+          ...rest
+        } = row;
+
+        if (acc.hasOwnProperty(rest.id)) {
+          acc[rest.id].visits.push({
+            id: visitId,
+            createdAt: visitCreatedAt,
+            modifiedAt: visitModifiedAt,
+            deletedAt: visitDeletedAt,
+            visitActivity: visitActivityName,
+          });
+        } else {
+          acc[rest.id] = {
+            ...rest,
+            visits: [{
+              id: visitId,
+              createdAt: visitCreatedAt,
+              modifiedAt: visitModifiedAt,
+              deletedAt: visitDeletedAt,
+              visitActivity: visitActivityName,
+            }],
+          };
+        }
+
+        return acc;
+      }, {})
+    );
   },
 };

@@ -49,11 +49,16 @@ describe('Visitor model', () => {
       expect(exists).toBe(false);
     });
 
-    test('fromOrganisation :: gets all visitors at organisation', async () => {
-      const cb = await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture Science' } });
-      const visitors = await Visitors.fromCommunityBusiness(knex, cb);
+    test.only('getWithVisits :: returns visit objects nested within visitors', async () => {
+      const visitors = await Visitors.getWithVisits(knex, { where: { name: 'Chell' } });
       expect(visitors).toHaveLength(1);
-      expect(visitors[0]).toEqual(expect.objectContaining({ name: 'Chell' }));
+      expect(visitors[0]).toEqual(expect.objectContaining({ id: 1, name: 'Chell' }));
+      expect(visitors[0].visits).toHaveLength(10);
+      expect(visitors[0].visits).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ visitActivity: 'Free Running' }),
+        ])
+      );
     });
   });
 
