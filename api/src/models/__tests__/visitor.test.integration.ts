@@ -49,8 +49,8 @@ describe('Visitor model', () => {
       expect(exists).toBe(false);
     });
 
-    test.only('getWithVisits :: returns visit objects nested within visitors', async () => {
-      const visitors = await Visitors.getWithVisits(knex, { where: { name: 'Chell' } });
+    test('getWithVisits :: returns visit objects nested within visitors', async () => {
+      const visitors = await Visitors.getWithVisits(knex, { id: 1 }, { where: { name: 'Chell' } });
       expect(visitors).toHaveLength(1);
       expect(visitors[0]).toEqual(expect.objectContaining({ id: 1, name: 'Chell' }));
       expect(visitors[0].visits).toHaveLength(10);

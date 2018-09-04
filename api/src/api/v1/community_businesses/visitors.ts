@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import * as Joi from 'joi';
 import * as moment from 'moment';
 import { pick, mergeDeepRight } from 'ramda';
-import { Visitors, User, ModelQuery } from '../../../models';
+import { Visitors, User, ModelQuery, CommunityBusiness } from '../../../models';
 import { query, filterQuery, response } from '../users/schema';
 import { GetVisitorsRequest } from '../types';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
@@ -34,7 +34,7 @@ const routes: Hapi.ServerRoute[] = [
       ],
     },
     handler: async (request: GetVisitorsRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, query } = request;
+      const { knex, query, pre: { communityBusiness } } = request;
       const { visits, filter, fields: _fields } = query;
 
       const q: {
@@ -79,7 +79,10 @@ const routes: Hapi.ServerRoute[] = [
       }
 
       const visitors = await (visits
-        ? Visitors.getWithVisits(knex, modelQuery)
+        ? Visitors.getWithVisits(
+            knex,
+            (<Pick<CommunityBusiness, 'id'>> pick(['id'], communityBusiness)),
+            modelQuery)
         : Visitors.get(knex, modelQuery));
 
       return Promise.all(visitors.map(Visitors.serialise));

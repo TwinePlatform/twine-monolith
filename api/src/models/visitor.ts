@@ -28,8 +28,9 @@ type UserWithVisits = User & {
 };
 type CustomMethods = {
   recordLogin: (k: Knex, u: User) => Promise<void>
-  getWithVisits: (k: Knex, q?: ModelQuery<User>) => Promise<UserWithVisits[]>
-  fromCommunityBusiness: (k: Knex, c: CommunityBusiness) => Promise<User[]>
+  getWithVisits: (k: Knex, c: Pick<CommunityBusiness, 'id'>, q?: ModelQuery<User>)
+    => Promise<UserWithVisits[]>
+  fromCommunityBusiness: (client: Knex, c: CommunityBusiness) => Promise<User[]>
 };
 
 
@@ -134,7 +135,7 @@ export const Visitors: UserCollection & CustomMethods = {
     return serialisedUser;
   },
 
-  async getWithVisits (client: Knex, q: ModelQuery<User> = {}) {
+  async getWithVisits (client: Knex, c: Pick<CommunityBusiness, 'id'>, q: ModelQuery<User> = {}) {
     const query = evolve({
       where: Visitors.toColumnNames,
       whereNot: Visitors.toColumnNames,
@@ -173,7 +174,10 @@ export const Visitors: UserCollection & CustomMethods = {
         .where({
           ['user_account_access_role.access_role_id']: client('access_role')
             .select('access_role_id')
-            .where({ access_role_name: RoleEnum.VISITOR }),
+            .where({
+              access_role_name: RoleEnum.VISITOR,
+              'user_account_access_role.organisation_id': c.id,
+            }),
         }),
       query
     );
