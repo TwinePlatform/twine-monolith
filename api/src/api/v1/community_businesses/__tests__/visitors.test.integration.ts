@@ -1,6 +1,6 @@
 import * as Hapi from 'hapi';
-import { init } from '../../../../../server';
-import { getConfig } from '../../../../../../config';
+import { init } from '../../../../server';
+import { getConfig } from '../../../../../config';
 
 
 describe('API /users/visitors', () => {

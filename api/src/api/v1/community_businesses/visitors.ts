@@ -2,17 +2,23 @@ import * as Hapi from 'hapi';
 import * as Joi from 'joi';
 import * as moment from 'moment';
 import { compose, omit, pick, mergeDeepRight } from 'ramda';
-import { Visitors, User, ModelQuery } from '../../../../models';
-import { query, filterQuery, response } from '../schema';
-import { GetVisitorsRequest } from '../../types';
+import { Visitors, User, ModelQuery } from '../../../models';
+import { query, filterQuery, response } from '../users/schema';
+import { GetVisitorsRequest } from '../types';
 
 
 const routes: Hapi.ServerRoute[] = [
   {
     method: 'GET',
-    path: '/users/visitors',
+    path: '/community-businesses/{organisationId}/visitors',
     options: {
-      description: 'Retreive list of all visitors',
+      description: 'Retreive list of all visitors from an organisation',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['user_details-child:read'],
+        },
+      },
       validate: {
         query: {
           ...query,
