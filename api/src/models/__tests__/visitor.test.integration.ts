@@ -3,7 +3,7 @@ import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
-import { Visitors, CommunityBusinesses } from '..';
+import { Visitors } from '..';
 
 
 describe('Visitor model', () => {

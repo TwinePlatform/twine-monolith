@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Joi from 'joi';
 import * as moment from 'moment';
-import { compose, omit, pick, mergeDeepRight } from 'ramda';
+import { pick, mergeDeepRight } from 'ramda';
 import { Visitors, User, ModelQuery } from '../../../models';
 import { query, filterQuery, response } from '../users/schema';
 import { GetVisitorsRequest } from '../types';
