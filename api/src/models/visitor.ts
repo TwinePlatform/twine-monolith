@@ -5,7 +5,14 @@ import { createHmac } from 'crypto';
 import * as Knex from 'knex';
 import { assoc, omit, pick, evolve, compose } from 'ramda';
 import { Dictionary } from '../types/internal';
-import { User, UserCollection, UserChangeSet, ModelQuery, LinkedVisitEvent } from './types';
+import {
+  User,
+  UserCollection,
+  UserChangeSet,
+  ModelQuery,
+  LinkedVisitEvent,
+  CommunityBusiness
+} from './types';
 import { Users, ModelToColumn } from './user';
 import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './util';
@@ -22,6 +29,7 @@ type UserWithVisits = User & {
 type CustomMethods = {
   recordLogin: (k: Knex, u: User) => Promise<void>
   getWithVisits: (k: Knex, q?: ModelQuery<User>) => Promise<UserWithVisits[]>
+  fromCommunityBusiness: (k: Knex, c: CommunityBusiness) => Promise<User[]>
 };
 
 
@@ -96,6 +104,25 @@ export const Visitors: UserCollection & CustomMethods = {
 
   async recordLogin (client: Knex, u: User) {
     return Users.recordLogin(client, u);
+  },
+
+  async fromCommunityBusiness (client: Knex, c: CommunityBusiness) {
+    return client
+        .select(ModelToColumn)
+        .from('user_account')
+        .leftOuterJoin('gender', 'user_account.gender_id', 'gender.gender_id')
+        .leftOuterJoin('ethnicity', 'user_account.ethnicity_id', 'ethnicity.ethnicity_id')
+        .leftOuterJoin('disability', 'user_account.disability_id', 'disability.disability_id')
+        .leftOuterJoin(
+          'user_account_access_role',
+          'user_account.user_account_id',
+          'user_account_access_role.user_account_id')
+        .where({
+          ['user_account_access_role.access_role_id']: client('access_role')
+            .select('access_role_id')
+            .where({ access_role_name: RoleEnum.VISITOR }),
+          ['user_account_access_role.organisation_id']: c.id,
+        });
   },
 
   async serialise (user: Partial<User>) {
