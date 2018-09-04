@@ -5,6 +5,7 @@ import { compose, omit, pick, mergeDeepRight } from 'ramda';
 import { Visitors, User, ModelQuery } from '../../../models';
 import { query, filterQuery, response } from '../users/schema';
 import { GetVisitorsRequest } from '../types';
+import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -27,6 +28,10 @@ const routes: Hapi.ServerRoute[] = [
         },
       },
       response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness , assign: 'communityBusiness' },
+        { method: isChildOrganisation , assign: 'isChild' },
+      ],
     },
     handler: async (request: GetVisitorsRequest, h: Hapi.ResponseToolkit) => {
       const { knex, query } = request;
