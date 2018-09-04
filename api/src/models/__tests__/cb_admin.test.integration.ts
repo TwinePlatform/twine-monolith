@@ -45,7 +45,7 @@ describe('CbAdmin model', () => {
     });
 
     test('getOne :: returns first user with cb-admin role', async () => {
-      const admin = await CbAdmins.getOne(knex);
+      const admin = await CbAdmins.getOne(knex, { order: ['name', 'asc'] });
       expect(admin).toEqual(expect.objectContaining({
         name: 'GlaDos',
         email: '1@aperturescience.com',

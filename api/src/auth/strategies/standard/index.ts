@@ -1,6 +1,9 @@
-import validate, { UserCredentials } from './validate';
+import validate from './validate';
+import { UserCredentials } from './types';
+import { SessionManager as Session } from './session';
 
 export {
-  validate,
   UserCredentials,
+  Session,
+  validate,
 };

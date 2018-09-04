@@ -17,7 +17,7 @@ const templates = {
   ].join('\n'),
 
   js: [
-    'const { buildQueryFromFile } = require(\'../util\');',
+    'const { buildQueryFromFile } = require(\'../utils\');',
     'exports.up = buildQueryFromFile(__filename);',
     'exports.down = () => {};',
     '',
@@ -26,11 +26,13 @@ const templates = {
 
 exports.migrate = {
   make: async (name) => {
+    const config = getConfig(process.env.NODE_ENV);
+    const MIGRATIONS_BASE_PATH = config.knex.migrations.directory;
+
     const date = (new Date()).toISOString().slice(0, 10).replace(/-/g, '');
     const files = fs.readdirSync(path.resolve(__dirname, 'migrations', 'sql')).sort();
     const newVersion = Number(last(files).split('_')[1]) + 1;
     const newFilename = `${date}_${newVersion}_${name.toLowerCase().replace(/\s/g, '_')}`;
-
     write(path.resolve(MIGRATIONS_BASE_PATH, 'sql', `${newFilename}.sql`), templates.sql);
     write(path.resolve(MIGRATIONS_BASE_PATH, `${newFilename}.js`), templates.js);
 

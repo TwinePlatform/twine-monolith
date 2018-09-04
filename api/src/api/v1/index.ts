@@ -19,11 +19,11 @@ import setupAuthentication from './auth';
 
 export default {
   name: 'Twine API v1',
-  register: async (server: Hapi.Server, options: { jwtSecret: string }) => {
+  register: async (server: Hapi.Server) => {
     /*
      * Authentication Strategies
      */
-    await setupAuthentication(server, { jwtSecret: options.jwtSecret });
+    await setupAuthentication(server);
 
     /*
      * Server request lifecycle hooks

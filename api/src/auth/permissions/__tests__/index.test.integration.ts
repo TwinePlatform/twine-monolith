@@ -49,9 +49,9 @@ describe('Permisions Module', () => {
       expect.assertions(1);
       try {
         const query = await Permissions.grantNew(trx, {
-          resource: ResourceEnum.CONSTANTS,
+          resource: ResourceEnum.ORG_DETAILS,
           access: AccessEnum.READ,
-          permissionLevel: PermissionLevelEnum.ALL,
+          permissionLevel: PermissionLevelEnum.PARENT,
           role: RoleEnum.VOLUNTEER,
         });
         expect(query).toBe(false);
@@ -182,7 +182,7 @@ describe('Permisions Module', () => {
         const query = await Permissions.roleHas(trx, {
           resource: ResourceEnum.ORG_OUTREACH,
           access: AccessEnum.READ,
-          permissionLevel: PermissionLevelEnum.CHILD,
+          permissionLevel: PermissionLevelEnum.PARENT,
           role: RoleEnum.VOLUNTEER_ADMIN,
         });
         expect(query).toBe(true);

@@ -11,6 +11,6 @@ exports.seed = (knex) =>
       },
       {
         organisation_name: 'Umbrella Corporation',
-        _360_giving_id: '01111002',
+        _360_giving_id: 'GB-COH-298435',
       },
     ]);

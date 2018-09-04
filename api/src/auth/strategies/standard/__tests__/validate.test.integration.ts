@@ -7,6 +7,7 @@ import { getConfig } from '../../../../../config';
 describe('Internal auth scheme', () => {
   let server: Hapi.Server;
   const config = getConfig(process.env.NODE_ENV);
+  const { auth: { standard: { jwt: { secret }, cookie: { name: cookieName } } } } = config;
 
   beforeAll(async () => {
     server = await init(config);
@@ -17,21 +18,21 @@ describe('Internal auth scheme', () => {
   });
 
   test('SUCCESS - Token needed for authorised routes', async () => {
-    const token = jwt.sign({ userId: 2, organisationId: 1 }, config.secret.jwt_secret);
+    const token = jwt.sign({ userId: 2, organisationId: 1, privilege: 'full' }, secret);
     const response = await server.inject({
       method: 'GET',
       url: '/v1/users',
-      headers: { authorization: token },
+      headers: { cookie: `${cookieName}=${token}` },
     });
     expect(response.statusCode).toBe(200);
   });
 
   test('FAIL - Token with missing userId is unauthorised', async () => {
-    const token = jwt.sign({ }, config.secret.jwt_secret);
+    const token = jwt.sign({}, secret);
     const response = await server.inject({
       method: 'GET',
       url: '/v1/users',
-      headers: { authorization: token },
+      headers: { cookie: `${cookieName}=${token}` },
     });
     expect(response.statusCode).toBe(401);
   });

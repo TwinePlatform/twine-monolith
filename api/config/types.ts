@@ -1,4 +1,7 @@
+import * as Hapi from 'hapi';
 import * as Knex from 'knex';
+import * as JWT from 'jsonwebtoken';
+
 
 export enum Environment {
   DEVELOPMENT = 'development',
@@ -24,20 +27,23 @@ type EmailConfig = {
   postmark_key: string
 };
 
-type SecretConfig = {
-  jwt_secret: string
+type AuthConfig = {
+  standard: {
+    jwt: {
+      secret: string
+      signOptions?: JWT.SignOptions
+      verifyOptions?: JWT.VerifyOptions
+      decodeOptions?: JWT.DecodeOptions
+    }
+    cookie: {
+      name: string,
+      options: Hapi.ServerStateCookieOptions
+    }
+  }
 };
 
 type QrCodeConfig = {
   secret: string
-};
-
-type CookieOptions = {
-  ttl?: number
-  isSecure?: boolean,
-  isHttpOnly?: boolean,
-  isSameSite?: false | 'Strict' | 'Lax',
-  path?: string,
 };
 
 export type Config = {
@@ -46,9 +52,6 @@ export type Config = {
   web: WebConfig
   knex: Knex.Config
   email: EmailConfig
-  secret: SecretConfig
+  auth: AuthConfig
   qrcode: QrCodeConfig
-  cookies: {
-    token: CookieOptions
-  }
 };

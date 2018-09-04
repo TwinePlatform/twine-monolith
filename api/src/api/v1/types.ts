@@ -40,9 +40,29 @@ export interface OrganisationRequest extends Hapi.Request {
   };
 }
 
+export interface GetFeedbackRequest extends Hapi.Request {
+  query: ApiRequestQuery & {
+    since: string
+    until: string
+  };
+}
+
 export interface PostFeedbackRequest extends Hapi.Request {
   payload: {
     feedbackScore: number
+  };
+}
+
+export interface LoginRequest extends Hapi.Request {
+  payload: {
+    email: string,
+    password: string,
+  };
+}
+
+export interface EscalateRequest extends Hapi.Request {
+  payload: {
+    password: string
   };
 }
 

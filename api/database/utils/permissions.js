@@ -1,4 +1,5 @@
 const api = require('../../src/api/v1/api.json');
+const perms = require('../../src/api/v1/permissions.json');
 const { map } = require('ramda');
 
 const restrictedScopes = {
@@ -7,7 +8,6 @@ const restrictedScopes = {
     "organisations_feedback-own:write",
     "visit_activities-own:read",
     "visit_logs-own:write",
-    "constants-all:read"
   ]
 }
 
@@ -22,7 +22,9 @@ const permissionsForRoles = Object.values(api.routes)
   }, [])
   .reduce((acc, el) => {
     el.intendedFor.forEach(x => {
-      if (el.scope.length > 0) acc[x].add(...el.scope)
+      if (el.scope.length > 0 && el.auth !== 'external') {
+        el.scope.forEach(y => acc[x].add(y))
+      }
     })
     return acc
   }, {
@@ -66,7 +68,7 @@ const queryRestrictedPermissions = (client) =>
   .reduce((acc, x) => acc.concat(x), []);
 
 const accessRolePermissionsRows = (client) =>
-  Object.entries(permissionsForRoles)
+  Object.entries(perms.permissionsForRoles)
   .reduce((acc, [roles, permissions]) => {
     const rows = Array.from(permissions)
     .map(x=> ({
@@ -83,9 +85,9 @@ const accessRolePermissionsRows = (client) =>
 
 
 module.exports = {
-  permissionRows: Array.from(allPermissions).map(scopeToPermission),
+  permissionRows: Array.from(perms.permissions).map(scopeToPermission),
   accessRolePermissionsRows,
-}
+};
 
 
 if (require.main === module) {

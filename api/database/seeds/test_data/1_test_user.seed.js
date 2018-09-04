@@ -1,10 +1,11 @@
-const { hashSync } = require('bcrypt')
-const gladosPassword = hashSync('CakeisaLi3!', 12)
+const { hashSync } = require('bcrypt');
+const gladosPassword = hashSync('CakeisaLi3!', 12);
+const bigBossPassword = hashSync('Snaaaaaake!', 12);
 
 exports.seed = (knex) =>
   knex('user_account')
     .insert([
-      { 
+      {
         user_name: 'Chell',
         qr_code: 'tobereplacedwhenqrgenissetup',
         email: '1498@aperturescience.com',
@@ -19,10 +20,9 @@ exports.seed = (knex) =>
         disability_id: knex('disability').select('disability_id').where({ disability_name: 'no' }),
         ethnicity_id: knex('ethnicity').select('ethnicity_id').where({ ethnicity_name: 'prefer not to say' }),
       },
-      { 
+      {
         user_name: 'GlaDos',
         user_password: gladosPassword,
-        qr_code: 'tobereplacedwhenqrgenissetup2',
         email: '1@aperturescience.com',
         phone_number: '+1 425-450-4464',
         post_code: '49829',
@@ -62,6 +62,15 @@ exports.seed = (knex) =>
         is_phone_number_confirmed: false,
         is_email_contact_consent_granted: false,
         is_sms_contact_consent_granted: false,
+        gender_id: knex('gender').select('gender_id').where({ gender_name: 'male' }),
+        disability_id: knex('disability').select('disability_id').where({ disability_name: 'no' }),
+        ethnicity_id: knex('ethnicity').select('ethnicity_id').where({ ethnicity_name: 'prefer not to say' }),
+      },
+      {
+        user_name: 'Big Boss',
+        user_password: bigBossPassword,
+        email: 'info@outerheaven.com',
+        is_email_confirmed: true,
         gender_id: knex('gender').select('gender_id').where({ gender_name: 'male' }),
         disability_id: knex('disability').select('disability_id').where({ disability_name: 'no' }),
         ethnicity_id: knex('ethnicity').select('ethnicity_id').where({ ethnicity_name: 'prefer not to say' }),

@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { intersection, compose } from 'ramda';
+import { intersection, compose, isNil } from 'ramda';
 import { ModelQuery } from './types';
 
 
@@ -20,19 +20,19 @@ export const applyQueryModifiers =
 
     const query = modifiers
     .reduce((acc, k: keyof ModelQuery<T>) => {
-      if (k === 'limit') {
+      if (k === 'limit' && !isNil(opts.limit)) {
         return compose(Utils.limit(opts.limit), acc);
 
-      } else if (k === 'offset') {
+      } else if (k === 'offset' && !isNil(opts.offset)) {
         return compose(Utils.offset(opts.offset), acc);
 
-      } else if (k === 'order') {
+      } else if (k === 'order' && !isNil(opts.order)) {
         return compose(Utils.order(...opts.order), acc);
 
-      } else if (k === 'where') {
+      } else if (k === 'where' && !isNil(opts.where)) {
         return compose(Utils.where(opts.where), acc);
 
-      } else if (k === 'whereNot') {
+      } else if (k === 'whereNot' && !isNil(opts.whereNot)) {
         return compose(Utils.whereNot(opts.whereNot), acc);
 
       } else {

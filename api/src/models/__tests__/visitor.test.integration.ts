@@ -3,7 +3,7 @@ import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
-import { Visitors } from '..';
+import { Visitors, CommunityBusinesses } from '..';
 
 
 describe('Visitor model', () => {
@@ -47,6 +47,13 @@ describe('Visitor model', () => {
     test('exists :: returns false for non-existent visitor', async () => {
       const exists = await Visitors.exists(knex, { where: { name: 'Gordon' } });
       expect(exists).toBe(false);
+    });
+
+    test('fromOrganisation :: gets all visitors at organisation', async () => {
+      const cb = await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture Science' } });
+      const visitors = await Visitors.fromCommunityBusiness(knex, cb);
+      expect(visitors).toHaveLength(1);
+      expect(visitors[0]).toEqual(expect.objectContaining({ name: 'Chell' }));
     });
   });
 

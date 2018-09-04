@@ -28,6 +28,15 @@ export type Json = Dictionary<JsonTypes> | Dictionary<JsonTypes>[] | JsonTypes[]
 
 export type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
+export type Day =
+  'monday'
+  | 'tuesday'
+  | 'wednesday'
+  | 'thursday'
+  | 'friday'
+  | 'saturday'
+  | 'sunday'
+
 /*
  * Aliases
  *

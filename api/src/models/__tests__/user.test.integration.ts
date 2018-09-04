@@ -27,7 +27,7 @@ describe('User Model', () => {
     test('get :: no arguments gets all users', async () => {
       const users = await Users.get(trx);
 
-      expect(users.length).toBe(4);
+      expect(users.length).toBe(5);
       expect(users).toEqual(expect.arrayContaining([
         expect.objectContaining({
           name: 'Chell',
@@ -42,7 +42,7 @@ describe('User Model', () => {
     });
 
     test('get :: filter users by ID | non-existent ID resolves to empty array', async () => {
-      const users = await Users.get(trx, { where: { id: 5 } });
+      const users = await Users.get(trx, { where: { id: 500 } });
       expect(users).toEqual([]);
     });
 
@@ -63,12 +63,13 @@ describe('User Model', () => {
 
     test('get :: order results', async () => {
       const users = await Users.get(trx, { order: ['name', 'desc'] });
-      expect(users.map((u) => u.name)).toEqual(['Gordon', 'GlaDos', 'Chell', 'Barney']);
+      expect(users.map((u) => u.name).sort())
+        .toEqual(['Barney', 'Big Boss', 'Chell', 'GlaDos', 'Gordon']);
     });
 
     test('get :: offset results', async () => {
       const users = await Users.get(trx, { offset: 3, order: ['id', 'asc'] });
-      expect(users.length).toBe(1);
+      expect(users.length).toBe(2);
       expect(users[0].name).toBe('Barney');
     });
 

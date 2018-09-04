@@ -13,11 +13,6 @@ describe('Community Business Model', () => {
     await knex.destroy();
   });
 
-  beforeAll(async () => {
-    await migrate.teardown({ client: knex });
-    await knex.migrate.latest();
-  });
-
   beforeEach(async () => {
     await migrate.truncate({ client: knex });
     await knex.seed.run();

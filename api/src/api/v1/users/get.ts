@@ -3,7 +3,7 @@ import { Users } from '../../../models';
 import { query, response } from './schema';
 
 
-export default [
+const routes: Hapi.ServerRoute[] = [
   {
     method: 'GET',
     path: '/users',
@@ -20,4 +20,27 @@ export default [
       return Promise.all(users.map(Users.serialise));
     },
   },
+
+  {
+    method: 'GET',
+    path: '/users/me',
+    options: {
+      description: 'Retrieve own user details',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['user_details-own:read'],
+        },
+      },
+      validate: { query },
+      response: { schema: response },
+    },
+    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+      const { user } = request.auth.credentials;
+
+      return Users.serialise(user);
+    },
+  },
 ];
+
+export default routes;
