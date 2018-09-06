@@ -3,9 +3,10 @@
  */
 import * as Joi from 'joi';
 import { query } from '../users/schema';
+import { id } from '../schema/request';
 
 
-export { query } from '../schema/request';
+export { query, id } from '../schema/request';
 export { response } from '../schema/response';
 
 export const since = Joi.date().iso().default(0);
@@ -41,5 +42,4 @@ export const visitActivitiesPutPayload = {
   sunday: Joi.boolean(),
 };
 
-export const id = Joi.number().positive().required();
 export const meOrId = id.allow('me').required();

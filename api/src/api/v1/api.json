@@ -731,7 +731,7 @@
           "response": "types.visitActivity"
         }
       },
-      "/:id/visit-logs": {
+      "/me/visit-logs": {
         "POST": {
           "description": "For users to adds a visit to their community business",
           "isImplemented": false,
