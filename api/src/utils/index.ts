@@ -54,3 +54,14 @@ export const getCookie = (res: Shot.ResponseObject) => {
   const setCookie = res.headers['set-cookie'];
   return setCookie[0].split('; ')[0].split('=')[1];
 };
+
+
+export const findAsync = async <T>(xs: T[], predicate: (a: T) => Promise<boolean>) => {
+  for (let i = 0; i < xs.length; i = i + 1) {
+    const result = await predicate(xs[i]);
+    if (result) {
+      return xs[i];
+    }
+  }
+  return null;
+};

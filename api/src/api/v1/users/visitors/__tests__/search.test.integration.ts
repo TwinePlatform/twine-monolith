@@ -26,7 +26,7 @@ describe('POST /v1/visitor/search', () => {
       method: 'POST',
       url: '/v1/users/visitors/search',
       payload: {
-        qrCode: 'tobereplacedwhenqrgenissetup',
+        qrCode: 'chellsqrcode',
       },
       credentials: {
         scope: ['user_details-child:read'],
