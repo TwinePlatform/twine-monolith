@@ -146,6 +146,7 @@ export const Visitors: UserCollection & CustomMethods = {
       visitCreatedAt: 'visit.created_at',
       visitModifiedAt: 'visit.modified_at',
       visitDeletedAt: 'visit.deleted_at',
+      visitActivityId: 'visit_activity.visit_activity_id',
       visitActivityName: 'visit_activity.visit_activity_name',
     };
 
@@ -191,6 +192,7 @@ export const Visitors: UserCollection & CustomMethods = {
           visitModifiedAt: string
           visitDeletedAt: string
           visitActivityName: string
+          visitActivityId: number
         }
       ) => {
         const {
@@ -198,6 +200,7 @@ export const Visitors: UserCollection & CustomMethods = {
           visitModifiedAt,
           visitDeletedAt,
           visitActivityName,
+          visitActivityId,
           visitId,
           ...rest
         } = row;
@@ -205,20 +208,24 @@ export const Visitors: UserCollection & CustomMethods = {
         if (acc.hasOwnProperty(rest.id)) {
           acc[rest.id].visits.push({
             id: visitId,
+            userId: rest.id,
             createdAt: visitCreatedAt,
             modifiedAt: visitModifiedAt,
             deletedAt: visitDeletedAt,
             visitActivity: visitActivityName,
+            visitActivityId,
           });
         } else {
           acc[rest.id] = {
             ...rest,
             visits: [{
               id: visitId,
+              userId: rest.id,
               createdAt: visitCreatedAt,
               modifiedAt: visitModifiedAt,
               deletedAt: visitDeletedAt,
               visitActivity: visitActivityName,
+              visitActivityId,
             }],
           };
         }
