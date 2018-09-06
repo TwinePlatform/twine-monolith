@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import * as Joi from 'joi';
 import * as moment from 'moment';
 import { pick, mergeDeepRight } from 'ramda';
-import { Visitors, User, ModelQuery, CommunityBusiness } from '../../../models';
+import { Visitors, User, ModelQuery } from '../../../models';
 import { query, filterQuery, response } from '../users/schema';
 import { GetVisitorsRequest } from '../types';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
