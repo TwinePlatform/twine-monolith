@@ -13,6 +13,8 @@ import {
   ModelQuery,
   DateTimeQuery,
   VisitActivity,
+  VisitEvent,
+  User,
 } from './types';
 import { Organisations } from './organisation';
 import { applyQueryModifiers } from './util';
@@ -36,6 +38,7 @@ type CustomMethods = {
     => Promise<Maybe<VisitActivity>>
   updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>
   deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>
+  addVisitLog: (k: Knex, v: VisitActivity, u: User) => Promise<VisitEvent>
 };
 
 /*
@@ -428,6 +431,23 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
       ]);
 
     return res || null;
+  },
+
+  async addVisitLog (client: Knex, v: VisitActivity, u: User) {
+    const [res] = await client('visit')
+      .insert({
+        user_account_id: u.id,
+        visit_activity_id: v.id,
+      })
+      .returning([
+        'visit_id AS id',
+        'user_account_id AS userId',
+        'visit_activity_id AS visitActivityId',
+        'created_at AS createdAt',
+        'modified_at AS modifiedAt',
+        'deleted_at AS deletedAt',
+      ]);
+    return <VisitEvent> res;
   },
 };
 

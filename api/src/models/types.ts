@@ -139,6 +139,8 @@ export type VisitActivityBase = CommonTimestamps & {
 
 export type VisitEventBase = CommonTimestamps & {
   id: Int
+  userId: Int
+  visitActivityId: Int
 };
 
 export type LinkedVisitEventBase = VisitEventBase & {
