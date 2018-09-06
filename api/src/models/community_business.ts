@@ -15,6 +15,7 @@ import {
   VisitActivity,
   VisitEvent,
   User,
+  VisitLog,
 } from './types';
 import { Organisations } from './organisation';
 import { applyQueryModifiers } from './util';
@@ -39,6 +40,7 @@ type CustomMethods = {
   updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>
   deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>
   addVisitLog: (k: Knex, v: VisitActivity, u: User) => Promise<VisitEvent>
+  getVisitLogs: (k: Knex, c: CommunityBusiness, q: ModelQuery<VisitLog>) => Promise<VisitLog>
 };
 
 /*
@@ -454,6 +456,27 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         'deleted_at AS deletedAt',
       ]);
     return <VisitEvent> res;
+  },
+
+  async getVisitLogs (client: Knex, c: CommunityBusiness, q: ModelQuery<VisitLog>) {
+    return client('visit')
+      .select({
+        id: 'visit_id',
+        userId: 'user_account.user_account_id',
+        activity: 'visit_activity_name',
+        category: 'visit_activity_category_name',
+        createdAt: 'visit.created_at',
+        modifiedAt: 'visit.modified_at',
+        birthYear: 'user_account.birth_year',
+        gender: 'gender.gender_name',
+      })
+      .innerJoin('visit_activity', 'visit_activity.visit_activity_id', 'visit.visit_activity_id')
+      .innerJoin(
+        'visit_activity_category',
+        'visit_activity_category.visit_activity_category_id',
+        'visit_activity.visit_activity_category_id')
+      .innerJoin('user_account', 'user_account.user_account_id', 'visit.user_account_id')
+      .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id');
   },
 };
 

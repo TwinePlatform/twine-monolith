@@ -732,6 +732,29 @@
         }
       },
       "/me/visit-logs": {
+          "GET": {
+            "description": "Retreive all visit data for a community business",
+            "isImplemented": false,
+            "auth": true,
+            "intendedFor": ["TWINE_ADMIN"],
+            "scope": ["visit_logs-own:read"],
+            "query": {
+              "fields": ["String"],
+              "filter": {
+                "sort": "String",
+                "page": "Number",
+                "offset": "Number",
+                "gender": "String",
+                "age": "String",
+                "activity": "String",
+                "since": "String",
+                "until": "String"
+              }
+            },
+            "response": "types.visit"
+          }
+        },
+      "/:id/visit-logs": {
         "POST": {
           "description": "For users to adds a visit to their community business",
           "isImplemented": true,

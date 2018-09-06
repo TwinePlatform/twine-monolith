@@ -6,7 +6,7 @@ import { query, response, id } from './schema';
 import { User, Visitors, CommunityBusiness, CommunityBusinesses } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import { findAsync } from '../../../utils';
-
+import { filterQuery } from '../users/schema';
 
 interface VisitorSearchRequest extends Hapi.Request {
   payload: {
@@ -60,6 +60,51 @@ const routes: Hapi.ServerRoute[] = [
       return CommunityBusinesses.addVisitLog(knex, activity, visitor);
     },
   },
+  {
+    method: 'GET',
+    path: '/community-businesses/me/visit-logs',
+    options: {
+      description: 'Retrieve a list of visit logs for your community business',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['visit_logs-own:read'],
+        },
+      },
+      validate: {
+        query: {
+          ...query,
+          ...filterQuery,
+        },
+      },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness , assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+      const { knex, pre: { communityBusiness } } = request;
+      // TODO add filtering based on query
+      return CommunityBusinesses.getVisitLogs(knex, communityBusiness, null);
+    },
+  },
+  // {
+  //   method: 'GET',
+  //   path: '/community-businesses/me/visit-logs/aggregates',
+  //   options: {
+  //     description: 'Retrieve a list of all community businesses',
+  //     auth: {
+  //       strategy: 'standard',
+  //       access: {
+  //         scope: ['organisations_details-child:read'],
+  //       },
+  //     },
+  //     validate: { query },
+  //     response: { schema: response },
+  //   },
+  //   handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+  //   },
+  // },
 ];
 
 
