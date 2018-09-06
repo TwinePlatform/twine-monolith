@@ -50,6 +50,13 @@ describe('Visitor model', () => {
       expect(exists).toBe(false);
     });
 
+    test('fromCommunityBusiness :: gets all visitors at organisation', async () => {
+      const cb = await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture Science' } });
+      const visitors = await Visitors.fromCommunityBusiness(knex, cb);
+      expect(visitors).toHaveLength(1);
+      expect(visitors[0]).toEqual(expect.objectContaining({ name: 'Chell' }));
+    });
+
     test('getWithVisits :: returns visit objects nested within visitors', async () => {
       const apScience = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
       const visitors = await Visitors.getWithVisits(knex, apScience, { where: { name: 'Chell' } });
