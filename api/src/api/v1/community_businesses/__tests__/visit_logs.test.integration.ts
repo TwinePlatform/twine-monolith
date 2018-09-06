@@ -7,7 +7,6 @@ import { RoleEnum } from '../../../../auth/types';
 
 describe('API v1 :: Community Businesses :: Visit Logs', () => {
   let server: Hapi.Server;
-  let visitor: User;
   let cbAdmin: User;
   let organisation: Organisation;
   const config = getConfig(process.env.NODE_ENV);
@@ -15,7 +14,6 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
   beforeAll(async () => {
     server = await init(config);
 
-    visitor = await Users.getOne(server.app.knex, { where: { id: 1 } });
     cbAdmin = await Users.getOne(server.app.knex, { where: { id: 2 } });
     organisation = await Organisations.getOne(server.app.knex, { where: { id: 1 } });
   });
