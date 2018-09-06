@@ -1,13 +1,14 @@
 const { hashSync } = require('bcrypt');
 const gladosPassword = hashSync('CakeisaLi3!', 12);
 const bigBossPassword = hashSync('Snaaaaaake!', 12);
+const chellQrCode = hashSync('chellsqrcode', 12);
 
 exports.seed = (knex) =>
   knex('user_account')
     .insert([
       {
         user_name: 'Chell',
-        qr_code: 'tobereplacedwhenqrgenissetup',
+        qr_code: chellQrCode,
         email: '1498@aperturescience.com',
         phone_number: '+1 425-450-4464',
         post_code: '49829',
