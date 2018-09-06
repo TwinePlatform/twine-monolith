@@ -4,6 +4,7 @@ import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
 import { Visitors } from '..';
+import { CommunityBusinesses } from '../community_business';
 
 
 describe('Visitor model', () => {
@@ -50,7 +51,8 @@ describe('Visitor model', () => {
     });
 
     test('getWithVisits :: returns visit objects nested within visitors', async () => {
-      const visitors = await Visitors.getWithVisits(knex, { id: 1 }, { where: { name: 'Chell' } });
+      const apScience = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
+      const visitors = await Visitors.getWithVisits(knex, apScience, { where: { name: 'Chell' } });
       expect(visitors).toHaveLength(1);
       expect(visitors[0]).toEqual(expect.objectContaining({ id: 1, name: 'Chell' }));
       expect(visitors[0].visits).toHaveLength(10);

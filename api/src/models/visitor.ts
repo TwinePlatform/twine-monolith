@@ -28,7 +28,7 @@ type UserWithVisits = User & {
 };
 type CustomMethods = {
   recordLogin: (k: Knex, u: User) => Promise<void>
-  getWithVisits: (k: Knex, c: Pick<CommunityBusiness, 'id'>, q?: ModelQuery<User>)
+  getWithVisits: (k: Knex, c: CommunityBusiness, q?: ModelQuery<User>)
     => Promise<UserWithVisits[]>
   fromCommunityBusiness: (client: Knex, c: CommunityBusiness) => Promise<User[]>
 };
@@ -135,7 +135,7 @@ export const Visitors: UserCollection & CustomMethods = {
     return serialisedUser;
   },
 
-  async getWithVisits (client: Knex, c: Pick<CommunityBusiness, 'id'>, q: ModelQuery<User> = {}) {
+  async getWithVisits (client: Knex, c: CommunityBusiness, q: ModelQuery<User> = {}) {
     const query = evolve({
       where: Visitors.toColumnNames,
       whereNot: Visitors.toColumnNames,

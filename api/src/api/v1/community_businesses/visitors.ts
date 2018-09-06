@@ -79,10 +79,7 @@ const routes: Hapi.ServerRoute[] = [
       }
 
       const visitors = await (visits
-        ? Visitors.getWithVisits(
-            knex,
-            (<Pick<CommunityBusiness, 'id'>> pick(['id'], communityBusiness)),
-            modelQuery)
+        ? Visitors.getWithVisits(knex, communityBusiness, modelQuery)
         : Visitors.get(knex, modelQuery));
 
       return Promise.all(visitors.map(Visitors.serialise));
