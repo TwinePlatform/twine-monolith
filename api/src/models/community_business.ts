@@ -30,7 +30,7 @@ type CustomMethods = {
     bw?: DateTimeQuery & Pick<ModelQuery<LinkedFeedback>, 'limit' | 'offset' | 'order'>
   ) =>
     Promise<LinkedFeedback[]>
-  getVisitActivities: (k: Knex, c: CommunityBusiness, d?: Day) => Promise<VisitActivity>
+  getVisitActivities: (k: Knex, c: CommunityBusiness, d?: Day) => Promise<VisitActivity[]>
   getVisitActivityById: (k: Knex, c: CommunityBusiness, id: Int) => Promise<Maybe<VisitActivity>>
   addVisitActivity: (k: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>)
     => Promise<Maybe<VisitActivity>>
