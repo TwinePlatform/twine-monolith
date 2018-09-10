@@ -32,6 +32,7 @@ describe('PUT /community-businesses', () => {
 
   afterEach(async () => {
     await trx.rollback();
+    server.app.knex = knex;
   });
 
   describe('PUT /community-businesses/me', () => {

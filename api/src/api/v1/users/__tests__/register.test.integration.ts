@@ -29,6 +29,7 @@ describe('POST /users/register/visitor', () => {
 
   afterEach(async () => {
     await trx.rollback();
+    server.app.knex = knex;
   });
 
   test('user already exists', async () => {

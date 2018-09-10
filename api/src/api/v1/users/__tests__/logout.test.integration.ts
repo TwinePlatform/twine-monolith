@@ -28,6 +28,7 @@ describe('GET /users/logout', () => {
 
   afterEach(async () => {
     await trx.rollback();
+    server.app.knex = knex;
   });
 
   test(':: successful logout', async () => {

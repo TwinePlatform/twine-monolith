@@ -30,6 +30,7 @@ describe('POST /users/login/admin', () => {
 
   afterEach(async () => {
     await trx.rollback();
+    server.app.knex = knex;
   });
 
   test(':: successful login', async () => {

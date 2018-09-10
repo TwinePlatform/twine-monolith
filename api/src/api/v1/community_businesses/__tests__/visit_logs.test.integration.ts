@@ -34,6 +34,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
 
   afterEach(async () => {
     await trx.rollback();
+    server.app.knex = knex;
   });
 
   describe('POST', () => {

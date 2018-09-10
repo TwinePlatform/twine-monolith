@@ -37,6 +37,7 @@ describe('/community-business/{id}/feedback', () => {
 
   afterEach(async () => {
     await trx.rollback();
+    server.app.knex = knex;
   });
 
   afterAll(async () => {
