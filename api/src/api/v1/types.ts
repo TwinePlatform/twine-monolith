@@ -3,7 +3,7 @@ import { Dictionary } from 'ramda';
 import { ApiRequestQuery, ApiRequestBody } from './schema/request';
 import { ApiResponse } from './schema/response';
 import { UserCredentials } from '../../auth/strategies/standard';
-import { GenderEnum, CommunityBusiness } from '../../models';
+import { GenderEnum, CommunityBusiness, User, CommonTimestamps } from '../../models';
 import { Omit } from '../../types/internal';
 
 
@@ -87,6 +87,10 @@ export interface GetVisitorsRequest extends Hapi.Request {
     }
     visits: boolean
   };
+}
+
+export interface PutUserRequest extends Hapi.Request {
+  payload: Omit<User, 'id' | keyof CommonTimestamps | 'password' | 'qrCode'>;
 }
 
 /*
