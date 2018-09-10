@@ -2,20 +2,24 @@ import * as Knex from 'knex';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { CommunityBusinesses } from '..';
-const { migrate } = require('../../../database');
+import { getTrx } from '../../../tests/utils/database';
 
 
 describe('Community Business Model', () => {
   const config = getConfig(process.env.NODE_ENV);
   const knex = Knex(config.knex);
+  let trx: Knex.Transaction;
 
   afterAll(async () => {
     await knex.destroy();
   });
 
   beforeEach(async () => {
-    await migrate.truncate({ client: knex });
-    await knex.seed.run();
+    trx = await getTrx(knex);
+  });
+
+  afterEach(async () => {
+    await trx.rollback();
   });
 
   describe('Read', () => {
@@ -68,16 +72,16 @@ describe('Community Business Model', () => {
     test('add :: create new record using minimal changeset', async () => {
       const changeset = await factory.build('communityBusiness');
 
-      const org = await CommunityBusinesses.add(knex, changeset);
+      const org = await CommunityBusinesses.add(trx, changeset);
 
       expect(org).toEqual(expect.objectContaining(changeset));
     });
 
     test('update :: modify value in local table', async () => {
       const changeset = { logoUrl: 'foo' };
-      const org = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
+      const org = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
 
-      const updatedOrg = await CommunityBusinesses.update(knex, org, changeset);
+      const updatedOrg = await CommunityBusinesses.update(trx, org, changeset);
 
       expect(updatedOrg.name).toEqual(org.name);
       expect(updatedOrg.logoUrl).toEqual('foo');
@@ -86,26 +90,27 @@ describe('Community Business Model', () => {
 
     test('update :: modify foreign value', async () => {
       const changeset = { _360GivingId: 'foo' };
-      const org = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
+      const org = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
 
-      const updatedOrg = await CommunityBusinesses.update(knex, org, changeset);
+      const updatedOrg = await CommunityBusinesses.update(trx, org, changeset);
+
       expect(updatedOrg.name).toEqual(org.name);
       expect(updatedOrg._360GivingId).toEqual('foo');
       expect(updatedOrg.modifiedAt).toEqual(null);
     });
 
     test('destroy :: mark existing record as deleted', async () => {
-      const org = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
+      const org = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
 
       const orgsBeforeDelete =
-        await CommunityBusinesses.get(knex, { where: { deletedAt: null } });
+        await CommunityBusinesses.get(trx, { where: { deletedAt: null } });
 
-      await CommunityBusinesses.destroy(knex, org);
+      await CommunityBusinesses.destroy(trx, org);
 
       const orgsAfterDelete =
-        await CommunityBusinesses.get(knex, { where: { deletedAt: null } });
+        await CommunityBusinesses.get(trx, { where: { deletedAt: null } });
       const deletedOrgs =
-        await CommunityBusinesses.get(knex, { whereNot: { deletedAt: null } });
+        await CommunityBusinesses.get(trx, { whereNot: { deletedAt: null } });
 
       expect(orgsAfterDelete).toHaveLength(orgsBeforeDelete.length - 1);
       expect(deletedOrgs).toHaveLength(1);
@@ -127,62 +132,51 @@ describe('Community Business Model', () => {
 
   describe('Feedback', () => {
     test('addFeedback :: insert positive feedback', async () => {
-      const org = await CommunityBusinesses.getOne(knex);
-      const fb = await knex('visit_feedback').select().where({ organisation_id: org.id });
+      const org = await CommunityBusinesses.getOne(trx);
+      const fb = await trx('visit_feedback').select().where({ organisation_id: org.id });
 
-      await CommunityBusinesses.addFeedback(knex, org, 1);
+      await CommunityBusinesses.addFeedback(trx, org, 1);
 
-      const res = await knex('visit_feedback').select().where({ organisation_id: org.id });
+      const res = await trx('visit_feedback').select().where({ organisation_id: org.id });
 
       expect(res).toHaveLength(fb.length + 1);
       expect(res.slice(-1)[0].score).toBe(1);
     });
 
     test('getFeedback :: retrieve all added feedback', async () => {
-      const org = await CommunityBusinesses.getOne(knex);
-      const fb = await knex('visit_feedback').select().where({ organisation_id: org.id });
+      const org = await CommunityBusinesses.getOne(trx);
+      const fb = await trx('visit_feedback').select().where({ organisation_id: org.id });
 
-      await CommunityBusinesses.addFeedback(knex, org, 1);
-      await CommunityBusinesses.addFeedback(knex, org, 0);
-      await CommunityBusinesses.addFeedback(knex, org, 0);
-      await CommunityBusinesses.addFeedback(knex, org, -1);
+      await CommunityBusinesses.addFeedback(trx, org, 1);
+      await CommunityBusinesses.addFeedback(trx, org, 0);
+      await CommunityBusinesses.addFeedback(trx, org, 0);
+      await CommunityBusinesses.addFeedback(trx, org, -1);
 
-      const feedback = await CommunityBusinesses.getFeedback(knex, org);
+      const feedback = await CommunityBusinesses.getFeedback(trx, org);
 
       expect(feedback).toHaveLength(fb.length + 4);
       expect(feedback.slice(-4)[0].score).toBe(1);
     });
 
     test('getFeedback :: retrieve feedback added between timestamps', async () => {
-      const wait = (n: number, cb: () => number): Promise<number> =>
-        new Promise((resolve) => setTimeout(() => resolve(cb()), n));
-      const org = await CommunityBusinesses.getOne(knex);
+      const org = await CommunityBusinesses.getOne(trx);
 
-      const d1 = await wait(0, () => Date.now());
-      await CommunityBusinesses.addFeedback(knex, org, 1);
-      await CommunityBusinesses.addFeedback(knex, org, 0);
-      await CommunityBusinesses.addFeedback(knex, org, -1);
+      const d1 = new Date('2018-07-29T00:00:00.000Z');
+      const d2 = new Date('2018-08-01T00:00:00.000Z');
+      const d3 = new Date(Date.now());
 
-      const d2 = await wait(0, () => Date.now());
-      await CommunityBusinesses.addFeedback(knex, org, 0);
+      const feedback12 = await CommunityBusinesses.getFeedback(trx, org, { since: d1, until: d2 });
+      const feedback13 = await CommunityBusinesses.getFeedback(trx, org, { since: d1, until: d3 });
+      const feedback23 = await CommunityBusinesses.getFeedback(trx, org, { since: d2, until: d3 });
 
-      const d3 = await wait(0, () => Date.now());
+      expect(feedback12).toHaveLength(6);
+      expect(feedback12.map((f) => f.score)).toEqual([-1, 0, 0, 1, -1, 0]);
 
-      const feedback12 = await CommunityBusinesses.getFeedback(
-        knex, org, { since: new Date(d1), until: new Date(d2) });
-      const feedback13 = await CommunityBusinesses.getFeedback(
-        knex, org, { since: new Date(d1), until: new Date(d3) });
-      const feedback23 = await CommunityBusinesses.getFeedback(
-        knex, org, { since: new Date(d2), until: new Date(d3) });
+      expect(feedback13).toHaveLength(9);
+      expect(feedback13.map((f) => f.score)).toEqual([-1, 0, 0, 1, -1, 0, 0, 1, 1]);
 
-      expect(feedback12).toHaveLength(3);
-      expect(feedback12.map((f) => f.score)).toEqual([1, 0, -1]);
-
-      expect(feedback13).toHaveLength(4);
-      expect(feedback13.map((f) => f.score)).toEqual([1, 0, -1, 0]);
-
-      expect(feedback23).toHaveLength(1);
-      expect(feedback23.map((f) => f.score)).toEqual([0]);
+      expect(feedback23).toHaveLength(3);
+      expect(feedback23.map((f) => f.score)).toEqual([0, 1, 1]);
     });
   });
 });

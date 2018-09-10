@@ -267,6 +267,9 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         'score',
         'organisation_id AS organisationId',
         'visit_feedback_id AS id',
+        'created_at AS createdAt',
+        'modified_at AS modifiedAt',
+        'deleted_at AS deletedAt',
       ]);
 
     return res;
@@ -277,8 +280,11 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
       client('visit_feedback')
         .select({
           id: 'visit_feedback_id',
+          organisationId: 'organisation_id',
           score: 'score',
           createdAt: 'created_at',
+          modifiedAt: 'modified_at',
+          deletedAt: 'deleted_at',
         })
         .where({ organisation_id: c.id, deleted_at: null }),
       bw || {}

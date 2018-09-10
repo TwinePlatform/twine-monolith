@@ -240,8 +240,8 @@ describe('/community-business/{id}/feedback', () => {
     });
 
     test('Get summary results for own organisation between date limits', async () => {
-      const since = '2018-07-01T10:43:22.231';
-      const until = '2018-07-31T10:43:22.231';
+      const since = '2018-07-01T00:00:00.000Z';
+      const until = '2018-07-31T23:59:59.999Z';
 
       const res = await server.inject({
         method: 'GET',
@@ -255,9 +255,9 @@ describe('/community-business/{id}/feedback', () => {
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual({
-        totalFeedback: 5,
+        totalFeedback: 6,
         '-1': 2,
-        0: 2,
+        0: 3,
         1: 1,
       });
     });
