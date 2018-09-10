@@ -57,6 +57,8 @@ export default [
       } catch (error) {
         if (error.code.includes('235')) {
           return Boom.badRequest();
+        } else {
+          throw error;
         }
       }
 
