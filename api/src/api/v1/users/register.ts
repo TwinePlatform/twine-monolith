@@ -5,13 +5,13 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import {
   id,
-  visitorName,
+  userName,
   birthYear,
   email,
   phoneNumber,
   postCode,
-  emailConsent,
-  smsConsent,
+  isEmailConsentGranted,
+  isSMSConsentGranted,
   gender,
   response
 } from './schema';
@@ -50,14 +50,14 @@ export default [
       validate: {
         payload: {
           organisationId: id.required(),
-          name: visitorName.required(),
+          name: userName.required(),
           gender: gender.required(),
           birthYear: birthYear.required(),
           email: email.required(),
           phoneNumber: phoneNumber.allow(''),
           postCode: postCode.allow(''),
-          emailConsent: emailConsent.default(false),
-          smsConsent: smsConsent.default(false),
+          emailConsent: isEmailConsentGranted.default(false),
+          smsConsent: isSMSConsentGranted.default(false),
         },
       },
       response: { schema: response },

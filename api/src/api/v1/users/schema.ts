@@ -12,7 +12,7 @@ const currentYear = (new Date()).getFullYear();
 /*
  * Common request schema
  */
-export const visitorName =
+export const userName =
   Joi.string()
     .min(3)
     .max(100)
@@ -43,11 +43,17 @@ export const postCode =
     .min(4)
     .max(10);
 
-export const emailConsent =
+export const isEmailConsentGranted =
   Joi.boolean();
 
-export const smsConsent =
+export const isSMSConsentGranted =
   Joi.boolean();
+
+export const disability =
+  Joi.string().only(['yes', 'no', 'prefer not to say']);
+
+export const ethnicity =
+  Joi.string();
 
 /*
  *

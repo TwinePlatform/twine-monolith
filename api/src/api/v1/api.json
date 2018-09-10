@@ -49,8 +49,8 @@
       "email": "String",
       "phoneNumber": "String",
       "postCode": "String",
-      "emailConsent": "Boolean",
-      "smsConsent": "Boolean",
+      "isEmailConsentGranted": "Boolean",
+      "isSMSConsentGranted": "Boolean",
       "registeredAt": "String",
       "lastActiveAt": "String",
       "modifiedAt": "String",
@@ -68,8 +68,8 @@
       "email": "String",
       "phoneNumber": "String",
       "postCode": "String",
-      "emailConsent": "Boolean",
-      "smsConsent": "Boolean",
+      "isEmailConsentGranted": "Boolean",
+      "isSMSConsentGranted": "Boolean",
       "registeredAt": "String",
       "lastActiveAt": "String",
       "modifiedAt": "String"
@@ -83,8 +83,8 @@
       "email": "String",
       "phoneNumber": "String",
       "postCode": "String",
-      "emailConsent": "Boolean",
-      "smsConsent": "Boolean",
+      "isEmailConsentGranted": "Boolean",
+      "isSMSConsentGranted": "Boolean",
       "qrCodeUrl": "String",
       "registeredAt": "String",
       "lastActiveAt": "String",
@@ -560,8 +560,8 @@
               "sort": "String",
               "gender": "String",
               "age": "String",
-              "emailConsent": "Boolean",
-              "smsConsent": "Boolean"
+              "isEmailConsentGranted": "Boolean",
+              "isSMSConsentGranted": "Boolean"
             }
           },
           "response": {
@@ -587,8 +587,8 @@
               "sort": "String",
               "gender": "String",
               "age": "String",
-              "emailConsent": "Boolean",
-              "smsConsent": "Boolean"
+              "isEmailConsentGranted": "Boolean",
+              "isSMSConsentGranted": "Boolean"
             }
           },
           "response": {
@@ -612,8 +612,8 @@
               "sort": "String",
               "gender": "String",
               "age": "String",
-              "emailConsent": "Boolean",
-              "smsConsent": "Boolean"
+              "isEmailConsentGranted": "Boolean",
+              "isSMSConsentGranted": "Boolean"
             }
           },
           "response": {
@@ -822,8 +822,8 @@
               "sort": "String",
               "gender": "String",
               "age": "String",
-              "emailConsent": "Boolean",
-              "smsConsent": "Boolean"
+              "isEmailConsentGranted": "Boolean",
+              "isSMSConsentGranted": "Boolean"
             }
           },
           "response": {
@@ -951,8 +951,8 @@
             "email": "String",
             "phoneNumber": "String",
             "userPostCode": "String",
-            "emailConsent": "Boolean",
-            "smsConsent": "Boolean",
+            "isEmailConsentGranted": "Boolean",
+            "isSMSConsentGranted": "Boolean",
             "password": "String",
             "adminCode":"String",
             "organisationName": "String",
@@ -1083,8 +1083,8 @@
             "email": "String",
             "phoneNumber": "String",
             "postCode": "String",
-            "emailConsent": "Boolean",
-            "smsConsent": "Boolean",
+            "isEmailConsentGranted": "Boolean",
+            "isSMSConsentGranted": "Boolean",
             "password": "String",
             "adminCode":"String"
           },
@@ -1106,8 +1106,8 @@
             "email": "String",
             "phoneNumber": "String",
             "postCode": "String",
-            "emailConsent": "Boolean",
-            "smsConsent": "Boolean"
+            "isEmailConsentGranted": "Boolean",
+            "isSMSConsentGranted": "Boolean"
           },
           "response": "types.visitorUser"
         }
@@ -1127,8 +1127,8 @@
             "email": "String",
             "phoneNumber": "String",
             "postCode": "String",
-            "emailConsent": "Boolean",
-            "smsConsent": "Boolean",
+            "isEmailConsentGranted": "Boolean",
+            "isSMSConsentGranted": "Boolean",
             "invitationCode": "String",
             "emailConfirmation": "String"
           },
@@ -1254,8 +1254,8 @@
             "birthYear": "String",
             "email": "String",
             "phoneNumber": "String",
-            "emailConsent": "Boolean",
-            "smsConsent": "Boolean",
+            "isEmailConsentGranted": "Boolean",
+            "isSMSConsentGranted": "Boolean",
             "qrCode": "String"
           },
           "response": "types.visitorUser || types.volunteerUser || types.adminUser"
@@ -1313,8 +1313,8 @@
             "birthYear": "String",
             "email": "String",
             "phoneNumber": "String",
-            "emailConsent": "Boolean",
-            "smsConsent": "Boolean",
+            "isEmailConsentGranted": "Boolean",
+            "isSMSConsentGranted": "Boolean",
             "delete": "Boolean"
           },
           "response": "types.user"
