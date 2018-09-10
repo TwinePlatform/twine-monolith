@@ -1,18 +1,23 @@
 import * as Hapi from 'hapi';
+import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
 import { RoleEnum } from '../../../../auth/types';
+import { getTrx } from '../../../../../tests/utils/database';
 
 
 describe('API v1 :: Community Businesses :: Visit Activities', () => {
   let server: Hapi.Server;
+  let knex: Knex;
+  let trx: Knex.Transaction;
   let user: User;
   let organisation: Organisation;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
     server = await init(config);
+    knex = server.app.knex;
 
     user = await Users.getOne(server.app.knex, { where: { id: 1 } });
     organisation = await Organisations.getOne(server.app.knex, { where: { id: 1 } });
@@ -20,6 +25,15 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
 
   afterAll(async () => {
     await server.shutdown(true);
+  });
+
+  beforeEach(async () => {
+    trx = await getTrx(knex);
+    server.app.knex = trx;
+  });
+
+  afterEach(async () => {
+    await trx.rollback();
   });
 
   describe('GET', () => {

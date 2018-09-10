@@ -1,26 +1,34 @@
 import * as Hapi from 'hapi';
+import * as Knex from 'knex';
 import { init } from '../../../../server';
 import factory from '../../../../../tests/utils/factory';
 import { getConfig } from '../../../../../config';
 import { RoleEnum } from '../../../../auth/types';
-const { migrate } = require('../../../../../database');
+import { getTrx } from '../../../../../tests/utils/database';
 
 
 describe('POST /users/register/visitor', () => {
   let server: Hapi.Server;
+  let knex: Knex;
+  let trx: Knex.Transaction;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
     server = await init(config);
+    knex = server.app.knex;
   });
 
   afterAll(async () => {
     await server.shutdown(true);
   });
 
+  beforeEach(async () => {
+    trx = await getTrx(knex);
+    server.app.knex = trx;
+  });
+
   afterEach(async () => {
-    await migrate.truncate({ client: server.app.knex });
-    await server.app.knex.seed.run();
+    await trx.rollback();
   });
 
   test('user already exists', async () => {

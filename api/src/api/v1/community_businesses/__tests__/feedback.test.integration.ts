@@ -4,12 +4,13 @@ import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { Users, Organisations, LinkedFeedback, User, Organisation } from '../../../../models';
 import { RoleEnum } from '../../../../auth/types';
-const { migrate } = require('../../../../../database');
+import { getTrx } from '../../../../../tests/utils/database';
 
 
 describe('/community-business/{id}/feedback', () => {
   let server: Hapi.Server;
   let knex: Knex;
+  let trx: Knex.Transaction;
   const config = getConfig(process.env.NODE_ENV);
   const users: Hapi.Util.Dictionary<User> = {};
   const orgs: Hapi.Util.Dictionary<Organisation> = {};
@@ -17,9 +18,6 @@ describe('/community-business/{id}/feedback', () => {
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
-
-    await migrate.truncate({ client: knex });
-    await knex.seed.run();
 
     users.gordon = await Users.getOne(knex, { where: { name: 'Gordon' } });
     users.glados = await Users.getOne(knex, { where: { name: 'GlaDos' } });
@@ -30,6 +28,15 @@ describe('/community-business/{id}/feedback', () => {
       knex,
       { where: { name: 'Black Mesa Research' } }
     );
+  });
+
+  beforeEach(async () => {
+    trx = await getTrx(knex);
+    server.app.knex = trx;
+  });
+
+  afterEach(async () => {
+    await trx.rollback();
   });
 
   afterAll(async () => {
