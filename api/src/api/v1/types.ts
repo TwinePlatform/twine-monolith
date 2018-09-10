@@ -3,7 +3,8 @@ import { Dictionary } from 'ramda';
 import { ApiRequestQuery, ApiRequestBody } from './schema/request';
 import { ApiResponse } from './schema/response';
 import { UserCredentials } from '../../auth/strategies/standard';
-import { GenderEnum } from '../../models';
+import { GenderEnum, CommunityBusiness } from '../../models';
+import { Omit } from '../../types/internal';
 
 
 declare module 'hapi' {
@@ -38,6 +39,15 @@ export type ApiRouteSpec = {
 export interface GetCommunityBusinessRequest extends Hapi.Request {
   params: {
     organisationId: string
+  };
+}
+
+export interface PutCommunityBusinesssRequest extends Hapi.Request {
+  payload:
+    Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>;
+  pre: {
+    communityBusiness: CommunityBusiness
+    isChild?: boolean
   };
 }
 
