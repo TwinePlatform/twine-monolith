@@ -63,7 +63,7 @@ export default [
       response: { schema: response },
     },
     handler: async (request: RegisterRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, payload, server: { app: { EmailService } } } = request;
+      const { payload, server: { app: { EmailService, knex } } } = request;
 
       /*
        * Preliminaries

@@ -34,7 +34,7 @@ const routes: Hapi.ServerRoute[] = [
       ],
     },
     handler: async (request: GetVisitorsRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, query, pre: { communityBusiness } } = request;
+      const { query, pre: { communityBusiness }, server: { app: { knex } } } = request;
       const { visits, filter, fields: _fields } = query;
 
       const q: {

@@ -38,7 +38,11 @@ const routes: Hapi.ServerRoute[] = [
       ],
     },
     handler: async (request: VisitorSearchRequest, h) => {
-      const { knex, payload: { qrCode }, pre: { communityBusiness } } = request;
+      const {
+        payload: { qrCode },
+        pre: { communityBusiness },
+        server: { app: { knex } },
+      } = request;
 
       const visitors = await Visitors.fromCommunityBusiness(knex, communityBusiness);
 

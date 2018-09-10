@@ -36,7 +36,7 @@ const route: Hapi.ServerRoute[] = [
       response: { schema: response },
     },
     handler: async (request: LoginRequest, h: Hapi.ResponseToolkit) => {
-      const { knex } = request;
+      const { server: { app: { knex } } } = request;
       const { email, password } = request.payload;
 
       const user = await Users.getOne(knex, { where: { email } });

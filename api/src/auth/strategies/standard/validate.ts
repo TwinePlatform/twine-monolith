@@ -12,7 +12,7 @@ type ValidateUser = (a: Session, b: Hapi.Request)
 
 const validateUser: ValidateUser = async (decoded, request) => {
   try {
-    const { knex } = request;
+    const { server: { app: { knex } } } = request;
     const { userId, organisationId, privilege } = decoded;
 
     if (!userId || !organisationId || !privilege) {

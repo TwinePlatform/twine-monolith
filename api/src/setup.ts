@@ -30,8 +30,6 @@ export default (server: Hapi.Server, config: Config) => {
   server.app.knex = Knex(config.knex);
   server.app.EmailService = emailInitialiser.init({ apiKey: config.email.postmark_key });
 
-  server.decorate('request', 'knex', server.app.knex);
-
   server.decorate('server', 'shutdown', async (graceful) => {
     /* istanbul ignore else */
     if (graceful) {
