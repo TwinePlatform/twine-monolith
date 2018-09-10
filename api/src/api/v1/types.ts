@@ -35,7 +35,7 @@ export type ApiRouteSpec = {
 /*
  * Request types
  */
-export interface OrganisationRequest extends Hapi.Request {
+export interface GetCommunityBusinessRequest extends Hapi.Request {
   params: {
     organisationId: string
   };

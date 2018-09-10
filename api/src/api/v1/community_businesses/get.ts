@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
-import { OrganisationRequest } from '../types';
+import { GetCommunityBusinessRequest } from '../types';
 import { query, response } from './schema';
 
 
@@ -68,7 +68,7 @@ export default [
         { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
       ],
     },
-    handler: async (request: OrganisationRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
       const { communityBusiness, isChild } = request.pre;
 
       if (!isChild) {

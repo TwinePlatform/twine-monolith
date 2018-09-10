@@ -11,11 +11,11 @@
  *
  */
 import * as Hapi from 'hapi';
-import { OrganisationRequest } from '../types';
+import { GetCommunityBusinessRequest } from '../types';
 import { RoleEnum } from '../../../auth/types';
 
 
-export default async (request: OrganisationRequest, h: Hapi.ResponseToolkit) => {
+export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
   const { auth: { credentials: { role } } } = request;
 
   if (role === RoleEnum.TWINE_ADMIN) {

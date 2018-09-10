@@ -10,23 +10,17 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import { isNil } from 'ramda';
 import { CommunityBusinesses } from '../../../models';
-
-
-export interface CommunityBusinessRequest extends Hapi.Request {
-  params: {
-    organisationId: string
-  };
-}
+import { GetCommunityBusinessRequest } from '../types';
 
 
 const is360GivingId = (s: string) => isNaN(parseInt(s, 10));
-const getCbFromCredentials = async (request: CommunityBusinessRequest) => {
+const getCbFromCredentials = async (request: GetCommunityBusinessRequest) => {
   const knex = request.server.app.knex;
   const id = request.auth.credentials.organisation.id;
   return CommunityBusinesses.getOne(knex, { where: { id } });
 };
 
-export default async (request: CommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
+export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
   const { params: { organisationId: id }, server: { app: { knex } } } = request;
 
   const communityBusiness =
