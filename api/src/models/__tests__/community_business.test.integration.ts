@@ -99,6 +99,19 @@ describe('Community Business Model', () => {
       expect(updatedOrg.modifiedAt).toEqual(null);
     });
 
+    test('update :: invalid foreign value', async () => {
+      expect.assertions(1);
+
+      const changeset = { region: 'Narnia' };
+      const org = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+
+      try {
+        await CommunityBusinesses.update(trx, org, changeset);
+      } catch (error) {
+        expect(error).toBeTruthy();
+      }
+    });
+
     test('destroy :: mark existing record as deleted', async () => {
       const org = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
 

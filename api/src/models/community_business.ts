@@ -218,16 +218,16 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
   },
 
   async update (client: Knex, o: CommunityBusiness, c: CommunityBusinessChangeSet) {
-    const preProcessCbChangeset = compose(
-      CommunityBusinesses.toColumnNames,
-      pickCbFields
-    );
-
     const orgChangeset = preProcessOrgChangeset(c);
-    const cbChangeset = preProcessCbChangeset(c);
 
     const [{ organisation_id: id }] = await client.transaction(async (trx) => {
       const cbQuery = preProcessCb(trx)(o);
+      const preProcessCbChangeset = compose(
+        transformForeignKeysToSubQueries(trx),
+        CommunityBusinesses.toColumnNames,
+        pickCbFields
+      );
+      const cbChangeset = preProcessCbChangeset(c);
 
       if (Object.keys(orgChangeset).length > 0) {
         await trx('organisation')
