@@ -190,6 +190,10 @@ export const Users: UserCollection & CustomMethods = {
       .where(preProcessUser(u))
       .returning('user_account_id');
 
+    if (!id) {
+      throw new Error('Unable to perform update');
+    }
+
     return Users.getOne(client, { where: { id } });
   },
 
