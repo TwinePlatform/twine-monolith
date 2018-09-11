@@ -29,7 +29,7 @@ describe('Pre-requisite :: is_child_organisation', () => {
     await knex.destroy();
   });
 
-  test('pre-req returns false when user is admin for community business', async () => {
+  test('returns false when user is ORG_ADMIN for community business', async () => {
     const res = await server.inject({
       method: 'GET',
       url: '/foo',
@@ -44,7 +44,7 @@ describe('Pre-requisite :: is_child_organisation', () => {
     expect(res.result).toEqual({ is: false });
   });
 
-  test('pre-req returns true when user is Twine admin', async () => {
+  test('returns true when user is TWINE_ADMIN', async () => {
     const res = await server.inject({
       method: 'GET',
       url: '/foo',
@@ -59,7 +59,7 @@ describe('Pre-requisite :: is_child_organisation', () => {
     expect(res.result).toEqual({ is: true });
   });
 
-  test('CB admin tries to access different organisation', async () => {
+  test('returns false when ORG_ADMIN tries to access different organisation', async () => {
     const res = await server.inject({
       method: 'GET',
       url: '/foo',
