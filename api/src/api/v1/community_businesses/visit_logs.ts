@@ -2,17 +2,35 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
 import * as bcrypt from 'bcrypt';
+import { omit, filter } from 'ramda';
 import { query, response, id } from './schema';
-import { User, Visitors, CommunityBusiness, CommunityBusinesses } from '../../../models';
+import {
+  User,
+  Visitors,
+  CommunityBusiness,
+  CommunityBusinesses,
+  GenderEnum } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
-import { findAsync } from '../../../utils';
+import { findAsync, valueIsSet } from '../../../utils';
 import { filterQuery } from '../users/schema';
+import { ApiRequestQuery } from '../schema/request';
 
 interface VisitorSearchRequest extends Hapi.Request {
   payload: {
     userId: number
     visitActivityId: number
     qrCode: string
+  };
+}
+
+export interface GetVisitLogsRequest extends Hapi.Request {
+  query: ApiRequestQuery & {
+    [k: string]: any
+    filter?: {
+      age?: [number, number]
+      gender?: GenderEnum
+      activity?: string
+    }
   };
 }
 
@@ -82,30 +100,88 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness , assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      const { knex, pre: { communityBusiness } } = request;
-      // TODO add filtering based on query
-      return CommunityBusinesses.getVisitLogs(knex, communityBusiness, null);
+    handler: async (request: GetVisitLogsRequest, h: Hapi.ResponseToolkit) => {
+      const {
+        server: { app: { knex } },
+        query: { limit, offset, filter: filterOptions = {} },
+        pre: { communityBusiness } } = request;
+
+      console.log({ filterOptions });
+
+      // move to query definition to model
+      const query = filter(valueIsSet, {
+        offset,
+        limit,
+        where: omit(['age'], { ...filterOptions }),
+        whereBetween: filterOptions.age
+        ? {
+          columnName: 'age',
+          range: filterOptions.age }
+        : {},
+      });
+
+      const visits = await CommunityBusinesses.getVisitLogs(
+        knex,
+        communityBusiness,
+        query
+        );
+
+      const count = await CommunityBusinesses.getVisitLogs(
+        knex,
+        communityBusiness,
+        omit(['limit', 'offset'], query)
+        ).then((rows: any) => rows.length);
+
+      return {
+        meta: {
+          total: count,
+        },
+        result: visits,
+      };
     },
   },
-  // {
-  //   method: 'GET',
-  //   path: '/community-businesses/me/visit-logs/aggregates',
-  //   options: {
-  //     description: 'Retrieve a list of all community businesses',
-  //     auth: {
-  //       strategy: 'standard',
-  //       access: {
-  //         scope: ['organisations_details-child:read'],
-  //       },
-  //     },
-  //     validate: { query },
-  //     response: { schema: response },
-  //   },
-  //   handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-  //   },
-  // },
-];
+  {
+    method: 'GET',
+    path: '/community-businesses/me/visit-logs/aggregates',
+    options: {
+      description: 'Retrieve a list of aggregated visit data for your scommunity businesses',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['visit_logs-own:read'],
+        },
+      },
+      validate: {
+        query: {
+          ...query,
+          ...filterQuery,
+        },
+      },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness , assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request: GetVisitLogsRequest, h: Hapi.ResponseToolkit) => {
 
+      const {
+        server: { app: { knex } },
+        query: { filter: filterOptions = {}, fields },
+        pre: { communityBusiness } } = request;
+
+      // deal with this in the model
+      const query = filter(valueIsSet, {
+        where: omit(['age'], { ...filterOptions }),
+        whereBetween: filterOptions.age
+          ? {
+            columnName: 'birthYear',
+            range: filterOptions.age}
+          : {},
+      });
+
+      return CommunityBusinesses.getVisitLogAggregates(knex, communityBusiness, fields, query);
+    },
+  },
+];
 
 export default routes;

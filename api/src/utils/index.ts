@@ -1,7 +1,8 @@
 import * as stream from 'stream';
 import * as Shot from 'shot';
+import * as moment from 'moment';
 import axios from 'axios';
-import { Dictionary, CurriedFunction2, assoc, curry } from 'ramda';
+import { Dictionary, CurriedFunction2, assoc, curry, isEmpty } from 'ramda';
 
 type MapKeys =
   CurriedFunction2<(a: string) => string, Dictionary<any>, Dictionary<any>>;
@@ -65,3 +66,10 @@ export const findAsync = async <T>(xs: T[], predicate: (a: T) => Promise<boolean
   }
   return null;
 };
+
+export const ageArrayToBirthYearArray = (ageArray: number[]) =>
+  ageArray
+    .map((age: number) => moment().year() - age)
+    .reverse();
+
+export const valueIsSet = (value: any) => !isEmpty(value);

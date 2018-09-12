@@ -757,7 +757,7 @@
       "/:id/visit-logs": {
         "POST": {
           "description": "For users to adds a visit to their community business",
-          "isImplemented": true,
+          "isImplemented": false,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["visit_logs-own:write"],
@@ -771,7 +771,7 @@
       "/me/visit-logs/aggregates": {
         "GET": {
           "description": "Retreive all visit data for own community business",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["visit_logs-own:read"],

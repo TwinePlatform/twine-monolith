@@ -3,6 +3,7 @@ import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { CommunityBusinesses } from '..';
 import { getTrx } from '../../../tests/utils/database';
+import { GenderEnum } from '../types';
 
 
 describe('Community Business Model', () => {
@@ -190,6 +191,75 @@ describe('Community Business Model', () => {
 
       expect(feedback23).toHaveLength(3);
       expect(feedback23.map((f) => f.score)).toEqual([0, 1, 1]);
+    });
+  });
+
+  describe('getVisitLogs', () => {
+    test(':: returns all logs for a cb', async () => {
+      const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+      const logs = await CommunityBusinesses.getVisitLogs(trx, cb);
+      expect(logs.length).toEqual(10);
+      expect(logs).toEqual(expect.arrayContaining([
+        expect.objectContaining({
+          activity: 'Free Running',
+          birthYear: 1988,
+          category: 'Sports',
+          gender: 'female',
+          id: 1,
+          userId: 1,
+        }),
+      ]));
+    });
+
+    test(':: returns subset of logs when a query is supplied', async () => {
+      const cb = await CommunityBusinesses.getOne(trx, { where: { id: 2 } });
+      const logs = await CommunityBusinesses
+        .getVisitLogs(trx, cb, { where: { gender: GenderEnum.MALE } });
+
+      expect(logs.length).toEqual(0);
+    });
+  });
+
+  describe('getAggregatedVisitLogs', () => {
+    test(':: returns all aggregated logs for a cb', async () => {
+      const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+      const aggregates = await CommunityBusinesses
+        .getVisitLogAggregates(trx, cb, ['gender', 'age', 'activity']);
+      expect(aggregates).toEqual({
+        activity: { 'Free Running': '7', 'Wear Pink': '3' },
+        age: { '18-34': '10' },
+        gender: { female: '10' },
+      });
+    });
+
+    test(':: returns subset of aggregates when a query is supplied', async () => {
+      const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+      const logs = await CommunityBusinesses.getVisitLogAggregates(
+        trx,
+        cb,
+        ['gender', 'activity', 'age'],
+        { where: { activity: 'Wear Pink' } }
+        );
+
+      expect(logs).toEqual({
+        activity: { 'Wear Pink': '3' },
+        age: { '18-34': '3' },
+        gender: { female: '3' } });
+    });
+
+    test(':: throws an error if unsupported aggregate fields are supplied', async () => {
+      expect.assertions(1);
+      const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+      try {
+        await CommunityBusinesses.getVisitLogAggregates(
+          trx,
+          cb,
+          ['gender', 'activity', 'age', 'funkability'],
+          { where: { activity: 'Wear Pink' } }
+          );
+      } catch (error) {
+        expect(error).toBeTruthy();
+      }
     });
   });
 });

@@ -2,7 +2,8 @@
  * Community Business Model
  */
 import * as Knex from 'knex';
-import { compose, omit, evolve, filter, pick, invertObj } from 'ramda';
+import * as moment from 'moment';
+import { compose, omit, evolve, filter, pick, invertObj, pipe, assocPath, difference } from 'ramda';
 import { Dictionary, Map, Int, Day, Maybe } from '../types/internal';
 import {
   CommunityBusiness,
@@ -19,7 +20,7 @@ import {
 } from './types';
 import { Organisations } from './organisation';
 import { applyQueryModifiers } from './util';
-import { renameKeys } from '../utils';
+import { renameKeys, lazyPromiseSeries, ageArrayToBirthYearArray } from '../utils';
 
 
 /*
@@ -40,7 +41,12 @@ type CustomMethods = {
   updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>
   deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>
   addVisitLog: (k: Knex, v: VisitActivity, u: User) => Promise<VisitEvent>
-  getVisitLogs: (k: Knex, c: CommunityBusiness, q: ModelQuery<VisitLog>) => Promise<VisitLog>
+  getVisitLogs: (k: Knex, c: CommunityBusiness, q?: ModelQuery<VisitLog>) => Promise<VisitLog[]>
+  getVisitLogAggregates: (
+    k: Knex,
+    c: CommunityBusiness,
+    aggs: string[],
+    q?: ModelQuery<VisitLog>) => Promise<any>
 };
 
 /*
@@ -458,8 +464,21 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return <VisitEvent> res;
   },
 
-  async getVisitLogs (client: Knex, c: CommunityBusiness, q: ModelQuery<VisitLog>) {
-    return client('visit')
+  async getVisitLogs (client: Knex, c: CommunityBusiness, q?: ModelQuery<VisitLog>) {
+    const modifyColumnNames = evolve({
+      where: renameKeys({
+        activity: 'visit_activity.visit_activity_name',
+        gender: 'gender.gender_name',
+      }),
+      whereBetween: (oldWB) => ({
+        columnName: 'user_account.birth_year',
+        range: ageArrayToBirthYearArray(oldWB.range),
+      }),
+    });
+    const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], c.id);
+    const query = pipe(modifyColumnNames, checkSpecificCb)(q);
+
+    return applyQueryModifiers(client('visit')
       .select({
         id: 'visit_id',
         userId: 'user_account.user_account_id',
@@ -476,7 +495,119 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         'visit_activity_category.visit_activity_category_id',
         'visit_activity.visit_activity_category_id')
       .innerJoin('user_account', 'user_account.user_account_id', 'visit.user_account_id')
-      .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id');
+      .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id'),
+      query);
+  },
+
+  async getVisitLogAggregates (client, cb, aggs, query) {
+    const unsupportedAggregates = difference(aggs, ['age', 'gender', 'activity']);
+    if (unsupportedAggregates.length > 0) {
+      throw new Error(`${unsupportedAggregates.join(', ')} are not supported aggregate fields`);
+    }
+    const year = moment().year();
+
+    const modifyColumnNamesForGenderActivity = evolve({
+      where: renameKeys({
+        activity: 'visit_activity.visit_activity_name',
+        gender: 'gender.gender_name',
+      }),
+    });
+
+    const modifyColumnNamesForAge = evolve({
+      where: renameKeys({
+        activity: 'visit_activity.visit_activity_name',
+        gender: 'gender.gender_name',
+      }),
+      whereBetween: (oldWB) => ({
+        columnName: 'user_account.birth_year',
+        range: ageArrayToBirthYearArray(oldWB.range),
+      }),
+    });
+
+    const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);
+
+    const genderActivityQuery = pipe(modifyColumnNamesForGenderActivity, checkSpecificCb)(query);
+    const ageQuery = pipe(modifyColumnNamesForAge, checkSpecificCb)(query);
+
+    const aggregateQueries = {
+      gender: applyQueryModifiers(client('visit')
+        .count('gender.gender_name')
+        .select({
+          gender: 'gender.gender_name',
+        })
+        .innerJoin('visit_activity', 'visit_activity.visit_activity_id', 'visit.visit_activity_id')
+        .innerJoin('user_account', 'user_account.user_account_id', 'visit.user_account_id')
+        .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
+        .groupBy('gender.gender_name')
+        , genderActivityQuery)
+        .then((rows) => {
+          const gender = rows.reduce((acc, row) => {
+            acc[row.gender] = row.count;
+            return acc;
+          } , {});
+          return { gender };
+        }),
+
+      activity: applyQueryModifiers(client('visit')
+        .count('visit_activity.visit_activity_name')
+        .select({
+          activity: 'visit_activity_name',
+        })
+        .innerJoin('visit_activity', 'visit_activity.visit_activity_id', 'visit.visit_activity_id')
+        .innerJoin('user_account', 'user_account.user_account_id', 'visit.user_account_id')
+        .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
+        .groupBy('visit_activity.visit_activity_name'), genderActivityQuery)
+        .then((rows) => {
+          const activity = rows.reduce((acc, row) => {
+            acc[row.activity] = row.count;
+            return acc;
+          } , {});
+          return { activity };
+        }),
+
+      age: applyQueryModifiers(client.with('age_group_table',
+        client
+          .raw('SELECT *, CASE ' +
+            `WHEN birth_year > ${year - 17} THEN '0-17' ` +
+            `WHEN birth_year > ${year - 34} AND birth_year <= ${year - 17} THEN '18-34' ` +
+            `WHEN birth_year > ${year - 50} AND birth_year <= ${year - 34} THEN '35-50' ` +
+            `WHEN birth_year > ${year - 69} AND birth_year <= ${year - 50} THEN '51-69' ` +
+            `WHEN birth_year <= ${year - 69} THEN '70+' ` +
+            `END AS age_group ` +
+            'FROM visit ' +
+            'INNER JOIN user_account ON user_account.user_account_id = visit.user_account_id')
+          )
+          // TODO: generate case statements based on supplied query
+          .innerJoin(
+            'visit_activity',
+            'visit_activity.visit_activity_id',
+            'age_group_table.visit_activity_id')
+          .innerJoin('gender', 'gender.gender_id', 'age_group_table.gender_id')
+          .count('age_group')
+          .select({ ageGroup: 'age_group' })
+          .groupBy('age_group')
+          .from('age_group_table'), ageQuery)
+        .then((rows) => {
+          console.log(rows);
+
+          const age = rows.reduce((acc, row) => {
+            acc[row.ageGroup] = row.count;
+            return acc;
+          } , {});
+          return { age };
+        }),
+    };
+
+    const requestedAggregates = aggs.map((agg) => aggregateQueries[agg]);
+    const rawAggregateData = await lazyPromiseSeries(requestedAggregates);
+    return rawAggregateData.reduce((acc, el) => ({ ...acc, ...el }), {});
   },
 };
+
+
+// select count("gender"."gender_name"), "gender"."gender_name" as "gender"
+// from "visit" inner join "visit_activity" on "visit_activity"."visit_activity_id" = "visit"."visit_activity_id"
+// inner join "user_account" on "user_account"."user_account_id" = "visit"."user_account_id"
+// inner join "gender" on "gender"."gender_id" = "user_account"."gender_id"
+// group by "gender"."gender_name"
 

@@ -11,6 +11,8 @@ export const Utils: {
   order: (c: string, d: string) => (q: Knex.QueryBuilder) => q.orderBy(c, d),
   where: (o: any) => (q: Knex.QueryBuilder) => q.where(o),
   whereNot: (o: any) => (q: Knex.QueryBuilder) => q.whereNot(o),
+  whereBetween: (o: {columnName: string, range: [number, number]}) =>
+    (q: Knex.QueryBuilder) => q.whereBetween(o.columnName, o.range),
 };
 
 export const applyQueryModifiers =
@@ -34,6 +36,9 @@ export const applyQueryModifiers =
 
       } else if (k === 'whereNot' && !isNil(opts.whereNot)) {
         return compose(Utils.whereNot(opts.whereNot), acc);
+
+      } else if (k === 'whereBetween' && !isNil(opts.whereBetween)) {
+        return compose(Utils.whereBetween(opts.whereBetween), acc);
 
       } else {
         /* istanbul ignore next */
