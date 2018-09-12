@@ -16,7 +16,8 @@ export const userName =
   Joi.string()
     .min(3)
     .max(100)
-    .regex(/[^\w\s\d]/, { name: 'alphanumeric', invert: true });
+    .regex(/[^\w\s\d]/, { name: 'alphanumeric', invert: true })
+    .lowercase();
 
 export const birthYear =
   Joi.number()
@@ -26,7 +27,8 @@ export const birthYear =
 
 export const email =
   Joi.string()
-    .email();
+    .email()
+    .lowercase();
 
 export const password =
   Joi.string()
@@ -41,7 +43,8 @@ export const phoneNumber =
 export const postCode =
   Joi.string()
     .min(4)
-    .max(10);
+    .max(10)
+    .lowercase();
 
 export const isEmailConsentGranted =
   Joi.boolean();
