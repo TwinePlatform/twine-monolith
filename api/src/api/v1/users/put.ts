@@ -1,6 +1,6 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import { Users, UserChangeSet } from '../../../models';
+import { Users } from '../../../models';
 import {
   id,
   userName,
@@ -55,7 +55,7 @@ const routes: Hapi.ServerRoute[] = [
         payload,
       } = request;
 
-      const changeset = <UserChangeSet> { ...payload };
+      const changeset = { ...payload };
 
       try {
         const updatedUser = await Users.update(knex, user, changeset);
@@ -63,6 +63,7 @@ const routes: Hapi.ServerRoute[] = [
         return Users.serialise(updatedUser);
 
       } catch (error) {
+        // TODO: Better way to handle this.
         if (error.code === '23502') {
           return Boom.badRequest();
         } else {
@@ -117,7 +118,7 @@ const routes: Hapi.ServerRoute[] = [
         return Boom.forbidden('Insufficient permission to access this resource');
       }
 
-      const changeset = <UserChangeSet> { ...payload };
+      const changeset = { ...payload };
 
       const user = await Users.getOne(knex, { where: { id: Number(userId) } });
 
@@ -131,6 +132,7 @@ const routes: Hapi.ServerRoute[] = [
         return Users.serialise(updatedUser);
 
       } catch (error) {
+        // TODO: Better way to handle this.
         if (error.code === '23502') {
           return Boom.badRequest();
         } else {

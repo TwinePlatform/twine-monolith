@@ -1,11 +1,28 @@
 import * as Hapi from 'hapi';
+import * as Boom from 'boom';
 import * as Joi from 'joi';
 import * as moment from 'moment';
 import { pick, mergeDeepRight } from 'ramda';
 import { Visitors, User, ModelQuery } from '../../../models';
-import { query, filterQuery, response } from '../users/schema';
-import { GetVisitorsRequest } from '../types';
-import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
+import {
+  query,
+  filterQuery,
+  response,
+  id,
+  userName,
+  birthYear,
+  gender,
+  disability,
+  ethnicity,
+  email,
+  phoneNumber,
+  postCode,
+  isEmailConsentGranted,
+  isSMSConsentGranted,
+} from '../users/schema';
+import { meOrId } from './schema';
+import { GetVisitorsRequest, PutUserRequest } from '../types';
+import { getCommunityBusiness, isChildOrganisation, isChildUser } from '../prerequisites';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -21,6 +38,9 @@ const routes: Hapi.ServerRoute[] = [
         },
       },
       validate: {
+        params: {
+          organisationId: meOrId,
+        },
         query: {
           ...query,
           ...filterQuery,
@@ -34,8 +54,12 @@ const routes: Hapi.ServerRoute[] = [
       ],
     },
     handler: async (request: GetVisitorsRequest, h: Hapi.ResponseToolkit) => {
-      const { query, pre: { communityBusiness }, server: { app: { knex } } } = request;
+      const { query, pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
       const { visits, filter, fields: _fields } = query;
+
+      if (request.params.organisationId !== 'me' && !isChild) {
+        return Boom.forbidden('Insufficient permissions to access this resource');
+      }
 
       const q: {
         limit?: number,
@@ -80,9 +104,83 @@ const routes: Hapi.ServerRoute[] = [
 
       const visitors = await (visits
         ? Visitors.getWithVisits(knex, communityBusiness, modelQuery)
-        : Visitors.get(knex, modelQuery));
+        : Visitors.fromCommunityBusiness(knex, communityBusiness, modelQuery));
 
       return Promise.all(visitors.map(Visitors.serialise));
+    },
+  },
+
+  {
+    method: 'PUT',
+    path: '/community-businesses/{organisationId}/visitors/{userId}',
+    options: {
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['user_details-child:write'],
+        },
+      },
+      validate: {
+        params: {
+          userId: id,
+          organisationId: meOrId,
+        },
+        payload: {
+          name: userName,
+          gender,
+          birthYear,
+          email,
+          phoneNumber,
+          postCode,
+          isEmailConsentGranted,
+          isSMSConsentGranted,
+          disability,
+          ethnicity,
+        },
+      },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness , assign: 'communityBusiness' },
+        { method: isChildUser, assign: 'isChild' },
+      ],
+    },
+    handler: async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
+      const {
+        server: { app: { knex } },
+        payload,
+        pre: { isChild, communityBusiness },
+        params: { userId },
+      } = request;
+
+      if (!isChild) {
+        return Boom.forbidden('Insufficient permission to access this resource');
+      }
+
+      const changeset = { ...payload };
+
+      const [user] = await Visitors.fromCommunityBusiness(
+        knex,
+        communityBusiness,
+        { where: { id: Number(userId) } }
+      );
+
+      if (!user) {
+        return Boom.notFound(`User with id ${userId} not found`);
+      }
+
+      try {
+        const updatedUser = await Visitors.update(knex, user, changeset);
+
+        return Visitors.serialise(updatedUser);
+
+      } catch (error) {
+        // TODO: Better way to handle this.
+        if (error.code === '23502') {
+          return Boom.badRequest();
+        } else {
+          throw error;
+        }
+      }
     },
   },
 ];

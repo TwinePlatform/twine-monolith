@@ -28,9 +28,9 @@ type UserWithVisits = User & {
 };
 type CustomMethods = {
   recordLogin: (k: Knex, u: User) => Promise<void>
-  getWithVisits: (k: Knex, c: CommunityBusiness, q?: ModelQuery<User>)
-    => Promise<UserWithVisits[]>
-  fromCommunityBusiness: (client: Knex, c: CommunityBusiness) => Promise<User[]>
+  getWithVisits: (k: Knex, c: CommunityBusiness, q?: ModelQuery<User>) => Promise<UserWithVisits[]>
+  fromCommunityBusiness: (client: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
+    Promise<User[]>
 };
 
 
@@ -107,8 +107,14 @@ export const Visitors: UserCollection & CustomMethods = {
     return Users.recordLogin(client, u);
   },
 
-  async fromCommunityBusiness (client: Knex, c: CommunityBusiness) {
-    return client
+  async fromCommunityBusiness (client: Knex, c: CommunityBusiness, q: ModelQuery<User> = {}) {
+    const query = evolve({
+      where: Visitors.toColumnNames,
+      whereNot: Visitors.toColumnNames,
+    }, q);
+
+    return applyQueryModifiers(
+      client
         .select(ModelToColumn)
         .from('user_account')
         .leftOuterJoin('gender', 'user_account.gender_id', 'gender.gender_id')
@@ -123,7 +129,9 @@ export const Visitors: UserCollection & CustomMethods = {
             .select('access_role_id')
             .where({ access_role_name: RoleEnum.VISITOR }),
           ['user_account_access_role.organisation_id']: c.id,
-        });
+        }),
+      query
+    );
   },
 
   async serialise (user: Partial<User>) {
