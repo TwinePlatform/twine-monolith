@@ -3,10 +3,14 @@
  */
 import * as Knex from 'knex';
 import { compose, omit, filter, pick, invertObj, evolve } from 'ramda';
+import { randomBytes } from 'crypto';
+import { hash } from 'bcrypt';
+import * as moment from 'moment';
 import { Dictionary, Map } from '../types/internal';
 import { User, UserRow, UserCollection, UserChangeSet, ModelQuery, GenderEnum } from './types';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { renameKeys, mapKeys } from '../utils';
+import { Token } from '../auth/strategies/standard/types';
 
 
 /*
@@ -14,6 +18,7 @@ import { renameKeys, mapKeys } from '../utils';
  */
 type CustomMethods = {
   recordLogin: (k: Knex, u: User) => Promise<void>
+  createPasswordResetToken: (k: Knex, u: Partial<User>) => Promise<Token>
 };
 
 
@@ -224,5 +229,34 @@ export const Users: UserCollection & CustomMethods = {
 
   async serialise (user: User) {
     return omit(['password', 'qrCode'], user);
+  },
+
+  async createPasswordResetToken (client: Knex, u: Partial<User>) {
+    const twoDaysFromToday = moment().add(2, 'days').toISOString();
+    const token = randomBytes(64).toString('base64');
+    const hashToken = await hash(token, 12);
+    const res = await client.transaction(async (trx) => {
+      const [tokenRow] = await trx('single_use_token')
+      .insert({ token: hashToken,
+        expires_at: twoDaysFromToday,
+      })
+      .returning([
+        'single_use_token_id AS id',
+        'created_at AS createdAt',
+        'expires_at AS expiresAt',
+      ]);
+
+      const [userTokenRow] = await trx('user_secret_reset')
+      .insert({
+        single_use_token_id: tokenRow.id,
+        user_account_id:
+        // NB: email search is lowercase due to joi's payload conversion
+            u.id || trx('user_account').select('user_account_id').where({ email: u.email }),
+        })
+        .returning('*');
+
+      return { ...tokenRow, userId: userTokenRow.user_account_id };
+    });
+    return { ...res, token };
   },
 };

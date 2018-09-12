@@ -1291,20 +1291,33 @@
           "response": null
         }
       },
+      "/password/forgot": {
+        "POST": {
+          "description": "Send password reset link for a single user",
+          "isImplemented": true,
+          "auth": false,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": [],
+          "body": {
+            "email": "String"
+          },
+          "response": {}
+        }
+      },
       "/password/reset": {
         "POST": {
           "description": "Reset password for a single user",
           "isImplemented": false,
-          "auth": true,
+          "auth": false,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
-          "scope": ["user_details-own:write"],
+          "scope": [],
           "body": {
             "token": "String",
             "email": "String",
             "password": "String",
             "confirmPassword": "String"
           },
-          "response": null
+          "response": {}
         }
       },
       "/me": {

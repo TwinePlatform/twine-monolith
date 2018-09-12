@@ -155,5 +155,34 @@ describe('User Model', () => {
       expect(serialised).toEqual(omit(['password', 'qrCode'], user));
     });
   });
+
+  describe('createPasswordResetToken', () => {
+    test(':: returns a token object when email is supplied', async () => {
+      const resetToken = await Users
+        .createPasswordResetToken(knex, { email: '1@aperturescience.com' });
+
+      expect(resetToken).toEqual(expect.objectContaining({
+        userId: 2,
+      }));
+    });
+
+    test(':: returns a token object when a user id is supplied', async () => {
+      const resetToken = await Users.createPasswordResetToken(knex, { id: 2 });
+
+      expect(resetToken).toEqual(expect.objectContaining({
+        userId: 2,
+      }));
+    });
+
+
+    test(':: throws an error when an incorrect email is supplied', async () => {
+      expect.assertions(1);
+      try {
+        await Users.createPasswordResetToken(knex, { email: '1999@aperturescience.com' });
+      } catch (err) {
+        expect(err).toBeTruthy();
+      }
+    });
+  });
 });
 

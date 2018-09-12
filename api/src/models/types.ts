@@ -2,7 +2,7 @@
  * Type declarations for the models
  */
 import * as Knex from 'knex';
-import { Maybe, Json, Dictionary, Float, Int } from '../types/internal';
+import { Maybe, Json, Dictionary, Float, Int, Omit } from '../types/internal';
 
 /*
  * Common and utility types
@@ -171,6 +171,14 @@ export type OutreachCampaignBase = CommonTimestamps & {
   endsAt: string
 };
 
+export type TokenBase = Omit<CommonTimestamps, 'modifiedAt'> & {
+  id: Int
+  userId: Int
+  token: string
+  expiresAt: string
+  usedAt?: string
+};
+
 /*
  * Read-only model declarations
  *
@@ -187,6 +195,7 @@ export type Feedback = Readonly<FeedbackBase>;
 export type LinkedFeedback = Readonly<LinkedFeedbackBase>;
 export type OutreachMeeting = Readonly<OutreachMeetingBase>;
 export type OutreachCampaign = Readonly<OutreachCampaignBase>;
+export type Token = Readonly<TokenBase>;
 
 /*
  * Change-set declarations
