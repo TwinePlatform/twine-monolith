@@ -174,7 +174,13 @@ const routes: Hapi.ServerRoute[] = [
         return Visitors.serialise(updatedUser);
 
       } catch (error) {
-        // TODO: Better way to handle this.
+        // Intercept subset of class 23 postgres error codes thrown by `knex`
+        // Class 23 corresponds to integrity constrain violation
+        // See https://www.postgresql.org/docs/10/static/errcodes-appendix.html
+        // Happens, for e.g., if try to set a sector or region that doesn't exist
+        // TODO:
+        // Handle this better, preferably without having to perform additional check
+        // queries. See https://github.com/TwinePlatform/twine-api/issues/147
         if (error.code === '23502') {
           return Boom.badRequest();
         } else {
