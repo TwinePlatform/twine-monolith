@@ -1,7 +1,6 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import * as moment from 'moment';
 import { pick, mergeDeepRight } from 'ramda';
 import { Visitors, User, ModelQuery } from '../../../models';
 import {

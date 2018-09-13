@@ -3,7 +3,6 @@ import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { CommunityBusinesses } from '..';
 import { getTrx } from '../../../tests/utils/database';
-import { GenderEnum } from '../types';
 
 
 describe('Community Business Model', () => {
