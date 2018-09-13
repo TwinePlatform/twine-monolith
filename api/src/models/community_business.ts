@@ -534,7 +534,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     const genderActivityQuery = pipe(modifyColumnNamesForGenderActivity, checkSpecificCb)(query);
     const ageQuery = pipe(modifyColumnNamesForAge, checkSpecificCb)(query);
 
-    const aggregateQueries = {
+    const aggregateQueries: Dictionary<PromiseLike<any>> = {
       gender: applyQueryModifiers(client('visit')
         .count('gender.gender_name')
         .select({
@@ -546,10 +546,11 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         .groupBy('gender.gender_name')
         , genderActivityQuery)
         .then((rows) => {
-          const gender = rows.reduce((acc, row) => {
-            acc[row.gender] = row.count;
-            return acc;
-          } , {});
+          const gender: Dictionary<number> = rows
+            .reduce((acc: Dictionary<number>, row: {gender: string, count: number}) => {
+              acc[row.gender] = row.count;
+              return acc;
+            } , {});
           return { gender };
         }),
 
@@ -563,10 +564,11 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
         .groupBy('visit_activity.visit_activity_name'), genderActivityQuery)
         .then((rows) => {
-          const activity = rows.reduce((acc, row) => {
-            acc[row.activity] = row.count;
-            return acc;
-          } , {});
+          const activity = rows
+            .reduce((acc: Dictionary<number>, row: {activity: string, count: number}) => {
+              acc[row.activity] = row.count;
+              return acc;
+            } , {});
           return { activity };
         }),
 
@@ -593,10 +595,11 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
           .groupBy('age_group')
           .from('age_group_table'), ageQuery)
         .then((rows) => {
-          const age = rows.reduce((acc, row) => {
-            acc[row.ageGroup] = row.count;
-            return acc;
-          } , {});
+          const age = rows
+            .reduce((acc: Dictionary<number>, row: {ageGroup: string, count: number}) => {
+              acc[row.ageGroup] = row.count;
+              return acc;
+            } , {});
           return { age };
         }),
     };
