@@ -10,6 +10,8 @@
  * - User X is an admin for a community business for which user Y is a VOLUNTEER
  * - User X is a Twine admin
  *
+ * NOTE: Funding body admins should not be allowed to access user information of
+ *       VISITOR or VOLUNTEER users at child community-businesses for GDPR reasons
  */
 import * as Hapi from 'hapi';
 import { PutUserRequest } from '../types';

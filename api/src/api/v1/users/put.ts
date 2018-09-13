@@ -83,7 +83,10 @@ const routes: Hapi.ServerRoute[] = [
     method: 'PUT',
     path: '/users/{userId}',
     options: {
-      description: 'Update child user\'s details',
+      description: `
+        Update child user\'s details;
+        NOTE: "PUT /community-businesses/:id/visitors/:id" offers similar functionality
+      `,
       auth: {
         strategy: 'standard',
         access: {

@@ -114,6 +114,7 @@ const routes: Hapi.ServerRoute[] = [
     method: 'PUT',
     path: '/community-businesses/{organisationId}/visitors/{userId}',
     options: {
+      description: 'Update child users details; NOTE: "PUT /users/:id" offers same functionality',
       auth: {
         strategy: 'standard',
         access: {
