@@ -5,7 +5,7 @@ import * as Knex from 'knex';
 import { compose, omit, filter, pick, invertObj, evolve } from 'ramda';
 import { Dictionary, Map } from '../types/internal';
 import { User, UserRow, UserCollection, UserChangeSet, ModelQuery, GenderEnum } from './types';
-import { applyQueryModifiers } from './util';
+import { applyQueryModifiers } from './applyQueryModifiers';
 import { renameKeys, mapKeys } from '../utils';
 
 

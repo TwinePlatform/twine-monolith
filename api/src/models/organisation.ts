@@ -12,7 +12,7 @@ import {
   ModelQuery,
   User
 } from './types';
-import { applyQueryModifiers } from './util';
+import { applyQueryModifiers } from './applyQueryModifiers';
 import { Users } from './user';
 
 /*

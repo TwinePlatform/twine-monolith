@@ -7,7 +7,7 @@ import { Dictionary } from '../types/internal';
 import { User, UserCollection, UserChangeSet, ModelQuery, Organisation } from './types';
 import { Users, ModelToColumn } from './user';
 import { RoleEnum } from '../auth/types';
-import { applyQueryModifiers } from './util';
+import { applyQueryModifiers } from './applyQueryModifiers';
 
 
 /*

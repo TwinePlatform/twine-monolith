@@ -15,7 +15,7 @@ import {
 } from './types';
 import { Users, ModelToColumn } from './user';
 import { RoleEnum } from '../auth/types';
-import { applyQueryModifiers } from './util';
+import { applyQueryModifiers } from './applyQueryModifiers';
 import { getConfig } from '../../config';
 import * as QRCode from '../services/qrcode';
 
