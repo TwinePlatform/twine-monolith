@@ -17,6 +17,7 @@ export const Utils: {
 
 export const applyQueryModifiers =
   <T>(p: Knex.QueryBuilder, opts: ModelQuery<T>): Knex.QueryBuilder => {
+    console.log({ opts });
 
     const modifiers = intersection(Object.keys(opts), Object.keys(Utils));
 

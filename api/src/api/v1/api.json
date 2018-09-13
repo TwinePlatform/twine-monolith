@@ -733,17 +733,17 @@
       },
       "/me/visit-logs": {
           "GET": {
-            "description": "Retreive all visit data for a community business",
+            "description": "Retrieve all visit data for a community business",
             "isImplemented": false,
             "auth": true,
-            "intendedFor": ["TWINE_ADMIN"],
+            "intendedFor": ["ORG_ADMIN"],
             "scope": ["visit_logs-own:read"],
             "query": {
               "fields": ["String"],
+              "sort": "String",
+              "limit": "Number",
+              "offset": "Number",
               "filter": {
-                "sort": "String",
-                "page": "Number",
-                "offset": "Number",
                 "gender": "String",
                 "age": "String",
                 "activity": "String",
