@@ -41,7 +41,7 @@ type CustomMethods = {
   updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>
   deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>
   addVisitLog: (k: Knex, v: VisitActivity, u: User) => Promise<VisitEvent>
-  getVisitLogs: (k: Knex, c: CommunityBusiness, q?: ModelQuery<LinkedVisitEvent & User>) =>
+  getVisitLogsWithUsers: (k: Knex, c: CommunityBusiness, q?: ModelQuery<LinkedVisitEvent & User>) =>
     Promise<Partial<LinkedVisitEvent & User>[]>
   getVisitLogAggregates: (
     k: Knex,
@@ -465,10 +465,10 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return <VisitEvent> res;
   },
 
-  async getVisitLogs (client, cb, q) {
+  async getVisitLogsWithUsers (client, cb, q) {
     const modifyColumnNames = evolve({
       where: renameKeys({
-        activity: 'visit_activity.visit_activity_name',
+        visitActivity: 'visit_activity.visit_activity_name',
         gender: 'gender.gender_name',
       }),
       whereBetween: (oldWB) => ({

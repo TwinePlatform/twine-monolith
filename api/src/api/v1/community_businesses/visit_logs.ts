@@ -117,14 +117,14 @@ const routes: Hapi.ServerRoute[] = [
         : {},
       });
 
-      const visits = await CommunityBusinesses.getVisitLogs(
+      const visits = await CommunityBusinesses.getVisitLogsWithUsers(
         knex,
         communityBusiness,
         query
         );
 
       const count = (limit && offset)
-        ? await CommunityBusinesses.getVisitLogs(
+        ? await CommunityBusinesses.getVisitLogsWithUsers(
           knex,
           communityBusiness,
           omit(['limit', 'offset'], query)

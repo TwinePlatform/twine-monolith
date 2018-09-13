@@ -194,10 +194,10 @@ describe('Community Business Model', () => {
     });
   });
 
-  describe('getVisitLogs', () => {
+  describe('getVisitLogsWithUsers', () => {
     test(':: returns all logs for a cb', async () => {
       const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
-      const logs = await CommunityBusinesses.getVisitLogs(trx, cb);
+      const logs = await CommunityBusinesses.getVisitLogsWithUsers(trx, cb);
       expect(logs.length).toEqual(10);
       expect(logs).toEqual(expect.arrayContaining([
         expect.objectContaining({
@@ -214,7 +214,7 @@ describe('Community Business Model', () => {
     test(':: returns subset of logs when a query is supplied', async () => {
       const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
       const logs = await CommunityBusinesses
-        .getVisitLogs(trx, cb, { where: { activity: 'Wear Pink' } });
+        .getVisitLogsWithUsers(trx, cb, { where: { visitActivity: 'Wear Pink' } });
 
       expect(logs.length).toEqual(3);
     });
@@ -223,7 +223,7 @@ describe('Community Business Model', () => {
     test(':: returns empty array when a cb with no logs is supplied', async () => {
       const cb = await CommunityBusinesses.getOne(trx, { where: { id: 2 } });
       const logs = await CommunityBusinesses
-        .getVisitLogs(trx, cb);
+        .getVisitLogsWithUsers(trx, cb);
 
       expect(logs.length).toEqual(0);
     });
