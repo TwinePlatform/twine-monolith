@@ -200,7 +200,7 @@ describe('Community Business Model', () => {
       expect(logs.length).toEqual(10);
       expect(logs).toEqual(expect.arrayContaining([
         expect.objectContaining({
-          activity: 'Free Running',
+          visitActivity: 'Free Running',
           birthYear: 1988,
           category: 'Sports',
           gender: 'female',
@@ -232,9 +232,9 @@ describe('Community Business Model', () => {
     test(':: returns all aggregated logs for a cb', async () => {
       const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
       const aggregates = await CommunityBusinesses
-        .getVisitLogAggregates(trx, cb, ['gender', 'age', 'activity']);
+        .getVisitLogAggregates(trx, cb, ['gender', 'age', 'visitActivity']);
       expect(aggregates).toEqual({
-        activity: { 'Free Running': '7', 'Wear Pink': '3' },
+        visitActivity: { 'Free Running': '7', 'Wear Pink': '3' },
         age: { '18-34': '10' },
         gender: { female: '10' },
       });
@@ -245,12 +245,12 @@ describe('Community Business Model', () => {
       const logs = await CommunityBusinesses.getVisitLogAggregates(
         trx,
         cb,
-        ['gender', 'activity', 'age'],
+        ['gender', 'visitActivity', 'age'],
         { where: { visitActivity: 'Wear Pink' } }
         );
 
       expect(logs).toEqual({
-        activity: { 'Wear Pink': '3' },
+        visitActivity: { 'Wear Pink': '3' },
         age: { '18-34': '3' },
         gender: { female: '3' } });
     });
@@ -262,7 +262,7 @@ describe('Community Business Model', () => {
         await CommunityBusinesses.getVisitLogAggregates(
           trx,
           cb,
-          ['gender', 'activity', 'age', 'funkability']
+          ['gender', 'visitActivity', 'age', 'funkability']
           );
       } catch (error) {
         expect(error).toBeTruthy();

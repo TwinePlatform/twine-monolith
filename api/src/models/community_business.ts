@@ -483,7 +483,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
       .select({
         id: 'visit_id',
         userId: 'user_account.user_account_id',
-        activity: 'visit_activity_name',
+        visitActivity: 'visit_activity_name',
         category: 'visit_activity_category_name',
         createdAt: 'visit.created_at',
         modifiedAt: 'visit.modified_at',
@@ -564,12 +564,12 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
         .groupBy('visit_activity.visit_activity_name'), genderActivityQuery)
         .then((rows) => {
-          const activity = rows
+          const visitActivity = rows
             .reduce((acc: Dictionary<number>, row: {activity: string, count: number}) => {
               acc[row.activity] = row.count;
               return acc;
             } , {});
-          return { activity };
+          return { visitActivity };
         }),
 
       age: applyQueryModifiers(client.with('age_group_table',

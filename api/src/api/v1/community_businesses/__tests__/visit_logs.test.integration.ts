@@ -100,7 +100,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
       expect((<any> res.result).result).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            activity: 'Free Running',
+            visitActivity: 'Free Running',
             birthYear: 1988,
             category: 'Sports',
             gender: 'female',
@@ -127,7 +127,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
       expect((<any> res.result).result).toEqual(
         expect.arrayContaining([
           (<any> expect).not.objectContaining({
-            activity: 'Free Running',
+            visitActivity: 'Free Running',
             category: 'Sports',
           }),
         ]));

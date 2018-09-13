@@ -69,7 +69,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual({
-        activity: { 'Free Running': '7', 'Wear Pink': '3' },
+        visitActivity: { 'Free Running': '7', 'Wear Pink': '3' },
       });
     });
 
