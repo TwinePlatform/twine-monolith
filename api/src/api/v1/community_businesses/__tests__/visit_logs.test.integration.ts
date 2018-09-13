@@ -81,4 +81,56 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
       expect(res.statusCode).toBe(400);
     });
   });
+
+  describe.only('GET', () => {
+    test(':: get all visit logs for a cb', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visit-logs',
+        credentials: {
+          user: cbAdmin,
+          organisation,
+          scope: ['visit_logs-own:read'],
+          role: RoleEnum.ORG_ADMIN,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).meta).toEqual({ total: 10 });
+      expect((<any> res.result).result).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            activity: 'Free Running',
+            birthYear: 1988,
+            category: 'Sports',
+            gender: 'female',
+            id: 1,
+            userId: 1}),
+        ]));
+    });
+
+    test(':: filtered visit logs with query', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visit-logs?'
+        + '&filter[visitActivity]=Wear%20Pink',
+        credentials: {
+          user: cbAdmin,
+          organisation,
+          scope: ['visit_logs-own:read'],
+          role: RoleEnum.ORG_ADMIN,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).meta).toEqual({ total: 3 });
+      expect((<any> res.result).result).toEqual(
+        expect.arrayContaining([
+          (<any> expect).not.objectContaining({
+            activity: 'Free Running',
+            category: 'Sports',
+          }),
+        ]));
+    });
+  });
 });
