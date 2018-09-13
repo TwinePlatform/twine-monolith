@@ -20,7 +20,7 @@ import {
 } from './types';
 import { Organisations } from './organisation';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import { renameKeys, lazyPromiseSeries, ageArrayToBirthYearArray } from '../utils';
+import { renameKeys, ageArrayToBirthYearArray } from '../utils';
 
 
 /*

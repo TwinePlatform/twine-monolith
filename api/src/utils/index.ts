@@ -2,7 +2,7 @@ import * as stream from 'stream';
 import * as Shot from 'shot';
 import * as moment from 'moment';
 import axios from 'axios';
-import { Dictionary, CurriedFunction2, assoc, curry, isEmpty } from 'ramda';
+import { Dictionary, CurriedFunction2, assoc, curry } from 'ramda';
 
 type MapKeys =
   CurriedFunction2<(a: string) => string, Dictionary<any>, Dictionary<any>>;
