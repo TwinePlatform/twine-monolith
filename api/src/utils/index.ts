@@ -71,5 +71,3 @@ export const ageArrayToBirthYearArray = (ageArray: number[]) =>
   ageArray
     .map((age: number) => moment().year() - age)
     .reverse();
-
-export const valueIsSet = (value: any) => !isEmpty(value);

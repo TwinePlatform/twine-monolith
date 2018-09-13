@@ -137,13 +137,6 @@ export type VisitActivityBase = CommonTimestamps & {
   sunday: boolean
 };
 
-export type VisitLogBase = Pick<UserBase, 'gender' | 'birthYear' > & CommonTimestamps & {
-  id: Int
-  userId: Int
-  activity: string
-  category: string,
-};
-
 export type VisitEventBase = CommonTimestamps & {
   id: Int
   userId: Int
@@ -188,7 +181,6 @@ export type Organisation = Readonly<OrganisationBase>;
 export type CommunityBusiness = Readonly<CommunityBusinessBase>;
 export type Subscription = Readonly<SubscriptionBase>;
 export type VisitActivity = Readonly<VisitActivityBase>;
-export type VisitLog= Readonly<VisitLogBase>;
 export type VisitEvent = Readonly<VisitEventBase>;
 export type LinkedVisitEvent = Readonly<LinkedVisitEventBase>;
 export type Feedback = Readonly<FeedbackBase>;

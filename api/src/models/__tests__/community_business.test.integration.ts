@@ -212,9 +212,18 @@ describe('Community Business Model', () => {
     });
 
     test(':: returns subset of logs when a query is supplied', async () => {
+      const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+      const logs = await CommunityBusinesses
+        .getVisitLogs(trx, cb, { where: { activity: 'Wear Pink' } });
+
+      expect(logs.length).toEqual(3);
+    });
+
+
+    test(':: returns empty array when a cb with no logs is supplied', async () => {
       const cb = await CommunityBusinesses.getOne(trx, { where: { id: 2 } });
       const logs = await CommunityBusinesses
-        .getVisitLogs(trx, cb, { where: { gender: GenderEnum.MALE } });
+        .getVisitLogs(trx, cb);
 
       expect(logs.length).toEqual(0);
     });

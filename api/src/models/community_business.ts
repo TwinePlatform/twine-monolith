@@ -15,8 +15,8 @@ import {
   DateTimeQuery,
   VisitActivity,
   VisitEvent,
+  LinkedVisitEvent,
   User,
-  VisitLog,
 } from './types';
 import { Organisations } from './organisation';
 import { applyQueryModifiers } from './util';
@@ -41,12 +41,13 @@ type CustomMethods = {
   updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>
   deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>
   addVisitLog: (k: Knex, v: VisitActivity, u: User) => Promise<VisitEvent>
-  getVisitLogs: (k: Knex, c: CommunityBusiness, q?: ModelQuery<VisitLog>) => Promise<VisitLog[]>
+  getVisitLogs: (k: Knex, c: CommunityBusiness, q?: ModelQuery<LinkedVisitEvent & User>) =>
+    Promise<Partial<LinkedVisitEvent & User>[]>
   getVisitLogAggregates: (
     k: Knex,
     c: CommunityBusiness,
     aggs: string[],
-    q?: ModelQuery<VisitLog>) => Promise<any>
+    q?: ModelQuery<LinkedVisitEvent & User>) => Promise<any>
 };
 
 /*
@@ -464,7 +465,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return <VisitEvent> res;
   },
 
-  async getVisitLogs (client: Knex, c: CommunityBusiness, q?: ModelQuery<VisitLog>) {
+  async getVisitLogs (client, cb, q) {
     const modifyColumnNames = evolve({
       where: renameKeys({
         activity: 'visit_activity.visit_activity_name',
@@ -475,7 +476,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         range: ageArrayToBirthYearArray(oldWB.range),
       }),
     });
-    const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], c.id);
+    const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);
     const query = pipe(modifyColumnNames, checkSpecificCb)(q);
 
     return applyQueryModifiers(client('visit')
@@ -588,8 +589,6 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
           .groupBy('age_group')
           .from('age_group_table'), ageQuery)
         .then((rows) => {
-          console.log(rows);
-
           const age = rows.reduce((acc, row) => {
             acc[row.ageGroup] = row.count;
             return acc;
@@ -599,15 +598,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     };
 
     const requestedAggregates = aggs.map((agg) => aggregateQueries[agg]);
-    const rawAggregateData = await lazyPromiseSeries(requestedAggregates);
+    const rawAggregateData = await Promise.all(requestedAggregates);
     return rawAggregateData.reduce((acc, el) => ({ ...acc, ...el }), {});
   },
 };
-
-
-// select count("gender"."gender_name"), "gender"."gender_name" as "gender"
-// from "visit" inner join "visit_activity" on "visit_activity"."visit_activity_id" = "visit"."visit_activity_id"
-// inner join "user_account" on "user_account"."user_account_id" = "visit"."user_account_id"
-// inner join "gender" on "gender"."gender_id" = "user_account"."gender_id"
-// group by "gender"."gender_name"
-

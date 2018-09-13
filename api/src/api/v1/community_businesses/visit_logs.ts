@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
 import * as bcrypt from 'bcrypt';
-import { omit, filter } from 'ramda';
+import { omit, filter, complement, isEmpty } from 'ramda';
 import { query, response, id } from './schema';
 import {
   User,
@@ -11,7 +11,7 @@ import {
   CommunityBusinesses,
   GenderEnum } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
-import { findAsync, valueIsSet } from '../../../utils';
+import { findAsync } from '../../../utils';
 import { filterQuery } from '../users/schema';
 import { ApiRequestQuery } from '../schema/request';
 
@@ -106,16 +106,13 @@ const routes: Hapi.ServerRoute[] = [
         query: { limit, offset, filter: filterOptions = {} },
         pre: { communityBusiness } } = request;
 
-      console.log({ filterOptions });
-
-      // move to query definition to model
-      const query = filter(valueIsSet, {
+      const query = filter(complement(isEmpty), {
         offset,
         limit,
-        where: omit(['age'], { ...filterOptions }),
+        where: omit(['age'], filterOptions),
         whereBetween: filterOptions.age
         ? {
-          columnName: 'age',
+          columnName: 'birthYear',
           range: filterOptions.age }
         : {},
       });
@@ -126,11 +123,13 @@ const routes: Hapi.ServerRoute[] = [
         query
         );
 
-      const count = await CommunityBusinesses.getVisitLogs(
-        knex,
-        communityBusiness,
-        omit(['limit', 'offset'], query)
-        ).then((rows: any) => rows.length);
+      const count = (limit && offset)
+        ? await CommunityBusinesses.getVisitLogs(
+          knex,
+          communityBusiness,
+          omit(['limit', 'offset'], query)
+          ).then((rows: object[]) => rows.length)
+        : visits.length;
 
       return {
         meta: {
@@ -144,7 +143,7 @@ const routes: Hapi.ServerRoute[] = [
     method: 'GET',
     path: '/community-businesses/me/visit-logs/aggregates',
     options: {
-      description: 'Retrieve a list of aggregated visit data for your scommunity businesses',
+      description: 'Retrieve a list of aggregated visit data for your community businesses',
       auth: {
         strategy: 'standard',
         access: {
@@ -169,8 +168,7 @@ const routes: Hapi.ServerRoute[] = [
         query: { filter: filterOptions = {}, fields },
         pre: { communityBusiness } } = request;
 
-      // deal with this in the model
-      const query = filter(valueIsSet, {
+      const query = filter(complement(isEmpty), {
         where: omit(['age'], { ...filterOptions }),
         whereBetween: filterOptions.age
           ? {
