@@ -61,7 +61,7 @@ export const ethnicity =
 export const filterQuery = {
   filter: Joi.object({
     age: Joi.array().length(2).items(Joi.number().integer().min(0)),
-    activity: Joi.string(),
+    visitActivity: Joi.string(),
     gender,
   }),
 };

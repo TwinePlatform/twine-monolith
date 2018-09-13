@@ -501,7 +501,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
   },
 
   async getVisitLogAggregates (client, cb, aggs, query) {
-    const unsupportedAggregates = difference(aggs, ['age', 'gender', 'activity']);
+    const unsupportedAggregates = difference(aggs, ['age', 'gender', 'visitActivity']);
     if (unsupportedAggregates.length > 0) {
       throw new Error(`${unsupportedAggregates.join(', ')} are not supported aggregate fields`);
     }
@@ -554,7 +554,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
           return { gender };
         }),
 
-      activity: applyQueryModifiers(client('visit')
+      visitActivity: applyQueryModifiers(client('visit')
         .count('visit_activity.visit_activity_name')
         .select({
           activity: 'visit_activity_name',

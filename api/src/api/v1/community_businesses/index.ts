@@ -5,6 +5,7 @@ import questions from './questions';
 import visitActivites from './visit_activities';
 import visitors from './visitors';
 import visitLogs from './visit_logs';
+import visitLogAggregates from './visit_logs_aggregates';
 
 export default [
   ...get,
@@ -14,4 +15,5 @@ export default [
   ...visitActivites,
   ...visitors,
   ...visitLogs,
+  ...visitLogAggregates,
 ];
