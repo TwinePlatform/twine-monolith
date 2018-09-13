@@ -247,7 +247,7 @@ describe('Community Business Model', () => {
         trx,
         cb,
         ['gender', 'activity', 'age'],
-        { where: { activity: 'Wear Pink' } }
+        { where: { visitActivity: 'Wear Pink' } }
         );
 
       expect(logs).toEqual({
@@ -263,8 +263,7 @@ describe('Community Business Model', () => {
         await CommunityBusinesses.getVisitLogAggregates(
           trx,
           cb,
-          ['gender', 'activity', 'age', 'funkability'],
-          { where: { activity: 'Wear Pink' } }
+          ['gender', 'activity', 'age', 'funkability']
           );
       } catch (error) {
         expect(error).toBeTruthy();

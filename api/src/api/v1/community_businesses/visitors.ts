@@ -68,8 +68,6 @@ const routes: Hapi.ServerRoute[] = [
         order: query.sort ? [query.sort, query.order || 'asc'] : undefined,
       };
 
-      const ageToBirthYear = (age: number) => moment().year() - age;
-
       // fields
       // TODO: Need to actually filter the object
       const fields = <(keyof User)[]> _fields;
@@ -78,10 +76,7 @@ const routes: Hapi.ServerRoute[] = [
 
       // age filter
       if (filter && filter.age) {
-        modelQuery.whereBetween = mergeDeepRight(
-          modelQuery.whereBetween || {},
-          { birthYear: [filter.age.map(ageToBirthYear)] }
-        );
+        modelQuery.whereBetween = { birthYear: filter.age };
       }
 
       // activity filter

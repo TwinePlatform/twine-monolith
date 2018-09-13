@@ -1,7 +1,6 @@
 import * as Knex from 'knex';
-import { intersection, compose, isNil } from 'ramda';
+import { intersection, compose, isNil, Dictionary } from 'ramda';
 import { ModelQuery } from './types';
-
 
 export const Utils: {
   [k: string]: (...a: any[]) => (q: Knex.QueryBuilder) => Knex.QueryBuilder
@@ -11,13 +10,18 @@ export const Utils: {
   order: (c: string, d: string) => (q: Knex.QueryBuilder) => q.orderBy(c, d),
   where: (o: any) => (q: Knex.QueryBuilder) => q.where(o),
   whereNot: (o: any) => (q: Knex.QueryBuilder) => q.whereNot(o),
-  whereBetween: (o: {columnName: string, range: [number, number]}) =>
-    (q: Knex.QueryBuilder) => q.whereBetween(o.columnName, o.range),
+  whereBetween: (o: Dictionary<[number, number]>) =>
+    (q: Knex.QueryBuilder) => {
+      const whereQueries = Object.keys(o)
+        .reduce((queryChain, whereQuery) => {
+          return queryChain.whereBetween(whereQuery, o[whereQuery]);
+        }, q);
+      return whereQueries;
+    },
 };
 
 export const applyQueryModifiers =
   <T>(p: Knex.QueryBuilder, opts: ModelQuery<T>): Knex.QueryBuilder => {
-    console.log({ opts });
 
     const modifiers = intersection(Object.keys(opts), Object.keys(Utils));
 

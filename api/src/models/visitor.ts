@@ -3,7 +3,7 @@
  */
 import { createHmac } from 'crypto';
 import * as Knex from 'knex';
-import { assoc, omit, pick, evolve, compose } from 'ramda';
+import { assoc, omit, pick, evolve, compose, pipe } from 'ramda';
 import { Dictionary } from '../types/internal';
 import {
   User,
@@ -18,6 +18,7 @@ import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { getConfig } from '../../config';
 import * as QRCode from '../services/qrcode';
+import { renameKeys, ageArrayToBirthYearArray } from '../utils';
 
 
 /*
@@ -147,6 +148,10 @@ export const Visitors: UserCollection & CustomMethods = {
     const query = evolve({
       where: Visitors.toColumnNames,
       whereNot: Visitors.toColumnNames,
+      whereBetween: pipe(
+        evolve({ birthYear: ageArrayToBirthYearArray }),
+        renameKeys({ birthYear: 'user_account.birth_year' })
+        ),
     }, q);
 
     const additionalColumnMap = {

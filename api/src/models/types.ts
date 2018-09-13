@@ -263,7 +263,7 @@ export type CommunityBusinessCollection =
  */
 export type WhereQuery<T> = Partial<T>;
 export type WhereBetweenQuery<T> = {
-  [k in keyof T]?: [string, string]
+  [k in keyof T]?: [number, number]
 };
 export type DateTimeQuery = {
   since: Date

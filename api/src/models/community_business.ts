@@ -19,7 +19,7 @@ import {
   User,
 } from './types';
 import { Organisations } from './organisation';
-import { applyQueryModifiers } from './util';
+import { applyQueryModifiers } from './applyQueryModifiers';
 import { renameKeys, lazyPromiseSeries, ageArrayToBirthYearArray } from '../utils';
 
 
@@ -471,10 +471,10 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         visitActivity: 'visit_activity.visit_activity_name',
         gender: 'gender.gender_name',
       }),
-      whereBetween: (oldWB) => ({
-        columnName: 'user_account.birth_year',
-        range: ageArrayToBirthYearArray(oldWB.range),
-      }),
+      whereBetween: pipe(
+        evolve({ birthYear: ageArrayToBirthYearArray }),
+        renameKeys({ birthYear: 'user_account.birth_year' })
+        ),
     });
     const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);
     const query = pipe(modifyColumnNames, checkSpecificCb)(q);
@@ -509,20 +509,24 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
 
     const modifyColumnNamesForGenderActivity = evolve({
       where: renameKeys({
-        activity: 'visit_activity.visit_activity_name',
+        visitActivity: 'visit_activity.visit_activity_name',
         gender: 'gender.gender_name',
       }),
+      whereBetween: pipe(
+        evolve({ birthYear: ageArrayToBirthYearArray }),
+        renameKeys({ birthYear: 'user_account.birth_year' })
+        ),
     });
 
     const modifyColumnNamesForAge = evolve({
       where: renameKeys({
-        activity: 'visit_activity.visit_activity_name',
+        visitActivity: 'visit_activity.visit_activity_name',
         gender: 'gender.gender_name',
       }),
-      whereBetween: (oldWB) => ({
-        columnName: 'user_account.birth_year',
-        range: ageArrayToBirthYearArray(oldWB.range),
-      }),
+      whereBetween: pipe(
+        evolve({ birthYear: ageArrayToBirthYearArray }),
+        renameKeys({ birthYear: 'age_group_table.birth_year' })
+        ),
     });
 
     const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);

@@ -111,9 +111,7 @@ const routes: Hapi.ServerRoute[] = [
         limit,
         where: omit(['age'], filterOptions),
         whereBetween: filterOptions.age
-        ? {
-          columnName: 'birthYear',
-          range: filterOptions.age }
+        ? { birthYear: filterOptions.age }
         : {},
       });
 
@@ -171,9 +169,7 @@ const routes: Hapi.ServerRoute[] = [
       const query = filter(complement(isEmpty), {
         where: omit(['age'], { ...filterOptions }),
         whereBetween: filterOptions.age
-          ? {
-            columnName: 'birthYear',
-            range: filterOptions.age}
+          ? { birthYear: filterOptions.age }
           : {},
       });
 
