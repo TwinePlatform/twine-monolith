@@ -111,4 +111,65 @@ describe('API /community-businesses/{id}/visitors', () => {
       }));
     });
   });
+
+  describe('GET /community-businesses/me/visitors/{userId}', () => {
+    test('get specific visitor details of own cb w/o visits', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors/1?visits=false',
+        credentials: {
+          user,
+          organisation,
+          scope: ['user_details-child:read'],
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          name: 'Chell',
+        }),
+      });
+      expect((<any> res.result).visits).not.toBeDefined();
+    });
+
+    test('get specific visitor details of own cb w/ visits', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors/1?visits=true',
+        credentials: {
+          user,
+          organisation,
+          scope: ['user_details-child:read'],
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          name: 'Chell',
+          visits: expect.arrayContaining([
+            expect.objectContaining({
+              visitActivity: 'Free Running',
+            }),
+          ]),
+        }),
+      });
+      expect((<any> res.result).result.visits).toHaveLength(10);
+    });
+
+    test('get 403 when trying to get non-child visitor', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors/4',
+        credentials: {
+          user,
+          organisation,
+          scope: ['user_details-child:read'],
+        },
+      });
+
+      expect(res.statusCode).toBe(403);
+    });
+  });
 });

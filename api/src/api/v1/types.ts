@@ -89,6 +89,15 @@ export interface GetVisitorsRequest extends Hapi.Request {
   };
 }
 
+export interface GetVisitorRequest extends Hapi.Request {
+  params: {
+    userId: string
+  };
+  query: {
+    visits: string
+  };
+}
+
 export interface PutUserRequest extends Hapi.Request {
   payload: Omit<User, 'id' | keyof CommonTimestamps | 'password' | 'qrCode'>;
   params: {
