@@ -15,7 +15,7 @@ import {
   ModelQuery,
   GenderEnum,
   SingleUseToken } from './types';
-import { applyQueryModifiers } from './util';
+import { applyQueryModifiers } from './applyQueryModifiers';
 import { renameKeys, mapKeys } from '../utils';
 
 
