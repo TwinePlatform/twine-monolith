@@ -1,4 +1,5 @@
 import * as Knex from 'knex';
+import * as moment from 'moment';
 import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
@@ -161,9 +162,12 @@ describe('User Model', () => {
       const resetToken = await Users
         .createPasswordResetToken(knex, { email: '1@aperturescience.com' });
 
+      const expiresAtIsInTheFuture = moment().diff(resetToken.expiresAt) < 0;
       expect(resetToken).toEqual(expect.objectContaining({
         userId: 2,
       }));
+      expect(expiresAtIsInTheFuture).toBeTruthy();
+      expect(resetToken.token).toBeTruthy();
     });
 
     test(':: returns a token object when a user id is supplied', async () => {

@@ -2,10 +2,10 @@
  * User Model
  */
 import * as Knex from 'knex';
+import * as moment from 'moment';
 import { compose, omit, filter, pick, invertObj, evolve } from 'ramda';
 import { randomBytes } from 'crypto';
 import { hash } from 'bcrypt';
-import * as moment from 'moment';
 import { Dictionary, Map } from '../types/internal';
 import { User, UserRow, UserCollection, UserChangeSet, ModelQuery, GenderEnum } from './types';
 import { applyQueryModifiers } from './applyQueryModifiers';
@@ -246,16 +246,17 @@ export const Users: UserCollection & CustomMethods = {
         'expires_at AS expiresAt',
       ]);
 
-      const [userTokenRow] = await trx('user_secret_reset')
+
+      const [userId] = await trx('user_secret_reset')
       .insert({
         single_use_token_id: tokenRow.id,
         user_account_id:
         // NB: email search is lowercase due to joi's payload conversion
-            u.id || trx('user_account').select('user_account_id').where({ email: u.email }),
-        })
-        .returning('*');
+        u.id || trx('user_account').select('user_account_id').where({ email: u.email }),
+      })
+      .returning('user_account_id AS userId');
 
-      return { ...tokenRow, userId: userTokenRow.user_account_id };
+      return { ...tokenRow, userId };
     });
     return { ...res, token };
   },
