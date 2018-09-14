@@ -44,7 +44,7 @@ export const postCode =
   Joi.string()
     .min(4)
     .max(10)
-    .lowercase();
+    .uppercase();
 
 export const isEmailConsentGranted =
   Joi.boolean();

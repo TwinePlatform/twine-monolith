@@ -56,7 +56,7 @@ describe('PUT /users/{userId}', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
-        result: expect.objectContaining({ ...rest, name: 'Wheatley' }),
+        result: expect.objectContaining({ ...rest, name: 'wheatley' }),
       });
       expect((<any> res.result).result.modifiedAt).toBeTruthy();
       expect((<any> res.result).result.modifiedAt).not.toBe(modifiedAt);
@@ -88,7 +88,7 @@ describe('PUT /users/{userId}', () => {
       expect(res.result).toEqual({
         result: expect.objectContaining({
           id: 2,
-          name: 'Wheatley',
+          name: 'wheatley',
           gender: 'male',
           birthYear: 1983,
           email: 'wheatus@aperture.com',
@@ -141,7 +141,7 @@ describe('PUT /users/{userId}', () => {
           name: 'Wheatley',
         },
         credentials: {
-          user: { ...user, name: 'Wheatley' },
+          user: { ...user, name: 'wheatley' },
           scope: ['user_details-own:write'],
         },
       });
@@ -171,7 +171,7 @@ describe('PUT /users/{userId}', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
-        result: expect.objectContaining({ ...rest, name: 'Tubby' }),
+        result: expect.objectContaining({ ...rest, name: 'tubby' }),
       });
       expect((<any> res.result).result.modifiedAt).toBeTruthy();
       expect((<any> res.result).result.modifiedAt).not.toBe(modifiedAt);
@@ -204,7 +204,7 @@ describe('PUT /users/{userId}', () => {
       expect(res.result).toEqual({
         result: expect.objectContaining({
           id: 1,
-          name: 'Tubby',
+          name: 'tubby',
           gender: 'male',
           birthYear: 1972,
           email: 'tubbs@aperture.com',
