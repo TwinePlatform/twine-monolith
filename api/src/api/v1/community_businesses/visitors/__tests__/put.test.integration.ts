@@ -57,7 +57,7 @@ describe('API /community-businesses/{id}/visitors', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
-        result: expect.objectContaining({ ...rest, name: 'Tubby' }),
+        result: expect.objectContaining({ ...rest, name: 'tubby' }),
       });
       expect((<any> res.result).result.modifiedAt).toBeTruthy();
       expect((<any> res.result).result.modifiedAt).not.toBe(modifiedAt);
@@ -90,7 +90,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       expect(res.result).toEqual({
         result: expect.objectContaining({
           id: 1,
-          name: 'Tubby',
+          name: 'tubby',
           gender: 'male',
           birthYear: 1972,
           email: 'tubbs@aperture.com',
