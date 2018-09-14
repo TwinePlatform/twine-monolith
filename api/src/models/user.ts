@@ -5,7 +5,7 @@ import * as Knex from 'knex';
 import * as moment from 'moment';
 import { compose, omit, filter, pick, invertObj, evolve } from 'ramda';
 import { randomBytes } from 'crypto';
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { Dictionary, Map } from '../types/internal';
 import {
   User,
@@ -14,9 +14,10 @@ import {
   UserChangeSet,
   ModelQuery,
   GenderEnum,
-  SingleUseToken } from './types';
+  SingleUseToken,
+} from './types';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import { renameKeys, mapKeys } from '../utils';
+import { renameKeys, mapKeys, findAsync } from '../utils';
 
 
 /*
@@ -25,6 +26,7 @@ import { renameKeys, mapKeys } from '../utils';
 type CustomMethods = {
   recordLogin: (k: Knex, u: User) => Promise<void>
   createPasswordResetToken: (k: Knex, u: Partial<User>) => Promise<SingleUseToken>
+  fromPasswordResetToken: (k: Knex, t: string) => Promise<User>
 };
 
 
@@ -239,31 +241,61 @@ export const Users: UserCollection & CustomMethods = {
 
   async createPasswordResetToken (client: Knex, u: Partial<User>) {
     const twoDaysFromToday = moment().add(2, 'days').toISOString();
-    const token = randomBytes(64).toString('base64');
+    const token = randomBytes(32).toString('hex');
     const hashToken = await hash(token, 12);
+
     const res = await client.transaction(async (trx) => {
       const [tokenRow] = await trx('single_use_token')
-      .insert({ token: hashToken,
-        expires_at: twoDaysFromToday,
-      })
-      .returning([
-        'single_use_token_id AS id',
-        'created_at AS createdAt',
-        'expires_at AS expiresAt',
-      ]);
-
+        .insert({ token: hashToken, expires_at: twoDaysFromToday })
+        .returning([
+          'single_use_token_id AS id',
+          'created_at AS createdAt',
+          'expires_at AS expiresAt',
+        ]);
 
       const [userId] = await trx('user_secret_reset')
-      .insert({
-        single_use_token_id: tokenRow.id,
-        user_account_id:
-        // NB: email search is lowercase due to joi's payload conversion
-        u.id || trx('user_account').select('user_account_id').where({ email: u.email }),
-      })
-      .returning('user_account_id AS userId');
+        .insert({
+          single_use_token_id: tokenRow.id,
+          user_account_id:
+          // NB: email search is lowercase due to joi's payload conversion
+          u.id || trx('user_account').select('user_account_id').where({ email: u.email }),
+        })
+        .returning('user_account_id AS userId');
 
       return { ...tokenRow, userId };
     });
-    return { ...res, token };
+
+    return { ...res, token } as SingleUseToken;
+  },
+
+  async fromPasswordResetToken (client: Knex, t: string) {
+    // Find token
+    // // No token -> 400
+    const tokens = await client('single_use_token')
+      .select()
+      .where({ deleted_at: null, used_at: null })
+      .andWhere('expires_at', '>', new Date());
+
+    const tokenRow = await findAsync(tokens, (a: any) => compare(t, a.token));
+
+    if (!tokenRow) {
+      throw new Error('Unrecognised reset token');
+    }
+
+    // Find associated user
+    // // No associated user -> 400
+    const [{ user_account_id: id }] = await client('user_secret_reset')
+      .select('user_account_id')
+      .where({ single_use_token_id: tokenRow.single_use_token_id });
+
+    if (!id) {
+      throw new Error('No associated user');
+    }
+
+    await client('single_use_token')
+      .update({ used_at: new Date() })
+      .where({ single_use_token_id: tokenRow.single_use_token_id });
+
+    return Users.getOne(client, { where: { id } });
   },
 };

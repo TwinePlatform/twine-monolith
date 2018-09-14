@@ -10,7 +10,7 @@ import register from './register';
 import adminLogin from './login_admin';
 import logout from './logout';
 import visitors from './visitors';
-import passwordForgot from './password_forgot';
+import password from './password';
 
 export default [
   ...get,
@@ -19,5 +19,5 @@ export default [
   ...adminLogin,
   ...logout,
   ...visitors,
-  ...passwordForgot,
+  ...password,
 ];
