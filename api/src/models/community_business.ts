@@ -548,7 +548,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         .then((rows) => {
           const gender: Dictionary<number> = rows
             .reduce((acc: Dictionary<number>, row: {gender: string, count: number}) => {
-              acc[row.gender] = row.count;
+              acc[row.gender] = Number(row.count);
               return acc;
             } , {});
           return { gender };
@@ -566,7 +566,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         .then((rows) => {
           const visitActivity = rows
             .reduce((acc: Dictionary<number>, row: {activity: string, count: number}) => {
-              acc[row.activity] = row.count;
+              acc[row.activity] = Number(row.count);
               return acc;
             } , {});
           return { visitActivity };
@@ -597,7 +597,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         .then((rows) => {
           const age = rows
             .reduce((acc: Dictionary<number>, row: {ageGroup: string, count: number}) => {
-              acc[row.ageGroup] = row.count;
+              acc[row.ageGroup] = Number(row.count);
               return acc;
             } , {});
           return { age };

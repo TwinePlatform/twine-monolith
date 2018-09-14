@@ -36,10 +36,10 @@ const routes: Hapi.ServerRoute[] = [
         server: { app: { knex } },
         query: { filter: filterOptions = {}, fields },
         pre: { communityBusiness } } = request;
-/*
-* fields define what aggregates are returned.
-* If not fields are requested the respomse is empty.
-*/
+      /*
+       * fields define what aggregates are returned.
+       * If not fields are requested the respomse is empty.
+       */
       if (!fields) return {};
 
       const query = filter(complement(isEmpty), {

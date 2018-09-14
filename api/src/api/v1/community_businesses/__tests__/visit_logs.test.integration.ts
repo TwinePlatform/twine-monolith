@@ -82,7 +82,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
     });
   });
 
-  describe.only('GET', () => {
+  describe('GET', () => {
     test(':: get all visit logs for a cb', async () => {
       const res = await server.inject({
         method: 'GET',

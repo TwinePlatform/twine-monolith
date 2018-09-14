@@ -234,9 +234,9 @@ describe('Community Business Model', () => {
       const aggregates = await CommunityBusinesses
         .getVisitLogAggregates(trx, cb, ['gender', 'age', 'visitActivity']);
       expect(aggregates).toEqual({
-        visitActivity: { 'Free Running': '7', 'Wear Pink': '3' },
-        age: { '18-34': '10' },
-        gender: { female: '10' },
+        visitActivity: { 'Free Running': 7, 'Wear Pink': 3 },
+        age: { '18-34': 10 },
+        gender: { female: 10 },
       });
     });
 
@@ -250,9 +250,9 @@ describe('Community Business Model', () => {
         );
 
       expect(logs).toEqual({
-        visitActivity: { 'Wear Pink': '3' },
-        age: { '18-34': '3' },
-        gender: { female: '3' } });
+        visitActivity: { 'Wear Pink': 3 },
+        age: { '18-34': 3 },
+        gender: { female: 3 } });
     });
 
     test(':: throws an error if unsupported aggregate fields are supplied', async () => {

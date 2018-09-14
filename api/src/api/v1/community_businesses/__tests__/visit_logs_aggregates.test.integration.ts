@@ -37,7 +37,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
     server.app.knex = knex;
   });
 
-  describe.only('GET', () => {
+  describe('GET', () => {
     test(':: no fields returns empty response', async () => {
       const res = await server.inject({
         method: 'GET',
@@ -69,7 +69,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual({
-        visitActivity: { 'Free Running': '7', 'Wear Pink': '3' },
+        visitActivity: { 'Free Running': 7, 'Wear Pink': 3 },
       });
     });
 
