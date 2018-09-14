@@ -1,16 +1,18 @@
 import * as Postmark from 'postmark';
 import { EmailTemplate } from './templates';
 
+type Attachment = {
+  name: string,
+  content: string,
+  contentType: string,
+};
+
 type Email = {
   from: string,
   to: string,
   templateId: EmailTemplate,
   templateModel?: object,
-  attachements?: [{
-    name: string,
-    content: string,
-    contentType: string,
-  }],
+  attachments?: Attachment[],
 };
 
 type EmailServiceConfig = {
@@ -31,6 +33,8 @@ const emailKeyMap = (a: Email): Postmark.PostmarkMessageWithTemplate => ({
   From: a.from,
   TemplateId: a.templateId,
   TemplateModel: a.templateModel,
+  Attachments: (a.attachments || [])
+    .map((a) => ({ Name: a.name, Content: a.content, ContentType: a.contentType })),
 });
 
 const emailInitialiser: EmailInitialiser = {

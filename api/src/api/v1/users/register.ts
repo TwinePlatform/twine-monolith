@@ -120,9 +120,9 @@ export default [
         {
           from: 'visitorapp@powertochange.org.uk', // this shouldn't be hardcoded
           to: visitor.email,
-          templateId: EmailTemplate.WELCOME_VISITOR,
+          templateId: EmailTemplate.VISITOR_WELCOME,
           templateModel: { name: visitor.name, organisation: cb.name },
-          attachements: [{
+          attachments: [{
             name: `${visitor.name}-QrCode.pdf`,
             content: document,
             contentType: 'application/octet-stream',
@@ -131,9 +131,9 @@ export default [
         {
           from: 'visitorapp@powertochange.org.uk', // this shouldn't be hardcoded
           to: admin.email,
-          templateId: EmailTemplate.NEW_VISITOR_FOR_CB,
+          templateId: EmailTemplate.ORG_ADMIN_NEW_VISITOR,
           templateModel: { name: visitor.name, email: visitor.email },
-          attachements: [{
+          attachments: [{
             name: `${visitor.name}-QrCode.pdf`,
             content: document,
             contentType: 'application/octet-stream',

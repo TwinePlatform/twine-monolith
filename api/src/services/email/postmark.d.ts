@@ -7,29 +7,29 @@
 // editted to export all types and ClientClass(s) to take optional options object
 declare module 'postmark'{
       const defaults: Options;
-    
+
       interface PostmarkError {
           status: number;
           message: string;
           code: number;
       }
-    
+
       interface PostmarkMessageHeader {
           Name: string;
           Value: string;
       }
-    
+
       interface PostmarkAttachment {
           Content: string;
           Name: string;
           ContentType: string;
       }
-    
+
       interface Filter {
           count?: number;
           offset?: number;
       }
-    
+
       interface PostmarkMessageWithTemplate {
           To: string;
           From: string;
@@ -43,8 +43,9 @@ declare module 'postmark'{
           TrackOpens?: boolean;
           TrackLinks?: string;
           Headers?: PostmarkMessageHeader[];
+          Attachments?: PostmarkAttachment[];
       }
-    
+
       interface PostmarkMessage {
           To: string;
           From: string;
@@ -60,7 +61,7 @@ declare module 'postmark'{
           Headers?: PostmarkMessageHeader[];
           Attachments?: PostmarkAttachment[];
       }
-    
+
       interface Sender {
           Color: string;
           RawEmailEnabled: boolean;
@@ -76,7 +77,7 @@ declare module 'postmark'{
           InboundDomain: string;
           InboundSpamThreshold: number;
       }
-    
+
       interface TemplateValidator<T extends object> {
           Subject: string;
           HtmlBody: string;
@@ -84,14 +85,14 @@ declare module 'postmark'{
           TestRenderModel?: T;
           InlineCssForHtmlTestRender?: boolean;
       }
-    
+
       type PostmarkCallback<T extends object = any> = ((e: PostmarkError, ret: T) => undefined) | undefined;
-    
+
       interface SimpleOptions {
           ssl: boolean;
           requestHost: string;
       }
-    
+
       interface Options extends SimpleOptions {
           requestFactory(
               options: SimpleOptions
@@ -102,22 +103,22 @@ declare module 'postmark'{
               callback?: PostmarkCallback
           ) => any;
       }
-    
+
       class Client {
           constructor(serverKey: string, options?: Partial<Options>);
-    
+
           send(message: PostmarkMessage): Promise<SendStatus>;
           send(message: PostmarkMessage, callback: PostmarkCallback<SendStatus>): undefined;
-    
+
           sendEmailWithTemplate(message: PostmarkMessageWithTemplate): Promise<SendStatus>;
           sendEmailWithTemplate(message: PostmarkMessageWithTemplate, callback: PostmarkCallback<SendStatus>): undefined;
-    
+
           batch(message: PostmarkMessage[]): Promise<SendStatus[]>;
           batch(message: PostmarkMessage[], callback: PostmarkCallback<SendStatus[]>): undefined;
-    
+
           sendEmail(message: PostmarkMessage): Promise<SendStatus>;
           sendEmail(message: PostmarkMessage, callback: PostmarkCallback<SendStatus>): undefined;
-    
+
           sendEmailBatch(message: PostmarkMessage[]): Promise<SendStatus[]>;
           sendEmailBatch(message: PostmarkMessage[], callback: PostmarkCallback<SendStatus[]>): undefined;
 
@@ -127,82 +128,82 @@ declare module 'postmark'{
           // stats
           getDeliveryStatistics(): Promise<DeliveryStats>;
           getDeliveryStatistics(callback: PostmarkCallback<DeliveryStats>): undefined;
-    
+
           // bounces
           getBounces(filter: BounceFilter): Promise<BouncesResult>;
           getBounces(filter: BounceFilter, callback?: PostmarkCallback<BouncesResult>): undefined;
-    
+
           getBounce(id: number): Promise<Bounce>;
           getBounce(id: number, callback?: PostmarkCallback<Bounce>): undefined;
-    
+
           getBounceDump(id: number): Promise<BounceDump>;
           getBounceDump(id: number, callback?: PostmarkCallback<BounceDump>): undefined;
-    
+
           activateBounce(id: number): Promise<ActivatedBounceResult>;
           activateBounce(id: number, callback?: PostmarkCallback<ActivatedBounceResult>): undefined;
-    
+
           getBounceTags(): Promise<string[]>;
           getBounceTags(callback?: PostmarkCallback<string[]>): undefined;
-    
+
           // server
           getServer(): Promise<Server>;
           getServer(callback?: PostmarkCallback<Server>): undefined;
-    
+
           editServer(server: Partial<Server>): Promise<Server>;
           editServer(server: Partial<Server>, callback?: PostmarkCallback<Server>): undefined;
-    
+
           // message info
           getOutboundMessages(filter: OutboundMessageFilter): Promise<OutboundMessagesResult>;
           getOutboundMessages(filter: OutboundMessageFilter, callback?: PostmarkCallback<OutboundMessagesResult>): undefined;
-    
+
           getOutboundMessageDetails(id: number): Promise<OutboundMessage>;
           getOutboundMessageDetails(id: number, callback?: PostmarkCallback<OutboundMessage>): undefined;
-    
+
           getMessageOpens(filter: OpenMessageFilter): Promise<MessageOpensResult>;
           getMessageOpens(filter: OpenMessageFilter, callback?: PostmarkCallback<MessageOpensResult>): undefined;
-    
+
           getMessageOpensForSingleMessage(id: number, filter: Filter): Promise<MessageOpensResult>;
           getMessageOpensForSingleMessage(id: number, filter: Filter, callback?: PostmarkCallback<MessageOpensResult>): undefined;
-    
+
           getInboundMessages(filter: InboundMessageFilter): Promise<InboundMessagesResult>;
           getInboundMessages(filter: InboundMessageFilter, callback?: PostmarkCallback<InboundMessagesResult>): undefined;
-    
+
           getInboundMessageDetails(id: number): Promise<InboundMessage>;
           getInboundMessageDetails(id: number, callback?: PostmarkCallback<InboundMessage>): undefined;
-    
+
           bypassBlockedInboundMessage(id: number): Promise<GenericResult>;
           bypassBlockedInboundMessage(id: number, callback?: PostmarkCallback<GenericResult>): undefined;
-    
+
           getOuboundOverview(filter: BaseFilter): Promise<OutboundOverview>;
           getOuboundOverview(filter: BaseFilter, callback?: PostmarkCallback<OutboundOverview>): undefined;
-    
+
           retryInboundHookForMessage(id: number): Promise<GenericResult>;
           retryInboundHookForMessage(id: number, callback?: PostmarkCallback<GenericResult>): undefined;
-    
+
           // templates
           getTemplate(id: number): Promise<Template>;
           getTemplate(id: number, callback?: PostmarkCallback<Template>): undefined;
-    
+
           createTemplate(template: Partial<Template>): Promise<TemplateBase>;
           createTemplate(template: Partial<Template>, callback?: PostmarkCallback<TemplateBase>): undefined;
-    
+
           editTemplate(template: Partial<Template>): Promise<TemplateBase>;
           editTemplate(template: Partial<Template>, callback?: PostmarkCallback<TemplateBase>): undefined;
-    
+
           getTemplates(filter: Filter): Promise<TemplatesResult>;
           getTemplates(filter: Filter, callback?: PostmarkCallback<TemplatesResult>): undefined;
-    
+
           deleteTemplate(id: number): Promise<GenericResult>;
           deleteTemplate(id: number, callback?: PostmarkCallback<GenericResult>): undefined;
-    
+
           validateTemplate<T extends object>(templateObject: TemplateValidator<T>): Promise<TemplateValidationResult<T>>;
           validateTemplate<T extends object>(templateObject: TemplateValidator<T>, callback?: PostmarkCallback<TemplateValidationResult<T>>): undefined;
       }
-    
+
       interface CreateSignature extends UpdateSignature {
           FromEmail: string;
       }
-    
+
       interface CreateServer {
           Name: string;
           Color?: string;
@@ -219,89 +220,89 @@ declare module 'postmark'{
           InboundDomain?: string;
           InboundSpamThreshold?: number;
       }
-    
+
       interface CreateDomain {
           Name: string;
           ReturnPathDomain?: string;
       }
-    
+
       class AdminClient {
           constructor(apiKey: string, options: Partial<Options>);
           listSenderSignatures(query: Filter): Promise<SenderSignaturesResults>;
           listSenderSignatures(query: Filter, callback?: PostmarkCallback<SenderSignaturesResults>): undefined;
-    
+
           createSenderSignature(options: CreateSignature): Promise<SenderSignature>;
           createSenderSignature(options: CreateSignature, callback?: PostmarkCallback<SenderSignature>): undefined;
-    
+
           editSenderSignature(id: number, options: UpdateSignature): Promise<SenderSignature>;
           editSenderSignature(id: number, options: UpdateSignature, callback?: PostmarkCallback<SenderSignature>): undefined;
-    
+
           deleteSenderSignature(id: number): Promise<GenericResult>;
           deleteSenderSignature(id: number, callback?: PostmarkCallback<GenericResult>): undefined;
-    
+
           resendSenderSignatureConfirmation(id: number): Promise<GenericResult>;
           resendSenderSignatureConfirmation(id: number, callback?: PostmarkCallback<GenericResult>): undefined;
-    
+
           verifySenderSignatureSPF(id: number): Promise<SenderSignature>;
           verifySenderSignatureSPF(id: number, callback?: PostmarkCallback<SenderSignature>): undefined;
-    
+
           requestNewDKIMForSenderSignature(id: number): Promise<GenericResult>;
           requestNewDKIMForSenderSignature(id: number, callback?: PostmarkCallback<GenericResult>): undefined;
-    
+
           // servers
           getServer(id: number): Promise<Server>;
           getServer(id: number, callback?: PostmarkCallback<Server>): undefined;
-    
+
           createServer(options: CreateServer): Promise<Server>;
           createServer(options: CreateServer, callback?: PostmarkCallback<Server>): undefined;
-    
+
           editServer(id: number, options: Partial<CreateServer>): Promise<Server>;
           editServer(id: number, options: Partial<CreateServer>, callback?: PostmarkCallback<Server>): undefined;
-    
+
           deleteServer(id: number): Promise<GenericResult>;
           deleteServer(id: number, callback?: PostmarkCallback<GenericResult>): undefined;
-    
+
           listServers(query: ServerFilter): Promise<ServersResult>;
           listServers(query: ServerFilter, callback?: PostmarkCallback<ServersResult>): undefined;
-    
+
           // domains
           listDomains(query: Filter): Promise<DomainsResult>;
           listDomains(query: Filter, callback?: PostmarkCallback<DomainsResult>): undefined;
-    
+
           getDomain(id: number): Promise<Domain>;
           getDomain(id: number, callback?: PostmarkCallback<Domain>): undefined;
-    
+
           createDomain(options: CreateDomain): Promise<Domain>;
           createDomain(options: CreateDomain, callback?: PostmarkCallback<Domain>): undefined;
-    
+
           editDomain(id: number, options: Partial<CreateDomain>): Promise<Domain>;
           editDomain(id: number, options: Partial<CreateDomain>, callback?: PostmarkCallback<Domain>): undefined;
-    
+
           deleteDomain(id: number): Promise<GenericResult>;
           deleteDomain(id: number, callback?: PostmarkCallback<GenericResult>): undefined;
-    
+
           verifyDomainSPF(id: number): Promise<SenderSignature>;
           verifyDomainSPF(id: number, callback?: PostmarkCallback<SenderSignature>): undefined;
-    
+
           rotateDKIMForDomain(id: number): Promise<RotateDKIMResult>;
           rotateDKIMForDomain(id: number, callback?: PostmarkCallback<RotateDKIMResult>): undefined;
       }
-    
+
       interface ClientClass {
           new(serverKey: string, options?: Partial<Options>): Client;
       }
-    
+
       interface AdminClientClass {
           new(apiKey: string, options?: Partial<Options>): AdminClient;
       }
-    
+
       interface Postmark {
           (apiKey: string, options?: Partial<Options>): Client;
           defaults: Options;
           Client: ClientClass;
           AdminClient: AdminClientClass;
       }
-    
+
       // server
       interface Server extends Sender {
           ID: number;
@@ -309,7 +310,7 @@ declare module 'postmark'{
           ServerLink: string;
           Name: string;
       }
-    
+
       export interface SendStatus {
           To: string;
           SubmittedAt: string;
@@ -317,20 +318,20 @@ declare module 'postmark'{
           ErrorCode: number;
           Message: string;
       }
-    
+
       // validation
       interface ValidationError {
           Message: string;
           Line: number;
           CharacterPosition: number;
       }
-    
+
       interface ValidationSet {
           ContentIsValid: boolean;
           ValidationErrors: ValidationError[];
           RenderedContent: string;
       }
-    
+
       interface TemplateValidator<T extends object> {
           Subject: string;
           HtmlBody: string;
@@ -338,21 +339,21 @@ declare module 'postmark'{
           TestRenderModel?: T;
           InlineCssForHtmlTestRender?: boolean;
       }
-    
+
       // templates
       interface TemplateBase {
           Name: string;
           TemplateId: number;
           Active: boolean;
       }
-    
+
       interface Template extends TemplateBase {
           Subject: string;
           HtmlBody: string;
           TextBody: string;
           AssociatedServerId: number;
       }
-    
+
       // filters
       interface BaseFilter extends Filter {
           tag?: string;
@@ -365,18 +366,18 @@ declare module 'postmark'{
           emailFilter?: string;
           messageID?: string;
       }
-    
+
       interface OutboundMessageFilter extends BaseFilter {
           recipient?: string;
           fromemail?: string;
           status?: string;
       }
-    
+
       interface InboundMessageFilter extends OutboundMessageFilter {
           mailboxhash?: string;
           subject?: string;
       }
-    
+
       interface OpenMessageFilter extends BaseFilter {
           client_name?: string;
           client_company?: string;
@@ -388,11 +389,11 @@ declare module 'postmark'{
           region?: string;
           city?: string;
       }
-    
+
       interface ServerFilter extends Filter {
           name?: string;
       }
-    
+
       // bounces
       interface Bounce {
           ID: number;
@@ -413,18 +414,18 @@ declare module 'postmark'{
           CanActivate: boolean;
           Content: string;
       }
-    
+
       interface BounceDump {
           Body: string;
       }
-    
+
       // tracking info
       interface VendorTrackingInfo {
           Name: string;
           Company: string;
           Family: string;
       }
-    
+
       interface GeoTrackingInfo {
           CountryISOCode: string;
           Country: string;
@@ -435,18 +436,18 @@ declare module 'postmark'{
           Coords: string;
           IP: string;
       }
-    
+
       interface BounceStats {
           Name: string;
           Count: number;
           Type: string | undefined;
       }
-    
+
       interface DeliveryStats {
           InactiveMails: number;
           Bounces: BounceStats[];
       }
-    
+
       interface MessageOpens {
           FirstOpen: boolean;
           Client: VendorTrackingInfo;
@@ -460,12 +461,12 @@ declare module 'postmark'{
           Tag: string;
           Recipient: string;
       }
-    
+
       interface ExpandedEmail {
           Email: string;
           Name: string;
       }
-    
+
       // message events
       interface MessageEvents {
           Recipient: string;
@@ -473,7 +474,7 @@ declare module 'postmark'{
           ReceivedAt: string;
           Details: MessageEventDetails;
       }
-    
+
       interface MessageEventDetails {
           Summary?: string;
           BounceID?: string;
@@ -483,7 +484,7 @@ declare module 'postmark'{
           DestinationServer?: string;
           DestinationIP?: string;
       }
-    
+
       // messages
       interface MessageBase {
           Tag: string;
@@ -494,7 +495,7 @@ declare module 'postmark'{
           Status: string;
           Attachments: PostmarkAttachment[];
       }
-    
+
       interface OutboundMessageBase extends MessageBase {
           To: ExpandedEmail[];
           Recipients: string[];
@@ -502,14 +503,14 @@ declare module 'postmark'{
           TrackOpens: boolean;
           TrackLinks: string;
       }
-    
+
       interface OutboundMessage extends OutboundMessageBase {
           TextBody: string;
           HtmlBody: string;
           Body: string;
           MessageEvents: MessageEvents[];
       }
-    
+
       interface InboundMessageBase extends MessageBase {
           FromName: string;
           FromFull: ExpandedEmail;
@@ -521,7 +522,7 @@ declare module 'postmark'{
           Date: string;
           MailboxHash: string;
       }
-    
+
       interface InboundMessage extends InboundMessageBase {
           TextBody: string;
           HtmlBody: string;
@@ -529,41 +530,41 @@ declare module 'postmark'{
           BlockedReason?: string;
           MessageEvents: MessageEvents[];
       }
-    
+
       // Results
       interface GenericResult {
           Message: string;
           ErrorCode?: number;
       }
-    
+
       interface PaginatedResult {
           TotalCount: number;
       }
-    
+
       interface ActivatedBounceResult extends GenericResult {
           Bounce: Bounce;
       }
-    
+
       interface BouncesResult extends PaginatedResult {
           Bounces: Bounce[];
       }
-    
+
       interface TemplatesResult extends PaginatedResult {
           Templates: TemplateBase[];
       }
-    
+
       interface MessageOpensResult extends PaginatedResult {
           Opens: MessageOpens[];
       }
-    
+
       interface OutboundMessagesResult extends PaginatedResult {
           Messages: OutboundMessageBase[];
       }
-    
+
       interface InboundMessagesResult extends PaginatedResult {
           InboundMessages: InboundMessageBase[];
       }
-    
+
       interface TemplateValidationResult<T extends object = any> {
           AllContentIsValid: boolean;
           HtmlBody: ValidationSet;
@@ -571,19 +572,19 @@ declare module 'postmark'{
           Subject: ValidationSet;
           SuggestedTemplateModel: T;
       }
-    
+
       interface SenderSignaturesResults extends PaginatedResult {
           SenderSignatures: SenderSignatureBase[];
       }
-    
+
       interface ServersResult extends PaginatedResult {
           Servers: Server[];
       }
-    
+
       interface DomainsResult extends PaginatedResult {
           Domains: DomainBase[];
       }
-    
+
       // sender signature
       interface SenderSignatureBase {
           Domain: string;
@@ -593,13 +594,13 @@ declare module 'postmark'{
           Confirmed: boolean;
           ID: number;
       }
-    
+
       interface SPFRecord {
           SPFHost: string;
           SPFTextValue: string;
           SPFVerified: boolean;
       }
-    
+
       interface DKIMKey {
           WeakDKIM: boolean;
           DKIMHost: string;
@@ -612,22 +613,22 @@ declare module 'postmark'{
           SafeToRemoveRevokedKeyFromDNS: boolean;
           DKIMUpdateStatus: string;
       }
-    
+
       interface VerificationDetails extends SPFRecord, DKIMKey {
           ReturnPathDomain: string;
           ReturnPathDomainCNAMEValue: string;
       }
-    
+
       interface SenderSignature extends SenderSignatureBase, VerificationDetails {
           ReturnPathDomainVerified: boolean;
       }
-    
+
       interface UpdateSignature {
           Name: string;
           ReplyToEmail?: string;
           ReturnPathDomain?: string;
       }
-    
+
       // domain
       interface DomainBase {
           ID: number;
@@ -637,15 +638,15 @@ declare module 'postmark'{
           WeakDKIM: boolean;
           ReturnPathDomainVerified: boolean;
       }
-    
+
       interface Domain extends DomainBase, VerificationDetails {
       }
-    
+
       interface RotateDKIMResult extends DKIMKey {
           Name: string;
           ID: string;
       }
-    
+
       // outbound overview
       interface OutboundOverview {
           Sent: number;

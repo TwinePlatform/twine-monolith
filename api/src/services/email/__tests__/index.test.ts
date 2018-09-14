@@ -7,7 +7,7 @@ const config = getConfig(process.env.NODE_ENV);
 const emailOptions = {
   to: 'hi@hello.com',
   from: 'bye@seeya.com',
-  templateId: EmailTemplate.WELCOME_CB,
+  templateId: EmailTemplate.ORG_ADMIN_WELCOME,
   templateModel: {},
 };
 
