@@ -622,6 +622,19 @@
           }
         }
       },
+      "/me/visitors/:id/emails": {
+        "POST": {
+          "description": "Send an email to one of your visitors",
+          "isImplemented": false,
+          "auth": true,
+          "intendedFor": ["ORG_ADMIN"],
+          "scope": ["user_details-child:write"],
+          "body": {
+            "type": "String"
+          },
+          "response": null
+        }
+      },
       "/me/visit-activities": {
         "GET": {
           "description": "Retrieve all visit activities for an community business",
