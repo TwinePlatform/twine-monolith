@@ -171,7 +171,7 @@ export type OutreachCampaignBase = CommonTimestamps & {
   endsAt: string
 };
 
-export type TokenBase = Omit<CommonTimestamps, 'modifiedAt'> & {
+export type SingleUseTokenBase = Omit<CommonTimestamps, 'modifiedAt'> & {
   id: Int
   userId: Int
   token: string
@@ -195,7 +195,7 @@ export type Feedback = Readonly<FeedbackBase>;
 export type LinkedFeedback = Readonly<LinkedFeedbackBase>;
 export type OutreachMeeting = Readonly<OutreachMeetingBase>;
 export type OutreachCampaign = Readonly<OutreachCampaignBase>;
-export type Token = Readonly<TokenBase>;
+export type SingleUseToken = Readonly<SingleUseTokenBase>;
 
 /*
  * Change-set declarations

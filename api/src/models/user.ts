@@ -7,10 +7,16 @@ import { compose, omit, filter, pick, invertObj, evolve } from 'ramda';
 import { randomBytes } from 'crypto';
 import { hash } from 'bcrypt';
 import { Dictionary, Map } from '../types/internal';
-import { User, UserRow, UserCollection, UserChangeSet, ModelQuery, GenderEnum } from './types';
-import { applyQueryModifiers } from './applyQueryModifiers';
+import {
+  User,
+  UserRow,
+  UserCollection,
+  UserChangeSet,
+  ModelQuery,
+  GenderEnum,
+  SingleUseToken } from './types';
+import { applyQueryModifiers } from './util';
 import { renameKeys, mapKeys } from '../utils';
-import { Token } from '../auth/strategies/standard/types';
 
 
 /*
@@ -18,7 +24,7 @@ import { Token } from '../auth/strategies/standard/types';
  */
 type CustomMethods = {
   recordLogin: (k: Knex, u: User) => Promise<void>
-  createPasswordResetToken: (k: Knex, u: Partial<User>) => Promise<Token>
+  createPasswordResetToken: (k: Knex, u: Partial<User>) => Promise<SingleUseToken>
 };
 
 
