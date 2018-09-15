@@ -34,7 +34,7 @@ const routes: Hapi.ServerRoute[] = [
         await EmailService.send({
           from: 'visitorapp@powertochange.org.uk', // this shouldn't be hardcoded
           to: email,
-          templateId: EmailTemplate.PASSWORD_RESET,
+          templateId: EmailTemplate.USER_PASSWORD_RESET,
           templateModel: {
             email,
             token,
