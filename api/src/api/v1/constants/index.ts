@@ -38,6 +38,6 @@ export default [
   'community_business_sector',
   'community_business_region',
   'visit_activity_category',
-  'volunteer_activity_category',
+  'volunteer_activity',
 ]
   .map(createConstantRoute);

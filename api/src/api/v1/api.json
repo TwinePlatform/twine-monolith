@@ -1612,7 +1612,7 @@
         }
       }
     },
-    "/volunteer-activity-categories": {
+    "/volunteer-activities": {
       "/": {
         "GET": {
           "description": "Retrieve volunteer activity catagories",
