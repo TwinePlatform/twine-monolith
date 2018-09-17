@@ -262,7 +262,7 @@
         },
         "PUT": {
           "description": "Update information about a single community business",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["organisations_details-own:write"],
@@ -600,7 +600,7 @@
       "/:id/visitors": {
         "GET": {
           "description": "Retreive all visitor users in an community business",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
           "scope": ["user_details-child:read"],
@@ -625,7 +625,7 @@
       "/me/visitors/:id/emails": {
         "POST": {
           "description": "Send an email to one of your visitors",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["ORG_ADMIN"],
           "scope": ["user_details-child:write"],
@@ -1275,7 +1275,7 @@
         },
         "PUT": {
           "description": "Update details of a specific user",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
           "scope": ["user_details-child:write"],
@@ -1320,7 +1320,7 @@
       "/password/reset": {
         "POST": {
           "description": "Reset password for a single user",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": false,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": [],
@@ -1347,7 +1347,7 @@
         },
         "PUT": {
           "description": "Update details of a your own user account",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": ["user_details-own:write"],
