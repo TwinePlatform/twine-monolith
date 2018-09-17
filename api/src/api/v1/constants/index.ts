@@ -19,7 +19,7 @@ const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
       validate: { query },
       response: { schema: response },
     },
-    handler: async ({ knex }: Hapi.Request, h: Hapi.ResponseToolkit) => {
+    handler: async ({ server: { app: { knex } } }: Hapi.Request, h: Hapi.ResponseToolkit) => {
       const query = await knex(tableName)
         .select()
         .orderBy(`${resourceName}_name`);
