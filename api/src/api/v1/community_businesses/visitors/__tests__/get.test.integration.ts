@@ -43,6 +43,7 @@ describe('API /community-businesses/{id}/visitors', () => {
         name: 'Chell',
         deletedAt: null,
       }));
+      expect((<any> res.result).meta).toEqual({ total: 1 });
     });
 
     test('filtered query', async () => {
@@ -57,7 +58,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       });
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: [] });
+      expect(res.result).toEqual({ result: [], meta: { total: 0 } });
     });
 
     test('filtered query with visits', async () => {
@@ -88,6 +89,7 @@ describe('API /community-businesses/{id}/visitors', () => {
             ]),
           }),
         ]),
+        meta: { total: 1 },
       });
       expect((<any> res.result).result).toHaveLength(1);
       expect((<any> res.result).result[0].visits).toHaveLength(10);
@@ -109,6 +111,7 @@ describe('API /community-businesses/{id}/visitors', () => {
         name: 'Chell',
         deletedAt: null,
       }));
+      expect((<any> res.result).meta).toEqual({ total: 1 });
     });
   });
 

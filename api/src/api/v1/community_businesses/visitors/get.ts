@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import { pick, mergeDeepRight } from 'ramda';
+import { has, pick, mergeDeepRight, omit } from 'ramda';
 import { Visitors, User, ModelQuery } from '../../../../models';
 import { query, filterQuery, response } from '../../users/schema';
 import { meOrId, id } from '../schema';
@@ -83,7 +83,18 @@ const routes: Hapi.ServerRoute[] = [
         ? Visitors.getWithVisits(knex, communityBusiness, modelQuery)
         : Visitors.fromCommunityBusiness(knex, communityBusiness, modelQuery));
 
-      return Promise.all(visitors.map(Visitors.serialise));
+      const count = has('limit', modelQuery) || has('offset', modelQuery)
+        ? await Visitors.fromCommunityBusiness(
+            knex,
+            communityBusiness,
+            omit(['limit', 'offset'], modelQuery)
+          )
+        : visitors.length;
+
+      return {
+        result: await Promise.all(visitors.map(Visitors.serialise)),
+        meta: { total: count },
+      };
     },
   },
 
