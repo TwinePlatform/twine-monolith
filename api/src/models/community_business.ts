@@ -533,7 +533,6 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
 
     const queryMatchOnColumnNames = pipe(modifyColumnNames, checkSpecificCb)(query);
     const ageQuery = pipe(modifyColumnNamesForAge, checkSpecificCb)(query);
-    const today = moment();
 
     const aggregateQueries: Dictionary<PromiseLike<any>> = {
       gender: applyQueryModifiers(client('visit')
@@ -609,19 +608,13 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         .innerJoin('visit_activity', 'visit_activity.visit_activity_id', 'visit.visit_activity_id')
         .innerJoin('user_account', 'user_account.user_account_id', 'visit.user_account_id')
         .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id'), queryMatchOnColumnNames)
-        .then((data) => {
-          const lastWeekDatesObject = Array
-            .apply(null, { length: 7 })
-            .map((x: null, i: number) =>
-              today.clone().subtract(i + 1, 'days').format('DD-MM-YYYY'))
-            .reverse()
-            .reduce((o: Dictionary<number>, key: string) => ({ ...o, [key]: 0 }), {});
-
-          const lastWeek = data.reduce((acc: Dictionary<number>, visit: any) => {
+        .orderBy('visit.created_at')
+        .then((data: Pick<VisitEvent, 'createdAt'>[]) => {
+          const lastWeek = data.reduce((acc: Dictionary<number>, visit) => {
             const visitDateKey = moment(visit.createdAt).format('DD-MM-YYYY');
-            acc[visitDateKey] = acc[visitDateKey] + 1;
+            acc[visitDateKey] = acc[visitDateKey] + 1 || 1;
             return acc;
-          }, lastWeekDatesObject);
+          }, {});
           return { lastWeek };
         }),
     };
