@@ -3,6 +3,7 @@ import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { CommunityBusinesses } from '..';
 import { getTrx } from '../../../tests/utils/database';
+import { Dictionary } from 'ramda';
 
 
 describe('Community Business Model', () => {
@@ -253,6 +254,32 @@ describe('Community Business Model', () => {
         visitActivity: { 'Wear Pink': 3 },
         age: { '18-34': 3 },
         gender: { female: 3 } });
+    });
+
+    test(':: lastWeek field returns a total count of 8', async () => {
+      // NB test data is dynamically created in relation to todays date
+      const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+      const { lastWeek }: Dictionary<number> = await CommunityBusinesses.getVisitLogAggregates(
+        trx,
+        cb,
+        ['lastWeek']
+        );
+
+      const count = Object.values(lastWeek).reduce((a, b) => a + b);
+      expect(count).toEqual(8);
+    });
+
+    test(':: lastWeek field returns a total count of 8 with query', async () => {
+      const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+      const { lastWeek }: Dictionary<number> = await CommunityBusinesses.getVisitLogAggregates(
+        trx,
+        cb,
+        ['lastWeek'],
+        { where: { visitActivity: 'Wear Pink' } }
+        );
+
+      const count = Object.values(lastWeek).reduce((a, b) => a + b);
+      expect(count).toEqual(1);
     });
 
     test(':: throws an error if unsupported aggregate fields are supplied', async () => {

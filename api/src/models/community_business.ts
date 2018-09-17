@@ -501,13 +501,13 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
   },
 
   async getVisitLogAggregates (client, cb, aggs, query) {
-    const unsupportedAggregates = difference(aggs, ['age', 'gender', 'visitActivity']);
+    const unsupportedAggregates = difference(aggs, ['age', 'gender', 'visitActivity', 'lastWeek']);
     if (unsupportedAggregates.length > 0) {
       throw new Error(`${unsupportedAggregates.join(', ')} are not supported aggregate fields`);
     }
     const year = moment().year();
 
-    const modifyColumnNamesForGenderActivity = evolve({
+    const modifyColumnNames = evolve({
       where: renameKeys({
         visitActivity: 'visit_activity.visit_activity_name',
         gender: 'gender.gender_name',
@@ -531,8 +531,9 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
 
     const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);
 
-    const genderActivityQuery = pipe(modifyColumnNamesForGenderActivity, checkSpecificCb)(query);
+    const queryMatchOnColumnNames = pipe(modifyColumnNames, checkSpecificCb)(query);
     const ageQuery = pipe(modifyColumnNamesForAge, checkSpecificCb)(query);
+    const today = moment();
 
     const aggregateQueries: Dictionary<PromiseLike<any>> = {
       gender: applyQueryModifiers(client('visit')
@@ -544,7 +545,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         .innerJoin('user_account', 'user_account.user_account_id', 'visit.user_account_id')
         .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
         .groupBy('gender.gender_name')
-        , genderActivityQuery)
+        , queryMatchOnColumnNames)
         .then((rows) => {
           const gender: Dictionary<number> = rows
             .reduce((acc: Dictionary<number>, row: {gender: string, count: number}) => {
@@ -562,7 +563,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         .innerJoin('visit_activity', 'visit_activity.visit_activity_id', 'visit.visit_activity_id')
         .innerJoin('user_account', 'user_account.user_account_id', 'visit.user_account_id')
         .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
-        .groupBy('visit_activity.visit_activity_name'), genderActivityQuery)
+        .groupBy('visit_activity.visit_activity_name'), queryMatchOnColumnNames)
         .then((rows) => {
           const visitActivity = rows
             .reduce((acc: Dictionary<number>, row: {activity: string, count: number}) => {
@@ -601,6 +602,27 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
               return acc;
             } , {});
           return { age };
+        }),
+      lastWeek: applyQueryModifiers(client('visit')
+        .select({ createdAt: 'visit.created_at' })
+        .whereRaw('visit.created_at >= CURRENT_DATE - INTERVAL \'7 day\'')
+        .innerJoin('visit_activity', 'visit_activity.visit_activity_id', 'visit.visit_activity_id')
+        .innerJoin('user_account', 'user_account.user_account_id', 'visit.user_account_id')
+        .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id'), queryMatchOnColumnNames)
+        .then((data) => {
+          const lastWeekDatesObject = Array
+            .apply(null, { length: 7 })
+            .map((x: null, i: number) =>
+              today.clone().subtract(i + 1, 'days').format('DD-MM-YYYY'))
+            .reverse()
+            .reduce((o: Dictionary<number>, key: string) => ({ ...o, [key]: 0 }), {});
+
+          const lastWeek = data.reduce((acc: Dictionary<number>, visit: any) => {
+            const visitDateKey = moment(visit.createdAt).format('DD-MM-YYYY');
+            acc[visitDateKey] = acc[visitDateKey] + 1;
+            return acc;
+          }, lastWeekDatesObject);
+          return { lastWeek };
         }),
     };
 

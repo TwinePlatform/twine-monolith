@@ -7,51 +7,51 @@ exports.seed = (knex) =>
       { 
         user_account_id: knex('user_account').select('user_account_id').where({user_name: 'Chell'}),
         visit_activity_id: knex('visit_activity').select('visit_activity_id').where({visit_activity_name: 'Free Running'}),
-        created_at: (today.day(-7)),
+        created_at: (today.clone().subtract(7, 'days')),
       },
       { 
         user_account_id: knex('user_account').select('user_account_id').where({user_name: 'Chell'}),
         visit_activity_id: knex('visit_activity').select('visit_activity_id').where({visit_activity_name: 'Free Running'}),
-        created_at: (today.day(-6)),
+        created_at: (today.clone().subtract(6, 'days')),
       },
       { 
         user_account_id: knex('user_account').select('user_account_id').where({user_name: 'Chell'}),
         visit_activity_id: knex('visit_activity').select('visit_activity_id').where({visit_activity_name: 'Free Running'}),
-        created_at: (today.day(-5)),
+        created_at: (today.clone().subtract(5, 'days')),
       },
       { 
         user_account_id: knex('user_account').select('user_account_id').where({user_name: 'Chell'}),
         visit_activity_id: knex('visit_activity').select('visit_activity_id').where({visit_activity_name: 'Free Running'}),
-        created_at: (today.day(-4)),
+        created_at: (today.clone().subtract(4, 'days')),
       },
       { 
         user_account_id: knex('user_account').select('user_account_id').where({user_name: 'Chell'}),
         visit_activity_id: knex('visit_activity').select('visit_activity_id').where({visit_activity_name: 'Free Running'}),
-        created_at: (today.day(-3)),
+        created_at: (today.clone().subtract(3, 'days')),
       },
       { 
         user_account_id: knex('user_account').select('user_account_id').where({user_name: 'Chell'}),
         visit_activity_id: knex('visit_activity').select('visit_activity_id').where({visit_activity_name: 'Free Running'}),
-        created_at: (today.day(-2)),
+        created_at: (today.clone().subtract(2, 'days')),
       },
       { 
         user_account_id: knex('user_account').select('user_account_id').where({user_name: 'Chell'}),
         visit_activity_id: knex('visit_activity').select('visit_activity_id').where({visit_activity_name: 'Free Running'}),
-        created_at: (today.day(-1)),
+        created_at: (today.clone().subtract(1, 'days')),
       },
       { 
         user_account_id: knex('user_account').select('user_account_id').where({user_name: 'Chell'}),
         visit_activity_id: knex('visit_activity').select('visit_activity_id').where({visit_activity_name: 'Wear Pink'}),
-        created_at: (today.day(-1)),
+        created_at: (today.clone().subtract(1, 'days')),
       },
       { 
         user_account_id: knex('user_account').select('user_account_id').where({user_name: 'Chell'}),
         visit_activity_id: knex('visit_activity').select('visit_activity_id').where({visit_activity_name: 'Wear Pink'}),
-        created_at: (today.day(-15)),
+        created_at: (today.clone().subtract(15, 'days')),
       },
       { 
         user_account_id: knex('user_account').select('user_account_id').where({user_name: 'Chell'}),
         visit_activity_id: knex('visit_activity').select('visit_activity_id').where({visit_activity_name: 'Wear Pink'}),
-        created_at: (today.day(-22)),
+        created_at: (today.clone().subtract(22, 'day')),
       },
   ]);
