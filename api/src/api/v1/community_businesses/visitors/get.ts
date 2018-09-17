@@ -89,6 +89,7 @@ const routes: Hapi.ServerRoute[] = [
             communityBusiness,
             omit(['limit', 'offset'], modelQuery)
           )
+          .then((res) => res.length)
         : visitors.length;
 
       return {
