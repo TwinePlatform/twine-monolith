@@ -5,6 +5,8 @@ import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
 import { Visitors } from '..';
 import { CommunityBusinesses } from '../community_business';
+import Roles from '../../auth/roles';
+import { RoleEnum } from '../../auth/types';
 
 
 describe('Visitor model', () => {
@@ -68,6 +70,32 @@ describe('Visitor model', () => {
           expect.objectContaining({ visitActivity: 'Free Running' }),
         ])
       );
+    });
+
+    test('getWithVisits :: returns visitor object even if no visits', async () => {
+      // Grab organisation under test
+      const apScience = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+
+      // Add new visitor to organisation
+      const visitor = await Visitors.add(
+        trx,
+        Visitors.create({ email: 'foo@bar.com', name: 'jim' })
+      );
+      await Roles.add(trx, { role: RoleEnum.VISITOR, organisationId: 1, userId: visitor.id });
+
+      // Execute
+      const visitors = await Visitors.getWithVisits(trx, apScience, { limit: 10 });
+
+      // Assert
+      expect(visitors).toHaveLength(2);
+      expect(visitors[0]).toEqual(expect.objectContaining({ id: 1, name: 'Chell' }));
+      expect(visitors[0].visits).toHaveLength(10);
+      expect(visitors[0].visits).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ visitActivity: 'Free Running' }),
+        ])
+      );
+      expect(visitors[1]).toEqual({ ...visitor, visits: [] });
     });
   });
 

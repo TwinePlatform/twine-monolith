@@ -4,7 +4,7 @@
 import { createHmac } from 'crypto';
 import * as Knex from 'knex';
 import { assoc, omit, pick, evolve, compose, pipe } from 'ramda';
-import { Dictionary } from '../types/internal';
+import { Dictionary, Map } from '../types/internal';
 import {
   User,
   UserCollection,
@@ -154,20 +154,20 @@ export const Visitors: UserCollection & CustomMethods = {
         ),
     }, q);
 
-    const additionalColumnMap = {
-      visitId: 'visit.visit_id',
-      visitCreatedAt: 'visit.created_at',
-      visitModifiedAt: 'visit.modified_at',
-      visitDeletedAt: 'visit.deleted_at',
+    const additionalColumnMap: Map<keyof LinkedVisitEvent, string> = {
+      id: 'visit.visit_id',
+      createdAt: 'visit.created_at',
+      modifiedAt: 'visit.modified_at',
+      deletedAt: 'visit.deleted_at',
+      userId: 'visit.user_account_id',
       visitActivityId: 'visit_activity.visit_activity_id',
-      visitActivityName: 'visit_activity.visit_activity_name',
+      visitActivity: 'visit_activity.visit_activity_name',
     };
 
-    const rows = await applyQueryModifiers(
+    const rows: User[] = await applyQueryModifiers(
       client
         .select({
           ...(query.fields ? pick(query.fields, ModelToColumn) : ModelToColumn),
-          ...additionalColumnMap,
         })
         .from('user_account')
         .leftOuterJoin('gender', 'user_account.gender_id', 'gender.gender_id')
@@ -177,14 +177,6 @@ export const Visitors: UserCollection & CustomMethods = {
           'user_account_access_role',
           'user_account.user_account_id',
           'user_account_access_role.user_account_id')
-        .leftOuterJoin(
-          'visit',
-          'visit.user_account_id',
-          'user_account.user_account_id')
-        .leftOuterJoin(
-          'visit_activity',
-          'visit.visit_activity_id',
-          'visit_activity.visit_activity_id')
         .where({
           ['user_account_access_role.access_role_id']: client('access_role')
             .select('access_role_id')
@@ -196,55 +188,17 @@ export const Visitors: UserCollection & CustomMethods = {
       query
     );
 
-    return Object.values(
-      rows.reduce((
-        acc: Dictionary<UserWithVisits>,
-        row: User & {
-          visitId: number
-          visitCreatedAt: string
-          visitModifiedAt: string
-          visitDeletedAt: string
-          visitActivityName: string
-          visitActivityId: number
-        }
-      ) => {
-        const {
-          visitCreatedAt,
-          visitModifiedAt,
-          visitDeletedAt,
-          visitActivityName,
-          visitActivityId,
-          visitId,
-          ...rest
-        } = row;
+    const userVisits = await Promise.all(rows.map((user: User) =>
+      client
+        .select(additionalColumnMap)
+        .from('visit')
+        .leftOuterJoin(
+          'visit_activity',
+          'visit_activity.visit_activity_id',
+          'visit.visit_activity_id')
+        .where({ user_account_id: user.id })
+    ));
 
-        if (acc.hasOwnProperty(rest.id)) {
-          acc[rest.id].visits.push({
-            id: visitId,
-            userId: rest.id,
-            createdAt: visitCreatedAt,
-            modifiedAt: visitModifiedAt,
-            deletedAt: visitDeletedAt,
-            visitActivity: visitActivityName,
-            visitActivityId,
-          });
-        } else {
-          acc[rest.id] = {
-            ...rest,
-            visits: [{
-              id: visitId,
-              userId: rest.id,
-              createdAt: visitCreatedAt,
-              modifiedAt: visitModifiedAt,
-              deletedAt: visitDeletedAt,
-              visitActivity: visitActivityName,
-              visitActivityId,
-            }],
-          };
-        }
-
-        return acc;
-      }, {})
-    );
+    return rows.map((row: User, idx) => ({ ...row, visits: userVisits[idx] }), {});
   },
 };
