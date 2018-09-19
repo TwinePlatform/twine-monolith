@@ -9,6 +9,8 @@ export type Dictionary<T> = {
   [key: string]: T
 }
 
+export type ValueOf<T> = T[keyof T]
+
 export type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>
 }

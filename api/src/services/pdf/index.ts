@@ -4,9 +4,8 @@
  * Currently only supports creation of one PDF template, but extensible
  * to allow others to be added.
  */
-import { Dictionary } from 'ramda';
 import { pipeStreamToPromise } from '../../utils';
-import { PdfTemplateEnum } from './types';
+import { PdfTemplateEnum, PdfTemplateModel } from './types';
 import visitorQrCodeTemplate from './templates/visitor_qr_code';
 const PdfMake = require('pdfmake');
 
@@ -22,7 +21,7 @@ const getTemplate = (template: PdfTemplateEnum) => {
   }
 };
 
-export const fromTemplate = async (templateType: PdfTemplateEnum, model: Dictionary<any>) => {
+export const fromTemplate = async (templateType: PdfTemplateEnum, model: PdfTemplateModel) => {
   const { fontDescriptors, createTemplate } = getTemplate(templateType);
 
   const printer = new PdfMake(fontDescriptors);
