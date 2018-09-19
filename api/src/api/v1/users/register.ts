@@ -63,7 +63,11 @@ export default [
       response: { schema: response },
     },
     handler: async (request: RegisterRequest, h: Hapi.ResponseToolkit) => {
-      const { payload, server: { app: { EmailService, knex } } } = request;
+      const {
+        payload,
+        server: { app: { EmailService, knex } },
+        auth: { credentials: { organisation } },
+      } = request;
 
       /*
        * Preliminaries
@@ -72,6 +76,9 @@ export default [
       // Check user doesn't already exist
       if (await Visitors.exists(knex, { where: { email: payload.email } })) {
         throw Boom.conflict('User with this e-mail already registered');
+      }
+      if (organisation && organisation.id !== payload.organisationId) {
+        throw Boom.badRequest('Cannot register visitor for different organisation');
       }
       if (!(await CommunityBusinesses.exists(knex, { where: { id: payload.organisationId } }))) {
         throw Boom.badRequest('Unrecognised organisation');
