@@ -20,4 +20,3 @@ VALUES (
   ),
   'restricted'
 );
-  
