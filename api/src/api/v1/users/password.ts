@@ -74,7 +74,14 @@ const routes: Hapi.ServerRoute[] = [
         payload: {
           token: Joi.string().length(64),
           password: passwordSchema,
-          confirmPassword: Joi.any().only(Joi.ref('password')),
+          passwordConfirm: Joi.string().required().valid(Joi.ref('password'))
+            .options({ language: { any: {
+              required: 'confirm password is required',
+              allowOnly: 'passwords must match',
+            } } }),
+        },
+        failAction: (request, h, err) => {
+          throw err;
         },
       },
       response: { schema: response },
@@ -90,7 +97,7 @@ const routes: Hapi.ServerRoute[] = [
         user = await Users.fromPasswordResetToken(knex, token);
       } catch (error) {
         request.log('warning', error);
-        return Boom.badRequest('Invalid token');
+        return Boom.unauthorized('Invalid token. Reset password again.');
       }
 
       const hashedPw = await hash(password, 10);
