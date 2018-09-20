@@ -5,6 +5,28 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import { ApiResponse } from './schema/response';
 
+export interface JoiBoomError extends Boom {
+  details: {message: string}[];
+}
+
+/*
+ * formatJoiValidation allows joi errors thrown from
+ * failAction to be reformatted before sending response.
+ * Note joi throws an error on the first value that fails
+ * validation, therefore 'details' will only have 1 element.
+ */
+
+export const formatJoiValidation = ({ output: { payload }, details }: JoiBoomError)
+  : ApiResponse => {
+  const message = details[0].message.split('"');
+  return {
+    error: {
+      statusCode: payload.statusCode,
+      type: payload.error,
+      message: details[0].message,
+      validation: { [message[1]]: message[2].trim() },
+    } };
+};
 
 /*
  * We only choose to re-format the boom response
