@@ -1328,7 +1328,7 @@
             "token": "String",
             "email": "String",
             "password": "String",
-            "confirmPassword": "String"
+            "passwordConfirm": "String"
           },
           "response": {}
         }

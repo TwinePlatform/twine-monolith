@@ -21,7 +21,7 @@ interface ResetPasswordRequest extends Hapi.Request {
   payload: {
     token: string
     password: string
-    confirmPassword: string
+    passwordConfirm: string
   };
 }
 

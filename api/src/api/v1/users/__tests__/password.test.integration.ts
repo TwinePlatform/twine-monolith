@@ -76,7 +76,7 @@ describe('POST /users/password', () => {
         payload: {
           token,
           password: 'Password113!',
-          confirmPassword: 'Password113!',
+          passwordConfirm: 'Password113!',
         },
       });
 
@@ -95,7 +95,7 @@ describe('POST /users/password', () => {
         payload: {
           token,
           password: 'otherPassword113!',
-          confirmPassword: 'otherPassword113!',
+          passwordConfirm: 'otherPassword113!',
         },
       });
 
@@ -121,7 +121,7 @@ describe('POST /users/password', () => {
     const res = await server.inject({
       method: 'POST',
       url: '/v1/users/password/reset',
-      payload: { token: 'faketoken', password: 'password114!', confirmPassword: 'password141!' },
+      payload: { token: 'faketoken', password: 'password114!', passwordConfirm: 'password141!' },
     });
 
     expect(res.statusCode).toBe(400);
