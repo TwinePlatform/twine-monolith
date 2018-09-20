@@ -253,10 +253,10 @@ export type Collection<T extends Model, K extends ChangeSet, V extends Relation>
   exists: (c: Knex, a?: ModelQuery<T>) => Promise<boolean>
   get: (c: Knex, a?: ModelQuery<T>) => Promise<T[]>
   getOne: (c: Knex, a?: ModelQuery<T>) => Promise<Maybe<T>>
-  update: (c: Knex, a: T, b: K) => Promise<T>
+  update: (c: Knex, a: Partial<T>, b: K) => Promise<T>
   add: (c: Knex, a: Partial<T>) => Promise<T>
   destroy: (c: Knex, a: Partial<T>) => Promise<void>
-  serialise: (a: T) => Promise<Json>
+  serialise: (a: Partial<T>) => Promise<Json>
 };
 
 export type UserCollection =

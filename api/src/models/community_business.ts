@@ -40,7 +40,7 @@ type CustomMethods = {
     => Promise<Maybe<VisitActivity>>
   updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>
   deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>
-  addVisitLog: (k: Knex, v: VisitActivity, u: User) => Promise<VisitEvent>
+  addVisitLog: (k: Knex, v: VisitActivity, u: Partial<User>) => Promise<VisitEvent>
   getVisitLogsWithUsers: (k: Knex, c: CommunityBusiness, q?: ModelQuery<LinkedVisitEvent & User>) =>
     Promise<Partial<LinkedVisitEvent & User>[]>
   getVisitLogAggregates: (

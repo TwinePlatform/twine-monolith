@@ -18,20 +18,19 @@ import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { getConfig } from '../../config';
 import * as QRCode from '../services/qrcode';
-import { renameKeys, ageArrayToBirthYearArray } from '../utils';
+import { renameKeys, ageArrayToBirthYearArray, pickOrAll } from '../utils';
 
 
 /*
  * Declarations for methods specific to this model
  */
-type UserWithVisits = User & {
-  visits: LinkedVisitEvent[]
-};
+type PartialUserWithVisits = Partial<User> & { visits: LinkedVisitEvent[] };
 type CustomMethods = {
   recordLogin: (k: Knex, u: User) => Promise<void>
-  getWithVisits: (k: Knex, c: CommunityBusiness, q?: ModelQuery<User>) => Promise<UserWithVisits[]>
+  getWithVisits: (k: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
+    Promise<PartialUserWithVisits[]>
   fromCommunityBusiness: (client: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
-    Promise<User[]>
+    Promise<Partial<User>[]>
 };
 
 
@@ -164,10 +163,11 @@ export const Visitors: UserCollection & CustomMethods = {
       visitActivity: 'visit_activity.visit_activity_name',
     };
 
-    const rows: User[] = await applyQueryModifiers(
+    const rows: Partial<User>[] = await applyQueryModifiers(
       client
         .select({
-          ...(query.fields ? pick(query.fields, ModelToColumn) : ModelToColumn),
+          id: 'user_account.user_account_id',
+          ...pickOrAll(query.fields, ModelToColumn),
         })
         .from('user_account')
         .leftOuterJoin('gender', 'user_account.gender_id', 'gender.gender_id')
@@ -188,7 +188,7 @@ export const Visitors: UserCollection & CustomMethods = {
       query
     );
 
-    const userVisits = await Promise.all(rows.map((user: User) =>
+    const userVisits: LinkedVisitEvent[][] = await Promise.all(rows.map((user) =>
       client
         .select(additionalColumnMap)
         .from('visit')
@@ -199,6 +199,9 @@ export const Visitors: UserCollection & CustomMethods = {
         .where({ user_account_id: user.id })
     ));
 
-    return rows.map((row: User, idx) => ({ ...row, visits: userVisits[idx] }), {});
+    return rows.map((row: Partial<User>, idx) => {
+      const user: Partial<User> = pickOrAll(query.fields, row);
+      return ({ ...user, visits: userVisits[idx] });
+    });
   },
 };

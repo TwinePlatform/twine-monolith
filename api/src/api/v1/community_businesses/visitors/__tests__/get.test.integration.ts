@@ -78,17 +78,15 @@ describe('API /community-businesses/{id}/visitors', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
-        result: expect.arrayContaining([
-          expect.objectContaining({
-            name: 'Chell',
-            visits: expect.arrayContaining([
-              expect.objectContaining({
-                id: 1,
-                visitActivity: 'Free Running',
-              }),
-            ]),
-          }),
-        ]),
+        result: expect.arrayContaining([{
+          name: 'Chell',
+          visits: expect.arrayContaining([
+            expect.objectContaining({
+              id: 1,
+              visitActivity: 'Free Running',
+            }),
+          ]),
+        }]),
         meta: { total: 1 },
       });
       expect((<any> res.result).result).toHaveLength(1);
