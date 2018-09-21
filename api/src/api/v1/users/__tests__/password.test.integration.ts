@@ -99,7 +99,7 @@ describe('POST /users/password', () => {
         },
       });
 
-      expect(res3.statusCode).toBe(400);
+      expect(res3.statusCode).toBe(401);
 
       const user2 = await Users.getOne(trx, { where: { email: '1@aperturescience.com' } });
       const matches2 = await compare('Password113!', user2.password);
@@ -117,13 +117,46 @@ describe('POST /users/password', () => {
     });
   });
 
-  test('::ERROR mismatching passwords', async () => {
-    const res = await server.inject({
-      method: 'POST',
-      url: '/v1/users/password/reset',
-      payload: { token: 'faketoken', password: 'password114!', passwordConfirm: 'password141!' },
+  describe('POST /users/password/reset - Validation Checks', () => {
+    const fakeToken = 'mylengthis64characteslongimbluedabadedabadaaaardabadedabadaaaaar';
+
+    test('::ERROR mismatching passwords', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/password/reset',
+        payload: { token: fakeToken, password: 'Password114!', passwordConfirm: 'Password141!' },
+      });
+
+      expect(res.statusCode).toBe(400);
+      expect((<any> res.result).error.validation).toEqual({
+        passwordConfirm: 'passwords must match',
+      });
     });
 
-    expect(res.statusCode).toBe(400);
+    test('::ERROR password too weak', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/password/reset',
+        payload: { token: fakeToken, password: 'password111', passwordConfirm: 'password111' },
+      });
+
+      expect(res.statusCode).toBe(400);
+      expect((<any> res.result).error.validation).toEqual({
+        password: 'is too weak',
+      });
+    });
+
+    test('::ERROR token length not 64', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/password/reset',
+        payload: { token: 'fakeToken', password: 'Password111!', passwordConfirm: 'Password111!' },
+      });
+
+      expect(res.statusCode).toBe(400);
+      expect((<any> res.result).error.validation).toEqual({
+        token: 'length must be 64 characters long',
+      });
+    });
   });
 });
