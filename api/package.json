@@ -37,10 +37,13 @@
     "seed:make": "knex seed:make",
     "seed:run": "knex seed:run",
     "seed:run:test": "NODE_ENV=testing knex seed:run",
-    "dev": "tsc -w & nodemon ./build/src/index.js",
+    "dev": "tsc && npm run copy && tsc -w & nodemon ./build/src/index.js",
+    "copy:assets": "cp -R ./assets ./build/assets",
+    "copy:fonts": "cp -R ./src/services/pdf/fonts ./build/src/services/pdf/fonts",
+    "copy": "npm run copy:assets && npm run copy:fonts",
     "start": "node ./build/src/index.js",
     "watch": "tsc -w",
-    "build": "tsc && cp -R ./assets ./build/assets && cp -R ./src/services/pdf/fonts ./build/src/services/pdf/fonts",
+    "build": "tsc && npm run copy",
     "heroku-postbuild": "npm run build && npm run migrate:latest"
   },
   "dependencies": {
