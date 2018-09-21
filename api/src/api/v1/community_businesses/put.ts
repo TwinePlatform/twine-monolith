@@ -35,6 +35,7 @@ export default [
           postCode: Joi.string().min(6).max(10),
           turnoverBand: Joi.string().min(6).max(11),
         },
+        failAction: (request, h, err) => err,
       },
       response: { schema: response },
       pre: [

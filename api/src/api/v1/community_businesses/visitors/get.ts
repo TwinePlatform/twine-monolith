@@ -28,6 +28,7 @@ const routes: Hapi.ServerRoute[] = [
           ...filterQuery,
           visits: Joi.boolean().default(false),
         },
+        failAction: (request, h, err) => err,
       },
       response: { schema: response },
       pre: [
@@ -117,6 +118,7 @@ const routes: Hapi.ServerRoute[] = [
         query: {
           visits: Joi.boolean().default(false),
         },
+        failAction: (request, h, err) => err,
       },
       response: { schema: response },
       pre: [

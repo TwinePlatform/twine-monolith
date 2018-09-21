@@ -18,7 +18,10 @@ export default [
           scope: ['organisations_details-child:read'],
         },
       },
-      validate: { query },
+      validate: {
+        query,
+        failAction: (request, h, err) => err,
+      },
       response: { schema: response },
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
@@ -37,7 +40,10 @@ export default [
           scope: ['organisations_details-own:read'],
         },
       },
-      validate: { query },
+      validate: {
+        query,
+        failAction: (request, h, err) => err,
+      },
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
@@ -61,7 +67,10 @@ export default [
           scope: ['organisations_details-child:read'],
         },
       },
-      validate: { query },
+      validate: {
+        query,
+        failAction: (request, h, err) => err,
+      },
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },

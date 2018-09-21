@@ -19,7 +19,10 @@ export default [
           scope: ['organisations_feedback-own:read'],
         },
       },
-      validate: { query: { since, until, ...query } },
+      validate: {
+        query: { since, until, ...query },
+        failAction: (request, h, err) => err,
+      },
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness , assign: 'communityBusiness' },
@@ -50,7 +53,10 @@ export default [
           scope: ['organisations_feedback-child:read'],
         },
       },
-      validate: { query: { since, until } },
+      validate: {
+        query: { since, until },
+        failAction: (request, h, err) => err,
+      },
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness , assign: 'communityBusiness' },

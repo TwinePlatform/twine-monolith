@@ -51,6 +51,7 @@ const routes: Hapi.ServerRoute[] = [
           visitActivityId: id.required(),
           qrCode: Joi.string().required(),
         },
+        failAction: (request, h, err) => err,
       },
       response: { schema: response },
       pre: [
@@ -94,6 +95,7 @@ const routes: Hapi.ServerRoute[] = [
           ...query,
           ...filterQuery,
         },
+        failAction: (request, h, err) => err,
       },
       response: { schema: response },
       pre: [

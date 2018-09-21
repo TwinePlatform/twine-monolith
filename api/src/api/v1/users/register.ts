@@ -59,6 +59,7 @@ export default [
           emailConsent: isEmailConsentGranted.default(false),
           smsConsent: isSMSConsentGranted.default(false),
         },
+        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },

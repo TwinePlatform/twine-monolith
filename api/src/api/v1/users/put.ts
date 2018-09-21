@@ -45,6 +45,7 @@ const routes: Hapi.ServerRoute[] = [
           disability,
           ethnicity,
         },
+        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },
@@ -109,6 +110,7 @@ const routes: Hapi.ServerRoute[] = [
           disability,
           ethnicity,
         },
+        failAction: (request, h, err) => err,
       },
       response: { schema: response },
       pre: [

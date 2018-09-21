@@ -32,7 +32,10 @@ const routes: Hapi.ServerRoute[] = [
           scope: ['user_details-own:read'],
         },
       },
-      validate: { query },
+      validate: {
+        query,
+        failAction: (request, h, err) => err,
+      },
       response: { schema: response },
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {

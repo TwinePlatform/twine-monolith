@@ -35,6 +35,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: false,
       validate: {
         payload: { email: emailSchema },
+        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },
@@ -77,7 +78,7 @@ const routes: Hapi.ServerRoute[] = [
           password: passwordSchema,
           passwordConfirm: Joi.string().required().valid(Joi.ref('password'))
             .options({ language: { any: {
-              required: 'confirm password is required',
+              required: 'password confirmation is required',
               allowOnly: 'must match password',
             } } }),
         },
