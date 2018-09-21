@@ -129,7 +129,7 @@ describe('POST /users/password', () => {
 
       expect(res.statusCode).toBe(400);
       expect((<any> res.result).error.validation).toEqual({
-        passwordConfirm: 'passwords must match',
+        passwordConfirm: 'must match password',
       });
     });
 
@@ -153,10 +153,8 @@ describe('POST /users/password', () => {
         payload: { token: 'fakeToken', password: 'Password111!', passwordConfirm: 'Password111!' },
       });
 
-      expect(res.statusCode).toBe(400);
-      expect((<any> res.result).error.validation).toEqual({
-        token: 'length must be 64 characters long',
-      });
+      expect(res.statusCode).toBe(401);
+      expect((<any> res.result).error.message).toEqual('Invalid token. Reset password again.');
     });
   });
 });
