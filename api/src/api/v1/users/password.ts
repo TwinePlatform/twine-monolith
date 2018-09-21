@@ -9,6 +9,7 @@ import {
   password as passwordSchema,
 } from './schema';
 import { EmailTemplate } from '../../../services/email/templates';
+import { JoiBoomError } from '../utils';
 
 
 interface ForgotPasswordRequest extends Hapi.Request {
@@ -77,11 +78,15 @@ const routes: Hapi.ServerRoute[] = [
           passwordConfirm: Joi.string().required().valid(Joi.ref('password'))
             .options({ language: { any: {
               required: 'confirm password is required',
-              allowOnly: 'passwords must match',
+              allowOnly: 'must match password',
             } } }),
         },
         failAction: (request, h, err) => {
-          throw err;
+          if ((<JoiBoomError> err).details[0].message
+            === '"token" length must be 64 characters long') {
+            return Boom.unauthorized('Invalid token. Reset password again.');
+          }
+          return err;
         },
       },
       response: { schema: response },
