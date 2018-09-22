@@ -23,6 +23,13 @@ export default {
         credentials: true,
         additionalExposedHeaders: ['set-cookie'],
       },
+      security: {
+        hsts: {
+          maxAge: 365 * 24 * 60 * 60,
+          includeSubdomains: true,
+          preload: true,
+        },
+      },
     },
   },
   knex: {

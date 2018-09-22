@@ -10,15 +10,12 @@ export enum Environment {
 }
 
 type WebConfig = {
-  host: string,
-  port: number | string,
+  host: string
+  port: number | string
   router: { stripTrailingSlash: boolean }
   routes: {
-    cors: {
-      origin: string[],
-      credentials: boolean,
-      additionalExposedHeaders: string[],
-    },
+    cors: Hapi.RouteOptionsCors
+    security: Hapi.RouteOptionsSecureObject
   },
   tls: null | { key: string, cert: string }
 };
