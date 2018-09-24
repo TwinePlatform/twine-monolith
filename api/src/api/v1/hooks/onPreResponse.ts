@@ -12,18 +12,14 @@
  */
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import { formatBoom, formatJoiValidation, JoiBoomError } from '../utils';
-
+import { formatBoom, BoomWithValidation } from '../utils';
 
 export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
 
   if (!(<Boom<any>> request.response).isBoom) {
     return h.continue;
-  } else if (request.response.name === 'ValidationError') {
-    const err = <JoiBoomError> request.response;
-    return h.response(formatJoiValidation(err)).code(err.output.statusCode);
   } else {
-    const err = <Boom<any>> request.response;
+    const err = <BoomWithValidation> request.response;
     return h.response(formatBoom(err)).code(err.output.statusCode);
   }
 };

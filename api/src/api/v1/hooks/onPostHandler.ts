@@ -17,14 +17,15 @@
  *
  * See also: https://hapijs.com/api#request-lifecycle
  */
+
+
 import * as Hapi from 'hapi';
-import * as Boom from 'boom';
-import { formatBoom, formatResponse } from '../utils';
+import { formatBoom, formatResponse, BoomWithValidation } from '../utils';
 
 
 export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-  if ((<Boom<any>> request.response).isBoom) {
-    const err = <Boom<any>> request.response;
+  if ((<BoomWithValidation> request.response).isBoom) {
+    const err = <BoomWithValidation> request.response;
     return h.response(formatBoom(err)).code(err.output.statusCode);
   } else {
     return formatResponse(<Hapi.ResponseObject> request.response);

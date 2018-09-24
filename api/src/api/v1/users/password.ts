@@ -9,7 +9,7 @@ import {
   password as passwordSchema,
 } from './schema';
 import { EmailTemplate } from '../../../services/email/templates';
-import { JoiBoomError } from '../utils';
+import { BoomWithValidation } from '../utils';
 
 
 interface ForgotPasswordRequest extends Hapi.Request {
@@ -83,7 +83,7 @@ const routes: Hapi.ServerRoute[] = [
             } } }),
         },
         failAction: (request, h, err) => {
-          if ((<JoiBoomError> err).details[0].message
+          if ((<BoomWithValidation> err).details[0].message
             === '"token" length must be 64 characters long') {
             return Boom.unauthorized('Invalid token. Reset password again.');
           }
