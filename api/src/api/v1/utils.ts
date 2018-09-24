@@ -18,13 +18,14 @@ export interface JoiBoomError extends Boom {
 
 export const formatJoiValidation = ({ output: { payload }, details }: JoiBoomError)
   : ApiResponse => {
-  const message = details[0].message.split('"');
+  const message = details[0].message;
+  const [full, messageTopic, messageError] = message.match(/^\"([^"]+)\" (.*)/);
   return {
     error: {
       statusCode: payload.statusCode,
       type: payload.error,
-      message: details[0].message,
-      validation: { [message[1]]: message[2].trim() },
+      message,
+      validation: { [messageTopic]: messageError },
     } };
 };
 
