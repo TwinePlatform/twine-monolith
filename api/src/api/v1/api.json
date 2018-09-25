@@ -146,7 +146,7 @@
           "query": {},
           "response": [{
             "id": "Number",
-            "sectorName": "String"
+            "name": "String"
           }]
         }
       },
@@ -1379,7 +1379,7 @@
           "response": null
         }
       },
-      "/:id/volunteer_logs": {
+      "/:id/volunteer-logs": {
         "GET": {
           "description": "Retreive volunteer information for a user",
           "isImplemented": false,
