@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
 import { has, flip } from 'ramda';
-import { CommunityBusinesses, CommunityBusinessChangeSet } from '../../../models';
+import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 import { PutCommunityBusinesssRequest } from '../types';
 import { id, response } from './schema';
@@ -44,7 +44,7 @@ export default [
     },
     handler: async (request: PutCommunityBusinesssRequest, h: Hapi.ResponseToolkit) => {
       const { payload, pre: { communityBusiness }, server: { app: { knex } } } = request;
-      const changeSet: CommunityBusinessChangeSet = { ...payload };
+      const changeSet = <CommunityBusiness> { ...payload };
 
       if (hasAny(['address1', 'address2', 'townCity', 'postCode'], payload)) {
         // TODO: recalculate coordinates
@@ -113,7 +113,7 @@ export default [
         return Boom.forbidden('Insufficient permissions to access this resource');
       }
 
-      const changeSet: CommunityBusinessChangeSet = { ...payload };
+      const changeSet: Partial<CommunityBusiness> = { ...payload };
 
       if (hasAny(['address1', 'address2', 'townCity', 'postCode'], payload)) {
         // TODO: recalculate coordinates

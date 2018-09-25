@@ -15,7 +15,7 @@ type WebConfig = {
   router: { stripTrailingSlash: boolean }
   routes: {
     cors: Hapi.RouteOptionsCors
-    security: Hapi.RouteOptionsSecureObject
+    security: Hapi.RouteOptionsSecureObject | boolean
   },
   tls: null | { key: string, cert: string }
 };

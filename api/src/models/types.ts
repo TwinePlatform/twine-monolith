@@ -293,7 +293,7 @@ export interface CommunityBusinessCollection extends Collection<CommunityBusines
   getFeedback: (
     k: Knex,
     c: CommunityBusiness,
-    bw?: DateTimeQuery & ModelQueryInvariant
+    bw?: Partial<DateTimeQuery & ModelQueryInvariant>
   ) => Promise<LinkedFeedback[]>;
   getVisitActivities: (k: Knex, c: CommunityBusiness, d?: Weekday) => Promise<VisitActivity[]>;
   getVisitActivityById: (k: Knex, c: CommunityBusiness, id: Int) => Promise<Maybe<VisitActivity>>;

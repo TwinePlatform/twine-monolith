@@ -85,6 +85,7 @@ describe('Config', () => {
             credentials: true,
             additionalExposedHeaders: ['set-cookie'],
           },
+          security: false,
         },
         tls: null,
       },
@@ -147,6 +148,7 @@ describe('Config', () => {
             credentials: true,
             additionalExposedHeaders: ['set-cookie'],
           },
+          security: false,
         },
       },
       knex: {

@@ -13,7 +13,6 @@ export default {
   web: {
     host: 'localhost',
     port: 1000,
-    tls: null,
     router: {
       stripTrailingSlash: true,
     },

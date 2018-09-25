@@ -3,7 +3,7 @@ import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
-import { Visitors } from '..';
+import { Visitors, DisabilityEnum } from '..';
 import { CommunityBusinesses } from '../community_business';
 import Roles from '../../auth/roles';
 import { RoleEnum } from '../../auth/types';
@@ -118,7 +118,7 @@ describe('Visitor model', () => {
     });
 
     test('update :: foreign key column', async () => {
-      const changeset = { disability: 'no' };
+      const changeset = { disability: DisabilityEnum.NO };
       const visitor = await Visitors.getOne(trx, { where: { id: 1 } });
 
       const updatedVisitor = await Visitors.update(trx, visitor, changeset);

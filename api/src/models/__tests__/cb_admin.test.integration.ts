@@ -3,7 +3,7 @@ import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
-import { CbAdmins } from '..';
+import { CbAdmins, DisabilityEnum } from '..';
 
 
 describe('CbAdmin model', () => {
@@ -87,7 +87,7 @@ describe('CbAdmin model', () => {
     });
 
     test('update :: foreign key column', async () => {
-      const changeset = { disability: 'no' };
+      const changeset = { disability: DisabilityEnum.NO };
       const admin = await CbAdmins.getOne(trx, { where: { id: 2 } });
 
       const updatedAdmin = await CbAdmins.update(trx, admin, changeset);
