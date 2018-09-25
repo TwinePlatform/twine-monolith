@@ -2,17 +2,9 @@
  * Visitor Model
  */
 import { createHmac } from 'crypto';
-import * as Knex from 'knex';
 import { assoc, omit, pick, evolve, compose, pipe } from 'ramda';
-import { Dictionary, Map } from '../types/internal';
-import {
-  User,
-  UserCollection,
-  VisitorCollection,
-  ModelQuery,
-  LinkedVisitEvent,
-  CommunityBusiness
-} from './types';
+import { Map } from '../types/internal';
+import { User, VisitorCollection, LinkedVisitEvent } from './types';
 import { Users, ModelToColumn } from './user';
 import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './applyQueryModifiers';
