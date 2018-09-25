@@ -7,7 +7,7 @@ export default {
     port: 4000,
     routes: {
       cors: {
-        origin: ['http://localhost:3000'],
+        origin: ['http://localhost:3000', 'http://localhost:8100'],
       },
     },
   },
