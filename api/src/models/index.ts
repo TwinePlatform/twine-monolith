@@ -5,12 +5,17 @@ export { Organisations } from './organisation';
 export { CommunityBusinesses } from './community_business';
 export {
   User,
-  UserChangeSet,
   Organisation,
   CommunityBusiness,
-  CommunityBusinessChangeSet,
+  FundingBody,
   LinkedFeedback,
+  VisitActivity,
+  VisitEvent,
+  LinkedVisitEvent,
+  Subscription,
   GenderEnum,
+  DisabilityEnum,
+  EthnicityEnum,
   ModelQuery,
   CommonTimestamps,
 } from './types';

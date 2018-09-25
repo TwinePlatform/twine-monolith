@@ -8,7 +8,7 @@ import { Dictionary, Map } from '../types/internal';
 import {
   User,
   UserCollection,
-  UserChangeSet,
+  VisitorCollection,
   ModelQuery,
   LinkedVisitEvent,
   CommunityBusiness
@@ -19,19 +19,6 @@ import { applyQueryModifiers } from './applyQueryModifiers';
 import { getConfig } from '../../config';
 import * as QRCode from '../services/qrcode';
 import { renameKeys, ageArrayToBirthYearArray, pickOrAll } from '../utils';
-
-
-/*
- * Declarations for methods specific to this model
- */
-type PartialUserWithVisits = Partial<User> & { visits: LinkedVisitEvent[] };
-type CustomMethods = {
-  recordLogin: (k: Knex, u: User) => Promise<void>
-  getWithVisits: (k: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
-    Promise<PartialUserWithVisits[]>
-  fromCommunityBusiness: (client: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
-    Promise<Partial<User>[]>
-};
 
 
 const { qrcode: { secret } } = getConfig(process.env.NODE_ENV);
@@ -46,16 +33,16 @@ const hashVisitor: (visitor: Partial<User>) => string = compose(
 /*
  * Implementation of the UserCollection type for Visitors
  */
-export const Visitors: UserCollection & CustomMethods = {
-  create (a: Partial<User>): User {
+export const Visitors: VisitorCollection = {
+  create (a) {
     return Users.create({ ...a, qrCode: hashVisitor(a) });
   },
 
-  toColumnNames (o: Partial<User>): Dictionary<any> {
+  toColumnNames (o) {
     return Users.toColumnNames(o);
   },
 
-  async get (client: Knex, q: ModelQuery<User> = {}) {
+  async get (client, q = {}) {
     const query = evolve({
       where: Visitors.toColumnNames,
       whereNot: Visitors.toColumnNames,
@@ -81,33 +68,33 @@ export const Visitors: UserCollection & CustomMethods = {
     );
   },
 
-  async getOne (client: Knex, q: ModelQuery<User> = {}) {
-    const [res] = await Visitors.get(client, { ...q, limit: 1 });
+  async getOne (client, query = {}) {
+    const [res] = await Visitors.get(client, { ...query, limit: 1 });
     return res || null;
   },
 
-  async exists (client: Knex, q: ModelQuery<User>) {
-    const res = await Visitors.getOne(client, q);
+  async exists (client, query) {
+    const res = await Visitors.getOne(client, query);
     return res !== null;
   },
 
-  async add (client: Knex, u: UserChangeSet) {
-    return Users.add(client, u);
+  async add (client, user) {
+    return Users.add(client, user);
   },
 
-  async update (client: Knex, u: User, c: UserChangeSet) {
-    return Users.update(client, u, c);
+  async update (client, user, changes) {
+    return Users.update(client, user, changes);
   },
 
-  async destroy (client: Knex, u: Partial<User>) {
-    return Users.destroy(client, u);
+  async destroy (client, user) {
+    return Users.destroy(client, user);
   },
 
-  async recordLogin (client: Knex, u: User) {
-    return Users.recordLogin(client, u);
+  async recordLogin (client, user) {
+    return Users.recordLogin(client, user);
   },
 
-  async fromCommunityBusiness (client: Knex, c: CommunityBusiness, q: ModelQuery<User> = {}) {
+  async fromCommunityBusiness (client, cb, q = {}) {
     const query = evolve({
       where: Visitors.toColumnNames,
       whereNot: Visitors.toColumnNames,
@@ -128,13 +115,13 @@ export const Visitors: UserCollection & CustomMethods = {
           ['user_account_access_role.access_role_id']: client('access_role')
             .select('access_role_id')
             .where({ access_role_name: RoleEnum.VISITOR }),
-          ['user_account_access_role.organisation_id']: c.id,
+          ['user_account_access_role.organisation_id']: cb.id,
         }),
       query
     );
   },
 
-  async serialise (user: Partial<User>) {
+  async serialise (user) {
     const strippedUser = omit(['password', 'qrCode'], user);
     const serialisedUser = user.qrCode
       ? assoc('qrCode', await QRCode.create(user.qrCode), strippedUser)
@@ -143,7 +130,7 @@ export const Visitors: UserCollection & CustomMethods = {
     return serialisedUser;
   },
 
-  async getWithVisits (client: Knex, c: CommunityBusiness, q: ModelQuery<User> = {}) {
+  async getWithVisits (client, cb, q = {}) {
     const query = evolve({
       where: Visitors.toColumnNames,
       whereNot: Visitors.toColumnNames,
@@ -182,7 +169,7 @@ export const Visitors: UserCollection & CustomMethods = {
             .select('access_role_id')
             .where({
               access_role_name: RoleEnum.VISITOR,
-              'user_account_access_role.organisation_id': c.id,
+              'user_account_access_role.organisation_id': cb.id,
             }),
         }),
       query

@@ -6,28 +6,18 @@ import * as moment from 'moment';
 import { compose, omit, filter, pick, invertObj, evolve } from 'ramda';
 import { randomBytes } from 'crypto';
 import { hash, compare } from 'bcrypt';
-import { Dictionary, Map } from '../types/internal';
+import { Map } from '../types/internal';
 import {
   User,
   UserRow,
   UserCollection,
-  UserChangeSet,
-  ModelQuery,
   GenderEnum,
+  DisabilityEnum,
+  EthnicityEnum,
   SingleUseToken,
 } from './types';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { renameKeys, mapKeys, findAsync } from '../utils';
-
-
-/*
- * Declarations for methods specific to this model
- */
-type CustomMethods = {
-  recordLogin: (k: Knex, u: User) => Promise<void>
-  createPasswordResetToken: (k: Knex, u: Partial<User>) => Promise<SingleUseToken>
-  fromPasswordResetToken: (k: Knex, t: string) => Promise<User>
-};
 
 
 /*
@@ -61,11 +51,11 @@ export const ModelToColumn = invertObj(ColumnToModel);
 /*
  * Helpers for transforming query objects
  */
-const applyDefaultConstants = (o: UserChangeSet) => ({
+const applyDefaultConstants = (o: Partial<User>) => ({
   ...o,
   gender: o.gender || GenderEnum.PREFER_NOT_TO_SAY,
-  ethnicity: o.ethnicity || 'prefer not to say',
-  disability: o.disability || 'prefer not to say',
+  ethnicity: o.ethnicity || EthnicityEnum.PREFER_NOT_TO_SAY,
+  disability: o.disability || DisabilityEnum.PREFER_NOT_TO_SAY,
 });
 
 const replaceConstantsWithForeignKeys = renameKeys({
@@ -95,8 +85,8 @@ const dropUnwhereableUserFields = omit([
 /*
  * Implementation of the UserCollection type
  */
-export const Users: UserCollection & CustomMethods = {
-  create (a: Partial<User>): User {
+export const Users: UserCollection = {
+  create (a) {
     return {
       id: a.id,
       name: a.name,
@@ -119,7 +109,7 @@ export const Users: UserCollection & CustomMethods = {
     };
   },
 
-  toColumnNames (o: Partial<User>): Dictionary<any> {
+  toColumnNames (o) {
     return filter((a) => typeof a !== 'undefined', {
       'user_account.user_account_id': o.id,
       'user_account.user_name': o.name,
@@ -142,7 +132,7 @@ export const Users: UserCollection & CustomMethods = {
     });
   },
 
-  async get (client: Knex, q: ModelQuery<User> = {}) {
+  async get (client, q = {}) {
     const query = evolve({
       where: Users.toColumnNames,
       whereNot: Users.toColumnNames,
@@ -159,17 +149,17 @@ export const Users: UserCollection & CustomMethods = {
     );
   },
 
-  async getOne (client: Knex, q: ModelQuery<User> = {}) {
-    const [res] = await Users.get(client, { ...q, limit: 1 });
+  async getOne (client, query = {}) {
+    const [res] = await Users.get(client, { ...query, limit: 1 });
     return res || null;
   },
 
-  async exists (client: Knex, q: ModelQuery<User>) {
-    const res = await Users.getOne(client, q);
+  async exists (client, query) {
+    const res = await Users.getOne(client, query);
     return res !== null;
   },
 
-  async add (client: Knex, u: UserChangeSet) {
+  async add (client, user) {
     const preProcessUser = compose(
       mapKeys((k) => k.replace('user_account.', '')),
       transformForeignKeysToSubQueries(client),
@@ -179,13 +169,13 @@ export const Users: UserCollection & CustomMethods = {
     );
 
     const [id] = await client('user_account')
-      .insert(preProcessUser(u))
+      .insert(preProcessUser(user))
       .returning('user_account_id');
 
     return Users.getOne(client, { where: { id } });
   },
 
-  async update (client: Knex, u: User, c: UserChangeSet) {
+  async update (client: Knex, user, changes) {
     const preProcessUser = compose(
       Users.toColumnNames,
       dropUnwhereableUserFields
@@ -199,8 +189,8 @@ export const Users: UserCollection & CustomMethods = {
     );
 
     const [id] = await client('user_account')
-      .update(preProcessChangeSet(c))
-      .where(preProcessUser(u))
+      .update(preProcessChangeSet(changes))
+      .where(preProcessUser(user))
       .returning('user_account_id');
 
     if (!id) {
@@ -210,7 +200,7 @@ export const Users: UserCollection & CustomMethods = {
     return Users.getOne(client, { where: { id } });
   },
 
-  async destroy (client: Knex, u: Partial<User>) {
+  async destroy (client, user) {
     const preProcessUser = compose(
       transformForeignKeysToSubQueries(client),
       replaceConstantsWithForeignKeys,
@@ -219,7 +209,7 @@ export const Users: UserCollection & CustomMethods = {
     );
 
     return client('user_account')
-      .where(preProcessUser(u))
+      .where(preProcessUser(user))
       .update({
         user_name: 'none',
         email: null,
@@ -230,16 +220,16 @@ export const Users: UserCollection & CustomMethods = {
       });
   },
 
-  async recordLogin (client: Knex, u: User) {
+  async recordLogin (client, user) {
     return client('login_event')
-      .insert({ user_account_id: u.id });
+      .insert({ user_account_id: user.id });
   },
 
   async serialise (user: User) {
     return omit(['password', 'qrCode'], user);
   },
 
-  async createPasswordResetToken (client: Knex, u: Partial<User>) {
+  async createPasswordResetToken (client, user) {
     const twoDaysFromToday = moment().add(2, 'days').toISOString();
     const token = randomBytes(32).toString('hex');
     const hashToken = await hash(token, 12);
@@ -258,7 +248,7 @@ export const Users: UserCollection & CustomMethods = {
           single_use_token_id: tokenRow.id,
           user_account_id:
           // NB: email search is lowercase due to joi's payload conversion
-          u.id || trx('user_account').select('user_account_id').where({ email: u.email }),
+          user.id || trx('user_account').select('user_account_id').where({ email: user.email }),
         })
         .returning('user_account_id AS userId');
 
@@ -268,22 +258,22 @@ export const Users: UserCollection & CustomMethods = {
     return { ...res, token } as SingleUseToken;
   },
 
-  async fromPasswordResetToken (client: Knex, t: string) {
+  async fromPasswordResetToken (client, token) {
     // Find token
-    // // No token -> 400
+    // // No token -> Error
     const tokens = await client('single_use_token')
       .select()
       .where({ deleted_at: null, used_at: null })
       .andWhere('expires_at', '>', new Date());
 
-    const tokenRow = await findAsync(tokens, (a: any) => compare(t, a.token));
+    const tokenRow = await findAsync(tokens, (a: any) => compare(token, a.token));
 
     if (!tokenRow) {
       throw new Error('Unrecognised reset token');
     }
 
     // Find associated user
-    // // No associated user -> 400
+    // // No associated user -> Error
     const [{ user_account_id: id }] = await client('user_secret_reset')
       .select('user_account_id')
       .where({ single_use_token_id: tokenRow.single_use_token_id });

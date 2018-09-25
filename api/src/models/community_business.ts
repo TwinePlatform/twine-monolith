@@ -4,51 +4,17 @@
 import * as Knex from 'knex';
 import * as moment from 'moment';
 import { compose, omit, evolve, filter, pick, invertObj, pipe, assocPath, difference } from 'ramda';
-import { Dictionary, Map, Int, Day, Maybe } from '../types/internal';
+import { Dictionary, Map } from '../types/internal';
 import {
   CommunityBusiness,
   CommunityBusinessCollection,
   CommunityBusinessRow,
-  CommunityBusinessChangeSet,
-  LinkedFeedback,
-  ModelQuery,
-  DateTimeQuery,
-  VisitActivity,
   VisitEvent,
-  LinkedVisitEvent,
-  User,
 } from './types';
 import { Organisations } from './organisation';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { renameKeys, ageArrayToBirthYearArray } from '../utils';
 
-
-/*
- * Custom methods
- */
-type CustomMethods = {
-  addFeedback: (k: Knex, c: CommunityBusiness, score: Int) => Promise<LinkedFeedback>
-  getFeedback: (
-    k: Knex,
-    c: CommunityBusiness,
-    bw?: DateTimeQuery & Pick<ModelQuery<LinkedFeedback>, 'limit' | 'offset' | 'order'>
-  ) =>
-    Promise<LinkedFeedback[]>
-  getVisitActivities: (k: Knex, c: CommunityBusiness, d?: Day) => Promise<VisitActivity[]>
-  getVisitActivityById: (k: Knex, c: CommunityBusiness, id: Int) => Promise<Maybe<VisitActivity>>
-  addVisitActivity: (k: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>)
-    => Promise<Maybe<VisitActivity>>
-  updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>
-  deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>
-  addVisitLog: (k: Knex, v: VisitActivity, u: Partial<User>) => Promise<VisitEvent>
-  getVisitLogsWithUsers: (k: Knex, c: CommunityBusiness, q?: ModelQuery<LinkedVisitEvent & User>) =>
-    Promise<Partial<LinkedVisitEvent & User>[]>
-  getVisitLogAggregates: (
-    k: Knex,
-    c: CommunityBusiness,
-    aggs: string[],
-    q?: ModelQuery<LinkedVisitEvent & User>) => Promise<any>
-};
 
 /*
  * Field name mappings
@@ -116,8 +82,8 @@ const preProcessCb = (qb: Knex | Knex.QueryBuilder) => compose(
 /*
  * Implementation of the CommunityBusinessCollection type
  */
-export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = {
-  create (a: Partial<CommunityBusiness>): CommunityBusiness {
+export const CommunityBusinesses: CommunityBusinessCollection = {
+  create (a) {
     return {
       id: a.id,
       name: a.name,
@@ -137,7 +103,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     };
   },
 
-  toColumnNames (a: Partial<CommunityBusiness>): Dictionary < any > {
+  toColumnNames (a) {
     return filter((a) => typeof a !== 'undefined', {
       'community_business.organisation_id': a.id,
       'organisation.organisation_name': a.name,
@@ -157,7 +123,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     });
   },
 
-  async get (client: Knex, q: ModelQuery < CommunityBusiness > = {}) {
+  async get (client, q = {}) {
     const query = evolve({
       where: CommunityBusinesses.toColumnNames,
       whereNot: CommunityBusinesses.toColumnNames,
@@ -183,24 +149,24 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     );
   },
 
-  async getOne (client: Knex, q: ModelQuery<CommunityBusiness>) {
-    const [res] = await CommunityBusinesses.get(client, { ...q, limit: 1 });
+  async getOne (client, query) {
+    const [res] = await CommunityBusinesses.get(client, { ...query, limit: 1 });
     return res || null;
   },
 
-  async exists (client: Knex, q: ModelQuery<CommunityBusiness>) {
-    const res = await CommunityBusinesses.getOne(client, q);
+  async exists (client, query) {
+    const res = await CommunityBusinesses.getOne(client, query);
     return res !== null;
   },
 
-  async add (client: Knex, o: CommunityBusinessChangeSet) {
+  async add (client, cb) {
     const preProcessCbChangeset = compose(
       CommunityBusinesses.toColumnNames,
       pickCbFields
     );
 
-    const orgChangeset = preProcessOrgChangeset(o);
-    const cbChangeset = preProcessCbChangeset(o);
+    const orgChangeset = preProcessOrgChangeset(cb);
+    const cbChangeset = preProcessCbChangeset(cb);
 
     const [id] = await client
       .with('new_organisation', (qb) =>
@@ -226,17 +192,17 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return CommunityBusinesses.getOne(client, { where: { id } });
   },
 
-  async update (client: Knex, o: CommunityBusiness, c: CommunityBusinessChangeSet) {
-    const orgChangeset = preProcessOrgChangeset(c);
+  async update (client, cb, changes) {
+    const orgChangeset = preProcessOrgChangeset(changes);
 
     const [{ organisation_id: id }] = await client.transaction(async (trx) => {
-      const cbQuery = preProcessCb(trx)(o);
+      const cbQuery = preProcessCb(trx)(cb);
       const preProcessCbChangeset = compose(
         transformForeignKeysToSubQueries(trx),
         CommunityBusinesses.toColumnNames,
         pickCbFields
       );
-      const cbChangeset = preProcessCbChangeset(c);
+      const cbChangeset = preProcessCbChangeset(changes);
 
       if (Object.keys(orgChangeset).length > 0) {
         await trx('organisation')
@@ -259,19 +225,19 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return CommunityBusinesses.getOne(client, { where: { id } });
   },
 
-  async destroy (client: Knex, o: CommunityBusiness) {
+  async destroy (client, cb) {
     return client('community_business')
       .update({ deleted_at: new Date() })
-      .where(preProcessCb(client)(o));
+      .where(preProcessCb(client)(cb));
   },
 
-  async serialise (org: CommunityBusiness) {
-    return org;
+  async serialise (cb) {
+    return cb;
   },
 
-  async addFeedback (client: Knex, c: CommunityBusiness, score: number) {
+  async addFeedback (client, cb, score) {
     const [res] = await client('visit_feedback')
-      .insert({ score, organisation_id: c.id })
+      .insert({ score, organisation_id: cb.id })
       .returning([
         'score',
         'organisation_id AS organisationId',
@@ -284,7 +250,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return res;
   },
 
-  async getFeedback (client: Knex, c: CommunityBusiness, bw?) {
+  async getFeedback (client, cb, bw?) {
     const baseQuery = applyQueryModifiers(
       client('visit_feedback')
         .select({
@@ -295,7 +261,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
           modifiedAt: 'modified_at',
           deletedAt: 'deleted_at',
         })
-        .where({ organisation_id: c.id, deleted_at: null }),
+        .where({ organisation_id: cb.id, deleted_at: null }),
       bw || {}
     );
 
@@ -306,7 +272,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return query;
   },
 
-  async getVisitActivities (client: Knex, o: CommunityBusiness, d?: Day) {
+  async getVisitActivities (client, cb, day?) {
     const baseQuery = client('visit_activity')
       .innerJoin(
         'visit_activity_category',
@@ -326,16 +292,16 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         createdAt: 'created_at',
         modifiedAt: 'modified_at',
       })
-      .where({ organisation_id: o.id, deleted_at: null });
+      .where({ organisation_id: cb.id, deleted_at: null });
 
-    const query = d
-      ? baseQuery.where({ [d]: true })
+    const query = day
+      ? baseQuery.where({ [day]: true })
       : baseQuery;
 
     return query;
   },
 
-  async getVisitActivityById (client: Knex, c: CommunityBusiness, id: number) {
+  async getVisitActivityById (client, cb, id) {
     const [visitActivity] = await client('visit_activity')
         .innerJoin(
           'visit_activity_category',
@@ -358,20 +324,20 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         .where({
           visit_activity_id: id,
           deleted_at: null,
-          organisation_id: c.id,
+          organisation_id: cb.id,
         });
 
     return visitActivity || null;
   },
 
-  async addVisitActivity (client: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>) {
+  async addVisitActivity (client, visitActivity, cb) {
     const [res] = await client('visit_activity')
       .insert({
-        visit_activity_name: v.name,
+        visit_activity_name: visitActivity.name,
         visit_activity_category_id: client('visit_activity_category')
           .select('visit_activity_category_id')
-          .where({ visit_activity_category_name: v.category }),
-        organisation_id: c.id,
+          .where({ visit_activity_category_name: visitActivity.category }),
+        organisation_id: cb.id,
       })
       .returning([
         'visit_activity_id AS id',
@@ -389,7 +355,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return res;
   },
 
-  async updateVisitActivity (client: Knex, v: Partial<VisitActivity>) {
+  async updateVisitActivity (client, visitActivity) {
     const transformToColumns = compose(
       evolve({
         visit_activity_category_id: (n) =>
@@ -407,8 +373,8 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     );
 
     const [res] = await client('visit_activity')
-      .update(transformToColumns(v))
-      .where({ visit_activity_id: v.id, deleted_at: null })
+      .update(transformToColumns(visitActivity))
+      .where({ visit_activity_id: visitActivity.id, deleted_at: null })
       .returning([
         'visit_activity_id AS id',
         'visit_activity_name AS name',
@@ -423,10 +389,10 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         'modified_at AS modifiedAt',
       ]);
 
-    return res ? { ...res, category: v.category } : null;
+    return res ? { ...res, category: visitActivity.category } : null;
   },
 
-  async deleteVisitActivity (client: Knex, id: Int) {
+  async deleteVisitActivity (client, id) {
     const [res] = await client('visit_activity')
       .where({ visit_activity_id: id, deleted_at: null })
       .update({ deleted_at: new Date() })
@@ -448,11 +414,11 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return res || null;
   },
 
-  async addVisitLog (client: Knex, v: VisitActivity, u: User) {
+  async addVisitLog (client, visitActivity, user) {
     const [res] = await client('visit')
       .insert({
-        user_account_id: u.id,
-        visit_activity_id: v.id,
+        user_account_id: user.id,
+        visit_activity_id: visitActivity.id,
       })
       .returning([
         'visit_id AS id',

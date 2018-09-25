@@ -2,11 +2,20 @@
  * Type declarations for the models
  */
 import * as Knex from 'knex';
-import { Maybe, Json, Dictionary, Float, Int, Omit } from '../types/internal';
+import { Maybe, Dictionary, Float, Int, Omit } from '../types/internal';
 
 /*
  * Common and utility types
  */
+export type Weekday =
+  'monday'
+  | 'tuesday'
+  | 'wednesday'
+  | 'thursday'
+  | 'friday'
+  | 'saturday'
+  | 'sunday';
+
 export type Coordinates = {
   lat: Float
   lng: Float
@@ -22,6 +31,45 @@ export enum GenderEnum {
   MALE = 'male',
   FEMALE = 'female',
   PREFER_NOT_TO_SAY = 'prefer not to say',
+}
+
+export enum DisabilityEnum {
+  YES = 'yes',
+  NO = 'no',
+  PREFER_NOT_TO_SAY = 'prefer not to say',
+}
+
+export enum EthnicityEnum {
+  PREFER_NOT_TO_SAY = 'prefer not to say',
+}
+
+export enum RegionEnum {
+  EAST_MIDLANDS = 'East Midlands',
+  EAST_ENGLAND = 'East of England',
+  LONDON = 'London',
+  NORTH_EAST = 'North East',
+  NORTH_WEST = 'North West',
+  SOUTH_EAST = 'South East',
+  SOUTH_WEST = 'South West',
+  WEST_MIDLANDS = 'West Midlands',
+  YORKSHIRE_HUMBER = 'Yorkshire and the Humber',
+}
+
+export enum SectorEnum {
+  ART_CENTRE = 'Art centre or facility',
+  COMMUNITY_HUB = 'Community hub, facility or space',
+  PUB_SHOP_CAFE = 'Community pub, shop or café',
+  EMPLOYMENT_SUPPORT = 'Employment, training, business support or education',
+  ENERGY = 'Energy',
+  ENVIRONMENT = 'Environment or nature',
+  FOOD = 'Food catering or production (incl. farming)',
+  HEALTH = 'Health, care or wellbeing',
+  HOUSING = 'Housing',
+  FINANCIAL = 'Income or financial inclusion',
+  SPORT = 'Sport & leisure',
+  TRANSPORT = 'Transport',
+  TOURISM = 'Visitor facilities or tourism',
+  WASTE_RECYCLING = 'Waste reduction, reuse or recycling',
 }
 
 /*
@@ -81,7 +129,7 @@ export type CommunityBusinessRow = {
  * Declarations of the basic shape of each model. Not used directly
  * but combined with other declarations
  */
-export type UserBase = CommonTimestamps & {
+export type User = Readonly<CommonTimestamps & {
   id?: Int
   name: string
   email?: string
@@ -89,25 +137,25 @@ export type UserBase = CommonTimestamps & {
   password?: string
   qrCode?: string
   gender: GenderEnum
-  disability: string
-  ethnicity: string
+  disability: DisabilityEnum
+  ethnicity: EthnicityEnum
   birthYear?: Int
   postCode?: string
   isEmailConfirmed: boolean
   isPhoneNumberConfirmed: boolean
   isEmailConsentGranted: boolean
   isSMSConsentGranted: boolean
-};
+}>;
 
-export type OrganisationBase = CommonTimestamps & {
+export type Organisation = Readonly<CommonTimestamps & {
   id: Int
   name: string
   _360GivingId: string
-};
+}>;
 
-export type CommunityBusinessBase = CommonTimestamps & OrganisationBase & {
-  region: string
-  sector: string
+export type CommunityBusiness = Organisation & Readonly<{
+  region: RegionEnum
+  sector: SectorEnum
   logoUrl: string
   address1: string
   address2: string
@@ -115,16 +163,18 @@ export type CommunityBusinessBase = CommonTimestamps & OrganisationBase & {
   postCode: string
   coordinates: Coordinates
   turnoverBand: string
-};
+}>;
 
-export type SubscriptionBase = CommonTimestamps & {
+export type FundingBody = Organisation;
+
+export type Subscription = Readonly<CommonTimestamps & {
   id: Int
   type: string
   status: string
   expiresAt: string
-};
+}>;
 
-export type VisitActivityBase = CommonTimestamps & {
+export type VisitActivity = Readonly<CommonTimestamps & {
   id: Int
   name: string
   category: string
@@ -135,110 +185,65 @@ export type VisitActivityBase = CommonTimestamps & {
   friday: boolean
   saturday: boolean
   sunday: boolean
-};
+}>;
 
-export type VisitEventBase = CommonTimestamps & {
+export type VisitEvent = Readonly<CommonTimestamps & {
   id: Int
   userId: Int
   visitActivityId: Int
-};
+}>;
 
-export type LinkedVisitEventBase = VisitEventBase & {
+export type LinkedVisitEvent = VisitEvent & Readonly<{
   visitActivity: string
-};
+}>;
 
-export type FeedbackBase = CommonTimestamps & {
+export type Feedback = Readonly<CommonTimestamps & {
   id: Int
   score: -1 | 0 | 1
-};
+}>;
 
-export type LinkedFeedbackBase = FeedbackBase & {
+export type LinkedFeedback = Feedback & Readonly<{
   organisationId: Int
-};
+}>;
 
-export type OutreachMeetingBase = CommonTimestamps & {
+export type OutreachMeeting = Readonly<CommonTimestamps & {
   id: Int
   partner: string
   subject: string
   scheduledAt: string
-};
+}>;
 
-export type OutreachCampaignBase = CommonTimestamps & {
+export type OutreachCampaign = Readonly<CommonTimestamps & {
   id: Int
   type: string
   targets: string[]
   startsAt: string
   endsAt: string
-};
+}>;
 
-export type SingleUseTokenBase = Omit<CommonTimestamps, 'modifiedAt'> & {
+export type SingleUseToken = Readonly<Omit<CommonTimestamps, 'modifiedAt'> & {
   id: Int
   userId: Int
   token: string
   expiresAt: string
   usedAt?: string
-};
+}>;
 
-/*
- * Read-only model declarations
- *
- * Used directly as model representations
- */
-export type User = Readonly<UserBase>;
-export type Organisation = Readonly<OrganisationBase>;
-export type CommunityBusiness = Readonly<CommunityBusinessBase>;
-export type Subscription = Readonly<SubscriptionBase>;
-export type VisitActivity = Readonly<VisitActivityBase>;
-export type VisitEvent = Readonly<VisitEventBase>;
-export type LinkedVisitEvent = Readonly<LinkedVisitEventBase>;
-export type Feedback = Readonly<FeedbackBase>;
-export type LinkedFeedback = Readonly<LinkedFeedbackBase>;
-export type OutreachMeeting = Readonly<OutreachMeetingBase>;
-export type OutreachCampaign = Readonly<OutreachCampaignBase>;
-export type SingleUseToken = Readonly<SingleUseTokenBase>;
-
-/*
- * Change-set declarations
- *
- * Used directly to describe changes to be made to existing models
- */
-export type UserChangeSet = Partial<UserBase>;
-export type OrganisationChangeSet = Partial<OrganisationBase>;
-export type CommunityBusinessChangeSet = Partial<CommunityBusinessBase>;
-export type OutreachMeetingChangeSet = Partial<OutreachMeetingBase>;
-export type OutreachCampaignChangeSet = Partial<OutreachCampaignBase>;
-
-/*
- * Model relations declarations
- *
- * Declare which models have relations to other models
- */
-export type UserRelations =
-  OutreachMeeting
-  | Organisation;
-
-export type OrganisationRelations =
-  CommunityBusiness
-  | User
-  | Subscription;
-
-export type CommunityBusinessRelations =
-  Subscription
-  | OutreachCampaign;
 
 export type Model =
   User
   | Organisation
-  | CommunityBusiness;
-
-export type ChangeSet =
-  UserChangeSet
-  | OrganisationChangeSet;
-
-export type Relation =
-  UserRelations
-  | OrganisationRelations
-  | CommunityBusinessRelations;
+  | CommunityBusiness
+  | FundingBody
+  | Subscription
+  | VisitActivity
+  | VisitEvent
+  | LinkedVisitEvent
+  | Feedback
+  | LinkedFeedback
+  | OutreachMeeting
+  | OutreachCampaign
+  | SingleUseToken;
 
 
 /*
@@ -247,24 +252,64 @@ export type Relation =
  * Defines a common interface through which to operate on a
  * collection of model objects
  */
-export type Collection<T extends Model, K extends ChangeSet, V extends Relation> = {
+export type Collection<T extends Model> = {
   toColumnNames: (a: Partial<T>) => Dictionary<any>
   create: (a: Partial<T>) => T
   exists: (c: Knex, a?: ModelQuery<T>) => Promise<boolean>
   get: (c: Knex, a?: ModelQuery<T>) => Promise<T[]>
   getOne: (c: Knex, a?: ModelQuery<T>) => Promise<Maybe<T>>
-  update: (c: Knex, a: Partial<T>, b: K) => Promise<T>
+  update: (c: Knex, a: Partial<T>, b: Partial<T>) => Promise<T>
   add: (c: Knex, a: Partial<T>) => Promise<T>
   destroy: (c: Knex, a: Partial<T>) => Promise<void>
-  serialise: (a: Partial<T>) => Promise<Json>
+  serialise: (a: Partial<T>) => Promise<Partial<T>>
 };
 
-export type UserCollection =
-  Collection<User, UserChangeSet, UserRelations>;
-export type OrganisationCollection =
-  Collection<Organisation, OrganisationChangeSet, OrganisationRelations>;
-export type CommunityBusinessCollection =
-  Collection<CommunityBusiness, CommunityBusinessChangeSet, CommunityBusinessRelations>;
+interface UsersBaseCollection extends Collection<User> {
+  recordLogin: (k: Knex, u: User) => Promise<void>;
+}
+
+export interface UserCollection extends UsersBaseCollection {
+  createPasswordResetToken: (k: Knex, u: Partial<User>) => Promise<SingleUseToken>;
+  fromPasswordResetToken: (k: Knex, t: string) => Promise<User>;
+}
+
+export interface VisitorCollection extends UsersBaseCollection {
+  getWithVisits: (k: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
+    Promise<(Partial<User> & { visits: LinkedVisitEvent[] })[]>;
+  fromCommunityBusiness: (client: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
+    Promise<Partial<User>[]>;
+}
+
+export interface CbAdminCollection extends UsersBaseCollection {
+  fromOrganisation: (k: Knex, q: Partial<Organisation>) => Promise<User[]>;
+}
+
+export interface OrganisationCollection extends Collection<Organisation> {
+  fromUser: (k: Knex, q: ModelQuery<User>) => Promise<Organisation>;
+}
+
+export interface CommunityBusinessCollection extends Collection<CommunityBusiness> {
+  addFeedback: (k: Knex, c: CommunityBusiness, score: Int) => Promise<LinkedFeedback>;
+  getFeedback: (
+    k: Knex,
+    c: CommunityBusiness,
+    bw?: DateTimeQuery & ModelQueryInvariant
+  ) => Promise<LinkedFeedback[]>;
+  getVisitActivities: (k: Knex, c: CommunityBusiness, d?: Weekday) => Promise<VisitActivity[]>;
+  getVisitActivityById: (k: Knex, c: CommunityBusiness, id: Int) => Promise<Maybe<VisitActivity>>;
+  addVisitActivity: (k: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>)
+    => Promise<Maybe<VisitActivity>>;
+  updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>;
+  deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>;
+  addVisitLog: (k: Knex, v: VisitActivity, u: Partial<User>) => Promise<VisitEvent>;
+  getVisitLogsWithUsers: (k: Knex, c: CommunityBusiness, q?: ModelQuery<LinkedVisitEvent & User>) =>
+    Promise<Partial<LinkedVisitEvent & User>[]>;
+  getVisitLogAggregates: (
+    k: Knex,
+    c: CommunityBusiness,
+    aggs: string[],
+    q?: ModelQuery<LinkedVisitEvent & User>) => Promise<any>;
+}
 
 
 /*
@@ -278,13 +323,17 @@ export type DateTimeQuery = {
   since: Date
   until: Date
 };
-export type ModelQuery<T> = Partial<{
+
+type ModelQueryInvariant = {
+  limit: number
+  offset: number
+  order: [string, 'asc' | 'desc']
+};
+
+export type ModelQuery<T> = Partial<ModelQueryInvariant & {
   where: WhereQuery<T>
   whereNot: WhereQuery<T>
   whereBetween: WhereBetweenQuery<T>
   whereNotBetween: WhereBetweenQuery<T>
-  limit: number
-  offset: number
-  order: [string, 'asc' | 'desc']
   fields: (keyof T)[]
 }>;

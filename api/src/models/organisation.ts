@@ -3,24 +3,10 @@
  */
 import * as Knex from 'knex';
 import { compose, omit, evolve, filter, pick, invertObj } from 'ramda';
-import { Dictionary, Map } from '../types/internal';
-import {
-  Organisation,
-  OrganisationCollection,
-  OrganisationRow,
-  OrganisationChangeSet,
-  ModelQuery,
-  User
-} from './types';
+import { Map } from '../types/internal';
+import { Organisation, OrganisationCollection, OrganisationRow, } from './types';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { Users } from './user';
-
-/*
- * Declarations for methods specific to this model
- */
-type CustomMethods = {
-  fromUser: (k: Knex, q: ModelQuery<User>) => Promise<Organisation>
-};
 
 
 /*
@@ -53,8 +39,8 @@ export const dropUnWhereableOrgFields = omit([
 /*
  * Implementation of the OrganisationCollection type
  */
-export const Organisations: OrganisationCollection & CustomMethods = {
-  create (a: Partial<Organisation>): Organisation {
+export const Organisations: OrganisationCollection = {
+  create (a) {
     return {
       id: a.id,
       name: a.name,
@@ -65,7 +51,7 @@ export const Organisations: OrganisationCollection & CustomMethods = {
     };
   },
 
-  toColumnNames (a: Partial<Organisation>): Dictionary<any> {
+  toColumnNames (a) {
     return filter((a) => typeof a !== 'undefined', {
       organisation_id: a.id,
       organisation_name: a.name,
@@ -76,7 +62,7 @@ export const Organisations: OrganisationCollection & CustomMethods = {
     });
   },
 
-  async get (client: Knex, q: ModelQuery<Organisation> = {}) {
+  async get (client, q = {}) {
     const query = evolve({
       where: Organisations.toColumnNames,
       whereNot: Organisations.toColumnNames,
@@ -90,12 +76,12 @@ export const Organisations: OrganisationCollection & CustomMethods = {
     );
   },
 
-  async getOne (client: Knex, q: ModelQuery<Organisation>) {
-    const [res] = await Organisations.get(client, { ...q, limit: 1 });
+  async getOne (client, query) {
+    const [res] = await Organisations.get(client, { ...query, limit: 1 });
     return res || null;
   },
 
-  async fromUser (client: Knex, q: ModelQuery<User>) {
+  async fromUser (client, q) {
     const query = evolve({
       where: Users.toColumnNames,
       whereNot: Users.toColumnNames,
@@ -117,34 +103,34 @@ export const Organisations: OrganisationCollection & CustomMethods = {
     return user || null;
   },
 
-  async exists (client: Knex, q: ModelQuery<Organisation>) {
-    const res = await Organisations.getOne(client, q);
+  async exists (client, query) {
+    const res = await Organisations.getOne(client, query);
     return res !== null;
   },
 
-  async add (client: Knex, o: OrganisationChangeSet) {
+  async add (client: Knex, organisation) {
     const [id] = await client('organisation')
-      .insert(Organisations.toColumnNames(o))
+      .insert(Organisations.toColumnNames(organisation))
       .returning('organisation_id');
 
     return Organisations.getOne(client, { where: { id } });
   },
 
-  async update (client: Knex, o: Organisation, c: OrganisationChangeSet) {
+  async update (client, organisation, changes) {
     const preProcessOrg = compose(
       Organisations.toColumnNames,
       dropUnWhereableOrgFields
     );
 
     const [id] = await client('organisation')
-      .update(Organisations.toColumnNames(c))
-      .where(preProcessOrg(o))
+      .update(Organisations.toColumnNames(changes))
+      .where(preProcessOrg(organisation))
       .returning('organisation_id');
 
     return Organisations.getOne(client, { where: { id } });
   },
 
-  async destroy (client: Knex, o: Organisation) {
+  async destroy (client, organisation) {
     const preProcessOrg = compose(
       Organisations.toColumnNames,
       dropUnWhereableOrgFields
@@ -152,7 +138,7 @@ export const Organisations: OrganisationCollection & CustomMethods = {
 
     return client('organisation')
       .update({ deleted_at: new Date() })
-      .where(preProcessOrg(o));
+      .where(preProcessOrg(organisation));
   },
 
   async serialise (org: Organisation) {
