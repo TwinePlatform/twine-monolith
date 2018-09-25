@@ -17,7 +17,7 @@ type WebConfig = {
     cors: Hapi.RouteOptionsCors
     security: Hapi.RouteOptionsSecureObject | boolean
   },
-  tls: null | { key: string, cert: string }
+  tls?: null | { key: string, cert: string }
 };
 
 type EmailConfig = {

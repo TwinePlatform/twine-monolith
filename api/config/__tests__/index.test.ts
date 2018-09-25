@@ -10,12 +10,19 @@ describe('Config', () => {
       router: { stripTrailingSlash: true },
       routes: {
         cors: {
-          origin: ['http://localhost:3000'],
+          origin: ['http://localhost:3000', 'http://localhost:8100'],
           credentials: true,
           additionalExposedHeaders: ['set-cookie'],
         },
+        security: {
+          hsts: {
+            includeSubdomains: true,
+            maxAge: 31536000,
+            preload: true,
+          },
+        },
       },
-      tls: null });
+    });
   });
 
   test(`getConfig | ${Environment.TESTING}`, () => {
@@ -31,8 +38,15 @@ describe('Config', () => {
           credentials: true,
           additionalExposedHeaders: ['set-cookie'],
         },
+        security: {
+          hsts: {
+            includeSubdomains: true,
+            maxAge: 31536000,
+            preload: true,
+          },
+        },
       },
-      tls: null });
+    });
   });
 
   test(`getConfig | ${Environment.PRODUCTION}`, () => {
@@ -49,8 +63,15 @@ describe('Config', () => {
           credentials: true,
           additionalExposedHeaders: ['set-cookie'],
         },
+        security: {
+          hsts: {
+            includeSubdomains: true,
+            maxAge: 31536000,
+            preload: true,
+          },
+        },
       },
-      tls: null });
+    });
 
   });
 
@@ -63,12 +84,19 @@ describe('Config', () => {
       router: { stripTrailingSlash: true },
       routes: {
         cors: {
-          origin: ['http://localhost:3000'],
+          origin: ['http://localhost:3000', 'http://localhost:8100'],
           credentials: true,
           additionalExposedHeaders: ['set-cookie'],
         },
+        security: {
+          hsts: {
+            includeSubdomains: true,
+            maxAge: 31536000,
+            preload: true,
+          },
+        },
       },
-      tls: null });
+    });
   });
 
   test('Config | validateConfig | valid config', () => {
@@ -87,7 +115,6 @@ describe('Config', () => {
           },
           security: false,
         },
-        tls: null,
       },
       knex: {
         client: 'pg',
@@ -141,7 +168,6 @@ describe('Config', () => {
         host: 'localhost',
         port: -1,
         router: null,
-        tls: null,
         routes: {
           cors: {
             origin: ['http://lost.com'],
