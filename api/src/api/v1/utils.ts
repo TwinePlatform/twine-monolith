@@ -3,6 +3,7 @@
  */
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
+import * as Joi from 'joi';
 import { ApiResponse } from './schema/response';
 
 
@@ -10,9 +11,7 @@ import { ApiResponse } from './schema/response';
  * Boom error type does not include key details
  * added by Joi failAction validation method
  */
-export interface BoomWithValidation extends Boom {
-  details: { message: string }[];
-}
+export type BoomWithValidation = Boom<any> & Joi.ValidationError;
 
 /*
  * Catches Joi validation errors thrown from failAction and formats response
