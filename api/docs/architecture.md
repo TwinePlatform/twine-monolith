@@ -1,5 +1,4 @@
 # Application Architecture
-This is just a sketch
 
 ## General
 * Authentication
@@ -64,8 +63,8 @@ The `api` directory is partitioned by version (currently `v1` only), and each ve
 |  |- index.ts      (1)
 ```
 1. `index.ts`: Exports Hapi plugin containing all necessary setup and routes for API.
-2. `hooks`: Contains functions intended to be attached to the [Hapi request lifecycle]().
-3. `prerequisites`: Contains functions intended to be used in route defintions as [pre-requisites]().
+2. `hooks`: Contains functions intended to be attached to the [Hapi request lifecycle](https://hapijs.com/api#request-lifecycle).
+3. `prerequisites`: Contains functions intended to be used in route defintions as [pre-requisites](https://hapijs.com/api#route.options.pre).
 4. `schema`: Contains `Joi` schema commonly used across the entire API, including schema used to validate standard API response.
 5. `types`: Contains types commonly used across the entire API.
 6. `utils`: Contains commonly used utility functions.
