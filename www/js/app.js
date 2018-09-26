@@ -33,21 +33,21 @@
 			$rootScope.options = {
 				appName: 'Twine',
 				debug: false,
-				environment: 'live',	// dev | stage | live
+				environment: 'dev',	// dev | stage | live
 				apiBaseUrl: {
-					local:   'http://127.0.0.1/api/v1/',
-					dev:   'http://46.101.50.90/api/v1/',
-					stage: 'http://power-to-change-borne-stageing.default.ecox.uk0.bigv.io/api/v1/',
-					live:  'http://volunteerapp.default.twine.uk0.bigv.io/api/v1/'
+					local: 'http://localhost:4000/v1/',
+					dev:   'http://localhost:4000/v1/',
+					stage: 'https://twine-api-staging.herokuapp.com/v1/',
+					live:  'https://api.twine-together.com/v1/',
 				},
 				adminBaseUrl: {
-					local:   'http://127.0.0.1',
-					dev:   'http://46.101.50.90/',
-					stage: 'http://power-to-change-borne-stageing.default.ecox.uk0.bigv.io/',
-					live:  'http://volunteerapp.default.twine.uk0.bigv.io/'
+					local: 'http://localhost:4000/v1/',
+					dev:   'http://localhost:4000/v1/',
+					stage: 'https://twine-together.herokuapp.com/v1/',
+					live:  'https://twine-together.com/v1/',
 				}
 			};
-			
+
 
 		/*
 			>> ionic ready
@@ -71,12 +71,11 @@
 					>>> log $localStorage
 				*/
 
-					console.log('%c$localStorage: ', 'background: lightblue', $localStorage);
+					console.log('%c$localStorage: ', 'background: red', $localStorage);
 					if ($localStorage.offlineData !== undefined) {
-						console.log('%c$localStorage.offlineData.logs: ', 'background: lightblue', $localStorage.offlineData.logs);
-						// console.log(JSON.stringify($localStorage.offlineData.logs));
+						console.log('%c$localStorage.offlineData.logs: ', 'background: yellow', $localStorage.offlineData.logs);
 					}
-					
+
 
 				/*
 					>>> setup offline mode
