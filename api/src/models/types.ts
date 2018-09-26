@@ -264,29 +264,29 @@ export type Collection<T extends Model> = {
   serialise: (a: Partial<T>) => Promise<Partial<T>>
 };
 
-interface UsersBaseCollection extends Collection<User> {
-  recordLogin: (k: Knex, u: User) => Promise<void>;
-}
+type UsersBaseCollection = Collection<User> & {
+  recordLogin: (k: Knex, u: User) => Promise<void>
+};
 
-export interface UserCollection extends UsersBaseCollection {
-  createPasswordResetToken: (k: Knex, u: Partial<User>) => Promise<SingleUseToken>;
-  fromPasswordResetToken: (k: Knex, t: string) => Promise<User>;
-}
+export type UserCollection = UsersBaseCollection & {
+  createPasswordResetToken: (k: Knex, u: Partial<User>) => Promise<SingleUseToken>
+  fromPasswordResetToken: (k: Knex, t: string) => Promise<User>
+};
 
-export interface VisitorCollection extends UsersBaseCollection {
+export type VisitorCollection = UsersBaseCollection & {
   getWithVisits: (k: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
-    Promise<(Partial<User> & { visits: LinkedVisitEvent[] })[]>;
+    Promise<(Partial<User> & { visits: LinkedVisitEvent[] })[]>
   fromCommunityBusiness: (client: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
-    Promise<Partial<User>[]>;
-}
+    Promise<Partial<User>[]>
+};
 
-export interface CbAdminCollection extends UsersBaseCollection {
+export type CbAdminCollection = UsersBaseCollection & {
   fromOrganisation: (k: Knex, q: Partial<Organisation>) => Promise<User[]>;
-}
+};
 
-export interface OrganisationCollection extends Collection<Organisation> {
+export type OrganisationCollection = Collection<Organisation> & {
   fromUser: (k: Knex, q: ModelQuery<User>) => Promise<Organisation>;
-}
+};
 
 export interface CommunityBusinessCollection extends Collection<CommunityBusiness> {
   addFeedback: (k: Knex, c: CommunityBusiness, score: Int) => Promise<LinkedFeedback>;
