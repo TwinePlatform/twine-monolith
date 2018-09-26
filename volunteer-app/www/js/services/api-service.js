@@ -31,9 +31,27 @@
 	  - handles all interactions with the api
 */
 
-	angular.module('app.services').factory('$$api', function($http, $rootScope) {
+	angular.module('app.services').factory('$$api', function($http, $rootScope, $localStorage) {
 
 		var $$api = {
+
+			/*
+			  >> token
+			    Grabs token from localStorage
+			 */
+			token: {
+				get: function () {
+					return $localStorage.token;
+				},
+
+				set: function (tkn) {
+					$localStorage.token = tkn;
+				},
+
+				clear: function () {
+					delete $localStorage.token;
+				}
+			},
 
 			/*
 				>> url
