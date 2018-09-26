@@ -51,13 +51,11 @@
 			>> populate gender dropdown
 		*/
 
-			// $scope.genders = ['Male', 'Female', 'Trans male', 'Trans female', 'Other', 'Non-binary', 'Rather not say'];
-
 			$scope.gendersDisabled = true;
 			$scope.genders = [];
 
 			$$api.genders.get().success(function (result) {
-				
+
 				// loop through the results and push only required items to $scope.genders
 				for (var i = 0, len = result.data.length; i < len; i++) {
 					$scope.genders[i] = {id: result.data[i].id, name: result.data[i].name};
@@ -81,17 +79,17 @@
 			$scope.regions = [];
 
 			$$api.regions.get().success(function (result) {
-				
+
 				// loop through the results and push only required items to $scope.regions
 				for (var i = 0, len = result.data.length; i < len; i++) {
-					$scope.regions[i] = {id: result.data[i].id, name: result.data[i].name};
+					$scope.regions[i] = result.data[i];
 				}
 
 				// enable regions select
 				$scope.regionsDisabled = false;
 
 			}).error(function (result, error) {
-				
+
 				// process connection error
 				$$utilities.processConnectionError(result, error);
 
