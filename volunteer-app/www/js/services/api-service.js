@@ -33,6 +33,13 @@
 
 	angular.module('app.services').factory('$$api', function($http, $rootScope, $localStorage) {
 
+		const transformResponse = (response, headers, status) => {
+			const res = JSON.parse(response);
+			return status < 400
+				? { ...res, data: res.result }
+				: res;
+		};
+
 		var $$api = {
 
 			/*
@@ -55,13 +62,11 @@
 
 			/*
 				>> url
-				  generates an api url e.g. 'user' returns 'http://powertochangeadmindev.stage2.reason.digital/api/v1/user'
-	              the environment can be set in options in options.js
+				  Generates an api url
 			*/
 
 				url: function(url) {
 					return $rootScope.options.apiBaseUrl[$rootScope.options.environment] + url;
-					// return 'http://powertochangeadmindev.stage2.reason.digital/api/v1/' + url;
 				},
 
 			/*
@@ -255,14 +260,16 @@
 						>>> login
 					*/
 
-						login: function(data) {
-							return $http({
+						login: ({ email, password }) =>
+							$http({
 								method: 'POST',
 								url: $$api.url('users/login'),
-								data: data,
-								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-							});
-						},
+								data: { email, password }
+							})
+							.then((response) => {
+								$$api.token.set(response.result.token);
+								return response;
+							}),
 
 					/*
 						>>> save user
@@ -271,9 +278,9 @@
 						save: function(userId, data) {
 							return $http({
 								method: 'PUT',
-								url: $$api.url('users/' + userId),
+								url: $$api.url('users/me'),
 								data: data,
-								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+								headers: { Authorization: $$api.token.get() },
 							});
 						},
 
@@ -281,31 +288,36 @@
 						>>> register user
 					*/
 
-						register: function(data) {
-							return $http({
+						register: (data) =>
+							$http({
 								method: 'POST',
-								url: $$api.url('users'),
+								url: $$api.url('users/register/volunteer'),
 								data: data,
-								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-							});
-						},
+							})
+							.then(function (response) {
+								$$api.token.set(response.result.token);
+								return response
+							}),
 
 					/*
 						>>> total hours
 					*/
 
 						totalHours: function(userId, days) {
+							// by default just grab overall total hours
+							var qs = '';
+
 							// if days have been specified, grab last x days
 							if (days) {
-								var url = $$api.url('logs/user/' + userId + '/total/days/' + days)
+								var now = new Date();
+								now.setDate(now.getDate() - days);
+								qs = '?since=' + now.toDateString();
 							}
-							// else just grab overall total hours
-							else {
-								var url = $$api.url('logs/user/' + userId + '/total')
-							}
+
 							return $http({
 								method: 'GET',
-								url: url
+								url: $$api.url('users/me/volunteer-logs/aggregates' + qs),
+								headers: { Authorization: $$api.token.get() },
 							});
 						},
 
@@ -404,7 +416,8 @@
 						get: function() {
 							return $http({
 								method: 'GET',
-								url: $$api.url('genders')
+								url: $$api.url('genders'),
+								transformResponse,
 							});
 						}
 
@@ -417,7 +430,7 @@
 				meetingTypes: {
 
 					/*
-						>>> get genders
+						>>> get meetingTypes
 					*/
 
 						get: function() {
@@ -469,7 +482,7 @@
                     });
                 },
 
-				new : function (data) {
+				new: function (data) {
                     return $http({
                         method: 'POST',
                         url: $$api.url('outreaches'),
@@ -495,13 +508,13 @@
             },
 
             /*
-                >> Activities
+							>> Activities
             */
 
             activities: {
 
                 /*
-                    >>> get genders
+									>>> get activities
                 */
 
                 get: function() {
@@ -526,7 +539,8 @@
 						get: function() {
 							return $http({
 								method: 'GET',
-								url: $$api.url('regions')
+								url: $$api.url('regions'),
+								transformResponse,
 							});
 						}
 
