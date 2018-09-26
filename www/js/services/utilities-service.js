@@ -228,22 +228,22 @@
 					$ionicLoading.hide();
 
 					// if user does not exist, log user out
-					if (error === 404) {
-						$$utilities.logOut('This user account no longer exists.');
+					if (error === 401) {
+						$$utilities.logOut('Please log-in again');
 					}
 					else {
 
 						// no internet connection
 						if (error === 0) {
-							// $$shout('Could not connect. Please check your internet connection & try again.', 3000);
+							$$shout('Could not connect. Please check your internet connection & try again.', 3000);
 						}
 						// resource not found
 						else if (error === 404) {
-							// $$shout('Could not connect. Please check your internet connection & try again.', 3000);
+							$$shout('Could not find what you were looking for', 3000);
 						}
 						// other error
 						else {
-							// $$shout('Could not connect. Please check your internet connection & try again.', 3000);
+							$$shout('Oops! Something went wrong.', 3000);
 						}
 
 					}
