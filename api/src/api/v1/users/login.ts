@@ -1,11 +1,15 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
+import * as Joi from 'joi';
 import { compare } from 'bcrypt';
+import { takeWhile } from 'ramda';
 import { Users, Organisations } from '../../../models';
 import { email, password, response } from './schema';
 import { CbAdmins } from '../../../models/cb_admin';
-import { Session } from '../../../auth/strategies/standard';
+import { Session, Token } from '../../../auth/strategies/standard';
 import { LoginRequest, EscalateRequest } from '../types';
+import { RoleEnum } from '../../../auth/types';
+import Roles from '../../../auth/roles';
 
 
 const inferPrivilegeLevel = (request: Hapi.Request) => {
@@ -23,12 +27,18 @@ const inferPrivilegeLevel = (request: Hapi.Request) => {
 const route: Hapi.ServerRoute[] = [
   {
     method: 'POST',
-    path: '/users/login/admin',
+    path: '/users/login',
     options: {
       description: 'Login all accounts apart from visitor',
       auth: false,
       validate: {
         payload: {
+          restrict: Joi.alt()
+            .try(
+              Joi.string().only(Object.values(RoleEnum)),
+              Joi.array().items(Joi.string().only(Object.values(RoleEnum)))
+            ),
+          type: Joi.string().only('cookie', 'body').default('cookie'),
           email: email.required(),
           password: password.required(),
         },
@@ -38,7 +48,7 @@ const route: Hapi.ServerRoute[] = [
     },
     handler: async (request: LoginRequest, h: Hapi.ResponseToolkit) => {
       const { server: { app: { knex } } } = request;
-      const { email, password } = request.payload;
+      const { email, password, restrict, type } = request.payload;
 
       const user = await Users.getOne(knex, { where: { email } });
       if (! user) return Boom.unauthorized('Unknown account');
@@ -46,18 +56,65 @@ const route: Hapi.ServerRoute[] = [
       const authorisePassword = await compare(password, user.password);
       if (!authorisePassword) return Boom.unauthorized('Incorrect password');
 
-      const isAdmin = await CbAdmins.exists(knex, { where: { email } });
-      if (!isAdmin) return Boom.unauthorized('User is not admin');
-
       const organisation = await Organisations.fromUser(knex, { where: { email } });
       if (!organisation) return Boom.unauthorized('User has no associated organisation');
 
-      return Session.create(
-        request,
-        h.response({}),
-        { userId: user.id, organisationId: organisation.id },
-        inferPrivilegeLevel(request)
-      );
+      if (restrict) {
+        if (Array.isArray(restrict)) {
+          let has = false;
+          for (let i = 0; i < restrict.length; i = i + 1) {
+            const role = restrict[i];
+            const hasRole = await Roles.userHas(
+              knex,
+              { userId: user.id, role, organisationId: organisation.id }
+            );
+
+            if (hasRole) {
+              has = true;
+              break;
+            }
+          }
+
+          if (!has) {
+            return Boom.forbidden('User does not have required role');
+          }
+        } else {
+          const hasRole = await Roles.userHas(
+            knex,
+            {
+              userId: user.id,
+              role: <RoleEnum> restrict,
+              organisationId: organisation.id,
+            });
+
+          if (!hasRole) {
+            return Boom.forbidden('User does not have required role');
+          }
+        }
+      }
+
+      try {
+        await Users.recordLogin(knex, user);
+      } catch (error) {
+        request.log('warning', `Recording user login failed: ${user.id}`);
+      }
+
+      if (type === 'cookie') {
+        return Session.create(
+          request,
+          h.response({}),
+          { userId: user.id, organisationId: organisation.id },
+          inferPrivilegeLevel(request)
+        );
+      } else {
+        return {
+          token: Token.create({
+            userId: user.id,
+            organisationId: organisation.id,
+            privilege: inferPrivilegeLevel(request),
+          }),
+        };
+      }
     },
   },
 

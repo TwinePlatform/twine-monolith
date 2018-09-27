@@ -3,6 +3,7 @@ import { Dictionary } from 'ramda';
 import { ApiRequestQuery, ApiRequestBody } from './schema/request';
 import { ApiResponse } from './schema/response';
 import { UserCredentials } from '../../auth/strategies/standard';
+import { RoleEnum } from '../../auth/types';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps } from '../../models';
 import { Omit } from '../../types/internal';
 
@@ -66,8 +67,10 @@ export interface PostFeedbackRequest extends Hapi.Request {
 
 export interface LoginRequest extends Hapi.Request {
   payload: {
-    email: string,
-    password: string,
+    restrict?: RoleEnum | RoleEnum[]
+    type: 'cookie' | 'header'
+    email: string
+    password: string
   };
 }
 
