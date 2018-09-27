@@ -1374,9 +1374,7 @@
           "auth": true,
           "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": ["user_details-own:read"],
-          "query": {
-            "fields": ["String"]
-          },
+          "query": null,
           "response": {
             "organisationId": "Number",
             "role": "String"
