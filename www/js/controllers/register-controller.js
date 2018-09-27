@@ -80,10 +80,8 @@
 
 			$$api.regions.get().success(function (result) {
 
-				// loop through the results and push only required items to $scope.regions
-				for (var i = 0, len = result.data.length; i < len; i++) {
-					$scope.regions[i] = result.data[i];
-				}
+				// store results on scope
+				$scope.regions = result.data;
 
 				// enable regions select
 				$scope.regionsDisabled = false;
