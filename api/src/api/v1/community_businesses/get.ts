@@ -37,7 +37,7 @@ export default [
       auth: {
         strategy: 'standard',
         access: {
-          scope: ['organisations_details-own:read'],
+          scope: ['organisations_details-own:read', 'organisations_details-parent:read'],
         },
       },
       validate: {

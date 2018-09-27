@@ -39,13 +39,33 @@ describe('GET /community-businesses', () => {
   });
 
   describe('GET /community-businesses/me', () => {
-    test('Returns CB that user is authenticated against', async () => {
+    test('Returns CB that ORG_ADMIN is authenticated against', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me',
         credentials: {
           scope: ['organisations_details-own:read'],
           user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
+          organisation: await Organisations.getOne(knex, {
+            where: { name: 'Black Mesa Research' },
+          }),
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({ _360GivingId: 'GB-COH-9302' }),
+      });
+      expect(Object.keys((<any> res.result).result)).toHaveLength(15);
+    });
+
+    test('Returns CB that VOLUNTEER is authenticated against', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me',
+        credentials: {
+          scope: ['organisations_details-parent:read'],
+          user: await Users.getOne(knex, { where: { name: 'Emma Emmerich' } }),
           organisation: await Organisations.getOne(knex, {
             where: { name: 'Black Mesa Research' },
           }),
