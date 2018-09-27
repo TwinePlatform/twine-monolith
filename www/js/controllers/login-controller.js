@@ -14,7 +14,7 @@
 */
 
 	angular.module('app.controllers').controller('LoginController', function (
-		$scope, $stateParams, $http, $state, $ionicPopup, $localStorage, $ionicLoading, $rootScope, 
+		$scope, $stateParams, $http, $state, $ionicPopup, $localStorage, $ionicLoading, $rootScope,
 		$$api, $$utilities
 	) {
 		/*
@@ -42,71 +42,74 @@
 					$ionicLoading.show();
 
 					// >>> submit login form
-					$$api.user.login($.param($scope.formData)).success(function (result) {
+					$$api.user.login($scope.formData)
+					.then(() => $$api.user.get('me'))
+					.then((response) => {
 
 						// login successful
-						if (result.success) {
+						localStorage.setItem('lastAuth', JSON.stringify($scope.formData));
 
-							localStorage.setItem('lastAuth', JSON.stringify($scope.formData));
+						// hide loader
+						$ionicLoading.hide();
 
-							// hide loader
-							$ionicLoading.hide();
+						// store user data
+						$localStorage.user = response.data.result;
+						$rootScope.currentUser = response.data.result;
 
-							// store user data
-							$localStorage.user = result.data;
+						return $$api.user.roles()
+					})
+					.then((response) => {
+						$localStorage.user.role = response.data.result.role;
 
-							$rootScope.currentUser = result.data;
-
-							  if (result.data.role_id !== undefined && result.data.role_id == 2) {
-								$rootScope.isAdmin = true;
-							  } else {
-								$rootScope.isAdmin = false;
-							  }
-
-							// setup local storage
-							$$utilities.setupLocalStorage();
-
-							// set organisation subheader title
-							$rootScope.organisationName = $localStorage.user.organisation.name;
-
-							  if ($localStorage.user.role_id===2) {
-								console.log($localStorage.user);
-								// go to volunteers
-								$state.go('tabs.view-volunteers');
-							  } else {
-								// go to dashboard
-								$state.go('tabs.dashboard');
-											}
-
+						if ($localStorage.user.role !== undefined && $localStorage.user.role === 'VOLUNTEER_ADMIN') {
+							$rootScope.isAdmin = true;
+						} else {
+							$rootScope.isAdmin = false;
 						}
 
-						// login unsuccessful
-						else {
+						// setup local storage
+						$$utilities.setupLocalStorage();
 
-							// hide loader
-							$ionicLoading.hide();
+						return $$api.organisations.get();
+					})
+					.then((response) => {
+						$localStorage.user.organisation = response.data.result;
 
+						// set organisation subheader title
+						$rootScope.organisationName = $localStorage.user.organisation.name;
+
+						if ($rootScope.isAdmin) {
+							// go to volunteers
+							$state.go('tabs.view-volunteers');
+						} else {
+							// go to dashboard
+							$state.go('tabs.dashboard');
+						}
+
+					}).catch(function(error) {
+
+						// hide loader
+						$ionicLoading.hide();
+
+						if (typeof error === 'object' && error.status >= 400) {
 							// show unsuccess popup
-							var alertPopup = $ionicPopup.alert({
-							  	title: 'Error',
-							  	template: 'Login unsuccessful: ' + result.message,
-							  	okText: 'OK',
-							  	okType: 'button-assertive',
-							  	cssClass: 'error'
+							return $ionicPopup.alert({
+								title: 'Error',
+								template: 'Login unsuccessful: ' + error.data.error.message,
+								okText: 'OK',
+								okType: 'button-assertive',
+								cssClass: 'error'
 							});
-
 						}
-
-					}).error(function(data, error) {
 
 						// process connection error
-						$$utilities.processConnectionError(data, error);
+						$$utilities.processConnectionError(null, error);
 
 					});
 				}
 				// form is invalid
 				else {
-					
+
 				}
 
 			};
