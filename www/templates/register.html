@@ -70,7 +70,7 @@
                 <!-- region -->
                     <span class="input-label">Region</span>
                 <label class="item item-select" ng-class="{'item-select-disabled': regionsDisabled}">
-                    <select ng-model="formData.region" ng-options="option.name for option in regions track by option.id" name="region" id="region" ng-change="populateOrganisations()" ng-disabled="regionsDisabled" required>
+                    <select ng-model="formData.region" ng-options="option for option in regions track by option" name="region" id="region" ng-change="populateOrganisations()" ng-disabled="regionsDisabled" required>
                         <option disabled value="">Select region</option>
                         <!--  -->
                     </select>
