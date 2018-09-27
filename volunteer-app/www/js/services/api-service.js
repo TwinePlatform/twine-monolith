@@ -256,6 +256,13 @@
 							});
 						},
 
+						roles: () =>
+							$http({
+								method: 'GET',
+								url: $$api.url('users/me/roles'),
+								headers: { Authorization: $$api.token.get() },
+							}),
+
 					/*
 						>>> login
 					*/
@@ -267,7 +274,7 @@
 								data: { email, password, type: 'body', restrict: ['VOLUNTEER', 'VOLUNTEER_ADMIN'] }
 							})
 							.then((response) => {
-								$$api.token.set(response.result.token);
+								$$api.token.set(response.data.result.token);
 								return response;
 							}),
 
@@ -542,7 +549,13 @@
 								url: $$api.url('regions'),
 								transformResponse,
 							});
-						}
+						},
+
+						organisations: (regionId) =>
+							$http({
+								method: 'GET',
+								url: $$api.url(`regions/${regionId}/organisations`)
+							})
 
 				},
 
@@ -556,10 +569,11 @@
 						>>> get organisations
 					*/
 
-						get: function(regionId) {
+						get: function() {
 							return $http({
 								method: 'GET',
-								url: $$api.url('regions/' + regionId + '/organisations')
+								url: $$api.url('community-businesses/me'),
+								headers: { Authorization: $$api.token.get() },
 							});
 						},
 
