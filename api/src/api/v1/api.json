@@ -1367,6 +1367,22 @@
           "response": null
         }
       },
+      "/me/roles": {
+        "GET": {
+          "description": "Retrieve details of your own user accounts role",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": ["user_details-own:read"],
+          "query": {
+            "fields": ["String"]
+          },
+          "response": {
+            "organisationId": "Number",
+            "role": "String"
+          }
+        }
+      },
       "/:id/volunteer-logs": {
         "GET": {
           "description": "Retreive volunteer information for a user",

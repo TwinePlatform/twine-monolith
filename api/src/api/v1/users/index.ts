@@ -11,6 +11,7 @@ import adminLogin from './login';
 import logout from './logout';
 import visitors from './visitors';
 import password from './password';
+import roles from './roles';
 
 export default [
   ...get,
@@ -20,4 +21,5 @@ export default [
   ...logout,
   ...visitors,
   ...password,
+  ...roles,
 ];
