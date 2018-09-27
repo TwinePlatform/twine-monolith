@@ -2,10 +2,8 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
 import { compare } from 'bcrypt';
-import { takeWhile } from 'ramda';
 import { Users, Organisations } from '../../../models';
 import { email, password, response } from './schema';
-import { CbAdmins } from '../../../models/cb_admin';
 import { Session, Token } from '../../../auth/strategies/standard';
 import { LoginRequest, EscalateRequest } from '../types';
 import { RoleEnum } from '../../../auth/types';
@@ -60,36 +58,13 @@ const route: Hapi.ServerRoute[] = [
       if (!organisation) return Boom.unauthorized('User has no associated organisation');
 
       if (restrict) {
-        if (Array.isArray(restrict)) {
-          let has = false;
-          for (let i = 0; i < restrict.length; i = i + 1) {
-            const role = restrict[i];
-            const hasRole = await Roles.userHas(
-              knex,
-              { userId: user.id, role, organisationId: organisation.id }
-            );
+        const hasRole = await Roles.userHas(
+          knex,
+          { userId: user.id, organisationId: organisation.id, role: restrict }
+        );
 
-            if (hasRole) {
-              has = true;
-              break;
-            }
-          }
-
-          if (!has) {
-            return Boom.forbidden('User does not have required role');
-          }
-        } else {
-          const hasRole = await Roles.userHas(
-            knex,
-            {
-              userId: user.id,
-              role: <RoleEnum> restrict,
-              organisationId: organisation.id,
-            });
-
-          if (!hasRole) {
-            return Boom.forbidden('User does not have required role');
-          }
+        if (!hasRole) {
+          return Boom.forbidden('User does not have required role');
         }
       }
 

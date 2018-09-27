@@ -85,15 +85,18 @@ const Roles: RolesInterface = {
   },
 
   userHas: async (client, { role, userId, organisationId }) => {
+    const sub = Array.isArray(role)
+      ? client('access_role') .select('access_role_id') .whereIn('access_role_name', role)
+      : client('access_role').select('access_role_id').where({ access_role_name: role });
+
     const inner = client('user_account_access_role')
       .select()
       .where({
         user_account_id: userId,
         organisation_id: organisationId,
-        access_role_id: client('access_role')
-          .select('access_role_id')
-          .where({ access_role_name: role }),
-      });
+      })
+      .whereIn('access_role_id', sub);
+
     const { rows } = await client.raw('SELECT EXISTS ?', [inner]);
     return rows[0].exists;
   },

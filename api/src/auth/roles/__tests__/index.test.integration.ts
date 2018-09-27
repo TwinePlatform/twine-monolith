@@ -162,15 +162,27 @@ describe('Roles Module', () => {
   });
 
   describe('::userHas', () => {
-    test('SUCCESS - returns true exists object if user has role', async () => {
+    test('SUCCESS - returns true if user has role', async () => {
       const result = await Roles.userHas(trx,
         { userId: 1, role: RoleEnum.VISITOR, organisationId: 1 });
       expect(result).toEqual(true);
     });
 
-    test('SUCCESS - returns true exists object if user has role', async () => {
+    test('SUCCESS - returns false if user does not have role', async () => {
       const result = await Roles.userHas(trx,
         { userId: 1, role: RoleEnum.VOLUNTEER, organisationId: 1 });
+      expect(result).toEqual(false);
+    });
+
+    test('SUCCESS - returns true if user has one of many roles', async () => {
+      const result = await Roles.userHas(trx,
+        { userId: 1, role: [RoleEnum.ORG_ADMIN, RoleEnum.VISITOR], organisationId: 1 });
+      expect(result).toEqual(true);
+    });
+
+    test('SUCCESS - returns false if user has none of many roles', async () => {
+      const result = await Roles.userHas(trx,
+        { userId: 1, role: [RoleEnum.ORG_ADMIN, RoleEnum.TWINE_ADMIN], organisationId: 1 });
       expect(result).toEqual(false);
     });
   });
