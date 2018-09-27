@@ -7,7 +7,7 @@ import { getCookie } from '../../../../utils';
 import { getTrx } from '../../../../../tests/utils/database';
 
 
-describe('POST /users/login/admin', () => {
+describe('POST /users/login', () => {
   let server: Hapi.Server;
   let knex: Knex;
   let trx: Knex.Transaction;
