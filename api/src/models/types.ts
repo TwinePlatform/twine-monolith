@@ -302,6 +302,11 @@ export type VisitorCollection = UsersBaseCollection & {
     Promise<Partial<User>[]>
 };
 
+export type VolunteerCollection = UsersBaseCollection & {
+  fromCommunityBusiness: (client: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
+  Promise<Partial<User>[]>
+};
+
 export type CbAdminCollection = UsersBaseCollection & {
   fromOrganisation: (k: Knex, q: Partial<Organisation>) => Promise<User[]>;
 };
