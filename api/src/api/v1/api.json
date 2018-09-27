@@ -1182,22 +1182,6 @@
           "response": "types.visitorUser"
         }
       },
-      "/login/admin": {
-        "POST": {
-          "description": "Login admin accounts",
-          "isImplemented": true,
-          "auth": false,
-          "intendedFor": [
-            "ORG_ADMIN"
-          ],
-          "scope": [],
-          "body": {
-            "email": "String",
-            "password": "String"
-          },
-          "response": {}
-        }
-      },
       "/login": {
         "POST": {
           "description": "Generic login route",
@@ -1212,10 +1196,14 @@
           ],
           "scope": [],
           "body": {
+            "type": "String",
+            "restrict": "String",
             "email": "String",
             "password": "String"
           },
-          "response": {}
+          "response": {
+            "token": "String"
+          }
         }
       },
       "/logout": {

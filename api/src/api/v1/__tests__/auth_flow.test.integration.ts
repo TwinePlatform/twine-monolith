@@ -22,7 +22,7 @@ describe('Auth flow', () => {
       // 1. Login ("restricted") -> 200
       const resLogin = await server.inject({
         method: 'POST',
-        url: '/v1/users/login/admin',
+        url: '/v1/users/login',
         headers: { origin: 'https://dashboard.twine-together.com' },
         payload: {
           email: '1@aperturescience.com',
@@ -50,7 +50,7 @@ describe('Auth flow', () => {
       // 1. Login ("restricted") -> 200
       const resLogin = await server.inject({
         method: 'POST',
-        url: '/v1/users/login/admin',
+        url: '/v1/users/login',
         headers: { origin: 'https://visitor.twine-together.com' },
         payload: {
           email: '1@aperturescience.com',
