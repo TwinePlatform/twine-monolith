@@ -108,6 +108,12 @@ export interface PutUserRequest extends Hapi.Request {
   };
 }
 
+export interface VolunteersRequest extends Hapi.Request {
+  query: ApiRequestQuery & {
+    [k: string]: any
+  };
+}
+
 /*
  * Test related types
  */

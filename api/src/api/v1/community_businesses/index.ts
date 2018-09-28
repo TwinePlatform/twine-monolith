@@ -6,6 +6,7 @@ import visitActivites from './visit_activities';
 import visitors from './visitors';
 import visitLogs from './visit_logs';
 import visitLogAggregates from './visit_logs_aggregates';
+import volunteers from './volunteers';
 
 export default [
   ...get,
@@ -16,4 +17,5 @@ export default [
   ...visitors,
   ...visitLogs,
   ...visitLogAggregates,
+  ...volunteers,
 ];
