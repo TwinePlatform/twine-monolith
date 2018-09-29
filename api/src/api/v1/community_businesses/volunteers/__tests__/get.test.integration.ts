@@ -26,7 +26,7 @@ describe('API /community-businesses/{id}/volunteers', () => {
   });
 
   describe('GET /community-businesses/{id}/volunteers', () => {
-    test('non-filtered query', async () => {
+    test('happy path', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers',
@@ -45,23 +45,19 @@ describe('API /community-businesses/{id}/volunteers', () => {
       expect((<any> res.result).meta).toEqual({ total: 2 });
     });
 
-    test('filtered query', async () => {
+    test('happy path with offset', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/community-businesses/me/volunteers?fields[]=name&filter[gender]=male',
+        url: '/v1/community-businesses/me/volunteers?offset=1',
         credentials: {
           organisation,
           user,
           scope: ['user_details-child:read'],
         },
       });
-
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result).toEqual([expect.objectContaining({
-        name: 'Raiden',
-        id: 7,
-      })]);
-      expect((<any> res.result).meta).toEqual({ total: 1 });
+      expect((<any> res.result).result).toHaveLength(1);
+      expect((<any> res.result).meta).toEqual({ total: 2 });
     });
 
     test('query child organisation as TWINE_ADMIN', async () => {
