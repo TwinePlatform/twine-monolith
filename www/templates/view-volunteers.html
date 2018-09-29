@@ -16,16 +16,16 @@
         </div>
         <ion-list>
 
-            <ion-item style="margin-bottom: 5px" class=" item-remove-animate" ng-repeat="volunteer in volunteers | orderBy: ['-date','-updated_at']">
+            <ion-item style="margin-bottom: 5px" class=" item-remove-animate" ng-repeat="volunteer in volunteers | orderBy: ['-date','-updatedAt']">
                 <div style="float: left">
                 <h2>{{volunteer.name}}</h2>
-                <p> Joined {{ volunteer.created_at }}</p>
+                <p> Joined {{ volunteer.createdAt }}</p>
                 <p ng-if="options.debug">id: {{ volunteer.id }}</p>
                 </div>
                 <div class="button-bar">
-                    <a ng-if="!volunteer.deleted_at" class="button button-positive  button-clear" ng-click="edit(volunteer)" ng-disabled="volunteer.previous_month"><i class="icon-custom-edit"></i></a>
-                    <button ng-if="!volunteer.deleted_at" class="button button-positive  button-clear" ng-click="delete(volunteer)" ng-disabled="volunteer.previous_month"><i class="icon-custom-delete"></i></button>
-                    <span ng-if="volunteer.deleted_at" class="button button-positive  button-clear">Deleted</span>
+                    <a ng-if="!volunteer.deletedAt" class="button button-positive  button-clear" ng-click="edit(volunteer)" ng-disabled="volunteer.previous_month"><i class="icon-custom-edit"></i></a>
+                    <button ng-if="!volunteer.deletedAt" class="button button-positive  button-clear" ng-click="delete(volunteer)" ng-disabled="volunteer.previous_month"><i class="icon-custom-delete"></i></button>
+                    <span ng-if="volunteer.deletedAt" class="button button-positive  button-clear">Deleted</span>
                 </div>
             </ion-item>
 

@@ -3,7 +3,7 @@
     <a href="#" class="button button-small button-light button-outline" ng-click="syncOfflineData()">Sync</a>
 </div>
 
-<ion-tabs ng-if="currentUser.role_id===1" class="tabs-icon-top">
+<ion-tabs ng-if="currentUser.role==='VOLUNTEER'" class="tabs-icon-top">
     <ion-tab title="Dashboard" icon="icon-custom-dashboard" href="#/tab/dashboard">
         <ion-nav-view name="dashboard-tab" ng-init="refreshDashboard()"></ion-nav-view>
     </ion-tab>
@@ -15,7 +15,7 @@
     </ion-tab>
 </ion-tabs>
 
-<ion-tabs style="border-top: 1px solid #ccc" ng-if="currentUser.role_id===2" class="tabs-icon-top">
+<ion-tabs style="border-top: 1px solid #ccc" ng-if="currentUser.role==='VOLUNTEER_ADMIN'"class="tabs-icon-top">
     <ion-tab title="View volunteers" icon="icon-custom-volunteers" href="#/tab/volunteers">
         <ion-nav-view name="view-volunteers-tab"></ion-nav-view>
     </ion-tab>
