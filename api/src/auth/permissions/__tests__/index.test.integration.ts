@@ -29,7 +29,7 @@ describe('Permisions Module', () => {
           .select('')
           .count();
         const query = await Permissions.grantNew(trx, {
-          resource: ResourceEnum.USER_DETAILS,
+          resource: ResourceEnum.ORG_OUTREACH,
           access: AccessEnum.WRITE,
           permissionLevel: PermissionLevelEnum.PARENT,
           role: RoleEnum.VOLUNTEER,
