@@ -35,6 +35,15 @@ export type ApiRouteSpec = {
 };
 
 /*
+ * Prereq types
+ */
+export interface IsSiblingPreReq extends Hapi.Request {
+  params: {
+    userId: string
+  };
+}
+
+/*
  * Request types
  */
 export interface GetCommunityBusinessRequest extends Hapi.Request {
@@ -107,8 +116,7 @@ export interface PutUserRequest extends Hapi.Request {
     userId: string
   };
 }
-
-export interface VolunteersRequest extends Hapi.Request {
+export interface GetAllVolunteersRequest extends Hapi.Request {
   query: ApiRequestQuery & {
     [k: string]: any
   };

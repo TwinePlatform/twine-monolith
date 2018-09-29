@@ -3,6 +3,7 @@ import getCommunityBusiness from './get_community_business';
 import isChildOrganisation from './is_child_organisation';
 import isParentOrganisation from './is_parent_organisation';
 import isChildUser from './is_child_user';
+import isSiblingUser from './is_sibling_user';
 
 export {
   getOrganisation,
@@ -10,4 +11,5 @@ export {
   isChildOrganisation,
   isParentOrganisation,
   isChildUser,
+  isSiblingUser
 };
