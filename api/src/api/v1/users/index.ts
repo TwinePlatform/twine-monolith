@@ -10,6 +10,7 @@ import register from './register';
 import adminLogin from './login';
 import logout from './logout';
 import visitors from './visitors';
+import volunteers from './volunteers';
 import password from './password';
 import roles from './roles';
 
@@ -20,6 +21,7 @@ export default [
   ...adminLogin,
   ...logout,
   ...visitors,
+  ...volunteers,
   ...password,
   ...roles,
 ];
