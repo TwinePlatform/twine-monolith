@@ -111,7 +111,7 @@
 				*/
 
 					if ($localStorage.user) {
-            $$api.user.get($localStorage.user.id).success(function(result) {
+            $$api.user.get('me').success(function(result) {
               $localStorage.user = result.data;
               $rootScope.currentUser = $localStorage.user;
               $rootScope.organisationName = $localStorage.user.organisation.name;
@@ -150,6 +150,8 @@
 				*/
 
 					$rootScope.syncOfflineData = function() {
+						// do not run if not logged in
+						if ($localStorage.user) {
 						// get all offline logs
 						var allLogs = $localStorage.offlineData ? $localStorage.offlineData.logs : [];
 						// filter by current organisation id
@@ -222,7 +224,7 @@
 						}
 
 					}
-
+				}
 
 				/*
 					>>> check for internet connection
