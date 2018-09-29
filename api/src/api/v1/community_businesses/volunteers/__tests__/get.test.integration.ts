@@ -37,18 +37,18 @@ describe('API /community-businesses/{id}/volunteers', () => {
         },
       });
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result).toHaveLength(1);
+      expect((<any> res.result).result).toHaveLength(2);
       expect((<any> res.result).result[0]).toEqual(expect.objectContaining({
         name: 'Emma Emmerich',
         deletedAt: null,
       }));
-      expect((<any> res.result).meta).toEqual({ total: 1 });
+      expect((<any> res.result).meta).toEqual({ total: 2 });
     });
 
     test('filtered query', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/community-businesses/me/visitors?fields[]=name&filter[gender]=male',
+        url: '/v1/community-businesses/me/volunteers?fields[]=name&filter[gender]=male',
         credentials: {
           organisation,
           user,
@@ -57,7 +57,11 @@ describe('API /community-businesses/{id}/volunteers', () => {
       });
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: [], meta: { total: 0 } });
+      expect((<any> res.result).result).toEqual([expect.objectContaining({
+        name: 'Raiden',
+        id: 7,
+      })]);
+      expect((<any> res.result).meta).toEqual({ total: 1 });
     });
 
     test('query child organisation as TWINE_ADMIN', async () => {
@@ -70,47 +74,12 @@ describe('API /community-businesses/{id}/volunteers', () => {
         },
       });
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result).toHaveLength(1);
+      expect((<any> res.result).result).toHaveLength(2);
       expect((<any> res.result).result[0]).toEqual(expect.objectContaining({
         name: 'Emma Emmerich',
         deletedAt: null,
       }));
-      expect((<any> res.result).meta).toEqual({ total: 1 });
-    });
-  });
-
-  describe('GET /community-businesses/me/volunteers/{userId}', () => {
-    test('get specific volunteers details', async () => {
-      const res = await server.inject({
-        method: 'GET',
-        url: '/v1/community-businesses/me/volunteers/6',
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:read'],
-        },
-      });
-
-      expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({
-        result: expect.objectContaining({
-          name: 'Emma Emmerich',
-        }),
-      });
-    });
-
-    test('get 403 when trying to get non-child visitor', async () => {
-      const res = await server.inject({
-        method: 'GET',
-        url: '/v1/community-businesses/me/visitors/4',
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:read'],
-        },
-      });
-
-      expect(res.statusCode).toBe(403);
+      expect((<any> res.result).meta).toEqual({ total: 2 });
     });
   });
 });

@@ -3,9 +3,9 @@ import * as Boom from 'boom';
 import { has, pick, mergeDeepRight, omit } from 'ramda';
 import { User, ModelQuery, Volunteers } from '../../../../models';
 import { query, filterQuery, response } from '../../users/schema';
-import { meOrId, id } from '../schema';
+import { id } from '../schema';
 import { getCommunityBusiness, isChildOrganisation, isChildUser } from '../../prerequisites';
-import { VolunteersRequest } from '../../types';
+import { GetAllVolunteersRequest } from '../../types';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -21,7 +21,7 @@ const routes: Hapi.ServerRoute[] = [
         },
       },
       validate: {
-        params: { organisationId: meOrId },
+        params: { organisationId: id },
         query: {
           ...query,
           ...filterQuery,
@@ -34,7 +34,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: isChildOrganisation, assign: 'isChild' },
       ],
     },
-    handler: async (request: VolunteersRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request: GetAllVolunteersRequest, h: Hapi.ResponseToolkit) => {
       const { query, pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
       const { filter, fields: _fields } = query;
 
@@ -91,48 +91,75 @@ const routes: Hapi.ServerRoute[] = [
 
   {
     method: 'GET',
-    path: '/community-businesses/me/volunteers/{userId}',
+    path: '/community-businesses/me/volunteers',
     options: {
       description: 'Retreive list of all volunteers from an organisation',
       auth: {
         strategy: 'standard',
         access: {
-          scope: ['user_details-child:read'],
+          scope: ['user_details-child:read', 'user_details-parent:read'],
         },
       },
       validate: {
-        params: {
-          userId: id,
+        query: {
+          ...query,
+          ...filterQuery,
         },
         failAction: (request, h, err) => err,
       },
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
-        { method: isChildUser, assign: 'isChildUser' },
       ],
     },
-    handler: async (request: VolunteersRequest, h: Hapi.ResponseToolkit) => {
-      const {
-        params: { userId },
-        pre: { isChildUser, communityBusiness: cb },
-        server: { app: { knex } },
-      } = request;
+    handler: async (request: GetAllVolunteersRequest, h: Hapi.ResponseToolkit) => {
+      const { query, pre: { communityBusiness }, server: { app: { knex } } } = request;
+      const { filter, fields: _fields } = query;
 
-      if (!isChildUser) {
-        return Boom.forbidden('Insufficient permissions to access this resource');
+      const q: {
+        limit?: number,
+        offset?: number,
+        order?: [string, 'asc' | 'desc']
+      } = {
+        ...pick(['limit', 'offset'], query),
+        order: query.sort ? [query.sort, query.order || 'asc'] : undefined,
+      };
+
+      // fields
+      // TODO: Need to actually filter the object
+      const fields = <(keyof User)[]> _fields;
+
+      const modelQuery: ModelQuery<User> = { fields, ...q, where: { deletedAt: null } };
+
+      // age filter
+      if (filter && filter.age) {
+        modelQuery.whereBetween = { birthYear: filter.age };
       }
 
-      const [volunteer] =
-        await Volunteers.fromCommunityBusiness(knex, cb, { where: { id: Number(userId) } });
-
-      /* istanbul ignore next */
-      if (!volunteer) {
-        // This _should_ be impossible because of the `isChildUser` pre-requisite
-        return Boom.notFound('No visitor with this id');
+      // gender filter
+      if (filter && filter.gender) {
+        modelQuery.where = mergeDeepRight(
+          modelQuery.where || {},
+          { gender: filter.gender }
+        );
       }
 
-      return Volunteers.serialise(volunteer);
+      const volunteers =
+        await Volunteers.fromCommunityBusiness(knex, communityBusiness, modelQuery);
+
+      const count = has('limit', modelQuery) || has('offset', modelQuery)
+        ? await Volunteers.fromCommunityBusiness(
+            knex,
+            communityBusiness,
+            omit(['limit', 'offset'], modelQuery)
+          )
+          .then((res) => res.length)
+        : volunteers.length;
+
+      return {
+        result: await Promise.all(volunteers.map(Volunteers.serialise)),
+        meta: { total: count },
+      };
     },
   },
 ];
