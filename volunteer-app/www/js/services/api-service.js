@@ -252,7 +252,7 @@
 							return $http({
 								method: 'GET',
 								url: $$api.url('users/' + userId),
-								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+								headers: { Authorization: $$api.token.get() }
 							});
 						},
 
@@ -363,10 +363,11 @@
           >>> get Volunteers
         */
 
-        getVolunteers: function(organisationId) {
+        getVolunteers: function() {
           return $http({
             method: 'GET',
-            url: $$api.url('volunteers/organisation/' + organisationId)
+						url: $$api.url('community-businesses/me/volunteers/'),
+						headers: { Authorization: $$api.token.get() },
           });
         },
 
@@ -377,7 +378,8 @@
         getVolunteer: function(volunteerId) {
           return $http({
             method: 'GET',
-            url: $$api.url('volunteers/' + volunteerId)
+						url: $$api.url('users/volunteers/' + volunteerId),
+						headers: { Authorization: $$api.token.get() },
           });
         },
 
