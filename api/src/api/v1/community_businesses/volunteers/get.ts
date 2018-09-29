@@ -4,7 +4,7 @@ import { has, pick, mergeDeepRight, omit } from 'ramda';
 import { User, ModelQuery, Volunteers } from '../../../../models';
 import { query, filterQuery, response } from '../../users/schema';
 import { id } from '../schema';
-import { getCommunityBusiness, isChildOrganisation, isChildUser } from '../../prerequisites';
+import { getCommunityBusiness, isChildOrganisation } from '../../prerequisites';
 import { GetAllVolunteersRequest } from '../../types';
 
 

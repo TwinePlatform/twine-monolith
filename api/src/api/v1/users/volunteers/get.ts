@@ -1,5 +1,5 @@
 import * as Hapi from 'hapi';
-import { Users, Volunteers } from '../../../../models';
+import { Volunteers } from '../../../../models';
 import { response } from '../schema';
 import { id } from '../../schema/request';
 import { getCommunityBusiness, isSiblingUser } from '../../prerequisites';
