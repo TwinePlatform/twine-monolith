@@ -26,7 +26,9 @@ describe('Visitor model', () => {
   describe('Read', () => {
     test('get :: returns only those users with a volunteer type role', async () => {
       const volunteers = await Volunteers.get(knex);
-      expect(volunteers).toEqual([expect.objectContaining({ id: 6, name: 'Emma Emmerich' })]);
+      expect(volunteers).toEqual(expect.arrayContaining([
+        expect.objectContaining({ id: 6, name: 'Emma Emmerich' }),
+      ]));
     });
 
     test('get :: no deleted volunteers', async () => {
@@ -53,7 +55,7 @@ describe('Visitor model', () => {
       const cb = await CommunityBusinesses.getOne(knex, { where: { name: 'Black Mesa Research' } });
       const volunteers = await Volunteers.fromCommunityBusiness(knex, cb);
 
-      expect(volunteers).toHaveLength(1);
+      expect(volunteers).toHaveLength(2);
       expect(volunteers[0]).toEqual(expect.objectContaining({ name: 'Emma Emmerich' }));
     });
   });

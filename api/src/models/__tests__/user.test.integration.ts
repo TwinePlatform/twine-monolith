@@ -28,7 +28,7 @@ describe('User Model', () => {
     test('get :: no arguments gets all users', async () => {
       const users = await Users.get(trx);
 
-      expect(users.length).toBe(6);
+      expect(users.length).toBe(8);
       expect(users).toEqual(expect.arrayContaining([
         expect.objectContaining({
           name: 'Chell',
@@ -65,12 +65,21 @@ describe('User Model', () => {
     test('get :: order results', async () => {
       const users = await Users.get(trx, { order: ['name', 'desc'] });
       expect(users.map((u) => u.name).sort())
-        .toEqual(['Barney', 'Big Boss', 'Chell', 'Emma Emmerich', 'GlaDos', 'Gordon']);
+        .toEqual([
+          'Barney',
+          'Big Boss',
+          'Chell',
+          'Emma Emmerich',
+          'GlaDos',
+          'Gordon',
+          'Raiden',
+          'Turret',
+        ]);
     });
 
     test('get :: offset results', async () => {
       const users = await Users.get(trx, { offset: 3, order: ['id', 'asc'] });
-      expect(users.length).toBe(3);
+      expect(users.length).toBe(5);
       expect(users[0].name).toBe('Barney');
     });
 
