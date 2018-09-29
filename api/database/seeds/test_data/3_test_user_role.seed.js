@@ -28,5 +28,15 @@ exports.seed = (knex) =>
         user_account_id: knex('user_account').select('user_account_id').where({ user_name: 'Emma Emmerich' }),
         organisation_id: knex('organisation').select('organisation_id'). where({ organisation_name: 'Black Mesa Research' }),
         access_role_id: knex('access_role').select('access_role_id').where({ access_role_name: 'VOLUNTEER' }),
-      }
+      },
+      {
+        user_account_id: knex('user_account').select('user_account_id').where({ user_name: 'Raiden' }),
+        organisation_id: knex('organisation').select('organisation_id'). where({ organisation_name: 'Black Mesa Research' }),
+        access_role_id: knex('access_role').select('access_role_id').where({ access_role_name: 'VOLUNTEER_ADMIN' }),
+      },
+      {
+        user_account_id: knex('user_account').select('user_account_id').where({ user_name: 'Turret' }),
+        organisation_id: knex('organisation').select('organisation_id'). where({ organisation_name: 'Aperture Science' }),
+        access_role_id: knex('access_role').select('access_role_id').where({ access_role_name: 'VOLUNTEER_ADMIN' }),
+      },
   ]);
