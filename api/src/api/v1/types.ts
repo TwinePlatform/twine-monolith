@@ -118,7 +118,7 @@ export interface PutUserRequest extends Hapi.Request {
 }
 export interface GetAllVolunteersRequest extends Hapi.Request {
   query: ApiRequestQuery & {
-    [k: string]: any
+    [k: string]: string
   };
 }
 
