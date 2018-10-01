@@ -6,31 +6,6 @@ import { getTrx } from '../../../tests/utils/database';
 import { VolunteerLogs, Users, CommunityBusinesses } from '..';
 
 
-/*
- * get -> gets xs
- * getOne -> gets x
- * get with sort -> sort by f asc === reverse sort by f desc
- * get with limit n -> length xs = n
- *                  -> sort by f asc !== reverse sort by f desc
- *                  -> n = Infinity === get
- * get with fields -> xs = get.map(pick(f))
- * get with offset -> offset 5 = tail 5 get
- *
- * update partial -> updates on re-get
- * update full -> updates on re-get
- * update same values -> no change
- * update non-existent -> throws
- *
- * add partial -> adds with defaults on re-get
- * add full -> adds on re-get
- * add existing -> throws
- *
- * destroy single existing -> marked deleted
- * destroy multiple existing -> marked deleted
- * destroy single non-existing -> silent fail
- * destroy multiple non-existing -> silent fail
- */
-
 describe('VolunteerLog model', () => {
   let trx: Knex.Transaction;
   const config = getConfig(process.env.NODE_ENV);
