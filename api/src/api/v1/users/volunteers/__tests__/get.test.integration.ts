@@ -29,7 +29,7 @@ describe('GET /v1/users/volunteers/:id', () => {
       method: 'GET',
       url: '/v1/users/volunteers/6',
       credentials: {
-        scope: ['user_details-parent:read'],
+        scope: ['user_details-sibling:read'],
         user: volunteerAdmin,
         organisation: blackMesa,
       },
@@ -46,7 +46,7 @@ describe('GET /v1/users/volunteers/:id', () => {
       method: 'GET',
       url: '/v1/users/volunteers/6',
       credentials: {
-        scope: ['user_details-parent:read'],
+        scope: ['user_details-sibling:read'],
         user: adminFromWrongOrg,
         organisation: apertureScience,
       },

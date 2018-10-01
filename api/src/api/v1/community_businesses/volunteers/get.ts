@@ -80,7 +80,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          scope: ['user_details-child:read', 'user_details-parent:read'],
+          scope: ['user_details-child:read', 'user_details-sibling:read'],
         },
       },
       validate: {

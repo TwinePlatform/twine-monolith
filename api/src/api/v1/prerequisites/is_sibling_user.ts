@@ -1,5 +1,5 @@
 /*
- * "user_details-parent" route pre-requisite
+ * "user_details-sibling" route pre-requisite
  *
  * Determines if the authenticated user is trying to access an data
  * of a sibling at the same organisation.
