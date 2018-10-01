@@ -13,6 +13,7 @@ import visitors from './visitors';
 import volunteers from './volunteers';
 import password from './password';
 import roles from './roles';
+import volunteer_logs from './volunteer_logs';
 
 export default [
   ...get,
@@ -24,4 +25,5 @@ export default [
   ...volunteers,
   ...password,
   ...roles,
+  ...volunteer_logs,
 ];
