@@ -47,3 +47,6 @@ export const gender =
 
 export const id =
   Joi.number().integer().positive();
+
+export const since = Joi.date().iso().default('1970-01-01T00:00:00.000Z');
+export const until = Joi.date().iso().default(() => Date.now(), 'Current date');
