@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import { Volunteers } from '../../../../models';
 import { response } from '../schema';
 import { id } from '../../schema/request';
-import { getCommunityBusiness, isSiblingUser } from '../../prerequisites';
+import { getCommunityBusiness, requireSiblingUser } from '../../prerequisites';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -10,7 +10,7 @@ const routes: Hapi.ServerRoute[] = [
     method: 'GET',
     path: '/users/volunteers/{userId}',
     options: {
-      description: 'Retrieve own user details',
+      description: 'Retrieve a single volunteers details',
       auth: {
         strategy: 'standard',
         access: {
@@ -24,13 +24,14 @@ const routes: Hapi.ServerRoute[] = [
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
-        { method: isSiblingUser, assign: 'isSibling' },
+        { method: requireSiblingUser, assign: 'requireSibling' },
       ],
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
       const { server: { app: { knex } }, params: { userId } } = request;
 
-      return Volunteers.getOne(knex, { where: { id: Number(userId) } });
+      const volunteer = await Volunteers.getOne(knex, { where: { id: Number(userId) } });
+      return Volunteers.serialise(volunteer);
     },
   },
 ];
