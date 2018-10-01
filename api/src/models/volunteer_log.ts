@@ -177,7 +177,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
 
   async fromUser (client, user, bw = {}) {
     return VolunteerLogs.get(client, {
-      where: { userId: user.id },
+      where: { userId: user.id, deletedAt: null },
       whereBetween: bw.since || bw.until
         ? {
           startedAt: [
@@ -193,6 +193,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
     return VolunteerLogs.get(client, {
       where: {
         organisationId: cb.id,
+        deletedAt: null,
       },
       whereBetween: bw.since || bw.until
         ? {
@@ -210,6 +211,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
       where: {
         organisationId: cb.id,
         userId: user.id,
+        deletedAt: null,
       },
       whereBetween: bw.since || bw.until
         ? {

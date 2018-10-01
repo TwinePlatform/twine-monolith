@@ -101,6 +101,7 @@ const routes: Hapi.ServerRoute[] = [
             id: Number(logId),
             userId: user.id,
             organisationId: communityBusiness.id,
+            deletedAt: null,
           },
           fields: query.fields,
         }
@@ -109,6 +110,43 @@ const routes: Hapi.ServerRoute[] = [
       return !log
         ? Boom.notFound('No log with this id found under this account')
         : log;
+    },
+  },
+
+  {
+    method: 'DELETE',
+    path: '/users/me/volunteer-logs/{logId}',
+    options: {
+      description: 'Delete own volunteer logs',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['volunteer_logs-parent:write'],
+        },
+      },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request: GetVolunteerLogRequest, h: Hapi.ResponseToolkit) => {
+      const {
+        server: { app: { knex } },
+        auth: { credentials: { user } },
+        pre: { communityBusiness },
+        params: { logId },
+      } = request;
+
+      const affectedRows = await VolunteerLogs.destroy(knex, {
+        id: Number(logId),
+        userId: user.id,
+        organisationId: communityBusiness.id,
+        deletedAt: null,
+      });
+
+      return affectedRows === 0
+        ? Boom.notFound('No log with this id found under this account')
+        : null;
     },
   },
 

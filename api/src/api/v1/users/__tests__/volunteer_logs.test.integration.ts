@@ -3,12 +3,14 @@ import * as Knex from 'knex';
 import * as moment from 'moment';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
+import { getTrx } from '../../../../../tests/utils/database';
 import { User, Users, Organisation, Organisations } from '../../../../models';
 
 
-describe.only('API /users/me/volunteer-logs', () => {
+describe('API /users/me/volunteer-logs', () => {
   let server: Hapi.Server;
   let knex: Knex;
+  let trx: Knex.Transaction;
   let user: User;
   let organisation: Organisation;
   const config = getConfig(process.env.NODE_ENV);
@@ -23,6 +25,16 @@ describe.only('API /users/me/volunteer-logs', () => {
 
   afterAll(async () => {
     await server.shutdown(true);
+  });
+
+  beforeEach(async () => {
+    trx = await getTrx(knex);
+    server.app.knex = trx;
+  });
+
+  afterEach(async () => {
+    await trx.rollback();
+    server.app.knex = knex;
   });
 
   describe('GET /users/me/volunteers-logs', () => {
@@ -143,6 +155,64 @@ describe.only('API /users/me/volunteer-logs', () => {
           user: await Users.getOne(knex, { where: { id: 3 } }),
           organisation,
           scope: ['volunteer_logs-parent:read'],
+        },
+      });
+
+      expect(res.statusCode).toBe(404);
+    });
+  });
+
+  describe('DELETE /users/me/volunteer-logs', () => {
+    test('can mark own volunteer log as deleted', async () => {
+      const res = await server.inject({
+        method: 'DELETE',
+        url: '/v1/users/me/volunteer-logs/1',
+        credentials: {
+          user,
+          organisation,
+          scope: ['volunteer_logs-parent:write'],
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: null });
+
+      const res2 = await server.inject({
+        method: 'GET',
+        url: '/v1/users/me/volunteer-logs/1',
+        credentials: {
+          user,
+          organisation,
+          scope: ['volunteer_logs-parent:read'],
+        },
+      });
+
+      expect(res2.statusCode).toBe(404);
+
+      const res3 = await server.inject({
+        method: 'GET',
+        url: '/v1/users/me/volunteer-logs',
+        credentials: {
+          user,
+          organisation,
+          scope: ['volunteer_logs-parent:read'],
+        },
+      });
+
+      expect(res3.statusCode).toBe(200);
+      expect((<any> res3.result).result).toHaveLength(6);
+      expect((<any> res3.result).result.map((x: any) => x.id)).not.toContain(1);
+    });
+
+    test('cannot mark other user\'s volunteer log as deleted', async () => {
+      const otherUser = await Users.getOne(trx, { where: { id: 3 } });
+      const res = await server.inject({
+        method: 'DELETE',
+        url: '/v1/users/me/volunteer-logs/1',
+        credentials: {
+          user: otherUser,
+          organisation,
+          scope: ['volunteer_logs-parent:write'],
         },
       });
 
