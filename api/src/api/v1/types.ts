@@ -37,7 +37,7 @@ export type ApiRouteSpec = {
 /*
  * Prereq types
  */
-export interface IsSiblingPreReq extends Hapi.Request {
+export interface RequireSiblingPreReq extends Hapi.Request {
   params: {
     userId: string
   };
@@ -111,7 +111,7 @@ export interface GetVisitorRequest extends Hapi.Request {
 }
 
 export interface PutUserRequest extends Hapi.Request {
-  payload: Omit<User, 'id' | keyof CommonTimestamps | 'password' | 'qrCode'>;
+  payload: Partial<Omit<User, 'id' | keyof CommonTimestamps | 'password' | 'qrCode'>>;
   params: {
     userId: string
   };

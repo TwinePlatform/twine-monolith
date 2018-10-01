@@ -4,7 +4,7 @@ import { init } from '../../../../../tests/utils/server';
 import { RoleEnum } from '../../../../auth/types';
 import { getConfig } from '../../../../../config';
 import { Users, Organisation, User, CommunityBusinesses, Volunteers } from '../../../../models';
-import pre from '../is_sibling_user';
+import pre from '../require_sibling_user';
 
 
 describe('Pre-requisite :: is_sibling_user', () => {

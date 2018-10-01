@@ -7,6 +7,8 @@
  * Conditions under which this is true for user X attemptying to access user Y's data:
  *
  * - User X is an VOLUNTEER_ADMIN for a community business for which user Y is a VOLUNTEER
+ * - User X is a VOLUNTEER for a community business for which user Y is an ORG_ADMIN
+ *   (note this use case is currently not needed)
  *
  * Assumptions:
  * - This route pre-requisite is run _AFTER_ the organisation in question
@@ -20,10 +22,10 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import { Organisations } from '../../../models';
-import { IsSiblingPreReq } from '../types';
+import { RequireSiblingPreReq } from '../types';
 import { RoleEnum } from '../../../auth/types';
 
-export default async (request: IsSiblingPreReq, h: Hapi.ResponseToolkit) => {
+export default async (request: RequireSiblingPreReq, h: Hapi.ResponseToolkit) => {
   const {
     auth: { credentials: { organisation, role } },
     server: { app: { knex } },
