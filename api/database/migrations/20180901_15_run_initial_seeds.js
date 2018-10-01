@@ -33,6 +33,7 @@ exports.up = (knex) => {
               .then(() => require(path.join(basePath, '23_test_visit_activity.seed.js')).seed(knex))
               .then(() => require(path.join(basePath, '24_test_visit.seed.js')).seed(knex))
               .then(() => require(path.join(basePath, '25_test_visit_feedback.seed.js')).seed(knex))
+              .then(() => require(path.join(basePath, '26_test_volunteer_hours_log.seed.js')).seed(knex))
           : Promise.resolve()
     )
 };
@@ -64,4 +65,5 @@ exports.down = (knex) => {
     .then(() => knex('visit_activity').truncate())
     .then(() => knex('visit').truncate())
     .then(() => knex('visit_feedback').truncate())
+    .then(() => knex('volunteer_hours_log').truncate())
 };
