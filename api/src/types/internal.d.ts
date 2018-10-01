@@ -1,7 +1,7 @@
 export type Nothing = null;
 export type Maybe<T> = T | Nothing;
 
-export type Map<K extends string | number, V> = {
+export type Map<K extends string | number | symbol, V> = {
   [k in K]: V
 }
 

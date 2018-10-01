@@ -155,8 +155,7 @@ export const Users: UserCollection = {
   },
 
   async exists (client, query) {
-    const res = await Users.getOne(client, query);
-    return res !== null;
+    return null !== await Users.getOne(client, query);
   },
 
   async add (client, user) {
