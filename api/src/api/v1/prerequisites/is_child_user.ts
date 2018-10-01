@@ -30,27 +30,34 @@ export default async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
     return true;
   }
 
-  const [isOrgAdmin, targetIsVisitor, targetIsVolunteer] = await Promise.all([
-    Roles.userHas(knex, {
-      role: RoleEnum.ORG_ADMIN,
-      userId: user.id,
-      organisationId: organisation.id,
-    }),
+  const [isOrgAdmin, targetIsVisitor, targetIsVolunteer, targetIsVolunteerAdmin] =
+    await Promise.all([
+      Roles.userHas(knex, {
+        role: RoleEnum.ORG_ADMIN,
+        userId: user.id,
+        organisationId: organisation.id,
+      }),
 
-    Roles.userHas(knex, {
-      role: RoleEnum.VISITOR,
-      userId: Number(userId),
-      organisationId: organisation.id,
-    }),
+      Roles.userHas(knex, {
+        role: RoleEnum.VISITOR,
+        userId: Number(userId),
+        organisationId: organisation.id,
+      }),
 
-    Roles.userHas(knex, {
-      role: RoleEnum.VOLUNTEER,
-      userId: Number(userId),
-      organisationId: organisation.id,
-    }),
-  ]);
+      Roles.userHas(knex, {
+        role: RoleEnum.VOLUNTEER,
+        userId: Number(userId),
+        organisationId: organisation.id,
+      }),
 
-  if (isOrgAdmin && (targetIsVisitor || targetIsVolunteer)) {
+      Roles.userHas(knex, {
+        role: RoleEnum.VOLUNTEER_ADMIN,
+        userId: Number(userId),
+        organisationId: organisation.id,
+      }),
+    ]);
+
+  if (isOrgAdmin && (targetIsVisitor || targetIsVolunteer || targetIsVolunteerAdmin)) {
     return true;
   }
 
