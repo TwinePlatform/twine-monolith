@@ -2,7 +2,7 @@
  * Type declarations for the models
  */
 import * as Knex from 'knex';
-import { Maybe, Dictionary, Float, Int, Omit } from '../types/internal';
+import { Maybe, Dictionary, Float, Int, Omit, Map } from '../types/internal';
 
 /*
  * Common and utility types
@@ -236,6 +236,20 @@ export type SingleUseToken = Readonly<Omit<CommonTimestamps, 'modifiedAt'> & {
   usedAt?: string
 }>;
 
+export type VolunteerActivity = Readonly<CommonTimestamps & {
+  id: Int
+  name: string
+}>;
+
+export type VolunteerLog = Readonly<CommonTimestamps & {
+  id: Int
+  userId: Int
+  organisationId: Int
+  activity: string
+  duration: Duration
+  startedAt: string
+}>;
+
 
 export type Model =
   User
@@ -250,7 +264,8 @@ export type Model =
   | LinkedFeedback
   | OutreachMeeting
   | OutreachCampaign
-  | SingleUseToken;
+  | SingleUseToken
+  | VolunteerLog;
 
 
 /*
@@ -260,7 +275,7 @@ export type Model =
  * collection of model objects
  */
 export type Collection<T extends Model> = {
-  toColumnNames: (a: Partial<T>) => Dictionary<any>
+  toColumnNames: (a: Partial<Map<keyof T, any>>) => Dictionary<any>
   create: (a: Partial<T>) => T
   exists: (c: Knex, a?: ModelQuery<T>) => Promise<boolean>
   get: (c: Knex, a?: ModelQuery<T>) => Promise<T[]>
@@ -295,7 +310,7 @@ export type OrganisationCollection = Collection<Organisation> & {
   fromUser: (k: Knex, q: ModelQuery<User>) => Promise<Organisation>;
 };
 
-export interface CommunityBusinessCollection extends Collection<CommunityBusiness> {
+export type CommunityBusinessCollection = Collection<CommunityBusiness> & {
   addFeedback: (k: Knex, c: CommunityBusiness, score: Int) => Promise<LinkedFeedback>;
   getFeedback: (
     k: Knex,
@@ -316,15 +331,29 @@ export interface CommunityBusinessCollection extends Collection<CommunityBusines
     c: CommunityBusiness,
     aggs: string[],
     q?: ModelQuery<LinkedVisitEvent & User>) => Promise<any>;
-}
+};
 
+export type VolunteerLogCollection = Collection<VolunteerLog> & {
+  fromUser: (
+      k: Knex,
+      u: User,
+      bw?: Partial<DateModelQuery>) => Promise<VolunteerLog[]>
+  fromCommunityBusiness: (
+      k: Knex,
+      c: CommunityBusiness,
+      bw?: Partial<DateModelQuery>) => Promise<VolunteerLog[]>
+  fromUserAtCommunityBusiness: (
+      k: Knex,
+      u: User, c: CommunityBusiness,
+      bw?: Partial<DateModelQuery>) => Promise<VolunteerLog[]>
+};
 
 /*
  * Model query declarations
  */
 export type WhereQuery<T> = Partial<T>;
 export type WhereBetweenQuery<T> = {
-  [k in keyof T]?: [number, number]
+  [k in keyof T]?: [number | Date, number | Date]
 };
 export type DateTimeQuery = {
   since: Date
@@ -344,3 +373,4 @@ export type ModelQuery<T> = Partial<ModelQueryInvariant & {
   whereNotBetween: WhereBetweenQuery<T>
   fields: (keyof T)[]
 }>;
+export type DateModelQuery = DateTimeQuery & ModelQueryInvariant;
