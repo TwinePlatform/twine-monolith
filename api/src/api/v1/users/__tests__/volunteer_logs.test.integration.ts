@@ -93,4 +93,60 @@ describe.only('API /users/me/volunteer-logs', () => {
       expect((<any> res.result).result).toHaveLength(0);
     });
   });
+
+  describe('GET /users/me/volunteer-logs/{logId}', () => {
+    test('can get own volunteer log', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/users/me/volunteer-logs/1',
+        credentials: {
+          user,
+          organisation,
+          scope: ['volunteer_logs-parent:read'],
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          id: 1,
+          organisationId: organisation.id,
+          userId: user.id,
+          duration: { minutes: 10, seconds: 20 },
+          activity: 'Helping with raising funds (shop, events…)',
+        }),
+      });
+    });
+
+    test('can filter fields of own volunteer log', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/users/me/volunteer-logs/1?fields[]=activity',
+        credentials: {
+          user,
+          organisation,
+          scope: ['volunteer_logs-parent:read'],
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: { activity: 'Helping with raising funds (shop, events…)' },
+      });
+    });
+
+    test('cannot get other users volunteer log', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/users/me/volunteer-logs/1',
+        credentials: {
+          user: await Users.getOne(knex, { where: { id: 3 } }),
+          organisation,
+          scope: ['volunteer_logs-parent:read'],
+        },
+      });
+
+      expect(res.statusCode).toBe(404);
+    });
+  });
 });

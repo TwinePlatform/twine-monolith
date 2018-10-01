@@ -15,6 +15,7 @@ export {
   VisitEvent,
   LinkedVisitEvent,
   Subscription,
+  VolunteerLog,
   GenderEnum,
   DisabilityEnum,
   EthnicityEnum,
