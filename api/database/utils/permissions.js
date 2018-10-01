@@ -1,5 +1,5 @@
 const api = require('../../src/api/v1/api.json');
-const perms = require('../../src/api/v1/permissions.json');
+const perms = require('../seeds/permissions.seed.json');
 const { map } = require('ramda');
 
 const restrictedScopes = {

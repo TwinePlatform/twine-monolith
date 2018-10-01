@@ -27,8 +27,6 @@
     "user_details-own:delete",
     "user_details-own:read",
     "user_details-own:write",
-    "user_details-sibling:read",
-    "user_details-sibling:write",
     "visit_activities-child:read",
     "visit_activities-own:delete",
     "visit_activities-own:read",
@@ -119,8 +117,6 @@
     "VOLUNTEER_ADMIN": [
       "organisations_details-parent:read",
       "organisations_outreach-parent:read",
-      "user_details-sibling:read",
-      "user_details-sibling:write",
       "user_details-own:read",
       "user_details-own:write",
       "volunteer_logs-parent:delete",
