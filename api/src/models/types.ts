@@ -21,6 +21,13 @@ export type Coordinates = {
   lng: Float
 };
 
+export type Duration = Partial<{
+  seconds: number
+  minutes: number
+  hours: number
+  days: number
+}>;
+
 export type CommonTimestamps = {
   createdAt: string
   modifiedAt?: string
