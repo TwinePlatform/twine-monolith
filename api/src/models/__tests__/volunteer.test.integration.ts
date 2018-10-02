@@ -3,7 +3,7 @@ import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
-import { Volunteers, DisabilityEnum } from '..';
+import { Volunteers, DisabilityEnum, Users } from '..';
 import { CommunityBusinesses } from '../community_business';
 
 describe('Visitor model', () => {
@@ -96,6 +96,20 @@ describe('Visitor model', () => {
         await Volunteers.update(trx, volunteer, changeset);
       } catch (error) {
         expect(error).toBeTruthy();
+      }
+    });
+
+    test('update :: failed as not a volunteer user', async () => {
+      expect.assertions(2);
+
+      const changeset = <any> { gender: 'non-existent' };
+      const volunteer = await Users.getOne(trx, { where: { id: 1 } });
+
+      try {
+        await Volunteers.update(trx, volunteer, changeset);
+      } catch (error) {
+        expect(error).toBeTruthy();
+        expect(error.message).toBe('User is not a volunteer');
       }
     });
   });

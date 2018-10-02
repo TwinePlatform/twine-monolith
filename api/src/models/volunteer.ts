@@ -60,11 +60,10 @@ export const Volunteers: VolunteerCollection = {
   },
 
   async update (client, user, changes) {
-    const volunteer = Volunteers.getOne(client, { where: { id: user.id } });
-    if (!volunteer) {
-      throw new Error('User is not a volunteer');
+    if (await Volunteers.exists(client, { where: { id: user.id } })) {
+      return Users.update(client, user, changes);
     }
-    return Users.update(client, user, changes);
+    throw new Error('User is not a volunteer');
   },
 
   async destroy (client, user) {
