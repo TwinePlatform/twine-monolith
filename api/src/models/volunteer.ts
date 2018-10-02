@@ -60,6 +60,10 @@ export const Volunteers: VolunteerCollection = {
   },
 
   async update (client, user, changes) {
+    const volunteer = Volunteers.getOne(client, { where: { id: user.id } });
+    if (!volunteer) {
+      throw new Error('User is not a volunteer');
+    }
     return Users.update(client, user, changes);
   },
 
@@ -99,6 +103,6 @@ export const Volunteers: VolunteerCollection = {
   },
 
   async serialise (user) {
-    return omit(['password'], user);
+    return omit(['password', 'qrCode'], user);
   },
 };

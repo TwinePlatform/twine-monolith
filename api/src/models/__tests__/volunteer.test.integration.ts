@@ -105,7 +105,7 @@ describe('Visitor model', () => {
       const volunteer = await Volunteers.getOne(knex);
       const serialised = await Volunteers.serialise(volunteer);
 
-      expect(serialised).toEqual(omit(['password'], volunteer));
+      expect(serialised).toEqual(omit(['password', 'qrCode'], volunteer));
     });
   });
 });
