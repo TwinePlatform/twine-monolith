@@ -1,10 +1,11 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import * as moment from 'moment';
+import { omit } from 'ramda';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
-import { User, Users, Organisation, Organisations } from '../../../../models';
+import { User, Users, Organisation, Organisations, VolunteerLog } from '../../../../models';
 
 
 describe('API /users/me/volunteer-logs', () => {
@@ -155,6 +156,144 @@ describe('API /users/me/volunteer-logs', () => {
           user: await Users.getOne(knex, { where: { id: 3 } }),
           organisation,
           scope: ['volunteer_logs-parent:read'],
+        },
+      });
+
+      expect(res.statusCode).toBe(404);
+    });
+  });
+
+  describe('PUT /users/me/volunteer-logs/{logId}', () => {
+    test('can partial update own log', async () => {
+      const resPre = await server.inject({
+        method: 'GET',
+        url: '/v1/users/me/volunteer-logs/1',
+        credentials: {
+          user,
+          organisation,
+          scope: ['volunteer_logs-parent:read'],
+        },
+      });
+
+      const log = <VolunteerLog> (<any> resPre.result).result;
+
+      const res = await server.inject({
+        method: 'PUT',
+        url: '/v1/users/me/volunteer-logs/1',
+        credentials: {
+          user,
+          organisation,
+          scope: ['volunteer_logs-parent:write'],
+        },
+        payload: {
+          activity: 'Committee work, AGM',
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          ...omit(['modifiedAt'], log),
+          activity: 'Committee work, AGM',
+        }),
+      });
+      expect((<any> res.result).result.modifiedAt).not.toEqual(log.modifiedAt);
+    });
+
+    test('can full update own log', async () => {
+      const resPre = await server.inject({
+        method: 'GET',
+        url: '/v1/users/me/volunteer-logs/1',
+        credentials: {
+          user,
+          organisation,
+          scope: ['volunteer_logs-parent:read'],
+        },
+      });
+
+      const log = <VolunteerLog> (<any> resPre.result).result;
+
+      const then = new Date('2018-07-23T10:33:22.122Z');
+      const res = await server.inject({
+        method: 'PUT',
+        url: '/v1/users/me/volunteer-logs/1',
+        credentials: {
+          user,
+          organisation,
+          scope: ['volunteer_logs-parent:write'],
+        },
+        payload: {
+          activity: 'Committee work, AGM',
+          duration: {
+            hours: 1,
+            minutes: 20,
+            seconds: 30,
+          },
+          startedAt: then.toISOString(),
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          ...omit(['modifiedAt'], log),
+          activity: 'Committee work, AGM',
+          startedAt: then,
+          duration: {
+            hours: 1,
+            minutes: 20,
+            seconds: 30,
+          },
+        }),
+      });
+      expect((<any> res.result).result.modifiedAt).not.toEqual(log.modifiedAt);
+    });
+
+    test('cannot re-assign log to another user', async () => {
+      const res = await server.inject({
+        method: 'PUT',
+        url: '/v1/users/me/volunteer-logs/1',
+        credentials: {
+          user,
+          organisation,
+          scope: ['volunteer_logs-parent:write'],
+        },
+        payload: {
+          userId: 2,
+        },
+      });
+
+      expect(res.statusCode).toBe(400);
+    });
+
+    test('cannot re-assign log to another organisation', async () => {
+      const res = await server.inject({
+        method: 'PUT',
+        url: '/v1/users/me/volunteer-logs/1',
+        credentials: {
+          user,
+          organisation,
+          scope: ['volunteer_logs-parent:write'],
+        },
+        payload: {
+          organisationId: 1,
+        },
+      });
+
+      expect(res.statusCode).toBe(400);
+    });
+
+    test('cannot update other user\'s log', async () => {
+      const res = await server.inject({
+        method: 'PUT',
+        url: '/v1/users/me/volunteer-logs/1',
+        credentials: {
+          user: await Users.getOne(knex, { where: { id: 3 } }),
+          organisation,
+          scope: ['volunteer_logs-parent:write'],
+        },
+        payload: {
+          activity: 'Committee work, AGM',
         },
       });
 

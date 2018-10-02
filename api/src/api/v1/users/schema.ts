@@ -4,7 +4,7 @@
 import * as Joi from 'joi';
 import { gender } from '../schema/request';
 
-export { query, gender, id, since, until } from '../schema/request';
+export { query, gender, id, since, until, ApiRequestQuery } from '../schema/request';
 export { response } from '../schema/response';
 
 const currentYear = (new Date()).getFullYear();

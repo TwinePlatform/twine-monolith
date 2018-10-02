@@ -1,9 +1,17 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import { response, since, until, query } from './schema';
-import { VolunteerLogs, CommunityBusiness, VolunteerLog } from '../../../models';
+import * as Joi from 'joi';
+import {
+  response,
+  since,
+  until,
+  query,
+  ApiRequestQuery,
+  id,
+} from './schema';
+import { VolunteerLogs, CommunityBusiness, VolunteerLog, CommonTimestamps } from '../../../models';
+import { Omit } from '../../../types/internal';
 import { getCommunityBusiness } from '../prerequisites';
-import { ApiRequestQuery } from '../schema/request';
 
 
 interface GetMyVolunteerLogsRequest extends Hapi.Request {
@@ -19,6 +27,14 @@ interface GetMyVolunteerLogsRequest extends Hapi.Request {
 interface GetVolunteerLogRequest extends Hapi.Request {
   query: { fields: (keyof VolunteerLog)[] };
   params: { logId: string };
+  pre: {
+    communityBusiness: CommunityBusiness
+  };
+}
+
+interface PutMyVolunteerLogRequest extends Hapi.Request {
+  params: { logId: string };
+  payload: Partial<Omit<VolunteerLog, 'id' | 'userId' | 'organisationId' | keyof CommonTimestamps>>;
   pre: {
     communityBusiness: CommunityBusiness
   };
@@ -79,6 +95,7 @@ const routes: Hapi.ServerRoute[] = [
       },
       validate: {
         query: { fields: query.fields },
+        params: { logId: id },
       },
       response: { schema: response },
       pre: [
@@ -114,6 +131,58 @@ const routes: Hapi.ServerRoute[] = [
   },
 
   {
+    method: 'PUT',
+    path: '/users/me/volunteer-logs/{logId}',
+    options: {
+      description: 'Delete own volunteer logs',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['volunteer_logs-parent:write'],
+        },
+      },
+      validate:  {
+        params: { logId: id },
+        payload: {
+          activity: Joi.string(),
+          duration: Joi.object({
+            hours: Joi.number().integer().min(0),
+            minutes: Joi.number().integer().min(0),
+            seconds: Joi.number().integer().min(0),
+          }),
+          startedAt: Joi.date().iso().max('now'),
+        },
+      },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request: PutMyVolunteerLogRequest, h: Hapi.ResponseToolkit) => {
+      const {
+        server: { app: { knex } },
+        auth: { credentials: { user } },
+        payload,
+        pre: { communityBusiness },
+        params: { logId },
+      } = request;
+
+      const log = await VolunteerLogs.getOne(knex, { where: {
+        id: Number(logId),
+        userId: user.id,
+        organisationId: communityBusiness.id,
+        deletedAt: null,
+      }});
+
+      if (!log) {
+        return Boom.notFound('No log with this id found under this account');
+      }
+
+      return VolunteerLogs.update(knex, log, { ...payload });
+    },
+  },
+
+  {
     method: 'DELETE',
     path: '/users/me/volunteer-logs/{logId}',
     options: {
@@ -124,12 +193,15 @@ const routes: Hapi.ServerRoute[] = [
           scope: ['volunteer_logs-parent:write'],
         },
       },
+      validate: {
+        params: { logId: id },
+      },
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetVolunteerLogRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request: PutMyVolunteerLogRequest, h: Hapi.ResponseToolkit) => {
       const {
         server: { app: { knex } },
         auth: { credentials: { user } },
