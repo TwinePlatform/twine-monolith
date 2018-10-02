@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import { Volunteers } from '../../../../models';
 import { response } from '../schema';
 import { id } from '../../schema/request';
-import { getCommunityBusiness, requireSiblingUser } from '../../prerequisites';
+import { requireSiblingUser } from '../../prerequisites';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -23,7 +23,6 @@ const routes: Hapi.ServerRoute[] = [
       },
       response: { schema: response },
       pre: [
-        { method: getCommunityBusiness, assign: 'communityBusiness' },
         { method: requireSiblingUser, assign: 'requireSibling' },
       ],
     },
