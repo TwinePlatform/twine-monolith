@@ -107,6 +107,218 @@ describe('API /users/me/volunteer-logs', () => {
     });
   });
 
+  describe('POST /users/me/volunteer-logs', () => {
+    test('can create log for own user', async () => {
+      const when = new Date();
+
+      const resCount1 = await server.inject({
+        method: 'GET',
+        url: '/v1/users/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:read'],
+          user,
+          organisation,
+        },
+      });
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user,
+          organisation,
+        },
+        payload: {
+          activity: 'Office support',
+          duration: {
+            minutes: 20,
+            hours: 2,
+          },
+          startedAt: when.toISOString(),
+        },
+      });
+
+      const resCount2 = await server.inject({
+        method: 'GET',
+        url: '/v1/users/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          userId: 6,
+          organisationId: 2,
+          activity: 'Office support',
+          duration: {
+            minutes: 20,
+            hours: 2,
+          },
+          startedAt: when,
+        }),
+      });
+      expect((<any> resCount1.result).result.length)
+        .toBe((<any> resCount2.result).result.length - 1);
+
+    });
+
+    test('creating log without start date defaults to "now"', async () => {
+      const before = new Date();
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user,
+          organisation,
+        },
+        payload: {
+          activity: 'Office support',
+          duration: {
+            minutes: 20,
+            hours: 2,
+          },
+        },
+      });
+
+      const after = new Date();
+
+      expect(res.statusCode).toEqual(200);
+      expect((<any> res.result).result.startedAt.valueOf()).toBeGreaterThan(before.valueOf());
+      expect((<any> res.result).result.startedAt.valueOf()).toBeLessThan(after.valueOf());
+    });
+
+    test('cannot create log for other user', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/2/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user,
+          organisation,
+        },
+        payload: {
+          activity: 'Office support',
+          duration: {
+            minutes: 20,
+            hours: 2,
+          },
+        },
+      });
+
+      expect(res.statusCode).toBe(404);
+
+      const res2 = await server.inject({
+        method: 'POST',
+        url: '/v1/users/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user,
+          organisation,
+        },
+        payload: {
+          userId: 4,
+          activity: 'Office support',
+          duration: {
+            minutes: 20,
+            hours: 2,
+          },
+        },
+      });
+
+      expect(res2.statusCode).toBe(400);
+    });
+
+    test('cannot create log for other organisation', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user,
+          organisation,
+        },
+        payload: {
+          organisationId: 1,
+          activity: 'Office support',
+          duration: {
+            minutes: 20,
+            hours: 2,
+          },
+        },
+      });
+
+      expect(res.statusCode).toBe(400);
+    });
+
+    test('non-existent activity', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user,
+          organisation,
+        },
+        payload: {
+          activity: 'LOLOLOLOLOL',
+          duration: {
+            minutes: 20,
+            hours: 2,
+          },
+        },
+      });
+
+      expect(res.statusCode).toBe(400);
+    });
+
+    test('malformed duration', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user,
+          organisation,
+        },
+        payload: {
+          activity: 'Office support',
+          duration: {
+            foo: 20,
+          },
+        },
+      });
+
+      expect(res.statusCode).toBe(400);
+    });
+
+    test('negative duration', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user,
+          organisation,
+        },
+        payload: {
+          activity: 'Office support',
+          duration: {
+            minutes: -1,
+          },
+        },
+      });
+
+      expect(res.statusCode).toBe(400);
+    });
+  });
+
   describe('GET /users/me/volunteer-logs/{logId}', () => {
     test('can get own volunteer log', async () => {
       const res = await server.inject({

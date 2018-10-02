@@ -24,6 +24,15 @@ interface GetMyVolunteerLogsRequest extends Hapi.Request {
   };
 }
 
+interface PostMyVolunteerLogsRequest extends Hapi.Request {
+  payload: Pick<VolunteerLog, 'activity' | 'duration' | 'startedAt'> & {
+    organisationId?: number
+  };
+  pre: {
+    communityBusiness: CommunityBusiness
+  };
+}
+
 interface GetVolunteerLogRequest extends Hapi.Request {
   query: { fields: (keyof VolunteerLog)[] };
   params: { logId: string };
@@ -62,7 +71,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetMyVolunteerLogsRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request: GetMyVolunteerLogsRequest, h) => {
       const {
         server: { app: { knex } },
         auth: { credentials: { user } },
@@ -73,12 +82,72 @@ const routes: Hapi.ServerRoute[] = [
       const since = new Date(query.since);
       const until = new Date(query.until);
 
-      return VolunteerLogs.fromUserAtCommunityBusiness(
+      const logs = await VolunteerLogs.fromUserAtCommunityBusiness(
         knex,
         user,
         communityBusiness,
         { since, until, limit: query.limit, offset: query.offset }
       );
+
+      return Promise.all(logs.map(VolunteerLogs.serialise));
+    },
+  },
+
+  {
+    method: 'POST',
+    path: '/users/me/volunteer-logs',
+    options: {
+      description: 'Create volunteer log for own user',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['volunteer_logs-parent:write'],
+        },
+      },
+      validate: {
+        payload: {
+          organisationId: id,
+          activity: Joi.string().required(),
+          duration: Joi.object({
+            hours: Joi.number().integer().min(0),
+            minutes: Joi.number().integer().min(0),
+            seconds: Joi.number().integer().min(0),
+          }).required(),
+          startedAt: Joi.date().iso().max('now').default(() => new Date().toISOString(), 'now'),
+        },
+      },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request: PostMyVolunteerLogsRequest, h) => {
+      const {
+        server: { app: { knex } },
+        auth: { credentials: { user } },
+        pre: { communityBusiness },
+        payload,
+      } = request;
+
+      if (payload.organisationId && communityBusiness.id !== payload.organisationId) {
+        return Boom.badRequest('Cannot create log for different organisation');
+      }
+
+      try {
+        const log = await VolunteerLogs.add(knex, {
+          ...payload,
+          organisationId: communityBusiness.id,
+          userId: user.id,
+        });
+
+        return VolunteerLogs.serialise(log);
+
+      } catch (error) {
+        if (error.code === '23502') { // Violation of null constraint implies invalid activity
+          return Boom.badRequest('Invalid activity');
+        }
+        throw error;
+      }
     },
   },
 
@@ -102,7 +171,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetVolunteerLogRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request: GetVolunteerLogRequest, h) => {
       const {
         server: { app: { knex } },
         auth: { credentials: { user } },
@@ -126,7 +195,7 @@ const routes: Hapi.ServerRoute[] = [
 
       return !log
         ? Boom.notFound('No log with this id found under this account')
-        : log;
+        : VolunteerLogs.serialise(log);
     },
   },
 
@@ -158,7 +227,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: PutMyVolunteerLogRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request: PutMyVolunteerLogRequest, h) => {
       const {
         server: { app: { knex } },
         auth: { credentials: { user } },
@@ -178,7 +247,9 @@ const routes: Hapi.ServerRoute[] = [
         return Boom.notFound('No log with this id found under this account');
       }
 
-      return VolunteerLogs.update(knex, log, { ...payload });
+      const updatedLog = await VolunteerLogs.update(knex, log, { ...payload });
+
+      return VolunteerLogs.serialise(updatedLog);
     },
   },
 
@@ -201,7 +272,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: PutMyVolunteerLogRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request: PutMyVolunteerLogRequest, h) => {
       const {
         server: { app: { knex } },
         auth: { credentials: { user } },
