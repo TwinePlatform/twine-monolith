@@ -91,7 +91,6 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           startedAt: when,
         }),
       });
-
       expect((<any> resCount1.result).result.length)
         .toBe((<any> resCount2.result).result.length - 1);
 
