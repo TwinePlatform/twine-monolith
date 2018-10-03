@@ -8,7 +8,10 @@ const SEC_PER_HR = SEC_PER_MIN * MIN_PER_HR;
 const SEC_PER_DAY = SEC_PER_HR * HRS_PER_DAY;
 
 
-export default {
+const Duration = {
+  toHours: (d: Duration) =>
+    Duration.toSeconds(d) / 3600,
+
   toSeconds: (d: Duration) => {
     return Object.entries(d).reduce((acc, [k, v]) => {
       switch (k) {
@@ -47,6 +50,10 @@ export default {
 
     return filter((v) => v > 0, { days, hours, minutes, seconds });
   },
+
+  sum: (d1: Duration, d2: Duration) =>
+    Duration.fromSeconds(Duration.toSeconds(d1) + Duration.toSeconds(d2)),
+
 };
 
-//
+export default Duration;

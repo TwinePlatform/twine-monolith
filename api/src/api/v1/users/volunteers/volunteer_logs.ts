@@ -2,12 +2,13 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
 import { response, since, until, query, id } from '../schema';
-import { VolunteerLogs } from '../../../../models';
+import { VolunteerLogs, Duration } from '../../../../models';
 import { getCommunityBusiness } from '../../prerequisites';
 import {
   GetMyVolunteerLogsRequest,
   GetVolunteerLogRequest,
-  PutMyVolunteerLogRequest
+  PutMyVolunteerLogRequest,
+  GetMyVolunteerLogsAggregateRequest,
 } from '../../types';
 
 
@@ -197,6 +198,50 @@ const routes: Hapi.ServerRoute[] = [
       return affectedRows === 0
         ? Boom.notFound('No log with this id found under this account')
         : null;
+    },
+  },
+
+  {
+    method: 'GET',
+    path: '/users/volunteers/me/volunteer-logs/aggregates',
+    options: {
+      description: 'Read own volunteer logs aggregates',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['volunteer_logs-parent:read'],
+        },
+      },
+      validate: {
+        query: { since, until },
+      },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request: GetMyVolunteerLogsAggregateRequest, h) => {
+      const {
+        server: { app: { knex } },
+        auth: { credentials: { user } },
+        pre: { communityBusiness },
+        query,
+      } = request;
+
+      const since = new Date(query.since);
+      const until = new Date(query.until);
+
+      const logs = await VolunteerLogs.fromUserAtCommunityBusiness(
+        knex,
+        user,
+        communityBusiness,
+        { since, until, limit: query.limit, offset: query.offset }
+      );
+
+      const total = logs.reduce((acc, log) =>
+        Duration.sum(acc, log.duration), Duration.fromSeconds(0));
+
+      return { total };
     },
   },
 

@@ -186,6 +186,12 @@ export interface VolunteerRegisterRequest extends Hapi.Request {
   };
 }
 
+export interface GetMyVolunteerLogsAggregateRequest extends Hapi.Request {
+  query: ApiRequestQuery & Hapi.Util.Dictionary<string>;
+  pre: {
+    communityBusiness: CommunityBusiness
+  };
+}
 /*
  * Test related types
  */

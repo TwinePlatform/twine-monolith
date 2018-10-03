@@ -358,4 +358,69 @@ describe('API /users/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(404);
     });
   });
+
+  describe('GET /users/volunteers/me/volunteer-logs/aggregates', () => {
+    test('can get own aggregates', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/users/volunteers/me/volunteer-logs/aggregates',
+        credentials: {
+          scope: ['volunteer_logs-parent:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          total: {
+            seconds: 59,
+            minutes: 1,
+            hours: 10,
+          },
+        }),
+      });
+    });
+
+    test('can get own aggregates between dates', async () => {
+      const then = moment().day(-6).utc().startOf('day').toISOString();
+      const now = moment().day(-4).utc().endOf('day').toISOString();
+
+      const res = await server.inject({
+        method: 'GET',
+        url: `/v1/users/volunteers/me/volunteer-logs/aggregates?since=${then}&until=${now}`,
+        credentials: {
+          scope: ['volunteer_logs-parent:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: {
+          total: {
+            seconds: 59,
+            minutes: 10,
+            hours: 8,
+          },
+        },
+      });
+    });
+
+    test('cannot get other users aggregates', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/users/4/volunteer-logs/aggregates',
+        credentials: {
+          scope: ['volunteer_logs-parent:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(res.statusCode).toBe(404);
+    });
+  });
 });

@@ -1459,6 +1459,26 @@
           "response": null
         }
       },
+      "/volunteers/me/volunteer-logs/aggregates": {
+        "GET": {
+          "description": "Retreive single volunteer log for own user",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": ["volunteer_logs-parent:read"],
+          "query": {
+            "fields": ["String"]
+          },
+          "response": {
+            "total": {
+              "days": "Number",
+              "hours": "Number",
+              "minutes": "Number",
+              "seconds": "Number"
+            }
+          }
+        }
+      },
       "/volunteers/:id/volunteer-logs": {
         "GET": {
           "description": "Retreive volunteer information for a user",
