@@ -1,18 +1,11 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import {
-  response,
-  since,
-  until,
-  query,
-  id,
-} from '../schema';
+import { response, since, until, query, id } from '../schema';
 import { VolunteerLogs } from '../../../../models';
 import { getCommunityBusiness } from '../../prerequisites';
 import {
   GetMyVolunteerLogsRequest,
-  PostMyVolunteerLogsRequest,
   GetVolunteerLogRequest,
   PutMyVolunteerLogRequest
 } from '../../types';

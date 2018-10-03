@@ -36,13 +36,13 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     server.app.knex = knex;
   });
 
-  describe('POST /users/me/volunteer-logs', () => {
+  describe('POST /community-businesses/me/volunteer-logs', () => {
     test('can create log for own user', async () => {
       const when = new Date();
 
       const resCount1 = await server.inject({
         method: 'GET',
-        url: '/v1/users/me/volunteer-logs',
+        url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: {
           scope: ['volunteer_logs-parent:read'],
           user,
@@ -70,7 +70,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
       const resCount2 = await server.inject({
         method: 'GET',
-        url: '/v1/users/me/volunteer-logs',
+        url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: {
           scope: ['volunteer_logs-parent:read'],
           user,
@@ -91,6 +91,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           startedAt: when,
         }),
       });
+
       expect((<any> resCount1.result).result.length)
         .toBe((<any> resCount2.result).result.length - 1);
 
