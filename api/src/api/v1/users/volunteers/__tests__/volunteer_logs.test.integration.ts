@@ -2,10 +2,10 @@ import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import * as moment from 'moment';
 import { omit } from 'ramda';
-import { init } from '../../../../server';
-import { getConfig } from '../../../../../config';
-import { getTrx } from '../../../../../tests/utils/database';
-import { User, Users, Organisation, Organisations, VolunteerLog } from '../../../../models';
+import { init } from '../../../../../server';
+import { getConfig } from '../../../../../../config';
+import { getTrx } from '../../../../../../tests/utils/database';
+import { User, Users, Organisation, Organisations, VolunteerLog } from '../../../../../models';
 
 
 describe('API /users/me/volunteer-logs', () => {
@@ -42,7 +42,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can get own logs', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/users/me/volunteer-logs',
+        url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: {
           user,
           organisation,
@@ -69,7 +69,7 @@ describe('API /users/me/volunteer-logs', () => {
 
       const res = await server.inject({
         method: 'GET',
-        url: `/v1/users/me/volunteer-logs?since=${since}&until=${until}`,
+        url: `/v1/users/volunteers/me/volunteer-logs?since=${since}&until=${until}`,
         credentials: {
           user,
           organisation,
@@ -94,7 +94,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can get no logs for non-volunteer', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: `/v1/users/me/volunteer-logs`,
+        url: `/v1/users/volunteers/me/volunteer-logs`,
         credentials: {
           user: await Users.getOne(knex, { where: { id: 1 } }),
           organisation,
@@ -107,223 +107,11 @@ describe('API /users/me/volunteer-logs', () => {
     });
   });
 
-  describe('POST /users/me/volunteer-logs', () => {
-    test('can create log for own user', async () => {
-      const when = new Date();
-
-      const resCount1 = await server.inject({
-        method: 'GET',
-        url: '/v1/users/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-parent:read'],
-          user,
-          organisation,
-        },
-      });
-
-      const res = await server.inject({
-        method: 'POST',
-        url: '/v1/users/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-parent:write'],
-          user,
-          organisation,
-        },
-        payload: {
-          activity: 'Office support',
-          duration: {
-            minutes: 20,
-            hours: 2,
-          },
-          startedAt: when.toISOString(),
-        },
-      });
-
-      const resCount2 = await server.inject({
-        method: 'GET',
-        url: '/v1/users/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-parent:read'],
-          user,
-          organisation,
-        },
-      });
-
-      expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({
-        result: expect.objectContaining({
-          userId: 6,
-          organisationId: 2,
-          activity: 'Office support',
-          duration: {
-            minutes: 20,
-            hours: 2,
-          },
-          startedAt: when,
-        }),
-      });
-      expect((<any> resCount1.result).result.length)
-        .toBe((<any> resCount2.result).result.length - 1);
-
-    });
-
-    test('creating log without start date defaults to "now"', async () => {
-      const before = new Date();
-
-      const res = await server.inject({
-        method: 'POST',
-        url: '/v1/users/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-parent:write'],
-          user,
-          organisation,
-        },
-        payload: {
-          activity: 'Office support',
-          duration: {
-            minutes: 20,
-            hours: 2,
-          },
-        },
-      });
-
-      const after = new Date();
-
-      expect(res.statusCode).toEqual(200);
-      expect((<any> res.result).result.startedAt.valueOf()).toBeGreaterThan(before.valueOf());
-      expect((<any> res.result).result.startedAt.valueOf()).toBeLessThan(after.valueOf());
-    });
-
-    test('cannot create log for other user', async () => {
-      const res = await server.inject({
-        method: 'POST',
-        url: '/v1/users/2/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-parent:write'],
-          user,
-          organisation,
-        },
-        payload: {
-          activity: 'Office support',
-          duration: {
-            minutes: 20,
-            hours: 2,
-          },
-        },
-      });
-
-      expect(res.statusCode).toBe(404);
-
-      const res2 = await server.inject({
-        method: 'POST',
-        url: '/v1/users/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-parent:write'],
-          user,
-          organisation,
-        },
-        payload: {
-          userId: 4,
-          activity: 'Office support',
-          duration: {
-            minutes: 20,
-            hours: 2,
-          },
-        },
-      });
-
-      expect(res2.statusCode).toBe(400);
-    });
-
-    test('cannot create log for other organisation', async () => {
-      const res = await server.inject({
-        method: 'POST',
-        url: '/v1/users/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-parent:write'],
-          user,
-          organisation,
-        },
-        payload: {
-          organisationId: 1,
-          activity: 'Office support',
-          duration: {
-            minutes: 20,
-            hours: 2,
-          },
-        },
-      });
-
-      expect(res.statusCode).toBe(400);
-    });
-
-    test('non-existent activity', async () => {
-      const res = await server.inject({
-        method: 'POST',
-        url: '/v1/users/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-parent:write'],
-          user,
-          organisation,
-        },
-        payload: {
-          activity: 'LOLOLOLOLOL',
-          duration: {
-            minutes: 20,
-            hours: 2,
-          },
-        },
-      });
-
-      expect(res.statusCode).toBe(400);
-    });
-
-    test('malformed duration', async () => {
-      const res = await server.inject({
-        method: 'POST',
-        url: '/v1/users/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-parent:write'],
-          user,
-          organisation,
-        },
-        payload: {
-          activity: 'Office support',
-          duration: {
-            foo: 20,
-          },
-        },
-      });
-
-      expect(res.statusCode).toBe(400);
-    });
-
-    test('negative duration', async () => {
-      const res = await server.inject({
-        method: 'POST',
-        url: '/v1/users/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-parent:write'],
-          user,
-          organisation,
-        },
-        payload: {
-          activity: 'Office support',
-          duration: {
-            minutes: -1,
-          },
-        },
-      });
-
-      expect(res.statusCode).toBe(400);
-    });
-  });
-
   describe('GET /users/me/volunteer-logs/{logId}', () => {
     test('can get own volunteer log', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/users/me/volunteer-logs/1',
+        url: '/v1/users/volunteers/me/volunteer-logs/1',
         credentials: {
           user,
           organisation,
@@ -346,7 +134,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can filter fields of own volunteer log', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/users/me/volunteer-logs/1?fields[]=activity',
+        url: '/v1/users/volunteers/me/volunteer-logs/1?fields[]=activity',
         credentials: {
           user,
           organisation,
@@ -363,7 +151,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('cannot get other users volunteer log', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/users/me/volunteer-logs/1',
+        url: '/v1/users/volunteers/me/volunteer-logs/1',
         credentials: {
           user: await Users.getOne(knex, { where: { id: 3 } }),
           organisation,
@@ -379,7 +167,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can partial update own log', async () => {
       const resPre = await server.inject({
         method: 'GET',
-        url: '/v1/users/me/volunteer-logs/1',
+        url: '/v1/users/volunteers/me/volunteer-logs/1',
         credentials: {
           user,
           organisation,
@@ -391,7 +179,7 @@ describe('API /users/me/volunteer-logs', () => {
 
       const res = await server.inject({
         method: 'PUT',
-        url: '/v1/users/me/volunteer-logs/1',
+        url: '/v1/users/volunteers/me/volunteer-logs/1',
         credentials: {
           user,
           organisation,
@@ -415,7 +203,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can full update own log', async () => {
       const resPre = await server.inject({
         method: 'GET',
-        url: '/v1/users/me/volunteer-logs/1',
+        url: '/v1/users/volunteers/me/volunteer-logs/1',
         credentials: {
           user,
           organisation,
@@ -428,7 +216,7 @@ describe('API /users/me/volunteer-logs', () => {
       const then = new Date('2018-07-23T10:33:22.122Z');
       const res = await server.inject({
         method: 'PUT',
-        url: '/v1/users/me/volunteer-logs/1',
+        url: '/v1/users/volunteers/me/volunteer-logs/1',
         credentials: {
           user,
           organisation,
@@ -464,7 +252,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('cannot re-assign log to another user', async () => {
       const res = await server.inject({
         method: 'PUT',
-        url: '/v1/users/me/volunteer-logs/1',
+        url: '/v1/users/volunteers/me/volunteer-logs/1',
         credentials: {
           user,
           organisation,
@@ -481,7 +269,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('cannot re-assign log to another organisation', async () => {
       const res = await server.inject({
         method: 'PUT',
-        url: '/v1/users/me/volunteer-logs/1',
+        url: '/v1/users/volunteers/me/volunteer-logs/1',
         credentials: {
           user,
           organisation,
@@ -498,7 +286,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('cannot update other user\'s log', async () => {
       const res = await server.inject({
         method: 'PUT',
-        url: '/v1/users/me/volunteer-logs/1',
+        url: '/v1/users/volunteers/me/volunteer-logs/1',
         credentials: {
           user: await Users.getOne(knex, { where: { id: 3 } }),
           organisation,
@@ -517,7 +305,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can mark own volunteer log as deleted', async () => {
       const res = await server.inject({
         method: 'DELETE',
-        url: '/v1/users/me/volunteer-logs/1',
+        url: '/v1/users/volunteers/me/volunteer-logs/1',
         credentials: {
           user,
           organisation,
@@ -530,7 +318,7 @@ describe('API /users/me/volunteer-logs', () => {
 
       const res2 = await server.inject({
         method: 'GET',
-        url: '/v1/users/me/volunteer-logs/1',
+        url: '/v1/users/volunteers/me/volunteer-logs/1',
         credentials: {
           user,
           organisation,
@@ -542,7 +330,7 @@ describe('API /users/me/volunteer-logs', () => {
 
       const res3 = await server.inject({
         method: 'GET',
-        url: '/v1/users/me/volunteer-logs',
+        url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: {
           user,
           organisation,
@@ -559,7 +347,7 @@ describe('API /users/me/volunteer-logs', () => {
       const otherUser = await Users.getOne(trx, { where: { id: 3 } });
       const res = await server.inject({
         method: 'DELETE',
-        url: '/v1/users/me/volunteer-logs/1',
+        url: '/v1/users/volunteers/me/volunteer-logs/1',
         credentials: {
           user: otherUser,
           organisation,

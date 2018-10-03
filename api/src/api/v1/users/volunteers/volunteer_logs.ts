@@ -7,22 +7,22 @@ import {
   until,
   query,
   id,
-} from './schema';
-import { VolunteerLogs } from '../../../models';
-import { getCommunityBusiness } from '../prerequisites';
+} from '../schema';
+import { VolunteerLogs } from '../../../../models';
+import { getCommunityBusiness } from '../../prerequisites';
 import {
   GetMyVolunteerLogsRequest,
   PostMyVolunteerLogsRequest,
   GetVolunteerLogRequest,
   PutMyVolunteerLogRequest
-} from '../types';
+} from '../../types';
 
 
 const routes: Hapi.ServerRoute[] = [
 
   {
     method: 'GET',
-    path: '/users/me/volunteer-logs',
+    path: '/users/volunteers/me/volunteer-logs',
     options: {
       description: 'Read own volunteer logs',
       auth: {
@@ -62,66 +62,8 @@ const routes: Hapi.ServerRoute[] = [
   },
 
   {
-    method: 'POST',
-    path: '/users/me/volunteer-logs',
-    options: {
-      description: 'Create volunteer log for own user',
-      auth: {
-        strategy: 'standard',
-        access: {
-          scope: ['volunteer_logs-parent:write'],
-        },
-      },
-      validate: {
-        payload: {
-          organisationId: id,
-          activity: Joi.string().required(),
-          duration: Joi.object({
-            hours: Joi.number().integer().min(0),
-            minutes: Joi.number().integer().min(0),
-            seconds: Joi.number().integer().min(0),
-          }).required(),
-          startedAt: Joi.date().iso().max('now').default(() => new Date().toISOString(), 'now'),
-        },
-      },
-      response: { schema: response },
-      pre: [
-        { method: getCommunityBusiness, assign: 'communityBusiness' },
-      ],
-    },
-    handler: async (request: PostMyVolunteerLogsRequest, h) => {
-      const {
-        server: { app: { knex } },
-        auth: { credentials: { user } },
-        pre: { communityBusiness },
-        payload,
-      } = request;
-
-      if (payload.organisationId && communityBusiness.id !== payload.organisationId) {
-        return Boom.badRequest('Cannot create log for different organisation');
-      }
-
-      try {
-        const log = await VolunteerLogs.add(knex, {
-          ...payload,
-          organisationId: communityBusiness.id,
-          userId: user.id,
-        });
-
-        return VolunteerLogs.serialise(log);
-
-      } catch (error) {
-        if (error.code === '23502') { // Violation of null constraint implies invalid activity
-          return Boom.badRequest('Invalid activity');
-        }
-        throw error;
-      }
-    },
-  },
-
-  {
     method: 'GET',
-    path: '/users/me/volunteer-logs/{logId}',
+    path: '/users/volunteers/me/volunteer-logs/{logId}',
     options: {
       description: 'Read own volunteer logs',
       auth: {
@@ -169,7 +111,7 @@ const routes: Hapi.ServerRoute[] = [
 
   {
     method: 'PUT',
-    path: '/users/me/volunteer-logs/{logId}',
+    path: '/users/volunteers/me/volunteer-logs/{logId}',
     options: {
       description: 'Delete own volunteer logs',
       auth: {
@@ -223,7 +165,7 @@ const routes: Hapi.ServerRoute[] = [
 
   {
     method: 'DELETE',
-    path: '/users/me/volunteer-logs/{logId}',
+    path: '/users/volunteers/me/volunteer-logs/{logId}',
     options: {
       description: 'Delete own volunteer logs',
       auth: {
