@@ -77,7 +77,7 @@ const testSpec = Object.entries(collapseUrls(APISpecification.routes, '/v1'))
     /*
      * Bad request tests
      */
-    if (routeSpec.query !== null) {
+    if (routeSpec.query && routeSpec.query !== null) {
       tests.push({
         name: `${method} ${url} || Bad query parameters || unrecognised query parameter`,
         inject: {
