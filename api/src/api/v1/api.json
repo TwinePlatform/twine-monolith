@@ -129,9 +129,14 @@
     },
     "volunteerLog": {
       "id": "Number",
-      "volunteerActivity": "String",
+      "userId": "Number",
+      "organisationId": "Number",
+      "activity": "String",
       "duration": "Number",
-      "loggedAt": "String"
+      "startedAt": "String",
+      "createdAt": "String",
+      "modifiedAt": "String",
+      "deletedAt": "String"
     }
   },
   "routes": {
@@ -885,6 +890,23 @@
             "totalVolunteerHours": "Number",
             "volunteerLogs": ["types.volunteerLog"]
           }
+        },
+        "POST": {
+          "description": "Create volunteer logs for own community business",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": ["volunteer_logs-parent:write"],
+          "body": {
+            "activity": "String",
+            "duration": {
+              "hours": "Number",
+              "minutes": "Number",
+              "seconds": "Number"
+            },
+            "startedAt": "String"
+          },
+          "response": null
         }
       },
       "/:id/volunteer-logs": {
@@ -1381,7 +1403,62 @@
           }
         }
       },
-      "/:id/volunteer-logs": {
+      "/volunteers/me/volunteer-logs": {
+        "GET": {
+          "description": "Retreive volunteer logs for own user",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": ["volunteer_logs-parent:read"],
+          "query": {
+            "fields": ["String"],
+            "filter": {
+              "since": "String",
+              "until": "String"
+            }
+          },
+          "response": ["types.volunteerLog"]
+        }
+      },
+      "/volunteers/me/volunteer-logs/:id": {
+        "GET": {
+          "description": "Retreive single volunteer log for own user",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": ["volunteer_logs-parent:read"],
+          "query": {
+            "fields": ["String"]
+          },
+          "response": "types.volunteerLog"
+        },
+        "PUT": {
+          "description": "Update single volunteer log for own user",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": ["volunteer_logs-parent:write"],
+          "body": {
+            "activity": "String",
+            "duration": {
+              "hours": "Number",
+              "minutes": "Number",
+              "seconds": "Number"
+            },
+            "startedAt": "String"
+          },
+          "response": "types.volunteerLog"
+        },
+        "DELETE": {
+          "description": "Delete single volunteer log for own user",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": ["volunteer_logs-parent:write"],
+          "response": null
+        }
+      },
+      "/volunteers/:id/volunteer-logs": {
         "GET": {
           "description": "Retreive volunteer information for a user",
           "isImplemented": false,
