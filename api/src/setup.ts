@@ -30,11 +30,11 @@ export default (server: Hapi.Server, config: Config) => {
   server.app.knex = Knex(config.knex);
   server.app.EmailService = emailInitialiser.init({ apiKey: config.email.postmark_key });
 
-  server.decorate('server', 'shutdown', async (graceful) => {
+  server.decorate('server', 'shutdown', async (graceful = true) => {
     /* istanbul ignore else */
     if (graceful) {
-      await server.app.knex.destroy();
-      return server.stop();
+      await server.stop();
+      return server.app.knex.destroy();
 
     } else {
       return process.exit(1);
