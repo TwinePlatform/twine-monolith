@@ -112,6 +112,40 @@ describe('Visitor model', () => {
         expect(error.message).toBe('User is not a volunteer');
       }
     });
+
+    test('destroy :: soft delete volunteer', async () => {
+      const volunteer = await Users.getOne(trx, { where: { name: 'Emma Emmerich' } });
+      const deletedRows = await Volunteers.destroy(trx, volunteer);
+      const userCheck = await Users.getOne(trx, { where: { name: 'Emma Emmerich' } });
+      const userCheck2 = await Users.getOne(trx, { where: { id: 6 } });
+
+      expect(deletedRows).toBe(1);
+      expect(userCheck).toBe(null);
+      expect(userCheck2).toEqual(expect.objectContaining({
+        birthYear: 1996,
+        disability: 'yes',
+        email: null,
+        ethnicity: 'prefer not to say',
+        gender: 'female',
+        id: 6,
+        name: 'none',
+        phoneNumber: null,
+        postCode: null,
+      }));
+      expect(userCheck2.deletedAt).toBeTruthy();
+    });
+
+    test('destroy :: failed as not a volunteer user', async () => {
+      expect.assertions(2);
+      const volunteer = await Users.getOne(trx, { where: { id: 1 } });
+
+      try {
+        await Volunteers.destroy(trx, volunteer);
+      } catch (error) {
+        expect(error).toBeTruthy();
+        expect(error.message).toBe('User is not a volunteer');
+      }
+    });
   });
 
   describe('Serialisation', () => {
