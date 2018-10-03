@@ -37,7 +37,7 @@
     "seed:make": "knex seed:make",
     "seed:run": "knex seed:run",
     "seed:run:test": "NODE_ENV=testing knex seed:run",
-    "dev": "tsc && npm run copy && tsc -w & nodemon ./build/src/index.js",
+    "dev": "nodemon",
     "copy:assets": "cp -R ./assets ./build/assets",
     "copy:fonts": "cp -R ./src/services/pdf/fonts ./build/src/services/pdf/fonts",
     "copy": "npm run copy:assets && npm run copy:fonts",
