@@ -67,7 +67,10 @@ export const Volunteers: VolunteerCollection = {
   },
 
   async destroy (client, user) {
-    return Users.destroy(client, user);
+    if (await Volunteers.exists(client, { where: { id: user.id } })) {
+      return Users.destroy(client, user);
+    }
+    throw new Error('User is not a volunteer');
   },
 
   async recordLogin (client, user) {

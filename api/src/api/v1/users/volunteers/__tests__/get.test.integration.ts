@@ -18,7 +18,7 @@ describe('GET /v1/users/volunteers/:id', () => {
     organisation = await CommunityBusinesses.getOne(server.app.knex, { where: { id: 2 } });
     wrongOrganisation = await CommunityBusinesses.getOne(server.app.knex, { where: { id: 1 } });
     volunteerAdmin = await Volunteers.getOne(server.app.knex, { where: { id: 7 } });
-    orgAdmin = await Volunteers.getOne(server.app.knex, { where: { id: 5 } });
+    orgAdmin = await Volunteers.getOne(server.app.knex, { where: { id: 3 } });
     adminFromWrongOrg = await Volunteers.getOne(server.app.knex, { where: { id: 8 } });
   });
 
