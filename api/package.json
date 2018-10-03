@@ -59,6 +59,7 @@
     "axios": "^0.18.0",
     "bcrypt": "^3.0.0",
     "boom": "^7.2.0",
+    "chalk": "^2.4.1",
     "dotenv": "^6.0.0",
     "good": "^8.1.1",
     "good-console": "^7.1.0",
@@ -78,6 +79,7 @@
     "postmark": "^1.6.1",
     "qrcode": "^1.2.2",
     "ramda": "^0.25.0",
+    "ts-node": "^7.0.1",
     "typescript": "^3.0.3"
   },
   "devDependencies": {
