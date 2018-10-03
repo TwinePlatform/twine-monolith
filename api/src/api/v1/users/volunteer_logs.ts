@@ -6,48 +6,16 @@ import {
   since,
   until,
   query,
-  ApiRequestQuery,
   id,
 } from './schema';
-import { VolunteerLogs, CommunityBusiness, VolunteerLog, CommonTimestamps } from '../../../models';
-import { Omit } from '../../../types/internal';
+import { VolunteerLogs } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
-
-
-interface GetMyVolunteerLogsRequest extends Hapi.Request {
-  query: ApiRequestQuery & {
-    since: string
-    until: string
-  };
-  pre: {
-    communityBusiness: CommunityBusiness
-  };
-}
-
-interface PostMyVolunteerLogsRequest extends Hapi.Request {
-  payload: Pick<VolunteerLog, 'activity' | 'duration' | 'startedAt'> & {
-    organisationId?: number
-  };
-  pre: {
-    communityBusiness: CommunityBusiness
-  };
-}
-
-interface GetVolunteerLogRequest extends Hapi.Request {
-  query: { fields: (keyof VolunteerLog)[] };
-  params: { logId: string };
-  pre: {
-    communityBusiness: CommunityBusiness
-  };
-}
-
-interface PutMyVolunteerLogRequest extends Hapi.Request {
-  params: { logId: string };
-  payload: Partial<Omit<VolunteerLog, 'id' | 'userId' | 'organisationId' | keyof CommonTimestamps>>;
-  pre: {
-    communityBusiness: CommunityBusiness
-  };
-}
+import {
+  GetMyVolunteerLogsRequest,
+  PostMyVolunteerLogsRequest,
+  GetVolunteerLogRequest,
+  PutMyVolunteerLogRequest
+} from '../types';
 
 
 const routes: Hapi.ServerRoute[] = [

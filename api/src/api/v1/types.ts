@@ -4,7 +4,7 @@ import { ApiRequestQuery, ApiRequestBody } from './schema/request';
 import { ApiResponse } from './schema/response';
 import { UserCredentials } from '../../auth/strategies/standard';
 import { RoleEnum } from '../../auth/types';
-import { GenderEnum, CommunityBusiness, User, CommonTimestamps } from '../../models';
+import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../models';
 import { Omit } from '../../types/internal';
 
 
@@ -125,6 +125,42 @@ export interface GetAllVolunteersRequest extends Hapi.Request {
 export interface DeleteUserRequest extends Hapi.Request {
   params: {
     userId: string
+  };
+}
+
+
+export interface GetMyVolunteerLogsRequest extends Hapi.Request {
+  query: ApiRequestQuery & {
+    since: string
+    until: string
+  };
+  pre: {
+    communityBusiness: CommunityBusiness
+  };
+}
+
+export interface PostMyVolunteerLogsRequest extends Hapi.Request {
+  payload: Pick<VolunteerLog, 'activity' | 'duration' | 'startedAt'> & {
+    organisationId?: number
+  };
+  pre: {
+    communityBusiness: CommunityBusiness
+  };
+}
+
+export interface GetVolunteerLogRequest extends Hapi.Request {
+  query: { fields: (keyof VolunteerLog)[] };
+  params: { logId: string };
+  pre: {
+    communityBusiness: CommunityBusiness
+  };
+}
+
+export interface PutMyVolunteerLogRequest extends Hapi.Request {
+  params: { logId: string };
+  payload: Partial<Omit<VolunteerLog, 'id' | 'userId' | 'organisationId' | keyof CommonTimestamps>>;
+  pre: {
+    communityBusiness: CommunityBusiness
   };
 }
 
