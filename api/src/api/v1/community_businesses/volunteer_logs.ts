@@ -4,9 +4,9 @@ import * as Joi from 'joi';
 import { response, id } from './schema';
 import Roles from '../../../auth/roles';
 import { RoleEnum } from '../../../auth/types';
-import { VolunteerLogs } from '../../../models';
+import { VolunteerLogs, Duration, Volunteers } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
-import { PostMyVolunteerLogsRequest } from '../types';
+import { PostMyVolunteerLogsRequest, SyncMyVolunteerLogsRequest } from '../types';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -99,6 +99,128 @@ const routes: Hapi.ServerRoute[] = [
     },
   },
 
+  {
+    method: 'POST',
+    path: '/community-businesses/me/volunteer-logs/sync',
+    options: {
+      description: 'Synchronise volunteer logs for own use at community business',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['volunteer_logs-parent:write'],
+        },
+      },
+      validate: {
+        payload: Joi.array().items(Joi.object({
+          activity: Joi.string().required(),
+          duration: Joi.object({
+            hours: Joi.number().integer().min(0),
+            minutes: Joi.number().integer().min(0),
+            seconds: Joi.number().integer().min(0),
+          }).required(),
+          startedAt: Joi.date().iso().max('now').default(() => new Date().toISOString(), 'now'),
+        })).required(),
+      },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request: SyncMyVolunteerLogsRequest, h) => {
+      const {
+        server: { app: { knex } },
+        auth: { credentials: { user } },
+        pre: { communityBusiness },
+        payload,
+      } = request;
+
+      try {
+        const batch = VolunteerLogs.deduplicate(payload).map(async (log) => {
+          if (await VolunteerLogs.exists(knex, { where: { ...log } })) {
+            return null;
+          }
+          return VolunteerLogs.add(knex, {
+            ...log,
+            organisationId: communityBusiness.id,
+            userId: user.id,
+          });
+        });
+
+      } catch (error) {
+        if (error.code === '23502') { // Violation of null constraint implies invalid activity
+          return Boom.badRequest('Invalid activity');
+        }
+        throw error;
+      }
+    },
+  },
+
+  {
+    method: 'GET',
+    path: '/community-businesses/me/volunteer-logs/summary',
+    options: {
+      description: 'Retreive summary of volunteer statistics from own organisation',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: [
+            'volunteer_logs-parent:read',
+            'volunteer_logs-own:read',
+            'organisations_details-parent:read',
+            'organisations_details-own:read',
+          ],
+        },
+      },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request, h) => {
+      const {
+        server: { app: { knex } },
+        auth: { credentials: { scope } },
+        pre: { communityBusiness },
+      } = request;
+
+      /*
+       * This manual checking of scopes is necessary because
+       * hapi.js scopes specification isn't capable of capturing
+       * complex scope rules e.g ((x AND y) OR (a AND b)).
+       *
+       * See: https://hapijs.com/api#-routeoptionsauthaccessscope
+       */
+      const hasParentScopes =
+        scope.includes('volunteer_logs-parent:read') &&
+        scope.includes('organisation_details-parent:read');
+
+      const hasOwnScopes =
+        scope.includes('volunteer_logs-own:read') &&
+        scope.includes('organisation_details-own:read');
+
+      if (!hasParentScopes && !hasOwnScopes) {
+        return Boom.forbidden('Insufficient scope');
+      }
+
+      const logs = await VolunteerLogs.get(
+        knex,
+        {
+          fields: ['duration'],
+          where: { organisationId: communityBusiness.id },
+        }
+      );
+
+      const total = logs.reduce((acc, log) =>
+        Duration.sum(acc, log.duration), Duration.fromSeconds(0));
+
+      const volunteers = await Volunteers.fromCommunityBusiness(knex, communityBusiness);
+
+      return {
+        volunteers: volunteers.length,
+        volunteeredTime: total,
+      };
+    },
+  },
 ];
 
 export default routes;

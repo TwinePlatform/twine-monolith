@@ -192,6 +192,14 @@ export interface GetMyVolunteerLogsAggregateRequest extends Hapi.Request {
     communityBusiness: CommunityBusiness
   };
 }
+
+export interface SyncMyVolunteerLogsRequest extends Hapi.Request {
+  payload: Pick<VolunteerLog, 'id' | 'activity' | 'duration' | 'startedAt'>[];
+  pre: {
+    communityBusiness: CommunityBusiness
+  };
+}
+
 /*
  * Test related types
  */

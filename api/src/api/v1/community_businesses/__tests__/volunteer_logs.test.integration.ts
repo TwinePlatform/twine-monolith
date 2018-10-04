@@ -258,4 +258,98 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(400);
     });
   });
+
+  describe('GET /community-businesses/me/volunteer-logs/summary', () => {
+    test('can get own summaries as VOLUNTEER', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/volunteer-logs/summary',
+        credentials: {
+          scope: ['volunteer_logs-parent:read', 'organisation_details-parent:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: {
+          volunteers: 2,
+          volunteeredTime: {
+            hours: 10,
+            minutes: 1,
+            seconds: 59,
+          },
+        },
+      });
+    });
+
+    test('can get own summaries as ORG_ADMIN', async () => {
+      const cbAdmin = await Users.getOne(trx, { where: { name: 'Gordon' } });
+
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/volunteer-logs/summary',
+        credentials: {
+          scope: ['volunteer_logs-own:read', 'organisation_details-own:read'],
+          user: cbAdmin,
+          organisation,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: {
+          volunteers: 2,
+          volunteeredTime: {
+            hours: 10,
+            minutes: 1,
+            seconds: 59,
+          },
+        },
+      });
+    });
+
+    test('cannot get summary with insufficient (own) scope', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/volunteer-logs/summary',
+        credentials: {
+          scope: ['volunteer_logs-own:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(res.statusCode).toBe(403);
+    });
+
+    test('cannot get summary with insufficient (parent) scope', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/volunteer-logs/summary',
+        credentials: {
+          scope: ['volunteer_logs-parent:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(res.statusCode).toBe(403);
+    });
+
+    test('cannot get other orgs summaries', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/3/volunteer-logs/summary',
+        credentials: {
+          scope: ['volunteer_logs-own:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(res.statusCode).toBe(404);
+    });
+  });
 });
