@@ -1,10 +1,10 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
-import { init } from '../../../../server';
-import factory from '../../../../../tests/utils/factory';
-import { getConfig } from '../../../../../config';
-import { RoleEnum } from '../../../../auth/types';
-import { getTrx } from '../../../../../tests/utils/database';
+import { init } from '../../../../../server';
+import factory from '../../../../../../tests/utils/factory';
+import { getConfig } from '../../../../../../config';
+import { RoleEnum } from '../../../../../auth/types';
+import { getTrx } from '../../../../../../tests/utils/database';
 
 
 describe('API v1 - register new users', () => {
@@ -31,12 +31,12 @@ describe('API v1 - register new users', () => {
     await trx.rollback();
     server.app.knex = knex;
   });
-  describe('POST /users/register/visitor', () => {
+  describe('POST /users/register/visitors', () => {
     test('user already exists', async () => {
       const user = await factory.build('user');
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/visitor',
+        url: '/v1/users/register/visitors',
         payload: {
           organisationId: 1,
           name: 'Chell',
@@ -59,7 +59,7 @@ describe('API v1 - register new users', () => {
       const user = await factory.build('user');
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/visitor',
+        url: '/v1/users/register/visitors',
         payload: {
           organisationId: 9352,
           name: 'foo',
@@ -86,7 +86,7 @@ describe('API v1 - register new users', () => {
       const user = await factory.build('user');
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/visitor',
+        url: '/v1/users/register/visitors',
         payload: {
           organisationId: 2,
           name: 'foo',
@@ -109,7 +109,7 @@ describe('API v1 - register new users', () => {
       const user = await factory.build('user');
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/visitor',
+        url: '/v1/users/register/visitors',
         payload: {
           organisationId: 1,
           name: 'foo',
@@ -121,93 +121,6 @@ describe('API v1 - register new users', () => {
           user,
           scope: ['user_details-child:write'],
           role: RoleEnum.ORG_ADMIN,
-        },
-      });
-
-      expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result).toEqual(expect.objectContaining({
-        name: 'foo',
-        gender: 'female',
-        birthYear: 1988,
-        email: '13542@google.com',
-      }));
-    });
-  });
-  describe.only('POST /users/register/volunteers', () => {
-    test(':: fail - user already exists', async () => {
-      const res = await server.inject({
-        method: 'POST',
-        url: '/v1/users/register/volunteers',
-        payload: {
-          organisationId: 1,
-          name: 'Chell',
-          gender: 'female',
-          birthYear: 1988,
-          email: '1498@aperturescience.com',
-          password: 'c<3mpanionCube',
-          role: RoleEnum.VOLUNTEER,
-        },
-      });
-
-      expect(res.statusCode).toBe(409);
-      expect((<any> res.result).error.message).toBe('User with this e-mail already registered');
-    });
-
-    test(':: fail - non-existent community business', async () => {
-      const res = await server.inject({
-        method: 'POST',
-        url: '/v1/users/register/volunteers',
-        payload: {
-          organisationId: 9352,
-          name: 'foo',
-          gender: 'female',
-          birthYear: 1988,
-          email: '13542@google.com',
-          password: 'fighteS1994!',
-          role: RoleEnum.VOLUNTEER,
-        },
-      });
-
-      expect(res.statusCode).toBe(400);
-      expect((<any> res.result).error.message).toBe('Unrecognised organisation');
-    });
-
-    test(':: success - create VOLUNTEER', async () => {
-      const res = await server.inject({
-        method: 'POST',
-        url: '/v1/users/register/volunteers',
-        payload: {
-          organisationId: 1,
-          name: 'foo',
-          gender: 'female',
-          birthYear: 1988,
-          email: '13542@google.com',
-          password: 'fighteS1994!',
-          role: RoleEnum.VOLUNTEER,
-        },
-      });
-
-      expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result).toEqual(expect.objectContaining({
-        name: 'foo',
-        gender: 'female',
-        birthYear: 1988,
-        email: '13542@google.com',
-      }));
-    });
-
-    test(':: success - create VOLUNTEER_ADMIN', async () => {
-      const res = await server.inject({
-        method: 'POST',
-        url: '/v1/users/register/volunteers',
-        payload: {
-          organisationId: 1,
-          name: 'foo',
-          gender: 'female',
-          birthYear: 1988,
-          email: '13542@google.com',
-          password: 'fighteS1994!',
-          role: RoleEnum.VOLUNTEER_ADMIN,
         },
       });
 

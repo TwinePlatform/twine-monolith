@@ -164,6 +164,27 @@ export interface PutMyVolunteerLogRequest extends Hapi.Request {
   };
 }
 
+export interface RegisterRequest extends Hapi.Request {
+  payload: {
+    organisationId: number
+    name: string
+    gender: GenderEnum
+    birthYear: number
+    email: string
+    phoneNumber: string
+    postCode: string
+    emailConsent: boolean
+    smsConsent: boolean
+  };
+}
+
+export interface VolunteerRegisterRequest extends Hapi.Request {
+  payload: RegisterRequest['payload'] & {
+    password: string
+    role: RoleEnum.VOLUNTEER | RoleEnum.VOLUNTEER_ADMIN
+  };
+}
+
 /*
  * Test related types
  */
