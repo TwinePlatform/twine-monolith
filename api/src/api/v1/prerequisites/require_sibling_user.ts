@@ -11,13 +11,18 @@
  *   (note this use case is currently not needed)
  *
  * Assumptions:
- * - This route pre-requisite is run _AFTER_ the organisation in question
- *   is fetched and placed in the `pre` object under one of the following keys:
- *   > organisation
- *   > communityBusiness
- *
  * - requested user is passed as a params named userId
  * - accessing user's details and linked organisation are held in credentials
+ *
+ * Current Uses:
+ * This prereq is currently used in conjuntion with "user_details-sibling" for VOLUNTEER_ADMIN
+ * to access details of VOLUNTEERs and other VOLUNTEER_ADMINs at the same organisation.
+ * This works by:
+ * - linking `user_details-sibling:...` scopes to VOLUNTEER_ADMIN
+ * - using this prereq to check that VOLUNTEER_ADMIN are at the same org as the target user
+ *   (without this check VOLUNTEER_ADMINs would be able to check for users at other orgs)
+ * - VOLUNTEERs & VISITORs will pass this check but cannot access these routes as they
+ *   do not have the correct scope
  */
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
