@@ -1,4 +1,5 @@
 import * as Hapi from 'hapi';
+import * as Boom from 'boom';
 import { Volunteers } from '../../../../models';
 import { response } from '../schema';
 import { id } from '../../schema/request';
@@ -29,8 +30,14 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
       const { server: { app: { knex } }, params: { userId } } = request;
 
-      const volunteer = await Volunteers.getOne(knex, { where: { id: Number(userId) } });
-      return Volunteers.serialise(volunteer);
+      const volunteer = await Volunteers.getOne(knex, { where: {
+        id: Number(userId),
+        deletedAt: null,
+      } });
+
+      return volunteer
+        ? Volunteers.serialise(volunteer)
+        : Boom.notFound('No volunteer found under this id');
     },
   },
 ];

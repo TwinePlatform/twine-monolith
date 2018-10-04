@@ -38,6 +38,16 @@ describe('DELETE /v1/users/volunteers/:id', () => {
   });
 
   test(':: success - volunteer deleted', async () => {
+    const getRes = await server.inject({
+      method: 'GET',
+      url: '/v1/users/volunteers/6',
+      credentials: {
+        scope: ['user_details-sibling:read'],
+        user,
+        organisation,
+      },
+    });
+
     const res = await server.inject({
       method: 'DELETE',
       url: '/v1/users/volunteers/6',
@@ -48,7 +58,7 @@ describe('DELETE /v1/users/volunteers/:id', () => {
       },
     });
 
-    const res2 = await server.inject({
+    const getRes2 = await server.inject({
       method: 'GET',
       url: '/v1/users/volunteers/6',
       credentials: {
@@ -58,9 +68,13 @@ describe('DELETE /v1/users/volunteers/:id', () => {
       },
     });
 
+    // volunteer exists
+    expect(getRes.statusCode).toBe(200);
+    // delete route is successful
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toEqual(null);
-    expect((<any> res2.result).result.deletedAt).toBeTruthy();
+    // cannot retreive volunteer after they have been deleted
+    expect(getRes2.statusCode).toBe(404);
   });
 
   test(':: fail - user that is not a volunteers returns 404', async () => {

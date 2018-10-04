@@ -15,11 +15,13 @@ describe('GET /v1/users/volunteers/:id', () => {
 
   beforeAll(async () => {
     server = await init(config);
-    organisation = await CommunityBusinesses.getOne(server.app.knex, { where: { id: 2 } });
-    wrongOrganisation = await CommunityBusinesses.getOne(server.app.knex, { where: { id: 1 } });
-    volunteerAdmin = await Volunteers.getOne(server.app.knex, { where: { id: 7 } });
-    orgAdmin = await Volunteers.getOne(server.app.knex, { where: { id: 3 } });
-    adminFromWrongOrg = await Volunteers.getOne(server.app.knex, { where: { id: 8 } });
+    organisation = await CommunityBusinesses
+      .getOne(server.app.knex, { where: { name: 'Black Mesa Research' } });
+    wrongOrganisation = await CommunityBusinesses
+      .getOne(server.app.knex, { where: { name: 'Aperture Science' } });
+    volunteerAdmin = await Volunteers.getOne(server.app.knex, { where: { name: 'Raiden' } });
+    orgAdmin = await Volunteers.getOne(server.app.knex, { where: { name: 'Gordon' } });
+    adminFromWrongOrg = await Volunteers.getOne(server.app.knex, { where: { name: 'Turret' } });
   });
 
   afterAll(async () => {
@@ -58,6 +60,20 @@ describe('GET /v1/users/volunteers/:id', () => {
     expect((<any> res.result).result).toEqual(expect.objectContaining({
       name: 'Emma Emmerich',
     }));
+  });
+
+  test(':: fail - non volunteer user returns a 404', async () => {
+    const res = await server.inject({
+      method: 'GET',
+      url: '/v1/users/volunteers/1',
+      credentials: {
+        scope: ['user_details-sibling:read'],
+        user: adminFromWrongOrg,
+        organisation: wrongOrganisation,
+      },
+    });
+
+    expect(res.statusCode).toBe(404);
   });
 
   test(':: fail - volunteer admin from a different org cannot access user details', async () => {
