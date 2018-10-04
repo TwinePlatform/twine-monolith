@@ -5,6 +5,8 @@ import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
 import { Volunteers, DisabilityEnum, Users } from '..';
 import { CommunityBusinesses } from '../community_business';
+import { RoleEnum } from '../../auth/types';
+import Roles from '../../auth/roles';
 
 describe('Visitor model', () => {
   let trx: Knex.Transaction;
@@ -66,6 +68,33 @@ describe('Visitor model', () => {
       const volunteer = await Volunteers.add(trx, changeset);
 
       expect(volunteer).toEqual(expect.objectContaining(changeset));
+    });
+
+    test('addWithRole :: create new VOLUNTEER record', async () => {
+      const changeset = await factory.build('volunteer');
+      const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
+      const volunteer = await Volunteers.addWithRole(trx, changeset, RoleEnum.VOLUNTEER, cb);
+      const rolesCheck = await Roles
+       .userHas(trx, { role: RoleEnum.VOLUNTEER, userId: volunteer.id, organisationId: cb.id });
+      expect(volunteer).toEqual(expect.objectContaining(changeset));
+      expect(rolesCheck).toBeTruthy();
+    });
+
+    test('addWithRole :: create new VOLUNTEER_ADMIN record', async () => {
+      const changeset = await factory.build('volunteer');
+      const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
+
+      const volunteerAdmin = await Volunteers
+        .addWithRole(trx, changeset, RoleEnum.VOLUNTEER_ADMIN, cb);
+
+      const rolesCheck = await Roles.userHas(trx, {
+        role: RoleEnum.VOLUNTEER_ADMIN,
+        userId: volunteerAdmin.id,
+        organisationId: cb.id,
+      });
+
+      expect(volunteerAdmin).toEqual(expect.objectContaining(changeset));
+      expect(rolesCheck).toBeTruthy();
     });
 
     test('update :: non-foreign key column', async () => {

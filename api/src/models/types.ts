@@ -3,6 +3,7 @@
  */
 import * as Knex from 'knex';
 import { Maybe, Dictionary, Float, Int, Omit, Map } from '../types/internal';
+import { RoleEnum } from '../auth/types';
 
 /*
  * Common and utility types
@@ -305,6 +306,10 @@ export type VisitorCollection = UsersBaseCollection & {
 export type VolunteerCollection = UsersBaseCollection & {
   fromCommunityBusiness: (client: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
   Promise<Partial<User>[]>
+  addWithRole: (
+    c: Knex, a: Partial<User>,
+    vt: RoleEnum.VOLUNTEER | RoleEnum.VOLUNTEER_ADMIN,
+    o: Partial<Organisation>) => Promise<User>
 };
 
 export type CbAdminCollection = UsersBaseCollection & {

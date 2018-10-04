@@ -6,6 +6,7 @@ import { VolunteerCollection } from './types';
 import { Users, ModelToColumn } from './user';
 import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './applyQueryModifiers';
+import Roles from '../auth/roles';
 
 /*
  * Implementation of the UserCollection type for Volunteers
@@ -57,6 +58,14 @@ export const Volunteers: VolunteerCollection = {
 
   async add (client, user) {
     return Users.add(client, user);
+  },
+
+  async addWithRole (client, user, volunteerType, org) {
+    return client.transaction(async (trx) => {
+      const newUser = await Users.add(trx, user);
+      await Roles.add(trx, { role: volunteerType, userId: newUser.id, organisationId: org.id });
+      return newUser;
+    });
   },
 
   async update (client, user, changes) {
