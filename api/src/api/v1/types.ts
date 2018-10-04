@@ -122,6 +122,12 @@ export interface GetAllVolunteersRequest extends Hapi.Request {
   };
 }
 
+export interface DeleteUserRequest extends Hapi.Request {
+  params: {
+    userId: string
+  };
+}
+
 /*
  * Test related types
  */
