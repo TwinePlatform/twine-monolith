@@ -7,7 +7,7 @@ import { RoleEnum } from '../../../../auth/types';
 import { getTrx } from '../../../../../tests/utils/database';
 
 
-describe('POST /users/register/visitor', () => {
+describe('API v1 - register new users', () => {
   let server: Hapi.Server;
   let knex: Knex;
   let trx: Knex.Transaction;
@@ -31,105 +31,193 @@ describe('POST /users/register/visitor', () => {
     await trx.rollback();
     server.app.knex = knex;
   });
+  describe('POST /users/register/visitor', () => {
+    test('user already exists', async () => {
+      const user = await factory.build('user');
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitor',
+        payload: {
+          organisationId: 1,
+          name: 'Chell',
+          gender: 'female',
+          birthYear: 1988,
+          email: '1498@aperturescience.com',
+        },
+        credentials: {
+          user,
+          scope: ['user_details-child:write'],
+          role: RoleEnum.ORG_ADMIN,
+        },
+      });
 
-  test('user already exists', async () => {
-    const user = await factory.build('user');
-    const res = await server.inject({
-      method: 'POST',
-      url: '/v1/users/register/visitor',
-      payload: {
-        organisationId: 1,
-        name: 'Chell',
-        gender: 'female',
-        birthYear: 1988,
-        email: '1498@aperturescience.com',
-      },
-      credentials: {
-        user,
-        scope: ['user_details-child:write'],
-        role: RoleEnum.ORG_ADMIN,
-      },
+      expect(res.statusCode).toBe(409);
+      expect((<any> res.result).error.message).toBe('User with this e-mail already registered');
     });
 
-    expect(res.statusCode).toBe(409);
-    expect((<any> res.result).error.message).toBe('User with this e-mail already registered');
-  });
+    test('non-existent community business', async () => {
+      const user = await factory.build('user');
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitor',
+        payload: {
+          organisationId: 9352,
+          name: 'foo',
+          gender: 'female',
+          birthYear: 1988,
+          email: '13542@google.com',
+        },
+        credentials: {
+          user,
+          scope: ['user_details-child:write'],
+          role: RoleEnum.ORG_ADMIN,
+        },
+      });
 
-  test('non-existent community business', async () => {
-    const user = await factory.build('user');
-    const res = await server.inject({
-      method: 'POST',
-      url: '/v1/users/register/visitor',
-      payload: {
-        organisationId: 9352,
-        name: 'foo',
-        gender: 'female',
-        birthYear: 1988,
-        email: '13542@google.com',
-      },
-      credentials: {
-        user,
-        scope: ['user_details-child:write'],
-        role: RoleEnum.ORG_ADMIN,
-      },
+      expect(res.statusCode).toBe(400);
+      expect((<any> res.result).error.message).toBe('Unrecognised organisation');
     });
 
-    expect(res.statusCode).toBe(400);
-    expect((<any> res.result).error.message).toBe('Unrecognised organisation');
-  });
-
-  test('no registered ORG_ADMIN', async () => {
+    test('no registered ORG_ADMIN', async () => {
     /*
      * Organisation 2 (Black Mesa Research) has an ORG_ADMIN (Gordon) who is
      * marked as deleted, and therefore will not be fetched from the DB
      */
-    const user = await factory.build('user');
-    const res = await server.inject({
-      method: 'POST',
-      url: '/v1/users/register/visitor',
-      payload: {
-        organisationId: 2,
+      const user = await factory.build('user');
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitor',
+        payload: {
+          organisationId: 2,
+          name: 'foo',
+          gender: 'female',
+          birthYear: 1988,
+          email: '13542@google.com',
+        },
+        credentials: {
+          user,
+          scope: ['user_details-child:write'],
+          role: RoleEnum.ORG_ADMIN,
+        },
+      });
+
+      expect(res.statusCode).toBe(422);
+      expect((<any> res.result).error.message).toBe('No associated admin for this organisation');
+    });
+
+    test('happy path', async () => {
+      const user = await factory.build('user');
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitor',
+        payload: {
+          organisationId: 1,
+          name: 'foo',
+          gender: 'female',
+          birthYear: 1988,
+          email: '13542@google.com',
+        },
+        credentials: {
+          user,
+          scope: ['user_details-child:write'],
+          role: RoleEnum.ORG_ADMIN,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toEqual(expect.objectContaining({
         name: 'foo',
         gender: 'female',
         birthYear: 1988,
         email: '13542@google.com',
-      },
-      credentials: {
-        user,
-        scope: ['user_details-child:write'],
-        role: RoleEnum.ORG_ADMIN,
-      },
+      }));
     });
-
-    expect(res.statusCode).toBe(422);
-    expect((<any> res.result).error.message).toBe('No associated admin for this organisation');
   });
+  describe.only('POST /users/register/volunteers', () => {
+    test(':: fail - user already exists', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/volunteers',
+        payload: {
+          organisationId: 1,
+          name: 'Chell',
+          gender: 'female',
+          birthYear: 1988,
+          email: '1498@aperturescience.com',
+          password: 'c<3mpanionCube',
+          role: RoleEnum.VOLUNTEER,
+        },
+      });
 
-  test('happy path', async () => {
-    const user = await factory.build('user');
-    const res = await server.inject({
-      method: 'POST',
-      url: '/v1/users/register/visitor',
-      payload: {
-        organisationId: 1,
+      expect(res.statusCode).toBe(409);
+      expect((<any> res.result).error.message).toBe('User with this e-mail already registered');
+    });
+
+    test(':: fail - non-existent community business', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/volunteers',
+        payload: {
+          organisationId: 9352,
+          name: 'foo',
+          gender: 'female',
+          birthYear: 1988,
+          email: '13542@google.com',
+          password: 'fighteS1994!',
+          role: RoleEnum.VOLUNTEER,
+        },
+      });
+
+      expect(res.statusCode).toBe(400);
+      expect((<any> res.result).error.message).toBe('Unrecognised organisation');
+    });
+
+    test(':: success - create VOLUNTEER', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/volunteers',
+        payload: {
+          organisationId: 1,
+          name: 'foo',
+          gender: 'female',
+          birthYear: 1988,
+          email: '13542@google.com',
+          password: 'fighteS1994!',
+          role: RoleEnum.VOLUNTEER,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toEqual(expect.objectContaining({
         name: 'foo',
         gender: 'female',
         birthYear: 1988,
         email: '13542@google.com',
-      },
-      credentials: {
-        user,
-        scope: ['user_details-child:write'],
-        role: RoleEnum.ORG_ADMIN,
-      },
+      }));
     });
 
-    expect(res.statusCode).toBe(200);
-    expect((<any> res.result).result).toEqual(expect.objectContaining({
-      name: 'foo',
-      gender: 'female',
-      birthYear: 1988,
-      email: '13542@google.com',
-    }));
+    test(':: success - create VOLUNTEER_ADMIN', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/volunteers',
+        payload: {
+          organisationId: 1,
+          name: 'foo',
+          gender: 'female',
+          birthYear: 1988,
+          email: '13542@google.com',
+          password: 'fighteS1994!',
+          role: RoleEnum.VOLUNTEER_ADMIN,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toEqual(expect.objectContaining({
+        name: 'foo',
+        gender: 'female',
+        birthYear: 1988,
+        email: '13542@google.com',
+      }));
+    });
   });
 });
