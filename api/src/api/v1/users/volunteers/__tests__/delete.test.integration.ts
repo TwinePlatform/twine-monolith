@@ -94,11 +94,8 @@ describe('DELETE /v1/users/volunteers/:id', () => {
     const res = await server.inject({
       method: 'DELETE',
       url: '/v1/users/volunteers/7',
-      payload: {
-        favouritePet: 'Snake',
-      },
       credentials: {
-        scope: ['user_details-sibling:write'],
+        scope: ['user_details-child:write'],
         role: RoleEnum.TWINE_ADMIN,
       },
     });
@@ -109,11 +106,8 @@ describe('DELETE /v1/users/volunteers/:id', () => {
     const res = await server.inject({
       method: 'DELETE',
       url: '/v1/users/volunteers/7',
-      payload: {
-        favouritePet: 'Snake',
-      },
       credentials: {
-        scope: ['user_details-sibling:write'],
+        scope: ['user_details-child:write'],
         user: await Users.getOne(knex, { where: { name: 'GlaDos' } }),
         organisation: await CommunityBusinesses
           .getOne(knex, { where: { name: 'Aperture Science' } }),
