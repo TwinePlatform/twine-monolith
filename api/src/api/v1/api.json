@@ -1125,10 +1125,10 @@
           }
         }
       },
-      "/register/volunteer": {
+      "/register/volunteers": {
         "POST": {
           "description": "Create a volunteer account",
-          "isImplemented": false,
+          "isImplemented": true,
           "auth": false,
           "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": [],
@@ -1148,7 +1148,7 @@
           "response": "types.volunteerUser"
         }
       },
-      "/register/visitor": {
+      "/register/visitors": {
         "POST": {
           "description": "Create a visitor account",
           "isImplemented": true,
