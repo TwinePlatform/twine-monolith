@@ -4,6 +4,7 @@ import factory from '../../../tests/utils/factory';
 import { CommunityBusinesses } from '..';
 import { getTrx } from '../../../tests/utils/database';
 import { Dictionary } from 'ramda';
+import { RegionEnum, SectorEnum } from '../types';
 
 
 describe('Community Business Model', () => {
@@ -301,7 +302,11 @@ describe('Community Business Model', () => {
   describe('byRegion', () => {
     test(':: returns all Community Businesses names by region ', async () => {
       const cbByRegion = await CommunityBusinesses.byRegion(trx, {});
-      expect(cbByRegion).toEqual({ London: ['Aperture Science', 'Black Mesa Research'] });
+      expect(cbByRegion).toEqual({
+        London: [
+          { id: 1, name: 'Aperture Science' },
+          { id: 2, name: 'Black Mesa Research' },
+        ]});
     });
 
     test(':: returns subset of Community Businesses names by region with query', async () => {
@@ -310,7 +315,32 @@ describe('Community Business Model', () => {
       await CommunityBusinesses.destroy(trx, blackMesa);
 
       const cbByRegion = await CommunityBusinesses.byRegion(trx, { where: { deletedAt: null } });
-      expect(cbByRegion).toEqual({ London: ['Aperture Science'] });
+      expect(cbByRegion).toEqual({ London: [{ id: 1, name: 'Aperture Science' }] });
+    });
+
+    test(':: returns alphebatised list', async () => {
+      await CommunityBusinesses.add(trx, {
+        name: 'Zeldas Dungeon',
+        region: RegionEnum.LONDON,
+        sector: SectorEnum.COMMUNITY_HUB,
+      });
+      await CommunityBusinesses.add(trx, {
+        name: 'Okamis Fields',
+        region: RegionEnum.LONDON,
+        sector: SectorEnum.ENVIRONMENT,
+      });
+      /*
+       * NB: due to sequences not resetting during transaction rollbacks this test
+       * will fail if run separately to the others in test suite.
+       */
+      const cbByRegion = await CommunityBusinesses.byRegion(trx, { where: { deletedAt: null } });
+      expect(cbByRegion).toEqual({
+        London: [
+          { id: 1, name: 'Aperture Science' },
+          { id: 2, name: 'Black Mesa Research' },
+          { id: 6, name: 'Okamis Fields' },
+          { id: 5, name: 'Zeldas Dungeon' },
+        ]});
     });
   });
 });

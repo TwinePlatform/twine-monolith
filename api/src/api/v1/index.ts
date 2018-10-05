@@ -12,6 +12,7 @@
 import * as Hapi from 'hapi';
 import constants from './constants';
 import users from './users';
+import regions from './regions';
 import communityBusinesses from './community_businesses';
 import addLifecycleHooks from './hooks';
 import setupAuthentication from './auth';
@@ -37,6 +38,7 @@ export default {
       ...constants,
       ...users,
       ...communityBusinesses,
+      ...regions,
     ]);
   },
 };

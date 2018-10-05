@@ -4,7 +4,7 @@
 import * as Knex from 'knex';
 import * as moment from 'moment';
 import { compose, omit, evolve, filter, pick, invertObj, pipe, assocPath, difference } from 'ramda';
-import { Dictionary, Map } from '../types/internal';
+import { Dictionary, Map, Int } from '../types/internal';
 import {
   CommunityBusiness,
   CommunityBusinessCollection,
@@ -591,14 +591,14 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
   },
 
   async byRegion (client, q) {
-    const allCommunityBusinesses = await CommunityBusinesses.get(client, q);
+    const order: [string, 'asc' | 'desc'] = ['organisation_name', 'asc'];
+    const query = { ...q, order };
+    const allCommunityBusinesses = await CommunityBusinesses.get(client, query);
     return allCommunityBusinesses
-      .reduce((byRegion: Dictionary<string[]>, cb: CommunityBusiness) => {
+      .reduce((byRegion: Dictionary<{id: Int, name: string}[]>, cb: CommunityBusiness) => {
         byRegion[cb.region]
-        ? byRegion[cb.region].push(cb.name)
-        : byRegion[cb.region] = [cb.name];
-
-        byRegion[cb.region].sort();
+        ? byRegion[cb.region].push({ id: cb.id, name: cb.name })
+        : byRegion[cb.region] = [{ id: cb.id, name: cb.name }];
         return byRegion;
       }, {});
   },
