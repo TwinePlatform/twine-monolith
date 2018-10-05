@@ -41,7 +41,10 @@
 			$scope.formData.email = $localStorage.user.email;
 
 			// phone
-			$scope.formData.phone = $localStorage.user.phone;
+			$scope.formData.phoneNumber = $localStorage.user.phoneNumber;
+			
+			// gender
+			$scope.formData.gender = $localStorage.user.gender;
 
 		/*
 			>> populate year of birth dropdown (current year going down to (current year - 110))
@@ -67,33 +70,12 @@
 
 			$$api.genders.get().success(function (result) {
 				
-				// loop through the results and push only required items to $scope.genders
-				for (var i = 0, len = result.data.length; i < len; i++) {
-					$scope.genders[i] = {id: result.data[i].id, name: result.data[i].name};
+				$scope.genders = result.data 
+				$scope.gendersDisabled = false;
 
-					// when for loop complete
-					if (i === len - 1) {
-
-						// enable genders select
-						$scope.gendersDisabled = false;
-
-						// if theres a gender in localstorage
-						if ($localStorage.user.gender !== undefined) {
-
-							// get user's gender
-							var gender = $localStorage.user.gender.name;
-
-							// get position of user's gender in $scope.years array
-							var genderPosition = $scope.genders.map(function(x) {return x.name; }).indexOf(gender);
-
-							// set the value of formData.gender to that item
-							$scope.formData.gender = $scope.genders[genderPosition];
-
-						}
-
-					}
+				if ($localStorage.user.gender) {
+					$scope.formData.gender = $localStorage.user.gender
 				}
-
 
 			}).error(function (result, error) {
 				
@@ -111,24 +93,10 @@
 			$scope.regions = [];
 
 			$$api.regions.get($localStorage.user.organisation.id).success(function (result) {
-				
-				// loop through the results and push only required items to $scope.regions
-				for (var i = 0, len = result.data.length; i < len; i++) {
-					$scope.regions[i] = {id: result.data[i].id, name: result.data[i].name};
+				$scope.regions = result.data;
 
-					// when for loop complete
-					if (i === len - 1) {
-
-						// get user's region id
-						var regionId = parseInt($localStorage.user.region.id);
-
-						// get position of user's region in $scope.regions array
-						var regionPosition = $scope.regions.map(function(x) {return x.id; }).indexOf(regionId);
-
-						// set the value of formData.region to that item
-						$scope.formData.region = $scope.regions[regionPosition];
-
-					}
+				if ($localStorage.user.organisation.region) {
+					$scope.formData.region = $localStorage.user.organisation.region
 				}
 
 				// enable regions select
@@ -146,64 +114,36 @@
 			>> populate organisation dropdown
 		*/
 
+
 			$scope.organisationsDisabled = true;
+			$scope.organisationsByRegion = {};
 			$scope.organisations = [];
 
-			$scope.populateOrganisations = function(regionId) {
+			$$api.regions.organisations().success(function (data) {
 
-				// if no region is selected, empty & disable organisations
-				if (regionId === undefined) {
-					$scope.organisations = [];
+				$scope.organisationsByRegion = data.result
+
+			}).error(function (result, error) {
+				
+				// hide loader
+				$ionicLoading.hide();
+
+				// process connection error
+				processConnectionError(result, error);
+
+			});
+
+			$scope.populateOrganisations = function(regionName) {
+				if($scope.organisationsByRegion[regionName]){
+					$scope.organisations = $scope.organisationsByRegion[regionName]
+					$scope.organisationsDisabled = false;
+				} else {
 					$scope.organisationsDisabled = true;
 				}
-				// otherwise get the organisations
-				else {
-
-					$$api.organisations.get(regionId).success(function (result) {
-
-						$scope.organisations = result.data;
-						// >>> loop through the results and push only required items to $scope.organisations
-						for (var i = 0, len = result.data.length; i < len; i++) {
-							$scope.organisations[i] = {id: result.data[i].id, name: result.data[i].name};
-
-							// when for loop complete
-							if (i === len - 1) {
-
-								$scope.organisationsLoaded = true;
-
-								// get user's organisation id
-								var orgId = parseInt($localStorage.user.organisation.id);
-
-								// get position of user's organsation in $scope.organisations array
-								var organisationPosition = $scope.organisations.map(function(x) {return x.id; }).indexOf(orgId);
-
-								// set the value of formData.organisation to that item
-								$scope.formData.organisation = $scope.organisations[organisationPosition];
-
-								// hide loader
-								$ionicLoading.hide();
-
-							}
-						}
-
-						// enable organisation select 
-						$scope.organisationsDisabled = false;
-
-					}).error(function (result, error) {
-						
-						// hide loader
-						$ionicLoading.hide();
-
-						// process connection error
-						processConnectionError(result, error);
-
-					});
-				}
-
 			}
 
 			// populate on first load by localStorage region id
-			$scope.populateOrganisations($localStorage.user.region.id);
+			$scope.populateOrganisations($localStorage.user.organisation.region);
 
 
 		/*
@@ -250,7 +190,7 @@
 							// store user information
 							$localStorage.user = response.data;
 
-                            $rootScope.currentUser = response.data;
+              $rootScope.currentUser = response.data;
 
 							// set organisation subheader title
 							$rootScope.organisationName = $localStorage.user.organisation.name;
