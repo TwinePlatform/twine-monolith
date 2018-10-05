@@ -97,29 +97,32 @@
 		*/
 
 			$scope.organisationsDisabled = true;
+			$scope.organisationsByRegion = {};
 			$scope.organisations = [];
 
-			$scope.populateOrganisations = function() {
 
-				// get selected region id
-				$scope.regionId = $scope.formData.region.id;
+			$$api.regions.organisations().success(function (data) {
 
-				$$api.organisations.get($scope.regionId).success(function (result) {
+				$scope.organisationsByRegion = data.result
 
-					// loop through the results and push only required items to $scope.organisations
-					for (var i = 0, len = result.data.length; i < len; i++) {
-						$scope.organisations[i] = {id: result.data[i].id, name: result.data[i].name};
-					}
+			}).error(function (result, error) {
+				
+				// hide loader
+				$ionicLoading.hide();
 
-					// enable organisation select 
+				// process connection error
+				processConnectionError(result, error);
+
+			});
+
+
+			$scope.populateOrganisations = function(regionName) {
+				if($scope.organisationsByRegion[regionName]){
+					$scope.organisations = $scope.organisationsByRegion[regionName]
 					$scope.organisationsDisabled = false;
-
-				}).error(function (result, error) {
-					
-					// process connection error
-					$$utilities.processConnectionError(result, error);
-
-				});
+				} else {
+					$scope.organisationsDisabled = true;
+				}
 			}
 
 
