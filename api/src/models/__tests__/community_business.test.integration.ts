@@ -296,4 +296,21 @@ describe('Community Business Model', () => {
       }
     });
   });
+
+
+  describe('byRegion', () => {
+    test(':: returns all Community Businesses names by region ', async () => {
+      const cbByRegion = await CommunityBusinesses.byRegion(trx, {});
+      expect(cbByRegion).toEqual({ London: ['Aperture Science', 'Black Mesa Research'] });
+    });
+
+    test(':: returns subset of Community Businesses names by region with query', async () => {
+      const blackMesa = await CommunityBusinesses
+        .getOne(trx, { where: { name: 'Black Mesa Research' } });
+      await CommunityBusinesses.destroy(trx, blackMesa);
+
+      const cbByRegion = await CommunityBusinesses.byRegion(trx, { where: { deletedAt: null } });
+      expect(cbByRegion).toEqual({ London: ['Aperture Science'] });
+    });
+  });
 });

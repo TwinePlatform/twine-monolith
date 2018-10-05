@@ -589,4 +589,17 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     const rawAggregateData = await Promise.all(requestedAggregates);
     return rawAggregateData.reduce((acc, el) => ({ ...acc, ...el }), {});
   },
+
+  async byRegion (client, q) {
+    const allCommunityBusinesses = await CommunityBusinesses.get(client, q);
+    return allCommunityBusinesses
+      .reduce((byRegion: Dictionary<string[]>, cb: CommunityBusiness) => {
+        byRegion[cb.region]
+        ? byRegion[cb.region].push(cb.name)
+        : byRegion[cb.region] = [cb.name];
+
+        byRegion[cb.region].sort();
+        return byRegion;
+      }, {});
+  },
 };
