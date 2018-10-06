@@ -43,7 +43,7 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: PostMyVolunteerLogsRequest, h) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { user } },
+        auth: { credentials: { user, scope } },
         pre: { communityBusiness },
         payload,
       } = request;
