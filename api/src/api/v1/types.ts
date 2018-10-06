@@ -141,7 +141,7 @@ export interface GetMyVolunteerLogsRequest extends Hapi.Request {
 
 export interface PostMyVolunteerLogsRequest extends Hapi.Request {
   payload: Pick<VolunteerLog, 'activity' | 'duration' | 'startedAt'> & {
-    organisationId?: number
+    userId?: number
   };
   pre: {
     communityBusiness: CommunityBusiness

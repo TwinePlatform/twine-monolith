@@ -124,36 +124,17 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect((<any> res.result).result.startedAt.valueOf()).toBeLessThan(after.valueOf());
     });
 
-    test('cannot create log for other user', async () => {
+    test('can create log for other user if admin at CB', async () => {
       const res = await server.inject({
-        method: 'POST',
-        url: '/v1/users/2/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-parent:write'],
-          user,
-          organisation,
-        },
-        payload: {
-          activity: 'Office support',
-          duration: {
-            minutes: 20,
-            hours: 2,
-          },
-        },
-      });
-
-      expect(res.statusCode).toBe(404);
-
-      const res2 = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: {
           scope: ['volunteer_logs-parent:write'],
-          user,
+          user: await Users.getOne(knex, { where: { name: 'Raiden' } }),
           organisation,
         },
         payload: {
-          userId: 4,
+          userId: user.id,
           activity: 'Office support',
           duration: {
             minutes: 20,
@@ -162,7 +143,37 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         },
       });
 
-      expect(res2.statusCode).toBe(400);
+      expect(res.statusCode).toEqual(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          userId: user.id,
+          organisationId: organisation.id,
+          activity: 'Office support',
+          duration: {
+            minutes: 20,
+            hours: 2,
+          },
+        }),
+      });
+    });
+
+    test('cannot create log for other user if not admin at CB', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user: await Users.getOne(knex, { where: { name: 'Chell' } }),
+          organisation,
+        },
+        payload: {
+          userId: user.id,
+          activity: 'Office support',
+          duration: { minutes: 20, hours: 2 },
+        },
+      });
+
+      expect(res.statusCode).toBe(403);
     });
 
     test('cannot create log for other organisation', async () => {

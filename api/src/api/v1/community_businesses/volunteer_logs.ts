@@ -1,7 +1,9 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import { response } from './schema';
+import { response, id } from './schema';
+import Roles from '../../../auth/roles';
+import { RoleEnum } from '../../../auth/types';
 import { VolunteerLogs } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import { PostMyVolunteerLogsRequest } from '../types';
@@ -17,11 +19,12 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-parent:write', 'volunteer_logs-own:write'],
         },
       },
       validate: {
         payload: {
+          userId: id,
           activity: Joi.string().required(),
           duration: Joi.object({
             hours: Joi.number().integer().min(0),
@@ -44,11 +47,35 @@ const routes: Hapi.ServerRoute[] = [
         payload,
       } = request;
 
+      if (payload.userId) {
+        const isTargetVolunteer = await Roles.userHas(knex, {
+          userId: payload.userId,
+          organisationId: communityBusiness.id,
+          role: [RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN],
+        });
+
+        const isUserAdmin = await Roles.userHas(knex, {
+          userId: user.id,
+          organisationId: communityBusiness.id,
+          role: [RoleEnum.ORG_ADMIN, RoleEnum.VOLUNTEER_ADMIN],
+        });
+
+        // To continue, userId must correspond to VOLUNTEER/VOLUNTEER_ADMIN
+        // and scope must include 'volunteer_logs-own:write'
+        if (!isTargetVolunteer) {
+          return Boom.badRequest('User ID does not correspond to a volunteer');
+        }
+
+        if (!isUserAdmin) {
+          return Boom.forbidden('Insufficient permission');
+        }
+      }
+
       try {
         const log = await VolunteerLogs.add(knex, {
-          ...payload,
-          organisationId: communityBusiness.id,
           userId: user.id,
+          ...payload, // if payload contains userId, will overwrite existing
+          organisationId: communityBusiness.id,
         });
 
         return VolunteerLogs.serialise(log);
@@ -61,7 +88,6 @@ const routes: Hapi.ServerRoute[] = [
       }
     },
   },
-
 
 ];
 
