@@ -76,6 +76,6 @@ exports.seed = (knex) =>
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 5,
         duration: 60 * 30,
-        started_at: now.clone(),
+        started_at: now.clone().hour(-12),
       },
     ])
