@@ -305,11 +305,14 @@ export type VisitorCollection = UsersBaseCollection & {
 
 export type VolunteerCollection = UsersBaseCollection & {
   fromCommunityBusiness: (client: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
-  Promise<Partial<User>[]>
+    Promise<Partial<User>[]>
   addWithRole: (
-    c: Knex, a: Partial<User>,
+    k: Knex,
+    u: Partial<User>,
     vt: RoleEnum.VOLUNTEER | RoleEnum.VOLUNTEER_ADMIN,
-    o: Partial<Organisation>) => Promise<User>
+    cb: CommunityBusiness,
+    c?: string
+    ) => Promise<User>
   adminCodeIsValid: (k: Knex, c: CommunityBusiness, code: string) => Promise<boolean>
 };
 

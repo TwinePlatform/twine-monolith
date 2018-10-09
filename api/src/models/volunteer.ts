@@ -60,12 +60,32 @@ export const Volunteers: VolunteerCollection = {
     return Users.add(client, user);
   },
 
-  async addWithRole (client, user, volunteerType, org) {
-    return client.transaction(async (trx) => {
-      const newUser = await Users.add(trx, user);
-      await Roles.add(trx, { role: volunteerType, userId: newUser.id, organisationId: org.id });
-      return newUser;
-    });
+  async addWithRole (client, user, volunteerType, cb, code) {
+    switch (volunteerType) {
+
+      case RoleEnum.VOLUNTEER:
+        return client.transaction(async (trx) => {
+          const newUser = await Users.add(trx, user);
+          await Roles.add(trx, { role: volunteerType, userId: newUser.id, organisationId: cb.id });
+          return newUser;
+        });
+
+      case RoleEnum.VOLUNTEER_ADMIN:
+
+        const codeIsValid = await Volunteers.adminCodeIsValid(client, cb, code);
+        if (!codeIsValid) {
+          throw new Error('Invalid volunteer admin code');
+        }
+
+        return client.transaction(async (trx) => {
+          const newUser = await Users.add(trx, user);
+
+          await Roles.add(trx, { role: volunteerType, userId: newUser.id, organisationId: cb.id });
+          return newUser;
+        });
+
+
+    }
   },
 
   async update (client, user, changes) {
@@ -127,3 +147,4 @@ export const Volunteers: VolunteerCollection = {
     return row ? true : false;
   },
 };
+

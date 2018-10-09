@@ -182,6 +182,7 @@ export interface VolunteerRegisterRequest extends Hapi.Request {
   payload: RegisterRequest['payload'] & {
     password: string
     role: RoleEnum.VOLUNTEER | RoleEnum.VOLUNTEER_ADMIN
+    adminCode?: string
   };
 }
 

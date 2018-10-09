@@ -18,10 +18,9 @@ import {
   response
 } from '../schema';
 import {
-  GenderEnum,
   Volunteers,
-  Organisations,
-  Users
+  Users,
+  CommunityBusinesses
 } from '../../../../models';
 import { RoleEnum } from '../../../../auth/types';
 import { VolunteerRegisterRequest } from '../../types';
@@ -37,6 +36,7 @@ export default [
         payload: {
           organisationId: id.required(),
           role: Joi.alternatives(RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN),
+          adminCode: Joi.string().regex(/^[0-9]{5}$/),
           name: userName.required(),
           gender: gender.required(),
           birthYear: birthYear.required(),
@@ -47,27 +47,42 @@ export default [
           emailConsent: isEmailConsentGranted.default(false),
           smsConsent: isSMSConsentGranted.default(false),
         },
+        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },
     handler: async (request: VolunteerRegisterRequest, h: Hapi.ResponseToolkit) => {
       const { server: { app: { knex } }, payload } = request;
+      const { email, role, organisationId, adminCode } = payload;
       /*
        * Preliminaries
        */
       // check user doesn't already exist
-      if (await Users.exists(knex, { where: { email: payload.email } })) {
+      if (await Users.exists(knex, { where: { email } })) {
         return Boom.conflict('User with this e-mail already registered');
       }
-      const organisation = await Organisations
-        .getOne(knex, { where: { id: payload.organisationId, deletedAt: null } });
+      const communityBusiness = await CommunityBusinesses
+        .getOne(knex, { where: { id: organisationId, deletedAt: null } });
       // check organisation exists
-      if (!organisation) return Boom.badRequest('Unrecognised organisation');
+      if (!communityBusiness) return Boom.badRequest('Unrecognised organisation');
 
       /*
        * Registation
        */
-      const volunteer = await Volunteers.addWithRole(knex, payload, payload.role, organisation);
+
+      if (role === RoleEnum.VOLUNTEER_ADMIN && !adminCode) {
+        return Boom.badRequest('Missing volunteer admin code');
+      }
+      let volunteer;
+
+      try {
+        volunteer = await Volunteers.addWithRole(knex, payload, role, communityBusiness, adminCode);
+
+      } catch ({ message }) {
+        if (message === 'Invalid volunteer admin code') {
+          return Boom.unauthorized(message);
+        }
+      }
 
       // register login event
       await Volunteers.recordLogin(knex, volunteer);

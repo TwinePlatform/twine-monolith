@@ -99,7 +99,7 @@ describe('Visitor model', () => {
       const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
 
       const volunteerAdmin = await Volunteers
-        .addWithRole(trx, changeset, RoleEnum.VOLUNTEER_ADMIN, cb);
+        .addWithRole(trx, changeset, RoleEnum.VOLUNTEER_ADMIN, cb, '70007');
 
       const rolesCheck = await Roles.userHas(trx, {
         role: RoleEnum.VOLUNTEER_ADMIN,

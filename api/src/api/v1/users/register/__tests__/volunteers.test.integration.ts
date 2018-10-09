@@ -105,6 +105,7 @@ describe('API v1 - register new users', () => {
           email: '13542@google.com',
           password: 'fighteS1994!',
           role: RoleEnum.VOLUNTEER_ADMIN,
+          adminCode: '10101',
         },
       });
 
@@ -115,6 +116,44 @@ describe('API v1 - register new users', () => {
         birthYear: 1988,
         email: '13542@google.com',
       }));
+    });
+
+    test(':: fail - invalid admin code for VOLUNTEER_ADMIN', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/volunteers',
+        payload: {
+          organisationId: 1,
+          name: 'foo',
+          gender: 'female',
+          birthYear: 1988,
+          email: '13542@google.com',
+          password: 'fighteS1994!',
+          role: RoleEnum.VOLUNTEER_ADMIN,
+          adminCode: '99999',
+        },
+      });
+
+      expect(res.statusCode).toBe(401);
+      expect((<any> res.result).error.message).toEqual('Invalid volunteer admin code');
+    });
+    test(':: fail - missing admin code for VOLUNTEER_ADMIN', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/volunteers',
+        payload: {
+          organisationId: 1,
+          name: 'foo',
+          gender: 'female',
+          birthYear: 1988,
+          email: '13542@google.com',
+          password: 'fighteS1994!',
+          role: RoleEnum.VOLUNTEER_ADMIN,
+        },
+      });
+
+      expect(res.statusCode).toBe(400);
+      expect((<any> res.result).error.message).toEqual('Missing volunteer admin code');
     });
   });
 });
