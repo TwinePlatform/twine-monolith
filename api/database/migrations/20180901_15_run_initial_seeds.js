@@ -34,6 +34,7 @@ exports.up = (knex) => {
               .then(() => require(path.join(basePath, '24_test_visit.seed.js')).seed(knex))
               .then(() => require(path.join(basePath, '25_test_visit_feedback.seed.js')).seed(knex))
               .then(() => require(path.join(basePath, '26_test_volunteer_hours_log.seed.js')).seed(knex))
+              .then(() => require(path.join(basePath, '27_test_volunteer_admin_code.seed.js')).seed(knex))
           : Promise.resolve()
     )
 };

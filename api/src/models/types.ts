@@ -310,6 +310,7 @@ export type VolunteerCollection = UsersBaseCollection & {
     c: Knex, a: Partial<User>,
     vt: RoleEnum.VOLUNTEER | RoleEnum.VOLUNTEER_ADMIN,
     o: Partial<Organisation>) => Promise<User>
+  adminCodeIsValid: (k: Knex, c: CommunityBusiness, code: string) => Promise<boolean>
 };
 
 export type CbAdminCollection = UsersBaseCollection & {

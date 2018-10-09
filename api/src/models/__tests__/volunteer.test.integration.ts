@@ -60,6 +60,20 @@ describe('Visitor model', () => {
       expect(volunteers).toHaveLength(2);
       expect(volunteers[0]).toEqual(expect.objectContaining({ name: 'Emma Emmerich' }));
     });
+
+    test('adminCodeIsValid :: returns true for matching code & cb', async () => {
+      const cb = await CommunityBusinesses.getOne(knex, { where: { name: 'Black Mesa Research' } });
+      const isValid = await Volunteers.adminCodeIsValid(knex, cb, '70007');
+
+      expect(isValid).toBe(true);
+    });
+
+    test('adminCodeIsValid :: returns false for not matching code & cb', async () => {
+      const cb = await CommunityBusinesses.getOne(knex, { where: { name: 'Black Mesa Research' } });
+      const isValid = await Volunteers.adminCodeIsValid(knex, cb, '10000');
+
+      expect(isValid).toBe(false);
+    });
   });
 
   describe('Write', () => {

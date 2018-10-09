@@ -111,9 +111,19 @@ export const Volunteers: VolunteerCollection = {
         ),
       query
     );
+
   },
 
   async serialise (user) {
     return omit(['password', 'qrCode'], user);
+  },
+
+  async adminCodeIsValid (client, cb, code) {
+    const [row] = await client('volunteer_admin_code')
+      .where({
+        code,
+        organisation_id: cb.id,
+      });
+    return row ? true : false;
   },
 };
