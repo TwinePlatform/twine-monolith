@@ -24,14 +24,3 @@ CREATE TABLE user_secret_reset (
   CONSTRAINT user_secret_reset_to_user_account_fk     FOREIGN KEY (user_account_id)     REFERENCES user_account     ON DELETE CASCADE,
   CONSTRAINT user_secret_reset_to_single_use_token_fk FOREIGN KEY (single_use_token_id) REFERENCES single_use_token ON DELETE CASCADE
 );
-
-
-CREATE TABLE volunteer_admin_one_time_code (
-  volunteer_admin_one_time_code_id SERIAL NOT NULL UNIQUE,
-  user_account_id                  INT NOT NULL,
-  single_use_token_id              INT NOT NULL UNIQUE,
-
-  CONSTRAINT volunteer_admin_one_time_code_pk                     PRIMARY KEY (volunteer_admin_one_time_code_id),
-  CONSTRAINT volunteer_admin_one_time_code_to_user_fk             FOREIGN KEY (user_account_id)     REFERENCES user_account     ON DELETE CASCADE,
-  CONSTRAINT volunteer_admin_one_time_code_to_single_use_token_fk FOREIGN KEY (single_use_token_id) REFERENCES single_use_token ON DELETE CASCADE
-);

@@ -75,6 +75,17 @@ CREATE TABLE community_business (
   CONSTRAINT community_business_to_community_business_region_fk FOREIGN KEY (community_business_region_id) REFERENCES community_business_region
 );
 
+CREATE TABLE volunteer_admin_code (
+  volunteer_admin_code_id SERIAL NOT NULL UNIQUE,
+  organisation_id                INT NOT NULL,
+  code                           INT NOT NULL,
+  created_at                     TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at                    TIMESTAMP WITH TIME ZONE,
+  deleted_at                     TIMESTAMP WITH TIME ZONE,
+
+  CONSTRAINT volunteer_admin_code_pk                     PRIMARY KEY (volunteer_admin_code_id),
+  CONSTRAINT volunteer_admin_code_to_organisation_fk     FOREIGN KEY (organisation_id) REFERENCES organisation ON DELETE CASCADE
+);
 
 CREATE TABLE funding_programme_community_business (
   funding_programme_id  INT NOT NULL,
