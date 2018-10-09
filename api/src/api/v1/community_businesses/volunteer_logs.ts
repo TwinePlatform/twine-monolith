@@ -135,20 +135,24 @@ const routes: Hapi.ServerRoute[] = [
       } = request;
 
       try {
-        const batch = VolunteerLogs.deduplicate(payload).map(async (log) => {
-          if (await VolunteerLogs.exists(knex, { where: { ...log } })) {
-            return null;
-          }
-          return VolunteerLogs.add(knex, {
-            ...log,
-            organisationId: communityBusiness.id,
-            userId: user.id,
-          });
-        });
+        await knex.transaction(async (trx) =>
+          Promise.all(payload.map(async (log) =>
+            VolunteerLogs.add(knex, {
+              ...log,
+              organisationId: communityBusiness.id,
+              userId: user.id,
+            })
+          ))
+        );
+
+        return null;
 
       } catch (error) {
         if (error.code === '23502') { // Violation of null constraint implies invalid activity
           return Boom.badRequest('Invalid activity');
+        }
+        if (error.code === '23505') { // Violation of unique constraint => duplicate log
+          return Boom.badRequest('Duplicate logs in payload, check start times');
         }
         throw error;
       }

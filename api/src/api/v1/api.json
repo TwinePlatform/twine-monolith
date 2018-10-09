@@ -910,6 +910,27 @@
           "response": null
         }
       },
+      "/me/volunteer-logs/sync": {
+        "POST": {
+          "description": "Synchronise volunteer logs for own use at community business",
+          "isImplemented": true,
+          "auth": true,
+          "intendedFor": ["VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "scope": ["volunteer_logs-parent:write"],
+          "body": {
+            "logs": [{
+              "activity": "String",
+              "duration": {
+                "hours": "Number",
+                "minutes": "Number",
+                "seconds": "Number"
+              },
+              "startedAt": "String"
+            }]
+          },
+          "response": null
+        }
+      },
       "/:id/volunteer-logs": {
         "GET": {
           "description": "Retrieve volunteer logs for a single community business",

@@ -352,4 +352,175 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(404);
     });
   });
+
+  describe('POST /community-businesses/me/volunteer-logs/sync', () => {
+    test('can sync single log', async () => {
+      const logs = [{
+        activity: 'Office support',
+        duration: { minutes: 20 },
+      }];
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user,
+          organisation,
+        },
+        payload: logs,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: null });
+
+      const resLogs = await server.inject({
+        method: 'GET',
+        url: '/v1/users/volunteers/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(resLogs.statusCode).toBe(200);
+      expect((<any> resLogs.result).result).toHaveLength(8);
+    });
+
+    test('can sync multiple logs', async () => {
+      const times = ['2018-09-22T21:02:10', '2018-09-21T21:01:12', '2018-10-02T21:02:10'];
+      const logs = [
+        { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
+        { activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
+        { activity: 'Shop/Cafe work', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
+      ];
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user,
+          organisation,
+        },
+        payload: logs,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: null });
+
+      const resLogs = await server.inject({
+        method: 'GET',
+        url: '/v1/users/volunteers/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(resLogs.statusCode).toBe(200);
+      expect((<any> resLogs.result).result).toHaveLength(10);
+    });
+
+    test('empty array in payload does nothing', async () => {
+      const logs: any[] = [];
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user,
+          organisation,
+        },
+        payload: logs,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: null });
+
+      const resLogs = await server.inject({
+        method: 'GET',
+        url: '/v1/users/volunteers/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(resLogs.statusCode).toBe(200);
+      expect((<any> resLogs.result).result).toHaveLength(7);
+    });
+
+    test('fails when trying to sync logs w/ identical "startedAt" in payload', async () => {
+      const now = new Date().toISOString();
+      const logs = [
+        { activity: 'Office support', duration: { minutes: 20 }, startedAt: now },
+        { activity: 'Office support', duration: { minutes: 20 }, startedAt: now },
+      ];
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user,
+          organisation,
+        },
+        payload: logs,
+      });
+
+      expect(res.statusCode).toBe(400);
+
+      const resLogs = await server.inject({
+        method: 'GET',
+        url: '/v1/users/volunteers/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(resLogs.statusCode).toBe(200);
+      expect((<any> resLogs.result).result).toHaveLength(7);
+    });
+
+    test('fails when trying to sync logs w/ same "startedAt" as existing log', async () => {
+      const resLogs = await server.inject({
+        method: 'GET',
+        url: '/v1/users/volunteers/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-parent:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(resLogs.statusCode).toBe(200);
+      expect((<any> resLogs.result).result).toHaveLength(7);
+
+      const { startedAt } = (<any> resLogs.result).result[0];
+
+      const logs = [
+        { activity: 'Office support', duration: { minutes: 20 }, startedAt },
+      ];
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: {
+          scope: ['volunteer_logs-parent:write'],
+          user,
+          organisation,
+        },
+        payload: logs,
+      });
+
+      expect(res.statusCode).toBe(400);
+    });
+  });
 });
