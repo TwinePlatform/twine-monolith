@@ -8,7 +8,7 @@ import { CommunityBusinesses } from '../community_business';
 import { RoleEnum } from '../../auth/types';
 import Roles from '../../auth/roles';
 
-describe('Visitor model', () => {
+describe('Volunteer model', () => {
   let trx: Knex.Transaction;
   const config = getConfig(process.env.NODE_ENV);
   const knex = Knex(config.knex);
