@@ -390,9 +390,9 @@
         edit: function(volunteerId, data) {
           return $http({
             method: 'PUT',
-            url: $$api.url('volunteers/' + volunteerId),
+            url: $$api.url('users/volunteers/' + volunteerId),
             data: data,
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            headers: { Authorization: $$api.token.get() }
           });
         },
 

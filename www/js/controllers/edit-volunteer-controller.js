@@ -6,8 +6,6 @@
 *    store the form data
 *    populate year of birth dropdown (current year going down to (current year - 110))
 *    populate gender dropdown
-*    populate region dropdown
-*    populate organisation dropdown
 *    process the form
 *      validate form
 *      submit form data
@@ -50,10 +48,8 @@ angular.module('app').controller('EditVolunteerController', function ($scope, $s
     $$api.genders.get().success(function (result) {
 
         // loop through the results and push only required items to $scope.genders
-        for (var i = 0, len = result.data.length; i < len; i++) {
-            $scope.genders[i] = {id: result.data[i].id, name: result.data[i].name};
-        }
-
+        $scope.genders = result.data
+        
         // enable genders select
         $scope.gendersDisabled = false;
 
@@ -68,9 +64,9 @@ angular.module('app').controller('EditVolunteerController', function ($scope, $s
     $scope.volunteerId = $state.params.id;
 
     // get volunteer from api
-    $$api.volunteers.getVolunteer($scope.volunteerId).success(function (result) {
+    $$api.volunteers.getVolunteer($scope.volunteerId).success(function (data) {
 
-        $scope.formData = result.data;
+        $scope.formData = data.result;
 
     }).error(function (result, error) {
 
@@ -89,7 +85,7 @@ angular.module('app').controller('EditVolunteerController', function ($scope, $s
 
     $scope.formSubmitted = false;
     $scope.processForm = function (form) {
-
+        
         // >>> validate form
 
         // variable to show that form was submitted
@@ -114,10 +110,14 @@ angular.module('app').controller('EditVolunteerController', function ($scope, $s
             }
 
             // >>> submit form data
-            $$api.volunteers.edit($scope.formData.id, $.param($scope.formData)).success(function (response) {
-
-                // saving successful
-                if (response.success) {
+            $$api.volunteers.edit($scope.formData.id, 
+                { 
+                    name: $scope.formData.name,
+                    email: $scope.formData.email,
+                    phoneNumber: $scope.formData.phoneNumber,
+                    birthYear: $scope.formData.birthYear,
+                    gender: $scope.formData.gender
+                }).success(function (response) {
 
                     // hide loader
                     $ionicLoading.hide();
@@ -129,15 +129,6 @@ angular.module('app').controller('EditVolunteerController', function ($scope, $s
                     $state.go('tabs.view-volunteers');
 
                     $$shout('Volunteer saved.');
-
-                }
-
-                // adding unsuccessful
-                else {
-
-                    $$shout(result.message);
-
-                }
 
             }).error(function (data, error) {
 
