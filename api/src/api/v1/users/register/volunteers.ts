@@ -67,27 +67,25 @@ export default [
       if (!communityBusiness) return Boom.badRequest('Unrecognised organisation');
 
       /*
-       * Registation
+       * Registration
        */
 
       if (role === RoleEnum.VOLUNTEER_ADMIN && !adminCode) {
         return Boom.badRequest('Missing volunteer admin code');
       }
-      let volunteer;
 
       try {
-        volunteer = await Volunteers.addWithRole(knex, payload, role, communityBusiness, adminCode);
+        const volunteer =
+          await Volunteers.addWithRole(knex, payload, role, communityBusiness, adminCode);
 
-      } catch ({ message }) {
-        if (message === 'Invalid volunteer admin code') {
-          return Boom.unauthorized(message);
+        return Volunteers.serialise(volunteer);
+
+      } catch (error) {
+        if (error.message === 'Invalid volunteer admin code') {
+          return Boom.unauthorized(error.message);
         }
+        return error;
       }
-
-      // register login event
-      await Volunteers.recordLogin(knex, volunteer);
-
-      return Volunteers.serialise(volunteer);
     },
   },
 ] as Hapi.ServerRoute[];
