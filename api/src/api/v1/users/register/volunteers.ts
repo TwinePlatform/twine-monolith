@@ -36,7 +36,7 @@ export default [
         payload: {
           organisationId: id.required(),
           role: Joi.alternatives(RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN),
-          adminCode: Joi.string().regex(/^[0-9]{5}$/),
+          adminCode: Joi.string().regex(/^\w{5,8}$/),
           name: userName.required(),
           gender: gender.required(),
           birthYear: birthYear.required(),
