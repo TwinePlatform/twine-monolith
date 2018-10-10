@@ -82,68 +82,7 @@
 				// process connection error
 				$$utilities.processConnectionError(result, error);
 
-			});			
-
-
-		/*
-			>> populate region dropdown
-		*/
-
-			$scope.regionsDisabled = true;
-			$scope.regions = [];
-
-			$$api.regions.get($localStorage.user.organisation.id).success(function (result) {
-				$scope.regions = result.data;
-
-				if ($localStorage.user.organisation.region) {
-					$scope.formData.region = $localStorage.user.organisation.region
-				}
-
-				// enable regions select
-				$scope.regionsDisabled = false;
-
-			}).error(function (result, error) {
-				
-				// process connection error
-				processConnectionError(result, error);
-
 			});
-
-
-		/*
-			>> populate organisation dropdown
-		*/
-
-
-			$scope.organisationsDisabled = true;
-			$scope.organisationsByRegion = {};
-			$scope.organisations = [];
-
-			$$api.regions.organisations().success(function (data) {
-
-				$scope.organisationsByRegion = data.result
-
-			}).error(function (result, error) {
-				
-				// hide loader
-				$ionicLoading.hide();
-
-				// process connection error
-				processConnectionError(result, error);
-
-			});
-
-			$scope.populateOrganisations = function(regionName) {
-				if($scope.organisationsByRegion[regionName]){
-					$scope.organisations = $scope.organisationsByRegion[regionName]
-					$scope.organisationsDisabled = false;
-				} else {
-					$scope.organisationsDisabled = true;
-				}
-			}
-
-			// populate on first load by localStorage region id
-			$scope.populateOrganisations($localStorage.user.organisation.region);
 
 
 		/*
