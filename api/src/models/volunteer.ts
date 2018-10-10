@@ -144,7 +144,7 @@ export const Volunteers: VolunteerCollection = {
         code,
         organisation_id: cb.id,
       });
-    return row ? true : false;
+    return Boolean(row);
   },
 };
 
