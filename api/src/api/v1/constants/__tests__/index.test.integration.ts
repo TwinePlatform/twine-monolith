@@ -38,7 +38,7 @@ describe('API Constants', () => {
 
         expect(res.statusCode).toBe(200);
         expect(res.result).toEqual({
-          result: expect.arrayContaining([expect.stringContaining('')]),
+          result: expect.arrayContaining([expect.objectContaining({ id: 1 })]),
         });
       });
     });
