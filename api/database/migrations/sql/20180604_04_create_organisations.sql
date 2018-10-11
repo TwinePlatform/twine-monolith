@@ -76,9 +76,9 @@ CREATE TABLE community_business (
 );
 
 CREATE TABLE volunteer_admin_code (
-  volunteer_admin_code_id SERIAL NOT NULL UNIQUE,
-  organisation_id                INT NOT NULL,
-  code                           INT NOT NULL,
+  volunteer_admin_code_id        SERIAL  NOT NULL UNIQUE,
+  organisation_id                INT     NOT NULL UNIQUE,
+  code                           VARCHAR NOT NULL UNIQUE,
   created_at                     TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at                    TIMESTAMP WITH TIME ZONE,
   deleted_at                     TIMESTAMP WITH TIME ZONE,
