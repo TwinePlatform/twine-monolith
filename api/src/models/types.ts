@@ -345,7 +345,6 @@ export type CommunityBusinessCollection = Collection<CommunityBusiness> & {
     c: CommunityBusiness,
     aggs: string[],
     q?: ModelQuery<LinkedVisitEvent & User>) => Promise<any>;
-  byRegion: (k: Knex, q: ModelQuery<CommunityBusiness>) => Promise<Dictionary<string[]>>
 };
 
 export type VolunteerLogCollection = Collection<VolunteerLog> & {

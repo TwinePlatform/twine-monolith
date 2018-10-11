@@ -41,6 +41,31 @@ describe('Community Business Model', () => {
       expect(orgs).toEqual([]);
     });
 
+    test('get :: filter results by region query', async () => {
+      const orgs = await CommunityBusinesses.get(knex, { where: { region: RegionEnum.LONDON } });
+      expect(orgs).toEqual([
+        expect.objectContaining({
+          _360GivingId: 'GB-COH-3205',
+          id: 1,
+          name: 'Aperture Science',
+          region: 'London',
+          sector: 'Housing',
+          turnoverBand: '£100k-£250k'}),
+        expect.objectContaining({
+          _360GivingId: 'GB-COH-9302',
+          id: 2,
+          name: 'Black Mesa Research',
+          region: 'London',
+          sector: 'Housing',
+          turnoverBand: '£100k-£250k'}),
+      ]);
+    });
+
+    test('get :: return empty array for unpopulated sector', async () => {
+      const orgs = await CommunityBusinesses.get(knex, { where: { sector: SectorEnum.TOURISM } });
+      expect(orgs).toEqual([]);
+    });
+
     test('getOne :: returns first organisation only', async () => {
       const org = await CommunityBusinesses.getOne(knex);
 
@@ -295,52 +320,6 @@ describe('Community Business Model', () => {
       } catch (error) {
         expect(error).toBeTruthy();
       }
-    });
-  });
-
-
-  describe('byRegion', () => {
-    test(':: returns all Community Businesses names by region ', async () => {
-      const cbByRegion = await CommunityBusinesses.byRegion(trx, {});
-      expect(cbByRegion).toEqual({
-        London: [
-          { id: 1, name: 'Aperture Science' },
-          { id: 2, name: 'Black Mesa Research' },
-        ]});
-    });
-
-    test(':: returns subset of Community Businesses names by region with query', async () => {
-      const blackMesa = await CommunityBusinesses
-        .getOne(trx, { where: { name: 'Black Mesa Research' } });
-      await CommunityBusinesses.destroy(trx, blackMesa);
-
-      const cbByRegion = await CommunityBusinesses.byRegion(trx, { where: { deletedAt: null } });
-      expect(cbByRegion).toEqual({ London: [{ id: 1, name: 'Aperture Science' }] });
-    });
-
-    test(':: returns alphebatised list', async () => {
-      await CommunityBusinesses.add(trx, {
-        name: 'Zeldas Dungeon',
-        region: RegionEnum.LONDON,
-        sector: SectorEnum.COMMUNITY_HUB,
-      });
-      await CommunityBusinesses.add(trx, {
-        name: 'Okamis Fields',
-        region: RegionEnum.LONDON,
-        sector: SectorEnum.ENVIRONMENT,
-      });
-      /*
-       * NB: due to sequences not resetting during transaction rollbacks this test
-       * will fail if run separately to the others in test suite.
-       */
-      const cbByRegion = await CommunityBusinesses.byRegion(trx, { where: { deletedAt: null } });
-      expect(cbByRegion).toEqual({
-        London: [
-          { id: 1, name: 'Aperture Science' },
-          { id: 2, name: 'Black Mesa Research' },
-          { id: 6, name: 'Okamis Fields' },
-          { id: 5, name: 'Zeldas Dungeon' },
-        ]});
     });
   });
 });

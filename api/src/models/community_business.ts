@@ -4,7 +4,7 @@
 import * as Knex from 'knex';
 import * as moment from 'moment';
 import { compose, omit, evolve, filter, pick, invertObj, pipe, assocPath, difference } from 'ramda';
-import { Dictionary, Map, Int } from '../types/internal';
+import { Dictionary, Map } from '../types/internal';
 import {
   CommunityBusiness,
   CommunityBusinessCollection,
@@ -13,7 +13,7 @@ import {
 } from './types';
 import { Organisations } from './organisation';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import { renameKeys, ageArrayToBirthYearArray } from '../utils';
+import { renameKeys, ageArrayToBirthYearArray, mapKeys } from '../utils';
 
 
 /*
@@ -46,12 +46,12 @@ const ModelToColumn = invertObj(ColumnToModel);
  * Helpers
  */
 const transformForeignKeysToSubQueries = (client: Knex | Knex.QueryBuilder) => evolve({
-  community_business_region_id: (v: string) =>
+  'community_business.community_business_region_id': (v: string) =>
     client
       .table('community_business_region')
       .select('community_business_region_id')
       .where({ region_name: v }),
-  community_business_sector_id: (v: string) =>
+  'community_business.community_business_sector_id': (v: string) =>
     client
       .table('community_business_sector')
       .select('community_business_sector_id')
@@ -111,8 +111,8 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       'community_business.created_at': a.createdAt,
       'community_business.modified_at': a.modifiedAt,
       'community_business.deleted_at': a.deletedAt,
-      community_business_region_id: a.region,
-      community_business_sector_id: a.sector,
+      'community_business.community_business_region_id': a.region,
+      'community_business.community_business_sector_id': a.sector,
       logo_url: a.logoUrl,
       address_1: a.address1,
       address_2: a.address2,
@@ -125,7 +125,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   async get (client, q = {}) {
     const query = evolve({
-      where: CommunityBusinesses.toColumnNames,
+      where: pipe(CommunityBusinesses.toColumnNames, transformForeignKeysToSubQueries(client)),
       whereNot: CommunityBusinesses.toColumnNames,
     }, q);
 
@@ -161,6 +161,8 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   async add (client, cb) {
     const preProcessCbChangeset = compose(
+      mapKeys((s) => s.replace('community_business.', '')),
+      transformForeignKeysToSubQueries(client),
       CommunityBusinesses.toColumnNames,
       pickCbFields
     );
@@ -177,14 +179,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       )
       .insert({
         ...cbChangeset,
-        organisation_id: client('new_organisation')
-          .select('organisation_id'),
-        community_business_region_id: client('community_business_region')
-          .select('community_business_region_id')
-          .where({ region_name: cbChangeset.community_business_region_id }),
-        community_business_sector_id: client('community_business_sector')
-          .select('community_business_sector_id')
-          .where({ sector_name: cbChangeset.community_business_sector_id }),
+        organisation_id: client('new_organisation').select('organisation_id'),
       })
       .into('community_business')
       .returning('organisation_id');
@@ -198,6 +193,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     const [{ organisation_id: id }] = await client.transaction(async (trx) => {
       const cbQuery = preProcessCb(trx)(cb);
       const preProcessCbChangeset = compose(
+        mapKeys((s) => s.replace('community_business.', '')),
         transformForeignKeysToSubQueries(trx),
         CommunityBusinesses.toColumnNames,
         pickCbFields
@@ -588,18 +584,5 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     const requestedAggregates = aggs.map((agg) => aggregateQueries[agg]);
     const rawAggregateData = await Promise.all(requestedAggregates);
     return rawAggregateData.reduce((acc, el) => ({ ...acc, ...el }), {});
-  },
-
-  async byRegion (client, q) {
-    const order: [string, 'asc' | 'desc'] = ['organisation_name', 'asc'];
-    const query = { ...q, order };
-    const allCommunityBusinesses = await CommunityBusinesses.get(client, query);
-    return allCommunityBusinesses
-      .reduce((byRegion: Dictionary<{id: Int, name: string}[]>, cb: CommunityBusiness) => {
-        byRegion[cb.region]
-        ? byRegion[cb.region].push({ id: cb.id, name: cb.name })
-        : byRegion[cb.region] = [{ id: cb.id, name: cb.name }];
-        return byRegion;
-      }, {});
   },
 };
