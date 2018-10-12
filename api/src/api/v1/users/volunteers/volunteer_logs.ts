@@ -209,6 +209,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
+          // TO BE REPLACED: "parent" with "own"
           scope: ['volunteer_logs-parent:read'],
         },
       },
