@@ -22,10 +22,12 @@ describe('API /users', () => {
 
   beforeEach(async () => {
     trx = await getTrx(knex);
+    server.app.knex = trx;
   });
 
   afterEach(async () => {
     await trx.rollback();
+    server.app.knex = knex;
   });
 
   afterAll(async () => {
@@ -68,12 +70,12 @@ describe('API /users', () => {
       await CommunityBusinesses.add(trx, {
         name: 'Zeldas Dungeon',
         region: RegionEnum.LONDON,
-        sector: SectorEnum.COMMUNITY_HUB,
+        sector: SectorEnum.EMPLOYMENT_SUPPORT,
       });
       await CommunityBusinesses.add(trx, {
         name: 'Okamis Fields',
         region: RegionEnum.LONDON,
-        sector: SectorEnum.ENVIRONMENT,
+        sector: SectorEnum.ART_CENTRE,
       });
 
       const res = await server.inject({
@@ -81,7 +83,14 @@ describe('API /users', () => {
         url: '/v1/regions/3/community-businesses',
       });
 
-      expect(res.statusCode).toBe(404);
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toEqual([
+        { name: 'Aperture Science' },
+        { name: 'Black Mesa Research' },
+        { name: 'Okamis Fields' },
+        { name: 'Zeldas Dungeon' },
+      ].map(expect.objectContaining)
+      );
     });
   });
 });
