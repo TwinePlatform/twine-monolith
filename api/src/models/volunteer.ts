@@ -83,8 +83,6 @@ export const Volunteers: VolunteerCollection = {
           await Roles.add(trx, { role: volunteerType, userId: newUser.id, organisationId: cb.id });
           return newUser;
         });
-
-
     }
   },
 
@@ -131,7 +129,6 @@ export const Volunteers: VolunteerCollection = {
         ),
       query
     );
-
   },
 
   async serialise (user) {
@@ -147,4 +144,3 @@ export const Volunteers: VolunteerCollection = {
     return Boolean(row);
   },
 };
-
