@@ -21,6 +21,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
+          // TO BE REPLACED: "parent" with "own"
           scope: ['volunteer_logs-parent:read'],
         },
       },
@@ -62,6 +63,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
+          // TO BE REPLACED: "parent" with "own"
           scope: ['volunteer_logs-parent:read'],
         },
       },
@@ -106,10 +108,11 @@ const routes: Hapi.ServerRoute[] = [
     method: 'PUT',
     path: '/users/volunteers/me/volunteer-logs/{logId}',
     options: {
-      description: 'Delete own volunteer logs',
+      description: 'Update own volunteer logs',
       auth: {
         strategy: 'standard',
         access: {
+          // TO BE REPLACED: "parent" with "own"
           scope: ['volunteer_logs-parent:write'],
         },
       },
@@ -164,6 +167,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
+          // TO BE REPLACED: "parent" with "own"
           scope: ['volunteer_logs-parent:write'],
         },
       },

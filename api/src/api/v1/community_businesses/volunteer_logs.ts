@@ -19,6 +19,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
+          // TO BE REPLACED: "parent" with "sibling" (and possibly "child")
           scope: ['volunteer_logs-parent:write', 'volunteer_logs-own:write'],
         },
       },
@@ -47,6 +48,15 @@ const routes: Hapi.ServerRoute[] = [
         payload,
       } = request;
 
+      /*
+       * TO BE REPLACED
+       *
+       * Because of the way the scopes currently work, we must check the
+       * role here. See https://github.com/TwinePlatform/twine-api/pull/175#discussion_r223072650
+       *
+       * As soon as https://github.com/TwinePlatform/twine-api/issues/187 is
+       * resolved, this should be changed to avoid explicit reference to roles
+       */
       if (payload.userId) {
         const isTargetVolunteer = await Roles.userHas(knex, {
           userId: payload.userId,
