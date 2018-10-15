@@ -40,7 +40,7 @@ export const password =
 export const phoneNumber =
   Joi.string()
     .regex(/^\+?[0-9 -]*$/, { name: 'numeric' })
-    .min(11)
+    .min(9)
     .max(20)
     .options({ language: { string: { regex: { name: 'invalid number' } } } });
 
