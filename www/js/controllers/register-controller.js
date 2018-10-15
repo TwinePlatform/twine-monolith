@@ -57,7 +57,6 @@
 
 			$$api.genders.get().success(function (result) {
 
-				// loop through the results and push only required items to $scope.genders
 				$scope.genders = result.data;
 
 				// enable genders select
