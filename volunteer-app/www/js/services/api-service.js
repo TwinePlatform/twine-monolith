@@ -279,19 +279,6 @@
 							}),
 
 					/*
-						>>> save user
-					*/
-
-						save: function(userId, data) {
-							return $http({
-								method: 'PUT',
-								url: $$api.url('users/me'),
-								data: data,
-								headers: { Authorization: $$api.token.get() },
-							});
-						},
-
-					/*
 						>>> register user
 					*/
 
