@@ -1,6 +1,8 @@
 /*
  * Volunteer Model
  */
+import { hash } from 'bcrypt';
+
 import { omit, pick, evolve } from 'ramda';
 import { VolunteerCollection } from './types';
 import { Users, ModelToColumn } from './user';
@@ -56,11 +58,16 @@ export const Volunteers: VolunteerCollection = {
     return res !== null;
   },
 
-  async add (client, user) {
+  async add (client, _user) {
+    const passwordHash = await hash(_user.password, 12);
+    const user = { ..._user, password: passwordHash };
     return Users.add(client, user);
   },
 
-  async addWithRole (client, user, volunteerType, cb, code) {
+  async addWithRole (client, _user, volunteerType, cb, code) {
+    const passwordHash = await hash(_user.password, 12);
+    const user = { ..._user, password: passwordHash };
+
     switch (volunteerType) {
 
       case RoleEnum.VOLUNTEER:
