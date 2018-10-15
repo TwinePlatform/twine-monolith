@@ -49,10 +49,7 @@ angular.module('app').controller('NewVolunteerController', function ($scope, $st
 
     $$api.genders.get().success(function (result) {
 
-        // loop through the results and push only required items to $scope.genders
-        for (var i = 0, len = result.data.length; i < len; i++) {
-            $scope.genders[i] = {id: result.data[i].id, name: result.data[i].name};
-        }
+        $scope.genders = result.data;
 
         // enable genders select
         $scope.gendersDisabled = false;
@@ -96,57 +93,39 @@ angular.module('app').controller('NewVolunteerController', function ($scope, $st
 
         // form is valid
         if (form.$valid) {
-            $scope.formData.organisation = $localStorage.user.organisation;
-            $scope.formData.region = $localStorage.user.region;
-            // if no gender selected, setup an object with empty values
-            if ($scope.formData.gender == null) {
-                $scope.formData.gender = {
-                    id: '',
-                    name: ''
-                }
+            $scope.formData.role = 'VOLUNTEER';
+            $scope.formData.organisationId = $localStorage.user.organisation.id;
+            
+            if($scope.formData.gender){
+                $scope.formData.gender = $scope.formData.gender.name;
             }
 
             // >>> submit form data
-            $$api.volunteers.new($.param($scope.formData)).success(function (response) {
+            $$api.user.register($scope.formData).success(function (response) {
 
-                // adding successful
-                if (response.success) {
+                // hide loader
+                $ionicLoading.hide();
 
-                    // hide loader
-                    $ionicLoading.hide();
+                // hide click preventer
+                $$clickPreventer.hide();
 
-                    // hide click preventer
-                    $$clickPreventer.hide();
+                $$shout('Volunteer added.');
 
-                    $$shout('Volunteer added.');
+                // go back to volunteers list
+                $state.go('tabs.view-volunteers');
 
-                    // go back to volunteers list
-                    $state.go('tabs.view-volunteers');
+            }).error(function (error) {
 
-                }
+                // hide loader
+                $ionicLoading.hide();
 
-                // adding unsuccessful
-                else {
-
-                    // hide loader
-                    $ionicLoading.hide();
-
-                    // hide click preventer
-                    $$clickPreventer.hide();
-
-
-                    $$shout(response.message);
-
-
-                }
-
-            }).error(function (data, error) {
+                $$shout(error.error.message);
 
                 // hide click preventer
                 $$clickPreventer.hide();
 
                 // process connection error
-                $$utilities.processConnectionError(data, error);
+                $$utilities.processConnectionError(error);
 
             });
         }
