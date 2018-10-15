@@ -35,7 +35,7 @@ export default [
       validate: {
         payload: {
           organisationId: id.required(),
-          role: Joi.alternatives(RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN),
+          role: Joi.alternatives(RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN).required(),
           adminCode: Joi.string().regex(/^\w{5,8}$/),
           name: userName.required(),
           gender: gender.required(),
@@ -58,11 +58,14 @@ export default [
        * Preliminaries
        */
       // check user doesn't already exist
+
       if (await Users.exists(knex, { where: { email } })) {
         return Boom.conflict('User with this e-mail already registered');
       }
+
       const communityBusiness = await CommunityBusinesses
-        .getOne(knex, { where: { id: organisationId, deletedAt: null } });
+      .getOne(knex, { where: { id: organisationId, deletedAt: null } });
+
       // check organisation exists
       if (!communityBusiness) return Boom.badRequest('Unrecognised organisation');
 
