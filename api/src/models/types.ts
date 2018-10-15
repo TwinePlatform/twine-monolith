@@ -64,7 +64,7 @@ export enum RegionEnum {
 }
 
 export enum SectorEnum {
-  ART_CENTRE = 'Art centre or facility',
+  ART_CENTRE = 'Arts centre or facility',
   COMMUNITY_HUB = 'Community hub, facility or space',
   PUB_SHOP_CAFE = 'Community pub, shop or café',
   EMPLOYMENT_SUPPORT = 'Employment, training, business support or education',

@@ -48,7 +48,7 @@ factory.define('organisation', Object, {
 
 factory.extend('organisation', 'communityBusiness', {
   region: factory.chance('pickone', ['London', 'Yorkshire and the Humber', 'North East']),
-  sector: factory.chance('pickone', ['Art centre or facility', 'Energy', 'Housing', 'Transport']),
+  sector: factory.chance('pickone', ['Arts centre or facility', 'Energy', 'Housing', 'Transport']),
   logoUrl: factory.chance('url'),
   address1: factory.chance('address'),
   townCity: factory.chance('city'),
