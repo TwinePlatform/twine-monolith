@@ -39,6 +39,7 @@
 		*/
 
 			$scope.formData = {};
+			$scope.selected = {};
 			$scope.syncOfflineData =  $rootScope.syncOfflineData;
 
 		/*
@@ -97,32 +98,24 @@
 		*/
 
 			$scope.organisationsDisabled = true;
-			$scope.organisationsByRegion = {};
 			$scope.organisations = [];
 
 
-			$$api.regions.organisations().success(function (data) {
-
-				$scope.organisationsByRegion = data.result
-
-			}).error(function (result, error) {
+			$scope.populateOrganisations = function() {
 				
-				// hide loader
-				$ionicLoading.hide();
-
-				// process connection error
-				processConnectionError(result, error);
-
-			});
-
-
-			$scope.populateOrganisations = function(regionName) {
-				if($scope.organisationsByRegion[regionName]){
-					$scope.organisations = $scope.organisationsByRegion[regionName]
+				$$api.regions.organisations($scope.selected.region.id).success(function (data) {
+					$scope.organisations = data.result
 					$scope.organisationsDisabled = false;
-				} else {
-					$scope.organisationsDisabled = true;
-				}
+	
+				}).error(function (result, error) {
+					
+					// hide loader
+					$ionicLoading.hide();
+	
+					// process connection error
+					processConnectionError(result, error);
+	
+				});
 			}
 
 
@@ -132,7 +125,7 @@
 
 			$scope.formSubmitted = false;
 			$scope.processForm = function(form) {
-
+				
 				// >>> validate form
 
 				// variable to show that form was submitted
@@ -147,69 +140,114 @@
 				// form is valid
 				if (form.$valid) {
 
-					// if no gender selected, setup an object with empty values
-					if ($scope.formData.gender == null) {
-						$scope.formData.gender = {
-							id: '',
-							name: ''
-						}
+					// form cleanup
+					if ($scope.selected.gender) {
+						$scope.formData.gender = $scope.selected.gender.name
+					}
+
+					if ($scope.selected.organisation) {
+						$scope.formData.organisationId = $scope.selected.organisation.id
+					}
+
+					if($scope.formData.adminCode) {
+						$scope.formData.role = 'VOLUNTEER_ADMIN'
+					} else {
+						$scope.formData.role = 'VOLUNTEER'
 					}
 
 					// >>> submit form data
-					$$api.user.register($.param($scope.formData)).success(function(response) {
+					$$api.user.register($scope.formData).success(function(response) {
 
-						// registration successful
-						if (response.success) {
-
-							// hide loader
-							$ionicLoading.hide();
-
-							// hide click preventer
-							$$clickPreventer.hide();
-
-							// store user information
-							$localStorage.user = response.data;
-
-                            $rootScope.currentUser = response.data;
-
-							// setup localstorage
-							$$utilities.setupLocalStorage();
-
-							// set organisation subheader title
-							$rootScope.organisationName = $localStorage.user.organisation.name;
-
-							// show success popup
-                            $state.go('tabs.dashboard');
-
-						}
-
-						// registration unsuccessful
-						else {
-
-							// hide loader
-							$ionicLoading.hide();
-
-							// hide click preventer
-							$$clickPreventer.hide();
-
-							// show unsuccess popup
-							var alertPopup = $ionicPopup.alert({
-							  	title: 'Registration unsuccessful',
-							  	template: 'Registration unsuccessful: ' + response.message,
-							  	okText: 'OK',
-							  	okType: 'button-assertive',
-							  	cssClass: 'error'
-							});
-
-						}
-
-					}).error(function(data, error) {
+						// hide loader
+						$ionicLoading.hide();
 
 						// hide click preventer
 						$$clickPreventer.hide();
 
+						// setup localstorage
+						$$utilities.setupLocalStorage();
+
+						// store user information
+						$localStorage.user = response.result;
+						$rootScope.currentUser = response.result;
+
+						// set organisation subheader title
+						$rootScope.organisationName = $scope.selected.organisation.name
+					})
+					.error(function(error) {
+						// hide loader
+						$ionicLoading.hide();
+
+						// hide click preventer
+						$$clickPreventer.hide();
+
+						// show unsuccess popup
+						if (typeof error === 'object' && error.status >= 400) {
+							// show unsuccess popup
+							return $ionicPopup.alert({
+								title: 'Registration unsuccessful',
+								template: 'Registration unsuccessful: ' + error.data.error.message,
+								okText: 'OK',
+								okType: 'button-assertive',
+								cssClass: 'error'
+							});
+						}
+
 						// process connection error
-						$$utilities.processConnectionError(data, error);
+						$$utilities.processConnectionError(error);
+
+					})
+					.then(function(){
+						return $$api.user.login($scope.formData)
+					})
+					.then(function(){
+						return $$api.user.roles()
+					})
+					.then((response) => {
+						$localStorage.user.role = response.data.result.role;
+
+						if ($localStorage.user.role !== undefined && $localStorage.user.role === 'VOLUNTEER_ADMIN') {
+							$rootScope.isAdmin = true;
+						} else {
+							$rootScope.isAdmin = false;
+						}
+
+						return $$api.organisations.get();
+					})
+					.then((response) => {
+						$localStorage.user.organisation = response.data.result;
+
+						if ($rootScope.isAdmin) {
+							// go to volunteers
+							$state.go('tabs.view-volunteers');
+						} else {
+							// go to dashboard
+							$state.go('tabs.dashboard');
+						}
+					})
+					.catch(function(error) {
+						console.log(error);
+						
+						// hide loader
+						$ionicLoading.hide();
+
+						// hide click preventer
+						$$clickPreventer.hide();
+
+						// show unsuccess popup
+						if (typeof error === 'object' && error.status >= 400) {
+							// show unsuccess popup
+							return $ionicPopup.alert({
+								title: 'Redirect unsuccessful',
+								template: error.data.error.message + ', please try to login',
+								okText: 'OK',
+								okType: 'button-assertive',
+								cssClass: 'error'
+							});
+						}
+
+						// process connection error
+						$$utilities.processConnectionError(error);
 
 					});
 				}

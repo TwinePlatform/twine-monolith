@@ -298,12 +298,8 @@
 						register: (data) =>
 							$http({
 								method: 'POST',
-								url: $$api.url('users/register/volunteer'),
+								url: $$api.url('users/register/volunteers'),
 								data: data,
-							})
-							.then(function (response) {
-								$$api.token.set(response.result.token);
-								return response
 							}),
 
 					/*
@@ -556,7 +552,7 @@
 						organisations: (regionId) =>
 							$http({
 								method: 'GET',
-								url: $$api.url(`regions/${regionId}/organisations`)
+								url: $$api.url(`regions/${regionId}/community-businesses`)
 							})
 
 				},
