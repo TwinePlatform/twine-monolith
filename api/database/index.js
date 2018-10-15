@@ -43,6 +43,8 @@ exports.migrate = {
     const config = getConfig(env);
     const client = _client ? _client : knex(config.knex);
 
+    console.log(`Tearing down the "${config.env}" database\n`);
+
     const tables = await client('pg_catalog.pg_tables')
       .select('tablename')
       .where({ schemaname: 'public' })
