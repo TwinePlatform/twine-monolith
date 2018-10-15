@@ -3,6 +3,7 @@ import * as Boom from 'boom';
 import { pick, map } from 'ramda';
 import { CommunityBusinesses } from '../../../models';
 import { response } from '../schema/response';
+import { id } from '../schema/request';
 
 
 export default [
@@ -12,6 +13,9 @@ export default [
     options: {
       description: 'Retreive list of regions with related community businesses',
       auth: false,
+      validate: {
+        params: { regionId: id },
+      },
       response: { schema: response },
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
@@ -24,7 +28,7 @@ export default [
 
       if (!regionName) { return Boom.notFound('Region cannot be found'); }
 
-      const regions = await CommunityBusinesses.get(knex, {
+      const cbsInRegion = await CommunityBusinesses.get(knex, {
         where: {
           region: regionName,
           deletedAt: null,
@@ -32,7 +36,7 @@ export default [
         order: ['organisation_name', 'asc'],
       });
 
-      return map(pick(['id', 'name']), regions);
+      return map(pick(['id', 'name']), cbsInRegion);
     },
   },
 ] as Hapi.ServerRoute[];
