@@ -172,8 +172,59 @@
 
 						// set organisation subheader title
 						$rootScope.organisationName = $scope.selected.organisation.name
+
+						// if registration is successful then run login promise chain to gather all user info
+						$$api.user.login($scope.formData)
+							.then(function(){
+								return $$api.user.roles()
+							})
+							.then((response) => {
+								$localStorage.user.role = response.data.result.role;
+		
+								if ($localStorage.user.role !== undefined && $localStorage.user.role === 'VOLUNTEER_ADMIN') {
+									$rootScope.isAdmin = true;
+								} else {
+									$rootScope.isAdmin = false;
+								}
+		
+								return $$api.organisations.get();
+							})
+							.then((response) => {
+								$localStorage.user.organisation = response.data.result;
+		
+								if ($rootScope.isAdmin) {
+									// go to volunteers
+									$state.go('tabs.view-volunteers');
+								} else {
+									// go to dashboard
+									$state.go('tabs.dashboard');
+								}
+							})
+							.catch(function(error) {
+								// hide loader
+								$ionicLoading.hide();
+		
+								// hide click preventer
+								$$clickPreventer.hide();
+		
+								// show unsuccess popup
+								if (typeof error === 'object' && error.status >= 400) {
+									// show unsuccess popup
+									return $ionicPopup.alert({
+										title: 'Redirect unsuccessful',
+										template: error.data.error.message + ', please try to login',
+										okText: 'OK',
+										okType: 'button-assertive',
+										cssClass: 'error'
+									});
+								}
+		
+								// process connection error
+								$$utilities.processConnectionError(error);
+		
+							});
 					})
-					.error(function(error) {
+					.catch(function(error) {
 						// hide loader
 						$ionicLoading.hide();
 
@@ -196,59 +247,6 @@
 						$$utilities.processConnectionError(error);
 
 					})
-					.then(function(){
-						return $$api.user.login($scope.formData)
-					})
-					.then(function(){
-						return $$api.user.roles()
-					})
-					.then((response) => {
-						$localStorage.user.role = response.data.result.role;
-
-						if ($localStorage.user.role !== undefined && $localStorage.user.role === 'VOLUNTEER_ADMIN') {
-							$rootScope.isAdmin = true;
-						} else {
-							$rootScope.isAdmin = false;
-						}
-
-						return $$api.organisations.get();
-					})
-					.then((response) => {
-						$localStorage.user.organisation = response.data.result;
-
-						if ($rootScope.isAdmin) {
-							// go to volunteers
-							$state.go('tabs.view-volunteers');
-						} else {
-							// go to dashboard
-							$state.go('tabs.dashboard');
-						}
-					})
-					.catch(function(error) {
-						console.log(error);
-						
-						// hide loader
-						$ionicLoading.hide();
-
-						// hide click preventer
-						$$clickPreventer.hide();
-
-						// show unsuccess popup
-						if (typeof error === 'object' && error.status >= 400) {
-							// show unsuccess popup
-							return $ionicPopup.alert({
-								title: 'Redirect unsuccessful',
-								template: error.data.error.message + ', please try to login',
-								okText: 'OK',
-								okType: 'button-assertive',
-								cssClass: 'error'
-							});
-						}
-
-						// process connection error
-						$$utilities.processConnectionError(error);
-
-					});
 				}
 				// form is invalid
 				else {
