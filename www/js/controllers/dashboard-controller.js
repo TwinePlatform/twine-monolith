@@ -102,12 +102,11 @@
 
 					$scope.todaysTotalHours = -1;
 
-					// get today's date in sql format yyyy-mm-dd
-					var todaysDate = $$utilities.jsDateToSqlDate(new Date());
-
-					$$api.user.totalHoursForDay($localStorage.user.id, todaysDate).success(function (result) {
-						$scope.todaysTotalHours = result.data.duration;
+					$$api.user.totalHoursForDay($localStorage.user.id, new Date()).success(function (result) {
+						$scope.todaysTotalHours = result.data.total;
 					}).error(function (result, error) {
+						// process connection error
+						$$utilities.processConnectionError(result, error);
 					});
 
 
@@ -115,17 +114,16 @@
 					>>> update organisation summary
 				*/
 
-					$$api.organisations.summary($localStorage.user.organisation.id).success(function (result) {
+					$$api.organisations.summary().success(function (result) {
 
-						// we got what we wanted
-						if (result.success) {
-							$scope.totalUsers = result.data.totalUsers;
-							$scope.totalVolunteeredMinutes = result.data.totalVolunteeredTime;
-						}
-						// we didn't
-						else {
-							$$shout("Couldn't retrieve organisation summary.");
-						}
+						const { days, hours, minutes, seconds } = result.data.volunteeredTime;
+
+						$scope.totalUsers = result.data.volunteers;
+						$scope.totalVolunteeredMinutes =
+							((days || 0) * 24 * 60) +
+							((hours || 0) * 60) +
+							(minutes || 0) +
+							((seconds || 0) / 60);
 
 					}).error(function (result, error) {
 						
