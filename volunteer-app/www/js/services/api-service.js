@@ -288,7 +288,7 @@
 						>>> get
 					*/
 
-						get: function(userId) {
+						get: function(userId = 'me') {
 							return $http({
 								method: 'GET',
 								url: $$api.url('users/' + userId),
@@ -607,6 +607,7 @@
 								method: 'GET',
 								url: $$api.url('community-businesses/me'),
 								headers: { Authorization: $$api.token.get() },
+								transformResponse
 							});
 						},
 
