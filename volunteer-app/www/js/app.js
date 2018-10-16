@@ -151,7 +151,9 @@
 
 					$rootScope.syncOfflineData = function() {
 						// do not run if not logged in
-						if ($localStorage.user) {
+						if (!$localStorage.user) {
+							return;
+						}
 						// get all offline logs
 						var allLogs = $localStorage.offlineData ? $localStorage.offlineData.logs : [];
 						// filter by current organisation id
@@ -223,7 +225,7 @@
                             $$shout('No internet connection!');
 						}
 
-					}
+					
 				}
 
 				/*
