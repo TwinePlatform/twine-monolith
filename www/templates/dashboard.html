@@ -59,7 +59,7 @@
         <div class="spacer-10"></div>
 
         <!-- .summary-box -->
-        <div class="summary-box text-center" ng-if="totalUsers && totalVolunteeredMinutes && !offlineMode && $storage.user.status !== 'pending'">
+        <div class="summary-box text-center" ng-if="totalUsers && totalVolunteeredMinutes && !offlineMode">
             Last week, <strong>{{ totalUsers || 0}} <span ng-if="totalUsers > 1">people</span><span ng-if="totalUsers === 1">person</span></strong> gave <strong><span ng-bind-html="totalVolunteeredMinutes | hoursAndMinutesAsString">0 min</span> </strong>to <strong>{{ organisationName }}</strong>
         </div>
         <!-- /.summary-box -->

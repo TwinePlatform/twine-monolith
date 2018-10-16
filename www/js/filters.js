@@ -55,8 +55,8 @@ angular.module('app.filters', [])
 		.filter('hoursAndMinutesAsObject', function() {
 			return function(minutesRaw) {
 
-				var hours = Math.floor( minutesRaw / 60);          
-			    var minutes = minutesRaw % 60;
+				var hours = Math.floor( minutesRaw / 60);
+			    var minutes = Math.floor(minutesRaw % 60);
 			    return { hours: hours, minutes: minutes};
 
 			}
