@@ -346,7 +346,7 @@
 
 							return $http({
 								method: 'GET',
-								url: $$api.url('users/volunteers/me/volunteer-logs/aggregates' + qs),
+								url: $$api.url('users/volunteers/me/volunteer-logs/summary' + qs),
 								headers: { Authorization: $$api.token.get() },
 								transformResponse: (r, h, s) => transformDurationResponse(transformResponse(r, h, s), h, s),
 							});
@@ -365,7 +365,7 @@
 
 							return $http({
 								method: 'GET',
-								url: $$api.url(`users/volunteers/me/volunteer-logs/aggregates?since=${start}&until=${end}`),
+								url: $$api.url(`users/volunteers/me/volunteer-logs/summary?since=${start}&until=${end}`),
 								headers: { Authorization: $$api.token.get() },
 								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s),
 							});
