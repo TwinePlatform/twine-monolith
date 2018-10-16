@@ -22,7 +22,7 @@
 
 	angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services','app.filters','ngStorage',])
 	.run(function(
-		$ionicPlatform, $localStorage, $rootScope, $filter, $ionicModal, $ionicLoading, $state, $window, 
+		$ionicPlatform, $localStorage, $rootScope, $filter, $ionicModal, $ionicLoading, $state, $window,
 		$$api, $$offline, $$shout, $$utilities
 	) {
 
@@ -111,22 +111,36 @@
 				*/
 
 					if ($localStorage.user) {
-            $$api.user.get('me').success(function(result) {
-              $localStorage.user = result.data;
-              $rootScope.currentUser = $localStorage.user;
-              $rootScope.organisationName = $localStorage.user.organisation.name;
-              if (result.data.role_id !== undefined && result.data.role_id == 2) {
-                $rootScope.isAdmin = true;
-              } else {
-                $rootScope.isAdmin = false;
-              }
+						$$api.user.get('me')
+							.then(function(result) {
+								$localStorage.user = result.data;
+								$rootScope.currentUser = $localStorage.user;
 
-            }).error(function (result, error) {
-              $localStorage.user = null;
-              // process connection error
-              $$utilities.processConnectionError(result, error);
+								return $$api.user.roles();
+							})
+							.then((response) => {
+								$localStorage.user.role = response.data.result.role;
+								$rootScope.currentUser.role = response.data.result.role;
 
-            });
+								if (['VOLUNTEER_ADMIN', 'ORG_ADMIN'].includes($localStorage.user.role)) {
+									$rootScope.isAdmin = true;
+								} else {
+									$rootScope.isAdmin = false;
+								}
+
+								return $$api.organisations.get();
+							})
+							.then((response) => {
+								$localStorage.user.organisation = response.data.result;
+								$rootScope.currentUser.organisation = response.data.result;
+								$rootScope.organisationName = $localStorage.user.organisation.name;
+							})
+							.catch(function (error) {
+								$localStorage.user = null;
+								// process connection error
+								$$utilities.processConnectionError(null, error);
+
+							});
 
 					}
 
@@ -225,7 +239,7 @@
                             $$shout('No internet connection!');
 						}
 
-					
+
 				}
 
 				/*
