@@ -203,9 +203,9 @@ const routes: Hapi.ServerRoute[] = [
 
   {
     method: 'GET',
-    path: '/users/volunteers/me/volunteer-logs/aggregates',
+    path: '/users/volunteers/me/volunteer-logs/summary',
     options: {
-      description: 'Read own volunteer logs aggregates',
+      description: 'Read own volunteer logs summary',
       auth: {
         strategy: 'standard',
         access: {

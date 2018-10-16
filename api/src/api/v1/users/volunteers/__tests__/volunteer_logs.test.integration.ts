@@ -359,11 +359,11 @@ describe('API /users/me/volunteer-logs', () => {
     });
   });
 
-  describe('GET /users/volunteers/me/volunteer-logs/aggregates', () => {
-    test('can get own aggregates', async () => {
+  describe('GET /users/volunteers/me/volunteer-logs/summary', () => {
+    test('can get own summary', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs/aggregates',
+        url: '/v1/users/volunteers/me/volunteer-logs/summary',
         credentials: {
           scope: ['volunteer_logs-parent:read'],
           user,
@@ -383,13 +383,13 @@ describe('API /users/me/volunteer-logs', () => {
       });
     });
 
-    test('can get own aggregates between dates', async () => {
+    test('can get own summary between dates', async () => {
       const then = moment().day(-6).utc().startOf('day').toISOString();
       const now = moment().day(-4).utc().endOf('day').toISOString();
 
       const res = await server.inject({
         method: 'GET',
-        url: `/v1/users/volunteers/me/volunteer-logs/aggregates?since=${then}&until=${now}`,
+        url: `/v1/users/volunteers/me/volunteer-logs/summary?since=${then}&until=${now}`,
         credentials: {
           scope: ['volunteer_logs-parent:read'],
           user,
@@ -409,10 +409,10 @@ describe('API /users/me/volunteer-logs', () => {
       });
     });
 
-    test('cannot get other users aggregates', async () => {
+    test('cannot get other users summary', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/users/4/volunteer-logs/aggregates',
+        url: '/v1/users/4/volunteer-logs/summary',
         credentials: {
           scope: ['volunteer_logs-parent:read'],
           user,
