@@ -1,4 +1,5 @@
 import * as Knex from 'knex';
+import { compare } from 'bcrypt';
 import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
@@ -80,17 +81,20 @@ describe('Volunteer model', () => {
     test('add :: create new record using minimal information', async () => {
       const changeset = await factory.build('volunteer');
       const volunteer = await Volunteers.add(trx, changeset);
-
-      expect(volunteer).toEqual(expect.objectContaining(changeset));
+      const passwordCheck = await compare(changeset.password, volunteer.password);
+      expect(volunteer).toEqual(expect.objectContaining(omit(['password'], changeset)));
+      expect(passwordCheck).toBeTruthy();
     });
 
     test('addWithRole :: create new VOLUNTEER record', async () => {
       const changeset = await factory.build('volunteer');
       const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
       const volunteer = await Volunteers.addWithRole(trx, changeset, RoleEnum.VOLUNTEER, cb);
+      const passwordCheck = await compare(changeset.password, volunteer.password);
       const rolesCheck = await Roles
        .userHas(trx, { role: RoleEnum.VOLUNTEER, userId: volunteer.id, organisationId: cb.id });
-      expect(volunteer).toEqual(expect.objectContaining(changeset));
+      expect(volunteer).toEqual(expect.objectContaining(omit(['password'], changeset)));
+      expect(passwordCheck).toBeTruthy();
       expect(rolesCheck).toBeTruthy();
     });
 
@@ -101,13 +105,15 @@ describe('Volunteer model', () => {
       const volunteerAdmin = await Volunteers
         .addWithRole(trx, changeset, RoleEnum.VOLUNTEER_ADMIN, cb, '70007');
 
+      const passwordCheck = await compare(changeset.password, volunteerAdmin.password);
       const rolesCheck = await Roles.userHas(trx, {
         role: RoleEnum.VOLUNTEER_ADMIN,
         userId: volunteerAdmin.id,
         organisationId: cb.id,
       });
 
-      expect(volunteerAdmin).toEqual(expect.objectContaining(changeset));
+      expect(volunteerAdmin).toEqual(expect.objectContaining(omit(['password'], changeset)));
+      expect(passwordCheck).toBeTruthy();
       expect(rolesCheck).toBeTruthy();
     });
 
