@@ -61,7 +61,7 @@
 					.then((response) => {
 						$localStorage.user.role = response.data.result.role;
 
-						if ($localStorage.user.role !== undefined && $localStorage.user.role === 'VOLUNTEER_ADMIN') {
+						if (['VOLUNTEER_ADMIN', 'ORG_ADMIN'].includes($localStorage.user.role)) {
 							$rootScope.isAdmin = true;
 						} else {
 							$rootScope.isAdmin = false;

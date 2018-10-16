@@ -311,7 +311,7 @@
 							$http({
 								method: 'POST',
 								url: $$api.url('users/login'),
-								data: { email, password, type: 'body', restrict: ['VOLUNTEER', 'VOLUNTEER_ADMIN'] }
+								data: { email, password, type: 'body', restrict: ['VOLUNTEER', 'VOLUNTEER_ADMIN', 'ORG_ADMIN'] }
 							})
 							.then((response) => {
 								$$api.token.set(response.data.result.token);
