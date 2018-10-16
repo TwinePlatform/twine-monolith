@@ -265,7 +265,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/summary',
         credentials: {
-          scope: ['volunteer_logs-parent:read', 'organisation_details-parent:read'],
+          scope: ['organisations_details-parent:read'],
           user,
           organisation,
         },
@@ -291,7 +291,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/summary',
         credentials: {
-          scope: ['volunteer_logs-own:read', 'organisation_details-own:read'],
+          scope: ['organisations_details-own:read'],
           user: cbAdmin,
           organisation,
         },
@@ -310,40 +310,12 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('cannot get summary with insufficient (own) scope', async () => {
-      const res = await server.inject({
-        method: 'GET',
-        url: '/v1/community-businesses/me/volunteer-logs/summary',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-        },
-      });
-
-      expect(res.statusCode).toBe(403);
-    });
-
-    test('cannot get summary with insufficient (parent) scope', async () => {
-      const res = await server.inject({
-        method: 'GET',
-        url: '/v1/community-businesses/me/volunteer-logs/summary',
-        credentials: {
-          scope: ['volunteer_logs-parent:read'],
-          user,
-          organisation,
-        },
-      });
-
-      expect(res.statusCode).toBe(403);
-    });
-
     test('cannot get other orgs summaries', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/3/volunteer-logs/summary',
         credentials: {
-          scope: ['volunteer_logs-own:read'],
+          scope: ['organisations_details-own:read'],
           user,
           organisation,
         },

@@ -168,10 +168,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          // TO BE REPLACED: "volunteer_logs-parent" with "volunteer_logs-child"
           scope: [
-            'volunteer_logs-parent:read',
-            'volunteer_logs-own:read',
             'organisations_details-parent:read',
             'organisations_details-own:read',
           ],
@@ -185,28 +182,8 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request, h) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { scope } },
         pre: { communityBusiness },
       } = request;
-
-      /*
-       * This manual checking of scopes is necessary because
-       * hapi.js scopes specification isn't capable of capturing
-       * complex scope rules e.g ((x AND y) OR (a AND b)).
-       *
-       * See: https://hapijs.com/api#-routeoptionsauthaccessscope
-       */
-      const hasParentScopes =
-        scope.includes('volunteer_logs-parent:read') &&
-        scope.includes('organisation_details-parent:read');
-
-      const hasOwnScopes =
-        scope.includes('volunteer_logs-own:read') &&
-        scope.includes('organisation_details-own:read');
-
-      if (!hasParentScopes && !hasOwnScopes) {
-        return Boom.forbidden('Insufficient scope');
-      }
 
       const logs = await VolunteerLogs.get(
         knex,

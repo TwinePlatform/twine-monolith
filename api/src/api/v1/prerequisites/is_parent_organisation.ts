@@ -1,5 +1,5 @@
 /*
- * "organisation_details-parent" route pre-requisite
+ * "organisations_details-parent" route pre-requisite
  *
  * Determines if the authenticated user is trying to access an organisation
  * which is actually a "parent" entity.
