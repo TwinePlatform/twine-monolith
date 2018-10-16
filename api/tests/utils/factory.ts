@@ -10,7 +10,7 @@ factory.extend('user', 'cbAdmin', {
   isEmailConfirmed: factory.chance('bool'),
 });
 
-factory.extend('user', 'visitor', {
+factory.define('visitor', Object, {
   name: factory.chance('name'),
   email: factory.chance('email'),
   phoneNumber: factory.chance('phone', { country: 'uk' }),

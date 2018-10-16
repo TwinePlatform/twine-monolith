@@ -1,4 +1,5 @@
 import * as Knex from 'knex';
+import { compare } from 'bcrypt';
 import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
@@ -71,10 +72,11 @@ describe('CbAdmin model', () => {
   describe('Write', () => {
     test('add :: create new record using minimal information', async () => {
       const changeset = await factory.build('cbAdmin');
-
       const admin = await CbAdmins.add(trx, changeset);
+      const passwordCheck = await compare(changeset.password, admin.password);
 
-      expect(admin).toEqual(expect.objectContaining(changeset));
+      expect(admin).toEqual(expect.objectContaining(omit(['password'], changeset)));
+      expect(passwordCheck).toBeTruthy();
     });
 
     test('update :: non-foreign key column', async () => {

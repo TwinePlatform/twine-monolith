@@ -1,5 +1,6 @@
 import * as Knex from 'knex';
 import * as moment from 'moment';
+import { compare } from 'bcrypt';
 import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
@@ -121,13 +122,15 @@ describe('User Model', () => {
       const changeset = await factory.build('user');
 
       const user = await Users.add(trx, changeset);
+      const passwordCheck = await compare(changeset.password, user.password);
 
       expect(user).toEqual(expect.objectContaining({
-        ...changeset,
+        ...omit(['password'], changeset),
         gender: 'prefer not to say',
         ethnicity: 'prefer not to say',
         disability: 'prefer not to say',
       }));
+      expect(passwordCheck).toBeTruthy();
     });
 
     test('destroy :: mark existing record as deleted', async () => {

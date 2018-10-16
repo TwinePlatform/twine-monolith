@@ -1,5 +1,6 @@
 const { hashSync } = require('bcrypt');
 const gladosPassword = hashSync('CakeisaLi3!', 12);
+const gordonPassword = hashSync('i<3Hawkin', 12)
 const bigBossPassword = hashSync('Snaa4aaake!', 12);
 const chellQrCode = hashSync('chellsqrcode', 12);
 const emmaPassword = hashSync('Hal0ops!', 12);
@@ -39,7 +40,7 @@ exports.seed = (knex) =>
       },
       {
         user_name: 'Gordon',
-        user_password: 'tobereplacedwhenauthissetup',
+        user_password: gordonPassword,
         email: '1998@blackmesaresearch.com',
         phone_number: '+1 555-555-3141',
         post_code: '82394',
@@ -55,7 +56,7 @@ exports.seed = (knex) =>
       },
       {
         user_name: 'Barney',
-        user_password: 'tobereplacedwhenauthissetup',
+        user_password: gordonPassword,
         email: '2305@blackmesaresearch.com',
         phone_number: '+1 555-555-3141',
         post_code: '82394',
