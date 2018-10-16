@@ -341,13 +341,14 @@
 							if (days) {
 								var now = new Date();
 								now.setDate(now.getDate() - days);
-								qs = '?since=' + now.toDateString();
+								qs = '?since=' + now.toISOString();
 							}
 
 							return $http({
 								method: 'GET',
-								url: $$api.url('users/me/volunteer-logs/aggregates' + qs),
+								url: $$api.url('users/volunteers/me/volunteer-logs/aggregates' + qs),
 								headers: { Authorization: $$api.token.get() },
+								transformResponse: (r, h, s) => transformDurationResponse(transformResponse(r, h, s), h, s),
 							});
 						},
 
@@ -613,10 +614,12 @@
 						>>> summary
 					*/
 
-						summary: function(organisationId) {
+						summary: function() {
 							return $http({
 								method: 'GET',
-								url: $$api.url('organisations/' + organisationId + '/summary')
+								url: $$api.url('community-businesses/me/volunteer-logs/summary'),
+								headers: { Authorization: $$api.token.get() },
+								transformResponse
 							})
 						}
 
