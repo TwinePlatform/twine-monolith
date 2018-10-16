@@ -111,7 +111,9 @@
 						delete: function(id) {
 							return $http({
 								method: 'DELETE',
-							  	url: $$api.url('logs/' + id)
+								url: $$api.url('users/volunteers/me/volunteer-logs/' + id),
+								headers: { Authorization: $$api.token.get() },
+								transformResponse,
 							});
 						},
 
@@ -119,10 +121,12 @@
 						>>> get logs
 					*/
 
-						getLogs: function(userId) {
+						getLogs: function() {
 							return $http({
 								method: 'GET',
-								url: $$api.url('logs/user/' + userId)
+								url: $$api.url('users/volunteers/me/volunteer-logs'),
+								headers: { Authorization: $$api.token.get() },
+								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s)
 							});
 						},
 
@@ -133,14 +137,18 @@
 						getLog: function(logId) {
 							return $http({
 								method: 'GET',
-								url: $$api.url('logs/' + logId)
+								url: $$api.url('users/volunteers/me/volunteer-logs/' + logId),
+								headers: { Authorization: $$api.token.get() },
+								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s)
 							});
 						},
 
-						getAdminLogs : function (userId) {
+						getAdminLogs : function () {
 							return $http({
 								method: 'GET',
-								url: $$api.url('logs/admin/' + userId)
+								url: $$api.url('community-businesses/me/volunteer-logs'),
+								headers: { Authorization: $$api.token.get() },
+								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s)
 							});
 						},
 
@@ -151,9 +159,10 @@
 						edit: function(logId, data) {
 							return $http({
 								method: 'PUT',
-								url: $$api.url('logs/' + logId),
+								url: $$api.url('users/volunteers/me/volunteer-logs/' + logId),
 								data: data,
-								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+								headers: { Authorization: $$api.token.get() },
+								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s)
 							});
 						},
 
@@ -164,9 +173,10 @@
 						new: function(data) {
 							return $http({
 								method: 'POST',
-								url: $$api.url('logs'),
+								url: $$api.url('community-businesses/me/volunteer-logs'),
 								data: data,
-								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+								headers: { Authorization: $$api.token.get() },
+								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s)
 							});
 						},
 
@@ -177,9 +187,10 @@
 						sync: function(data) {
 							return $http({
 								method: 'POST',
-								url: $$api.url('logs/sync'),
+								url: $$api.url('community-businesses/me/volunteer-logs/sync'),
 								data: data,
-								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+								headers: { Authorization: $$api.token.get() },
+								transformResponse,
 							});
 						},
 
@@ -344,11 +355,18 @@
 						>>> total hours for a day
 					*/
 
-						totalHoursForDay: function(userId, date) {
-							var url = $$api.url('logs/user/' + userId + '/total/date/' + date)
+						totalHoursForDay: function(_, _date = new Date()) {
+							var date = new Date(_date); // clone or parse date string
+							date.setHours(0, 0, 0, 0);
+							var start = date.toISOString();
+							date.setHours(23, 59, 59, 999);
+							var end = date.toISOString();
+
 							return $http({
 								method: 'GET',
-								url: url
+								url: $$api.url(`users/volunteers/me/volunteer-logs/aggregates?since=${start}&until=${end}`),
+								headers: { Authorization: $$api.token.get() },
+								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s),
 							});
 						}
 
