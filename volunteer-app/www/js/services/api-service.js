@@ -40,6 +40,35 @@
 				: res;
 		};
 
+		const transformDuration = (duration = {}) =>
+			Math.floor(
+				(duration.days || 0) * 24 * 60
+			+ (duration.hours || 0) * 60
+			+ (duration.minutes || 0)
+			+ (duration.seconds || 0) / 60
+			);
+
+		const transformLog = (log) => ({
+			...log,
+			date_of_log: log.startedAt,
+			duration: transformDuration(log.duration),
+		})
+
+		const transformLogResponse = (res, headers, status) =>
+			status >= 400
+				? res
+				: Array.isArray(res.data)
+					? { ...res, data: res.data.map(transformLog) }
+					: { ...res, data: transformLog(res.data) };
+
+		const transformDurationResponse = (res, headers, status) =>
+			status >= 400
+				? res
+				: res.data && typeof res.data === 'object'
+					? { ...res, data: { total: transformDuration(res.data.total) } }
+					: res;
+
+
 		var $$api = {
 
 			/*
