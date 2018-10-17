@@ -202,12 +202,12 @@
 
 					// filter out deleted logs
 					logs = $filter('filter')(logs, {
-						'deleted_at': null
+						'deletedAt': null
 					});
 
 					// filter by organisation id
 					logs = $filter('filter')(logs, {
-						'organisation_id': $localStorage.user.organisation_id
+						'organisationId': $localStorage.user.organisation.id
 					});
 
 					// loop through each log in the response and put back into offline data with a unique offline_id
