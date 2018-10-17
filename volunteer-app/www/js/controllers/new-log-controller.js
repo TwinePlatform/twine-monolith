@@ -141,7 +141,9 @@
                     })
             };
 
-        	$scope.fillVolonters();
+			if ($scope.isAdmin) {
+				$scope.fillVolonters();
+			}
 
         /*
             >> fill Activities
