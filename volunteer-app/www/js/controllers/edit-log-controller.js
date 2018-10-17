@@ -43,7 +43,6 @@
         $scope.fillActivities = function () {
             $$api.activities.get()
                 .success(function (result) {
-                    console.log(result);
                     if (result !== null && result !== undefined && result.data !== null && result.data !== undefined)
                         $scope.activities = result.data;
                 })
@@ -282,35 +281,24 @@
 					else {
 
 						// >>> submit edit log form
-						$$api.logs.edit($scope.formData.id, $.param($scope.formData)).success(function (result) {
+						$$api.logs.edit($scope.formData.id, $scope.formData).success(function (result) {
 
 							console.log($scope.formData);
 
 							console.log('result: ', result);
 
-							// create log successful
-							if (result.success) {
+							// hide loader
+							$ionicLoading.hide();
 
-								// hide loader
-								$ionicLoading.hide();
+							// save offline
+							$$offline.editLog({ id: $scope.formData.id, idKey: 'id' }, result.data);
 
-								// save offline
-								$$offline.editLog({ id: $scope.formData.id, idKey: 'id' }, result.data);
+							// go back to view logs
+							$state.go('tabs.view-logs.hours');
 
-								// go back to view logs
-								$state.go('tabs.view-logs.hours');
+							// shout success
+							$$shout('Log saved succesfully!');
 
-								// shout success
-								$$shout('Log saved succesfully!');
-
-							}
-
-							// create log unsuccessful
-							else {
-
-								$$shout('Edit log unsuccessful');
-
-							}
 
 						}).error(function(result, error) {
 
@@ -341,6 +329,7 @@
 				// form is invalid
 				else {
 					console.log('form invalid!!');
+					$$shout('Application error.');
 				}
 
 			};
