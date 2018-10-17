@@ -560,7 +560,8 @@
                 get: function() {
                     return $http({
                         method: 'GET',
-                        url: $$api.url('activities')
+												url: $$api.url('volunteer-activities'),
+												transformResponse,
                     });
                 }
 
