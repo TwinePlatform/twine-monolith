@@ -1,7 +1,7 @@
 /*
  * Visitor Model
  */
-import { createHmac } from 'crypto';
+import { createHmac, randomBytes } from 'crypto';
 import { assoc, omit, pick, evolve, compose, pipe } from 'ramda';
 import { Map } from '../types/internal';
 import { User, VisitorCollection, LinkedVisitEvent } from './types';
@@ -17,7 +17,7 @@ const { qrcode: { secret } } = getConfig(process.env.NODE_ENV);
 
 const hashVisitor: (visitor: Partial<User>) => string = compose(
   (s: string) => createHmac('sha256', secret).update(s).digest('hex'),
-  (s: string[]) => s.join(':'),
+  (s: string[]) => s.concat(randomBytes(16).toString('hex')).join(':'),
   Object.values,
   pick(['email', 'name', 'gender', 'disability', 'ethnicity'])
 );
