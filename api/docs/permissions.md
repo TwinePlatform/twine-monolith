@@ -30,38 +30,6 @@ volunteer_logs
 visit_activites  
 visit_logs  
 
-## Permissions module
-Permissions and roles will have a many to many relationship documented in the datebase under the `role_permission` linking table.
-Roles and users will have a many to many relationship documented in the database under the `user_account_access_role` linking table.
-A module can be created for easily updating and checking these relationships.
-
-```
-const Permissions = require('./permissions');
-const Roles = require('./roles');
-const User = require('../user');
-
-// Permissions.grant :: Resource -> Operation -> PermissionLevel -> Role -> Promise ()
-// Permissions.revoke :: Resource -> Operation -> PermissionLevel -> Role -> Promise ()
-// Permissions.grantAll :: Resource -> Role -> Promise ()
-// Permissions.revokeAll :: Resource -> Role -> Promise ()
-// Permissions.roleHas :: Resource -> Operation -> PermissionLevel -> Role -> Promise Boolean
-// Permissions.userHas :: Resource -> Operation -> PermissionLevel -> User -> Promise Boolean
-
-// Roles.add :: Role -> User -> Promise ()
-// Roles.remove :: Role -> User -> Promise ()
-// Roles.move :: Role -> Role -> User -> Promise ()
-// Roles.removeUserFromAll :: User -> Promise ()
-// Roles.hasPermission :: Permission -> Promise Boolean
-// Roles.userHas :: User -> Promise Boolean
-
-// Examples:
-Permissions.grant(Resouce.ORG_DETAILS_CHILD, Permission.WRITE, Roles.ORG_ADMIN);
-Permissions.revoke(Resource.VOLUNTEER_LOGS_OWN, Permissions.DELETE, Roles.VOLUNTEER);
-
-User.byId(1).then(user => Roles.add(Roles.VOLUNTEER, user));
-User.byEmail('foo@bar.com').then(user => Roles.remove(Roles.VISITOR, user));
-
-```
 
 ## References
 

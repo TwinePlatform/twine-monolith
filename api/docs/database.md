@@ -41,5 +41,8 @@ $ npm run seed:make
 
 **Note** the `NODE_ENV` should be specified when running the seed.
 
-## Drop
-TBD
+## Drop
+To drop all tables and data types created by the migrations, run
+```
+$ npm run migrate:teardown
+```
