@@ -113,7 +113,7 @@
 					if ($localStorage.user) {
 						$$api.user.get('me')
 							.then(function(result) {
-								$localStorage.user = result.data;
+								$localStorage.user = result.data.result;
 								$rootScope.currentUser = $localStorage.user;
 
 								return $$api.user.roles();
