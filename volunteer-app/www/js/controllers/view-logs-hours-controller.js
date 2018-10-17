@@ -41,13 +41,13 @@
 						$$api.logs.getAdminLogs($rootScope.currentUser.id).success(function (result) {
 
                             // update logs in view
-                            $scope.logs = result.data.logs;
+                            $scope.logs = result.data;
 
-                            if (result.data.logs.length == 0) {
+                            if (result.data.length == 0) {
                                 $scope.noLogs = true;
                             }
 
-                            $$offline.saveLogs(result.data.logs);
+                            $$offline.saveLogs(result.data);
 
                         }).error(function (result, error) {
 
@@ -72,10 +72,10 @@
 
 					} else {
 
-                        $$api.logs.getLogs($localStorage.user.id).success(function (result) {
+                        $$api.logs.getLogs().success(function (result) {
 
                             // update logs in view
-                            $scope.logs = result.data.logs;
+                            $scope.logs = result.data;
 
                             // loop through each log and disable logs from previous months
                             var dateFirstOfMonth = $$utilities.getDateFirstOfMonth();
@@ -90,10 +90,10 @@
                             }
 
                             // save logs offline
-                            $$offline.saveLogs(result.data.logs);
+                            $$offline.saveLogs(result.data);
 
                             // if no logs
-                            if (result.data.logs.length == 0) {
+                            if (result.data.length == 0) {
                                 $scope.noLogs = true;
                             }
 
