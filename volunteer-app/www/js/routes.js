@@ -223,6 +223,6 @@ angular.module('app.routes', ['ionicUIRouter'])
 
 
         // default page
-        $urlRouterProvider.otherwise('/register');
+        $urlRouterProvider.otherwise('/login');
 
     });
