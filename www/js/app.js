@@ -280,7 +280,12 @@
 						}
 					})
 
-                    // $ionicPlatform.on('resume', function(){
+				/*
+				  >>> forward to dashboard if have token
+				 */
+				if ($$api.token.get()) {
+					$state.go('tabs.dashboard');
+				}
 			});
 	})
     .config(function( $ionicConfigProvider) {

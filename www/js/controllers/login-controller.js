@@ -20,8 +20,7 @@
 		/*
 			>> store the form data
 		*/
-			var formData = JSON.parse(localStorage.getItem('lastAuth'));
-			$scope.formData = (formData !== undefined && formData !== null && formData !== '') ? formData : {};
+			$scope.formData = {};
 
 		/*
 			>> process the form
@@ -45,9 +44,6 @@
 					$$api.user.login($scope.formData)
 					.then(() => $$api.user.get('me'))
 					.then((response) => {
-
-						// login successful
-						localStorage.setItem('lastAuth', JSON.stringify($scope.formData));
 
 						// hide loader
 						$ionicLoading.hide();
