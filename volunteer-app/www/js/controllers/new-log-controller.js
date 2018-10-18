@@ -310,27 +310,15 @@
 							// hide loader
 							$ionicLoading.hide();
 
-							// create log successful
-							if (result.success) {
+							// push to offline data
+							$scope.newLogOffline(result.data);
 
-								// push to offline data
-								$scope.newLogOffline(result.data);
+							$$shout('Log saved.');
 
-								$$shout('Log saved.');
-
-								if ($rootScope.isAdmin) {
-                                    $state.go('tabs.view-logs.hours');
-								} else {
-                                    $state.go('tabs.dashboard');
-                                }
-
-							}
-
-							// create log unsuccessful
-							else {
-
-								$$shout(result.message);
-
+							if ($rootScope.isAdmin) {
+								$state.go('tabs.view-logs.hours');
+							} else {
+								$state.go('tabs.dashboard');
 							}
 
 						}).error(function(data, error) {
