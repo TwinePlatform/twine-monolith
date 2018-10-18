@@ -184,45 +184,33 @@
 
 						console.log('logsData: ', logsData);
 
-						console.log('$.param(logsData): ', $.param(logsData));
-
 						// if we have logs that need syncing, sync them
 						if (logsData.logs.length > 0) {
 
 							// sync offline logs
-							$$api.logs.sync($.param(logsData)).success(function(response) {
+							$$api.logs.sync(logsData).success(function(response) {
 								console.log('response: ', response);
 
-								// successful response
-								if (response.success) {
+								// show loader
+								$ionicLoading.show('Syncing');
 
-									// show loader
-									$ionicLoading.show('Syncing');
+								// get response logs
+								var responseLogs = response.data;
 
-									// get response logs
-									var responseLogs = response.data;
+								// save logs offline
+								$$offline.saveLogs(responseLogs);
 
-									// save logs offline
-									$$offline.saveLogs(responseLogs);
+								// switch offline mode off
+								$$offline.disable();
 
-									// switch offline mode off
-									$$offline.disable();
+								// reload current page
+								$state.reload();
 
-									// reload current page
-									$state.reload();
+								// hide loader
+								$ionicLoading.hide();
 
-									// hide loader
-									$ionicLoading.hide();
-
-									// inform user
-									$$shout('Data synced successfully!');
-
-								}
-								// unsuccessful response
-								else {
-									$$shout('Couldn\'t sync offline data');
-								}
-
+								// inform user
+								$$shout('Data synced successfully!');
 
 							}).error(function(data, error) {
 
