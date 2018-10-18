@@ -281,9 +281,17 @@
 					else {
 
 						// >>> submit edit log form
-						$$api.logs.edit($scope.formData.id, $scope.formData).success(function (result) {
+						var payload = {
+							activity: $scope.formData.activity,
+							duration: {
+								hours: $scope.formData.hours.value,
+								minutes: $scope.formData.minutes.value,
+							},
+							startedAt: $scope.formData.date_of_log,
+						}
+						$$api.logs.edit($scope.formData.id, payload).success(function (result) {
 
-							console.log($scope.formData);
+							console.log(payload);
 
 							console.log('result: ', result);
 
