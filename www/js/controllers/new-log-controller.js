@@ -297,8 +297,15 @@
 					else {
 
 						// >>> submit form
-
-						$$api.logs.new($.param($scope.formData)).success(function (result) {
+						var payload = {
+							activity: $scope.formData.activity,
+							duration: {
+								minutes: $scope.formData.duration,
+							},
+							startedAt: $scope.formData.date_of_log,
+							userId: $scope.formData.user_id && $scope.formData.user_id !== $rootScope.currentUser.id || undefined,
+						}
+						$$api.logs.new(payload).success(function (result) {
 
 							// hide loader
 							$ionicLoading.hide();
