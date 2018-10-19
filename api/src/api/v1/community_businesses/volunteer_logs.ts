@@ -1,15 +1,188 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import { response, id } from './schema';
+import { response, id, since, until } from './schema';
 import Roles from '../../../auth/roles';
 import { RoleEnum } from '../../../auth/types';
 import { VolunteerLogs, Duration, Volunteers } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
-import { PostMyVolunteerLogsRequest, SyncMyVolunteerLogsRequest } from '../types';
+import {
+  PostMyVolunteerLogsRequest,
+  SyncMyVolunteerLogsRequest,
+  GetMyVolunteerLogsRequest,
+  GetVolunteerLogRequest,
+  PutMyVolunteerLogRequest,
+} from '../types';
 
 
 const routes: Hapi.ServerRoute[] = [
+
+  {
+    method: 'GET',
+    path: '/community-businesses/me/volunteer-logs',
+    options: {
+      description: 'Retrieve volunteer logs for own community business',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read'],
+        },
+      },
+      validate: { query: { since, until } },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request: GetMyVolunteerLogsRequest, h) => {
+      const {
+        server: { app: { knex } },
+        query,
+        pre: { communityBusiness },
+      } = request;
+
+      const since = new Date(query.since);
+      const until = new Date(query.until);
+
+      const logs =
+        await VolunteerLogs.fromCommunityBusiness(knex, communityBusiness, { since, until });
+
+      return Promise.all(logs.map(VolunteerLogs.serialise));
+    },
+  },
+
+  {
+    method: 'GET',
+    path: '/community-businesses/me/volunteer-logs/{logId}',
+    options: {
+      description: 'Retrieve volunteer logs for own community business',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read'],
+        },
+      },
+      validate: { query: { since, until } },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request: GetVolunteerLogRequest, h) => {
+      const {
+        server: { app: { knex } },
+        params: { logId },
+        pre: { communityBusiness },
+      } = request;
+
+      const log = await VolunteerLogs.getOne(
+        knex,
+        {
+          where: {
+            id: Number(logId),
+            organisationId: communityBusiness.id,
+            deletedAt: null,
+          },
+        }
+      );
+
+      if (!log) {
+        return Boom.notFound(`No log with ID: ${logId} found`);
+      }
+
+      return VolunteerLogs.serialise(log);
+    },
+  },
+
+  {
+    method: 'PUT',
+    path: '/community-businesses/me/volunteer-logs/{logId}',
+    options: {
+      description: 'Update volunteer logs for own community business',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['volunteer_logs-sibling:write', 'volunteer_logs-child:write'],
+        },
+      },
+      validate: {
+        params: { logId: id },
+        payload: {
+          activity: Joi.string(),
+          duration: Joi.object({
+            hours: Joi.number().integer().min(0),
+            minutes: Joi.number().integer().min(0),
+            seconds: Joi.number().integer().min(0),
+          }),
+          startedAt: Joi.date().iso().max('now'),
+        },
+      },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request: PutMyVolunteerLogRequest, h) => {
+      const {
+        server: { app: { knex } },
+        params: { logId },
+        payload,
+        pre: { communityBusiness },
+      } = request;
+
+      const log = await VolunteerLogs.getOne(
+        knex,
+        { where: { id: Number(logId), organisationId: communityBusiness.id } }
+      );
+
+      if (!log) {
+        return Boom.notFound(`No log with ID: ${logId} found`);
+      }
+
+      const updatedLog = await VolunteerLogs.update(knex, log, payload);
+
+      return VolunteerLogs.serialise(updatedLog);
+    },
+  },
+
+  {
+    method: 'DELETE',
+    path: '/community-businesses/me/volunteer-logs/{logId}',
+    options: {
+      description: 'Mark volunteer logs for own community business as deleted',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['volunteer_logs-sibling:delete', 'volunteer_logs-child:delete'],
+        },
+      },
+      validate: {
+        params: { logId: id },
+      },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request: GetVolunteerLogRequest, h) => {
+      const {
+        server: { app: { knex } },
+        params: { logId },
+        pre: { communityBusiness },
+      } = request;
+
+      const log = await VolunteerLogs.destroy(
+        knex,
+        { id: Number(logId), organisationId: communityBusiness.id }
+      );
+
+      if (log === 0) {
+        return Boom.notFound(`No log with ID: ${logId} found`);
+      }
+
+      return null;
+    },
+  },
 
   {
     method: 'POST',
