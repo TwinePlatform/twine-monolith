@@ -38,37 +38,29 @@
 
 					if ($rootScope.isAdmin) {
 
-						$$api.logs.getAdminLogs($rootScope.currentUser.id).success(function (result) {
+						$$api.logs.getAdminLogs().success(function (result) {
 
-                            // update logs in view
-                            $scope.logs = result.data;
+								// update logs in view
+								$scope.logs = result.data;
 
-                            if (result.data.length == 0) {
-                                $scope.noLogs = true;
-                            }
+								if (result.data.length == 0) {
+										$scope.noLogs = true;
+								}
 
-                            $$offline.saveLogs(result.data);
+								$$offline.saveLogs(result.data);
 
-                        }).error(function (result, error) {
+						}).error(function (result, error) {
 
-                            // if user does not exist, log user out
-                            if (error === 404) {
-                                $$utilities.logOut('This user account no longer exists.');
-                            }
-                            else {
+								// enable offline mode
+								$$offline.enable();
 
-                                // enable offline mode
-                                $$offline.enable();
+								// update logs in view
+								$scope.logs = $$offline.getLogs();
 
-                                // update logs in view
-                                $scope.logs = $$offline.getLogs();
+								// process connection error
+								$$utilities.processConnectionError(result, error);
 
-                                // process connection error
-                                $$utilities.processConnectionError(result, error);
-
-                            }
-
-                        });
+						});
 
 					} else {
 
