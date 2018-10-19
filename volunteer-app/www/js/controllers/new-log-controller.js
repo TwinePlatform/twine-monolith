@@ -21,8 +21,8 @@
 */
 
 	angular.module('app.controllers').controller('NewLogController', function (
-		$scope, $stateParams, $http, $state, $filter, $ionicLoading, $localStorage, $rootScope, $timeout, 
-		$$api, $$utilities, $$shout, $$offline
+		$scope, $state, $filter, $ionicLoading, $localStorage, $rootScope, $timeout,
+		$$api, $$utilities, $$shout, $$offline, $q
 	) {
 
 		/*
@@ -130,15 +130,17 @@
 			$scope.fillVolonters = function () {
 				$$api.volunteers.getVolunteers($rootScope.currentUser.organisation_id)
 					.success(function (result) {
-						if (result !== null && result !== undefined && result.data.volunteers !== null && result.data.volunteers !== undefined) {
-                            $scope.volunteers = result.data.volunteers;
-                            var me = angular.copy($rootScope.currentUser);
-                            me.name += ' (you)';
-                            console.log($rootScope.currentUser, me);
-                            $scope.volunteers.unshift(me);
+						if (result && result.result) {
+                            $scope.volunteers = result.result;
                             $scope.displayedVolunteers = $scope.volunteers;
 						}
-                    })
+					})
+					.error((data, error) => {
+
+							// process connection error
+							$$utilities.processConnectionError(data, error);
+
+					})
             };
 
 			if ($scope.isAdmin) {
@@ -287,6 +289,8 @@
 
 					// if offline mode active, push to offline data
 					if ($rootScope.offlineMode) {
+						// hide loader
+						$ionicLoading.hide();
 
 						// push to offline data, mark as 'needs_pushing'
 						$scope.newLogOffline($scope.formData, true, 'Log saved offline.');
@@ -303,15 +307,45 @@
 								minutes: $scope.formData.duration,
 							},
 							startedAt: $scope.formData.date_of_log,
-							userId: $scope.formData.user_id && $scope.formData.user_id !== $rootScope.currentUser.id || undefined,
 						}
-						$$api.logs.new(payload).success(function (result) {
+						var payloads = null;
+						var promise = null;
+
+						if ($scope.formData.user_id && $scope.formData.user_id !== $rootScope.currentUser.id) {
+							if ($scope.selectedVolunteers.length > 1) { // Multiple IDs!
+								payloads = $scope.selectedVolunteers.map((user) => Object.assign({ userId: user.id }, payload))
+							} else { // Single ID
+								payload.userId = $scope.selectedVolunteers[0].id;
+							}
+						} else {
+							// User ID refers to own user, therefore do nothing, since this is default
+							// behaviour of new API
+						}
+
+						try {
+							promise = payloads
+								? Promise.all(payloads.map($$api.logs.new))
+								: $$api.logs.new(payload);
+						} catch (error) {
+							promise = $q.defer().reject(error);
+						}
+
+						promise.then(function (result) {
+							if (Array.isArray(result)) {
+								result = result.map((r) => r.data.result)
+							} else {
+								result = result.data.result;
+							}
 
 							// hide loader
 							$ionicLoading.hide();
 
 							// push to offline data
-							$scope.newLogOffline(result.data);
+							if (Array.isArray(result)) {
+								result.map((r) => $scope.newLogOffline(r));
+							} else {
+								$scope.newLogOffline(result);
+							}
 
 							$$shout('Log saved.');
 
@@ -321,16 +355,25 @@
 								$state.go('tabs.dashboard');
 							}
 
-						}).error(function(data, error) {
-
+						}).catch(function(error) {
 							// enable offline mode
 							$$offline.enable();
+
+							// hide loader
+							$ionicLoading.hide();
 
 							// push to offline data and mark as 'needs_pushing'
 							$scope.newLogOffline($scope.formData, true, 'Log saved offline.');
 
+							// go back to dashboard
+							if ($rootScope.isAdmin) {
+								$state.go('tabs.view-logs.hours');
+							} else {
+								$state.go('tabs.dashboard');
+							}
+
 							// process connection error
-							$$utilities.processConnectionError(data, error);
+							$$utilities.processConnectionError(null, error);
 
 						});
 
@@ -338,7 +381,7 @@
 				}
 				// form is invalid
 				else {
-					
+					$$shout('Application error!');
 				}
 
 			};
@@ -349,9 +392,6 @@
 		*/
 
 			$scope.newLogOffline = function(data, needs_pushing, message) {
-
-				// hide loader
-				$ionicLoading.hide();
 
 				if (needs_pushing === undefined) {
 					needs_pushing = false;
@@ -364,9 +404,6 @@
 				if (message !== undefined) {
 					$$shout(message);
 				}
-
-				// go back to dashboard
-				$state.go('tabs.dashboard');
 
 			}
 
