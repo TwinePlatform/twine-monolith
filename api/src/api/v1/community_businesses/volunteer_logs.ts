@@ -128,7 +128,7 @@ const routes: Hapi.ServerRoute[] = [
       try {
         await knex.transaction(async (trx) =>
           Promise.all(payload.map(async (log) =>
-            VolunteerLogs.add(knex, {
+            VolunteerLogs.add(trx, {
               ...log,
               organisationId: communityBusiness.id,
               userId: user.id,
