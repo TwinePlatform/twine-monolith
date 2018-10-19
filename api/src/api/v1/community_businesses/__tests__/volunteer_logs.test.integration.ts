@@ -4,6 +4,7 @@ import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
 import { User, Users, Organisation, Organisations } from '../../../../models';
+import { RoleEnum } from '../../../../auth';
 
 
 describe('API /community-businesses/me/volunteer-logs', () => {
@@ -44,9 +45,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
       });
 
@@ -54,9 +56,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
         payload: {
           activity: 'Office support',
@@ -72,9 +75,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
       });
 
@@ -103,9 +107,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
         payload: {
           activity: 'Office support',
@@ -128,9 +133,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-sibling:write'],
           user: await Users.getOne(knex, { where: { name: 'Raiden' } }),
           organisation,
+          role: RoleEnum.VOLUNTEER_ADMIN,
         },
         payload: {
           userId: user.id,
@@ -161,7 +167,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
           user: await Users.getOne(knex, { where: { name: 'Chell' } }),
           organisation,
         },
@@ -180,9 +186,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
         payload: {
           organisationId: 1,
@@ -202,9 +209,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
         payload: {
           activity: 'LOLOLOLOLOL',
@@ -223,9 +231,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
         payload: {
           activity: 'Office support',
@@ -243,9 +252,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
         payload: {
           activity: 'Office support',
@@ -336,9 +346,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
         payload: logs,
       });
@@ -350,9 +361,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
       });
 
@@ -372,9 +384,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
         payload: logs,
       });
@@ -386,9 +399,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
       });
 
@@ -403,9 +417,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
         payload: logs,
       });
@@ -417,9 +432,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
       });
 
@@ -438,9 +454,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
         payload: logs,
       });
@@ -451,9 +468,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
       });
 
@@ -466,9 +484,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: {
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
       });
 
@@ -485,9 +504,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: {
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
           user,
           organisation,
+          role: RoleEnum.VOLUNTEER,
         },
         payload: logs,
       });

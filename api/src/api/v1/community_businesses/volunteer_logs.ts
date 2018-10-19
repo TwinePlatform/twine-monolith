@@ -19,8 +19,11 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          // TO BE REPLACED: "parent" with "sibling" (and possibly "child")
-          scope: ['volunteer_logs-parent:write', 'volunteer_logs-own:write'],
+          scope: [
+            'volunteer_logs-child:write',
+            'volunteer_logs-sibling:write',
+            'volunteer_logs-own:write',
+          ],
         },
       },
       validate: {
@@ -43,20 +46,11 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: PostMyVolunteerLogsRequest, h) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { user } },
+        auth: { credentials: { user, role, scope } },
         pre: { communityBusiness },
         payload,
       } = request;
 
-      /*
-       * TO BE REPLACED
-       *
-       * Because of the way the scopes currently work, we must check the
-       * role here. See https://github.com/TwinePlatform/twine-api/pull/175#discussion_r223072650
-       *
-       * As soon as https://github.com/TwinePlatform/twine-api/issues/187 is
-       * resolved, this should be changed to avoid explicit reference to roles
-       */
       if (payload.userId) {
         const isTargetVolunteer = await Roles.userHas(knex, {
           userId: payload.userId,
@@ -64,19 +58,16 @@ const routes: Hapi.ServerRoute[] = [
           role: [RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN],
         });
 
-        const isUserAdmin = await Roles.userHas(knex, {
-          userId: user.id,
-          organisationId: communityBusiness.id,
-          role: [RoleEnum.ORG_ADMIN, RoleEnum.VOLUNTEER_ADMIN],
-        });
+        const hasPermission =
+          scope.includes('volunteer_logs-child:write') ||
+          scope.includes('volunteer_logs-sibling:write');
 
         // To continue, userId must correspond to VOLUNTEER/VOLUNTEER_ADMIN
-        // and scope must include 'volunteer_logs-own:write'
         if (!isTargetVolunteer) {
           return Boom.badRequest('User ID does not correspond to a volunteer');
         }
 
-        if (!isUserAdmin) {
+        if (!hasPermission) {
           return Boom.forbidden('Insufficient permission');
         }
       }
@@ -107,8 +98,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          // TO BE REPLACED: "parent" with "own"
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
         },
       },
       validate: {

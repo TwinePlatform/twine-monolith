@@ -22,8 +22,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          // TO BE REPLACED: "parent" with "own"
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
         },
       },
       validate: {
@@ -64,8 +63,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          // TO BE REPLACED: "parent" with "own"
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
         },
       },
       validate: {
@@ -113,8 +111,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          // TO BE REPLACED: "parent" with "own"
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
         },
       },
       validate:  {
@@ -168,8 +165,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          // TO BE REPLACED: "parent" with "own"
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
         },
       },
       validate: {
@@ -209,8 +205,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          // TO BE REPLACED: "parent" with "own"
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
         },
       },
       validate: {

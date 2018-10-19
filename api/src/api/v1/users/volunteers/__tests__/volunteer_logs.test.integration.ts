@@ -46,7 +46,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user,
           organisation,
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
         },
       });
 
@@ -73,7 +73,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user,
           organisation,
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
         },
       });
 
@@ -98,7 +98,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user: await Users.getOne(knex, { where: { id: 1 } }),
           organisation,
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
         },
       });
 
@@ -115,7 +115,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user,
           organisation,
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
         },
       });
 
@@ -138,7 +138,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user,
           organisation,
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
         },
       });
 
@@ -155,7 +155,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user: await Users.getOne(knex, { where: { id: 3 } }),
           organisation,
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
         },
       });
 
@@ -171,7 +171,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user,
           organisation,
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
         },
       });
 
@@ -183,7 +183,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user,
           organisation,
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
         },
         payload: {
           activity: 'Committee work, AGM',
@@ -207,7 +207,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user,
           organisation,
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
         },
       });
 
@@ -220,7 +220,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user,
           organisation,
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
         },
         payload: {
           activity: 'Committee work, AGM',
@@ -256,7 +256,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user,
           organisation,
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
         },
         payload: {
           userId: 2,
@@ -273,7 +273,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user,
           organisation,
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
         },
         payload: {
           organisationId: 1,
@@ -290,7 +290,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user: await Users.getOne(knex, { where: { id: 3 } }),
           organisation,
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
         },
         payload: {
           activity: 'Committee work, AGM',
@@ -309,7 +309,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user,
           organisation,
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
         },
       });
 
@@ -322,7 +322,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user,
           organisation,
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
         },
       });
 
@@ -334,7 +334,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user,
           organisation,
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
         },
       });
 
@@ -351,7 +351,7 @@ describe('API /users/me/volunteer-logs', () => {
         credentials: {
           user: otherUser,
           organisation,
-          scope: ['volunteer_logs-parent:write'],
+          scope: ['volunteer_logs-own:write'],
         },
       });
 
@@ -365,7 +365,7 @@ describe('API /users/me/volunteer-logs', () => {
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/summary',
         credentials: {
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
           user,
           organisation,
         },
@@ -391,7 +391,7 @@ describe('API /users/me/volunteer-logs', () => {
         method: 'GET',
         url: `/v1/users/volunteers/me/volunteer-logs/summary?since=${then}&until=${now}`,
         credentials: {
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
           user,
           organisation,
         },
@@ -414,7 +414,7 @@ describe('API /users/me/volunteer-logs', () => {
         method: 'GET',
         url: '/v1/users/4/volunteer-logs/summary',
         credentials: {
-          scope: ['volunteer_logs-parent:read'],
+          scope: ['volunteer_logs-own:read'],
           user,
           organisation,
         },
