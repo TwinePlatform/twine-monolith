@@ -22,8 +22,8 @@
 */
 
 	angular.module('app.services').factory('$$utilities', function(
-		$localStorage, $ionicLoading, $filter, $rootScope, $state, 
-		$$shout
+		$localStorage, $ionicLoading, $filter, $rootScope, $state,
+		$$shout, $$api
 	) {
 
 		var $$utilities = {
@@ -214,6 +214,7 @@
 					}
 					delete $localStorage.user;
 					delete $localStorage.offlineData;
+					$$api.token.clear();
 					$state.go('login');
 				},
 
