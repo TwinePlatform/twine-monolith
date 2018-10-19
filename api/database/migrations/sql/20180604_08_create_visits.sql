@@ -28,7 +28,7 @@ CREATE TABLE visit_activity (
 
   CONSTRAINT visit_activity_pk                            PRIMARY KEY (visit_activity_id),
   CONSTRAINT visit_activity_to_community_business_fk      FOREIGN KEY (organisation_id)            REFERENCES organisation ON DELETE CASCADE,
-  CONSTRAINT visit_activity_to_visit_activity_category_fk FOREIGN KEY (visit_activity_category_id) REFERENCES visit_activity_category
+  CONSTRAINT visit_activity_to_visit_activity_category_fk FOREIGN KEY (visit_activity_category_id) REFERENCES visit_activity_category ON DELETE CASCADE
 );
 
 
@@ -42,7 +42,7 @@ CREATE TABLE visit (
 
   CONSTRAINT visit_pk                   PRIMARY KEY (visit_id),
   CONSTRAINT visit_to_user_fk           FOREIGN KEY (user_account_id)   REFERENCES user_account ON DELETE CASCADE,
-  CONSTRAINT visit_to_visit_activity_fk FOREIGN KEY (visit_activity_id) REFERENCES visit_activity
+  CONSTRAINT visit_to_visit_activity_fk FOREIGN KEY (visit_activity_id) REFERENCES visit_activity ON DELETE CASCADE
 );
 
 
