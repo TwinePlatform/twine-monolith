@@ -1,6 +1,4 @@
-const api = require('../../src/api/v1/api.json');
 const perms = require('../seeds/permissions.seed.json');
-const { map } = require('ramda');
 
 const restrictedScopes = {
   ORG_ADMIN: [
@@ -10,36 +8,6 @@ const restrictedScopes = {
     "visit_logs-own:write",
   ]
 }
-
-const permissionsForRoles = Object.values(api.routes)
-  .reduce((acc, nestedRoutes) => {
-    const route = Object.values(nestedRoutes)
-      .reduce((accRouteValues, routeObject) =>
-        [...accRouteValues, ...Object.values(routeObject)]
-      ,[])
-      .map(({ scope, intendedFor, description }) => ({ scope, intendedFor, description }))
-    return [...acc, ...route]
-  }, [])
-  .reduce((acc, el) => {
-    el.intendedFor.forEach(x => {
-      if (el.scope.length > 0 && el.auth !== 'external') {
-        el.scope.forEach(y => acc[x].add(y))
-      }
-    })
-    return acc
-  }, {
-  TWINE_ADMIN: new Set(),
-  FUNDING_BODY: new Set(),
-  ORG_ADMIN: new Set(),
-  VOLUNTEER: new Set(),
-  VOLUNTEER_ADMIN: new Set(),
-});
-
-const allPermissions = Object.values(permissionsForRoles)
-  .reduce((acc, el) => {
-    el.forEach(x => acc.add(x))
-    return acc
-}, new Set());
 
 const rx = new RegExp('[-:]');
 
@@ -88,13 +56,3 @@ module.exports = {
   permissionRows: Array.from(perms.permissions).map(scopeToPermission),
   accessRolePermissionsRows,
 };
-
-
-if (require.main === module) {
-  console.log(
-    JSON.stringify({
-      'permissions': Array.from(allPermissions).sort(),
-      'permissionsForRoles': map((x) => Array.from(x).sort(), permissionsForRoles)
-    })
-  );
-}
