@@ -278,13 +278,13 @@
     "GET": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "visit_logs-own:read"
+        "ORG_ADMIN": "visit_logs-child:read"
       }
     },
     "POST": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "visit_logs-own:write"
+        "ORG_ADMIN": "visit_logs-child:write"
       }
     }
   },
@@ -292,7 +292,7 @@
     "GET": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "visit_logs-own:read"
+        "ORG_ADMIN": "visit_logs-child:read"
       }
     }
   },
@@ -318,14 +318,14 @@
     "GET": {
       "isImplemented": false,
       "permissions": {
-        "ORG_ADMIN": "volunteer_logs-own:read"
+        "ORG_ADMIN": "volunteer_logs-child:read"
       }
     },
     "POST": {
       "isImplemented": true,
       "permissions": {
-        "VOLUNTEER": "volunteer_logs-parent:write",
-        "VOLUNTEER_ADMIN": "volunteer_logs-parent:write"
+        "VOLUNTEER": "volunteer_logs-own:write",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"]
       }
     }
   },
@@ -333,8 +333,8 @@
     "POST": {
       "isImplemented": true,
       "permissions": {
-        "VOLUNTEER": "volunteer_logs-parent:write",
-        "VOLUNTEER_ADMIN": "volunteer_logs-parent:write"
+        "VOLUNTEER": "volunteer_logs-own:write",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"]
       }
     }
   },
@@ -342,24 +342,23 @@
     "GET": {
       "isImplemented": false,
       "permissions": {
-        "TWINE_ADMIN": "volunteer_logs-child:read",
-        "FUNDING_BODY": "volunteer_logs-child:read"
+        "TWINE_ADMIN": "volunteer_logs-child:read"
       }
     }
   },
-  "/community-businesses/:id/volunteer-logs/:id": {
+  "/community-businesses/me/volunteer-logs/:id": {
     "PUT": {
       "isImplemented": false,
       "permissions": {
-        "VOLUNTEER": "volunteer_logs-parent:write",
-        "VOLUNTEER_ADMIN": "volunteer_logs-parent:write"
+        "VOLUNTEER": "volunteer_logs-own:write",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"]
       }
     },
     "DELETE": {
       "isImplemented": false,
       "permissions": {
-        "VOLUNTEER": "volunteer_logs-parent:delete",
-        "VOLUNTEER_ADMIN": "volunteer_logs-parent:delete"
+        "VOLUNTEER": "volunteer_logs-own:delete",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:delete", "volunteer_logs-own:delete"]
       }
     }
   },
@@ -569,22 +568,22 @@
     "GET": {
       "isImplemented": true,
       "permissions": {
-        "VOLUNTEER": "volunteer_logs-parent:read",
-        "VOLUNTEER_ADMIN": "volunteer_logs-parent:read"
+        "VOLUNTEER": "volunteer_logs-own:read",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:read", "volunteer_logs-own:read"]
       }
     },
     "PUT": {
       "isImplemented": true,
       "permissions": {
-        "VOLUNTEER": "volunteer_logs-parent:write",
-        "VOLUNTEER_ADMIN": "volunteer_logs-parent:write"
+        "VOLUNTEER": "volunteer_logs-own:write",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"]
       }
     },
     "DELETE": {
       "isImplemented": true,
       "permissions": {
-        "VOLUNTEER": "volunteer_logs-parent:delete",
-        "VOLUNTEER_ADMIN": "volunteer_logs-parent:delete"
+        "VOLUNTEER": "volunteer_logs-own:delete",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:delete", "volunteer_logs-own:delete"]
       }
     }
   },
@@ -592,8 +591,8 @@
     "GET": {
       "isImplemented": true,
       "permissions": {
-        "VOLUNTEER": "volunteer_logs-parent:read",
-        "VOLUNTEER_ADMIN": "volunteer_logs-parent:read"
+        "VOLUNTEER": "volunteer_logs-own:read",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:read", "volunteer_logs-own:read"]
       }
     }
   },
@@ -601,9 +600,8 @@
     "GET": {
       "isImplemented": false,
       "permissions": {
-        "TWINE_ADMIN": "volunteer_logs-own:read",
-        "FUNDING_BODY": "volunteer_logs-own:read",
-        "ORG_ADMIN": "volunteer_logs-own:read"
+        "TWINE_ADMIN": "volunteer_logs-child:read",
+        "ORG_ADMIN": "volunteer_logs-child:read"
       }
     }
   },
