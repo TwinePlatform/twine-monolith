@@ -110,7 +110,7 @@
 					>>> set organisation subheader title
 				*/
 
-					if ($localStorage.user) {
+				if ($$api.token.get()) {
 						$$api.user.get('me')
 							.then(function(result) {
 								$localStorage.user = result.data.result;
@@ -134,6 +134,8 @@
 								$localStorage.user.organisation = response.data.result;
 								$rootScope.currentUser.organisation = response.data.result;
 								$rootScope.organisationName = $localStorage.user.organisation.name;
+
+								$state.go('tabs.dashboard');
 							})
 							.catch(function (error) {
 								$localStorage.user = null;
@@ -272,20 +274,13 @@
 
 					$rootScope.$watch('currentUser',function (user) {
 						if (user !== undefined && user !== null) {
-                            if (user.role_id !== undefined && user.role_id == 2) {
-                                $rootScope.isAdmin = true;
-                            } else {
-                                $rootScope.isAdmin = false;
-                            }
+							if (['VOLUNTEER_ADMIN', 'ORG_ADMIN'].includes($localStorage.user.role)) {
+									$rootScope.isAdmin = true;
+							} else {
+									$rootScope.isAdmin = false;
+							}
 						}
 					})
-
-				/*
-				  >>> forward to dashboard if have token
-				 */
-				if ($$api.token.get()) {
-					$state.go('tabs.dashboard');
-				}
 			});
 	})
     .config(function( $ionicConfigProvider) {
