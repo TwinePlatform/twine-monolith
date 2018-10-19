@@ -277,7 +277,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           volunteers: 2,
           volunteeredTime: {
             hours: 10,
-            minutes: 1,
+            minutes: 36,
             seconds: 59,
           },
         },
@@ -303,7 +303,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           volunteers: 2,
           volunteeredTime: {
             hours: 10,
-            minutes: 1,
+            minutes: 36,
             seconds: 59,
           },
         },

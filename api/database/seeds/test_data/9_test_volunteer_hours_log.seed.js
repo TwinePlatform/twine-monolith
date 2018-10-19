@@ -16,6 +16,10 @@ const getVolunteerId = (k, s) =>
     .where({
       access_role_id: k('access_role').select('access_role_id').where({ access_role_name: 'VOLUNTEER' }),
       email: s,
+    })
+    .orWhere({
+      access_role_id: k('access_role').select('access_role_id').where({ access_role_name: 'VOLUNTEER_ADMIN' }),
+      email: s,
     });
 
 
@@ -77,5 +81,12 @@ exports.seed = (knex) =>
         volunteer_activity_id: 5,
         duration: 60 * 30,
         started_at: now.clone().hour(-12),
+      },
+      {
+        organisation_id: getOrgId(knex, 'Black Mesa Research'),
+        user_account_id: getVolunteerId(knex, 'raiden@aotd.com'),
+        volunteer_activity_id: 1,
+        duration: 60 * 35,
+        started_at: now.clone().day(-12),
       },
     ])
