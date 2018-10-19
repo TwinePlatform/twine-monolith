@@ -109,9 +109,12 @@
 					*/
 
 						delete: function(id) {
+							var urlPrefix = $rootScope.isAdmin
+								? 'community-businesses/me/volunteer-logs/'
+								: 'users/volunteers/me/volunteer-logs/';
 							return $http({
 								method: 'DELETE',
-								url: $$api.url('users/volunteers/me/volunteer-logs/' + id),
+								url: $$api.url(urlPrefix + id),
 								headers: { Authorization: $$api.token.get() },
 								transformResponse,
 							});
@@ -135,9 +138,12 @@
 					*/
 
 						getLog: function(logId) {
+							var urlPrefix = $rootScope.isAdmin
+								? 'community-businesses/me/volunteer-logs/'
+								: 'users/volunteers/me/volunteer-logs/';
 							return $http({
 								method: 'GET',
-								url: $$api.url('users/volunteers/me/volunteer-logs/' + logId),
+								url: $$api.url(urlPrefix + logId),
 								headers: { Authorization: $$api.token.get() },
 								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s)
 							});
@@ -157,9 +163,12 @@
 					*/
 
 						edit: function(logId, data) {
+							var urlPrefix = $rootScope.isAdmin
+								? 'community-businesses/me/volunteer-logs/'
+								: 'users/volunteers/me/volunteer-logs/';
 							return $http({
 								method: 'PUT',
-								url: $$api.url('users/volunteers/me/volunteer-logs/' + logId),
+								url: $$api.url(urlPrefix + logId),
 								data: data,
 								headers: { Authorization: $$api.token.get() },
 								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s)
