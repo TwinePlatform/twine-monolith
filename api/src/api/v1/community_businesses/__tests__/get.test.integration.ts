@@ -39,7 +39,7 @@ describe('GET /community-businesses', () => {
   });
 
   describe('GET /community-businesses/me', () => {
-    test('Returns CB that ORG_ADMIN is authenticated against', async () => {
+    test('Returns CB that CB_ADMIN is authenticated against', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me',

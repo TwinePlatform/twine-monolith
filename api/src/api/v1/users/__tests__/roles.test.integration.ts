@@ -38,7 +38,7 @@ describe('PUT /users/{userId}', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
-        result: expect.objectContaining({ organisationId: organisation.id, role: 'ORG_ADMIN' }),
+        result: expect.objectContaining({ organisationId: organisation.id, role: 'CB_ADMIN' }),
       });
     });
   });

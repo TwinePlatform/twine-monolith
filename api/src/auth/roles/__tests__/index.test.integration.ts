@@ -176,13 +176,13 @@ describe('Roles Module', () => {
 
     test('SUCCESS - returns true if user has one of many roles', async () => {
       const result = await Roles.userHas(trx,
-        { userId: 1, role: [RoleEnum.ORG_ADMIN, RoleEnum.VISITOR], organisationId: 1 });
+        { userId: 1, role: [RoleEnum.CB_ADMIN, RoleEnum.VISITOR], organisationId: 1 });
       expect(result).toEqual(true);
     });
 
     test('SUCCESS - returns false if user has none of many roles', async () => {
       const result = await Roles.userHas(trx,
-        { userId: 1, role: [RoleEnum.ORG_ADMIN, RoleEnum.TWINE_ADMIN], organisationId: 1 });
+        { userId: 1, role: [RoleEnum.CB_ADMIN, RoleEnum.TWINE_ADMIN], organisationId: 1 });
       expect(result).toEqual(false);
     });
   });

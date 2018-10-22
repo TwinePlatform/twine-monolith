@@ -29,12 +29,12 @@ describe('Pre-requisite :: is_child_organisation', () => {
     await knex.destroy();
   });
 
-  test('returns false when user is ORG_ADMIN for community business', async () => {
+  test('returns false when user is CB_ADMIN for community business', async () => {
     const res = await server.inject({
       method: 'GET',
       url: '/foo',
       credentials: {
-        role: RoleEnum.ORG_ADMIN,
+        role: RoleEnum.CB_ADMIN,
         user: await Users.getOne(knex, { where: { name: 'GlaDos' } }),
         organisation: await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture' } }),
         scope: [],
@@ -59,12 +59,12 @@ describe('Pre-requisite :: is_child_organisation', () => {
     expect(res.result).toEqual({ is: true });
   });
 
-  test('returns false when ORG_ADMIN tries to access different organisation', async () => {
+  test('returns false when CB_ADMIN tries to access different organisation', async () => {
     const res = await server.inject({
       method: 'GET',
       url: '/foo',
       credentials: {
-        role: RoleEnum.ORG_ADMIN,
+        role: RoleEnum.CB_ADMIN,
         user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
         organisation: await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture' } }),
         scope: [],

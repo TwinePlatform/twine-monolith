@@ -7,7 +7,7 @@
  * Conditions under which this is true for user X attemptying to access user Y's data:
  *
  * - User X is an VOLUNTEER_ADMIN for a community business for which user Y is a VOLUNTEER
- * - User X is a VOLUNTEER for a community business for which user Y is an ORG_ADMIN
+ * - User X is a VOLUNTEER for a community business for which user Y is an CB_ADMIN
  *   (note this use case is currently not needed)
  *
  * Assumptions:

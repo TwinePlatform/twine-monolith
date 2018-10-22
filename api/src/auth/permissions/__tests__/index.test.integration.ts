@@ -109,7 +109,7 @@ describe('Permisions Module', () => {
           resource: ResourceEnum.VISIT_ACTIVITIES,
           access: AccessEnum.READ,
           permissionLevel: PermissionLevelEnum.OWN,
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         });
       } catch (error) {
         expect(error.message).toBe('Permission entry is already associated to this role');
@@ -125,7 +125,7 @@ describe('Permisions Module', () => {
           resource: ResourceEnum.USER_DETAILS,
           access: AccessEnum.READ,
           permissionLevel: PermissionLevelEnum.CHILD,
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         });
         expect(query).toBe(1);
       } catch (error) {

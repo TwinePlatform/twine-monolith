@@ -33,7 +33,7 @@ export default async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
   const [isOrgAdmin, targetIsVisitor, targetIsVolunteer, targetIsVolunteerAdmin] =
     await Promise.all([
       Roles.userHas(knex, {
-        role: RoleEnum.ORG_ADMIN,
+        role: RoleEnum.CB_ADMIN,
         userId: user.id,
         organisationId: organisation.id,
       }),

@@ -46,7 +46,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
           user: cbAdmin,
           organisation,
           scope: ['visit_logs-child:read'],
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         },
       });
 
@@ -63,7 +63,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
           user: cbAdmin,
           organisation,
           scope: ['visit_logs-child:read'],
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         },
       });
 
@@ -82,7 +82,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
           user: cbAdmin,
           organisation,
           scope: ['visit_logs-child:read'],
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         },
       });
 

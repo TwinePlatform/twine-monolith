@@ -146,7 +146,7 @@
           "description": "Retrieve all sectors",
           "isImplemented": true,
           "auth": false,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": [],
           "query": {},
           "response": [{
@@ -180,7 +180,7 @@
           "description": "Retrieve all regions",
           "isImplemented": true,
           "auth": false,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": [],
           "query": {
             "fields": ["String"]
@@ -258,7 +258,7 @@
           "description": "Retrieve information about a single community business",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["organisations_details-own:read"],
           "query": {
             "fields": ["String"]
@@ -269,7 +269,7 @@
           "description": "Update information about a single community business",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["organisations_details-own:write"],
           "body": {
             "id": "Number",
@@ -297,7 +297,7 @@
           "description": "Delete a single community business that has no subscriptions",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["organisations_details-own:delete"],
           "body": {},
           "response": null
@@ -358,7 +358,7 @@
           "description": "Retrieve all training sessions for own community business",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["organisations_training-own:read"],
           "query": {
             "fields": ["String"]
@@ -372,7 +372,7 @@
           "description": "Create a training sessions for own community business",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["organisations_training-own:read"],
           "body": {
             "notes": "String"
@@ -412,7 +412,7 @@
           "description": "Update a training sessions for own business",
           "isImplemented": false,
           "auth":true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["organisations_training-own:read"],
           "body": {
             "notes": "String"
@@ -423,7 +423,7 @@
           "description": "Delete training sessions for own business",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["organisations_training-own:delete"],
           "body": {},
           "response": null
@@ -456,7 +456,7 @@
           "description": "Retreive feedback for one community business",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["organisations_feedback-own:read"],
           "query": {
             "since": "String",
@@ -474,7 +474,7 @@
           "description": "Send feedback for one community business",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["organisations_feedback-own:write"],
           "body": {
             "feedbackScore": "Number"
@@ -513,7 +513,7 @@
           "description": "Retreive aggregated feedback for own community business",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["organisations_feedback-own:read"],
           "query": {
             "filter": {
@@ -555,7 +555,7 @@
           "description": "Retreive aggregated users in an community business",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "CB_ADMIN"],
           "scope": ["user_details-child:read"],
           "query": {
             "fields": ["String"],
@@ -582,7 +582,7 @@
           "description": "Retreive all admin users in an community business",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "CB_ADMIN"],
           "scope": ["user_details-child:read"],
           "query": {
             "fields": ["String"],
@@ -607,7 +607,7 @@
           "description": "Retreive all visitor users in an community business",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "CB_ADMIN"],
           "scope": ["user_details-child:read"],
           "query": {
             "fields": ["String"],
@@ -632,7 +632,7 @@
           "description": "Send an email to one of your visitors",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["user_details-child:write"],
           "body": {
             "type": "String"
@@ -645,7 +645,7 @@
           "description": "Retrieve all visit activities for an community business",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["visit_activities-own:read"],
           "query": {
             "fields": ["String"],
@@ -663,7 +663,7 @@
           "description": "Add visit activities for an community business",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["visit_activities-own:write"],
           "body": {
             "name": "String",
@@ -684,7 +684,7 @@
           "description": "Retrieve a single visit activity for an community business",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["visit_activities-own:read"],
           "query": {},
           "response": "types.visitActivity"
@@ -693,7 +693,7 @@
           "description": "Update a visit activity for an community business",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["visit_activities-own:write"],
           "body": {
             "name": "String",
@@ -712,7 +712,7 @@
           "description": "Soft delete visit activity for an community business",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["visit_activities-own:delete"],
           "body": {},
           "response": null
@@ -754,7 +754,7 @@
             "description": "Retrieve all visit data for a community business",
             "isImplemented": true,
             "auth": true,
-            "intendedFor": ["ORG_ADMIN"],
+            "intendedFor": ["CB_ADMIN"],
             "scope": ["visit_logs-own:read"],
             "query": {
               "fields": ["String"],
@@ -775,7 +775,7 @@
           "description": "For users to adds a visit to their community business",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["visit_logs-own:write"],
           "body": {
             "userId": "Number",
@@ -789,7 +789,7 @@
           "description": "Retreive all visit data for own community business",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["visit_logs-own:read"],
           "query": {
             "fields": ["String"],
@@ -851,7 +851,7 @@
           "description": "Retreive all volunteer users in an community business",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "CB_ADMIN"],
           "scope": ["user_details-child:read"],
           "query": {
             "fields": ["String"],
@@ -876,7 +876,7 @@
           "description": "Retrieve volunteer logs for own community business",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["volunteer_logs-own:read"],
           "query": {
             "fields": ["String"],
@@ -982,7 +982,7 @@
           "description": "Retrieve all outreach campaings and meetings for own community business",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["organisations_outreach-own:read"],
           "query": {
             "fields": ["String"],
@@ -1020,7 +1020,7 @@
           "description": "Create an organisation and admin account",
           "isImplemented": false,
           "auth": false,
-          "intendedFor": ["FUNDING_BODY", "ORG_ADMIN"],
+          "intendedFor": ["FUNDING_BODY", "CB_ADMIN"],
           "scope": [],
           "body": {
             "name": "String",
@@ -1174,7 +1174,7 @@
           "description": "Create a visitor account",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["user_details-child:write"],
           "body": {
             "organisationId": "Number",
@@ -1195,7 +1195,7 @@
           "description": "Create an admin account",
           "isImplemented": false,
           "auth": false,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": [],
           "body": {
             "organisationId": "Number",
@@ -1218,7 +1218,7 @@
           "description": "Login as visitor",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": [],
           "body": {
             "qrCode": "String"
@@ -1232,7 +1232,7 @@
           "isImplemented": false,
           "auth": false,
           "intendedFor": [
-            "ORG_ADMIN",
+            "CB_ADMIN",
             "FUNDING_BODY",
             "TWINE_ADMIN",
             "VOLUNTEER",
@@ -1256,7 +1256,7 @@
           "isImplemented": true,
           "auth": false,
           "intendedFor": [
-            "ORG_ADMIN",
+            "CB_ADMIN",
             "FUNDING_BODY",
             "TWINE_ADMIN",
             "VOLUNTEER",
@@ -1272,7 +1272,7 @@
           "description": "Used to increase privilege level of current user session",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": [],
           "query": null,
           "body": {
@@ -1286,7 +1286,7 @@
           "description": "Used to decrease privilege level of current user session",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": [],
           "query": null,
           "body": null,
@@ -1298,7 +1298,7 @@
           "description": "Retrieve details of a specific user",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN"],
           "scope": ["user_details-child:read"],
           "query": {
             "fields": ["String"]
@@ -1309,7 +1309,7 @@
           "description": "Update details of a specific user",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "ORG_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "CB_ADMIN"],
           "scope": ["user_details-child:write"],
           "body": {
             "name": "String",
@@ -1330,7 +1330,7 @@
           "description": "Delete a specific user",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN"],
           "scope": ["user_details-child:write"],
           "body": {},
           "response": null
@@ -1341,7 +1341,7 @@
           "description": "Send password reset link for a single user",
           "isImplemented": true,
           "auth": false,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": [],
           "body": {
             "email": "String"
@@ -1354,7 +1354,7 @@
           "description": "Reset password for a single user",
           "isImplemented": true,
           "auth": false,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": [],
           "body": {
             "token": "String",
@@ -1370,7 +1370,7 @@
           "description": "Retrieve details of your own user account",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": ["user_details-own:read"],
           "query": {
             "fields": ["String"]
@@ -1381,7 +1381,7 @@
           "description": "Update details of a your own user account",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": ["user_details-own:write"],
           "body": {
             "name": "String",
@@ -1402,7 +1402,7 @@
           "description": "Delete your own admin user account",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN"],
           "scope": ["user_details-own:delete"],
           "body": {
             "userName": "String",
@@ -1416,7 +1416,7 @@
           "description": "Retrieve details of your own user accounts role",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": ["user_details-own:read"],
           "query": null,
           "response": {
@@ -1505,7 +1505,7 @@
           "description": "Retreive volunteer information for a user",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN"],
           "scope": ["volunteer_logs-own:read"],
           "query": {
             "fields": ["String"],
@@ -1525,7 +1525,7 @@
           "description": "Retrieve all outreach campaigns and meetings for self",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["CB_ADMIN", "VOLUNTEER_ADMIN"],
           "scope": ["organisations_outreach-own:read", "organisations_outreach-parent:read"],
           "query": {
             "fields": ["String"],
@@ -1561,7 +1561,7 @@
           "description": "Search for visitors of own organisation by QR code",
           "isImplemented": true,
           "auth": true,
-          "intendedFor": ["ORG_ADMIN"],
+          "intendedFor": ["CB_ADMIN"],
           "scope": ["user_details-child:read"],
           "body": {
             "qrCode": "String"
@@ -1578,7 +1578,7 @@
           "description": "Retrieve gender catagories",
           "isImplemented": true,
           "auth": false,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": [],
           "query": {
           },
@@ -1592,7 +1592,7 @@
           "description": "Retrieve ethnicity catagories",
           "isImplemented": true,
           "auth": false,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": [],
           "query": {
           },
@@ -1606,7 +1606,7 @@
           "description": "Retrieve disability catagories",
           "isImplemented": true,
           "auth": false,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": [],
           "query": {
           },
@@ -1620,7 +1620,7 @@
           "description": "Retrieve subscription type catagories",
           "isImplemented": true,
           "auth": false,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": [],
           "query": {
           },
@@ -1634,7 +1634,7 @@
           "description": "Retrieve campaign targets for an outreach type",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER_ADMIN"],
           "scope": [],
           "query": {
             "fields": ["String"]
@@ -1690,7 +1690,7 @@
           "description": "Retrieve all meetings for a specific outreach campaign",
           "isImplemented": false,
           "auth": true,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN"],
           "scope": ["organisations_outreach-child:read"],
           "query": {
             "fields": ["String"],
@@ -1711,7 +1711,7 @@
           "description": "Retrieve subscription type catagories",
           "isImplemented": true,
           "auth": false,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": [],
           "query": {
           },
@@ -1725,7 +1725,7 @@
           "description": "Retrieve visit activity catagories",
           "isImplemented": true,
           "auth": false,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": [],
           "query": {
           },
@@ -1739,7 +1739,7 @@
           "description": "Retrieve volunteer activity catagories",
           "isImplemented": true,
           "auth": false,
-          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "ORG_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
+          "intendedFor": ["TWINE_ADMIN", "FUNDING_BODY", "CB_ADMIN", "VOLUNTEER", "VOLUNTEER_ADMIN"],
           "scope": [],
           "query": {
           },

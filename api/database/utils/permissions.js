@@ -1,7 +1,7 @@
 const perms = require('../seeds/permissions.seed.json');
 
 const restrictedScopes = {
-  ORG_ADMIN: [
+  CB_ADMIN: [
     "organisations_details-own:read",
     "organisations_feedback-own:write",
     "visit_activities-own:read",

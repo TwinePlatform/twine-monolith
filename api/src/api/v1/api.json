@@ -48,19 +48,19 @@
     "GET": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "organisations_details-own:read"
+        "CB_ADMIN": "organisations_details-own:read"
       }
     },
     "PUT": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "organisations_details-own:write"
+        "CB_ADMIN": "organisations_details-own:write"
       }
     },
     "DELETE": {
       "isImplemented": false,
       "permissions": {
-        "ORG_ADMIN": "organisations_details-own:delete"
+        "CB_ADMIN": "organisations_details-own:delete"
       }
     }
   },
@@ -91,13 +91,13 @@
     "GET": {
       "isImplemented": false,
       "permissions": {
-        "ORG_ADMIN": "organisations_training-own:read"
+        "CB_ADMIN": "organisations_training-own:read"
       }
     },
     "POST": {
       "isImplemented": false,
       "permissions": {
-        "ORG_ADMIN": "organisations_training-own:write"
+        "CB_ADMIN": "organisations_training-own:write"
       }
     }
   },
@@ -121,13 +121,13 @@
     "PUT": {
       "isImplemented": false,
       "permissions": {
-        "ORG_ADMIN": "organisations_training-own:read"
+        "CB_ADMIN": "organisations_training-own:read"
       }
     },
     "DELETE": {
       "isImplemented": false,
       "permissions": {
-        "ORG_ADMIN": "organisations_training-own:delete"
+        "CB_ADMIN": "organisations_training-own:delete"
       }
     }
   },
@@ -151,13 +151,13 @@
     "GET": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN":"organisations_feedback-own:read"
+        "CB_ADMIN":"organisations_feedback-own:read"
       }
     },
     "POST": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN":"organisations_feedback-own:write"
+        "CB_ADMIN":"organisations_feedback-own:write"
       }
     }
   },
@@ -174,7 +174,7 @@
     "GET": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "organisations_feedback-own:read"
+        "CB_ADMIN": "organisations_feedback-own:read"
       }
     }
   },
@@ -192,7 +192,7 @@
       "isImplemented": false,
       "permissions": {
         "TWINE_ADMIN": "user_details-child:read",
-        "ORG_ADMIN": "user_details-child:read"
+        "CB_ADMIN": "user_details-child:read"
       }
     }
   },
@@ -201,7 +201,7 @@
       "isImplemented": false,
       "permissions": {
         "TWINE_ADMIN": "user_details-child:read",
-        "ORG_ADMIN": "user_details-child:read"
+        "CB_ADMIN": "user_details-child:read"
       }
     }
   },
@@ -210,7 +210,7 @@
       "isImplemented": true,
       "permissions": {
         "TWINE_ADMIN": "user_details-child:read",
-        "ORG_ADMIN": "user_details-child:read"
+        "CB_ADMIN": "user_details-child:read"
       }
     }
   },
@@ -218,7 +218,7 @@
     "POST": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "user_details-child:write"
+        "CB_ADMIN": "user_details-child:write"
       }
     }
   },
@@ -226,13 +226,13 @@
     "GET": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "visit_activities-own:read"
+        "CB_ADMIN": "visit_activities-own:read"
       }
     },
     "POST": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "visit_activities-own:write"
+        "CB_ADMIN": "visit_activities-own:write"
       }
     }
   },
@@ -240,19 +240,19 @@
     "GET": {
       "isImplemented": false,
       "permissions": {
-        "ORG_ADMIN": "visit_activities-own:read"
+        "CB_ADMIN": "visit_activities-own:read"
       }
     },
     "PUT": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "visit_activities-own:write"
+        "CB_ADMIN": "visit_activities-own:write"
       }
     },
     "DELETE": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "visit_activities-own:delete"
+        "CB_ADMIN": "visit_activities-own:delete"
       }
     }
   },
@@ -261,7 +261,7 @@
       "isImplemented": true,
       "permissions": {
         "TWINE_ADMIN": "visit_activities-child:read",
-        "ORG_ADMIN": "visit_activities-child:read"
+        "CB_ADMIN": "visit_activities-child:read"
       }
     }
   },
@@ -270,7 +270,7 @@
       "isImplemented": false,
       "permissions": {
         "TWINE_ADMIN": "visit_activities-child:read",
-        "ORG_ADMIN": "visit_activities-child:read"
+        "CB_ADMIN": "visit_activities-child:read"
       }
     }
   },
@@ -278,13 +278,13 @@
     "GET": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "visit_logs-child:read"
+        "CB_ADMIN": "visit_logs-child:read"
       }
     },
     "POST": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "visit_logs-child:write"
+        "CB_ADMIN": "visit_logs-child:write"
       }
     }
   },
@@ -292,7 +292,7 @@
     "GET": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "visit_logs-child:read"
+        "CB_ADMIN": "visit_logs-child:read"
       }
     }
   },
@@ -301,7 +301,7 @@
       "isImplemented": false,
       "permissions": {
         "TWINE_ADMIN": "visit_logs-child:read",
-        "ORG_ADMIN": "visit_logs-child:read"
+        "CB_ADMIN": "visit_logs-child:read"
       }
     }
   },
@@ -310,7 +310,7 @@
       "isImplemented": true,
       "permissions": {
         "TWINE_ADMIN": "user_details-child:read",
-        "ORG_ADMIN": "user_details-child:read"
+        "CB_ADMIN": "user_details-child:read"
       }
     }
   },
@@ -318,7 +318,7 @@
     "GET": {
       "isImplemented": false,
       "permissions": {
-        "ORG_ADMIN": "volunteer_logs-child:read",
+        "CB_ADMIN": "volunteer_logs-child:read",
         "VOLUNTEER_ADMIN": "volunteer_logs-sibling:read"
       }
     },
@@ -355,14 +355,14 @@
       "isImplemented": false,
       "permissions": {
         "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write"],
-        "ORG_ADMIN": "volunteer_logs-child:write"
+        "CB_ADMIN": "volunteer_logs-child:write"
       }
     },
     "DELETE": {
       "isImplemented": false,
       "permissions": {
         "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:delete"],
-        "ORG_ADMIN": "volunteer_logs-child:delete"
+        "CB_ADMIN": "volunteer_logs-child:delete"
       }
     }
   },
@@ -370,7 +370,7 @@
     "GET": {
       "isImplemented": false,
       "permissions": {
-        "ORG_ADMIN": "organisations_outreach-own:read"
+        "CB_ADMIN": "organisations_outreach-own:read"
       }
     }
   },
@@ -442,7 +442,7 @@
     "POST": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "user_details-child:write"
+        "CB_ADMIN": "user_details-child:write"
       }
     }
   },
@@ -487,21 +487,21 @@
       "isImplemented": false,
       "permissions": {
         "TWINE_ADMIN": "user_details-child:read",
-        "ORG_ADMIN": "user_details-child:read"
+        "CB_ADMIN": "user_details-child:read"
       }
     },
     "PUT": {
       "isImplemented": true,
       "permissions": {
         "TWINE_ADMIN": "user_details-child:write",
-        "ORG_ADMIN": "user_details-child:write"
+        "CB_ADMIN": "user_details-child:write"
       }
     },
     "DELETE": {
       "isImplemented": false,
       "permissions": {
         "TWINE_ADMIN": "user_details-child:delete",
-        "ORG_ADMIN": "user_details-child:delete"
+        "CB_ADMIN": "user_details-child:delete"
       }
     }
   },
@@ -523,7 +523,7 @@
       "permissions": {
         "TWINE_ADMIN": "user_details-own:read",
         "FUNDING_BODY": "user_details-own:read",
-        "ORG_ADMIN": "user_details-own:read",
+        "CB_ADMIN": "user_details-own:read",
         "VOLUNTEER": "user_details-own:read",
         "VOLUNTEER_ADMIN": "user_details-own:read"
       }
@@ -533,7 +533,7 @@
       "permissions": {
         "TWINE_ADMIN": "user_details-own:write",
         "FUNDING_BODY": "user_details-own:write",
-        "ORG_ADMIN": "user_details-own:write",
+        "CB_ADMIN": "user_details-own:write",
         "VOLUNTEER": "user_details-own:write",
         "VOLUNTEER_ADMIN": "user_details-own:write"
       }
@@ -543,7 +543,7 @@
       "permissions": {
         "TWINE_ADMIN": "user_details-own:delete",
         "FUNDING_BODY": "user_details-own:delete",
-        "ORG_ADMIN": "user_details-own:delete"
+        "CB_ADMIN": "user_details-own:delete"
       }
     }
   },
@@ -553,7 +553,7 @@
       "permissions": {
         "TWINE_ADMIN": "user_details-own:read",
         "FUNDING_BODY": "user_details-own:read",
-        "ORG_ADMIN": "user_details-own:read",
+        "CB_ADMIN": "user_details-own:read",
         "VOLUNTEER": "user_details-own:read",
         "VOLUNTEER_ADMIN": "user_details-own:read"
       }
@@ -605,7 +605,7 @@
       "isImplemented": false,
       "permissions": {
         "TWINE_ADMIN": "volunteer_logs-child:read",
-        "ORG_ADMIN": "volunteer_logs-child:read",
+        "CB_ADMIN": "volunteer_logs-child:read",
         "VOLUNTEER_ADMIN": "volunteer_logs-sibling:read"
       }
     }
@@ -614,7 +614,7 @@
     "GET": {
       "isImplemented": false,
       "permissions": {
-        "ORG_ADMIN": "organisations_outreach-own:read",
+        "CB_ADMIN": "organisations_outreach-own:read",
         "VOLUNTEER_ADMIN": "organisations_outreach-parent:read"
       }
     }
@@ -632,7 +632,7 @@
     "POST": {
       "isImplemented": true,
       "permissions": {
-        "ORG_ADMIN": "user_details-child:read"
+        "CB_ADMIN": "user_details-child:read"
       }
     }
   },
@@ -690,7 +690,7 @@
       "permissions": {
         "TWINE_ADMIN": "organisations_outreach-child:read",
         "FUNDING_BODY": "organisations_outreach-child:read",
-        "ORG_ADMIN": "organisations_outreach-child:read"
+        "CB_ADMIN": "organisations_outreach-child:read"
       }
     }
   },

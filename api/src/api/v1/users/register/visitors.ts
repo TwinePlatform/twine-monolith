@@ -128,7 +128,7 @@ export default [
         {
           from: 'visitorapp@powertochange.org.uk', // this shouldn't be hardcoded
           to: admin.email,
-          templateId: EmailTemplate.ORG_ADMIN_NEW_VISITOR,
+          templateId: EmailTemplate.CB_ADMIN_NEW_VISITOR,
           templateModel: { name: visitor.name, email: visitor.email },
           attachments: [{
             name: `${visitor.name}-QrCode.pdf`,

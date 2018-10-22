@@ -86,7 +86,7 @@
       "user_details-own:write",
       "visit_activities-child:read"
     ],
-    "ORG_ADMIN": [
+    "CB_ADMIN": [
       "organisations_details-own:delete",
       "organisations_details-own:read",
       "organisations_details-own:write",

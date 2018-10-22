@@ -54,14 +54,14 @@ describe('Pre-requisite :: is_sibling_user', () => {
     expect(res.result).toEqual({ isSiblingUser: true });
   });
 
-  test('returns true when ORG_ADMIN accesses user at the same org', async () => {
+  test('returns true when CB_ADMIN accesses user at the same org', async () => {
     const res = await server.inject({
       method: 'GET',
       url: '/aliens/6',
       credentials: {
         user: orgAdmin,
         organisation: blackMesa,
-        role: RoleEnum.ORG_ADMIN,
+        role: RoleEnum.CB_ADMIN,
         scope: [],
       },
     });
@@ -77,7 +77,7 @@ describe('Pre-requisite :: is_sibling_user', () => {
       credentials: {
         user: volunteerAdmin,
         organisation: blackMesa,
-        role: RoleEnum.ORG_ADMIN,
+        role: RoleEnum.CB_ADMIN,
         scope: [],
       },
     });
@@ -86,14 +86,14 @@ describe('Pre-requisite :: is_sibling_user', () => {
     expect(res.result).toEqual({ isSiblingUser: true });
   });
 
-  test('returns error when ORG_ADMIN at another org accesses user', async () => {
+  test('returns error when CB_ADMIN at another org accesses user', async () => {
     const res = await server.inject({
       method: 'GET',
       url: '/aliens/6',
       credentials: {
         user: adminFromWrongOrg,
         organisation: apertureScience,
-        role: RoleEnum.ORG_ADMIN,
+        role: RoleEnum.CB_ADMIN,
         scope: [],
       },
     });

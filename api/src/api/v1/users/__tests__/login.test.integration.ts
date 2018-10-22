@@ -78,7 +78,7 @@ describe('POST /users/login', () => {
       url: '/v1/users/login',
       payload: {
         type: 'cookie',
-        restrict: 'ORG_ADMIN',
+        restrict: 'CB_ADMIN',
         email: '1@aperturescience.com',
         password: 'CakeisaLi3!',
       },
@@ -116,7 +116,7 @@ describe('POST /users/login', () => {
       url: '/v1/users/login',
       payload: {
         type: 'body',
-        restrict: ['TWINE_ADMIN', 'ORG_ADMIN'],
+        restrict: ['TWINE_ADMIN', 'CB_ADMIN'],
         email: '1@aperturescience.com',
         password: 'CakeisaLi3!',
       },

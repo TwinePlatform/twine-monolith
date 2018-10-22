@@ -45,7 +45,7 @@ describe('/community-business/{id}/feedback', () => {
   });
 
   describe('GET /community-businesses/{id}/feebdack', () => {
-    test('Get empty feedback for own org as ORG_ADMIN when no data', async () => {
+    test('Get empty feedback for own org as CB_ADMIN when no data', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback',
@@ -60,7 +60,7 @@ describe('/community-business/{id}/feedback', () => {
       expect((<any> res.result).result).toHaveLength(0);
     });
 
-    test('Get all feedback for own org as ORG_ADMIN', async () => {
+    test('Get all feedback for own org as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback',
@@ -79,7 +79,7 @@ describe('/community-business/{id}/feedback', () => {
       });
     });
 
-    test('Get all feedback between dates for own org as ORG_ADMIN', async () => {
+    test('Get all feedback between dates for own org as CB_ADMIN', async () => {
       const since = '2018-07-01T10:43:22.231';
       const until = '2018-07-31T10:43:22.231';
 
@@ -198,7 +198,7 @@ describe('/community-business/{id}/feedback', () => {
           user: users.glados,
           organisation: orgs.aperture,
           scope: ['organisations_feedback-child:read'],
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         },
       });
 
@@ -286,7 +286,7 @@ describe('/community-business/{id}/feedback', () => {
   });
 
   describe('POST /community-businesses/{id}/feedback', () => {
-    test('Leave feedback on own org as ORG_ADMIN', async () => {
+    test('Leave feedback on own org as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/feedback',

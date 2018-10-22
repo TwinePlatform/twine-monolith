@@ -64,7 +64,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can get own organisations logs as ORG_ADMIN', async () => {
+    test('can get own organisations logs as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
@@ -72,7 +72,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           scope: ['volunteer_logs-child:read'],
           user: cbAdmin,
           organisation,
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         },
       });
 
@@ -162,7 +162,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can get other volunteer\'s log as ORG_ADMIN', async () => {
+    test('can get other volunteer\'s log as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/2',
@@ -170,7 +170,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           scope: ['volunteer_logs-child:read'],
           user: cbAdmin,
           organisation,
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         },
       });
 
@@ -280,13 +280,13 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can update logs as ORG_ADMIN', async () => {
+    test('can update logs as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/2',
         credentials: {
           scope: ['volunteer_logs-child:write'],
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
           user: cbAdmin,
           organisation,
         },
@@ -314,7 +314,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         url: '/v1/community-businesses/me/volunteer-logs/8',
         credentials: {
           scope: ['volunteer_logs-child:write'],
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
           user: cbAdmin,
           organisation,
         },
@@ -359,7 +359,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(resGet.statusCode).toBe(404);
     });
 
-    test('can mark other users log as deleted as ORG_ADMIN', async () => {
+    test('can mark other users log as deleted as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/3',
@@ -367,7 +367,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           scope: ['volunteer_logs-child:delete'],
           user: cbAdmin,
           organisation,
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         },
       });
 
@@ -381,7 +381,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           scope: ['volunteer_logs-child:read'],
           user: cbAdmin,
           organisation,
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         },
       });
 
@@ -676,7 +676,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can get own summaries as ORG_ADMIN', async () => {
+    test('can get own summaries as CB_ADMIN', async () => {
       const cbAdmin = await Users.getOne(trx, { where: { name: 'Gordon' } });
 
       const res = await server.inject({

@@ -47,7 +47,7 @@ describe('API v1 - register new users', () => {
         credentials: {
           user,
           scope: ['user_details-child:write'],
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         },
       });
 
@@ -70,7 +70,7 @@ describe('API v1 - register new users', () => {
         credentials: {
           user,
           scope: ['user_details-child:write'],
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         },
       });
 
@@ -78,9 +78,9 @@ describe('API v1 - register new users', () => {
       expect((<any> res.result).error.message).toBe('Unrecognised organisation');
     });
 
-    test('no registered ORG_ADMIN', async () => {
+    test('no registered CB_ADMIN', async () => {
     /*
-     * Organisation 2 (Black Mesa Research) has an ORG_ADMIN (Gordon) who is
+     * Organisation 2 (Black Mesa Research) has an CB_ADMIN (Gordon) who is
      * marked as deleted, and therefore will not be fetched from the DB
      */
       const user = await factory.build('user');
@@ -97,7 +97,7 @@ describe('API v1 - register new users', () => {
         credentials: {
           user,
           scope: ['user_details-child:write'],
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         },
       });
 
@@ -120,7 +120,7 @@ describe('API v1 - register new users', () => {
         credentials: {
           user,
           scope: ['user_details-child:write'],
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         },
       });
 

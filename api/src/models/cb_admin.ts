@@ -40,7 +40,7 @@ export const CbAdmins: CbAdminCollection = {
         .where({
           ['user_account_access_role.access_role_id']: client('access_role')
             .select('access_role_id')
-            .where({ access_role_name: RoleEnum.ORG_ADMIN }),
+            .where({ access_role_name: RoleEnum.CB_ADMIN }),
         }),
       query
     );
@@ -83,7 +83,7 @@ export const CbAdmins: CbAdminCollection = {
           'user_account.deleted_at': null,
           ['user_account_access_role.access_role_id']: client('access_role')
             .select('access_role_id')
-            .where({ access_role_name: RoleEnum.ORG_ADMIN }),
+            .where({ access_role_name: RoleEnum.CB_ADMIN }),
           ['user_account_access_role.organisation_id']: organisation.id,
         });
   },

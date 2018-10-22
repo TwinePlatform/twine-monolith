@@ -44,14 +44,14 @@ describe('Pre-requisite :: is_child_user', () => {
     expect(res.result).toEqual({ is: true });
   });
 
-  test('returns true when ORG_ADMIN accesses own VISITOR', async () => {
+  test('returns true when CB_ADMIN accesses own VISITOR', async () => {
     const res = await server.inject({
       method: 'GET',
       url: '/foo/1',
       credentials: {
         user: await Users.getOne(knex, { where: { name: 'GlaDos' } }),
         organisation: await Organisations.getOne(knex, { where: { name: 'Aperture Science' } }),
-        role: RoleEnum.ORG_ADMIN,
+        role: RoleEnum.CB_ADMIN,
         scope: [],
       },
     });
@@ -60,14 +60,14 @@ describe('Pre-requisite :: is_child_user', () => {
     expect(res.result).toEqual({ is: true });
   });
 
-  test('returns true when ORG_ADMIN accesses own VOLUNTEER', async () => {
+  test('returns true when CB_ADMIN accesses own VOLUNTEER', async () => {
     const res = await server.inject({
       method: 'GET',
       url: '/foo/6',
       credentials: {
         user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
         organisation: await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } }),
-        role: RoleEnum.ORG_ADMIN,
+        role: RoleEnum.CB_ADMIN,
         scope: [],
       },
     });
@@ -83,7 +83,7 @@ describe('Pre-requisite :: is_child_user', () => {
       credentials: {
         user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
         organisation: await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } }),
-        role: RoleEnum.ORG_ADMIN,
+        role: RoleEnum.CB_ADMIN,
         scope: [],
       },
     });
