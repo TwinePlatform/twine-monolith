@@ -201,7 +201,7 @@ const routes: Hapi.ServerRoute[] = [
       },
       validate: {
         payload: {
-          userId: id,
+          userId: id.default('me'),
           activity: Joi.string().required(),
           duration: Joi.object({
             hours: Joi.number().integer().min(0),
@@ -224,7 +224,8 @@ const routes: Hapi.ServerRoute[] = [
         payload,
       } = request;
 
-      if (payload.userId) {
+      if (payload.userId !== 'me') {
+        // if userId is specified, check request user has correct permissions
         const isTargetVolunteer = await Roles.userHas(knex, {
           userId: payload.userId,
           organisationId: communityBusiness.id,
@@ -247,8 +248,8 @@ const routes: Hapi.ServerRoute[] = [
 
       try {
         const log = await VolunteerLogs.add(knex, {
-          userId: user.id,
-          ...payload, // if payload contains userId, will overwrite existing
+          ...payload,
+          userId: payload.userId === 'me' ? user.id : payload.userId,
           organisationId: communityBusiness.id,
         });
 
