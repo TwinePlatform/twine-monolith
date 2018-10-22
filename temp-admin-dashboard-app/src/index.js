@@ -1,16 +1,11 @@
-const { getConfig } = require('../config');
-const init = require('./server');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
 
-(async () => {
-  try {
-    const config = getConfig(process.env.NODE_ENV);
-    const server = await init(config);
-    await server.start();
+ReactDOM.render(<App />, document.getElementById('root'));
 
-    console.log(`Server running at ${server.info.uri}`);
-  } catch (error) {
-    console.log('Oops!');
-    console.log(error);
-
-  }
-})();
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: http://bit.ly/CRA-PWA
+serviceWorker.unregister();
