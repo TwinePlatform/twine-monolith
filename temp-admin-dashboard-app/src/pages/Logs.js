@@ -1,10 +1,10 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
 export default () => {
   return (
-    <TextField>
-      Hi
-    </TextField>
+    <Typography variant="h5" component="h3">
+      Logs
+    </Typography>
   )
 };

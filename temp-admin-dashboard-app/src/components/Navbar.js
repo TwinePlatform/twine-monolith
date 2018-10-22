@@ -50,7 +50,7 @@ const Navbar = (props) => {
         <Divider />
         <List>
           {[['Home', <Home />], ['Logs', <TimeLapse />], ['Organisations', <Business />], ['Admin Codes', <RecentActors />]].map(([text, icon]) => (
-            <Link to={text.toLowerCase().replace(' ', '-')}>
+            <Link to={text.toLowerCase().replace(' ', '-').replace('home', '')}>
               <ListItem button key={text}>
                 <ListItemIcon> {icon} </ListItemIcon>
                 <ListItemText primary={text} />
