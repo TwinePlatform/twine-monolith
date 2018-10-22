@@ -1,0 +1,32 @@
+{
+  "name": "twine-temp-dash",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "boom": "^7.2.0",
+    "dotenv": "^6.1.0",
+    "eslint": "^5.7.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-twine": "github:TwinePlatform/tslint-config-twine#1.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
+    "handlebars": "^4.0.12",
+    "hapi": "^17.6.0",
+    "hapi-auth-cookie": "^9.0.0",
+    "inert": "^5.1.0",
+    "joi": "^14.0.0",
+    "nodemon": "^1.18.4",
+    "vision": "^5.4.0"
+  }
+}
