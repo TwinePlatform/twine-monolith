@@ -318,14 +318,16 @@
     "GET": {
       "isImplemented": false,
       "permissions": {
-        "ORG_ADMIN": "volunteer_logs-child:read"
+        "ORG_ADMIN": "volunteer_logs-child:read",
+        "VOLUNTEER_ADMIN": "volunteer_logs-sibling:read"
       }
     },
     "POST": {
       "isImplemented": true,
       "permissions": {
         "VOLUNTEER": "volunteer_logs-own:write",
-        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"]
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"],
+        "ORG_ADMIN": "volunteer_logs-child:write"
       }
     }
   },
@@ -334,7 +336,8 @@
       "isImplemented": true,
       "permissions": {
         "VOLUNTEER": "volunteer_logs-own:write",
-        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"]
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"],
+        "ORG_ADMIN": "volunteer_logs-child:write"
       }
     }
   },
@@ -342,7 +345,8 @@
     "GET": {
       "isImplemented": false,
       "permissions": {
-        "TWINE_ADMIN": "volunteer_logs-child:read"
+        "TWINE_ADMIN": "volunteer_logs-child:read",
+        "FUNDING_BODY_ADMIN": "volunteer_logs-child:read"
       }
     }
   },
@@ -351,14 +355,16 @@
       "isImplemented": false,
       "permissions": {
         "VOLUNTEER": "volunteer_logs-own:write",
-        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"]
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"],
+        "ORG_ADMIN": "volunteer_logs-child:write"
       }
     },
     "DELETE": {
       "isImplemented": false,
       "permissions": {
         "VOLUNTEER": "volunteer_logs-own:delete",
-        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:delete", "volunteer_logs-own:delete"]
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:delete", "volunteer_logs-own:delete"],
+        "ORG_ADMIN": "volunteer_logs-child:delete"
       }
     }
   },
@@ -559,8 +565,8 @@
     "GET": {
       "isImplemented": true,
       "permissions": {
-        "VOLUNTEER": "volunteer_logs-parent:read",
-        "VOLUNTEER_ADMIN": "volunteer_logs-parent:read"
+        "VOLUNTEER": "volunteer_logs-own:read",
+        "VOLUNTEER_ADMIN": "volunteer_logs-own:read"
       }
     }
   },
@@ -601,7 +607,8 @@
       "isImplemented": false,
       "permissions": {
         "TWINE_ADMIN": "volunteer_logs-child:read",
-        "ORG_ADMIN": "volunteer_logs-child:read"
+        "ORG_ADMIN": "volunteer_logs-child:read",
+        "VOLUNTEER_ADMIN": "volunteer_logs-sibling:read"
       }
     }
   },
