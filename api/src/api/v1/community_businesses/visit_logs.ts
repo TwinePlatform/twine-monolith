@@ -42,7 +42,7 @@ const routes: Hapi.ServerRoute[] = [
       description: 'For users to adds a visit to their community business',
       auth: {
         strategy: 'standard',
-        scope: ['visit_logs-own:write'],
+        scope: ['visit_logs-child:write'],
       },
       validate: {
         query,
@@ -87,7 +87,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          scope: ['visit_logs-own:read'],
+          scope: ['visit_logs-child:read'],
         },
       },
       validate: {

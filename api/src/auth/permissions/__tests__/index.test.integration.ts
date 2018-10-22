@@ -238,12 +238,12 @@ describe('Permisions Module', () => {
         {
           access: AccessEnum.WRITE,
           resource: ResourceEnum.VOLUNTEER_LOGS,
-          permissionLevel: PermissionLevelEnum.PARENT,
+          permissionLevel: PermissionLevelEnum.OWN,
         },
         {
           access: AccessEnum.DELETE,
           resource: ResourceEnum.VOLUNTEER_LOGS,
-          permissionLevel: PermissionLevelEnum.PARENT,
+          permissionLevel: PermissionLevelEnum.OWN,
         }].map(expect.objectContaining)));
     });
 

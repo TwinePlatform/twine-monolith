@@ -5,7 +5,7 @@ const restrictedScopes = {
     "organisations_details-own:read",
     "organisations_feedback-own:write",
     "visit_activities-own:read",
-    "visit_logs-own:write",
+    "visit_logs-child:write",
   ]
 }
 

@@ -1,9 +1,25 @@
 # Permissions
+## Resources and their ownership
+**organisations - 🏢 owned by ORG (represented by CB_ADMIN)**
+organisations_details
+organisations_subscriptions
+organisations_feedback
+organisations_training
+organisations_invitations
+organisations_outreach
+visit_activities
+volunteer_activities
+
+**users - 🙍🏾‍♂️ owned by USER**
+user_details
+volunteer_logs
+visit_logs
 
 ## permission flags
 *-children - data of all child catagories  
 *-parent - data of all parent catagories  
 *-own - data directly owned by user  
+*-sibling - data owned by a sibling (same level) user
 
 ## resources
 

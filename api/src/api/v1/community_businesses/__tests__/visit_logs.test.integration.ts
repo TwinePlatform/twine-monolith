@@ -50,7 +50,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
         credentials: {
           user: cbAdmin,
           organisation,
-          scope: ['visit_logs-own:write'],
+          scope: ['visit_logs-child:write'],
           role: RoleEnum.ORG_ADMIN,
         },
       });
@@ -73,7 +73,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
         credentials: {
           user: cbAdmin,
           organisation,
-          scope: ['visit_logs-own:write'],
+          scope: ['visit_logs-child:write'],
           role: RoleEnum.ORG_ADMIN,
         },
       });
@@ -90,7 +90,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
         credentials: {
           user: cbAdmin,
           organisation,
-          scope: ['visit_logs-own:read'],
+          scope: ['visit_logs-child:read'],
           role: RoleEnum.ORG_ADMIN,
         },
       });
@@ -117,7 +117,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
         credentials: {
           user: cbAdmin,
           organisation,
-          scope: ['visit_logs-own:read'],
+          scope: ['visit_logs-child:read'],
           role: RoleEnum.ORG_ADMIN,
         },
       });

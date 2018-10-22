@@ -16,7 +16,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          scope: ['visit_logs-own:read'],
+          scope: ['visit_logs-child:read'],
         },
       },
       validate: {
