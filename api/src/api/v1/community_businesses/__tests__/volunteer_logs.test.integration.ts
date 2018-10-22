@@ -5,7 +5,7 @@ import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
 import { User, Users, Organisation, Organisations, VolunteerLog } from '../../../../models';
-import { RoleEnum } from '../../../../auth';
+import { RoleEnum } from '../../../../auth/types';
 
 
 describe('API /community-businesses/me/volunteer-logs', () => {
