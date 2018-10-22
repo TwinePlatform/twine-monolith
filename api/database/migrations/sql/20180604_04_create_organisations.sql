@@ -56,8 +56,8 @@ CREATE TABLE community_business_sector (
 
 CREATE TABLE community_business (
   organisation_id              INT NOT NULL UNIQUE,
-  community_business_region_id INT,
-  community_business_sector_id INT,
+  community_business_region_id INT NOT NULL,
+  community_business_sector_id INT NOT NULL,
   address_1                    VARCHAR(255),
   address_2                    VARCHAR(255),
   town_city                    VARCHAR(255),
