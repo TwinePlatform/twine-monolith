@@ -1,10 +1,34 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
-export default () => {
+const styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+    
+  },
+});
+
+const Organisations = (props) =>{
+  const { classes } = props;
+
   return (
-    <TextField>
-      Hi
-    </TextField>
-  )
+    <div>
+        <Typography variant="h5" component="h3">
+          Organisations
+        </Typography>
+        <Typography component="p">
+          Paper can be used to build surface or other elements for your application.
+        </Typography>
+    </div>
+  );
+}
+
+Organisations.propTypes = {
+  classes: PropTypes.object.isRequired,
 };
+
+export default withStyles(styles)(Organisations);
