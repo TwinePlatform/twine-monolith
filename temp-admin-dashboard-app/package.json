@@ -15,7 +15,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "copy": "cp ./public/_redirects ./build/_redirects",
+    "deploy": "npm run build && npm run copy"
   },
   "eslintConfig": {
     "extends": "react-app"
