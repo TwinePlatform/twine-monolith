@@ -36,6 +36,8 @@
     "visit_logs-child:read",
     "visit_logs-child:write",
     "volunteer_logs-child:read",
+    "volunteer_logs-child:write",
+    "volunteer_logs-child:delete",
     "volunteer_logs-own:read",
     "volunteer_logs-own:write",
     "volunteer_logs-own:delete",
@@ -104,7 +106,9 @@
       "visit_activities-own:write",
       "visit_logs-child:read",
       "visit_logs-child:write",
-      "volunteer_logs-child:read"
+      "volunteer_logs-child:read",
+      "volunteer_logs-child:write",
+      "volunteer_logs-child:delete"
     ],
     "VOLUNTEER": [
       "organisations_details-parent:read",
