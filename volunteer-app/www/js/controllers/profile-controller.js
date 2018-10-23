@@ -108,68 +108,46 @@
 
 					// if no gender selected, setup an object with empty values
 					if ($scope.formData.gender == null) {
-						$scope.formData.gender = {
-							id: '',
-							name: ''
-						}
+						$scope.formData.gender = undefined;
 					}
 
 					// >>> submit form data
-					$$api.user.save($localStorage.user.id, $.param($scope.formData)).success(function(response) {
+					$$api.user.save($scope.formData).success(function(response) {
 
-						// registration successful
-						if (response.success) {
-
-							// hide loader
-							$ionicLoading.hide();
-
-							// hide click preventer
-							$$clickPreventer.hide();
-
-							// store user information
-							$localStorage.user = response.data;
-
-              $rootScope.currentUser = response.data;
-
-							// set organisation subheader title
-							$rootScope.organisationName = $localStorage.user.organisation.name;
-
-							// shout success popup
-							$$shout('Your profile was saved!');
-
-						}
-
-						// registration unsuccessful
-						else {
-
-							// hide loader
-							$ionicLoading.hide();
-
-							// hide click preventer
-							$$clickPreventer.hide();
-
-							// show unsuccess popup
-							$$shout('Could not save your profile!');
-
-						}
-
-					}).error(function(data, error) {
-
-						// shout error
-						$$shout('Your account has not been approved'); // this is not specific enough
+						// hide loader
+						$ionicLoading.hide();
 
 						// hide click preventer
 						$$clickPreventer.hide();
 
-						// process connection error
-						$$utilities.processConnectionError(data, error);
+						// store user information
+						$localStorage.user = Object.assign({}, $localStorage.user, response.data);
+
+						$rootScope.currentUser = $localStorage.user;
+
+						// set organisation subheader title
+						$rootScope.organisationName = $localStorage.user.organisation.name;
+
+						// shout success popup
+						$$shout('Your profile was saved!');
+
+					}).error(function(data, error) {
+
+						// hide loader
+						$ionicLoading.hide();
+
+						// hide click preventer
+						$$clickPreventer.hide();
+
+						// show unsuccess popup
+						$$shout('Could not save your profile!');
 
 					});
 				}
 				// form is invalid
 				else {
 
-					console.log('form invalid');
+					$$shout('Application error.');
 
 					// hide loader
 					$ionicLoading.hide();

@@ -312,6 +312,15 @@
 								headers: { Authorization: $$api.token.get() },
 							}),
 
+						save: ({ name, email, phoneNumber, password, gender: { name: gender }, yearOfBirth: birthYear }) =>
+							$http({
+								method: 'PUT',
+								url: $$api.url('users/me'),
+								data: { name, email, phoneNumber, password, birthYear, gender },
+								headers: { Authorization: $$api.token.get() },
+								transformResponse
+							}),
+
 					/*
 						>>> login
 					*/
