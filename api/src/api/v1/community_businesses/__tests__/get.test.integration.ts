@@ -63,7 +63,7 @@ describe('GET /community-businesses', () => {
     test('Fetching collection returns only list that user is authorised for', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/api/v1/community-businesses',
+        url: '/v1/community-businesses',
         credentials: {
           scope: ['organisations_details-child:read'],
           user: await Users.getOne(knex, { where: { name: 'Gordon' } }),

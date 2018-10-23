@@ -2,8 +2,9 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
-import { GetCommunityBusinessRequest } from '../types';
+import { GetCommunityBusinessRequest, GetCommunityBusinessesRequest } from '../types';
 import { query, response } from './schema';
+import { RoleEnum } from '../../../auth/types';
 
 
 export default [
@@ -24,8 +25,18 @@ export default [
       },
       response: { schema: response },
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      return Boom.notFound('Not implemented');
+    handler: async (request: GetCommunityBusinessesRequest, h: Hapi.ResponseToolkit) => {
+      const {
+        auth: { credentials: { role } } ,
+        server: { app: { knex } },
+        query,
+      } = request;
+
+      if (role !== RoleEnum.TWINE_ADMIN) {
+        return Boom.unauthorized('Not implemented');
+      }
+
+      return CommunityBusinesses.get(knex, query);
     },
   },
 

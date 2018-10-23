@@ -52,6 +52,12 @@ export interface GetCommunityBusinessRequest extends Hapi.Request {
   };
 }
 
+export interface GetCommunityBusinessesRequest extends Hapi.Request {
+  query: ApiRequestQuery & {
+    [k: string]: any
+  };
+}
+
 export interface PutCommunityBusinesssRequest extends Hapi.Request {
   payload:
     Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>;
