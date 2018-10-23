@@ -21,6 +21,45 @@ describe('GET /community-businesses', () => {
   });
 
   describe('GET /community-businesses', () => {
+    test('success:: user TWINE_ADMIN return list of all cbs', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses',
+        credentials: {
+          scope: ['organisations_details-child:read'],
+          user: await Users.getOne(knex, { where: { name: 'Big Boss' } }),
+          organisation: await Organisations.getOne(knex, {
+            where: { name: 'Black Mesa Research' },
+          }),
+          role: RoleEnum.TWINE_ADMIN,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toHaveLength(2);
+    });
+
+    test('success: admin code fields query returns subset of cbs', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses?fields[]=adminCode&fields[]=name',
+        credentials: {
+          scope: ['organisations_details-child:read'],
+          user: await Users.getOne(knex, { where: { name: 'Big Boss' } }),
+          organisation: await Organisations.getOne(knex, {
+            where: { name: 'Black Mesa Research' },
+          }),
+          role: RoleEnum.TWINE_ADMIN,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toEqual(expect.arrayContaining([
+        { adminCode: '10101', name: 'Aperture Science' },
+        { adminCode: '70007', name: 'Black Mesa Research' }])
+        );
+    });
+
     test('Fetching collection returns only list that user is authorised for', async () => {
       const res = await server.inject({
         method: 'GET',

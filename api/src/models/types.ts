@@ -171,6 +171,7 @@ export type CommunityBusiness = Organisation & Readonly<{
   postCode: string
   coordinates: Coordinates
   turnoverBand: string
+  adminCode?: string
 }>;
 
 export type FundingBody = Organisation;

@@ -66,6 +66,13 @@ describe('Community Business Model', () => {
       expect(orgs).toEqual([]);
     });
 
+    test('get :: return selected fields with volunteer admin code', async () => {
+      const orgs = await CommunityBusinesses.get(knex, { fields: ['adminCode', 'name'] });
+      expect(orgs).toEqual(expect.arrayContaining([
+        { adminCode: '10101', name: 'Aperture Science' },
+        { adminCode: '70007', name: 'Black Mesa Research' }]));
+    });
+
     test('getOne :: returns first organisation only', async () => {
       const org = await CommunityBusinesses.getOne(knex);
 

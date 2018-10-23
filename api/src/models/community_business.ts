@@ -3,7 +3,18 @@
  */
 import * as Knex from 'knex';
 import * as moment from 'moment';
-import { compose, omit, evolve, filter, pick, invertObj, pipe, assocPath, difference } from 'ramda';
+import {
+  compose,
+  omit,
+  evolve,
+  filter,
+  pick,
+  invertObj,
+  pipe,
+  assocPath,
+  difference,
+} from 'ramda';
+import { randomBytes } from 'crypto';
 import { Dictionary, Map } from '../types/internal';
 import {
   CommunityBusiness,
@@ -39,9 +50,12 @@ const ColumnToModel: Map<keyof CommunityBusinessRow, keyof CommunityBusiness> = 
   'community_business.modified_at': 'modifiedAt',
   'community_business.deleted_at': 'deletedAt',
 };
+
 const ModelToColumn = invertObj(ColumnToModel);
 
-
+const optionalFields: Dictionary<string> = {
+  adminCode: 'volunteer_admin_code.code',
+};
 /*
  * Helpers
  */
@@ -131,7 +145,9 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
     return applyQueryModifiers(
       client
-        .select(query.fields ? pick(query.fields, ModelToColumn) : ModelToColumn)
+        .select(query.fields
+          ? pick(query.fields, { ...ModelToColumn, ...optionalFields })
+          : ModelToColumn)
         .from('community_business')
         .innerJoin(
           'community_business_region',
@@ -144,7 +160,11 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         .innerJoin(
           'organisation',
           'organisation.organisation_id',
-          'community_business.organisation_id'),
+          'community_business.organisation_id')
+        .leftOuterJoin(
+          'volunteer_admin_code',
+          'organisation.organisation_id',
+          'volunteer_admin_code.organisation_id'),
       query
     );
   },
@@ -167,22 +187,30 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       pickCbFields
     );
 
+    const code = randomBytes(4).toString('hex');
+
     const orgChangeset = preProcessOrgChangeset(cb);
     const cbChangeset = preProcessCbChangeset(cb);
 
-    const [id] = await client
-      .with('new_organisation', (qb) =>
-        qb
-          .table('organisation')
-          .insert(orgChangeset)
-          .returning('*')
-      )
-      .insert({
-        ...cbChangeset,
-        organisation_id: client('new_organisation').select('organisation_id'),
-      })
-      .into('community_business')
-      .returning('organisation_id');
+    const [id] = await client.transaction(async (trx) => {
+      const [newOrg] = await trx
+        .table('organisation')
+        .insert(orgChangeset)
+        .returning('*');
+
+      await trx
+      .insert({ code, organisation_id: newOrg.organisation_id, })
+      .into('volunteer_admin_code')
+      .returning('*');
+
+      return trx
+        .insert({
+          ...cbChangeset,
+          organisation_id: newOrg.organisation_id,
+        })
+        .into('community_business')
+        .returning('organisation_id');
+    });
 
     return CommunityBusinesses.getOne(client, { where: { id } });
   },
