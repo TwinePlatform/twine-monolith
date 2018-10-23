@@ -73,7 +73,7 @@ describe('GET /community-businesses', () => {
         },
       });
 
-      expect(res.statusCode).toBe(404);
+      expect(res.statusCode).toBe(403);
     });
   });
 

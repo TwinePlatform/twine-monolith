@@ -4,8 +4,6 @@ import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 import { GetCommunityBusinessRequest, GetCommunityBusinessesRequest } from '../types';
 import { query, response } from './schema';
-import { RoleEnum } from '../../../auth/types';
-
 
 export default [
   {
@@ -23,17 +21,20 @@ export default [
         query,
         failAction: (request, h, err) => err,
       },
+      pre: [
+        { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
+      ],
       response: { schema: response },
     },
     handler: async (request: GetCommunityBusinessesRequest, h: Hapi.ResponseToolkit) => {
       const {
-        auth: { credentials: { role } } ,
+        pre: { isChild },
         server: { app: { knex } },
         query,
       } = request;
 
-      if (role !== RoleEnum.TWINE_ADMIN) {
-        return Boom.unauthorized('Not implemented');
+      if (!isChild) {
+        return Boom.forbidden('Insufficient permissions to access this organisations');
       }
 
       return CommunityBusinesses.get(knex, query);
