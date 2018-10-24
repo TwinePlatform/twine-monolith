@@ -10,7 +10,7 @@ describe('Config', () => {
       router: { stripTrailingSlash: true },
       routes: {
         cors: {
-          origin: ['http://localhost:3000', 'http://localhost:8100'],
+          origin: ['http://localhost:3000', 'http://localhost:8100', 'http://localhost:5000'],
           credentials: true,
           additionalExposedHeaders: ['set-cookie'],
         },
@@ -84,7 +84,7 @@ describe('Config', () => {
       router: { stripTrailingSlash: true },
       routes: {
         cors: {
-          origin: ['http://localhost:3000', 'http://localhost:8100'],
+          origin: ['http://localhost:3000', 'http://localhost:8100', 'http://localhost:5000'],
           credentials: true,
           additionalExposedHeaders: ['set-cookie'],
         },
