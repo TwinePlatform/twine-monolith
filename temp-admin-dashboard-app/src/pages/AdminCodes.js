@@ -8,6 +8,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+
+import { api } from '../utils/api'
 
 const styles = theme => ({
   root: {
@@ -18,24 +21,38 @@ const styles = theme => ({
   table: {
     maxWidth: 700,
   },
+  snackbar: {
+    margin: theme.spacing.unit,
+  },
 });
-class Organisations extends Component {
+class AdminCodes extends Component {
   constructor(props) {
     super(props);
-    this.state = { organisations: null };
+    this.state = {
+      organisations: null,
+      error: null,
+    };
   }
 
   componentDidMount() {
-
+    api.adminCodes()
+      .then(res => {
+        this.setState({ organisations: res.data.result })
+      })
+      .catch((err) => {
+        const errorMessage = err.response.data.error.message || 'Error fetching data.'
+        this.setState({ error: errorMessage })
+      })
   }
 
   render() {
-    const classes = this.props
+    const { props: { classes }, state: { organisations, error } } = this
     return (
       <Fragment>
         <Typography variant="h5" component="h3">
           Admin Codes
         </Typography>
+        {error && <SnackbarContent className={classes.snackbar} message={error} />}
         <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead>
@@ -44,12 +61,14 @@ class Organisations extends Component {
                 <TableCell numeric>Admin Code</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell>Aperture Science</TableCell>
-                <TableCell numeric>10101</TableCell>
-              </TableRow>
-            </TableBody>
+            {organisations && organisations.map(({ name, adminCode }) => (
+              <TableBody>
+                <TableRow key={name}>
+                  <TableCell>{name}</TableCell>
+                  <TableCell>{adminCode}</TableCell>
+                </TableRow>
+              </TableBody>
+            ))}
           </Table>
         </Paper>
       </Fragment>
@@ -57,4 +76,4 @@ class Organisations extends Component {
   }
 }
 
-export default withStyles(styles)(Organisations);
+export default withStyles(styles)(AdminCodes);
