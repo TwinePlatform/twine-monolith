@@ -6,8 +6,8 @@ export default {
   web: {
     port: 4000,
     routes: {
-      cors: {
-        origin: ['http://localhost:3000', 'http://localhost:8100'],
+      cors: { // Local dev servers for Visitor App, Volunteer App, Temp Admin Dashboard
+        origin: ['http://localhost:3000', 'http://localhost:8100', 'http://localhost:5000'],
       },
     },
   },
