@@ -19,6 +19,7 @@
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
     <preference name="orientation" value="portrait" />
+    <preference name="UseLegacySwiftLanguageVersion" value="true" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
@@ -80,7 +81,7 @@
         <variable name="GEOFENCE_ALWAYS_USAGE_DESCRIPTION" value="${EXECUTABLE_NAME} Would Like to Use Your Current Location Even In Background." />
         <variable name="GEOFENCE_IN_USE_USAGE_DESCRIPTION" value="${EXECUTABLE_NAME} Would Like to Use Your Current Location When In Use." />
     </plugin>
-    <engine name="android" spec="7.0.0" />
     <engine name="browser" spec="5.0.4" />
     <engine name="ios" spec="4.5.5" />
+    <engine name="android" spec="7.0.0" />
 </widget>
