@@ -103,10 +103,7 @@ angular.module('app').controller('EditVolunteerController', function ($scope, $s
             $scope.formData.region = $localStorage.user.region;
             // if no gender selected, setup an object with empty values
             if ($scope.formData.gender == null) {
-                $scope.formData.gender = {
-                    id: '',
-                    name: ''
-                }
+                $scope.formData.gender = undefined;
             }
 
             // >>> submit form data
@@ -115,6 +112,7 @@ angular.module('app').controller('EditVolunteerController', function ($scope, $s
                     name: $scope.formData.name,
                     email: $scope.formData.email,
                     phoneNumber: $scope.formData.phoneNumber,
+                    password: $scope.formData.password,
                     birthYear: $scope.formData.birthYear,
                     gender: $scope.formData.gender
                 }).success(function (response) {
