@@ -81,4 +81,7 @@
         <variable name="GEOFENCE_ALWAYS_USAGE_DESCRIPTION" value="${EXECUTABLE_NAME} Would Like to Use Your Current Location Even In Background." />
         <variable name="GEOFENCE_IN_USE_USAGE_DESCRIPTION" value="${EXECUTABLE_NAME} Would Like to Use Your Current Location When In Use." />
     </plugin>
+    <engine name="browser" spec="5.0.4" />
+    <engine name="android" spec="7.0.0" />
+    <engine name="ios" spec="4.4.0" />
 </widget>

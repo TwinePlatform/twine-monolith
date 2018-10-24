@@ -3,6 +3,9 @@
   "version": "1.1.1",
   "description": "powertochange: An Ionic project",
   "dependencies": {
+    "cordova-android": "7.0.0",
+    "cordova-browser": "5.0.4",
+    "cordova-ios": "4.4.0",
     "cordova-plugin-add-swift-support": "~1.7.2",
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-console": "~1.0.3",
@@ -43,7 +46,11 @@
     }
   ],
   "cordova": {
-    "platforms": [],
+    "platforms": [
+      "browser",
+      "android",
+      "ios"
+    ],
     "plugins": {
       "cordova-plugin-device": {},
       "cordova-plugin-console": {},
