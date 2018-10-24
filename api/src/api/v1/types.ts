@@ -117,7 +117,7 @@ export interface GetVisitorRequest extends Hapi.Request {
 }
 
 export interface PutUserRequest extends Hapi.Request {
-  payload: Partial<Omit<User, 'id' | keyof CommonTimestamps | 'password' | 'qrCode'>>;
+  payload: Partial<Omit<User, 'id' | keyof CommonTimestamps | 'qrCode'>>;
   params: {
     userId: string
   };

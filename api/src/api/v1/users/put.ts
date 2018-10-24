@@ -4,6 +4,7 @@ import { Users } from '../../../models';
 import {
   id,
   userName,
+  password,
   gender,
   birthYear,
   email,
@@ -38,6 +39,9 @@ const routes: Hapi.ServerRoute[] = [
           gender,
           birthYear,
           email,
+          // NOTE: "password" added as a field to support
+          //       existing functionality in legacy volunteer app
+          password,
           phoneNumber,
           postCode,
           isEmailConsentGranted,
@@ -103,6 +107,9 @@ const routes: Hapi.ServerRoute[] = [
           gender,
           birthYear,
           email,
+          // NOTE: "password" added as a field to support
+          //       existing functionality in legacy volunteer app
+          password,
           phoneNumber,
           postCode,
           isEmailConsentGranted,
