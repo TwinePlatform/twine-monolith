@@ -644,6 +644,14 @@
       }
     }
   },
+  "/volunteer-logs": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "volunteer_logs-child:read"
+      }
+    }
+  },
   "/genders/": {
     "GET": {
       "isImplemented": true,

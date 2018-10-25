@@ -4,7 +4,7 @@ import { VolunteerLog, VolunteerLogCollection } from './types';
 import { CommunityBusinesses } from './community_business';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { renameKeys, mapKeys } from '../utils';
-import { Map } from '../types/internal';
+import { Map, Dictionary } from '../types/internal';
 import Duration from './duration';
 import Roles from '../auth/roles';
 import { RoleEnum } from '../auth/types';
@@ -28,6 +28,10 @@ export const ColumnToModel: Map<string, keyof VolunteerLog> = {
   'volunteer_activity.volunteer_activity_name': 'activity',
 };
 export const ModelToColumn = invertObj(ColumnToModel);
+
+const optionalFields: Dictionary<string> = {
+  organisationName: 'organisation.organisation_name',
+};
 
 const stripTablePrefix = mapKeys((s) => s.replace('volunteer_hours_log.', ''));
 
@@ -88,7 +92,14 @@ export const VolunteerLogs: VolunteerLogCollection = {
           'volunteer_activity',
           'volunteer_activity.volunteer_activity_id',
           'volunteer_hours_log.volunteer_activity_id')
-        .select(query.fields ? pick(query.fields, ModelToColumn) : ModelToColumn),
+        .innerJoin(
+          'organisation',
+          'volunteer_hours_log.organisation_id',
+          'organisation.organisation_id'
+        )
+        .select(query.fields
+          ? pick(query.fields, { ...ModelToColumn, ...optionalFields })
+          : ModelToColumn),
       query
     );
   },
