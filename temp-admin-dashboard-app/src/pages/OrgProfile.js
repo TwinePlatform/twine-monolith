@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 
-import OrgTable from '../components/OrgTable'
 import { api } from '../utils/api'
 
 const styles = theme => ({
@@ -20,7 +19,7 @@ const styles = theme => ({
     margin: theme.spacing.unit,
   },
 });
-class Organisations extends Component {
+class OrgProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,9 +29,10 @@ class Organisations extends Component {
   }
 
   componentDidMount() {
-    api.organisations()
+    const { id } = this.props.match.params
+    api.organisation(id)
       .then(res => {
-        this.setState({ organisations: res.data.result })
+        this.setState({ organisation: res.data.result })
       })
       .catch((err) => {
         const errorMessage = err.response.data.error.message || 'Error fetching data.'
@@ -41,19 +41,21 @@ class Organisations extends Component {
   }
 
   render() {
-    const { props: { classes }, state: { organisations, error } } = this
+    console.log(this.props);
+
+    const { props: { classes }, state: { organisation, error } } = this
     return (
       <Fragment>
         <Typography variant="h5" component="h3">
-          Organisations
+          Organisation
         </Typography>
         {error && <SnackbarContent className={classes.snackbar} message={error} />}
         <Paper className={classes.container}>
-          {organisations && <OrgTable organisations={organisations} />}
+
         </Paper>
       </Fragment>
     );
   }
 }
 
-export default withStyles(styles)(Organisations);
+export default withStyles(styles)(OrgProfile);

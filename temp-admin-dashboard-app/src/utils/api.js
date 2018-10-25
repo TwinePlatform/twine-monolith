@@ -21,5 +21,11 @@ export const api = {
   },
   adminCodes: () => {
     return axios.get('/community-businesses?fields[]=name&fields[]=adminCode')
-  }
+  },
+  organisations: () => {
+    return axios.get('/community-businesses')
+  },
+  organisation: (id) => {
+    return axios.get(`/community-businesses/${id}`)
+  },
 };
