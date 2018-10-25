@@ -12,6 +12,7 @@ import AdminCodes from './pages/AdminCodes'
 import Home from './pages/Home'
 import Logs from './pages/Logs'
 import Organisations from './pages/Organisations'
+import OrgProfile from './pages/OrgProfile';
 //utils
 import { api } from './utils/api'
 
@@ -46,10 +47,7 @@ class App extends Component {
     api.login({ email, password })
       .then(() => this.setState({ auth: true, loginError: null }))
       .catch((err) => {
-        const errorMessage = err.response.data.error.message
-          ? err.response.data.error.message
-          : 'There has been an error logging in.'
-
+        const errorMessage = err.response.data.error.message || 'There has been an error logging in.'
         this.setState({ loginError: errorMessage })
       })
   }
@@ -68,6 +66,7 @@ class App extends Component {
               <PrivateRoute auth={auth} exact path="/admin-codes" component={AdminCodes} />
               <PrivateRoute auth={auth} exact path="/logs" component={Logs} />
               <PrivateRoute auth={auth} exact path="/organisations" component={Organisations} />
+              <PrivateRoute auth={auth} exact path="/organisations/:id" component={OrgProfile} />
             </div>
           </Paper>
         </div>
