@@ -14,6 +14,7 @@ import constants from './constants';
 import users from './users';
 import regions from './regions';
 import communityBusinesses from './community_businesses';
+import logs from './user_logs';
 import addLifecycleHooks from './hooks';
 import setupAuthentication from './auth';
 
@@ -39,6 +40,7 @@ export default {
       ...users,
       ...communityBusinesses,
       ...regions,
+      ...logs,
     ]);
   },
 };

@@ -636,6 +636,14 @@
       }
     }
   },
+  "/visit-logs": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "visit_logs-child:read"
+      }
+    }
+  },
   "/genders/": {
     "GET": {
       "isImplemented": true,
