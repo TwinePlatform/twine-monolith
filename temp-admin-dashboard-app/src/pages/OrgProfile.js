@@ -4,7 +4,10 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 
+import OrgForm from '../components/OrgForm'
+
 import { api } from '../utils/api'
+import { StatusEnum } from '../utils/enums';
 
 const styles = theme => ({
   container: {
@@ -12,8 +15,16 @@ const styles = theme => ({
     marginTop: 20,
     overflowX: 'auto',
   },
-  table: {
-    maxWidth: 700,
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  dense: {
+    marginTop: 19,
+  },
+  menu: {
+    width: 200,
   },
   snackbar: {
     margin: theme.spacing.unit,
@@ -23,16 +34,23 @@ class OrgProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      organisations: null,
+      status: StatusEnum.PENDING,
       error: null,
     };
   }
 
   componentDidMount() {
     const { id } = this.props.match.params
-    api.organisation(id)
-      .then(res => {
-        this.setState({ organisation: res.data.result })
+
+    Promise.all([api.organisation(id), api.regions(), api.sectors()])
+      .then(([orgRes, regionsRes, sectorsRes]) => {
+        this.setState({
+          organisation: orgRes.data.result,
+          regions: regionsRes.data.result,
+          sectors: sectorsRes.data.result,
+
+          status: StatusEnum.SUCCESS
+        })
       })
       .catch((err) => {
         const errorMessage = err.response.data.error.message || 'Error fetching data.'
@@ -40,18 +58,28 @@ class OrgProfile extends Component {
       })
   }
 
-  render() {
-    console.log(this.props);
+  handleChange = name => event => {
+    this.setState(prevState => ({
+      organisation: {
+        ...prevState.organisation,
+        [name]: event.target.value
+      },
+    }));
+  };
 
-    const { props: { classes }, state: { organisation, error } } = this
+  render() {
+    const {
+      props: { classes, match: { params: { id } } },
+      state: { status, error }, handleChange } = this
+
     return (
       <Fragment>
         <Typography variant="h5" component="h3">
-          Organisation
+          Organisation {id}
         </Typography>
         {error && <SnackbarContent className={classes.snackbar} message={error} />}
         <Paper className={classes.container}>
-
+          {status === StatusEnum.SUCCESS && <OrgForm {...this.state} handleChange={handleChange} />}
         </Paper>
       </Fragment>
     );

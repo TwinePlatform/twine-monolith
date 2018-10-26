@@ -37,4 +37,10 @@ export const api = {
   volunteerLogs: () => {
     return axios.get(`/volunteer-logs?since=${lastMonth}&until=${tomorrow}`)
   },
+  regions: () => {
+    return axios.get(`/regions`)
+  },
+  sectors: () => {
+    return axios.get(`/sectors`)
+  },
 };
