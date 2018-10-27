@@ -22,7 +22,7 @@ const routes: Hapi.ServerRoute[] = [
         },
       },
       validate: {
-        params: { organisationId: meOrId },
+        params: { organisationId: meOrId.required() },
         query: {
           ...query,
           ...filterQuery,

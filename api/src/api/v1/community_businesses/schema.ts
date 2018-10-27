@@ -39,4 +39,4 @@ export const visitActivitiesPutPayload = {
   sunday: Joi.boolean(),
 };
 
-export const meOrId = id.allow('me').required();
+export const meOrId = id.allow('me');

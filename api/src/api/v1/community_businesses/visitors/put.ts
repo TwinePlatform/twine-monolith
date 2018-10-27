@@ -34,8 +34,8 @@ const routes: Hapi.ServerRoute[] = [
       },
       validate: {
         params: {
-          userId: id,
-          organisationId: meOrId,
+          userId: id.required(),
+          organisationId: meOrId.required(),
         },
         payload: {
           name: userName,
