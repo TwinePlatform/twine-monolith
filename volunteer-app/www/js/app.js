@@ -122,7 +122,7 @@
 								$localStorage.user.role = response.data.result.role;
 								$rootScope.currentUser.role = response.data.result.role;
 
-								if (['VOLUNTEER_ADMIN', 'ORG_ADMIN'].includes($localStorage.user.role)) {
+								if (['VOLUNTEER_ADMIN', 'CB_ADMIN'].includes($localStorage.user.role)) {
 									$rootScope.isAdmin = true;
 								} else {
 									$rootScope.isAdmin = false;
@@ -280,7 +280,7 @@
 
 					$rootScope.$watch('currentUser',function (user) {
 						if (user !== undefined && user !== null) {
-							if (['VOLUNTEER_ADMIN', 'ORG_ADMIN'].includes($localStorage.user.role)) {
+							if (['VOLUNTEER_ADMIN', 'CB_ADMIN'].includes($localStorage.user.role)) {
 									$rootScope.isAdmin = true;
 							} else {
 									$rootScope.isAdmin = false;
