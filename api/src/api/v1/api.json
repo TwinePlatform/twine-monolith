@@ -327,7 +327,7 @@
       "permissions": {
         "VOLUNTEER": "volunteer_logs-own:write",
         "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"],
-        "ORG_ADMIN": "volunteer_logs-child:write"
+        "CB_ADMIN": "volunteer_logs-child:write"
       }
     }
   },
@@ -337,7 +337,7 @@
       "permissions": {
         "VOLUNTEER": "volunteer_logs-own:write",
         "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"],
-        "ORG_ADMIN": "volunteer_logs-child:write"
+        "CB_ADMIN": "volunteer_logs-child:write"
       }
     }
   },
