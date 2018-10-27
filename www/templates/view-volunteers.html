@@ -16,7 +16,7 @@
         </div>
         <ion-list>
 
-            <ion-item style="margin-bottom: 5px" class=" item-remove-animate" ng-repeat="volunteer in volunteers | orderBy: ['-date','-updatedAt']">
+            <ion-item style="margin-bottom: 5px" class=" item-remove-animate" ng-repeat="volunteer in volunteers track by volunteer.id | orderBy: ['-createdAt','-updatedAt']">
                 <div style="float: left">
                 <h2>{{volunteer.name}}</h2>
                 <p> Joined {{ volunteer.createdAt }}</p>
