@@ -139,9 +139,8 @@
 							})
 							.catch(function (error) {
 								$localStorage.user = null;
-								// process connection error
-								$$utilities.processConnectionError(null, error);
-
+								$rootScope.currentUser = null;
+								$rootScope.organisationName = null;
 							});
 
 					}
