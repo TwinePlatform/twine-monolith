@@ -98,8 +98,8 @@
 					// generate an offline id
 					data.offline_id = $$offline.generateLogOfflineId();
 
-					// add organisation id
-					data.organisation_id = $localStorage.user.organisation.id;
+					// // add organisation id
+					// data.organisation_id = $localStorage.user.organisation.id;
 
 					// set id to empty string if it doesn't exist
 					if (data.id === undefined) {
@@ -205,10 +205,10 @@
 						'deletedAt': null
 					});
 
-					// filter by organisation id
-					logs = $filter('filter')(logs, {
-						'organisationId': $localStorage.user.organisation.id
-					});
+					// // filter by organisation id
+					// logs = $filter('filter')(logs, {
+					// 	'organisationId': $localStorage.user.organisation.id
+					// });
 
 					// loop through each log in the response and put back into offline data with a unique offline_id
 					for (i = 0; i < logs.length; i++) {

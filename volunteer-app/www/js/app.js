@@ -170,12 +170,13 @@
 						if (!$localStorage.user) {
 							return;
 						}
+						var userId = $localStorage.user.id
 						// get all offline logs
 						var allLogs = $localStorage.offlineData ? $localStorage.offlineData.logs : [];
-						// filter by current organisation id
-						var logsByOrganisation = $filter('filter')(allLogs, {'organisation_id' : $localStorage.user.organisation.id});
+						// // filter by current organisation id
+						// var logsByOrganisation = $filter('filter')(allLogs, {'organisation_id' : $localStorage.user.organisation.id});
 						// filter by 'needs_pushing'
-						var logsThatNeedPushing = $filter('filter')(logsByOrganisation, {'needs_pushing' : true});
+						var logsThatNeedPushing = $filter('filter')(allLogs, {'needs_pushing' : true});
 
 						var logsData = {
 							logs: logsThatNeedPushing
@@ -184,23 +185,29 @@
 						// remove $$hasKey items
 						logsData = angular.copy(logsData);
 
+						logsData.logs = logsData.logs.map((log) => ({
+							userId: log.user_id == userId ? undefined : log.user_id,
+							duration: { minutes: log.duration },
+							activity: log.activity,
+							startedAt: log.date_of_log,
+						}))
+
 						console.log('logsData: ', logsData);
 
 						// if we have logs that need syncing, sync them
 						if (logsData.logs.length > 0) {
 
 							// sync offline logs
-							$$api.logs.sync(logsData).success(function(response) {
+							$$api.logs.sync(logsData.logs).success(function(response) {
 								console.log('response: ', response);
 
 								// show loader
 								$ionicLoading.show('Syncing');
 
-								// get response logs
-								var responseLogs = response.data;
-
-								// save logs offline
-								$$offline.saveLogs(responseLogs);
+								// clear logs offline
+								if ($localStorage.offlineData) {
+									$localStorage.offlineData.logs = [];
+								}
 
 								// switch offline mode off
 								$$offline.disable();
