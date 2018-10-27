@@ -43,7 +43,6 @@ export default [
       ],
       validate: {
         query: visitActivitiesGetQuery,
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },
@@ -74,7 +73,6 @@ export default [
       ],
       validate: {
         payload: visitActivitiesPostPayload,
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },
@@ -106,7 +104,6 @@ export default [
         params: {
           visitActivityId: id,
         },
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },
@@ -148,7 +145,6 @@ export default [
         params: {
           visitActivityId: id,
         },
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },
@@ -175,7 +171,6 @@ export default [
       validate: {
         query: visitActivitiesGetQuery,
         params: { organisationId: id },
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },

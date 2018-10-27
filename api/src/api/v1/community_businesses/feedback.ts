@@ -21,7 +21,6 @@ export default [
       },
       validate: {
         query: { since, until, ...query },
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
       pre: [
@@ -55,7 +54,6 @@ export default [
       },
       validate: {
         query: { since, until },
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
       pre: [

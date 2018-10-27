@@ -21,7 +21,6 @@ const routes: Hapi.ServerRoute[] = [
       },
       validate: {
         params: { userId: id },
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
       pre: [

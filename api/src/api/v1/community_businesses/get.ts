@@ -19,7 +19,6 @@ export default [
       },
       validate: {
         query,
-        failAction: (request, h, err) => err,
       },
       pre: [
         { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
@@ -54,7 +53,6 @@ export default [
       },
       validate: {
         query,
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
       pre: [
@@ -81,7 +79,6 @@ export default [
       },
       validate: {
         query,
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
       pre: [

@@ -40,7 +40,6 @@ const route: Hapi.ServerRoute[] = [
           email: email.required(),
           password: password.required(),
         },
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },
@@ -104,7 +103,6 @@ const route: Hapi.ServerRoute[] = [
         payload: {
           password: password.required(),
         },
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },

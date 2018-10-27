@@ -40,7 +40,6 @@ const routes: Hapi.ServerRoute[] = [
           //       the handler must be explicitly changed to support it.
           type: Joi.any().only(['qrcode']),
         },
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
       pre: [

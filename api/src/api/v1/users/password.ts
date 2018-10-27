@@ -35,7 +35,6 @@ const routes: Hapi.ServerRoute[] = [
       auth: false,
       validate: {
         payload: { email: emailSchema },
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },

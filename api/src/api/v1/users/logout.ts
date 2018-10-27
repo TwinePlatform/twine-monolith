@@ -11,7 +11,6 @@ export default [
       description: 'Logout users',
       validate: {
         query,
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },

@@ -25,8 +25,7 @@ const routes: Hapi.ServerRoute[] = [
         },
       },
       validate: {
-        query: { since, until } ,
-        failAction: (request, h, err) => err,
+        query: { since, until },
       },
       response: { schema: response },
       pre: [

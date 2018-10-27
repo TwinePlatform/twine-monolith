@@ -15,7 +15,6 @@ export default [
       auth: false,
       validate: {
         params: { regionId: id },
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },

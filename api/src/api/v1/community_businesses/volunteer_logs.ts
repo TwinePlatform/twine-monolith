@@ -286,7 +286,6 @@ const routes: Hapi.ServerRoute[] = [
           }).required(),
           startedAt: Joi.date().iso().max('now').default(() => new Date().toISOString(), 'now'),
         })).required(),
-        failAction: (r, s, e) => e,
       },
       response: { schema: response },
       pre: [

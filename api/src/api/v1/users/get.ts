@@ -34,7 +34,6 @@ const routes: Hapi.ServerRoute[] = [
       },
       validate: {
         query,
-        failAction: (request, h, err) => err,
       },
       response: { schema: response },
     },
