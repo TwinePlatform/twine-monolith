@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import { response, id, since, until } from './schema';
+import { response, id, meOrId, since, until } from './schema';
 import Roles from '../../../auth/roles';
 import { RoleEnum } from '../../../auth/types';
 import { VolunteerLogs, Duration, Volunteers } from '../../../models';
@@ -277,6 +277,7 @@ const routes: Hapi.ServerRoute[] = [
       },
       validate: {
         payload: Joi.array().items(Joi.object({
+          userId: meOrId.default('me'),
           activity: Joi.string().required(),
           duration: Joi.object({
             hours: Joi.number().integer().min(0),
@@ -285,6 +286,7 @@ const routes: Hapi.ServerRoute[] = [
           }).required(),
           startedAt: Joi.date().iso().max('now').default(() => new Date().toISOString(), 'now'),
         })).required(),
+        failAction: (r, s, e) => e,
       },
       response: { schema: response },
       pre: [
@@ -294,10 +296,22 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: SyncMyVolunteerLogsRequest, h) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { user } },
+        auth: { credentials: { user, scope } },
         pre: { communityBusiness },
         payload,
       } = request;
+
+      // TODO:
+      // // Edge case: We don't check each target userId (if it exists)
+      // //            corresponds to a VOLUNTEER(_ADMIN)
+
+      if (
+        Array.isArray(payload) &&
+        payload.some((log) => log.userId !== 'me') &&
+        !scope.includes('volunteer_logs-sibling:write')
+      ) {
+        return Boom.forbidden('Insufficient scope');
+      }
 
       try {
         await knex.transaction(async (trx) =>
@@ -305,7 +319,7 @@ const routes: Hapi.ServerRoute[] = [
             VolunteerLogs.add(trx, {
               ...log,
               organisationId: communityBusiness.id,
-              userId: user.id,
+              userId: log.userId === 'me' ? user.id : Number(log.userId),
             })
           ))
         );

@@ -115,12 +115,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(6);
-      expect(
-        (<any> res.result).result
+      expect((<any> res.result).result
           .map((l: VolunteerLog) => l.startedAt)
           .every((d: Date) => d <= until.toDate()))
       .toBe(true);
-
     });
   });
 
@@ -823,6 +821,67 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(7);
+    });
+
+    test('can sync a mixture of logs for self and logs for others as VOLUNTEER_ADMIN', async () => {
+      const times = ['2018-09-22T21:02:10', '2018-09-21T21:01:12', '2018-10-02T21:02:10'];
+      const logs = [
+        { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
+        { userId: 6, activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
+        { activity: 'Shop/Cafe work', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
+      ];
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: {
+          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
+          user: volAdmin,
+          organisation,
+          role: RoleEnum.VOLUNTEER_ADMIN,
+        },
+        payload: logs,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: null });
+
+      const resLogs = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-own:read', 'volunteer_logs-sibling:read'],
+          user: volAdmin,
+          organisation,
+          role: RoleEnum.VOLUNTEER_ADMIN,
+        },
+      });
+
+      expect(resLogs.statusCode).toBe(200);
+      expect((<any> resLogs.result).result).toHaveLength(11);
+    });
+
+    test('cannot sync logs for others as VOLUNTEER', async () => {
+      const times = ['2018-09-22T21:02:10', '2018-09-21T21:01:12', '2018-10-02T21:02:10'];
+      const logs = [
+        { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
+        { userId: 6, activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
+        { activity: 'Shop/Cafe work', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
+      ];
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: {
+          scope: ['volunteer_logs-own:write'],
+          user,
+          organisation,
+          role: RoleEnum.VOLUNTEER,
+        },
+        payload: logs,
+      });
+
+      expect(res.statusCode).toBe(403);
     });
 
     test('fails when trying to sync logs w/ identical "startedAt" in payload', async () => {
