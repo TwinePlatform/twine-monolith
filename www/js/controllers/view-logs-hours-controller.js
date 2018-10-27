@@ -43,11 +43,33 @@
 								// update logs in view
 								$scope.logs = result.data;
 
+								const uniqueIds = $scope.logs
+									.map((l) => l.userId)
+									.reduce((acc, id) => acc.includes(id) ? acc : acc.concat(id), []);
+
+								Promise.all(
+									uniqueIds.map((id) => $$api.volunteers.getVolunteer(id))
+								)
+									.then((volunteerResp) => {
+										var volunteers = volunteerResp.map((v) => v.data.result);
+
+										$scope.logs.forEach((l, i) => {
+											var index = uniqueIds.indexOf(l.userId);
+
+											if (index > -1) {
+												$scope.logs[i].user = volunteers[index];
+											}
+										})
+									})
+									.catch((error) => {
+										console.log(error);
+									})
+
 								if (result.data.length == 0) {
 										$scope.noLogs = true;
 								}
 
-								$$offline.saveLogs(result.data);
+								$$offline.saveLogs($scope.logs);
 
 						}).error(function (result, error) {
 
@@ -117,7 +139,7 @@
         >> if the last log deleted set nologs true
     	*/
 			$scope.$watch('logs', function (newVal) {
-				console.log(newVal);
+				// console.log(newVal);
 				if ( newVal !== null && newVal !== undefined && newVal.length === 0) {
 					$scope.noLogs = true;
 				}

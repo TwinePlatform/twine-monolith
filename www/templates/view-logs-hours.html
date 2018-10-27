@@ -18,8 +18,8 @@
                 </i>
                 <div style="max-width: 70%;float: left; overflow: hidden">
                 <h1 ng-bind-html="log.duration | hoursAndMinutesAsString"></h1>
-                    <h3 style="color: black" ng-if="isAdmin"> {{log.user.name}} <span style="font-size: 10px; color: gray">{{log.user.id === currentUser.id ? 'me': ''}}</span></h3>
-                <p>{{ log.date_of_log.split(' ')[0] | date:'d MMM yyyy'}} @ {{ log.activity.name }}</p>
+                    <h3 style="color: black" ng-if="isAdmin"> {{log.user.name}} <span style="font-size: 10px; color: gray">{{log.userId === currentUser.id ? 'me': ''}}</span></h3>
+                <p>{{ log.date_of_log.split(' ')[0] | date:'d MMM yyyy'}} @ {{ log.activity }}</p>
                 <p ng-if="options.debug">id: {{ log.id }}</p>
                 </div>
                 <div class="button-bar">
