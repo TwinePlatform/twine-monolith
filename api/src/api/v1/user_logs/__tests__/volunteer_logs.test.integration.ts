@@ -34,9 +34,8 @@ describe('GET /volunteer-logs', () => {
   });
 
   test('success :: returns subset of logs with date querystring', async () => {
-    const today = moment();
-    const until = today.clone().format('YYYY-MM-DD');
-    const since = today.clone().subtract(5, 'day').format('YYYY-MM-DD');
+    const until = moment().format('YYYY-MM-DD');
+    const since = moment().subtract(5, 'day').format('YYYY-MM-DD');
     const res = await server.inject({
       method: 'GET',
       url: `/v1/volunteer-logs?since=${since}&until=${until}`,
@@ -47,7 +46,7 @@ describe('GET /volunteer-logs', () => {
     });
 
     expect(res.statusCode).toBe(200);
-    expect((<any> res.result).result).toHaveLength(2);
+    expect((<any> res.result).result).toHaveLength(1);
     expect((<any> res.result).result).toEqual([
       {
         activity: 'Office support',
@@ -55,14 +54,7 @@ describe('GET /volunteer-logs', () => {
         organisationId: 1,
         organisationName: 'Aperture Science',
         userId: 6,
-      },
-      {
-        activity: 'Support and Care for vulnerable community members',
-        duration: { minutes: 10, seconds: 20 },
-        organisationId: 2,
-        organisationName: 'Black Mesa Research',
-        userId: 6,
-      }].map((x) => expect.objectContaining(x)));
+      }].map(expect.objectContaining));
   });
 
   test('failure :: funding body cannot access as not implemented', async () => {
