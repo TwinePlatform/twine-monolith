@@ -16,6 +16,22 @@ describe('API v1 - register new users', () => {
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
+    server.app.EmailService = {
+      send: () => Promise.resolve({
+        To: '',
+        SubmittedAt: '',
+        MessageID: '',
+        ErrorCode: 0,
+        Message: '',
+      }),
+      sendBatch: () => Promise.resolve([{
+        To: '',
+        SubmittedAt: '',
+        MessageID: '',
+        ErrorCode: 0,
+        Message: '',
+      }]),
+    };
   });
 
   afterAll(async () => {
@@ -31,6 +47,7 @@ describe('API v1 - register new users', () => {
     await trx.rollback();
     server.app.knex = knex;
   });
+
   describe('POST /users/register/visitors', () => {
     test('user already exists', async () => {
       const user = await factory.build('user');

@@ -33,9 +33,10 @@ describe('GET /volunteer-logs', () => {
     expect((<any> res.result).result).toHaveLength(9);
   });
 
-  test('success :: returns subset of logs with date querystring', async () => {
-    const until = moment().format('YYYY-MM-DD');
-    const since = moment().subtract(5, 'day').format('YYYY-MM-DD');
+  test.only('success :: returns subset of logs with date querystring', async () => {
+    const until = moment().utc().startOf('day').toISOString();
+    const since = moment().utc().subtract(5, 'day').startOf('day').toISOString();
+
     const res = await server.inject({
       method: 'GET',
       url: `/v1/volunteer-logs?since=${since}&until=${until}`,
@@ -46,15 +47,30 @@ describe('GET /volunteer-logs', () => {
     });
 
     expect(res.statusCode).toBe(200);
-    expect((<any> res.result).result).toHaveLength(1);
+    expect((<any> res.result).result).toHaveLength(3);
     expect((<any> res.result).result).toEqual([
+      {
+        activity: 'Committee work, AGM',
+        duration: { hours: 1, seconds: 20 },
+        organisationId: 2,
+        organisationName: 'Black Mesa Research',
+        userId: 6,
+      },
+      {
+        activity: 'Support and Care for vulnerable community members',
+        duration: { minutes: 10, seconds: 20 },
+        organisationId: 2,
+        organisationName: 'Black Mesa Research',
+        userId: 6,
+      },
       {
         activity: 'Office support',
         duration: { minutes: 30 },
         organisationId: 1,
         organisationName: 'Aperture Science',
         userId: 6,
-      }].map(expect.objectContaining));
+      },
+    ].map(expect.objectContaining));
   });
 
   test('failure :: funding body cannot access as not implemented', async () => {

@@ -58,15 +58,17 @@ const routes: Hapi.ServerRoute[] = [
           'duration',
           'startedAt'],
           whereBetween: {
-            startedAt:  since || until
-          ? [
-            new Date(since),
-            new Date(until),
-          ]
-          : [null, null]},
+            startedAt: since || until
+              ? [
+                new Date(since),
+                new Date(until),
+              ]
+              : [null, null],
+          },
+          order: ['startedAt', 'asc'],
         });
 
-      return volunteerLogs;
+      return Promise.all(volunteerLogs.map(VolunteerLogs.serialise));
     },
   },
 ];
