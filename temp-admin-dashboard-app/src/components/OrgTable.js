@@ -37,11 +37,12 @@ const OrgTable = (props) => {
           <TableCell numeric>Region</TableCell>
           <TableCell numeric>Sector</TableCell>
           <TableCell numeric>360GivingId</TableCell>
+          <TableCell numeric>Turnover Band</TableCell>
           <TableCell numeric>Created</TableCell>
           <TableCell numeric>Edit</TableCell>
         </TableRow>
       </TableHead>
-      {organisations && organisations.map(({ id, name, region, sector, _360GivingId, createdAt }) => (
+      {organisations && organisations.map(({ id, name, region, sector, _360GivingId, turnoverBand, createdAt }) => (
         <TableBody>
           <TableRow key={name}>
             <TableCell>{id}</TableCell>
@@ -49,6 +50,7 @@ const OrgTable = (props) => {
             <TableCell>{region}</TableCell>
             <TableCell>{sector}</TableCell>
             <TableCell>{_360GivingId}</TableCell>
+            <TableCell>{turnoverBand}</TableCell>
             <TableCell>{(new Date(createdAt)).toLocaleDateString()}</TableCell>
             <TableCell>
               <Link to={`/organisations/${id}`}>

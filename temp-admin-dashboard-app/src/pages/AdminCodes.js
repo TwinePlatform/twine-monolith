@@ -58,7 +58,7 @@ class AdminCodes extends Component {
             <TableHead>
               <TableRow>
                 <TableCell>Organisation Name</TableCell>
-                <TableCell numeric>Admin Code</TableCell>
+                <TableCell>Admin Code</TableCell>
               </TableRow>
             </TableHead>
             {organisations && organisations.map(({ name, adminCode }) => (

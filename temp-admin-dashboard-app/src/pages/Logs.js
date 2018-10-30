@@ -91,13 +91,13 @@ class Home extends Component {
     return (
       <Fragment>
         <Typography variant="h5" component="h3">
-          Home
+          Logs
         </Typography>
         <Button component="span" color="secondary" onClick={() => getVisitLogs()}>
-          Last Months Visitor Logs
+          Download Visitor Logs
         </Button>
         <Button component="span" color="secondary" onClick={() => getVolunteerLogs()}>
-          Last Months Volunteer Logs
+          Download Volunteer Logs
         </Button>
       </Fragment>
     )

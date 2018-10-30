@@ -64,7 +64,7 @@ class Home extends Component {
         margin="normal"
         type="password"
       />
-      <Button component="span" onClick={() => login({ email, password })}>
+      <Button component="span" color="secondary" onClick={() => login({ email, password })}>
         Login
   </Button>
       {loginError && <SnackbarContent className={classes.snackbar} message={loginError} />}

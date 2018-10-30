@@ -14,10 +14,6 @@ const axios = _axios.create({
   withCredentials: true,
 });
 
-const today = moment();
-const tomorrow = today.clone().add(1, 'day').format('YYYY-MM-DD');
-const lastMonth = today.clone().subtract(1, 'month').format('YYYY-MM-DD');
-
 export const api = {
   login: ({ email, password }) => {
     return axios.post('/users/login', { email, password, restrict: RoleEnum.TwineAdmin })
@@ -32,10 +28,10 @@ export const api = {
     return axios.get(`/community-businesses/${id}`)
   },
   visitLogs: () => {
-    return axios.get(`/visit-logs?since=${lastMonth}&until=${tomorrow}`)
+    return axios.get(`/visit-logs`)
   },
   volunteerLogs: () => {
-    return axios.get(`/volunteer-logs?since=${lastMonth}&until=${tomorrow}`)
+    return axios.get(`/volunteer-logs`)
   },
   regions: () => {
     return axios.get(`/regions`)

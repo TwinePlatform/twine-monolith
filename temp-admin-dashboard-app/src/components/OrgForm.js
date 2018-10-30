@@ -35,6 +35,8 @@ const styles = theme => ({
   },
 });
 
+const turnoverBands = ['<£100k', '£100k-£250k', '£250k-£500k', '£500k-£750k', '£750k-£1m', '£1m-£5m', '£5m-£10m', '>£10m']
+
 const OrgForm = ({ organisation, regions, sectors, handleChange, classes }) => {
   return (
     <form className={classes.container} noValidate autoComplete="off">
@@ -109,6 +111,23 @@ const OrgForm = ({ organisation, regions, sectors, handleChange, classes }) => {
             <em>None</em>
           </MenuItem>
           {sectors.map(x => <MenuItem key={x.id} value={x.name}>{x.name}</MenuItem>)}
+        </Select>
+      </FormControl>
+      <FormControl className={classes.formControl}>
+        <InputLabel htmlFor="turnoverBand">Turnover Band</InputLabel>
+        <Select
+          value={organisation.turnoverBand}
+          className={classes.textField}
+          onChange={handleChange('turnoverBand')}
+          inputProps={{
+            name: 'turnoverBand',
+            id: 'turnoverBand',
+          }}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          {turnoverBands.map(x => <MenuItem key={x} value={x}>{x}</MenuItem>)}
         </Select>
       </FormControl>
     </form>
