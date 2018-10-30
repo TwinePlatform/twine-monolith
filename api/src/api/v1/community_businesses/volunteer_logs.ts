@@ -300,16 +300,30 @@ const routes: Hapi.ServerRoute[] = [
         payload,
       } = request;
 
-      // TODO:
-      // // Edge case: We don't check each target userId (if it exists)
-      // //            corresponds to a VOLUNTEER(_ADMIN)
-
       if (
-        Array.isArray(payload) &&
-        payload.some((log) => log.userId !== 'me') &&
-        !scope.includes('volunteer_logs-sibling:write')
+        payload.some((log) => log.userId !== 'me') && // If some logs correspond to other users
+        !scope.includes('volunteer_logs-sibling:write') // And client doesn't have the sibling scope
       ) {
-        return Boom.forbidden('Insufficient scope');
+        return Boom.forbidden('Insufficient scope'); // Then 403
+      }
+
+      const targetUserChecks = payload
+        .filter((l) => l.userId !== 'me')
+        .map((l) =>
+          Roles.userHas(
+            knex,
+            {
+              userId: Number(l.userId),
+              organisationId: communityBusiness.id,
+              role: [RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN],
+            }
+          )
+        );
+
+      const areVolunteers = await Promise.all(targetUserChecks);
+
+      if (!areVolunteers.every((a) => a)) {
+        return Boom.badRequest('Some users are not volunteers');
       }
 
       try {

@@ -504,8 +504,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const after = new Date();
 
       expect(res.statusCode).toEqual(200);
-      expect((<any> res.result).result.startedAt.valueOf()).toBeGreaterThan(before.valueOf());
-      expect((<any> res.result).result.startedAt.valueOf()).toBeLessThan(after.valueOf());
+      expect((<any> res.result).result.startedAt.valueOf())
+        .toBeGreaterThanOrEqual(before.valueOf());
+      expect((<any> res.result).result.startedAt.valueOf())
+        .toBeLessThanOrEqual(after.valueOf());
     });
 
     test('can create log for other user if admin at CB', async () => {
@@ -949,6 +951,26 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           user,
           organisation,
           role: RoleEnum.VOLUNTEER,
+        },
+        payload: logs,
+      });
+
+      expect(res.statusCode).toBe(400);
+    });
+
+    test('fails when one user isn\'t a volunteer', async () => {
+      const logs = [
+        { activity: 'Office support', duration: { minutes: 20 }, userId: 1 },
+      ];
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: {
+          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
+          user: volAdmin,
+          organisation,
+          role: RoleEnum.VOLUNTEER_ADMIN,
         },
         payload: logs,
       });
