@@ -191,14 +191,11 @@
 							startedAt: log.date_of_log,
 						}))
 
-						console.log('logsData: ', logsData);
-
 						// if we have logs that need syncing, sync them
 						if (logsData.logs.length > 0) {
 
 							// sync offline logs
 							$$api.logs.sync(logsData.logs).success(function(response) {
-								console.log('response: ', response);
 
 								// show loader
 								$ionicLoading.show('Syncing');
