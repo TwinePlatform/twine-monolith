@@ -37,17 +37,20 @@ TBD
 * cordova v8.0.0 (Use `npm`)
 * cordova-ios@4.4.0 (See below https://github.com/ionic-team/ionic/issues/12942)
 * Xcode 8.2 (See below https://developer.apple.com/download/more/)
+* https://github.com/compelling/cordova-plugin-geofence/
 
 ### Build
-Download the distribution of Xcode 8.2, and extract it into
+Read https://github.com/cowbell/cordova-plugin-geofence/issues/243#issuecomment-332822465
+
+Download the distribution of Xcode 9, and extract it into
 ```
-/Applications/Xcode8.2/Xcode.app
+/Applications/Xcode9/Xcode.app
 ```
 DO NOT overwrite any existing Xcode installations at `/Applications/Xcode.app`.
 
 Now set the command line tools to use this legacy version of Xcode:
 ```sh
-$ sudo xcode-select -s /Applications/Xcode8.2/Xcode.app
+$ sudo xcode-select -s /Applications/Xcode9/Xcode.app
 ```
 Verify this with
 ```
@@ -56,6 +59,7 @@ $ xcode-select -p
 In the project directory, run:
 ```sh
 $ ionic cordova platforms rm ios
+$ ionic cordova plugings add https://github.com/compelling/cordova-plugin-geofence/
 $ ionic cordova platforms add ios@4.4.0
 ```
 Note we specify the exact version of the iOS platform to install. Newer versions will produce failing builds.
