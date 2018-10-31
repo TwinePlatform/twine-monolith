@@ -1,5 +1,6 @@
 const moment = require('moment');
-const now = moment();
+const now = moment().utc();
+
 
 const getOrgId = (k, s) =>
   k('organisation')
@@ -31,42 +32,42 @@ exports.seed = (knex) =>
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 1,
         duration: (60 * 10) + 20,
-        started_at: now.clone().day(-7),
+        started_at: now.clone().subtract(7, 'day'),
       },
       {
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 3,
         duration: (60 * 60 * 2) + (60 * 20),
-        started_at: now.clone().day(-6),
+        started_at: now.clone().subtract(6, 'day'),
       },
       {
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 2,
         duration: 60 * 60 * 5,
-        started_at: now.clone().day(-5),
+        started_at: now.clone().subtract(5, 'day'),
       },
       {
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 5,
         duration: (60 * 50) + 59,
-        started_at: now.clone().day(-4),
+        started_at: now.clone().subtract(4, 'day'),
       },
       {
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 4,
         duration: (60 * 60 * 1) + 20,
-        started_at: now.clone().day(-3),
+        started_at: now.clone().subtract(3, 'day'),
       },
       {
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 6,
         duration: (60 * 10) + 20,
-        started_at: now.clone().day(-1),
+        started_at: now.clone().subtract(1, 'day'),
       },
       {
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
@@ -80,13 +81,13 @@ exports.seed = (knex) =>
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 5,
         duration: 60 * 30,
-        started_at: now.clone().hour(-12),
+        started_at: now.clone().subtract(12, 'hour'),
       },
       {
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'raiden@aotd.com'),
         volunteer_activity_id: 1,
         duration: 60 * 35,
-        started_at: now.clone().day(-12),
+        started_at: now.clone().subtract(12, 'day'),
       },
     ])

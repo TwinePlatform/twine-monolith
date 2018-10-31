@@ -101,7 +101,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('can get own organisations logs between dates', async () => {
-      const until = moment().day(-3);
+      const until = moment().utc().subtract(3, 'day');
       const res = await server.inject({
         method: 'GET',
         url: `/v1/community-businesses/me/volunteer-logs?until=${until.toISOString()}`,

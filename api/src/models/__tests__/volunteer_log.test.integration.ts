@@ -80,7 +80,10 @@ describe('VolunteerLog model', () => {
     test('fromCommunityBusiness :: gets all logs at CB between dates', async () => {
       const now = moment();
       const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
-      const bw = { since: now.clone().day(-6).toDate(), until: now.clone().day(-4).toDate() };
+      const bw = {
+        since: now.clone().subtract(6, 'day').toDate(),
+        until: now.clone().subtract(4, 'day').toDate(),
+      };
       const logs = await VolunteerLogs.fromCommunityBusiness(trx, cb, bw);
 
       expect(logs).toHaveLength(2);
@@ -88,8 +91,8 @@ describe('VolunteerLog model', () => {
         expect.objectContaining({
           userId: 6,
           organisationId: cb.id,
-          activity: 'Office support',
-          duration: { minutes: 50, seconds: 59 },
+          activity: 'Outdoor and practical work',
+          duration: { hours: 5 },
         }),
       ]));
     });
@@ -112,7 +115,10 @@ describe('VolunteerLog model', () => {
     test('fromUser :: returns volunteer logs for user between dates', async () => {
       const now = moment();
       const volunteer = await Users.getOne(trx, { where: { name: 'Emma Emmerich' } });
-      const bw = { since: now.clone().day(-6).toDate(), until: now.clone().day(-4).toDate() };
+      const bw = {
+        since: now.clone().subtract(6, 'day').toDate(),
+        until: now.clone().subtract(4, 'day').toDate(),
+      };
       const logs = await VolunteerLogs.fromUser(trx, volunteer, bw);
 
       expect(logs).toHaveLength(2);
@@ -120,8 +126,8 @@ describe('VolunteerLog model', () => {
         expect.objectContaining({
           userId: volunteer.id,
           organisationId: 2,
-          activity: 'Office support',
-          duration: { minutes: 50, seconds: 59 },
+          activity: 'Outdoor and practical work',
+          duration: { hours: 5 },
         }),
       ]));
     });

@@ -64,8 +64,8 @@ describe('API /users/me/volunteer-logs', () => {
     });
 
     test('can get own logs filtered by date', async () => {
-      const since = moment().day(-6).toDate().toISOString();
-      const until = moment().day(-5).toDate().toISOString();
+      const since = moment().utc().subtract(6, 'day').toDate().toISOString();
+      const until = moment().utc().subtract(5, 'day').toDate().toISOString();
 
       const res = await server.inject({
         method: 'GET',
@@ -384,8 +384,8 @@ describe('API /users/me/volunteer-logs', () => {
     });
 
     test('can get own summary between dates', async () => {
-      const then = moment().day(-6).utc().startOf('day').toISOString();
-      const now = moment().day(-4).utc().endOf('day').toISOString();
+      const then = moment().utc().subtract(6, 'day').startOf('day').toISOString();
+      const now = moment().utc().subtract(4, 'day').endOf('day').toISOString();
 
       const res = await server.inject({
         method: 'GET',

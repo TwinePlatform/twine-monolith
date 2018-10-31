@@ -47,8 +47,22 @@ describe('GET /volunteer-logs', () => {
     });
 
     expect(res.statusCode).toBe(200);
-    expect((<any> res.result).result).toHaveLength(3);
+    expect((<any> res.result).result).toHaveLength(4);
     expect((<any> res.result).result).toEqual([
+      {
+        activity: 'Outdoor and practical work',
+        duration: { hours: 5 },
+        organisationId: 2,
+        organisationName: 'Black Mesa Research',
+        userId: 6,
+      },
+      {
+        activity: 'Office support',
+        duration: { minutes: 50, seconds: 59 },
+        organisationId: 2,
+        organisationName: 'Black Mesa Research',
+        userId: 6,
+      },
       {
         activity: 'Committee work, AGM',
         duration: { hours: 1, seconds: 20 },
@@ -61,13 +75,6 @@ describe('GET /volunteer-logs', () => {
         duration: { minutes: 10, seconds: 20 },
         organisationId: 2,
         organisationName: 'Black Mesa Research',
-        userId: 6,
-      },
-      {
-        activity: 'Office support',
-        duration: { minutes: 30 },
-        organisationId: 1,
-        organisationName: 'Aperture Science',
         userId: 6,
       },
     ].map(expect.objectContaining));
