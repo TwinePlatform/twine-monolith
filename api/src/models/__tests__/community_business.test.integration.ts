@@ -43,7 +43,7 @@ describe('Community Business Model', () => {
 
     test('get :: filter results by region query', async () => {
       const orgs = await CommunityBusinesses.get(knex, { where: { region: RegionEnum.LONDON } });
-      expect(orgs).toEqual([
+      expect(orgs).toEqual(expect.arrayContaining([
         expect.objectContaining({
           _360GivingId: 'GB-COH-3205',
           id: 1,
@@ -58,7 +58,7 @@ describe('Community Business Model', () => {
           region: 'London',
           sector: 'Housing',
           turnoverBand: '£100k-£250k'}),
-      ]);
+      ]));
     });
 
     test('get :: return empty array for unpopulated sector', async () => {
