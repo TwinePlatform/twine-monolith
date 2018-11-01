@@ -140,7 +140,7 @@ export type CommunityBusinessRow = {
 export type User = Readonly<CommonTimestamps & {
   id?: Int
   name: string
-  email?: string
+  email: string
   phoneNumber?: string
   password?: string
   qrCode?: string
@@ -296,7 +296,7 @@ type UsersBaseCollection = Collection<User> & {
 };
 
 export type UserCollection = UsersBaseCollection & {
-  createPasswordResetToken: (k: Knex, u: Partial<User>) => Promise<SingleUseToken>
+  createPasswordResetToken: (k: Knex, u: User) => Promise<SingleUseToken>
   fromPasswordResetToken: (k: Knex, t: string) => Promise<User>
 };
 

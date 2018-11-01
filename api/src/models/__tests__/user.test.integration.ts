@@ -93,6 +93,7 @@ describe('User Model', () => {
       const exists = await Users.exists(knex, { where: { name: 'foo' } });
       expect(exists).toBe(false);
     });
+
   });
 
   describe('Write', () => {
@@ -170,9 +171,9 @@ describe('User Model', () => {
   });
 
   describe('createPasswordResetToken', () => {
-    test(':: returns a token object when email is supplied', async () => {
-      const resetToken = await Users
-        .createPasswordResetToken(knex, { email: '1@aperturescience.com' });
+    test(':: returns a token object when user is supplied', async () => {
+      const user = await Users.getOne(knex, { where: { email: '1@aperturescience.com' } });
+      const resetToken = await Users.createPasswordResetToken(knex, user);
 
       const expiresAtIsInTheFuture = moment().diff(resetToken.expiresAt) < 0;
       expect(resetToken).toEqual(expect.objectContaining({
@@ -182,19 +183,41 @@ describe('User Model', () => {
       expect(resetToken.token).toBeTruthy();
     });
 
-    test(':: returns a token object when a user id is supplied', async () => {
-      const resetToken = await Users.createPasswordResetToken(knex, { id: 2 });
+    test(':: invalidates old reset token when creating a new one', async () => {
+      const user = await Users.getOne(knex, { where: { id: 2 } });
 
-      expect(resetToken).toEqual(expect.objectContaining({
-        userId: 2,
-      }));
+      await Users.createPasswordResetToken(knex, user);
+      await Users.createPasswordResetToken(knex, user);
+      await Users.createPasswordResetToken(knex, user);
+      await Users.createPasswordResetToken(knex, user);
+      await Users.createPasswordResetToken(knex, user);
+
+      const rows = await knex('single_use_token')
+        .select('*')
+        .innerJoin(
+          'user_secret_reset',
+          'user_secret_reset.single_use_token_id',
+          'single_use_token.single_use_token_id')
+        .innerJoin(
+          'user_account',
+          'user_account.user_account_id',
+          'user_secret_reset.user_account_id')
+        .where({
+          'user_account.user_account_id': 2,
+          'single_use_token.used_at': null,
+          'single_use_token.deleted_at': null,
+        })
+        .andWhereRaw('single_use_token.expires_at > ?', [new Date()]);
+
+      expect(rows).toHaveLength(1);
     });
 
 
     test(':: throws an error when an incorrect email is supplied', async () => {
       expect.assertions(1);
       try {
-        await Users.createPasswordResetToken(knex, { email: '1999@aperturescience.com' });
+        const user = await Users.create({ name: 'Rat Man', email: '1999@aperturescience.com' });
+        await Users.createPasswordResetToken(knex, user);
       } catch (err) {
         expect(err).toBeTruthy();
       }

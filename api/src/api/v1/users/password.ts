@@ -40,11 +40,11 @@ const routes: Hapi.ServerRoute[] = [
     },
     handler: async (request: ForgotPasswordRequest, h: Hapi.ResponseToolkit) => {
       const { server: { app: { knex, EmailService } }, payload: { email } } = request;
-      const exists = await Users.exists(knex, { where: { email } });
+      const user = await Users.getOne(knex, { where: { email } });
 
-      if (!exists) return Boom.badRequest('E-mail not recognised');
+      if (!user) return Boom.badRequest('E-mail not recognised');
 
-      const { token } = await Users.createPasswordResetToken(knex, { email });
+      const { token } = await Users.createPasswordResetToken(knex, user);
 
       try {
         await EmailService.send({

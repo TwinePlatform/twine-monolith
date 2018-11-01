@@ -242,6 +242,16 @@ export const Users: UserCollection = {
     const hashToken = await hash(token, 12);
 
     const res = await client.transaction(async (trx) => {
+
+      // invalidate old tokens
+      await trx.raw(
+        'UPDATE single_use_token '
+      + 'SET expires_at = now() '
+      + 'FROM user_secret_reset '
+      + 'WHERE single_use_token.single_use_token_id = user_secret_reset.single_use_token_id '
+      + 'AND user_secret_reset.user_account_id = ?', [user.id]);
+
+      // create single use token
       const [tokenRow] = await trx('single_use_token')
         .insert({ token: hashToken, expires_at: twoDaysFromToday })
         .returning([
@@ -250,6 +260,7 @@ export const Users: UserCollection = {
           'expires_at AS expiresAt',
         ]);
 
+      // link token to user_secret_reset table
       const [userId] = await trx('user_secret_reset')
         .insert({
           single_use_token_id: tokenRow.id,
