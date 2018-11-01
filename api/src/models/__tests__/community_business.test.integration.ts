@@ -73,6 +73,15 @@ describe('Community Business Model', () => {
         { adminCode: '70007', name: 'Black Mesa Research' }]));
     });
 
+    test('get :: return selected fields with frontline info', async () => {
+      const orgs = await CommunityBusinesses.get(knex, {
+        fields: ['name', 'frontlineApiKey', 'frontlineWorkspaceId'],
+      });
+      expect(orgs).toEqual(expect.arrayContaining([
+        { name: 'Aperture Science', frontlineWorkspaceId: null, frontlineApiKey: null },
+        { name: 'Black Mesa Research', frontlineWorkspaceId: null, frontlineApiKey: null }]));
+    });
+
     test('getOne :: returns first organisation only', async () => {
       const org = await CommunityBusinesses.getOne(knex);
 
