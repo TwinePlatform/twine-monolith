@@ -23,6 +23,13 @@ export enum HttpMethodEnum {
   DELETE = 'DELETE',
 }
 
+export enum AppEnum {
+  TWINE_API = 'TWINE_API',
+  VISITOR = 'VISITOR_APP',
+  VOLUNTEER = 'VOLUNTEER_APP',
+  ADMIN = 'ADMIN_APP',
+}
+
 export type ApiRouteSpec = {
   description: string,
   isImplemented: boolean,
