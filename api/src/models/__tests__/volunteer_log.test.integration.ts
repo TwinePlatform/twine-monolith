@@ -81,8 +81,8 @@ describe('VolunteerLog model', () => {
       const now = moment();
       const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
       const bw = {
-        since: now.clone().subtract(6, 'day').toDate(),
-        until: now.clone().subtract(4, 'day').toDate(),
+        since: now.clone().subtract(6, 'day').startOf('day').toDate(),
+        until: now.clone().subtract(4, 'day').startOf('day').toDate(),
       };
       const logs = await VolunteerLogs.fromCommunityBusiness(trx, cb, bw);
 
@@ -116,8 +116,8 @@ describe('VolunteerLog model', () => {
       const now = moment();
       const volunteer = await Users.getOne(trx, { where: { name: 'Emma Emmerich' } });
       const bw = {
-        since: now.clone().subtract(6, 'day').toDate(),
-        until: now.clone().subtract(4, 'day').toDate(),
+        since: now.clone().subtract(6, 'day').startOf('day').toDate(),
+        until: now.clone().subtract(4, 'day').startOf('day').toDate(),
       };
       const logs = await VolunteerLogs.fromUser(trx, volunteer, bw);
 
