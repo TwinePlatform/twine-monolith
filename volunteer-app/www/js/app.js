@@ -41,10 +41,10 @@
 					live:  'https://api.twine-together.com/v1/',
 				},
 				adminBaseUrl: {
-					local: 'http://localhost:4000/v1/',
-					dev:   'http://localhost:4000/v1/',
-					stage: 'https://twine-together.herokuapp.com/v1/',
-					live:  'https://twine-together.com/v1/',
+					local: 'http://localhost:5000/',
+					dev:   'http://localhost:5000/',
+					stage: 'https://admin.twine-together.com/',
+					live:  'https://admin.twine-together.com/',
 				}
 			};
 
