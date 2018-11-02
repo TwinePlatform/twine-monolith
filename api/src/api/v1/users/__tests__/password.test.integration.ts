@@ -58,7 +58,7 @@ describe('POST /users/password', () => {
       expect(mockEmailService.mock.calls.length).toBe(1);
       expect(mockEmailService.mock.calls[0][0]).toEqual(expect.objectContaining({
         from: 'visitorapp@powertochange.org.uk',
-        templateId: '4148361',
+        templateId: '8786293',
         templateModel: expect.objectContaining({
           email: '1@aperturescience.com',
         }),
@@ -75,6 +75,7 @@ describe('POST /users/password', () => {
         url: '/v1/users/password/reset',
         payload: {
           token,
+          email: '1@aperturescience.com',
           password: 'Password113!',
           passwordConfirm: 'Password113!',
         },
@@ -94,6 +95,7 @@ describe('POST /users/password', () => {
         url: '/v1/users/password/reset',
         payload: {
           token,
+          email: '1@aperturescience.com',
           password: 'otherPassword113!',
           passwordConfirm: 'otherPassword113!',
         },
@@ -124,7 +126,11 @@ describe('POST /users/password', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/users/password/reset',
-        payload: { token: fakeToken, password: 'Password114!', passwordConfirm: 'Password141!' },
+        payload: {
+          token: fakeToken,
+          email: 'lost@burmuda.is',
+          password: 'Password114!',
+          passwordConfirm: 'Password141!' },
       });
 
       expect(res.statusCode).toBe(400);
@@ -137,7 +143,11 @@ describe('POST /users/password', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/users/password/reset',
-        payload: { token: fakeToken, password: 'password111', passwordConfirm: 'password111' },
+        payload: {
+          token: fakeToken,
+          email: 'lost@burmuda.is',
+          password: 'password111',
+          passwordConfirm: 'password111' },
       });
 
       expect(res.statusCode).toBe(400);

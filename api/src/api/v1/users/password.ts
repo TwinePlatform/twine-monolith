@@ -22,6 +22,7 @@ interface ForgotPasswordRequest extends Hapi.Request {
 
 interface ResetPasswordRequest extends Hapi.Request {
   payload: {
+    email: string
     token: string
     password: string
     passwordConfirm: string
@@ -37,7 +38,7 @@ const routes: Hapi.ServerRoute[] = [
       auth: false,
       validate: {
         payload: {
-          email: emailSchema,
+          email: emailSchema.required(),
           redirect: Joi.allow([AppEnum.ADMIN, AppEnum.VOLUNTEER]).default(AppEnum.ADMIN),
         },
       },
@@ -82,8 +83,9 @@ const routes: Hapi.ServerRoute[] = [
       auth: false,
       validate: {
         payload: {
-          token: Joi.string().length(64),
-          password: passwordSchema,
+          token: Joi.string().length(64).required(),
+          email: emailSchema.required(),
+          password: passwordSchema.required(),
           passwordConfirm: Joi.string().required().valid(Joi.ref('password'))
             .options({ language: { any: {
               required: 'password confirmation is required',
@@ -103,12 +105,12 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: ResetPasswordRequest, h: Hapi.ResponseToolkit) => {
       const {
         server: { app: { knex } },
-        payload: { token, password },
+        payload: { token, password, email },
       } = request;
       let user: User;
 
       try {
-        user = await Users.fromPasswordResetToken(knex, token);
+        user = await Users.usePasswordResetToken(knex, email, token);
       } catch (error) {
         request.log('warning', error);
         return Boom.unauthorized('Invalid token. Reset password again.');
