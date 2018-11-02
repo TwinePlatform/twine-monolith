@@ -759,7 +759,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
         { activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
-        { activity: 'Shop/Cafe work', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
+        { activity: 'Shop/Sales', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
       ];
 
       const res = await server.inject({
@@ -830,7 +830,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
         { userId: 6, activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
-        { activity: 'Shop/Cafe work', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
+        { activity: 'Shop/Sales', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
       ];
 
       const res = await server.inject({
