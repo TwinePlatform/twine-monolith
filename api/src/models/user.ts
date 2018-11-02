@@ -17,7 +17,7 @@ import {
   SingleUseToken,
 } from './types';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import { renameKeys, mapKeys, findAsync } from '../utils';
+import { renameKeys, mapKeys } from '../utils';
 
 
 /*
@@ -276,34 +276,41 @@ export const Users: UserCollection = {
     return { ...res, token } as SingleUseToken;
   },
 
-  async fromPasswordResetToken (client, token) {
-    // Find token
-    // // No token -> Error
-    const tokens = await client('single_use_token')
-      .select()
-      .where({ deleted_at: null, used_at: null })
-      .andWhere('expires_at', '>', new Date());
+  async usePasswordResetToken (client, email, token) {
+    // get user
+    const user = await Users.getOne(client, { where: { email } });
+    if (!user) throw new Error('E-mail not recognised');
 
-    const tokenRow = await findAsync(tokens, (a: any) => compare(token, a.token));
+    // get valid token matching user
+    const [match] = await client('single_use_token')
+      .select('*')
+      .innerJoin(
+        'user_secret_reset',
+        'user_secret_reset.single_use_token_id',
+        'single_use_token.single_use_token_id')
+      .innerJoin(
+        'user_account',
+        'user_account.user_account_id',
+        'user_secret_reset.user_account_id')
+      .where({
+        'user_account.email': email,
+        'single_use_token.used_at': null,
+        'single_use_token.deleted_at': null,
+      })
+      .andWhereRaw('single_use_token.expires_at > ?', [moment().toISOString()]);
 
-    if (!tokenRow) {
-      throw new Error('Unrecognised reset token');
-    }
+    if (!match) throw new Error('Token not recognised');
 
-    // Find associated user
-    // // No associated user -> Error
-    const [{ user_account_id: id }] = await client('user_secret_reset')
-      .select('user_account_id')
-      .where({ single_use_token_id: tokenRow.single_use_token_id });
+    // check token hash matches supplied token
+    const isValid = await compare(token, match.token);
 
-    if (!id) {
-      throw new Error('No associated user');
-    }
+    if (!isValid) throw new Error('Token not recognised');
 
+    // update token row as used
     await client('single_use_token')
-      .update({ used_at: new Date() })
-      .where({ single_use_token_id: tokenRow.single_use_token_id });
+      .update({ used_at: moment().toISOString() })
+      .where({ single_use_token_id: match.single_use_token_id });
 
-    return Users.getOne(client, { where: { id } });
+    return null;
   },
 };

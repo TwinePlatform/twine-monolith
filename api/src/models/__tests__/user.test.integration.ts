@@ -223,5 +223,67 @@ describe('User Model', () => {
       }
     });
   });
+
+  describe('usePasswordResetToken', () => {
+    test('::SUCCESS - marks valid token as expired', async () => {
+      const getTokenForUser = knex('single_use_token')
+      .select('*')
+      .innerJoin(
+        'user_secret_reset',
+        'user_secret_reset.single_use_token_id',
+        'single_use_token.single_use_token_id')
+      .innerJoin(
+        'user_account',
+        'user_account.user_account_id',
+        'user_secret_reset.user_account_id')
+      .where({
+        'user_account.user_account_id': 1,
+        'single_use_token.used_at': null,
+        'single_use_token.deleted_at': null,
+      })
+      .andWhereRaw('single_use_token.expires_at > ?', [new Date()]);
+
+      const user = await Users.getOne(knex, { where: { id: 1 } });
+      const { token } = await Users.createPasswordResetToken(knex, user);
+
+      const preUseRows = await getTokenForUser;
+      expect(preUseRows).toHaveLength(1);
+
+      await Users.usePasswordResetToken(knex, user.email, token);
+
+      const postUseRows = await getTokenForUser;
+      expect(postUseRows).toHaveLength(0);
+    });
+
+    test('::FAIL - returns error for invalid email', async () => {
+      expect.assertions(1);
+      try {
+        await Users.usePasswordResetToken(knex, '1999@aperturescience.com', 'thisisnotarealtoken');
+      } catch (error) {
+        expect(error.message).toBe('E-mail not recognised');
+      }
+    });
+
+    test('::FAIL - returns error no token stored for user', async () => {
+      expect.assertions(1);
+      try {
+        await Users.usePasswordResetToken(knex, '1@aperturescience.com', 'thisisnotarealtoken');
+      } catch (error) {
+        expect(error.message).toBe('Token not recognised');
+      }
+    });
+
+    test('::FAIL - returns error for invalid token', async () => {
+      expect.assertions(1);
+      try {
+        const user = await Users.getOne(knex, { where: { id: 1 } });
+        await Users.createPasswordResetToken(knex, user);
+
+        await Users.usePasswordResetToken(knex, user.email, 'thisisnotarealtoken');
+      } catch (error) {
+        expect(error.message).toBe('Token not recognised');
+      }
+    });
+  });
 });
 
