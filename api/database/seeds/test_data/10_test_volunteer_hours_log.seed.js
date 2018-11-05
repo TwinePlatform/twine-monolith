@@ -23,6 +23,13 @@ const getVolunteerId = (k, s) =>
       email: s,
     });
 
+const getProjectId = (k, s, n) =>
+  k('volunteer_project')
+    .select('volunteer_project_id')
+    .where({
+      volunteer_project_name: s,
+      organisation_id: getOrgId(n),
+    });
 
 exports.seed = (knex) =>
   knex('volunteer_hours_log')
@@ -31,6 +38,7 @@ exports.seed = (knex) =>
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 1,
+        volunteer_project_id: getProjectId(knex, 'Party', 'Black Mesa Research'),
         duration: (60 * 10) + 20,
         started_at: now.clone().subtract(7, 'day'),
       },
@@ -45,6 +53,7 @@ exports.seed = (knex) =>
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 2,
+        volunteer_project_id: getProjectId(knex, 'Take over the world', 'Black Mesa Research'),
         duration: 60 * 60 * 5,
         started_at: now.clone().subtract(5, 'day'),
       },
@@ -72,6 +81,7 @@ exports.seed = (knex) =>
       {
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
+        volunteer_project_id: getProjectId(knex, 'Party', 'Black Mesa Research'),
         volunteer_activity_id: 5,
         duration: 60 * 30,
         started_at: now.clone(),

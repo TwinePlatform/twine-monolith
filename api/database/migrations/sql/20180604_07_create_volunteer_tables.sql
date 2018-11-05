@@ -12,10 +12,22 @@ CREATE TABLE volunteer_activity (
   CONSTRAINT volunteer_activity_pk PRIMARY KEY (volunteer_activity_id)
 );
 
+CREATE TABLE volunteer_project (
+  volunteer_project_id   SERIAL NOT NULL UNIQUE,
+  volunteer_project_name VARCHAR NOT NULL,
+  organisation_id        INT NOT NULL,
+  created_at             TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at            TIMESTAMP WITH TIME ZONE,
+  deleted_at             TIMESTAMP WITH TIME ZONE,
+
+  CONSTRAINT volunteer_project_pk                       PRIMARY KEY (volunteer_project_id),
+  CONSTRAINT volunteer_project_to_community_business_fk FOREIGN KEY (organisation_id)       REFERENCES organisation ON DELETE CASCADE
+);
 
 CREATE TABLE volunteer_hours_log (
   volunteer_hours_log_id SERIAL NOT NULL UNIQUE,
   volunteer_activity_id  INT NOT NULL,
+  volunteer_project_id   INT,
   user_account_id        INT NOT NULL,
   organisation_id        INT NOT NULL,
   duration               INTERVAL DAY TO SECOND NOT NULL,

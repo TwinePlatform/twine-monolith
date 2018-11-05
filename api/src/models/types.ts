@@ -251,6 +251,7 @@ export type VolunteerLog = Readonly<CommonTimestamps & {
   organisationId: Int
   organisationName?: string
   activity: string
+  project?: string
   duration: Duration
   startedAt: string
 }>;

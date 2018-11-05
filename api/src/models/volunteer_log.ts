@@ -26,6 +26,7 @@ export const ColumnToModel: Map<string, keyof VolunteerLog> = {
   'volunteer_hours_log.modified_at': 'modifiedAt',
   'volunteer_hours_log.deleted_at': 'deletedAt',
   'volunteer_activity.volunteer_activity_name': 'activity',
+  'volunteer_project.volunteer_project_name': 'project',
 };
 export const ModelToColumn = invertObj(ColumnToModel);
 
@@ -37,6 +38,7 @@ const stripTablePrefix = mapKeys((s) => s.replace('volunteer_hours_log.', ''));
 
 const replaceConstantsWithForeignKeys = renameKeys({
   'volunteer_activity.volunteer_activity_name': 'volunteer_hours_log.volunteer_activity_id',
+  'volunteer_project.volunteer_project_name': 'volunteer_hours_log.volunteer_project_id',
 });
 
 const transformForeignKeysToSubQueries = (client: Knex) => evolve({
@@ -44,6 +46,11 @@ const transformForeignKeysToSubQueries = (client: Knex) => evolve({
     client('volunteer_activity')
       .select('volunteer_activity_id')
       .where({ volunteer_activity_name: s }),
+
+  'volunteer_hours_log.volunteer_project_id': (s: string) =>
+    s && client('volunteer_project')
+      .select('volunteer_project_id')
+      .where({ volunteer_project_name: s }),
 });
 
 const transformDuration = evolve({
@@ -76,6 +83,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
       modifiedAt: o.modifiedAt,
       deletedAt: o.deletedAt,
       activity: o.activity,
+      project: o.project,
     };
   },
 
@@ -96,6 +104,11 @@ export const VolunteerLogs: VolunteerLogCollection = {
           'organisation',
           'volunteer_hours_log.organisation_id',
           'organisation.organisation_id'
+        )
+        .leftOuterJoin(
+          'volunteer_project',
+          'volunteer_project.volunteer_project_id',
+          'volunteer_hours_log.volunteer_project_id'
         )
         .select(query.fields
           ? pick(query.fields, { ...ModelToColumn, ...optionalFields })
