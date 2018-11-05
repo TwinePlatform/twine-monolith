@@ -13,6 +13,8 @@ import Home from './pages/Home'
 import Logs from './pages/Logs'
 import Organisations from './pages/Organisations'
 import OrgProfile from './pages/OrgProfile';
+import PasswordForgot from './pages/PasswordForgot';
+import PasswordReset from './pages/PasswordReset';
 //utils
 import { api } from './utils/api'
 
@@ -63,6 +65,8 @@ class App extends Component {
           <Paper className={classes.content} elevation={1} style={inlinePaperStyle}>
             <div className={classes.toolbar} >
               <Route exact path="/" render={(props) => <Home {...props} login={login} loginError={loginError} auth={auth} />} />
+              <Route exact path="/password-forgot" component={PasswordForgot} />
+              <Route exact path="/password-reset/:token" component={PasswordReset} />
               <PrivateRoute auth={auth} exact path="/admin-codes" component={AdminCodes} />
               <PrivateRoute auth={auth} exact path="/logs" component={Logs} />
               <PrivateRoute auth={auth} exact path="/organisations" component={Organisations} />

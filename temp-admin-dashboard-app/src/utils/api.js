@@ -1,22 +1,25 @@
 import _axios from 'axios';
 import { RoleEnum } from './enums'
-import * as moment from 'moment'
 
-const baseURL = process.env
-  ? process.env.NODE_ENV === 'development'
-    ? 'http://localhost:4000/v1'
-    : 'https//:api.twine-together.com/v1'
-  : 'https//:api.twine-together.com/v1'
+const baseURL = process.env && process.env.NODE_ENV === 'development'
+  ? 'http://localhost:4000/v1'
+  : 'https://api.twine-together.com/v1'
 
 const axios = _axios.create({
   baseURL,
-  timeout: 1000,
+  // timeout: 1000,
   withCredentials: true,
 });
 
 export const api = {
   login: ({ email, password }) => {
     return axios.post('/users/login', { email, password, restrict: RoleEnum.TwineAdmin })
+  },
+  forgot: ({ email }) => {
+    return axios.post('/users/password/forgot', { email, redirect: 'ADMIN_APP' })
+  },
+  reset: ({ token, email, password, passwordConfirm }) => {
+    return axios.post('/users/password/reset', { token, email, password, passwordConfirm })
   },
   adminCodes: () => {
     return axios.get('/community-businesses?fields[]=name&fields[]=adminCode')
