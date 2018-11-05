@@ -4,7 +4,7 @@ const getOrgId = (k, s) =>
     .where({ organisation_name: s });
 
 exports.seed = (knex) =>
-  knex('volunteer_hours_log')
+  knex('volunteer_project')
     .insert([
       {
         volunteer_project_name: 'Party',

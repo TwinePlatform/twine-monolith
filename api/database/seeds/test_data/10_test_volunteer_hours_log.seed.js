@@ -28,7 +28,7 @@ const getProjectId = (k, s, n) =>
     .select('volunteer_project_id')
     .where({
       volunteer_project_name: s,
-      organisation_id: getOrgId(n),
+      organisation_id: getOrgId(k, n),
     });
 
 exports.seed = (knex) =>
