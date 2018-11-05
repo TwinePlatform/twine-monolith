@@ -41,7 +41,7 @@ const replaceConstantsWithForeignKeys = renameKeys({
   'volunteer_project.volunteer_project_name': 'volunteer_hours_log.volunteer_project_id',
 });
 
-const transformForeignKeysToSubQueries = (client: Knex) => evolve({
+const transformForeignKeysToSubQueries = (client: Knex, org_id: number) => evolve({
   'volunteer_hours_log.volunteer_activity_id': (s: string) =>
     client('volunteer_activity')
       .select('volunteer_activity_id')
@@ -50,7 +50,7 @@ const transformForeignKeysToSubQueries = (client: Knex) => evolve({
   'volunteer_hours_log.volunteer_project_id': (s: string) =>
     s && client('volunteer_project')
       .select('volunteer_project_id')
-      .where({ volunteer_project_name: s }),
+      .where({ volunteer_project_name: s, organisation_id: org_id }),
 });
 
 const transformDuration = evolve({
@@ -141,7 +141,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
 
     const preProcessLog = compose(
       stripTablePrefix,
-      transformForeignKeysToSubQueries(client),
+      transformForeignKeysToSubQueries(client, log.organisationId),
       replaceConstantsWithForeignKeys,
       VolunteerLogs.toColumnNames,
       transformDuration
@@ -161,7 +161,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
   async update (client, log, changes) {
     const preProcessChangeSet = compose(
       stripTablePrefix,
-      transformForeignKeysToSubQueries(client),
+      transformForeignKeysToSubQueries(client, log.organisationId),
       replaceConstantsWithForeignKeys,
       VolunteerLogs.toColumnNames,
       transformDuration
@@ -186,7 +186,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
 
   async destroy (client, log) {
     const preProcessLog = compose(
-      transformForeignKeysToSubQueries(client),
+      transformForeignKeysToSubQueries(client, log.organisationId),
       replaceConstantsWithForeignKeys,
       VolunteerLogs.toColumnNames,
       dropUnwhereableUserFields
