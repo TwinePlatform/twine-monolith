@@ -5,6 +5,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   container: {
@@ -37,14 +38,14 @@ const styles = theme => ({
 
 const turnoverBands = ['<£100k', '£100k-£250k', '£250k-£500k', '£500k-£750k', '£750k-£1m', '£1m-£5m', '£5m-£10m', '>£10m']
 
-const OrgForm = ({ organisation, regions, sectors, handleChange, classes }) => {
+const OrgForm = ({ organisation, regions, sectors, handleChange, classes, submitForm, formUpdate }) => {
   return (
     <form className={classes.container} noValidate autoComplete="off">
       <TextField
         id="name"
         label="Name"
         className={classes.textField}
-        value={organisation.name}
+        value={formUpdate.name || organisation.name}
         onChange={handleChange('name')}
         margin="normal"
       />
@@ -53,37 +54,37 @@ const OrgForm = ({ organisation, regions, sectors, handleChange, classes }) => {
         label="360GivingId"
         className={classes.textField}
         value={organisation._360GivingId}
-        onChange={handleChange('_360GivingId')}
         margin="normal"
+        disabled="true"
       />
       <TextField
         id="address1"
-        label="address1"
+        label="address 1"
         className={classes.textField}
-        value={organisation.address1}
+        value={formUpdate.address1 || organisation.address1}
         onChange={handleChange('address1')}
         margin="normal"
       />
       <TextField
         id="address2"
-        label="address2"
+        label="address 2"
         className={classes.textField}
-        value={organisation.address1}
+        value={formUpdate.address2 || organisation.address2}
         onChange={handleChange('address2')}
         margin="normal"
       />
       <TextField
-        id="postcode"
-        label="postcode"
+        id="postCode"
+        label="Post Code"
         className={classes.textField}
-        value={organisation.address1}
-        onChange={handleChange('postcode')}
+        value={formUpdate.postCode || organisation.postCode}
+        onChange={handleChange('postCode')}
         margin="normal"
       />
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor="region">Region</InputLabel>
         <Select
-          value={organisation.region}
+          value={formUpdate.region || organisation.region}
           onChange={handleChange('region')}
           inputProps={{
             name: 'region',
@@ -99,7 +100,7 @@ const OrgForm = ({ organisation, regions, sectors, handleChange, classes }) => {
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor="region">Sector</InputLabel>
         <Select
-          value={organisation.sector}
+          value={formUpdate.sector || organisation.sector}
           className={classes.textField}
           onChange={handleChange('sector')}
           inputProps={{
@@ -116,7 +117,7 @@ const OrgForm = ({ organisation, regions, sectors, handleChange, classes }) => {
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor="turnoverBand">Turnover Band</InputLabel>
         <Select
-          value={organisation.turnoverBand}
+          value={formUpdate.turnoverBand || organisation.turnoverBand}
           className={classes.textField}
           onChange={handleChange('turnoverBand')}
           inputProps={{
@@ -130,6 +131,25 @@ const OrgForm = ({ organisation, regions, sectors, handleChange, classes }) => {
           {turnoverBands.map(x => <MenuItem key={x} value={x}>{x}</MenuItem>)}
         </Select>
       </FormControl>
+      <TextField
+        id="frontlineWorkspaceId"
+        label="frontlineWorkspaceId"
+        className={classes.textField}
+        value={organisation.frontlineWorkspaceId || 'No id linked'}
+        margin="normal"
+        disabled="true"
+      />
+      <TextField
+        id="frontlineApiKey"
+        label="frontlineApiKey"
+        className={classes.textField}
+        value={organisation.frontlineApiKey || 'No key linked'}
+        margin="normal"
+        disabled="true"
+      />
+      <Button component="span" color="secondary" onClick={() => submitForm()}>
+        Save Changes
+      </Button>
     </form>
   )
 }

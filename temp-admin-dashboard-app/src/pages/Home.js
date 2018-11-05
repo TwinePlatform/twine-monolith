@@ -28,6 +28,7 @@ const styles = theme => ({
     margin: theme.spacing.unit,
   },
 });
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -66,15 +67,14 @@ class Home extends Component {
       />
       <Button component="span" color="secondary" onClick={() => login({ email, password })}>
         Login
-  </Button>
+      </Button>
       {loginError && <SnackbarContent className={classes.snackbar} message={loginError} />}
     </form>
 
     return (
       <Typography variant="h5" component="h3">
         Home
-      {!auth ? loginForm : <Typography component="p">You are logged in</Typography>
-        }
+      {!auth ? loginForm : <Typography component="p">You are logged in</Typography>}
 
       </Typography>
     )

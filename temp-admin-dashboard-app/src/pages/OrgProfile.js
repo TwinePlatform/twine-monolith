@@ -35,7 +35,8 @@ class OrgProfile extends Component {
     super(props);
     this.state = {
       status: StatusEnum.PENDING,
-      error: null,
+      formUpdate: {},
+      message: null,
     };
   }
 
@@ -48,38 +49,51 @@ class OrgProfile extends Component {
           organisation: orgRes.data.result,
           regions: regionsRes.data.result,
           sectors: sectorsRes.data.result,
-
           status: StatusEnum.SUCCESS
         })
       })
       .catch((err) => {
         const errorMessage = err.response.data.error.message || 'Error fetching data.'
-        this.setState({ error: errorMessage })
+        this.setState({ message: errorMessage })
       })
   }
 
   handleChange = name => event => {
-    this.setState(prevState => ({
-      organisation: {
-        ...prevState.organisation,
+    this.setState({
+      formUpdate: {
+        ...this.state.formUpdate,
         [name]: event.target.value
       },
-    }));
+    })
   };
+
+  submitForm = () => {
+    const { formUpdate, organisation: { id } } = this.state;
+    api.updateOrganisation({ id, formUpdate })
+      .then(() => {
+        this.setState({ message: 'Information saved' })
+        setTimeout(() => {
+          this.setState({ message: null })
+        }, 2000)
+      })
+      .catch((err) => {
+        this.setState({ message: err.response.data.error.message })
+      })
+  }
 
   render() {
     const {
       props: { classes, match: { params: { id } } },
-      state: { status, error }, handleChange } = this
+      state: { status, message }, handleChange, submitForm } = this
 
     return (
       <Fragment>
         <Typography variant="h5" component="h3">
           Organisation {id}
         </Typography>
-        {error && <SnackbarContent className={classes.snackbar} message={error} />}
         <Paper className={classes.container}>
-          {status === StatusEnum.SUCCESS && <OrgForm {...this.state} handleChange={handleChange} />}
+          {status === StatusEnum.SUCCESS && <OrgForm {...this.state} submitForm={submitForm} handleChange={handleChange} />}
+          {message && <SnackbarContent className={classes.snackbar} message={message} />}
         </Paper>
       </Fragment>
     );

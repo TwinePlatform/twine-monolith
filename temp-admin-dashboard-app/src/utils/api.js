@@ -28,7 +28,22 @@ export const api = {
     return axios.get('/community-businesses')
   },
   organisation: (id) => {
-    return axios.get(`/community-businesses/${id}`)
+    return axios.get(`/community-businesses/${id}?`
+      + 'fields[]=id&'
+      + 'fields[]=name&'
+      + 'fields[]=_360GivingId&'
+      + 'fields[]=region&'
+      + 'fields[]=sector&'
+      + 'fields[]=address1&'
+      + 'fields[]=address2&'
+      + 'fields[]=postCode&'
+      + 'fields[]=turnoverBand&'
+      + 'fields[]=frontlineApiKey&'
+      + 'fields[]=frontlineWorkspaceId')
+  },
+
+  updateOrganisation: ({ id, formUpdate }) => {
+    return axios.put(`/community-businesses/${id}`, formUpdate)
   },
   visitLogs: () => {
     return axios.get(`/visit-logs`)
