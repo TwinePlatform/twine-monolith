@@ -13,7 +13,7 @@ import { CommunityBusinesses } from '../../../models';
 import { GetCommunityBusinessRequest } from '../types';
 
 
-const is360GivingId = (s: string) => isNaN(parseInt(s, 10));
+export const is360GivingId = (s: string) => isNaN(parseInt(s, 10));
 const getCbFromCredentials = async (request: GetCommunityBusinessRequest) => {
   const knex = request.server.app.knex;
   const id = request.auth.credentials.organisation.id;

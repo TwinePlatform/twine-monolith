@@ -1,9 +1,11 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
+import { pick } from 'ramda';
 import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 import { GetCommunityBusinessRequest, GetCommunityBusinessesRequest } from '../types';
 import { query, response } from './schema';
+import { is360GivingId } from '../prerequisites/get_community_business';
 
 export default [
   {
@@ -82,17 +84,30 @@ export default [
       },
       response: { schema: response },
       pre: [
-        { method: getCommunityBusiness, assign: 'communityBusiness' },
         { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
       ],
     },
     handler: async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
-      const { communityBusiness, isChild } = request.pre;
+      const {
+        pre: { isChild },
+        params: { organisationId },
+        query: _query,
+        server: { app: { knex } } } = request;
 
       if (!isChild) {
         return Boom.forbidden('Insufficient permissions to access this organisation');
       }
 
+      const idQuery = (is360GivingId(organisationId))
+        ? { _360GivingId: organisationId }
+        : { id: Number(organisationId) };
+
+      const query = {
+        ...pick(['fields'], _query),
+        ...{ where: idQuery },
+      };
+
+      const communityBusiness = await CommunityBusinesses.getOne(knex, query);
       return CommunityBusinesses.serialise(<CommunityBusiness> communityBusiness);
     },
   },

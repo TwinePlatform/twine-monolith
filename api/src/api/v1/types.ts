@@ -57,6 +57,9 @@ export interface GetCommunityBusinessRequest extends Hapi.Request {
   params: {
     organisationId: string
   };
+  query: ApiRequestQuery & {
+    [k: string]: any
+  };
 }
 
 export interface GetCommunityBusinessesRequest extends Hapi.Request {
