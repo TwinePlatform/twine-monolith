@@ -39,7 +39,9 @@ const styles = theme => ({
 class Home extends Component {
   constructor(props) {
     super(props);
-
+    this.state = {
+      message: null
+    }
   };
 
   getVisitLogs = () => {
@@ -61,12 +63,24 @@ class Home extends Component {
           saveAs(file)
         })
       })
-      .catch(console.log)
+      .catch((err) => {
+        const errorMessage = err.response.data.error.message || 'Error fetching data.'
+        this.setState({ message: errorMessage })
+      })
   }
+
   getVolunteerLogs = () => {
     api.volunteerLogs()
       .then((res) => {
-        const logs = res.data.result
+        const logs = res.data.result.map(log => {
+          const hours = log.duration.hours ? `${log.duration.hours} hours, ` : '';
+          const minutes = log.duration.minutes ? `${log.duration.minutes} minutes, ` : ''
+          const seconds = log.duration.seconds ? `${log.duration.seconds} seconds` : ''
+          return {
+            ...log,
+            duration: `${hours}${minutes}${seconds}`,
+          }
+        })
         const headers = Object.keys(logs[0]).reduce((acc, el) => ({ ...acc, ...{ [el]: el } }), { date: 'date', time: 'time' })
 
         const csvData = [headers].concat(logs.map(x => (
@@ -83,11 +97,14 @@ class Home extends Component {
           saveAs(file)
         })
       })
-      .catch(console.log)
+      .catch((err) => {
+        const errorMessage = err.response.data.error.message || 'Error fetching data.'
+        this.setState({ message: errorMessage })
+      })
   }
 
   render() {
-    const { props: { classes }, getVisitLogs, getVolunteerLogs } = this;
+    const { props: { classes }, getVisitLogs, getVolunteerLogs, state: { message } } = this;
     return (
       <Fragment>
         <Typography variant="h5" component="h3">
@@ -99,6 +116,7 @@ class Home extends Component {
         <Button component="span" color="secondary" onClick={() => getVolunteerLogs()}>
           Download Volunteer Logs
         </Button>
+        {message && <SnackbarContent className={classes.snackbar} message={message} />}
       </Fragment>
     )
   }
