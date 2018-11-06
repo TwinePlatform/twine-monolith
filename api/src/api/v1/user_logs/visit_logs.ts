@@ -61,7 +61,7 @@ const routes: Hapi.ServerRoute[] = [
           gender: 'gender.gender_name',
         })
         .innerJoin('visit_activity', 'visit_activity.visit_activity_id', 'visit.visit_activity_id')
-        .innerJoin(
+        .leftOuterJoin(
           'visit_activity_category',
           'visit_activity_category.visit_activity_category_id',
           'visit_activity.visit_activity_category_id')
@@ -71,6 +71,9 @@ const routes: Hapi.ServerRoute[] = [
           'visit_activity.organisation_id',
           'organisation.organisation_id')
         .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
+        .where({
+          'visit.deleted_at': null,
+        })
         .whereBetween('visit.created_at', since || until
           ? [
             new Date(since),
