@@ -33,7 +33,7 @@ export default [
           address2: Joi.string().min(1),
           townCity: Joi.string().min(1),
           postCode: Joi.string().min(6).max(10),
-          turnoverBand: Joi.string().min(6).max(11),
+          turnoverBand: Joi.string().min(5).max(11),
         },
       },
       response: { schema: response },
