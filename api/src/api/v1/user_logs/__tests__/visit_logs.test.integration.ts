@@ -30,19 +30,19 @@ describe('GET /visit-logs', () => {
     });
 
     expect(res.statusCode).toBe(200);
-    expect((<any> res.result).result).toEqual([
-      { category: 'Socialising', gender: 'female', id: 8, visitActivity: 'Wear Pink' },
-      { category: 'Socialising', gender: 'female', id: 9, visitActivity: 'Wear Pink' },
-      { category: 'Socialising', gender: 'female', id: 10, visitActivity: 'Wear Pink' },
+    expect((<any> res.result).result).toEqual(expect.arrayContaining([
       { category: 'Sports', gender: 'female', id: 1, visitActivity: 'Free Running' },
       { category: 'Sports', gender: 'female', id: 2, visitActivity: 'Free Running' },
       { category: 'Sports', gender: 'female', id: 3, visitActivity: 'Free Running' },
       { category: 'Sports', gender: 'female', id: 4, visitActivity: 'Free Running' },
       { category: 'Sports', gender: 'female', id: 5, visitActivity: 'Free Running' },
       { category: 'Sports', gender: 'female', id: 6, visitActivity: 'Free Running' },
-      { category: 'Sports', gender: 'female', id: 7, visitActivity: 'Free Running' }]
+      { category: 'Sports', gender: 'female', id: 7, visitActivity: 'Free Running' },
+      { category: 'Socialising', gender: 'female', id: 8, visitActivity: 'Wear Pink' },
+      { category: 'Socialising', gender: 'female', id: 9, visitActivity: 'Wear Pink' },
+      { category: 'Socialising', gender: 'female', id: 10, visitActivity: 'Wear Pink' }]
       .map((x) => expect.objectContaining(x))
-    );
+    ));
   });
 
   test('success :: returns subset of logs with date querystring', async () => {
@@ -59,7 +59,7 @@ describe('GET /visit-logs', () => {
     });
 
     expect(res.statusCode).toBe(200);
-    expect((<any> res.result).result).toEqual([
+    expect((<any> res.result).result).toEqual(expect.arrayContaining([
       {
         birthYear: 1988,
         category: 'Socialising',
@@ -77,9 +77,9 @@ describe('GET /visit-logs', () => {
         organisationName: 'Aperture Science',
         userId: 1,
         visitActivity: 'Free Running',
-      },
-    ].map((x) => expect.objectContaining(x))
-    );
+      }]
+      .map((x) => expect.objectContaining(x))
+    ));
   });
 
   test('failure :: funding body cannot access as not implemented', async () => {
