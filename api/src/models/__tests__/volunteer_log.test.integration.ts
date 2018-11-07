@@ -4,7 +4,6 @@ import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import { getTrx } from '../../../tests/utils/database';
 import { VolunteerLogs, Users, CommunityBusinesses } from '..';
-import { onPossiblyUnhandledRejection } from 'bluebird';
 
 
 describe('VolunteerLog model', () => {

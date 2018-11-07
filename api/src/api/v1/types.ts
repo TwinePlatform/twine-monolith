@@ -219,6 +219,36 @@ export interface SyncMyVolunteerLogsRequest extends Hapi.Request {
   };
 }
 
+export interface GetMyVolunteerProjectRequest extends Hapi.Request {
+  params: {
+    projectId: string
+  };
+  pre: {
+    communityBusiness: CommunityBusiness
+  };
+}
+
+export interface PostMyVolunteerProjectRequest extends Hapi.Request {
+  payload: {
+    name: string
+  };
+  pre: {
+    communityBusiness: CommunityBusiness
+  };
+}
+
+export interface PutMyVolunteerProjectRequest extends Hapi.Request {
+  params: {
+    projectId: string
+  };
+  payload: {
+    name: string
+  };
+  pre: {
+    communityBusiness: CommunityBusiness
+  };
+}
+
 /*
  * Test related types
  */
