@@ -98,7 +98,7 @@ export default [
           townCity: Joi.string().min(1),
           postCode: Joi.string().min(6).max(10),
           turnoverBand: Joi.string().min(6).max(11),
-          _360GivingId: Joi.string().min(5).max(11),
+          _360GivingId: Joi.string().min(5).max(255),
         },
       },
       response: { schema: response },
