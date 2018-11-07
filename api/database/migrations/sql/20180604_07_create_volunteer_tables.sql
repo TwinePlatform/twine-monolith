@@ -14,13 +14,14 @@ CREATE TABLE volunteer_activity (
 
 CREATE TABLE volunteer_project (
   volunteer_project_id   SERIAL NOT NULL UNIQUE,
-  volunteer_project_name VARCHAR NOT NULL,
+  volunteer_project_name CITEXT NOT NULL,
   organisation_id        INT NOT NULL,
   created_at             TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at            TIMESTAMP WITH TIME ZONE,
   deleted_at             TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT volunteer_project_pk                       PRIMARY KEY (volunteer_project_id),
+  CONSTRAINT volunteer_project_name_length              CHECK (char_length(volunteer_project_name) <= 255),
   CONSTRAINT volunteer_project_to_community_business_fk FOREIGN KEY (organisation_id)       REFERENCES organisation ON DELETE CASCADE
 );
 

@@ -27,15 +27,15 @@ CREATE TABLE ethnicity (
 
 CREATE TABLE user_account (
   user_account_id                  SERIAL NOT NULL UNIQUE,
-  user_name                        VARCHAR(100) NOT NULL,
+  user_name                        CITEXT NOT NULL,
   user_password                    VARCHAR(64),
   qr_code                          VARCHAR UNIQUE,
   gender_id                        INT NOT NULL,
   disability_id                    INT NOT NULL,
   ethnicity_id                     INT NOT NULL,
-  email                            VARCHAR(100) UNIQUE,
+  email                            CITEXT UNIQUE,
   phone_number                     VARCHAR(20),
-  post_code                        VARCHAR(10),
+  post_code                        CITEXT,
   birth_year                       INT,
   is_email_confirmed               BOOLEAN NOT NULL DEFAULT false,
   is_phone_number_confirmed        BOOLEAN NOT NULL DEFAULT false,
@@ -46,6 +46,9 @@ CREATE TABLE user_account (
   deleted_at                       TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT user_account_pk                  PRIMARY KEY (user_account_id),
+  CONSTRAINT user_name_length                 CHECK (char_length(user_name) <= 100),
+  CONSTRAINT email_length                     CHECK (char_length(email) <= 100),
+  CONSTRAINT post_code_length                 CHECK (char_length(post_code) <= 10),
   CONSTRAINT user_account_to_gender_fk        FOREIGN KEY (gender_id)     REFERENCES gender,
   CONSTRAINT user_account_to_disability_fk    FOREIGN KEY (disability_id) REFERENCES disability,
   CONSTRAINT user_account_to_ethnicity_fk     FOREIGN KEY (ethnicity_id)  REFERENCES ethnicity,

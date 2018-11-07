@@ -4,13 +4,14 @@
 
 CREATE TABLE organisation (
   organisation_id    SERIAL NOT NULL UNIQUE,
-  organisation_name  VARCHAR(255) NOT NULL,
+  organisation_name  CITEXT NOT NULL,
   _360_giving_id     VARCHAR UNIQUE,
   created_at         TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at        TIMESTAMP WITH TIME ZONE,
   deleted_at         TIMESTAMP WITH TIME ZONE,
 
-  CONSTRAINT organisation_pk PRIMARY KEY (organisation_id)
+  CONSTRAINT organisation_pk          PRIMARY KEY (organisation_id),
+  CONSTRAINT organisation_name_length CHECK (char_length(organisation_name) <= 255)
 );
 
 
