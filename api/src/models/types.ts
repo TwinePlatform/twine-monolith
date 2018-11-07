@@ -245,6 +245,12 @@ export type VolunteerActivity = Readonly<CommonTimestamps & {
   name: string
 }>;
 
+export type VolunteerProject = Readonly<CommonTimestamps & {
+  id: Int
+  name: string
+  organisationId: Int
+}>;
+
 export type VolunteerLog = Readonly<CommonTimestamps & {
   id: Int
   userId: Int
@@ -365,6 +371,20 @@ export type VolunteerLogCollection = Collection<VolunteerLog> & {
       k: Knex,
       u: User, c: CommunityBusiness,
       bw?: Partial<DateModelQuery>) => Promise<VolunteerLog[]>
+  getProjects: (
+    k: Knex,
+    c: CommunityBusiness) => Promise<VolunteerProject[]>
+  addProject: (
+    k: Knex,
+    c: CommunityBusiness,
+    name: string) => Promise<VolunteerProject>
+  updateProject: (
+    k: Knex,
+    p: VolunteerProject,
+    c: Partial<VolunteerProject>) => Promise<VolunteerProject[]>
+  deleteProject: (
+    k: Knex,
+    p: VolunteerProject) => Promise<Int>
 };
 
 /*

@@ -251,4 +251,71 @@ export const VolunteerLogs: VolunteerLogCollection = {
   async serialise (log) {
     return log;
   },
+
+  async getProjects (client, cb) {
+    return client('volunteer_project')
+      .select({
+        id: 'volunteer_project_id',
+        organisationId: 'organisation_id',
+        name: 'volunteer_project_name',
+        createdAt: 'created_at',
+        modifiedAt: 'modified_at',
+        deletedAt: 'deleted_at',
+      })
+      .where({
+        organisation_id: cb.id,
+        deleted_at: null,
+      });
+  },
+
+  async addProject (client, cb, name) {
+    const [project] = await client('volunteer_project')
+      .insert({
+        organisation_id: cb.id,
+        volunteer_project_name: name,
+      })
+      .returning([
+        'volunteer_project_id AS id',
+        'organisation_id AS organisationId',
+        'volunteer_project_name AS name',
+        'created_at AS createdAt',
+        'modified_at AS modifiedAt',
+        'deleted_at AS deletedAt',
+      ]);
+
+    return project;
+  },
+
+  async updateProject (client, project, changeset) {
+    return client('volunteer_project')
+      .update(filter((a) => typeof a !== 'undefined', {
+        volunteer_project_name: changeset.name,
+        organisation_id: changeset.organisationId,
+        deleted_at: changeset.deletedAt,
+      }))
+      .where(filter((a) => typeof a !== 'undefined', {
+        volunteer_project_id: project.id,
+        volunteer_project_name: project.name,
+        organisation_id: project.organisationId,
+        deleted_at: project.deletedAt,
+      }))
+      .returning([
+        'volunteer_project_id AS id',
+        'organisation_id AS organisationId',
+        'volunteer_project_name AS name',
+        'created_at AS createdAt',
+        'modified_at AS modifiedAt',
+        'deleted_at AS deletedAt',
+      ]);
+  },
+
+  async deleteProject (client, project) {
+    const rows = await VolunteerLogs.updateProject(
+      client,
+      project,
+      { deletedAt: new Date().toISOString() }
+    );
+
+    return rows.length;
+  },
 };

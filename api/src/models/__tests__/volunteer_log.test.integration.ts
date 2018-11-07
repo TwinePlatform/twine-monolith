@@ -4,6 +4,7 @@ import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import { getTrx } from '../../../tests/utils/database';
 import { VolunteerLogs, Users, CommunityBusinesses } from '..';
+import { onPossiblyUnhandledRejection } from 'bluebird';
 
 
 describe('VolunteerLog model', () => {
@@ -260,6 +261,57 @@ describe('VolunteerLog model', () => {
       const log = await VolunteerLogs.getOne(trx, { where: { activity: 'Office suport' } });
       const slog = await VolunteerLogs.serialise(log);
       expect(log).toEqual(slog);
+    });
+  });
+
+  describe('Projects', () => {
+    describe('Read', () => {
+      test('getProjects :: ', async () => {
+        const cb = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
+        const projects = await VolunteerLogs.getProjects(knex, cb);
+
+        expect(projects).toHaveLength(2);
+        expect(projects).toEqual([
+          { name: 'Party' },
+          { name: 'Community dinner' },
+        ].map(expect.objectContaining));
+      });
+    });
+
+    describe('Write', () => {
+      test('addProject :: ', async () => {
+        const cb = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
+        const project = await VolunteerLogs.addProject(knex, cb, 'foo');
+
+        expect(project).toEqual(expect.objectContaining({
+          name: 'foo',
+          organisationId: 1,
+        }));
+      });
+
+      test('updateProject ::', async () => {
+        const cb = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
+        const [project] = await VolunteerLogs.getProjects(knex, cb);
+        const updated = await VolunteerLogs.updateProject(knex, project, { name: 'NEW NAME' });
+
+        expect(updated).toHaveLength(1);
+        expect(updated[0]).toEqual(expect.objectContaining({
+          ...omit(['modifiedAt'], project),
+          name: 'NEW NAME',
+        }));
+        expect(updated[0].modifiedAt).not.toEqual(project.modifiedAt);
+      });
+
+      test('deleteProject :: ', async () => {
+        const cb = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
+        const projectsBefore = await VolunteerLogs.getProjects(knex, cb);
+        const numDeleted = await VolunteerLogs.deleteProject(knex, projectsBefore[0]);
+        const projectsAfter = await VolunteerLogs.getProjects(knex, cb);
+
+        expect(numDeleted).toBe(1);
+        expect(projectsAfter).toHaveLength(projectsBefore.length - 1);
+        expect(projectsAfter).toEqual(projectsBefore.slice(1));
+      });
     });
   });
 });
