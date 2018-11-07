@@ -7,7 +7,6 @@ const baseURL = process.env && process.env.NODE_ENV === 'development'
 
 const axios = _axios.create({
   baseURL,
-  // timeout: 1000,
   withCredentials: true,
 });
 
