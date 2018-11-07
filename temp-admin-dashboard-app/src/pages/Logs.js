@@ -87,8 +87,8 @@ class Home extends Component {
           {
             ...x,
             ...{
-              date: moment(x.createdAt).format('DD-MM-YY'),
-              time: moment(x.createdAt).format('HH:MM')
+              date: moment(x.startedAt).format('DD-MM-YY'),
+              time: moment(x.startedAt).format('HH:MM')
             }
           })))
 
