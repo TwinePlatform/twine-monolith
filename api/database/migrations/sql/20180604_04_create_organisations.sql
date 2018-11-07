@@ -97,7 +97,7 @@ CREATE TABLE volunteer_admin_code (
 CREATE TABLE funding_programme_community_business (
   funding_programme_id  INT NOT NULL,
   organisation_id       INT NOT NULL,
-  membership_status     VARCHAR NOT NULL,
+  membership_status     VARCHAR NOT NULL, -- https://github.com/TwinePlatform/twine-api/issues/38
   created_at            TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at           TIMESTAMP WITH TIME ZONE,
   deleted_at            TIMESTAMP WITH TIME ZONE,
