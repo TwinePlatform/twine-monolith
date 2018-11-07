@@ -28,7 +28,7 @@ CREATE TABLE visit_activity (
 
   CONSTRAINT visit_activity_pk                            PRIMARY KEY (visit_activity_id),
   CONSTRAINT visit_activity_to_community_business_fk      FOREIGN KEY (organisation_id)            REFERENCES organisation ON DELETE CASCADE,
-  CONSTRAINT visit_activity_name_length                             CHECK (char_length(visit_activity_name) <= 100),
+  CONSTRAINT visit_activity_name_length                   CHECK (char_length(visit_activity_name) <= 255),
   CONSTRAINT visit_activity_to_visit_activity_category_fk FOREIGN KEY (visit_activity_category_id) REFERENCES visit_activity_category ON DELETE CASCADE
 );
 
