@@ -53,9 +53,9 @@ const OrgForm = ({ organisation, regions, sectors, handleChange, classes, submit
         id="360GivingId"
         label="360GivingId"
         className={classes.textField}
-        value={organisation._360GivingId}
+        onChange={handleChange('_360GivingId')}
+        value={formUpdate._360GivingId || organisation._360GivingId}
         margin="normal"
-        disabled="true"
       />
       <TextField
         id="address1"
