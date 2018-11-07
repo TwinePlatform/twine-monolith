@@ -265,7 +265,6 @@ export const Users: UserCollection = {
         .insert({
           single_use_token_id: tokenRow.id,
           user_account_id:
-          // NB: email search is lowercase due to joi's payload conversion
           user.id || trx('user_account').select('user_account_id').where({ email: user.email }),
         })
         .returning('user_account_id AS userId');
