@@ -57,7 +57,7 @@ describe('PUT /v1/users/volunteers/:id', () => {
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toEqual(expect.objectContaining({
-      name: 'snake',
+      name: 'Snake',
       id: 6,
     }));
   });
