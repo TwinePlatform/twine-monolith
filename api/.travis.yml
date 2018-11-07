@@ -32,9 +32,9 @@ jobs:
         - psql -U postgres -c 'create extension postgis'
       script:
         - npm run build
-        - NODE_ENV=development npm run migrate:reset
-        - NODE_ENV=testing npm run migrate:reset
-        - NODE_ENV=production npm run migrate:reset
+        - NODE_ENV=development npm run db:reset
+        - NODE_ENV=testing npm run db:reset
+        - NODE_ENV=production npm run db:reset
         - npm run cover:$TEST_SUITE
         - codecov
 
