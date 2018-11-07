@@ -51,5 +51,8 @@ CREATE TABLE volunteer_hours_log (
 CREATE TRIGGER update_volunteer_activity_modified_at BEFORE UPDATE ON volunteer_activity
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
 
+CREATE TRIGGER update_volunteer_project_modified_at BEFORE UPDATE ON volunteer_project
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
 CREATE TRIGGER update_volunteer_hours_log_modified_at BEFORE UPDATE ON volunteer_hours_log
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
