@@ -5,6 +5,9 @@
 CREATE TABLE visit_activity_category (
   visit_activity_category_id   SERIAL NOT NULL UNIQUE,
   visit_activity_category_name VARCHAR(255) NOT NULL,
+  created_at                   TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at                  TIMESTAMP WITH TIME ZONE,
+  deleted_at                   TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT visit_activity_category_pk PRIMARY KEY (visit_activity_category_id)
 );
@@ -72,4 +75,7 @@ CREATE TRIGGER update_visit_modified_at BEFORE UPDATE ON visit
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
 
 CREATE TRIGGER update_visit_feedback_modified_at BEFORE UPDATE ON visit_feedback
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_visit_activity_category_modified_at BEFORE UPDATE ON visit_activity_category
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();

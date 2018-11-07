@@ -42,6 +42,9 @@ CREATE TABLE funding_programme (
 CREATE TABLE community_business_region (
   community_business_region_id SERIAL NOT NULL UNIQUE,
   region_name                  VARCHAR(80) NOT NULL UNIQUE,
+  created_at                   TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at                  TIMESTAMP WITH TIME ZONE,
+  deleted_at                   TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT community_business_region_pk PRIMARY KEY (community_business_region_id)
 );
@@ -50,6 +53,9 @@ CREATE TABLE community_business_region (
 CREATE TABLE community_business_sector (
   community_business_sector_id SERIAL NOT NULL UNIQUE,
   sector_name                  VARCHAR(80) NOT NULL UNIQUE,
+  created_at                   TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at                  TIMESTAMP WITH TIME ZONE,
+  deleted_at                   TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT community_business_sector_pk PRIMARY KEY (community_business_sector_id)
 );
@@ -114,4 +120,10 @@ CREATE TRIGGER update_funding_body_modified_at BEFORE UPDATE ON funding_body
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
 
 CREATE TRIGGER update_community_business_modified_at BEFORE UPDATE ON community_business
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+  
+CREATE TRIGGER update_community_business_region_modified_at BEFORE UPDATE ON community_business_region
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_community_business_sector_modified_at BEFORE UPDATE ON community_business_sector
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();

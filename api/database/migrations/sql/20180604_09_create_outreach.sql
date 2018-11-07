@@ -5,6 +5,9 @@
 CREATE TABLE outreach_type (
   outreach_type_id   SERIAL NOT NULL UNIQUE,
   outreach_type_name VARCHAR NOT NULL,
+  created_at         TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at        TIMESTAMP WITH TIME ZONE,
+  deleted_at         TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT outreach_type_pk PRIMARY KEY (outreach_type_id)
 );
@@ -13,6 +16,9 @@ CREATE TABLE outreach_type (
 CREATE TABLE outreach_meeting_type (
   outreach_meeting_type_id   SERIAL NOT NULL UNIQUE,
   outreach_meeting_type_name VARCHAR NOT NULL UNIQUE,
+  created_at                 TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at                TIMESTAMP WITH TIME ZONE,
+  deleted_at                 TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT outreach_meeting_type_pk PRIMARY KEY (outreach_meeting_type_id)
 );
@@ -58,6 +64,9 @@ CREATE TABLE outreach_meeting (
 CREATE TABLE outreach_campaign_target_type (
   outreach_campaign_target_type_id SERIAL NOT NULL UNIQUE,
   outreach_campaign_target_name    VARCHAR NOT NULL UNIQUE,
+  created_at                       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at                      TIMESTAMP WITH TIME ZONE,
+  deleted_at                       TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT outreach_campaign_target_type_pk PRIMARY KEY (outreach_campaign_target_type_id)
 );
@@ -66,6 +75,9 @@ CREATE TABLE outreach_campaign_target_type (
 CREATE TABLE outreach_campaign_target (
   outreach_campaign_target_type_id INT NOT NULL,
   outreach_type_id                 INT NOT NULL,
+  created_at                       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at                      TIMESTAMP WITH TIME ZONE,
+  deleted_at                       TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT outreach_campaign_target_to_outreach_campaign_target_type_fk FOREIGN KEY (outreach_campaign_target_type_id) REFERENCES outreach_campaign_target_type ON DELETE CASCADE,
   CONSTRAINT outreach_campaign_target_to_outreach_type_fk                 FOREIGN KEY (outreach_type_id)                 REFERENCES outreach_type                 ON DELETE CASCADE,
@@ -81,4 +93,16 @@ CREATE TRIGGER update_outreach_campaign_modified_at BEFORE UPDATE ON outreach_ca
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
 
 CREATE TRIGGER update_outreach_meeting_modified_at BEFORE UPDATE ON outreach_meeting
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_outreach_type_modified_at BEFORE UPDATE ON outreach_type
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_outreach_meeting_type_modified_at BEFORE UPDATE ON outreach_meeting_type
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_outreach_campaign_target_type_modified_at BEFORE UPDATE ON outreach_campaign_target_type
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_outreach_campaign_target_modified_at BEFORE UPDATE ON outreach_campaign_target
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
