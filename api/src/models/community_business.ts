@@ -324,10 +324,10 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         friday: 'friday',
         saturday: 'saturday',
         sunday: 'sunday',
-        createdAt: 'created_at',
-        modifiedAt: 'modified_at',
+        createdAt: 'visit_activity.created_at',
+        modifiedAt: 'visit_activity.modified_at',
       })
-      .where({ organisation_id: cb.id, deleted_at: null });
+      .where({ organisation_id: cb.id, 'visit_activity.deleted_at': null });
 
     const query = day
       ? baseQuery.where({ [day]: true })
@@ -353,12 +353,12 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
           friday: 'friday',
           saturday: 'saturday',
           sunday: 'sunday',
-          createdAt: 'created_at',
-          modifiedAt: 'modified_at',
+          createdAt: 'visit_activity.created_at',
+          modifiedAt: 'visit_activity.modified_at',
         })
         .where({
           visit_activity_id: id,
-          deleted_at: null,
+          'visit_activity.deleted_at': null,
           organisation_id: cb.id,
         });
 
