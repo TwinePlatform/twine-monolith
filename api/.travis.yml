@@ -35,6 +35,7 @@ jobs:
         - NODE_ENV=development npm run db:reset
         - NODE_ENV=testing npm run db:reset
         - NODE_ENV=production npm run db:reset
+        - node ./bin/server_setup.js
         - npm run cover:$TEST_SUITE
         - codecov
 
