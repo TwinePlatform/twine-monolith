@@ -207,10 +207,10 @@
 				},
 
 			/*
-				>> Meetings
+				>> Projects
 			*/
 
-				meetings: {
+				projects: {
 
 					/*
 						>>> delete
@@ -219,55 +219,58 @@
 						delete: function(id) {
 							return $http({
 								method: 'DELETE',
-							  	url: $$api.url('meetings/' + id)
+								url: $$api.url('community-businesses/me/volunteers/projects/' + id),
+								headers: { Authorization: $$api.token.get() },
 							});
 						},
 
 					/*
-						>>> get Meetings
+						>>> get Projects
 					*/
 
-						getMeetings: function(userId) {
+						getProjects: function() {
 							return $http({
 								method: 'GET',
-								url: $$api.url('meetings/user/' + userId)
+								url: $$api.url('community-businesses/me/volunteers/projects'),
+								headers: { Authorization: $$api.token.get() },
 							});
 						},
 
 					/*
-						>>> get Meeting
+						>>> get Project
 					*/
 
-						getMeeting: function(meetingId) {
+						getProject: function(id) {
 							return $http({
 								method: 'GET',
-								url: $$api.url('meetings/' + meetingId)
+								url: $$api.url('community-businesses/me/volunteers/projects/' + id),
+								headers: { Authorization: $$api.token.get() },
 							});
 						},
 
 					/*
-						>>> edit Meeting
+						>>> edit Project
 					*/
 
-						edit: function(meetingId, data) {
+						edit: function(id, data) {
 							return $http({
 								method: 'PUT',
-								url: $$api.url('meetings/' + meetingId),
+								url: $$api.url('community-businesses/me/volunteers/projects/' + id),
 								data: data,
-								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+								headers: { Authorization: $$api.token.get() },
 							});
 						},
 
 					/*
-						>>> new Meeting
+						>>> new Project
 					*/
 
 						new: function(data) {
 							return $http({
 								method: 'POST',
-								url: $$api.url('meetings'),
+								url: $$api.url('community-businesses/me/volunteers/projects'),
 								data: data,
-								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+								headers: { Authorization: $$api.token.get() },
 							});
 						},
 
@@ -275,15 +278,14 @@
 						>>> sync
 					*/
 
-						sync: function(data) {
-							return $http({
-								method: 'POST',
-								url: $$api.url('meetings/sync'),
-								data: data,
-								headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-							});
-						},
-
+						// sync: function(data) {
+						// 	return $http({
+						// 		method: 'POST',
+						// 		url: $$api.url('meetings/sync'),
+						// 		data: data,
+						// 		headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+						// 	});
+						// },
 
 				},
 
