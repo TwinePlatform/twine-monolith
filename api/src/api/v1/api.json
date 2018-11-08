@@ -314,6 +314,47 @@
       }
     }
   },
+  "/community-businesses/me/volunteers/projects": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER": "organisation_details-parent:read",
+        "VOLUNTEER_ADMIN": "organisation_details-parent:read",
+        "CB_ADMIN": "organisation_details-own:read"
+      }
+    },
+    "POST": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER_ADMIN": "organisation_details-parent:write",
+        "CB_ADMIN": "organisation_details-own:write"
+      }
+    }
+  },
+  "/community-businesses/me/volunteers/projects/:id": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER": "organisation_details-parent:read",
+        "VOLUNTEER_ADMIN": "organisation_details-parent:read",
+        "CB_ADMIN": "organisation_details-own:read"
+      }
+    },
+    "PUT": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER_ADMIN": "organisation_details-parent:write",
+        "CB_ADMIN": "organisation_details-own:write"
+      }
+    },
+    "DELETE": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER_ADMIN": "organisation_details-parent:delete",
+        "CB_ADMIN": "organisation_details-own:delete"
+      }
+    }
+  },
   "/community-businesses/me/volunteer-logs": {
     "GET": {
       "isImplemented": false,
