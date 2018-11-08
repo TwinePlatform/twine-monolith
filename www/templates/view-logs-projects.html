@@ -1,0 +1,40 @@
+<ion-view hide-nav-bar="true" title="Projects">
+
+    <div ng-if="noProjects || offlineMode" class="noResults">
+        <h4 ng-if="noProjects" class="text-center label">You haven't created any logs yet.</h4>
+        <h4 ng-if="offlineMode" class="text-center label">Cannot manage projects in offline mode.</h4>
+    </div>
+
+    <ion-content padding="true" overflow-scroll="false" has-bouncing="true" class="has-header view-logs log-hours">
+
+        <div class="padding text-center" ng-if="!projects">
+            <ion-spinner class="text-center"></ion-spinner>
+        </div>
+
+        <ion-list>
+
+            <ion-item style="margin-bottom: 10px" class="item-remove-animate" ng-class="{ 'deleted': project.deleted_at }" ng-repeat="project in projects | orderBy: ['-createdAt','-updatedAt']">
+                <div style="float: left; max-width: 70%;overflow: hidden">
+                    <h2>{{project.name}}</h2>
+                    <div class="spacer-10"></div>
+                    <p>{{ project.createdAt.split(' ')[0] | date:'d MMM yyyy'}}</p>
+                    <p ng-if="options.debug">id: {{ project.id }}</p>
+                </div>
+                <div class="button-bar">
+                    <a ng-if="!project.deleted_at" class="button button-positive button-block button-clear" ng-click="edit(project)"><i class="icon-custom-edit"></i> </a>
+                    <button ng-if="!project.deleted_at" class="button button-positive button-block button-clear" ng-click="delete(project)"><i class="icon-custom-delete"></i> </button>
+                    <span ng-if="project.deleted_at" class="button button-positive button-block button-clear">Deleted</span>
+                </div>
+            </ion-item>
+
+            <div class="spacer-100"></div>
+
+        </ion-list>
+
+    </ion-content>
+    <div ng-if="noProjects" class="button-add-message view-logs-button">
+        <p>Click on this button to add projects</p>
+    </div>
+    <a ui-sref="tabs.view-logs.new-project-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
+    </a>
+</ion-view>

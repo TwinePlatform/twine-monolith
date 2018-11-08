@@ -94,36 +94,36 @@ angular.module('app.routes', ['ionicUIRouter'])
                 }
             })
 
-            // >> view logs - meetings
-            .state('tabs.view-logs.meetings', {
+            // >> view logs - projects
+            .state('tabs.view-logs.projects', {
                 cache: false,
-                url: '/meetings',
+                url: '/projects',
                 views: {
-                    'view-logs-meetings-tab@tabs.view-logs': {
-                        templateUrl: 'templates/view-logs-meetings.html',
-                        controller: 'ViewLogsMeetingsController'
+                    'view-logs-projects-tab@tabs.view-logs': {
+                        templateUrl: 'templates/view-logs-projects.html',
+                        controller: 'ViewLogsProjectsController'
                     }
                 }
             })
-            // >>> view logs - meetings - new log
-            .state('tabs.view-logs.new-meeting-log', {
+            // >>> view logs - projects - new project
+            .state('tabs.view-logs.new-project-log', {
                 cache: false,
-                url: '/new-meeting-log',
+                url: '/new-project-log',
                 views: {
-                    'view-logs-meetings-tab@tabs.view-logs': {
-                        templateUrl: 'templates/new-meeting-log.html',
-                        controller: 'NewMeetingLogController'
+                    'view-logs-projects-tab@tabs.view-logs': {
+                        templateUrl: 'templates/new-project-log.html',
+                        controller: 'NewProjectController'
                     }
                 }
             })
-            // >>> view logs - meetings - new log
-            .state('tabs.view-logs.edit-meeting', {
+            // >>> view logs - projects - edit project
+            .state('tabs.view-logs.edit-project', {
                 cache: false,
-                url: '/edit-meeting/:id',
+                url: '/edit-project/:id',
                 views: {
-                    'view-logs-meetings-tab@tabs.view-logs': {
-                        templateUrl: 'templates/edit-meeting.html',
-                        controller: 'EditMeetingController'
+                    'view-logs-projects-tab@tabs.view-logs': {
+                        templateUrl: 'templates/edit-project.html',
+                        controller: 'EditProjectController'
                     }
                 }
             })
