@@ -2,19 +2,23 @@ import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
-import { CommunityBusinesses, Organisation } from '../../../../../models';
+import { CommunityBusinesses, Organisation, User, Volunteers } from '../../../../../models';
 
 
-describe('API /community-businesses/{id}/volunteers', () => {
+describe('API /community-businesses/me/volunteers/projects', () => {
   let server: Hapi.Server;
   let knex: Knex;
   let organisation: Organisation;
+  let vol: User;
+  let volAdmin: User;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
     organisation = await CommunityBusinesses.getOne(knex, { where: { id: 2 } });
+    vol = await Volunteers.getOne(knex, { where: { name: 'Emma Emmerich' } });
+    volAdmin = await Volunteers.getOne(knex, { where: { name: 'Raiden' } });
   });
 
   afterAll(async () => {
@@ -27,8 +31,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects',
         credentials: {
-          scope: ['volunteer_logs-own:read'],
+          scope: ['organisation_details-parent:read'],
           organisation,
+          user: vol,
         },
       });
 
@@ -46,8 +51,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'GET',
         url: '/v1/community-businesses/2/volunteers/projects',
         credentials: {
-          scope: ['volunteer_logs-own:read'],
+          scope: ['organisation_details-parent:read'],
           organisation,
+          user: vol,
         },
       });
 
@@ -61,8 +67,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteers/projects',
         credentials: {
-          scope: ['volunteer_logs-own:write'],
+          scope: ['organisation_details-parent:write'],
           organisation,
+          user: volAdmin,
         },
         payload: {
           name: 'new project',
@@ -81,8 +88,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects',
         credentials: {
-          scope: ['volunteer_logs-own:read'],
+          scope: ['organisation_details-parent:read'],
           organisation,
+          user: volAdmin,
         },
       });
 
@@ -95,8 +103,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'POST',
         url: '/v1/community-businesses/2/volunteers/projects',
         credentials: {
-          scope: ['volunteer_logs-own:write'],
+          scope: ['organisation_details-parent:write'],
           organisation,
+          user: volAdmin,
         },
       });
 
@@ -110,8 +119,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: {
-          scope: ['volunteer_logs-own:read'],
+          scope: ['organisation_details-parent:read'],
           organisation,
+          user: vol,
         },
       });
 
@@ -130,8 +140,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects/99999',
         credentials: {
-          scope: ['volunteer_logs-own:read'],
+          scope: ['organisation_details-parent:read'],
           organisation,
+          user: vol,
         },
       });
 
@@ -143,8 +154,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects/2',
         credentials: {
-          scope: ['volunteer_logs-own:read'],
+          scope: ['organisation_details-parent:read'],
           organisation,
+          user: vol,
         },
       });
 
@@ -158,8 +170,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: {
-          scope: ['volunteer_logs-own:write'],
+          scope: ['organisation_details-parent:write'],
           organisation,
+          user: volAdmin,
         },
         payload: {
           name: 'Foo',
@@ -181,8 +194,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: {
-          scope: ['volunteer_logs-own:write'],
+          scope: ['organisation_details-parent:write'],
           organisation,
+          user: volAdmin,
         },
         payload: {
           organisationId: 3,
@@ -197,8 +211,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'PUT',
         url: '/v1/community-businesses/2/volunteers/projects/1',
         credentials: {
-          scope: ['volunteer_logs-own:write'],
+          scope: ['organisation_details-parent:write'],
           organisation,
+          user: volAdmin,
         },
         payload: {
           name: 'Foo',
@@ -215,8 +230,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: {
-          scope: ['volunteer_logs-own:delete'],
+          scope: ['organisation_details-parent:delete'],
           organisation,
+          user: volAdmin,
         },
       });
 
@@ -229,8 +245,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteers/projects/999',
         credentials: {
-          scope: ['volunteer_logs-own:delete'],
+          scope: ['organisation_details-parent:delete'],
           organisation,
+          user: volAdmin,
         },
       });
 
@@ -242,8 +259,9 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'DELETE',
         url: '/v1/community-businesses/2/volunteers/projects/2',
         credentials: {
-          scope: ['volunteer_logs-own:delete'],
+          scope: ['organisation_details-parent:delete'],
           organisation,
+          user: volAdmin,
         },
       });
 
