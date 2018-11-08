@@ -22,9 +22,8 @@ const routes: Hapi.ServerRoute[] = [
         strategy: 'standard',
         access: {
           scope: [
-            'volunteer_logs-sibling:read',
-            'volunteer_logs-child:read',
-            'volunteer_logs-own:read',
+            'organisation_details-parent:read',
+            'organisation_details-own:read',
           ],
         },
       },
@@ -50,9 +49,8 @@ const routes: Hapi.ServerRoute[] = [
         strategy: 'standard',
         access: {
           scope: [
-            'volunteer_logs-sibling:write',
-            'volunteer_logs-child:write',
-            'volunteer_logs-own:write',
+            'organisation_details-parent:write',
+            'organisation_details-own:write',
           ],
         },
       },
@@ -86,9 +84,9 @@ const routes: Hapi.ServerRoute[] = [
         strategy: 'standard',
         access: {
           scope: [
-            'volunteer_logs-child:read',
-            'volunteer_logs-sibling:read',
-            'volunteer_logs-own:read',
+            'organisation_details-own:read',
+            'organisation_details-parent:read',
+
           ],
         },
       },
@@ -127,9 +125,8 @@ const routes: Hapi.ServerRoute[] = [
         strategy: 'standard',
         access: {
           scope: [
-            'volunteer_logs-sibling:write',
-            'volunteer_logs-child:write',
-            'volunteer_logs-own:write',
+            'organisation_details-parent:write',
+            'organisation_details-own:write',
           ],
         },
       },
@@ -176,9 +173,8 @@ const routes: Hapi.ServerRoute[] = [
         strategy: 'standard',
         access: {
           scope: [
-            'volunteer_logs-sibling:delete',
-            'volunteer_logs-child:delete',
-            'volunteer_logs-own:delete',
+            'organisation_details-parent:delete',
+            'organisation_details-own:delete',
           ],
         },
       },
