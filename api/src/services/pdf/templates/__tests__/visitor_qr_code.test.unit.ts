@@ -9,7 +9,7 @@ describe('Visitor QR Code Template', () => {
       const qrCodeDataUrl = 'data:image/png;base64,fooqfoi2oitn';
 
       const result = await visitorQrCodeTemplate.createTemplate({ qrCodeDataUrl });
-      const [logoColumn, qrCodeColumn] = result.content[0].columns;
+      const [logoColumn, qrCodeColumn] = (<any> result.content)[0].columns;
 
       expect(logoColumn.image.startsWith('/')).toBeTruthy();
       expect(qrCodeColumn.image).toBe(qrCodeDataUrl);
@@ -20,7 +20,7 @@ describe('Visitor QR Code Template', () => {
       const logoUrl = 'data:image/png;base64,fowgno09tjfe0eiw';
 
       const result = await visitorQrCodeTemplate.createTemplate({ qrCodeDataUrl, logoUrl });
-      const [logoColumn, qrCodeColumn] = result.content[0].columns;
+      const [logoColumn, qrCodeColumn] = (<any> result.content)[0].columns;
 
       expect(logoColumn.image).toBe(logoUrl);
       expect(qrCodeColumn.image).toBe(qrCodeDataUrl);
@@ -35,7 +35,7 @@ describe('Visitor QR Code Template', () => {
       mock.onGet(url).reply(200, imageContents);
 
       const result = await visitorQrCodeTemplate.createTemplate({ qrCodeDataUrl, logoUrl: url });
-      const [logoColumn, qrCodeColumn] = result.content[0].columns;
+      const [logoColumn, qrCodeColumn] = (<any> result.content)[0].columns;
 
       const processedImage = Buffer.from(imageContents).toString('base64');
       expect(logoColumn.image).toBe(`data:image/png;base64,${processedImage}`);

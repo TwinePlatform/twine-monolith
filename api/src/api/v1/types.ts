@@ -2,14 +2,15 @@ import * as Hapi from 'hapi';
 import { Dictionary } from 'ramda';
 import { ApiRequestQuery, ApiRequestBody } from './schema/request';
 import { ApiResponse } from './schema/response';
-import { UserCredentials } from '../../auth/strategies/standard';
+import { UserCredentials as UC } from '../../auth/strategies/standard';
 import { RoleEnum } from '../../auth/types';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../models';
 import { Omit } from '../../types/internal';
 
 
 declare module 'hapi' {
-  interface AuthCredentials extends UserCredentials {}
+  interface AuthCredentials extends UC {}
+  interface UserCredentials extends User {}
 }
 
 
