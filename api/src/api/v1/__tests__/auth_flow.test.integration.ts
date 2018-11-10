@@ -129,7 +129,7 @@ describe('Auth flow', () => {
       });
 
       expect(resLogin.statusCode).toBe(200);
-      expect(resLogin.headers).not.toHaveProperty('set-cookie');
+      expect(typeof resLogin.headers['set-cookie']).toBe('undefined');
       const token = (<any> resLogin.result).result.token;
 
       // 2. Try to access resource X -> 200

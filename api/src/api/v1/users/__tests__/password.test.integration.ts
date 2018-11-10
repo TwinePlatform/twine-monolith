@@ -58,7 +58,7 @@ describe('POST /users/password', () => {
       expect(mockEmailService.mock.calls.length).toBe(1);
       expect(mockEmailService.mock.calls[0][0]).toEqual(expect.objectContaining({
         from: 'visitorapp@powertochange.org.uk',
-        templateId: '8786293',
+        templateId: 8786293,
         templateModel: expect.objectContaining({
           email: '1@aperturescience.com',
         }),

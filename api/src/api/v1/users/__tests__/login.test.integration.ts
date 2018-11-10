@@ -64,7 +64,7 @@ describe('POST /users/login', () => {
     });
 
     expect(res.statusCode).toBe(200);
-    expect(res.headers).not.toHaveProperty('set-cookie');
+    expect(typeof res.headers['set-cookie']).toBe('undefined');
     expect(JWT.verify((<any> res.result).result.token, secret, verifyOptions))
       .toEqual(expect.objectContaining({
         userId: 2,
@@ -106,7 +106,7 @@ describe('POST /users/login', () => {
     });
 
     expect(res.statusCode).toBe(403);
-    expect(res.headers).not.toHaveProperty('set-cookie');
+    expect(typeof res.headers['set-cookie']).toBe('undefined');
     expect(res.result).toEqual({ error: expect.objectContaining({ statusCode: 403 }) });
   });
 
@@ -123,7 +123,7 @@ describe('POST /users/login', () => {
     });
 
     expect(res.statusCode).toBe(200);
-    expect(res.headers).not.toHaveProperty('set-cookie');
+    expect(typeof res.headers['set-cookie']).toBe('undefined');
     expect(JWT.verify((<any> res.result).result.token, secret, verifyOptions))
       .toEqual(expect.objectContaining({
         userId: 2,
@@ -144,7 +144,7 @@ describe('POST /users/login', () => {
     });
 
     expect(res.statusCode).toBe(403);
-    expect(res.headers).not.toHaveProperty('set-cookie');
+    expect(typeof res.headers['set-cookie']).toBe('undefined');
     expect(res.result).toEqual({ error: expect.objectContaining({ statusCode: 403 }) });
   });
 
@@ -160,7 +160,7 @@ describe('POST /users/login', () => {
     });
 
     expect(res.statusCode).toBe(400);
-    expect(res.headers).not.toHaveProperty('set-cookie');
+    expect(typeof res.headers['set-cookie']).toBe('undefined');
     expect(res.result).toEqual({ error: expect.objectContaining({ statusCode: 400 }) });
   });
 });
