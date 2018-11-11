@@ -31,7 +31,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects',
         credentials: {
-          scope: ['organisation_details-parent:read'],
+          scope: ['organisations_volunteer-parent:read'],
           organisation,
           user: vol,
         },
@@ -51,7 +51,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'GET',
         url: '/v1/community-businesses/2/volunteers/projects',
         credentials: {
-          scope: ['organisation_details-parent:read'],
+          scope: ['organisations_volunteer-parent:read'],
           organisation,
           user: vol,
         },
@@ -67,7 +67,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/volunteers/projects',
         credentials: {
-          scope: ['organisation_details-parent:write'],
+          scope: ['organisations_volunteer-parent:write'],
           organisation,
           user: volAdmin,
         },
@@ -88,7 +88,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects',
         credentials: {
-          scope: ['organisation_details-parent:read'],
+          scope: ['organisations_volunteer-parent:read'],
           organisation,
           user: volAdmin,
         },
@@ -104,7 +104,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'POST',
         url: '/v1/community-businesses/2/volunteers/projects',
         credentials: {
-          scope: ['organisation_details-parent:write'],
+          scope: ['organisations_volunteer-parent:write'],
           organisation,
           user: volAdmin,
         },
@@ -120,7 +120,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: {
-          scope: ['organisation_details-parent:read'],
+          scope: ['organisations_volunteer-parent:read'],
           organisation,
           user: vol,
         },
@@ -141,7 +141,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects/99999',
         credentials: {
-          scope: ['organisation_details-parent:read'],
+          scope: ['organisations_volunteer-parent:read'],
           organisation,
           user: vol,
         },
@@ -155,7 +155,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects/2',
         credentials: {
-          scope: ['organisation_details-parent:read'],
+          scope: ['organisations_volunteer-parent:read'],
           organisation,
           user: vol,
         },
@@ -171,7 +171,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: {
-          scope: ['organisation_details-parent:write'],
+          scope: ['organisations_volunteer-parent:write'],
           organisation,
           user: volAdmin,
         },
@@ -195,7 +195,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: {
-          scope: ['organisation_details-parent:write'],
+          scope: ['organisations_volunteer-parent:write'],
           organisation,
           user: volAdmin,
         },
@@ -213,7 +213,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'PUT',
         url: '/v1/community-businesses/2/volunteers/projects/1',
         credentials: {
-          scope: ['organisation_details-parent:write'],
+          scope: ['organisations_volunteer-parent:write'],
           organisation,
           user: volAdmin,
         },
@@ -232,7 +232,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: {
-          scope: ['organisation_details-parent:delete'],
+          scope: ['organisations_volunteer-parent:delete'],
           organisation,
           user: volAdmin,
         },
@@ -247,7 +247,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteers/projects/999',
         credentials: {
-          scope: ['organisation_details-parent:delete'],
+          scope: ['organisations_volunteer-parent:delete'],
           organisation,
           user: volAdmin,
         },
@@ -262,7 +262,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         method: 'DELETE',
         url: '/v1/community-businesses/2/volunteers/projects/2',
         credentials: {
-          scope: ['organisation_details-parent:delete'],
+          scope: ['organisations_volunteer-parent:delete'],
           organisation,
           user: volAdmin,
         },
