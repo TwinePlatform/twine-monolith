@@ -279,8 +279,8 @@ describe('VolunteerLog model', () => {
 
     describe('Write', () => {
       test('addProject :: ', async () => {
-        const cb = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
-        const project = await VolunteerLogs.addProject(knex, cb, 'foo');
+        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+        const project = await VolunteerLogs.addProject(trx, cb, 'foo');
 
         expect(project).toEqual(expect.objectContaining({
           name: 'foo',
@@ -289,9 +289,9 @@ describe('VolunteerLog model', () => {
       });
 
       test('updateProject ::', async () => {
-        const cb = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
-        const [project] = await VolunteerLogs.getProjects(knex, cb);
-        const updated = await VolunteerLogs.updateProject(knex, project, { name: 'NEW NAME' });
+        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+        const [project] = await VolunteerLogs.getProjects(trx, cb);
+        const updated = await VolunteerLogs.updateProject(trx, project, { name: 'NEW NAME' });
 
         expect(updated).toHaveLength(1);
         expect(updated[0]).toEqual(expect.objectContaining({
@@ -302,14 +302,19 @@ describe('VolunteerLog model', () => {
       });
 
       test('deleteProject :: ', async () => {
-        const cb = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
-        const projectsBefore = await VolunteerLogs.getProjects(knex, cb);
-        const numDeleted = await VolunteerLogs.deleteProject(knex, projectsBefore[0]);
-        const projectsAfter = await VolunteerLogs.getProjects(knex, cb);
+        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 2 } });
+        const p = await VolunteerLogs.getProjects(trx, cb);
+        const projBefore = p.sort((a, b) => a.id - b.id);
+        const logsBefore = await VolunteerLogs.get(trx, { where: { project: projBefore[0].name } });
+        const numDeleted = await VolunteerLogs.deleteProject(trx, projBefore[0]);
+        const projAfter = await VolunteerLogs.getProjects(trx, cb);
+        const logsAfter = await VolunteerLogs.get(trx, { where: { project: projBefore[0].name } });
 
         expect(numDeleted).toBe(1);
-        expect(projectsAfter).toHaveLength(projectsBefore.length - 1);
-        expect(projectsAfter).toEqual(projectsBefore.slice(1));
+        expect(projAfter).toHaveLength(projBefore.length - 1);
+        expect(projAfter).toEqual(projBefore.slice(1));
+        expect(logsBefore.length).toBeGreaterThan(0);
+        expect(logsAfter.length).toBe(0);
       });
     });
   });

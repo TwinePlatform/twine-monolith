@@ -310,12 +310,18 @@ export const VolunteerLogs: VolunteerLogCollection = {
   },
 
   async deleteProject (client, project) {
-    const rows = await VolunteerLogs.updateProject(
-      client,
-      project,
-      { deletedAt: new Date().toISOString() }
-    );
+    return client.transaction(async (trx) => {
+      const rows = await VolunteerLogs.updateProject(
+        trx,
+        project,
+        { deletedAt: new Date().toISOString() }
+      );
 
-    return rows.length;
+      await trx('volunteer_hours_log')
+        .update({ volunteer_project_id: null })
+        .where({ volunteer_project_id: project.id });
+
+      return rows.length;
+    });
   },
 };
