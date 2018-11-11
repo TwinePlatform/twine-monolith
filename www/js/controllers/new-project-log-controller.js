@@ -1,21 +1,21 @@
 /*
 * CONTENTS
 *
-* new meeting controller
+* new project controller
 *    store the form data
 *    setup datepickers
 *    populate hours dropdown
 *    populate minutes dropdown
 *    calculate duration
 *    populate user_id field
-*    process the new meeting form
+*    process the new project form
 *      validate form
 *      submit form
 *    push to offline data
 */
 
 /*
-	> new meeting controller
+	> new project controller
 */
 
 	angular.module('app.controllers').controller('NewProjectController', function (
