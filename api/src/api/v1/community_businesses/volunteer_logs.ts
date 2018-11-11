@@ -115,6 +115,7 @@ const routes: Hapi.ServerRoute[] = [
             seconds: Joi.number().integer().min(0),
           }),
           startedAt: Joi.date().iso().max('now'),
+          project: Joi.string().min(2),
         },
       },
       response: { schema: response },
@@ -209,6 +210,7 @@ const routes: Hapi.ServerRoute[] = [
             seconds: Joi.number().integer().min(0),
           }).required(),
           startedAt: Joi.date().iso().max('now').default(() => new Date().toISOString(), 'now'),
+          project: Joi.string().min(2),
         },
       },
       response: { schema: response },
@@ -257,7 +259,7 @@ const routes: Hapi.ServerRoute[] = [
 
       } catch (error) {
         if (error.code === '23502') { // Violation of null constraint implies invalid activity
-          return Boom.badRequest('Invalid activity');
+          return Boom.badRequest('Invalid activity or project');
         }
         throw error;
       }
@@ -285,6 +287,7 @@ const routes: Hapi.ServerRoute[] = [
             seconds: Joi.number().integer().min(0),
           }).required(),
           startedAt: Joi.date().iso().max('now').default(() => new Date().toISOString(), 'now'),
+          project: Joi.string().min(2),
         })).required(),
       },
       response: { schema: response },
@@ -341,7 +344,7 @@ const routes: Hapi.ServerRoute[] = [
 
       } catch (error) {
         if (error.code === '23502') { // Violation of null constraint implies invalid activity
-          return Boom.badRequest('Invalid activity');
+          return Boom.badRequest('Invalid activity or project');
         }
         if (error.code === '23505') { // Violation of unique constraint => duplicate log
           return Boom.badRequest('Duplicate logs in payload, check start times');
