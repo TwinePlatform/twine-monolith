@@ -1,7 +1,7 @@
 /*
 * CONTENTS
 *
-* edit meeting controller
+* edit project controller
 *    variables
 *    update total duration logged this date
 *    setup datepickers
@@ -9,16 +9,16 @@
 *    populate hours dropdown
 *    populate minutes dropdown
 *    calculate duration
-*    display meeting data
-*    get meeting data
+*    display project data
+*    get project data
 *    function: generate form date
-*    process the edit meeting form
+*    process the edit project form
 *      validate form
-*      submit edit meeting form
+*      submit edit project form
 */
 
 /*
-	> edit meeting controller
+	> edit project controller
 */
 
 angular.module('app.controllers').controller('EditProjectController', function (
@@ -53,7 +53,6 @@ angular.module('app.controllers').controller('EditProjectController', function (
 
     // else get project from api
     $$api.projects.getProject($scope.projectId).success(function (data) {
-        console.log(data);
 
         $ionicLoading.hide();
 
@@ -68,7 +67,7 @@ angular.module('app.controllers').controller('EditProjectController', function (
     });
 
     /*
-        >> process the edit outreach form
+        >> process the edit project form
     */
 
     $scope.formSubmitted = false;
@@ -81,8 +80,6 @@ angular.module('app.controllers').controller('EditProjectController', function (
 
         // form is valid
         if (form.$valid) {
-
-            console.log('$scope.formData: ', $scope.formData);
 
             // show loader
             $ionicLoading.show();
@@ -137,7 +134,6 @@ angular.module('app.controllers').controller('EditProjectController', function (
         }
         // form is invalid
         else {
-            console.log('form invalid!!');
             $$shout('Application error. Please contact the administrator.');
         }
 
