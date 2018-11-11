@@ -3,12 +3,12 @@
     <!--<organisation-subheader></organisation-subheader>-->
 
     <ion-content padding="true" class="has-header">
-        
+
     <!-- form#createLog -->
         <form id="createLog" name="createLog" class="list" ng-submit="processForm(createLog)" novalidate>
 
             <!-- name -->
-            <span  ng-if="isAdmin" class="input-label">Volunter name</span>
+            <span  ng-if="isAdmin" class="input-label">Volunteer name</span>
             <div ng-if="isAdmin">
                 <label class="item item-input">
                     <input type="text" placeholder="Search"  ng-model="volunteerNameFilter" ng-change="filterVolunteersByName(this.volunteerNameFilter)">
@@ -71,31 +71,23 @@
                     <!--  -->
                 </select>
             </label>
-            <!--<label class="error block text-right padding assertive" for="activities">-->
-                <!--Please select a activity-->
-            <!--</label>-->
             <!-- /Activity -->
-
-            <!-- total logged on this date -->
-            <label class="item item-input ng-hide">
-                <span class="input-label">Total logged on this date</span>
-                <input type="number" ng-model="formData.totalDurationThisDate" id="totalDurationToday" name="totalDurationToday" ng-max="24 * 60">
-            </label>
-            <!-- /total logged on this date -->
 
             <!-- duration -->
             <label class="item item-input ng-hide">
                 <span class="input-label">Duration</span>
                 <input type="number" ng-model="formData.duration" id="duration" name="duration" ng-min="5" required>
             </label>
-            <!-- /duration -->
 
-            <!--&lt;!&ndash; user_id &ndash;&gt;-->
-            <!--<label class="item item-input hide">-->
-                <!--<span class="input-label">User id</span>-->
-                <!--<input type="text" ng-model="formData.user_id" name="user_id" id="user_id" required />-->
-            <!--</label>-->
-            <!--&lt;!&ndash; /user_id &ndash;&gt;-->
+            <!-- Project -->
+            <span class="input-label" ng-if="hasProjects">Project (Optional)</span>
+            <label class="item item-select" ng-if="hasProjects">
+                <select ng-model="formData.project" name="project" id="project">
+                    <option value="" disabled selected>Select project</option>
+                    <option ng-repeat="option in projects track by option.id" value="{{option.name}}">{{option.name}}</option>
+                </select>
+            </label>
+            <!-- /Project -->
 
             <!-- buttons -->
             <button type="submit" ng-disabled="createLog.$invalid || (isAdmin && selectedVolunteers.length === 0)" class="button button-energized button-block">Log Hours</button>

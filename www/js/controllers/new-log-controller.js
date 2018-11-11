@@ -33,41 +33,22 @@
 
 			$scope.volunteers = [];
 
-        	$scope.displayedVolunteers = [];
+			$scope.displayedVolunteers = [];
 
 			$scope.volunteerNameFilter = '';
 
 			$scope.activities = [];
 
+			$scope.hasProjects = false;
+
+			$scope.projects = [];
+
 			$scope.isAdmin = $rootScope.isAdmin;
 
 			$scope.selectedVolunteers = [];
 
-			$scope.selectedUser = {
-			    id : ''
-            };
+			$scope.selectedUser = { id : '' };
 
-
-
-
-
-
-		/*
-			>> update total duration logged this date 
-		*/
-
-			$scope.calculateTotalDurationThisDate = function() {
-				
-				var sqlDate = $scope.formData.date_of_log.split(' ')[0];
-
-				$$api.user.totalHoursForDay($localStorage.user.id, sqlDate).success(function(result) {
-					if ($scope.formData.duration === undefined) {
-						$scope.formData.duration = 0;
-					}
-					$scope.formData.totalDurationThisDate = result.data.duration + $scope.formData.duration;
-				});
-
-			};
 
         /*
         >> volunteers selector filtrationa
@@ -89,7 +70,6 @@
             };
 
         	$scope.removeFromSelected = function (id) {
-        		console.log($scope.volunteerNameFilter);
 				$scope.selectedVolunteers = $scope.selectedVolunteers.filter(function (value) {
 					return value.id !== id;
 				})
@@ -155,7 +135,6 @@
         $scope.fillActivities = function () {
             $$api.activities.get()
                 .success(function (result) {
-                    console.log(result);
                     if (result !== null && result !== undefined && result.data !== null && result.data !== undefined)
                         $scope.activities = result.data;
                 })
@@ -175,7 +154,21 @@
                 $scope.formData.totalDurationThisDate = result.data.duration + $scope.formData.duration;
             });
 
-        }
+				}
+
+				function populateProjects () {
+					$$api.projects.getProjects().success(function (response) {
+						$scope.projects = response.result;
+
+						if ($scope.projects.length > 0) {
+							$scope.hasProjects = true;
+						}
+					}).error(function (result, error) {
+						$$utilities.processConnectionError(result, error);
+					});
+				}
+
+				populateProjects();
 
 		/*
 			>> setup datepickers
@@ -233,7 +226,7 @@
 			$scope.formData.duration = 0;
 
 			$scope.calculateDuration = function(hours, minutes) {
-				
+
 				// set minutes to 0 if hours == 24
 				if (hours === 24) {
 					$scope.formData.minutes = 0;
@@ -246,18 +239,6 @@
 				// update total duration for this date
 				$scope.calculateTotalDurationThisDate();
 
-			}
-
-
-
-		/*
-			>> populate user_id field
-		*/
-
-			if ($rootScope.currentUser.role_id !== 2) {
-                $scope.formData.user_id = $localStorage.user.id;
-            } else {
-                $scope.formData.user_id = null;
 			}
 
 
@@ -283,9 +264,9 @@
 					    var selectedIds = [];
 					    $scope.selectedVolunteers.forEach(function (value) {
 					        selectedIds.push(value.id);
-                        });
-                        $scope.formData.user_id = selectedIds.join(',');
-                    }
+							});
+							$scope.formData.user_id = selectedIds.join(',');
+					}
 
 					// if offline mode active, push to offline data
 					if ($rootScope.offlineMode) {
@@ -307,6 +288,7 @@
 								minutes: $scope.formData.duration,
 							},
 							startedAt: $scope.formData.date_of_log,
+							project: $scope.formData.project
 						}
 						var payloads = null;
 						var promise = null;

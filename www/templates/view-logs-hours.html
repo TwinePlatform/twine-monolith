@@ -11,7 +11,6 @@
         </div>
 
         <ion-list>
-            <!-- <ion-item class="item-icon-left item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at'] | filter: {deleted_at : '!'}"> -->
             <ion-item style="margin-bottom: 10px" class="item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at']">
                 <i class="icon" ng-class="{ 'ion-alert': log.needs_pushing}">
                     <span ng-if="log.needs_pushing">Not pushed</span>
@@ -20,10 +19,9 @@
                 <h1 ng-bind-html="log.duration | hoursAndMinutesAsString"></h1>
                     <h3 style="color: black" ng-if="isAdmin"> {{log.user.name}} <span style="font-size: 10px; color: gray">{{log.userId === currentUser.id ? 'me': ''}}</span></h3>
                 <p>{{ log.date_of_log.split(' ')[0] | date:'d MMM yyyy'}} @ {{ log.activity }}</p>
-                <p ng-if="options.debug">id: {{ log.id }}</p>
+                <p ng-if="log.project">{{ log.project }}</p>
                 </div>
                 <div class="button-bar">
-                    <!-- <a ng-if="!log.deleted_at" href="#/tab/edit-log/{{ log.id }}" class="button button-positive button-block button-clear icon-left ion-edit">Edit</a> -->
                     <a ng-if="!log.deleted_at" class="button button-positive button-block button-clear" ng-click="edit(log)" ng-disabled="log.previous_month"><i class="icon-custom-edit"></i> </a>
                     <button ng-if="!log.deleted_at" class="button button-positive button-block button-clear" ng-click="delete(log)" ng-disabled="log.previous_month"><i class="icon-custom-delete"></i> </button>
                     <span ng-if="log.deleted_at" class="button button-positive button-block button-clear">Deleted</span>
