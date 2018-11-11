@@ -406,7 +406,8 @@
         delete: function(id) {
           return $http({
             method: 'DELETE',
-            url: $$api.url('volunteers/' + id)
+						url: $$api.url('users/volunteers/' + id),
+						headers: { Authorization: $$api.token.get() },
           });
         },
 
