@@ -22,7 +22,7 @@
 */
 
 	angular.module('app.controllers').controller('EditLogController', function (
-		$scope, $stateParams, $state, $http, $ionicLoading, $filter, $localStorage, $rootScope, $timeout,
+		$scope, $state, $ionicLoading, $filter, $localStorage, $rootScope, $timeout,
 		$$api, $$utilities, $$shout, $$offline
 	) {
 
@@ -32,7 +32,10 @@
 
 			$scope.formData = {};
 			$scope.logLoaded = false;
+			$scope.logHasProject = false;
+			$scope.displayProject = false;
 			$scope.activities = [];
+			$scope.projects = [];
 
 
         /*
@@ -49,6 +52,17 @@
         };
 
         $scope.fillActivities();
+
+
+				function populateProjects () {
+					$$api.projects.getProjects().success(function (response) {
+						$scope.projects = response.result;
+					}).error(function (result, error) {
+						$$utilities.processConnectionError(result, error);
+					});
+				}
+
+				populateProjects();
 
 
 		/*
@@ -149,6 +163,10 @@
 				// add to scope
 				$scope.formData = result.data;
 
+				if ($scope.formData.project) {
+					$scope.logHasProject = true;
+				}
+
 				// preselect the correct hours and minutes based on duration (in raw minutes)
 				var hoursAndMinutes = $filter('hoursAndMinutesAsObject')($scope.formData.duration);
 				var hours = hoursAndMinutes.hours;
@@ -232,6 +250,12 @@
 				var formDate = $filter('date')($scope.formData.dateRaw, 'yyyy-MM-dd');
 				$scope.formData.date_of_log = formDate;
 			}
+
+			$scope.$watch('logHasProject', function (newVal) {
+				if (newVal && $scope.projects.length > 0) {
+					$scope.displayProject = true;
+				}
+			}, true);
 
 		/*
 			>> process the edit log form
