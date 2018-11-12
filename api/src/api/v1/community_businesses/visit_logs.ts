@@ -1,25 +1,22 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import * as Joi from 'joi';
-import * as bcrypt from 'bcrypt';
 import { omit, filter, complement, isEmpty } from 'ramda';
 import { query, response, id } from './schema';
 import {
-  User,
   Visitors,
   CommunityBusiness,
   CommunityBusinesses,
   GenderEnum } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
-import { findAsync } from '../../../utils';
 import { filterQuery } from '../users/schema';
 import { ApiRequestQuery } from '../schema/request';
+import Roles from '../../../auth/roles';
+import { RoleEnum } from '../../../auth/types';
 
 interface VisitorSearchRequest extends Hapi.Request {
   payload: {
     userId: number
     visitActivityId: number
-    qrCode: string
   };
 }
 
@@ -49,7 +46,6 @@ const routes: Hapi.ServerRoute[] = [
         payload: {
           userId: id.required(),
           visitActivityId: id.required(),
-          qrCode: Joi.string().required(),
         },
       },
       response: { schema: response },
@@ -58,15 +54,19 @@ const routes: Hapi.ServerRoute[] = [
       ],
     },
     handler: async (request: VisitorSearchRequest, h) => {
-      const { payload: { qrCode, userId, visitActivityId }, server: { app: { knex } } } = request;
+      const { payload: { userId, visitActivityId }, server: { app: { knex } } } = request;
       const communityBusiness = <CommunityBusiness> request.pre.communityBusiness;
 
-      const visitors = await Visitors.fromCommunityBusiness(knex, communityBusiness);
+      const visitor = await Visitors.getOne(knex, { where: { id: userId } });
 
-      const visitor = await findAsync(visitors, (v: User) => bcrypt.compare(qrCode, v.qrCode));
+      const isRegisteredVisitorAtCb = await Roles.userHas(knex, {
+        userId,
+        organisationId: communityBusiness.id,
+        role: RoleEnum.VISITOR,
+      });
 
-      if (!visitor || visitor.id !== userId) {
-        return Boom.badRequest('QR code invalid');
+      if (!isRegisteredVisitorAtCb) {
+        return Boom.forbidden('Visitor is not registered at Community Business');
       }
 
       const activity = await CommunityBusinesses.getVisitActivityById(
@@ -74,6 +74,10 @@ const routes: Hapi.ServerRoute[] = [
         communityBusiness,
         visitActivityId
       );
+
+      if (!activity) {
+        return Boom.badRequest('Activity not associated to Community Business');
+      }
 
       return CommunityBusinesses.addVisitLog(knex, activity, visitor);
     },

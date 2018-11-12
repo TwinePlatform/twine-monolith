@@ -44,7 +44,6 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
         url: '/v1/community-businesses/me/visit-logs',
         payload: {
           userId: 1,
-          qrCode: 'chellsqrcode',
           visitActivityId: 2,
         },
         credentials: {
@@ -61,14 +60,34 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
       });
     });
 
-    test(':: invalid QR code returns 400', async () => {
+    test(':: user from another cb returns error', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/visit-logs',
+        payload: {
+          userId: 2,
+          visitActivityId: 2,
+        },
+        credentials: {
+          user: cbAdmin,
+          organisation,
+          scope: ['visit_logs-child:write'],
+          role: RoleEnum.CB_ADMIN,
+        },
+      });
+
+      expect(res.statusCode).toBe(403);
+      expect((<any> res.result).error.message)
+        .toBe('Visitor is not registered at Community Business');
+    });
+
+    test(':: incorrect activity id returns error', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/visit-logs',
         payload: {
           userId: 1,
-          qrCode: 'thisisnotmyqrcode',
-          activityId: 2,
+          visitActivityId: 200,
         },
         credentials: {
           user: cbAdmin,
@@ -79,6 +98,8 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
       });
 
       expect(res.statusCode).toBe(400);
+      expect((<any> res.result).error.message)
+        .toBe('Activity not associated to Community Business');
     });
   });
 
