@@ -112,8 +112,8 @@
 					$ionicLoading.hide();
 	
 					// process connection error
-					processConnectionError(result, error);
-	
+					$$utilities.processConnectionError(result, error);
+
 				});
 			}
 
