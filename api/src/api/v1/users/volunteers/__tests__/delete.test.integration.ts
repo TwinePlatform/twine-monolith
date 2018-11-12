@@ -113,7 +113,7 @@ describe('DELETE /v1/users/volunteers/:id', () => {
           .getOne(knex, { where: { name: 'Aperture Science' } }),
       },
     });
-    expect(res.statusCode).toBe(401);
+    expect(res.statusCode).toBe(403);
   });
 });
 

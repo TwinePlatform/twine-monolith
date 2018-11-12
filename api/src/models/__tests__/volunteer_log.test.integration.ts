@@ -43,12 +43,12 @@ describe('VolunteerLog model', () => {
     });
 
     test('getOne :: returns first log', async () => {
-      const logs = await VolunteerLogs.getOne(trx);
+      const logs = await VolunteerLogs.getOne(trx, { order: ['startedAt', 'asc'] });
       expect(logs).toEqual(expect.objectContaining({
-        userId: 6,
+        userId: 7,
         organisationId: 2,
         activity: 'Helping with raising funds (shop, events…)',
-        duration: { minutes: 10, seconds: 20 },
+        duration: { minutes: 35 },
       }));
     });
 

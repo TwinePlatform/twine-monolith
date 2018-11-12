@@ -98,6 +98,6 @@ describe('Pre-requisite :: is_sibling_user', () => {
       },
     });
 
-    expect(res.statusCode).toBe(401);
+    expect(res.statusCode).toBe(403);
   });
 });

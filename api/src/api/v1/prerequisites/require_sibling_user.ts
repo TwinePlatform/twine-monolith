@@ -47,5 +47,5 @@ export default async (request: RequireSiblingPreReq, h: Hapi.ResponseToolkit) =>
   if (requestedUsersOrganisation.id === organisation.id) {
     return true;
   }
-  return Boom.unauthorized('Trying to access a user from another organisation');
+  return Boom.forbidden('Trying to access a user from another organisation');
 };
