@@ -22,8 +22,8 @@ const routes: Hapi.ServerRoute[] = [
         strategy: 'standard',
         access: {
           scope: [
-            'organisations_volunteer-parent:read',
-            'organisations_volunteer-own:read',
+            'organisations_volunteers-parent:read',
+            'organisations_volunteers-own:read',
           ],
         },
       },
@@ -49,8 +49,8 @@ const routes: Hapi.ServerRoute[] = [
         strategy: 'standard',
         access: {
           scope: [
-            'organisations_volunteer-parent:write',
-            'organisations_volunteer-own:write',
+            'organisations_volunteers-parent:write',
+            'organisations_volunteers-own:write',
           ],
         },
       },
@@ -84,8 +84,8 @@ const routes: Hapi.ServerRoute[] = [
         strategy: 'standard',
         access: {
           scope: [
-            'organisations_volunteer-parent:read',
-            'organisations_volunteer-own:read',
+            'organisations_volunteers-parent:read',
+            'organisations_volunteers-own:read',
 
           ],
         },
@@ -125,8 +125,8 @@ const routes: Hapi.ServerRoute[] = [
         strategy: 'standard',
         access: {
           scope: [
-            'organisations_volunteer-parent:write',
-            'organisations_volunteer-own:write',
+            'organisations_volunteers-parent:write',
+            'organisations_volunteers-own:write',
           ],
         },
       },
@@ -173,8 +173,8 @@ const routes: Hapi.ServerRoute[] = [
         strategy: 'standard',
         access: {
           scope: [
-            'organisations_volunteer-parent:delete',
-            'organisations_volunteer-own:delete',
+            'organisations_volunteers-parent:delete',
+            'organisations_volunteers-own:delete',
           ],
         },
       },
