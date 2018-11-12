@@ -234,6 +234,11 @@
 					}
 					else {
 
+						if (true) {
+							$$shout(result + '\n\n' + error);
+							return;
+						}
+
 						// no internet connection
 						if (error === 0) {
 							$$shout('Could not connect. Please check your internet connection & try again.', 3000);
