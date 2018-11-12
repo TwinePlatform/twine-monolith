@@ -141,6 +141,8 @@
 								$localStorage.user = null;
 								$rootScope.currentUser = null;
 								$rootScope.organisationName = null;
+
+								$state.go('login');
 							});
 
 					}
