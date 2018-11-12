@@ -1,50 +1,29 @@
 # Permissions
 ## Resources and their ownership
-**organisations - 🏢 owned by ORG (represented by CB_ADMIN)**
-organisations_details
-organisations_subscriptions
-organisations_feedback
-organisations_training
-organisations_invitations
-organisations_outreach
-visit_activities
-volunteer_activities
+| Resource | Owner | Description |
+|----------|-------|-------------|
+| `organisations_details` | 🏢 Organisation | Core organisation details |
+| `organisations_subscriptions` | 🏢 Organisation | Organisation subscriptions |
+| `organisations_feedback` | 🏢 Organisation | Visitor feedback data |
+| `organisations_training` | 🏢 Organisation | Twine training data |
+| `organisations_invitations` | 🏢 Organisation | TBD |
+| `organisations_outreach` | 🏢 Organisation | Outreach data |
+| `organisations_volunteers` | 🏢 Organisation | Miscellaneous volunteer related metadata (e.g. projects) |
+| `user_details` | 👩🏽 User | Core user details |
+| `visit_activities` | 🏢 Organisation | Visit activities offered/listed by organisation |
+| `visit_logs` | 👩🏽 User | Records of when a user visited/used services at an organisation |
+| `volunteer_activities` | 🏢 Organisation | TBD |
+| `volunteer_logs` | 👩🏽 User | Records of when a user volunteered time at an organisation |
 
-**users - 🙍🏾‍♂️ owned by USER**
-user_details
-volunteer_logs
-visit_logs
+#### Notes
+* In the application, the "Organisation" is represented by `CB_ADMIN` users.
+* The resource `users_details_anonymised` is not currently used but may be needed for funding bodies to access anonymised user data.
 
-## permission flags
-*-children - data of all child catagories  
-*-parent - data of all parent catagories  
-*-own - data directly owned by user  
-*-sibling - data owned by a sibling (same level) user
-
-## resources
-
-### constants
-constants (sectors/regions/gender/outreach types/meeting types/etc)
-
-### organisations
-organisations_details  
-organisations_subscriptions  
-organisations_feedback  
-organisations_training  
-organisations_invitations  
-organisations_outreach  
-
-### users
-users_details  
-users_details_anonymised //not currently used but may be needed for funding bodies to access anonymised user datas  
-
-### volunteers
-volunteer_activities  
-volunteer_logs  
-
-### visit_activities
-visit_activites  
-visit_logs  
+## Permission flags
+* `*-children` - data of all child catagories
+* `*-parent` - data of all parent catagories
+* `*-own` - data directly owned by user
+* `*-sibling` - data owned by a sibling (same level) user
 
 
 ## References

@@ -318,16 +318,16 @@
     "GET": {
       "isImplemented": true,
       "permissions": {
-        "VOLUNTEER": "organisation_details-parent:read",
-        "VOLUNTEER_ADMIN": "organisation_details-parent:read",
-        "CB_ADMIN": "organisation_details-own:read"
+        "VOLUNTEER": "organisations_volunteers-parent:read",
+        "VOLUNTEER_ADMIN": "organisations_volunteers-parent:read",
+        "CB_ADMIN": "organisations_volunteers-own:read"
       }
     },
     "POST": {
       "isImplemented": true,
       "permissions": {
-        "VOLUNTEER_ADMIN": "organisation_details-parent:write",
-        "CB_ADMIN": "organisation_details-own:write"
+        "VOLUNTEER_ADMIN": "organisations_volunteers-parent:write",
+        "CB_ADMIN": "organisations_volunteers-own:write"
       }
     }
   },
@@ -335,23 +335,23 @@
     "GET": {
       "isImplemented": true,
       "permissions": {
-        "VOLUNTEER": "organisation_details-parent:read",
-        "VOLUNTEER_ADMIN": "organisation_details-parent:read",
-        "CB_ADMIN": "organisation_details-own:read"
+        "VOLUNTEER": "organisations_volunteers-parent:read",
+        "VOLUNTEER_ADMIN": "organisations_volunteers-parent:read",
+        "CB_ADMIN": "organisations_volunteers-own:read"
       }
     },
     "PUT": {
       "isImplemented": true,
       "permissions": {
-        "VOLUNTEER_ADMIN": "organisation_details-parent:write",
-        "CB_ADMIN": "organisation_details-own:write"
+        "VOLUNTEER_ADMIN": "organisations_volunteers-parent:write",
+        "CB_ADMIN": "organisations_volunteers-own:write"
       }
     },
     "DELETE": {
       "isImplemented": true,
       "permissions": {
-        "VOLUNTEER_ADMIN": "organisation_details-parent:delete",
-        "CB_ADMIN": "organisation_details-own:delete"
+        "VOLUNTEER_ADMIN": "organisations_volunteers-parent:delete",
+        "CB_ADMIN": "organisations_volunteers-own:delete"
       }
     }
   },
