@@ -33,7 +33,6 @@
 			$scope.formData = {};
 			$scope.logLoaded = false;
 			$scope.logHasProject = false;
-			$scope.displayProject = true;
 			$scope.activities = [];
 			$scope.projects = [];
 
@@ -255,12 +254,6 @@
 				var formDate = $filter('date')($scope.formData.dateRaw, 'yyyy-MM-dd');
 				$scope.formData.date_of_log = formDate;
 			}
-
-			$scope.$watch('logHasProject', function (newVal) {
-				if (newVal && $scope.projects.length > 0) {
-					$scope.displayProject = true;
-				}
-			}, true);
 
 		/*
 			>> process the edit log form
