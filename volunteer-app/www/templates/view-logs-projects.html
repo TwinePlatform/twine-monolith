@@ -1,7 +1,7 @@
 <ion-view hide-nav-bar="true" title="Projects">
 
     <div ng-if="noProjects || offlineMode" class="noResults">
-        <h4 ng-if="noProjects" class="text-center label">You haven't created any logs yet.</h4>
+        <h4 ng-if="noProjects" class="text-center label">You haven't created any projects yet.</h4>
         <h4 ng-if="offlineMode" class="text-center label">Cannot manage projects in offline mode.</h4>
     </div>
 
@@ -21,9 +21,9 @@
                     <p ng-if="options.debug">id: {{ project.id }}</p>
                 </div>
                 <div class="button-bar">
-                    <a ng-if="!project.deleted_at" class="button button-positive button-block button-clear" ng-click="edit(project)"><i class="icon-custom-edit"></i> </a>
-                    <button ng-if="!project.deleted_at" class="button button-positive button-block button-clear" ng-click="delete(project)"><i class="icon-custom-delete"></i> </button>
-                    <span ng-if="project.deleted_at" class="button button-positive button-block button-clear">Deleted</span>
+                    <a ng-if="!project.deleted_at" class="button button-positive button-block button-clear" ng-click="edit(project)" ng-disabled="offlineMode"><i class="icon-custom-edit"></i> </a>
+                    <button ng-if="!project.deleted_at" class="button button-positive button-block button-clear" ng-click="delete(project)" ng-disabled="offlineMode"><i class="icon-custom-delete"></i> </button>
+                    <span ng-if="project.deleted_at" class="button button-positive button-block button-clear" ng-disabled="offlineMode">Deleted</span>
                 </div>
             </ion-item>
 
@@ -32,9 +32,9 @@
         </ion-list>
 
     </ion-content>
-    <div ng-if="noProjects" class="button-add-message view-logs-button">
+    <div ng-if="noProjects && !offlineMode" class="button-add-message view-logs-button">
         <p>Click on this button to add projects</p>
     </div>
-    <a ui-sref="tabs.view-logs.new-project-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
+    <a ng-if="noProjects && !offlineMode" ui-sref="tabs.view-logs.new-project-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
     </a>
 </ion-view>
