@@ -48,7 +48,10 @@
                 .success(function (result) {
                     if (result !== null && result !== undefined && result.data !== null && result.data !== undefined)
                         $scope.activities = result.data;
-                })
+								})
+								.error(function (result, error) {
+									$$utilities.processConnectionError(result, error);
+								})
         };
 
         $scope.fillActivities();
@@ -208,6 +211,8 @@
 
 				setTimeout(function(){
 					$scope.displayLogData(result);
+					$scope.activities = [{ id: -1, name: result.data.activity }];
+					$scope.projects = [{ id: -1, name: result.data.project }];
 				}, 100);
 
 			}
