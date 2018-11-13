@@ -212,7 +212,7 @@ export interface GetMyVolunteerLogsAggregateRequest extends Hapi.Request {
 
 export interface SyncMyVolunteerLogsRequest extends Hapi.Request {
   payload: (
-    Pick<VolunteerLog, 'id' | 'activity' | 'duration' | 'startedAt'> &
+    Pick<VolunteerLog, 'id' | 'activity' | 'duration' | 'startedAt' | 'deletedAt'> &
     { userId: number | string }
   )[];
   pre: {

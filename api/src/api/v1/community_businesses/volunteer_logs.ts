@@ -1,6 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
+import { omit } from 'ramda';
 import { response, id, meOrId, since, until } from './schema';
 import Roles from '../../../auth/roles';
 import { RoleEnum } from '../../../auth/types';
@@ -279,6 +280,7 @@ const routes: Hapi.ServerRoute[] = [
       },
       validate: {
         payload: Joi.array().items(Joi.object({
+          id,
           userId: meOrId.default('me'),
           activity: Joi.string().required(),
           duration: Joi.object({
@@ -287,7 +289,8 @@ const routes: Hapi.ServerRoute[] = [
             seconds: Joi.number().integer().min(0),
           }).required(),
           startedAt: Joi.date().iso().max('now').default(() => new Date().toISOString(), 'now'),
-          project: Joi.string().min(2),
+          deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
+          project: Joi.alt().try(Joi.string().min(2), Joi.only(null)),
         })).required(),
       },
       response: { schema: response },
@@ -331,13 +334,37 @@ const routes: Hapi.ServerRoute[] = [
 
       try {
         await knex.transaction(async (trx) =>
-          Promise.all(payload.map(async (log) =>
-            VolunteerLogs.add(trx, {
-              ...log,
-              organisationId: communityBusiness.id,
-              userId: log.userId === 'me' ? user.id : Number(log.userId),
-            })
-          ))
+          Promise.all(payload.map(async (log) => {
+            const existsInDB = log.hasOwnProperty('id');
+            const shouldUpdate = existsInDB && !log.deletedAt;
+            const shouldDelete = existsInDB && log.deletedAt;
+
+            if (shouldUpdate) {
+
+              return VolunteerLogs.update(trx,
+                { id: log.id, organisationId: communityBusiness.id },
+                {
+                  ...omit(['id', 'deletedAt'], log),
+                  organisationId: communityBusiness.id,
+                  userId: log.userId === 'me' ? user.id : Number(log.userId),
+                }
+              );
+
+            } else if (shouldDelete) {
+
+              return VolunteerLogs.update(trx, { id: log.id }, { deletedAt: log.deletedAt });
+
+            } else {
+              // otherwise, add log to DB
+
+              return VolunteerLogs.add(trx, {
+                ...log,
+                organisationId: communityBusiness.id,
+                userId: log.userId === 'me' ? user.id : Number(log.userId),
+              });
+
+            }
+          }))
         );
 
         return null;

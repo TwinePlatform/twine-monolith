@@ -1,6 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import * as moment from 'moment';
+import { omit } from 'ramda';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
@@ -718,7 +719,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('POST /community-businesses/me/volunteer-logs/sync', () => {
-    test('can sync single log', async () => {
+    test('can sync single new log', async () => {
       const logs = [{
         activity: 'Office support',
         duration: { minutes: 20 },
@@ -754,7 +755,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect((<any> resLogs.result).result).toHaveLength(8);
     });
 
-    test('can sync multiple logs', async () => {
+    test('can sync multiple new logs', async () => {
       const times = ['2018-09-22T21:02:10', '2018-09-21T21:01:12', '2018-10-02T21:02:10'];
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
@@ -823,6 +824,106 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(7);
+    });
+
+    test('can sync existing log', async () => {
+      const resGet = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/volunteer-logs/3',
+        credentials: {
+          scope: ['volunteer_logs-sibling:read'],
+          user: volAdmin,
+          organisation,
+          role: RoleEnum.VOLUNTEER_ADMIN,
+        },
+      });
+
+      expect(resGet.statusCode).toBe(200);
+
+      const log = omit(
+        ['createdAt', 'modifiedAt', 'organisationId'],
+        { ...(<any> resGet.result).result, duration: { hours: 1, minutes: 34 } }
+      );
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: {
+          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
+          user: volAdmin,
+          organisation,
+          role: RoleEnum.VOLUNTEER_ADMIN,
+        },
+        payload: [log],
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: null });
+
+      const resCheck = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/volunteer-logs/3',
+        credentials: {
+          scope: ['volunteer_logs-sibling:read'],
+          user: volAdmin,
+          organisation,
+          role: RoleEnum.VOLUNTEER_ADMIN,
+        },
+      });
+
+      expect(resCheck.statusCode).toBe(200);
+      expect(resCheck.result).toEqual({ result: expect.objectContaining(log) });
+
+    });
+
+
+    test('can sync existing log for deletion', async () => {
+      const resGet = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/volunteer-logs/3',
+        credentials: {
+          scope: ['volunteer_logs-sibling:read'],
+          user: volAdmin,
+          organisation,
+          role: RoleEnum.VOLUNTEER_ADMIN,
+        },
+      });
+
+      expect(resGet.statusCode).toBe(200);
+
+      const log = omit(
+        ['createdAt', 'modifiedAt', 'organisationId'],
+        { ...(<any> resGet.result).result, deletedAt: new Date().toISOString() }
+      );
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: {
+          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
+          user: volAdmin,
+          organisation,
+          role: RoleEnum.VOLUNTEER_ADMIN,
+        },
+        payload: [log],
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: null });
+
+      const resCheck = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/volunteer-logs/3',
+        credentials: {
+          scope: ['volunteer_logs-sibling:read'],
+          user: volAdmin,
+          organisation,
+          role: RoleEnum.VOLUNTEER_ADMIN,
+        },
+      });
+
+      expect(resCheck.statusCode).toBe(404);
+
     });
 
     test('can sync a mixture of logs for self and logs for others as VOLUNTEER_ADMIN', async () => {
