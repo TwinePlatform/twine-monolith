@@ -6,6 +6,8 @@ const restrictedScopes = {
     "organisations_feedback-own:write",
     "visit_activities-own:read",
     "visit_logs-child:write",
+    "user_details-child:write",
+    "user_details-child:read",
   ]
 }
 
