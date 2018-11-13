@@ -450,6 +450,4 @@
 			}
 
 
-			console.log($scope);
-
 	})

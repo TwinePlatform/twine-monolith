@@ -15,8 +15,12 @@
 */
 
 	angular.module('app.controllers').controller('ViewLogsProjectsController', function (
-		$scope, $state, $ionicLoading, $rootScope, $ionicPopup, $$api, $$utilities, $$shout, $$offline
+		$scope, $state, $ionicLoading, $rootScope, $ionicPopup, $$api, $$utilities, $$shout, $$offline, $localStorage
 	) {
+
+		if (!$$offline.checkConnection()) {
+			$$offline.enable();
+		}
 
 		$scope.noProjects = true;
 		$scope.offlineMode = $rootScope.offlineMode;
@@ -29,26 +33,23 @@
 
 				// if offline mode, stop
 				if ($rootScope.offlineMode) {
-
 					$scope.offlineMode = $rootScope.offlineMode;
-					return;
+					$scope.projects = $localStorage.offlineData.projects || [];
+					$scope.noProjects = $scope.projects.length === 0;
 				}
 
 				// else get projects from api
 				$$api.projects.getProjects().success(function (data) {
 
 					$scope.projects = data.result;
-
-					if (data.result.length === 0) {
-						$scope.noProjects = true;
-					} else {
-						$scope.noProjects = false;
-					}
+					$scope.noProjects = $scope.projects.length === 0;
 
 				}).error(function(result, error) {
 					if (error === 0) {
 						$$offline.enable();
 						$scope.offlineMode = $rootScope.offlineMode;
+						$scope.projects = $localStorage.offlineData.projects || [];
+						$scope.noProjects = $scope.projects.length === 0;
 					}
 
 					$$utilities.processConnectionError(result, error);
