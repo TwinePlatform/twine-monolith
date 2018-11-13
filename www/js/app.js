@@ -171,7 +171,7 @@
 						if (!$localStorage.user) {
 							return;
 						}
-						var userId = $localStorage.user.id
+						var userId = Number($localStorage.user.id);
 						// get all offline logs
 						var allLogs = $localStorage.offlineData ? $localStorage.offlineData.logs : [];
 						// // filter by current organisation id
@@ -187,10 +187,13 @@
 						logsData = angular.copy(logsData);
 
 						logsData.logs = logsData.logs.map((log) => ({
-							userId: log.user_id == userId ? undefined : log.user_id,
+							id: log.id || undefined,
+							userId: log.userId === userId ? undefined : log.userId,
 							duration: { minutes: log.duration },
 							activity: log.activity,
 							startedAt: log.date_of_log,
+							project: log.project,
+							deletedAt: log.deletedAt || undefined,
 						}))
 
 						// if we have logs that need syncing, sync them

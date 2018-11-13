@@ -51,7 +51,7 @@
 						}
 					}
 
-				},			
+				},
 
 			/*
 				>> get years options
@@ -171,7 +171,7 @@
 			*/
 
 				jsDateToSqlDate: function(jsDate) {
-					
+
 					var year = jsDate.getFullYear(),
 						month = $$utilities.zeroPad(jsDate.getMonth() + 1, 2),
 						day = $$utilities.zeroPad(jsDate.getDate(), 2),
@@ -190,7 +190,7 @@
 			*/
 
 				jsDateToSqlDateAndTime: function(jsDate) {
-					
+
 					var year = jsDate.getFullYear(),
 						month = $$utilities.zeroPad(jsDate.getMonth() + 1, 2),
 						day = $$utilities.zeroPad(jsDate.getDate(), 2),
@@ -235,7 +235,7 @@
 					else {
 
 						if (true) {
-							$$shout(result + '\n\n' + error);
+							$$shout('DEBUG:\n\n' + result + '\n\n' + error);
 							return;
 						}
 

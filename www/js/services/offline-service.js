@@ -115,9 +115,7 @@
 			*/
 
 				getLogs: function() {
-					var allLogs = $localStorage.offlineData.logs,
-						filteredLogs = $filter('filter')(allLogs, {'organisation_id': $localStorage.user.organisation.id});
-					return filteredLogs;
+					return $localStorage.offlineData.logs;
 				},
 
 			/*
@@ -160,8 +158,8 @@
 					}
 
 					// remove delete_at attribute if equal to nothing (as this was causing logs to be deleted at the server side on subsequent syncs)
-					if (data.deleted_at === null) {
-						delete data.deleted_at;
+					if (data.deletedAt === null) {
+						delete data.deletedAt;
 					}
 
 					// push new data back into $localStorage array
@@ -179,8 +177,8 @@
 
 					    if (this[idObject.idKey] === idObject.id){
 
-					    	// mark as deleted_at
-					        this.deleted_at = $$utilities.getCurrentDateAndTimeAsString();
+					    	// mark as deletedAt
+					        this.deletedAt = $$utilities.getCurrentDateAndTimeAsString();
 
 					        // mark as needs_pushing if necessary
 					        if (needs_pushing) {

@@ -314,8 +314,10 @@
 
 						promise.then(function (result) {
 							if (Array.isArray(result)) {
+								$$shout('Logs saved.');
 								result = result.map((r) => r.data.result)
 							} else {
+								$$shout('Log saved.');
 								result = result.data.result;
 							}
 
@@ -328,8 +330,6 @@
 							} else {
 								$scope.newLogOffline(result);
 							}
-
-							$$shout('Log saved.');
 
 							if ($rootScope.isAdmin) {
 								$state.go('tabs.view-logs.hours');
