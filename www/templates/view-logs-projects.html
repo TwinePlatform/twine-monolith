@@ -35,6 +35,6 @@
     <div ng-if="noProjects && !offlineMode" class="button-add-message view-logs-button">
         <p>Click on this button to add projects</p>
     </div>
-    <a ng-if="noProjects && !offlineMode" ui-sref="tabs.view-logs.new-project-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
+    <a ng-if="!offlineMode" ui-sref="tabs.view-logs.new-project-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
     </a>
 </ion-view>
