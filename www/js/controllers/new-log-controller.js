@@ -50,6 +50,10 @@
 			$scope.selectedUser = { id : '' };
 
 
+			if (!$$offline.checkConnection()) {
+				$$offline.enable();
+			}
+
         /*
         >> volunteers selector filtrationa
     	*/
@@ -108,11 +112,18 @@
 
         */
 			$scope.fillVolonters = function () {
+				if ($rootScope.offlineMode) {
+					$scope.volunteers = $localStorage.offlineData.volunteers || [];
+					$scope.displayedVolunteers = $scope.volunteers;
+					return;
+				}
+
 				$$api.volunteers.getVolunteers($rootScope.currentUser.organisation_id)
 					.success(function (result) {
 						if (result && result.result) {
-                            $scope.volunteers = result.result;
-                            $scope.displayedVolunteers = $scope.volunteers;
+							$scope.volunteers = result.result;
+							$scope.displayedVolunteers = $scope.volunteers;
+							$localStorage.offlineData.volunteers = $scope.volunteers || [];
 						}
 					})
 					.error((data, error) => {
@@ -133,10 +144,17 @@
         */
 
         $scope.fillActivities = function () {
+						if ($rootScope.offlineMode) {
+							$scope.activities = $localStorage.offlineData.activities || [];
+							return;
+						}
+
             $$api.activities.get()
                 .success(function (result) {
-                    if (result !== null && result !== undefined && result.data !== null && result.data !== undefined)
-                        $scope.activities = result.data;
+                    if (result !== null && result !== undefined && result.data !== null && result.data !== undefined) {
+											$scope.activities = result.data;
+											$localStorage.offlineData.activities = result.data;
+										}
                 })
         };
 
@@ -157,8 +175,19 @@
 				}
 
 				function populateProjects () {
+					if ($rootScope.offlineMode) {
+						$scope.projects = $localStorage.offlineData.projects || [];
+
+						if ($scope.projects.length > 0) {
+							$scope.hasProjects = true;
+						}
+
+						return;
+					}
+
 					$$api.projects.getProjects().success(function (response) {
 						$scope.projects = response.result;
+						$localStorage.offlineData.projects = response.result;
 
 						if ($scope.projects.length > 0) {
 							$scope.hasProjects = true;
@@ -273,8 +302,39 @@
 						// hide loader
 						$ionicLoading.hide();
 
-						// push to offline data, mark as 'needs_pushing'
-						$scope.newLogOffline($scope.formData, true, 'Log saved offline.');
+						var payload = {
+							activity: $scope.formData.activity,
+							duration: {
+								minutes: $scope.formData.duration,
+							},
+							startedAt: $scope.formData.date_of_log,
+							project: $scope.formData.project
+						}
+						var payloads = null;
+
+						if ($scope.formData.user_id && $scope.formData.user_id !== $rootScope.currentUser.id) {
+							if ($scope.selectedVolunteers.length > 1) { // Multiple IDs!
+								payloads = $scope.selectedVolunteers.map((user) => Object.assign({ userId: user.id }, payload))
+							} else { // Single ID
+								payload.userId = $scope.selectedVolunteers[0].id;
+							}
+						} else {
+							// User ID refers to own user, therefore do nothing, since this is default
+							// behaviour of new API
+						}
+
+						if (payloads) {
+							payloads.forEach(function (log) { $scope.newLogOffline(log, true, 'Log saved offline.'); });
+						} else {
+							// push to offline data, mark as 'needs_pushing'
+							$scope.newLogOffline(payload, true, 'Log saved offline.');
+						}
+
+						if ($rootScope.isAdmin) {
+							$state.go('tabs.view-logs.hours');
+						} else {
+							$state.go('tabs.dashboard');
+						}
 
 					}
 
@@ -326,7 +386,7 @@
 
 							// push to offline data
 							if (Array.isArray(result)) {
-								result.map((r) => $scope.newLogOffline(r));
+								result.forEach((r) => $scope.newLogOffline(r));
 							} else {
 								$scope.newLogOffline(result);
 							}
@@ -389,5 +449,7 @@
 
 			}
 
+
+			console.log($scope);
 
 	})

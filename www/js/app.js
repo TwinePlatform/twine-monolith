@@ -189,7 +189,7 @@
 						logsData.logs = logsData.logs.map((log) => ({
 							id: log.id || undefined,
 							userId: log.userId === userId ? undefined : log.userId,
-							duration: { minutes: log.duration },
+							duration: typeof log.duration === 'number' ? { minutes: log.duration } : log.duration,
 							activity: log.activity,
 							startedAt: log.date_of_log,
 							project: log.project,
