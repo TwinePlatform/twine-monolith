@@ -127,7 +127,8 @@ describe('Permisions Module', () => {
           permissionLevel: PermissionLevelEnum.CHILD,
           role: RoleEnum.CB_ADMIN,
         });
-        expect(query).toBe(1);
+        expect(query).toBe(2);
+        // NB: two rows are deleted as there is a restricted & a full access_mode row
       } catch (error) {
         expect(error).toBeFalsy();
       }
