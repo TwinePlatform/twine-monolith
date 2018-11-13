@@ -33,7 +33,7 @@
 			$scope.formData = {};
 			$scope.logLoaded = false;
 			$scope.logHasProject = false;
-			$scope.displayProject = false;
+			$scope.displayProject = true;
 			$scope.activities = [];
 			$scope.projects = [];
 
@@ -56,7 +56,7 @@
 
 				function populateProjects () {
 					$$api.projects.getProjects().success(function (response) {
-						$scope.projects = response.result;
+						$scope.projects = [ { id: -1, name: 'None' }].concat(response.result);
 					}).error(function (result, error) {
 						$$utilities.processConnectionError(result, error);
 					});
@@ -261,8 +261,6 @@
 			>> process the edit log form
 		*/
 
-			console.log('$$offline.checkConnection(): ', $$offline.checkConnection());
-
 			$scope.formSubmitted = false;
 			$scope.processForm = function(form) {
 
@@ -273,8 +271,6 @@
 
 				// form is valid
 				if (form.$valid) {
-
-					console.log('$scope.formData: ', $scope.formData);
 
 					// show loader
 					$ionicLoading.show();
@@ -312,12 +308,10 @@
 								minutes: $scope.formData.minutes.value,
 							},
 							startedAt: $scope.formData.date_of_log,
+							project: $scope.formData.project === 'None' ? null : $scope.formData.project,
 						}
+
 						$$api.logs.edit($scope.formData.id, payload).success(function (result) {
-
-							console.log(payload);
-
-							console.log('result: ', result);
 
 							// hide loader
 							$ionicLoading.hide();
@@ -349,7 +343,7 @@
 								$state.go('tabs.view-logs.hours');
 
 								// process connection error
-								$$utilities.processConnectionError(data, error);
+								$$utilities.processConnectionError(result, error);
 
 							}
 
