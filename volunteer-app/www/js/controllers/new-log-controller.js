@@ -126,7 +126,7 @@
 							$localStorage.offlineData.volunteers = $scope.volunteers || [];
 						}
 					})
-					.error((data, error) => {
+					.error(function (data, error) {
 
 							// process connection error
 							$$utilities.processConnectionError(data, error);
@@ -314,7 +314,7 @@
 
 						if ($scope.formData.user_id && $scope.formData.user_id !== $rootScope.currentUser.id) {
 							if ($scope.selectedVolunteers.length > 1) { // Multiple IDs!
-								payloads = $scope.selectedVolunteers.map((user) => Object.assign({ userId: user.id }, payload))
+								payloads = $scope.selectedVolunteers.map(function (user) { return Object.assign({ userId: user.id }, payload) })
 							} else { // Single ID
 								payload.userId = $scope.selectedVolunteers[0].id;
 							}
@@ -355,7 +355,7 @@
 
 						if ($scope.formData.user_id && $scope.formData.user_id !== $rootScope.currentUser.id) {
 							if ($scope.selectedVolunteers.length > 1) { // Multiple IDs!
-								payloads = $scope.selectedVolunteers.map((user) => Object.assign({ userId: user.id }, payload))
+								payloads = $scope.selectedVolunteers.map(function (user) { return Object.assign({ userId: user.id }, payload); })
 							} else { // Single ID
 								payload.userId = $scope.selectedVolunteers[0].id;
 							}
@@ -375,7 +375,7 @@
 						promise.then(function (result) {
 							if (Array.isArray(result)) {
 								$$shout('Logs saved.');
-								result = result.map((r) => r.data.result)
+								result = result.map(function (r) { return r.data.result; })
 							} else {
 								$$shout('Log saved.');
 								result = result.data.result;
@@ -386,7 +386,7 @@
 
 							// push to offline data
 							if (Array.isArray(result)) {
-								result.forEach((r) => $scope.newLogOffline(r));
+								result.forEach(function (r) { return $scope.newLogOffline(r) });
 							} else {
 								$scope.newLogOffline(result);
 							}

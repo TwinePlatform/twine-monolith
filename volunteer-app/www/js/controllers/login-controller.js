@@ -42,8 +42,8 @@
 
 					// >>> submit login form
 					$$api.user.login($scope.formData)
-					.then(() => $$api.user.get('me'))
-					.then((response) => {
+					.then(function () { return $$api.user.get('me'); })
+					.then(function (response) {
 
 						// hide loader
 						$ionicLoading.hide();
@@ -54,7 +54,7 @@
 
 						return $$api.user.roles()
 					})
-					.then((response) => {
+					.then(function (response) {
 						$localStorage.user.role = response.data.result.role;
 
 						if (['VOLUNTEER_ADMIN', 'CB_ADMIN'].includes($localStorage.user.role)) {
@@ -68,7 +68,7 @@
 
 						return $$api.organisations.get();
 					})
-					.then((response) => {
+					.then(function (response) {
 						$localStorage.user.organisation = response.data.result;
 
 						// set organisation subheader title

@@ -43,17 +43,17 @@
 								// update logs in view
 								$scope.logs = result.data;
 
-								const uniqueIds = $scope.logs
-									.map((l) => l.userId)
-									.reduce((acc, id) => acc.includes(id) ? acc : acc.concat(id), []);
+								var uniqueIds = $scope.logs
+									.map(function (l) { return l.userId; })
+									.reduce(function (acc, id) { return acc.includes(id) ? acc : acc.concat(id); }, []);
 
 								Promise.all(
-									uniqueIds.map((id) => $$api.volunteers.getVolunteer(id))
+									uniqueIds.map(function (id) { return $$api.volunteers.getVolunteer(id); })
 								)
-									.then((volunteerResp) => {
-										var volunteers = volunteerResp.map((v) => v.data.result);
+									.then(function (volunteerResp) {
+										var volunteers = volunteerResp.map(function (v) { return v.data.result; });
 
-										$scope.logs.forEach((l, i) => {
+										$scope.logs.forEach(function (l, i) {
 											var index = uniqueIds.indexOf(l.userId);
 
 											if (index > -1) {
@@ -61,7 +61,7 @@
 											}
 										})
 									})
-									.catch((error) => {
+									.catch(function (error) {
 										console.log(error);
 									})
 

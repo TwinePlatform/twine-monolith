@@ -116,14 +116,14 @@
 
 					$$api.organisations.summary().success(function (result) {
 
-						const { days, hours, minutes, seconds } = result.data.volunteeredTime;
+						var time = result.data.volunteeredTime;
 
 						$scope.totalUsers = result.data.volunteers;
 						$scope.totalVolunteeredMinutes =
-							((days || 0) * 24 * 60) +
-							((hours || 0) * 60) +
-							(minutes || 0) +
-							((seconds || 0) / 60);
+							((time.days || 0) * 24 * 60) +
+							((time.hours || 0) * 60) +
+							(time.minutes || 0) +
+							((time.seconds || 0) / 60);
 
 					}).error(function (result, error) {
 						

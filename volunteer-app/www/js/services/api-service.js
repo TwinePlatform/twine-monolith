@@ -33,40 +33,44 @@
 
 	angular.module('app.services').factory('$$api', function($http, $rootScope, $localStorage) {
 
-		const transformResponse = (response, headers, status) => {
-			const res = JSON.parse(response);
+		function transformResponse (response, headers, status) {
+			var res = JSON.parse(response);
 			return status < 400
-				? { ...res, data: res.result }
+				? Object.assign({}, res, { data: res.result })
 				: res;
 		};
 
-		const transformDuration = (duration = {}) =>
-			Math.floor(
+		function transformDuration (_duration) {
+			var duration = _duration || {};
+			return Math.floor(
 				(duration.days || 0) * 24 * 60
 			+ (duration.hours || 0) * 60
 			+ (duration.minutes || 0)
 			+ (duration.seconds || 0) / 60
 			);
+		}
 
-		const transformLog = (log) => ({
-			...log,
-			date_of_log: log.startedAt,
-			duration: transformDuration(log.duration),
-		})
-
-		const transformLogResponse = (res, headers, status) =>
-			status >= 400
+		function transformLog (log) {
+			return Object.assign({}, log, {
+				date_of_log: log.startedAt,
+				duration: transformDuration(log.duration),
+			})
+		}
+		function transformLogResponse (res, headers, status) {
+			return status >= 400
 				? res
 				: Array.isArray(res.data)
-					? { ...res, data: res.data.map(transformLog) }
-					: { ...res, data: transformLog(res.data) };
+					? Object.assign(res, { data: res.data.map(transformLog) })
+					: Object.assign(res, { data: transformLog(res.data) });
+		}
 
-		const transformDurationResponse = (res, headers, status) =>
-			status >= 400
+		function transformDurationResponse (res, headers, status) {
+			return status >= 400
 				? res
 				: res.data && typeof res.data === 'object'
-					? { ...res, data: { total: transformDuration(res.data.total) } }
+					? Object.assign(res, { data: { total: transformDuration(res.data.total) } })
 					: res;
+		}
 
 
 		var $$api = {
@@ -116,7 +120,7 @@
 								method: 'DELETE',
 								url: $$api.url(urlPrefix + id),
 								headers: { Authorization: $$api.token.get() },
-								transformResponse,
+								transformResponse: transformResponse,
 							});
 						},
 
@@ -129,7 +133,9 @@
 								method: 'GET',
 								url: $$api.url('users/volunteers/me/volunteer-logs'),
 								headers: { Authorization: $$api.token.get() },
-								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s)
+								transformResponse: function (r, h, s) {
+									return transformLogResponse(transformResponse(r, h, s), h, s);
+								}
 							});
 						},
 
@@ -145,7 +151,9 @@
 								method: 'GET',
 								url: $$api.url(urlPrefix + logId),
 								headers: { Authorization: $$api.token.get() },
-								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s)
+								transformResponse: function (r, h, s) {
+									return transformLogResponse(transformResponse(r, h, s), h, s)
+								}
 							});
 						},
 
@@ -154,7 +162,9 @@
 								method: 'GET',
 								url: $$api.url('community-businesses/me/volunteer-logs'),
 								headers: { Authorization: $$api.token.get() },
-								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s)
+								transformResponse: function (r, h, s) {
+									return transformLogResponse(transformResponse(r, h, s), h, s)
+								}
 							});
 						},
 
@@ -171,7 +181,9 @@
 								url: $$api.url(urlPrefix + logId),
 								data: data,
 								headers: { Authorization: $$api.token.get() },
-								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s)
+								transformResponse: function (r, h, s) {
+									return transformLogResponse(transformResponse(r, h, s), h, s);
+								}
 							});
 						},
 
@@ -185,7 +197,9 @@
 								url: $$api.url('community-businesses/me/volunteer-logs'),
 								data: data,
 								headers: { Authorization: $$api.token.get() },
-								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s)
+								transformResponse: function (r, h, s) {
+									return transformLogResponse(transformResponse(r, h, s), h, s);
+								}
 							});
 						},
 
@@ -199,7 +213,7 @@
 								url: $$api.url('community-businesses/me/volunteer-logs/sync'),
 								data: data,
 								headers: { Authorization: $$api.token.get() },
-								transformResponse,
+								transformResponse: transformResponse,
 							});
 						},
 
@@ -299,7 +313,8 @@
 						>>> get
 					*/
 
-						get: function(userId = 'me') {
+						get: function(_userId) {
+							var userId = _userId || 'me';
 							return $http({
 								method: 'GET',
 								url: $$api.url('users/' + userId),
@@ -307,47 +322,61 @@
 							});
 						},
 
-						roles: () =>
-							$http({
+						roles: function () {
+							return $http({
 								method: 'GET',
 								url: $$api.url('users/me/roles'),
 								headers: { Authorization: $$api.token.get() },
-							}),
+							});
+						},
 
-						save: ({ name, email, phoneNumber, password, gender: { name: gender }, yearOfBirth: birthYear }) =>
-							$http({
+						save: function (data) {
+							return $http({
 								method: 'PUT',
 								url: $$api.url('users/me'),
-								data: { name, email, phoneNumber, password, birthYear, gender },
+								data: {
+									name: data.name,
+									email: data.email,
+									phoneNumber: data.phoneNumber,
+									password: data.password,
+									birthYear: data.yearOfBirth,
+									gender: data.gender.name,
+								},
 								headers: { Authorization: $$api.token.get() },
-								transformResponse
-							}),
+								transformResponse: transformResponse,
+							});
+						},
 
 					/*
 						>>> login
 					*/
 
-						login: ({ email, password }) =>
-							$http({
+						login: function (data) {
+							return $http({
 								method: 'POST',
 								url: $$api.url('users/login'),
-								data: { email, password, type: 'body', restrict: ['VOLUNTEER', 'VOLUNTEER_ADMIN', 'CB_ADMIN'] }
+								data: {
+									email: data.email,
+									password: data.password,
+									type: 'body', restrict: ['VOLUNTEER', 'VOLUNTEER_ADMIN', 'CB_ADMIN'] }
 							})
-							.then((response) => {
+							.then(function (response) {
 								$$api.token.set(response.data.result.token);
 								return response;
-							}),
+							});
+						},
 
 					/*
 						>>> register user
 					*/
 
-						register: (data) =>
-							$http({
+						register: function (data) {
+							return $http({
 								method: 'POST',
 								url: $$api.url('users/register/volunteers'),
 								data: data,
-							}),
+							});
+						},
 
 					/*
 						>>> total hours
@@ -368,7 +397,9 @@
 								method: 'GET',
 								url: $$api.url('users/volunteers/me/volunteer-logs/summary' + qs),
 								headers: { Authorization: $$api.token.get() },
-								transformResponse: (r, h, s) => transformDurationResponse(transformResponse(r, h, s), h, s),
+								transformResponse: function (r, h, s) {
+									return transformDurationResponse(transformResponse(r, h, s), h, s);
+								},
 							});
 						},
 
@@ -376,8 +407,8 @@
 						>>> total hours for a day
 					*/
 
-						totalHoursForDay: function(_, _date = new Date()) {
-							var date = new Date(_date); // clone or parse date string
+						totalHoursForDay: function(_, _date) {
+							var date = new Date(_date || new Date()); // clone or parse date string
 							date.setHours(0, 0, 0, 0);
 							var start = date.toISOString();
 							date.setHours(23, 59, 59, 999);
@@ -385,9 +416,11 @@
 
 							return $http({
 								method: 'GET',
-								url: $$api.url(`users/volunteers/me/volunteer-logs/summary?since=${start}&until=${end}`),
+								url: $$api.url('users/volunteers/me/volunteer-logs/summary?since=' + start + '&until=' + end),
 								headers: { Authorization: $$api.token.get() },
-								transformResponse: (r, h, s) => transformLogResponse(transformResponse(r, h, s), h, s),
+								transformResponse: function (r, h, s) {
+									return transformLogResponse(transformResponse(r, h, s), h, s);
+								},
 							});
 						}
 
@@ -478,95 +511,11 @@
 							return $http({
 								method: 'GET',
 								url: $$api.url('genders'),
-								transformResponse,
+								transformResponse: transformResponse,
 							});
 						}
 
 				},
-
-			/*
-				>> meetingTypes
-			*/
-
-				meetingTypes: {
-
-					/*
-						>>> get meetingTypes
-					*/
-
-						get: function() {
-							return $http({
-								method: 'GET',
-								url: $$api.url('meetingTypes')
-							});
-						}
-
-				},
-
-            /*
-                >> meetingTypes
-            */
-
-            outreach: {
-
-                /*
-                    >>> get outreach types
-                */
-
-                get : function (id) {
-                    return $http({
-                        method: 'GET',
-                        url: $$api.url('outreaches/' + id)
-                    });
-                },
-
-                getByType : function (outreach_type, organisationId) {
-					return $http({
-						method: 'GET',
-						url: $$api.url('outreaches/' + organisationId + '/bytype/' + outreach_type)
-					});
-                },
-
-                delete: function(id) {
-                    return $http({
-                        method: 'DELETE',
-                        url: $$api.url('outreaches/' + id)
-                    });
-                },
-
-                edit: function(meetingId, data) {
-                    return $http({
-                        method: 'PUT',
-                        url: $$api.url('outreaches/' + meetingId),
-                        data: data,
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-                    });
-                },
-
-				new: function (data) {
-                    return $http({
-                        method: 'POST',
-                        url: $$api.url('outreaches'),
-                        data: data,
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-                    });
-                },
-
-                getTypes: function() {
-                    return $http({
-                        method: 'GET',
-                        url: $$api.url('outreachTypes')
-                    });
-                },
-
-                getChildTypes: function(outreach_id) {
-                    return $http({
-                        method: 'GET',
-                        url: $$api.url('outreachChildTypes/parent/' + outreach_id)
-                    });
-                }
-
-            },
 
             /*
 							>> Activities
@@ -582,7 +531,7 @@
                     return $http({
                         method: 'GET',
 												url: $$api.url('volunteer-activities'),
-												transformResponse,
+												transformResponse: transformResponse,
                     });
                 }
 
@@ -602,15 +551,16 @@
 							return $http({
 								method: 'GET',
 								url: $$api.url('regions'),
-								transformResponse,
+								transformResponse: transformResponse,
 							});
 						},
 
-						organisations: (regionId) =>
-							$http({
+						organisations: function (regionId) {
+							return $http({
 								method: 'GET',
-								url: $$api.url(`regions/${regionId}/community-businesses`)
-							})
+								url: $$api.url('regions/' + regionId + '/community-businesses')
+							});
+						},
 
 				},
 
@@ -629,7 +579,7 @@
 								method: 'GET',
 								url: $$api.url('community-businesses/me'),
 								headers: { Authorization: $$api.token.get() },
-								transformResponse
+								transformResponse: transformResponse
 							});
 						},
 
@@ -642,7 +592,7 @@
 								method: 'GET',
 								url: $$api.url('community-businesses/me/volunteer-logs/summary'),
 								headers: { Authorization: $$api.token.get() },
-								transformResponse
+								transformResponse: transformResponse
 							})
 						}
 
