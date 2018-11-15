@@ -167,7 +167,7 @@
 							.then(function(){
 								return $$api.user.roles()
 							})
-							.then((response) => {
+							.then(function (response) {
 								$localStorage.user.role = response.data.result.role;
 		
 								if ($localStorage.user.role !== undefined && $localStorage.user.role === 'VOLUNTEER_ADMIN') {
@@ -178,7 +178,7 @@
 		
 								return $$api.organisations.get();
 							})
-							.then((response) => {
+							.then(function (response) {
 								$localStorage.user.organisation = response.data.result;
 		
 								if ($rootScope.isAdmin) {
