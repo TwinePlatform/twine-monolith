@@ -24,17 +24,6 @@
 	) {
 
 		/*
-			>> if user has access token, log straight in
-		*/
-			if ($localStorage.user && $localStorage.user.api_token !== '') {
-				if ($localStorage.user.role_id === 2) {
-					$state.go('tabs.view-volunteers')
-                } else {
-                    $state.go('tabs.dashboard');
-                }
-			}
-
-		/*
 			>> store the form data
 		*/
 
