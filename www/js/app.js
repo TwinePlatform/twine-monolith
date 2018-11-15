@@ -20,7 +20,7 @@
 	> app
 */
 
-	angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services','app.filters','ngStorage',])
+	angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.directives','app.services','app.filters','ngStorage'])
 	.run(function(
 		$ionicPlatform, $localStorage, $rootScope, $filter, $ionicModal, $ionicLoading, $state, $window,
 		$$api, $$offline, $$shout, $$utilities
@@ -135,7 +135,11 @@
 								$rootScope.currentUser.organisation = response.data.result;
 								$rootScope.organisationName = $localStorage.user.organisation.name;
 
-								$state.go('tabs.dashboard');
+								if ($rootScope.isAdmin) {
+									$state.go('tabs.view-volunteers');
+								} else {
+									$state.go('tabs.dashboard');
+								}
 							})
 							.catch(function (error) {
 								$localStorage.user = null;
