@@ -152,6 +152,10 @@ describe('User Model', () => {
             phoneNumber: null,
             postCode: null,
             qrCode: null,
+            isEmailConfirmed: false,
+            isPhoneNumberConfirmed: false,
+            isEmailConsentGranted: false,
+            isSMSConsentGranted: false,
           }
         ),
       ]));

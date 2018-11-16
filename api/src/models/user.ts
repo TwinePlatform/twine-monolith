@@ -223,6 +223,10 @@ export const Users: UserCollection = {
         phone_number: null,
         post_code: null,
         qr_code: null,
+        is_email_confirmed: false,
+        is_phone_number_confirmed: false,
+        is_email_contact_consent_granted: false,
+        is_sms_contact_consent_granted: false,
         deleted_at: new Date(),
       });
   },
