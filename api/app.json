@@ -1,0 +1,34 @@
+{
+  "name": "twine-api",
+  "scripts": {},
+  "env": {
+    "JWT_SECRET": {
+      "required": true
+    },
+    "PGSSLMODE": {
+      "required": true
+    },
+    "POSTMARK_KEY_PRODUCTION": {
+      "required": true
+    },
+    "QRCODE_HMAC_SECRET": {
+      "required": true
+    },
+    "DATABASE_URL": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
