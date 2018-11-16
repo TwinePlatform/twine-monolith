@@ -54,12 +54,12 @@ CREATE TABLE user_account (
   deleted_at                       TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT user_account_pk                  PRIMARY KEY (user_account_id),
-  CONSTRAINT user_name_length                 CHECK (char_length(user_name) <= 100),
-  CONSTRAINT email_length                     CHECK (char_length(email) <= 100),
-  CONSTRAINT post_code_length                 CHECK (char_length(post_code) <= 10),
   CONSTRAINT user_account_to_gender_fk        FOREIGN KEY (gender_id)     REFERENCES gender,
   CONSTRAINT user_account_to_disability_fk    FOREIGN KEY (disability_id) REFERENCES disability,
   CONSTRAINT user_account_to_ethnicity_fk     FOREIGN KEY (ethnicity_id)  REFERENCES ethnicity,
+  CONSTRAINT user_account_user_name_length    CHECK       (char_length(user_name) <= 100),
+  CONSTRAINT user_account_email_length        CHECK       (char_length(email) <= 100),
+  CONSTRAINT user_account_post_code_length    CHECK       (char_length(post_code) <= 10),
   CONSTRAINT user_account_sensible_birth_year CHECK       (birth_year IS NULL OR (birth_year > 1890 AND birth_year <= date_part('year', CURRENT_DATE))),
   CONSTRAINT user_account_password_hash       CHECK       (char_length(user_password) = 60)
 );

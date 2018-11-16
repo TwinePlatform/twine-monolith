@@ -10,8 +10,8 @@ CREATE TABLE organisation (
   modified_at        TIMESTAMP WITH TIME ZONE,
   deleted_at         TIMESTAMP WITH TIME ZONE,
 
-  CONSTRAINT organisation_pk          PRIMARY KEY (organisation_id),
-  CONSTRAINT organisation_name_length CHECK (char_length(organisation_name) <= 255)
+  CONSTRAINT organisation_pk                       PRIMARY KEY (organisation_id),
+  CONSTRAINT organisation_organisation_name_length CHECK (char_length(organisation_name) <= 255)
 );
 
 
@@ -20,7 +20,7 @@ CREATE TABLE funding_body (
   created_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at     TIMESTAMP WITH TIME ZONE,
   deleted_at      TIMESTAMP WITH TIME ZONE,
-  
+
   CONSTRAINT funding_body_pk PRIMARY KEY (organisation_id),
   CONSTRAINT funding_body_to_organisation_fk FOREIGN KEY (organisation_id) REFERENCES organisation ON DELETE CASCADE
 );
@@ -121,7 +121,7 @@ CREATE TRIGGER update_funding_body_modified_at BEFORE UPDATE ON funding_body
 
 CREATE TRIGGER update_community_business_modified_at BEFORE UPDATE ON community_business
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
-  
+
 CREATE TRIGGER update_community_business_region_modified_at BEFORE UPDATE ON community_business_region
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
 
