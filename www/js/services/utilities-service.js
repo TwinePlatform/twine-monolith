@@ -235,7 +235,7 @@
 					else {
 
 						if (true) {
-							$$shout('DEBUG:\n\n' + result + '\n\n' + error);
+							$$shout('DEBUG:\n\n' + result + '\n\n' + (error && error.message));
 							return;
 						}
 
