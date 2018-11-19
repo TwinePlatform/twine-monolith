@@ -33,7 +33,7 @@
 			$rootScope.options = {
 				appName: 'Twine',
 				debug: false,
-				environment: 'dev',	// dev | stage | live
+				environment: 'stage',	// dev | stage | live
 				apiBaseUrl: {
 					local: 'http://localhost:4000/v1/',
 					dev:   'http://localhost:4000/v1/',
@@ -118,7 +118,7 @@
 
 								return $$api.user.roles();
 							})
-							.then((response) => {
+							.then(function (response) {
 								$localStorage.user.role = response.data.result.role;
 								$rootScope.currentUser.role = response.data.result.role;
 
@@ -130,7 +130,7 @@
 
 								return $$api.organisations.get();
 							})
-							.then((response) => {
+							.then(function (response) {
 								$localStorage.user.organisation = response.data.result;
 								$rootScope.currentUser.organisation = response.data.result;
 								$rootScope.organisationName = $localStorage.user.organisation.name;
@@ -190,15 +190,17 @@
 						// remove $$hasKey items
 						logsData = angular.copy(logsData);
 
-						logsData.logs = logsData.logs.map((log) => ({
-							id: log.id || undefined,
-							userId: log.userId === userId ? undefined : log.userId,
-							duration: typeof log.duration === 'number' ? { minutes: log.duration } : log.duration,
-							activity: log.activity,
-							startedAt: log.date_of_log,
-							project: log.project,
-							deletedAt: log.deletedAt || undefined,
-						}))
+						logsData.logs = logsData.logs.map(function (log) {
+							return {
+								id: log.id || undefined,
+								userId: log.userId === userId ? undefined : log.userId,
+								duration: typeof log.duration === 'number' ? { minutes: log.duration } : log.duration,
+								activity: log.activity,
+								startedAt: log.date_of_log,
+								project: log.project,
+								deletedAt: log.deletedAt || undefined,
+							}
+						})
 
 						// if we have logs that need syncing, sync them
 						if (logsData.logs.length > 0) {
