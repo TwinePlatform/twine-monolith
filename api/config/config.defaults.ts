@@ -40,6 +40,16 @@ export default {
       user: null,
       ssl: false,
     },
+    pool: {
+      min: 3,
+    },
+    migrations: {
+      tableName: 'knex_migrations',
+      directory: path.resolve(process.cwd(), 'database', 'migrations'),
+    },
+    seeds: {
+      directory: path.resolve(process.cwd(), 'database', 'seeds', 'testing'),
+    },
   },
   auth: {
     standard: {
