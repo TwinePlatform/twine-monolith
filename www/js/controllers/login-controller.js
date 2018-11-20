@@ -117,7 +117,7 @@
 
 			$scope.forgotPassword = function(form) {
 				if (window.cordova) {
-					var forgotPasswordUrl = $rootScope.options.adminBaseUrl[$rootScope.options.environment] + 'password-forgot';
+					var forgotPasswordUrl = $rootScope.options.adminBaseUrl[$rootScope.options.environment] + 'password/forgot';
 					window.open(forgotPasswordUrl, '_blank', 'location=no,clearcache=yes,clearsessioncache=yes');
 				}
 
