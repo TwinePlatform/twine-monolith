@@ -59,7 +59,7 @@ describe('Config', () => {
       router: { stripTrailingSlash: true },
       routes: {
         cors: {
-          origin: ['https://visitor.twine-together.com', 'https://admin.twine-together.com'],
+          origin: process.env.CORS_ORIGIN.split(','),
           credentials: true,
           additionalExposedHeaders: ['set-cookie'],
         },
