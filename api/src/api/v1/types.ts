@@ -181,6 +181,13 @@ export interface PutMyVolunteerLogRequest extends Hapi.Request {
   };
 }
 
+export interface GetVolunteerLogSummaryRequest extends Hapi.Request {
+  query: { since: string, until: string };
+  pre: {
+    communityBusiness: CommunityBusiness
+  };
+}
+
 export interface RegisterRequest extends Hapi.Request {
   payload: {
     organisationId: number

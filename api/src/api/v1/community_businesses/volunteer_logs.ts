@@ -13,6 +13,7 @@ import {
   GetMyVolunteerLogsRequest,
   GetVolunteerLogRequest,
   PutMyVolunteerLogRequest,
+  GetVolunteerLogSummaryRequest,
 } from '../types';
 
 
@@ -395,22 +396,37 @@ const routes: Hapi.ServerRoute[] = [
           ],
         },
       },
+      validate: {
+        query: { since, until },
+      },
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request, h) => {
+    handler: async (request: GetVolunteerLogSummaryRequest, h) => {
       const {
         server: { app: { knex } },
         pre: { communityBusiness },
+        query,
       } = request;
+
+      const since = new Date(query.since);
+      const until = new Date(query.until);
 
       const logs = await VolunteerLogs.get(
         knex,
         {
           fields: ['duration'],
           where: { organisationId: communityBusiness.id },
+          whereBetween: since || until
+            ? {
+              startedAt: [
+                since || new Date(0),
+                until || new Date(),
+              ],
+            }
+            : undefined,
         }
       );
 

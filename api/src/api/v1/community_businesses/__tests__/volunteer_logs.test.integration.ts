@@ -703,6 +703,31 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
+    test('can get summaries between dates', async () => {
+      const since = moment().subtract(5, 'days');
+      const res = await server.inject({
+        method: 'GET',
+        url: `/v1/community-businesses/me/volunteer-logs/summary?since=${since.toISOString()}`,
+        credentials: {
+          scope: ['organisations_details-parent:read'],
+          user,
+          organisation,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: {
+          volunteers: 2,
+          volunteeredTime: {
+            hours: 2,
+            minutes: 31,
+            seconds: 39,
+          },
+        },
+      });
+    });
+
     test('cannot get other orgs summaries', async () => {
       const res = await server.inject({
         method: 'GET',
