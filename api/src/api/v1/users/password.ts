@@ -1,7 +1,6 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import { hash } from 'bcrypt';
 import { Users } from '../../../models';
 import {
   response,
@@ -118,9 +117,7 @@ const routes: Hapi.ServerRoute[] = [
         return Boom.unauthorized('Invalid token. Reset password again.');
       }
 
-      const hashedPw = await hash(password, 10);
-
-      await Users.update(knex, user, { password: hashedPw });
+      await Users.update(knex, user, { password });
 
       return null;
     },

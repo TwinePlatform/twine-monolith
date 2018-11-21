@@ -119,6 +119,17 @@ describe('User Model', () => {
       expect(updatedUser.gender).toBe('male');
     });
 
+    test('update :: can update password', async () => {
+      const user = await Users.getOne(trx, { where: { id: 1 } });
+      const changes = { password: 'Foooo!oo2o3r' };
+      const omitter = omit(['password', 'modifiedAt']);
+
+      const updatedUser = await Users.update(trx, user, changes);
+
+      expect(omitter(updatedUser)).toEqual(omitter(user));
+      expect(await compare(changes.password, updatedUser.password)).toBe(true);
+    });
+
     test('add :: create a new record using minimal information', async () => {
       const changeset = await factory.build('user');
 

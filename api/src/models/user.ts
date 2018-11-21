@@ -182,7 +182,15 @@ export const Users: UserCollection = {
     return Users.getOne(client, { where: { id } });
   },
 
-  async update (client: Knex, user, changes) {
+  async update (client: Knex, user, _changes) {
+    let changes;
+    if (_changes.password) {
+      const passwordHash = await hash(_changes.password, 12);
+      changes = { ..._changes, password: passwordHash };
+    } else {
+      changes = { ..._changes };
+    }
+
     const preProcessUser = compose(
       Users.toColumnNames,
       dropUnwhereableUserFields
