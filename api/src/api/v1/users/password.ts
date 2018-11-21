@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
 import { hash } from 'bcrypt';
-import { User, Users } from '../../../models';
+import { Users } from '../../../models';
 import {
   response,
   email as emailSchema,
@@ -107,10 +107,12 @@ const routes: Hapi.ServerRoute[] = [
         server: { app: { knex } },
         payload: { token, password, email },
       } = request;
-      let user: User;
-
+      const user = await Users.getOne(knex, { where: { email } });
+      if (!user) {
+        return Boom.forbidden('User does not exist');
+      }
       try {
-        user = await Users.usePasswordResetToken(knex, email, token);
+        await Users.usePasswordResetToken(knex, user.email, token);
       } catch (error) {
         request.log('warning', error);
         return Boom.unauthorized('Invalid token. Reset password again.');

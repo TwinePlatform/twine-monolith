@@ -16,33 +16,35 @@ describe('POST /users/password', () => {
 
   const config = getConfig(process.env.NODE_ENV);
 
+  const mockEmailService = jest.fn();
+  mockEmailService.mockReturnValueOnce({
+    To: '1@aperturescience.com',
+    SubmittedAt: 'today',
+    MessageID: '10100101',
+  });
+
+  beforeAll(async () => {
+    server = await init(config);
+    knex = server.app.knex;
+    server.app.EmailService.send = mockEmailService;
+  });
+
+  afterAll(async () => {
+    await server.shutdown(true);
+  });
+
+  beforeEach(async () => {
+    trx = await getTrx(knex);
+    server.app.knex = trx;
+  });
+
+  afterEach(async () => {
+    await trx.rollback();
+    server.app.knex = knex;
+    mockEmailService.mockReset();
+  });
+
   describe('POST /users/password/forgot & POST /users/password/reset', () => {
-    const mockEmailService = jest.fn();
-    mockEmailService.mockReturnValueOnce({
-      To: '1@aperturescience.com',
-      SubmittedAt: 'today',
-      MessageID: '10100101',
-    });
-
-    beforeAll(async () => {
-      server = await init(config);
-      knex = server.app.knex;
-      server.app.EmailService.send = mockEmailService;
-    });
-
-    afterAll(async () => {
-      await server.shutdown(true);
-    });
-
-    beforeEach(async () => {
-      trx = await getTrx(knex);
-      server.app.knex = trx;
-    });
-
-    afterEach(async () => {
-      await trx.rollback();
-      server.app.knex = knex;
-    });
 
     test('::SUCCESS email sent with reset token', async () => {
       /*
@@ -119,7 +121,7 @@ describe('POST /users/password', () => {
     });
   });
 
-  describe('POST /users/password/reset - Validation Checks', () => {
+  describe('POST /users/password/reset', () => {
     const fakeToken = 'mylengthis64characteslongimbluedabadedabadaaaardabadedabadaaaaar';
 
     test('::ERROR mismatching passwords', async () => {
@@ -165,6 +167,58 @@ describe('POST /users/password', () => {
 
       expect(res.statusCode).toBe(401);
       expect((<any> res.result).error.message).toEqual('Invalid token. Reset password again.');
+    });
+
+    test('::SUCCESS updates one row', async () => {
+      const userOne = await Users.getOne(trx, { where: { id: 1 } });
+      const userTwo = await Users.getOne(trx, { where: { id: 2 } });
+
+      await server.inject({
+        method: 'POST',
+        url: '/v1/users/password/forgot',
+        payload: { email: userOne.email },
+      });
+
+      const { templateModel: { token } } = mockEmailService.mock.calls[0][0];
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/password/reset',
+        payload: {
+          token,
+          email: userOne.email,
+          password: 'Password114!',
+          passwordConfirm: 'Password114!' },
+      });
+
+      const userTwoPointOne = await Users.getOne(trx, { where: { id: 2 } });
+
+      expect((<any> res.result).result).toBe(null);
+      expect(userTwo).toEqual(userTwoPointOne);
+    });
+
+    test('::ERROR unknown user', async () => {
+      const userOne = await Users.getOne(trx, { where: { id: 1 } });
+
+      await server.inject({
+        method: 'POST',
+        url: '/v1/users/password/forgot',
+        payload: { email: userOne.email },
+      });
+
+      const { templateModel: { token } } = mockEmailService.mock.calls[0][0];
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/password/reset',
+        payload: {
+          token,
+          email: 'userOne@email.com',
+          password: 'Password114!',
+          passwordConfirm: 'Password114!' },
+      });
+
+      expect(res.statusCode).toBe(403);
     });
   });
 });
