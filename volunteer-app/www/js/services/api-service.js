@@ -588,9 +588,12 @@
 					*/
 
 						summary: function() {
+							var since = new Date();
+							since.setDate(since.getDate() - 7);
+
 							return $http({
 								method: 'GET',
-								url: $$api.url('community-businesses/me/volunteer-logs/summary'),
+								url: $$api.url('community-businesses/me/volunteer-logs/summary?since=' + since.toISOString()),
 								headers: { Authorization: $$api.token.get() },
 								transformResponse: transformResponse
 							})
