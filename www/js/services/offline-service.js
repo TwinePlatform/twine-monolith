@@ -234,6 +234,14 @@
 			*/
 
 				generateLogOfflineId: function(offline_id) {
+					if (!$localStorage.offlineData) {
+						$localStorage.offlineData = {};
+					}
+
+					if (!$localStorage.offlineData.logs) {
+						$localStorage.offlineData.logs = [];
+					}
+
 					return $localStorage.offlineData.logs.length + 1;
 				},
 
