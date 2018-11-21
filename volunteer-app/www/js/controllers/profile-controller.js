@@ -52,15 +52,9 @@
 
 			$scope.years = $$utilities.getYearsOptions();
 
-			// get user's yearOfBirth
-			var yearOfBirth = parseInt($localStorage.user.yearOfBirth);
-
-			// get position of user's yearOfBirth in $scope.years array
-			var yearOfBirthPosition = $scope.years.map(function(x) {return x; }).indexOf(yearOfBirth);
-
 			// set the value of formData.yearOfBirth to that item
-			$scope.formData.yearOfBirth = $scope.years[yearOfBirthPosition];
-				
+			$scope.formData.yearOfBirth = Number($localStorage.user.birthYear);
+
 		/*
 			>> populate gender dropdown
 		*/
@@ -69,12 +63,12 @@
 			$scope.genders = [];
 
 			$$api.genders.get().success(function (result) {
-				
-				$scope.genders = result.data 
+
+				$scope.genders = result.data.map(function (gender) { return gender.name; });
 				$scope.gendersDisabled = false;
 
 				if ($localStorage.user.gender) {
-					$scope.formData.gender = $localStorage.user.gender
+					$scope.formData.gender = $localStorage.user.gender;
 				}
 
 			}).error(function (result, error) {

@@ -54,7 +54,7 @@
 	    	        <!-- year of birth -->
 	    	            <span class="input-label">Year of birth (optional)</span>
 	    	        <label class="item item-select">
-	    	            <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option" name="yearOfBirth" id="yearOfBirth">
+	    	            <select ng-model="formData.yearOfBirth" ng-options="option for option in years track by option" ng-selected="option === formData.yearOfBirth" name="yearOfBirth" id="yearOfBirth">
 	    	                <option disabled value="">Select year</option>
 	    	                <!--  -->
 	    	            </select>
@@ -64,7 +64,7 @@
 	    	        <!-- gender -->
 	    	            <span class="input-label">Gender (optional)</span>
 	    	        <label class="item item-select" ng-class="{'item-select-disabled': gendersDisabled}">
-	    	            <select ng-model="formData.gender" ng-options="option.name for option in genders track by option.id" name="gender" id="gender" ng-disabled="gendersDisabled">
+	    	            <select ng-model="formData.gender" ng-options="option for option in genders track by option" ng-selected="option === formData.gender" name="gender" id="gender" ng-disabled="gendersDisabled">
 	    	                <option disabled value="">Select gender</option>
 	    	                <!--  -->
 	    	            </select>

@@ -340,7 +340,7 @@
 									phoneNumber: data.phoneNumber,
 									password: data.password,
 									birthYear: data.yearOfBirth,
-									gender: data.gender.name,
+									gender: data.gender,
 								},
 								headers: { Authorization: $$api.token.get() },
 								transformResponse: transformResponse,
