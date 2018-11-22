@@ -35,6 +35,11 @@ export const password =
      'strong_pwd')
     .options({ language: { string: { regex: { name: 'is too weak' } } } });
 
+// supports passwords from old volunteer app
+export const DEPRECATED_password =
+  Joi.string()
+    .min(6);
+
 export const phoneNumber =
   Joi.string()
     .regex(/^\+?[0-9 -]*$/, { name: 'numeric' })

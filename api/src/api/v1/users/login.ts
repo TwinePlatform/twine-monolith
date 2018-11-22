@@ -3,7 +3,7 @@ import * as Boom from 'boom';
 import * as Joi from 'joi';
 import { compare } from 'bcrypt';
 import { Users, Organisations } from '../../../models';
-import { email, password, response } from './schema';
+import { email, DEPRECATED_password, password, response } from './schema';
 import { Session, Token } from '../../../auth/strategies/standard';
 import { LoginRequest, EscalateRequest } from '../types';
 import { RoleEnum } from '../../../auth/types';
@@ -38,7 +38,7 @@ const route: Hapi.ServerRoute[] = [
             ),
           type: Joi.string().only('cookie', 'body').default('cookie'),
           email: email.required(),
-          password: password.required(),
+          password: DEPRECATED_password.required(),
         },
       },
       response: { schema: response },
