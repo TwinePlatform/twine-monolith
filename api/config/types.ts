@@ -6,6 +6,7 @@ import * as JWT from 'jsonwebtoken';
 export enum Environment {
   DEVELOPMENT = 'development',
   TESTING = 'testing',
+  STAGING = 'staging',
   PRODUCTION = 'production',
 }
 

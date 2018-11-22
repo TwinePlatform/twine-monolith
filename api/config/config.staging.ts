@@ -1,13 +1,15 @@
 import { Environment } from './types';
 
 export default {
-  env: Environment.PRODUCTION,
+  env: Environment.STAGING,
   web: {
     host: process.env.HOST || '0.0.0.0',
     port: process.env.PORT || 4002,
     routes: {
       cors: {
-        origin: ['https://admin.twine-together.com', 'https://visitor.twine-together.com'],
+        origin: ['https://twine-visitor-staging.herokuapp.com', 'https://admin.twine-together.com'],
+        credentials: true,
+        additionalExposedHeaders: ['set-cookie'],
       },
     },
   },

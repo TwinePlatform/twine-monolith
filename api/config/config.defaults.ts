@@ -18,7 +18,7 @@ export default {
     },
     routes: {
       cors: {
-        origin: process.env.CORS_ORIGIN.trim().split(','),
+        origin: ['*'],
         credentials: true,
         additionalExposedHeaders: ['set-cookie'],
       },
