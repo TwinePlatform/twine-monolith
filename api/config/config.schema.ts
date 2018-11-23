@@ -48,7 +48,8 @@ export default Joi.object({
       Joi.string().min('psql://localhost:5432'.length)
     ),
     pool: Joi.object({
-      min: 3,
+      min: Joi.number().integer(),
+      max: Joi.number().integer().greater(Joi.ref('min')),
     }),
     migrations: Joi.object({
       tableName: Joi.string().min(1).required(),
