@@ -88,13 +88,15 @@ CREATE TABLE permission (
 
 
 CREATE TABLE user_account_access_role (
-  user_account_id INT NOT NULL,
-  access_role_id  INT NOT NULL,
-  organisation_id INT NOT NULL,
-  created_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  modified_at     TIMESTAMP WITH TIME ZONE,
-  deleted_at      TIMESTAMP WITH TIME ZONE,
+  user_account_access_role_id SERIAL NOT NULL UNIQUE,
+  user_account_id             INT NOT NULL,
+  access_role_id              INT NOT NULL,
+  organisation_id             INT NOT NULL,
+  created_at                  TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at                 TIMESTAMP WITH TIME ZONE,
+  deleted_at                  TIMESTAMP WITH TIME ZONE,
 
+  CONSTRAINT user_account_access_role_pk                 PRIMARY KEY (user_account_access_role_id),
   CONSTRAINT user_account_access_role_to_user_fk         FOREIGN KEY (user_account_id) REFERENCES user_account ON DELETE CASCADE,
   CONSTRAINT user_account_access_role_to_access_role_fk  FOREIGN KEY (access_role_id)  REFERENCES access_role  ON DELETE CASCADE,
   CONSTRAINT user_account_access_role_to_organisation_fk FOREIGN KEY (organisation_id) REFERENCES organisation ON DELETE CASCADE,
