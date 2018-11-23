@@ -59,6 +59,16 @@ describe('Visitor model', () => {
       expect(visitors[0]).toEqual(expect.objectContaining({ name: 'Chell' }));
     });
 
+    test('fromCommunityBusiness :: can filter fields', async () => {
+      const cb =
+        await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture Science' } });
+      const visitors =
+        await Visitors.fromCommunityBusiness(knex, cb, { fields: ['name', 'qrCode'] });
+
+      expect(visitors).toHaveLength(1);
+      expect(visitors[0]).toEqual({ name: 'Chell', qrCode: 'chellsqrcode' });
+    });
+
     test('getWithVisits :: returns visit objects nested within visitors', async () => {
       const apScience = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
       const visitors = await Visitors.getWithVisits(knex, apScience, { where: { name: 'Chell' } });

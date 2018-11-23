@@ -94,7 +94,7 @@ export const Visitors: VisitorCollection = {
 
     return applyQueryModifiers(
       client
-        .select(ModelToColumn)
+        .select(query.fields ? pick(query.fields, ModelToColumn) : ModelToColumn)
         .from('user_account')
         .leftOuterJoin('gender', 'user_account.gender_id', 'gender.gender_id')
         .leftOuterJoin('ethnicity', 'user_account.ethnicity_id', 'ethnicity.ethnicity_id')
