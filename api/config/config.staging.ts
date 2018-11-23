@@ -7,7 +7,7 @@ export default {
     port: process.env.PORT || 4002,
     routes: {
       cors: {
-        origin: ['https://twine-visitor-staging.herokuapp.com', 'https://admin.twine-together.com'],
+        origin: ['https://twine-visitor-staging.herokuapp.com'],
         credentials: true,
         additionalExposedHeaders: ['set-cookie'],
       },
