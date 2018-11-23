@@ -13,6 +13,9 @@ export default {
   },
   knex: {
     connection: process.env.DATABASE_URL,
+    pool: {
+      max: 100,
+    },
   },
   email: {
     postmark_key: process.env.POSTMARK_KEY_PRODUCTION,
