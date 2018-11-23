@@ -111,6 +111,21 @@ describe('API /community-businesses/{id}/visitors', () => {
       }));
       expect((<any> res.result).meta).toEqual({ total: 1 });
     });
+
+    test('can filter users by name', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors?fields[]=name&filter[name]=Chell',
+        credentials: {
+          organisation,
+          user,
+          scope: ['user_details-child:read'],
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: [{ name: 'Chell' }], meta: { total: 1 } });
+    });
   });
 
   describe('GET /community-businesses/me/visitors/{userId}', () => {

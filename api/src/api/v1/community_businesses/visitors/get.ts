@@ -79,6 +79,14 @@ const routes: Hapi.ServerRoute[] = [
         );
       }
 
+      // name filter
+      if (filter && filter.name) {
+        modelQuery.where = mergeDeepRight(
+          modelQuery.where || {},
+          { name: filter.name }
+        );
+      }
+
       const visitors = await (visits
         ? Visitors.getWithVisits(knex, communityBusiness, modelQuery)
         : Visitors.fromCommunityBusiness(knex, communityBusiness, modelQuery));

@@ -72,5 +72,6 @@ export const filterQuery = {
     age: Joi.array().length(2).items(Joi.number().integer().min(0)),
     visitActivity: Joi.string(),
     gender,
+    name: userName,
   }),
 };
