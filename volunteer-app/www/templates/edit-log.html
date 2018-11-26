@@ -52,8 +52,8 @@
             <!-- /Activity -->
 
             <!-- Project -->
-            <span class="input-label">Project (optional)</span>
-            <label class="item item-select">
+            <span class="input-label" ng-if="hasProjects">Project (optional)</span>
+            <label class="item item-select" ng-if="hasProjects">
                 <select ng-model="formData.project" name="project" id="project">
                     <option ng-repeat="option in projects track by option.id" ng-selected="option.name === formData.project" value="{{option.name}}">{{option.name}}</option>
                 </select>
