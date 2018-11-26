@@ -33,6 +33,7 @@
 			$scope.formData = {};
 			$scope.logLoaded = false;
 			$scope.logHasProject = false;
+			$scope.hasProjects = false;
 			$scope.activities = [];
 			$scope.projects = [];
 
@@ -59,6 +60,10 @@
 				function populateProjects () {
 					$$api.projects.getProjects().success(function (response) {
 						$scope.projects = [ { id: -1, name: 'None' }].concat(response.result);
+
+						if (response.result.length > 0) {
+							$scope.hasProjects = true;
+						}
 					}).error(function (result, error) {
 						$$utilities.processConnectionError(result, error);
 					});
