@@ -30,7 +30,7 @@ exports.seed = async (client) => {
   const [cb_admin_user_id] = await client('user_account')
     .insert({
       user_name: 'Sonja',
-      email: 'sonjaw@powertochange.org.uk',
+      email: 'demo@powertochange.org.uk',
       user_password: '$2b$10$v1sL0AXwuS/gx6JIxZa/hONGP06XaRZIAd7sOq66qsCtTIUGzak1y',
       gender_id: 1,
       ethnicity_id: 1,
