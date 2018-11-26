@@ -124,6 +124,7 @@ const routes: Hapi.ServerRoute[] = [
             seconds: Joi.number().integer().min(0),
           }),
           startedAt: Joi.date().iso().max('now'),
+          project: Joi.alt().try(Joi.string().min(2), Joi.only(null)),
         },
       },
       response: { schema: response },

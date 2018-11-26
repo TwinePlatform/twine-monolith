@@ -230,6 +230,7 @@ describe('API /users/me/volunteer-logs', () => {
             seconds: 30,
           },
           startedAt: then.toISOString(),
+          project: 'Take over the world',
         },
       });
 
@@ -244,9 +245,33 @@ describe('API /users/me/volunteer-logs', () => {
             minutes: 20,
             seconds: 30,
           },
+          project: 'Take over the world',
         }),
       });
       expect((<any> res.result).result.modifiedAt).not.toEqual(log.modifiedAt);
+    });
+
+    test('can unassign project from log', async () => {
+      const res = await server.inject({
+        method: 'PUT',
+        url: '/v1/users/volunteers/me/volunteer-logs/1',
+        credentials: {
+          user,
+          organisation,
+          scope: ['volunteer_logs-own:write'],
+        },
+        payload: {
+          project: null,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          id: 1,
+          project: null,
+        }),
+      });
     });
 
     test('cannot re-assign log to another user', async () => {
