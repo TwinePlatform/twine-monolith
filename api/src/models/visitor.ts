@@ -133,11 +133,11 @@ export const Visitors: VisitorCollection = {
     }, q);
 
     const additionalColumnMap: Map<keyof LinkedVisitEvent, string> = {
-      id: 'visit.visit_id',
-      createdAt: 'visit.created_at',
-      modifiedAt: 'visit.modified_at',
-      deletedAt: 'visit.deleted_at',
-      userId: 'visit.user_account_id',
+      id: 'visit_log.visit_log_id',
+      createdAt: 'visit_log.created_at',
+      modifiedAt: 'visit_log.modified_at',
+      deletedAt: 'visit_log.deleted_at',
+      userId: 'visit_log.user_account_id',
       visitActivityId: 'visit_activity.visit_activity_id',
       visitActivity: 'visit_activity.visit_activity_name',
     };
@@ -170,11 +170,11 @@ export const Visitors: VisitorCollection = {
     const userVisits: LinkedVisitEvent[][] = await Promise.all(rows.map((user) =>
       client
         .select(additionalColumnMap)
-        .from('visit')
+        .from('visit_log')
         .leftOuterJoin(
           'visit_activity',
           'visit_activity.visit_activity_id',
-          'visit.visit_activity_id')
+          'visit_log.visit_activity_id')
         .where({ user_account_id: user.id })
     ));
 

@@ -450,13 +450,13 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
   },
 
   async addVisitLog (client, visitActivity, user) {
-    const [res] = await client('visit')
+    const [res] = await client('visit_log')
       .insert({
         user_account_id: user.id,
         visit_activity_id: visitActivity.id,
       })
       .returning([
-        'visit_id AS id',
+        'visit_log_id AS id',
         'user_account_id AS userId',
         'visit_activity_id AS visitActivityId',
         'created_at AS createdAt',
@@ -480,23 +480,26 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);
     const query = pipe(modifyColumnNames, checkSpecificCb)(q);
 
-    return applyQueryModifiers(client('visit')
+    return applyQueryModifiers(client('visit_log')
       .select({
-        id: 'visit_id',
+        id: 'visit_log_id',
         userId: 'user_account.user_account_id',
         visitActivity: 'visit_activity_name',
         category: 'visit_activity_category_name',
-        createdAt: 'visit.created_at',
-        modifiedAt: 'visit.modified_at',
+        createdAt: 'visit_log.created_at',
+        modifiedAt: 'visit_log.modified_at',
         birthYear: 'user_account.birth_year',
         gender: 'gender.gender_name',
       })
-      .innerJoin('visit_activity', 'visit_activity.visit_activity_id', 'visit.visit_activity_id')
+      .innerJoin(
+        'visit_activity',
+        'visit_activity.visit_activity_id',
+        'visit_log.visit_activity_id')
       .innerJoin(
         'visit_activity_category',
         'visit_activity_category.visit_activity_category_id',
         'visit_activity.visit_activity_category_id')
-      .innerJoin('user_account', 'user_account.user_account_id', 'visit.user_account_id')
+      .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
       .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id'),
       query);
   },
@@ -536,13 +539,16 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     const ageQuery = pipe(modifyColumnNamesForAge, checkSpecificCb)(query);
 
     const aggregateQueries: Dictionary<PromiseLike<any>> = {
-      gender: applyQueryModifiers(client('visit')
+      gender: applyQueryModifiers(client('visit_log')
         .count('gender.gender_name')
         .select({
           gender: 'gender.gender_name',
         })
-        .innerJoin('visit_activity', 'visit_activity.visit_activity_id', 'visit.visit_activity_id')
-        .innerJoin('user_account', 'user_account.user_account_id', 'visit.user_account_id')
+        .innerJoin(
+          'visit_activity',
+          'visit_activity.visit_activity_id',
+          'visit_log.visit_activity_id')
+        .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
         .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
         .groupBy('gender.gender_name')
         , queryMatchOnColumnNames)
@@ -555,13 +561,16 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
           return { gender };
         }),
 
-      visitActivity: applyQueryModifiers(client('visit')
+      visitActivity: applyQueryModifiers(client('visit_log')
         .count('visit_activity.visit_activity_name')
         .select({
           activity: 'visit_activity_name',
         })
-        .innerJoin('visit_activity', 'visit_activity.visit_activity_id', 'visit.visit_activity_id')
-        .innerJoin('user_account', 'user_account.user_account_id', 'visit.user_account_id')
+        .innerJoin(
+          'visit_activity',
+          'visit_activity.visit_activity_id',
+          'visit_log.visit_activity_id')
+        .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
         .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
         .groupBy('visit_activity.visit_activity_name'), queryMatchOnColumnNames)
         .then((rows) => {
@@ -582,8 +591,8 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
             `WHEN birth_year > ${year - 69} AND birth_year <= ${year - 50} THEN '51-69' ` +
             `WHEN birth_year <= ${year - 69} THEN '70+' ` +
             `END AS age_group ` +
-            'FROM visit ' +
-            'INNER JOIN user_account ON user_account.user_account_id = visit.user_account_id')
+            'FROM visit_log ' +
+            'INNER JOIN user_account ON user_account.user_account_id = visit_log.user_account_id')
           )
           // TODO: generate case statements based on supplied query
           .innerJoin(
@@ -603,13 +612,16 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
             } , {});
           return { age };
         }),
-      lastWeek: applyQueryModifiers(client('visit')
-        .select({ createdAt: 'visit.created_at' })
-        .whereRaw('visit.created_at >= CURRENT_DATE - INTERVAL \'7 day\'')
-        .innerJoin('visit_activity', 'visit_activity.visit_activity_id', 'visit.visit_activity_id')
-        .innerJoin('user_account', 'user_account.user_account_id', 'visit.user_account_id')
+      lastWeek: applyQueryModifiers(client('visit_log')
+        .select({ createdAt: 'visit_log.created_at' })
+        .whereRaw('visit_log.created_at >= CURRENT_DATE - INTERVAL \'7 day\'')
+        .innerJoin(
+          'visit_activity',
+          'visit_activity.visit_activity_id',
+          'visit_log.visit_activity_id')
+        .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
         .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id'), queryMatchOnColumnNames)
-        .orderBy('visit.created_at')
+        .orderBy('visit_log.created_at')
         .then((data: Pick<VisitEvent, 'createdAt'>[]) => {
           const lastWeek = data.reduce((acc: Dictionary<number>, visit) => {
             const visitDateKey = moment(visit.createdAt).format('DD-MM-YYYY');

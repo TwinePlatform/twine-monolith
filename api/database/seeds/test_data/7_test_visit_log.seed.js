@@ -2,7 +2,7 @@ const moment = require('moment');
 const today = moment();
 
 exports.seed = (knex) =>
-  knex('visit')
+  knex('visit_log')
     .insert([
       { 
         user_account_id: knex('user_account').select('user_account_id').where({user_name: 'Chell'}),

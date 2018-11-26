@@ -222,7 +222,7 @@ exports.seed = async (client) => {
     ])
     .returning('visit_activity_id');
 
-  return client('visit')
+  return client('visit_log')
     .insert([
       {user_account_id: chooseRandom(visitors), visit_activity_id: chooseRandom(visit_activities), created_at: '2018-03-15 12:24:56+00'},
       {user_account_id: chooseRandom(visitors), visit_activity_id: chooseRandom(visit_activities), created_at: '2018-03-20 13:32:30+00'},

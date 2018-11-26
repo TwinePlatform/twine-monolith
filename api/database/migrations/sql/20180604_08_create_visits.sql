@@ -36,17 +36,17 @@ CREATE TABLE visit_activity (
 );
 
 
-CREATE TABLE visit (
-  visit_id          SERIAL NOT NULL UNIQUE,
+CREATE TABLE visit_log (
+  visit_log_id      SERIAL NOT NULL UNIQUE,
   user_account_id   INT NOT NULL,
   visit_activity_id INT NOT NULL,
   created_at        TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at       TIMESTAMP WITH TIME ZONE,
   deleted_at        TIMESTAMP WITH TIME ZONE,
 
-  CONSTRAINT visit_pk                   PRIMARY KEY (visit_id),
-  CONSTRAINT visit_to_user_fk           FOREIGN KEY (user_account_id)   REFERENCES user_account ON DELETE CASCADE,
-  CONSTRAINT visit_to_visit_activity_fk FOREIGN KEY (visit_activity_id) REFERENCES visit_activity ON DELETE CASCADE
+  CONSTRAINT visit_log_pk                   PRIMARY KEY (visit_log_id),
+  CONSTRAINT visit_log_to_user_fk           FOREIGN KEY (user_account_id)   REFERENCES user_account ON DELETE CASCADE,
+  CONSTRAINT visit_log_to_visit_activity_fk FOREIGN KEY (visit_activity_id) REFERENCES visit_activity ON DELETE CASCADE
 );
 
 
@@ -71,7 +71,7 @@ CREATE TABLE visit_feedback (
 CREATE TRIGGER update_visit_activity_modified_at BEFORE UPDATE ON visit_activity
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
 
-CREATE TRIGGER update_visit_modified_at BEFORE UPDATE ON visit
+CREATE TRIGGER update_visit_modified_at BEFORE UPDATE ON visit_log
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
 
 CREATE TRIGGER update_visit_feedback_modified_at BEFORE UPDATE ON visit_feedback

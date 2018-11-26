@@ -39,7 +39,7 @@ exports.down = (knex) => {
     .then(() => knex('api_token').truncate())
     .then(() => knex('community_business').truncate())
     .then(() => knex('visit_activity').truncate())
-    .then(() => knex('visit').truncate())
+    .then(() => knex('visit_log').truncate())
     .then(() => knex('visit_feedback').truncate())
     .then(() => knex('volunteer_hours_log').truncate())
 };

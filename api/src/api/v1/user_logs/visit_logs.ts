@@ -49,32 +49,35 @@ const routes: Hapi.ServerRoute[] = [
        * created to support temp-admin-dashboard
        */
 
-      const visits = await knex('visit')
+      const visits = await knex('visit_log')
         .select({
-          id: 'visit_id',
+          id: 'visit_log_id',
           organisationName: 'organisation.organisation_name',
           userId: 'user_account.user_account_id',
           visitActivity: 'visit_activity_name',
           category: 'visit_activity_category_name',
-          createdAt: 'visit.created_at',
+          createdAt: 'visit_log.created_at',
           birthYear: 'user_account.birth_year',
           gender: 'gender.gender_name',
         })
-        .innerJoin('visit_activity', 'visit_activity.visit_activity_id', 'visit.visit_activity_id')
+        .innerJoin(
+          'visit_activity',
+          'visit_activity.visit_activity_id',
+          'visit_log.visit_activity_id')
         .leftOuterJoin(
           'visit_activity_category',
           'visit_activity_category.visit_activity_category_id',
           'visit_activity.visit_activity_category_id')
-        .innerJoin('user_account', 'user_account.user_account_id', 'visit.user_account_id')
+        .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
         .innerJoin(
           'organisation',
           'visit_activity.organisation_id',
           'organisation.organisation_id')
         .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
         .where({
-          'visit.deleted_at': null,
+          'visit_log.deleted_at': null,
         })
-        .whereBetween('visit.created_at', since || until
+        .whereBetween('visit_log.created_at', since || until
           ? [
             new Date(since),
             new Date(until),
