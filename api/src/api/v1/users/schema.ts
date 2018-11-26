@@ -31,7 +31,7 @@ export const email =
 
 export const password =
   Joi.string()
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!#$%&()*+,\-./\\:;<=>@[\]^_{|}~?])(?=.{8,})/,
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!#$%&()*+,\-./\\:;<=>@[\]^_{|}~? ])(?=.{8,})/,
      'strong_pwd')
     .options({ language: { string: { regex: { name: 'is too weak' } } } });
 
