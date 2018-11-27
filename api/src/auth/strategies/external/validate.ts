@@ -24,7 +24,7 @@ const findMatching = async (xs: TokenResponse [], token: string): ExternalStrate
   : findMatching(xs.slice(1), token);
 };
 
-const validateExternal: ValidateExternal = async ({ knex, log }, token, h) => {
+const validateExternal: ValidateExternal = async ({ log, server: { app: { knex } } }, token, h) => {
   try {
     const tokenResponses = await knex('api_token').select(['api_token', 'api_token_access']);
     if (tokenResponses.length === 0) {

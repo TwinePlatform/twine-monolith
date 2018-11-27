@@ -2,41 +2,30 @@
  * Community Business Model
  */
 import * as Knex from 'knex';
-import { compose, omit, evolve, filter, pick, invertObj } from 'ramda';
-import { Dictionary, Map, Int, Day, Maybe } from '../types/internal';
+import * as moment from 'moment';
+import {
+  compose,
+  omit,
+  evolve,
+  filter,
+  pick,
+  invertObj,
+  pipe,
+  assocPath,
+  difference,
+} from 'ramda';
+import { randomBytes } from 'crypto';
+import { Dictionary, Map } from '../types/internal';
 import {
   CommunityBusiness,
   CommunityBusinessCollection,
   CommunityBusinessRow,
-  CommunityBusinessChangeSet,
-  LinkedFeedback,
-  ModelQuery,
-  DateTimeQuery,
-  VisitActivity,
+  VisitEvent,
 } from './types';
 import { Organisations } from './organisation';
-import { applyQueryModifiers } from './util';
-import { renameKeys } from '../utils';
+import { applyQueryModifiers } from './applyQueryModifiers';
+import { renameKeys, ageArrayToBirthYearArray, mapKeys } from '../utils';
 
-
-/*
- * Custom methods
- */
-type CustomMethods = {
-  addFeedback: (k: Knex, c: CommunityBusiness, score: Int) => Promise<LinkedFeedback>
-  getFeedback: (
-    k: Knex,
-    c: CommunityBusiness,
-    bw?: DateTimeQuery & Pick<ModelQuery<LinkedFeedback>, 'limit' | 'offset' | 'order'>
-  ) =>
-    Promise<LinkedFeedback[]>
-  getVisitActivities: (k: Knex, c: CommunityBusiness, d?: Day) => Promise<VisitActivity>
-  getVisitActivityById: (k: Knex, c: CommunityBusiness, id: Int) => Promise<Maybe<VisitActivity>>
-  addVisitActivity: (k: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>)
-    => Promise<Maybe<VisitActivity>>
-  updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>
-  deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>
-};
 
 /*
  * Field name mappings
@@ -61,19 +50,24 @@ const ColumnToModel: Map<keyof CommunityBusinessRow, keyof CommunityBusiness> = 
   'community_business.modified_at': 'modifiedAt',
   'community_business.deleted_at': 'deletedAt',
 };
+
 const ModelToColumn = invertObj(ColumnToModel);
 
-
+const optionalFields: Dictionary<string> = {
+  adminCode: 'volunteer_admin_code.code',
+  frontlineApiKey: 'frontline_account.frontline_api_key',
+  frontlineWorkspaceId: 'frontline_account.frontline_workspace_id',
+};
 /*
  * Helpers
  */
 const transformForeignKeysToSubQueries = (client: Knex | Knex.QueryBuilder) => evolve({
-  community_business_region_id: (v: string) =>
+  'community_business.community_business_region_id': (v: string) =>
     client
       .table('community_business_region')
       .select('community_business_region_id')
       .where({ region_name: v }),
-  community_business_sector_id: (v: string) =>
+  'community_business.community_business_sector_id': (v: string) =>
     client
       .table('community_business_sector')
       .select('community_business_sector_id')
@@ -104,8 +98,8 @@ const preProcessCb = (qb: Knex | Knex.QueryBuilder) => compose(
 /*
  * Implementation of the CommunityBusinessCollection type
  */
-export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = {
-  create (a: Partial<CommunityBusiness>): CommunityBusiness {
+export const CommunityBusinesses: CommunityBusinessCollection = {
+  create (a) {
     return {
       id: a.id,
       name: a.name,
@@ -125,7 +119,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     };
   },
 
-  toColumnNames (a: Partial<CommunityBusiness>): Dictionary < any > {
+  toColumnNames (a) {
     return filter((a) => typeof a !== 'undefined', {
       'community_business.organisation_id': a.id,
       'organisation.organisation_name': a.name,
@@ -133,8 +127,8 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
       'community_business.created_at': a.createdAt,
       'community_business.modified_at': a.modifiedAt,
       'community_business.deleted_at': a.deletedAt,
-      community_business_region_id: a.region,
-      community_business_sector_id: a.sector,
+      'community_business.community_business_region_id': a.region,
+      'community_business.community_business_sector_id': a.sector,
       logo_url: a.logoUrl,
       address_1: a.address1,
       address_2: a.address2,
@@ -145,15 +139,17 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     });
   },
 
-  async get (client: Knex, q: ModelQuery < CommunityBusiness > = {}) {
+  async get (client, q = {}) {
     const query = evolve({
-      where: CommunityBusinesses.toColumnNames,
+      where: pipe(CommunityBusinesses.toColumnNames, transformForeignKeysToSubQueries(client)),
       whereNot: CommunityBusinesses.toColumnNames,
     }, q);
 
     return applyQueryModifiers(
       client
-        .select(query.fields ? pick(query.fields, ModelToColumn) : ModelToColumn)
+        .select(query.fields
+          ? pick(query.fields, { ...ModelToColumn, ...optionalFields })
+          : ModelToColumn)
         .from('community_business')
         .innerJoin(
           'community_business_region',
@@ -166,65 +162,82 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         .innerJoin(
           'organisation',
           'organisation.organisation_id',
-          'community_business.organisation_id'),
+          'community_business.organisation_id')
+        // joins for optional fields
+        .leftOuterJoin(
+          'subscription',
+          'subscription.beneficiary_id',
+          'community_business.organisation_id')
+        .leftOuterJoin(
+          'frontline_account',
+          'frontline_account.frontline_account_id',
+          'subscription.frontline_account_id')
+        .leftOuterJoin(
+          'volunteer_admin_code',
+          'organisation.organisation_id',
+          'volunteer_admin_code.organisation_id'),
       query
     );
   },
 
-  async getOne (client: Knex, q: ModelQuery<CommunityBusiness>) {
-    const [res] = await CommunityBusinesses.get(client, { ...q, limit: 1 });
+  async getOne (client, query) {
+    const [res] = await CommunityBusinesses.get(client, { ...query, limit: 1 });
     return res || null;
   },
 
-  async exists (client: Knex, q: ModelQuery<CommunityBusiness>) {
-    const res = await CommunityBusinesses.getOne(client, q);
+  async exists (client, query) {
+    const res = await CommunityBusinesses.getOne(client, query);
     return res !== null;
   },
 
-  async add (client: Knex, o: CommunityBusinessChangeSet) {
+  async add (client, cb) {
     const preProcessCbChangeset = compose(
+      mapKeys((s) => s.replace('community_business.', '')),
+      transformForeignKeysToSubQueries(client),
       CommunityBusinesses.toColumnNames,
       pickCbFields
     );
 
-    const orgChangeset = preProcessOrgChangeset(o);
-    const cbChangeset = preProcessCbChangeset(o);
+    const code = randomBytes(4).toString('hex');
 
-    const [id] = await client
-      .with('new_organisation', (qb) =>
-        qb
-          .table('organisation')
-          .insert(orgChangeset)
-          .returning('*')
-      )
-      .insert({
-        ...cbChangeset,
-        organisation_id: client('new_organisation')
-          .select('organisation_id'),
-        community_business_region_id: client('community_business_region')
-          .select('community_business_region_id')
-          .where({ region_name: cbChangeset.community_business_region_id }),
-        community_business_sector_id: client('community_business_sector')
-          .select('community_business_sector_id')
-          .where({ sector_name: cbChangeset.community_business_sector_id }),
-      })
-      .into('community_business')
-      .returning('organisation_id');
+    const orgChangeset = preProcessOrgChangeset(cb);
+    const cbChangeset = preProcessCbChangeset(cb);
+
+    const [id] = await client.transaction(async (trx) => {
+      const [newOrg] = await trx
+        .table('organisation')
+        .insert(orgChangeset)
+        .returning('*');
+
+      await trx
+      .insert({ code, organisation_id: newOrg.organisation_id, })
+      .into('volunteer_admin_code')
+      .returning('*');
+
+      return trx
+        .insert({
+          ...cbChangeset,
+          organisation_id: newOrg.organisation_id,
+        })
+        .into('community_business')
+        .returning('organisation_id');
+    });
 
     return CommunityBusinesses.getOne(client, { where: { id } });
   },
 
-  async update (client: Knex, o: CommunityBusiness, c: CommunityBusinessChangeSet) {
-    const preProcessCbChangeset = compose(
-      CommunityBusinesses.toColumnNames,
-      pickCbFields
-    );
-
-    const orgChangeset = preProcessOrgChangeset(c);
-    const cbChangeset = preProcessCbChangeset(c);
+  async update (client, cb, changes) {
+    const orgChangeset = preProcessOrgChangeset(changes);
 
     const [{ organisation_id: id }] = await client.transaction(async (trx) => {
-      const cbQuery = preProcessCb(trx)(o);
+      const cbQuery = preProcessCb(trx)(cb);
+      const preProcessCbChangeset = compose(
+        mapKeys((s) => s.replace('community_business.', '')),
+        transformForeignKeysToSubQueries(trx),
+        CommunityBusinesses.toColumnNames,
+        pickCbFields
+      );
+      const cbChangeset = preProcessCbChangeset(changes);
 
       if (Object.keys(orgChangeset).length > 0) {
         await trx('organisation')
@@ -247,37 +260,43 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return CommunityBusinesses.getOne(client, { where: { id } });
   },
 
-  async destroy (client: Knex, o: CommunityBusiness) {
+  async destroy (client, cb) {
     return client('community_business')
       .update({ deleted_at: new Date() })
-      .where(preProcessCb(client)(o));
+      .where(preProcessCb(client)(cb));
   },
 
-  async serialise (org: CommunityBusiness) {
-    return org;
+  async serialise (cb) {
+    return cb;
   },
 
-  async addFeedback (client: Knex, c: CommunityBusiness, score: number) {
+  async addFeedback (client, cb, score) {
     const [res] = await client('visit_feedback')
-      .insert({ score, organisation_id: c.id })
+      .insert({ score, organisation_id: cb.id })
       .returning([
         'score',
         'organisation_id AS organisationId',
         'visit_feedback_id AS id',
+        'created_at AS createdAt',
+        'modified_at AS modifiedAt',
+        'deleted_at AS deletedAt',
       ]);
 
     return res;
   },
 
-  async getFeedback (client: Knex, c: CommunityBusiness, bw?) {
+  async getFeedback (client, cb, bw?) {
     const baseQuery = applyQueryModifiers(
       client('visit_feedback')
         .select({
           id: 'visit_feedback_id',
+          organisationId: 'organisation_id',
           score: 'score',
           createdAt: 'created_at',
+          modifiedAt: 'modified_at',
+          deletedAt: 'deleted_at',
         })
-        .where({ organisation_id: c.id, deleted_at: null }),
+        .where({ organisation_id: cb.id, deleted_at: null }),
       bw || {}
     );
 
@@ -288,7 +307,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return query;
   },
 
-  async getVisitActivities (client: Knex, o: CommunityBusiness, d?: Day) {
+  async getVisitActivities (client, cb, day?) {
     const baseQuery = client('visit_activity')
       .innerJoin(
         'visit_activity_category',
@@ -305,19 +324,19 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         friday: 'friday',
         saturday: 'saturday',
         sunday: 'sunday',
-        createdAt: 'created_at',
-        modifiedAt: 'modified_at',
+        createdAt: 'visit_activity.created_at',
+        modifiedAt: 'visit_activity.modified_at',
       })
-      .where({ organisation_id: o.id, deleted_at: null });
+      .where({ organisation_id: cb.id, 'visit_activity.deleted_at': null });
 
-    const query = d
-      ? baseQuery.where({ [d]: true })
+    const query = day
+      ? baseQuery.where({ [day]: true })
       : baseQuery;
 
     return query;
   },
 
-  async getVisitActivityById (client: Knex, c: CommunityBusiness, id: number) {
+  async getVisitActivityById (client, cb, id) {
     const [visitActivity] = await client('visit_activity')
         .innerJoin(
           'visit_activity_category',
@@ -334,26 +353,26 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
           friday: 'friday',
           saturday: 'saturday',
           sunday: 'sunday',
-          createdAt: 'created_at',
-          modifiedAt: 'modified_at',
+          createdAt: 'visit_activity.created_at',
+          modifiedAt: 'visit_activity.modified_at',
         })
         .where({
           visit_activity_id: id,
-          deleted_at: null,
-          organisation_id: c.id,
+          'visit_activity.deleted_at': null,
+          organisation_id: cb.id,
         });
 
     return visitActivity || null;
   },
 
-  async addVisitActivity (client: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>) {
+  async addVisitActivity (client, visitActivity, cb) {
     const [res] = await client('visit_activity')
       .insert({
-        visit_activity_name: v.name,
+        visit_activity_name: visitActivity.name,
         visit_activity_category_id: client('visit_activity_category')
           .select('visit_activity_category_id')
-          .where({ visit_activity_category_name: v.category }),
-        organisation_id: c.id,
+          .where({ visit_activity_category_name: visitActivity.category }),
+        organisation_id: cb.id,
       })
       .returning([
         'visit_activity_id AS id',
@@ -371,7 +390,7 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     return res;
   },
 
-  async updateVisitActivity (client: Knex, v: Partial<VisitActivity>) {
+  async updateVisitActivity (client, visitActivity) {
     const transformToColumns = compose(
       evolve({
         visit_activity_category_id: (n) =>
@@ -389,8 +408,8 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
     );
 
     const [res] = await client('visit_activity')
-      .update(transformToColumns(v))
-      .where({ visit_activity_id: v.id, deleted_at: null })
+      .update(transformToColumns(visitActivity))
+      .where({ visit_activity_id: visitActivity.id, deleted_at: null })
       .returning([
         'visit_activity_id AS id',
         'visit_activity_name AS name',
@@ -405,10 +424,10 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
         'modified_at AS modifiedAt',
       ]);
 
-    return res ? { ...res, category: v.category } : null;
+    return res ? { ...res, category: visitActivity.category } : null;
   },
 
-  async deleteVisitActivity (client: Knex, id: Int) {
+  async deleteVisitActivity (client, id) {
     const [res] = await client('visit_activity')
       .where({ visit_activity_id: id, deleted_at: null })
       .update({ deleted_at: new Date() })
@@ -429,5 +448,192 @@ export const CommunityBusinesses: CommunityBusinessCollection & CustomMethods = 
 
     return res || null;
   },
-};
 
+  async addVisitLog (client, visitActivity, user) {
+    const [res] = await client('visit_log')
+      .insert({
+        user_account_id: user.id,
+        visit_activity_id: visitActivity.id,
+      })
+      .returning([
+        'visit_log_id AS id',
+        'user_account_id AS userId',
+        'visit_activity_id AS visitActivityId',
+        'created_at AS createdAt',
+        'modified_at AS modifiedAt',
+        'deleted_at AS deletedAt',
+      ]);
+    return <VisitEvent> res;
+  },
+
+  async getVisitLogsWithUsers (client, cb, q) {
+    const modifyColumnNames = evolve({
+      where: renameKeys({
+        visitActivity: 'visit_activity.visit_activity_name',
+        gender: 'gender.gender_name',
+      }),
+      whereBetween: pipe(
+        evolve({ birthYear: ageArrayToBirthYearArray }),
+        renameKeys({ birthYear: 'user_account.birth_year' })
+        ),
+    });
+    const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);
+    const query = pipe(modifyColumnNames, checkSpecificCb)(q);
+
+    return applyQueryModifiers(client('visit_log')
+      .select({
+        id: 'visit_log_id',
+        userId: 'user_account.user_account_id',
+        visitActivity: 'visit_activity_name',
+        category: 'visit_activity_category_name',
+        createdAt: 'visit_log.created_at',
+        modifiedAt: 'visit_log.modified_at',
+        birthYear: 'user_account.birth_year',
+        gender: 'gender.gender_name',
+      })
+      .innerJoin(
+        'visit_activity',
+        'visit_activity.visit_activity_id',
+        'visit_log.visit_activity_id')
+      .innerJoin(
+        'visit_activity_category',
+        'visit_activity_category.visit_activity_category_id',
+        'visit_activity.visit_activity_category_id')
+      .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
+      .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id'),
+      query);
+  },
+
+  async getVisitLogAggregates (client, cb, aggs, query) {
+    const unsupportedAggregates = difference(aggs, ['age', 'gender', 'visitActivity', 'lastWeek']);
+    if (unsupportedAggregates.length > 0) {
+      throw new Error(`${unsupportedAggregates.join(', ')} are not supported aggregate fields`);
+    }
+    const year = moment().year();
+
+    const modifyColumnNames = evolve({
+      where: renameKeys({
+        visitActivity: 'visit_activity.visit_activity_name',
+        gender: 'gender.gender_name',
+      }),
+      whereBetween: pipe(
+        evolve({ birthYear: ageArrayToBirthYearArray }),
+        renameKeys({ birthYear: 'user_account.birth_year' })
+        ),
+    });
+
+    const modifyColumnNamesForAge = evolve({
+      where: renameKeys({
+        visitActivity: 'visit_activity.visit_activity_name',
+        gender: 'gender.gender_name',
+      }),
+      whereBetween: pipe(
+        evolve({ birthYear: ageArrayToBirthYearArray }),
+        renameKeys({ birthYear: 'age_group_table.birth_year' })
+        ),
+    });
+
+    const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);
+
+    const queryMatchOnColumnNames = pipe(modifyColumnNames, checkSpecificCb)(query);
+    const ageQuery = pipe(modifyColumnNamesForAge, checkSpecificCb)(query);
+
+    const aggregateQueries: Dictionary<PromiseLike<any>> = {
+      gender: applyQueryModifiers(client('visit_log')
+        .count('gender.gender_name')
+        .select({
+          gender: 'gender.gender_name',
+        })
+        .innerJoin(
+          'visit_activity',
+          'visit_activity.visit_activity_id',
+          'visit_log.visit_activity_id')
+        .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
+        .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
+        .groupBy('gender.gender_name')
+        , queryMatchOnColumnNames)
+        .then((rows) => {
+          const gender: Dictionary<number> = rows
+            .reduce((acc: Dictionary<number>, row: {gender: string, count: number}) => {
+              acc[row.gender] = Number(row.count);
+              return acc;
+            } , {});
+          return { gender };
+        }),
+
+      visitActivity: applyQueryModifiers(client('visit_log')
+        .count('visit_activity.visit_activity_name')
+        .select({
+          activity: 'visit_activity_name',
+        })
+        .innerJoin(
+          'visit_activity',
+          'visit_activity.visit_activity_id',
+          'visit_log.visit_activity_id')
+        .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
+        .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
+        .groupBy('visit_activity.visit_activity_name'), queryMatchOnColumnNames)
+        .then((rows) => {
+          const visitActivity = rows
+            .reduce((acc: Dictionary<number>, row: {activity: string, count: number}) => {
+              acc[row.activity] = Number(row.count);
+              return acc;
+            } , {});
+          return { visitActivity };
+        }),
+
+      age: applyQueryModifiers(client.with('age_group_table',
+        client
+          .raw('SELECT *, CASE ' +
+            `WHEN birth_year > ${year - 17} THEN '0-17' ` +
+            `WHEN birth_year > ${year - 34} AND birth_year <= ${year - 17} THEN '18-34' ` +
+            `WHEN birth_year > ${year - 50} AND birth_year <= ${year - 34} THEN '35-50' ` +
+            `WHEN birth_year > ${year - 69} AND birth_year <= ${year - 50} THEN '51-69' ` +
+            `WHEN birth_year <= ${year - 69} THEN '70+' ` +
+            `END AS age_group ` +
+            'FROM visit_log ' +
+            'INNER JOIN user_account ON user_account.user_account_id = visit_log.user_account_id')
+          )
+          // TODO: generate case statements based on supplied query
+          .innerJoin(
+            'visit_activity',
+            'visit_activity.visit_activity_id',
+            'age_group_table.visit_activity_id')
+          .innerJoin('gender', 'gender.gender_id', 'age_group_table.gender_id')
+          .count('age_group')
+          .select({ ageGroup: 'age_group' })
+          .groupBy('age_group')
+          .from('age_group_table'), ageQuery)
+        .then((rows) => {
+          const age = rows
+            .reduce((acc: Dictionary<number>, row: {ageGroup: string, count: number}) => {
+              acc[row.ageGroup] = Number(row.count);
+              return acc;
+            } , {});
+          return { age };
+        }),
+      lastWeek: applyQueryModifiers(client('visit_log')
+        .select({ createdAt: 'visit_log.created_at' })
+        .whereRaw('visit_log.created_at >= CURRENT_DATE - INTERVAL \'7 day\'')
+        .innerJoin(
+          'visit_activity',
+          'visit_activity.visit_activity_id',
+          'visit_log.visit_activity_id')
+        .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
+        .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id'), queryMatchOnColumnNames)
+        .orderBy('visit_log.created_at')
+        .then((data: Pick<VisitEvent, 'createdAt'>[]) => {
+          const lastWeek = data.reduce((acc: Dictionary<number>, visit) => {
+            const visitDateKey = moment(visit.createdAt).format('DD-MM-YYYY');
+            acc[visitDateKey] = acc[visitDateKey] + 1 || 1;
+            return acc;
+          }, {});
+          return { lastWeek };
+        }),
+    };
+
+    const requestedAggregates = aggs.map((agg) => aggregateQueries[agg]);
+    const rawAggregateData = await Promise.all(requestedAggregates);
+    return rawAggregateData.reduce((acc, el) => ({ ...acc, ...el }), {});
+  },
+};

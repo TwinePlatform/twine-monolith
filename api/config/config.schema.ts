@@ -13,13 +13,6 @@ export default Joi.object({
   web: Joi.object({
     host: Joi.string().min(1),
     port: Joi.number().min(0).max(65535).required(),
-    tls: Joi.alternatives().try(
-      Joi.only(null),
-      Joi.object({
-        key: Joi.string().required(),
-        cert: Joi.string().required(),
-      })
-    ),
     router: Joi.object({
       stripTrailingSlash: Joi.boolean().required(),
     }).required(),
@@ -29,6 +22,16 @@ export default Joi.object({
         credentials: Joi.boolean(),
         additionalExposedHeaders: Joi.array().items(Joi.string()),
       }).required(),
+      security: Joi.alt(
+        Joi.only(false),
+        Joi.object({
+          hsts: Joi.object({
+            maxAge: Joi.number().integer().min(365 * 24 * 60 * 60).required(),
+            includeSubdomains: Joi.boolean().default(true),
+            preload: Joi.boolean().default(true),
+          }),
+        })
+      ).required(),
     }).required(),
   }).required(),
   knex: Joi.object({
@@ -45,7 +48,8 @@ export default Joi.object({
       Joi.string().min('psql://localhost:5432'.length)
     ),
     pool: Joi.object({
-      min: 3,
+      min: Joi.number().integer(),
+      max: Joi.number().integer().greater(Joi.ref('min')),
     }),
     migrations: Joi.object({
       tableName: Joi.string().min(1).required(),

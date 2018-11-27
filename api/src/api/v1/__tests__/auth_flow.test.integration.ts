@@ -22,7 +22,7 @@ describe('Auth flow', () => {
       // 1. Login ("restricted") -> 200
       const resLogin = await server.inject({
         method: 'POST',
-        url: '/v1/users/login/admin',
+        url: '/v1/users/login',
         headers: { origin: 'https://dashboard.twine-together.com' },
         payload: {
           email: '1@aperturescience.com',
@@ -50,7 +50,7 @@ describe('Auth flow', () => {
       // 1. Login ("restricted") -> 200
       const resLogin = await server.inject({
         method: 'POST',
-        url: '/v1/users/login/admin',
+        url: '/v1/users/login',
         headers: { origin: 'https://visitor.twine-together.com' },
         payload: {
           email: '1@aperturescience.com',
@@ -111,6 +111,35 @@ describe('Auth flow', () => {
       });
 
       expect(resAccess3.statusCode).toBe(403);
+    });
+  });
+
+  describe('Header authorisation', () => {
+    test('User login and fetch resource with Authorization header', async () => {
+      // 1. Login -> 200
+      const resLogin = await server.inject({
+        method: 'POST',
+        url: '/v1/users/login',
+        headers: { origin: 'https://dashboard.twine-together.com' },
+        payload: {
+          type: 'body',
+          email: '1@aperturescience.com',
+          password: 'CakeisaLi3!',
+        },
+      });
+
+      expect(resLogin.statusCode).toBe(200);
+      expect(typeof resLogin.headers['set-cookie']).toBe('undefined');
+      const token = (<any> resLogin.result).result.token;
+
+      // 2. Try to access resource X -> 200
+      const resAccess = await server.inject({
+        method: 'GET',
+        url: '/v1/users/me',
+        headers: { Authorization: token },
+      });
+
+      expect(resAccess.statusCode).toBe(200);
     });
   });
 });

@@ -1,36 +1,26 @@
 /*
  * Community Business Admin Model
  */
-import * as Knex from 'knex';
 import { omit, pick, evolve } from 'ramda';
-import { Dictionary } from '../types/internal';
-import { User, UserCollection, UserChangeSet, ModelQuery, Organisation } from './types';
+import { CbAdminCollection } from './types';
 import { Users, ModelToColumn } from './user';
 import { RoleEnum } from '../auth/types';
-import { applyQueryModifiers } from './util';
+import { applyQueryModifiers } from './applyQueryModifiers';
 
-
-/*
- * Declarations for methods specific to this model
- */
-type CustomMethods = {
-  recordLogin: (k: Knex, u: User) => Promise<void>
-  fromOrganisation: (k: Knex, q: Partial<Organisation>) => Promise<User[]>
-};
 
 /*
  * Implementation of the UserCollection type for CbAdmin
  */
-export const CbAdmins: UserCollection & CustomMethods = {
-  create (a: Partial<User>): User {
+export const CbAdmins: CbAdminCollection = {
+  create (a) {
     return Users.create(a);
   },
 
-  toColumnNames (o: Partial<User>): Dictionary<any> {
+  toColumnNames (o) {
     return Users.toColumnNames(o);
   },
 
-  async get (client: Knex, q: ModelQuery<User> = {}) {
+  async get (client, q = {}) {
     const query = evolve({
       where: CbAdmins.toColumnNames,
       whereNot: CbAdmins.toColumnNames,
@@ -50,35 +40,35 @@ export const CbAdmins: UserCollection & CustomMethods = {
         .where({
           ['user_account_access_role.access_role_id']: client('access_role')
             .select('access_role_id')
-            .where({ access_role_name: RoleEnum.ORG_ADMIN }),
+            .where({ access_role_name: RoleEnum.CB_ADMIN }),
         }),
       query
     );
   },
 
-  async getOne (client: Knex, q: ModelQuery<User> = {}) {
-    const res = await CbAdmins.get(client, { ...q, limit: 1 });
+  async getOne (client, query = {}) {
+    const res = await CbAdmins.get(client, { ...query, limit: 1 });
     return res[0] || null;
   },
 
-  async exists (client: Knex, q: ModelQuery<User> = {}) {
-    const res = await CbAdmins.getOne(client, q);
+  async exists (client, query = {}) {
+    const res = await CbAdmins.getOne(client, query);
     return res !== null;
   },
 
-  async add (client: Knex, u: UserChangeSet) {
-    return Users.add(client, u);
+  async add (client, user) {
+    return Users.add(client, user);
   },
 
-  async update (client: Knex, u: User, c: UserChangeSet) {
-    return Users.update(client, u, c);
+  async update (client, user, changes) {
+    return Users.update(client, user, changes);
   },
 
-  async destroy (client: Knex, u: Partial<User>) {
-    return Users.destroy(client, u);
+  async destroy (client, user) {
+    return Users.destroy(client, user);
   },
 
-  async fromOrganisation (client: Knex, o: Organisation) {
+  async fromOrganisation (client, organisation) {
     return client
         .select(ModelToColumn)
         .from('user_account')
@@ -93,16 +83,16 @@ export const CbAdmins: UserCollection & CustomMethods = {
           'user_account.deleted_at': null,
           ['user_account_access_role.access_role_id']: client('access_role')
             .select('access_role_id')
-            .where({ access_role_name: RoleEnum.ORG_ADMIN }),
-          ['user_account_access_role.organisation_id']: o.id,
+            .where({ access_role_name: RoleEnum.CB_ADMIN }),
+          ['user_account_access_role.organisation_id']: organisation.id,
         });
   },
 
-  async recordLogin (client: Knex, u: User) {
-    return Users.recordLogin(client, u);
+  async recordLogin (client, user) {
+    return Users.recordLogin(client, user);
   },
 
-  async serialise (user: User) {
+  async serialise (user) {
     return omit(['password', 'qrCode'], user);
   },
 };

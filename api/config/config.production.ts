@@ -1,4 +1,3 @@
-import * as path from 'path';
 import { Environment } from './types';
 
 export default {
@@ -6,19 +5,16 @@ export default {
   web: {
     host: process.env.HOST || '0.0.0.0',
     port: process.env.PORT || 4002,
+    routes: {
+      cors: {
+        origin: ['https://admin.twine-together.com', 'https://visitor.twine-together.com'],
+      },
+    },
   },
   knex: {
-    client: 'pg',
     connection: process.env.DATABASE_URL,
     pool: {
-      min: 3,
-    },
-    migrations: {
-      tableName: 'knex_migrations',
-      directory: path.resolve(process.cwd(), 'database', 'migrations'),
-    },
-    seeds: {
-      directory: path.resolve(process.cwd(), 'database', 'seeds', 'production'),
+      max: 100,
     },
   },
   email: {

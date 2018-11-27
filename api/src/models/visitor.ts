@@ -1,32 +1,23 @@
 /*
  * Visitor Model
  */
-import { createHmac } from 'crypto';
-import * as Knex from 'knex';
-import { omit, pick, evolve, compose } from 'ramda';
-import { Dictionary } from '../types/internal';
-import { User, UserCollection, UserChangeSet, ModelQuery, CommunityBusiness } from './types';
+import { createHmac, randomBytes } from 'crypto';
+import { assoc, omit, pick, evolve, compose, pipe } from 'ramda';
+import { Map } from '../types/internal';
+import { User, VisitorCollection, LinkedVisitEvent } from './types';
 import { Users, ModelToColumn } from './user';
 import { RoleEnum } from '../auth/types';
-import { applyQueryModifiers } from './util';
+import { applyQueryModifiers } from './applyQueryModifiers';
 import { getConfig } from '../../config';
 import * as QRCode from '../services/qrcode';
-
-
-/*
- * Declarations for methods specific to this model
- */
-type CustomMethods = {
-  recordLogin: (k: Knex, u: User) => Promise<void>
-  fromCommunityBusiness: (k: Knex, c: CommunityBusiness) => Promise<User[]>
-};
+import { renameKeys, ageArrayToBirthYearArray, pickOrAll } from '../utils';
 
 
 const { qrcode: { secret } } = getConfig(process.env.NODE_ENV);
 
 const hashVisitor: (visitor: Partial<User>) => string = compose(
   (s: string) => createHmac('sha256', secret).update(s).digest('hex'),
-  (s: string[]) => s.join(':'),
+  (s: string[]) => s.concat(randomBytes(16).toString('hex')).join(':'),
   Object.values,
   pick(['email', 'name', 'gender', 'disability', 'ethnicity'])
 );
@@ -34,16 +25,16 @@ const hashVisitor: (visitor: Partial<User>) => string = compose(
 /*
  * Implementation of the UserCollection type for Visitors
  */
-export const Visitors: UserCollection & CustomMethods = {
-  create (a: Partial<User>): User {
+export const Visitors: VisitorCollection = {
+  create (a) {
     return Users.create({ ...a, qrCode: hashVisitor(a) });
   },
 
-  toColumnNames (o: Partial<User>): Dictionary<any> {
+  toColumnNames (o) {
     return Users.toColumnNames(o);
   },
 
-  async get (client: Knex, q: ModelQuery<User> = {}) {
+  async get (client, q = {}) {
     const query = evolve({
       where: Visitors.toColumnNames,
       whereNot: Visitors.toColumnNames,
@@ -69,35 +60,41 @@ export const Visitors: UserCollection & CustomMethods = {
     );
   },
 
-  async getOne (client: Knex, q: ModelQuery<User> = {}) {
-    const [res] = await Visitors.get(client, { ...q, limit: 1 });
+  async getOne (client, query = {}) {
+    const [res] = await Visitors.get(client, { ...query, limit: 1 });
     return res || null;
   },
 
-  async exists (client: Knex, q: ModelQuery<User>) {
-    const res = await Visitors.getOne(client, q);
+  async exists (client, query) {
+    const res = await Visitors.getOne(client, query);
     return res !== null;
   },
 
-  async add (client: Knex, u: UserChangeSet) {
-    return Users.add(client, u);
+  async add (client, user) {
+    return Users.add(client, user);
   },
 
-  async update (client: Knex, u: User, c: UserChangeSet) {
-    return Users.update(client, u, c);
+  async update (client, user, changes) {
+    return Users.update(client, user, changes);
   },
 
-  async destroy (client: Knex, u: Partial<User>) {
-    return Users.destroy(client, u);
+  async destroy (client, user) {
+    return Users.destroy(client, user);
   },
 
-  async recordLogin (client: Knex, u: User) {
-    return Users.recordLogin(client, u);
+  async recordLogin (client, user) {
+    return Users.recordLogin(client, user);
   },
 
-  async fromCommunityBusiness (client: Knex, c: CommunityBusiness) {
-    return client
-        .select(ModelToColumn)
+  async fromCommunityBusiness (client, cb, q = {}) {
+    const query = evolve({
+      where: Visitors.toColumnNames,
+      whereNot: Visitors.toColumnNames,
+    }, q);
+
+    return applyQueryModifiers(
+      client
+        .select(query.fields ? pick(query.fields, ModelToColumn) : ModelToColumn)
         .from('user_account')
         .leftOuterJoin('gender', 'user_account.gender_id', 'gender.gender_id')
         .leftOuterJoin('ethnicity', 'user_account.ethnicity_id', 'ethnicity.ethnicity_id')
@@ -110,12 +107,80 @@ export const Visitors: UserCollection & CustomMethods = {
           ['user_account_access_role.access_role_id']: client('access_role')
             .select('access_role_id')
             .where({ access_role_name: RoleEnum.VISITOR }),
-          ['user_account_access_role.organisation_id']: c.id,
-        });
+          ['user_account_access_role.organisation_id']: cb.id,
+        }),
+      query
+    );
   },
 
-  async serialise (user: User) {
-    const qrCode = await QRCode.create(user.qrCode);
-    return { ...omit(['password', 'qrCode'], user), qrCode };
+  async serialise (user) {
+    const strippedUser = omit(['password', 'qrCode'], user);
+    const serialisedUser = user.qrCode
+      ? assoc('qrCode', await QRCode.create(user.qrCode), strippedUser)
+      : strippedUser;
+
+    return serialisedUser;
+  },
+
+  async getWithVisits (client, cb, q = {}) {
+    const query = evolve({
+      where: Visitors.toColumnNames,
+      whereNot: Visitors.toColumnNames,
+      whereBetween: pipe(
+        evolve({ birthYear: ageArrayToBirthYearArray }),
+        renameKeys({ birthYear: 'user_account.birth_year' })
+        ),
+    }, q);
+
+    const additionalColumnMap: Map<keyof LinkedVisitEvent, string> = {
+      id: 'visit_log.visit_log_id',
+      createdAt: 'visit_log.created_at',
+      modifiedAt: 'visit_log.modified_at',
+      deletedAt: 'visit_log.deleted_at',
+      userId: 'visit_log.user_account_id',
+      visitActivityId: 'visit_activity.visit_activity_id',
+      visitActivity: 'visit_activity.visit_activity_name',
+    };
+
+    const rows: Partial<User>[] = await applyQueryModifiers(
+      client
+        .select({
+          id: 'user_account.user_account_id',
+          ...pickOrAll(query.fields, ModelToColumn),
+        })
+        .from('user_account')
+        .leftOuterJoin('gender', 'user_account.gender_id', 'gender.gender_id')
+        .leftOuterJoin('ethnicity', 'user_account.ethnicity_id', 'ethnicity.ethnicity_id')
+        .leftOuterJoin('disability', 'user_account.disability_id', 'disability.disability_id')
+        .leftOuterJoin(
+          'user_account_access_role',
+          'user_account.user_account_id',
+          'user_account_access_role.user_account_id')
+        .where({
+          ['user_account_access_role.access_role_id']: client('access_role')
+            .select('access_role_id')
+            .where({
+              access_role_name: RoleEnum.VISITOR,
+              'user_account_access_role.organisation_id': cb.id,
+            }),
+        }),
+      query
+    );
+
+    const userVisits: LinkedVisitEvent[][] = await Promise.all(rows.map((user) =>
+      client
+        .select(additionalColumnMap)
+        .from('visit_log')
+        .leftOuterJoin(
+          'visit_activity',
+          'visit_activity.visit_activity_id',
+          'visit_log.visit_activity_id')
+        .where({ user_account_id: user.id })
+    ));
+
+    return rows.map((row: Partial<User>, idx) => {
+      const user: Partial<User> = pickOrAll(query.fields, row);
+      return ({ ...user, visits: userVisits[idx] });
+    });
   },
 };

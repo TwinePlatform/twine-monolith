@@ -13,7 +13,7 @@ const routes: Hapi.ServerRoute[] = [
       response: { schema: response },
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      const { knex } = request;
+      const { server: { app: { knex } } } = request;
 
       const users = await Users.get(knex, { where: { deletedAt: null } });
 
@@ -32,7 +32,9 @@ const routes: Hapi.ServerRoute[] = [
           scope: ['user_details-own:read'],
         },
       },
-      validate: { query },
+      validate: {
+        query,
+      },
       response: { schema: response },
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {

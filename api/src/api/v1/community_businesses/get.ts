@@ -1,10 +1,11 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
+import { pick } from 'ramda';
 import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
-import { OrganisationRequest } from '../types';
+import { GetCommunityBusinessRequest, GetCommunityBusinessesRequest } from '../types';
 import { query, response } from './schema';
-
+import { is360GivingId } from '../prerequisites/get_community_business';
 
 export default [
   {
@@ -18,11 +19,26 @@ export default [
           scope: ['organisations_details-child:read'],
         },
       },
-      validate: { query },
+      validate: {
+        query,
+      },
+      pre: [
+        { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
+      ],
       response: { schema: response },
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      return Boom.notFound('Not implemented');
+    handler: async (request: GetCommunityBusinessesRequest, h: Hapi.ResponseToolkit) => {
+      const {
+        pre: { isChild },
+        server: { app: { knex } },
+        query,
+      } = request;
+
+      if (!isChild) {
+        return Boom.forbidden('Insufficient permissions to access this organisations');
+      }
+
+      return CommunityBusinesses.get(knex, query);
     },
   },
 
@@ -34,10 +50,12 @@ export default [
       auth: {
         strategy: 'standard',
         access: {
-          scope: ['organisations_details-own:read'],
+          scope: ['organisations_details-own:read', 'organisations_details-parent:read'],
         },
       },
-      validate: { query },
+      validate: {
+        query,
+      },
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
@@ -61,20 +79,35 @@ export default [
           scope: ['organisations_details-child:read'],
         },
       },
-      validate: { query },
+      validate: {
+        query,
+      },
       response: { schema: response },
       pre: [
-        { method: getCommunityBusiness, assign: 'communityBusiness' },
         { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
       ],
     },
-    handler: async (request: OrganisationRequest, h: Hapi.ResponseToolkit) => {
-      const { communityBusiness, isChild } = request.pre;
+    handler: async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
+      const {
+        pre: { isChild },
+        params: { organisationId },
+        query: _query,
+        server: { app: { knex } } } = request;
 
       if (!isChild) {
         return Boom.forbidden('Insufficient permissions to access this organisation');
       }
 
+      const idQuery = (is360GivingId(organisationId))
+        ? { _360GivingId: organisationId }
+        : { id: Number(organisationId) };
+
+      const query = {
+        ...pick(['fields'], _query),
+        ...{ where: idQuery },
+      };
+
+      const communityBusiness = await CommunityBusinesses.getOne(knex, query);
       return CommunityBusinesses.serialise(<CommunityBusiness> communityBusiness);
     },
   },

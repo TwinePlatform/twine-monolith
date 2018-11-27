@@ -1,5 +1,5 @@
 # Deployment
-The Twine API is hosted on Heroku. Ask team members for access credentials.
+The Twine API is hosted on Heroku and deployed automatically from Github. Ask team members for access credentials.
 
 ## Environment
 Heroku automatically sets `NODE_ENV` to `'production'`, so it's unnecessary to manually set this.

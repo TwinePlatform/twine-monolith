@@ -4,12 +4,13 @@ import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { Users, Organisations, LinkedFeedback, User, Organisation } from '../../../../models';
 import { RoleEnum } from '../../../../auth/types';
-const { migrate } = require('../../../../../database');
+import { getTrx } from '../../../../../tests/utils/database';
 
 
 describe('/community-business/{id}/feedback', () => {
   let server: Hapi.Server;
   let knex: Knex;
+  let trx: Knex.Transaction;
   const config = getConfig(process.env.NODE_ENV);
   const users: Hapi.Util.Dictionary<User> = {};
   const orgs: Hapi.Util.Dictionary<Organisation> = {};
@@ -17,9 +18,6 @@ describe('/community-business/{id}/feedback', () => {
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
-
-    await migrate.truncate({ client: knex });
-    await knex.seed.run();
 
     users.gordon = await Users.getOne(knex, { where: { name: 'Gordon' } });
     users.glados = await Users.getOne(knex, { where: { name: 'GlaDos' } });
@@ -32,12 +30,22 @@ describe('/community-business/{id}/feedback', () => {
     );
   });
 
+  beforeEach(async () => {
+    trx = await getTrx(knex);
+    server.app.knex = trx;
+  });
+
+  afterEach(async () => {
+    await trx.rollback();
+    server.app.knex = knex;
+  });
+
   afterAll(async () => {
     await server.shutdown(true);
   });
 
   describe('GET /community-businesses/{id}/feebdack', () => {
-    test('Get empty feedback for own org as ORG_ADMIN when no data', async () => {
+    test('Get empty feedback for own org as CB_ADMIN when no data', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback',
@@ -52,7 +60,7 @@ describe('/community-business/{id}/feedback', () => {
       expect((<any> res.result).result).toHaveLength(0);
     });
 
-    test('Get all feedback for own org as ORG_ADMIN', async () => {
+    test('Get all feedback for own org as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback',
@@ -71,7 +79,7 @@ describe('/community-business/{id}/feedback', () => {
       });
     });
 
-    test('Get all feedback between dates for own org as ORG_ADMIN', async () => {
+    test('Get all feedback between dates for own org as CB_ADMIN', async () => {
       const since = '2018-07-01T10:43:22.231';
       const until = '2018-07-31T10:43:22.231';
 
@@ -190,7 +198,7 @@ describe('/community-business/{id}/feedback', () => {
           user: users.glados,
           organisation: orgs.aperture,
           scope: ['organisations_feedback-child:read'],
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         },
       });
 
@@ -240,8 +248,8 @@ describe('/community-business/{id}/feedback', () => {
     });
 
     test('Get summary results for own organisation between date limits', async () => {
-      const since = '2018-07-01T10:43:22.231';
-      const until = '2018-07-31T10:43:22.231';
+      const since = '2018-07-01T00:00:00.000Z';
+      const until = '2018-07-31T23:59:59.999Z';
 
       const res = await server.inject({
         method: 'GET',
@@ -255,9 +263,9 @@ describe('/community-business/{id}/feedback', () => {
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual({
-        totalFeedback: 5,
+        totalFeedback: 6,
         '-1': 2,
-        0: 2,
+        0: 3,
         1: 1,
       });
     });
@@ -278,7 +286,7 @@ describe('/community-business/{id}/feedback', () => {
   });
 
   describe('POST /community-businesses/{id}/feedback', () => {
-    test('Leave feedback on own org as ORG_ADMIN', async () => {
+    test('Leave feedback on own org as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/feedback',

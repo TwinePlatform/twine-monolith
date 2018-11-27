@@ -47,7 +47,7 @@ export default [
       response: { schema: response },
     },
     handler: async (request: GetRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, pre, query: { day: _day = null } } = request;
+      const { pre, query: { day: _day = null }, server: { app: { knex } } } = request;
       const communityBusiness = <CommunityBusiness> pre.communityBusiness;
 
       const day = _day === 'today'
@@ -77,7 +77,11 @@ export default [
       response: { schema: response },
     },
     handler: async (request: PostRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, payload: visitActivity, pre: { communityBusiness } } = request;
+      const {
+        payload: visitActivity,
+        pre: { communityBusiness },
+        server: { app: { knex } },
+      } = request;
       return CommunityBusinesses.addVisitActivity(knex, visitActivity, communityBusiness);
     },
   },
@@ -104,7 +108,7 @@ export default [
       response: { schema: response },
     },
     handler: async (request: PutRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, payload, pre, params: { visitActivityId } } = request;
+      const { payload, pre, params: { visitActivityId }, server: { app: { knex } } } = request;
       const communityBusiness = <CommunityBusiness> pre.communityBusiness;
 
       const visitActivity =
@@ -145,7 +149,7 @@ export default [
       response: { schema: response },
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      const { knex, params: { visitActivityId } } = request;
+      const { params: { visitActivityId }, server: { app: { knex } } } = request;
       return CommunityBusinesses.deleteVisitActivity(knex, Number(visitActivityId));
     },
   },
@@ -171,7 +175,7 @@ export default [
       response: { schema: response },
     },
     handler: async (request: GetRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, pre, query: { day: _day = null } } = request;
+      const { pre, query: { day: _day = null }, server: { app: { knex } } } = request;
       const communityBusiness = <CommunityBusiness> pre.communityBusiness;
 
       if (!pre.isChild) {

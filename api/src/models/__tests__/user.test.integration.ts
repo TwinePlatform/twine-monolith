@@ -1,9 +1,11 @@
 import * as Knex from 'knex';
+import * as moment from 'moment';
+import { compare } from 'bcrypt';
 import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
-import { Users } from '..';
+import { Users, GenderEnum } from '..';
 
 
 describe('User Model', () => {
@@ -27,7 +29,7 @@ describe('User Model', () => {
     test('get :: no arguments gets all users', async () => {
       const users = await Users.get(trx);
 
-      expect(users.length).toBe(5);
+      expect(users.length).toBe(8);
       expect(users).toEqual(expect.arrayContaining([
         expect.objectContaining({
           name: 'Chell',
@@ -64,12 +66,21 @@ describe('User Model', () => {
     test('get :: order results', async () => {
       const users = await Users.get(trx, { order: ['name', 'desc'] });
       expect(users.map((u) => u.name).sort())
-        .toEqual(['Barney', 'Big Boss', 'Chell', 'GlaDos', 'Gordon']);
+        .toEqual([
+          'Barney',
+          'Big Boss',
+          'Chell',
+          'Emma Emmerich',
+          'GlaDos',
+          'Gordon',
+          'Raiden',
+          'Turret',
+        ]);
     });
 
     test('get :: offset results', async () => {
       const users = await Users.get(trx, { offset: 3, order: ['id', 'asc'] });
-      expect(users.length).toBe(2);
+      expect(users.length).toBe(5);
       expect(users[0].name).toBe('Barney');
     });
 
@@ -82,6 +93,7 @@ describe('User Model', () => {
       const exists = await Users.exists(knex, { where: { name: 'foo' } });
       expect(exists).toBe(false);
     });
+
   });
 
   describe('Write', () => {
@@ -98,7 +110,7 @@ describe('User Model', () => {
 
     test('update :: successful update of foreign-key column', async () => {
       const user = await Users.getOne(trx, { where: { id: 1 } });
-      const changes = { gender: 'male' };
+      const changes = { gender: GenderEnum.MALE };
       const omitter = omit(['gender', 'modifiedAt']);
 
       const updatedUser = await Users.update(trx, user, changes);
@@ -107,17 +119,30 @@ describe('User Model', () => {
       expect(updatedUser.gender).toBe('male');
     });
 
+    test('update :: can update password', async () => {
+      const user = await Users.getOne(trx, { where: { id: 1 } });
+      const changes = { password: 'Foooo!oo2o3r' };
+      const omitter = omit(['password', 'modifiedAt']);
+
+      const updatedUser = await Users.update(trx, user, changes);
+
+      expect(omitter(updatedUser)).toEqual(omitter(user));
+      expect(await compare(changes.password, updatedUser.password)).toBe(true);
+    });
+
     test('add :: create a new record using minimal information', async () => {
       const changeset = await factory.build('user');
 
       const user = await Users.add(trx, changeset);
+      const passwordCheck = await compare(changeset.password, user.password);
 
       expect(user).toEqual(expect.objectContaining({
-        ...changeset,
+        ...omit(['password'], changeset),
         gender: 'prefer not to say',
         ethnicity: 'prefer not to say',
         disability: 'prefer not to say',
       }));
+      expect(passwordCheck).toBeTruthy();
     });
 
     test('destroy :: mark existing record as deleted', async () => {
@@ -138,6 +163,10 @@ describe('User Model', () => {
             phoneNumber: null,
             postCode: null,
             qrCode: null,
+            isEmailConfirmed: false,
+            isPhoneNumberConfirmed: false,
+            isEmailConsentGranted: false,
+            isSMSConsentGranted: false,
           }
         ),
       ]));
@@ -153,6 +182,122 @@ describe('User Model', () => {
       const serialised = await Users.serialise(user);
 
       expect(serialised).toEqual(omit(['password', 'qrCode'], user));
+    });
+  });
+
+  describe('createPasswordResetToken', () => {
+    test(':: returns a token object when user is supplied', async () => {
+      const user = await Users.getOne(knex, { where: { email: '1@aperturescience.com' } });
+      const resetToken = await Users.createPasswordResetToken(knex, user);
+
+      const expiresAtIsInTheFuture = moment().diff(resetToken.expiresAt) < 0;
+      expect(resetToken).toEqual(expect.objectContaining({
+        userId: 2,
+      }));
+      expect(expiresAtIsInTheFuture).toBeTruthy();
+      expect(resetToken.token).toBeTruthy();
+    });
+
+    test(':: invalidates old reset token when creating a new one', async () => {
+      const user = await Users.getOne(knex, { where: { id: 2 } });
+
+      await Users.createPasswordResetToken(knex, user);
+      await Users.createPasswordResetToken(knex, user);
+      await Users.createPasswordResetToken(knex, user);
+      await Users.createPasswordResetToken(knex, user);
+      await Users.createPasswordResetToken(knex, user);
+
+      const rows = await knex('single_use_token')
+        .select('*')
+        .innerJoin(
+          'user_secret_reset',
+          'user_secret_reset.single_use_token_id',
+          'single_use_token.single_use_token_id')
+        .innerJoin(
+          'user_account',
+          'user_account.user_account_id',
+          'user_secret_reset.user_account_id')
+        .where({
+          'user_account.user_account_id': 2,
+          'single_use_token.used_at': null,
+          'single_use_token.deleted_at': null,
+        })
+        .andWhereRaw('single_use_token.expires_at > ?', [new Date()]);
+
+      expect(rows).toHaveLength(1);
+    });
+
+
+    test(':: throws an error when an incorrect email is supplied', async () => {
+      expect.assertions(1);
+      try {
+        const user = await Users.create({ name: 'Rat Man', email: '1999@aperturescience.com' });
+        await Users.createPasswordResetToken(knex, user);
+      } catch (err) {
+        expect(err).toBeTruthy();
+      }
+    });
+  });
+
+  describe('usePasswordResetToken', () => {
+    test('::SUCCESS - marks valid token as expired', async () => {
+      const getTokenForUser = knex('single_use_token')
+      .select('*')
+      .innerJoin(
+        'user_secret_reset',
+        'user_secret_reset.single_use_token_id',
+        'single_use_token.single_use_token_id')
+      .innerJoin(
+        'user_account',
+        'user_account.user_account_id',
+        'user_secret_reset.user_account_id')
+      .where({
+        'user_account.user_account_id': 1,
+        'single_use_token.used_at': null,
+        'single_use_token.deleted_at': null,
+      })
+      .andWhereRaw('single_use_token.expires_at > ?', [new Date()]);
+
+      const user = await Users.getOne(knex, { where: { id: 1 } });
+      const { token } = await Users.createPasswordResetToken(knex, user);
+
+      const preUseRows = await getTokenForUser;
+      expect(preUseRows).toHaveLength(1);
+
+      await Users.usePasswordResetToken(knex, user.email, token);
+
+      const postUseRows = await getTokenForUser;
+      expect(postUseRows).toHaveLength(0);
+    });
+
+    test('::FAIL - returns error for invalid email', async () => {
+      expect.assertions(1);
+      try {
+        await Users.usePasswordResetToken(knex, '1999@aperturescience.com', 'thisisnotarealtoken');
+      } catch (error) {
+        expect(error.message).toBe('E-mail not recognised');
+      }
+    });
+
+    test('::FAIL - returns error no token stored for user', async () => {
+      expect.assertions(1);
+      try {
+        await Users.usePasswordResetToken(knex, '1@aperturescience.com', 'thisisnotarealtoken');
+      } catch (error) {
+        expect(error.message).toBe('Token not recognised');
+      }
+    });
+
+    test('::FAIL - returns error for invalid token', async () => {
+      expect.assertions(1);
+      try {
+        const user = await Users.getOne(knex, { where: { id: 1 } });
+        await Users.createPasswordResetToken(knex, user);
+
+        await Users.usePasswordResetToken(knex, user.email, 'thisisnotarealtoken');
+      } catch (error) {
+        expect(error.message).toBe('Token not recognised');
+      }
     });
   });
 });

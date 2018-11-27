@@ -4,7 +4,7 @@ import { RoleEnum } from '../../types';
 
 
 export type UserCredentials = {
-  scope: string[]
+  scope?: string[]
   user?: User
   organisation?: Organisation
   role?: RoleEnum

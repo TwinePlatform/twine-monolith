@@ -3,7 +3,10 @@ import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
-import { Visitors, CommunityBusinesses } from '..';
+import { Visitors, DisabilityEnum } from '..';
+import { CommunityBusinesses } from '../community_business';
+import Roles from '../../auth/roles';
+import { RoleEnum } from '../../auth/types';
 
 
 describe('Visitor model', () => {
@@ -49,11 +52,60 @@ describe('Visitor model', () => {
       expect(exists).toBe(false);
     });
 
-    test('fromOrganisation :: gets all visitors at organisation', async () => {
+    test('fromCommunityBusiness :: gets all visitors at organisation', async () => {
       const cb = await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture Science' } });
       const visitors = await Visitors.fromCommunityBusiness(knex, cb);
       expect(visitors).toHaveLength(1);
       expect(visitors[0]).toEqual(expect.objectContaining({ name: 'Chell' }));
+    });
+
+    test('fromCommunityBusiness :: can filter fields', async () => {
+      const cb =
+        await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture Science' } });
+      const visitors =
+        await Visitors.fromCommunityBusiness(knex, cb, { fields: ['name', 'qrCode'] });
+
+      expect(visitors).toHaveLength(1);
+      expect(visitors[0]).toEqual({ name: 'Chell', qrCode: 'chellsqrcode' });
+    });
+
+    test('getWithVisits :: returns visit objects nested within visitors', async () => {
+      const apScience = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
+      const visitors = await Visitors.getWithVisits(knex, apScience, { where: { name: 'Chell' } });
+      expect(visitors).toHaveLength(1);
+      expect(visitors[0]).toEqual(expect.objectContaining({ id: 1, name: 'Chell' }));
+      expect(visitors[0].visits).toHaveLength(10);
+      expect(visitors[0].visits).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ visitActivity: 'Free Running' }),
+        ])
+      );
+    });
+
+    test('getWithVisits :: returns visitor object even if no visits', async () => {
+      // Grab organisation under test
+      const apScience = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+
+      // Add new visitor to organisation
+      const visitor = await Visitors.add(
+        trx,
+        Visitors.create({ email: 'foo@bar.com', name: 'jim' })
+      );
+      await Roles.add(trx, { role: RoleEnum.VISITOR, organisationId: 1, userId: visitor.id });
+
+      // Execute
+      const visitors = await Visitors.getWithVisits(trx, apScience, { limit: 10 });
+
+      // Assert
+      expect(visitors).toHaveLength(2);
+      expect(visitors[0]).toEqual(expect.objectContaining({ id: 1, name: 'Chell' }));
+      expect(visitors[0].visits).toHaveLength(10);
+      expect(visitors[0].visits).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ visitActivity: 'Free Running' }),
+        ])
+      );
+      expect(visitors[1]).toEqual({ ...visitor, visits: [] });
     });
   });
 
@@ -76,7 +128,7 @@ describe('Visitor model', () => {
     });
 
     test('update :: foreign key column', async () => {
-      const changeset = { disability: 'no' };
+      const changeset = { disability: DisabilityEnum.NO };
       const visitor = await Visitors.getOne(trx, { where: { id: 1 } });
 
       const updatedVisitor = await Visitors.update(trx, visitor, changeset);
@@ -87,7 +139,7 @@ describe('Visitor model', () => {
     test('update :: failed update on foreign key column', async () => {
       expect.assertions(1);
 
-      const changeset = { gender: 'non-existent' };
+      const changeset = <any> { gender: 'non-existent' };
       const visitor = await Visitors.getOne(trx, { where: { id: 1 } });
 
       try {

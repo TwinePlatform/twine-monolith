@@ -6,21 +6,19 @@ import * as JWT from 'jsonwebtoken';
 export enum Environment {
   DEVELOPMENT = 'development',
   TESTING = 'testing',
+  STAGING = 'staging',
   PRODUCTION = 'production',
 }
 
 type WebConfig = {
-  host: string,
-  port: number | string,
+  host: string
+  port: number | string
   router: { stripTrailingSlash: boolean }
   routes: {
-    cors: {
-      origin: string[],
-      credentials: boolean,
-      additionalExposedHeaders: string[],
-    },
+    cors: Hapi.RouteOptionsCors
+    security: Hapi.RouteOptionsSecureObject | boolean
   },
-  tls: null | { key: string, cert: string }
+  tls?: null | { key: string, cert: string }
 };
 
 type EmailConfig = {

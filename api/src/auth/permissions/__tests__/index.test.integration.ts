@@ -29,7 +29,7 @@ describe('Permisions Module', () => {
           .select('')
           .count();
         const query = await Permissions.grantNew(trx, {
-          resource: ResourceEnum.USER_DETAILS,
+          resource: ResourceEnum.ORG_OUTREACH,
           access: AccessEnum.WRITE,
           permissionLevel: PermissionLevelEnum.PARENT,
           role: RoleEnum.VOLUNTEER,
@@ -109,7 +109,7 @@ describe('Permisions Module', () => {
           resource: ResourceEnum.VISIT_ACTIVITIES,
           access: AccessEnum.READ,
           permissionLevel: PermissionLevelEnum.OWN,
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         });
       } catch (error) {
         expect(error.message).toBe('Permission entry is already associated to this role');
@@ -125,9 +125,10 @@ describe('Permisions Module', () => {
           resource: ResourceEnum.USER_DETAILS,
           access: AccessEnum.READ,
           permissionLevel: PermissionLevelEnum.CHILD,
-          role: RoleEnum.ORG_ADMIN,
+          role: RoleEnum.CB_ADMIN,
         });
-        expect(query).toBe(1);
+        expect(query).toBe(2);
+        // NB: two rows are deleted as there is a restricted & a full access_mode row
       } catch (error) {
         expect(error).toBeFalsy();
       }
@@ -238,12 +239,12 @@ describe('Permisions Module', () => {
         {
           access: AccessEnum.WRITE,
           resource: ResourceEnum.VOLUNTEER_LOGS,
-          permissionLevel: PermissionLevelEnum.PARENT,
+          permissionLevel: PermissionLevelEnum.OWN,
         },
         {
           access: AccessEnum.DELETE,
           resource: ResourceEnum.VOLUNTEER_LOGS,
-          permissionLevel: PermissionLevelEnum.PARENT,
+          permissionLevel: PermissionLevelEnum.OWN,
         }].map(expect.objectContaining)));
     });
 

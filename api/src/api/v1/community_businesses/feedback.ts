@@ -19,14 +19,16 @@ export default [
           scope: ['organisations_feedback-own:read'],
         },
       },
-      validate: { query: { since, until, ...query } },
+      validate: {
+        query: { since, until, ...query },
+      },
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness , assign: 'communityBusiness' },
       ],
     },
     handler: async (request: GetFeedbackRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, pre: { communityBusiness }, query } = request;
+      const { pre: { communityBusiness }, query, server: { app: { knex } } } = request;
 
       const since = new Date(query.since);
       const until = new Date(query.until);
@@ -50,7 +52,9 @@ export default [
           scope: ['organisations_feedback-child:read'],
         },
       },
-      validate: { query: { since, until } },
+      validate: {
+        query: { since, until },
+      },
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness , assign: 'communityBusiness' },
@@ -58,7 +62,7 @@ export default [
       ],
     },
     handler: async (request: GetFeedbackRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, pre: { communityBusiness, isChild }, query } = request;
+      const { pre: { communityBusiness, isChild }, query, server: { app: { knex } } } = request;
 
       if (!isChild) {
         return Boom.forbidden('Cannot access this organisation');
@@ -122,7 +126,7 @@ export default [
       ],
     },
     handler: async (request: GetFeedbackRequest, h: Hapi.ResponseToolkit) => {
-      const { knex, query } = request;
+      const { query, server: { app: { knex } } } = request;
       const communityBusiness = <CommunityBusiness> request.pre.communityBusiness;
 
       const since = new Date(query.since);

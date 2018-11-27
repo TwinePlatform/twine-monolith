@@ -35,7 +35,7 @@ describe('Pre-requisite :: is_parent_organisation', () => {
       method: 'GET',
       url: '/foo/1',
       credentials: {
-        role: RoleEnum.ORG_ADMIN,
+        role: RoleEnum.CB_ADMIN,
         user: await Users.getOne(knex, { where: { name: 'GlaDos' } }),
         organisation: await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture' } }),
         scope: [],

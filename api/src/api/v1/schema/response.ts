@@ -16,6 +16,7 @@ export type ApiResponse = {
     statusCode: number
     type: string
     message: string
+    validation?: Dictionary<string>
   }
   meta?: {
     offset: number

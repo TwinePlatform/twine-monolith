@@ -12,12 +12,25 @@ CREATE TABLE volunteer_activity (
   CONSTRAINT volunteer_activity_pk PRIMARY KEY (volunteer_activity_id)
 );
 
+CREATE TABLE volunteer_project (
+  volunteer_project_id   SERIAL NOT NULL UNIQUE,
+  volunteer_project_name CITEXT NOT NULL,
+  organisation_id        INT NOT NULL,
+  created_at             TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at            TIMESTAMP WITH TIME ZONE,
+  deleted_at             TIMESTAMP WITH TIME ZONE,
+
+  CONSTRAINT volunteer_project_pk                             PRIMARY KEY (volunteer_project_id),
+  CONSTRAINT volunteer_project_to_community_business_fk       FOREIGN KEY (organisation_id)       REFERENCES organisation ON DELETE CASCADE,
+  CONSTRAINT volunteer_project_volunteer_project_name_length  CHECK (char_length(volunteer_project_name) <= 255)
+);
 
 CREATE TABLE volunteer_hours_log (
   volunteer_hours_log_id SERIAL NOT NULL UNIQUE,
   volunteer_activity_id  INT NOT NULL,
+  volunteer_project_id   INT,
   user_account_id        INT NOT NULL,
-  organisation_id  INT NOT NULL,
+  organisation_id        INT NOT NULL,
   duration               INTERVAL DAY TO SECOND NOT NULL,
   started_at             TIMESTAMP WITH TIME ZONE NOT NULL,
   created_at             TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -25,9 +38,10 @@ CREATE TABLE volunteer_hours_log (
   deleted_at             TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT volunteer_hours_log_pk                       PRIMARY KEY (volunteer_hours_log_id),
-  CONSTRAINT volunteer_hours_log_to_volunteer_activity_fk FOREIGN KEY (volunteer_activity_id)   REFERENCES volunteer_activity,
-  CONSTRAINT volunteer_hours_log_to_user_fk               FOREIGN KEY (user_account_id)         REFERENCES user_account       ON DELETE CASCADE,
-  CONSTRAINT volunteer_hours_log_to_community_business_fk FOREIGN KEY (organisation_id)         REFERENCES organisation ON DELETE CASCADE
+  CONSTRAINT volunteer_hours_log_to_volunteer_activity_fk FOREIGN KEY (volunteer_activity_id) REFERENCES volunteer_activity,
+  CONSTRAINT volunteer_hours_log_to_user_fk               FOREIGN KEY (user_account_id)       REFERENCES user_account ON DELETE CASCADE,
+  CONSTRAINT volunteer_hours_log_to_community_business_fk FOREIGN KEY (organisation_id)       REFERENCES organisation ON DELETE CASCADE,
+  CONSTRAINT volunteer_hours_log_no_duplicate_start_times UNIQUE      (user_account_id, started_at)
 );
 
 
@@ -35,6 +49,9 @@ CREATE TABLE volunteer_hours_log (
  * Triggers
  */
 CREATE TRIGGER update_volunteer_activity_modified_at BEFORE UPDATE ON volunteer_activity
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_volunteer_project_modified_at BEFORE UPDATE ON volunteer_project
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
 
 CREATE TRIGGER update_volunteer_hours_log_modified_at BEFORE UPDATE ON volunteer_hours_log

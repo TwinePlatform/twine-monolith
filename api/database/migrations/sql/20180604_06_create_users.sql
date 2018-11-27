@@ -4,7 +4,9 @@
 CREATE TABLE gender (
   gender_id    SERIAL NOT NULL UNIQUE,
   gender_name  VARCHAR(100) NOT NULL UNIQUE,
-
+  created_at   TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at  TIMESTAMP WITH TIME ZONE,
+  deleted_at   TIMESTAMP WITH TIME ZONE,
   CONSTRAINT gender_pk PRIMARY KEY (gender_id)
 );
 
@@ -12,6 +14,9 @@ CREATE TABLE gender (
 CREATE TABLE disability (
   disability_id   SERIAL NOT NULL UNIQUE,
   disability_name VARCHAR(100) NOT NULL UNIQUE,
+  created_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at     TIMESTAMP WITH TIME ZONE,
+  deleted_at      TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT disability_pk PRIMARY KEY (disability_id)
 );
@@ -20,6 +25,9 @@ CREATE TABLE disability (
 CREATE TABLE ethnicity (
   ethnicity_id   SERIAL NOT NULL UNIQUE,
   ethnicity_name VARCHAR(100) NOT NULL UNIQUE,
+  created_at     TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at    TIMESTAMP WITH TIME ZONE,
+  deleted_at     TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT ethnicity_pk PRIMARY KEY (ethnicity_id)
 );
@@ -27,15 +35,15 @@ CREATE TABLE ethnicity (
 
 CREATE TABLE user_account (
   user_account_id                  SERIAL NOT NULL UNIQUE,
-  user_name                        VARCHAR(100) NOT NULL,
+  user_name                        CITEXT NOT NULL,
   user_password                    VARCHAR(64),
   qr_code                          VARCHAR UNIQUE,
   gender_id                        INT NOT NULL,
   disability_id                    INT NOT NULL,
   ethnicity_id                     INT NOT NULL,
-  email                            VARCHAR(100) UNIQUE,
+  email                            CITEXT UNIQUE,
   phone_number                     VARCHAR(20),
-  post_code                        VARCHAR(10),
+  post_code                        CITEXT,
   birth_year                       INT,
   is_email_confirmed               BOOLEAN NOT NULL DEFAULT false,
   is_phone_number_confirmed        BOOLEAN NOT NULL DEFAULT false,
@@ -49,13 +57,20 @@ CREATE TABLE user_account (
   CONSTRAINT user_account_to_gender_fk        FOREIGN KEY (gender_id)     REFERENCES gender,
   CONSTRAINT user_account_to_disability_fk    FOREIGN KEY (disability_id) REFERENCES disability,
   CONSTRAINT user_account_to_ethnicity_fk     FOREIGN KEY (ethnicity_id)  REFERENCES ethnicity,
-  CONSTRAINT user_account_sensible_birth_year CHECK       (birth_year IS NULL OR (birth_year > 1890 AND birth_year <= date_part('year', CURRENT_DATE)))
+  CONSTRAINT user_account_user_name_length    CHECK       (char_length(user_name) <= 100),
+  CONSTRAINT user_account_email_length        CHECK       (char_length(email) <= 100),
+  CONSTRAINT user_account_post_code_length    CHECK       (char_length(post_code) <= 10),
+  CONSTRAINT user_account_sensible_birth_year CHECK       (birth_year IS NULL OR (birth_year > 1890 AND birth_year <= date_part('year', CURRENT_DATE))),
+  CONSTRAINT user_account_password_hash       CHECK       (char_length(user_password) = 60)
 );
 
 
 CREATE TABLE access_role (
   access_role_id   SERIAL NOT NULL UNIQUE,
   access_role_name VARCHAR NOT NULL UNIQUE,
+  created_at       TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at      TIMESTAMP WITH TIME ZONE,
+  deleted_at       TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT access_role_pk PRIMARY KEY (access_role_id)
 );
@@ -73,13 +88,15 @@ CREATE TABLE permission (
 
 
 CREATE TABLE user_account_access_role (
-  user_account_id INT NOT NULL,
-  access_role_id  INT NOT NULL,
-  organisation_id INT NOT NULL,
-  created_at      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  modified_at     TIMESTAMP WITH TIME ZONE,
-  deleted_at      TIMESTAMP WITH TIME ZONE,
+  user_account_access_role_id SERIAL NOT NULL UNIQUE,
+  user_account_id             INT NOT NULL,
+  access_role_id              INT NOT NULL,
+  organisation_id             INT NOT NULL,
+  created_at                  TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  modified_at                 TIMESTAMP WITH TIME ZONE,
+  deleted_at                  TIMESTAMP WITH TIME ZONE,
 
+  CONSTRAINT user_account_access_role_pk                 PRIMARY KEY (user_account_access_role_id),
   CONSTRAINT user_account_access_role_to_user_fk         FOREIGN KEY (user_account_id) REFERENCES user_account ON DELETE CASCADE,
   CONSTRAINT user_account_access_role_to_access_role_fk  FOREIGN KEY (access_role_id)  REFERENCES access_role  ON DELETE CASCADE,
   CONSTRAINT user_account_access_role_to_organisation_fk FOREIGN KEY (organisation_id) REFERENCES organisation ON DELETE CASCADE,
@@ -118,4 +135,16 @@ CREATE TRIGGER update_user_account_modified_at BEFORE UPDATE ON user_account
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
 
 CREATE TRIGGER update_user_account_access_role_modified_at BEFORE UPDATE ON user_account_access_role
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_access_role_modified_at BEFORE UPDATE ON access_role
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_gender_modified_at BEFORE UPDATE ON gender
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_disability_modified_at BEFORE UPDATE ON disability
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
+
+CREATE TRIGGER update_ethnicity_modified_at BEFORE UPDATE ON ethnicity
   FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();

@@ -35,35 +35,22 @@ After cloning, `cd` into the repo and install dependencies:
 npm i
 ```
 
-This will install dependencies for both the server and client apps.
-
-Next...
-```
-npm i -g typescript
-```
-This will install typescript globally which will compile the project to `./built`
-
 ## Running the server
 
-### Dev Mode 
-👀 The following scripts are setup to watch changes made and automatically restart the server. Run the following two commands in separate terminals:
-
-```
-npm run watch
-```
-This will make typescript compile whenever a change is made.
-
+### Dev Mode 👀
+The following script are setup to watch changes made and automatically restart the server.
 ```
 npm run dev
 ```
-This will restart the server whenever a change is made.
+This will rebuild and restart the server whenever a change is made.
 
 ### Production
 The following scripts start the server once.
- ```
- npm run build
- npm run start
- ```
+```
+npm run build
+npm run start
+```
+
 ## Database
 
 Start the postgres server.

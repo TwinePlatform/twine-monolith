@@ -11,7 +11,8 @@ export enum RoleEnum {
   VISITOR = 'VISITOR',
   VOLUNTEER = 'VOLUNTEER',
   VOLUNTEER_ADMIN = 'VOLUNTEER_ADMIN',
-  ORG_ADMIN = 'ORG_ADMIN',
+  CB_ADMIN = 'CB_ADMIN',
+  FUNDING_BODY = 'FUNDING_BODY',
   TWINE_ADMIN = 'TWINE_ADMIN',
   SYS_ADMIN = 'SYS_ADMIN',
 }
@@ -65,6 +66,7 @@ type RoleQuery = {
   userId: number
   organisationId: number
 };
+type RolesQuery = { role: RoleEnum | RoleEnum[], userId: number, organisationId: number };
 type MoveRoleQuery = Omit<RoleQuery, 'role'> & { from: RoleEnum, to: RoleEnum };
 type UserRoleQuery = Omit<RoleQuery, 'role'>;
 
@@ -88,13 +90,13 @@ export type PermissionInterface = {
 };
 
 export type RolesInterface = {
-  add: (k: Knex, a: RoleQuery) => Promise<QueryResponse>,
+  add: (k: Knex, a: RoleQuery) => Promise<QueryResponse>
 
-  remove: (k: Knex, a: RoleQuery) => Promise<QueryResponse>,
+  remove: (k: Knex, a: RoleQuery) => Promise<QueryResponse>
 
-  move: (k: Knex, a: MoveRoleQuery) => Promise<QueryResponse>,
+  move: (k: Knex, a: MoveRoleQuery) => Promise<QueryResponse>
 
-  userHas: (k: Knex, a: RoleQuery) => Promise<boolean>,
+  userHas: (k: Knex, a: RolesQuery) => Promise<boolean>
 
-  oneFromUser: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum>,
+  oneFromUser: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum>
 };

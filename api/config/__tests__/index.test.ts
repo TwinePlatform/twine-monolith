@@ -10,12 +10,19 @@ describe('Config', () => {
       router: { stripTrailingSlash: true },
       routes: {
         cors: {
-          origin: ['http://localhost:3000'],
+          origin: ['http://localhost:3000', 'http://localhost:8100', 'http://localhost:5000'],
           credentials: true,
           additionalExposedHeaders: ['set-cookie'],
         },
+        security: {
+          hsts: {
+            includeSubdomains: true,
+            maxAge: 31536000,
+            preload: true,
+          },
+        },
       },
-      tls: null });
+    });
   });
 
   test(`getConfig | ${Environment.TESTING}`, () => {
@@ -31,8 +38,15 @@ describe('Config', () => {
           credentials: true,
           additionalExposedHeaders: ['set-cookie'],
         },
+        security: {
+          hsts: {
+            includeSubdomains: true,
+            maxAge: 31536000,
+            preload: true,
+          },
+        },
       },
-      tls: null });
+    });
   });
 
   test(`getConfig | ${Environment.PRODUCTION}`, () => {
@@ -45,12 +59,19 @@ describe('Config', () => {
       router: { stripTrailingSlash: true },
       routes: {
         cors: {
-          origin: ['https://visitor.twine-together.com'],
+          origin: ['https://admin.twine-together.com', 'https://visitor.twine-together.com'],
           credentials: true,
           additionalExposedHeaders: ['set-cookie'],
         },
+        security: {
+          hsts: {
+            includeSubdomains: true,
+            maxAge: 31536000,
+            preload: true,
+          },
+        },
       },
-      tls: null });
+    });
 
   });
 
@@ -63,12 +84,19 @@ describe('Config', () => {
       router: { stripTrailingSlash: true },
       routes: {
         cors: {
-          origin: ['http://localhost:3000'],
+          origin: ['http://localhost:3000', 'http://localhost:8100', 'http://localhost:5000'],
           credentials: true,
           additionalExposedHeaders: ['set-cookie'],
         },
+        security: {
+          hsts: {
+            includeSubdomains: true,
+            maxAge: 31536000,
+            preload: true,
+          },
+        },
       },
-      tls: null });
+    });
   });
 
   test('Config | validateConfig | valid config', () => {
@@ -85,8 +113,8 @@ describe('Config', () => {
             credentials: true,
             additionalExposedHeaders: ['set-cookie'],
           },
+          security: false,
         },
-        tls: null,
       },
       knex: {
         client: 'pg',
@@ -140,13 +168,13 @@ describe('Config', () => {
         host: 'localhost',
         port: -1,
         router: null,
-        tls: null,
         routes: {
           cors: {
             origin: ['http://lost.com'],
             credentials: true,
             additionalExposedHeaders: ['set-cookie'],
           },
+          security: false,
         },
       },
       knex: {

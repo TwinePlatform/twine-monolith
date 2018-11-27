@@ -1,67 +1,30 @@
 # Permissions
+## Resources and their ownership
+| Resource | Owner | Description |
+|----------|-------|-------------|
+| `organisations_details` | 🏢 Organisation | Core organisation details |
+| `organisations_subscriptions` | 🏢 Organisation | Organisation subscriptions |
+| `organisations_feedback` | 🏢 Organisation | Visitor feedback data |
+| `organisations_training` | 🏢 Organisation | Twine training data |
+| `organisations_invitations` | 🏢 Organisation | TBD |
+| `organisations_outreach` | 🏢 Organisation | Outreach data |
+| `organisations_volunteers` | 🏢 Organisation | Miscellaneous volunteer related metadata (e.g. projects) |
+| `user_details` | 👩🏽 User | Core user details |
+| `visit_activities` | 🏢 Organisation | Visit activities offered/listed by organisation |
+| `visit_logs` | 👩🏽 User | Records of when a user visited/used services at an organisation |
+| `volunteer_activities` | 🏢 Organisation | TBD |
+| `volunteer_logs` | 👩🏽 User | Records of when a user volunteered time at an organisation |
 
-## permission flags
-*-children - data of all child catagories  
-*-parent - data of all parent catagories  
-*-own - data directly owned by user  
+#### Notes
+* In the application, the "Organisation" is represented by `CB_ADMIN` users.
+* The resource `users_details_anonymised` is not currently used but may be needed for funding bodies to access anonymised user data.
 
-## resources
+## Permission flags
+* `*-children` - data of all child catagories
+* `*-parent` - data of all parent catagories
+* `*-own` - data directly owned by user
+* `*-sibling` - data owned by a sibling (same level) user
 
-### constants
-constants (sectors/regions/gender/outreach types/meeting types/etc)
-
-### organisations
-organisations_details  
-organisations_subscriptions  
-organisations_feedback  
-organisations_training  
-organisations_invitations  
-organisations_outreach  
-
-### users
-users_details  
-users_details_anonymised //not currently used but may be needed for funding bodies to access anonymised user datas  
-
-### volunteers
-volunteer_activities  
-volunteer_logs  
-
-### visit_activities
-visit_activites  
-visit_logs  
-
-## Permissions module
-Permissions and roles will have a many to many relationship documented in the datebase under the `role_permission` linking table.
-Roles and users will have a many to many relationship documented in the database under the `user_account_access_role` linking table.
-A module can be created for easily updating and checking these relationships.
-
-```
-const Permissions = require('./permissions');
-const Roles = require('./roles');
-const User = require('../user');
-
-// Permissions.grant :: Resource -> Operation -> PermissionLevel -> Role -> Promise ()
-// Permissions.revoke :: Resource -> Operation -> PermissionLevel -> Role -> Promise ()
-// Permissions.grantAll :: Resource -> Role -> Promise ()
-// Permissions.revokeAll :: Resource -> Role -> Promise ()
-// Permissions.roleHas :: Resource -> Operation -> PermissionLevel -> Role -> Promise Boolean
-// Permissions.userHas :: Resource -> Operation -> PermissionLevel -> User -> Promise Boolean
-
-// Roles.add :: Role -> User -> Promise ()
-// Roles.remove :: Role -> User -> Promise ()
-// Roles.move :: Role -> Role -> User -> Promise ()
-// Roles.removeUserFromAll :: User -> Promise ()
-// Roles.hasPermission :: Permission -> Promise Boolean
-// Roles.userHas :: User -> Promise Boolean
-
-// Examples:
-Permissions.grant(Resouce.ORG_DETAILS_CHILD, Permission.WRITE, Roles.ORG_ADMIN);
-Permissions.revoke(Resource.VOLUNTEER_LOGS_OWN, Permissions.DELETE, Roles.VOLUNTEER);
-
-User.byId(1).then(user => Roles.add(Roles.VOLUNTEER, user));
-User.byEmail('foo@bar.com').then(user => Roles.remove(Roles.VISITOR, user));
-
-```
 
 ## References
 

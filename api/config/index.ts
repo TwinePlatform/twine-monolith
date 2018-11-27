@@ -10,6 +10,7 @@ import configSchema from './config.schema';
 import configDefaults from './config.defaults';
 import configDevelopment from './config.development';
 import configTesting from './config.testing';
+import configStaging from './config.staging';
 import configProduction from './config.production';
 import { Config, Environment } from './types';
 import { DeepPartial } from '../src/types/internal';
@@ -21,6 +22,7 @@ import { DeepPartial } from '../src/types/internal';
 const Configs: { [k in Environment]: DeepPartial<Config> } = {
   [Environment.DEVELOPMENT]: configDevelopment,
   [Environment.TESTING]: configTesting,
+  [Environment.STAGING]: configStaging,
   [Environment.PRODUCTION]: configProduction,
 };
 
@@ -52,6 +54,9 @@ const getEnvironment = (env: string): Environment => {
 
     case Environment.PRODUCTION:
       return Environment.PRODUCTION;
+
+    case Environment.STAGING:
+      return Environment.STAGING;
 
     default:
       return Environment.DEVELOPMENT;

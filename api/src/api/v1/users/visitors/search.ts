@@ -1,13 +1,15 @@
 import * as Hapi from 'hapi';
 import * as Joi from 'joi';
 import { query, response } from '../schema';
-import { Visitors, CommunityBusiness, User } from '../../../../models';
+import { Visitors, CommunityBusiness } from '../../../../models';
 import { getCommunityBusiness } from '../../prerequisites';
-
 
 interface VisitorSearchRequest extends Hapi.Request {
   payload: {
     qrCode: string
+  };
+  pre: {
+    communityBusiness: CommunityBusiness
   };
 }
 
@@ -33,12 +35,12 @@ const routes: Hapi.ServerRoute[] = [
       ],
     },
     handler: async (request: VisitorSearchRequest, h) => {
-      const { knex, payload: { qrCode } } = request;
-      const communityBusiness = <CommunityBusiness> request.pre.communityBusiness;
+      const {
+        payload: { qrCode },
+        server: { app: { knex } },
+      } = request;
 
-      const visitors = await Visitors.fromCommunityBusiness(knex, communityBusiness);
-
-      const visitor = visitors.find((v: User) => v.qrCode === qrCode);
+      const visitor = await Visitors.getOne(knex, { where: { qrCode } });
 
       return visitor ? Visitors.serialise(visitor) : null;
     },

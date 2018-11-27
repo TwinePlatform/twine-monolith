@@ -13,15 +13,21 @@ export default {
   web: {
     host: 'localhost',
     port: 1000,
-    tls: null,
     router: {
       stripTrailingSlash: true,
     },
     routes: {
       cors: {
-        origin: ['https://visitor.twine-together.com'],
+        origin: ['*'],
         credentials: true,
         additionalExposedHeaders: ['set-cookie'],
+      },
+      security: {
+        hsts: {
+          maxAge: 365 * 24 * 60 * 60,
+          includeSubdomains: true,
+          preload: true,
+        },
       },
     },
   },
@@ -33,6 +39,16 @@ export default {
       database: null,
       user: null,
       ssl: false,
+    },
+    pool: {
+      min: 3,
+    },
+    migrations: {
+      tableName: 'knex_migrations',
+      directory: path.resolve(process.cwd(), 'database', 'migrations'),
+    },
+    seeds: {
+      directory: path.resolve(process.cwd(), 'database', 'seeds', 'testing'),
     },
   },
   auth: {

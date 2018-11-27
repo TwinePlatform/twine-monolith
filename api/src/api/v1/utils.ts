@@ -3,11 +3,23 @@
  */
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
+import * as Joi from 'joi';
 import { ApiResponse } from './schema/response';
 
 
 /*
- * We only choose to re-format the boom response
+ * Boom error type does not include key details
+ * added by Joi failAction validation method
+ */
+export type BoomWithValidation = Boom<any> & Joi.ValidationError;
+
+/*
+ * Catches Joi validation errors thrown from failAction and formats response
+ *
+ * Note joi is configured to fail on first validation error
+ * so 'details' only has one element
+ *
+ *  We only choose to re-format the boom response
  * in order to get rid of the strange artefact of having
  * an `error.error` attribute.
  *
@@ -15,13 +27,31 @@ import { ApiResponse } from './schema/response';
  * but the compiler complains because it can't infer the
  * correct keys
  */
-export const formatBoom = ({ output: { payload } }: Boom<any>): ApiResponse => ({
-  error: {
-    statusCode: payload.statusCode,
-    type: payload.error,
-    message: payload.message,
-  },
-});
+
+export const formatBoom = (error: BoomWithValidation): ApiResponse => {
+  const { name, details, output: { payload } } = error;
+
+  if (name === 'ValidationError') {
+    const message = details[0].message;
+    const [, messageTopic, messageError] = message.match(/^\"([^"]+)\" (.*)/);
+    return {
+      error: {
+        statusCode: payload.statusCode,
+        type: payload.error,
+        message,
+        validation: { [messageTopic]: messageError },
+      },
+    };
+  } else {
+    return {
+      error: {
+        statusCode: payload.statusCode,
+        type: payload.error,
+        message: payload.message,
+      },
+    };
+  }
+};
 
 /*
  * If the response data is "raw", it is wrapped appropriately.

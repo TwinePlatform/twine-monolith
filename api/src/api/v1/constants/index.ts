@@ -19,12 +19,15 @@ const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
       validate: { query },
       response: { schema: response },
     },
-    handler: async ({ knex }: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      const query = await knex(tableName)
+    handler: async ({ server: { app: { knex } } }: Hapi.Request, h: Hapi.ResponseToolkit) => {
+      const rows = await knex(tableName)
         .select()
         .orderBy(`${resourceName}_name`);
 
-      return query.map((row: any) => row[`${resourceName}_name`]);
+      return rows.map((row: any) => ({
+        id: row[`${tableName}_id`],
+        name: row[`${resourceName}_name`],
+      }));
     },
   };
 };
@@ -38,6 +41,6 @@ export default [
   'community_business_sector',
   'community_business_region',
   'visit_activity_category',
-  'volunteer_activity_category',
+  'volunteer_activity',
 ]
   .map(createConstantRoute);

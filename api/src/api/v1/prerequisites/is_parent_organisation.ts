@@ -1,5 +1,5 @@
 /*
- * "organisation_details-parent" route pre-requisite
+ * "organisations_details-parent" route pre-requisite
  *
  * Determines if the authenticated user is trying to access an organisation
  * which is actually a "parent" entity.
@@ -19,13 +19,13 @@
  */
 import * as Hapi from 'hapi';
 import { Organisation, CommunityBusiness } from '../../../models';
-import { OrganisationRequest } from '../types';
+import { GetCommunityBusinessRequest } from '../types';
 import getOrganisation from './get_organisation';
 import { RoleEnum } from '../../../auth/types';
 import Roles from '../../../auth/roles';
 
 
-const getOrg = async (request: OrganisationRequest, h: Hapi.ResponseToolkit) => {
+const getOrg = async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
   const { pre } = request;
 
   if (pre.hasOwnProperty('organisation') || pre.hasOwnProperty('communityBusiness')) {
@@ -36,7 +36,7 @@ const getOrg = async (request: OrganisationRequest, h: Hapi.ResponseToolkit) => 
   return getOrganisation(request, h);
 };
 
-export default async (request: OrganisationRequest, h: Hapi.ResponseToolkit) => {
+export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
   const { auth: { credentials }, server: { app: { knex } } } = request;
   const { user } = credentials;
 

@@ -1,7 +1,8 @@
 import * as stream from 'stream';
 import * as Shot from 'shot';
+import * as moment from 'moment';
 import axios from 'axios';
-import { Dictionary, CurriedFunction2, assoc, curry } from 'ramda';
+import { Dictionary, CurriedFunction2, assoc, curry, pick } from 'ramda';
 
 type MapKeys =
   CurriedFunction2<(a: string) => string, Dictionary<any>, Dictionary<any>>;
@@ -54,3 +55,11 @@ export const getCookie = (res: Shot.ResponseObject) => {
   const setCookie = res.headers['set-cookie'];
   return setCookie[0].split('; ')[0].split('=')[1];
 };
+
+export const ageArrayToBirthYearArray = (ageArray: number[]) =>
+  ageArray
+    .map((age: number) => moment().year() - age)
+    .reverse();
+
+export const pickOrAll = curry(
+  (xs: string[] | undefined, o: object) => xs ? pick(xs, o) : { ...o });

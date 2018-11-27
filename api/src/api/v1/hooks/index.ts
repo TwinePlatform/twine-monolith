@@ -1,6 +1,6 @@
 import * as Hapi from 'hapi';
-import onPostHandler from './onPostHandler';
-import onPreResponse from './onPreResponse';
+import onPostHandler from './on_post_handler';
+import onPreResponse from './on_pre_response';
 
 
 export default (server: Hapi.Server): void => {

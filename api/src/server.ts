@@ -7,6 +7,7 @@ import setup from './setup';
 import routes from './routes';
 import { Config } from '../config/types';
 import logger from './logger';
+const HapiQs = require('hapi-qs');
 
 
 const init = async (config: Config): Promise<Hapi.Server> => {
@@ -16,6 +17,10 @@ const init = async (config: Config): Promise<Hapi.Server> => {
   setup(server, config);
 
   await server.register([
+    {
+      plugin: HapiQs,
+      options: { payload: false },
+    },
     {
       plugin: logger,
       options: { env: config.env },

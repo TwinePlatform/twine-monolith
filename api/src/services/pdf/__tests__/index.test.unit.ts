@@ -18,7 +18,7 @@ describe('PDF Service', () => {
       expect.assertions(2);
 
       try {
-        await fromTemplate(PdfTemplateEnum.VISITOR_QR_CODE, { foo: 'nonsense' });
+        await fromTemplate(PdfTemplateEnum.VISITOR_QR_CODE, { foo: 'nonsense' } as any);
       } catch (error) {
         expect(error).toBeTruthy();
         expect(error).toEqual(expect.stringContaining('Unrecognized document structure'));

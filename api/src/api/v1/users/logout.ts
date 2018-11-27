@@ -9,11 +9,13 @@ export default [
     path: '/users/logout',
     options: {
       description: 'Logout users',
-      validate: { query },
+      validate: {
+        query,
+      },
       response: { schema: response },
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
       return Session.destroy(request, h.response({}));
     },
   },
-];
+] as Hapi.ServerRoute[];
