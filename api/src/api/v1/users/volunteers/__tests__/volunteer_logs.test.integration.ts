@@ -213,7 +213,7 @@ describe('API /users/me/volunteer-logs', () => {
 
       const log = <VolunteerLog> (<any> resPre.result).result;
 
-      const then = new Date('2018-07-23T10:33:22.122Z');
+      const then = moment();
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
@@ -239,7 +239,7 @@ describe('API /users/me/volunteer-logs', () => {
         result: expect.objectContaining({
           ...omit(['modifiedAt'], log),
           activity: 'Committee work, AGM',
-          startedAt: then,
+          startedAt: then.toDate(),
           duration: {
             hours: 1,
             minutes: 20,

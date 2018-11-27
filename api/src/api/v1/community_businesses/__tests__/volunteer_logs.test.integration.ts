@@ -5,8 +5,9 @@ import { omit } from 'ramda';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
-import { User, Users, Organisation, Organisations, VolunteerLog } from '../../../../models';
+import { User, Users, Organisation, Organisations, VolunteerLog, VolunteerLogs } from '../../../../models';
 import { RoleEnum } from '../../../../auth/types';
+import { rndPastDateThisMonth } from '../../../../../tests/utils/data';
 
 
 describe('API /community-businesses/me/volunteer-logs', () => {
@@ -252,6 +253,8 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('can fully update other users log', async () => {
+      const date = moment().startOf('month').add(3, 'days');
+
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/2',
@@ -264,7 +267,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         payload: {
           activity: 'Other',
           duration: { minutes: 17 },
-          startedAt: '2017-12-22T22:14:23.000Z',
+          startedAt: date.toISOString(),
         },
       });
 
@@ -274,12 +277,14 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           id: 2,
           activity: 'Other',
           duration: { minutes: 17 },
-          startedAt: new Date('2017-12-22T22:14:23.000Z'),
+          startedAt: date.toDate(),
         }),
       });
     });
 
     test('can update logs as CB_ADMIN', async () => {
+      const date = moment().startOf('month').add(13, 'days');
+
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/2',
@@ -292,7 +297,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         payload: {
           activity: 'Other',
           duration: { minutes: 17 },
-          startedAt: '2017-12-22T22:14:23.000Z',
+          startedAt: date.toISOString(),
         },
       });
 
@@ -302,12 +307,14 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           id: 2,
           activity: 'Other',
           duration: { minutes: 17 },
-          startedAt: new Date('2017-12-22T22:14:23.000Z'),
+          startedAt: date.toDate(),
         }),
       });
     });
 
     test('cannot update logs of different organisation', async () => {
+      const date = moment().startOf('month').add(23, 'days');
+
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/8',
@@ -320,7 +327,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         payload: {
           activity: 'Other',
           duration: { minutes: 17 },
-          startedAt: '2017-12-22T22:14:23.000Z',
+          startedAt: date.toISOString(),
         },
       });
 
@@ -781,7 +788,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('can sync multiple new logs', async () => {
-      const times = ['2018-09-22T21:02:10', '2018-09-21T21:01:12', '2018-10-02T21:02:10'];
+      const times = [
+        rndPastDateThisMonth().toISOString(),
+        rndPastDateThisMonth().toISOString(),
+        rndPastDateThisMonth().toISOString(),
+      ];
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
         { activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
@@ -816,6 +827,66 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(10);
+    });
+
+    test('can sync future logs', async () => {
+      const times = [
+        moment().add(1, 'days').toISOString(),
+        moment().add(2, 'days').toISOString(),
+        moment().add(3, 'days').toISOString(),
+      ];
+      const logs = [
+        { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
+        { activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
+        { activity: 'Shop/Sales', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
+      ];
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: {
+          scope: ['volunteer_logs-own:write'],
+          user,
+          organisation,
+          role: RoleEnum.VOLUNTEER,
+        },
+        payload: logs,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: null });
+
+      const resLogs = await server.inject({
+        method: 'GET',
+        url: '/v1/users/volunteers/me/volunteer-logs',
+        credentials: {
+          scope: ['volunteer_logs-own:read'],
+          user,
+          organisation,
+          role: RoleEnum.VOLUNTEER,
+        },
+      });
+
+      expect(resLogs.statusCode).toBe(200);
+      // Logs don't appear in GET; should only return logs up to current date
+      expect((<any> resLogs.result).result).toHaveLength(7);
+
+      const resFutureLogs = await VolunteerLogs.get(
+        server.app.knex,
+        {
+          whereBetween: {
+            startedAt: [moment().toDate(), moment().add(100, 'days').toDate()],
+          },
+          order: ['startedAt', 'asc'],
+        }
+      );
+
+      expect(resFutureLogs).toHaveLength(3);
+      expect(resFutureLogs)
+        .toEqual(
+          logs
+            .map((l) => ({ ...l, startedAt: new Date(l.startedAt) }))
+            .map(expect.objectContaining));
     });
 
     test('empty array in payload does nothing', async () => {
@@ -952,7 +1023,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('can sync a mixture of logs for self and logs for others as VOLUNTEER_ADMIN', async () => {
-      const times = ['2018-09-22T21:02:10', '2018-09-21T21:01:12', '2018-10-02T21:02:10'];
+      const times = [
+        rndPastDateThisMonth(),
+        rndPastDateThisMonth(),
+        rndPastDateThisMonth(),
+      ];
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
         { userId: 6, activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
@@ -990,7 +1065,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('cannot sync logs for others as VOLUNTEER', async () => {
-      const times = ['2018-09-22T21:02:10', '2018-09-21T21:01:12', '2018-10-02T21:02:10'];
+      const times = [
+        rndPastDateThisMonth(),
+        rndPastDateThisMonth(),
+        rndPastDateThisMonth(),
+      ];
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
         { userId: 6, activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },

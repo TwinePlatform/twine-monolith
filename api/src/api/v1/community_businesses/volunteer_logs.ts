@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
 import { omit } from 'ramda';
-import { response, id, meOrId, since, until } from './schema';
+import { response, id, meOrId, since, until, startedAt } from './schema';
 import Roles from '../../../auth/roles';
 import { RoleEnum } from '../../../auth/types';
 import { VolunteerLogs, Duration, Volunteers } from '../../../models';
@@ -116,7 +116,7 @@ const routes: Hapi.ServerRoute[] = [
             minutes: Joi.number().integer().min(0),
             seconds: Joi.number().integer().min(0),
           }),
-          startedAt: Joi.date().iso().max('now'),
+          startedAt,
           project: Joi.alt().try(Joi.string().min(2), Joi.only(null)),
         },
       },
@@ -211,7 +211,7 @@ const routes: Hapi.ServerRoute[] = [
             minutes: Joi.number().integer().min(0),
             seconds: Joi.number().integer().min(0),
           }).required(),
-          startedAt: Joi.date().iso().max('now').default(() => new Date().toISOString(), 'now'),
+          startedAt: startedAt.default(() => new Date(), 'now'),
           project: Joi.string().min(2),
         },
       },
@@ -289,7 +289,7 @@ const routes: Hapi.ServerRoute[] = [
             minutes: Joi.number().integer().min(0),
             seconds: Joi.number().integer().min(0),
           }).required(),
-          startedAt: Joi.date().iso().max('now').default(() => new Date().toISOString(), 'now'),
+          startedAt: startedAt.default(() => new Date(), 'now'),
           deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
           project: Joi.alt().try(Joi.string().min(2), Joi.only(null)),
         })).required(),

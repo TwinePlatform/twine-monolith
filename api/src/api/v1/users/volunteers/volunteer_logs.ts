@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import { response, since, until, query, id } from '../schema';
+import { response, since, until, query, id, startedAt } from '../schema';
 import { VolunteerLogs, Duration } from '../../../../models';
 import { getCommunityBusiness } from '../../prerequisites';
 import {
@@ -123,7 +123,7 @@ const routes: Hapi.ServerRoute[] = [
             minutes: Joi.number().integer().min(0),
             seconds: Joi.number().integer().min(0),
           }),
-          startedAt: Joi.date().iso().max('now'),
+          startedAt,
           project: Joi.alt().try(Joi.string().min(2), Joi.only(null)),
         },
       },

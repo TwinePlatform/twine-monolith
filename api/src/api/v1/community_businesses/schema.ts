@@ -6,7 +6,7 @@ import { query } from '../users/schema';
 import { id } from '../schema/request';
 
 
-export { query, id, gender, since, until } from '../schema/request';
+export { query, id, gender, since, until, startedAt } from '../schema/request';
 export { response } from '../schema/response';
 
 export const visitActivitiesGetQuery = {
