@@ -5,7 +5,14 @@ import { omit } from 'ramda';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
-import { User, Users, Organisation, Organisations, VolunteerLog, VolunteerLogs } from '../../../../models';
+import {
+  User,
+  Users,
+  Organisation,
+  Organisations,
+  VolunteerLog,
+  VolunteerLogs,
+} from '../../../../models';
 import { RoleEnum } from '../../../../auth/types';
 import { rndPastDateThisMonth } from '../../../../../tests/utils/data';
 
