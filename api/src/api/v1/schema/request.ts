@@ -10,6 +10,7 @@
  * Used, overridden and extended by individual routes
  */
 import * as Joi from 'joi';
+import * as moment from 'moment';
 import { Dictionary } from 'ramda';
 import { Map } from '../../../types/internal';
 
@@ -25,6 +26,50 @@ export type ApiRequestQuery = {
 };
 
 export type ApiRequestBody = Dictionary<any>;
+
+
+/*
+ * Joi Extension to support dynamic date constraints
+ */
+export const DateJoi = Joi.extend((joi: any) => ({
+  base: joi.date(),
+  name: 'dynamicdate',
+  language: {
+    max: '{{v}} must be before {{q}}',
+    min: '{{v}} must be after {{q}}',
+  },
+  rules: [
+    {
+      name: 'max',
+      params: { q: joi.func() },
+      validate (params: any, value: any, state: any, options: any) {
+        const createError = (v: string, q: string) =>
+          this.createError('dynamicdate.max', { v, q }, state, options);
+        const now = moment(params.q());
+        const when = moment(value);
+
+        return when.isValid() && now.isValid() && now.isAfter(when)
+          ? when.toDate()
+          : createError(when.toISOString(), now.toISOString());
+      },
+    },
+
+    {
+      name: 'min',
+      params: { q: joi.func() },
+      validate (params: any, value: any, state: any, options: any) {
+        const createError = (v: string, q: string) =>
+          this.createError('dynamicdate.min', { v, q }, state, options);
+        const now = moment(params.q());
+        const when = moment(value);
+
+        return when.isValid() && now.isValid() && now.isBefore(when)
+          ? when.toDate()
+          : createError(when.toISOString(), now.toISOString());
+      },
+    },
+  ],
+}));
 
 
 /*
@@ -50,3 +95,7 @@ export const id =
 
 export const since = Joi.date().iso().default('1970-01-01T00:00:00.000Z');
 export const until = Joi.date().iso().default(() => Date.now(), 'Current date');
+
+export const startedAt =
+  DateJoi.dynamicdate()
+    .min(() => moment().startOf('month'));
