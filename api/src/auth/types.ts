@@ -52,7 +52,7 @@ export enum PermissionLevelEnum {
  */
 
 type QueryResponse = Dictionary<any>;
-type PermissionTuple = {
+export type PermissionTuple = {
   permissionLevel: PermissionLevelEnum
   access: AccessEnum
   resource: ResourceEnum
@@ -61,6 +61,7 @@ type PermissionTuple = {
 type PermissionQuery = PermissionTuple & { role: RoleEnum };
 type UserPermissionQuery = Omit<PermissionQuery, 'role'> & { userId: number };
 type RolePermissionQuery = { role: RoleEnum, accessMode?: 'full' | 'restricted' };
+type RolesPermissionQuery = { roles: RoleEnum[], accessMode?: 'full' | 'restricted' };
 
 type RoleQuery = {
   role: RoleEnum
@@ -88,6 +89,8 @@ export type PermissionInterface = {
   userHas: (k: Knex, a: UserPermissionQuery) => Promise<boolean>
 
   forRole: (k: Knex, a: RolePermissionQuery) => Promise<PermissionTuple[]>
+
+  forRoles: (k: Knex, a: RolesPermissionQuery) => Promise<PermissionTuple[]>
 };
 
 export type RolesInterface = {

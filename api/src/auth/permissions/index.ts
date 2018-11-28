@@ -1,4 +1,5 @@
-import { PermissionInterface } from '../types';
+import { uniqWith, equals } from 'ramda';
+import { PermissionInterface, PermissionTuple } from '../types';
 
 
 const Permissions: PermissionInterface = {
@@ -164,7 +165,34 @@ const Permissions: PermissionInterface = {
       throw new Error('Role does not exist or has no associated permissions');
     }
     return query;
+  },
 
+  forRoles: async (client, { roles, accessMode = 'full' }) => {
+    const query = await client('permission')
+      .innerJoin(
+        'access_role_permission',
+        'permission.permission_id',
+        'access_role_permission.permission_id')
+      .select({
+        access: 'access_type',
+        resource: 'permission_entity',
+        permissionLevel: 'permission_level',
+      })
+      .whereIn(
+        'access_role_permission.access_role_id',
+        client('access_role')
+          .select('access_role_id')
+          .whereIn('access_role_name', roles)
+      )
+      .andWhere({
+        ['access_role_permission.access_mode']: accessMode,
+      });
+
+    if (query.length === 0) {
+      throw new Error('Role does not exist or has no associated permissions');
+    }
+
+    return uniqWith(equals, query) as PermissionTuple[];
   },
 };
 

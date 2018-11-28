@@ -261,4 +261,118 @@ describe('Permisions Module', () => {
       }
     });
   });
+
+  describe('::forRoles', () => {
+    test('SUCCESS - returns all permissions associated with all roles', async () => {
+      const result = await Permissions.forRoles(
+        trx,
+        { roles: [RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN] }
+      );
+
+      expect(result).toHaveLength(15);
+      expect(result).toEqual(expect.arrayContaining([
+        {
+          access: AccessEnum.READ,
+          resource: ResourceEnum.ORG_DETAILS,
+          permissionLevel: PermissionLevelEnum.PARENT,
+        },
+        {
+          access: AccessEnum.READ,
+          resource: ResourceEnum.ORG_OUTREACH,
+          permissionLevel: PermissionLevelEnum.PARENT,
+        },
+        {
+          access: AccessEnum.READ,
+          resource: ResourceEnum.ORG_VOLUNTEERS,
+          permissionLevel: PermissionLevelEnum.PARENT,
+        },
+        {
+          access: AccessEnum.WRITE,
+          resource: ResourceEnum.ORG_VOLUNTEERS,
+          permissionLevel: PermissionLevelEnum.PARENT,
+        },
+        {
+          access: AccessEnum.DELETE,
+          resource: ResourceEnum.ORG_VOLUNTEERS,
+          permissionLevel: PermissionLevelEnum.PARENT,
+        },
+        {
+          access: AccessEnum.READ,
+          resource: ResourceEnum.USER_DETAILS,
+          permissionLevel: PermissionLevelEnum.OWN,
+        },
+        {
+          access: AccessEnum.WRITE,
+          resource: ResourceEnum.USER_DETAILS,
+          permissionLevel: PermissionLevelEnum.OWN,
+        },
+        {
+          access: AccessEnum.READ,
+          resource: ResourceEnum.USER_DETAILS,
+          permissionLevel: PermissionLevelEnum.SIBLING,
+        },
+        {
+          access: AccessEnum.WRITE,
+          resource: ResourceEnum.USER_DETAILS,
+          permissionLevel: PermissionLevelEnum.SIBLING,
+        },
+        {
+          access: AccessEnum.READ,
+          resource: ResourceEnum.VOLUNTEER_LOGS,
+          permissionLevel: PermissionLevelEnum.OWN,
+        },
+        {
+          access: AccessEnum.WRITE,
+          resource: ResourceEnum.VOLUNTEER_LOGS,
+          permissionLevel: PermissionLevelEnum.OWN,
+        },
+        {
+          access: AccessEnum.DELETE,
+          resource: ResourceEnum.VOLUNTEER_LOGS,
+          permissionLevel: PermissionLevelEnum.OWN,
+        },
+        {
+          access: AccessEnum.READ,
+          resource: ResourceEnum.VOLUNTEER_LOGS,
+          permissionLevel: PermissionLevelEnum.SIBLING,
+        },
+        {
+          access: AccessEnum.WRITE,
+          resource: ResourceEnum.VOLUNTEER_LOGS,
+          permissionLevel: PermissionLevelEnum.SIBLING,
+        },
+        {
+          access: AccessEnum.DELETE,
+          resource: ResourceEnum.VOLUNTEER_LOGS,
+          permissionLevel: PermissionLevelEnum.SIBLING,
+        },
+      ]));
+    });
+
+    test('ERROR - returns error if none of the roles exist', async () => {
+      expect.assertions(1);
+      try {
+        await trx('access_role')
+          .del()
+          .where({ access_role_name: RoleEnum.VOLUNTEER });
+
+        await Permissions.forRoles(trx, { roles: [RoleEnum.VOLUNTEER] });
+      } catch (error) {
+        expect(error.message).toEqual('Role does not exist or has no associated permissions');
+      }
+    });
+
+    test('ERROR - returns error if one of the roles do not exist', async () => {
+      expect.assertions(1);
+      try {
+        await trx('access_role')
+          .del()
+          .whereIn('access_role_name', [RoleEnum.VOLUNTEER, RoleEnum.CB_ADMIN]);
+
+        await Permissions.forRoles(trx, { roles: [RoleEnum.VOLUNTEER, RoleEnum.CB_ADMIN] });
+      } catch (error) {
+        expect(error.message).toEqual('Role does not exist or has no associated permissions');
+      }
+    });
+  });
 });
