@@ -54,6 +54,7 @@ describe('GET /volunteer-logs', () => {
         organisationId: 2,
         organisationName: 'Black Mesa Research',
         userId: 6,
+        userName: 'Emma Emmerich',
       },
       {
         activity: 'Committee work, AGM',
@@ -61,6 +62,7 @@ describe('GET /volunteer-logs', () => {
         organisationId: 2,
         organisationName: 'Black Mesa Research',
         userId: 6,
+        userName: 'Emma Emmerich',
       },
       {
         activity: 'Support and Care for vulnerable community members',
@@ -68,6 +70,7 @@ describe('GET /volunteer-logs', () => {
         organisationId: 2,
         organisationName: 'Black Mesa Research',
         userId: 6,
+        userName: 'Emma Emmerich',
       },
       {
         activity: 'Office support',
@@ -75,6 +78,7 @@ describe('GET /volunteer-logs', () => {
         organisationId: 1,
         organisationName: 'Aperture Science',
         userId: 6,
+        userName: 'Emma Emmerich',
       },
       {
         activity: 'Office support',
@@ -82,6 +86,7 @@ describe('GET /volunteer-logs', () => {
         organisationId: 2,
         organisationName: 'Black Mesa Research',
         userId: 6,
+        userName: 'Emma Emmerich',
       },
     ].map(expect.objectContaining)));
   });

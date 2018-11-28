@@ -32,6 +32,8 @@ export const ModelToColumn = invertObj(ColumnToModel);
 
 const optionalFields: Dictionary<string> = {
   organisationName: 'organisation.organisation_name',
+  userName: 'user_account.user_name',
+
 };
 
 const stripTablePrefix = mapKeys((s) => s.replace('volunteer_hours_log.', ''));
@@ -104,6 +106,11 @@ export const VolunteerLogs: VolunteerLogCollection = {
           'organisation',
           'volunteer_hours_log.organisation_id',
           'organisation.organisation_id'
+        )
+        .innerJoin(
+          'user_account',
+          'volunteer_hours_log.user_account_id',
+          'user_account.user_account_id'
         )
         .leftOuterJoin(
           'volunteer_project',

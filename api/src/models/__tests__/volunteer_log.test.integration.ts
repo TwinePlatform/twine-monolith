@@ -42,6 +42,15 @@ describe('VolunteerLog model', () => {
       expect(logs).toHaveLength(0);
     });
 
+    test('get :: additional fields', async () => {
+      const logs = await VolunteerLogs.get(trx, {
+        fields: ['userName', 'organisationName'],
+      });
+      expect(logs).toEqual(expect.arrayContaining(
+        [{ organisationName: 'Black Mesa Research', userName: 'Emma Emmerich' }]
+      ));
+    });
+
     test('getOne :: returns first log', async () => {
       const logs = await VolunteerLogs.getOne(trx, { order: ['startedAt', 'asc'] });
       expect(logs).toEqual(expect.objectContaining({

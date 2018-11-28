@@ -52,6 +52,7 @@ const routes: Hapi.ServerRoute[] = [
       const volunteerLogs = await VolunteerLogs.get(knex,
         { fields: [
           'userId',
+          'userName',
           'organisationId',
           'organisationName',
           'activity',
