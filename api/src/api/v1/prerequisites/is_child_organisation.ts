@@ -16,9 +16,9 @@ import { RoleEnum } from '../../../auth/types';
 
 
 export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
-  const { auth: { credentials: { role } } } = request;
+  const { auth: { credentials: { roles } } } = request;
 
-  if (role === RoleEnum.TWINE_ADMIN) {
+  if (roles.includes(RoleEnum.TWINE_ADMIN)) {
     return true;
   }
 

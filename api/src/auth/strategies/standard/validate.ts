@@ -22,25 +22,25 @@ const validateUser: ValidateUser = async (decoded, request) => {
     const [
       user,
       organisation,
-      role,
+      roles,
     ] = await Promise.all([
       Users.getOne(knex, { where: { id: userId, deletedAt: null } }),
       Organisations.getOne(knex, { where: { id: organisationId, deletedAt: null } }),
-      Roles.oneFromUser(knex, { userId, organisationId }),
+      Roles.fromUser(knex, { userId, organisationId }),
     ]);
 
-    const permissions = await Permissions.forRole(knex, { role, accessMode: privilege });
+    const permissions = await Permissions.forRoles(knex, { roles, accessMode: privilege });
     const scope = permissions.map(scopeToString);
 
     return {
       credentials: {
         user,
         organisation,
-        role,
+        roles,
         scope,
         session: decoded,
       },
-      isValid: Boolean(user && organisation && role),
+      isValid: Boolean(user && organisation && roles.length > 0),
     };
 
   } catch (error) {

@@ -32,12 +32,12 @@ import { RoleEnum } from '../../../auth/types';
 
 export default async (request: RequireSiblingPreReq, h: Hapi.ResponseToolkit) => {
   const {
-    auth: { credentials: { organisation, role } },
+    auth: { credentials: { organisation, roles } },
     server: { app: { knex } },
     params: { userId },
   } = request;
 
-  if (role === RoleEnum.TWINE_ADMIN) {
+  if (roles.includes(RoleEnum.TWINE_ADMIN)) {
     return true;
   }
 

@@ -7,7 +7,7 @@ export type UserCredentials = {
   scope?: string[]
   user?: User
   organisation?: Organisation
-  role?: RoleEnum
+  roles?: RoleEnum[]
   session?: Session
 };
 

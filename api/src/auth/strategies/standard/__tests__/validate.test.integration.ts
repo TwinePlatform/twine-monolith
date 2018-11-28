@@ -37,6 +37,26 @@ describe('Internal auth scheme', () => {
     expect(response.statusCode).toBe(401);
   });
 
+  test('FAIL - User with no role is unauthorised', async () => {
+    const token = jwt.sign({ userId: 4, organisationId: 1, privilege: 'full' }, secret);
+    const response = await server.inject({
+      method: 'GET',
+      url: '/v1/users',
+      headers: { cookie: `${cookieName}=${token}` },
+    });
+    expect(response.statusCode).toBe(401);
+  });
+
+  test('FAIL - User no role at different organisation is unauthorised', async () => {
+    const token = jwt.sign({ userId: 3, organisationId: 1, privilege: 'full' }, secret);
+    const response = await server.inject({
+      method: 'GET',
+      url: '/v1/users',
+      headers: { cookie: `${cookieName}=${token}` },
+    });
+    expect(response.statusCode).toBe(401);
+  });
+
   test('SUCCESS - Token not needed for open routes', async () => {
     const response = await server.inject({
       method: 'GET',
