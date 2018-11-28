@@ -110,7 +110,8 @@ const Roles: RolesInterface = {
           .where({
             user_account_id: userId,
             organisation_id: organisationId,
-          }),
+          })
+          .limit(1),
       });
 
     if (result.length === 0) {
@@ -118,6 +119,23 @@ const Roles: RolesInterface = {
     }
 
     return result[0].access_role_name as RoleEnum;
+  },
+
+  fromUser: async (client, { userId, organisationId }) => {
+    const result = await client('access_role')
+      .select('access_role_name')
+      .whereIn(
+        'access_role_id',
+        client('user_account_access_role')
+          .select('access_role_id')
+          .where({
+            user_account_id: userId,
+            organisation_id: organisationId,
+          })
+      )
+      .orderBy('access_role_name', 'asc');
+
+    return result.map((row: any) => row.access_role_name) as RoleEnum[];
   },
 };
 
