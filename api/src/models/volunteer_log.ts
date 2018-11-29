@@ -206,50 +206,50 @@ export const VolunteerLogs: VolunteerLogCollection = {
       .where(preProcessLog(log));
   },
 
-  async fromUser (client, user, bw = {}) {
+  async fromUser (client, user, q = {}) {
     return VolunteerLogs.get(client, {
       where: { userId: user.id, deletedAt: null },
-      whereBetween: bw.since || bw.until
+      whereBetween: q.since || q.until
         ? {
           startedAt: [
-            bw.since || new Date(0),
-            bw.until || new Date(),
+            q.since || new Date(0),
+            q.until || new Date(),
           ],
         }
         : undefined,
     });
   },
 
-  async fromCommunityBusiness (client, cb, bw = {}) {
+  async fromCommunityBusiness (client, cb, q = {}) {
     return VolunteerLogs.get(client, {
-      ...bw,
+      ...q,
       where: {
         organisationId: cb.id,
         deletedAt: null,
       },
-      whereBetween: bw.since || bw.until
+      whereBetween: q.since || q.until
         ? {
           startedAt: [
-            bw.since || new Date(0),
-            bw.until || new Date(),
+            q.since || new Date(0),
+            q.until || new Date(),
           ],
         }
         : undefined,
     });
   },
 
-  async fromUserAtCommunityBusiness (client, user, cb, bw = {}) {
+  async fromUserAtCommunityBusiness (client, user, cb, q = {}) {
     return VolunteerLogs.get(client, {
       where: {
         organisationId: cb.id,
         userId: user.id,
         deletedAt: null,
       },
-      whereBetween: bw.since || bw.until
+      whereBetween: q.since || q.until
         ? {
           startedAt: [
-            bw.since || new Date(0),
-            bw.until || new Date(),
+            q.since || new Date(0),
+            q.until || new Date(),
           ],
         }
         : undefined,

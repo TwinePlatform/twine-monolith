@@ -363,15 +363,15 @@ export type VolunteerLogCollection = Collection<VolunteerLog> & {
   fromUser: (
       k: Knex,
       u: User,
-      bw?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
+      q?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
   fromCommunityBusiness: (
       k: Knex,
       c: CommunityBusiness,
-      bw?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
+      q?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
   fromUserAtCommunityBusiness: (
       k: Knex,
       u: User, c: CommunityBusiness,
-      bw?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
+      q?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
   getProjects: (
     k: Knex,
     c: CommunityBusiness) => Promise<VolunteerProject[]>

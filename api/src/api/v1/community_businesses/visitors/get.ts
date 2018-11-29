@@ -1,12 +1,13 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import { has, pick, mergeDeepRight, omit } from 'ramda';
+import { has, mergeDeepRight, omit } from 'ramda';
 import { Visitors, User, ModelQuery } from '../../../../models';
 import { query, filterQuery, response } from '../../users/schema';
 import { meOrId, id } from '../schema';
 import { GetVisitorsRequest, GetVisitorRequest } from '../../types';
 import { getCommunityBusiness, isChildOrganisation, isChildUser } from '../../prerequisites';
+import { requestQueryToModelQuery } from '../../utils';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -37,26 +38,16 @@ const routes: Hapi.ServerRoute[] = [
     },
     handler: async (request: GetVisitorsRequest, h: Hapi.ResponseToolkit) => {
       const { query, pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
-      const { visits, filter, fields: _fields } = query;
+      const { visits, filter } = query;
 
       if (request.params.organisationId !== 'me' && !isChild) {
         return Boom.forbidden('Insufficient permissions to access this resource');
       }
 
-      const q: {
-        limit?: number,
-        offset?: number,
-        order?: [string, 'asc' | 'desc']
-      } = {
-        ...pick(['limit', 'offset'], query),
-        order: query.sort ? [query.sort, query.order || 'asc'] : undefined,
+      const modelQuery: ModelQuery<User> = {
+        ...requestQueryToModelQuery<User>(query),
+        where: { deletedAt: null },
       };
-
-      // fields
-      // TODO: Need to actually filter the object
-      const fields = <(keyof User)[]> _fields;
-
-      const modelQuery: ModelQuery<User> = { fields, ...q, where: { deletedAt: null } };
 
       // age filter
       if (filter && filter.age) {
