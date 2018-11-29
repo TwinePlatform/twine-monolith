@@ -363,15 +363,15 @@ export type VolunteerLogCollection = Collection<VolunteerLog> & {
   fromUser: (
       k: Knex,
       u: User,
-      bw?: Partial<DateModelQuery>) => Promise<VolunteerLog[]>
+      bw?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
   fromCommunityBusiness: (
       k: Knex,
       c: CommunityBusiness,
-      bw?: Partial<DateModelQuery>) => Promise<VolunteerLog[]>
+      bw?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
   fromUserAtCommunityBusiness: (
       k: Knex,
       u: User, c: CommunityBusiness,
-      bw?: Partial<DateModelQuery>) => Promise<VolunteerLog[]>
+      bw?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
   getProjects: (
     k: Knex,
     c: CommunityBusiness) => Promise<VolunteerProject[]>
@@ -406,11 +406,10 @@ type ModelQueryInvariant = {
   order: [string, 'asc' | 'desc']
 };
 
-export type ModelQuery<T> = Partial<ModelQueryInvariant & {
+export type ModelQuery<T> = Partial<ModelQueryInvariant & DateTimeQuery & {
   where: WhereQuery<T>
   whereNot: WhereQuery<T>
   whereBetween: WhereBetweenQuery<T>
   whereNotBetween: WhereBetweenQuery<T>
   fields: (keyof T)[]
 }>;
-export type DateModelQuery = DateTimeQuery & ModelQueryInvariant;

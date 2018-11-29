@@ -5,7 +5,7 @@ import { omit } from 'ramda';
 import { response, id, meOrId, since, until, startedAt } from './schema';
 import Roles from '../../../auth/roles';
 import { RoleEnum } from '../../../auth/types';
-import { VolunteerLogs, Duration, Volunteers } from '../../../models';
+import { VolunteerLogs, Duration, Volunteers, VolunteerLog } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import {
   PostMyVolunteerLogsRequest,
@@ -15,6 +15,8 @@ import {
   PutMyVolunteerLogRequest,
   GetVolunteerLogSummaryRequest,
 } from '../types';
+import { requestQueryToModelQuery } from '../utils';
+import { query } from '../users/schema';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -30,7 +32,11 @@ const routes: Hapi.ServerRoute[] = [
           scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read'],
         },
       },
-      validate: { query: { since, until } },
+      validate: {
+        query: {
+          ...query,
+          ...{ since, until }, },
+      },
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
@@ -39,15 +45,20 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: GetMyVolunteerLogsRequest, h) => {
       const {
         server: { app: { knex } },
-        query,
+        query: _query,
         pre: { communityBusiness },
       } = request;
 
-      const since = new Date(query.since);
-      const until = new Date(query.until);
+      const since = new Date(_query.since);
+      const until = new Date(_query.until);
+
+      const query = {
+        ...requestQueryToModelQuery<VolunteerLog>(_query),
+        ...{ since, until },
+      };
 
       const logs =
-        await VolunteerLogs.fromCommunityBusiness(knex, communityBusiness, { since, until });
+        await VolunteerLogs.fromCommunityBusiness(knex, communityBusiness, query);
 
       return Promise.all(logs.map(VolunteerLogs.serialise));
     },

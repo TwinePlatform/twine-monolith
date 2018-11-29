@@ -52,7 +52,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('GET /community-businesses/me/volunteer-logs', () => {
-    test('can get own organisations logs as VOLUNTEER_ADMIN', async () => {
+    test('SUCCESS - can get own organisations logs as VOLUNTEER_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
@@ -73,7 +73,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can get own organisations logs as CB_ADMIN', async () => {
+    test('SUCCESS - can get own organisations logs as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
@@ -94,7 +94,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('cannot get own organisations logs as VOLUNTEER', async () => {
+    test('ERROR - cannot get own organisations logs as VOLUNTEER', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
@@ -109,7 +109,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(403);
     });
 
-    test('can get own organisations logs between dates', async () => {
+    test('SUCCESS - can get own organisations logs between dates', async () => {
       const until = moment().utc().subtract(3, 'day');
       const res = await server.inject({
         method: 'GET',
@@ -129,10 +129,29 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           .every((d: Date) => d <= until.toDate()))
       .toBe(true);
     });
+
+    test('SUCCESS - can get select fields for own organisations logs', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: `/v1/community-businesses/me/volunteer-logs?fields[0]=userName`,
+        credentials: {
+          scope: ['volunteer_logs-sibling:read'],
+          user: volAdmin,
+          organisation,
+          role: RoleEnum.VOLUNTEER_ADMIN,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toHaveLength(8);
+      expect((<any> res.result).result).toEqual(expect.arrayContaining([
+        { userName: 'Emma Emmerich' },
+      ]));
+    });
   });
 
   describe('GET /community-businesses/me/volunteer-logs/:id', () => {
-    test('cannot get own volunteer log as VOLUNTEER', async () => {
+    test('ERROR - cannot get own volunteer log as VOLUNTEER', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/2',
@@ -147,7 +166,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(403);
     });
 
-    test('can get other volunteer\'s log as VOLUNTEER_ADMIN', async () => {
+    test('SUCCESS - can get other volunteer\'s log as VOLUNTEER_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/2',
@@ -169,7 +188,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can get other volunteer\'s log as CB_ADMIN', async () => {
+    test('SUCCESS - can get other volunteer\'s log as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/2',
@@ -191,7 +210,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('cannot get other volunteer\'s log as VOLUNTEER', async () => {
+    test('SUCCESS - cannot get other volunteer\'s log as VOLUNTEER', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/9',
@@ -206,7 +225,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(403);
     });
 
-    test('cannot get non-existent log', async () => {
+    test('ERROR - cannot get non-existent log', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/142',
@@ -221,7 +240,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(404);
     });
 
-    test('cannot get existing log from other organisation', async () => {
+    test('ERROR - cannot get existing log from other organisation', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/8',
@@ -238,7 +257,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('PUT /community-businesses/me/volunteer-logs/:id', () => {
-    test('can partially update other users log', async () => {
+    test('SUCCESS - can partially update other users log', async () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/2',
@@ -259,7 +278,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can fully update other users log', async () => {
+    test('SUCCESS - can fully update other users log', async () => {
       const date = moment().startOf('month').add(3, 'days');
 
       const res = await server.inject({
@@ -289,7 +308,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can update logs as CB_ADMIN', async () => {
+    test('SUCCESS - can update logs as CB_ADMIN', async () => {
       const date = moment().startOf('month').add(13, 'days');
 
       const res = await server.inject({
@@ -319,7 +338,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('cannot update logs of different organisation', async () => {
+    test('ERROR - cannot update logs of different organisation', async () => {
       const date = moment().startOf('month').add(23, 'days');
 
       const res = await server.inject({
@@ -343,7 +362,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('DELETE /community-businesses/me/volunteer-logs/:id', () => {
-    test('can mark other users log as deleted as VOLUNTEER_ADMIN', async () => {
+    test('SUCCESS - can mark other users log as deleted as VOLUNTEER_ADMIN', async () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/3',
@@ -372,7 +391,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(resGet.statusCode).toBe(404);
     });
 
-    test('can mark other users log as deleted as CB_ADMIN', async () => {
+    test('SUCCESS - can mark other users log as deleted as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/3',
@@ -401,7 +420,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(resGet.statusCode).toBe(404);
     });
 
-    test('cannot mark other users log as deleted as VOLUNTEER', async () => {
+    test('ERROR - cannot mark other users log as deleted as VOLUNTEER', async () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/3',
@@ -416,7 +435,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(403);
     });
 
-    test('cannot mark other users log as deleted from different organisation', async () => {
+    test('Error - cannot mark other users log as deleted from different organisation', async () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/8',
@@ -433,7 +452,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('POST /community-businesses/me/volunteer-logs', () => {
-    test('can create log for own user', async () => {
+    test('SUCCESS - can create log for own user', async () => {
       const when = new Date();
 
       const resCount1 = await server.inject({
@@ -495,7 +514,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
     });
 
-    test('creating log without start date defaults to "now"', async () => {
+    test('SUCCESS - creating log without start date defaults to "now"', async () => {
       const before = new Date();
 
       const res = await server.inject({
@@ -525,7 +544,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         .toBeLessThanOrEqual(after.valueOf());
     });
 
-    test('can create log for other user if admin at CB', async () => {
+    test('SUCCESS - can create log for other user if admin at CB', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
@@ -559,7 +578,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('cannot create log for other user if not admin at CB', async () => {
+    test('ERROR - cannot create log for other user if not admin at CB', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
@@ -578,7 +597,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(403);
     });
 
-    test('cannot create log for other organisation', async () => {
+    test('ERROR - cannot create log for other organisation', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
@@ -601,7 +620,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(400);
     });
 
-    test('non-existent activity', async () => {
+    test('ERROR - non-existent activity', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
@@ -623,7 +642,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(400);
     });
 
-    test('malformed duration', async () => {
+    test('ERROR - malformed duration', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
@@ -644,7 +663,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(400);
     });
 
-    test('negative duration', async () => {
+    test('ERROR - negative duration', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
@@ -667,7 +686,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('GET /community-businesses/me/volunteer-logs/summary', () => {
-    test('can get own summaries as VOLUNTEER', async () => {
+    test('SUCCESS - can get own summaries as VOLUNTEER', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/summary',
@@ -691,7 +710,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can get own summaries as CB_ADMIN', async () => {
+    test('SUCCESS - can get own summaries as CB_ADMIN', async () => {
       const cbAdmin = await Users.getOne(trx, { where: { name: 'Gordon' } });
 
       const res = await server.inject({
@@ -717,7 +736,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can get summaries between dates', async () => {
+    test('SUCCESS - can get summaries between dates', async () => {
       const since = moment().subtract(5, 'days');
       const res = await server.inject({
         method: 'GET',
@@ -742,7 +761,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('cannot get other orgs summaries', async () => {
+    test('ERROR - cannot get other orgs summaries', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/3/volunteer-logs/summary',
@@ -758,7 +777,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('POST /community-businesses/me/volunteer-logs/sync', () => {
-    test('can sync single new log', async () => {
+    test('SUCCESS - can sync single new log', async () => {
       const logs = [{
         activity: 'Office support',
         duration: { minutes: 20 },
@@ -794,7 +813,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect((<any> resLogs.result).result).toHaveLength(8);
     });
 
-    test('can sync multiple new logs', async () => {
+    test('SUCCESS - can sync multiple new logs', async () => {
       const times = [
         rndPastDateThisMonth().toISOString(),
         rndPastDateThisMonth().toISOString(),
@@ -836,7 +855,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect((<any> resLogs.result).result).toHaveLength(10);
     });
 
-    test('can sync future logs', async () => {
+    test('SUCCESS - can sync future logs', async () => {
       const times = [
         moment().add(1, 'days').toISOString(),
         moment().add(2, 'days').toISOString(),
@@ -896,7 +915,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
             .map(expect.objectContaining));
     });
 
-    test('empty array in payload does nothing', async () => {
+    test('SUCCESS - empty array in payload does nothing', async () => {
       const logs: any[] = [];
 
       const res = await server.inject({
@@ -929,7 +948,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect((<any> resLogs.result).result).toHaveLength(7);
     });
 
-    test('can sync existing log', async () => {
+    test('SUCCESS - can sync existing log', async () => {
       const resGet = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
@@ -980,7 +999,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
 
-    test('can sync existing log for deletion', async () => {
+    test('SUCCESS - can sync existing log for deletion', async () => {
       const resGet = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
@@ -1029,7 +1048,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
     });
 
-    test('can sync a mixture of logs for self and logs for others as VOLUNTEER_ADMIN', async () => {
+    test('SUCCESS - can sync a mix of logs for self and others as VOLUNTEER_ADMIN', async () => {
       const times = [
         rndPastDateThisMonth(),
         rndPastDateThisMonth(),
@@ -1071,7 +1090,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect((<any> resLogs.result).result).toHaveLength(11);
     });
 
-    test('cannot sync logs for others as VOLUNTEER', async () => {
+    test('ERROR - cannot sync logs for others as VOLUNTEER', async () => {
       const times = [
         rndPastDateThisMonth(),
         rndPastDateThisMonth(),
@@ -1098,7 +1117,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(403);
     });
 
-    test('fails when trying to sync logs w/ identical "startedAt" in payload', async () => {
+    test('ERROR - fails when trying to sync logs w/ identical "startedAt" in payload', async () => {
       const now = new Date().toISOString();
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: now },
@@ -1134,7 +1153,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect((<any> resLogs.result).result).toHaveLength(7);
     });
 
-    test('fails when trying to sync logs w/ same "startedAt" as existing log', async () => {
+    test('ERROR - fails when trying to sync logs w/ same "startedAt" as existing log', async () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
@@ -1170,7 +1189,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(400);
     });
 
-    test('fails when one user isn\'t a volunteer', async () => {
+    test('ERROR - fails when one user isn\'t a volunteer', async () => {
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, userId: 1 },
       ];

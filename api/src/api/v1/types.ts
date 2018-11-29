@@ -151,6 +151,7 @@ export interface GetMyVolunteerLogsRequest extends Hapi.Request {
   query: ApiRequestQuery & {
     since: string
     until: string
+    fields: (keyof VolunteerLog)[]
   };
   pre: {
     communityBusiness: CommunityBusiness

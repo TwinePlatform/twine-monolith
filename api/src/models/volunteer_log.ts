@@ -222,6 +222,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
 
   async fromCommunityBusiness (client, cb, bw = {}) {
     return VolunteerLogs.get(client, {
+      ...bw,
       where: {
         organisationId: cb.id,
         deletedAt: null,

@@ -4,7 +4,10 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
+import { omit } from 'ramda';
 import { ApiResponse } from './schema/response';
+import { ModelQuery } from '../../models';
+import { ApiRequestQuery } from './users/schema';
 
 
 /*
@@ -72,4 +75,26 @@ export const formatResponse = (res: Hapi.ResponseObject): ApiResponse => {
   return {
     result: r,
   };
+};
+
+export const requestQueryToModelQuery = <T>(requestQuery: ApiRequestQuery): ModelQuery<T> => {
+  let modelQuery: ModelQuery<T> = {
+    ...omit(['sort', 'order', 'fields'], requestQuery),
+  };
+
+  if (requestQuery.sort) {
+    modelQuery = {
+      ...modelQuery,
+      order: requestQuery.sort ? [requestQuery.sort, requestQuery.order || 'asc'] : undefined,
+    };
+  }
+
+  if (requestQuery.fields) {
+    modelQuery = {
+      ...modelQuery,
+      fields:  <(keyof T)[]> requestQuery.fields,
+    };
+  }
+
+  return modelQuery;
 };
