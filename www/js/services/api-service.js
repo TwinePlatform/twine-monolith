@@ -158,9 +158,13 @@
 						},
 
 						getAdminLogs : function () {
+							var qs = ['id', 'userId', 'userName', 'duration', 'project', 'activity', 'startedAt', 'modifiedAt', 'createdAt', 'deletedAt', 'organisationId', 'organisationName']
+								.map(function (s) { return 'fields[]=' + s; })
+								.join('&');
+
 							return $http({
 								method: 'GET',
-								url: $$api.url('community-businesses/me/volunteer-logs'),
+								url: $$api.url('community-businesses/me/volunteer-logs?' + qs),
 								headers: { Authorization: $$api.token.get() },
 								transformResponse: function (r, h, s) {
 									return transformLogResponse(transformResponse(r, h, s), h, s)
