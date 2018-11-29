@@ -11,13 +11,13 @@
         </div>
 
         <ion-list>
-            <ion-item style="margin-bottom: 10px" class="item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deleted_at }" ng-repeat="log in logs | orderBy: ['-date_of_log','-updated_at']">
+            <ion-item style="margin-bottom: 10px" class="item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deletedAt }" ng-repeat="log in logs | orderBy: ['-date_of_log','-modifiedAt']">
                 <i class="icon" ng-class="{ 'ion-alert': log.needs_pushing}">
                     <span ng-if="log.needs_pushing">Not pushed</span>
                 </i>
                 <div style="max-width: 70%;float: left; overflow: hidden">
                 <h1 ng-bind-html="log.duration | hoursAndMinutesAsString"></h1>
-                    <h3 style="color: black" ng-if="isAdmin"> {{log.user.name}} <span style="font-size: 10px; color: gray">{{log.userId === currentUser.id ? 'me': ''}}</span></h3>
+                <h3 style="color: black" ng-if="isAdmin"> {{log.userName}} <span style="font-size: 10px; color: gray">{{log.userId === currentUser.id ? 'me': ''}}</span></h3>
                 <p>{{ log.date_of_log.split(' ')[0] | date:'d MMM yyyy'}} @ {{ log.activity }}</p>
                 <p ng-if="log.project">{{ log.project }}</p>
                 </div>
