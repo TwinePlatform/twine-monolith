@@ -324,7 +324,10 @@
 						}
 
 						if (payloads) {
-							payloads.forEach(function (log) { $scope.newLogOffline(log, true, 'Log saved offline.'); });
+							payloads.forEach(function (log, i) {
+								var message = (i === payloads.length - 1) ? 'Log saved offline.' : undefined;
+								$scope.newLogOffline(log, true, message);
+							});
 						} else {
 							// push to offline data, mark as 'needs_pushing'
 							$scope.newLogOffline(payload, true, 'Log saved offline.');
