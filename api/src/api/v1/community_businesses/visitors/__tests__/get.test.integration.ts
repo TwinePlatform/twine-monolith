@@ -87,6 +87,24 @@ describe('API /community-businesses/{id}/visitors', () => {
       expect((<any> res.result).result[0].visits).toHaveLength(10);
     });
 
+    test('filtered query without visits', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors?'
+          + 'fields[]=name'
+          + '&filter[age][]=0'
+          + '&filter[age][]=20',
+        credentials,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.arrayContaining([{ name: 'Turret' }]),
+        meta: { total: 1 },
+      });
+      expect((<any> res.result).result).toHaveLength(1);
+    });
+
     test('query child organisation as TWINE_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
