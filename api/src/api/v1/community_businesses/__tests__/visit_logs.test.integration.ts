@@ -5,6 +5,7 @@ import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
 import { RoleEnum } from '../../../../auth/types';
 import { getTrx } from '../../../../../tests/utils/database';
+import { Credentials } from '../../../../auth/strategies/standard';
 
 
 describe('API v1 :: Community Businesses :: Visit Logs', () => {
@@ -13,6 +14,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
   let trx: Knex.Transaction;
   let cbAdmin: User;
   let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -21,6 +23,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
 
     cbAdmin = await Users.getOne(server.app.knex, { where: { id: 2 } });
     organisation = await Organisations.getOne(server.app.knex, { where: { id: 1 } });
+    credentials = await Credentials.get(server.app.knex, cbAdmin, organisation);
   });
 
   afterAll(async () => {
@@ -46,12 +49,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
           userId: 1,
           visitActivityId: 2,
         },
-        credentials: {
-          user: cbAdmin,
-          organisation,
-          scope: ['visit_logs-child:write'],
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -68,12 +66,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
           userId: 2,
           visitActivityId: 2,
         },
-        credentials: {
-          user: cbAdmin,
-          organisation,
-          scope: ['visit_logs-child:write'],
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(403);
@@ -89,12 +82,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
           userId: 1,
           visitActivityId: 200,
         },
-        credentials: {
-          user: cbAdmin,
-          organisation,
-          scope: ['visit_logs-child:write'],
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(400);
@@ -108,12 +96,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-logs',
-        credentials: {
-          user: cbAdmin,
-          organisation,
-          scope: ['visit_logs-child:read'],
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -135,12 +118,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/visit-logs?'
         + '&filter[visitActivity]=Wear%20Pink',
-        credentials: {
-          user: cbAdmin,
-          organisation,
-          scope: ['visit_logs-child:read'],
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);

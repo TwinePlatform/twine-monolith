@@ -3,8 +3,8 @@ import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { Users, Organisations, LinkedFeedback, User, Organisation } from '../../../../models';
-import { RoleEnum } from '../../../../auth/types';
 import { getTrx } from '../../../../../tests/utils/database';
+import { Credentials } from '../../../../auth/strategies/standard';
 
 
 describe('/community-business/{id}/feedback', () => {
@@ -14,6 +14,7 @@ describe('/community-business/{id}/feedback', () => {
   const config = getConfig(process.env.NODE_ENV);
   const users: Hapi.Util.Dictionary<User> = {};
   const orgs: Hapi.Util.Dictionary<Organisation> = {};
+  const creds: Hapi.Util.Dictionary<Hapi.AuthCredentials> = {};
 
   beforeAll(async () => {
     server = await init(config);
@@ -28,6 +29,10 @@ describe('/community-business/{id}/feedback', () => {
       knex,
       { where: { name: 'Black Mesa Research' } }
     );
+
+    creds.gordon = await Credentials.get(knex, users.gordon, orgs.blackMesa);
+    creds.glados = await Credentials.get(knex, users.glados, orgs.aperture);
+    creds.bigboss = await Credentials.get(knex, users.bigboss, orgs.aperture);
   });
 
   beforeEach(async () => {
@@ -49,11 +54,7 @@ describe('/community-business/{id}/feedback', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback',
-        credentials: {
-          user: users.gordon,
-          organisation: orgs.blackMesa,
-          scope: ['organisations_feedback-own:read'],
-        },
+        credentials: creds.gordon,
       });
 
       expect(res.statusCode).toBe(200);
@@ -64,11 +65,7 @@ describe('/community-business/{id}/feedback', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback',
-        credentials: {
-          user: users.glados,
-          organisation: orgs.aperture,
-          scope: ['organisations_feedback-own:read'],
-        },
+        credentials: creds.glados,
       });
 
       expect(res.statusCode).toBe(200);
@@ -86,11 +83,7 @@ describe('/community-business/{id}/feedback', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/community-businesses/me/feedback?since=${since}&until=${until}`,
-        credentials: {
-          user: users.glados,
-          organisation: orgs.aperture,
-          scope: ['organisations_feedback-own:read'],
-        },
+        credentials: creds.glados,
       });
 
       expect(res.statusCode).toBe(200);
@@ -108,11 +101,7 @@ describe('/community-business/{id}/feedback', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/community-businesses/me/feedback?since=${since}&until=${until}`,
-        credentials: {
-          user: users.glados,
-          organisation: orgs.aperture,
-          scope: ['organisations_feedback-own:read'],
-        },
+        credentials: creds.glados,
       });
       expect(res.statusCode).toBe(400);
     });
@@ -121,11 +110,7 @@ describe('/community-business/{id}/feedback', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/2/feedback',
-        credentials: {
-          user: users.bigBoss,
-          role: RoleEnum.TWINE_ADMIN,
-          scope: ['organisations_feedback-child:read'],
-        },
+        credentials: creds.bigboss,
       });
 
       expect(res.statusCode).toBe(200);
@@ -136,11 +121,7 @@ describe('/community-business/{id}/feedback', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/1/feedback',
-        credentials: {
-          user: users.bigBoss,
-          role: RoleEnum.TWINE_ADMIN,
-          scope: ['organisations_feedback-child:read'],
-        },
+        credentials: creds.bigboss,
       });
 
       expect(res.statusCode).toBe(200);
@@ -158,11 +139,7 @@ describe('/community-business/{id}/feedback', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/community-businesses/1/feedback?since=${since}&until=${until}`,
-        credentials: {
-          user: users.glados,
-          role: RoleEnum.TWINE_ADMIN,
-          scope: ['organisations_feedback-child:read'],
-        },
+        credentials: creds.bigboss,
       });
 
       expect(res.statusCode).toBe(200);
@@ -180,11 +157,7 @@ describe('/community-business/{id}/feedback', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/community-businesses/1/feedback?since=${since}&until=${until}`,
-        credentials: {
-          user: users.glados,
-          organisation: orgs.aperture,
-          scope: ['organisations_feedback-child:read'],
-        },
+        credentials: creds.bigboss,
       });
 
       expect(res.statusCode).toBe(400);
@@ -194,12 +167,7 @@ describe('/community-business/{id}/feedback', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/community-businesses/1/feedback`,
-        credentials: {
-          user: users.glados,
-          organisation: orgs.aperture,
-          scope: ['organisations_feedback-child:read'],
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials: creds.glados,
       });
 
       expect(res.statusCode).toBe(403);
@@ -211,11 +179,7 @@ describe('/community-business/{id}/feedback', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback/aggregates',
-        credentials: {
-          user: users.gordon,
-          organisation: orgs.blackMesa,
-          scope: ['organisations_feedback-own:read'],
-        },
+        credentials: creds.gordon,
       });
 
       expect(res.statusCode).toBe(200);
@@ -231,11 +195,7 @@ describe('/community-business/{id}/feedback', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback/aggregates',
-        credentials: {
-          user: users.glados,
-          organisation: orgs.aperture,
-          scope: ['organisations_feedback-own:read'],
-        },
+        credentials: creds.glados,
       });
 
       expect(res.statusCode).toBe(200);
@@ -254,11 +214,7 @@ describe('/community-business/{id}/feedback', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/community-businesses/me/feedback/aggregates?since=${since}&until=${until}`,
-        credentials: {
-          user: users.glados,
-          organisation: orgs.aperture,
-          scope: ['organisations_feedback-own:read'],
-        },
+        credentials: creds.glados,
       });
 
       expect(res.statusCode).toBe(200);
@@ -274,11 +230,7 @@ describe('/community-business/{id}/feedback', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback/aggregates?since=nope&until=never',
-        credentials: {
-          user: users.glados,
-          organisation: orgs.aperture,
-          scope: ['organisations_feedback-own:read'],
-        },
+        credentials: creds.glados,
       });
 
       expect(res.statusCode).toBe(400);
@@ -291,11 +243,7 @@ describe('/community-business/{id}/feedback', () => {
         method: 'POST',
         url: '/v1/community-businesses/me/feedback',
         payload: { feedbackScore: 1 },
-        credentials: {
-          user: users.gordon,
-          organisation: orgs.blackMesa,
-          scope: ['organisations_feedback-own:write'],
-        },
+        credentials: creds.gordon,
       });
 
       expect(res.statusCode).toBe(200);

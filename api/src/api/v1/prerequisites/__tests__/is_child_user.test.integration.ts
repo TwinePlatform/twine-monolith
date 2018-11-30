@@ -34,8 +34,11 @@ describe('Pre-requisite :: is_child_user', () => {
       method: 'GET',
       url: '/foo/1',
       credentials: {
-        user: await Users.getOne(knex, { where: { name: 'Big Boss' } }),
-        role: RoleEnum.TWINE_ADMIN,
+        user: {
+          user: await Users.getOne(knex, { where: { name: 'Big Boss' } }),
+          organisation: await Organisations.getOne(knex, { where: { name: 'Aperture Science' } }),
+          roles: [RoleEnum.TWINE_ADMIN],
+        },
         scope: [],
       },
     });
@@ -49,9 +52,11 @@ describe('Pre-requisite :: is_child_user', () => {
       method: 'GET',
       url: '/foo/1',
       credentials: {
-        user: await Users.getOne(knex, { where: { name: 'GlaDos' } }),
-        organisation: await Organisations.getOne(knex, { where: { name: 'Aperture Science' } }),
-        role: RoleEnum.CB_ADMIN,
+        user: {
+          user: await Users.getOne(knex, { where: { name: 'GlaDos' } }),
+          organisation: await Organisations.getOne(knex, { where: { name: 'Aperture Science' } }),
+          roles: [RoleEnum.CB_ADMIN],
+        },
         scope: [],
       },
     });
@@ -65,9 +70,12 @@ describe('Pre-requisite :: is_child_user', () => {
       method: 'GET',
       url: '/foo/6',
       credentials: {
-        user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
-        organisation: await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } }),
-        role: RoleEnum.CB_ADMIN,
+        user: {
+          user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
+          organisation: await Organisations.getOne(
+            knex, { where: { name: 'Black Mesa Research' } }),
+          roles: [RoleEnum.CB_ADMIN],
+        },
         scope: [],
       },
     });
@@ -81,9 +89,12 @@ describe('Pre-requisite :: is_child_user', () => {
       method: 'GET',
       url: '/foo/1',
       credentials: {
-        user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
-        organisation: await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } }),
-        role: RoleEnum.CB_ADMIN,
+        user: {
+          user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
+          organisation: await Organisations.getOne(
+            knex, { where: { name: 'Black Mesa Research' } }),
+          roles: [RoleEnum.CB_ADMIN],
+        },
         scope: [],
       },
     });

@@ -3,8 +3,8 @@ import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
-import { RoleEnum } from '../../../../auth/types';
 import { getTrx } from '../../../../../tests/utils/database';
+import { Credentials } from '../../../../auth/strategies/standard';
 
 
 describe('API v1 :: Community Businesses :: Visit Activities', () => {
@@ -12,15 +12,27 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
   let knex: Knex;
   let trx: Knex.Transaction;
   let user: User;
+  let wrongUser: User;
+  let twAdmin: User;
   let organisation: Organisation;
+  let otherOrganisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
+  let twAdminCreds: Hapi.AuthCredentials;
+  let otherCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
 
-    user = await Users.getOne(server.app.knex, { where: { id: 1 } });
+    user = await Users.getOne(server.app.knex, { where: { name: 'GlaDos' } });
+    wrongUser = await Users.getOne(server.app.knex, { where: { name: 'Gordon' } });
+    twAdmin = await Users.getOne(server.app.knex, { where: { name: 'Big Boss' } });
     organisation = await Organisations.getOne(server.app.knex, { where: { id: 1 } });
+    otherOrganisation = await Organisations.getOne(server.app.knex, { where: { id: 2 } });
+    credentials = await Credentials.get(server.app.knex, user, organisation);
+    otherCreds = await Credentials.get(server.app.knex, wrongUser, otherOrganisation);
+    twAdminCreds = await Credentials.get(server.app.knex, twAdmin, organisation);
   });
 
   afterAll(async () => {
@@ -42,11 +54,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-activities',
-        credentials: {
-          user,
-          organisation,
-          scope: ['visit_activities-own:read'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -84,10 +92,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/1/visit-activities',
-        credentials: {
-          role: RoleEnum.TWINE_ADMIN,
-          scope: ['visit_activities-child:read'],
-        },
+        credentials: twAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -125,11 +130,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/1/visit-activities',
-        credentials: {
-          user,
-          organisation: await Organisations.getOne(server.app.knex, { where: { id: 2 } }),
-          scope: ['visit_activities-child:read'],
-        },
+        credentials: otherCreds,
       });
 
       expect(res.statusCode).toBe(403);
@@ -142,11 +143,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
         method: 'PUT',
         url: '/v1/community-businesses/me/visit-activities/2',
         payload: { monday: true, category: 'Sports' },
-        credentials: {
-          user,
-          organisation,
-          scope: ['visit_activities-own:write'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -171,11 +168,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
         method: 'PUT',
         url: '/v1/community-businesses/me/visit-activities/2',
         payload: { monday: true },
-        credentials: {
-          user,
-          organisation: await Organisations.getOne(server.app.knex, { where: { id: 2 } }),
-          scope: ['visit_activities-own:write'],
-        },
+        credentials: otherCreds,
       });
 
       expect(res.statusCode).toBe(403);
@@ -191,11 +184,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
           name: 'Base Jumping',
           category: 'Adult skills building',
         },
-        credentials: {
-          user,
-          organisation,
-          scope: ['visit_activities-own:write'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -221,11 +210,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/visit-activities/1',
-        credentials: {
-          user,
-          organisation,
-          scope: ['visit_activities-own:delete'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -234,7 +219,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       const check = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-activities',
-        credentials: { user, organisation, scope: ['visit_activities-own:read'] },
+        credentials,
       });
 
       expect(

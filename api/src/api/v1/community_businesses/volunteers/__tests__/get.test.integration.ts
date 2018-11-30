@@ -2,8 +2,9 @@ import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
-import { User, CommunityBusinesses, Organisation, Volunteers } from '../../../../../models';
+import { User, CommunityBusinesses, Organisation, Volunteers, Users } from '../../../../../models';
 import { RoleEnum } from '../../../../../auth/types';
+import { Credentials } from '../../../../../auth/strategies/standard';
 
 
 describe('API /community-businesses/{id}/volunteers', () => {
@@ -12,6 +13,8 @@ describe('API /community-businesses/{id}/volunteers', () => {
   let organisation: Organisation;
   let volunteerAdmin: User;
   let orgAdmin: User;
+  let vCreds: Hapi.AuthCredentials;
+  let aCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -19,7 +22,10 @@ describe('API /community-businesses/{id}/volunteers', () => {
     knex = server.app.knex;
     organisation = await CommunityBusinesses.getOne(knex, { where: { id: 2 } });
     volunteerAdmin = await Volunteers.getOne(knex, { where: { id: 7 } });
-    orgAdmin = await Volunteers.getOne(knex, { where: { id: 5 } });
+    orgAdmin = await Users.getOne(knex, { where: { name: 'Gordon' } });
+
+    vCreds = await Credentials.get(knex, volunteerAdmin, organisation);
+    aCreds = await Credentials.get(knex, orgAdmin, organisation);
   });
 
   afterAll(async () => {
@@ -31,11 +37,7 @@ describe('API /community-businesses/{id}/volunteers', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers',
-        credentials: {
-          organisation,
-          volunteerAdmin,
-          scope: ['user_details-sibling:read'],
-        },
+        credentials: vCreds,
       });
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(2);
@@ -50,11 +52,7 @@ describe('API /community-businesses/{id}/volunteers', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers?offset=1',
-        credentials: {
-          organisation,
-          user: volunteerAdmin,
-          scope: ['user_details-sibling:read'],
-        },
+        credentials: vCreds,
       });
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(1);
@@ -65,11 +63,7 @@ describe('API /community-businesses/{id}/volunteers', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers',
-        credentials: {
-          organisation,
-          user: orgAdmin,
-          scope: ['user_details-child:read'],
-        },
+        credentials: aCreds,
       });
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(2);
@@ -84,11 +78,7 @@ describe('API /community-businesses/{id}/volunteers', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/1/volunteers',
-        credentials: {
-          organisation,
-          user: volunteerAdmin,
-          scope: ['user_details-child:read'],
-        },
+        credentials: vCreds,
       });
       expect(res.statusCode).toBe(403);
     });
@@ -97,11 +87,7 @@ describe('API /community-businesses/{id}/volunteers', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/1/volunteers',
-        credentials: {
-          organisation,
-          user: orgAdmin,
-          scope: ['user_details-child:read'],
-        },
+        credentials: aCreds,
       });
       expect(res.statusCode).toBe(403);
     });
@@ -111,8 +97,12 @@ describe('API /community-businesses/{id}/volunteers', () => {
         method: 'GET',
         url: '/v1/community-businesses/2/volunteers',
         credentials: {
-          role: RoleEnum.TWINE_ADMIN,
           scope: ['user_details-child:read'],
+          user: {
+            roles: [RoleEnum.TWINE_ADMIN],
+            user: await Users.getOne(knex, { where: { name: 'Big Boss' } }),
+            organisation,
+          },
         },
       });
       expect(res.statusCode).toBe(200);

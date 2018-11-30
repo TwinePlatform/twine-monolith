@@ -3,14 +3,17 @@ import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../../models';
-import { RoleEnum } from '../../../../../auth/types';
+import { Credentials } from '../../../../../auth/strategies/standard';
 
 
 describe('API /community-businesses/{id}/visitors', () => {
   let server: Hapi.Server;
   let knex: Knex;
   let user: User;
+  let admin: User;
   let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
+  let adminCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -18,7 +21,10 @@ describe('API /community-businesses/{id}/visitors', () => {
     knex = server.app.knex;
 
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
+    admin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
     organisation = await Organisations.getOne(knex, { where: { id: 1 } });
+    credentials = await Credentials.get(knex, user, organisation);
+    adminCreds = await Credentials.get(knex, admin, organisation);
   });
 
   afterAll(async () => {
@@ -30,11 +36,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors',
-        credentials: {
-          organisation,
-          user,
-          scope: ['user_details-child:read'],
-        },
+        credentials,
       });
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(1);
@@ -50,11 +52,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors?fields[]=name&filter[gender]=male',
-        credentials: {
-          organisation,
-          user,
-          scope: ['user_details-child:read'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -69,11 +67,7 @@ describe('API /community-businesses/{id}/visitors', () => {
           + '&filter[age][]=17'
           + '&filter[age][]=60'
           + '&visits=true',
-        credentials: {
-          organisation,
-          user,
-          scope: ['user_details-child:read'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -97,10 +91,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/1/visitors',
-        credentials: {
-          role: RoleEnum.TWINE_ADMIN,
-          scope: ['user_details-child:read'],
-        },
+        credentials: adminCreds,
       });
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(1);
@@ -116,11 +107,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors?fields[]=name&filter[name]=Chell',
-        credentials: {
-          organisation,
-          user,
-          scope: ['user_details-child:read'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -133,11 +120,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors/1?visits=false',
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:read'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -153,11 +136,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors/1?visits=true',
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:read'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -178,11 +157,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors/4',
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:read'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(403);

@@ -2,18 +2,37 @@ import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
-import { Users, Organisations } from '../../../../models';
-import { RoleEnum } from '../../../../auth/types';
+import { User, Users, Organisations, Organisation } from '../../../../models';
+import { Credentials } from '../../../../auth/strategies/standard';
 
 
 describe('GET /community-businesses', () => {
   let server: Hapi.Server;
   let knex: Knex;
+  let twAdmin: User;
+  let cbAdmin: User;
+  let volunteer: User;
+  let organisation: Organisation;
+  let twAdminCreds: Hapi.AuthCredentials;
+  let cbAdminCreds: Hapi.AuthCredentials;
+  let volunteerCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
+
+    twAdmin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
+    cbAdmin = await Users.getOne(knex, { where: { name: 'Gordon' } });
+    volunteer = await Users.getOne(knex, { where: { name: 'Emma Emmerich' } });
+    organisation = await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } });
+    // This is only needed b/c the TWINE_ADMIN is registered to a ORG
+    // In fact, TWINE_ADMIN users shouldn't be registered against any ORG
+    // Data model, however, doesn't currently support this.
+    const aperture = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
+    twAdminCreds = await Credentials.get(knex, twAdmin, aperture);
+    cbAdminCreds = await Credentials.get(knex, cbAdmin, organisation);
+    volunteerCreds = await Credentials.get(knex, volunteer, organisation);
   });
 
   afterAll(async () => {
@@ -25,14 +44,7 @@ describe('GET /community-businesses', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses',
-        credentials: {
-          scope: ['organisations_details-child:read'],
-          user: await Users.getOne(knex, { where: { name: 'Big Boss' } }),
-          organisation: await Organisations.getOne(knex, {
-            where: { name: 'Black Mesa Research' },
-          }),
-          role: RoleEnum.TWINE_ADMIN,
-        },
+        credentials: twAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -43,14 +55,7 @@ describe('GET /community-businesses', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses?fields[]=adminCode&fields[]=name',
-        credentials: {
-          scope: ['organisations_details-child:read'],
-          user: await Users.getOne(knex, { where: { name: 'Big Boss' } }),
-          organisation: await Organisations.getOne(knex, {
-            where: { name: 'Black Mesa Research' },
-          }),
-          role: RoleEnum.TWINE_ADMIN,
-        },
+        credentials: twAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -64,13 +69,7 @@ describe('GET /community-businesses', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses',
-        credentials: {
-          scope: ['organisations_details-child:read'],
-          user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
-          organisation: await Organisations.getOne(knex, {
-            where: { name: 'Black Mesa Research' },
-          }),
-        },
+        credentials: cbAdminCreds,
       });
 
       expect(res.statusCode).toBe(403);
@@ -82,13 +81,7 @@ describe('GET /community-businesses', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me',
-        credentials: {
-          scope: ['organisations_details-own:read'],
-          user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
-          organisation: await Organisations.getOne(knex, {
-            where: { name: 'Black Mesa Research' },
-          }),
-        },
+        credentials: cbAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -102,13 +95,7 @@ describe('GET /community-businesses', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me',
-        credentials: {
-          scope: ['organisations_details-parent:read'],
-          user: await Users.getOne(knex, { where: { name: 'Emma Emmerich' } }),
-          organisation: await Organisations.getOne(knex, {
-            where: { name: 'Black Mesa Research' },
-          }),
-        },
+        credentials: volunteerCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -124,10 +111,7 @@ describe('GET /community-businesses', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/2',
-        credentials: {
-          role: RoleEnum.TWINE_ADMIN,
-          scope: ['organisations_details-child:read'],
-        },
+        credentials: twAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -141,13 +125,7 @@ describe('GET /community-businesses', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/1',
-        credentials: {
-          scope: ['organisations_details-child:read'],
-          user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
-          organisation: await Organisations.getOne(knex, {
-            where: { name: 'Black Mesa Research' },
-          }),
-        },
+        credentials: cbAdminCreds,
       });
 
       expect(res.statusCode).toBe(403);

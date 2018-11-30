@@ -2,23 +2,31 @@ import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
-import { Organisation, Organisations } from '../../../../models';
-import { RoleEnum } from '../../../../auth/types';
+import { Organisation, Organisations, User, Users } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
+import { Credentials } from '../../../../auth/strategies/standard';
 
 
 describe('PUT /community-businesses', () => {
   let server: Hapi.Server;
   let knex: Knex;
   let trx: Knex.Transaction;
+  let user: User;
+  let admin: User;
   let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
+  let adminCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
 
+    user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
+    admin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
+    credentials = await Credentials.get(knex, user, organisation);
+    adminCreds = await Credentials.get(knex, admin, organisation);
   });
 
   afterAll(async () => {
@@ -44,10 +52,7 @@ describe('PUT /community-businesses', () => {
           name: 'CRAPerture Sciences',
           sector: 'Housing',
         },
-        credentials: {
-          scope: ['organisations_details-own:write'],
-          organisation,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -66,10 +71,7 @@ describe('PUT /community-businesses', () => {
         payload: {
           region: 'Narnia',
         },
-        credentials: {
-          scope: ['organisations_details-own:write'],
-          organisation,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(400);
@@ -82,10 +84,7 @@ describe('PUT /community-businesses', () => {
         payload: {
           sector: 'Hedge Fund',
         },
-        credentials: {
-          scope: ['organisations_details-own:write'],
-          organisation,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(400);
@@ -104,10 +103,7 @@ describe('PUT /community-businesses', () => {
           name: 'CRAPerture Sciences',
           sector: 'Housing',
         },
-        credentials: {
-          scope: ['organisations_details-child:write'],
-          role: RoleEnum.TWINE_ADMIN,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -126,10 +122,7 @@ describe('PUT /community-businesses', () => {
         payload: {
           sector: 'Hedge Fund',
         },
-        credentials: {
-          scope: ['organisations_details-child:write'],
-          organisation,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(403);
@@ -142,10 +135,7 @@ describe('PUT /community-businesses', () => {
         payload: {
           region: 'Narnia',
         },
-        credentials: {
-          scope: ['organisations_details-child:write'],
-          role: RoleEnum.TWINE_ADMIN,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(400);
@@ -158,10 +148,7 @@ describe('PUT /community-businesses', () => {
         payload: {
           sector: 'Hedge Fund',
         },
-        credentials: {
-          scope: ['organisations_details-child:write'],
-          role: RoleEnum.TWINE_ADMIN,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(400);

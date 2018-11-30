@@ -4,6 +4,7 @@ import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../../models';
 import { getTrx } from '../../../../../../tests/utils/database';
+import { Credentials } from '../../../../../auth/strategies/standard';
 
 
 describe('API /community-businesses/{id}/visitors', () => {
@@ -13,6 +14,7 @@ describe('API /community-businesses/{id}/visitors', () => {
   let user: User;
   let visitor: User;
   let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -22,6 +24,7 @@ describe('API /community-businesses/{id}/visitors', () => {
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     visitor = await Users.getOne(knex, { where: { name: 'Chell' } });
     organisation = await Organisations.getOne(knex, { where: { id: 1 } });
+    credentials = await Credentials.get(knex, user, organisation);
   });
 
   afterAll(async () => {
@@ -46,11 +49,7 @@ describe('API /community-businesses/{id}/visitors', () => {
         payload: {
           name: 'Tubby',
         },
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:write'],
-        },
+        credentials,
       });
 
       const { modifiedAt, createdAt, deletedAt, password, qrCode, ...rest } = visitor;
@@ -79,11 +78,7 @@ describe('API /community-businesses/{id}/visitors', () => {
           disability: 'yes',
           ethnicity: 'prefer not to say',
         },
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:write'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -114,11 +109,7 @@ describe('API /community-businesses/{id}/visitors', () => {
           name: 'Wheatley',
           ethnicity: 'thisisprobablynotaethnicity',
         },
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:write'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(400);
@@ -131,11 +122,7 @@ describe('API /community-businesses/{id}/visitors', () => {
         payload: {
           name: 'Tubby',
         },
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:write'],
-        },
+        credentials,
       });
 
       const res2 = await server.inject({
@@ -144,11 +131,7 @@ describe('API /community-businesses/{id}/visitors', () => {
         payload: {
           name: 'Tubby',
         },
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:write'],
-        },
+        credentials,
       });
 
       expect(res1.statusCode).toBe(200);

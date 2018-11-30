@@ -4,14 +4,14 @@ import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { Organisation, User, Volunteers, CommunityBusinesses } from '../../../../../models';
 import { getTrx } from '../../../../../../tests/utils/database';
-import { RoleEnum } from '../../../../../auth/types';
+import { Credentials } from '../../../../../auth/strategies/standard';
 
 
 describe('PUT /v1/users/volunteers/:id', () => {
   let server: Hapi.Server;
   let trx: Knex.Transaction;
   let knex: Knex;
-
+  let credentials: Hapi.AuthCredentials;
   let organisation: Organisation;
   let user: User;
   const config = getConfig(process.env.NODE_ENV);
@@ -21,6 +21,7 @@ describe('PUT /v1/users/volunteers/:id', () => {
     knex = server.app.knex;
     organisation = await CommunityBusinesses.getOne(server.app.knex, { where: { id: 2 } });
     user = await Volunteers.getOne(server.app.knex, { where: { id: 7 } });
+    credentials = await Credentials.get(knex, user, organisation);
   });
 
   beforeEach(async () => {
@@ -48,11 +49,7 @@ describe('PUT /v1/users/volunteers/:id', () => {
         gender: 'prefer not to say',
         birthYear: 1972,
       },
-      credentials: {
-        scope: ['user_details-sibling:write'],
-        user,
-        organisation,
-      },
+      credentials,
     });
 
     expect(res.statusCode).toBe(200);
@@ -69,11 +66,7 @@ describe('PUT /v1/users/volunteers/:id', () => {
       payload: {
         name: 'Snake',
       },
-      credentials: {
-        user,
-        organisation,
-        scope: ['user_details-child:write'],
-      },
+      credentials,
     });
 
     const res2 = await server.inject({
@@ -82,11 +75,7 @@ describe('PUT /v1/users/volunteers/:id', () => {
       payload: {
         name: 'Snake',
       },
-      credentials: {
-        user,
-        organisation,
-        scope: ['user_details-sibling:write'],
-      },
+      credentials,
     });
 
     expect(res1.statusCode).toBe(200);
@@ -101,11 +90,7 @@ describe('PUT /v1/users/volunteers/:id', () => {
       payload: {
         favouritePet: 'Snake',
       },
-      credentials: {
-        scope: ['user_details-sibling:write'],
-        user,
-        organisation,
-      },
+      credentials,
     });
 
     expect(res.statusCode).toBe(400);
@@ -114,14 +99,11 @@ describe('PUT /v1/users/volunteers/:id', () => {
   test(':: fail - non volunteer cannot be updated', async () => {
     const res = await server.inject({
       method: 'PUT',
-      url: '/v1/users/volunteers/2',
+      url: '/v1/users/volunteers/3',
       payload: {
         name: 'Snake',
       },
-      credentials: {
-        scope: ['user_details-sibling:write'],
-        role: RoleEnum.TWINE_ADMIN,
-      },
+      credentials,
     });
 
     expect(res.statusCode).toBe(404);

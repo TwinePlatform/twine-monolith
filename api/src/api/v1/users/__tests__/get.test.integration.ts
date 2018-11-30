@@ -4,13 +4,24 @@
 import * as Hapi from 'hapi';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
+import { Credentials } from '../../../../auth/strategies/standard';
+import { Organisation, User, Users, Organisations } from '../../../../models';
+
 
 describe('API /users', () => {
   let server: Hapi.Server;
+  let user: User;
+  let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
     server = await init(config);
+
+    user = await Users.getOne(server.app.knex, { where: { name: 'GlaDos' } });
+    organisation =
+      await Organisations.getOne(server.app.knex, { where: { name: 'Aperture Science' } });
+    credentials = await Credentials.get(server.app.knex, user, organisation);
   });
 
   afterAll(async () => {
@@ -22,7 +33,7 @@ describe('API /users', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users',
-        credentials: { scope: ['users_details-child:read'] },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);

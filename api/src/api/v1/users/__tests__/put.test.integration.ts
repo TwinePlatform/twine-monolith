@@ -4,6 +4,7 @@ import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
 import { User, Users, Organisation, Organisations } from '../../../../models';
+import { Credentials } from '../../../../auth/strategies/standard';
 
 
 describe('PUT /users/{userId}', () => {
@@ -13,6 +14,7 @@ describe('PUT /users/{userId}', () => {
   let user: User;
   let visitor: User;
   let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -22,6 +24,8 @@ describe('PUT /users/{userId}', () => {
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     visitor = await Users.getOne(knex, { where: { name: 'Chell' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
+
+    credentials = await Credentials.get(knex, user, organisation);
   });
 
   afterAll(async () => {
@@ -46,10 +50,7 @@ describe('PUT /users/{userId}', () => {
         payload: {
           name: 'Wheatley',
         },
-        credentials: {
-          user,
-          scope: ['user_details-own:write'],
-        },
+        credentials,
       });
 
       const { modifiedAt, createdAt, deletedAt, password, qrCode, ...rest } = user;
@@ -78,10 +79,7 @@ describe('PUT /users/{userId}', () => {
           disability: 'yes',
           ethnicity: 'prefer not to say',
         },
-        credentials: {
-          user,
-          scope: ['user_details-own:write'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -112,10 +110,7 @@ describe('PUT /users/{userId}', () => {
           name: 'Wheatley',
           ethnicity: 'thisisprobablynotaethnicity',
         },
-        credentials: {
-          user,
-          scope: ['user_details-own:write'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(400);
@@ -128,10 +123,7 @@ describe('PUT /users/{userId}', () => {
         payload: {
           name: 'Wheatley',
         },
-        credentials: {
-          user,
-          scope: ['user_details-own:write'],
-        },
+        credentials,
       });
 
       const res2 = await server.inject({
@@ -141,8 +133,14 @@ describe('PUT /users/{userId}', () => {
           name: 'Wheatley',
         },
         credentials: {
-          user: { ...user, name: 'Wheatley' },
-          scope: ['user_details-own:write'],
+          ...credentials,
+          user: {
+            ...credentials.user,
+            user: {
+              ...credentials.user.user,
+              name: 'Wheatley',
+            },
+          },
         },
       });
 
@@ -160,11 +158,7 @@ describe('PUT /users/{userId}', () => {
         payload: {
           name: 'Tubby',
         },
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:write'],
-        },
+        credentials,
       });
 
       const { modifiedAt, createdAt, deletedAt, password, qrCode, ...rest } = visitor;
@@ -193,11 +187,7 @@ describe('PUT /users/{userId}', () => {
           disability: 'yes',
           ethnicity: 'prefer not to say',
         },
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:write'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -228,11 +218,7 @@ describe('PUT /users/{userId}', () => {
           name: 'Wheatley',
           ethnicity: 'thisisprobablynotaethnicity',
         },
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:write'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(400);
@@ -245,11 +231,7 @@ describe('PUT /users/{userId}', () => {
         payload: {
           name: 'Tubby',
         },
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:write'],
-        },
+        credentials,
       });
 
       const res2 = await server.inject({
@@ -258,11 +240,7 @@ describe('PUT /users/{userId}', () => {
         payload: {
           name: 'Tubby',
         },
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-child:write'],
-        },
+        credentials,
       });
 
       expect(res1.statusCode).toBe(200);

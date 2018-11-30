@@ -6,13 +6,24 @@ import { init } from '../../../../server';
 import * as moment from 'moment';
 import { getConfig } from '../../../../../config';
 import { RoleEnum } from '../../../../auth/types';
+import { User, Organisation, Users, Organisations } from '../../../../models';
+import { Credentials } from '../../../../auth/strategies/standard';
+
 
 describe('GET /visit-logs', () => {
   let server: Hapi.Server;
+  let user: User;
+  let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
     server = await init(config);
+
+    user = await Users.getOne(server.app.knex, { where: { name: 'Big Boss' } });
+    organisation =
+      await Organisations.getOne(server.app.knex, { where: { name: 'Aperture Science' } });
+    credentials = await Credentials.get(server.app.knex, user, organisation);
   });
 
   afterAll(async () => {
@@ -23,10 +34,7 @@ describe('GET /visit-logs', () => {
     const res = await server.inject({
       method: 'GET',
       url: '/v1/visit-logs',
-      credentials: {
-        role: RoleEnum.TWINE_ADMIN,
-        scope: ['visit_logs-child:read'],
-      },
+      credentials,
     });
 
     expect(res.statusCode).toBe(200);
@@ -52,10 +60,7 @@ describe('GET /visit-logs', () => {
     const res = await server.inject({
       method: 'GET',
       url: `/v1/visit-logs?since=${since}&until=${until}`,
-      credentials: {
-        role: RoleEnum.TWINE_ADMIN,
-        scope: ['visit_logs-child:read'],
-      },
+      credentials,
     });
 
     expect(res.statusCode).toBe(200);
@@ -87,8 +92,11 @@ describe('GET /visit-logs', () => {
       method: 'GET',
       url: `/v1/visit-logs`,
       credentials: {
-        role: RoleEnum.FUNDING_BODY,
-        scope: ['visit_logs-child:read'],
+        ...credentials,
+        user: {
+          ...credentials.user,
+          roles: [RoleEnum.FUNDING_BODY],
+        },
       },
     });
 

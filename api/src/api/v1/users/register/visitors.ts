@@ -80,7 +80,11 @@ export default [
       });
       const [admin] = await CbAdmins.fromOrganisation(knex, { id: payload.organisationId });
 
+      /* istanbul ignore next */
       if (!admin) {
+        // Because of a change in testing method, this is now unreachable
+        // (and was always functionally impossible), but is kept **just
+        // in case**
         throw Boom.badData('No associated admin for this organisation');
       }
 

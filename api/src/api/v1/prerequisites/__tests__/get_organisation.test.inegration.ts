@@ -47,7 +47,7 @@ describe('Prerequisites :: getOrganisation', () => {
     const res = await server.inject({
       method: 'GET',
       url: '/foo/me',
-      credentials: { scope: [], organisation, user },
+      credentials: { scope: [], organisation, user, roles: [] },
     });
 
     expect(res.statusCode).toBe(200);

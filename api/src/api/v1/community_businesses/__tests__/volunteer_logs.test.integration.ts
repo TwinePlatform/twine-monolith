@@ -15,6 +15,7 @@ import {
 } from '../../../../models';
 import { RoleEnum } from '../../../../auth/types';
 import { rndPastDateThisMonth } from '../../../../../tests/utils/data';
+import { Credentials } from '../../../../auth/strategies/standard';
 
 
 describe('API /community-businesses/me/volunteer-logs', () => {
@@ -25,6 +26,9 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   let volAdmin: User;
   let cbAdmin: User;
   let organisation: Organisation;
+  let volCreds: Hapi.AuthCredentials;
+  let vAdminCreds: Hapi.AuthCredentials;
+  let adminCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -35,6 +39,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     volAdmin = await Users.getOne(knex, { where: { name: 'Raiden' } });
     cbAdmin = await Users.getOne(knex, { where: { name: 'Gordon' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } });
+
+    volCreds = await Credentials.get(knex, user, organisation);
+    vAdminCreds = await Credentials.get(knex, volAdmin, organisation);
+    adminCreds = await Credentials.get(knex, cbAdmin, organisation);
   });
 
   afterAll(async () => {
@@ -56,12 +64,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -77,12 +80,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-child:read'],
-          user: cbAdmin,
-          organisation,
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -98,12 +96,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(403);
@@ -114,12 +107,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/community-businesses/me/volunteer-logs?until=${until.toISOString()}`,
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -134,12 +122,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/community-businesses/me/volunteer-logs?fields[0]=userName`,
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -155,12 +138,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/2',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(403);
@@ -170,12 +148,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/2',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -192,12 +165,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/2',
-        credentials: {
-          scope: ['volunteer_logs-child:read'],
-          user: cbAdmin,
-          organisation,
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -214,12 +182,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/9',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(403);
@@ -229,12 +192,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/142',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(404);
@@ -244,12 +202,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/8',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(404);
@@ -261,12 +214,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/2',
-        credentials: {
-          scope: ['volunteer_logs-sibling:write'],
-          role: RoleEnum.VOLUNTEER_ADMIN,
-          user: volAdmin,
-          organisation,
-        },
+        credentials: vAdminCreds,
         payload: {
           activity: 'Other',
         },
@@ -284,12 +232,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/2',
-        credentials: {
-          scope: ['volunteer_logs-sibling:write'],
-          role: RoleEnum.VOLUNTEER_ADMIN,
-          user: volAdmin,
-          organisation,
-        },
+        credentials: vAdminCreds,
         payload: {
           activity: 'Other',
           duration: { minutes: 17 },
@@ -314,12 +257,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/2',
-        credentials: {
-          scope: ['volunteer_logs-child:write'],
-          role: RoleEnum.CB_ADMIN,
-          user: cbAdmin,
-          organisation,
-        },
+        credentials: adminCreds,
         payload: {
           activity: 'Other',
           duration: { minutes: 17 },
@@ -344,12 +282,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/8',
-        credentials: {
-          scope: ['volunteer_logs-child:write'],
-          role: RoleEnum.CB_ADMIN,
-          user: cbAdmin,
-          organisation,
-        },
+        credentials: adminCreds,
         payload: {
           activity: 'Other',
           duration: { minutes: 17 },
@@ -366,12 +299,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-sibling:delete'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -380,12 +308,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resGet = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(resGet.statusCode).toBe(404);
@@ -395,12 +318,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-child:delete'],
-          user: cbAdmin,
-          organisation,
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -409,12 +327,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resGet = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-child:read'],
-          user: cbAdmin,
-          organisation,
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials: adminCreds,
       });
 
       expect(resGet.statusCode).toBe(404);
@@ -424,12 +337,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-own:delete'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(403);
@@ -439,12 +347,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/8',
-        credentials: {
-          scope: ['volunteer_logs-sibling:delete'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(404);
@@ -458,23 +361,13 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resCount1 = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: {
           activity: 'Office support',
           duration: {
@@ -488,12 +381,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resCount2 = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -520,12 +408,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: {
           activity: 'Office support',
           duration: {
@@ -548,12 +431,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-sibling:write'],
-          user: await Users.getOne(knex, { where: { name: 'Raiden' } }),
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
         payload: {
           userId: user.id,
           activity: 'Office support',
@@ -582,11 +460,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user: await Users.getOne(knex, { where: { name: 'Chell' } }),
-          organisation,
-        },
+        credentials: volCreds,
         payload: {
           userId: user.id,
           activity: 'Office support',
@@ -601,12 +475,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: {
           organisationId: 1,
           activity: 'Office support',
@@ -624,12 +493,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: {
           activity: 'LOLOLOLOLOL',
           duration: {
@@ -646,12 +510,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: {
           activity: 'Office support',
           duration: {
@@ -667,12 +526,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: {
           activity: 'Office support',
           duration: {
@@ -690,11 +544,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/summary',
-        credentials: {
-          scope: ['organisations_details-parent:read'],
-          user,
-          organisation,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -711,16 +561,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('SUCCESS - can get own summaries as CB_ADMIN', async () => {
-      const cbAdmin = await Users.getOne(trx, { where: { name: 'Gordon' } });
-
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/summary',
-        credentials: {
-          scope: ['organisations_details-own:read'],
-          user: cbAdmin,
-          organisation,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -741,11 +585,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/community-businesses/me/volunteer-logs/summary?since=${since.toISOString()}`,
-        credentials: {
-          scope: ['organisations_details-parent:read'],
-          user,
-          organisation,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -765,11 +605,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/3/volunteer-logs/summary',
-        credentials: {
-          scope: ['organisations_details-own:read'],
-          user,
-          organisation,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(404);
@@ -786,12 +622,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: logs,
       });
 
@@ -801,12 +632,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
@@ -828,12 +654,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: logs,
       });
 
@@ -843,12 +664,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
@@ -870,12 +686,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: logs,
       });
 
@@ -885,12 +696,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
@@ -921,12 +727,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: logs,
       });
 
@@ -936,12 +737,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
@@ -952,12 +748,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resGet = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(resGet.statusCode).toBe(200);
@@ -970,12 +761,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
         payload: [log],
       });
 
@@ -985,12 +771,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resCheck = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(resCheck.statusCode).toBe(200);
@@ -1003,12 +784,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resGet = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(resGet.statusCode).toBe(200);
@@ -1021,12 +797,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
         payload: [log],
       });
 
@@ -1036,12 +807,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resCheck = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(resCheck.statusCode).toBe(404);
@@ -1063,12 +829,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
         payload: logs,
       });
 
@@ -1078,12 +839,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read', 'volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
@@ -1105,12 +861,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: logs,
       });
 
@@ -1127,12 +878,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: logs,
       });
 
@@ -1141,12 +887,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
@@ -1157,12 +898,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
@@ -1177,12 +913,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: logs,
       });
 
@@ -1197,12 +928,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
         payload: logs,
       });
 

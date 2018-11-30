@@ -3,6 +3,7 @@ import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
+import { Credentials, StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 describe('PUT /users/{userId}', () => {
@@ -10,6 +11,7 @@ describe('PUT /users/{userId}', () => {
   let knex: Knex;
   let user: User;
   let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -18,6 +20,7 @@ describe('PUT /users/{userId}', () => {
 
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
+    credentials = await Credentials.get(knex, user, organisation);
   });
 
   afterAll(async () => {
@@ -29,11 +32,7 @@ describe('PUT /users/{userId}', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/me/roles',
-        credentials: {
-          user,
-          organisation,
-          scope: ['user_details-own:read'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
