@@ -3,7 +3,6 @@ import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
-import { RoleEnum } from '../../../../auth/types';
 import { getTrx } from '../../../../../tests/utils/database';
 import { Credentials } from '../../../../auth/strategies/standard';
 

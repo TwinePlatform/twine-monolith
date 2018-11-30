@@ -13,7 +13,6 @@ import {
   VolunteerLog,
   VolunteerLogs,
 } from '../../../../models';
-import { RoleEnum } from '../../../../auth/types';
 import { rndPastDateThisMonth } from '../../../../../tests/utils/data';
 import { Credentials } from '../../../../auth/strategies/standard';
 

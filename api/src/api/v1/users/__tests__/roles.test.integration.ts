@@ -3,7 +3,7 @@ import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
-import { Credentials, StandardCredentials } from '../../../../auth/strategies/standard';
+import { Credentials } from '../../../../auth/strategies/standard';
 
 
 describe('PUT /users/{userId}', () => {
