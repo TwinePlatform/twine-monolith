@@ -39,13 +39,13 @@ describe('API /community-businesses/{id}/visitors', () => {
         credentials,
       });
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result).toHaveLength(1);
+      expect((<any> res.result).result).toHaveLength(2);
       expect((<any> res.result).result.visits).not.toBeDefined();
       expect((<any> res.result).result[0]).toEqual(expect.objectContaining({
         name: 'Chell',
         deletedAt: null,
       }));
-      expect((<any> res.result).meta).toEqual({ total: 1 });
+      expect((<any> res.result).meta).toEqual({ total: 2 });
     });
 
     test('filtered query', async () => {
@@ -56,7 +56,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       });
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: [], meta: { total: 0 } });
+      expect(res.result).toEqual({ result: [{ name: 'Turret' }], meta: { total: 1 } });
     });
 
     test('filtered query with visits', async () => {
@@ -81,9 +81,9 @@ describe('API /community-businesses/{id}/visitors', () => {
             }),
           ]),
         }]),
-        meta: { total: 1 },
+        meta: { total: 2 },
       });
-      expect((<any> res.result).result).toHaveLength(1);
+      expect((<any> res.result).result).toHaveLength(2);
       expect((<any> res.result).result[0].visits).toHaveLength(10);
     });
 
@@ -94,13 +94,13 @@ describe('API /community-businesses/{id}/visitors', () => {
         credentials: adminCreds,
       });
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result).toHaveLength(1);
+      expect((<any> res.result).result).toHaveLength(2);
       expect((<any> res.result).result.visits).not.toBeDefined();
       expect((<any> res.result).result[0]).toEqual(expect.objectContaining({
         name: 'Chell',
         deletedAt: null,
       }));
-      expect((<any> res.result).meta).toEqual({ total: 1 });
+      expect((<any> res.result).meta).toEqual({ total: 2 });
     });
 
     test('can filter users by name', async () => {
