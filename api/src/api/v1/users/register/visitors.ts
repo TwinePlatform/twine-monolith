@@ -19,6 +19,7 @@ import {
   Visitors,
   CommunityBusinesses,
   CbAdmins,
+  Users,
 } from '../../../../models';
 import * as QRCode from '../../../../services/qrcode';
 import * as PdfService from '../../../../services/pdf';
@@ -64,7 +65,7 @@ export default [
        * (Can possibly eventually be removed into pre-requisites)
        */
       // Check user doesn't already exist
-      if (await Visitors.exists(knex, { where: { email: payload.email } })) {
+      if (await Users.exists(knex, { where: { email: payload.email } })) {
         throw Boom.conflict('User with this e-mail already registered');
       }
       if (organisation && organisation.id !== payload.organisationId) {

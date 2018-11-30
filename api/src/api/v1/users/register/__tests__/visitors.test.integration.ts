@@ -111,6 +111,25 @@ describe('API v1 - register new users', () => {
         .toBe('Cannot register visitor for different organisation');
     });
 
+    test('cannot register user that is already registered under a different role', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitors',
+        payload: {
+          organisationId: 1,
+          name: 'GlaDos',
+          gender: 'female',
+          birthYear: 1900,
+          email: '1@aperturescience.com',
+        },
+        credentials,
+      });
+
+      expect(res.statusCode).toBe(409);
+      expect((<any> res.result).error.message)
+        .toBe('User with this e-mail already registered');
+    });
+
     test('happy path', async () => {
       const res = await server.inject({
         method: 'POST',
