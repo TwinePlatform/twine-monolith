@@ -1,14 +1,45 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import { Users, Organisations } from '../../../models';
+import * as Knex from 'knex';
+import { Users, Organisations, User, Organisation } from '../../../models';
 import Roles from '../../roles';
 import Permissions from '../../permissions';
 import { scopeToString } from '../../scopes';
-import { Session, UserCredentials } from './types';
+import { Session, StandardCredentials } from './types';
 
 
-type ValidateUser = (a: Session, b: Hapi.Request)
-  => Promise <{credentials?: UserCredentials, isValid: boolean } | Boom<null>>;
+type ValidateUser = (a: Session, b: Hapi.Request) =>
+  Promise <{credentials?: Hapi.AuthCredentials, isValid: boolean } | Boom<null>>;
+
+type TCredentials = {
+  get: (k: Knex, u: User, o: Organisation, privilege?: 'full' | 'restricted', s?: Session) =>
+    Promise<Hapi.AuthCredentials>
+
+  fromRequest: (r: Hapi.Request) =>
+    StandardCredentials & { scope: string[] }
+};
+
+export const Credentials: TCredentials = {
+  async get (knex, user, organisation, privilege = 'full', session) {
+    const roles = await Roles.fromUser(knex, { userId: user.id, organisationId: organisation.id });
+    const permissions = await Permissions.forRoles(knex, { roles, accessMode: privilege });
+
+    return {
+      scope: permissions.map(scopeToString),
+      user: {
+        user,
+        organisation,
+        roles,
+        session,
+      },
+    };
+  },
+
+  fromRequest (request: Hapi.Request) {
+    return { ...request.auth.credentials.user, scope: request.auth.credentials.scope };
+  },
+};
+
 
 const validateUser: ValidateUser = async (decoded, request) => {
   try {
@@ -29,17 +60,8 @@ const validateUser: ValidateUser = async (decoded, request) => {
       Roles.fromUser(knex, { userId, organisationId }),
     ]);
 
-    const permissions = await Permissions.forRoles(knex, { roles, accessMode: privilege });
-    const scope = permissions.map(scopeToString);
-
     return {
-      credentials: {
-        user,
-        organisation,
-        roles,
-        scope,
-        session: decoded,
-      },
+      credentials: await Credentials.get(knex, user, organisation, privilege, decoded),
       isValid: Boolean(user && organisation && roles.length > 0),
     };
 

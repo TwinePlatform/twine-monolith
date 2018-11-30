@@ -1,6 +1,7 @@
 import * as JWT from 'jsonwebtoken';
 import { getConfig } from '../../../../config';
 import { TTokenManager, TSessionManager, Session } from './types';
+import { Credentials } from './validate';
 
 
 const {
@@ -36,7 +37,7 @@ export const SessionManager: TSessionManager = {
   },
 
   refresh (request, res) {
-    const { session } = request.auth.credentials;
+    const { session } = Credentials.fromRequest(request);
 
     const token = TokenManager.create(session);
 
@@ -48,7 +49,7 @@ export const SessionManager: TSessionManager = {
   },
 
   escalate (request, res) {
-    const { session: { userId, organisationId } } = request.auth.credentials;
+    const { session: { userId, organisationId } } = Credentials.fromRequest(request);
 
     const token = TokenManager.create({ userId, organisationId, privilege: 'full' });
 
@@ -56,7 +57,7 @@ export const SessionManager: TSessionManager = {
   },
 
   deescalate (request, res) {
-    const { session: { userId, organisationId } } = request.auth.credentials;
+    const { session: { userId, organisationId } } = Credentials.fromRequest(request);
 
     const token = TokenManager.create({ userId, organisationId, privilege: 'restricted' });
 

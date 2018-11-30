@@ -1,37 +1,37 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
+import * as Knex from 'knex';
 import { compare } from 'bcrypt';
-
-type ExternalStrategyResponse =
-  Promise <{ isValid: boolean, credentials: { scope: string } | {} } | Boom<null>>;
-
-type ValidateExternal = (request: Hapi.Request, token: string, h: Hapi.ResponseToolkit)
-  => ExternalStrategyResponse;
-
-type TokenResponse = { api_token: string, api_token_access: string };
+import { asyncFind } from '../../../utils';
 
 
-const findMatching = async (xs: TokenResponse [], token: string): ExternalStrategyResponse => {
-  if (xs.length < 1) return { isValid: false, credentials: {} };
+type ApiTokenRow = { api_token: string, api_token_access: string };
 
-  const { api_token: apiToken, api_token_access: scope } = xs[0];
-  const match = await compare(token, apiToken);
+export const Credentials = {
+  async get (knex: Knex, token: string) {
+    const tokens: ApiTokenRow[] = await knex('api_token').select(['api_token', 'api_token_access']);
 
-  return match
-  ? {
-    isValid: true,
-    credentials: { scope }, }
-  : findMatching(xs.slice(1), token);
-};
-
-const validateExternal: ValidateExternal = async ({ log, server: { app: { knex } } }, token, h) => {
-  try {
-    const tokenResponses = await knex('api_token').select(['api_token', 'api_token_access']);
-    if (tokenResponses.length === 0) {
-      return Boom.unauthorized('No stored api token data');
+    if (tokens.length < 1) {
+      return { isValid: false, credentials: {} };
     }
 
-    return findMatching(tokenResponses, token);
+    try {
+      const match = await asyncFind<ApiTokenRow>((tkn) => compare(token, tkn.api_token), tokens);
+      return {
+        isValid: true,
+        credentials: { scope: [match.api_token_access], app: 'frontline' },
+      };
+    } catch (error) {
+      return { isValid: false, credentials: {} };
+    }
+  },
+};
+
+const validateExternal = async (request: Hapi.Request, token: string, h: Hapi.ResponseToolkit) => {
+  const { log, server: { app: { knex } } } = request;
+
+  try {
+    return Credentials.get(knex, token);
   } catch (error) {
     log('error', error);
     return Boom.badImplementation('Error with route authentication for 3rd party clients');
