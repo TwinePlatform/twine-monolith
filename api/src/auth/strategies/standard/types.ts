@@ -3,11 +3,10 @@ import { User, Organisation } from '../../../models';
 import { RoleEnum } from '../../types';
 
 
-export type UserCredentials = {
-  scope?: string[]
-  user?: User
-  organisation?: Organisation
-  roles?: RoleEnum[]
+export type StandardCredentials = {
+  user: User
+  organisation: Organisation
+  roles: RoleEnum[]
   session?: Session
 };
 
