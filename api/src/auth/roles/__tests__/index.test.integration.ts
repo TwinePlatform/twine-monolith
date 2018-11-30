@@ -223,5 +223,14 @@ describe('Roles Module', () => {
         expect(error.message).toEqual('User 20 does not exist');
       }
     });
+
+    test('Error - returns error if multiple roles exist', async () => {
+      expect.assertions(1);
+      try {
+        await Roles.oneFromUser(trx, { userId: 8, organisationId: 1 });
+      } catch (error) {
+        expect(error.message).toEqual('User 8 has multiple roles, please use "Roles.fromUser"');
+      }
+    });
   });
 });

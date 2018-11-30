@@ -102,23 +102,17 @@ const Roles: RolesInterface = {
   },
 
   oneFromUser: async (client, { userId, organisationId }) => {
-    const result = await client('access_role')
-      .select('access_role_name')
-      .where({
-        access_role_id: client('user_account_access_role')
-          .select('access_role_id')
-          .where({
-            user_account_id: userId,
-            organisation_id: organisationId,
-          })
-          .limit(1),
-      });
+    const result = await Roles.fromUser(client, { userId, organisationId });
 
     if (result.length === 0) {
       throw new Error(`User ${userId} does not exist`);
     }
 
-    return result[0].access_role_name as RoleEnum;
+    if (result.length > 1) {
+      throw new Error(`User ${userId} has multiple roles, please use "Roles.fromUser"`);
+    }
+
+    return result[0];
   },
 
   fromUser: async (client, { userId, organisationId }) => {
