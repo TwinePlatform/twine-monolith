@@ -17,6 +17,7 @@ import {
 } from '../types';
 import { requestQueryToModelQuery } from '../utils';
 import { query } from '../users/schema';
+import { Credentials } from '../../../auth/strategies/standard';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -234,10 +235,11 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: PostMyVolunteerLogsRequest, h) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { user, scope } },
         pre: { communityBusiness },
         payload,
       } = request;
+
+      const { user, scope } = Credentials.fromRequest(request);
 
       if (payload.userId !== 'me') {
         // if userId is specified, check request user has correct permissions
@@ -313,10 +315,11 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: SyncMyVolunteerLogsRequest, h) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { user, scope } },
         pre: { communityBusiness },
         payload,
       } = request;
+
+      const { user, scope } = Credentials.fromRequest(request);
 
       if (
         payload.some((log) => log.userId !== 'me') && // If some logs correspond to other users

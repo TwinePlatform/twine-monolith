@@ -5,6 +5,7 @@ import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { GetFeedbackRequest, PostFeedbackRequest } from '../types';
 import { query, response, since, until } from './schema';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
+import { Credentials } from '../../../auth/strategies/standard';
 
 
 export default [
@@ -100,7 +101,7 @@ export default [
     handler: async (request: PostFeedbackRequest, h: Hapi.ResponseToolkit) => {
       const { knex } = request.server.app;
       const { feedbackScore } = request.payload;
-      const { id } = request.auth.credentials.organisation;
+      const { id } = Credentials.fromRequest(request).organisation;
 
       const communityBusiness = await CommunityBusinesses.getOne(knex, { where: { id } });
 

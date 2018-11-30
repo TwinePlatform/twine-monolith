@@ -17,14 +17,16 @@ import * as Hapi from 'hapi';
 import { PutUserRequest } from '../types';
 import Roles from '../../../auth/roles';
 import { RoleEnum } from '../../../auth/types';
+import { Credentials } from '../../../auth/strategies/standard';
 
 
 export default async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
   const {
-    auth: { credentials: { user, roles, organisation } },
     server: { app: { knex } },
     params: { userId },
   } = request;
+
+  const { user, roles, organisation } = Credentials.fromRequest(request);
 
   if (roles.includes(RoleEnum.TWINE_ADMIN)) {
     return true;

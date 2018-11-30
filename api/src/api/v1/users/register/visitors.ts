@@ -26,6 +26,7 @@ import { EmailTemplate } from '../../../../services/email/templates';
 import { RoleEnum } from '../../../../auth/types';
 import Roles from '../../../../auth/roles';
 import { RegisterRequest } from '../../types';
+import { Credentials } from '../../../../auth/strategies/standard';
 
 export default [
   {
@@ -55,9 +56,9 @@ export default [
       const {
         payload,
         server: { app: { EmailService, knex } },
-        auth: { credentials: { organisation } },
       } = request;
 
+      const { organisation } = Credentials.fromRequest(request);
       /*
        * Preliminaries
        * (Can possibly eventually be removed into pre-requisites)

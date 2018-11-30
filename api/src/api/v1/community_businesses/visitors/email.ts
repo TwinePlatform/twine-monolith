@@ -7,6 +7,7 @@ import { Visitors, CommunityBusinesses } from '../../../../models';
 import { EmailTemplate } from '../../../../services/email/templates';
 import * as PdfService from '../../../../services/pdf';
 import * as QRCode from '../../../../services/qrcode';
+import { Credentials } from '../../../../auth/strategies/standard';
 
 
 interface UserEmailRequest extends Hapi.Request {
@@ -48,11 +49,12 @@ const routes: Hapi.ServerRoute[] = [
     },
     handler: async (request: UserEmailRequest, h) => {
       const {
-        auth: { credentials: { user, organisation } },
         pre: { isChild },
         params: { userId },
         server: { app: { knex, EmailService } },
       } = request;
+
+      const { user, organisation } = Credentials.fromRequest(request);
 
       if (!isChild) {
         return Boom.forbidden('Insufficient permissions to access this resource');

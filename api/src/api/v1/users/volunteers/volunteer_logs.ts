@@ -10,6 +10,7 @@ import {
   PutMyVolunteerLogRequest,
   GetMyVolunteerLogsAggregateRequest,
 } from '../../types';
+import { Credentials } from '../../../../auth/strategies/standard';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -36,11 +37,11 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: GetMyVolunteerLogsRequest, h) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { user } },
         pre: { communityBusiness },
         query,
       } = request;
 
+      const { user } = Credentials.fromRequest(request);
       const since = new Date(query.since);
       const until = new Date(query.until);
 
@@ -78,11 +79,12 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: GetVolunteerLogRequest, h) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { user } },
         pre: { communityBusiness },
         params: { logId },
         query,
       } = request;
+
+      const { user } = Credentials.fromRequest(request);
 
       const log = await VolunteerLogs.getOne(
         knex,
@@ -135,11 +137,12 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: PutMyVolunteerLogRequest, h) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { user } },
         payload,
         pre: { communityBusiness },
         params: { logId },
       } = request;
+
+      const { user } = Credentials.fromRequest(request);
 
       const log = await VolunteerLogs.getOne(knex, { where: {
         id: Number(logId),
@@ -180,10 +183,11 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: PutMyVolunteerLogRequest, h) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { user } },
         pre: { communityBusiness },
         params: { logId },
       } = request;
+
+      const { user } = Credentials.fromRequest(request);
 
       const affectedRows = await VolunteerLogs.destroy(knex, {
         id: Number(logId),
@@ -220,11 +224,11 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: GetMyVolunteerLogsAggregateRequest, h) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { user } },
         pre: { communityBusiness },
         query,
       } = request;
 
+      const { user } = Credentials.fromRequest(request);
       const since = new Date(query.since);
       const until = new Date(query.until);
 

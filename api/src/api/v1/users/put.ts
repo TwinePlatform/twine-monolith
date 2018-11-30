@@ -18,6 +18,7 @@ import {
 } from './schema';
 import { PutUserRequest } from '../types';
 import { isChildUser } from '../prerequisites';
+import { Credentials } from '../../../auth/strategies/standard';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -55,10 +56,10 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { user } },
         payload,
       } = request;
 
+      const { user } = Credentials.fromRequest(request);
       const changeset = { ...payload };
 
       try {

@@ -13,10 +13,11 @@
 import * as Hapi from 'hapi';
 import { GetCommunityBusinessRequest } from '../types';
 import { RoleEnum } from '../../../auth/types';
+import { Credentials } from '../../../auth/strategies/standard';
 
 
 export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
-  const { auth: { credentials: { roles } } } = request;
+  const { roles } = Credentials.fromRequest(request);
 
   if (roles.includes(RoleEnum.TWINE_ADMIN)) {
     return true;
