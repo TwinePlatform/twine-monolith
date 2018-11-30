@@ -83,7 +83,7 @@ export const Organisations: OrganisationCollection = {
 
   async fromUser (client, q) {
     const query = evolve({
-      where: Users.toColumnNames,
+      where: compose(Users.toColumnNames, omit(['createdAt'])),
       whereNot: Users.toColumnNames,
     }, q);
 
@@ -97,6 +97,18 @@ export const Organisations: OrganisationCollection = {
           'user_account',
           'user_account_access_role.user_account_id',
           'user_account.user_account_id')
+        .leftOuterJoin(
+          'gender',
+          'gender.gender_id',
+          'user_account.gender_id')
+        .leftOuterJoin(
+          'disability',
+          'disability.disability_id',
+          'user_account.disability_id')
+        .leftOuterJoin(
+          'ethnicity',
+          'ethnicity.ethnicity_id',
+          'user_account.ethnicity_id')
         .select(ModelToColumn),
       query);
 
