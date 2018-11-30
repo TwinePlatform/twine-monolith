@@ -25,10 +25,14 @@ const routes: Hapi.ServerRoute[] = [
       } = request;
 
       const { user, organisation } = Credentials.fromRequest(request);
+      const roles = await Roles.fromUser(
+        knex,
+        { userId: user.id, organisationId: organisation.id }
+      );
 
       return {
         organisationId: organisation.id,
-        role: await Roles.oneFromUser(knex, { userId: user.id, organisationId: organisation.id }),
+        roles: roles.sort(),
       };
     },
   },
