@@ -16,7 +16,7 @@
 	> editVolunteer controller
 */
 
-angular.module('app').controller('EditVolunteerController', function ($scope, $stateParams, $http, $state, $ionicPopup, $ionicLoading, $localStorage, $ionicModal, $rootScope,
+angular.module('app').controller('EditVolunteerController', function ($scope, $state, $ionicLoading, $localStorage,
                                                                      $$api, $$clickPreventer, $$utilities, $$shout) {
 
     $scope.$on('$ionicView.beforeEnter', function () {
@@ -48,8 +48,8 @@ angular.module('app').controller('EditVolunteerController', function ($scope, $s
     $$api.genders.get().success(function (result) {
 
         // loop through the results and push only required items to $scope.genders
-        $scope.genders = result.data
-        
+        $scope.genders = result.data.map(function (gender) { return gender.name; });
+
         // enable genders select
         $scope.gendersDisabled = false;
 
