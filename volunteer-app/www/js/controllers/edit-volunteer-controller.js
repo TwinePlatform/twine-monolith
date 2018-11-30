@@ -20,7 +20,7 @@ angular.module('app').controller('EditVolunteerController', function ($scope, $s
                                                                      $$api, $$clickPreventer, $$utilities, $$shout) {
 
     $scope.$on('$ionicView.beforeEnter', function () {
-        if (!$localStorage.user || $localStorage.user.role_id !== 2) {
+        if (!$localStorage.user || $localStorage.user.role !== 'VOLUNTEER_ADMIN') {
             // go back to dashboard
             $state.go('tabs.dashboard');
         }
