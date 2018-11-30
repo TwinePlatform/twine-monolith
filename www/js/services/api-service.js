@@ -331,6 +331,28 @@
 								method: 'GET',
 								url: $$api.url('users/me/roles'),
 								headers: { Authorization: $$api.token.get() },
+								transformResponse: function (response, headers, status) {
+									var res = JSON.parse(response);
+
+									if (status >= 400) {
+										return res;
+									}
+
+									var roles = res.result.roles;
+									var role;
+
+									if (roles.includes('CB_ADMIN')) {
+										role = 'CB_ADMIN';
+									} else if (roles.includes('VOLUNTEER_ADMIN')) {
+										role = 'VOLUNTEER_ADMIN';
+									} else if (roles.includes('VOLUNTEER')) {
+										role = 'VOLUNTEER';
+									} else {
+										role = roles[0];
+									}
+
+									return Object.assign({}, { result: { role: role } });
+								}
 							});
 						},
 
