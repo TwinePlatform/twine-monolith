@@ -348,7 +348,7 @@
 									} else if (roles.includes('VOLUNTEER')) {
 										role = 'VOLUNTEER';
 									} else {
-										role = roles[0];
+										throw new Error('Unrecognized roles');
 									}
 
 									return Object.assign({}, { result: { role: role } });
