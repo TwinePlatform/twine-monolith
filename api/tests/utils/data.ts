@@ -4,9 +4,9 @@ const rndInt = (max: number, min = 0) =>
   Math.round((max - min) * Math.random() + min);
 
 export const rndPastDateThisMonth = () =>
-  moment()
+  moment().utc()
     .startOf('month')
-    .add(rndInt(moment().date() - 1), 'days')
+    .add(rndInt(moment().date() - 2), 'days')
     .add(rndInt(23), 'hours')
     .add(rndInt(59), 'minutes')
     .add(rndInt(59), 'seconds')

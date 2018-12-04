@@ -204,8 +204,28 @@ describe('Roles Module', () => {
     });
 
     test('returns empty array if no roles are found', async () => {
-      const roles = await Roles.fromUser(trx, { userId: 20, organisationId: 1 });
+      const roles = await Roles.fromUser(trx, { userId: 4, organisationId: 2 });
       expect(roles).toEqual([]);
+    });
+
+    test('throws if user ID does not exist', async () => {
+      expect.assertions(1);
+
+      try {
+        await Roles.fromUser(trx, { userId: 20000, organisationId: 1 });
+      } catch (error) {
+        expect(error.message).toBe('User with ID 20000 does not exist');
+      }
+    });
+
+    test('throws if organisation ID does not exist', async () => {
+      expect.assertions(1);
+
+      try {
+        await Roles.fromUser(trx, { userId: 1, organisationId: -1 });
+      } catch (error) {
+        expect(error.message).toBe('Organisation with ID -1 does not exist');
+      }
     });
   });
 });
