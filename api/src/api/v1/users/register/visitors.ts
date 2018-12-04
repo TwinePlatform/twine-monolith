@@ -66,6 +66,8 @@ export default [
        */
       // Check user doesn't already exist
       if (await Users.exists(knex, { where: { email: payload.email } })) {
+        // Registering second roles is not yet supported;
+        // see https://github.com/TwinePlatform/twine-api/issues/247#issuecomment-443182884
         throw Boom.conflict('User with this e-mail already registered');
       }
       if (organisation && organisation.id !== payload.organisationId) {
