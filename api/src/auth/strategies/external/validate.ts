@@ -19,7 +19,7 @@ export const ExternalCredentials = {
       const match = await asyncFind<ApiTokenRow>((tkn) => compare(token, tkn.api_token), tokens);
       return {
         isValid: true,
-        credentials: { scope: [match.api_token_access], app: 'frontline' },
+        credentials: { scope: [match.api_token_access], app: match.api_token_name },
       };
     } catch (error) {
       return { isValid: false, credentials: {} };
