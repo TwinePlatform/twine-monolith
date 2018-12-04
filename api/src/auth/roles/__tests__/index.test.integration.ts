@@ -208,29 +208,4 @@ describe('Roles Module', () => {
       expect(roles).toEqual([]);
     });
   });
-
-  describe('::oneFromUser', () => {
-    test('SUCCESS - returns users role', async () => {
-      const result = await Roles.oneFromUser(trx, { userId: 1, organisationId: 1 });
-      expect(result).toEqual(RoleEnum.VISITOR);
-    });
-
-    test('Error - returns error if userId does not exist', async () => {
-      expect.assertions(1);
-      try {
-        await Roles.oneFromUser(trx, { userId: 20, organisationId: 1 });
-      } catch (error) {
-        expect(error.message).toEqual('User 20 does not exist');
-      }
-    });
-
-    test('Error - returns error if multiple roles exist', async () => {
-      expect.assertions(1);
-      try {
-        await Roles.oneFromUser(trx, { userId: 8, organisationId: 1 });
-      } catch (error) {
-        expect(error.message).toEqual('User 8 has multiple roles, please use "Roles.fromUser"');
-      }
-    });
-  });
 });

@@ -101,20 +101,6 @@ const Roles: RolesInterface = {
     return rows[0].exists;
   },
 
-  oneFromUser: async (client, { userId, organisationId }) => {
-    const result = await Roles.fromUser(client, { userId, organisationId });
-
-    if (result.length === 0) {
-      throw new Error(`User ${userId} does not exist`);
-    }
-
-    if (result.length > 1) {
-      throw new Error(`User ${userId} has multiple roles, please use "Roles.fromUser"`);
-    }
-
-    return result[0];
-  },
-
   fromUser: async (client, { userId, organisationId }) => {
     const result = await client('access_role')
       .select('access_role_name')

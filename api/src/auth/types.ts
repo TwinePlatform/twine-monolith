@@ -60,7 +60,6 @@ export type PermissionTuple = {
 
 type PermissionQuery = PermissionTuple & { role: RoleEnum };
 type UserPermissionQuery = Omit<PermissionQuery, 'role'> & { userId: number };
-type RolePermissionQuery = { role: RoleEnum, accessMode?: 'full' | 'restricted' };
 type RolesPermissionQuery = { roles: RoleEnum[], accessMode?: 'full' | 'restricted' };
 
 type RoleQuery = {
@@ -88,8 +87,6 @@ export type PermissionInterface = {
 
   userHas: (k: Knex, a: UserPermissionQuery) => Promise<boolean>
 
-  forRole: (k: Knex, a: RolePermissionQuery) => Promise<PermissionTuple[]>
-
   forRoles: (k: Knex, a: RolesPermissionQuery) => Promise<PermissionTuple[]>
 };
 
@@ -103,6 +100,4 @@ export type RolesInterface = {
   userHas: (k: Knex, a: RolesQuery) => Promise<boolean>
 
   fromUser: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum[]>
-
-  oneFromUser: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum>
 };
