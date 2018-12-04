@@ -125,7 +125,7 @@ const routes: Hapi.ServerRoute[] = [
         query
         );
 
-      const count = (limit && offset)
+      const count = (limit || offset)
         ? await CommunityBusinesses.getVisitLogsWithUsers(
           knex,
           communityBusiness,
