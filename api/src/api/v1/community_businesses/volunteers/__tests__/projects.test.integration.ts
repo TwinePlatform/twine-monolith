@@ -3,7 +3,7 @@ import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { CommunityBusinesses, Organisation, User, Volunteers } from '../../../../../models';
-import { Credentials } from '../../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('API /community-businesses/me/volunteers/projects', () => {
@@ -23,8 +23,8 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     vol = await Volunteers.getOne(knex, { where: { name: 'Emma Emmerich' } });
     volAdmin = await Volunteers.getOne(knex, { where: { name: 'Raiden' } });
 
-    volCreds = await Credentials.get(knex, vol, organisation);
-    adminCreds = await Credentials.get(knex, volAdmin, organisation);
+    volCreds = await StandardCredentials.get(knex, vol, organisation);
+    adminCreds = await StandardCredentials.get(knex, volAdmin, organisation);
   });
 
   afterAll(async () => {

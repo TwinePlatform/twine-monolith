@@ -3,7 +3,7 @@ import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisations, Organisation } from '../../../../models';
-import { Credentials } from '../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 describe('GET /community-businesses', () => {
@@ -30,9 +30,9 @@ describe('GET /community-businesses', () => {
     // In fact, TWINE_ADMIN users shouldn't be registered against any ORG
     // Data model, however, doesn't currently support this.
     const aperture = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
-    twAdminCreds = await Credentials.get(knex, twAdmin, aperture);
-    cbAdminCreds = await Credentials.get(knex, cbAdmin, organisation);
-    volunteerCreds = await Credentials.get(knex, volunteer, organisation);
+    twAdminCreds = await StandardCredentials.get(knex, twAdmin, aperture);
+    cbAdminCreds = await StandardCredentials.get(knex, cbAdmin, organisation);
+    volunteerCreds = await StandardCredentials.get(knex, volunteer, organisation);
   });
 
   afterAll(async () => {

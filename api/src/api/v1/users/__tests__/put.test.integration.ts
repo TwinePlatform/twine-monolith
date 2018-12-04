@@ -4,7 +4,7 @@ import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
 import { User, Users, Organisation, Organisations } from '../../../../models';
-import { Credentials } from '../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 describe('PUT /users/{userId}', () => {
@@ -25,7 +25,7 @@ describe('PUT /users/{userId}', () => {
     visitor = await Users.getOne(knex, { where: { name: 'Chell' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
 
-    credentials = await Credentials.get(knex, user, organisation);
+    credentials = await StandardCredentials.get(knex, user, organisation);
   });
 
   afterAll(async () => {

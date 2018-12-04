@@ -4,7 +4,7 @@ import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { Users, Organisations, LinkedFeedback, User, Organisation } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
-import { Credentials } from '../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 describe('/community-business/{id}/feedback', () => {
@@ -30,9 +30,9 @@ describe('/community-business/{id}/feedback', () => {
       { where: { name: 'Black Mesa Research' } }
     );
 
-    creds.gordon = await Credentials.get(knex, users.gordon, orgs.blackMesa);
-    creds.glados = await Credentials.get(knex, users.glados, orgs.aperture);
-    creds.bigboss = await Credentials.get(knex, users.bigboss, orgs.aperture);
+    creds.gordon = await StandardCredentials.get(knex, users.gordon, orgs.blackMesa);
+    creds.glados = await StandardCredentials.get(knex, users.glados, orgs.aperture);
+    creds.bigboss = await StandardCredentials.get(knex, users.bigboss, orgs.aperture);
   });
 
   beforeEach(async () => {

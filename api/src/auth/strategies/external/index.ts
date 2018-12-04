@@ -1,11 +1,8 @@
-import validate from './validate';
-
-type ExternalCredentials = {
-  scope: string[],
-  app: 'frontline',
-};
+import validate, { ExternalCredentials } from './validate';
+import { ExternalAppCredentials } from './types';
 
 export {
   validate,
+  ExternalAppCredentials,
   ExternalCredentials,
 };

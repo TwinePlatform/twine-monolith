@@ -14,7 +14,7 @@ import {
   VolunteerLogs,
 } from '../../../../models';
 import { rndPastDateThisMonth } from '../../../../../tests/utils/data';
-import { Credentials } from '../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 describe('API /community-businesses/me/volunteer-logs', () => {
@@ -39,9 +39,9 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     cbAdmin = await Users.getOne(knex, { where: { name: 'Gordon' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } });
 
-    volCreds = await Credentials.get(knex, user, organisation);
-    vAdminCreds = await Credentials.get(knex, volAdmin, organisation);
-    adminCreds = await Credentials.get(knex, cbAdmin, organisation);
+    volCreds = await StandardCredentials.get(knex, user, organisation);
+    vAdminCreds = await StandardCredentials.get(knex, volAdmin, organisation);
+    adminCreds = await StandardCredentials.get(knex, cbAdmin, organisation);
   });
 
   afterAll(async () => {

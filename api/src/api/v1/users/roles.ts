@@ -1,7 +1,6 @@
 import * as Hapi from 'hapi';
 import { response } from './schema';
-import Roles from '../../../auth/roles';
-import { Credentials } from '../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../auth/strategies/standard';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -20,15 +19,7 @@ const routes: Hapi.ServerRoute[] = [
       response: { schema: response },
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      const {
-        server: { app: { knex } },
-      } = request;
-
-      const { user, organisation } = Credentials.fromRequest(request);
-      const roles = await Roles.fromUser(
-        knex,
-        { userId: user.id, organisationId: organisation.id }
-      );
+      const { organisation, roles } = StandardCredentials.fromRequest(request);
 
       return {
         organisationId: organisation.id,

@@ -4,7 +4,7 @@ import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
-import { Credentials } from '../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 describe('API v1 :: Community Businesses :: Visit Activities', () => {
@@ -30,9 +30,9 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     twAdmin = await Users.getOne(server.app.knex, { where: { name: 'Big Boss' } });
     organisation = await Organisations.getOne(server.app.knex, { where: { id: 1 } });
     otherOrganisation = await Organisations.getOne(server.app.knex, { where: { id: 2 } });
-    credentials = await Credentials.get(server.app.knex, user, organisation);
-    otherCreds = await Credentials.get(server.app.knex, wrongUser, otherOrganisation);
-    twAdminCreds = await Credentials.get(server.app.knex, twAdmin, organisation);
+    credentials = await StandardCredentials.get(server.app.knex, user, organisation);
+    otherCreds = await StandardCredentials.get(server.app.knex, wrongUser, otherOrganisation);
+    twAdminCreds = await StandardCredentials.get(server.app.knex, twAdmin, organisation);
   });
 
   afterAll(async () => {

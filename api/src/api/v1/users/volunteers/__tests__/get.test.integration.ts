@@ -8,7 +8,7 @@ import {
   CommunityBusinesses,
   CbAdmins,
 } from '../../../../../models';
-import { Credentials } from '../../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('GET /v1/users/volunteers/:id', () => {
@@ -35,9 +35,10 @@ describe('GET /v1/users/volunteers/:id', () => {
     orgAdmin = await CbAdmins.getOne(server.app.knex, { where: { name: 'Gordon' } });
     wrongOrgAdmin = await Volunteers.getOne(server.app.knex, { where: { name: 'Turret' } });
 
-    volunteerCreds = await Credentials.get(server.app.knex, volunteerAdmin, organisation);
-    adminCreds = await Credentials.get(server.app.knex, orgAdmin, organisation);
-    wrongAdminCreds = await Credentials.get(server.app.knex, wrongOrgAdmin, wrongOrganisation);
+    volunteerCreds = await StandardCredentials.get(server.app.knex, volunteerAdmin, organisation);
+    adminCreds = await StandardCredentials.get(server.app.knex, orgAdmin, organisation);
+    wrongAdminCreds =
+      await StandardCredentials.get(server.app.knex, wrongOrgAdmin, wrongOrganisation);
   });
 
   afterAll(async () => {

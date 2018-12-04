@@ -3,13 +3,13 @@ import * as Boom from 'boom';
 import * as Knex from 'knex';
 import { compare } from 'bcrypt';
 import { asyncFind } from '../../../utils';
+import { ApiTokenRow } from './types';
 
 
-type ApiTokenRow = { api_token: string, api_token_access: string };
-
-export const Credentials = {
+export const ExternalCredentials = {
   async get (knex: Knex, token: string) {
-    const tokens: ApiTokenRow[] = await knex('api_token').select(['api_token', 'api_token_access']);
+    const tokens: ApiTokenRow[] = await knex('api_token')
+      .select(['api_token', 'api_token_access', 'api_token_string']);
 
     if (tokens.length < 1) {
       return { isValid: false, credentials: {} };
@@ -31,7 +31,7 @@ const validateExternal = async (request: Hapi.Request, token: string, h: Hapi.Re
   const { log, server: { app: { knex } } } = request;
 
   try {
-    return Credentials.get(knex, token);
+    return ExternalCredentials.get(knex, token);
   } catch (error) {
     log('error', error);
     return Boom.badImplementation('Error with route authentication for 3rd party clients');

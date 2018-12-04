@@ -17,7 +17,7 @@ import * as Hapi from 'hapi';
 import { PutUserRequest } from '../types';
 import Roles from '../../../auth/roles';
 import { RoleEnum } from '../../../auth/types';
-import { Credentials } from '../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../auth/strategies/standard';
 
 
 export default async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
@@ -26,7 +26,7 @@ export default async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
     params: { userId },
   } = request;
 
-  const { user, roles, organisation } = Credentials.fromRequest(request);
+  const { user, roles, organisation } = StandardCredentials.fromRequest(request);
 
   if (roles.includes(RoleEnum.TWINE_ADMIN)) {
     return true;

@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { Organisations, Organisation, User, Users } from '../../../../../models';
-import { Credentials } from '../../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('POST /v1/visitor/search', () => {
@@ -19,7 +19,7 @@ describe('POST /v1/visitor/search', () => {
       { where: { name: 'Aperture Science' } }
     );
     user = await Users.getOne(server.app.knex, { where: { name: 'GlaDos' } });
-    credentials = await Credentials.get(server.app.knex, user, organisation);
+    credentials = await StandardCredentials.get(server.app.knex, user, organisation);
   });
 
   afterAll(async () => {

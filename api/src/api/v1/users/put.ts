@@ -18,7 +18,7 @@ import {
 } from './schema';
 import { PutUserRequest } from '../types';
 import { isChildUser } from '../prerequisites';
-import { Credentials } from '../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../auth/strategies/standard';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -59,7 +59,7 @@ const routes: Hapi.ServerRoute[] = [
         payload,
       } = request;
 
-      const { user } = Credentials.fromRequest(request);
+      const { user } = StandardCredentials.fromRequest(request);
       const changeset = { ...payload };
 
       try {

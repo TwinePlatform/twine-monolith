@@ -11,13 +11,13 @@ import * as Boom from 'boom';
 import { isNil } from 'ramda';
 import { CommunityBusinesses } from '../../../models';
 import { GetCommunityBusinessRequest } from '../types';
-import { Credentials } from '../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../auth/strategies/standard';
 
 
 export const is360GivingId = (s: string) => isNaN(parseInt(s, 10));
 const getCbFromCredentials = async (request: GetCommunityBusinessRequest) => {
   const knex = request.server.app.knex;
-  const id = Credentials.fromRequest(request).organisation.id;
+  const id = StandardCredentials.fromRequest(request).organisation.id;
   return CommunityBusinesses.getOne(knex, { where: { id } });
 };
 

@@ -4,7 +4,7 @@ import * as Joi from 'joi';
 import { compare } from 'bcrypt';
 import { Users, Organisations } from '../../../models';
 import { email, DEPRECATED_password, password, response } from './schema';
-import { Session, Token, Credentials } from '../../../auth/strategies/standard';
+import { Session, Token, StandardCredentials } from '../../../auth/strategies/standard';
 import { LoginRequest, EscalateRequest } from '../types';
 import { RoleEnum } from '../../../auth/types';
 import Roles from '../../../auth/roles';
@@ -108,7 +108,7 @@ const route: Hapi.ServerRoute[] = [
     },
     handler: async (request: EscalateRequest, h: Hapi.ResponseToolkit) => {
       const { payload: { password } } = request;
-      const credentials = Credentials.fromRequest(request);
+      const credentials = StandardCredentials.fromRequest(request);
 
       const matches = await compare(password, credentials.user.password);
 

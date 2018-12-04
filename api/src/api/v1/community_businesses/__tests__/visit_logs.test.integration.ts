@@ -4,7 +4,7 @@ import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
-import { Credentials } from '../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 describe('API v1 :: Community Businesses :: Visit Logs', () => {
@@ -22,7 +22,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
 
     cbAdmin = await Users.getOne(server.app.knex, { where: { id: 2 } });
     organisation = await Organisations.getOne(server.app.knex, { where: { id: 1 } });
-    credentials = await Credentials.get(server.app.knex, cbAdmin, organisation);
+    credentials = await StandardCredentials.get(server.app.knex, cbAdmin, organisation);
   });
 
   afterAll(async () => {

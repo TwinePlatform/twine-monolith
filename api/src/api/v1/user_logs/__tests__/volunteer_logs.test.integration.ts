@@ -7,7 +7,7 @@ import * as moment from 'moment';
 import { getConfig } from '../../../../../config';
 import { RoleEnum } from '../../../../auth/types';
 import { User, Organisation, Users, Organisations } from '../../../../models';
-import { Credentials } from '../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 describe('GET /volunteer-logs', () => {
@@ -23,7 +23,7 @@ describe('GET /volunteer-logs', () => {
     user = await Users.getOne(server.app.knex, { where: { name: 'Big Boss' } });
     organisation =
       await Organisations.getOne(server.app.knex, { where: { name: 'Aperture Science' } });
-    credentials = await Credentials.get(server.app.knex, user, organisation);
+    credentials = await StandardCredentials.get(server.app.knex, user, organisation);
   });
 
   afterAll(async () => {

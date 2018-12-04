@@ -3,7 +3,7 @@ import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
-import { Credentials } from '../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 describe('PUT /users/{userId}', () => {
@@ -23,8 +23,8 @@ describe('PUT /users/{userId}', () => {
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     multiRoleUser = await Users.getOne(knex, { where: { name: 'Turret' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
-    credentials = await Credentials.get(knex, user, organisation);
-    multiCredentials = await Credentials.get(knex, multiRoleUser, organisation);
+    credentials = await StandardCredentials.get(knex, user, organisation);
+    multiCredentials = await StandardCredentials.get(knex, multiRoleUser, organisation);
   });
 
   afterAll(async () => {

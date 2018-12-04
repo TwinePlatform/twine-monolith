@@ -1,9 +1,11 @@
 import * as Hapi from 'hapi';
+import * as Boom from 'boom';
+import * as Knex from 'knex';
 import { User, Organisation } from '../../../models';
 import { RoleEnum } from '../../types';
 
 
-export type StandardCredentials = {
+export type StandardUserCredentials = {
   user: User
   organisation: Organisation
   roles: RoleEnum[]
@@ -41,4 +43,15 @@ export type TSessionManager = {
   destroy: (request: Hapi.Request, res: Hapi.ResponseObject) => Hapi.ResponseObject
   escalate: (request: Hapi.Request, res: Hapi.ResponseObject) => Hapi.ResponseObject
   deescalate: (request: Hapi.Request, res: Hapi.ResponseObject) => Hapi.ResponseObject
+};
+
+export type ValidateUser = (a: Session, b: Hapi.Request) =>
+  Promise <{credentials?: Hapi.AuthCredentials, isValid: boolean } | Boom<null>>;
+
+export type TCredentials = {
+  get: (k: Knex, u: User, o: Organisation, privilege?: 'full' | 'restricted', s?: Session) =>
+    Promise<Hapi.AuthCredentials>
+
+  fromRequest: (r: Hapi.Request) =>
+    StandardUserCredentials & { scope: string[] }
 };

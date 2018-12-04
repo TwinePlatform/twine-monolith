@@ -4,7 +4,7 @@ import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { Users, User, Organisations, Organisation } from '../../../../../models';
-import { Credentials } from '../../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('API v1 - register new users', () => {
@@ -37,7 +37,7 @@ describe('API v1 - register new users', () => {
     };
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     organisation = await Organisations.fromUser(knex, { where: user });
-    credentials = await Credentials.get(knex, user, organisation, 'full');
+    credentials = await StandardCredentials.get(knex, user, organisation, 'full');
   });
 
   afterAll(async () => {

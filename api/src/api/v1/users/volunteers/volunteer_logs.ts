@@ -10,7 +10,7 @@ import {
   PutMyVolunteerLogRequest,
   GetMyVolunteerLogsAggregateRequest,
 } from '../../types';
-import { Credentials } from '../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -41,7 +41,7 @@ const routes: Hapi.ServerRoute[] = [
         query,
       } = request;
 
-      const { user } = Credentials.fromRequest(request);
+      const { user } = StandardCredentials.fromRequest(request);
       const since = new Date(query.since);
       const until = new Date(query.until);
 
@@ -84,7 +84,7 @@ const routes: Hapi.ServerRoute[] = [
         query,
       } = request;
 
-      const { user } = Credentials.fromRequest(request);
+      const { user } = StandardCredentials.fromRequest(request);
 
       const log = await VolunteerLogs.getOne(
         knex,
@@ -142,7 +142,7 @@ const routes: Hapi.ServerRoute[] = [
         params: { logId },
       } = request;
 
-      const { user } = Credentials.fromRequest(request);
+      const { user } = StandardCredentials.fromRequest(request);
 
       const log = await VolunteerLogs.getOne(knex, { where: {
         id: Number(logId),
@@ -187,7 +187,7 @@ const routes: Hapi.ServerRoute[] = [
         params: { logId },
       } = request;
 
-      const { user } = Credentials.fromRequest(request);
+      const { user } = StandardCredentials.fromRequest(request);
 
       const affectedRows = await VolunteerLogs.destroy(knex, {
         id: Number(logId),
@@ -228,7 +228,7 @@ const routes: Hapi.ServerRoute[] = [
         query,
       } = request;
 
-      const { user } = Credentials.fromRequest(request);
+      const { user } = StandardCredentials.fromRequest(request);
       const since = new Date(query.since);
       const until = new Date(query.until);
 

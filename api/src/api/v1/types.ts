@@ -2,16 +2,16 @@ import * as Hapi from 'hapi';
 import { Dictionary } from 'ramda';
 import { ApiRequestQuery, ApiRequestBody } from './schema/request';
 import { ApiResponse } from './schema/response';
-import { StandardCredentials } from '../../auth/strategies/standard';
-import { ExternalCredentials } from '../../auth/strategies/external';
+import { StandardUserCredentials } from '../../auth/strategies/standard';
+import { ExternalAppCredentials } from '../../auth/strategies/external';
 import { RoleEnum } from '../../auth/types';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../models';
 import { Omit } from '../../types/internal';
 
 
 declare module 'hapi' {
-  interface UserCredentials extends StandardCredentials {}
-  interface AppCredentials extends ExternalCredentials {}
+  interface UserCredentials extends StandardUserCredentials {}
+  interface AppCredentials extends ExternalAppCredentials {}
 }
 
 

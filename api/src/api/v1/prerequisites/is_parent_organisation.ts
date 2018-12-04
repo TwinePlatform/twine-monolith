@@ -23,7 +23,7 @@ import { GetCommunityBusinessRequest } from '../types';
 import getOrganisation from './get_organisation';
 import { RoleEnum } from '../../../auth/types';
 import Roles from '../../../auth/roles';
-import { Credentials } from '../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../auth/strategies/standard';
 
 
 const getOrg = async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
@@ -39,7 +39,7 @@ const getOrg = async (request: GetCommunityBusinessRequest, h: Hapi.ResponseTool
 
 export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
   const { server: { app: { knex } } } = request;
-  const { user } = Credentials.fromRequest(request);
+  const { user } = StandardCredentials.fromRequest(request);
 
   // TODO: Funding body case is unimplemented
   //       See: https:github.com/TwinePlatform/twine-api/issues/120

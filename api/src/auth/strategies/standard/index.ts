@@ -1,13 +1,13 @@
-import validate, { Credentials } from './validate';
-import { StandardCredentials } from './types';
+import validate, { StandardCredentials } from './validate';
+import { StandardUserCredentials } from './types';
 import { SessionManager as Session, TokenManager as Token } from './session';
 
 
 export {
-  StandardCredentials,
+  StandardUserCredentials,
   Session,
   Token,
   validate,
-  Credentials,
+  StandardCredentials,
 };
 

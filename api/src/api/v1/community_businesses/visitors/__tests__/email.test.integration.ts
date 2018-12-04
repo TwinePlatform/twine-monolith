@@ -4,7 +4,7 @@ import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../../models';
 import { EmailTemplate } from '../../../../../services/email/templates';
-import { Credentials } from '../../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('API /community-businesses/{id}/visitors', () => {
@@ -21,7 +21,7 @@ describe('API /community-businesses/{id}/visitors', () => {
 
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     organisation = await Organisations.getOne(knex, { where: { id: 1 } });
-    credentials = await Credentials.get(knex, user, organisation);
+    credentials = await StandardCredentials.get(knex, user, organisation);
   });
 
   afterAll(async () => {

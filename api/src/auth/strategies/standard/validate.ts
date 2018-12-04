@@ -1,25 +1,13 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import * as Knex from 'knex';
-import { Users, Organisations, User, Organisation } from '../../../models';
+import { Users, Organisations } from '../../../models';
 import Roles from '../../roles';
 import Permissions from '../../permissions';
 import { scopeToString } from '../../scopes';
-import { Session, StandardCredentials } from './types';
+import { ValidateUser, TCredentials } from './types';
 
 
-type ValidateUser = (a: Session, b: Hapi.Request) =>
-  Promise <{credentials?: Hapi.AuthCredentials, isValid: boolean } | Boom<null>>;
-
-type TCredentials = {
-  get: (k: Knex, u: User, o: Organisation, privilege?: 'full' | 'restricted', s?: Session) =>
-    Promise<Hapi.AuthCredentials>
-
-  fromRequest: (r: Hapi.Request) =>
-    StandardCredentials & { scope: string[] }
-};
-
-export const Credentials: TCredentials = {
+export const StandardCredentials: TCredentials = {
   async get (knex, user, organisation, privilege = 'full', session) {
     const roles = await Roles.fromUser(knex, { userId: user.id, organisationId: organisation.id });
     const permissions = await Permissions.forRoles(knex, { roles, accessMode: privilege });
@@ -61,7 +49,7 @@ const validateUser: ValidateUser = async (decoded, request) => {
     ]);
 
     return {
-      credentials: await Credentials.get(knex, user, organisation, privilege, decoded),
+      credentials: await StandardCredentials.get(knex, user, organisation, privilege, decoded),
       isValid: Boolean(user && organisation && roles.length > 0),
     };
 

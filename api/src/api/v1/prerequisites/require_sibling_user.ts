@@ -29,7 +29,7 @@ import * as Boom from 'boom';
 import { Organisations } from '../../../models';
 import { RequireSiblingPreReq } from '../types';
 import { RoleEnum } from '../../../auth/types';
-import { Credentials } from '../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../auth/strategies/standard';
 
 
 export default async (request: RequireSiblingPreReq, h: Hapi.ResponseToolkit) => {
@@ -38,7 +38,7 @@ export default async (request: RequireSiblingPreReq, h: Hapi.ResponseToolkit) =>
     params: { userId },
   } = request;
 
-  const { organisation, roles } = Credentials.fromRequest(request);
+  const { organisation, roles } = StandardCredentials.fromRequest(request);
 
   if (roles.includes(RoleEnum.TWINE_ADMIN)) {
     return true;

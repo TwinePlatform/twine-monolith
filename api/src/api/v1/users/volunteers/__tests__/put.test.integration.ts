@@ -4,7 +4,7 @@ import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { Organisation, User, Volunteers, CommunityBusinesses } from '../../../../../models';
 import { getTrx } from '../../../../../../tests/utils/database';
-import { Credentials } from '../../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('PUT /v1/users/volunteers/:id', () => {
@@ -21,7 +21,7 @@ describe('PUT /v1/users/volunteers/:id', () => {
     knex = server.app.knex;
     organisation = await CommunityBusinesses.getOne(server.app.knex, { where: { id: 2 } });
     user = await Volunteers.getOne(server.app.knex, { where: { id: 7 } });
-    credentials = await Credentials.get(knex, user, organisation);
+    credentials = await StandardCredentials.get(knex, user, organisation);
   });
 
   beforeEach(async () => {

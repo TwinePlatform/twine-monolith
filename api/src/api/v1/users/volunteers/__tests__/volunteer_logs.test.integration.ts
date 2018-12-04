@@ -6,7 +6,7 @@ import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { User, Users, Organisation, Organisations, VolunteerLog } from '../../../../../models';
-import { Credentials } from '../../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('API /users/me/volunteer-logs', () => {
@@ -27,8 +27,8 @@ describe('API /users/me/volunteer-logs', () => {
     user = await Users.getOne(knex, { where: { name: 'Emma Emmerich' } });
     nonVolunteer = await Users.getOne(knex, { where: { name: 'Gordon' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } });
-    credentials = await Credentials.get(knex, user, organisation);
-    nonVolCreds = await Credentials.get(knex, nonVolunteer, organisation);
+    credentials = await StandardCredentials.get(knex, user, organisation);
+    nonVolCreds = await StandardCredentials.get(knex, nonVolunteer, organisation);
   });
 
   afterAll(async () => {

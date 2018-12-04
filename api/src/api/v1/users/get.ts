@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 import { Users } from '../../../models';
 import { query, response } from './schema';
-import { Credentials } from '../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../auth/strategies/standard';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -39,7 +39,7 @@ const routes: Hapi.ServerRoute[] = [
       response: { schema: response },
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      const { user } = Credentials.fromRequest(request);
+      const { user } = StandardCredentials.fromRequest(request);
 
       return Users.serialise(user);
     },

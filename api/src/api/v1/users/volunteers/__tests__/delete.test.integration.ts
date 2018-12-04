@@ -4,7 +4,7 @@ import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { Organisation, User, Volunteers, CommunityBusinesses, Users } from '../../../../../models';
 import { getTrx } from '../../../../../../tests/utils/database';
-import { Credentials } from '../../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('DELETE /v1/users/volunteers/:id', () => {
@@ -33,9 +33,9 @@ describe('DELETE /v1/users/volunteers/:id', () => {
     otherUser = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     twAdmin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
 
-    credentials = await Credentials.get(knex, user, organisation);
-    otherCredentials = await Credentials.get(knex, otherUser, otherOrganisation);
-    twAdminCreds = await Credentials.get(knex, twAdmin, otherOrganisation);
+    credentials = await StandardCredentials.get(knex, user, organisation);
+    otherCredentials = await StandardCredentials.get(knex, otherUser, otherOrganisation);
+    twAdminCreds = await StandardCredentials.get(knex, twAdmin, otherOrganisation);
   });
 
   beforeEach(async () => {

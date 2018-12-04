@@ -4,7 +4,7 @@ import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { User, CommunityBusinesses, Organisation, Volunteers, Users } from '../../../../../models';
 import { RoleEnum } from '../../../../../auth/types';
-import { Credentials } from '../../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('API /community-businesses/{id}/volunteers', () => {
@@ -24,8 +24,8 @@ describe('API /community-businesses/{id}/volunteers', () => {
     volunteerAdmin = await Volunteers.getOne(knex, { where: { id: 7 } });
     orgAdmin = await Users.getOne(knex, { where: { name: 'Gordon' } });
 
-    vCreds = await Credentials.get(knex, volunteerAdmin, organisation);
-    aCreds = await Credentials.get(knex, orgAdmin, organisation);
+    vCreds = await StandardCredentials.get(knex, volunteerAdmin, organisation);
+    aCreds = await StandardCredentials.get(knex, orgAdmin, organisation);
   });
 
   afterAll(async () => {

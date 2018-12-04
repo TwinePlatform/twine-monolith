@@ -4,7 +4,7 @@
 import * as Hapi from 'hapi';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
-import { Credentials } from '../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 import { Organisation, User, Users, Organisations } from '../../../../models';
 
 
@@ -21,7 +21,7 @@ describe('API /users', () => {
     user = await Users.getOne(server.app.knex, { where: { name: 'GlaDos' } });
     organisation =
       await Organisations.getOne(server.app.knex, { where: { name: 'Aperture Science' } });
-    credentials = await Credentials.get(server.app.knex, user, organisation);
+    credentials = await StandardCredentials.get(server.app.knex, user, organisation);
   });
 
   afterAll(async () => {

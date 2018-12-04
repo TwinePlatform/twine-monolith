@@ -4,7 +4,7 @@ import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { Organisation, Organisations, User, Users } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
-import { Credentials } from '../../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 describe('PUT /community-businesses', () => {
@@ -25,8 +25,8 @@ describe('PUT /community-businesses', () => {
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     admin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
-    credentials = await Credentials.get(knex, user, organisation);
-    adminCreds = await Credentials.get(knex, admin, organisation);
+    credentials = await StandardCredentials.get(knex, user, organisation);
+    adminCreds = await StandardCredentials.get(knex, admin, organisation);
   });
 
   afterAll(async () => {

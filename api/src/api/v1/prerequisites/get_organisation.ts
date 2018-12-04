@@ -10,7 +10,7 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import { Organisations } from '../../../models';
 import { GetCommunityBusinessRequest } from '../types';
-import { Credentials } from '../../../auth/strategies/standard';
+import { StandardCredentials } from '../../../auth/strategies/standard';
 
 
 const is360GivingId = (s: string) => isNaN(parseInt(s, 10));
@@ -20,7 +20,7 @@ export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseTool
 
   const organisation =
     (id === 'me')
-      ? Credentials.fromRequest(request).organisation
+      ? StandardCredentials.fromRequest(request).organisation
       : (is360GivingId(id))
         ? await Organisations.getOne(knex, { where: { _360GivingId: id } })
         : await Organisations.getOne(knex, { where: { id: Number(id) } });
