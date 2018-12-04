@@ -96,7 +96,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       });
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: expect.arrayContaining([]), });
+      expect(res.result).toEqual({ result: [] });
     });
 
     test(':: try to get activities for non-child cb', async () => {
