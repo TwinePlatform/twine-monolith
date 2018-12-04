@@ -144,9 +144,10 @@ const Permissions: PermissionInterface = {
   },
 
   forRoles: async (client, { roles, accessMode = 'full' }) => {
-    const accessRoles = await client('access_role')
+    const accessRoles = (await client('access_role')
       .select('access_role_id')
-      .whereIn('access_role_name', roles);
+      .whereIn('access_role_name', roles))
+      .map(((x: any) => x.access_role_id));
 
     if (accessRoles.length !== roles.length) {
       throw new Error(`One or more of the roles ${roles} do not exist`);

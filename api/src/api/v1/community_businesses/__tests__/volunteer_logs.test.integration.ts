@@ -1,6 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import * as moment from 'moment';
+import * as MockDate from 'mockdate';
 import { omit } from 'ramda';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
@@ -750,6 +751,8 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         credentials: vAdminCreds,
       });
 
+      MockDate.set((<any> resGet.result).result.startedAt);
+
       expect(resGet.statusCode).toBe(200);
 
       const log = omit(
@@ -776,6 +779,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(resCheck.statusCode).toBe(200);
       expect(resCheck.result).toEqual({ result: expect.objectContaining(log) });
 
+      MockDate.reset();
     });
 
 
@@ -785,6 +789,8 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         url: '/v1/community-businesses/me/volunteer-logs/3',
         credentials: vAdminCreds,
       });
+
+      MockDate.set((<any> resGet.result).result.startedAt);
 
       expect(resGet.statusCode).toBe(200);
 
@@ -811,6 +817,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
       expect(resCheck.statusCode).toBe(404);
 
+      MockDate.reset();
     });
 
     test('SUCCESS - can sync a mix of logs for self and others as VOLUNTEER_ADMIN', async () => {

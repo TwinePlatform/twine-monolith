@@ -9,7 +9,7 @@ import { ApiTokenRow } from './types';
 export const ExternalCredentials = {
   async get (knex: Knex, token: string) {
     const tokens: ApiTokenRow[] = await knex('api_token')
-      .select(['api_token', 'api_token_access', 'api_token_string']);
+      .select(['api_token', 'api_token_access', 'api_token_name']);
 
     if (tokens.length < 1) {
       return { isValid: false, credentials: {} };

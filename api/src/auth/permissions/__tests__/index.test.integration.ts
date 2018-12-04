@@ -315,7 +315,7 @@ describe('Permisions Module', () => {
         { roles: [RoleEnum.VOLUNTEER, RoleEnum.VISITOR] }
       );
 
-      expect(result).toHaveLength(15);
+      expect(result).toHaveLength(8);
       expect(result).toEqual(expect.arrayContaining([
         {
           access: AccessEnum.READ,
@@ -329,16 +329,6 @@ describe('Permisions Module', () => {
         },
         {
           access: AccessEnum.READ,
-          resource: ResourceEnum.ORG_VOLUNTEERS,
-          permissionLevel: PermissionLevelEnum.PARENT,
-        },
-        {
-          access: AccessEnum.WRITE,
-          resource: ResourceEnum.ORG_VOLUNTEERS,
-          permissionLevel: PermissionLevelEnum.PARENT,
-        },
-        {
-          access: AccessEnum.DELETE,
           resource: ResourceEnum.ORG_VOLUNTEERS,
           permissionLevel: PermissionLevelEnum.PARENT,
         },
@@ -384,7 +374,7 @@ describe('Permisions Module', () => {
 
         await Permissions.forRoles(trx, { roles: [RoleEnum.VOLUNTEER] });
       } catch (error) {
-        expect(error.message).toEqual('One or more of the roles [VOLUNTEER] do not exist');
+        expect(error.message).toEqual('One or more of the roles VOLUNTEER do not exist');
       }
     });
 
@@ -398,7 +388,7 @@ describe('Permisions Module', () => {
         await Permissions.forRoles(trx, { roles: [RoleEnum.VOLUNTEER, RoleEnum.CB_ADMIN] });
       } catch (error) {
         expect(error.message)
-          .toEqual('One or more of the roles [VOLUNTEER, CB_ADMIN] do not exist');
+          .toEqual('One or more of the roles VOLUNTEER,CB_ADMIN do not exist');
       }
     });
   });
