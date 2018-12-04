@@ -91,39 +91,12 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: get activities for child cb', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/community-businesses/1/visit-activities',
+        url: '/v1/community-businesses/2/visit-activities',
         credentials: twAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: expect.arrayContaining(
-        [
-          expect.objectContaining({
-            category: 'Socialising',
-            id: 2,
-            name: 'Wear Pink',
-            monday: false,
-            tuesday: false,
-            wednesday: true,
-            thursday: false,
-            friday: false,
-            saturday: false,
-            sunday: false,
-          }),
-          expect.objectContaining({
-            id: 3,
-            name: 'Free Running',
-            category: 'Sports',
-            monday: false,
-            tuesday: true,
-            wednesday: true,
-            thursday: false,
-            friday: true,
-            saturday: true,
-            sunday: true,
-          }),
-        ]),
-      });
+      expect(res.result).toEqual({ result: expect.arrayContaining([]), });
     });
 
     test(':: try to get activities for non-child cb', async () => {
