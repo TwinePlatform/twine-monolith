@@ -234,11 +234,6 @@
 					}
 					else {
 
-						if (true) {
-							$$shout('DEBUG:\n\n' + JSON.stringify(result) + '\n\n' + error);
-							return;
-						}
-
 						// no internet connection
 						if (error === 0) {
 							$$shout('Could not connect. Please check your internet connection & try again.', 3000);
