@@ -44,8 +44,11 @@ describe('Pre-requisite :: is_sibling_user', () => {
       method: 'GET',
       url: '/aliens/6',
       credentials: {
-        user: await Users.getOne(knex, { where: { name: 'Big Boss' } }),
-        role: RoleEnum.TWINE_ADMIN,
+        user: {
+          user: await Users.getOne(knex, { where: { name: 'Big Boss' } }),
+          organisation: apertureScience,
+          roles: [RoleEnum.TWINE_ADMIN],
+        },
         scope: [],
       },
     });
@@ -59,9 +62,11 @@ describe('Pre-requisite :: is_sibling_user', () => {
       method: 'GET',
       url: '/aliens/6',
       credentials: {
-        user: orgAdmin,
-        organisation: blackMesa,
-        role: RoleEnum.CB_ADMIN,
+        user: {
+          user: orgAdmin,
+          organisation: blackMesa,
+          roles: [RoleEnum.CB_ADMIN],
+        },
         scope: [],
       },
     });
@@ -75,9 +80,11 @@ describe('Pre-requisite :: is_sibling_user', () => {
       method: 'GET',
       url: '/aliens/6',
       credentials: {
-        user: volunteerAdmin,
-        organisation: blackMesa,
-        role: RoleEnum.CB_ADMIN,
+        user: {
+          user: volunteerAdmin,
+          organisation: blackMesa,
+          roles: [RoleEnum.CB_ADMIN],
+        },
         scope: [],
       },
     });
@@ -91,9 +98,11 @@ describe('Pre-requisite :: is_sibling_user', () => {
       method: 'GET',
       url: '/aliens/6',
       credentials: {
-        user: adminFromWrongOrg,
-        organisation: apertureScience,
-        role: RoleEnum.CB_ADMIN,
+        user: {
+          user: adminFromWrongOrg,
+          organisation: apertureScience,
+          roles: [RoleEnum.CB_ADMIN],
+        },
         scope: [],
       },
     });

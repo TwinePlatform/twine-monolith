@@ -2,15 +2,16 @@ import * as Hapi from 'hapi';
 import { Dictionary } from 'ramda';
 import { ApiRequestQuery, ApiRequestBody } from './schema/request';
 import { ApiResponse } from './schema/response';
-import { UserCredentials as UC } from '../../auth/strategies/standard';
+import { StandardUserCredentials } from '../../auth/strategies/standard';
+import { ExternalAppCredentials } from '../../auth/strategies/external';
 import { RoleEnum } from '../../auth/types';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../models';
 import { Omit } from '../../types/internal';
 
 
 declare module 'hapi' {
-  interface AuthCredentials extends UC {}
-  interface UserCredentials extends User {}
+  interface UserCredentials extends StandardUserCredentials {}
+  interface AppCredentials extends ExternalAppCredentials {}
 }
 
 
@@ -151,6 +152,7 @@ export interface GetMyVolunteerLogsRequest extends Hapi.Request {
   query: ApiRequestQuery & {
     since: string
     until: string
+    fields: (keyof VolunteerLog)[]
   };
   pre: {
     communityBusiness: CommunityBusiness

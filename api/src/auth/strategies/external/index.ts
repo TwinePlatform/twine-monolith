@@ -1,5 +1,8 @@
-import validate from './validate';
+import validate, { ExternalCredentials } from './validate';
+import { ExternalAppCredentials } from './types';
 
 export {
-  validate
+  validate,
+  ExternalAppCredentials,
+  ExternalCredentials,
 };

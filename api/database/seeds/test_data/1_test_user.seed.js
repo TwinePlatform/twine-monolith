@@ -110,6 +110,7 @@ exports.seed = (knex) =>
       {
         user_name: 'Turret',
         user_password: gladosPassword,
+        qr_code: 'friend',
         email: '1010@aperturescience.com',
         phone_number: '+1 555-555-3141',
         post_code: '82394',

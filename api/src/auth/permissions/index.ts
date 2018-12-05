@@ -1,4 +1,5 @@
-import { PermissionInterface } from '../types';
+import { uniqWith, equals } from 'ramda';
+import { PermissionInterface, PermissionTuple } from '../types';
 
 
 const Permissions: PermissionInterface = {
@@ -142,7 +143,16 @@ const Permissions: PermissionInterface = {
     return rows[0].exists;
   },
 
-  forRole: async (client, { role, accessMode = 'full' }) => {
+  forRoles: async (client, { roles, accessMode = 'full' }) => {
+    const accessRoles = (await client('access_role')
+      .select('access_role_id')
+      .whereIn('access_role_name', roles))
+      .map(((x: any) => x.access_role_id));
+
+    if (accessRoles.length !== roles.length) {
+      throw new Error(`One or more of the roles ${roles} do not exist`);
+    }
+
     const query = await client('permission')
       .innerJoin(
         'access_role_permission',
@@ -153,18 +163,15 @@ const Permissions: PermissionInterface = {
         resource: 'permission_entity',
         permissionLevel: 'permission_level',
       })
-      .where({
-        ['access_role_permission.access_role_id']: client('access_role')
-          .select('access_role_id')
-          .where({ access_role_name: role }),
+      .whereIn(
+        'access_role_permission.access_role_id',
+        accessRoles
+      )
+      .andWhere({
         ['access_role_permission.access_mode']: accessMode,
       });
 
-    if (query.length === 0) {
-      throw new Error('Role does not exist or has no associated permissions');
-    }
-    return query;
-
+    return uniqWith(equals, query) as PermissionTuple[];
   },
 };
 

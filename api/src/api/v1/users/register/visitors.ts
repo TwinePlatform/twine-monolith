@@ -19,6 +19,7 @@ import {
   Visitors,
   CommunityBusinesses,
   CbAdmins,
+  Users,
 } from '../../../../models';
 import * as QRCode from '../../../../services/qrcode';
 import * as PdfService from '../../../../services/pdf';
@@ -26,6 +27,7 @@ import { EmailTemplate } from '../../../../services/email/templates';
 import { RoleEnum } from '../../../../auth/types';
 import Roles from '../../../../auth/roles';
 import { RegisterRequest } from '../../types';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 export default [
   {
@@ -55,15 +57,17 @@ export default [
       const {
         payload,
         server: { app: { EmailService, knex } },
-        auth: { credentials: { organisation } },
       } = request;
 
+      const { organisation } = StandardCredentials.fromRequest(request);
       /*
        * Preliminaries
        * (Can possibly eventually be removed into pre-requisites)
        */
       // Check user doesn't already exist
-      if (await Visitors.exists(knex, { where: { email: payload.email } })) {
+      if (await Users.exists(knex, { where: { email: payload.email } })) {
+        // Registering second roles is not yet supported;
+        // see https://github.com/TwinePlatform/twine-api/issues/247#issuecomment-443182884
         throw Boom.conflict('User with this e-mail already registered');
       }
       if (organisation && organisation.id !== payload.organisationId) {
@@ -79,7 +83,11 @@ export default [
       });
       const [admin] = await CbAdmins.fromOrganisation(knex, { id: payload.organisationId });
 
+      /* istanbul ignore next */
       if (!admin) {
+        // Because of a change in testing method, this is now unreachable
+        // (and was always functionally impossible), but is kept **just
+        // in case**
         throw Boom.badData('No associated admin for this organisation');
       }
 

@@ -4,7 +4,7 @@ import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { Organisation, User, Volunteers, CommunityBusinesses, Users } from '../../../../../models';
 import { getTrx } from '../../../../../../tests/utils/database';
-import { RoleEnum } from '../../../../../auth/types';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('DELETE /v1/users/volunteers/:id', () => {
@@ -13,14 +13,29 @@ describe('DELETE /v1/users/volunteers/:id', () => {
   let knex: Knex;
 
   let organisation: Organisation;
+  let otherOrganisation: Organisation;
   let user: User;
+  let otherUser: User;
+  let twAdmin: User;
+  let credentials: Hapi.AuthCredentials;
+  let otherCredentials: Hapi.AuthCredentials;
+  let twAdminCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
-    organisation = await CommunityBusinesses.getOne(server.app.knex, { where: { id: 2 } });
-    user = await Volunteers.getOne(server.app.knex, { where: { id: 7 } });
+
+    organisation = await CommunityBusinesses.getOne(knex, { where: { id: 2 } });
+    otherOrganisation = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
+
+    user = await Volunteers.getOne(knex, { where: { id: 7 } });
+    otherUser = await Users.getOne(knex, { where: { name: 'GlaDos' } });
+    twAdmin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
+
+    credentials = await StandardCredentials.get(knex, user, organisation);
+    otherCredentials = await StandardCredentials.get(knex, otherUser, otherOrganisation);
+    twAdminCreds = await StandardCredentials.get(knex, twAdmin, otherOrganisation);
   });
 
   beforeEach(async () => {
@@ -41,31 +56,19 @@ describe('DELETE /v1/users/volunteers/:id', () => {
     const getRes = await server.inject({
       method: 'GET',
       url: '/v1/users/volunteers/6',
-      credentials: {
-        scope: ['user_details-sibling:read'],
-        user,
-        organisation,
-      },
+      credentials,
     });
 
     const res = await server.inject({
       method: 'DELETE',
       url: '/v1/users/volunteers/6',
-      credentials: {
-        scope: ['user_details-sibling:write'],
-        user,
-        organisation,
-      },
+      credentials,
     });
 
     const getRes2 = await server.inject({
       method: 'GET',
       url: '/v1/users/volunteers/6',
-      credentials: {
-        scope: ['user_details-sibling:read'],
-        user,
-        organisation,
-      },
+      credentials,
     });
 
     // volunteer exists
@@ -77,14 +80,11 @@ describe('DELETE /v1/users/volunteers/:id', () => {
     expect(getRes2.statusCode).toBe(404);
   });
 
-  test(':: fail - user that is not a volunteers returns 404', async () => {
+  test(':: fail - user that is not a volunteer returns 404', async () => {
     const res = await server.inject({
       method: 'DELETE',
-      url: '/v1/users/volunteers/1',
-      credentials: {
-        scope: ['user_details-child:write'],
-        role: RoleEnum.TWINE_ADMIN,
-      },
+      url: '/v1/users/volunteers/3',
+      credentials,
     });
 
     expect(res.statusCode).toBe(404);
@@ -94,10 +94,7 @@ describe('DELETE /v1/users/volunteers/:id', () => {
     const res = await server.inject({
       method: 'DELETE',
       url: '/v1/users/volunteers/7',
-      credentials: {
-        scope: ['user_details-child:write'],
-        role: RoleEnum.TWINE_ADMIN,
-      },
+      credentials: twAdminCreds,
     });
     expect(res.statusCode).toBe(200);
   });
@@ -106,12 +103,7 @@ describe('DELETE /v1/users/volunteers/:id', () => {
     const res = await server.inject({
       method: 'DELETE',
       url: '/v1/users/volunteers/7',
-      credentials: {
-        scope: ['user_details-child:write'],
-        user: await Users.getOne(knex, { where: { name: 'GlaDos' } }),
-        organisation: await CommunityBusinesses
-          .getOne(knex, { where: { name: 'Aperture Science' } }),
-      },
+      credentials: otherCredentials,
     });
     expect(res.statusCode).toBe(403);
   });

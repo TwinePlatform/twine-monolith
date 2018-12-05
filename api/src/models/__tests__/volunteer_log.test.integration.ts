@@ -42,6 +42,15 @@ describe('VolunteerLog model', () => {
       expect(logs).toHaveLength(0);
     });
 
+    test('get :: additional fields', async () => {
+      const logs = await VolunteerLogs.get(trx, {
+        fields: ['userName', 'organisationName'],
+      });
+      expect(logs).toEqual(expect.arrayContaining(
+        [{ organisationName: 'Black Mesa Research', userName: 'Emma Emmerich' }]
+      ));
+    });
+
     test('getOne :: returns first log', async () => {
       const logs = await VolunteerLogs.getOne(trx, { order: ['startedAt', 'asc'] });
       expect(logs).toEqual(expect.objectContaining({
@@ -80,11 +89,11 @@ describe('VolunteerLog model', () => {
     test('fromCommunityBusiness :: gets all logs at CB between dates', async () => {
       const now = moment();
       const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
-      const bw = {
+      const query = {
         since: now.clone().subtract(6, 'day').startOf('day').toDate(),
         until: now.clone().subtract(4, 'day').startOf('day').toDate(),
       };
-      const logs = await VolunteerLogs.fromCommunityBusiness(trx, cb, bw);
+      const logs = await VolunteerLogs.fromCommunityBusiness(trx, cb, query);
 
       expect(logs).toHaveLength(2);
       expect(logs).toEqual(expect.arrayContaining([
@@ -115,11 +124,11 @@ describe('VolunteerLog model', () => {
     test('fromUser :: returns volunteer logs for user between dates', async () => {
       const now = moment();
       const volunteer = await Users.getOne(trx, { where: { name: 'Emma Emmerich' } });
-      const bw = {
+      const query = {
         since: now.clone().subtract(6, 'day').startOf('day').toDate(),
         until: now.clone().subtract(4, 'day').startOf('day').toDate(),
       };
-      const logs = await VolunteerLogs.fromUser(trx, volunteer, bw);
+      const logs = await VolunteerLogs.fromUser(trx, volunteer, query);
 
       expect(logs).toHaveLength(2);
       expect(logs).toEqual(expect.arrayContaining([

@@ -35,9 +35,7 @@ describe('GET /users/logout', () => {
     const res = await server.inject({
       method: 'GET',
       url: '/v1/users/logout',
-      credentials: {
-        scope: ['access'],
-      },
+      credentials: {},
     });
 
     expect(res.statusCode).toBe(200);

@@ -4,11 +4,30 @@ import { Users, Organisations } from '../../../models';
 import Roles from '../../roles';
 import Permissions from '../../permissions';
 import { scopeToString } from '../../scopes';
-import { Session, UserCredentials } from './types';
+import { ValidateUser, TCredentials } from './types';
 
 
-type ValidateUser = (a: Session, b: Hapi.Request)
-  => Promise <{credentials?: UserCredentials, isValid: boolean } | Boom<null>>;
+export const StandardCredentials: TCredentials = {
+  async get (knex, user, organisation, privilege = 'full', session) {
+    const roles = await Roles.fromUser(knex, { userId: user.id, organisationId: organisation.id });
+    const permissions = await Permissions.forRoles(knex, { roles, accessMode: privilege });
+
+    return {
+      scope: permissions.map(scopeToString),
+      user: {
+        user,
+        organisation,
+        roles,
+        session,
+      },
+    };
+  },
+
+  fromRequest (request: Hapi.Request) {
+    return { ...request.auth.credentials.user, scope: request.auth.credentials.scope };
+  },
+};
+
 
 const validateUser: ValidateUser = async (decoded, request) => {
   try {
@@ -22,25 +41,16 @@ const validateUser: ValidateUser = async (decoded, request) => {
     const [
       user,
       organisation,
-      role,
+      roles,
     ] = await Promise.all([
       Users.getOne(knex, { where: { id: userId, deletedAt: null } }),
       Organisations.getOne(knex, { where: { id: organisationId, deletedAt: null } }),
-      Roles.oneFromUser(knex, { userId, organisationId }),
+      Roles.fromUser(knex, { userId, organisationId }),
     ]);
 
-    const permissions = await Permissions.forRole(knex, { role, accessMode: privilege });
-    const scope = permissions.map(scopeToString);
-
     return {
-      credentials: {
-        user,
-        organisation,
-        role,
-        scope,
-        session: decoded,
-      },
-      isValid: Boolean(user && organisation && role),
+      credentials: await StandardCredentials.get(knex, user, organisation, privilege, decoded),
+      isValid: Boolean(user && organisation && roles.length > 0),
     };
 
   } catch (error) {

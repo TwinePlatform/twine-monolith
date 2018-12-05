@@ -34,9 +34,11 @@ describe('Pre-requisite :: is_child_organisation', () => {
       method: 'GET',
       url: '/foo',
       credentials: {
-        role: RoleEnum.CB_ADMIN,
-        user: await Users.getOne(knex, { where: { name: 'GlaDos' } }),
-        organisation: await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture' } }),
+        user: {
+          roles: [RoleEnum.CB_ADMIN],
+          user: await Users.getOne(knex, { where: { name: 'GlaDos' } }),
+          organisation: await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture' } }),
+        },
         scope: [],
       },
     });
@@ -49,9 +51,11 @@ describe('Pre-requisite :: is_child_organisation', () => {
       method: 'GET',
       url: '/foo',
       credentials: {
-        role: RoleEnum.TWINE_ADMIN,
-        user: await Users.getOne(knex, { where: { name: 'GlaDos' } }),
-        organisation: await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture' } }),
+        user: {
+          roles: [RoleEnum.TWINE_ADMIN],
+          user: await Users.getOne(knex, { where: { name: 'GlaDos' } }),
+          organisation: await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture' } }),
+        },
         scope: [],
       },
     });
@@ -64,9 +68,11 @@ describe('Pre-requisite :: is_child_organisation', () => {
       method: 'GET',
       url: '/foo',
       credentials: {
-        role: RoleEnum.CB_ADMIN,
-        user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
-        organisation: await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture' } }),
+        user: {
+          roles: [RoleEnum.CB_ADMIN],
+          user: await Users.getOne(knex, { where: { name: 'Gordon' } }),
+          organisation: await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture' } }),
+        },
         scope: [],
       },
     });

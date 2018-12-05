@@ -10,7 +10,7 @@ import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { getConfig } from '../../config';
 import * as QRCode from '../services/qrcode';
-import { renameKeys, ageArrayToBirthYearArray, pickOrAll } from '../utils';
+import { ageArrayToBirthYearArray, pickOrAll } from '../utils';
 
 
 const { qrcode: { secret } } = getConfig(process.env.NODE_ENV);
@@ -90,6 +90,8 @@ export const Visitors: VisitorCollection = {
     const query = evolve({
       where: Visitors.toColumnNames,
       whereNot: Visitors.toColumnNames,
+      whereBetween: pipe(evolve({ birthYear: ageArrayToBirthYearArray }), Visitors.toColumnNames),
+      whereNotBetween: Visitors.toColumnNames,
     }, q);
 
     return applyQueryModifiers(
@@ -126,10 +128,7 @@ export const Visitors: VisitorCollection = {
     const query = evolve({
       where: Visitors.toColumnNames,
       whereNot: Visitors.toColumnNames,
-      whereBetween: pipe(
-        evolve({ birthYear: ageArrayToBirthYearArray }),
-        renameKeys({ birthYear: 'user_account.birth_year' })
-        ),
+      whereBetween: pipe(evolve({ birthYear: ageArrayToBirthYearArray }), Visitors.toColumnNames),
     }, q);
 
     const additionalColumnMap: Map<keyof LinkedVisitEvent, string> = {

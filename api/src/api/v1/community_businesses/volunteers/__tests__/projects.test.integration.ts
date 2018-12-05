@@ -3,6 +3,7 @@ import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { CommunityBusinesses, Organisation, User, Volunteers } from '../../../../../models';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('API /community-businesses/me/volunteers/projects', () => {
@@ -11,6 +12,8 @@ describe('API /community-businesses/me/volunteers/projects', () => {
   let organisation: Organisation;
   let vol: User;
   let volAdmin: User;
+  let volCreds: Hapi.AuthCredentials;
+  let adminCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -19,6 +22,9 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     organisation = await CommunityBusinesses.getOne(knex, { where: { id: 2 } });
     vol = await Volunteers.getOne(knex, { where: { name: 'Emma Emmerich' } });
     volAdmin = await Volunteers.getOne(knex, { where: { name: 'Raiden' } });
+
+    volCreds = await StandardCredentials.get(knex, vol, organisation);
+    adminCreds = await StandardCredentials.get(knex, volAdmin, organisation);
   });
 
   afterAll(async () => {
@@ -30,11 +36,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects',
-        credentials: {
-          scope: ['organisations_volunteers-parent:read'],
-          organisation,
-          user: vol,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -50,11 +52,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/2/volunteers/projects',
-        credentials: {
-          scope: ['organisations_volunteers-parent:read'],
-          organisation,
-          user: vol,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(404);
@@ -66,11 +64,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteers/projects',
-        credentials: {
-          scope: ['organisations_volunteers-parent:write'],
-          organisation,
-          user: volAdmin,
-        },
+        credentials: adminCreds,
         payload: {
           name: 'new project',
         },
@@ -87,11 +81,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res2 = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects',
-        credentials: {
-          scope: ['organisations_volunteers-parent:read'],
-          organisation,
-          user: volAdmin,
-        },
+        credentials: adminCreds,
       });
 
       expect(res2.statusCode).toBe(200);
@@ -103,11 +93,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/2/volunteers/projects',
-        credentials: {
-          scope: ['organisations_volunteers-parent:write'],
-          organisation,
-          user: volAdmin,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(401);
@@ -119,11 +105,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects/1',
-        credentials: {
-          scope: ['organisations_volunteers-parent:read'],
-          organisation,
-          user: vol,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -140,11 +122,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects/99999',
-        credentials: {
-          scope: ['organisations_volunteers-parent:read'],
-          organisation,
-          user: vol,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(404);
@@ -154,11 +132,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects/2',
-        credentials: {
-          scope: ['organisations_volunteers-parent:read'],
-          organisation,
-          user: vol,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(404);
@@ -170,11 +144,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteers/projects/1',
-        credentials: {
-          scope: ['organisations_volunteers-parent:write'],
-          organisation,
-          user: volAdmin,
-        },
+        credentials: adminCreds,
         payload: {
           name: 'Foo',
         },
@@ -194,11 +164,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteers/projects/1',
-        credentials: {
-          scope: ['organisations_volunteers-parent:write'],
-          organisation,
-          user: volAdmin,
-        },
+        credentials: adminCreds,
         payload: {
           organisationId: 3,
         },
@@ -212,11 +178,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/2/volunteers/projects/1',
-        credentials: {
-          scope: ['organisations_volunteers-parent:write'],
-          organisation,
-          user: volAdmin,
-        },
+        credentials: adminCreds,
         payload: {
           name: 'Foo',
         },
@@ -231,11 +193,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteers/projects/1',
-        credentials: {
-          scope: ['organisations_volunteers-parent:delete'],
-          organisation,
-          user: volAdmin,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -246,11 +204,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteers/projects/999',
-        credentials: {
-          scope: ['organisations_volunteers-parent:delete'],
-          organisation,
-          user: volAdmin,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(404);
@@ -261,11 +215,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/2/volunteers/projects/2',
-        credentials: {
-          scope: ['organisations_volunteers-parent:delete'],
-          organisation,
-          user: volAdmin,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(401);

@@ -63,3 +63,14 @@ export const ageArrayToBirthYearArray = (ageArray: number[]) =>
 
 export const pickOrAll = curry(
   (xs: string[] | undefined, o: object) => xs ? pick(xs, o) : { ...o });
+
+export const asyncFind = async <T>(fn: (a: T) => Promise<boolean>, xs: T[]): Promise<T> => {
+  if (xs.length < 1) {
+    throw new Error('Item not found');
+  }
+  const [head, ...tail] = xs;
+  const isFound = await fn(head);
+  return isFound
+    ? head
+    : asyncFind(fn, tail);
+};

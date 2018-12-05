@@ -41,6 +41,24 @@ describe('Roles Module', () => {
       }
     });
 
+    test('SUCCESS - can add second role for a user', async () => {
+      try {
+        const result = await Roles.add(trx, {
+          role: RoleEnum.VOLUNTEER,
+          userId: 1,
+          organisationId: 1,
+        });
+
+        expect(result).toEqual(expect.objectContaining({
+          access_role_id: 2,
+          organisation_id: 1,
+          user_account_id: 1,
+        }));
+      } catch (error) {
+        expect(error).toBeFalsy();
+      }
+    });
+
     test('ERROR - throws error if user/role link exists', async () => {
       expect.assertions(1);
       try {
@@ -66,33 +84,19 @@ describe('Roles Module', () => {
       }
     });
 
-    test('ERROR - throws if user already has role at same organisation', async () => {
+    test('ERROR - throws if user already has same role at same organisation', async () => {
       expect.assertions(1);
 
       try {
-        await Roles.add(trx, { role: RoleEnum.VOLUNTEER, userId: 1, organisationId: 1 });
+        await Roles.add(trx, { role: RoleEnum.VISITOR, userId: 1, organisationId: 1 });
       } catch (error) {
         expect(error.message)
           .toEqual(
-            'Constraint violation: user_account_access_role_one_org_per_user\n' +
-            'Tried to associate User 1 with role VOLUNTEER at organistion 1'
+            'Constraint violation: user_account_access_role_unique_row\n' +
+            'Tried to associate User 1 with role VISITOR at organistion 1'
           );
       }
     });
-
-    test('ERROR - throws if user already has role at different organisation', async () => {
-      expect.assertions(1);
-
-      try {
-        await Roles.add(trx, { role: RoleEnum.VOLUNTEER, userId: 2, organisationId: 1 });
-      } catch (error) {
-        expect(error.message).toEqual(
-          'Constraint violation: user_account_access_role_one_org_per_user\n' +
-            'Tried to associate User 2 with role VOLUNTEER at organistion 1'
-        );
-      }
-    });
-
   });
 
   describe('::remove', () => {
@@ -155,7 +159,7 @@ describe('Roles Module', () => {
           { to: RoleEnum.VOLUNTEER, from: RoleEnum.VISITOR, userId: 1, organisationId: 1 });
       } catch (error) {
         expect(error.message).toEqual(
-          'Constraint violation: user_account_access_role_one_org_per_user\n' +
+          'Constraint violation: user_account_access_role_unique_row\n' +
           'Tried to associate User 1 with role VOLUNTEER at organistion 1');
       }
     });
@@ -187,18 +191,40 @@ describe('Roles Module', () => {
     });
   });
 
-  describe('::oneFromUser', () => {
-    test('SUCCESS - returns users role id', async () => {
-      const result = await Roles.oneFromUser(trx, { userId: 1, organisationId: 1 });
-      expect(result).toEqual(RoleEnum.VISITOR);
+  describe('::fromUser', () => {
+    test('returns array of one role if only one role at org', async () => {
+      const roles = await Roles.fromUser(trx, { userId: 1, organisationId: 1 });
+      expect(roles).toEqual([RoleEnum.VISITOR]);
     });
 
-    test('Error - returns error if userId does not exist', async () => {
+    test('returns array of multiple roles if user has multiple roles at org', async () => {
+      await Roles.add(trx, { userId: 1, organisationId: 1, role: RoleEnum.VOLUNTEER });
+      const roles = await Roles.fromUser(trx, { userId: 1, organisationId: 1 });
+      expect(roles).toEqual([RoleEnum.VISITOR, RoleEnum.VOLUNTEER]);
+    });
+
+    test('returns empty array if no roles are found', async () => {
+      const roles = await Roles.fromUser(trx, { userId: 4, organisationId: 2 });
+      expect(roles).toEqual([]);
+    });
+
+    test('throws if user ID does not exist', async () => {
       expect.assertions(1);
+
       try {
-        await Roles.oneFromUser(trx, { userId: 20, organisationId: 1 });
+        await Roles.fromUser(trx, { userId: 20000, organisationId: 1 });
       } catch (error) {
-        expect(error.message).toEqual('User 20 does not exist');
+        expect(error.message).toBe('User with ID 20000 does not exist');
+      }
+    });
+
+    test('throws if organisation ID does not exist', async () => {
+      expect.assertions(1);
+
+      try {
+        await Roles.fromUser(trx, { userId: 1, organisationId: -1 });
+      } catch (error) {
+        expect(error.message).toBe('Organisation with ID -1 does not exist');
       }
     });
   });

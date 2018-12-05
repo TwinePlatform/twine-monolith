@@ -1,11 +1,12 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import { has, pick, omit } from 'ramda';
+import { has, omit } from 'ramda';
 import { User, ModelQuery, Volunteers } from '../../../../models';
 import { query, response } from '../../users/schema';
 import { meOrId } from '../schema';
 import { getCommunityBusiness, isChildOrganisation } from '../../prerequisites';
 import { GetAllVolunteersRequest } from '../../types';
+import { requestQueryToModelQuery } from '../../utils';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -43,16 +44,10 @@ const routes: Hapi.ServerRoute[] = [
         return Boom.forbidden('Insufficient permissions to access this resource');
       }
 
-      const q: {
-        limit?: number,
-        offset?: number,
-        order?: [string, 'asc' | 'desc']
-      } = {
-        ...pick(['limit', 'offset'], query),
-        order: query.sort ? [query.sort, query.order || 'asc'] : undefined,
+      const modelQuery: ModelQuery<User> = {
+        ...requestQueryToModelQuery<User>(query),
+        where: { deletedAt: null },
       };
-
-      const modelQuery: ModelQuery<User> = { ...q, where: { deletedAt: null } };
 
       // TODO: Need to actually filtering and field option
 

@@ -4,6 +4,7 @@ import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../../models';
 import { EmailTemplate } from '../../../../../services/email/templates';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('API /community-businesses/{id}/visitors', () => {
@@ -11,6 +12,7 @@ describe('API /community-businesses/{id}/visitors', () => {
   let knex: Knex;
   let user: User;
   let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -19,6 +21,7 @@ describe('API /community-businesses/{id}/visitors', () => {
 
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     organisation = await Organisations.getOne(knex, { where: { id: 1 } });
+    credentials = await StandardCredentials.get(knex, user, organisation);
   });
 
   afterAll(async () => {
@@ -37,11 +40,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       payload: {
         type: 'qrcode',
       },
-      credentials: {
-        user,
-        organisation,
-        scope: ['user_details-child:write'],
-      },
+      credentials,
     });
 
     expect(res.statusCode).toBe(200);
@@ -69,11 +68,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       payload: {
         type: 'qrcode',
       },
-      credentials: {
-        user,
-        organisation,
-        scope: ['user_details-child:write'],
-      },
+      credentials,
     });
 
     expect(res.statusCode).toBe(502);
@@ -86,11 +81,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       payload: {
         type: 'qrcode',
       },
-      credentials: {
-        user,
-        organisation,
-        scope: ['user_details-child:write'],
-      },
+      credentials,
     });
 
     expect(res.statusCode).toBe(403);
@@ -103,11 +94,7 @@ describe('API /community-businesses/{id}/visitors', () => {
       payload: {
         type: 'unknownemailtype',
       },
-      credentials: {
-        user,
-        organisation,
-        scope: ['user_details-child:write'],
-      },
+      credentials,
     });
 
     expect(res.statusCode).toBe(400);

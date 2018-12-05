@@ -3,6 +3,7 @@ import { getConfig } from '../../../config';
 import { getTrx } from '../../../tests/utils/database';
 import factory from '../../../tests/utils/factory';
 import { Organisations } from '..';
+import { Users } from '../user';
 
 
 describe('Organisation Model', () => {
@@ -73,6 +74,13 @@ describe('Organisation Model', () => {
       const result =
           await Organisations.fromUser(knex, { where: { email: 'freedom@aperturescience.com' } });
       expect(result).toBeNull();
+    });
+
+    test('fromUser :: works with a full user object', async () => {
+      const user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
+      const result = await Organisations.fromUser(knex, { where: user });
+      expect(result).toEqual(
+        expect.objectContaining({ _360GivingId: 'GB-COH-3205', name: 'Aperture Science' }));
     });
   });
 

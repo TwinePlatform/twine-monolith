@@ -28,11 +28,14 @@
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --project tsconfig.json --fix",
     "migrate:latest": "knex migrate:latest",
+    "migrate:latest:prod": "NODE_ENV=production knex migrate:latest",
     "migrate:latest:test": "NODE_ENV=testing knex migrate:latest",
     "migrate:make": "node ./bin/db.js migrate:make",
     "migrate:teardown": "node ./bin/db.js migrate:teardown",
+    "migrate:teardown:prod": "NODE_ENV=production node ./bin/db.js migrate:teardown",
     "migrate:teardown:test": "NODE_ENV=testing node ./bin/db.js migrate:teardown",
     "db:reset": "npm run migrate:teardown && npm run migrate:latest",
+    "db:reset:prod": "npm run migrate:teardown:prod && npm run migrate:latest:prod",
     "db:reset:test": "npm run migrate:teardown:test && npm run migrate:latest:test",
     "seed:make": "knex seed:make",
     "seed:run": "knex seed:run",
@@ -82,9 +85,11 @@
     "typescript": "^3.1.6"
   },
   "devDependencies": {
+    "@types/mockdate": "^2.0.0",
     "axios-mock-adapter": "^1.15.0",
     "factory-girl": "^5.0.3",
     "jest": "^23.6.0",
+    "mockdate": "^2.0.2",
     "nodemon": "^1.18.7",
     "ts-jest": "^23.10.4",
     "tslint-config-twine": "github:TwinePlatform/tslint-config-twine#2.1.0"

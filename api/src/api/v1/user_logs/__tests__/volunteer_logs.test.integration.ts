@@ -6,13 +6,24 @@ import { init } from '../../../../server';
 import * as moment from 'moment';
 import { getConfig } from '../../../../../config';
 import { RoleEnum } from '../../../../auth/types';
+import { User, Organisation, Users, Organisations } from '../../../../models';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
+
 
 describe('GET /volunteer-logs', () => {
   let server: Hapi.Server;
+  let user: User;
+  let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
     server = await init(config);
+
+    user = await Users.getOne(server.app.knex, { where: { name: 'Big Boss' } });
+    organisation =
+      await Organisations.getOne(server.app.knex, { where: { name: 'Aperture Science' } });
+    credentials = await StandardCredentials.get(server.app.knex, user, organisation);
   });
 
   afterAll(async () => {
@@ -23,10 +34,7 @@ describe('GET /volunteer-logs', () => {
     const res = await server.inject({
       method: 'GET',
       url: '/v1/volunteer-logs',
-      credentials: {
-        role: RoleEnum.TWINE_ADMIN,
-        scope: ['volunteer_logs-child:read'],
-      },
+      credentials,
     });
 
     expect(res.statusCode).toBe(200);
@@ -39,10 +47,7 @@ describe('GET /volunteer-logs', () => {
     const res = await server.inject({
       method: 'GET',
       url: `/v1/volunteer-logs?since=${since}&until=${until}`,
-      credentials: {
-        role: RoleEnum.TWINE_ADMIN,
-        scope: ['volunteer_logs-child:read'],
-      },
+      credentials,
     });
 
     expect(res.statusCode).toBe(200);
@@ -54,6 +59,7 @@ describe('GET /volunteer-logs', () => {
         organisationId: 2,
         organisationName: 'Black Mesa Research',
         userId: 6,
+        userName: 'Emma Emmerich',
       },
       {
         activity: 'Committee work, AGM',
@@ -61,6 +67,7 @@ describe('GET /volunteer-logs', () => {
         organisationId: 2,
         organisationName: 'Black Mesa Research',
         userId: 6,
+        userName: 'Emma Emmerich',
       },
       {
         activity: 'Support and Care for vulnerable community members',
@@ -68,6 +75,7 @@ describe('GET /volunteer-logs', () => {
         organisationId: 2,
         organisationName: 'Black Mesa Research',
         userId: 6,
+        userName: 'Emma Emmerich',
       },
       {
         activity: 'Office support',
@@ -75,6 +83,7 @@ describe('GET /volunteer-logs', () => {
         organisationId: 1,
         organisationName: 'Aperture Science',
         userId: 6,
+        userName: 'Emma Emmerich',
       },
       {
         activity: 'Office support',
@@ -82,6 +91,7 @@ describe('GET /volunteer-logs', () => {
         organisationId: 2,
         organisationName: 'Black Mesa Research',
         userId: 6,
+        userName: 'Emma Emmerich',
       },
     ].map(expect.objectContaining)));
   });
@@ -91,8 +101,11 @@ describe('GET /volunteer-logs', () => {
       method: 'GET',
       url: `/v1/volunteer-logs`,
       credentials: {
-        role: RoleEnum.FUNDING_BODY,
-        scope: ['volunteer_logs-child:read'],
+        ...credentials,
+        user: {
+          ...credentials.user,
+          roles: [RoleEnum.FUNDING_BODY],
+        },
       },
     });
 

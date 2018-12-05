@@ -35,9 +35,11 @@ describe('Pre-requisite :: is_parent_organisation', () => {
       method: 'GET',
       url: '/foo/1',
       credentials: {
-        role: RoleEnum.CB_ADMIN,
-        user: await Users.getOne(knex, { where: { name: 'GlaDos' } }),
-        organisation: await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture' } }),
+        user: {
+          roles: [RoleEnum.CB_ADMIN],
+          user: await Users.getOne(knex, { where: { name: 'GlaDos' } }),
+          organisation: await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture' } }),
+        },
         scope: [],
       },
     });
@@ -60,9 +62,11 @@ describe('Pre-requisite :: is_parent_organisation', () => {
       method: 'GET',
       url: '/foo/2',
       credentials: {
-        role: RoleEnum.VOLUNTEER,
-        user,
-        organisation,
+        user: {
+          roles: [RoleEnum.VOLUNTEER],
+          user,
+          organisation,
+        },
         scope: [],
       },
     });

@@ -1,4 +1,5 @@
 import { RoleEnum, RolesInterface } from '../types';
+import { Users, Organisations } from '../../models';
 
 
 const Roles: RolesInterface = {
@@ -101,23 +102,33 @@ const Roles: RolesInterface = {
     return rows[0].exists;
   },
 
-  oneFromUser: async (client, { userId, organisationId }) => {
+  fromUser: async (client, { userId, organisationId }) => {
+    const userExists = await Users.exists(client, { where: { id: userId } });
+
+    if (!userExists) {
+      throw new Error(`User with ID ${userId} does not exist`);
+    }
+
+    const orgExists = await Organisations.exists(client, { where: { id: organisationId } });
+
+    if (!orgExists) {
+      throw new Error(`Organisation with ID ${organisationId} does not exist`);
+    }
+
     const result = await client('access_role')
       .select('access_role_name')
-      .where({
-        access_role_id: client('user_account_access_role')
+      .whereIn(
+        'access_role_id',
+        client('user_account_access_role')
           .select('access_role_id')
           .where({
             user_account_id: userId,
             organisation_id: organisationId,
-          }),
-      });
+          })
+      )
+      .orderBy('access_role_name', 'asc');
 
-    if (result.length === 0) {
-      throw new Error(`User ${userId} does not exist`);
-    }
-
-    return result[0].access_role_name as RoleEnum;
+    return result.map((row: any) => row.access_role_name) as RoleEnum[];
   },
 };
 

@@ -3,7 +3,7 @@ import * as Knex from 'knex';
 import { init } from '../../../../../tests/utils/server';
 import { getConfig } from '../../../../../config';
 import pre from '../get_community_business';
-import { CommunityBusinesses, Organisations, CbAdmins } from '../../../../models';
+import { CommunityBusinesses, Organisations, CbAdmins, Users } from '../../../../models';
 
 
 describe('Prerequisites :: getCommunityBusiness', () => {
@@ -57,7 +57,7 @@ describe('Prerequisites :: getCommunityBusiness', () => {
     const res = await server.inject({
       method: 'GET',
       url: '/foo/me',
-      credentials: { scope: [], organisation, user },
+      credentials: { scope: [], user: { organisation, user, roles: [] } },
     });
 
     expect(res.statusCode).toBe(200);
@@ -89,13 +89,18 @@ describe('Prerequisites :: getCommunityBusiness', () => {
       await Organisations.getOne(knex, { where: { _360GivingId: 'GB-COH-3205' } });
     const communityBusiness =
       await CommunityBusinesses.getOne(knex, { where: { id: organisation.id } });
+    const user = await Users.getOne(knex, { where: { name: 'Chell' } });
 
     const res = await server.inject({
       method: 'GET',
       url: '/poo',
       credentials: {
         scope: [],
-        organisation,
+        user: {
+          user,
+          organisation,
+          roles: [],
+        },
       },
     });
 

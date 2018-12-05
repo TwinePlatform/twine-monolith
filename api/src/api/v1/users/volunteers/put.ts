@@ -4,6 +4,7 @@ import { Volunteers } from '../../../../models';
 import {
   response,
    userName,
+   password,
    gender,
    birthYear,
    email,
@@ -35,6 +36,7 @@ const routes: Hapi.ServerRoute[] = [
         params: { userId: id },
         payload: {
           name: userName,
+          password,
           gender,
           birthYear,
           email,

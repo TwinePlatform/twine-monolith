@@ -3,8 +3,8 @@ import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
-import { RoleEnum } from '../../../../auth/types';
 import { getTrx } from '../../../../../tests/utils/database';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
@@ -13,6 +13,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
   let trx: Knex.Transaction;
   let cbAdmin: User;
   let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -21,6 +22,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
 
     cbAdmin = await Users.getOne(server.app.knex, { where: { id: 2 } });
     organisation = await Organisations.getOne(server.app.knex, { where: { id: 1 } });
+    credentials = await StandardCredentials.get(knex, cbAdmin, organisation);
   });
 
   afterAll(async () => {
@@ -42,12 +44,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-logs/aggregates',
-        credentials: {
-          user: cbAdmin,
-          organisation,
-          scope: ['visit_logs-child:read'],
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -59,12 +56,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/visit-logs/aggregates?'
           + 'fields[0]=visitActivity',
-        credentials: {
-          user: cbAdmin,
-          organisation,
-          scope: ['visit_logs-child:read'],
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -78,12 +70,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
         method: 'GET',
         url: '/v1/community-businesses/me/visit-logs/aggregates?'
           + 'fields[0]=lightspeed',
-        credentials: {
-          user: cbAdmin,
-          organisation,
-          scope: ['visit_logs-child:read'],
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(400);

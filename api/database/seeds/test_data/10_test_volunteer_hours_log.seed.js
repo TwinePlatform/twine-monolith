@@ -39,14 +39,14 @@ exports.seed = (knex) =>
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 1,
         volunteer_project_id: getProjectId(knex, 'Party', 'Black Mesa Research'),
-        duration: (60 * 10) + 20,
+        duration: (60 * 10) + 20, // 00:10:20
         started_at: now.clone().subtract(7, 'day'),
       },
       {
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 3,
-        duration: (60 * 60 * 2) + (60 * 20),
+        duration: (60 * 60 * 2) + (60 * 20), // 02:20:00
         started_at: now.clone().subtract(6, 'day'),
       },
       {
@@ -54,28 +54,28 @@ exports.seed = (knex) =>
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 2,
         volunteer_project_id: getProjectId(knex, 'Take over the world', 'Black Mesa Research'),
-        duration: 60 * 60 * 5,
+        duration: 60 * 60 * 5, // 05:00:00
         started_at: now.clone().subtract(5, 'day'),
       },
       {
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 5,
-        duration: (60 * 50) + 59,
+        duration: (60 * 50) + 59, // 00:50:59
         started_at: now.clone().subtract(4, 'day'),
       },
       {
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 4,
-        duration: (60 * 60 * 1) + 20,
+        duration: (60 * 60 * 1) + 20, // 01:00:20
         started_at: now.clone().subtract(3, 'day'),
       },
       {
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 6,
-        duration: (60 * 10) + 20,
+        duration: (60 * 10) + 20, // 00:10:20
         started_at: now.clone().subtract(1, 'day'),
       },
       {
@@ -83,21 +83,21 @@ exports.seed = (knex) =>
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_project_id: getProjectId(knex, 'Party', 'Black Mesa Research'),
         volunteer_activity_id: 5,
-        duration: 60 * 30,
+        duration: 60 * 30, // 00:30:00
         started_at: now.clone(),
       },
       {
         organisation_id: getOrgId(knex, 'Aperture Science'),
         user_account_id: getVolunteerId(knex, 'emma@sol.com'),
         volunteer_activity_id: 5,
-        duration: 60 * 30,
+        duration: 60 * 30, // 00:30:00
         started_at: now.clone().subtract(12, 'hour'),
       },
       {
         organisation_id: getOrgId(knex, 'Black Mesa Research'),
         user_account_id: getVolunteerId(knex, 'raiden@aotd.com'),
         volunteer_activity_id: 1,
-        duration: 60 * 35,
+        duration: 60 * 35, // 00:35:00
         started_at: now.clone().subtract(12, 'day'),
       },
     ])

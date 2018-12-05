@@ -29,7 +29,10 @@ describe('Visitor model', () => {
   describe('Read', () => {
     test('get :: returns only those users with a visitor role', async () => {
       const visitors = await Visitors.get(knex);
-      expect(visitors).toEqual([expect.objectContaining({ id: 1, name: 'Chell' })]);
+      expect(visitors).toEqual([
+        expect.objectContaining({ id: 1, name: 'Chell' }),
+        expect.objectContaining({ id: 8, name: 'Turret' }),
+      ]);
     });
 
     test('get :: no deleted users', async () => {
@@ -55,7 +58,7 @@ describe('Visitor model', () => {
     test('fromCommunityBusiness :: gets all visitors at organisation', async () => {
       const cb = await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture Science' } });
       const visitors = await Visitors.fromCommunityBusiness(knex, cb);
-      expect(visitors).toHaveLength(1);
+      expect(visitors).toHaveLength(2);
       expect(visitors[0]).toEqual(expect.objectContaining({ name: 'Chell' }));
     });
 
@@ -65,8 +68,23 @@ describe('Visitor model', () => {
       const visitors =
         await Visitors.fromCommunityBusiness(knex, cb, { fields: ['name', 'qrCode'] });
 
-      expect(visitors).toHaveLength(1);
+      expect(visitors).toHaveLength(2);
       expect(visitors[0]).toEqual({ name: 'Chell', qrCode: 'chellsqrcode' });
+    });
+
+    test('fromCommunityBusiness :: can filter by birth year', async () => {
+      const cb =
+        await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture Science' } });
+      const visitors = await Visitors.fromCommunityBusiness(
+        knex,
+        cb,
+        { fields: ['id', 'name'], whereBetween: { birthYear: [24, 45] } }
+      );
+
+      expect(visitors).toHaveLength(1);
+      expect(visitors).toEqual(expect.arrayContaining([
+        { id: 1, name: 'Chell' },
+      ]));
     });
 
     test('getWithVisits :: returns visit objects nested within visitors', async () => {
@@ -97,7 +115,7 @@ describe('Visitor model', () => {
       const visitors = await Visitors.getWithVisits(trx, apScience, { limit: 10 });
 
       // Assert
-      expect(visitors).toHaveLength(2);
+      expect(visitors).toHaveLength(3);
       expect(visitors[0]).toEqual(expect.objectContaining({ id: 1, name: 'Chell' }));
       expect(visitors[0].visits).toHaveLength(10);
       expect(visitors[0].visits).toEqual(
@@ -105,7 +123,7 @@ describe('Visitor model', () => {
           expect.objectContaining({ visitActivity: 'Free Running' }),
         ])
       );
-      expect(visitors[1]).toEqual({ ...visitor, visits: [] });
+      expect(visitors[2]).toEqual({ ...visitor, visits: [] });
     });
   });
 

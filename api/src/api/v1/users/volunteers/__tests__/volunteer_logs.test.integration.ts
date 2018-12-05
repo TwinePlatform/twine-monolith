@@ -6,6 +6,7 @@ import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { User, Users, Organisation, Organisations, VolunteerLog } from '../../../../../models';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('API /users/me/volunteer-logs', () => {
@@ -13,7 +14,10 @@ describe('API /users/me/volunteer-logs', () => {
   let knex: Knex;
   let trx: Knex.Transaction;
   let user: User;
+  let nonVolunteer: User;
   let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
+  let nonVolCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -21,7 +25,10 @@ describe('API /users/me/volunteer-logs', () => {
     knex = server.app.knex;
 
     user = await Users.getOne(knex, { where: { name: 'Emma Emmerich' } });
+    nonVolunteer = await Users.getOne(knex, { where: { name: 'Gordon' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } });
+    credentials = await StandardCredentials.get(knex, user, organisation);
+    nonVolCreds = await StandardCredentials.get(knex, nonVolunteer, organisation);
   });
 
   afterAll(async () => {
@@ -43,11 +50,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:read'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -70,11 +73,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/users/volunteers/me/volunteer-logs?since=${since}&until=${until}`,
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:read'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -95,15 +94,10 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/users/volunteers/me/volunteer-logs`,
-        credentials: {
-          user: await Users.getOne(knex, { where: { id: 1 } }),
-          organisation,
-          scope: ['volunteer_logs-own:read'],
-        },
+        credentials: nonVolCreds,
       });
 
-      expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result).toHaveLength(0);
+      expect(res.statusCode).toBe(403);
     });
   });
 
@@ -112,11 +106,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:read'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -135,11 +125,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1?fields[]=activity',
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:read'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -151,12 +137,8 @@ describe('API /users/me/volunteer-logs', () => {
     test('cannot get other users volunteer log', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials: {
-          user: await Users.getOne(knex, { where: { id: 3 } }),
-          organisation,
-          scope: ['volunteer_logs-own:read'],
-        },
+        url: '/v1/users/volunteers/me/volunteer-logs/9',
+        credentials,
       });
 
       expect(res.statusCode).toBe(404);
@@ -168,11 +150,7 @@ describe('API /users/me/volunteer-logs', () => {
       const resPre = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:read'],
-        },
+        credentials,
       });
 
       const log = <VolunteerLog> (<any> resPre.result).result;
@@ -180,11 +158,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:write'],
-        },
+        credentials,
         payload: {
           activity: 'Committee work, AGM',
         },
@@ -204,24 +178,16 @@ describe('API /users/me/volunteer-logs', () => {
       const resPre = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:read'],
-        },
+        credentials,
       });
 
       const log = <VolunteerLog> (<any> resPre.result).result;
 
-      const then = new Date('2018-07-23T10:33:22.122Z');
+      const then = moment();
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:write'],
-        },
+        credentials,
         payload: {
           activity: 'Committee work, AGM',
           duration: {
@@ -239,7 +205,7 @@ describe('API /users/me/volunteer-logs', () => {
         result: expect.objectContaining({
           ...omit(['modifiedAt'], log),
           activity: 'Committee work, AGM',
-          startedAt: then,
+          startedAt: then.toDate(),
           duration: {
             hours: 1,
             minutes: 20,
@@ -255,11 +221,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:write'],
-        },
+        credentials,
         payload: {
           project: null,
         },
@@ -278,11 +240,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:write'],
-        },
+        credentials,
         payload: {
           userId: 2,
         },
@@ -295,11 +253,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:write'],
-        },
+        credentials,
         payload: {
           organisationId: 1,
         },
@@ -311,12 +265,8 @@ describe('API /users/me/volunteer-logs', () => {
     test('cannot update other user\'s log', async () => {
       const res = await server.inject({
         method: 'PUT',
-        url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials: {
-          user: await Users.getOne(knex, { where: { id: 3 } }),
-          organisation,
-          scope: ['volunteer_logs-own:write'],
-        },
+        url: '/v1/users/volunteers/me/volunteer-logs/9',
+        credentials,
         payload: {
           activity: 'Committee work, AGM',
         },
@@ -331,11 +281,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:write'],
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -344,11 +290,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res2 = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:read'],
-        },
+        credentials,
       });
 
       expect(res2.statusCode).toBe(404);
@@ -356,11 +298,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res3 = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          user,
-          organisation,
-          scope: ['volunteer_logs-own:read'],
-        },
+        credentials,
       });
 
       expect(res3.statusCode).toBe(200);
@@ -369,15 +307,10 @@ describe('API /users/me/volunteer-logs', () => {
     });
 
     test('cannot mark other user\'s volunteer log as deleted', async () => {
-      const otherUser = await Users.getOne(trx, { where: { id: 3 } });
       const res = await server.inject({
         method: 'DELETE',
-        url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials: {
-          user: otherUser,
-          organisation,
-          scope: ['volunteer_logs-own:write'],
-        },
+        url: '/v1/users/volunteers/me/volunteer-logs/9',
+        credentials,
       });
 
       expect(res.statusCode).toBe(404);
@@ -389,11 +322,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/summary',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -415,11 +344,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/users/volunteers/me/volunteer-logs/summary?since=${then}&until=${now}`,
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);
@@ -438,11 +363,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/4/volunteer-logs/summary',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(404);

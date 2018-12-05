@@ -29,15 +29,18 @@ import * as Boom from 'boom';
 import { Organisations } from '../../../models';
 import { RequireSiblingPreReq } from '../types';
 import { RoleEnum } from '../../../auth/types';
+import { StandardCredentials } from '../../../auth/strategies/standard';
+
 
 export default async (request: RequireSiblingPreReq, h: Hapi.ResponseToolkit) => {
   const {
-    auth: { credentials: { organisation, role } },
     server: { app: { knex } },
     params: { userId },
   } = request;
 
-  if (role === RoleEnum.TWINE_ADMIN) {
+  const { organisation, roles } = StandardCredentials.fromRequest(request);
+
+  if (roles.includes(RoleEnum.TWINE_ADMIN)) {
     return true;
   }
 

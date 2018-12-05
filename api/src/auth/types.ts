@@ -26,22 +26,23 @@ export enum AccessEnum {
 export enum ResourceEnum {
   CONSTANTS = 'constants',
   ORG_DETAILS = 'organisations_details',
-  ORG_SUBSCRIPTIONS = 'organisations_subscriptions',
   ORG_FEEDBACK = 'organisations_feedback',
-  ORG_TRAINING = 'organisations_training',
   ORG_INVITATIONS = 'organisations_invitations',
   ORG_OUTREACH = 'organisations_outreach',
+  ORG_SUBSCRIPTIONS = 'organisations_subscriptions',
+  ORG_TRAINING = 'organisations_training',
+  ORG_VOLUNTEERS = 'organisations_volunteers',
   USER_DETAILS = 'user_details',
-  VOLUNTEER_ACTIVITIES = 'volunteer_activities',
-  VOLUNTEER_LOGS = 'volunteer_logs',
   VISIT_ACTIVITIES = 'visit_activities',
   VISIT_LOGS = 'visit_logs',
+  VOLUNTEER_LOGS = 'volunteer_logs',
 }
 
 export enum PermissionLevelEnum {
   OWN = 'own',
   CHILD = 'child',
   PARENT = 'parent',
+  SIBLING = 'sibling',
   ALL = 'all',
 }
 
@@ -51,7 +52,7 @@ export enum PermissionLevelEnum {
  */
 
 type QueryResponse = Dictionary<any>;
-type PermissionTuple = {
+export type PermissionTuple = {
   permissionLevel: PermissionLevelEnum
   access: AccessEnum
   resource: ResourceEnum
@@ -59,7 +60,7 @@ type PermissionTuple = {
 
 type PermissionQuery = PermissionTuple & { role: RoleEnum };
 type UserPermissionQuery = Omit<PermissionQuery, 'role'> & { userId: number };
-type RolePermissionQuery = { role: RoleEnum, accessMode?: 'full' | 'restricted' };
+type RolesPermissionQuery = { roles: RoleEnum[], accessMode?: 'full' | 'restricted' };
 
 type RoleQuery = {
   role: RoleEnum
@@ -86,7 +87,7 @@ export type PermissionInterface = {
 
   userHas: (k: Knex, a: UserPermissionQuery) => Promise<boolean>
 
-  forRole: (k: Knex, a: RolePermissionQuery) => Promise<PermissionTuple[]>
+  forRoles: (k: Knex, a: RolesPermissionQuery) => Promise<PermissionTuple[]>
 };
 
 export type RolesInterface = {
@@ -98,5 +99,5 @@ export type RolesInterface = {
 
   userHas: (k: Knex, a: RolesQuery) => Promise<boolean>
 
-  oneFromUser: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum>
+  fromUser: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum[]>
 };

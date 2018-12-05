@@ -1,16 +1,19 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
-import factory from '../../../../../../tests/utils/factory';
 import { getConfig } from '../../../../../../config';
-import { RoleEnum } from '../../../../../auth/types';
 import { getTrx } from '../../../../../../tests/utils/database';
+import { Users, User, Organisations, Organisation } from '../../../../../models';
+import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
 describe('API v1 - register new users', () => {
   let server: Hapi.Server;
   let knex: Knex;
   let trx: Knex.Transaction;
+  let user: User;
+  let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -32,6 +35,9 @@ describe('API v1 - register new users', () => {
         Message: '',
       }]),
     };
+    user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
+    organisation = await Organisations.fromUser(knex, { where: user });
+    credentials = await StandardCredentials.get(knex, user, organisation, 'full');
   });
 
   afterAll(async () => {
@@ -50,7 +56,6 @@ describe('API v1 - register new users', () => {
 
   describe('POST /users/register/visitors', () => {
     test('user already exists', async () => {
-      const user = await factory.build('user');
       const res = await server.inject({
         method: 'POST',
         url: '/v1/users/register/visitors',
@@ -61,11 +66,7 @@ describe('API v1 - register new users', () => {
           birthYear: 1988,
           email: '1498@aperturescience.com',
         },
-        credentials: {
-          user,
-          scope: ['user_details-child:write'],
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(409);
@@ -73,7 +74,6 @@ describe('API v1 - register new users', () => {
     });
 
     test('non-existent community business', async () => {
-      const user = await factory.build('user');
       const res = await server.inject({
         method: 'POST',
         url: '/v1/users/register/visitors',
@@ -84,23 +84,15 @@ describe('API v1 - register new users', () => {
           birthYear: 1988,
           email: '13542@google.com',
         },
-        credentials: {
-          user,
-          scope: ['user_details-child:write'],
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(400);
-      expect((<any> res.result).error.message).toBe('Unrecognised organisation');
+      expect((<any> res.result).error.message)
+        .toBe('Cannot register visitor for different organisation');
     });
 
-    test('no registered CB_ADMIN', async () => {
-    /*
-     * Organisation 2 (Black Mesa Research) has an CB_ADMIN (Gordon) who is
-     * marked as deleted, and therefore will not be fetched from the DB
-     */
-      const user = await factory.build('user');
+    test('cannot register against a different community business', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/users/register/visitors',
@@ -111,19 +103,34 @@ describe('API v1 - register new users', () => {
           birthYear: 1988,
           email: '13542@google.com',
         },
-        credentials: {
-          user,
-          scope: ['user_details-child:write'],
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials,
       });
 
-      expect(res.statusCode).toBe(422);
-      expect((<any> res.result).error.message).toBe('No associated admin for this organisation');
+      expect(res.statusCode).toBe(400);
+      expect((<any> res.result).error.message)
+        .toBe('Cannot register visitor for different organisation');
+    });
+
+    test('cannot register user that is already registered under a different role', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitors',
+        payload: {
+          organisationId: 1,
+          name: 'GlaDos',
+          gender: 'female',
+          birthYear: 1900,
+          email: '1@aperturescience.com',
+        },
+        credentials,
+      });
+
+      expect(res.statusCode).toBe(409);
+      expect((<any> res.result).error.message)
+        .toBe('User with this e-mail already registered');
     });
 
     test('happy path', async () => {
-      const user = await factory.build('user');
       const res = await server.inject({
         method: 'POST',
         url: '/v1/users/register/visitors',
@@ -134,11 +141,7 @@ describe('API v1 - register new users', () => {
           birthYear: 1988,
           email: '13542@google.com',
         },
-        credentials: {
-          user,
-          scope: ['user_details-child:write'],
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials,
       });
 
       expect(res.statusCode).toBe(200);

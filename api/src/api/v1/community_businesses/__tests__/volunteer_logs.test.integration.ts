@@ -1,12 +1,21 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import * as moment from 'moment';
+import * as MockDate from 'mockdate';
 import { omit } from 'ramda';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
-import { User, Users, Organisation, Organisations, VolunteerLog } from '../../../../models';
-import { RoleEnum } from '../../../../auth/types';
+import {
+  User,
+  Users,
+  Organisation,
+  Organisations,
+  VolunteerLog,
+  VolunteerLogs,
+} from '../../../../models';
+import { rndPastDateThisMonth } from '../../../../../tests/utils/data';
+import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 describe('API /community-businesses/me/volunteer-logs', () => {
@@ -17,6 +26,9 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   let volAdmin: User;
   let cbAdmin: User;
   let organisation: Organisation;
+  let volCreds: Hapi.AuthCredentials;
+  let vAdminCreds: Hapi.AuthCredentials;
+  let adminCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -27,6 +39,10 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     volAdmin = await Users.getOne(knex, { where: { name: 'Raiden' } });
     cbAdmin = await Users.getOne(knex, { where: { name: 'Gordon' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } });
+
+    volCreds = await StandardCredentials.get(knex, user, organisation);
+    vAdminCreds = await StandardCredentials.get(knex, volAdmin, organisation);
+    adminCreds = await StandardCredentials.get(knex, cbAdmin, organisation);
   });
 
   afterAll(async () => {
@@ -44,16 +60,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('GET /community-businesses/me/volunteer-logs', () => {
-    test('can get own organisations logs as VOLUNTEER_ADMIN', async () => {
+    test('SUCCESS - can get own organisations logs as VOLUNTEER_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -65,16 +76,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can get own organisations logs as CB_ADMIN', async () => {
+    test('SUCCESS - can get own organisations logs as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-child:read'],
-          user: cbAdmin,
-          organisation,
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -86,32 +92,22 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('cannot get own organisations logs as VOLUNTEER', async () => {
+    test('ERROR - cannot get own organisations logs as VOLUNTEER', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(403);
     });
 
-    test('can get own organisations logs between dates', async () => {
+    test('SUCCESS - can get own organisations logs between dates', async () => {
       const until = moment().utc().subtract(3, 'day');
       const res = await server.inject({
         method: 'GET',
         url: `/v1/community-businesses/me/volunteer-logs?until=${until.toISOString()}`,
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -121,34 +117,38 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           .every((d: Date) => d <= until.toDate()))
       .toBe(true);
     });
+
+    test('SUCCESS - can get select fields for own organisations logs', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: `/v1/community-businesses/me/volunteer-logs?fields[0]=userName`,
+        credentials: vAdminCreds,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toHaveLength(8);
+      expect((<any> res.result).result).toEqual(expect.arrayContaining([
+        { userName: 'Emma Emmerich' },
+      ]));
+    });
   });
 
   describe('GET /community-businesses/me/volunteer-logs/:id', () => {
-    test('cannot get own volunteer log as VOLUNTEER', async () => {
+    test('ERROR - cannot get own volunteer log as VOLUNTEER', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/2',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(403);
     });
 
-    test('can get other volunteer\'s log as VOLUNTEER_ADMIN', async () => {
+    test('SUCCESS - can get other volunteer\'s log as VOLUNTEER_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/2',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -161,16 +161,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can get other volunteer\'s log as CB_ADMIN', async () => {
+    test('SUCCESS - can get other volunteer\'s log as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/2',
-        credentials: {
-          scope: ['volunteer_logs-child:read'],
-          user: cbAdmin,
-          organisation,
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -183,46 +178,31 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('cannot get other volunteer\'s log as VOLUNTEER', async () => {
+    test('SUCCESS - cannot get other volunteer\'s log as VOLUNTEER', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/9',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(403);
     });
 
-    test('cannot get non-existent log', async () => {
+    test('ERROR - cannot get non-existent log', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/142',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(404);
     });
 
-    test('cannot get existing log from other organisation', async () => {
+    test('ERROR - cannot get existing log from other organisation', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/8',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(404);
@@ -230,16 +210,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('PUT /community-businesses/me/volunteer-logs/:id', () => {
-    test('can partially update other users log', async () => {
+    test('SUCCESS - can partially update other users log', async () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/2',
-        credentials: {
-          scope: ['volunteer_logs-sibling:write'],
-          role: RoleEnum.VOLUNTEER_ADMIN,
-          user: volAdmin,
-          organisation,
-        },
+        credentials: vAdminCreds,
         payload: {
           activity: 'Other',
         },
@@ -251,20 +226,17 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can fully update other users log', async () => {
+    test('SUCCESS - can fully update other users log', async () => {
+      const date = moment().startOf('month').add(3, 'days');
+
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/2',
-        credentials: {
-          scope: ['volunteer_logs-sibling:write'],
-          role: RoleEnum.VOLUNTEER_ADMIN,
-          user: volAdmin,
-          organisation,
-        },
+        credentials: vAdminCreds,
         payload: {
           activity: 'Other',
           duration: { minutes: 17 },
-          startedAt: '2017-12-22T22:14:23.000Z',
+          startedAt: date.toISOString(),
         },
       });
 
@@ -274,25 +246,22 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           id: 2,
           activity: 'Other',
           duration: { minutes: 17 },
-          startedAt: new Date('2017-12-22T22:14:23.000Z'),
+          startedAt: date.toDate(),
         }),
       });
     });
 
-    test('can update logs as CB_ADMIN', async () => {
+    test('SUCCESS - can update logs as CB_ADMIN', async () => {
+      const date = moment().startOf('month').add(13, 'days');
+
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/2',
-        credentials: {
-          scope: ['volunteer_logs-child:write'],
-          role: RoleEnum.CB_ADMIN,
-          user: cbAdmin,
-          organisation,
-        },
+        credentials: adminCreds,
         payload: {
           activity: 'Other',
           duration: { minutes: 17 },
-          startedAt: '2017-12-22T22:14:23.000Z',
+          startedAt: date.toISOString(),
         },
       });
 
@@ -302,25 +271,22 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           id: 2,
           activity: 'Other',
           duration: { minutes: 17 },
-          startedAt: new Date('2017-12-22T22:14:23.000Z'),
+          startedAt: date.toDate(),
         }),
       });
     });
 
-    test('cannot update logs of different organisation', async () => {
+    test('ERROR - cannot update logs of different organisation', async () => {
+      const date = moment().startOf('month').add(23, 'days');
+
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/8',
-        credentials: {
-          scope: ['volunteer_logs-child:write'],
-          role: RoleEnum.CB_ADMIN,
-          user: cbAdmin,
-          organisation,
-        },
+        credentials: adminCreds,
         payload: {
           activity: 'Other',
           duration: { minutes: 17 },
-          startedAt: '2017-12-22T22:14:23.000Z',
+          startedAt: date.toISOString(),
         },
       });
 
@@ -329,16 +295,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('DELETE /community-businesses/me/volunteer-logs/:id', () => {
-    test('can mark other users log as deleted as VOLUNTEER_ADMIN', async () => {
+    test('SUCCESS - can mark other users log as deleted as VOLUNTEER_ADMIN', async () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-sibling:delete'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -347,27 +308,17 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resGet = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(resGet.statusCode).toBe(404);
     });
 
-    test('can mark other users log as deleted as CB_ADMIN', async () => {
+    test('SUCCESS - can mark other users log as deleted as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-child:delete'],
-          user: cbAdmin,
-          organisation,
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -376,42 +327,27 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resGet = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-child:read'],
-          user: cbAdmin,
-          organisation,
-          role: RoleEnum.CB_ADMIN,
-        },
+        credentials: adminCreds,
       });
 
       expect(resGet.statusCode).toBe(404);
     });
 
-    test('cannot mark other users log as deleted as VOLUNTEER', async () => {
+    test('ERROR - cannot mark other users log as deleted as VOLUNTEER', async () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-own:delete'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(403);
     });
 
-    test('cannot mark other users log as deleted from different organisation', async () => {
+    test('Error - cannot mark other users log as deleted from different organisation', async () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/8',
-        credentials: {
-          scope: ['volunteer_logs-sibling:delete'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(res.statusCode).toBe(404);
@@ -419,29 +355,19 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('POST /community-businesses/me/volunteer-logs', () => {
-    test('can create log for own user', async () => {
+    test('SUCCESS - can create log for own user', async () => {
       const when = new Date();
 
       const resCount1 = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: {
           activity: 'Office support',
           duration: {
@@ -455,12 +381,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resCount2 = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -481,18 +402,13 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
     });
 
-    test('creating log without start date defaults to "now"', async () => {
+    test('SUCCESS - creating log without start date defaults to "now"', async () => {
       const before = new Date();
 
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: {
           activity: 'Office support',
           duration: {
@@ -511,16 +427,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         .toBeLessThanOrEqual(after.valueOf());
     });
 
-    test('can create log for other user if admin at CB', async () => {
+    test('SUCCESS - can create log for other user if admin at CB', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-sibling:write'],
-          user: await Users.getOne(knex, { where: { name: 'Raiden' } }),
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
         payload: {
           userId: user.id,
           activity: 'Office support',
@@ -545,15 +456,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('cannot create log for other user if not admin at CB', async () => {
+    test('ERROR - cannot create log for other user if not admin at CB', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user: await Users.getOne(knex, { where: { name: 'Chell' } }),
-          organisation,
-        },
+        credentials: volCreds,
         payload: {
           userId: user.id,
           activity: 'Office support',
@@ -564,16 +471,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(403);
     });
 
-    test('cannot create log for other organisation', async () => {
+    test('ERROR - cannot create log for other organisation', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: {
           organisationId: 1,
           activity: 'Office support',
@@ -587,16 +489,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(400);
     });
 
-    test('non-existent activity', async () => {
+    test('ERROR - non-existent activity', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: {
           activity: 'LOLOLOLOLOL',
           duration: {
@@ -609,16 +506,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(400);
     });
 
-    test('malformed duration', async () => {
+    test('ERROR - malformed duration', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: {
           activity: 'Office support',
           duration: {
@@ -630,16 +522,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(400);
     });
 
-    test('negative duration', async () => {
+    test('ERROR - negative duration', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: {
           activity: 'Office support',
           duration: {
@@ -653,15 +540,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('GET /community-businesses/me/volunteer-logs/summary', () => {
-    test('can get own summaries as VOLUNTEER', async () => {
+    test('SUCCESS - can get own summaries as VOLUNTEER', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/summary',
-        credentials: {
-          scope: ['organisations_details-parent:read'],
-          user,
-          organisation,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -677,17 +560,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can get own summaries as CB_ADMIN', async () => {
-      const cbAdmin = await Users.getOne(trx, { where: { name: 'Gordon' } });
-
+    test('SUCCESS - can get own summaries as CB_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/summary',
-        credentials: {
-          scope: ['organisations_details-own:read'],
-          user: cbAdmin,
-          organisation,
-        },
+        credentials: adminCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -703,16 +580,12 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('can get summaries between dates', async () => {
+    test('SUCCESS - can get summaries between dates', async () => {
       const since = moment().subtract(5, 'days');
       const res = await server.inject({
         method: 'GET',
         url: `/v1/community-businesses/me/volunteer-logs/summary?since=${since.toISOString()}`,
-        credentials: {
-          scope: ['organisations_details-parent:read'],
-          user,
-          organisation,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(200);
@@ -728,15 +601,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
-    test('cannot get other orgs summaries', async () => {
+    test('ERROR - cannot get other orgs summaries', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/3/volunteer-logs/summary',
-        credentials: {
-          scope: ['organisations_details-own:read'],
-          user,
-          organisation,
-        },
+        credentials: volCreds,
       });
 
       expect(res.statusCode).toBe(404);
@@ -744,7 +613,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('POST /community-businesses/me/volunteer-logs/sync', () => {
-    test('can sync single new log', async () => {
+    test('SUCCESS - can sync single new log', async () => {
       const logs = [{
         activity: 'Office support',
         duration: { minutes: 20 },
@@ -753,12 +622,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: logs,
       });
 
@@ -768,20 +632,19 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(8);
     });
 
-    test('can sync multiple new logs', async () => {
-      const times = ['2018-09-22T21:02:10', '2018-09-21T21:01:12', '2018-10-02T21:02:10'];
+    test('SUCCESS - can sync multiple new logs', async () => {
+      const times = [
+        rndPastDateThisMonth().toISOString(),
+        rndPastDateThisMonth().toISOString(),
+        rndPastDateThisMonth().toISOString(),
+      ];
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
         { activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
@@ -791,12 +654,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: logs,
       });
 
@@ -806,30 +664,29 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(10);
     });
 
-    test('empty array in payload does nothing', async () => {
-      const logs: any[] = [];
+    test('SUCCESS - can sync future logs', async () => {
+      const times = [
+        moment().add(1, 'days').toISOString(),
+        moment().add(2, 'days').toISOString(),
+        moment().add(3, 'days').toISOString(),
+      ];
+      const logs = [
+        { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
+        { activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
+        { activity: 'Shop/Sales', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
+      ];
 
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: logs,
       });
 
@@ -839,29 +696,62 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
+      });
+
+      expect(resLogs.statusCode).toBe(200);
+      // Logs don't appear in GET; should only return logs up to current date
+      expect((<any> resLogs.result).result).toHaveLength(7);
+
+      const resFutureLogs = await VolunteerLogs.get(
+        server.app.knex,
+        {
+          whereBetween: {
+            startedAt: [moment().toDate(), moment().add(100, 'days').toDate()],
+          },
+          order: ['startedAt', 'asc'],
+        }
+      );
+
+      expect(resFutureLogs).toHaveLength(3);
+      expect(resFutureLogs)
+        .toEqual(
+          logs
+            .map((l) => ({ ...l, startedAt: new Date(l.startedAt) }))
+            .map(expect.objectContaining));
+    });
+
+    test('SUCCESS - empty array in payload does nothing', async () => {
+      const logs: any[] = [];
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: volCreds,
+        payload: logs,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: null });
+
+      const resLogs = await server.inject({
+        method: 'GET',
+        url: '/v1/users/volunteers/me/volunteer-logs',
+        credentials: volCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(7);
     });
 
-    test('can sync existing log', async () => {
+    test('SUCCESS - can sync existing log', async () => {
       const resGet = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
+
+      MockDate.set((<any> resGet.result).result.startedAt);
 
       expect(resGet.statusCode).toBe(200);
 
@@ -873,12 +763,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
         payload: [log],
       });
 
@@ -888,31 +773,24 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resCheck = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(resCheck.statusCode).toBe(200);
       expect(resCheck.result).toEqual({ result: expect.objectContaining(log) });
 
+      MockDate.reset();
     });
 
 
-    test('can sync existing log for deletion', async () => {
+    test('SUCCESS - can sync existing log for deletion', async () => {
       const resGet = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
+
+      MockDate.set((<any> resGet.result).result.startedAt);
 
       expect(resGet.statusCode).toBe(200);
 
@@ -924,12 +802,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
         payload: [log],
       });
 
@@ -939,20 +812,20 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resCheck = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
-        credentials: {
-          scope: ['volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(resCheck.statusCode).toBe(404);
 
+      MockDate.reset();
     });
 
-    test('can sync a mixture of logs for self and logs for others as VOLUNTEER_ADMIN', async () => {
-      const times = ['2018-09-22T21:02:10', '2018-09-21T21:01:12', '2018-10-02T21:02:10'];
+    test('SUCCESS - can sync a mix of logs for self and others as VOLUNTEER_ADMIN', async () => {
+      const times = [
+        rndPastDateThisMonth(),
+        rndPastDateThisMonth(),
+        rndPastDateThisMonth(),
+      ];
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
         { userId: 6, activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
@@ -962,12 +835,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
         payload: logs,
       });
 
@@ -977,20 +845,19 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read', 'volunteer_logs-sibling:read'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(11);
     });
 
-    test('cannot sync logs for others as VOLUNTEER', async () => {
-      const times = ['2018-09-22T21:02:10', '2018-09-21T21:01:12', '2018-10-02T21:02:10'];
+    test('ERROR - cannot sync logs for others as VOLUNTEER', async () => {
+      const times = [
+        rndPastDateThisMonth(),
+        rndPastDateThisMonth(),
+        rndPastDateThisMonth(),
+      ];
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
         { userId: 6, activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
@@ -1000,19 +867,14 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: logs,
       });
 
       expect(res.statusCode).toBe(403);
     });
 
-    test('fails when trying to sync logs w/ identical "startedAt" in payload', async () => {
+    test('ERROR - fails when trying to sync logs w/ identical "startedAt" in payload', async () => {
       const now = new Date().toISOString();
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: now },
@@ -1022,12 +884,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: logs,
       });
 
@@ -1036,28 +893,18 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(7);
     });
 
-    test('fails when trying to sync logs w/ same "startedAt" as existing log', async () => {
+    test('ERROR - fails when trying to sync logs w/ same "startedAt" as existing log', async () => {
       const resLogs = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: {
-          scope: ['volunteer_logs-own:read'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
@@ -1072,19 +919,14 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write'],
-          user,
-          organisation,
-          role: RoleEnum.VOLUNTEER,
-        },
+        credentials: volCreds,
         payload: logs,
       });
 
       expect(res.statusCode).toBe(400);
     });
 
-    test('fails when one user isn\'t a volunteer', async () => {
+    test('ERROR - fails when one user isn\'t a volunteer', async () => {
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, userId: 1 },
       ];
@@ -1092,12 +934,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
-        credentials: {
-          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
-          user: volAdmin,
-          organisation,
-          role: RoleEnum.VOLUNTEER_ADMIN,
-        },
+        credentials: vAdminCreds,
         payload: logs,
       });
 

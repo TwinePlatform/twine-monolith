@@ -2,10 +2,10 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
 import { omit } from 'ramda';
-import { response, id, meOrId, since, until } from './schema';
+import { response, id, meOrId, since, until, startedAt } from './schema';
 import Roles from '../../../auth/roles';
 import { RoleEnum } from '../../../auth/types';
-import { VolunteerLogs, Duration, Volunteers } from '../../../models';
+import { VolunteerLogs, Duration, Volunteers, VolunteerLog } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import {
   PostMyVolunteerLogsRequest,
@@ -15,6 +15,9 @@ import {
   PutMyVolunteerLogRequest,
   GetVolunteerLogSummaryRequest,
 } from '../types';
+import { requestQueryToModelQuery } from '../utils';
+import { query } from '../users/schema';
+import { StandardCredentials } from '../../../auth/strategies/standard';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -30,7 +33,11 @@ const routes: Hapi.ServerRoute[] = [
           scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read'],
         },
       },
-      validate: { query: { since, until } },
+      validate: {
+        query: {
+          ...query,
+          ...{ since, until }, },
+      },
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
@@ -39,15 +46,20 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: GetMyVolunteerLogsRequest, h) => {
       const {
         server: { app: { knex } },
-        query,
+        query: _query,
         pre: { communityBusiness },
       } = request;
 
-      const since = new Date(query.since);
-      const until = new Date(query.until);
+      const since = new Date(_query.since);
+      const until = new Date(_query.until);
+
+      const query = {
+        ...requestQueryToModelQuery<VolunteerLog>(_query),
+        ...{ since, until },
+      };
 
       const logs =
-        await VolunteerLogs.fromCommunityBusiness(knex, communityBusiness, { since, until });
+        await VolunteerLogs.fromCommunityBusiness(knex, communityBusiness, query);
 
       return Promise.all(logs.map(VolunteerLogs.serialise));
     },
@@ -116,7 +128,7 @@ const routes: Hapi.ServerRoute[] = [
             minutes: Joi.number().integer().min(0),
             seconds: Joi.number().integer().min(0),
           }),
-          startedAt: Joi.date().iso().max('now'),
+          startedAt,
           project: Joi.alt().try(Joi.string().min(2), Joi.only(null)),
         },
       },
@@ -211,7 +223,7 @@ const routes: Hapi.ServerRoute[] = [
             minutes: Joi.number().integer().min(0),
             seconds: Joi.number().integer().min(0),
           }).required(),
-          startedAt: Joi.date().iso().max('now').default(() => new Date().toISOString(), 'now'),
+          startedAt: startedAt.default(() => new Date(), 'now'),
           project: Joi.string().min(2),
         },
       },
@@ -223,10 +235,11 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: PostMyVolunteerLogsRequest, h) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { user, scope } },
         pre: { communityBusiness },
         payload,
       } = request;
+
+      const { user, scope } = StandardCredentials.fromRequest(request);
 
       if (payload.userId !== 'me') {
         // if userId is specified, check request user has correct permissions
@@ -289,7 +302,7 @@ const routes: Hapi.ServerRoute[] = [
             minutes: Joi.number().integer().min(0),
             seconds: Joi.number().integer().min(0),
           }).required(),
-          startedAt: Joi.date().iso().max('now').default(() => new Date().toISOString(), 'now'),
+          startedAt: startedAt.default(() => new Date(), 'now'),
           deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
           project: Joi.alt().try(Joi.string().min(2), Joi.only(null)),
         })).required(),
@@ -302,10 +315,11 @@ const routes: Hapi.ServerRoute[] = [
     handler: async (request: SyncMyVolunteerLogsRequest, h) => {
       const {
         server: { app: { knex } },
-        auth: { credentials: { user, scope } },
         pre: { communityBusiness },
         payload,
       } = request;
+
+      const { user, scope } = StandardCredentials.fromRequest(request);
 
       if (
         payload.some((log) => log.userId !== 'me') && // If some logs correspond to other users
