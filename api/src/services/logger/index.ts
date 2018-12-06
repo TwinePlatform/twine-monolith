@@ -1,5 +1,6 @@
 import * as Hapi from 'hapi';
-import { Environment } from '../config/types';
+import { Environment } from '../../../config/types';
+import GoodLogger from './logger';
 const good = require('good');
 
 
@@ -11,25 +12,18 @@ const options = {
   reporters: {
     console: [
       {
-        module: 'good-squeeze',
-        name: 'Squeeze',
-        args: [{ log: '*', response: '*' }],
-      },
-      {
-        module: 'good-console',
+        module: GoodLogger,
       },
       'stdout',
     ],
   },
 };
 
-
 const getOption = (env: Environment) =>
   /* istanbul ignore next */
   env === Environment.TESTING
     ? {}
     : options;
-
 
 export default {
   name: 'twine-logger',
