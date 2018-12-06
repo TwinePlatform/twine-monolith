@@ -4,6 +4,7 @@ import * as JWT from 'jsonwebtoken';
 import { compose } from 'ramda';
 import { RequestErrorEvent, RequestSentEvent, LogLine } from './types';
 import { getConfig } from '../../../config';
+import { Session } from '../../auth/strategies/standard/types';
 
 
 const { auth: { standard } } = getConfig(process.env.NODE_ENV);
@@ -29,8 +30,8 @@ const extractCookie = (c: string) => {
   return token;
 };
 
-const decodeToken = (c: string): { userId?: number, organisationId?: number } => {
-  let decoded: { userId?: number, organisationId?: number };
+const decodeToken = (c: string): Partial<Session> => {
+  let decoded: Partial<Session>;
   try {
     decoded = <any> JWT.verify(c, standard.jwt.secret, standard.jwt.verifyOptions);
 
