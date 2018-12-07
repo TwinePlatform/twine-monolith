@@ -54,7 +54,7 @@ const routes: Hapi.ServerRoute[] = [
         server: { app: { knex, EmailService } },
       } = request;
 
-      const { user, organisation } = StandardCredentials.fromRequest(request);
+      const { organisation } = StandardCredentials.fromRequest(request);
 
       if (!isChild) {
         return Boom.forbidden('Insufficient permissions to access this resource');
@@ -79,7 +79,7 @@ const routes: Hapi.ServerRoute[] = [
 
       try {
         await EmailService.send({
-          from: user.email,
+          from: 'visitorapp@powertochange.org.uk', // TODO - this should not be hardcoded
           to: visitor.email,
           templateId: EmailTemplate.VISITOR_WELCOME,
           templateModel: { name: visitor.name, organisation: cb.name },
