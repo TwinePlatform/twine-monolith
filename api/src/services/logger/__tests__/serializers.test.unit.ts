@@ -72,8 +72,8 @@ describe('Logger Service :: Serializers', () => {
           referrer: 'https://bar.com',
           cookie: `${config.auth.standard.cookie.name}=${token}`,
         },
-        userId: 1,
-        organisationId: 2,
+        sessionUserId: 1,
+        sessionOrgId: 2,
       });
     });
 
@@ -146,8 +146,8 @@ describe('Logger Service :: Serializers', () => {
           referrer: 'https://bar.com',
           authorization: `${token}`,
         },
-        userId: 2,
-        organisationId: 5,
+        sessionUserId: 2,
+        sessionOrgId: 5,
       });
     });
 

@@ -33,7 +33,7 @@ const getIds = compose(decodeToken, extractToken);
 
 const attachUserId = (req: { headers: Hapi.Util.Dictionary<string> }) => {
   const { userId, organisationId } = getIds(req.headers);
-  return { ...req, userId, organisationId };
+  return { ...req, sessionUserId: userId, sessionOrgId: organisationId };
 };
 
 
