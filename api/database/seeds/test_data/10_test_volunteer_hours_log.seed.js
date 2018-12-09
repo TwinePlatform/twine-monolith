@@ -100,4 +100,11 @@ exports.seed = (knex) =>
         duration: 60 * 35, // 00:35:00
         started_at: now.clone().subtract(12, 'day'),
       },
+      {
+        organisation_id: getOrgId(knex, 'Black Mesa Research'),
+        user_account_id: getVolunteerId(knex, 'raiden@aotd.com'),
+        volunteer_activity_id: 1,
+        duration: 60 * 12, // 00:12:00
+        started_at: now.clone().add(12, 'day'),
+      },
     ])

@@ -14,9 +14,11 @@ describe('API /users/me/volunteer-logs', () => {
   let knex: Knex;
   let trx: Knex.Transaction;
   let user: User;
+  let volAdmin: User;
   let nonVolunteer: User;
   let organisation: Organisation;
   let credentials: Hapi.AuthCredentials;
+  let volAdminCreds: Hapi.AuthCredentials;
   let nonVolCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
@@ -25,9 +27,11 @@ describe('API /users/me/volunteer-logs', () => {
     knex = server.app.knex;
 
     user = await Users.getOne(knex, { where: { name: 'Emma Emmerich' } });
+    volAdmin = await Users.getOne(knex, { where: { name: 'Raiden' } });
     nonVolunteer = await Users.getOne(knex, { where: { name: 'Gordon' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } });
     credentials = await StandardCredentials.get(knex, user, organisation);
+    volAdminCreds = await StandardCredentials.get(knex, volAdmin, organisation);
     nonVolCreds = await StandardCredentials.get(knex, nonVolunteer, organisation);
   });
 
@@ -98,6 +102,35 @@ describe('API /users/me/volunteer-logs', () => {
       });
 
       expect(res.statusCode).toBe(403);
+    });
+
+    test('can get all logs in future by default', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: `/v1/users/volunteers/me/volunteer-logs`,
+        credentials: volAdminCreds,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toHaveLength(2);
+      expect(res.result).toEqual({
+        result: [
+          expect.objectContaining({
+            organisationId: organisation.id,
+            userId: volAdmin.id,
+            activity: 'Helping with raising funds (shop, events…)',
+            duration: { minutes: 35 },
+          }),
+          expect.objectContaining({
+            organisationId: organisation.id,
+            userId: volAdmin.id,
+            activity: 'Helping with raising funds (shop, events…)',
+            duration: { minutes: 12 },
+          }),
+        ],
+      });
+      expect((<any> res.result).result[1].startedAt.valueOf())
+        .toBeGreaterThan(new Date().valueOf());
     });
   });
 

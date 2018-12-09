@@ -36,7 +36,7 @@ const routes: Hapi.ServerRoute[] = [
       validate: {
         query: {
           ...query,
-          ...{ since, until }, },
+          ...{ since, until: Joi.date().iso().greater(Joi.ref('since')) }, },
       },
       response: { schema: response },
       pre: [
@@ -51,7 +51,7 @@ const routes: Hapi.ServerRoute[] = [
       } = request;
 
       const since = new Date(_query.since);
-      const until = new Date(_query.until);
+      const until = _query.until ? new Date(_query.until) : undefined;
 
       const query = {
         ...requestQueryToModelQuery<VolunteerLog>(_query),
