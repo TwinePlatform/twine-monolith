@@ -15,7 +15,7 @@
 */
 
 	angular.module('app.controllers').controller('ViewLogsHoursController', function (
-		$scope, $stateParams, $state, $http, $ionicLoading, $localStorage, $rootScope, $ionicPopup, $timeout,
+		$scope, $state, $ionicLoading, $rootScope, $ionicPopup,
 		$$api, $$utilities, $$shout, $$offline
 	) {
 
@@ -47,6 +47,18 @@
 										$scope.noLogs = true;
 								}
 
+								// loop through each log and mark future logs
+								var now = new Date();
+								for (i = 0; i < $scope.logs.length; i++) {
+										// convert sql date to js date so we can compare with dateFirstOfMonth
+										var sqlDateOfLog = $scope.logs[i].date_of_log;
+										var jsDateOfLog = new Date(sqlDateOfLog);
+
+										if (jsDateOfLog > now) {
+											$scope.logs[i].is_future_log = true;
+										}
+								}
+
 								$$offline.saveLogs($scope.logs);
 
 						}).error(function (result, error) {
@@ -70,15 +82,20 @@
                             $scope.logs = result.data;
 
                             // loop through each log and disable logs from previous months
-                            var dateFirstOfMonth = $$utilities.getDateFirstOfMonth();
+														var dateFirstOfMonth = $$utilities.getDateFirstOfMonth();
+														var now = new Date();
                             for (i = 0; i < $scope.logs.length; i++) {
                                 // convert sql date to js date so we can compare with dateFirstOfMonth
                                 var sqlDateOfLog = $scope.logs[i].date_of_log;
-                                var jsDateOfLog = $$utilities.sqlDateToJSDate(sqlDateOfLog);
+																var jsDateOfLog = new Date(sqlDateOfLog);
+
                                 // if log date is less than dateFirstOfMonth, flag it as previous month
                                 if (jsDateOfLog < dateFirstOfMonth) {
                                     $scope.logs[i].previous_month = true;
-                                }
+																}
+																if (jsDateOfLog > now) {
+																	$scope.logs[i].is_future_log = true;
+																}
                             }
 
                             // save logs offline

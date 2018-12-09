@@ -11,10 +11,15 @@
         </div>
 
         <ion-list>
-            <ion-item style="margin-bottom: 10px" class="item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing, 'deleted': log.deletedAt }" ng-repeat="log in logs | orderBy: ['-date_of_log','-modifiedAt']">
-                <i class="icon" ng-class="{ 'ion-alert': log.needs_pushing}">
+            <ion-item style="margin-bottom: 10px" class="item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing || log.is_future_log, 'deleted': log.deletedAt }" ng-repeat="log in logs | orderBy: ['-date_of_log','-modifiedAt']">
+                <p ng-if="log.needs_pushing">
+                    <i class="icon" ng-class="{ 'ion-alert': log.needs_pushing }"></i>
                     <span ng-if="log.needs_pushing">Not pushed</span>
-                </i>
+                </p>
+                <p ng-if="log.is_future_log">
+                    <i class="icon ion-time" ng-class="{ 'ion-alert': log.is_future_log }"></i>
+                    <span ng-if="log.is_future_log">Pending: Future log</span>
+                </p>
                 <div style="max-width: 70%;float: left; overflow: hidden">
                 <h1 ng-bind-html="log.duration | hoursAndMinutesAsString"></h1>
                 <h3 style="color: black" ng-if="isAdmin"> {{log.userName}} <span style="font-size: 10px; color: gray">{{log.userId === currentUser.id ? 'me': ''}}</span></h3>
