@@ -13,12 +13,15 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import { formatBoom, BoomWithValidation } from '../utils';
+import { Environment } from '../../../../config';
 
 
 export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+  const env = request.server.app.config.env;
+
   if ((<Boom<any>> request.response).isBoom) {
     const err = <BoomWithValidation> request.response;
-    console.log(err);
+    if (env !== Environment.TESTING) console.log(err);
     return h.response(formatBoom(err)).code(err.output.statusCode);
   } else {
     return h.continue;
