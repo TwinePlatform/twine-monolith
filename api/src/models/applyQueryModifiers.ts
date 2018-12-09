@@ -2,22 +2,28 @@ import * as Knex from 'knex';
 import { intersection, compose, isNil, Dictionary } from 'ramda';
 import { ModelQuery } from './types';
 
-export const Utils: {
-  [k: string]: (...a: any[]) => (q: Knex.QueryBuilder) => Knex.QueryBuilder
-} = {
+type DateLike = Date | number | undefined;
+
+export const Utils = {
   limit: (n: number) => (q: Knex.QueryBuilder) => q.limit(n),
   offset: (n: number) => (q: Knex.QueryBuilder) => q.offset(n),
   order: (c: string, d: string) => (q: Knex.QueryBuilder) => q.orderBy(c, d),
   where: (o: any) => (q: Knex.QueryBuilder) => q.where(o),
   whereNot: (o: any) => (q: Knex.QueryBuilder) => q.whereNot(o),
-  whereBetween: (o: Dictionary<[number, number]>) =>
-    (q: Knex.QueryBuilder) => {
-      const whereQueries = Object.keys(o)
-        .reduce((queryChain, whereQuery) => {
-          return queryChain.whereBetween(whereQuery, o[whereQuery]);
-        }, q);
-      return whereQueries;
-    },
+  whereBetween: (o: Dictionary<[DateLike, DateLike]>) =>
+    (q: Knex.QueryBuilder) =>
+      Object.keys(o)
+        .reduce((queryChain, whereQuery, i) => {
+          if (o[whereQuery].length !== 2) {
+            throw new Error('Underspecified whereBetween query');
+          } else if (typeof o[whereQuery][0] === 'undefined') {
+            return queryChain.where(whereQuery, '<', o[whereQuery][1]);
+          } else if (typeof o[whereQuery][1] === 'undefined') {
+            return queryChain.where(whereQuery, '>', o[whereQuery][0]);
+          } else {
+            return queryChain.whereBetween(whereQuery, o[whereQuery]);
+          }
+        }, q),
 };
 
 export const applyQueryModifiers =
