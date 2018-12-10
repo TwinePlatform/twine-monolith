@@ -12,7 +12,6 @@ import {
   Organisation,
   Organisations,
   VolunteerLog,
-  VolunteerLogs,
 } from '../../../../models';
 import { rndPastDateThisMonth } from '../../../../../tests/utils/data';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
