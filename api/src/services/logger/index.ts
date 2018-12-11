@@ -1,35 +1,22 @@
 import * as Hapi from 'hapi';
 import { Environment } from '../../../config/types';
-import GoodLogger from './logger';
-const good = require('good');
+import serializers from './serializers';
+const hapiPino = require('hapi-pino');
 
 
-const options = {
-  includes: {
-    request: ['headers', 'payload'],
-    response: ['headers', 'payload'],
-  },
-  reporters: {
-    console: [
-      {
-        module: GoodLogger,
-      },
-      'stdout',
-    ],
-  },
+const loggerConfig = {
+  logPayload: true,
+  mergeHapiLogData: true,
+  serializers,
 };
-
-const getOption = (env: Environment) =>
-  /* istanbul ignore next */
-  env === Environment.TESTING
-    ? {}
-    : options;
 
 export default {
   name: 'twine-logger',
   register: async (server: Hapi.Server, options: {env: Environment}) =>
-    server.register({
-      plugin: good,
-      options: getOption(options.env),
-    }),
+    options.env === Environment.TESTING
+      ? Promise.resolve()
+      : server.register({
+        plugin: hapiPino,
+        options: { ...loggerConfig, prettyPrint: options.env !== Environment.PRODUCTION },
+      }),
 };

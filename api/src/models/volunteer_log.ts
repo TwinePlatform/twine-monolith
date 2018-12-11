@@ -210,12 +210,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
     return VolunteerLogs.get(client, {
       where: { userId: user.id, deletedAt: null },
       whereBetween: q.since || q.until
-        ? {
-          startedAt: [
-            q.since || new Date(0),
-            q.until || new Date(),
-          ],
-        }
+        ? { startedAt: [q.since, q.until] }
         : undefined,
     });
   },
@@ -228,12 +223,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
         deletedAt: null,
       },
       whereBetween: q.since || q.until
-        ? {
-          startedAt: [
-            q.since || new Date(0),
-            q.until || new Date(),
-          ],
-        }
+        ? { startedAt: [q.since, q.until] }
         : undefined,
     });
   },
@@ -246,12 +236,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
         deletedAt: null,
       },
       whereBetween: q.since || q.until
-        ? {
-          startedAt: [
-            q.since || new Date(0),
-            q.until || new Date(),
-          ],
-        }
+        ? { startedAt: [q.since, q.until], }
         : undefined,
     });
   },

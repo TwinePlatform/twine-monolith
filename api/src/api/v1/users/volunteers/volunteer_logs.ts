@@ -27,7 +27,7 @@ const routes: Hapi.ServerRoute[] = [
         },
       },
       validate: {
-        query: { since, until, ...query },
+        query: { since, until: Joi.date().iso().greater(Joi.ref('since')), ...query },
       },
       response: { schema: response },
       pre: [
@@ -42,8 +42,9 @@ const routes: Hapi.ServerRoute[] = [
       } = request;
 
       const { user } = StandardCredentials.fromRequest(request);
+
       const since = new Date(query.since);
-      const until = new Date(query.until);
+      const until = query.until ? new Date(query.until) : undefined;
 
       const logs = await VolunteerLogs.fromUserAtCommunityBusiness(
         knex,

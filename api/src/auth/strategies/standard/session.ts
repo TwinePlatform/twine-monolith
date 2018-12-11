@@ -15,7 +15,7 @@ const {
 
 export const TokenManager: TTokenManager = {
   create (s) {
-    return JWT.sign(s, jwtSecret, signOptions);
+    return JWT.sign({ ...s, version: 'v1' }, jwtSecret, signOptions);
   },
 
   verify (s) {

@@ -12,7 +12,6 @@ import {
   Organisation,
   Organisations,
   VolunteerLog,
-  VolunteerLogs,
 } from '../../../../models';
 import { rndPastDateThisMonth } from '../../../../../tests/utils/data';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
@@ -68,7 +67,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
 
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result).toHaveLength(8);
+      expect((<any> res.result).result).toHaveLength(9);
       expect(res.result).toEqual({
         result: expect.arrayContaining([
           expect.objectContaining({ duration: { hours: 5 } }),
@@ -84,7 +83,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
 
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result).toHaveLength(8);
+      expect((<any> res.result).result).toHaveLength(9);
       expect(res.result).toEqual({
         result: expect.arrayContaining([
           expect.objectContaining({ duration: { hours: 5 } }),
@@ -126,7 +125,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
 
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result).toHaveLength(8);
+      expect((<any> res.result).result).toHaveLength(9);
       expect((<any> res.result).result).toEqual(expect.arrayContaining([
         { userName: 'Emma Emmerich' },
       ]));
@@ -695,30 +694,19 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
       const resLogs = await server.inject({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs',
+        url: '/v1/users/volunteers/me/volunteer-logs?sort=startedAt&order=asc',
         credentials: volCreds,
       });
 
       expect(resLogs.statusCode).toBe(200);
-      // Logs don't appear in GET; should only return logs up to current date
-      expect((<any> resLogs.result).result).toHaveLength(7);
-
-      const resFutureLogs = await VolunteerLogs.get(
-        server.app.knex,
-        {
-          whereBetween: {
-            startedAt: [moment().toDate(), moment().add(100, 'days').toDate()],
-          },
-          order: ['startedAt', 'asc'],
-        }
-      );
-
-      expect(resFutureLogs).toHaveLength(3);
-      expect(resFutureLogs)
+      expect((<any> resLogs.result).result).toHaveLength(10);
+      // Pluck out the newly added logs
+      expect((<any> resLogs.result).result.slice(7, 10))
         .toEqual(
           logs
             .map((l) => ({ ...l, startedAt: new Date(l.startedAt) }))
-            .map(expect.objectContaining));
+            .map(expect.objectContaining)
+        );
     });
 
     test('SUCCESS - empty array in payload does nothing', async () => {
@@ -849,7 +837,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
 
       expect(resLogs.statusCode).toBe(200);
-      expect((<any> resLogs.result).result).toHaveLength(11);
+      expect((<any> resLogs.result).result).toHaveLength(12);
     });
 
     test('ERROR - cannot sync logs for others as VOLUNTEER', async () => {

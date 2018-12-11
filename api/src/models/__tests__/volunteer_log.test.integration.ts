@@ -26,7 +26,7 @@ describe('VolunteerLog model', () => {
   describe('Read', () => {
     test('get :: returns volunteer logs', async () => {
       const logs = await VolunteerLogs.get(trx);
-      expect(logs).toHaveLength(9);
+      expect(logs).toHaveLength(10);
       expect(logs).toEqual(expect.arrayContaining([
         expect.objectContaining({
           userId: 6,
@@ -75,7 +75,7 @@ describe('VolunteerLog model', () => {
       const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
       const logs = await VolunteerLogs.fromCommunityBusiness(trx, cb);
 
-      expect(logs).toHaveLength(8);
+      expect(logs).toHaveLength(9);
       expect(logs).toEqual(expect.arrayContaining([
         expect.objectContaining({
           userId: 6,

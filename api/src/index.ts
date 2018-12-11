@@ -18,6 +18,7 @@ const logConfig = (config: any) => {
   console.log(`\nAttempting to start twine-api in "${ch.bgBlue.white(config.env)}" environment.`);
   console.log('\n\nUsing the following configuration');
   console.log(inspect(config, { depth: 4 }));
+  console.log('');
 };
 
 const up = compose(
