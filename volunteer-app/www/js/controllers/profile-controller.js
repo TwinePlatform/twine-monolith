@@ -105,6 +105,10 @@
 						$scope.formData.gender = undefined;
 					}
 
+					if (typeof $scope.formData.yearOfBirth !== 'number' || $scope.formData.yearOfBirth < 1890) {
+						$scope.formData.yearOfBirth = undefined;
+					}
+
 					// >>> submit form data
 					$$api.user.save($scope.formData).success(function(response) {
 
