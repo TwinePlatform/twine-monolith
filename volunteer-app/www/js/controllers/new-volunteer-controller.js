@@ -119,13 +119,11 @@ angular.module('app').controller('NewVolunteerController', function ($scope, $st
                 // hide loader
                 $ionicLoading.hide();
 
-                $$shout(error.error.message);
-
                 // hide click preventer
                 $$clickPreventer.hide();
 
                 // process connection error
-                $$utilities.processConnectionError(error);
+                $$utilities.processConnectionError(error, null, error.error.message);
 
             });
         }
