@@ -223,7 +223,7 @@
 				>> process connection error
 			*/
 
-				processConnectionError: function(result, error) {
+				processConnectionError: function(result, error, message) {
 
 					// hide loader
 					$ionicLoading.hide();
@@ -244,7 +244,7 @@
 						}
 						// other error
 						else {
-							$$shout('Oops! Something went wrong.', 3000);
+							$$shout(message || 'Oops! Something went wrong.', 3000);
 						}
 
 					}
