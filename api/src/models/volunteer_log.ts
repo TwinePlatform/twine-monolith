@@ -47,12 +47,12 @@ const transformForeignKeysToSubQueries = (client: Knex, org_id: number) => evolv
   'volunteer_hours_log.volunteer_activity_id': (s: string) =>
     client('volunteer_activity')
       .select('volunteer_activity_id')
-      .where({ volunteer_activity_name: s }),
+      .where({ volunteer_activity_name: s, deleted_at: null }),
 
   'volunteer_hours_log.volunteer_project_id': (s: string) =>
     s && client('volunteer_project')
       .select('volunteer_project_id')
-      .where({ volunteer_project_name: s, organisation_id: org_id }),
+      .where({ volunteer_project_name: s, organisation_id: org_id, deleted_at: null }),
 });
 
 const transformDuration = evolve({

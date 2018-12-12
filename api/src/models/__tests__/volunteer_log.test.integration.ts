@@ -216,6 +216,99 @@ describe('VolunteerLog model', () => {
       }
     });
 
+    test('add :: with valid project', async () => {
+      const now = new Date();
+
+      const res = await VolunteerLogs.add(trx, {
+        userId: 6,
+        organisationId: 2,
+        activity: 'Office support',
+        duration: { minutes: 100 },
+        project: 'Take over the world',
+        startedAt: now.toISOString(),
+      });
+
+      expect(res).toEqual(expect.objectContaining({
+        userId: 6,
+        organisationId: 2,
+        activity: 'Office support',
+        duration: { hours: 1, minutes: 40 },
+        project: 'Take over the world',
+        startedAt: now,
+      }));
+    });
+
+    test('add :: invalid project is ignored', async () => {
+      const now = new Date();
+
+      const res = await VolunteerLogs.add(trx, {
+        userId: 6,
+        organisationId: 2,
+        activity: 'Office support',
+        duration: { minutes: 100 },
+        project: 'Non-existent',
+        startedAt: now.toISOString(),
+      });
+
+      expect(res).toEqual(expect.objectContaining({
+        userId: 6,
+        organisationId: 2,
+        activity: 'Office support',
+        duration: { hours: 1, minutes: 40 },
+        startedAt: now,
+      }));
+      expect(res.project).toEqual(null);
+    });
+
+    test('add :: with duplicate deleted project', async () => {
+      const now = new Date();
+      const cb = await CommunityBusinesses.getOne(trx, { where: { id: 2 } });
+      const projects = await VolunteerLogs.getProjects(trx, cb);
+      await VolunteerLogs.deleteProject(trx, projects[0]);
+      const project = await VolunteerLogs.addProject(trx, cb, projects[0].name);
+
+      const log = await VolunteerLogs.add(trx, {
+        userId: 6,
+        organisationId: 2,
+        activity: 'Office support',
+        duration: { minutes: 100 },
+        project: project.name,
+        startedAt: now.toISOString(),
+      });
+
+      expect(log).toEqual(expect.objectContaining({
+        userId: 6,
+        organisationId: 2,
+        activity: 'Office support',
+        duration: { hours: 1, minutes: 40 },
+        project: project.name,
+        startedAt: now,
+      }));
+    });
+
+    test('add :: with deleted activity', async () => {
+      expect.assertions(2);
+      const now = new Date();
+
+      const res = await trx('volunteer_activity')
+        .update({ deleted_at: now })
+        .where({ volunteer_activity_name: 'Office support' });
+
+      expect(res).toBe(1);
+
+      try {
+        await VolunteerLogs.add(trx, {
+          userId: 6,
+          organisationId: 2,
+          activity: 'Office support',
+          duration: { minutes: 100 },
+          startedAt: now.toISOString(),
+        });
+      } catch (error) {
+        expect(error).toBeTruthy();
+      }
+    });
+
     test('update :: non-foreign key column', async () => {
       const log = await VolunteerLogs.getOne(trx, { where: { activity: 'Office support' } });
       const changes = { duration: { hours: 1, minutes: 1 } };
