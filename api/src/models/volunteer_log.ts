@@ -262,6 +262,16 @@ export const VolunteerLogs: VolunteerLogCollection = {
   },
 
   async addProject (client, cb, name) {
+    const { rows: [{ exists }] } = await client.raw('SELECT EXISTS ?', [
+      client('volunteer_project')
+        .select()
+        .where({ organisation_id: cb.id, deleted_at: null, volunteer_project_name: name }),
+    ]);
+
+    if (exists) {
+      throw new Error('Cannot add duplicate project');
+    }
+
     const [project] = await client('volunteer_project')
       .insert({
         organisation_id: cb.id,

@@ -380,7 +380,7 @@ describe('VolunteerLog model', () => {
     });
 
     describe('Write', () => {
-      test('addProject :: ', async () => {
+      test('addProject :: happy path', async () => {
         const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
         const project = await VolunteerLogs.addProject(trx, cb, 'foo');
 
@@ -388,6 +388,19 @@ describe('VolunteerLog model', () => {
           name: 'foo',
           organisationId: 1,
         }));
+      });
+
+      test('addProject :: cannot add duplicates within CB', async () => {
+        expect.assertions(1);
+
+        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+        await VolunteerLogs.addProject(trx, cb, 'foo');
+
+        try {
+          await VolunteerLogs.addProject(trx, cb, 'foo');
+        } catch (error) {
+          expect(error).toBeTruthy();
+        }
       });
 
       test('updateProject ::', async () => {
