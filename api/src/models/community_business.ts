@@ -310,7 +310,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   async getVisitActivities (client, cb, day?) {
     const baseQuery = client('visit_activity')
-      .innerJoin(
+      .leftOuterJoin(
         'visit_activity_category',
         'visit_activity_category.visit_activity_category_id',
         'visit_activity.visit_activity_category_id')
@@ -496,7 +496,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         'visit_activity',
         'visit_activity.visit_activity_id',
         'visit_log.visit_activity_id')
-      .innerJoin(
+      .leftOuterJoin(
         'visit_activity_category',
         'visit_activity_category.visit_activity_category_id',
         'visit_activity.visit_activity_category_id')
