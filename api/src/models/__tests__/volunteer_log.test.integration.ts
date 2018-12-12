@@ -403,7 +403,18 @@ describe('VolunteerLog model', () => {
         }
       });
 
-      test('updateProject ::', async () => {
+      test('addProject :: can add duplicates across CBs', async () => {
+        const cbOne = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+        const cbTwo = await CommunityBusinesses.getOne(trx, { where: { id: 2 } });
+        const p1 = await VolunteerLogs.addProject(trx, cbOne, 'foo');
+        const p2 = await VolunteerLogs.addProject(trx, cbTwo, 'foo');
+
+        expect(p1.organisationId).toBe(1);
+        expect(p2.organisationId).toBe(2);
+        expect(omit(['id', 'organisationId'], p1)).toEqual(omit(['id', 'organisationId'], p2));
+      });
+
+      test('updateProject :: happy path', async () => {
         const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
         const [project] = await VolunteerLogs.getProjects(trx, cb);
         const updated = await VolunteerLogs.updateProject(trx, project, { name: 'NEW NAME' });
@@ -414,6 +425,37 @@ describe('VolunteerLog model', () => {
           name: 'NEW NAME',
         }));
         expect(updated[0].modifiedAt).not.toEqual(project.modifiedAt);
+      });
+
+      test('updateProject :: cannot update to existing (non-deleted) name', async () => {
+        expect.assertions(1);
+
+        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+        const projects = await VolunteerLogs.getProjects(trx, cb);
+
+        try {
+          await VolunteerLogs.updateProject(trx, projects[0], { name: projects[1].name });
+        } catch (error) {
+          expect(error).toBeTruthy();
+        }
+      });
+
+      test('updateProject :: can update to existing deleted name', async () => {
+        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+        const projects = await VolunteerLogs.getProjects(trx, cb);
+        const num = await VolunteerLogs.deleteProject(trx, projects[1]);
+
+        expect(num).toBe(1);
+
+        const updated =
+          await VolunteerLogs.updateProject(trx, projects[0], { name: projects[1].name });
+
+        expect(updated).toHaveLength(1);
+        expect(updated[0]).toEqual(expect.objectContaining({
+          ...omit(['modifiedAt'], projects[0]),
+          name: projects[1].name,
+        }));
+        expect(updated[0].modifiedAt).not.toEqual(projects[0].modifiedAt);
       });
 
       test('deleteProject :: ', async () => {

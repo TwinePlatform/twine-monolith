@@ -290,6 +290,22 @@ export const VolunteerLogs: VolunteerLogCollection = {
   },
 
   async updateProject (client, project, changeset) {
+    if (changeset.name) {
+      const { rows: [{ exists }] } = await client.raw('SELECT EXISTS ?', [
+        client('volunteer_project')
+          .select()
+          .where({
+            organisation_id: project.organisationId,
+            deleted_at: null,
+            volunteer_project_name: changeset.name,
+          }),
+      ]);
+
+      if (exists) {
+        throw new Error(`Project name ${project.name} is a duplicate`);
+      }
+    }
+
     return client('volunteer_project')
       .update(filter((a) => typeof a !== 'undefined', {
         volunteer_project_name: changeset.name,
