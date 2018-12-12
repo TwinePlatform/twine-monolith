@@ -302,7 +302,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
       ]);
 
       if (exists) {
-        throw new Error(`Project name ${project.name} is a duplicate`);
+        throw new Error(`Project name is a duplicate`);
       }
     }
 

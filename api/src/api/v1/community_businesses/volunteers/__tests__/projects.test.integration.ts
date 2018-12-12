@@ -88,6 +88,19 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       expect((<any> res2.result).result).toHaveLength(3);
     });
 
+    test('cannot create project with a duplicate name', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteers/projects',
+        credentials: adminCreds,
+        payload: { name: 'Party' },
+      });
+
+      expect(res.statusCode).toBe(409);
+      expect(res.result)
+        .toEqual({ error: expect.objectContaining({ message: 'Cannot add duplicate project' }) });
+    });
+
     // General {id} routes not implemented yet, remove the 'skip' when they are
     test.skip('cannot create new project for other org', async () => {
       const res = await server.inject({
@@ -171,6 +184,21 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       });
 
       expect(res.statusCode).toBe(400);
+    });
+
+    test('cannot update name to already existing name', async () => {
+      const res = await server.inject({
+        method: 'PUT',
+        url: '/v1/community-businesses/me/volunteers/projects/1',
+        credentials: adminCreds,
+        payload: {
+          name: 'Take over the world',
+        },
+      });
+
+      expect(res.statusCode).toBe(409);
+      expect(res.result)
+        .toEqual({ error: expect.objectContaining({ message: 'Project name is a duplicate' }) });
     });
 
     // General {id} routes not implemented yet, remove the 'skip' when they are
