@@ -66,11 +66,11 @@ const replaceConstantsWithForeignKeys = renameKeys({
 
 const transformForeignKeysToSubQueries = (client: Knex) => evolve({
   gender_id: (v: string) =>
-    client('gender').select('gender_id').where({ gender_name: v }),
+    client('gender').select('gender_id').where({ gender_name: v, deleted_at: null }),
   disability_id: (v: string) =>
-    client('disability').select('disability_id').where({ disability_name: v }),
+    client('disability').select('disability_id').where({ disability_name: v, deleted_at: null }),
   ethnicity_id: (v: string) =>
-    client('ethnicity').select('ethnicity_id').where({ ethnicity_name: v }),
+    client('ethnicity').select('ethnicity_id').where({ ethnicity_name: v, deleted_at: null }),
 });
 
 const dropUnwhereableUserFields = omit([

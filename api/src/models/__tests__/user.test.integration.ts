@@ -145,6 +145,57 @@ describe('User Model', () => {
       expect(passwordCheck).toBeTruthy();
     });
 
+    test('add :: cannot create record with deleted gender', async () => {
+      expect.assertions(2);
+
+      const changeset = await factory.build('volunteer');
+      const res = await trx('gender')
+        .update({ deleted_at: new Date() })
+        .where({ gender_name: changeset.gender });
+
+      expect(res).toBe(1);
+
+      try {
+        await Users.add(trx, changeset);
+      } catch (error) {
+        expect(error).toBeTruthy();
+      }
+    });
+
+    test('add :: cannot create record with deleted disability', async () => {
+      expect.assertions(2);
+
+      const changeset = await factory.build('volunteer');
+      const res = await trx('disability')
+        .update({ deleted_at: new Date() })
+        .where({ disability_name: changeset.disability });
+
+      expect(res).toBe(1);
+
+      try {
+        await Users.add(trx, changeset);
+      } catch (error) {
+        expect(error).toBeTruthy();
+      }
+    });
+
+    test('add :: cannot create record with deleted ethnicity', async () => {
+      expect.assertions(2);
+
+      const changeset = await factory.build('volunteer');
+      const res = await trx('ethnicity')
+        .update({ deleted_at: new Date() })
+        .where({ ethnicity_name: changeset.ethnicity });
+
+      expect(res).toBe(1);
+
+      try {
+        await Users.add(trx, changeset);
+      } catch (error) {
+        expect(error).toBeTruthy();
+      }
+    });
+
     test('destroy :: mark existing record as deleted', async () => {
       const users = await Users.get(trx, { where: { deletedAt: null } });
 
