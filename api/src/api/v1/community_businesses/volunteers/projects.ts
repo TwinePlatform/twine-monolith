@@ -71,7 +71,16 @@ const routes: Hapi.ServerRoute[] = [
         pre: { communityBusiness },
       } = request;
 
-      return VolunteerLogs.addProject(knex, communityBusiness, name);
+      try {
+        // Need to await to allow catching thrown exceptions
+        const project = await VolunteerLogs.addProject(knex, communityBusiness, name);
+        return project;
+      } catch (error) {
+        if (error.message === 'Cannot add duplicate project') {
+          return Boom.conflict(error.message);
+        }
+        throw error;
+      }
     },
   },
 
@@ -158,9 +167,15 @@ const routes: Hapi.ServerRoute[] = [
         return Boom.notFound('No project with this ID found under this organisation');
       }
 
-      const [log] = await VolunteerLogs.updateProject(knex, project, payload);
-
-      return log;
+      try {
+        const [log] = await VolunteerLogs.updateProject(knex, project, payload);
+        return log;
+      } catch (error) {
+        if (error.message === 'Project name is a duplicate') {
+          return Boom.conflict(error.message);
+        }
+        throw error;
+      }
     },
   },
 
