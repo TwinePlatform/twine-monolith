@@ -120,6 +120,38 @@ describe('Community Business Model', () => {
       expect(org).toEqual(expect.objectContaining(changeset));
     });
 
+    test('add :: cannot create record using deleted region', async () => {
+      expect.assertions(2);
+      const changeset = await factory.build('communityBusiness');
+      const res = await trx('community_business_region')
+        .update({ deleted_at: new Date() })
+        .where({ region_name: changeset.region });
+
+      expect(res).toBe(1);
+
+      try {
+        await CommunityBusinesses.add(trx, changeset);
+      } catch (error) {
+        expect(error).toBeTruthy();
+      }
+    });
+
+    test('add :: cannot create record using deleted sector', async () => {
+      expect.assertions(2);
+      const changeset = await factory.build('communityBusiness');
+      const res = await trx('community_business_sector')
+        .update({ deleted_at: new Date() })
+        .where({ sector_name: changeset.sector });
+
+      expect(res).toBe(1);
+
+      try {
+        await CommunityBusinesses.add(trx, changeset);
+      } catch (error) {
+        expect(error).toBeTruthy();
+      }
+    });
+
     test('update :: modify value in local table', async () => {
       const changeset = { logoUrl: 'foo' };
       const org = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
