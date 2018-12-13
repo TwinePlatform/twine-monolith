@@ -58,6 +58,7 @@ const optionalFields: Dictionary<string> = {
   frontlineApiKey: 'frontline_account.frontline_api_key',
   frontlineWorkspaceId: 'frontline_account.frontline_workspace_id',
 };
+
 /*
  * Helpers
  */
@@ -66,12 +67,12 @@ const transformForeignKeysToSubQueries = (client: Knex | Knex.QueryBuilder) => e
     client
       .table('community_business_region')
       .select('community_business_region_id')
-      .where({ region_name: v }),
+      .where({ region_name: v, deleted_at: null }),
   'community_business.community_business_sector_id': (v: string) =>
     client
       .table('community_business_sector')
       .select('community_business_sector_id')
-      .where({ sector_name: v }),
+      .where({ sector_name: v, deleted_at: null }),
 });
 
 const dropUnwhereableCbFields = omit([
@@ -309,7 +310,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   async getVisitActivities (client, cb, day?) {
     const baseQuery = client('visit_activity')
-      .innerJoin(
+      .leftOuterJoin(
         'visit_activity_category',
         'visit_activity_category.visit_activity_category_id',
         'visit_activity.visit_activity_category_id')
@@ -495,7 +496,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         'visit_activity',
         'visit_activity.visit_activity_id',
         'visit_log.visit_activity_id')
-      .innerJoin(
+      .leftOuterJoin(
         'visit_activity_category',
         'visit_activity_category.visit_activity_category_id',
         'visit_activity.visit_activity_category_id')

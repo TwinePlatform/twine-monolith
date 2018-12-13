@@ -47,12 +47,12 @@ const transformForeignKeysToSubQueries = (client: Knex, org_id: number) => evolv
   'volunteer_hours_log.volunteer_activity_id': (s: string) =>
     client('volunteer_activity')
       .select('volunteer_activity_id')
-      .where({ volunteer_activity_name: s }),
+      .where({ volunteer_activity_name: s, deleted_at: null }),
 
   'volunteer_hours_log.volunteer_project_id': (s: string) =>
     s && client('volunteer_project')
       .select('volunteer_project_id')
-      .where({ volunteer_project_name: s, organisation_id: org_id }),
+      .where({ volunteer_project_name: s, organisation_id: org_id, deleted_at: null }),
 });
 
 const transformDuration = evolve({
@@ -262,6 +262,16 @@ export const VolunteerLogs: VolunteerLogCollection = {
   },
 
   async addProject (client, cb, name) {
+    const { rows: [{ exists }] } = await client.raw('SELECT EXISTS ?', [
+      client('volunteer_project')
+        .select()
+        .where({ organisation_id: cb.id, deleted_at: null, volunteer_project_name: name }),
+    ]);
+
+    if (exists) {
+      throw new Error('Cannot add duplicate project');
+    }
+
     const [project] = await client('volunteer_project')
       .insert({
         organisation_id: cb.id,
@@ -280,6 +290,22 @@ export const VolunteerLogs: VolunteerLogCollection = {
   },
 
   async updateProject (client, project, changeset) {
+    if (changeset.name) {
+      const { rows: [{ exists }] } = await client.raw('SELECT EXISTS ?', [
+        client('volunteer_project')
+          .select()
+          .where({
+            organisation_id: project.organisationId,
+            deleted_at: null,
+            volunteer_project_name: changeset.name,
+          }),
+      ]);
+
+      if (exists) {
+        throw new Error(`Project name is a duplicate`);
+      }
+    }
+
     return client('volunteer_project')
       .update(filter((a) => typeof a !== 'undefined', {
         volunteer_project_name: changeset.name,
