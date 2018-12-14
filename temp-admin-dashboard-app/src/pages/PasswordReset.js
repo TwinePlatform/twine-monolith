@@ -54,8 +54,13 @@ function PasswordReset(props) {
         setMessage('Password successfully reset')
       })
       .catch((err) => {
-        console.log({ err });
-        setMessage(err.response.data.error.message)
+        const msg = err.response.data.error.message;
+
+        if (msg.endsWith('is too weak')) {
+          setMessage('Password must contain 1 upper and lower case letter, one number and one symbol')
+        } else {
+          setMessage(err.response.data.error.message)
+        }
       })
   }
 
@@ -64,7 +69,7 @@ function PasswordReset(props) {
     <Fragment>
       <Typography variant="h5" component="h3">
         Reset Password
-    </Typography>
+      </Typography>
       <form className={classes.container} noValidate autoComplete="off">
         <TextField
           id="password"
