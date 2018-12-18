@@ -44,7 +44,7 @@ function PasswordForgot(props) {
   const forgotRequest = (email) => {
     api.forgot({ email })
       .then(() => {
-        setMessage('Password successfully reset')
+        setMessage('Password reset e-mail sent')
       })
       .catch((err) => {
         console.log({ err });
