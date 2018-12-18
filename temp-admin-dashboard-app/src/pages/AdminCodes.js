@@ -40,7 +40,7 @@ class AdminCodes extends Component {
         this.setState({ organisations: res.data.result })
       })
       .catch((err) => {
-        const errorMessage = err.response && err.response.data.error.message || 'Error fetching data.'
+        const errorMessage = (err.response && err.response.data.error.message) || 'Error fetching data.'
         this.setState({ error: errorMessage })
       })
   }

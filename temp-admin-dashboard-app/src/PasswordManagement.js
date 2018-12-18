@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 // mui components
 import CssBaseline from '@material-ui/core/CssBaseline';

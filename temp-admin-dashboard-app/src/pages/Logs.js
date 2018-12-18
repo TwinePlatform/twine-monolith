@@ -5,7 +5,6 @@ import saveAs from 'file-saver';
 import * as moment from 'moment'
 
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 
@@ -64,7 +63,7 @@ class Home extends Component {
         })
       })
       .catch((err) => {
-        const errorMessage = err.response && err.response.data.error.message || 'Error fetching data.'
+        const errorMessage = (err.response && err.response.data.error.message) || 'Error fetching data.'
         this.setState({ message: errorMessage })
       })
   }
@@ -98,7 +97,7 @@ class Home extends Component {
         })
       })
       .catch((err) => {
-        const errorMessage = err.response && err.response.data.error.message || 'Error fetching data.'
+        const errorMessage = (err.response && err.response.data.error.message) || 'Error fetching data.'
         this.setState({ message: errorMessage })
       })
   }

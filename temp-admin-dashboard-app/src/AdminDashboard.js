@@ -47,7 +47,7 @@ class AdminDashboard extends Component {
     api.login({ email, password })
       .then(() => this.setState({ auth: true, loginError: null }))
       .catch((err) => {
-        const errorMessage = err.response.data && err.response.data.error.message || 'There has been an error logging in.'
+        const errorMessage = (err.response.data && err.response.data.error.message) || 'There has been an error logging in.'
         this.setState({ loginError: errorMessage })
       })
   }
