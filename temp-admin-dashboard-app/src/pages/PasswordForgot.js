@@ -41,7 +41,9 @@ function PasswordForgot(props) {
   const email = useFormInput()
   const [message, setMessage] = useState(null);
 
-  const forgotRequest = (email) => {
+  const forgotRequest = (e, email) => {
+    e.preventDefault();
+
     api.forgot({ email })
       .then(() => {
         setMessage('Password reset e-mail sent')
@@ -53,12 +55,11 @@ function PasswordForgot(props) {
   }
 
   return (
-
     <Fragment>
       <Typography variant="h5" component="h3">
         Forgot Password
     </Typography>
-      <form className={classes.container} noValidate autoComplete="off">
+      <form className={classes.container} noValidate autoComplete="off" onSubmit={(e) => forgotRequest(e, email.value)}>
         <TextField
           id="email"
           label="Email"
@@ -66,7 +67,7 @@ function PasswordForgot(props) {
           {...email}
           margin="normal"
         />
-        <Button component="span" color="secondary" onClick={() => forgotRequest(email.value)}>
+        <Button color="secondary" type="submit">
           Send email reset link
         </Button>
         {message && <SnackbarContent className={classes.snackbar} message={message} />}

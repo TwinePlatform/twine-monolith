@@ -48,7 +48,9 @@ function PasswordReset(props) {
   const { email } = parse(search.replace('?', ''))
 
 
-  function sendReset(form) {
+  function sendReset(e, form) {
+    e.preventDefault();
+
     api.reset(form)
       .then(() => {
         setMessage('Password successfully reset')
@@ -65,12 +67,11 @@ function PasswordReset(props) {
   }
 
   return (
-
     <Fragment>
       <Typography variant="h5" component="h3">
         Reset Password
       </Typography>
-      <form className={classes.container} noValidate autoComplete="off">
+      <form className={classes.container} noValidate autoComplete="off" onSubmit={(e) => sendReset(e, { token, email, password, passwordConfirm })}>
         <TextField
           id="password"
           label="Password"
@@ -87,7 +88,7 @@ function PasswordReset(props) {
           margin="normal"
           type='password'
         />
-        <Button component="span" color="secondary" onClick={() => sendReset({ token, email, password, passwordConfirm })}>
+        <Button color="secondary" type="submit">
           Reset Password
         </Button>
       </form>

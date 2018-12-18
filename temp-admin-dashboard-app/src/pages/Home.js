@@ -44,10 +44,15 @@ class Home extends Component {
     });
   };
 
-  render() {
-    const { props: { classes, login, loginError, auth }, state: { email, password } } = this;
+  login = (e) => {
+    e.preventDefault();
+    return this.props.login({ email: this.state.email, password: this.state.password })
+  }
 
-    const loginForm = <form noValidate autoComplete="off">
+  render() {
+    const { props: { classes, loginError, auth } } = this;
+
+    const loginForm = <form noValidate autoComplete="off" onSubmit={this.login}>
       <TextField
         id="email"
         label="Email"
@@ -65,7 +70,7 @@ class Home extends Component {
         margin="normal"
         type="password"
       />
-      <Button component="span" color="secondary" onClick={() => login({ email, password })}>
+      <Button color="secondary" type="submit">
         Login
       </Button>
       {loginError && <SnackbarContent className={classes.snackbar} message={loginError} />}
