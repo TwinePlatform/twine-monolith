@@ -71,6 +71,9 @@ function PasswordReset(props) {
       <Typography variant="h5" component="h3">
         Reset Password
       </Typography>
+      <Typography variant="caption" component="span">
+        Choose a password with at least 8 characters, and at least one upper case, lower case, number and symbol:
+      </Typography>
       <form className={classes.container} noValidate autoComplete="off" onSubmit={(e) => sendReset(e, { token, email, password, passwordConfirm })}>
         <TextField
           id="password"
