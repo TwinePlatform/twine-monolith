@@ -2,9 +2,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 
 
-module.exports = async (knex, name, access) => {
-  const token = crypto.randomBytes(64).toString('base64');
-
+module.exports = async (knex, name, access, token = crypto.randomBytes(64).toString('base64')) => {
   await knex('api_token')
     .insert({
       api_token_name: name,

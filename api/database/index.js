@@ -97,14 +97,14 @@ exports.migrate = {
 };
 
 exports.add = {
-  apiToken: async (name, access, { env = process.env.NODE_ENV, client: _client } = {}) => {
+  apiToken: async (name, access, token, { env = process.env.NODE_ENV, client: _client } = {}) => {
     const config = getConfig(env);
     const client = _client ? _client : knex(config.knex);
 
-    const { token } = await addApiToken(client, name, access);
+    const { token: tkn } = await addApiToken(client, name, access, token);
 
     console.log(`Added new API token for ${name} with access level ${access}`);
-    console.log(`API token: ${token}`);
+    console.log(`API token: ${tkn}`);
 
     return _client ? null : client.destroy();
   }
