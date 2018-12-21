@@ -1,29 +1,52 @@
 #!/usr/bin/env node
 
 /*
- * script for creating a new user locally
+ * script for creating a new user
  */
-
+const parse = require('minimist');
 const Knex = require('knex')
-const {Volunteers} = require('../build/src/models/volunteer');
-const {CommunityBusinesses} = require('../build/src/models/community_business.js');
-const {getConfig} = require('../build/config')
+const { Users, CommunityBusinesses } = require('../build/src/models');
+const { Roles } = require('../build/src/auth');
+const { getConfig } = require('../build/config')
+
+process.on('unhandledRejection', (err) => { throw err });
+
+const { name, email, role, password, oid } = parse(process.argv.slice(2));
+
+if (!name || !email || !role || !password || !oid) {
+  throw new Error('Missing arguments');
+}
 
 (async () => {
-  const {knex: config} = getConfig('development')
-
+  const {knex: config} = getConfig(process.env.NODE_ENV)
   const client = Knex(config)
 
-  const user = {
-    email: 'INSERTEMAIL@EMAIL.COM',
-    password: 'Password123!',
-    name: 'INSERT NAME'
-  }
-  const cb = await CommunityBusinesses.getOne(client, {where: {id:1}})
-  console.log({cb});
+  try {
+    await client.transaction(async (trx) => {
+      const cb = await CommunityBusinesses.getOne(trx, { where: { id: oid } });
 
-  const volunteer = await Volunteers.addWithRole(client, user, 'VOLUNTEER_ADMIN', cb, '10101')
-  console.log({volunteer});
+      if (!cb) {
+        throw new Error(`Community Business with ID ${oid} does not exist`)
+      }
+
+      const user = await Users.add(trx, Users.create({ name, email, password }));
+
+      await Roles.add(trx, { userId: user.id, organisationId: cb.id, role });
+
+      console.log(`
+        User added to ${process.env.NODE_ENV} database:
+          Name: ${user.name}
+          E-mail: ${user.email}
+          Password: ${user.password} (${password})
+          Community Business: ${cb.name}
+          Role: ${role}
+      `);
+    });
+
+  } catch (error) {
+    console.log('Something went wrong!');
+    console.log(error);
+  }
 
   await client.destroy();
 })();
