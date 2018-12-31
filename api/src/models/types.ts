@@ -147,7 +147,7 @@ export type User = Readonly<CommonTimestamps & {
   gender: GenderEnum
   disability: DisabilityEnum
   ethnicity: EthnicityEnum
-  birthYear?: Int
+  birthYear?: Int | null
   postCode?: string
   isEmailConfirmed: boolean
   isPhoneNumberConfirmed: boolean

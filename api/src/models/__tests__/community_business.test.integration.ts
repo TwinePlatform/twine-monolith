@@ -272,7 +272,7 @@ describe('Community Business Model', () => {
     test(':: returns all logs for a cb', async () => {
       const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
       const logs = await CommunityBusinesses.getVisitLogsWithUsers(trx, cb);
-      expect(logs.length).toEqual(10);
+      expect(logs.length).toEqual(11);
       expect(logs).toEqual(expect.arrayContaining([
         expect.objectContaining({
           visitActivity: 'Free Running',
@@ -290,7 +290,7 @@ describe('Community Business Model', () => {
       const logs = await CommunityBusinesses
         .getVisitLogsWithUsers(trx, cb, { where: { visitActivity: 'Wear Pink' } });
 
-      expect(logs.length).toEqual(3);
+      expect(logs.length).toEqual(4);
     });
 
 
@@ -355,9 +355,9 @@ describe('Community Business Model', () => {
       const aggregates = await CommunityBusinesses
         .getVisitLogAggregates(trx, cb, ['gender', 'age', 'visitActivity']);
       expect(aggregates).toEqual({
-        visitActivity: { 'Free Running': 7, 'Wear Pink': 3 },
-        age: { '18-34': 10 },
-        gender: { female: 10 },
+        visitActivity: { 'Free Running': 7, 'Wear Pink': 4 },
+        age: { '18-34': 10, null: 1 },
+        gender: { female: 11 },
       });
     });
 
@@ -371,12 +371,12 @@ describe('Community Business Model', () => {
         );
 
       expect(logs).toEqual({
-        visitActivity: { 'Wear Pink': 3 },
-        age: { '18-34': 3 },
-        gender: { female: 3 } });
+        visitActivity: { 'Wear Pink': 4 },
+        age: { '18-34': 3, null: 1 },
+        gender: { female: 4 } });
     });
 
-    test(':: lastWeek field returns a total count of 8', async () => {
+    test(':: lastWeek field returns total count', async () => {
       // NB test data is dynamically created in relation to todays date
       const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
       const { lastWeek }: Dictionary<number> = await CommunityBusinesses.getVisitLogAggregates(
@@ -386,10 +386,10 @@ describe('Community Business Model', () => {
         );
 
       const count = Object.values(lastWeek).reduce((a, b) => a + b);
-      expect(count).toEqual(8);
+      expect(count).toEqual(9);
     });
 
-    test(':: lastWeek field returns a total count of 8 with query', async () => {
+    test(':: lastWeek field with model query returns a total count', async () => {
       const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
       const { lastWeek }: Dictionary<number> = await CommunityBusinesses.getVisitLogAggregates(
         trx,
@@ -399,7 +399,7 @@ describe('Community Business Model', () => {
         );
 
       const count = Object.values(lastWeek).reduce((a, b) => a + b);
-      expect(count).toEqual(1);
+      expect(count).toEqual(2);
     });
 
     test(':: throws an error if unsupported aggregate fields are supplied', async () => {

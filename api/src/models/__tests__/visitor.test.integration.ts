@@ -32,6 +32,7 @@ describe('Visitor model', () => {
       expect(visitors).toEqual([
         expect.objectContaining({ id: 1, name: 'Chell' }),
         expect.objectContaining({ id: 8, name: 'Turret' }),
+        expect.objectContaining({ id: 9, name: 'Companion Cube' }),
       ]);
     });
 
@@ -58,7 +59,7 @@ describe('Visitor model', () => {
     test('fromCommunityBusiness :: gets all visitors at organisation', async () => {
       const cb = await CommunityBusinesses.getOne(knex, { where: { name: 'Aperture Science' } });
       const visitors = await Visitors.fromCommunityBusiness(knex, cb);
-      expect(visitors).toHaveLength(2);
+      expect(visitors).toHaveLength(3);
       expect(visitors[0]).toEqual(expect.objectContaining({ name: 'Chell' }));
     });
 
@@ -68,7 +69,7 @@ describe('Visitor model', () => {
       const visitors =
         await Visitors.fromCommunityBusiness(knex, cb, { fields: ['name', 'qrCode'] });
 
-      expect(visitors).toHaveLength(2);
+      expect(visitors).toHaveLength(3);
       expect(visitors[0]).toEqual({ name: 'Chell', qrCode: 'chellsqrcode' });
     });
 
@@ -112,10 +113,10 @@ describe('Visitor model', () => {
       await Roles.add(trx, { role: RoleEnum.VISITOR, organisationId: 1, userId: visitor.id });
 
       // Execute
-      const visitors = await Visitors.getWithVisits(trx, apScience, { limit: 10 });
+      const visitors = await Visitors.getWithVisits(trx, apScience);
 
       // Assert
-      expect(visitors).toHaveLength(3);
+      expect(visitors).toHaveLength(4);
       expect(visitors[0]).toEqual(expect.objectContaining({ id: 1, name: 'Chell' }));
       expect(visitors[0].visits).toHaveLength(10);
       expect(visitors[0].visits).toEqual(
@@ -123,7 +124,7 @@ describe('Visitor model', () => {
           expect.objectContaining({ visitActivity: 'Free Running' }),
         ])
       );
-      expect(visitors[2]).toEqual({ ...visitor, visits: [] });
+      expect(visitors[3]).toEqual({ ...visitor, visits: [] });
     });
   });
 

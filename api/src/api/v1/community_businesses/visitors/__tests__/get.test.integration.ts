@@ -39,13 +39,13 @@ describe('API /community-businesses/{id}/visitors', () => {
         credentials,
       });
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result).toHaveLength(2);
+      expect((<any> res.result).result).toHaveLength(3);
       expect((<any> res.result).result.visits).not.toBeDefined();
       expect((<any> res.result).result[0]).toEqual(expect.objectContaining({
         name: 'Chell',
         deletedAt: null,
       }));
-      expect((<any> res.result).meta).toEqual({ total: 2 });
+      expect((<any> res.result).meta).toEqual({ total: 3 });
     });
 
     test('filtered query', async () => {
@@ -112,13 +112,13 @@ describe('API /community-businesses/{id}/visitors', () => {
         credentials: adminCreds,
       });
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result).toHaveLength(2);
+      expect((<any> res.result).result).toHaveLength(3);
       expect((<any> res.result).result.visits).not.toBeDefined();
       expect((<any> res.result).result[0]).toEqual(expect.objectContaining({
         name: 'Chell',
         deletedAt: null,
       }));
-      expect((<any> res.result).meta).toEqual({ total: 2 });
+      expect((<any> res.result).meta).toEqual({ total: 3 });
     });
 
     test('can filter users by name', async () => {

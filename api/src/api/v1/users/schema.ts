@@ -23,7 +23,8 @@ export const birthYear =
   Joi.number()
     .integer()
     .min(1890)
-    .max(currentYear);
+    .max(currentYear)
+    .allow(null);
 
 export const email =
   Joi.string()
