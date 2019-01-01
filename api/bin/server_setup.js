@@ -10,7 +10,7 @@ const { getConfig } = require('../build/config');
 (async () => {
   console.log('Setting up server');
 
-  const server = await init(getConfig('development'));
+  const server = await init(getConfig('testing'));
 
   console.log('Server initialising');
 
