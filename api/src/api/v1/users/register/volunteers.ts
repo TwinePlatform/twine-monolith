@@ -39,7 +39,7 @@ export default [
           adminCode: Joi.string().regex(/^\w{5,8}$/),
           name: userName.required(),
           gender: gender.default('prefer not to say'),
-          birthYear,
+          birthYear: birthYear.default(null),
           email: email.required(),
           phoneNumber: phoneNumber.allow(''),
           postCode: postCode.allow(''),

@@ -152,5 +152,22 @@ describe('API v1 - register new users', () => {
         email: '13542@google.com',
       }));
     });
+
+    test('register visitor with null birthYear', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitors',
+        payload: {
+          organisationId: 1,
+          name: 'Ratman',
+          gender: 'male',
+          birthYear: null,
+          email: '666@aperturescience.com',
+        },
+        credentials,
+      });
+
+      expect(res.statusCode).toBe(200);
+    });
   });
 });

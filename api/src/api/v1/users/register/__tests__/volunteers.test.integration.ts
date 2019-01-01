@@ -137,6 +137,7 @@ describe('API v1 - register new users', () => {
       expect(res.statusCode).toBe(401);
       expect((<any> res.result).error.message).toEqual('Invalid volunteer admin code');
     });
+
     test(':: fail - missing admin code for VOLUNTEER_ADMIN', async () => {
       const res = await server.inject({
         method: 'POST',
@@ -154,6 +155,24 @@ describe('API v1 - register new users', () => {
 
       expect(res.statusCode).toBe(400);
       expect((<any> res.result).error.message).toEqual('Missing volunteer admin code');
+    });
+
+    test(':: success - add volunteer with null birthYear', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/volunteers',
+        payload: {
+          organisationId: 1,
+          name: 'Ratman',
+          gender: 'male',
+          birthYear: null,
+          email: '666@google.com',
+          password: 'helpMe1mtrapped!',
+          role: RoleEnum.VOLUNTEER,
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
     });
   });
 });
