@@ -339,7 +339,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   async getVisitActivityById (client, cb, id) {
     const [visitActivity] = await client('visit_activity')
-        .innerJoin(
+        .leftOuterJoin(
           'visit_activity_category',
           'visit_activity_category.visit_activity_category_id',
           'visit_activity.visit_activity_category_id')
