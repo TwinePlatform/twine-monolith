@@ -11,6 +11,7 @@ import { applyQueryModifiers } from './applyQueryModifiers';
 import { getConfig } from '../../config';
 import * as QRCode from '../services/qrcode';
 import { ageArrayToBirthYearArray, pickOrAll } from '../utils';
+import { Roles } from '../auth';
 
 
 const { qrcode: { secret } } = getConfig(process.env.NODE_ENV);
@@ -72,6 +73,24 @@ export const Visitors: VisitorCollection = {
 
   async add (client, user) {
     return Users.add(client, user);
+  },
+
+  async addWithRole (client, cb, user) {
+    return client.transaction(async (trx) => {
+      const newUser = await Users.add(trx, user);
+      await Roles.add(trx, { role: RoleEnum.VISITOR, userId: newUser.id, organisationId: cb.id });
+      return newUser;
+    });
+  },
+
+  async addAnonymousWithRole (client, cb, user) {
+    const anonymousCount = await client('user_account').where('email', 'like', 'anon%org%');
+    const email = `anon_${anonymousCount.length}_org_${cb.id}`;
+    return client.transaction(async (trx) => {
+      const newUser = await Users.add(trx, { ...user, email });
+      await Roles.add(trx, { role: RoleEnum.VISITOR, userId: newUser.id, organisationId: cb.id });
+      return newUser;
+    });
   },
 
   async update (client, user, changes) {

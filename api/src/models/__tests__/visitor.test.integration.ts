@@ -167,6 +167,38 @@ describe('Visitor model', () => {
         expect(error).toBeTruthy();
       }
     });
+
+    test('addWithRole :: creates a new user with role', async () => {
+      const changeset = await factory.build('visitor');
+      const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
+      const visitor = await Visitors.addWithRole(trx, cb, changeset);
+      const rolesCheck = await Roles
+       .userHas(trx, { role: RoleEnum.VISITOR, userId: visitor.id, organisationId: cb.id });
+      expect(visitor).toEqual(expect.objectContaining(changeset));
+      expect(rolesCheck).toBeTruthy();
+    });
+
+    test('addAnonymousWithRole :: creates a new anonymous user with role', async () => {
+      const changeset = await factory.build('visitor');
+      const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
+      const visitor = await Visitors.addAnonymousWithRole(trx, cb, changeset);
+      const emailCheck = /anon_\d*_org_\d*/.test(visitor.email);
+      const rolesCheck = await Roles
+       .userHas(trx, { role: RoleEnum.VISITOR, userId: visitor.id, organisationId: cb.id });
+      expect(visitor).toEqual(expect.objectContaining(omit(['email'], changeset)));
+      expect(emailCheck).toBeTruthy();
+      expect(rolesCheck).toBeTruthy();
+    });
+
+    test('addAnonymousWithRole :: increments counter in faux email', async () => {
+      const changeset = await factory.build('visitor');
+      const changeset2 = await factory.build('visitor');
+      const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
+      const visitor = await Visitors.addAnonymousWithRole(trx, cb, changeset);
+      const visitor2 = await Visitors.addAnonymousWithRole(trx, cb, changeset2);
+      expect(visitor.email).toBe('anon_0_org_2');
+      expect(visitor2.email).toBe('anon_1_org_2');
+    });
   });
 
   describe('Serialisation', () => {
