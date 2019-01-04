@@ -73,3 +73,7 @@ Thumbs.db
 
 # Typescript compiled code
 build
+
+# Local script files
+*.local.js
+*.local.ts

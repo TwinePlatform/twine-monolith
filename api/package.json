@@ -47,7 +47,8 @@
     "start": "node ./build/src/index.js",
     "watch": "tsc -w",
     "build": "tsc && npm run copy",
-    "heroku-postbuild": "npm run build && npm run migrate:latest"
+    "heroku-postbuild": "npm run build && npm run migrate:latest",
+    "bin": "tsc && node ./bin"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
