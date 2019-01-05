@@ -1,15 +1,13 @@
-#!/usr/bin/env node
-
 /*
  * script for editing an existing user
  */
-const parse = require('minimist');
-const Knex = require('knex')
-const { Users, CommunityBusinesses } = require('../build/src/models');
-const { Roles } = require('../build/src/auth');
-const { getConfig } = require('../build/config')
+import * as parse from 'minimist';
+import * as Knex from 'knex';
+import { Users } from '../src/models';
+import { Roles } from '../src/auth';
+import { getConfig } from '../config';
 
-process.on('unhandledRejection', (err) => { throw err });
+process.on('unhandledRejection', (err) => { throw err; });
 
 const { userId, email, role, password, oid } = parse(process.argv.slice(2));
 
@@ -18,8 +16,8 @@ if (!userId || !email) {
 }
 
 (async () => {
-  const {knex: config} = getConfig(process.env.NODE_ENV)
-  const client = Knex(config)
+  const { knex: config } = getConfig(process.env.NODE_ENV);
+  const client = Knex(config);
   const changeEmail = userId && email;
 
   try {

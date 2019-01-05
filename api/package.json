@@ -48,7 +48,7 @@
     "watch": "tsc -w",
     "build": "tsc && npm run copy",
     "heroku-postbuild": "npm run build && npm run migrate:latest",
-    "bin": "tsc && node ./bin"
+    "exc": "ts-node"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
@@ -59,6 +59,7 @@
     "@types/jest": "^23.3.9",
     "@types/jsonwebtoken": "^8.3.0",
     "@types/knex": "^0.15.0",
+    "@types/minimist": "^1.2.0",
     "@types/pdfmake": "^0.1.2",
     "@types/ramda": "^0.25.41",
     "axios": "^0.18.0",
