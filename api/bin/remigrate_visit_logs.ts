@@ -90,7 +90,7 @@ if (!sourceUrl) {
             'visit_activity.visit_activity_id',
             'visit_log.visit_activity_id')
           .where('user_account.qr_code', visitor.qrCode)
-          .whereBetween('visit_log.created_at', [new Date('2018-12-14T19:00:00'), new Date()]);
+          .whereBetween('visit_log.created_at', [new Date('2018-12-13T19:00:00'), new Date()]);
 
         // 2.2 Get list of logs from source DB (_before data sync), B
         const sourceLogsPreSync = await source
@@ -109,7 +109,7 @@ if (!sourceUrl) {
             'activities.id',
             'visits.activitiesid')
           .where('users.hash', visitor.qrCode)
-          .whereBetween('visits.date', [new Date(0), new Date('2018-12-14T19:00:00')]);
+          .whereBetween('visits.date', [new Date(0), new Date('2018-12-13T19:00:00')]);
 
         const logs = sourceLogsPreSync.concat(trgtLogsPostSync);
 
