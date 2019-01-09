@@ -15,6 +15,14 @@ import configProduction from './config.production';
 import { Config, Environment } from './types';
 import { DeepPartial } from '../src/types/internal';
 
+
+declare module 'knex' {
+  interface PoolConfig {
+    connectionTimeoutMillis?: number;
+  }
+}
+
+
 /**
  * Describes the transformations of the default configuration object
  * in the various supported deployment environments

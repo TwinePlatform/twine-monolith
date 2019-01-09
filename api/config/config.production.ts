@@ -15,6 +15,7 @@ export default {
     connection: process.env.DATABASE_URL,
     pool: {
       max: 20,
+      connectionTimeoutMillis: 1000,
     },
   },
   email: {
