@@ -1,5 +1,14 @@
 /*
- * script for editing an existing user
+ * Edit roles for a user
+ *
+ * Usage:
+ *  npm run exc ./bin/edit_user_role.ts [--userId=a] [--oid=b] [--add=role] [--rm=role]
+ *
+ * Flags:
+ *  userId: Integer corresponding to `user_account_id` in database
+ *  oid: Integer corresponding to `organisation_id` in database
+ *  add: Role to add to given user at given organisation. Must be member of `RoleEnum` enumeration
+ *  rm: Role to remove to given user at given organisation. Must be member of `RoleEnum` enumeration
  */
 import * as parse from 'minimist';
 import * as Knex from 'knex';
