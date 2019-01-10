@@ -34,7 +34,15 @@ export const password =
   Joi.string()
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!#$£€%&()*+,\-./\\:;<=>@[\]^_{|}~? ])(?=.{8,})/,
      'strong_pwd')
-    .options({ language: { string: { regex: { name: 'is too weak' } } } });
+    .options({
+      language: {
+        string: {
+          regex: {
+            name: 'is too weak: must contain number, symbol, upper case and lower case',
+          },
+        },
+      },
+    });
 
 // supports passwords from old volunteer app
 export const DEPRECATED_password =

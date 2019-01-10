@@ -154,7 +154,7 @@ describe('POST /users/password', () => {
 
       expect(res.statusCode).toBe(400);
       expect((<any> res.result).error.validation).toEqual({
-        password: 'is too weak',
+        password: 'is too weak: must contain number, symbol, upper case and lower case',
       });
     });
 
