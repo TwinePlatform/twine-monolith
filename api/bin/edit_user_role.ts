@@ -12,14 +12,14 @@
  */
 import * as parse from 'minimist';
 import * as Knex from 'knex';
-import { Roles } from '../src/auth';
+import Roles from '../src/auth/roles';
 import { getConfig } from '../config';
 
 process.on('unhandledRejection', (err) => { throw err; });
 
 const { userId, oid, add, rm } = parse(process.argv.slice(2));
 
-if (!userId || !oid || !(add && rm)) {
+if (!userId || !oid || !(add || rm)) {
   throw new Error('Not enough arguments supplied');
 }
 
