@@ -44,7 +44,7 @@ CREATE TABLE user_account (
   email                            CITEXT UNIQUE,
   phone_number                     VARCHAR(20),
   post_code                        CITEXT,
-  birth_year                       INT DEFAULT NULL,
+  birth_year                       INT,
   is_email_confirmed               BOOLEAN NOT NULL DEFAULT false,
   is_phone_number_confirmed        BOOLEAN NOT NULL DEFAULT false,
   is_email_contact_consent_granted BOOLEAN NOT NULL DEFAULT false,
