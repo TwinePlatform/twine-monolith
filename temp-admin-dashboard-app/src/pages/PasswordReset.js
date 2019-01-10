@@ -58,7 +58,7 @@ function PasswordReset(props) {
       .catch((err) => {
         const msg = err.response.data.error.message;
 
-        if (msg.endsWith('is too weak')) {
+        if (msg.includes('is too weak')) {
           setMessage('Password must contain 1 upper and lower case letter, one number and one symbol')
         } else {
           setMessage(err.response.data.error.message)
