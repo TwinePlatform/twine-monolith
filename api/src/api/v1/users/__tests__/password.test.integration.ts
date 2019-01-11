@@ -166,7 +166,8 @@ describe('POST /users/password', () => {
       });
 
       expect(res.statusCode).toBe(401);
-      expect((<any> res.result).error.message).toEqual('Invalid token. Reset password again.');
+      expect((<any> res.result).error.message)
+        .toEqual('Invalid token. Request another reset e-mail.');
     });
 
     test('::SUCCESS updates one row', async () => {
