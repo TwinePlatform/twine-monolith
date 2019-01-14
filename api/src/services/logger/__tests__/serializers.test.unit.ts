@@ -270,7 +270,7 @@ describe('Logger Service :: Serializers', () => {
         },
       });
 
-      expect(result).toEqual({ id: 1, headers: {} });
+      expect(result).toEqual({ id: 1 });
     });
   });
 });
