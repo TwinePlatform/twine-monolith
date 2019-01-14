@@ -126,7 +126,7 @@ exports.seed = (knex) =>
       {
         user_name: 'Companion Cube',
         qr_code: 'thecakeisalie',
-        email: '<3@aperturescience.com',
+        email: '',
         phone_number: '+1 425-450-4464',
         post_code: '49829',
         birth_year: null,
