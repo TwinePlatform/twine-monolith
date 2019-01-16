@@ -48,7 +48,7 @@
     "watch": "tsc -w",
     "build": "tsc && npm run copy",
     "heroku-postbuild": "npm run build && npm run migrate:latest",
-    "exc": "ts-node"
+    "exc": "ts-node --files"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
