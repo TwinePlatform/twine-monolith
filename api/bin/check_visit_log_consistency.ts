@@ -4,6 +4,15 @@
  *
  * If all is fine, any difference in logs should only correspond to test
  * accounts or junk logs.
+ *
+ * Usage:
+ *  npm run exec ./bin/check_visit_log_consistency.ts -- source_url
+ *
+ * Arguments:
+ *  source_url: Postgres connection string of source database
+ *
+ * Note: Including the argument separator `--` before any of the flags is important.
+ *       Without it, the argument parsing will not work.
  */
 import * as parse from 'minimist';
 import * as Knex from 'knex';

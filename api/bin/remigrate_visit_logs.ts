@@ -5,7 +5,7 @@
  * - https://github.com/TwinePlatform/data-sync/issues/39
  *
  * Usage:
- *  npm run exc ./bin/remigrate_visit_logs [source_url] [--ignore=a,b,c] [--ignoreNullAct=a]
+ *  npm run exc ./bin/remigrate_visit_logs -- [source_url] [--ignore=a,b,c] [--ignoreNullAct=a]
  *
  * Arguments:
  *  source_url: Connection URL for PostgreSQL database of original visitor app
@@ -25,6 +25,9 @@
  *   2.2 Get list of logs from source DB (_before data sync), B
  *   2.3 Delete all logs for visitor from target database
  *   2.4 Insert the logs (A concat B) into the target database
+ *
+ * Note: Including the argument separator `--` before any of the flags is important.
+ *       Without it, the argument parsing will not work.
  */
 import * as parse from 'minimist';
 import * as Knex from 'knex';

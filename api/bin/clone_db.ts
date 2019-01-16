@@ -1,3 +1,18 @@
+/*
+ * Clone remote heroku database to local database
+ *
+ * Usage:
+ *  npm run exec ./bin/clone_db.ts -- db_name [--clean]
+ *
+ * Arguments:
+ *  db_name: Name of local database to create to hold the contents of the remote
+ *
+ * Flags:
+ *  clean: Boolean flag; determines whether to delete any existing dump file
+ *
+ * Note: Including the argument separator `--` before any of the flags is important.
+ *       Without it, the argument parsing will not work.
+ */
 import * as path from 'path';
 import { exists as existsOld } from 'fs';
 import { exec as execOld } from 'child_process';

@@ -1,5 +1,22 @@
 /*
- * script for creating a new user
+ * Create new user
+ *
+ * Usage:
+ *  npm run exec ./bin/create_user.ts -- [--name=a]
+ *                                       [--email=b]
+ *                                       [--password=c]
+ *                                       [--role=role]
+ *                                       [--oid=c]
+ *
+ * Flags:
+ *  name: User name
+ *  email: User email
+ *  password: User password (unhashed)
+ *  role: Role that user should have
+ *  oid: Organisation ID of organisation at which to assign role
+ *
+ * Note: Including the argument separator `--` before any of the flags is important.
+ *       Without it, the argument parsing will not work.
  */
 import * as parse from 'minimist';
 import * as Knex from 'knex';
