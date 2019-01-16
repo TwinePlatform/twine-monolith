@@ -2,11 +2,11 @@
  * Edit roles for a user
  *
  * Usage:
- *  npm run exc ./bin/edit_user_role.ts [--userId=a] [--oid=b] [--add=role] [--rm=role]
+ *  npm run exc ./bin/edit_user_role.ts [--userId=a] [--orgId=b] [--add=role] [--rm=role]
  *
  * Flags:
  *  userId: Integer corresponding to `user_account_id` in database
- *  oid: Integer corresponding to `organisation_id` in database
+ *  orgId: Integer corresponding to `organisation_id` in database
  *  add: Role to add to given user at given organisation. Must be member of `RoleEnum` enumeration
  *  rm: Role to remove to given user at given organisation. Must be member of `RoleEnum` enumeration
  */
@@ -17,9 +17,11 @@ import { getConfig } from '../config';
 
 process.on('unhandledRejection', (err) => { throw err; });
 
-const { userId, oid, add, rm } = parse(process.argv.slice(2));
+const { _: args } = parse(process.argv.slice(2));
+const [userId, orgId, add, rm] = args.map((x) => x.split('=')[1]);
 
-if (!userId || !oid || !(add || rm)) {
+
+if (!userId || !orgId || !(add || rm)) {
   throw new Error('Not enough arguments supplied');
 }
 
@@ -30,11 +32,19 @@ if (!userId || !oid || !(add || rm)) {
   try {
     await client.transaction(async (trx) => {
       if (add) {
-        await Roles.add(trx, { userId, organisationId: oid, role: add });
+        console.log(await Roles.add(trx, {
+          userId: Number(userId),
+          organisationId: Number(orgId),
+          role: (<any> add),
+        }));
       }
 
       if (rm) {
-        await Roles.remove(trx, { userId, organisationId: oid, role: rm });
+        console.log(await Roles.remove(trx, {
+          userId: Number(userId),
+          organisationId: Number(orgId),
+          role: (<any> rm),
+        }));
       }
     });
 
