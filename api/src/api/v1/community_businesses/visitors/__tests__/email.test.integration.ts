@@ -99,4 +99,35 @@ describe('API /community-businesses/{id}/visitors', () => {
 
     expect(res.statusCode).toBe(400);
   });
+
+  test('return 400 for user with no email', async () => {
+    const res = await server.inject({
+      method: 'POST',
+      url: '/v1/community-businesses/me/visitors/9/emails',
+      payload: {
+        type: 'qrcode',
+      },
+      credentials,
+    });
+
+    expect(res.statusCode).toBe(400);
+    expect((<any> res).result.error.message).toBe('User has not specified an email');
+  });
+
+  test('return 400 for anonymous user', async () => {
+    await Users.update(knex, { name: 'Companion Cube' }, { email: 'anon_01_org_01' });
+    const res = await server.inject({
+      method: 'POST',
+      url: '/v1/community-businesses/me/visitors/9/emails',
+      payload: {
+        type: 'qrcode',
+      },
+      credentials,
+    });
+
+    expect(res.statusCode).toBe(400);
+    expect((<any> res).result.error.message).toBe('User has not specified an email');
+  });
+
+
 });

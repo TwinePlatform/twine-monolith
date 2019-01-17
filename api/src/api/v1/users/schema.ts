@@ -23,7 +23,8 @@ export const birthYear =
   Joi.number()
     .integer()
     .min(1890)
-    .max(currentYear);
+    .max(currentYear)
+    .allow(null);
 
 export const email =
   Joi.string()
@@ -31,9 +32,17 @@ export const email =
 
 export const password =
   Joi.string()
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!#$%&()*+,\-./\\:;<=>@[\]^_{|}~? ])(?=.{8,})/,
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!#$£€%&()*+,\-./\\:;<=>@[\]^_{|}~? ])(?=.{8,})/,
      'strong_pwd')
-    .options({ language: { string: { regex: { name: 'is too weak' } } } });
+    .options({
+      language: {
+        string: {
+          regex: {
+            name: 'is too weak: must contain number, symbol, upper case and lower case',
+          },
+        },
+      },
+    });
 
 // supports passwords from old volunteer app
 export const DEPRECATED_password =

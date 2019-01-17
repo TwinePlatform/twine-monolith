@@ -51,7 +51,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
       expect((<any> res.result).result).toEqual({});
     });
 
-    test(':: get aggregated visit logs with field', async () => {
+    test(':: get aggregated visit logs with one field', async () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-logs/aggregates?'
@@ -61,7 +61,25 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual({
-        visitActivity: { 'Free Running': 7, 'Wear Pink': 3 },
+        visitActivity: { 'Free Running': 7, 'Wear Pink': 4 },
+      });
+    });
+
+    test(':: get aggregated visit logs with all fields', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visit-logs/aggregates?'
+          + 'fields[0]=visitActivity&'
+          + 'fields[1]=age&'
+          + 'fields[2]=gender',
+        credentials,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toEqual({
+        age: { '18-34': 10, null: 1 },
+        gender: { female: 11 },
+        visitActivity: { 'Free Running': 7, 'Wear Pink': 4 },
       });
     });
 

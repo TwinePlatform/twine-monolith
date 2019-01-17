@@ -99,7 +99,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
       });
 
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).meta).toEqual({ total: 10 });
+      expect((<any> res.result).meta).toEqual({ total: 11 });
       expect((<any> res.result).result).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -121,7 +121,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
       });
 
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).meta).toEqual({ total: 3 });
+      expect((<any> res.result).meta).toEqual({ total: 4 });
       expect((<any> res.result).result).toEqual(
         expect.arrayContaining([
           (<any> expect).not.objectContaining({

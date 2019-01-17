@@ -8,7 +8,7 @@ const MIGRATIONS_BASE_PATH = path.resolve(__dirname, '..', 'migrations');
 const readFile = (fpath) => fs.readFileSync(fpath, 'utf8');
 
 // buildQuery :: String -> KnexClient -> Promise ()
-exports.buildQuery = (path) => (knex) => compose(knex.raw, readFile)(path);
+exports.buildQuery = (path) => (knex) => compose((s) => knex.raw(s), readFile)(path);
 
 // buildPath :: String -> String
 exports.buildPath = (fname) =>

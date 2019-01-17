@@ -39,7 +39,7 @@ const attachUserId = (req: { headers: Hapi.Util.Dictionary<string> }) => {
 
 export default {
   req: compose(
-    omit(['id']),
+    omit(['id', 'remotePort', 'remoteAddress']),
     evolve({
       headers: omit([
         'host',
@@ -49,6 +49,14 @@ export default {
         'connection',
         'dnt',
         'upgrade-insecure-requests',
+        'x-request-id',
+        'x-forwarded-for',
+        'x-forwarded-proto',
+        'x-forwarded-port',
+        'x-request-start',
+        'total-route-time',
+        'via',
+        'connect-time',
       ]),
     }),
     attachUserId
@@ -56,21 +64,5 @@ export default {
 
   payload: omit(['password', 'passwordConfirm', 'confirmPassword']),
 
-  res: evolve({
-    headers: omit([
-      'content-type',
-      'vary',
-      'access-control-allow-origin',
-      'access-control-allow-credentials',
-      'access-control-expose-headers',
-      'strict-transport-security',
-      'x-frame-options',
-      'x-xss-protection',
-      'x-download-options',
-      'x-content-type-options',
-      'cache-control',
-      'set-cookie',
-      'accept-ranges',
-    ]),
-  }),
+  res: omit(['v', 'responseTime', 'headers']),
 };

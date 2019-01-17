@@ -44,4 +44,9 @@ exports.seed = (knex) =>
         organisation_id: knex('organisation').select('organisation_id'). where({ organisation_name: 'Aperture Science' }),
         access_role_id: knex('access_role').select('access_role_id').where({ access_role_name: 'VISITOR' }),
       },
+      {
+        user_account_id: knex('user_account').select('user_account_id').where({ user_name: 'Companion Cube' }),
+        organisation_id: knex('organisation').select('organisation_id').where({ organisation_name: 'Aperture Science' }),
+        access_role_id: knex('access_role').select('access_role_id').where({ access_role_name: 'VISITOR' }),
+      },
   ]);

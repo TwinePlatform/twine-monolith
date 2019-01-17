@@ -13,7 +13,6 @@
     ],
   },
   "exclude": [
-    "bin",
     "database",
     "docs",
     "node_modules"

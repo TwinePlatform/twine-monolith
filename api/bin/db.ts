@@ -1,9 +1,8 @@
-#!/usr/bin/env node
-const parse = require('minimist');
+import * as parse from 'minimist';
 const db = require('../database');
 
 
-process.on('unhandledRejection', (err) => { throw err });
+process.on('unhandledRejection', (err) => { throw err; });
 
 const { _: args } = parse(process.argv.slice(2));
 

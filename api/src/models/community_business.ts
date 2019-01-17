@@ -586,6 +586,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       age: applyQueryModifiers(client.with('age_group_table',
         client
           .raw('SELECT *, CASE ' +
+            `WHEN birth_year IS NULL THEN 'null' ` +
             `WHEN birth_year > ${year - 17} THEN '0-17' ` +
             `WHEN birth_year > ${year - 34} AND birth_year <= ${year - 17} THEN '18-34' ` +
             `WHEN birth_year > ${year - 50} AND birth_year <= ${year - 34} THEN '35-50' ` +

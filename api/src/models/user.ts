@@ -159,13 +159,8 @@ export const Users: UserCollection = {
   },
 
   async add (client, _user) {
-    let user;
-    if (_user.password) {
-      const passwordHash = await hash(_user.password, 12);
-      user = { ..._user, password: passwordHash };
-    } else {
-      user = { ..._user };
-    }
+    const password = _user.password ? await hash(_user.password, 12) : undefined;
+    const user = { ..._user, password };
 
     const preProcessUser = compose(
       mapKeys((k) => k.replace('user_account.', '')),

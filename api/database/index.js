@@ -6,7 +6,6 @@ const { last, tap } = require('ramda');
 const { getConfig, Environment: { TESTING } } = require('../build/config');
 const { write } = require('./utils')
 const { lazyPromiseSeries } = require('../build/src/utils');
-const addApiToken = require('./utils/addApiToken');
 
 
 const templates = {
@@ -95,17 +94,3 @@ exports.migrate = {
     return _client ? null : client.destroy();
   }
 };
-
-exports.add = {
-  apiToken: async (name, access, { env = process.env.NODE_ENV, client: _client } = {}) => {
-    const config = getConfig(env);
-    const client = _client ? _client : knex(config.knex);
-
-    const { token } = await addApiToken(client, name, access);
-
-    console.log(`Added new API token for ${name} with access level ${access}`);
-    console.log(`API token: ${token}`);
-
-    return _client ? null : client.destroy();
-  }
-}

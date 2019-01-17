@@ -43,7 +43,7 @@ export default [
           organisationId: id.required(),
           name: userName.required(),
           gender: gender.required(),
-          birthYear: birthYear.required(),
+          birthYear: birthYear.default(null),
           email: email.required(),
           phoneNumber: phoneNumber.allow(''),
           postCode: postCode.allow(''),

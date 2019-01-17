@@ -14,7 +14,8 @@ export default {
   knex: {
     connection: process.env.DATABASE_URL,
     pool: {
-      max: 100,
+      max: 20,
+      connectionTimeoutMillis: 1000,
     },
   },
   email: {

@@ -68,6 +68,12 @@ const routes: Hapi.ServerRoute[] = [
         { where: { id: Number(userId) } }
       );
 
+      if (!visitor.email
+        || /anon_\d+_org_\d+/.test(visitor.email)
+        ) {
+        return Boom.badRequest('User has not specified an email');
+      }
+
       // Send QR code to visitor
       // // generate QR code data URL
       const qrCode = await QRCode.create(visitor.qrCode);

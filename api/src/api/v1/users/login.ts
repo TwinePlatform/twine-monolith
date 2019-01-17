@@ -116,7 +116,7 @@ const route: Hapi.ServerRoute[] = [
         return Boom.unauthorized('Password invalid');
       }
 
-      return Session.escalate(request, h.response({}));
+      return Session.escalate(request, h.response(null));
     },
   },
 
@@ -130,7 +130,7 @@ const route: Hapi.ServerRoute[] = [
       response: { schema: response },
     },
     handler: async (request: EscalateRequest, h: Hapi.ResponseToolkit) => {
-      return Session.deescalate(request, h.response({}));
+      return Session.deescalate(request, h.response(null));
     },
   },
 ];

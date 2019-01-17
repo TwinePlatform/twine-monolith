@@ -50,6 +50,7 @@ export default Joi.object({
     pool: Joi.object({
       min: Joi.number().integer(),
       max: Joi.number().integer().greater(Joi.ref('min')),
+      connectionTimeoutMillis: Joi.number().integer().positive(),
     }),
     migrations: Joi.object({
       tableName: Joi.string().min(1).required(),

@@ -94,7 +94,7 @@ const routes: Hapi.ServerRoute[] = [
         failAction: (request, h, err) => {
           if ((<BoomWithValidation> err).details[0].message
             === '"token" length must be 64 characters long') {
-            return Boom.unauthorized('Invalid token. Reset password again.');
+            return Boom.unauthorized('Invalid token. Request another reset e-mail.');
           }
           return err;
         },
@@ -114,7 +114,7 @@ const routes: Hapi.ServerRoute[] = [
         await Users.usePasswordResetToken(knex, user.email, token);
       } catch (error) {
         request.log('warning', error);
-        return Boom.unauthorized('Invalid token. Reset password again.');
+        return Boom.unauthorized('Invalid token. Request another reset e-mail.');
       }
 
       await Users.update(knex, user, { password });
