@@ -1,10 +1,13 @@
 import * as Knex from 'knex';
+import { compare } from 'bcrypt';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { CommunityBusinesses } from '..';
 import { getTrx } from '../../../tests/utils/database';
-import { Dictionary } from 'ramda';
+import { Dictionary, omit } from 'ramda';
 import { RegionEnum, SectorEnum } from '../types';
+import { CbAdmins } from '../cb_admin';
+import { RoleEnum, Roles } from '../../auth';
 
 
 describe('Community Business Model', () => {
@@ -150,6 +153,17 @@ describe('Community Business Model', () => {
       } catch (error) {
         expect(error).toBeTruthy();
       }
+    });
+
+    test('addWithRole :: creates a new user with role', async () => {
+      const changeset = await factory.build('cbAdmin');
+      const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
+      const visitor = await CbAdmins.addWithRole(trx, cb, changeset);
+      const rolesCheck = await Roles
+       .userHas(trx, { role: RoleEnum.CB_ADMIN, userId: visitor.id, organisationId: cb.id });
+      expect(visitor).toEqual(expect.objectContaining(omit(['password'], changeset)));
+      expect(rolesCheck).toBeTruthy();
+      expect(await compare(changeset.password, visitor.password)).toBeTruthy();
     });
 
     test('update :: modify value in local table', async () => {
