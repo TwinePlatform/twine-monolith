@@ -1,11 +1,10 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import * as Joi from 'joi';
 import { has, flip } from 'ramda';
 import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 import { PutCommunityBusinesssRequest } from '../types';
-import { id, response } from './schema';
+import { id, response, cbPayload } from './schema';
 
 
 const hasAny = (props: string[], o: object) => props.map(flip(has)(o));
@@ -24,18 +23,7 @@ export default [
         },
       },
       validate: {
-        payload: {
-          name: Joi.string().min(1),
-          region: Joi.string().min(1),
-          sector: Joi.string().min(1),
-          logoUrl: Joi.string().uri(),
-          address1: Joi.string().min(1),
-          address2: Joi.string().min(1),
-          townCity: Joi.string().min(1),
-          postCode: Joi.string().min(6).max(10),
-          turnoverBand: Joi.string().min(5).max(11),
-          _360GivingId: Joi.string().min(5).max(11),
-        },
+        payload: cbPayload,
       },
       response: { schema: response },
       pre: [
@@ -88,18 +76,7 @@ export default [
         params: {
           organisationId: id,
         },
-        payload: {
-          name: Joi.string().min(1),
-          region: Joi.string().min(1),
-          sector: Joi.string().min(1),
-          logoUrl: Joi.string().uri(),
-          address1: Joi.string().min(1),
-          address2: Joi.string().min(1),
-          townCity: Joi.string().min(1),
-          postCode: Joi.string().min(6).max(10),
-          turnoverBand: Joi.string().min(6).max(11),
-          _360GivingId: Joi.string().min(5).max(255),
-        },
+        payload: cbPayload,
       },
       response: { schema: response },
       pre: [
