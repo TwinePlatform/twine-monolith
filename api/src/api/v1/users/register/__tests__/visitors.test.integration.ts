@@ -55,7 +55,7 @@ describe('API v1 - register new users', () => {
   });
 
   describe('POST /users/register/visitors', () => {
-    test('user already exists', async () => {
+    test('FAIL :: cannot create visitor if email is associated to another user', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/users/register/visitors',
@@ -73,7 +73,40 @@ describe('API v1 - register new users', () => {
       expect((<any> res.result).error.message).toBe('User with this e-mail already registered');
     });
 
-    test('non-existent community business', async () => {
+    test('FAIL :: cannot create visitor if phone number is associated to another user',
+    async () => {
+      await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitors',
+        payload: {
+          organisationId: 1,
+          name: 'Ratman',
+          gender: 'male',
+          birthYear: null,
+          phoneNumber: '090909090909',
+        },
+        credentials,
+      });
+
+      const res2 = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitors',
+        payload: {
+          organisationId: 1,
+          name: 'Ratman',
+          gender: 'male',
+          birthYear: null,
+          phoneNumber: '090909090909',
+        },
+        credentials,
+      });
+
+      expect(res2.statusCode).toBe(409);
+      expect((<any> res2.result).error.message)
+        .toBe('User with this phone number already registered');
+    });
+
+    test('FAIL :: non-existent community business', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/users/register/visitors',
@@ -92,7 +125,7 @@ describe('API v1 - register new users', () => {
         .toBe('Cannot register visitor for different organisation');
     });
 
-    test('cannot register against a different community business', async () => {
+    test('FAIL :: cannot register against a different community business', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/users/register/visitors',
@@ -111,7 +144,8 @@ describe('API v1 - register new users', () => {
         .toBe('Cannot register visitor for different organisation');
     });
 
-    test('cannot register user that is already registered under a different role', async () => {
+    test('FAIL :: cannot register user that is already registered under a different role',
+    async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/users/register/visitors',
@@ -130,7 +164,25 @@ describe('API v1 - register new users', () => {
         .toBe('User with this e-mail already registered');
     });
 
-    test('happy path', async () => {
+
+    test('FAIL :: cannot register visitor without email & phone number', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitors',
+        payload: {
+          organisationId: 1,
+          name: 'Ratman',
+          gender: 'male',
+          birthYear: null,
+        },
+        credentials,
+      });
+
+      expect(res.statusCode).toBe(400);
+      expect((<any> res.result).error.message).toBe('Please supply either email or phone number');
+    });
+
+    test('SUCCESS :: happy path for standard visitor', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/users/register/visitors',
@@ -153,7 +205,51 @@ describe('API v1 - register new users', () => {
       }));
     });
 
-    test('register visitor with null birthYear', async () => {
+    test('SUCCESS :: happy path for anonymous visitor', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitors',
+        payload: {
+          organisationId: 1,
+          name: 'foo',
+          gender: 'female',
+          birthYear: 1988,
+          isAnonymous: true,
+        },
+        credentials,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toEqual(expect.objectContaining({
+        name: 'foo',
+        gender: 'female',
+        birthYear: 1988,
+        email: 'anon_0_org_1',
+      }));
+
+      const res2 = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitors',
+        payload: {
+          organisationId: 1,
+          name: 'boo',
+          gender: 'female',
+          birthYear: 1988,
+          isAnonymous: true,
+        },
+        credentials,
+      });
+
+      expect(res2.statusCode).toBe(200);
+      expect((<any> res2.result).result).toEqual(expect.objectContaining({
+        name: 'boo',
+        gender: 'female',
+        birthYear: 1988,
+        email: 'anon_1_org_1',
+      }));
+    });
+
+    test('SUCCESS :: register visitor with null birthYear', async () => {
       const res = await server.inject({
         method: 'POST',
         url: '/v1/users/register/visitors',
@@ -168,6 +264,30 @@ describe('API v1 - register new users', () => {
       });
 
       expect(res.statusCode).toBe(200);
+    });
+
+
+    test('SUCCESS :: register visitor with only phone number', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitors',
+        payload: {
+          organisationId: 1,
+          name: 'Ratman',
+          gender: 'male',
+          birthYear: null,
+          phoneNumber: '090909090909',
+        },
+        credentials,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toEqual(expect.objectContaining({
+        name: 'Ratman',
+        gender: 'male',
+        birthYear: null,
+        phoneNumber: '090909090909',
+      }));
     });
   });
 });

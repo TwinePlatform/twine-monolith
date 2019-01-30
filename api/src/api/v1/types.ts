@@ -202,6 +202,7 @@ export interface RegisterRequest extends Hapi.Request {
     postCode: string
     emailConsent: boolean
     smsConsent: boolean
+    isAnonymous?: boolean
   };
 }
 
