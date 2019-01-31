@@ -7,6 +7,7 @@ import { ExternalAppCredentials } from '../../auth/strategies/external';
 import { RoleEnum } from '../../auth/types';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../models';
 import { Omit } from '../../types/internal';
+import { RegionEnum, SectorEnum } from '../../models/types';
 
 
 declare module 'hapi' {
@@ -67,6 +68,22 @@ export interface GetCommunityBusinessRequest extends Hapi.Request {
 export interface GetCommunityBusinessesRequest extends Hapi.Request {
   query: ApiRequestQuery & {
     [k: string]: any
+  };
+}
+
+export interface RegisterCommunityBusinessesRequest extends Hapi.Request {
+  payload: {
+    orgName: string
+    region: RegionEnum
+    sector: SectorEnum
+    address1: string
+    address2: string
+    townCity: string
+    postCode: string
+    turnoverBand: string
+    _360GivingId: string
+    adminName: string
+    adminEmail: string
   };
 }
 

@@ -6,6 +6,7 @@ import { CbAdminCollection } from './types';
 import { Users, ModelToColumn } from './user';
 import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './applyQueryModifiers';
+import { Roles } from '../auth';
 
 
 /*
@@ -58,6 +59,14 @@ export const CbAdmins: CbAdminCollection = {
 
   async add (client, user) {
     return Users.add(client, user);
+  },
+
+  async addWithRole (client, cb, user) {
+    return client.transaction(async (trx) => {
+      const newUser = await Users.add(trx, user);
+      await Roles.add(trx, { role: RoleEnum.CB_ADMIN, userId: newUser.id, organisationId: cb.id });
+      return newUser;
+    });
   },
 
   async update (client, user, changes) {

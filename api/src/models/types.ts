@@ -332,6 +332,7 @@ export type VolunteerCollection = UsersBaseCollection & {
 
 export type CbAdminCollection = UsersBaseCollection & {
   fromOrganisation: (k: Knex, q: Partial<Organisation>) => Promise<User[]>;
+  addWithRole: (k: Knex, c: CommunityBusiness, a: Partial<User>) => Promise<User>
 };
 
 export type OrganisationCollection = Collection<Organisation> & {

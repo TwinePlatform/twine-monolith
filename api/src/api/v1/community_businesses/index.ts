@@ -8,6 +8,7 @@ import visitLogs from './visit_logs';
 import visitLogAggregates from './visit_logs_aggregates';
 import volunteers from './volunteers';
 import volunteerLogs from './volunteer_logs';
+import register from './register';
 
 export default [
   ...get,
@@ -20,4 +21,5 @@ export default [
   ...visitLogAggregates,
   ...volunteers,
   ...volunteerLogs,
+  ...register,
 ];
