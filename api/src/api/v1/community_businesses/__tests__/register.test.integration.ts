@@ -114,5 +114,25 @@ describe('PUT /community-businesses', () => {
       expect(res.statusCode).toBe(400);
       expect((<any> res.result).error.message).toEqual('360 Giving Id already exists');
     });
+
+    test('FAILURE - return error for duplicate email', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/register',
+        payload: {
+          orgName: 'Stick House',
+          region: RegionEnum.NORTH_EAST,
+          sector: SectorEnum.HOUSING,
+          postCode: 'I11 X11',
+          _360GivingId: 'hidingFromTheWolf',
+          adminName: 'Twiglet',
+          adminEmail: admin.email,
+        },
+        credentials: adminCreds,
+      });
+
+      expect(res.statusCode).toBe(409);
+      expect((<any> res.result).error.message).toEqual('User already exists with this email');
+    });
   });
 });

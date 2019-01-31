@@ -60,10 +60,16 @@ export default [
         return Boom.forbidden('Insufficient permissions to create organisations');
       }
 
+      // Initial checks
       if (await CommunityBusinesses.exists(knex, { where: { _360GivingId } })) {
         return Boom.badRequest('360 Giving Id already exists');
       }
 
+      if (await Users.exists(knex, { where: { email: adminEmail } })) {
+        return Boom.conflict('User already exists with this email');
+      }
+
+      // Create accounts
       const { user, cb, token } = await knex.transaction(async (trx) => {
         const cb = await CommunityBusinesses.add(trx, {
           name: orgName,
