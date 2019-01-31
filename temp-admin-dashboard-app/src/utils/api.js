@@ -45,6 +45,9 @@ export const api = {
   updateOrganisation: ({ id, formUpdate }) => {
     return axios.put(`/community-businesses/${id}`, formUpdate)
   },
+  register: ({ formUpdate }) => {
+    return axios.post('/community-businesses/register', formUpdate)
+  },
   visitLogs: () => {
     return axios.get(`/visit-logs`)
   },

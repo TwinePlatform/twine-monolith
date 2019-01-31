@@ -13,6 +13,7 @@ import Home from './pages/Home'
 import Logs from './pages/Logs'
 import Organisations from './pages/Organisations'
 import OrgProfile from './pages/OrgProfile';
+import CreateCb from './pages/CreateCb';
 //utils
 import { api } from './utils/api'
 
@@ -67,6 +68,7 @@ class AdminDashboard extends Component {
               <PrivateRoute auth={auth} exact path="/logs" component={Logs} />
               <PrivateRoute auth={auth} exact path="/organisations" component={Organisations} />
               <PrivateRoute auth={auth} exact path="/organisations/:id" component={OrgProfile} />
+              <PrivateRoute auth={auth} exact path="/create-cb" component={CreateCb} />
             </div>
           </Paper>
         </div>
