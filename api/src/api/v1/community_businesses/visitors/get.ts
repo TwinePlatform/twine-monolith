@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import { has, mergeDeepRight, omit } from 'ramda';
+import { has, mergeDeepRight, omit, keys, assoc } from 'ramda';
 import { Visitors, User, ModelQuery } from '../../../../models';
 import { query, filterQuery, response } from '../../users/schema';
 import { meOrId, id } from '../schema';
@@ -54,32 +54,15 @@ const routes: Hapi.ServerRoute[] = [
         modelQuery.whereBetween = { birthYear: filter.age };
       }
 
-      // activity filter
-      if (filter && filter.activity) {
-        modelQuery.where = mergeDeepRight(
-          modelQuery.where || {},
-          { activity: filter.activity }
-        );
-      }
-
-      // gender filter
-      if (filter && filter.gender) {
-        modelQuery.where = mergeDeepRight(
-          modelQuery.where || {},
-          { gender: filter.gender }
-        );
-      }
-
-      // name filter
-      if (filter && filter.name) {
-        modelQuery.where = mergeDeepRight(
-          modelQuery.where || {},
-          { name: filter.name }
-        );
-      }
+      modelQuery.where = mergeDeepRight(
+        modelQuery.where,
+        keys(omit(['age', 'visitActivity'], filter))
+          .reduce((acc, k) => assoc(k, filter[k], acc), {})
+      );
 
       const visitors = await (visits
-        ? Visitors.getWithVisits(knex, communityBusiness, modelQuery)
+        ? Visitors.getWithVisits(
+            knex, communityBusiness, modelQuery, filter ? filter.visitActivity : undefined)
         : Visitors.fromCommunityBusiness(knex, communityBusiness, modelQuery));
 
       const count = has('limit', modelQuery) || has('offset', modelQuery)
