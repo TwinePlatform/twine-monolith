@@ -126,6 +126,16 @@ describe('Visitor model', () => {
       );
       expect(visitors[3]).toEqual({ ...visitor, visits: [] });
     });
+
+    test('getWithVisits :: third argument filters by activity name', async () => {
+      const apScience = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
+      const visitors = await Visitors.getWithVisits(
+        knex, apScience, { where: { name: 'Chell' } }, 'Free Running');
+      expect(visitors).toHaveLength(1);
+      expect(visitors[0]).toEqual(expect.objectContaining({ id: 1, name: 'Chell' }));
+      expect(visitors[0].visits).toHaveLength(7);
+      expect(visitors[0].visits.every((v) => v.visitActivity === 'Free Running')).toBe(true);
+    });
   });
 
   describe('Write', () => {

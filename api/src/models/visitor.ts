@@ -2,7 +2,7 @@
  * Visitor Model
  */
 import { createHmac, randomBytes } from 'crypto';
-import { assoc, omit, pick, evolve, compose, pipe } from 'ramda';
+import { assoc, omit, pick, evolve, compose, pipe, filter } from 'ramda';
 import { Map } from '../types/internal';
 import { User, VisitorCollection, LinkedVisitEvent } from './types';
 import { Users, ModelToColumn } from './user';
@@ -143,7 +143,7 @@ export const Visitors: VisitorCollection = {
     return serialisedUser;
   },
 
-  async getWithVisits (client, cb, q = {}) {
+  async getWithVisits (client, cb, q = {}, activity) {
     const query = evolve({
       where: Visitors.toColumnNames,
       whereNot: Visitors.toColumnNames,
@@ -193,7 +193,10 @@ export const Visitors: VisitorCollection = {
           'visit_activity',
           'visit_activity.visit_activity_id',
           'visit_log.visit_activity_id')
-        .where({ user_account_id: user.id })
+        .where(filter(Boolean, {
+          user_account_id: user.id,
+          'visit_activity.visit_activity_name': activity,
+        }))
     ));
 
     return rows.map((row: Partial<User>, idx) => {

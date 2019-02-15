@@ -105,6 +105,40 @@ describe('API /community-businesses/{id}/visitors', () => {
       expect((<any> res.result).result).toHaveLength(1);
     });
 
+    test('filtered query on activities', async () => {
+      const res = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors?'
+          + 'fields[]=name'
+          + '&filter[age][]=17'
+          + '&filter[age][]=60'
+          + '&filter[visitActivity]=Free Running'
+          + '&visits=true',
+        credentials,
+      });
+
+      const result = (<any> res.result).result;
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.arrayContaining([{
+          name: 'Chell',
+          visits: expect.arrayContaining([
+            expect.objectContaining({
+              id: 1,
+              visitActivity: 'Free Running',
+            }),
+          ]),
+        }]),
+        meta: { total: 2 },
+      });
+      expect(result).toHaveLength(2);
+      expect(result[0].visits).toHaveLength(7);
+      expect(result[1].visits).toHaveLength(0);
+      expect(result[0].visits.every((v: any) => v.name === 'Free Running'));
+      expect(result[1].visits.every((v: any) => v.name === 'Free Running'));
+    });
+
     test('query child organisation as TWINE_ADMIN', async () => {
       const res = await server.inject({
         method: 'GET',

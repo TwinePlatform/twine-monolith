@@ -309,7 +309,7 @@ export type UserCollection = UsersBaseCollection & {
 };
 
 export type VisitorCollection = UsersBaseCollection & {
-  getWithVisits: (k: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
+  getWithVisits: (k: Knex, c: CommunityBusiness, q?: ModelQuery<User>, a?: string) =>
     Promise<(Partial<User> & { visits: LinkedVisitEvent[] })[]>
   fromCommunityBusiness: (client: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
     Promise<Partial<User>[]>

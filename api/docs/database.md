@@ -1,4 +1,10 @@
-# Database
+# 🗃 Database
+
+## Contents
+1. [Data model](#data-model)
+2. [Migrations](#migrations)
+3. [Seeds](#seeds)
+4. [Backups](#backups)
 
 ## Data Model
 
@@ -46,3 +52,33 @@ To drop all tables and data types created by the migrations, run
 ```
 $ npm run migrate:teardown
 ```
+
+## Backups
+### Schedule Backups
+Backups are scheduled to run everyday at 3am, and are retained for 7 days.
+
+Current status of backups
+```
+heroku pg:backups --app [app-name]
+```
+❗️ If at any point heroku is upgraded from hobby to production tier, backups will need to be rescheduled.
+
+Change backup schedule
+```
+heroku pg:backups:schedule DATABASE_URL --at '[time] [TZ format]' --app [app-name]
+```
+
+### Local Test Restore
+A test restore can either be done locally or on a staging pipeline to check the integrety of the backup. Be careful not to restore to the production database as it will be wiped during the process 😨.
+
+Use the `clone_db` script:
+```
+$ npm run exec ./bin/clone_db.ts -- <DB_NAME>
+```
+See documentation in the script file for more information.
+
+You can now connect your local app to the restored database.
+
+### Resources
+- [Heroku PostgreSQL backups](https://devcenter.heroku.com/articles/heroku-postgres-backups)
+- [Heroku importing and exporting PostgreSQL databases](https://devcenter.heroku.com/articles/heroku-postgres-import-export)

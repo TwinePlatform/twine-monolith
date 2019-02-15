@@ -130,7 +130,7 @@ export interface GetVisitorsRequest extends Hapi.Request {
     filter?: {
       age?: [number, number]
       gender?: GenderEnum
-      activity?: string
+      visitActivity?: string
       name?: string
     }
     visits: boolean
