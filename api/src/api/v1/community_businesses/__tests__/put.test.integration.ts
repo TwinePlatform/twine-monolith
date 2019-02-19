@@ -115,6 +115,26 @@ describe('PUT /community-businesses', () => {
       });
     });
 
+    test('can update casing of child community business name', async () => {
+      const res = await server.inject({
+        method: 'PUT',
+        url: '/v1/community-businesses/1',
+        payload: {
+          name: 'aperture sciences',
+          sector: 'Housing',
+        },
+        credentials: adminCreds,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          name: 'aperture sciences',
+          sector: 'Housing',
+        }),
+      });
+    });
+
     test('cannot update non-child community business', async () => {
       const res = await server.inject({
         method: 'PUT',

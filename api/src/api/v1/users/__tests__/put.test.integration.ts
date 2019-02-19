@@ -102,6 +102,30 @@ describe('PUT /users/{userId}', () => {
       expect((<any> res.result).result.modifiedAt).not.toBe(user.modifiedAt);
     });
 
+    test('can change casing on case-insensitive fields of user model', async () => {
+      const res = await server.inject({
+        method: 'PUT',
+        url: '/v1/users/me',
+        payload: {
+          name: 'glados',
+          email: '1@APERTUREscience.com',
+        },
+        credentials,
+      });
+
+      const { modifiedAt, createdAt, deletedAt, password, qrCode, ...rest } = user;
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          ...rest,
+          name: 'glados',
+          email: '1@APERTUREscience.com',
+        }),
+      });
+      expect((<any> res.result).result.modifiedAt).toBe(modifiedAt);
+    });
+
     test('bad update data returns 400', async () => {
       const res = await server.inject({
         method: 'PUT',
@@ -208,6 +232,30 @@ describe('PUT /users/{userId}', () => {
       });
       expect((<any> res.result).result.modifiedAt).toBeTruthy();
       expect((<any> res.result).result.modifiedAt).not.toBe(user.modifiedAt);
+    });
+
+    test('can change casing on case-insensitive fields of user model', async () => {
+      const res = await server.inject({
+        method: 'PUT',
+        url: `/v1/users/${visitor.id}`,
+        payload: {
+          name: 'chell',
+          email: '1498@apertureSCIENCE.com',
+        },
+        credentials,
+      });
+
+      const { modifiedAt, createdAt, deletedAt, password, qrCode, ...rest } = visitor;
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          ...rest,
+          name: 'chell',
+          email: '1498@apertureSCIENCE.com',
+        }),
+      });
+      expect((<any> res.result).result.modifiedAt).toBe(modifiedAt);
     });
 
     test('bad update data returns 400', async () => {
