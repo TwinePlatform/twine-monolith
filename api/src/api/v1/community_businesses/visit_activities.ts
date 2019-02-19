@@ -1,12 +1,10 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
-import * as Joi from 'joi';
 import * as moment from 'moment' ;
 import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 import {
   response,
-  query,
   visitActivitiesPostPayload,
   visitActivitiesPutPayload,
   id,
@@ -140,8 +138,6 @@ export default [
         },
       },
       validate: {
-        payload: Joi.any().valid(null),
-        query,
         params: {
           visitActivityId: id,
         },

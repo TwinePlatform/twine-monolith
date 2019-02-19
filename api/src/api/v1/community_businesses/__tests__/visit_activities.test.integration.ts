@@ -201,5 +201,29 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
           .includes('Absailing')
       ).toBeFalsy();
     });
+
+    test(':: any payload and/or querystring is ignored', async () => {
+      const res = await server.inject({
+        method: 'DELETE',
+        url: '/v1/community-businesses/me/visit-activities/1?foo=bar',
+        credentials,
+        payload: { activity: 2 },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result.deletedAt).toBeTruthy();
+
+      const check = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visit-activities',
+        credentials,
+      });
+
+      expect(
+        (<any> check.result).result
+          .map((a: any) => a.name)
+          .includes('Absailing')
+      ).toBeFalsy();
+    });
   });
 });
