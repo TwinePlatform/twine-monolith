@@ -28,7 +28,7 @@
                 <span class="input-label" style="max-width: 100%; width: 100%"><span style="width: 90%; display: inline-block">Create password</span><span align="right" style="width: 10%; display: inline-block"><i ng-click="infoShow()" class="icon ion-help-circled large"></i></span></span>
 
                 <label class="item item-input">
-                    <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!#$%&()*+,\-./\\:;<=>@[\]^_{|}~? ])(?=.{8,})" required>
+                    <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="8" ng-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!#$%&()*+,\-./\\:;<=>@[\]^_{|}~? ])(?=.{8,})$" required>
                 </label>
                 <label class="error block text-right padding assertive" ng-show="register.password.$invalid && formSubmitted" for="password">
                     Please enter at least 8 characters, with at least one upper- and lower-case, one symbol and one number
