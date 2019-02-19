@@ -53,7 +53,9 @@
 			$scope.years = $$utilities.getYearsOptions();
 
 			// set the value of formData.yearOfBirth to that item
-			$scope.formData.yearOfBirth = Number($localStorage.user.birthYear);
+			$scope.formData.yearOfBirth = $localStorage.user.birthYear === null
+				? $localStorage.user.birthYear
+				: Number($localStorage.user.birthYear);
 
 		/*
 			>> populate gender dropdown
@@ -138,7 +140,11 @@
 						$$clickPreventer.hide();
 
 						// show unsuccess popup
-						$$shout('Could not save your profile!');
+						try {
+							$$shout('Could not save profile.\n' + data.error.message);
+						} catch (error) {
+							$$shout('Could not save profile.\n');
+						}
 
 					});
 				}
