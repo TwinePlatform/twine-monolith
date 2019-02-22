@@ -136,6 +136,31 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       });
     });
 
+    test(':: successfully change casing on a visit activity', async () => {
+      const res = await server.inject({
+        method: 'PUT',
+        url: '/v1/community-businesses/me/visit-activities/2',
+        payload: { name: 'wear pink', category: 'Sports' },
+        credentials,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          id: 2,
+          category: 'Sports',
+          name: 'wear pink',
+          monday: false,
+          tuesday: false,
+          wednesday: true,
+          thursday: false,
+          friday: false,
+          saturday: false,
+          sunday: false,
+        }),
+      });
+    });
+
     test(':: cannot update activity owned by different CB', async () => {
       const res = await server.inject({
         method: 'PUT',
@@ -184,6 +209,30 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
         method: 'DELETE',
         url: '/v1/community-businesses/me/visit-activities/1',
         credentials,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result.deletedAt).toBeTruthy();
+
+      const check = await server.inject({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visit-activities',
+        credentials,
+      });
+
+      expect(
+        (<any> check.result).result
+          .map((a: any) => a.name)
+          .includes('Absailing')
+      ).toBeFalsy();
+    });
+
+    test(':: any payload and/or querystring is ignored', async () => {
+      const res = await server.inject({
+        method: 'DELETE',
+        url: '/v1/community-businesses/me/visit-activities/1?foo=bar',
+        credentials,
+        payload: { activity: 2 },
       });
 
       expect(res.statusCode).toBe(200);

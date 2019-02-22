@@ -29,6 +29,7 @@ export const visitActivitiesPostPayload = {
 };
 
 export const visitActivitiesPutPayload = {
+  name: Joi.string().min(2),
   category: Joi.string().min(3),
   monday: Joi.boolean(),
   tuesday: Joi.boolean(),

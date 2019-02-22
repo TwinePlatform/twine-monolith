@@ -173,6 +173,26 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       });
     });
 
+    test('can update casing on project name', async () => {
+      const res = await server.inject({
+        method: 'PUT',
+        url: '/v1/community-businesses/me/volunteers/projects/1',
+        credentials: adminCreds,
+        payload: {
+          name: 'party',
+        },
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          id: 1,
+          name: 'party',
+          organisationId: organisation.id,
+        }),
+      });
+    });
+
     test('cannot update organisationId', async () => {
       const res = await server.inject({
         method: 'PUT',
