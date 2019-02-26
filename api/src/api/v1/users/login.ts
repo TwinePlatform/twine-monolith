@@ -3,24 +3,12 @@ import * as Boom from 'boom';
 import * as Joi from 'joi';
 import { compare } from 'bcrypt';
 import { Users, Organisations } from '../../../models';
-import { email, DEPRECATED_password, password, response } from './schema';
-import { Session, Token, StandardCredentials } from '../../../auth/strategies/standard';
-import { LoginRequest, EscalateRequest } from '../types';
+import { email, DEPRECATED_password, response } from './schema';
+import { Session, Token } from '../../../auth/strategies/standard';
+import { LoginRequest } from '../types';
 import { RoleEnum } from '../../../auth/types';
 import Roles from '../../../auth/roles';
 
-
-const inferPrivilegeLevel = (request: Hapi.Request) => {
-  const { origin } = request.headers;
-
-  switch (origin) {
-    case 'https://visitor.twine-together.com':
-    case 'http://localhost:3000':
-      return 'restricted';
-    default:
-      return 'full';
-  }
-};
 
 const route: Hapi.ServerRoute[] = [
   {
@@ -77,60 +65,16 @@ const route: Hapi.ServerRoute[] = [
         return Session.create(
           request,
           h.response({}),
-          { userId: user.id, organisationId: organisation.id },
-          inferPrivilegeLevel(request)
+          { userId: user.id, organisationId: organisation.id }
         );
       } else {
         return {
           token: Token.create({
             userId: user.id,
             organisationId: organisation.id,
-            privilege: inferPrivilegeLevel(request),
           }),
         };
       }
-    },
-  },
-
-  {
-    method: 'POST',
-    path: '/users/login/escalate',
-    options: {
-      auth: {
-        strategy: 'standard',
-      },
-      validate: {
-        payload: {
-          password: password.required(),
-        },
-      },
-      response: { schema: response },
-    },
-    handler: async (request: EscalateRequest, h: Hapi.ResponseToolkit) => {
-      const { payload: { password } } = request;
-      const credentials = StandardCredentials.fromRequest(request);
-
-      const matches = await compare(password, credentials.user.password);
-
-      if (!matches) {
-        return Boom.unauthorized('Password invalid');
-      }
-
-      return Session.escalate(request, h.response(null));
-    },
-  },
-
-  {
-    method: 'POST',
-    path: '/users/login/de-escalate',
-    options: {
-      auth: {
-        strategy: 'standard',
-      },
-      response: { schema: response },
-    },
-    handler: async (request: EscalateRequest, h: Hapi.ResponseToolkit) => {
-      return Session.deescalate(request, h.response(null));
     },
   },
 ];

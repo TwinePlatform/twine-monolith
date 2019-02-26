@@ -118,12 +118,6 @@ export interface LoginRequest extends Hapi.Request {
   };
 }
 
-export interface EscalateRequest extends Hapi.Request {
-  payload: {
-    password: string
-  };
-}
-
 export interface GetVisitorsRequest extends Hapi.Request {
   query: ApiRequestQuery & {
     [k: string]: any
