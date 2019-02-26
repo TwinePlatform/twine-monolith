@@ -39,7 +39,6 @@ describe('Permisions Module', () => {
           .toEqual([{
             access_role_id: 2,
             permission_id: Number(permissionsCount) + 1,
-            access_mode: 'full',
           }]);
       } catch (error) {
         expect(error).toBeFalsy();
@@ -82,7 +81,6 @@ describe('Permisions Module', () => {
           .toEqual(expect.arrayContaining([{
             access_role_id: 2,
             permission_id: permissionId,
-            access_mode: 'full',
           }]));
       } catch (error) {
         expect(error).toBeFalsy();
@@ -127,8 +125,7 @@ describe('Permisions Module', () => {
           permissionLevel: PermissionLevelEnum.CHILD,
           role: RoleEnum.CB_ADMIN,
         });
-        expect(query).toBe(2);
-        // NB: two rows are deleted as there is a restricted & a full access_mode row
+        expect(query).toBe(1);
       } catch (error) {
         expect(error).toBeFalsy();
       }

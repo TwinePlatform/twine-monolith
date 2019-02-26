@@ -37,7 +37,7 @@ describe('API v1 - register new users', () => {
     };
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     organisation = await Organisations.fromUser(knex, { where: user });
-    credentials = await StandardCredentials.get(knex, user, organisation, 'full');
+    credentials = await StandardCredentials.get(knex, user, organisation);
   });
 
   afterAll(async () => {

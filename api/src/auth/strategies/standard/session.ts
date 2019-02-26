@@ -28,8 +28,8 @@ export const TokenManager: TTokenManager = {
 };
 
 export const SessionManager: TSessionManager = {
-  create (request, res, payload, level = 'full') {
-    const session = { ...payload, privilege: level };
+  create (request, res, payload) {
+    const session = { ...payload };
 
     const token = TokenManager.create(session);
 
@@ -46,21 +46,5 @@ export const SessionManager: TSessionManager = {
 
   destroy (request, res) {
     return res.unstate(cookieName);
-  },
-
-  escalate (request, res) {
-    const { session: { userId, organisationId } } = StandardCredentials.fromRequest(request);
-
-    const token = TokenManager.create({ userId, organisationId, privilege: 'full' });
-
-    return res.state(cookieName, token);
-  },
-
-  deescalate (request, res) {
-    const { session: { userId, organisationId } } = StandardCredentials.fromRequest(request);
-
-    const token = TokenManager.create({ userId, organisationId, privilege: 'restricted' });
-
-    return res.state(cookieName, token);
   },
 };

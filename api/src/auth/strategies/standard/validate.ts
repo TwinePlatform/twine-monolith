@@ -8,9 +8,9 @@ import { ValidateUser, TCredentials } from './types';
 
 
 export const StandardCredentials: TCredentials = {
-  async get (knex, user, organisation, privilege = 'full', session) {
+  async get (knex, user, organisation, session) {
     const roles = await Roles.fromUser(knex, { userId: user.id, organisationId: organisation.id });
-    const permissions = await Permissions.forRoles(knex, { roles, accessMode: privilege });
+    const permissions = await Permissions.forRoles(knex, { roles });
 
     return {
       scope: permissions.map(scopeToString),
@@ -32,9 +32,9 @@ export const StandardCredentials: TCredentials = {
 const validateUser: ValidateUser = async (decoded, request) => {
   try {
     const { server: { app: { knex } } } = request;
-    const { userId, organisationId, privilege } = decoded;
+    const { userId, organisationId } = decoded;
 
-    if (!userId || !organisationId || !privilege) {
+    if (!userId || !organisationId) {
       return { isValid: false };
     }
 
@@ -49,7 +49,7 @@ const validateUser: ValidateUser = async (decoded, request) => {
     ]);
 
     return {
-      credentials: await StandardCredentials.get(knex, user, organisation, privilege, decoded),
+      credentials: await StandardCredentials.get(knex, user, organisation, decoded),
       isValid: Boolean(user && organisation && roles.length > 0),
     };
 

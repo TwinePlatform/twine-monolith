@@ -18,7 +18,7 @@ describe('Internal auth scheme', () => {
   });
 
   test('SUCCESS - Token needed for authorised routes', async () => {
-    const token = jwt.sign({ userId: 2, organisationId: 1, privilege: 'full' }, secret);
+    const token = jwt.sign({ userId: 2, organisationId: 1 }, secret);
     const response = await server.inject({
       method: 'GET',
       url: '/v1/users',
@@ -38,7 +38,7 @@ describe('Internal auth scheme', () => {
   });
 
   test('FAIL - User with no role is unauthorised', async () => {
-    const token = jwt.sign({ userId: 4, organisationId: 1, privilege: 'full' }, secret);
+    const token = jwt.sign({ userId: 4, organisationId: 1 }, secret);
     const response = await server.inject({
       method: 'GET',
       url: '/v1/users',
@@ -48,7 +48,7 @@ describe('Internal auth scheme', () => {
   });
 
   test('FAIL - User no role at different organisation is unauthorised', async () => {
-    const token = jwt.sign({ userId: 3, organisationId: 1, privilege: 'full' }, secret);
+    const token = jwt.sign({ userId: 3, organisationId: 1 }, secret);
     const response = await server.inject({
       method: 'GET',
       url: '/v1/users',

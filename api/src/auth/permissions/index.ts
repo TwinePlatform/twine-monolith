@@ -166,10 +166,7 @@ const Permissions: PermissionInterface = {
       .whereIn(
         'access_role_permission.access_role_id',
         accessRoles
-      )
-      .andWhere({
-        ['access_role_permission.access_mode']: accessMode,
-      });
+      );
 
     return uniqWith(equals, query) as PermissionTuple[];
   },
