@@ -8,6 +8,7 @@ import { Dictionary, omit } from 'ramda';
 import { RegionEnum, SectorEnum } from '../types';
 import { CbAdmins } from '../cb_admin';
 import { RoleEnum, Roles } from '../../auth';
+import moment = require('moment');
 
 
 describe('Community Business Model', () => {
@@ -315,6 +316,18 @@ describe('Community Business Model', () => {
 
       expect(logs.length).toEqual(0);
     });
+
+    test(':: returns subset of logs between dates', async () => {
+      const until = moment().toDate();
+      const since = moment().subtract(5, 'days').toDate();
+      const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+      const logs = await CommunityBusinesses
+        .getVisitLogsWithUsers(trx, cb, { since, until });
+
+      expect(logs).toHaveLength(6);
+      expect(logs.filter((l) => l.visitActivity === 'Free Running')).toHaveLength(4);
+      expect(logs.filter((l) => l.visitActivity === 'Wear Pink')).toHaveLength(2);
+    });
   });
 
   describe('getVisitActivities', () => {
@@ -363,6 +376,7 @@ describe('Community Business Model', () => {
       ]));
     });
   });
+
   describe('getAggregatedVisitLogs', () => {
     test(':: returns all aggregated logs for a cb', async () => {
       const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });

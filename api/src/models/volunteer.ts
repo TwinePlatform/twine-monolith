@@ -109,6 +109,7 @@ export const Volunteers: VolunteerCollection = {
     const query = evolve({
       where: Volunteers.toColumnNames,
       whereNot: Volunteers.toColumnNames,
+      whereBetween: Volunteers.toColumnNames,
     }, q);
 
     return applyQueryModifiers(

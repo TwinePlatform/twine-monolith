@@ -8,6 +8,7 @@ import { Volunteers, DisabilityEnum, Users } from '..';
 import { CommunityBusinesses } from '../community_business';
 import { RoleEnum } from '../../auth/types';
 import Roles from '../../auth/roles';
+import moment = require('moment');
 
 describe('Volunteer model', () => {
   let trx: Knex.Transaction;
@@ -60,6 +61,28 @@ describe('Volunteer model', () => {
 
       expect(volunteers).toHaveLength(2);
       expect(volunteers[0]).toEqual(expect.objectContaining({ name: 'Emma Emmerich' }));
+    });
+
+    test('fromCommunityBusiness :: volunteers created between two dates', async () => {
+      const nowMinus = moment().subtract(1, 'minute').toDate();
+      const nowPlus = moment().add(1, 'minute').toDate();
+      const yesterday = moment().subtract(1, 'day').toDate();
+      const tomorrow = moment().add(1, 'day').toDate();
+
+      const cb = await CommunityBusinesses.getOne(knex, { where: { name: 'Black Mesa Research' } });
+      const v1 = await Volunteers.fromCommunityBusiness(knex, cb, {
+        whereBetween: { createdAt: [nowPlus, tomorrow] },
+      });
+      const v2 = await Volunteers.fromCommunityBusiness(knex, cb, {
+        whereBetween: { createdAt: [yesterday, nowMinus] },
+      });
+      const v3 = await Volunteers.fromCommunityBusiness(knex, cb, {
+        whereBetween: { createdAt: [nowMinus, nowPlus] },
+      });
+
+      expect(v1).toHaveLength(0);
+      expect(v2).toHaveLength(0);
+      expect(v3).toHaveLength(2);
     });
 
     test('adminCodeIsValid :: returns true for matching code & cb', async () => {

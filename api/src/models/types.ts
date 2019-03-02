@@ -353,8 +353,10 @@ export type CommunityBusinessCollection = Collection<CommunityBusiness> & {
   updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>;
   deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>;
   addVisitLog: (k: Knex, v: VisitActivity, u: Partial<User>) => Promise<VisitEvent>;
+  // TODO [getVisitLogsWithUsers]:
+  // this is still wrong, we return "category", which is missing
   getVisitLogsWithUsers: (k: Knex, c: CommunityBusiness, q?: ModelQuery<LinkedVisitEvent & User>) =>
-    Promise<Partial<LinkedVisitEvent & User>[]>;
+    Promise<Partial<LinkedVisitEvent & Pick<User, 'birthYear' | 'gender'>>[]>;
   getVisitLogAggregates: (
     k: Knex,
     c: CommunityBusiness,
