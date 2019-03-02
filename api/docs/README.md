@@ -11,3 +11,4 @@
 1. [Permissions](./permissions.md)
 1. [Stack](./stack.md)
 1. [Deployment](./deployment.md)
+1. [Reporting](./reporting.md)
