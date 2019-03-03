@@ -18,7 +18,7 @@ describe('Internal auth scheme', () => {
   });
 
   test('SUCCESS - Token needed for authorised routes', async () => {
-    const token = jwt.sign({ userId: 2, organisationId: 1 }, secret);
+    const token = jwt.sign({ userId: 5, organisationId: 1 }, secret);
     const response = await server.inject({
       method: 'GET',
       url: '/v1/users',
