@@ -85,7 +85,7 @@ describe('Community Business Model', () => {
         { name: 'Black Mesa Research', frontlineWorkspaceId: null, frontlineApiKey: null }]));
     });
 
-    test('getOne :: returns first organisation only', async () => {
+    test('getOne :: returns first community business only', async () => {
       const org = await CommunityBusinesses.getOne(knex);
 
       expect(org).toEqual(expect.objectContaining({
@@ -94,21 +94,21 @@ describe('Community Business Model', () => {
       }));
     });
 
-    test('getOne :: returns null for non-existent organisation', async () => {
+    test('getOne :: returns null for non-existent community business', async () => {
       const org = await CommunityBusinesses.getOne(knex, { where: { id: 300 } });
       expect(org).toEqual(null);
     });
 
-    test('exists :: returns true for existent user', async () => {
+    test('exists :: returns true for existent community business', async () => {
       const exists = await CommunityBusinesses.exists(knex, {
         where: { name: 'Aperture Science' },
       });
       expect(exists).toBe(true);
     });
 
-    test('exists :: returns false for non-existent user', async () => {
+    test('exists :: returns false for non-existent community business', async () => {
       const exists = await CommunityBusinesses.exists(knex, {
-        where: { name: 'Umbrella Corporation' },
+        where: { name: 'Non-existent CB' },
       });
       expect(exists).toBe(false);
     });
