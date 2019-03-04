@@ -7,14 +7,11 @@ process.on('unhandledRejection', (err) => { throw err; });
 const { _: args } = parse(process.argv.slice(2));
 
 (async () => {
-  const file = fs.readdirSync(path.join(__dirname, 'reports'))
-    .find((f) => f === args[0]);
+  const [file] = args;
 
-  if (file) {
+  if (fs.existsSync(path.join(__dirname, 'reports', file))) {
     try {
       const { default: mod } = await import(path.join(__dirname, 'reports', file));
-      // console.log(mod);
-
       await mod();
 
     } catch (error) {

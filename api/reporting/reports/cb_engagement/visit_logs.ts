@@ -79,7 +79,7 @@ const cbLogsInMonthVis = async (client: Knex, date: moment.Moment, cb: Community
 
 const estimateSignUp = async (client: Knex, cb: CommunityBusiness) => {
   const logs = await CommunityBusinesses.getVisitLogsWithUsers(client, cb, {
-    order: ['visit_log.created_at', 'desc'],
+    order: ['visit_log.created_at', 'asc'],
     limit: 1,
   });
   return logs.length > 0 ? moment(logs[0].createdAt).format('MMM YYYY') : '';

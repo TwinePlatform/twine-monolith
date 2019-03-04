@@ -94,7 +94,7 @@ const cbVolsInMonthVol = async (client: Knex, date: moment.Moment, cb: Community
 
 const estimateSignUp = async (client: Knex, cb: CommunityBusiness) => {
   const logs = await VolunteerLogs.fromCommunityBusiness(client, cb, {
-    order: ['startedAt', 'desc'],
+    order: ['startedAt', 'asc'],
     limit: 1,
   });
   return logs.length > 0 ? moment(logs[0].startedAt).format('MMM YYYY') : '';
