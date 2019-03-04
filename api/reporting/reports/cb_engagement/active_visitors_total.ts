@@ -1,3 +1,11 @@
+/*
+ * Total registered visitors
+ *
+ * For each Community business:
+ * Number of total registered visitors, broken down cumulatively per month,
+ * so that the number corresponding to "Feb 2019" represents total registered
+ * visitors from UTC 0 until the end of February 2019
+ */
 import * as Knex from 'knex';
 import * as moment from 'moment';
 import { getConfig } from '../../../config';

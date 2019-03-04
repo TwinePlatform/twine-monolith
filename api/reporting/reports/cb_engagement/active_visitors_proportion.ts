@@ -1,3 +1,10 @@
+/*
+ * Proportion of registered visitors that are active
+ *
+ * For each Community business:
+ * Proportion of total registered visitors that are active in a given month,
+ * where "active" means "have created at least one log"
+ */
 import * as Knex from 'knex';
 import * as moment from 'moment';
 import { uniq } from 'ramda';

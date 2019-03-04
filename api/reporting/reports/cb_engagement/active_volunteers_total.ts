@@ -1,3 +1,11 @@
+/*
+ * Total registered volunteers
+ *
+ * For each Community business:
+ * Number of total registered volunteers, broken down cumulatively per month,
+ * so that the number corresponding to "Feb 2019" represents total registered
+ * volunteers from UTC 0 until the end of February 2019
+ */
 import * as Knex from 'knex';
 import * as moment from 'moment';
 import { getConfig } from '../../../config';
