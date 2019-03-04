@@ -60,6 +60,11 @@ export const formatBoom = (error: BoomWithValidation): ApiResponse => {
  * If the response data is "raw", it is wrapped appropriately.
  * Otherwise if the response has meta-data attached to it (and
  * is therefore correctly formatted) it is simply passed through
+ *
+ * TODO: This function will strip custom headers (set in handlers).
+ *       If such headers are required, this function will need to
+ *       be re-written.
+ *       See https://github.com/TwinePlatform/twine-api/issues/111
  */
 export const formatResponse = (res: Hapi.ResponseObject): ApiResponse => {
   const r: any = res.source;
