@@ -363,5 +363,89 @@ describe('User Model', () => {
       }
     });
   });
+  describe('addActiveDayEvent', () => {
+    test('::SUCCESS - adds an event for a user', async () => {
+      const user = await Users.getOne(trx, { where: { id: 1 } });
+
+      // check no event exists
+      const eventCheck = await trx('user_account_active_day')
+        .where({ user_account_id: user.id })
+        .andWhereRaw('created_at >= DATE_TRUNC(\'day\', CURRENT_DATE)');
+
+      expect(eventCheck).toHaveLength(0);
+
+      // insert event
+      await Users.addActiveDayEvent(trx, user, 'localhost:101');
+
+      // check event is inserted
+      const eventCheck2 = await trx('user_account_active_day')
+        .where({ user_account_id: user.id })
+        .andWhereRaw('created_at >= DATE_TRUNC(\'day\', CURRENT_DATE)');
+
+      expect(eventCheck2).toHaveLength(1);
+      expect(eventCheck2).toEqual([expect.objectContaining({
+        user_account_id: 1,
+        origin: 'localhost:101',
+      })]);
+    });
+
+    test('::SUCCESS - adds only 1 event per day for a user', async () => {
+      const user = await Users.getOne(trx, { where: { id: 1 } });
+
+      // check no event exists
+      const eventCheck = await trx('user_account_active_day')
+        .where({ user_account_id: user.id })
+        .andWhereRaw('created_at >= DATE_TRUNC(\'day\', CURRENT_DATE)');
+
+      expect(eventCheck).toHaveLength(0);
+
+      // insert event x 2
+      await Users.addActiveDayEvent(trx, user, 'localhost:101');
+      await Users.addActiveDayEvent(trx, user, 'localhost:101');
+
+      // check event is inserted
+      const eventCheck2 = await trx('user_account_active_day')
+        .where({ user_account_id: user.id })
+        .andWhereRaw('created_at >= DATE_TRUNC(\'day\', CURRENT_DATE)');
+
+      expect(eventCheck2).toHaveLength(1);
+      expect(eventCheck2).toEqual([expect.objectContaining({
+        user_account_id: 1,
+        origin: 'localhost:101',
+      })]);
+    });
+
+    test('::SUCCESS - separate events stored for a different origin', async () => {
+      const user = await Users.getOne(trx, { where: { id: 1 } });
+
+      // check no event exists
+      const eventCheck = await trx('user_account_active_day')
+        .where({ user_account_id: user.id })
+        .andWhereRaw('created_at >= DATE_TRUNC(\'day\', CURRENT_DATE)');
+
+      expect(eventCheck).toHaveLength(0);
+
+      // insert event x 2
+      await Users.addActiveDayEvent(trx, user, 'localhost:101');
+      await Users.addActiveDayEvent(trx, user, 'localhost:202');
+
+      // check event is inserted
+      const eventCheck2 = await trx('user_account_active_day')
+        .where({ user_account_id: user.id })
+        .andWhereRaw('created_at >= DATE_TRUNC(\'day\', CURRENT_DATE)');
+
+      expect(eventCheck2).toHaveLength(2);
+      expect(eventCheck2).toEqual([
+        expect.objectContaining({
+          user_account_id: 1,
+          origin: 'localhost:101',
+        }),
+        expect.objectContaining({
+          user_account_id: 1,
+          origin: 'localhost:202',
+        }),
+      ]);
+    });
+  });
 });
 

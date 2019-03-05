@@ -306,6 +306,7 @@ type UsersBaseCollection = Collection<User> & {
 export type UserCollection = UsersBaseCollection & {
   createPasswordResetToken: (k: Knex, u: User) => Promise<SingleUseToken>
   usePasswordResetToken: (k: Knex, e: string, t: string) => Promise<null>
+  addActiveDayEvent: (k: Knex, u: User, o: string) => Promise<void>
 };
 
 export type VisitorCollection = UsersBaseCollection & {
