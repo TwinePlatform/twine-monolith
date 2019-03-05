@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import { response, id, since, until } from '../schema';
+import { response, id, since, until, volunteerProject } from '../schema';
 import { VolunteerLogs } from '../../../../models';
 import { getCommunityBusiness } from '../../prerequisites';
 import {
@@ -56,7 +56,7 @@ const routes: Hapi.ServerRoute[] = [
       },
       validate: {
         payload: {
-          name: Joi.string().min(2).max(255).required(),
+          name: volunteerProject.required(),
         },
       },
       response: { schema: response },

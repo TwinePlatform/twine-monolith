@@ -11,6 +11,11 @@ import {
   GetMyVolunteerLogsAggregateRequest,
 } from '../../types';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
+import {
+  volunteerProject,
+  volunteerLogActivity,
+  volunteerLogDuration
+} from '../../community_businesses/schema';
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -120,14 +125,10 @@ const routes: Hapi.ServerRoute[] = [
       validate:  {
         params: { logId: id },
         payload: {
-          activity: Joi.string(),
-          duration: Joi.object({
-            hours: Joi.number().integer().min(0),
-            minutes: Joi.number().integer().min(0),
-            seconds: Joi.number().integer().min(0),
-          }),
+          activity: volunteerLogActivity,
+          duration: volunteerLogDuration,
           startedAt,
-          project: Joi.alt().try(Joi.string().min(2), Joi.only(null)),
+          project: volunteerProject.allow(null),
         },
       },
       response: { schema: response },

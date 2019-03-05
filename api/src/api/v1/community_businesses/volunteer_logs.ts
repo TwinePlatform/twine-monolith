@@ -2,7 +2,17 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
 import { omit } from 'ramda';
-import { response, id, meOrId, since, until, startedAt } from './schema';
+import {
+  response,
+  id,
+  meOrId,
+  since,
+  until,
+  startedAt,
+  volunteerLogActivity,
+  volunteerLogDuration,
+  volunteerProject
+} from './schema';
 import Roles from '../../../auth/roles';
 import { RoleEnum } from '../../../auth/types';
 import { VolunteerLogs, Duration, Volunteers, VolunteerLog } from '../../../models';
@@ -122,14 +132,10 @@ const routes: Hapi.ServerRoute[] = [
       validate: {
         params: { logId: id },
         payload: {
-          activity: Joi.string(),
-          duration: Joi.object({
-            hours: Joi.number().integer().min(0),
-            minutes: Joi.number().integer().min(0),
-            seconds: Joi.number().integer().min(0),
-          }),
+          activity: volunteerLogActivity,
+          duration: volunteerLogDuration,
           startedAt,
-          project: Joi.alt().try(Joi.string().min(2), Joi.only(null)),
+          project: volunteerProject.allow(null),
         },
       },
       response: { schema: response },
@@ -217,14 +223,10 @@ const routes: Hapi.ServerRoute[] = [
       validate: {
         payload: {
           userId: id.default('me'),
-          activity: Joi.string().required(),
-          duration: Joi.object({
-            hours: Joi.number().integer().min(0),
-            minutes: Joi.number().integer().min(0),
-            seconds: Joi.number().integer().min(0),
-          }).required(),
+          activity: volunteerLogActivity.required(),
+          duration: volunteerLogDuration.required(),
           startedAt: startedAt.default(() => new Date(), 'now'),
-          project: Joi.string().min(2),
+          project: volunteerProject.allow(null),
         },
       },
       response: { schema: response },
@@ -296,15 +298,11 @@ const routes: Hapi.ServerRoute[] = [
         payload: Joi.array().items(Joi.object({
           id,
           userId: meOrId.default('me'),
-          activity: Joi.string().required(),
-          duration: Joi.object({
-            hours: Joi.number().integer().min(0),
-            minutes: Joi.number().integer().min(0),
-            seconds: Joi.number().integer().min(0),
-          }).required(),
+          activity: volunteerLogActivity.required(),
+          duration: volunteerLogDuration.required(),
           startedAt: startedAt.default(() => new Date(), 'now'),
           deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
-          project: Joi.alt().try(Joi.string().min(2), Joi.only(null)),
+          project: volunteerProject.allow(null),
         })).required(),
       },
       response: { schema: response },
