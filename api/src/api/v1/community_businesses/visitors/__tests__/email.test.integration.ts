@@ -1,5 +1,6 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
+import * as Postmark from 'postmark';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../../models';
@@ -31,7 +32,7 @@ describe('API /community-businesses/{id}/visitors', () => {
   test('send e-mail w/ qr code attached to visitor of own community business', async () => {
     // Attach mock
     const realEmailServiceSend = server.app.EmailService.send;
-    const mock = jest.fn(() => Promise.resolve());
+    const mock = jest.fn(() => Promise.resolve({} as Postmark.Models.MessageSendingResponse));
     server.app.EmailService.send = mock;
 
     const res = await server.inject({
@@ -46,7 +47,7 @@ describe('API /community-businesses/{id}/visitors', () => {
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual({ result: null });
     expect(mock).toHaveBeenCalledTimes(1);
-    expect(mock.mock.calls[0][0]).toEqual(expect.objectContaining({
+    expect((<any> mock.mock.calls[0])[0]).toEqual(expect.objectContaining({
       to: '1498@aperturescience.com',
       templateId: EmailTemplate.VISITOR_WELCOME,
       templateModel: { name: 'Chell', organisation: 'Aperture Science' },

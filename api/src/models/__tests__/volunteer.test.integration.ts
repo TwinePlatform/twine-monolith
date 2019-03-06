@@ -64,8 +64,8 @@ describe('Volunteer model', () => {
     });
 
     test('fromCommunityBusiness :: volunteers created between two dates', async () => {
-      const nowMinus = moment().subtract(1, 'minute').toDate();
-      const nowPlus = moment().add(1, 'minute').toDate();
+      const nowMinus = moment().subtract(2, 'minutes').toDate();
+      const nowPlus = moment().add(2, 'minutes').toDate();
       const yesterday = moment().subtract(1, 'day').toDate();
       const tomorrow = moment().add(1, 'day').toDate();
 
