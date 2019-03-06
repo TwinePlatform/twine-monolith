@@ -10,6 +10,12 @@ const routes: Hapi.ServerRoute[] = [
     path: '/users',
     options: {
       description: 'Retreive list of all users',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: ['organisations_details-child:read'],
+        },
+      },
       validate: { query },
       response: { schema: response },
     },

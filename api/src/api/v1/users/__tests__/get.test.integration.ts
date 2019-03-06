@@ -18,7 +18,7 @@ describe('API /users', () => {
   beforeAll(async () => {
     server = await init(config);
 
-    user = await Users.getOne(server.app.knex, { where: { name: 'GlaDos' } });
+    user = await Users.getOne(server.app.knex, { where: { name: 'Big Boss' } });
     organisation =
       await Organisations.getOne(server.app.knex, { where: { name: 'Aperture Science' } });
     credentials = await StandardCredentials.get(server.app.knex, user, organisation);
