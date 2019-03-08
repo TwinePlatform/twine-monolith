@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+  - '10'
+
+env:
+  - NODE_ENV=testing
+
+cache:
+  directories:
+    - "node_modules"
+
+install:
+  - npm install -g codecov
+  - npm install
+
+script:
+  - npm run lint
+  - npm run build
+  - npm run cover
+  - codecov
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
