@@ -14,10 +14,21 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import { formatBoom, BoomWithValidation } from '../utils';
 import { Environment } from '../../../../config';
+import { Users } from '../../../models';
+import { StandardCredentials } from '../../../auth/strategies/standard';
 
 
 export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
   const env = request.server.app.config.env;
+
+
+  if (request.auth.credentials) { // only for authenticated routes
+    const { user } = StandardCredentials.fromRequest(request);
+
+    Users.addActiveDayEvent(request.server.app.knex, user, request.headers.origin)
+      .then(() => {})
+      .catch(() => {});
+  }
 
   if ((<Boom<any>> request.response).isBoom) {
     const err = <BoomWithValidation> request.response;

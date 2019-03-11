@@ -76,7 +76,7 @@ export const DateJoi = Joi.extend((joi: any) => ({
  * Request query schema
  */
 export const query: Map<keyof ApiRequestQuery, Joi.Schema> = {
-  fields: Joi.array().items(Joi.string().min(1).max(255)),
+  fields: Joi.array().items(Joi.string().min(1).max(255).trim()),
   sort: Joi.string(),
   order: Joi.string().only('asc', 'desc'),
   offset: Joi.number().integer().min(0),

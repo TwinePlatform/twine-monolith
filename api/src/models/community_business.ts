@@ -13,6 +13,7 @@ import {
   pipe,
   assocPath,
   difference,
+  identity,
 } from 'ramda';
 import { randomBytes } from 'crypto';
 import { Dictionary, Map } from '../types/internal';
@@ -476,10 +477,13 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       whereBetween: pipe(
         evolve({ birthYear: ageArrayToBirthYearArray }),
         renameKeys({ birthYear: 'user_account.birth_year' })
-        ),
+      ),
     });
     const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);
-    const query = pipe(modifyColumnNames, checkSpecificCb)(q);
+    const limitDates = q && q.since && q.until
+      ? assocPath(['whereBetween', 'visit_log.created_at'], [q.since, q.until])
+      : identity;
+    const query = pipe(modifyColumnNames, limitDates, checkSpecificCb)(q);
 
     return applyQueryModifiers(client('visit_log')
       .select({

@@ -27,7 +27,7 @@ describe('Organisation Model', () => {
     test('get :: no arguments gets all orgs', async () => {
       const orgs = await Organisations.get(knex);
 
-      expect(orgs.length).toBe(3);
+      expect(orgs.length).toBe(2);
       expect(orgs[0]).toEqual(expect.objectContaining({
         name: 'Aperture Science',
         _360GivingId: 'GB-COH-3205',

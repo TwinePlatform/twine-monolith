@@ -17,6 +17,7 @@ export const userName =
     .min(3)
     .max(100)
     .regex(/^[a-zA-Z]{2,}\s?[a-zA-z]*['\-]?[a-zA-Z]*['\- ]?([a-zA-Z]{1,})?/, { name: 'alpha' })
+    .trim()
     .options({ language: { string: { regex: { name: 'can only contain letters' } } } });
 
 export const birthYear =
@@ -28,6 +29,7 @@ export const birthYear =
 
 export const email =
   Joi.string()
+    .trim()
     .email();
 
 export const password =
@@ -54,12 +56,14 @@ export const phoneNumber =
     .regex(/^\+?[0-9 -]*$/, { name: 'numeric' })
     .min(9)
     .max(20)
+    .trim()
     .options({ language: { string: { regex: { name: 'invalid number' } } } });
 
 export const postCode =
   Joi.string()
     .min(4)
-    .max(10);
+    .max(10)
+    .trim();
 
 export const isEmailConsentGranted =
   Joi.boolean();
