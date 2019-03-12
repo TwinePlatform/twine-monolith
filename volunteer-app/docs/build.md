@@ -28,15 +28,26 @@ $ ionic cordova build android
 ```
 To produce a debug build.
 
-### Sign
-TBD
+### Production Build
+1. Open Android Studio in the `/platforms/android` directory
+1. Select _"Build"_ > _"Generate Signed Bundle / APK"_
+1. Select _"APK"_
+1. Enter the keystore details
+1. Choose both signature versions (V1 and V2)
+1. Press _"Finish"_
+1. Once build is finish, locate the APK file
+1. Go to the Google Play Console website
+1. Select the Twine app (`com.ionicframework.powertochange157302`)
+1. Select _"Release management"_ > _"App releases"_
+1. Select _"Manage"_ on one of the release tracks (Production/Beta/Alpha/Internal)
+1. Select _"Create release"_ and follow the prompts and instructions
 
 ## iOS
 ### Requirements
 * ionic v4.2.1 (Use `npm`)
 * cordova v8.0.0 (Use `npm`)
 * cordova-ios@4.4.0 (See below https://github.com/ionic-team/ionic/issues/12942)
-* Xcode 8.2 (See below https://developer.apple.com/download/more/)
+* Xcode 9 (See below https://developer.apple.com/download/more/)
 * https://github.com/compelling/cordova-plugin-geofence/
 
 ### Build
@@ -69,5 +80,13 @@ Now run:
 $ ionic cordova build ios
 ```
 
-### Sign
-TBD
+### Production Build
+1. Locally install the distribution certificates from the Apple Developer portal
+1. Open Xcode 9 in the `/platforms/ios` directory
+1. Under the _"Signing"_ section of the main project view, untick, then retick _"Automatically manage signing"_
+1. Ensure the selected team is _"POWER TO CHANGE TRUSTEE LIMITED"_
+1. Change the build target to _"Generic iOS Device"_
+1. Select _"Product"_ > _"Archive"_
+1. Click _"Upload to App Store"_
+1. Follow the onscreen prompts, selecting _"Automatically manage signing"_
+1. On success, that build of the app will be available in TestFlight. After testing, it can be promoted to production through the _AppStoreConnect_ web app
