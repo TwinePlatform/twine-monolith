@@ -22,7 +22,7 @@ The server may be configured with the following environment variables:
 # Hostname from which to redirect
 # MUST NOT INCLUDE PROTOCOL
 # Example:
-#   twine-visitor.herokuapp.com
+#   subdomain.herokuapp.com
 REDIR_FROM_HOST=...
 
 # Hostname to which to redirect
