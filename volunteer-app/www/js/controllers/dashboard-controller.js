@@ -102,8 +102,16 @@
 
 					$scope.todaysTotalHours = -1;
 
+					function durationToMinutes (duration) {
+						return ((duration.days || 0) * 24 * 60) +
+							((duration.hours || 0) * 60) +
+							(duration.minutes || 0) +
+							((duration.seconds || 0) / 60)
+					}
+
 					$$api.user.totalHoursForDay($localStorage.user.id, new Date()).success(function (result) {
-						$scope.todaysTotalHours = result.data.total;
+						// This says $scope.todaysTotalHours but the quantity actually needs to be in minutes 🙃
+						$scope.todaysTotalHours = durationToMinutes(result.data.total);
 					}).error(function (result, error) {
 						// process connection error
 						$$utilities.processConnectionError(result, error);
@@ -116,14 +124,8 @@
 
 					$$api.organisations.summary().success(function (result) {
 
-						var time = result.data.volunteeredTime;
-
 						$scope.totalUsers = result.data.volunteers;
-						$scope.totalVolunteeredMinutes =
-							((time.days || 0) * 24 * 60) +
-							((time.hours || 0) * 60) +
-							(time.minutes || 0) +
-							((time.seconds || 0) / 60);
+						$scope.totalVolunteeredMinutes = durationToMinutes(result.data.volunteeredTime);
 
 					}).error(function (result, error) {
 						
