@@ -15,13 +15,13 @@ The general principle is to arrange the application in a kind of hub-and-spoke s
 |- public       Public assets
 |- src          Client app
 |  |- api             Interface with the Twine HTTP API
-|  |- shared          All code shared between the admin and visitor UIs
-|  |  |- assets
-|  |  |- components
-|  |  |- hoc
-|  |  |- ...
-|  |  |- index.ts     Defines public interface of `shared` module
-|  |- styles          Stylesheets for external components or other things not compatible with Style Components
+|  |- assets          Contains static assets like images, SVGs
+|  |- components      Common components used throughout the app
+|  |- styles          Stylesheets for external components or other things not compatible with Styled Components
+|  |- <FEATURE>
+|  |  |- components   Feature-specific components
+|  |  |- pages        Feature-specific routes/pages
+|  |  |- index.ts     Defines public interface of <FEATURE> module
 |  |- App.tsx
 |  |- index.tsx
 |- ...dotfiles
