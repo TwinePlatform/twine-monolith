@@ -19,6 +19,7 @@ import { RoleEnum } from '../auth/types';
 export const ColumnToModel: Map<string, keyof VolunteerLog> = {
   'volunteer_hours_log.volunteer_hours_log_id': 'id',
   'volunteer_hours_log.user_account_id': 'userId',
+  'volunteer_hours_log.created_by': 'createdBy',
   'volunteer_hours_log.organisation_id': 'organisationId',
   'volunteer_hours_log.duration': 'duration',
   'volunteer_hours_log.started_at': 'startedAt',

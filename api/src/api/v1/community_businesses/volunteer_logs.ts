@@ -268,6 +268,7 @@ const routes: Hapi.ServerRoute[] = [
       try {
         const log = await VolunteerLogs.add(knex, {
           ...payload,
+          createdBy: user.id,
           userId: payload.userId === 'me' ? user.id : payload.userId,
           organisationId: communityBusiness.id,
         });
@@ -372,6 +373,7 @@ const routes: Hapi.ServerRoute[] = [
 
               return VolunteerLogs.add(trx, {
                 ...log,
+                createdBy: user.id,
                 organisationId: communityBusiness.id,
                 userId: log.userId === 'me' ? user.id : Number(log.userId),
               });

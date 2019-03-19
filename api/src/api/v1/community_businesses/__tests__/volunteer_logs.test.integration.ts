@@ -387,6 +387,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.result).toEqual({
         result: expect.objectContaining({
           userId: 6,
+          createdBy: 6,
           organisationId: 2,
           activity: 'Office support',
           duration: {
@@ -445,6 +446,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.result).toEqual({
         result: expect.objectContaining({
           userId: user.id,
+          createdBy: vAdminCreds.user.user.id,
           organisationId: organisation.id,
           activity: 'Office support',
           duration: {
@@ -744,7 +746,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(resGet.statusCode).toBe(200);
 
       const log = omit(
-        ['createdAt', 'modifiedAt', 'organisationId'],
+        ['createdAt', 'modifiedAt', 'organisationId', 'createdBy'],
         { ...(<any> resGet.result).result, duration: { hours: 1, minutes: 34 } }
       );
 
@@ -783,7 +785,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(resGet.statusCode).toBe(200);
 
       const log = omit(
-        ['createdAt', 'modifiedAt', 'organisationId'],
+        ['createdAt', 'modifiedAt', 'organisationId', 'createdBy'],
         { ...(<any> resGet.result).result, deletedAt: new Date().toISOString() }
       );
 
