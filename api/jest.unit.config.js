@@ -3,7 +3,9 @@ module.exports = {
   coveragePathIgnorePatterns: ["<rootDir>/build/", "<rootDir>/node_modules/"],
   errorOnDeprecated: true,
   testPathIgnorePatterns: [
-    '<rootDir>/build/'
+    '<rootDir>/bin',
+    '<rootDir>/build/',
+    '<rootDir>/tests/utils',
   ],
   moduleFileExtensions: [
     'ts',
