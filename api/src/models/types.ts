@@ -254,6 +254,7 @@ export type VolunteerProject = Readonly<CommonTimestamps & {
 export type VolunteerLog = Readonly<CommonTimestamps & {
   id: Int
   userId: Int
+  createdBy?: Int
   userName?: string
   organisationId: Int
   organisationName?: string

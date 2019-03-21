@@ -309,6 +309,24 @@ describe('VolunteerLog model', () => {
       }
     });
 
+    test('add :: with createdBy user id', async () => {
+      const now = new Date();
+      const res = await VolunteerLogs.add(trx, {
+        userId: 6,
+        createdBy: 7,
+        organisationId: 2,
+        activity: 'Office support',
+        duration: { minutes: 100 },
+        startedAt: now.toDateString(),
+      });
+
+      expect(res).toEqual(expect.objectContaining({
+        activity: 'Office support',
+        duration: { hours: 1, minutes: 40 },
+        startedAt: new Date(now.toDateString()),
+      }));
+    });
+
     test('update :: non-foreign key column', async () => {
       const log = await VolunteerLogs.getOne(trx, { where: { activity: 'Office support' } });
       const changes = { duration: { hours: 1, minutes: 1 } };
