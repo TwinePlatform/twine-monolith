@@ -135,4 +135,30 @@ describe('PUT /community-businesses', () => {
       expect((<any> res.result).error.message).toEqual('User already exists with this email');
     });
   });
+
+  describe('POST /community-businesses/register/temporary', () => {
+    test('SUCCESS - create a temporary marked CB and admin user', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/register/temporary',
+        payload: {
+          orgName: 'Stick House',
+        },
+        credentials: adminCreds,
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: {
+          communityBusiness: expect.objectContaining({
+            name: 'TEMPORARY ACCOUNT: Stick House',
+            sector: 'TEMPORARY DATA',
+          }),
+          cbAdmin: expect.objectContaining({
+            name: 'TEMPORARY ADMIN USER',
+          }),
+        },
+      });
+    });
+  });
 });

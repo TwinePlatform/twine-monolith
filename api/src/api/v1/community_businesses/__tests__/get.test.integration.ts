@@ -88,7 +88,7 @@ describe('GET /community-businesses', () => {
       expect(res.result).toEqual({
         result: expect.objectContaining({ _360GivingId: 'GB-COH-9302' }),
       });
-      expect(Object.keys((<any> res.result).result)).toHaveLength(15);
+      expect(Object.keys((<any> res.result).result)).toHaveLength(16);
     });
 
     test('Returns CB that VOLUNTEER is authenticated against', async () => {
@@ -102,7 +102,7 @@ describe('GET /community-businesses', () => {
       expect(res.result).toEqual({
         result: expect.objectContaining({ _360GivingId: 'GB-COH-9302' }),
       });
-      expect(Object.keys((<any> res.result).result)).toHaveLength(15);
+      expect(Object.keys((<any> res.result).result)).toHaveLength(16);
     });
   });
 
@@ -118,7 +118,7 @@ describe('GET /community-businesses', () => {
       expect(res.result).toEqual({
         result: expect.objectContaining({ _360GivingId: 'GB-COH-9302' }),
       });
-      expect(Object.keys((<any> res.result).result)).toHaveLength(15);
+      expect(Object.keys((<any> res.result).result)).toHaveLength(16);
     });
 
     test('Returns 403 if user is not authorised', async () => {

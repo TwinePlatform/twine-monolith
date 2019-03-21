@@ -42,4 +42,36 @@ describe('API Constants', () => {
         });
       });
     });
+
+  test(`GET /sectors does not include TEMPORARY DATA value`, async () => {
+    const res = await server.inject({
+      method: 'GET',
+      url: `/v1/sectors`,
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.result).not.toEqual({
+      result: expect.arrayContaining([
+        expect.objectContaining({
+          name: 'TEMPORARY DATA',
+        }),
+      ]),
+    });
+  });
+
+  test(`GET /regions does not include TEMPORARY DATA value`, async () => {
+    const res = await server.inject({
+      method: 'GET',
+      url: `/v1/regions`,
+    });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.result).not.toEqual({
+      result: expect.arrayContaining([
+        expect.objectContaining({
+          name: 'TEMPORARY DATA',
+        }),
+      ]),
+    });
+  });
 });

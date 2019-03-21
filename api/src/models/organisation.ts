@@ -22,6 +22,7 @@ const ColumnToModel: Map<keyof OrganisationRow, keyof Organisation> = {
   'organisation.created_at': 'createdAt',
   'organisation.modified_at': 'modifiedAt',
   'organisation.deleted_at': 'deletedAt',
+  'organisation.is_temp': 'isTemp',
 };
 const ModelToColumn = invertObj(ColumnToModel);
 
@@ -48,6 +49,7 @@ export const Organisations: OrganisationCollection = {
       createdAt: a.createdAt,
       modifiedAt: a.modifiedAt,
       deletedAt: a.deletedAt,
+      isTemp: a.isTemp,
     };
   },
 
@@ -59,6 +61,7 @@ export const Organisations: OrganisationCollection = {
       created_at: a.createdAt,
       modified_at: a.modifiedAt,
       deleted_at: a.deletedAt,
+      is_temp: a.isTemp,
     });
   },
 

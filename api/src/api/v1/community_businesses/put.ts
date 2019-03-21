@@ -34,6 +34,10 @@ export default [
       const { payload, pre: { communityBusiness }, server: { app: { knex } } } = request;
       const changeSet = <CommunityBusiness> { ...payload };
 
+      if (communityBusiness.isTemp) {
+        return Boom.forbidden('Temporary organisation');
+      }
+
       if (hasAny(['address1', 'address2', 'townCity', 'postCode'], payload)) {
         // TODO: recalculate coordinates
         // See https://github.com/TwinePlatform/twine-api/issues/144
@@ -89,6 +93,10 @@ export default [
 
       if (!isChild) {
         return Boom.forbidden('Insufficient permissions to access this resource');
+      }
+
+      if (communityBusiness.isTemp) {
+        return Boom.forbidden('Temporary organisation');
       }
 
       const changeSet: Partial<CommunityBusiness> = { ...payload };

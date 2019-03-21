@@ -3,6 +3,7 @@ import * as Shot from 'shot';
 import * as moment from 'moment';
 import axios from 'axios';
 import { Dictionary, CurriedFunction2, assoc, curry, pick } from 'ramda';
+const randomWords = require('random-words');
 
 type MapKeys =
   CurriedFunction2<(a: string) => string, Dictionary<any>, Dictionary<any>>;
@@ -74,3 +75,9 @@ export const asyncFind = async <T>(fn: (a: T) => Promise<boolean>, xs: T[]): Pro
     ? head
     : asyncFind(fn, tail);
 };
+
+export const randomPasswordGenerator: () => string = () => randomWords({ min: 3, max: 4 })
+.map((x: string) => x.charAt(0).toUpperCase() + x.slice(1))
+.concat(Math.floor(Math.random() * Math.floor(99)))
+.concat(['!', '@', '£', '$', '%', '&', '*', '?'][Math.floor(Math.random() * 8)])
+.join('');
