@@ -17,7 +17,6 @@
   "bugs": {
     "url": "https://github.com/TwinePlatform/volunteer-dashboard/issues"
   },
-  "homepage": "https://github.com/TwinePlatform/volunteer-dashboard#readme",
   "dependencies": {
     "@types/express": "^4.16.1",
     "@types/http-proxy-middleware": "^0.19.2",
