@@ -17,6 +17,7 @@ import Home from '@material-ui/icons/Home';
 import Business from '@material-ui/icons/Business';
 import RecentActors from '@material-ui/icons/RecentActors';
 import GroupAdd from '@material-ui/icons/GroupAdd';
+import FlipToBack from '@material-ui/icons/FlipToBack';
 
 const drawerWidth = 240;
 
@@ -50,8 +51,8 @@ const Navbar = (props) => {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          {[['Home', <Home />], ['Logs', <TimeLapse />], ['Organisations', <Business />], ['Admin Codes', <RecentActors />], ['Create CB', <GroupAdd />]].map(([text, icon]) => (
-            <Link to={'/'.concat(text.toLowerCase().replace(' ', '-').replace('home', ''))} key={text}>
+          {[['Home', <Home />], ['Logs', <TimeLapse />], ['Organisations', <Business />], ['Admin Codes', <RecentActors />], ['Create CB', <GroupAdd />], ['Temp Accounts', <FlipToBack />]].map(([text, icon]) => (
+            <Link to={'/'.concat(text.toLowerCase().replace(/ /g, '-').replace('home', ''))} key={text}>
               <ListItem button >
                 <ListItemIcon> {icon} </ListItemIcon>
                 <ListItemText primary={text} />

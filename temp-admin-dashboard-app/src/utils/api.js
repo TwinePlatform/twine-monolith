@@ -27,6 +27,18 @@ export const api = {
   organisations: () => {
     return axios.get('/community-businesses')
   },
+  tempOrganisations: () => {
+    return axios.get('/community-businesses/temporary')
+  },
+  deleteTempOrganisation: (id) => {
+    return axios.delete(`/community-businesses/temporary/${id}`)
+  },
+  getAdmins: (id) => {
+    return axios.get(`/community-businesses/${id}/cb-admins`)
+  },
+  tempAdminPasswordReset: (id) => {
+    return axios.get(`/community-businesses/temporary/${id}/password/reset`)
+  },
   organisation: (id) => {
     return axios.get(`/community-businesses/${id}?`
       + 'fields[]=id&'
@@ -48,6 +60,11 @@ export const api = {
   register: ({ formUpdate }) => {
     return axios.post('/community-businesses/register', formUpdate)
   },
+  registerTemp: ({ orgName }) => {
+    console.log({ orgName });
+
+    return axios.post('/community-businesses/register/temporary', { orgName })
+  },
   visitLogs: () => {
     return axios.get(`/visit-logs`)
   },
@@ -61,3 +78,7 @@ export const api = {
     return axios.get(`/sectors`)
   },
 };
+
+export const ResponseUtils = {
+  getRes: (res) => res.data.result
+}

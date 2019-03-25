@@ -14,6 +14,7 @@ import Logs from './pages/Logs'
 import Organisations from './pages/Organisations'
 import OrgProfile from './pages/OrgProfile';
 import CreateCb from './pages/CreateCb';
+import TempAccounts from './pages/TempAccounts/index';
 //utils
 import { api } from './utils/api'
 
@@ -69,6 +70,7 @@ class AdminDashboard extends Component {
               <PrivateRoute auth={auth} exact path="/organisations" component={Organisations} />
               <PrivateRoute auth={auth} exact path="/organisations/:id" component={OrgProfile} />
               <PrivateRoute auth={auth} exact path="/create-cb" component={CreateCb} />
+              <PrivateRoute auth={auth} exact path="/temp-accounts" component={TempAccounts} />
             </div>
           </Paper>
         </div>

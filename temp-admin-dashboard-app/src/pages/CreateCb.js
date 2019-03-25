@@ -49,7 +49,7 @@ const inlinePaperStyle = {
 
 const turnoverBands = ['<£100k', '£100k-£250k', '£250k-£500k', '£500k-£750k', '£750k-£1m', '£1m-£5m', '£5m-£10m', '>£10m']
 
-class OrgProfile extends Component {
+class CreateCb extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -239,4 +239,4 @@ class OrgProfile extends Component {
   }
 }
 
-export default withStyles(styles)(OrgProfile);
+export default withStyles(styles)(CreateCb);

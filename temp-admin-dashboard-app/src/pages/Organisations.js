@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 import OrgTable from '../components/OrgTable'
-import { api } from '../utils/api'
+import { api, ResponseUtils } from '../utils/api'
 
 const styles = theme => ({
   container: {
@@ -29,15 +29,21 @@ class Organisations extends Component {
     };
   }
 
-  componentDidMount() {
-    api.organisations()
-      .then(res => {
-        this.setState({ organisations: res.data.result })
+  async componentDidMount() {
+    try {
+      const orgRes = ResponseUtils.getRes(await api.organisations());
+      const cbAdmins = await Promise.all(orgRes.map((org) => api.getAdmins(org.id)))
+        .then(xs => xs.map(ResponseUtils.getRes))
+
+      const organisations = orgRes.map((x, i) => ({ ...x, email: cbAdmins[i][0] ? cbAdmins[i][0].email : 'no associated admin' }))
+
+      this.setState({
+        organisations,
       })
-      .catch((err) => {
-        const errorMessage = (err.response && err.response.data.error.message) || 'Error fetching data.'
-        this.setState({ error: errorMessage })
-      })
+    } catch (err) {
+      const errorMessage = (err.response && err.response.data.error.message) || 'Error fetching data.'
+      this.setState({ message: errorMessage })
+    }
   }
 
   render() {

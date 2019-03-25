@@ -34,6 +34,7 @@ const OrgTable = (props) => {
         <TableRow>
           <TableCell>Id</TableCell>
           <TableCell>Organisation Name</TableCell>
+          <TableCell>Cb Admin Email</TableCell>
           <TableCell numeric>Region</TableCell>
           <TableCell numeric>Sector</TableCell>
           <TableCell numeric>360GivingId</TableCell>
@@ -42,11 +43,12 @@ const OrgTable = (props) => {
           <TableCell numeric>Edit</TableCell>
         </TableRow>
       </TableHead>
-      {organisations && organisations.map(({ id, name, region, sector, _360GivingId, turnoverBand, createdAt }) => (
+      {organisations && organisations.map(({ id, name, email, region, sector, _360GivingId, turnoverBand, createdAt }) => (
         <TableBody>
           <TableRow key={name}>
             <TableCell>{id}</TableCell>
             <TableCell>{name}</TableCell>
+            <TableCell>{email}</TableCell>
             <TableCell>{region}</TableCell>
             <TableCell>{sector}</TableCell>
             <TableCell>{_360GivingId}</TableCell>
