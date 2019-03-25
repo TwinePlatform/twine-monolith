@@ -33,7 +33,7 @@ if (!name || !email || !role || !password || !oid) {
 }
 
 (async () => {
-  const { knex: config } = getConfig(process.env.NODE_ENV);
+  const { knex: config, env } = getConfig(process.env.NODE_ENV);
   const client = Knex(config);
 
   try {
@@ -49,7 +49,8 @@ if (!name || !email || !role || !password || !oid) {
       await Roles.add(trx, { userId: user.id, organisationId: cb.id, role });
 
       console.log(`
-        User added to ${process.env.NODE_ENV} database:
+        User added to ${env} database:
+          ID: ${user.id}
           Name: ${user.name}
           E-mail: ${user.email}
           Password: ${user.password} (${password})
