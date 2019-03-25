@@ -45,6 +45,7 @@ export const ColumnToModel: Map<keyof UserRow, keyof User> = {
   'gender.gender_name': 'gender',
   'ethnicity.ethnicity_name': 'ethnicity',
   'disability.disability_name': 'disability',
+  'user_account.is_temp': 'isTemp',
 };
 export const ModelToColumn = invertObj(ColumnToModel);
 
@@ -106,6 +107,7 @@ export const Users: UserCollection = {
       createdAt: a.createdAt,
       modifiedAt: a.modifiedAt,
       deletedAt: a.deletedAt,
+      isTemp: a.isTemp,
     };
   },
 

@@ -9,6 +9,8 @@ import visitLogAggregates from './visit_logs_aggregates';
 import volunteers from './volunteers';
 import volunteerLogs from './volunteer_logs';
 import register from './register';
+import cbAdmins from './cb_admins';
+import temporary from './temporary';
 
 export default [
   ...get,
@@ -22,4 +24,6 @@ export default [
   ...volunteers,
   ...volunteerLogs,
   ...register,
+  ...cbAdmins,
+  ...temporary,
 ];

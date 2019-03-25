@@ -61,6 +61,7 @@ export enum RegionEnum {
   SOUTH_WEST = 'South West',
   WEST_MIDLANDS = 'West Midlands',
   YORKSHIRE_HUMBER = 'Yorkshire and the Humber',
+  TEMPORARY_DATA = 'TEMPORARY DATA',
 }
 
 export enum SectorEnum {
@@ -78,6 +79,7 @@ export enum SectorEnum {
   TRANSPORT = 'Transport',
   TOURISM = 'Visitor facilities or tourism',
   WASTE_RECYCLING = 'Waste reduction, reuse or recycling',
+  TEMPORARY_DATA = 'TEMPORARY DATA',
 }
 
 /*
@@ -102,6 +104,7 @@ export type UserRow = {
   'gender.gender_name': string
   'ethnicity.ethnicity_name': string
   'disability.disability_name': string
+  'user_account.is_temp': boolean
 };
 
 export type OrganisationRow = {
@@ -111,6 +114,7 @@ export type OrganisationRow = {
   'organisation.created_at': string
   'organisation.modified_at': string
   'organisation.deleted_at': string
+  'organisation.is_temp': boolean
 };
 
 export type CommunityBusinessRow = {
@@ -129,6 +133,7 @@ export type CommunityBusinessRow = {
   'community_business.created_at': string
   'community_business.modified_at': string
   'community_business.deleted_at': string
+  'organisation.is_temp': boolean
 };
 
 /*
@@ -153,12 +158,14 @@ export type User = Readonly<CommonTimestamps & {
   isPhoneNumberConfirmed: boolean
   isEmailConsentGranted: boolean
   isSMSConsentGranted: boolean
+  isTemp: boolean
 }>;
 
 export type Organisation = Readonly<CommonTimestamps & {
   id: Int
   name: string
   _360GivingId: string
+  isTemp?: boolean
 }>;
 
 export type CommunityBusiness = Organisation & Readonly<{
@@ -335,6 +342,7 @@ export type VolunteerCollection = UsersBaseCollection & {
 export type CbAdminCollection = UsersBaseCollection & {
   fromOrganisation: (k: Knex, q: Partial<Organisation>) => Promise<User[]>;
   addWithRole: (k: Knex, c: CommunityBusiness, a: Partial<User>) => Promise<User>
+  addTemporaryWithRole: (k: Knex, c: CommunityBusiness) => Promise<User>
 };
 
 export type OrganisationCollection = Collection<Organisation> & {
@@ -364,6 +372,8 @@ export type CommunityBusinessCollection = Collection<CommunityBusiness> & {
     c: CommunityBusiness,
     aggs: string[],
     q?: ModelQuery<LinkedVisitEvent & User>) => Promise<any>;
+  getTemporary: (k: Knex) => Promise<Pick<CommunityBusiness, 'id' | 'name'> & CommonTimestamps>
+  addTemporary: (k: Knex, n: string) => Promise<CommunityBusiness>
 };
 
 export type VolunteerLogCollection = Collection<VolunteerLog> & {

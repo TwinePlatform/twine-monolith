@@ -4,6 +4,7 @@ module.exports = {
   errorOnDeprecated: true,
   globalSetup: '<rootDir>/tests/global_setup.ts',
   testPathIgnorePatterns: [
+    '<rootDir>/bin',
     '<rootDir>/build/',
     '<rootDir>/tests/utils',
   ],

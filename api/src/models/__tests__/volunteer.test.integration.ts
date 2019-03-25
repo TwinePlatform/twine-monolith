@@ -60,7 +60,8 @@ describe('Volunteer model', () => {
       const volunteers = await Volunteers.fromCommunityBusiness(knex, cb);
 
       expect(volunteers).toHaveLength(2);
-      expect(volunteers[0]).toEqual(expect.objectContaining({ name: 'Emma Emmerich' }));
+      expect(volunteers).toEqual(expect.arrayContaining(
+        [expect.objectContaining({ name: 'Emma Emmerich' })]));
     });
 
     test('fromCommunityBusiness :: volunteers created between two dates', async () => {

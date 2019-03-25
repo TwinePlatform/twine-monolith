@@ -17,6 +17,7 @@ const ignoreRe = new RegExp(
     'nerv',
     'trainer',
     'Edward',
+    'Inspired Neighbourhoods CIC',
   ].join('|')
   + ')'
 );
@@ -82,12 +83,12 @@ const cbActiveInMonthVol = async (client: Knex, date: moment.Moment, cb: Communi
   const since = date.startOf('month').toDate();
   const until = date.endOf('month').toDate();
   const logs = await VolunteerLogs.fromCommunityBusiness(client, cb, { since, until });
-  return logs.length > 1;
+  return logs.length >= 1;
 };
 
 const cbActiveInMonthVis = async (client: Knex, date: moment.Moment, cb: CommunityBusiness) => {
   const since = date.startOf('month').toDate();
   const until = date.endOf('month').toDate();
   const logs = await CommunityBusinesses.getVisitLogsWithUsers(client, cb, { since, until });
-  return logs.length > 1;
+  return logs.length >= 1;
 };

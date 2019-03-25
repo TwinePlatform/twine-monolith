@@ -444,4 +444,16 @@ describe('Community Business Model', () => {
       }
     });
   });
+
+  describe('getTemporary && addTemporary', () => {
+    test(':: returns all temporary cbs', async () => {
+      const cbs = await CommunityBusinesses.getTemporary(trx);
+      expect(cbs).toHaveLength(0);
+
+      await CommunityBusinesses.addTemporary(trx, `TEMPORARY ACCOUNT: Yellowstone National Park`);
+
+      const cbs2 = await CommunityBusinesses.getTemporary(trx);
+      expect(cbs2).toHaveLength(1);
+    });
+  });
 });

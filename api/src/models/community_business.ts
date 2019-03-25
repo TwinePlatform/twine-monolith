@@ -22,6 +22,8 @@ import {
   CommunityBusinessCollection,
   CommunityBusinessRow,
   VisitEvent,
+  RegionEnum,
+  SectorEnum,
 } from './types';
 import { Organisations } from './organisation';
 import { applyQueryModifiers } from './applyQueryModifiers';
@@ -50,6 +52,7 @@ const ColumnToModel: Map<keyof CommunityBusinessRow, keyof CommunityBusiness> = 
   'community_business.created_at': 'createdAt',
   'community_business.modified_at': 'modifiedAt',
   'community_business.deleted_at': 'deletedAt',
+  'organisation.is_temp': 'isTemp',
 };
 
 const ModelToColumn = invertObj(ColumnToModel);
@@ -82,8 +85,8 @@ const dropUnwhereableCbFields = omit([
   'deletedAt',
 ]);
 
-const pickOrgFields = pick(['name', '_360GivingId']);
-const pickCbFields = omit(['name', '_360GivingId']);
+const pickOrgFields = pick(['name', '_360GivingId', 'isTemp']);
+const pickCbFields = omit(['name', '_360GivingId', 'isTemp']);
 
 const preProcessOrgChangeset = compose(
   Organisations.toColumnNames,
@@ -118,6 +121,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       postCode: a.postCode,
       coordinates: a.coordinates,
       turnoverBand: a.turnoverBand,
+      isTemp: a.isTemp,
     };
   },
 
@@ -187,6 +191,18 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return res || null;
   },
 
+  async getTemporary (client) {
+    return client('organisation')
+    .select({
+      id: 'organisation.organisation_id',
+      name: 'organisation.organisation_name',
+      createdAt: 'organisation.created_at',
+      modifiedAt: 'organisation.modified_at',
+      deletedAt: 'organisation.deleted_at',
+    })
+    .where({ is_temp: true });
+  },
+
   async exists (client, query) {
     const res = await CommunityBusinesses.getOne(client, query);
     return res !== null;
@@ -226,6 +242,15 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     });
 
     return CommunityBusinesses.getOne(client, { where: { id } });
+  },
+
+  async addTemporary (client, name) {
+    return CommunityBusinesses.add(client, {
+      name,
+      region: RegionEnum.TEMPORARY_DATA,
+      sector: SectorEnum.TEMPORARY_DATA,
+      isTemp: true,
+    });
   },
 
   async update (client, cb, changes) {

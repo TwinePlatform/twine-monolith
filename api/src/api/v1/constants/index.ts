@@ -22,7 +22,8 @@ const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
     handler: async ({ server: { app: { knex } } }: Hapi.Request, h: Hapi.ResponseToolkit) => {
       const rows = await knex(tableName)
         .select()
-        .orderBy(`${resourceName}_name`);
+        .orderBy(`${resourceName}_name`)
+        .whereNot({ [`${resourceName}_name`]: 'TEMPORARY DATA' });
 
       return rows.map((row: any) => ({
         id: row[`${tableName}_id`],

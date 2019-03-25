@@ -174,6 +174,28 @@ describe('PUT /community-businesses', () => {
       expect(res.statusCode).toBe(400);
     });
 
+    test('cannot update own temporary community business', async () => {
+
+      const resCreate = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/register/temporary',
+        credentials: adminCreds,
+        payload: { orgName: 'Shinra Electric Power Company' },
+      });
+      expect(resCreate.statusCode).toBe(200);
+      const { communityBusiness: tempCb } = (<any> resCreate.result).result;
+      const res = await server.inject({
+        method: 'PUT',
+        url: `/v1/community-businesses/${tempCb.id}`,
+        payload: {
+          name: 'Not Temp',
+        },
+        credentials: adminCreds,
+      });
+
+      expect(res.statusCode).toBe(403);
+    });
+
     test.skip('updating child community business address updates coordinates', async () => {});
     test.skip('updating child community business post code updates coordinates', async () => {});
   });
