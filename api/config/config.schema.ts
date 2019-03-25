@@ -61,7 +61,8 @@ export default Joi.object({
     }).required(),
   }).required(),
   email: Joi.object({
-    postmark_key: Joi.string().required(),
+    postmarkKey: Joi.string().required(),
+    fromAddress: Joi.string().email().required(),
   }).required(),
   auth: Joi.object({
     standard: {

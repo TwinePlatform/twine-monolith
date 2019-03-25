@@ -133,7 +133,8 @@ describe('Config', () => {
         },
       },
       email: {
-        postmark_key: 'foo',
+        postmarkKey: 'foo',
+        fromAddress: 'boo@coo.com',
       },
       auth: {
         standard: {
@@ -186,7 +187,8 @@ describe('Config', () => {
         },
       },
       email: {
-        postmark_key: '',
+        postmarkKey: '',
+        fromAddress: 'fooo',
       },
       auth: {
         standard: {

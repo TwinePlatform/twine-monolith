@@ -7,12 +7,12 @@ const config = getConfig(process.env.NODE_ENV);
 const emailOptions = {
   to: 'hi@hello.com',
   from: 'bye@seeya.com',
-  templateId: EmailTemplate.CB_ADMIN_WELCOME,
+  templateId: EmailTemplate.WELCOME_CB_ADMIN,
   templateModel: {},
 };
 
 describe('Email Service', () => {
-  const emailService = emailInitialiser.init({ apiKey: config.email.postmark_key });
+  const emailService = emailInitialiser.init({ apiKey: config.email.postmarkKey });
 
   describe('::send', () => {
     test('Correct email options throws error due to non existent template', async () => {

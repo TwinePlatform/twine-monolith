@@ -87,7 +87,7 @@ const routes: Hapi.ServerRoute[] = [
         await EmailService.send({
           from: 'visitorapp@powertochange.org.uk', // TODO - this should not be hardcoded
           to: visitor.email,
-          templateId: EmailTemplate.VISITOR_WELCOME,
+          templateId: EmailTemplate.WELCOME_VISITOR,
           templateModel: { name: visitor.name, organisation: cb.name },
           attachments: [{
             name: `${visitor.name}-QrCode.pdf`,

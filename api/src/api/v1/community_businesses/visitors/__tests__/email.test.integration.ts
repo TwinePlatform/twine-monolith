@@ -49,7 +49,7 @@ describe('API /community-businesses/{id}/visitors', () => {
     expect(mock).toHaveBeenCalledTimes(1);
     expect((<any> mock.mock.calls[0])[0]).toEqual(expect.objectContaining({
       to: '1498@aperturescience.com',
-      templateId: EmailTemplate.VISITOR_WELCOME,
+      templateId: EmailTemplate.WELCOME_VISITOR,
       templateModel: { name: 'Chell', organisation: 'Aperture Science' },
       attachments: [
         expect.objectContaining({

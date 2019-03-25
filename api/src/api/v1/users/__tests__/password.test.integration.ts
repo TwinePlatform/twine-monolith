@@ -9,6 +9,7 @@ import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
 import { Users } from '../../../../models';
 
+
 describe('POST /users/password', () => {
   let server: Hapi.Server;
   let knex: Knex;

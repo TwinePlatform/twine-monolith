@@ -7,15 +7,15 @@ import {
   email as emailSchema,
   password as passwordSchema,
 } from './schema';
-import { EmailTemplate } from '../../../services/email/templates';
+import { Templates } from '../../../services/email';
 import { BoomWithValidation } from '../utils';
-import { AppEnum } from '../types';
+import { AppEnum } from '../../../types/internal';
 
 
 interface ForgotPasswordRequest extends Hapi.Request {
   payload: {
     email: string
-    redirect: AppEnum.ADMIN | AppEnum.VISITOR
+    redirect: AppEnum.ADMIN | AppEnum.VISITOR | AppEnum.DASHBOARD
   };
 }
 
@@ -38,26 +38,31 @@ const routes: Hapi.ServerRoute[] = [
       validate: {
         payload: {
           email: emailSchema.required(),
-          redirect: Joi.allow([AppEnum.ADMIN, AppEnum.VOLUNTEER]).default(AppEnum.ADMIN),
+          redirect: Joi.allow([
+            AppEnum.ADMIN,
+            AppEnum.VISITOR,
+            AppEnum.DASHBOARD,
+          ]).default(AppEnum.ADMIN),
         },
       },
       response: { schema: response },
     },
     handler: async (request: ForgotPasswordRequest, h: Hapi.ResponseToolkit) => {
-      const { server: { app: { knex, EmailService } }, payload: { email, redirect } } = request;
+      const {
+        server: { app: { knex, EmailService, config } },
+        payload: { email, redirect },
+      } = request;
       const user = await Users.getOne(knex, { where: { email } });
 
       if (!user) return Boom.badRequest('E-mail not recognised');
 
       const { token } = await Users.createPasswordResetToken(knex, user);
 
-      const templateId = redirect === AppEnum.ADMIN
-        ? EmailTemplate.ADMIN_APP_PASSWORD_RESET
-        : EmailTemplate.VISITOR_APP_PASSWORD_RESET;
+      const templateId = Templates.passwordResetForApp(redirect);
 
       try {
         await EmailService.send({
-          from: 'visitorapp@powertochange.org.uk',
+          from: config.email.fromAddress,
           to: email,
           templateId,
           templateModel: { email, token },

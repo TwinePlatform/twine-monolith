@@ -22,7 +22,8 @@ type WebConfig = {
 };
 
 type EmailConfig = {
-  postmark_key: string
+  postmarkKey: string
+  fromAddress: string
 };
 
 type AuthConfig = {

@@ -93,7 +93,7 @@ export default [
       await EmailService.send({
         from: 'visitorapp@powertochange.org.uk', // this shouldn't be hardcoded
         to: user.email,
-        templateId: EmailTemplate.CB_ADMIN_WELCOME,
+        templateId: EmailTemplate.WELCOME_CB_ADMIN,
         templateModel: { name: user.name, organisation: cb.name, token, email: user.email },
       });
 
