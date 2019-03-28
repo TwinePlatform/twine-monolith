@@ -1,6 +1,8 @@
-import { Environment } from './types';
+import { Environment, Config } from './types';
+import { DeepPartial } from '../src/types/internal';
 
-export default {
+
+const config: DeepPartial<Config> = {
   env: Environment.DEVELOPMENT,
   web: {
     port: 4000,
@@ -14,7 +16,7 @@ export default {
     connection: process.env.DATABASE_URL_DEVELOPMENT,
   },
   email: {
-    postmark_key: process.env.POSTMARK_KEY_DEVELOPMENT,
+    postmarkKey: process.env.POSTMARK_KEY_DEVELOPMENT,
   },
   auth: {
     standard: {
@@ -26,3 +28,5 @@ export default {
     },
   },
 };
+
+export default config;

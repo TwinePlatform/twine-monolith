@@ -28,7 +28,7 @@ declare module 'hapi' {
 export default (server: Hapi.Server, config: Config) => {
   server.app.config = config;
   server.app.knex = Knex(config.knex);
-  server.app.EmailService = emailInitialiser.init({ apiKey: config.email.postmark_key });
+  server.app.EmailService = emailInitialiser.init({ apiKey: config.email.postmarkKey });
 
   server.decorate('server', 'shutdown', async (graceful = true) => {
     /* istanbul ignore else */

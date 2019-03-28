@@ -930,5 +930,20 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
       expect(res.statusCode).toBe(400);
     });
+
+    test('ERROR - fails when activity is invalid', async () => {
+      const logs = [
+        { activity: 'Doesn\'t exist', duration: { minutes: 20 }, userId: 1 },
+      ];
+
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: vAdminCreds,
+        payload: logs,
+      });
+
+      expect(res.statusCode).toBe(400);
+    });
   });
 });

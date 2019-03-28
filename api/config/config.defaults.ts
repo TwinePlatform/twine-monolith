@@ -5,9 +5,10 @@
  * Merged into environment-specific configurations
  */
 import * as path from 'path';
-import { Environment } from './types';
+import { Environment, Config } from './types';
+import { DeepPartial } from '../src/types/internal';
 
-export default {
+const config: DeepPartial<Config> = {
   root: path.resolve(__dirname, '..'),
   env: Environment.DEVELOPMENT,
   web: {
@@ -79,4 +80,9 @@ export default {
   qrcode: {
     secret: process.env.QRCODE_HMAC_SECRET,
   },
+  email: {
+    fromAddress: 'visitorapp@powertochange.org.uk',
+  },
 };
+
+export default config;

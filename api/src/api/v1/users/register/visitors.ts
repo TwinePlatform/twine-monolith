@@ -136,7 +136,7 @@ export default [
         {
           from: 'visitorapp@powertochange.org.uk', // this shouldn't be hardcoded
           to: visitor.email,
-          templateId: EmailTemplate.VISITOR_WELCOME,
+          templateId: EmailTemplate.WELCOME_VISITOR,
           templateModel: { name: visitor.name, organisation: cb.name },
           attachments: [{
             name: `${visitor.name}-QrCode.pdf`,
@@ -147,7 +147,7 @@ export default [
         {
           from: 'visitorapp@powertochange.org.uk', // this shouldn't be hardcoded
           to: admin.email,
-          templateId: EmailTemplate.CB_ADMIN_NEW_VISITOR,
+          templateId: EmailTemplate.NEW_VISITOR_CB_ADMIN,
           templateModel: { name: visitor.name, email: visitor.email },
           attachments: [{
             name: `${visitor.name}-QrCode.pdf`,

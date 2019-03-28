@@ -433,14 +433,7 @@ const routes: Hapi.ServerRoute[] = [
         {
           fields: ['duration'],
           where: { organisationId: communityBusiness.id },
-          whereBetween: since || until
-            ? {
-              startedAt: [
-                since || new Date(0),
-                until || new Date(),
-              ],
-            }
-            : undefined,
+          whereBetween: { startedAt: [since, until] },
         }
       );
 

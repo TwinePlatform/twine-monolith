@@ -1,6 +1,7 @@
-import { Environment } from './types';
+import { Environment, Config } from './types';
+import { DeepPartial } from '../src/types/internal';
 
-export default {
+const config: DeepPartial<Config> = {
   env: Environment.PRODUCTION,
   web: {
     host: process.env.HOST || '0.0.0.0',
@@ -19,6 +20,8 @@ export default {
     },
   },
   email: {
-    postmark_key: process.env.POSTMARK_KEY_PRODUCTION,
+    postmarkKey: process.env.POSTMARK_KEY_PRODUCTION,
   },
 };
+
+export default config;

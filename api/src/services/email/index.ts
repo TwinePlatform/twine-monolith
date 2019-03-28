@@ -1,5 +1,5 @@
 import * as Postmark from 'postmark';
-import { EmailTemplate } from './templates';
+import { EmailTemplate, Templates } from './templates';
 
 type Attachment = {
   name: string,
@@ -62,4 +62,4 @@ const emailInitialiser: EmailInitialiser = {
   },
 };
 
-export { emailInitialiser };
+export { emailInitialiser, Templates };
