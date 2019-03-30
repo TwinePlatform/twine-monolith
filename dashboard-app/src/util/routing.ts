@@ -1,6 +1,8 @@
+import qs from 'querystring';
 import { AxiosError } from 'axios';
-import { Response } from '../api';
 import { Dictionary } from 'ramda';
+import { RouteComponentProps } from 'react-router-dom';
+import { Response } from '../api';
 
 /**
  * Utility function to support client-side redirects based on
@@ -48,3 +50,10 @@ export const redirectOnError = (
     historyPush(redirs.default);
   }
 };
+
+
+export const getQueryObjectFromProps = <T extends RouteComponentProps>(props: T) =>
+  qs.parse(props.location.search.replace('?', ''));
+
+export const withParams = (path: string, params: Dictionary<string>) =>
+  `${path}?${qs.stringify(params)}`;

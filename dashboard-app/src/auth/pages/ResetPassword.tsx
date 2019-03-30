@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import * as Joi from 'joi';
-import qs from 'querystring';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { Formik, Form as _Form } from 'formik';
@@ -9,7 +8,7 @@ import { CbAdmins, Response } from '../../api';
 import Input from '../../components/Input';
 import { SubmitButton } from '../../components/Buttons';
 import NavHeader from '../../components/NavHeader/NavHeader';
-import { redirectOnError } from '../../util/routing';
+import { redirectOnError, withParams, getQueryObjectFromProps } from '../../util/routing';
 import { validateForm } from '../../util/forms';
 import { AxiosError } from 'axios';
 
@@ -55,7 +54,7 @@ const ResetPassword: React.SFC<ResetPasswordProps> = (props) => (
           <Formik
             initialValues={{ password: '', passwordConfirm: '' }}
             onSubmit={(values, actions) => {
-              const query = qs.parse(props.location.search.replace('?', ''));
+              const query = getQueryObjectFromProps(props);
               const email = typeof query.email === 'string' ? query.email : query.email[0];
 
               CbAdmins.resetPassword({
@@ -63,7 +62,8 @@ const ResetPassword: React.SFC<ResetPasswordProps> = (props) => (
                 email,
                 token: props.match.params.token,
               })
-                .then(() => props.history.push('/login'))
+                .then(() => props.history.push(
+                  withParams('/login', { referrer: 'reset_password' })))
                 .catch((err: AxiosError) => {
                   if (!err.response) {
                     redirectOnError(props.history.push, err);

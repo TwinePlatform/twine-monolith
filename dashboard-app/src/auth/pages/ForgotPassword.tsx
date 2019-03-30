@@ -8,7 +8,7 @@ import { CbAdmins, Response } from '../../api';
 import Input from '../../components/Input';
 import { SubmitButton } from '../../components/Buttons';
 import NavHeader from '../../components/NavHeader/NavHeader';
-import { redirectOnError } from '../../util/routing';
+import { redirectOnError, withParams } from '../../util/routing';
 import { validateForm } from '../../util/forms';
 import { AxiosError } from 'axios';
 
@@ -32,7 +32,7 @@ const Form = styled(_Form)`
 const createSubmitHandler = (props: ForgotPasswordProps) => {
   return (values: { email: string }, actions: FormikActions<{ email: string }>) => {
     CbAdmins.forgotPassword(values)
-      .then(() => props.history.push('/login'))
+      .then(() => props.history.push(withParams('/login', { referrer: 'forgot_password' })))
       .catch((err: AxiosError) => {
         const response = err.response;
 

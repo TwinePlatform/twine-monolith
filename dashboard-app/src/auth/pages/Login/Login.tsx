@@ -3,10 +3,12 @@ import styled from 'styled-components';
 import { Link as L, withRouter, RouteComponentProps } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { Form as _Form, FormikActions } from 'formik';
+import { Notification } from 'react-notification';
 import { CbAdmins, Response } from '../../../api';
 import LoginForm, { FormValues } from './LoginForm';
 import { H1, H4 } from '../../../components/Headings';
-import { redirectOnError } from '../../../util/routing';
+import { redirectOnError, getQueryObjectFromProps } from '../../../util/routing';
+import { colors } from '../../../styles/style_guide';
 
 
 /**
@@ -46,6 +48,20 @@ const createSubmitHandler = (props: LoginProps) =>
         }
       });
 
+// Derive notification message from "referrer" query param
+const getMessage = (props: LoginProps) => {
+  switch (getQueryObjectFromProps(props).referrer) {
+    case 'forgot_password':
+      return 'Password reset e-mail has been sent';
+
+    case 'reset_password':
+      return 'Password has been reset!';
+
+    default:
+      return '';
+  }
+};
+
 
 /**
  * Component
@@ -73,6 +89,18 @@ const Login: React.SFC<LoginProps> = (props) => (
           <Link to="/password/forgot">Forgot your password?</Link>
         </Row>
       </Col>
+    </Row>
+    <Row center="xs">
+      <Notification
+        isActive={getMessage(props).length > 0}
+        message={getMessage(props)}
+        barStyle={{
+          backgroundColor: colors.dark,
+          left: getMessage(props).length > 0 ? 'inherit' : '-100%',
+          marginTop: '3rem',
+          borderRadius: '0.2rem',
+        }}
+      />
     </Row>
   </Grid>
 );
