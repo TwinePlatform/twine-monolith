@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
 import { Route, RouteProps, Redirect } from 'react-router-dom';
 import { FullScreenBeatLoader } from '../../components/Loaders';
 import { colors } from '../../styles/style_guide';
@@ -17,47 +16,37 @@ enum AuthStatusEnum {
 
 interface PrivateRouteProps extends RouteProps {}
 
-interface PrivateRouteState {
-  authStatus: AuthStatusEnum;
-}
 
+/**
+ * Component
+ */
+const PrivateRoute: React.SFC<PrivateRouteProps> = (props) => {
+  const { component: Comp, ...rest } = props;
+  const [authStatus, setAuthStatus] = useState(AuthStatusEnum.PENDING);
 
-export default class PrivateRoute extends Component<PrivateRouteProps, PrivateRouteState> {
-
-  static propTypes = {
-    component: PropTypes.oneOfType([PropTypes.func, PropTypes.element]).isRequired,
-  };
-
-  state = {
-    authStatus: AuthStatusEnum.PENDING,
-  };
-
-  componentDidMount () {
+  useEffect(() => {
     Roles.get()
-      .then(() => this.setState({ authStatus: AuthStatusEnum.SUCCESS }))
-      .catch(() => this.setState({ authStatus: AuthStatusEnum.FAILURE }));
+      .then(() => setAuthStatus(AuthStatusEnum.SUCCESS))
+      .catch(() => setAuthStatus(AuthStatusEnum.FAILURE));
+  });
+
+  switch (authStatus) {
+    case AuthStatusEnum.PENDING:
+      return (
+        <FullScreenBeatLoader color={colors.highlight_primary} />
+      );
+
+    case AuthStatusEnum.SUCCESS:
+      return (
+        <Route {...rest} component={Comp} />
+      );
+
+    case AuthStatusEnum.FAILURE:
+    default:
+      return (
+        <Redirect to={{ pathname: '/login' }} />
+      );
   }
+};
 
-  render () {
-    const { component: Comp, ...rest } = this.props;
-
-    switch (this.state.authStatus) {
-      case AuthStatusEnum.PENDING:
-        return (
-          <FullScreenBeatLoader color={colors.highlight_primary} />
-        );
-
-      case AuthStatusEnum.SUCCESS:
-        return (
-          <Route {...rest} component={Comp} />
-        );
-
-      case AuthStatusEnum.FAILURE:
-      default:
-        return (
-          <Redirect to={{ pathname: '/login' }} />
-        );
-    }
-
-  }
-}
+export default PrivateRoute;
