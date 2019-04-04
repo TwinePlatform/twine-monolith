@@ -1,7 +1,7 @@
 {
-  "name": "powertochange",
-  "version": "1.1.1",
-  "description": "powertochange: An Ionic project",
+  "name": "twine",
+  "version": "1.5.7",
+  "description": "Volunteer app for the Twine Platform",
   "dependencies": {
     "cordova-android": "7.0.0",
     "cordova-browser": "5.0.4",
