@@ -1,0 +1,28 @@
+<div class="bar bar-footer bar-subfooter bar-assertive bar-offline-mode ng-hide" ng-show="offlineMode">
+    <div class="title title-left">Offline mode: <span>{{ offlineLogsToPush() }}</span> log<span ng-if="offlineLogsToPush() !== 1">s</span> need<span ng-if="offlineLogsToPush() === 1">s</span> syncing </div>
+    <a href="#" class="button button-small button-light button-outline" ng-click="syncOfflineData()">Sync</a>
+</div>
+
+<ion-tabs ng-if="currentUser.role==='VOLUNTEER'" class="tabs-icon-top">
+    <ion-tab title="Dashboard" icon="icon-custom-dashboard" href="#/tab/dashboard">
+        <ion-nav-view name="dashboard-tab" ng-init="refreshDashboard()"></ion-nav-view>
+    </ion-tab>
+    <ion-tab title="View logs" icon="icon-custom-logs" href="#/tab/view-logs">
+        <ion-nav-view name="view-logs-tab"></ion-nav-view>
+    </ion-tab>
+    <ion-tab title="Settings" icon="icon-custom-settings" href="#/tab/settings">
+        <ion-nav-view name="settings-tab"></ion-nav-view>
+    </ion-tab>
+</ion-tabs>
+
+<ion-tabs style="border-top: 1px solid #ccc" ng-if="['VOLUNTEER_ADMIN', 'CB_ADMIN'].includes(currentUser.role)" class="tabs-icon-top">
+    <ion-tab title="View volunteers" icon="icon-custom-volunteers" href="#/tab/volunteers">
+        <ion-nav-view name="view-volunteers-tab"></ion-nav-view>
+    </ion-tab>
+    <ion-tab title="View logs" icon="icon-custom-logs" href="#/tab/view-logs">
+        <ion-nav-view name="view-logs-tab"></ion-nav-view>
+    </ion-tab>
+    <ion-tab title="Settings" icon="icon-custom-settings" href="#/tab/settings">
+        <ion-nav-view name="settings-tab"></ion-nav-view>
+    </ion-tab>
+</ion-tabs>

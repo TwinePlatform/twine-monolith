@@ -1,0 +1,20 @@
+body, .ionic-body, input, button, select, textarea, h1, h2, h3, h4, h5, h6 {
+	font-family: -apple-system;
+	font-family: "Quicksand", "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+	font-weight: 400;
+}
+// text
+h1, h2, h3, h4 {
+	color: $positive;
+}
+// content areas
+.content {
+	// ordered list
+	ol {
+		list-style: decimal;
+		li {
+			margin-bottom: 10px;
+			margin-left: 15px;
+		}
+	}
+}

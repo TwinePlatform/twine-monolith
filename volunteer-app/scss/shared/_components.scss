@@ -1,0 +1,191 @@
+// click preventer
+.click-preventer {
+	position: fixed;
+	background: rgba(0,0,0,0);
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	z-index: 100;
+}
+
+// header
+.bar.bar-positive {
+	background-image: none;
+	.title {
+		color: white;
+		font-size: 20px;
+		text-transform: uppercase;
+		font-weight: 700;
+	}
+}
+
+// organisation bar
+$fontsize: 15px;
+$subsize: $fontsize * 2;
+.bar-subheader-organisation {
+	// background-color: #4FAAD0;
+	// background-color: $grey-light;
+	background-color: $positive;
+	background-image: none;
+	height: $subsize;
+	.title {
+		color: white;
+		color: $energized;
+		height: $subsize;
+		line-height: $subsize;
+		font-size: $fontsize;
+		font-weight: 700;
+	}
+}
+// ios
+.has-subheader-organisation {
+	top: 72px;
+}
+.platform-ios.platform-cordova .has-subheader-organisation {
+	top: 92px !important;
+}
+// android
+.platform-android .bar-subheader-organisation {
+	top: 93px;
+	.title {
+		font-size: $fontsize;
+		height: $subsize - 1;
+		line-height: $subsize;
+	}
+}
+.platform-android .has-subheader-organisation {
+	top: 122px;
+	bottom: 0;
+}
+
+// logo
+.logo {
+	margin: 10px auto;
+    display: block;
+    width: 90px;
+}
+
+// buttons
+.button {
+	font-weight: 700;
+	text-transform: uppercase;
+}
+.button-faint {
+	opacity: 0.1;
+}
+.button-energized:not(.button-clear) {
+	color: $dark !important;
+}
+
+// popups
+.popup-title {
+	font-weight: 700;
+}
+.popup-container.error .popup-title {
+    color: $assertive;
+}
+
+// shout
+.shout {
+	text-align: center;
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	z-index: 3000;
+	left: 0;
+	top: 0;
+	pointer-events: none;
+	&:before {
+		content: '';
+		display: inline-block;
+		height: 100%;
+		vertical-align: middle;
+		margin-right: -0.25em;
+	}
+	.shout-content {
+		transition: all 0.3s;
+		display: inline-block;
+		vertical-align: middle;
+		width: 300px;
+		padding: 10px 10px;
+		background: rgba(0, 0, 0, 0.8);
+		border-radius: 5px;
+		color: white;
+		font-size: 15px;
+
+		p {
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+
+// forms
+.item-divider {
+	font-weight: 700;
+}
+select[disabled], .item-select-disabled:after {
+	opacity: 0.4;
+}
+.input-label {
+	font-size: 15px;
+	font-weight: 600;
+}
+// ios label misalignment fix
+.platform-ios .input-label {
+	top: -2px;
+	position: relative;
+}
+.item-checkbox {
+	background-color: #eee;
+	font-size: 15px;
+	font-weight: 600;
+	color: $positive;
+}
+.item-input {
+	input, textarea {
+		&.text-right {
+			padding-right: 21px !important;
+		}
+	}
+}
+
+// datepickers
+.datepicker, input[readonly].datepicker {
+	background-color: white;
+}
+
+// offline mode
+.bar-subfooter.bar-offline-mode {
+	bottom: 49px;
+
+	.platform-android & {
+		bottom: 0;
+	}
+
+	.title {
+		font-size: 15px;
+	}
+	.button {
+		&.activated {
+			background-color: darken($assertive, 10);
+		}
+	}
+}
+.offline-mode.platform-ios .scroll-content.has-tabs {
+    bottom: 94px;
+}
+.offline-mode.platform-android .scroll-content.has-tabs-top {
+    bottom: 44px;
+}
+
+// tabs
+.tabs-icon-top > .tabs .tab-item, .tabs-icon-top.tabs .tab-item, .tabs-icon-bottom > .tabs .tab-item, .tabs-icon-bottom.tabs .tab-item {
+	text-transform: uppercase;
+	font-weight: 700;
+}
+.tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
+	background-color: darken($positive, 5);
+}

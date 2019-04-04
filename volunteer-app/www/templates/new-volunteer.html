@@ -1,0 +1,96 @@
+<ion-view hide-back-button="{{isAndroid}}" title="Register Volunteer">
+    <ion-content padding="true" class="has-header register">
+        <!-- form#register -->
+        <form id="register" name="register" class="list" ng-submit="processForm(register)" novalidate>
+            <ion-list>
+                <!-- name -->
+                <span class="input-label">Full name</span>
+                <label class="item item-input">
+                    <input type="text" name="name" id="name" placeholder="E.g. Jon Smith" ng-model="formData.name" required>
+                </label>
+                <label class="error block text-right padding assertive" ng-show="register.name.$invalid && formSubmitted" for="name">
+                    Please enter volunteer's full name
+                </label>
+                <!-- /name -->
+
+                <!-- email -->
+                <span class="input-label" style="max-width: 100%; width: 100%"><span style="width: 90%; display: inline-block">Email</span><span align="right" style="width: 10%; display: inline-block"><i ng-click="infoShow()" class="icon ion-help-circled large"></i></span></span>
+
+                <label class="item item-input">
+                    <input type="email" name="email" id="email" placeholder="E.g. jon@smith.com" ng-model="formData.email" ng-pattern="/^[\w.%+\-]+@[\w.\-]+\.[A-Za-z]{2,6}$/" required>
+                </label>
+                <label class="error block text-right padding assertive" ng-show="register.email.$invalid && formSubmitted" for="email">
+                    Please enter a valid email address
+                </label>
+                <!-- /email -->
+
+                <!-- password -->
+                <span class="input-label" style="max-width: 100%; width: 100%"><span style="width: 90%; display: inline-block">Create password</span><span align="right" style="width: 10%; display: inline-block"><i ng-click="infoShow()" class="icon ion-help-circled large"></i></span></span>
+
+                <label class="item item-input">
+                    <input type="password" name="password" id="password" placeholder="Enter password" ng-model="formData.password" minlength="8" ng-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!#$%&()*+,\-./\\:;<=>@[\]^_{|}~? ])(?=.{8,})$" required>
+                </label>
+                <label class="error block text-right padding assertive" ng-show="register.password.$invalid && formSubmitted" for="password">
+                    Please enter at least 8 characters, with at least one upper- and lower-case, one symbol and one number
+                </label>
+                <!-- /password -->
+
+                <div class="spacer-20"></div>
+
+                <!-- phone -->
+                <span class="input-label">Phone number</span>
+                <label class="item item-input">
+                    <input type="tel" name="phone" id="phone" placeholder="E.g. 07979799799" ng-model="formData.phoneNumber" minlength="6" maxlength="15" ng-pattern="/^([0-9|+|*|#|\-]+)$/" required>
+                </label>
+                <label class="error block text-right padding assertive" ng-show="register.phone.$invalid && formSubmitted" for="phone">
+                    Please enter only digits or these symbols: *+#- (between 6 and 15 characters in length)
+                </label>
+                <!-- /phone -->
+
+                <!-- year of birth -->
+                <span class="input-label">Year of birth (optional)</span>
+                <label class="item item-select">
+                    <select ng-model="formData.birthYear" ng-options="option for option in years track by option" name="yearOfBirth" id="yearOfBirth">
+                        <option disabled value="">Select year</option>
+                        <!--  -->
+                    </select>
+                </label>
+                <!-- /year of birth -->
+
+                <!-- gender -->
+                <span class="input-label">Gender (optional)</span>
+                <label class="item item-select" ng-class="{'item-select-disabled': gendersDisabled}">
+                    <select ng-model="formData.gender" ng-options="option.name for option in genders track by option.id" name="gender" id="gender" ng-disabled="gendersDisabled">
+                        <option disabled value="">Select gender</option>
+                        <!--  -->
+                    </select>
+                </label>
+                <!-- /gender -->
+
+                <!-- organisationName -->
+                <span class="input-label">Organisation</span>
+                <label class="item item-select">
+                    <select disabled>
+                        <option selected>{{organisationName}}</option>
+                    </select>
+                </label>
+                <!-- /organisationName -->
+
+                <div class="spacer-20"></div>
+
+
+            </ion-list>
+
+            <div class="spacer-10"></div>
+
+            <button type="submit" class="button button-energized button-block">Add volunteer</button>
+
+            <div class="spacer-20"></div>
+
+        </form>
+        <!-- /form#register -->
+
+        <!-- <a href="#/tab/dashboard" class="button button-positive button-block button-clear button-faint">Skip to app</a> -->
+
+    </ion-content>
+</ion-view>

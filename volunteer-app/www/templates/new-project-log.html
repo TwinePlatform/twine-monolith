@@ -1,0 +1,24 @@
+<ion-view title="New project" hide-back-button="{{isAndroid}}">
+
+    <ion-content padding="true" class="has-header  has-header-tabs">
+
+    <!-- form#createProject -->
+        <form id="createProject" name="createProject" class="list" ng-submit="processForm(createProject)" novalidate>
+
+            <!-- project name -->
+            <span class="input-label">What is the name of the project?</span>
+            <label class="item item-input">
+                <input type="text" name="name" id="name" ng-model="formData.name" required>
+            </label>
+            <label class="error block text-right padding assertive" ng-show="createProject.name.$invalid && formSubmitted" for="name">
+                Please enter a project name
+            </label>
+
+            <!-- buttons -->
+            <button type="submit" ng-disabled="createProject.$invalid" class="button button-energized button-block">Save</button>
+
+        </form>
+        <!-- /form#createProject -->
+
+    </ion-content>
+</ion-view>

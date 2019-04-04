@@ -1,0 +1,54 @@
+/*
+ * Labelled Input component
+ */
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { Input, Label } from './base';
+import { colors } from '../../style_guide';
+
+
+const ErrorText = styled.span`
+  color: ${colors.error};
+  display: ${props => (props.show ? 'inline' : 'none')};
+`;
+
+const InputContainer = styled.div`
+  width: 100%;
+`;
+
+
+const LabelledInput = (props) => {
+  const { id, label, error, ...rest } = props;
+
+  return (
+    <InputContainer>
+      <div>
+        <Label htmlFor={id} display="inline">
+          {[
+            label,
+            error ? ': ' : '',
+          ]}
+        </Label>
+        <ErrorText key={1} show={error}>{error}</ErrorText>
+      </div>
+      <Input id={id} {...rest} />
+    </InputContainer>
+  );
+};
+
+
+LabelledInput.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.node.isRequired,
+  error: PropTypes.string,
+};
+
+LabelledInput.defaultProps = {
+  error: null,
+};
+
+
+export default styled(LabelledInput)`
+  margin-bottom: 1em;
+`;

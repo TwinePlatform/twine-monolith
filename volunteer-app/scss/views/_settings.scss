@@ -1,0 +1,23 @@
+.settings {
+
+	// dividers
+	.item-divider {
+		p.wrap {
+			white-space: normal;
+			line-height: 1em;
+			margin-top: 3px;
+			margin-bottom: 3px;
+		}
+	}
+
+	// input labels
+	.input-label {
+		font-size: 15px;
+	}
+
+	// item buttons
+	.item-button {
+		padding: 7px 16px;
+	}
+
+}

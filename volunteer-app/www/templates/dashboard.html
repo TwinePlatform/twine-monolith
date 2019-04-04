@@ -1,0 +1,78 @@
+<ion-view title="Dashboard" hide-back-button="true">
+
+    <!--<organisation-subheader></organisation-subheader>-->
+    <div class="noResults fadeIn" ng-if="totalHours === 0">
+        <h4 class="text-center label">You haven't created any hours yet.</h4>
+    </div>
+
+    <ion-content scroll="false" overflow-scroll="false" has-bouncing="true" class="has-header dashboard">
+
+        <div class="total-hours-container padding-left padding-right row">
+            <div class="col text-center" style="background-color: white; border: 1px solid gainsboro;">
+                <h4 class="dashboard-label">Total Hours</h4>
+                <span class="total-hours animated fadeIn" ng-class="{'ng-hide': totalHours < 0}" ng-bind-html="totalHours | hoursAndMinutesAsString"></span>
+            </div>
+            <!--<div class="col chart-container">-->
+                <!--&lt;!&ndash; <canvas id="logsChart" class="chart" width="400" height="100"></canvas> &ndash;&gt;-->
+            <!--</div>-->
+        </div>
+
+        <!-- .hours-summary -->
+        <div class="hours-summary" ng-if="totalHours > 0">
+            <ion-list>
+                <ion-item class="hours-summary-today">
+                    <div class="row row-no-padding">
+                        <div class="col">
+                            <strong>
+                                <span class="animated fadeIn" ng-class="{'ng-hide': todaysTotalHours < 0}" ng-bind-html="todaysTotalHours | hoursAndMinutesAsString"></span>
+                            </strong>
+                        </div>
+                        <div class="col text-right">
+                            <span class="bold">Today</span>
+                        </div>
+                    </div>
+                </ion-item>
+                <ion-item class="hours-summary-other" ng-if="!offlineMode">
+                    <div class="row row-no-padding">
+                        <div class="col">
+                            <span class="animated fadeIn unbold" ng-class="{'ng-hide': last7DaysHours < 0}" ng-bind-html="last7DaysHours | hoursAndMinutesAsString"></span>
+                        </div>
+                        <div class="col text-right">
+                            Last 7 days
+                        </div>
+                    </div>
+                </ion-item>
+                <ion-item class="hours-summary-other" ng-if="!offlineMode">
+                    <div class="row row-no-padding">
+                        <div class="col">
+                            <span class="animated fadeIn unbold" ng-class="{'ng-hide': last30DaysHours < 0}" ng-bind-html="last30DaysHours | hoursAndMinutesAsString"></span>
+                        </div>
+                        <div class="col text-right">
+                            Last 30 days
+                        </div>
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+        <!-- /.hours-summary -->
+
+        <div class="spacer-10"></div>
+
+        <!-- .summary-box -->
+        <div class="summary-box text-center" ng-if="totalUsers && totalVolunteeredMinutes && !offlineMode">
+            Last week, <strong>{{ totalUsers || 0}} <span ng-if="totalUsers > 1">people</span><span ng-if="totalUsers === 1">person</span></strong> gave <strong><span ng-bind-html="totalVolunteeredMinutes | hoursAndMinutesAsString">0 min</span> </strong>to <strong>{{ organisationName }}</strong>
+        </div>
+        <!-- /.summary-box -->
+
+        <!-- pending approval box -->
+        <div class="summary-box text-center" ng-if="$storage.user.status === 'pending'">
+            <i class="ion-information-circled"></i>
+            Your account is pending approval
+        </div>
+        <!-- /.pending approval box -->
+            <div ng-if="totalHours === 0" class="button-add-message">
+                <p>Click on this button to start adding hours</p>
+            </div>
+            <a ui-sref="tabs.new-log" class="button button-energized button-block icon-left ion-plus button-add"></a>
+    </ion-content>
+</ion-view>

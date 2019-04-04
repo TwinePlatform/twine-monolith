@@ -1,0 +1,47 @@
+<ion-view hide-nav-bar="{{isAdmin}}" title="View logs">
+    <!--<organisation-subheader></organisation-subheader>-->
+    <div ng-if="noLogs" class="noResults">
+        <h4 class="text-center label">You haven't created any logs yet.</h4>
+    </div>
+
+    <ion-content padding="true" overflow-scroll="false" has-bouncing="true" ng-class="{'has-header' : isAdmin}" class="view-logs log-hours" >
+
+        <div class="padding text-center" ng-if="!logs">
+            <ion-spinner class="text-center"></ion-spinner>
+        </div>
+
+        <ion-list>
+            <ion-item style="margin-bottom: 10px" class="item-remove-animate" ng-class="{ 'needs-pushing': log.needs_pushing || log.is_future_log, 'deleted': log.deletedAt }" ng-repeat="log in logs | orderBy: ['-date_of_log','-modifiedAt']">
+                <p ng-if="log.needs_pushing">
+                    <i class="icon" ng-class="{ 'ion-alert': log.needs_pushing }"></i>
+                    <span ng-if="log.needs_pushing">Not pushed</span>
+                </p>
+                <p ng-if="log.is_future_log">
+                    <i class="icon ion-time" ng-class="{ 'ion-alert': log.is_future_log }"></i>
+                    <span ng-if="log.is_future_log">Pending: Future log</span>
+                </p>
+                <div style="max-width: 70%;float: left; overflow: hidden">
+                <h1 ng-bind-html="log.duration | hoursAndMinutesAsString"></h1>
+                <h3 style="color: black" ng-if="isAdmin"> {{log.userName}} <span style="font-size: 10px; color: gray">{{log.userId === currentUser.id ? 'me': ''}}</span></h3>
+                <p>{{ log.date_of_log.split(' ')[0] | date:'d MMM yyyy'}} @ {{ log.activity }}</p>
+                <p ng-if="log.project">{{ log.project }}</p>
+                </div>
+                <div class="button-bar">
+                    <a ng-if="!log.deleted_at" class="button button-positive button-block button-clear" ng-click="edit(log)" ng-disabled="log.previous_month"><i class="icon-custom-edit"></i> </a>
+                    <button ng-if="!log.deleted_at" class="button button-positive button-block button-clear" ng-click="delete(log)" ng-disabled="log.previous_month"><i class="icon-custom-delete"></i> </button>
+                    <span ng-if="log.deleted_at" class="button button-positive button-block button-clear">Deleted</span>
+                </div>
+            </ion-item>
+
+            <div class="spacer-100"></div>
+
+        </ion-list>
+
+    </ion-content>
+    <div ng-if="noLogs" class="button-add-message view-logs-button">
+        <p ng-if="!isAdmin">Click on this button to start logging hours</p>
+        <p  ng-if="isAdmin">Click on this button to start logging volunteer hours</p>
+    </div>
+    <a ui-sref="tabs.view-logs.new-log" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
+    </a>
+</ion-view>

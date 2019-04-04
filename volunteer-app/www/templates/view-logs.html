@@ -1,0 +1,10 @@
+<ion-view  view-title="View logs">
+    <ion-tabs id="tabs" class="tabs-striped tabs-top logs-tabs">
+        <ion-tab title="Hours" href="#/tab/view-logs/hours">
+            <ion-nav-view name="view-logs-hours-tab"></ion-nav-view>
+        </ion-tab>
+        <ion-tab ng-if="isAdmin" title="Projects" href="#/tab/view-logs/projects">
+            <ion-nav-view name="view-logs-projects-tab"></ion-nav-view>
+        </ion-tab>
+    </ion-tabs>
+</ion-view>

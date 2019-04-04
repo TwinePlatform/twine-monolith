@@ -1,0 +1,43 @@
+<ion-view hide-nav-bar="true" title="View volunteers">
+    <div class="bar bar-header item-input-inset search-bar">
+        <label class="item-input-wrapper">
+            <i class="icon ion-ios-search placeholder-icon"></i>
+            <input type="search" ng-model="searchParam" placeholder="Search" ng-keyup="search($event)">
+        </label>
+    </div>
+    <div class="noResults fadeIn" ng-if="noVolunteers">
+        <h4 class="text-center label">There are currently no volunteers in your organisation.</h4>
+    </div>
+    <ion-content overflow-scroll="false" has-bouncing="true" padding="true" class="space-top view-logs has-search">
+        <p class="no-logs text-center padding animate fadeIn absolute" ng-if="isOfflineMode">You can't manage volunteers offline.</p>
+
+        <div class="padding text-center" ng-if="!volunteers">
+            <ion-spinner class="text-center"></ion-spinner>
+        </div>
+        <ion-list>
+
+            <ion-item style="margin-bottom: 5px" class=" item-remove-animate" ng-repeat="volunteer in volunteers track by volunteer.id | orderBy: ['-createdAt','-updatedAt']">
+                <div style="float: left">
+                <h2>{{volunteer.name}} {{volunteer.id === currentUser.id ? '(me)': ''}}</h2>
+                <p> Joined {{ volunteer.createdAt }}</p>
+                <p ng-if="options.debug">id: {{ volunteer.id }}</p>
+                </div>
+                <div class="button-bar">
+                    <a ng-if="!volunteer.deletedAt" class="button button-positive  button-clear" ng-click="edit(volunteer)" ng-disabled="volunteer.previous_month"><i class="icon-custom-edit"></i></a>
+                    <button ng-if="!volunteer.deletedAt" class="button button-positive  button-clear" ng-click="delete(volunteer)" ng-disabled="{{volunteer.id === currentUser.id}}"><i class="icon-custom-delete"></i></button>
+                    <span ng-if="volunteer.deletedAt" class="button button-positive  button-clear">Deleted</span>
+                </div>
+            </ion-item>
+
+            <div class="spacer-100"></div>
+
+        </ion-list>
+
+    </ion-content>
+    <div ng-if="noVolunteers" class="button-add-message view-logs-button">
+        <p>Click on this button to start adding volunteers</p>
+    </div>
+    <a ui-sref="tabs.new-volunteer" class="button button-energized button-block icon-left ion-plus button-add view-logs-button">
+    </a>
+
+</ion-view>

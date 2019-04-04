@@ -1,0 +1,64 @@
+// view logs
+.view-logs {
+
+	.item {
+	
+		.icon {
+			color: $positive;
+		}
+
+		&.needs-pushing {
+			background-color: cornsilk;
+			.icon {
+				color: $assertive;
+				top: -12px;
+				span {
+					font-size: 10px;
+					position: absolute;
+					top: 83px;
+					left: -4px;
+					width: 40px;
+					display: block;
+					white-space: pre-wrap;
+					text-align: center;
+					line-height: 1em;
+				}
+			}
+		}
+
+		&.deleted {
+			opacity: 0.5;
+			.button-bar {
+				pointer-events: none;
+			}
+		}
+
+		h2 {
+			font-weight: bold;
+			.hours, .minutes {
+				.unit {
+					font-size: 13px;
+				}
+			}
+		}
+	}
+
+
+	.no-logs {
+		position: absolute;
+		width: 100%;
+		left: 0;
+	}
+
+	.button-bar {
+		max-width: 230px;
+	    float: right;
+	    .button {
+	    	min-height: 37px;
+	    	margin-bottom: 0;
+	    	&:before {
+	    		margin-top: -2px;
+	    	}
+	    }
+	}
+}

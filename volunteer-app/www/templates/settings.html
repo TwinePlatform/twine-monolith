@@ -1,0 +1,32 @@
+<ion-view title="Settings">
+
+    <!--<organisation-subheader></organisation-subheader>-->
+
+    <ion-content padding="true" class="has-header settings">
+        <form class="list">
+            <label class="input-label">Location reminders</label>
+            <ion-toggle toggle-class="toggle-positive" ng-change="locationReminders()" ng-model="locationRemindersSwitch">
+                <p style="text-overflow: clip; white-space: normal;">Receive a reminder to log your hours when you leave {{ organisationName }}</p>
+            </ion-toggle>
+        </form>
+
+        <!-- account settings -->
+        <label class="input-label">Account settings</label>
+        <div class="list">
+            <ion-item class="item-icon-right" ui-sref="tabs.profile">
+                My profile
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+        </div>
+        <!-- /account settings -->
+
+        <form class="list">
+            <label class="input-label">Information</label>
+            <ion-item class="item-icon-right" ui-sref="tabs.terms-and-conditions">Terms &amp; conditions
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </ion-item>
+        </form>
+
+        <a ng-click="logOut()" class="button-logout bold">Log out</a>
+    </ion-content>
+</ion-view>

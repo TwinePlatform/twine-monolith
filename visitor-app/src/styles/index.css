@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito:300,400,700');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 16px;
+  overflow: hidden;
+}

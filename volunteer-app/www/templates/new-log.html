@@ -1,0 +1,101 @@
+<ion-view title="Log hours" hide-back-button="{{isAndroid}}">
+
+    <!--<organisation-subheader></organisation-subheader>-->
+
+    <ion-content padding="true" class="has-header">
+
+    <!-- form#createLog -->
+        <form id="createLog" name="createLog" class="list" ng-submit="processForm(createLog)" novalidate>
+
+            <!-- name -->
+            <span  ng-if="isAdmin" class="input-label">Volunteer name</span>
+            <div ng-if="isAdmin">
+                <label class="item item-input">
+                    <input type="text" placeholder="Search"  ng-model="volunteerNameFilter" ng-change="filterVolunteersByName(this.volunteerNameFilter)">
+                </label>
+                <label class="item item-select" style="margin-bottom: 8px">
+                    <select  name="volunteers" id="volunteers" ng-model="selectedUser.id" ng-change="volunteerSelected(this.selectedUser.id)" convert-to-number>
+                        <option value="" selected disabled>{{noNameMatches ? 'No search matches' : 'Select volunteer'}}</option>
+                        <option ng-if="!isSelected(option.id)" ng-repeat="option in displayedVolunteers" value="{{option.id}}">{{option.name}}</option>
+                    </select>
+                </label>
+                <div class="selectedVolunteers" ng-repeat="option in selectedVolunteers">
+                    <i ng-click="removeFromSelected(option.id)" class="icon ion-close-circled large"></i>
+                    <span class="input-label">{{option.name}}</span>
+                </div>
+            </div>
+            <!-- /name -->
+
+            <!-- date -->
+            <span class="input-label">Date</span>
+            <label class="item item-input">
+                <input type="text" name="date_pretty" id="date_pretty" class="datepicker">
+            </label>
+            <label class="error block text-right padding assertive" ng-show="createLog.date.$invalid && formSubmitted" for="date">
+                Please select a date
+            </label>
+            <!-- /date -->
+
+            <!-- hours -->
+            <span class="input-label">Hours</span>
+            <label class="item item-select">
+                <select ng-model="formData.hours" ng-options="option.name for option in hours track by option.value" name="hours" id="hours" ng-change="calculateDuration(formData.hours.value, formData.minutes.value)">
+                    <option disabled value="" selected>Select hours</option>
+                    <!--  -->
+                </select>
+            </label>
+            <!-- /hours -->
+
+            <!-- minutes -->
+            <span class="input-label">Minutes</span>
+            <label class="item item-select">
+                <select ng-model="formData.minutes" ng-options="option.name for option in minutes track by option.value" name="minutes" id="minutes" ng-change="calculateDuration(formData.hours.value, formData.minutes.value)" ng-disabled="formData.hours.value == 24">
+                    <option disabled value="" selected>Select minutes</option>
+                    <!--  -->
+                </select>
+            </label>
+            <label class="error block text-right padding assertive" ng-show="createLog.duration.$invalid && formSubmitted" for="hours">
+                Please select a duration of at least 5 minutes
+            </label>
+            <label class="error block text-right padding assertive" ng-show="createLog.totalDurationToday.$invalid && formSubmitted" for="hours">
+                You cannot log more than 24 hours in a day.
+            </label>
+            <!-- /minutes -->
+
+            <!-- Activity -->
+            <span class="input-label">Activity</span>
+            <label class="item item-select">
+                <select required ng-model="formData.activity" name="activities" id="activities">
+                    <option  value="" disabled selected>Select activity</option>
+                    <option ng-repeat="option in activities track by option.id" value="{{option.name}}">{{option.name}}</option>
+                    <!--  -->
+                </select>
+            </label>
+            <!-- /Activity -->
+
+            <!-- duration -->
+            <label class="item item-input ng-hide">
+                <span class="input-label">Duration</span>
+                <input type="number" ng-model="formData.duration" id="duration" name="duration" ng-min="5" required>
+            </label>
+
+            <!-- Project -->
+            <span class="input-label" ng-if="hasProjects">Project (Optional)</span>
+            <label class="item item-select" ng-if="hasProjects">
+                <select ng-model="formData.project" name="project" id="project">
+                    <option value="" disabled selected>Select project</option>
+                    <option ng-repeat="option in projects track by option.id" value="{{option.name}}">{{option.name}}</option>
+                </select>
+            </label>
+            <!-- /Project -->
+
+            <!-- buttons -->
+            <button type="submit" ng-disabled="createLog.$invalid || (isAdmin && selectedVolunteers.length === 0)" class="button button-energized button-block">Log Hours</button>
+
+            <div class="log-spacer"></div>
+
+        </form>
+        <!-- /form#createLog -->
+
+    </ion-content>
+</ion-view>

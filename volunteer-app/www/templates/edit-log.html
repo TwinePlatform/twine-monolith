@@ -1,0 +1,88 @@
+<ion-view hide-back-button="{{isAndroid}}" title="Edit log">
+
+    <!--<organisation-subheader></organisation-subheader>-->
+
+    <ion-content padding="true" class="has-header ">
+        <form class="editLog" name="editLog" class="list" ng-submit="processForm(editLog)" novalidate>
+
+            <!-- date -->
+            <span class="input-label">Date</span>
+            <label class="item item-input">
+                <input type="text" name="date_pretty" id="date_pretty" ng-model="formData.date_pretty" class="datepicker">
+            </label>
+            <label class="error block text-right padding assertive" ng-show="editLog.date.$invalid && formSubmitted" for="date">
+                Please select a date
+            </label>
+            <!-- /date -->
+
+           <!-- hours -->
+            <span class="input-label">Hours</span>
+            <label class="item item-select">
+                <select ng-model="formData.hours" ng-options="option.name for option in hours track by option.value" name="hours" id="hours" ng-change="calculateDuration(formData.hours.value, formData.minutes.value)">
+                    <option disabled value="">Select hours</option>
+                    <!--  -->
+                </select>
+            </label>
+            <!-- /hours -->
+
+            <!-- minutes -->
+            <span class="input-label">Minutes</span>
+            <label class="item item-select">
+                <select ng-model="formData.minutes" ng-options="option.name for option in minutes track by option.value" name="minutes" id="minutes" ng-change="calculateDuration(formData.hours.value, formData.minutes.value)" ng-disabled="formData.hours.value == 24">
+                    <option disabled value="">Select minutes</option>
+                    <!--  -->
+                </select>
+            </label>
+            <label class="error block text-right padding assertive" ng-show="editLog.duration.$invalid && formSubmitted" for="hours">
+                Please select a duration of at least 5 minutes
+            </label>
+            <label class="error block text-right padding assertive" ng-show="editLog.totalDurationToday.$invalid && formSubmitted" for="hours">
+                You cannot log more than 24 hours in a day.
+            </label>
+            <!-- /minutes -->
+
+            <!-- Activity -->
+            <span class="input-label">Activity</span>
+            <label class="item item-select">
+                <select ng-model="formData.activity" name="activities" id="activities" required>
+                    <option ng-repeat="option in activities" ng-selected="option.name === formData.activity" value="{{option.name}}">{{option.name}}</option>
+                    <!--  -->
+                </select>
+            </label>
+            <!-- /Activity -->
+
+            <!-- Project -->
+            <span class="input-label" ng-if="hasProjects">Project (optional)</span>
+            <label class="item item-select" ng-if="hasProjects">
+                <select ng-model="formData.project" name="project" id="project">
+                    <option ng-repeat="option in projects track by option.id" ng-selected="option.name === formData.project" value="{{option.name}}">{{option.name}}</option>
+                </select>
+            </label>
+            <!-- /Project -->
+
+            <!-- duration -->
+            <label class="item item-input ng-hide">
+                <span class="input-label">Duration</span>
+                <input type="number" name="duration" id="duration" ng-model="formData.duration" ng-min="5" required>
+            </label>
+            <!-- /duration -->
+
+            <!-- id -->
+            <label class="item item-input" ng-show="options.debug">
+                <span class="input-label">Log id</span>
+                <input type="text" ng-model="formData.id" name="id" id="id" />
+            </label>
+            <!-- /id -->
+
+            <!-- offline id -->
+            <label class="item item-input" ng-show="options.debug">
+                <span class="input-label">Offline id</span>
+                <input type="text" ng-model="formData.offline_id" name="offline_id" id="offline_id" />
+            </label>
+            <!-- /offline id -->
+
+            <!-- buttons -->
+            <button type="submit" class="button button-energized button-block">Save</button>
+        </form>
+    </ion-content>
+</ion-view>
