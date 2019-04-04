@@ -45,7 +45,7 @@ export default async () => {
       ? await Volunteers.getOne(client, { where: { id: log.createdBy } })
       : null;
     const roles = creator
-      ? await Roles.fromUser(client, { userId: log.createdBy, organisationId: org.id })
+      ? await Roles.fromUserWithOrg(client, { userId: log.createdBy, organisationId: org.id })
       : null;
 
 
