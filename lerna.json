@@ -1,0 +1,11 @@
+{
+  "packages": [
+    "api",
+    "dashboard-app",
+    "temp-admin-dashboard-app",
+    "visitor-app",
+    "volunteer-app",
+    "packages/*"
+  ],
+  "version": "0.0.0"
+}

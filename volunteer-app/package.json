@@ -1,5 +1,5 @@
 {
-  "name": "twine",
+  "name": "volunteer-app",
   "version": "1.5.7",
   "description": "Volunteer app for the Twine Platform",
   "dependencies": {
