@@ -3,7 +3,15 @@ import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { has, mergeDeepRight, omit, keys, assoc } from 'ramda';
 import { Visitors, User, ModelQuery } from '../../../../models';
-import { query, filterQuery, response } from '../../users/schema';
+import {
+  query,
+  userName,
+  gender,
+  response,
+  email,
+  postCode,
+  phoneNumber,
+} from '../../users/schema';
 import { meOrId, id } from '../schema';
 import { GetVisitorsRequest, GetVisitorRequest } from '../../types';
 import { getCommunityBusiness, isChildOrganisation, isChildUser } from '../../prerequisites';
@@ -26,7 +34,15 @@ const routes: Hapi.ServerRoute[] = [
         params: { organisationId: meOrId.required() },
         query: {
           ...query,
-          ...filterQuery,
+          filter: Joi.object({
+            age: Joi.array().length(2).items(Joi.number().integer().min(0)),
+            gender,
+            name: userName,
+            email,
+            postCode,
+            phoneNumber,
+            visitActivity: Joi.string(),
+          }),
           visits: Joi.boolean().default(false),
         },
       },
