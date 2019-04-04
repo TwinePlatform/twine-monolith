@@ -12,6 +12,7 @@ import {
   Volunteers,
   Duration,
 } from '../../src/models';
+import { Roles } from '../../src/auth';
 
 
 const ignoreRe = new RegExp(
@@ -40,6 +41,13 @@ export default async () => {
   const data = (await Promise.all(logs.map(async (log) => {
     const user = await Volunteers.getOne(client, { where: { id: log.userId } });
     const org = await CommunityBusinesses.getOne(client, { where: { id: log.organisationId } });
+    const creator = log.createdBy
+      ? await Volunteers.getOne(client, { where: { id: log.createdBy } })
+      : null;
+    const roles = creator
+      ? await Roles.fromUser(client, { userId: log.createdBy, organisationId: org.id })
+      : null;
+
 
     if (ignoreRe.test(org.name) || org.name.includes('TEMPORARY') || org.name === 'as') {
       return null;
@@ -53,6 +61,10 @@ export default async () => {
         createdAt: log.createdAt && new Date(log.createdAt).toISOString(),
         modifiedAt: log.modifiedAt && new Date(log.modifiedAt).toISOString(),
         deletedAt: log.deletedAt && new Date(log.deletedAt).toISOString(),
+        creatorId: creator ? creator.id : '',
+        creatorName: creator ? creator.name : '',
+        creatorRole: roles && roles.length ? roles[0] : '',
+        organisationId: org.id,
         organisation: org.name,
         _360GivingId: org._360GivingId,
         sector: org.sector,
@@ -62,6 +74,7 @@ export default async () => {
         orgAddress2: org.address2,
         orgPostCode: org.postCode,
         orgTownCity: org.townCity,
+        userId: user.id,
         userName: user.name,
         gender: user.gender,
         birthYear: user.birthYear,
@@ -84,6 +97,10 @@ export default async () => {
       'createdAt',
       'modifiedAt',
       'deletedAt',
+      'creatorId',
+      'creatorName',
+      'creatorRole',
+      'organisationId',
       'organisation',
       '_360GivingId',
       'sector',
@@ -93,6 +110,7 @@ export default async () => {
       'orgAddress2',
       'orgPostCode',
       'orgTownCity',
+      'userId',
       'userName',
       'gender',
       'birthYear',

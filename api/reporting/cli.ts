@@ -19,5 +19,8 @@ const { _: args } = parse(process.argv.slice(2));
       console.log(error);
 
     }
+  } else {
+    console.log(`File does not exist: ${path.join(__dirname, 'reports', file)}`);
+
   }
 })();
