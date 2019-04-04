@@ -140,6 +140,23 @@ describe('API /community-businesses/{id}/visitors', () => {
       expect(result[1].visits.every((v: any) => v.name === 'Free Running'));
     });
 
+    test('filtered query using email', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors?'
+          + 'fields[]=name'
+          + '&filter[email]=1498@aperturescience.com',
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: [{ name: 'Chell' }],
+        meta: { total: 1 },
+      });
+      expect((<any> res.result).result).toHaveLength(1);
+    });
+
     test('query child organisation as TWINE_ADMIN', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
