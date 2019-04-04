@@ -3,6 +3,7 @@
   "version": "1.5.7",
   "description": "Volunteer app for the Twine Platform",
   "dependencies": {
+    "angular": "^1.4.3",
     "cordova-android": "7.0.0",
     "cordova-browser": "5.0.4",
     "cordova-ios": "4.4.0",
@@ -26,9 +27,14 @@
   },
   "devDependencies": {
     "@ionic/v1-toolkit": "1.0.8",
+    "angular-mocks": "^1.4.3",
     "bower": "^1.3.3",
     "gulp-util": "^2.2.14",
+    "jest": "^24.6.0",
     "shelljs": "^0.3.0"
+  },
+  "scripts": {
+    "test": "jest"
   },
   "cordovaPlugins": [
     "cordova-plugin-device",
