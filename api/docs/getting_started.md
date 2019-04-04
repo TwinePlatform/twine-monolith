@@ -71,6 +71,12 @@ The database uses a PostGIS extention for handling location queries. If not alre
 CREATE EXTENSION postgis;
 ```
 
+You'll also need to add the `CITEXT` extension to deal with case-insensitive fields:
+
+```SQL
+CREATE EXTENSION citext;
+```
+
 ## Configuration
 
 To configure the application see the [configuration guide](./configuration.md).
