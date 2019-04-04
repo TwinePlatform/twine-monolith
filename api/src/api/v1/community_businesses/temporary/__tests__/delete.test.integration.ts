@@ -25,6 +25,23 @@ describe('DELETE /community-businesses/temporary/:id', () => {
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
+    server.app.EmailService = {
+      send: () => Promise.resolve({
+        To: '',
+        SubmittedAt: '',
+        MessageID: '',
+        ErrorCode: 0,
+        Message: '',
+      }),
+      sendBatch: () => Promise.resolve([{
+        To: '',
+        SubmittedAt: '',
+        MessageID: '',
+        ErrorCode: 0,
+        Message: '',
+      }]),
+    };
+
 
     twAdmin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
     const aperture = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });

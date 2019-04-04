@@ -86,7 +86,7 @@ describe('PUT /community-businesses', () => {
 
       const cbCheck = await CommunityBusinesses.getOne(trx, { where: { _360GivingId: 'XOXOBO' } });
       const userCheck = await Users.getOne(trx, { where: { email: 'twiggie@stick.house' } });
-      const adminExists = await Roles.userHas(trx, {
+      const adminExists = await Roles.userHasAtCb(trx, {
         role: RoleEnum.CB_ADMIN,
         userId: (<any> userCheck).id,
         organisationId: (<any> cbCheck).id,

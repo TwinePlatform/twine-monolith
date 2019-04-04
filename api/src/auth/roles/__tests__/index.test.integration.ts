@@ -3,6 +3,8 @@ import Roles from '..';
 import { RoleEnum } from '../../types';
 import { getConfig } from '../../../../config';
 import { getTrx } from '../../../../tests/utils/database';
+import { Users } from '../../../models';
+import factory from '../../../../tests/utils/factory';
 
 
 describe('Roles Module', () => {
@@ -167,44 +169,95 @@ describe('Roles Module', () => {
 
   describe('::userHas', () => {
     test('SUCCESS - returns true if user has role', async () => {
-      const result = await Roles.userHas(trx,
+      const user = await Users.getOne(trx, { where: { name: 'Chell' } });
+      const result = await Roles.userHas(trx, user, RoleEnum.VISITOR);
+      expect(result).toEqual(true);
+    });
+
+    test('SUCCESS - returns false if user does not have role', async () => {
+      const user = await Users.getOne(trx, { where: { name: 'GlaDos' } });
+      const result = await Roles.userHas(trx, user, RoleEnum.VOLUNTEER);
+      expect(result).toEqual(false);
+    });
+
+    test('SUCCESS - returns true if user has one of many roles', async () => {
+      const user = await Users.getOne(trx, { where: { name: 'turret' } });
+      const result = await Roles.userHas(trx, user, RoleEnum.VOLUNTEER_ADMIN);
+      expect(result).toEqual(true);
+    });
+
+    test('SUCCESS - returns false if user has none of many roles', async () => {
+      const user = await Users.getOne(trx, { where: { name: 'turret' } });
+      const result = await Roles.userHas(trx, user, RoleEnum.CB_ADMIN);
+      expect(result).toEqual(false);
+    });
+  });
+
+  describe('::userHasAtCb', () => {
+    test('SUCCESS - returns true if user has role', async () => {
+      const result = await Roles.userHasAtCb(trx,
         { userId: 1, role: RoleEnum.VISITOR, organisationId: 1 });
       expect(result).toEqual(true);
     });
 
     test('SUCCESS - returns false if user does not have role', async () => {
-      const result = await Roles.userHas(trx,
+      const result = await Roles.userHasAtCb(trx,
         { userId: 1, role: RoleEnum.VOLUNTEER, organisationId: 1 });
       expect(result).toEqual(false);
     });
 
     test('SUCCESS - returns true if user has one of many roles', async () => {
-      const result = await Roles.userHas(trx,
+      const result = await Roles.userHasAtCb(trx,
         { userId: 1, role: [RoleEnum.CB_ADMIN, RoleEnum.VISITOR], organisationId: 1 });
       expect(result).toEqual(true);
     });
 
     test('SUCCESS - returns false if user has none of many roles', async () => {
-      const result = await Roles.userHas(trx,
+      const result = await Roles.userHasAtCb(trx,
         { userId: 1, role: [RoleEnum.CB_ADMIN, RoleEnum.TWINE_ADMIN], organisationId: 1 });
       expect(result).toEqual(false);
     });
   });
 
   describe('::fromUser', () => {
+    test('returns array of one role', async () => {
+      const user = await Users.getOne(trx, { where: { id: 3 } });
+      const roles = await Roles.fromUser(trx, user);
+      expect(roles).toEqual([{ organisationId: 2, role: RoleEnum.CB_ADMIN }]);
+    });
+
+    test('returns array of multiple roles if user has multiple roles at org', async () => {
+      const user = await Users.getOne(trx, { where: { id: 1 } });
+      await Roles.add(trx, { userId: 1, organisationId: 1, role: RoleEnum.VOLUNTEER });
+      const roles = await Roles.fromUser(trx, user);
+      expect(roles).toEqual([
+        { organisationId: 1, role: RoleEnum.VISITOR },
+        { organisationId: 1, role: RoleEnum.VOLUNTEER },
+      ]);
+    });
+
+    test('returns empty array if no roles are found', async () => {
+      const changeset = await factory.build('user');
+      const user = await Users.add(trx, changeset);
+      const roles = await Roles.fromUser(trx, user);
+      expect(roles).toEqual([]);
+    });
+  });
+
+  describe('::fromUserWithOrg', () => {
     test('returns array of one role if only one role at org', async () => {
-      const roles = await Roles.fromUser(trx, { userId: 1, organisationId: 1 });
+      const roles = await Roles.fromUserWithOrg(trx, { userId: 1, organisationId: 1 });
       expect(roles).toEqual([RoleEnum.VISITOR]);
     });
 
     test('returns array of multiple roles if user has multiple roles at org', async () => {
       await Roles.add(trx, { userId: 1, organisationId: 1, role: RoleEnum.VOLUNTEER });
-      const roles = await Roles.fromUser(trx, { userId: 1, organisationId: 1 });
+      const roles = await Roles.fromUserWithOrg(trx, { userId: 1, organisationId: 1 });
       expect(roles).toEqual([RoleEnum.VISITOR, RoleEnum.VOLUNTEER]);
     });
 
     test('returns empty array if no roles are found', async () => {
-      const roles = await Roles.fromUser(trx, { userId: 4, organisationId: 2 });
+      const roles = await Roles.fromUserWithOrg(trx, { userId: 4, organisationId: 2 });
       expect(roles).toEqual([]);
     });
 
@@ -212,7 +265,7 @@ describe('Roles Module', () => {
       expect.assertions(1);
 
       try {
-        await Roles.fromUser(trx, { userId: 20000, organisationId: 1 });
+        await Roles.fromUserWithOrg(trx, { userId: 20000, organisationId: 1 });
       } catch (error) {
         expect(error.message).toBe('User with ID 20000 does not exist');
       }
@@ -222,7 +275,7 @@ describe('Roles Module', () => {
       expect.assertions(1);
 
       try {
-        await Roles.fromUser(trx, { userId: 1, organisationId: -1 });
+        await Roles.fromUserWithOrg(trx, { userId: 1, organisationId: -1 });
       } catch (error) {
         expect(error.message).toBe('Organisation with ID -1 does not exist');
       }

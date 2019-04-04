@@ -18,6 +18,7 @@ import {
 } from './types';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { renameKeys, mapKeys } from '../utils';
+import { Roles } from '../auth';
 
 
 /*
@@ -245,7 +246,7 @@ export const Users: UserCollection = {
     return omit(['password', 'qrCode'], user);
   },
 
-  async createPasswordResetToken (client, user) {
+  async createToken (client, user, table) {
     const twoDaysFromToday = moment().add(2, 'days').toISOString();
     const token = randomBytes(32).toString('hex');
     const hashToken = await hash(token, 12);
@@ -256,9 +257,9 @@ export const Users: UserCollection = {
       await trx.raw(
         'UPDATE single_use_token '
       + 'SET expires_at = now() '
-      + 'FROM user_secret_reset '
-      + 'WHERE single_use_token.single_use_token_id = user_secret_reset.single_use_token_id '
-      + 'AND user_secret_reset.user_account_id = ?', [user.id]);
+      + `FROM ${table} `
+      + `WHERE single_use_token.single_use_token_id = ${table}.single_use_token_id `
+      + `AND ${table}.user_account_id = ?`, [user.id]);
 
       // create single use token
       const [tokenRow] = await trx('single_use_token')
@@ -269,8 +270,8 @@ export const Users: UserCollection = {
           'expires_at AS expiresAt',
         ]);
 
-      // link token to user_secret_reset table
-      const [userId] = await trx('user_secret_reset')
+      // link token to  table
+      const [userId] = await trx(table)
         .insert({
           single_use_token_id: tokenRow.id,
           user_account_id:
@@ -284,7 +285,15 @@ export const Users: UserCollection = {
     return { ...res, token } as SingleUseToken;
   },
 
-  async usePasswordResetToken (client, email, token) {
+  async createPasswordResetToken (client, user) {
+    return Users.createToken(client, user, 'user_secret_reset');
+  },
+
+  async createConfirmAddRoleToken (client, user) {
+    return Users.createToken(client, user, 'confirm_add_role');
+  },
+
+  async useToken (client, email, token, table) {
     // get user
     const user = await Users.getOne(client, { where: { email } });
     if (!user) throw new Error('E-mail not recognised');
@@ -293,13 +302,13 @@ export const Users: UserCollection = {
     const [match] = await client('single_use_token')
       .select('*')
       .innerJoin(
-        'user_secret_reset',
-        'user_secret_reset.single_use_token_id',
+        table,
+        `${table}.single_use_token_id`,
         'single_use_token.single_use_token_id')
       .innerJoin(
         'user_account',
         'user_account.user_account_id',
-        'user_secret_reset.user_account_id')
+        `${table}.user_account_id`)
       .where({
         'user_account.email': email,
         'single_use_token.used_at': null,
@@ -322,6 +331,14 @@ export const Users: UserCollection = {
     return null;
   },
 
+  async usePasswordResetToken (client, email, token) {
+    return Users.useToken(client, email, token, 'user_secret_reset');
+  },
+
+  async useConfirmAddRoleToken (client, email, token) {
+    return Users.useToken(client, email, token, 'confirm_add_role');
+  },
+
   async addActiveDayEvent (client, user, origin) {
     const [exists] = await client('user_account_active_day')
       .where({
@@ -339,5 +356,11 @@ export const Users: UserCollection = {
       });
 
     return;
+  },
+
+  async isMemberOf (client, user, cb) {
+    const currentRoles = await Roles.fromUser(client, user);
+    // currently not supporting roles at different cbs
+    return currentRoles.every((x) => x.organisationId === cb.id);
   },
 };

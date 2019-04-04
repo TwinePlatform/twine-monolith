@@ -209,6 +209,14 @@ export interface RegisterRequest extends Hapi.Request {
     isAnonymous?: boolean
   };
 }
+export interface RegisterConfirm extends Hapi.Request {
+  payload: {
+    organisationId: number
+    userId: number
+    token: string
+    role: RoleEnum
+  };
+}
 
 export interface VolunteerRegisterRequest extends Hapi.Request {
   payload: RegisterRequest['payload'] & {

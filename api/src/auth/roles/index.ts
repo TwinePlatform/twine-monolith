@@ -57,7 +57,8 @@ const Roles: RolesInterface = {
   },
 
   move: async (client, { to, from , userId, organisationId }) => {
-    const userHasSourceRole = await Roles.userHas(client, { role: from, userId, organisationId });
+    const userHasSourceRole = await Roles.userHasAtCb(client,
+      { role: from, userId, organisationId });
 
     if (! userHasSourceRole) {
       throw new Error(`"from" role ${from} is not associated with user ${userId}`);
@@ -85,7 +86,12 @@ const Roles: RolesInterface = {
     }
   },
 
-  userHas: async (client, { role, userId, organisationId }) => {
+  userHas: async (client, user, role) => {
+    const currentRoles = await Roles.fromUser(client, user);
+    return currentRoles.some((x) => x.role === role);
+  },
+
+  userHasAtCb: async (client, { role, userId, organisationId }) => {
     const sub = Array.isArray(role)
       ? client('access_role') .select('access_role_id') .whereIn('access_role_name', role)
       : client('access_role').select('access_role_id').where({ access_role_name: role });
@@ -102,7 +108,23 @@ const Roles: RolesInterface = {
     return rows[0].exists;
   },
 
-  fromUser: async (client, { userId, organisationId }) => {
+  fromUser: async (client, user) => {
+    return client
+      .select({
+        role: 'access_role.access_role_name',
+        organisationId: 'user_account_access_role.organisation_id',
+      })
+      .from('user_account_access_role')
+      .innerJoin(
+        'access_role',
+        'access_role.access_role_id',
+        'user_account_access_role.access_role_id')
+      .where({
+        'user_account_access_role.user_account_id': user.id,
+      });
+  },
+
+  fromUserWithOrg: async (client, { userId, organisationId }) => {
     const userExists = await Users.exists(client, { where: { id: userId } });
 
     if (!userExists) {
@@ -130,6 +152,8 @@ const Roles: RolesInterface = {
 
     return result.map((row: any) => row.access_role_name) as RoleEnum[];
   },
+
+  toDisplay: (role) => role.toLowerCase(),
 };
 
 export default Roles;

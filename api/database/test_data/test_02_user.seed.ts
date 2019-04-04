@@ -63,7 +63,7 @@ exports.seed = async (knex: Knex) => {
     });
 
   /*
-   * Gordon - CB_ADMIN
+   * Gordon - CB_ADMIN - SOFT DELETED
    */
   await knex('user_account')
     .insert({

@@ -24,6 +24,8 @@ import {
 } from '../../../../models';
 import { RoleEnum } from '../../../../auth/types';
 import { VolunteerRegisterRequest } from '../../types';
+import { Roles } from '../../../../auth';
+import { EmailTemplate } from '../../../../services/email/templates';
 
 export default [
   {
@@ -51,22 +53,72 @@ export default [
       response: { schema: response },
     },
     handler: async (request: VolunteerRegisterRequest, h: Hapi.ResponseToolkit) => {
-      const { server: { app: { knex } }, payload } = request;
+      const {
+        server: { app: { knex, EmailService, config } },
+        payload,
+      } = request;
       const { email, role, organisationId, adminCode } = payload;
       /*
        * Preliminaries
        */
-      // check user doesn't already exist
-
-      if (await Users.exists(knex, { where: { email } })) {
-        return Boom.conflict('User with this e-mail already registered');
-      }
 
       const communityBusiness = await CommunityBusinesses
-      .getOne(knex, { where: { id: organisationId, deletedAt: null } });
+        .getOne(knex, { where: { id: organisationId, deletedAt: null } });
 
       // check organisation exists
       if (!communityBusiness) return Boom.badRequest('Unrecognised organisation');
+
+
+      // Check user exists
+      if (await Users.exists(knex, { where: { email } })) {
+        // VOLUNTEER_ADMIN cannot have a second role
+        if (role === RoleEnum.VOLUNTEER_ADMIN) {
+          return Boom.conflict('User with this e-mail already registered');
+        }
+        // Registering second role
+        const user = await Users.getOne(knex, { where: { email } });
+
+        // check role doesnt exist on user account
+        if (await Roles.userHas(knex, user, role)) {
+          throw Boom.conflict(
+            `${Roles.toDisplay(role)} with this e-mail already registered`);
+        }
+        // currently not supporting roles at different cbs
+        if (!(await Users.isMemberOf(knex, user, communityBusiness))) {
+          throw Boom.conflict(
+            'User with this e-mail already registered at another Community Business');
+        }
+
+        const { token } = await Users.createConfirmAddRoleToken(knex, user);
+
+        try {
+          await EmailService.send({
+            from: config.email.fromAddress,
+            to: payload.email,
+            templateId: EmailTemplate.NEW_ROLE_CONFIRM,
+            templateModel: {
+              email,
+              token,
+              organisationName: communityBusiness.name,
+              role: Roles.toDisplay(RoleEnum.VOLUNTEER),
+              userId: user.id,
+              organisationId: communityBusiness.id,
+            },
+          });
+
+        } catch (error) {
+              /*
+               * we should do something meaningful here!
+               * such as retry with backoff and log/email
+               * dev team if unsuccessful
+               */
+          return Boom.badGateway('E-mail service unavailable');
+        }
+        throw Boom.conflict(
+          'Email is associated to a visitor, '
+          + 'please see email confirmation to create volunteer account'
+          );
+      }
 
       /*
        * Registration
