@@ -3,13 +3,5 @@
   "integrations": {
     "cordova": {}
   },
-  "gulpStartupTasks": [
-    "sass",
-    "watch"
-  ],
-  "watchPatterns": [
-    "www/**/*",
-    "!www/lib/**/*"
-  ],
   "type": "ionic1"
 }
