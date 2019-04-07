@@ -35,6 +35,7 @@ jobs:
         - psql -U postgres -c 'create database twine_api_test'
         - psql -U postgres -c 'create extension postgis'
       script:
+        - lerna run build
         - lerna run checks
         - lerna run cover
 
