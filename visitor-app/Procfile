@@ -1,1 +1,1 @@
-web: npm run serve
+web: cd visitor-app && npm run serve

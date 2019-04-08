@@ -1,1 +1,1 @@
-web: npm run serve
+web: cd dashboard-app && npm run serve
