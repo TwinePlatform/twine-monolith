@@ -1,0 +1,9 @@
+{
+  "name": "twine-volunteer-dashboard",
+  "scripts": {},
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  }
+}
