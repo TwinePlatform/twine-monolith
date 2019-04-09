@@ -1,7 +1,0 @@
-coverage:
-  range: 50...75
-  round: nearest
-  precision: 2
-
-ignore:
-  - "public/*"
