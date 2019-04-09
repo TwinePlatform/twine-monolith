@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "name": "util",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "cover": "jest --cover",
+    "build": "tsc",
+    "lint": "tslint --project tsconfig.json"
+  },
+  "contributors": [
+    "Elias Malik <elias@foundersandcoders.com>",
+    "Aisha Nasir <aisha@foundersandcoders.com>"
+  ],
+  "dependencies": {
+    "@types/node": "^11.13.2",
+    "@types/ramda": "^0.26.6",
+    "moment": "^2.24.0",
+    "ramda": "^0.26.1",
+    "typescript": "^3.4.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "jest": "^24.7.1",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.15.0"
+  }
+}
