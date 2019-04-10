@@ -86,6 +86,11 @@ export default [
             throw Boom.conflict(
               `Visitor with this e-mail already registered`);
           }
+          // check user is VOLUNTEER - only role allowed to have an additional role
+          if (!(await Roles.userHas(knex, user, RoleEnum.VOLUNTEER))) {
+            throw Boom.conflict(
+              `User with this e-mail already registered`);
+          }
           // currently not supporting roles at different cbs
           if (!(await Users.isMemberOf(knex, user, communityBusiness))) {
             throw Boom.conflict(

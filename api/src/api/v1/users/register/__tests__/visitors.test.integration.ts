@@ -154,6 +154,25 @@ describe('API v1 - register new users', () => {
         .toBe('Cannot register visitor for different organisation');
     });
 
+    test('FAIL :: cannot register additonal role against VOLUNTEER_ADMIN', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/visitors',
+        payload: {
+          organisationId: 2,
+          name: 'foo',
+          gender: 'female',
+          birthYear: 1988,
+          email: 'raiden@aotd.com', // email of VOLUNTEER_ADMIN
+        },
+        credentials: credentialsBlackMesa,
+      });
+
+      expect(res.statusCode).toBe(409);
+      expect((<any> res.result).error.message)
+        .toBe('User with this e-mail already registered');
+    });
+
     test('FAIL :: cannot register as a visitor if user is registered under a different cb',
     async () => {
       const res = await server.inject({
@@ -174,7 +193,7 @@ describe('API v1 - register new users', () => {
         .toBe('User with this e-mail already registered at another Community Business');
     });
 
-    test.only('SUCCESS :: confirmation email sent to add visitor if user already exists at cb',
+    test('SUCCESS :: confirmation email sent to add visitor if user already exists at cb',
     async () => {
       const realEmailServiceSend = server.app.EmailService.send;
       const mock = jest.fn(() => Promise.resolve({} as Postmark.Models.MessageSendingResponse));
