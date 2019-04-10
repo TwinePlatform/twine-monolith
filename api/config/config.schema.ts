@@ -5,6 +5,7 @@
  */
 import * as Joi from 'joi';
 import { Environment } from './types';
+import { AppEnum } from '../src/types/internal';
 
 
 export default Joi.object({
@@ -34,6 +35,15 @@ export default Joi.object({
       ).required(),
     }).required(),
   }).required(),
+  platform: Joi.object({
+    domains: Joi.object({
+      [AppEnum.ADMIN]: Joi.string().min(5).required(),
+      [AppEnum.DASHBOARD]: Joi.string().min(5).required(),
+      [AppEnum.TWINE_API]: Joi.string().min(5).required(),
+      [AppEnum.VISITOR]: Joi.string().min(5).required(),
+      [AppEnum.VOLUNTEER]: Joi.only(null).required(),
+    }),
+  }),
   knex: Joi.object({
     client: Joi.string().required(),
     connection: Joi.alternatives().try(

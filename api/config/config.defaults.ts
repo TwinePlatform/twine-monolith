@@ -6,7 +6,8 @@
  */
 import * as path from 'path';
 import { Environment, Config } from './types';
-import { DeepPartial } from '../src/types/internal';
+import { DeepPartial, AppEnum } from '../src/types/internal';
+import { envOr } from './util';
 
 const config: DeepPartial<Config> = {
   root: path.resolve(__dirname, '..'),
@@ -30,6 +31,15 @@ const config: DeepPartial<Config> = {
           preload: true,
         },
       },
+    },
+  },
+  platform: {
+    domains: {
+      [AppEnum.ADMIN]: envOr('ADMIN_APP_DOMAIN', 'localhost:5000'),
+      [AppEnum.DASHBOARD]: envOr('DASHBOARD_APP_DOMAIN', 'localhost:3000'),
+      [AppEnum.TWINE_API]: envOr('TWINE_API_DOMAIN', 'localhost:4000'),
+      [AppEnum.VISITOR]: envOr('VISITOR_APP_DOMAIN', 'localhost:3000'),
+      [AppEnum.VOLUNTEER]: null,
     },
   },
   knex: {
@@ -81,7 +91,7 @@ const config: DeepPartial<Config> = {
     secret: process.env.QRCODE_HMAC_SECRET,
   },
   email: {
-    fromAddress: 'visitorapp@powertochange.org.uk',
+    fromAddress: envOr('EMAIL_FROM_ADDRESS', 'visitorapp@powertochange.org.uk'),
   },
 };
 

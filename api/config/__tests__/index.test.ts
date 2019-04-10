@@ -1,4 +1,5 @@
 import { getConfig, validateConfig, Environment, Config } from '..';
+import { AppEnum } from '../../src/types/internal';
 
 describe('Config', () => {
   test(`getConfig | ${Environment.DEVELOPMENT}`, () => {
@@ -52,14 +53,17 @@ describe('Config', () => {
   test(`getConfig | ${Environment.PRODUCTION}`, () => {
     const config = getConfig(Environment.PRODUCTION);
 
-
     expect(config.web).toEqual({
       host: '0.0.0.0',
       port: 4002,
       router: { stripTrailingSlash: true },
       routes: {
         cors: {
-          origin: ['https://admin.twine-together.com', 'https://visitor.twine-together.com'],
+          origin: [
+            'https://admin.twine-together.com',
+            'https://visitor.twine-together.com',
+            'https://data.twine-toghether.com',
+          ],
           credentials: true,
           additionalExposedHeaders: ['set-cookie'],
         },
@@ -72,31 +76,10 @@ describe('Config', () => {
         },
       },
     });
-
   });
 
-  test(`getConfig | Invalid environment defaults to ${Environment.DEVELOPMENT}`, () => {
-    const config = getConfig('foo');
-
-    expect(config.web).toEqual({
-      host: 'localhost',
-      port: 4000,
-      router: { stripTrailingSlash: true },
-      routes: {
-        cors: {
-          origin: ['http://localhost:3000', 'http://localhost:8100', 'http://localhost:5000'],
-          credentials: true,
-          additionalExposedHeaders: ['set-cookie'],
-        },
-        security: {
-          hsts: {
-            includeSubdomains: true,
-            maxAge: 31536000,
-            preload: true,
-          },
-        },
-      },
-    });
+  test('getConfig | Invalid environment throws', () => {
+    expect(() => getConfig('foo')).toThrow('Invalid environment: foo');
   });
 
   test('Config | validateConfig | valid config', () => {
@@ -114,6 +97,15 @@ describe('Config', () => {
             additionalExposedHeaders: ['set-cookie'],
           },
           security: false,
+        },
+      },
+      platform: {
+        domains: {
+          [AppEnum.ADMIN]: 'localhost:5000',
+          [AppEnum.DASHBOARD]: 'localhost:3000',
+          [AppEnum.TWINE_API]: 'localhost:4000',
+          [AppEnum.VISITOR]: 'localhost:3000',
+          [AppEnum.VOLUNTEER]: null,
         },
       },
       knex: {
@@ -176,6 +168,15 @@ describe('Config', () => {
             additionalExposedHeaders: ['set-cookie'],
           },
           security: false,
+        },
+      },
+      platform: {
+        domains: {
+          [AppEnum.ADMIN]: 'localhost:5000',
+          [AppEnum.DASHBOARD]: 'localhost:3000',
+          [AppEnum.TWINE_API]: 'localhost:4000',
+          [AppEnum.VISITOR]: 'localhost:3000',
+          [AppEnum.VOLUNTEER]: null,
         },
       },
       knex: {
