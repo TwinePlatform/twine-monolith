@@ -2,12 +2,11 @@
  * Community Business Admin Model
  */
 import { omit, pick, evolve } from 'ramda';
-import { CbAdminCollection } from './types';
+import { CbAdminCollection, RoleEnum } from './types';
 import { Users, ModelToColumn } from './user';
-import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import { Roles } from '../auth';
 import { randomPasswordGenerator } from '../utils';
+import Roles from './role';
 
 
 /*

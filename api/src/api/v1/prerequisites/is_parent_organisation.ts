@@ -21,9 +21,9 @@ import * as Hapi from 'hapi';
 import { Organisation, CommunityBusiness } from '../../../models';
 import { GetCommunityBusinessRequest } from '../types';
 import getOrganisation from './get_organisation';
-import { RoleEnum } from '../../../auth/types';
-import Roles from '../../../auth/roles';
+import Roles from '../../../models/role';
 import { StandardCredentials } from '../../../auth/strategies/standard';
+import { RoleEnum } from '../../../models/types';
 
 
 const getOrg = async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {

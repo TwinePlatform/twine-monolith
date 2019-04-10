@@ -12,7 +12,7 @@ import {
   Volunteers,
   Duration,
 } from '../../src/models';
-import { Roles } from '../../src/auth';
+import Roles from '../../src/models/role';
 
 
 const ignoreRe = new RegExp(

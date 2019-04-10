@@ -1,8 +1,8 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import { Users, Organisations } from '../../../models';
-import Roles from '../../roles';
-import Permissions from '../../permissions';
+import Roles from '../../../models/role';
+import Permissions from '../../../models/permission';
 import { scopeToString } from '../../scopes';
 import { ValidateUser, TCredentials } from './types';
 

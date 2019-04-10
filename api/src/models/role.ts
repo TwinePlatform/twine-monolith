@@ -1,8 +1,8 @@
-import { RoleEnum, RolesInterface } from '../types';
-import { Users, Organisations } from '../../models';
+import { Users, Organisations } from '.';
+import { RolesCollection, RoleEnum } from './types';
 
 
-const Roles: RolesInterface = {
+const Roles: RolesCollection = {
   add: async (client, { role, userId, organisationId }) => {
     try {
       const [result] = await client.insert({

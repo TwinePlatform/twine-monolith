@@ -10,8 +10,8 @@ import {
 import { getCommunityBusiness } from '../prerequisites';
 import { filterQuery } from '../users/schema';
 import { ApiRequestQuery } from '../schema/request';
-import Roles from '../../../auth/roles';
-import { RoleEnum } from '../../../auth/types';
+import Roles from '../../../models/role';
+import { RoleEnum } from '../../../models/types';
 
 interface VisitorSearchRequest extends Hapi.Request {
   payload: {

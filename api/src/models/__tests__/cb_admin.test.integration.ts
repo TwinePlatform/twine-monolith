@@ -6,7 +6,8 @@ import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
 import { CbAdmins, DisabilityEnum } from '..';
 import { CommunityBusinesses } from '../community_business';
-import { Roles, RoleEnum } from '../../auth';
+import Roles from '../role';
+import { RoleEnum } from '../types';
 
 
 describe('CbAdmin model', () => {

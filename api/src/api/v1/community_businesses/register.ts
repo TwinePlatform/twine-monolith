@@ -11,6 +11,7 @@ import {
   email,
 } from '../users/schema';
 import { EmailTemplate } from '../../../services/email/templates';
+import { Tokens } from '../../../models/token';
 
 export default [
   {
@@ -86,7 +87,7 @@ export default [
           name: adminName,
           email: adminEmail,
         });
-        const { token } = await Users.createPasswordResetToken(trx, user);
+        const { token } = await Tokens.createPasswordResetToken(trx, user);
         return { user, cb, token };
       });
 

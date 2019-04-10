@@ -22,10 +22,11 @@ import {
   Users,
   CommunityBusinesses
 } from '../../../../models';
-import { RoleEnum } from '../../../../auth/types';
 import { VolunteerRegisterRequest } from '../../types';
-import { Roles } from '../../../../auth';
 import { EmailTemplate } from '../../../../services/email/templates';
+import { RoleEnum } from '../../../../models/types';
+import Roles from '../../../../models/role';
+import { Tokens } from '../../../../models/token';
 
 export default [
   {
@@ -89,7 +90,7 @@ export default [
             'User with this e-mail already registered at another Community Business');
         }
 
-        const { token } = await Users.createConfirmAddRoleToken(knex, user);
+        const { token } = await Tokens.createConfirmAddRoleToken(knex, user);
 
         try {
           await EmailService.send({

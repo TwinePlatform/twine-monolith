@@ -2,11 +2,10 @@
  * Volunteer Model
  */
 import { omit, pick, evolve } from 'ramda';
-import { VolunteerCollection } from './types';
+import { VolunteerCollection, RoleEnum } from './types';
 import { Users, ModelToColumn } from './user';
-import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import Roles from '../auth/roles';
+import Roles from './role';
 
 /*
  * Implementation of the UserCollection type for Volunteers

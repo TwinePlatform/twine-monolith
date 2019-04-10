@@ -5,6 +5,7 @@
 import * as Knex from 'knex';
 import { Users } from '../src/models';
 import { getConfig } from '../config';
+import { Tokens } from '../src/models/token';
 
 (async () => {
   const { knex: config } = getConfig('development');
@@ -12,7 +13,7 @@ import { getConfig } from '../config';
   const client = Knex(config);
 
   const user = await Users.getOne(client, { where: { id: 1 } });
-  await Users.createPasswordResetToken(client, user);
+  await Tokens.createPasswordResetToken(client, user);
 
   return client.destroy();
 })();

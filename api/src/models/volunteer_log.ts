@@ -1,13 +1,12 @@
 import * as Knex from 'knex';
 import { assoc, compose, evolve, has, filter, invertObj, omit, pick } from 'ramda';
-import { VolunteerLog, VolunteerLogCollection } from './types';
+import { VolunteerLog, VolunteerLogCollection, RoleEnum } from './types';
 import { CommunityBusinesses } from './community_business';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { renameKeys, mapKeys } from '../utils';
 import { Map, Dictionary } from '../types/internal';
 import Duration from './duration';
-import Roles from '../auth/roles';
-import { RoleEnum } from '../auth/types';
+import Roles from './role';
 
 
 /*

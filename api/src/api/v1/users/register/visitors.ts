@@ -27,8 +27,10 @@ import * as PdfService from '../../../../services/pdf';
 import { EmailTemplate } from '../../../../services/email/templates';
 import { RegisterRequest } from '../../types';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
-import { Roles, RoleEnum } from '../../../../auth';
 import { getCommunityBusiness } from '../../prerequisites';
+import Roles from '../../../../models/role';
+import { RoleEnum } from '../../../../models/types';
+import { Tokens } from '../../../../models/token';
 
 export default [
   {
@@ -92,7 +94,7 @@ export default [
               'User with this e-mail already registered at another Community Business');
           }
 
-          const { token } = await Users.createConfirmAddRoleToken(knex, user);
+          const { token } = await Tokens.createConfirmAddRoleToken(knex, user);
 
           try {
             await EmailService.send({

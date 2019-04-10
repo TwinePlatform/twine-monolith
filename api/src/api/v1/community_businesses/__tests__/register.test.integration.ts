@@ -5,8 +5,8 @@ import { getConfig } from '../../../../../config';
 import { Organisation, Organisations, User, Users, CommunityBusinesses } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
-import { RegionEnum, SectorEnum } from '../../../../models/types';
-import { Roles, RoleEnum } from '../../../../auth';
+import { RegionEnum, SectorEnum, RoleEnum } from '../../../../models/types';
+import Roles from '../../../../models/role';
 
 
 describe('PUT /community-businesses', () => {

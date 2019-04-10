@@ -1,8 +1,9 @@
 import * as Knex from 'knex';
-import { getTrx } from '../../../../tests/utils/database';
-import { PermissionLevelEnum, ResourceEnum, RoleEnum, AccessEnum } from '../../types';
-import Permissions from '..';
-const { getConfig } = require('../../../../config');
+import { getTrx } from '../../../tests/utils/database';
+import { PermissionLevelEnum, ResourceEnum, AccessEnum } from '../../auth/types';
+import Permissions from '../permission';
+import { RoleEnum } from '../types';
+import { getConfig } from '../../../config';
 
 
 describe('Permisions Module', () => {

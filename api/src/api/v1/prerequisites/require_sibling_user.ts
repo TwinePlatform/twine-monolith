@@ -28,8 +28,8 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import { Organisations } from '../../../models';
 import { RequireSiblingPreReq } from '../types';
-import { RoleEnum } from '../../../auth/types';
 import { StandardCredentials } from '../../../auth/strategies/standard';
+import { RoleEnum } from '../../../models/types';
 
 
 export default async (request: RequireSiblingPreReq, h: Hapi.ResponseToolkit) => {

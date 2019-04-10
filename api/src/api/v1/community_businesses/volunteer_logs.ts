@@ -13,8 +13,7 @@ import {
   volunteerLogDuration,
   volunteerProject
 } from './schema';
-import Roles from '../../../auth/roles';
-import { RoleEnum } from '../../../auth/types';
+import Roles from '../../../models/role';
 import { VolunteerLogs, Duration, Volunteers, VolunteerLog } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import {
@@ -28,6 +27,7 @@ import {
 import { requestQueryToModelQuery } from '../utils';
 import { query } from '../users/schema';
 import { StandardCredentials } from '../../../auth/strategies/standard';
+import { RoleEnum } from '../../../models/types';
 
 
 const routes: Hapi.ServerRoute[] = [

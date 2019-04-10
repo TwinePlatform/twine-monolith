@@ -7,7 +7,8 @@ import { getConfig } from '../../../../../../config';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { Users, Volunteers, CommunityBusinesses, Visitors } from '../../../../../models';
 import { EmailTemplate } from '../../../../../services/email/templates';
-import { RoleEnum } from '../../../../../auth';
+import { RoleEnum } from '../../../../../models/types';
+import { Tokens } from '../../../../../models/token';
 
 
 describe('API v1 - confirm adding a new role', () => {
@@ -54,7 +55,7 @@ describe('API v1 - confirm adding a new role', () => {
 
   describe('POST /users/register/confirm', () => {
     test('FAIL :: cannot create role if email is associated to said role', async () => {
-      const { token } = await Users.createConfirmAddRoleToken(
+      const { token } = await Tokens.createConfirmAddRoleToken(
         trx, await Users.getOne(trx, { where: { id: 1 } }));
 
       const res = await server.inject({
@@ -74,7 +75,7 @@ describe('API v1 - confirm adding a new role', () => {
     });
 
     test('FAIL :: cannot register role if user is registered under a different cb', async () => {
-      const { token } = await Users.createConfirmAddRoleToken(
+      const { token } = await Tokens.createConfirmAddRoleToken(
         trx, await Users.getOne(trx, { where: { id: 6 } }));
 
       const res = await server.inject({
@@ -98,7 +99,7 @@ describe('API v1 - confirm adding a new role', () => {
       const changeset = await factory.build('visitor');
       const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Aperture Science' } });
       const visitor = await Visitors.addWithRole(trx, cb, changeset);
-      const { token } = await Users.createConfirmAddRoleToken(
+      const { token } = await Tokens.createConfirmAddRoleToken(
         trx, await Users.getOne(trx, { where: { id: visitor.id } }));
 
       const res = await server.inject({
@@ -130,7 +131,7 @@ describe('API v1 - confirm adding a new role', () => {
       const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Aperture Science' } });
       const volunteer = await Volunteers.addWithRole(trx, changeset, RoleEnum.VOLUNTEER, cb);
 
-      const { token } = await Users.createConfirmAddRoleToken(
+      const { token } = await Tokens.createConfirmAddRoleToken(
         trx, await Users.getOne(trx, { where: { id: volunteer.id } }));
 
       const res = await server.inject({

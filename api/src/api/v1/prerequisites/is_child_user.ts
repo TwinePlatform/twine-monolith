@@ -15,9 +15,9 @@
  */
 import * as Hapi from 'hapi';
 import { PutUserRequest } from '../types';
-import Roles from '../../../auth/roles';
-import { RoleEnum } from '../../../auth/types';
+import Roles from '../../../models/role';
 import { StandardCredentials } from '../../../auth/strategies/standard';
+import { RoleEnum } from '../../../models/types';
 
 
 export default async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {

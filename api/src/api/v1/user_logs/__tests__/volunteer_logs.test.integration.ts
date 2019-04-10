@@ -5,9 +5,9 @@ import * as Hapi from 'hapi';
 import { init } from '../../../../server';
 import * as moment from 'moment';
 import { getConfig } from '../../../../../config';
-import { RoleEnum } from '../../../../auth/types';
 import { User, Organisation, Users, Organisations } from '../../../../models';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { RoleEnum } from '../../../../models/types';
 
 
 describe('GET /volunteer-logs', () => {

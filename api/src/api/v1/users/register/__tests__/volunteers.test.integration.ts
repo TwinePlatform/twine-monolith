@@ -3,11 +3,11 @@ import * as Knex from 'knex';
 import * as Postmark from 'postmark';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
-import { RoleEnum } from '../../../../../auth/types';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { User, Organisation, Users, Organisations } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
 import { EmailTemplate } from '../../../../../services/email/templates';
+import { RoleEnum } from '../../../../../models/types';
 
 
 describe('API v1 - register new users', () => {
