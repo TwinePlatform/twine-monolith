@@ -1,6 +1,7 @@
 import * as Knex from 'knex';
 import { Dictionary } from 'ramda';
-import { Omit } from '../types/internal';
+import { Omit, Int } from '../types/internal';
+import { User } from '../models';
 
 
 /*
@@ -97,7 +98,13 @@ export type RolesInterface = {
 
   move: (k: Knex, a: MoveRoleQuery) => Promise<QueryResponse>
 
-  userHas: (k: Knex, a: RolesQuery) => Promise<boolean>
+  userHas: (k: Knex, u: User, r: RoleEnum) => Promise<boolean>
 
-  fromUser: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum[]>
+  userHasAtCb: (k: Knex, a: RolesQuery) => Promise<boolean>
+
+  fromUser: (k: Knex, a: User) => Promise<{organisationId: Int, role: RoleEnum}[]>
+
+  fromUserWithOrg: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum[]>
+
+  toDisplay: (r: RoleEnum) => string
 };

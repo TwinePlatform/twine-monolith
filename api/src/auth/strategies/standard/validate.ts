@@ -9,7 +9,9 @@ import { ValidateUser, TCredentials } from './types';
 
 export const StandardCredentials: TCredentials = {
   async get (knex, user, organisation, session) {
-    const roles = await Roles.fromUser(knex, { userId: user.id, organisationId: organisation.id });
+    const roles = await Roles.fromUserWithOrg(
+      knex,
+      { userId: user.id, organisationId: organisation.id });
     const permissions = await Permissions.forRoles(knex, { roles });
 
     return {
@@ -45,7 +47,7 @@ const validateUser: ValidateUser = async (decoded, request) => {
     ] = await Promise.all([
       Users.getOne(knex, { where: { id: userId, deletedAt: null } }),
       Organisations.getOne(knex, { where: { id: organisationId, deletedAt: null } }),
-      Roles.fromUser(knex, { userId, organisationId }),
+      Roles.fromUserWithOrg(knex, { userId, organisationId }),
     ]);
 
     return {

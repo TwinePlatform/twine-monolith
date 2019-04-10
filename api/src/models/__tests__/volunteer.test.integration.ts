@@ -115,8 +115,8 @@ describe('Volunteer model', () => {
       const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
       const volunteer = await Volunteers.addWithRole(trx, changeset, RoleEnum.VOLUNTEER, cb);
       const passwordCheck = await compare(changeset.password, volunteer.password);
-      const rolesCheck = await Roles
-       .userHas(trx, { role: RoleEnum.VOLUNTEER, userId: volunteer.id, organisationId: cb.id });
+      const rolesCheck = await Roles.userHasAtCb(trx,
+        { role: RoleEnum.VOLUNTEER, userId: volunteer.id, organisationId: cb.id });
       expect(volunteer).toEqual(expect.objectContaining(omit(['password'], changeset)));
       expect(passwordCheck).toBeTruthy();
       expect(rolesCheck).toBeTruthy();
@@ -130,7 +130,7 @@ describe('Volunteer model', () => {
         .addWithRole(trx, changeset, RoleEnum.VOLUNTEER_ADMIN, cb, '70007');
 
       const passwordCheck = await compare(changeset.password, volunteerAdmin.password);
-      const rolesCheck = await Roles.userHas(trx, {
+      const rolesCheck = await Roles.userHasAtCb(trx, {
         role: RoleEnum.VOLUNTEER_ADMIN,
         userId: volunteerAdmin.id,
         organisationId: cb.id,

@@ -58,7 +58,7 @@ export default async () => {
       { Quantity: '# of active CBs (volunteer app)', ...volData },
       { Quantity: '# of active CBs (visitor app)', ...visData },
     ],
-    'cbe_gen.csv'
+    'cbe_overview.csv'
   );
 
   return client.destroy();

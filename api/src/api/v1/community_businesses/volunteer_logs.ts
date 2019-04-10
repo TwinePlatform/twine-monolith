@@ -245,7 +245,7 @@ const routes: Hapi.ServerRoute[] = [
 
       if (payload.userId !== 'me') {
         // if userId is specified, check request user has correct permissions
-        const isTargetVolunteer = await Roles.userHas(knex, {
+        const isTargetVolunteer = await Roles.userHasAtCb(knex, {
           userId: payload.userId,
           organisationId: communityBusiness.id,
           role: [RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN],
@@ -330,7 +330,7 @@ const routes: Hapi.ServerRoute[] = [
       const targetUserChecks = payload
         .filter((l) => l.userId !== 'me')
         .map((l) =>
-          Roles.userHas(
+          Roles.userHasAtCb(
             knex,
             {
               userId: Number(l.userId),

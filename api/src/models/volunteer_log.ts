@@ -135,7 +135,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
   },
 
   async add (client, log) {
-    const isVolunteer = await Roles.userHas(client, {
+    const isVolunteer = await Roles.userHasAtCb(client, {
       userId: log.userId,
       organisationId: log.organisationId,
       role: [RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN],

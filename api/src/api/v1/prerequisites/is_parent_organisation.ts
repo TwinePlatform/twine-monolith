@@ -45,7 +45,7 @@ export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseTool
   //       See: https:github.com/TwinePlatform/twine-api/issues/120
   const org = await getOrg(request, h);
 
-  const isVolunteer = await Roles.userHas(knex, {
+  const isVolunteer = await Roles.userHasAtCb(knex, {
     role: RoleEnum.VOLUNTEER,
     userId: user.id,
     organisationId: org.id,
@@ -55,7 +55,7 @@ export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseTool
     return isVolunteer;
   }
 
-  const isVisitor = await Roles.userHas(knex, {
+  const isVisitor = await Roles.userHasAtCb(knex, {
     role: RoleEnum.VISITOR,
     userId: user.id,
     organisationId: org.id,

@@ -27,6 +27,8 @@ import * as PdfService from '../../../../services/pdf';
 import { EmailTemplate } from '../../../../services/email/templates';
 import { RegisterRequest } from '../../types';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { Roles, RoleEnum } from '../../../../auth';
+import { getCommunityBusiness } from '../../prerequisites';
 
 export default [
   {
@@ -52,12 +54,16 @@ export default [
         },
       },
       response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
+      ],
     },
     handler: async (request: RegisterRequest, h: Hapi.ResponseToolkit) => {
       const {
         payload,
-        server: { app: { EmailService, knex } },
-      } = request;
+        server: { app: { EmailService, knex, config } },
+        pre: { communityBusiness },
+    } = request;
 
       const { organisation } = StandardCredentials.fromRequest(request);
       /*
@@ -71,11 +77,50 @@ export default [
         if (!(payload.email || payload.phoneNumber)) {
           return Boom.badRequest('Please supply either email or phone number');
         }
-        // Check user doesn't already exist
+        // Check if user already exists
         if (payload.email && await Users.exists(knex, { where: { email: payload.email } })) {
-        // Registering second roles is not yet supported;
-        // see https://github.com/TwinePlatform/twine-api/issues/247#issuecomment-443182884
-          throw Boom.conflict('User with this e-mail already registered');
+          // Registering second role
+          const user = await Users.getOne(knex, { where: { email: payload.email } });
+          // check role doesnt exist on user account
+          if (await Roles.userHas(knex, user, RoleEnum.VISITOR)) {
+            throw Boom.conflict(
+              `Visitor with this e-mail already registered`);
+          }
+          // currently not supporting roles at different cbs
+          if (!(await Users.isMemberOf(knex, user, communityBusiness))) {
+            throw Boom.conflict(
+              'User with this e-mail already registered at another Community Business');
+          }
+
+          const { token } = await Users.createConfirmAddRoleToken(knex, user);
+
+          try {
+            await EmailService.send({
+              from: config.email.fromAddress,
+              to: payload.email,
+              templateId: EmailTemplate.NEW_ROLE_CONFIRM,
+              templateModel: {
+                email,
+                token,
+                organisationName: organisation.name,
+                role: Roles.toDisplay(RoleEnum.VISITOR),
+                userId: user.id,
+                organisationId: organisation.id,
+              },
+            });
+
+          } catch (error) {
+            /*
+             * we should do something meaningful here!
+             * such as retry with backoff and log/email
+             * dev team if unsuccessful
+             */
+            return Boom.badGateway('E-mail service unavailable');
+          }
+          throw Boom.conflict(
+            'Email is associated to a volunteer, '
+            + 'please see email confirmation to create visitor account'
+            );
         }
         if (payload.phoneNumber
           && await Users.exists(knex, { where: { phoneNumber: payload.phoneNumber } })
@@ -134,7 +179,7 @@ export default [
       // TODO: This should be hidden away
       await EmailService.sendBatch([
         {
-          from: 'visitorapp@powertochange.org.uk', // this shouldn't be hardcoded
+          from: config.email.fromAddress,
           to: visitor.email,
           templateId: EmailTemplate.WELCOME_VISITOR,
           templateModel: { name: visitor.name, organisation: cb.name },
@@ -145,7 +190,7 @@ export default [
           }],
         },
         {
-          from: 'visitorapp@powertochange.org.uk', // this shouldn't be hardcoded
+          from: config.email.fromAddress,
           to: admin.email,
           templateId: EmailTemplate.NEW_VISITOR_CB_ADMIN,
           templateModel: { name: visitor.name, email: visitor.email },

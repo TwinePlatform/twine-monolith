@@ -312,9 +312,14 @@ type UsersBaseCollection = Collection<User> & {
 };
 
 export type UserCollection = UsersBaseCollection & {
+  createToken: (k: Knex, u: User, t: string) => Promise<SingleUseToken>
   createPasswordResetToken: (k: Knex, u: User) => Promise<SingleUseToken>
+  createConfirmAddRoleToken: (k: Knex, u: User) => Promise<SingleUseToken>
+  useToken: (k: Knex, e: string, t: string, tb: string) => Promise<null>
   usePasswordResetToken: (k: Knex, e: string, t: string) => Promise<null>
+  useConfirmAddRoleToken: (k: Knex, e: string, t: string) => Promise<null>
   addActiveDayEvent: (k: Knex, u: User, o: string) => Promise<void>
+  isMemberOf: (k: Knex, u: User, cb: CommunityBusiness) => Promise<boolean>
 };
 
 export type VisitorCollection = UsersBaseCollection & {

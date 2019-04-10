@@ -145,7 +145,7 @@ describe('CbAdmin model', () => {
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!#$£€%&()*+,\-./\\:;<=>@[\]^_{|}~? ])(?=.{8,})/
         .test(admin.password);
       const rolesCheck = await Roles
-       .userHas(trx, { role: RoleEnum.CB_ADMIN, userId: admin.id, organisationId: cb.id });
+       .userHasAtCb(trx, { role: RoleEnum.CB_ADMIN, userId: admin.id, organisationId: cb.id });
       expect(emailCheck).toBeTruthy();
       expect(passwordCheck).toBeTruthy();
       expect(rolesCheck).toBeTruthy();

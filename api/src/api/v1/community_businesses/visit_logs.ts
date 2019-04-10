@@ -59,7 +59,7 @@ const routes: Hapi.ServerRoute[] = [
 
       const visitor = await Visitors.getOne(knex, { where: { id: userId } });
 
-      const isRegisteredVisitorAtCb = await Roles.userHas(knex, {
+      const isRegisteredVisitorAtCb = await Roles.userHasAtCb(knex, {
         userId,
         organisationId: communityBusiness.id,
         role: RoleEnum.VISITOR,

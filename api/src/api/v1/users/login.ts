@@ -45,7 +45,7 @@ const route: Hapi.ServerRoute[] = [
       if (!organisation) return Boom.unauthorized('User has no associated organisation');
 
       if (restrict) {
-        const hasRole = await Roles.userHas(
+        const hasRole = await Roles.userHasAtCb(
           knex,
           { userId: user.id, organisationId: organisation.id, role: restrict }
         );

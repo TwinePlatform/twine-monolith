@@ -13,7 +13,6 @@
     ],
   },
   "exclude": [
-    "database",
     "docs",
     "node_modules"
   ]
