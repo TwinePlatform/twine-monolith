@@ -2,8 +2,6 @@ import * as stream from 'stream';
 import axios from 'axios';
 import { Dictionary, CurriedFunction2, assoc, curry, pick } from 'ramda';
 
-type MapKeys =
-  CurriedFunction2<(a: string) => string, Dictionary<any>, Dictionary<any>>;
 
 type RenameKeys<T extends Dictionary<any>, L extends Dictionary<string>> =
   CurriedFunction2<L, T, { [k in L[keyof L]]: any }> ;
@@ -18,8 +16,6 @@ export const lazyPromiseSeries = (ps: PromiseLike<any>[]): Promise<any[]> =>
       )
     );
 
-export const mapKeys: MapKeys =
-  curry((f, o) => Object.keys(o).reduce((acc, k) => assoc(f(k), o[k], acc), {}));
 
 export const renameKeys: RenameKeys<Dictionary<any>, Dictionary<string>> =
   curry((map, o) =>

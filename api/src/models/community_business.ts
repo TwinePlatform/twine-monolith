@@ -16,6 +16,7 @@ import {
   identity,
 } from 'ramda';
 import { randomBytes } from 'crypto';
+import { Objects } from 'twine-util';
 import { Dictionary, Map } from '../types/internal';
 import {
   CommunityBusiness,
@@ -28,7 +29,7 @@ import {
 import { Organisations } from './organisation';
 import { AgeList } from './age';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import { renameKeys, mapKeys } from '../utils';
+import { renameKeys } from '../utils';
 
 
 /*
@@ -211,7 +212,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   async add (client, cb) {
     const preProcessCbChangeset = compose(
-      mapKeys((s) => s.replace('community_business.', '')),
+      Objects.mapKeys((s) => s.replace('community_business.', '')),
       transformForeignKeysToSubQueries(client),
       CommunityBusinesses.toColumnNames,
       pickCbFields
@@ -260,7 +261,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     const [{ organisation_id: id }] = await client.transaction(async (trx) => {
       const cbQuery = preProcessCb(trx)(cb);
       const preProcessCbChangeset = compose(
-        mapKeys((s) => s.replace('community_business.', '')),
+        Objects.mapKeys((s) => s.replace('community_business.', '')),
         transformForeignKeysToSubQueries(trx),
         CommunityBusinesses.toColumnNames,
         pickCbFields

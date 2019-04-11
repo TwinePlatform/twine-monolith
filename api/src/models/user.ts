@@ -4,6 +4,7 @@
 import * as Knex from 'knex';
 import { compose, omit, filter, pick, invertObj, evolve } from 'ramda';
 import { hash } from 'bcrypt';
+import { Objects } from 'twine-util';
 import { Map } from '../types/internal';
 import {
   User,
@@ -14,7 +15,7 @@ import {
   EthnicityEnum,
 } from './types';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import { renameKeys, mapKeys } from '../utils';
+import { renameKeys } from '../utils';
 import Roles from './role';
 
 
@@ -163,7 +164,7 @@ export const Users: UserCollection = {
     const user = { ..._user, password };
 
     const preProcessUser = compose(
-      mapKeys((k) => k.replace('user_account.', '')),
+      Objects.mapKeys((k) => k.replace('user_account.', '')),
       transformForeignKeysToSubQueries(client),
       replaceConstantsWithForeignKeys,
       Users.toColumnNames,
@@ -192,7 +193,7 @@ export const Users: UserCollection = {
     );
 
     const preProcessChangeSet = compose(
-      mapKeys((k) => k.replace('user_account.', '')),
+      Objects.mapKeys((k) => k.replace('user_account.', '')),
       transformForeignKeysToSubQueries(client),
       replaceConstantsWithForeignKeys,
       Users.toColumnNames
