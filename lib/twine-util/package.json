@@ -1,9 +1,9 @@
 {
   "private": true,
-  "name": "util",
+  "name": "twine-util",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "jest",
     "cover": "jest --cover",
