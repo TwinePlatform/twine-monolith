@@ -6,7 +6,7 @@
   "main": "index.ts",
   "scripts": {
     "test": "jest",
-    "cover": "jest --cover",
+    "cover": "jest --coverage",
     "build": "tsc",
     "lint": "tslint --project tsconfig.json"
   },
