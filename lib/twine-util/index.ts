@@ -3,6 +3,7 @@ import * as Objects from './objects';
 import * as Random from './random';
 import * as Time from './time';
 import * as File from './file';
+import * as Url from './url'
 
 export {
   Promises,
@@ -10,4 +11,5 @@ export {
   Random,
   Time,
   File,
+  Url,
 };
