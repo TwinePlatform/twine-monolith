@@ -4,7 +4,7 @@
  * Currently only supports creation of one PDF template, but extensible
  * to allow others to be added.
  */
-import { pipeStreamToPromise } from '../../utils';
+import { Promises } from 'twine-util';
 import { PdfTemplateEnum, PdfTemplateModel } from './types';
 import visitorQrCodeTemplate from './templates/visitor_qr_code';
 const PdfMake = require('pdfmake');
@@ -27,7 +27,7 @@ export const fromTemplate = async (templateType: PdfTemplateEnum, model: PdfTemp
   const printer = new PdfMake(fontDescriptors);
   const template = await createTemplate(model);
   const document = printer.createPdfKitDocument(template);
-  const pData = pipeStreamToPromise(document);
+  const pData = Promises.fromStream(document);
   document.end();
   const data = await pData;
 
