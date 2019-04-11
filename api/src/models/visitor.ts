@@ -3,6 +3,7 @@
  */
 import { createHmac, randomBytes } from 'crypto';
 import { assoc, omit, pick, evolve, compose, pipe, filter } from 'ramda';
+import { Objects } from 'twine-util';
 import { Map } from '../types/internal';
 import { User, VisitorCollection, LinkedVisitEvent, RoleEnum } from './types';
 import { Users, ModelToColumn } from './user';
@@ -10,7 +11,6 @@ import { AgeList } from './age';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { getConfig } from '../../config';
 import * as QRCode from '../services/qrcode';
-import { pickOrAll } from '../utils';
 import Roles from './role';
 
 
@@ -164,7 +164,7 @@ export const Visitors: VisitorCollection = {
       client
         .select({
           id: 'user_account.user_account_id',
-          ...pickOrAll(query.fields, ModelToColumn),
+          ...Objects.pickOrAll(query.fields, ModelToColumn),
         })
         .from('user_account')
         .leftOuterJoin('gender', 'user_account.gender_id', 'gender.gender_id')
@@ -200,7 +200,7 @@ export const Visitors: VisitorCollection = {
     ));
 
     return rows.map((row: Partial<User>, idx) => {
-      const user: Partial<User> = pickOrAll(query.fields, row);
+      const user: Partial<User> = Objects.pickOrAll(query.fields, row);
       return ({ ...user, visits: userVisits[idx] });
     });
   },
