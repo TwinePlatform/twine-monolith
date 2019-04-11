@@ -53,11 +53,6 @@ export const toDataUrl = async (url: string) => {
 };
 
 
-export const ageArrayToBirthYearArray = (ageArray: number[]) =>
-  ageArray
-    .map((age: number) => moment().year() - age)
-    .reverse();
-
 export const pickOrAll = curry(
   (xs: string[] | undefined, o: object) => xs ? pick(xs, o) : { ...o });
 

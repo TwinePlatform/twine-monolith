@@ -6,10 +6,11 @@ import { assoc, omit, pick, evolve, compose, pipe, filter } from 'ramda';
 import { Map } from '../types/internal';
 import { User, VisitorCollection, LinkedVisitEvent, RoleEnum } from './types';
 import { Users, ModelToColumn } from './user';
+import { AgeList } from './age';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { getConfig } from '../../config';
 import * as QRCode from '../services/qrcode';
-import { ageArrayToBirthYearArray, pickOrAll } from '../utils';
+import { pickOrAll } from '../utils';
 import Roles from './role';
 
 
@@ -108,7 +109,7 @@ export const Visitors: VisitorCollection = {
     const query = evolve({
       where: Visitors.toColumnNames,
       whereNot: Visitors.toColumnNames,
-      whereBetween: pipe(evolve({ birthYear: ageArrayToBirthYearArray }), Visitors.toColumnNames),
+      whereBetween: pipe(evolve({ birthYear: AgeList.toBirthYear }), Visitors.toColumnNames),
       whereNotBetween: Visitors.toColumnNames,
     }, q);
 
@@ -146,7 +147,7 @@ export const Visitors: VisitorCollection = {
     const query = evolve({
       where: Visitors.toColumnNames,
       whereNot: Visitors.toColumnNames,
-      whereBetween: pipe(evolve({ birthYear: ageArrayToBirthYearArray }), Visitors.toColumnNames),
+      whereBetween: pipe(evolve({ birthYear: AgeList.toBirthYear }), Visitors.toColumnNames),
     }, q);
 
     const additionalColumnMap: Map<keyof LinkedVisitEvent, string> = {

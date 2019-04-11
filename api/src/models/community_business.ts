@@ -26,8 +26,9 @@ import {
   SectorEnum,
 } from './types';
 import { Organisations } from './organisation';
+import { AgeList } from './age';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import { renameKeys, ageArrayToBirthYearArray, mapKeys } from '../utils';
+import { renameKeys, mapKeys } from '../utils';
 
 
 /*
@@ -500,7 +501,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         gender: 'gender.gender_name',
       }),
       whereBetween: pipe(
-        evolve({ birthYear: ageArrayToBirthYearArray }),
+        evolve({ birthYear: AgeList.toBirthYear }),
         renameKeys({ birthYear: 'user_account.birth_year' })
       ),
     });
@@ -547,7 +548,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         gender: 'gender.gender_name',
       }),
       whereBetween: pipe(
-        evolve({ birthYear: ageArrayToBirthYearArray }),
+        evolve({ birthYear: AgeList.toBirthYear }),
         renameKeys({ birthYear: 'user_account.birth_year' })
         ),
     });
@@ -558,7 +559,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         gender: 'gender.gender_name',
       }),
       whereBetween: pipe(
-        evolve({ birthYear: ageArrayToBirthYearArray }),
+        evolve({ birthYear: AgeList.toBirthYear }),
         renameKeys({ birthYear: 'age_group_table.birth_year' })
         ),
     });
