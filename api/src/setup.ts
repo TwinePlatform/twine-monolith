@@ -5,7 +5,7 @@ import { Config } from '../config/types';
 
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
-import { emailInitialiser, EmailService } from './services/email';
+import Service, { EmailService } from './services/email';
 
 
 // Extend declaration from hapi
@@ -28,7 +28,7 @@ declare module 'hapi' {
 export default (server: Hapi.Server, config: Config) => {
   server.app.config = config;
   server.app.knex = Knex(config.knex);
-  server.app.EmailService = emailInitialiser.init({ apiKey: config.email.postmarkKey });
+  server.app.EmailService = Service;
 
   server.decorate('server', 'shutdown', async (graceful = true) => {
     /* istanbul ignore else */

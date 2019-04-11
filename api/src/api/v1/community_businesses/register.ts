@@ -41,7 +41,7 @@ export default [
     handler: async (request: RegisterCommunityBusinessesRequest, h: Hapi.ResponseToolkit) => {
       const {
         pre: { isChild },
-        server: { app: { knex, EmailService } },
+        server: { app: { knex, EmailService, config } },
         payload: {
           orgName,
           region,
@@ -91,12 +91,7 @@ export default [
         return { user, cb, token };
       });
 
-      await EmailService.send({
-        from: 'visitorapp@powertochange.org.uk', // this shouldn't be hardcoded
-        to: user.email,
-        templateId: EmailTemplate.WELCOME_CB_ADMIN,
-        templateModel: { name: user.name, organisation: cb.name, token, email: user.email },
-      });
+      await EmailService.newCbAdmin(config, user, cb, token);
 
       return CommunityBusinesses.serialise(cb);
     },
