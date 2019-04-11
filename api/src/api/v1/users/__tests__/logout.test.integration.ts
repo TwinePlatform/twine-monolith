@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
-import { getCookie } from '../../../../utils';
+import { getCookie } from '../../../../../tests/utils/server';
 import { getTrx } from '../../../../../tests/utils/database';
 
 

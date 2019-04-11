@@ -52,10 +52,6 @@ export const toDataUrl = async (url: string) => {
   return `data:image/png;base64,${content}`;
 };
 
-export const getCookie = (res: Shot.ResponseObject) => {
-  const setCookie = res.headers['set-cookie'];
-  return setCookie[0].split('; ')[0].split('=')[1];
-};
 
 export const ageArrayToBirthYearArray = (ageArray: number[]) =>
   ageArray
