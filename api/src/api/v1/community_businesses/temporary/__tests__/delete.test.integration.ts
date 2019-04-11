@@ -9,7 +9,7 @@ import { User,
   VolunteerLogs } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
 import { getTrx } from '../../../../../../tests/utils/database';
-import { RoleEnum } from '../../../../../auth';
+import { RoleEnum } from '../../../../../models/types';
 
 
 describe('DELETE /community-businesses/temporary/:id', () => {

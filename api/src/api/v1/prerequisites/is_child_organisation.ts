@@ -12,8 +12,8 @@
  */
 import * as Hapi from 'hapi';
 import { GetCommunityBusinessRequest } from '../types';
-import { RoleEnum } from '../../../auth/types';
 import { StandardCredentials } from '../../../auth/strategies/standard';
+import { RoleEnum } from '../../../models/types';
 
 
 export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {

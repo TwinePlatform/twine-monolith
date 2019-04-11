@@ -7,7 +7,7 @@ import { getTrx } from '../../../../../../tests/utils/database';
 import { Users, User, Organisations, Organisation } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
 import { EmailTemplate } from '../../../../../services/email/templates';
-import { RoleEnum } from '../../../../../auth';
+import { RoleEnum } from '../../../../../models/types';
 
 
 describe('API v1 - register new users', () => {

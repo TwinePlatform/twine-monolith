@@ -10,6 +10,7 @@ import {
 import { Templates } from '../../../services/email';
 import { BoomWithValidation } from '../utils';
 import { AppEnum } from '../../../types/internal';
+import { Tokens } from '../../../models/token';
 
 
 interface ForgotPasswordRequest extends Hapi.Request {
@@ -56,7 +57,7 @@ const routes: Hapi.ServerRoute[] = [
 
       if (!user) return Boom.badRequest('E-mail not recognised');
 
-      const { token } = await Users.createPasswordResetToken(knex, user);
+      const { token } = await Tokens.createPasswordResetToken(knex, user);
 
       const templateId = Templates.passwordResetForApp(redirect);
 
@@ -116,7 +117,7 @@ const routes: Hapi.ServerRoute[] = [
         return Boom.forbidden('User does not exist');
       }
       try {
-        await Users.usePasswordResetToken(knex, user.email, token);
+        await Tokens.usePasswordResetToken(knex, user.email, token);
       } catch (error) {
         request.log('warning', error);
         return Boom.unauthorized('Invalid token. Request another reset e-mail.');

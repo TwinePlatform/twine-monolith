@@ -15,7 +15,7 @@
  */
 import * as parse from 'minimist';
 import * as Knex from 'knex';
-import Roles from '../src/auth/roles';
+import Roles from '../src/models/role';
 import { getConfig } from '../config';
 
 process.on('unhandledRejection', (err) => { throw err; });

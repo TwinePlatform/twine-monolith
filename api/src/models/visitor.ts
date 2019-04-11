@@ -4,14 +4,13 @@
 import { createHmac, randomBytes } from 'crypto';
 import { assoc, omit, pick, evolve, compose, pipe, filter } from 'ramda';
 import { Map } from '../types/internal';
-import { User, VisitorCollection, LinkedVisitEvent } from './types';
+import { User, VisitorCollection, LinkedVisitEvent, RoleEnum } from './types';
 import { Users, ModelToColumn } from './user';
-import { RoleEnum } from '../auth/types';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { getConfig } from '../../config';
 import * as QRCode from '../services/qrcode';
 import { ageArrayToBirthYearArray, pickOrAll } from '../utils';
-import { Roles } from '../auth';
+import Roles from './role';
 
 
 const { qrcode: { secret } } = getConfig(process.env.NODE_ENV);

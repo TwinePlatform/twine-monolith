@@ -3,8 +3,8 @@ import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { User, CommunityBusinesses, Organisation, Volunteers, Users } from '../../../../../models';
-import { RoleEnum } from '../../../../../auth/types';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { RoleEnum } from '../../../../../models/types';
 
 
 describe('API /community-businesses/{id}/volunteers', () => {

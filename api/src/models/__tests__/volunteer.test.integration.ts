@@ -1,14 +1,14 @@
 import * as Knex from 'knex';
 import { compare } from 'bcrypt';
 import { omit } from 'ramda';
+import * as moment from 'moment';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
 import { Volunteers, DisabilityEnum, Users } from '..';
 import { CommunityBusinesses } from '../community_business';
-import { RoleEnum } from '../../auth/types';
-import Roles from '../../auth/roles';
-import moment = require('moment');
+import Roles from '../role';
+import { RoleEnum } from '../types';
 
 describe('Volunteer model', () => {
   let trx: Knex.Transaction;

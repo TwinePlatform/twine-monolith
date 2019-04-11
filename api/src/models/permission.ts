@@ -1,8 +1,8 @@
 import { uniqWith, equals } from 'ramda';
-import { PermissionInterface, PermissionTuple } from '../types';
+import { PermissionCollection, PermissionTuple } from './types';
 
 
-const Permissions: PermissionInterface = {
+const Permissions: PermissionCollection = {
   grantNew: async (client, { resource, permissionLevel, access, role }) => {
     try {
       // "return await" necessary to trap errors here instead of caller

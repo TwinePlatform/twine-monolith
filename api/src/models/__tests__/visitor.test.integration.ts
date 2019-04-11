@@ -5,8 +5,8 @@ import factory from '../../../tests/utils/factory';
 import { getTrx } from '../../../tests/utils/database';
 import { Visitors, DisabilityEnum } from '..';
 import { CommunityBusinesses } from '../community_business';
-import Roles from '../../auth/roles';
-import { RoleEnum } from '../../auth/types';
+import Roles from '../role';
+import { RoleEnum } from '../types';
 
 
 describe('Visitor model', () => {

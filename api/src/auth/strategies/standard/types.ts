@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Knex from 'knex';
 import { User, Organisation } from '../../../models';
-import { RoleEnum } from '../../types';
+import { RoleEnum } from '../../../models/types';
 
 
 export type StandardUserCredentials = {

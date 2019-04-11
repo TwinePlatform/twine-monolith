@@ -2,13 +2,13 @@ import * as Knex from 'knex';
 import { compare } from 'bcrypt';
 import { getConfig } from '../../../config';
 import factory from '../../../tests/utils/factory';
+import * as moment from 'moment';
 import { CommunityBusinesses } from '..';
 import { getTrx } from '../../../tests/utils/database';
 import { Dictionary, omit } from 'ramda';
-import { RegionEnum, SectorEnum } from '../types';
+import { RegionEnum, SectorEnum, RoleEnum } from '../types';
 import { CbAdmins } from '../cb_admin';
-import { RoleEnum, Roles } from '../../auth';
-import moment = require('moment');
+import Roles from '../role';
 
 
 describe('Community Business Model', () => {

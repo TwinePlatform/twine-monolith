@@ -4,10 +4,9 @@ import { ApiRequestQuery, ApiRequestBody } from './schema/request';
 import { ApiResponse } from './schema/response';
 import { StandardUserCredentials } from '../../auth/strategies/standard';
 import { ExternalAppCredentials } from '../../auth/strategies/external';
-import { RoleEnum } from '../../auth/types';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../models';
 import { Omit } from '../../types/internal';
-import { RegionEnum, SectorEnum } from '../../models/types';
+import { RegionEnum, SectorEnum, RoleEnum } from '../../models/types';
 
 
 declare module 'hapi' {

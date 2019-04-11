@@ -1,11 +1,11 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../tests/utils/server';
-import { RoleEnum } from '../../../../auth/types';
-import Roles from '../../../../auth/roles';
+import Roles from '../../../../models/role';
 import { getConfig } from '../../../../../config';
 import { Users, CommunityBusinesses } from '../../../../models';
 import pre from '../is_parent_organisation';
+import { RoleEnum } from '../../../../models/types';
 
 
 describe('Pre-requisite :: is_parent_organisation', () => {

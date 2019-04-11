@@ -17,7 +17,9 @@ import * as QRCode from '../../../../services/qrcode';
 import * as PdfService from '../../../../services/pdf';
 import { EmailTemplate } from '../../../../services/email/templates';
 import { RegisterConfirm } from '../../types';
-import { RoleEnum, Roles } from '../../../../auth';
+import { RoleEnum } from '../../../../models/types';
+import Roles from '../../../../models/role';
+import { Tokens } from '../../../../models/token';
 
 export default [
   {
@@ -77,7 +79,7 @@ export default [
             let document: string;
 
             await knex.transaction(async (trx) => {
-              await Users.useConfirmAddRoleToken(trx, user.email, token);
+              await Tokens.useConfirmAddRoleToken(trx, user.email, token);
               await Roles.add(trx, { role, userId, organisationId });
               updatedVisitor = await Users.getOne(trx, { where: { id: user.id } });
 
@@ -119,12 +121,12 @@ export default [
 
           case RoleEnum.VOLUNTEER:
             return knex.transaction(async (trx) => {
-              await Users.useConfirmAddRoleToken(trx, user.email, token);
+              await Tokens.useConfirmAddRoleToken(trx, user.email, token);
               await Roles.add(trx, { role, userId, organisationId });
               const updatedVolunteer = await Users.getOne(trx, { where: { id: user.id } });
 
               // create password reset token & send with response
-              const { token: newToken } = await Users
+              const { token: newToken } = await Tokens
                 .createPasswordResetToken(trx, updatedVolunteer);
               return { ...await Volunteers.serialise(updatedVolunteer), token: newToken };
             });

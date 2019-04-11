@@ -1,13 +1,13 @@
 import * as Knex from 'knex';
-import Roles from '..';
-import { RoleEnum } from '../../types';
-import { getConfig } from '../../../../config';
-import { getTrx } from '../../../../tests/utils/database';
-import { Users } from '../../../models';
-import factory from '../../../../tests/utils/factory';
+import Roles from '../role';
+import { getConfig } from '../../../config';
+import { getTrx } from '../../../tests/utils/database';
+import { Users } from '..';
+import factory from '../../../tests/utils/factory';
+import { RoleEnum } from '../types';
 
 
-describe('Roles Module', () => {
+describe('Roles Model', () => {
   let trx: Knex.Transaction;
   const config = getConfig(process.env.NODE_ENV);
   const knex = Knex(config.knex);

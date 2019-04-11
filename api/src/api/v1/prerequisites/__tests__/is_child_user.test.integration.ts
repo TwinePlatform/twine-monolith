@@ -1,10 +1,10 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../tests/utils/server';
-import { RoleEnum } from '../../../../auth/types';
 import { getConfig } from '../../../../../config';
 import { Users, Organisations } from '../../../../models';
 import pre from '../is_child_user';
+import { RoleEnum } from '../../../../models/types';
 
 
 describe('Pre-requisite :: is_child_user', () => {
