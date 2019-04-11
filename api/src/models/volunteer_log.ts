@@ -4,7 +4,6 @@ import { Objects } from 'twine-util';
 import { VolunteerLog, VolunteerLogCollection, RoleEnum } from './types';
 import { CommunityBusinesses } from './community_business';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import { renameKeys } from '../utils';
 import { Map, Dictionary } from '../types/internal';
 import Duration from './duration';
 import Roles from './role';
@@ -39,7 +38,7 @@ const optionalFields: Dictionary<string> = {
 
 const stripTablePrefix = Objects.mapKeys((s) => s.replace('volunteer_hours_log.', ''));
 
-const replaceConstantsWithForeignKeys = renameKeys({
+const replaceConstantsWithForeignKeys = Objects.renameKeys({
   'volunteer_activity.volunteer_activity_name': 'volunteer_hours_log.volunteer_activity_id',
   'volunteer_project.volunteer_project_name': 'volunteer_hours_log.volunteer_project_id',
 });

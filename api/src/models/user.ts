@@ -15,8 +15,8 @@ import {
   EthnicityEnum,
 } from './types';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import { renameKeys } from '../utils';
 import Roles from './role';
+import { renameKeys } from '../utils';
 
 
 /*

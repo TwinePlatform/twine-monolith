@@ -497,13 +497,13 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   async getVisitLogsWithUsers (client, cb, q) {
     const modifyColumnNames = evolve({
-      where: renameKeys({
+      where: Objects.renameKeys({
         visitActivity: 'visit_activity.visit_activity_name',
         gender: 'gender.gender_name',
       }),
       whereBetween: pipe(
         evolve({ birthYear: AgeList.toBirthYear }),
-        renameKeys({ birthYear: 'user_account.birth_year' })
+        Objects.renameKeys({ birthYear: 'user_account.birth_year' })
       ),
     });
     const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);
@@ -544,24 +544,24 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     const year = moment().year();
 
     const modifyColumnNames = evolve({
-      where: renameKeys({
+      where: Objects.renameKeys({
         visitActivity: 'visit_activity.visit_activity_name',
         gender: 'gender.gender_name',
       }),
       whereBetween: pipe(
         evolve({ birthYear: AgeList.toBirthYear }),
-        renameKeys({ birthYear: 'user_account.birth_year' })
+        Objects.renameKeys({ birthYear: 'user_account.birth_year' })
         ),
     });
 
     const modifyColumnNamesForAge = evolve({
-      where: renameKeys({
+      where: Objects.renameKeys({
         visitActivity: 'visit_activity.visit_activity_name',
         gender: 'gender.gender_name',
       }),
       whereBetween: pipe(
         evolve({ birthYear: AgeList.toBirthYear }),
-        renameKeys({ birthYear: 'age_group_table.birth_year' })
+        Objects.renameKeys({ birthYear: 'age_group_table.birth_year' })
         ),
     });
 
