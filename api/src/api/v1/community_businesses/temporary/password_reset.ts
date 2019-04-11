@@ -1,9 +1,9 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
+import { Random } from 'twine-util';
 import { isChildOrganisation, getCommunityBusiness } from '../../prerequisites';
 import { response, id } from '../schema';
 import { CbAdmins, Users } from '../../../../models';
-import { randomPasswordGenerator } from '../../../../utils';
 
 export default [
   {
@@ -39,7 +39,7 @@ export default [
 
       const [admin] = await CbAdmins.fromOrganisation(knex, communityBusiness);
 
-      const password = randomPasswordGenerator();
+      const password = Random.password();
       const updatedAdmin = await Users.update(knex, admin, { password });
       return { ...updatedAdmin, password };
     },
