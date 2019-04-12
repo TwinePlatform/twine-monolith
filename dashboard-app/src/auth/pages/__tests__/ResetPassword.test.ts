@@ -11,7 +11,7 @@ import ResetPassword from '../ResetPassword';
 import 'jest-dom/extend-expect';
 
 
-describe.skip('ResetPassword Page', () => {
+describe('ResetPassword Page', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -98,7 +98,10 @@ describe.skip('ResetPassword Page', () => {
       tools.getByText(/"password" length must be at least 8 characters/),
     ]);
 
-    expect(passwordLabel).toHaveTextContent('"password" length must be at least 8 characters long');
+    await wait(() => {
+      expect(passwordLabel).toHaveTextContent(
+        '"password" length must be at least 8 characters long');
+    });
   });
 
   test('Server-side validation :: Invalid token', async () => {
@@ -115,6 +118,8 @@ describe.skip('ResetPassword Page', () => {
     // tslint:disable-next-line:max-line-length
     const tools = renderWithHistory(ResetPassword, { route: `/password/reset/${token}?email=${email}` });
 
+    // UNKNOWN WHY THIS FIXES THE TESTS!
+    await wait();
     const [pwdInput, pwdConfirmInput, submitBtn] = await waitForElement(async () => [
       tools.getByLabelText('Password'),
       tools.getByLabelText('Confirm password'),
@@ -132,7 +137,9 @@ describe.skip('ResetPassword Page', () => {
       tools.getByText(/Invalid token/),
     ]);
 
-    expect(passwordLabel).toHaveTextContent('Invalid token');
+    await wait(() => {
+      expect(passwordLabel).toHaveTextContent('Invalid token');
+    });
   });
 
   test('Server-side validation :: Unrecognised e-mail', async () => {
@@ -166,6 +173,8 @@ describe.skip('ResetPassword Page', () => {
       tools.getByText(/User does not exist/),
     ]);
 
-    expect(passwordLabel).toHaveTextContent('User does not exist');
+    await wait(() => {
+      expect(passwordLabel).toHaveTextContent('User does not exist');
+    });
   });
 });

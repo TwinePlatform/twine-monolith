@@ -11,7 +11,7 @@ import ForgotPassword from '../ForgotPassword';
 import 'jest-dom/extend-expect';
 
 
-describe.skip('ForgotPassword Page', () => {
+describe('ForgotPassword Page', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -78,7 +78,9 @@ describe.skip('ForgotPassword Page', () => {
       tools.getByText(/"email" must be a valid email/),
     ]);
 
-    expect(emailLabel).toHaveTextContent('"email" must be a valid email');
+    await wait(() => {
+      expect(emailLabel).toHaveTextContent('"email" must be a valid email');
+    });
   });
 
   test('Server-side validation :: Invalid e-mail', async () => {
@@ -106,6 +108,8 @@ describe.skip('ForgotPassword Page', () => {
       tools.getByText(/E-mail not recognised/),
     ]);
 
-    expect(emailLabel).toHaveTextContent('E-mail not recognised');
+    await wait(() => {
+      expect(emailLabel).toHaveTextContent('E-mail not recognised');
+    });
   });
 });

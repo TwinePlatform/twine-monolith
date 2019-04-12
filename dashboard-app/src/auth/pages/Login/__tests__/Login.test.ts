@@ -10,7 +10,7 @@ import { axios } from '../../../../api';
 import Login from '../Login';
 import 'jest-dom/extend-expect';
 
-describe.skip('Login Page', () => {
+describe('Login Page', () => {
   let mock: MockAdapter;
 
   beforeAll(() => {
@@ -69,7 +69,9 @@ describe.skip('Login Page', () => {
       tools.getByText(/"email" must be a valid email/),
     ]);
 
-    expect(emailLabel).toHaveTextContent('"email" must be a valid email');
+    await wait(() => {
+      expect(emailLabel).toHaveTextContent('"email" must be a valid email');
+    });
   });
 
   test('Client-side validation :: Invalid password', async () => {
@@ -96,7 +98,10 @@ describe.skip('Login Page', () => {
       tools.getByText(/length must be at least/),
     ]);
 
-    expect(passwordLabel).toHaveTextContent('"password" length must be at least 8 characters long');
+    await wait(() => {
+      expect(passwordLabel).toHaveTextContent(
+        '"password" length must be at least 8 characters long');
+    });
   });
 
   test('Server-side validation :: Invalid e-mail', async () => {
@@ -133,7 +138,9 @@ describe.skip('Login Page', () => {
       tools.getByText(/"email" must be a valid email/),
     ]);
 
-    expect(emailLabel).toHaveTextContent('"email" must be a valid email');
+    await wait(() => {
+      expect(emailLabel).toHaveTextContent('"email" must be a valid email');
+    });
   });
 
   test('Server-side validation :: Invalid password', async () => {
@@ -170,7 +177,10 @@ describe.skip('Login Page', () => {
       tools.getByText(/length must be at least/),
     ]);
 
-    expect(passwordLabel).toHaveTextContent('"password" length must be at least 8 characters long');
+    await wait(() => {
+      expect(passwordLabel).toHaveTextContent(
+        '"password" length must be at least 8 characters long');
+    });
   });
 
   test('Click on "Forgot Password" link', async () => {
