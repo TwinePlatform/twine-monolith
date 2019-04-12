@@ -9,9 +9,9 @@ export const mapKeys =
       Object.keys(o).reduce((acc, k) => assoc(f(k), o[k], acc), {} as Dictionary<T>);
 
 export const renameKeys =
-    (map: Dictionary<string>) => <T>(o: Dictionary<T>) =>
+    (map: Dictionary<string>) => (o: Dictionary<any>) =>
       Object.keys(o)
-        .reduce((acc, k) => assoc(map[k] || k, o[k], acc), {} as Dictionary<T>);
+        .reduce((acc, k) => assoc(map[k] || k, o[k], acc), {} as Dictionary<any>);
 
 export const evolveKeys = <T>(map: Dictionary<any>, o: Dictionary<T>) =>
   Object.keys(o)

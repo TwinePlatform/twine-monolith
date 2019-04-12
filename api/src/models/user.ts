@@ -16,7 +16,6 @@ import {
 } from './types';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import Roles from './role';
-import { renameKeys } from '../utils';
 
 
 /*
@@ -58,7 +57,7 @@ const applyDefaultConstants = (o: Partial<User>) => ({
   disability: o.disability || DisabilityEnum.PREFER_NOT_TO_SAY,
 });
 
-const replaceConstantsWithForeignKeys = renameKeys({
+const replaceConstantsWithForeignKeys = Objects.renameKeys({
   'gender.gender_name': 'gender_id',
   'ethnicity.ethnicity_name': 'ethnicity_id',
   'disability.disability_name': 'disability_id',

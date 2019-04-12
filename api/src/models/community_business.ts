@@ -29,7 +29,6 @@ import {
 import { Organisations } from './organisation';
 import { AgeList } from './age';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import { renameKeys } from '../utils';
 
 
 /*
@@ -427,7 +426,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
             .select('visit_activity_category_id')
             .where({ visit_activity_category_name: n }),
       }),
-      renameKeys({
+      Objects.renameKeys({
         name: 'visit_activity_name',
         category: 'visit_activity_category_id',
         createdAt: 'created_at',
