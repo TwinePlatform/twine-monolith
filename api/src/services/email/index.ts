@@ -1,25 +1,31 @@
-import EmailDispatcher from './postmark';
+import EmailDispatcher from './dispatcher';
 import { EmailTemplate, Templates } from './templates';
 import { Config } from '../../../config';
 import { User, CommunityBusiness } from '../../models';
 import { RoleEnum } from '../../models/types';
 import { AppEnum } from '../../types/internal';
 
+
 export type EmailService = {
   newVisitor:
     (c: Config, v: User, a: User, cb: CommunityBusiness, at: string) => Promise<void>
+
   visitorReminder:
     (c: Config, v: User, cb: CommunityBusiness, at: string) => Promise<void>
+
   newVolunteer:
     (c: Config, v: User, a: User, cb: CommunityBusiness) => Promise<void>
+
   newCbAdmin:
     (c: Config, a: User, cb: CommunityBusiness, t: string) => Promise<void>
+
   addRole:
     (c: Config, a: User, cb: CommunityBusiness, r: RoleEnum, t: string) => Promise<void>
 
   resetPassword:
     (c: Config, ap: AppEnum, a: User, t: string) => Promise<void>
 };
+
 
 const Service: EmailService = {
   async newVisitor (cfg, visitor, admin, cb, attachment) {
