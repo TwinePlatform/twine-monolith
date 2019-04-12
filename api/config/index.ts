@@ -10,7 +10,6 @@ import configSchema from './config.schema';
 import configDefaults from './config.defaults';
 import configDevelopment from './config.development';
 import configTesting from './config.testing';
-import configStaging from './config.staging';
 import configProduction from './config.production';
 import { Config, Environment } from './types';
 import { DeepPartial } from '../src/types/internal';
@@ -30,7 +29,6 @@ declare module 'knex' {
 const Configs: { [k in Environment]: DeepPartial<Config> } = {
   [Environment.DEVELOPMENT]: configDevelopment,
   [Environment.TESTING]: configTesting,
-  [Environment.STAGING]: configStaging,
   [Environment.PRODUCTION]: configProduction,
 };
 
@@ -38,11 +36,11 @@ const Configs: { [k in Environment]: DeepPartial<Config> } = {
 // transformations to the default config.
 //
 // Allows an optional filepath for a config override JSON file.
-const readConfig = (env = Environment.DEVELOPMENT): Partial<Config> =>
-  mergeDeepLeft(Configs[env], configDefaults) as Partial<Config>;
+const readConfig = (env = Environment.DEVELOPMENT): DeepPartial<Config> =>
+  mergeDeepLeft(Configs[env], configDefaults);
 
 // Validates the given configuration object against the default schema
-const validateConfig = (cfg: Partial<Config>): Config => {
+const validateConfig = (cfg: DeepPartial<Config>): Config => {
   const { error, value } = Joi.validate(cfg, configSchema);
 
   if (error) {
@@ -63,11 +61,8 @@ const getEnvironment = (env: string): Environment => {
     case Environment.PRODUCTION:
       return Environment.PRODUCTION;
 
-    case Environment.STAGING:
-      return Environment.STAGING;
-
     default:
-      return Environment.DEVELOPMENT;
+      throw new Error(`Invalid environment: ${env}`);
   }
 };
 

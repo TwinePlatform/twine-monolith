@@ -1,12 +1,12 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
 import * as JWT from 'jsonwebtoken';
+import { AppEnum } from '../src/types/internal';
 
 
 export enum Environment {
   DEVELOPMENT = 'development',
   TESTING = 'testing',
-  STAGING = 'staging',
   PRODUCTION = 'production',
 }
 
@@ -19,6 +19,16 @@ type WebConfig = {
     security: Hapi.RouteOptionsSecureObject | boolean
   },
   tls?: null | { key: string, cert: string }
+};
+
+type PlatformConfig = {
+  domains: {
+    [AppEnum.ADMIN]: string
+    [AppEnum.DASHBOARD]: string
+    [AppEnum.TWINE_API]: string
+    [AppEnum.VISITOR]: string
+    [AppEnum.VOLUNTEER]: null
+  }
 };
 
 type EmailConfig = {
@@ -49,6 +59,7 @@ export type Config = {
   root: string
   env: Environment
   web: WebConfig
+  platform: PlatformConfig
   knex: Knex.Config
   email: EmailConfig
   auth: AuthConfig
