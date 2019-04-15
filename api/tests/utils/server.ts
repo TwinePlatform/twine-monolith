@@ -6,6 +6,7 @@
  */
 import * as Knex from 'knex';
 import * as Hapi from 'hapi';
+import * as Shot from 'shot';
 import { Config } from '../../config';
 
 
@@ -37,4 +38,10 @@ export const init = async (config: Config, options: Options = {}): Promise<Hapi.
   }
 
   return server;
+};
+
+
+export const getCookie = (res: Shot.ResponseObject) => {
+  const setCookie = res.headers['set-cookie'];
+  return setCookie[0].split('; ')[0].split('=')[1];
 };
