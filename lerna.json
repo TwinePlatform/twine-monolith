@@ -5,7 +5,7 @@
     "temp-admin-dashboard-app",
     "visitor-app",
     "volunteer-app",
-    "lib/*"
+    "packages/*"
   ],
   "version": "0.0.0"
 }

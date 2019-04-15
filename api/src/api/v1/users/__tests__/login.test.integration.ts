@@ -3,7 +3,7 @@ import * as Knex from 'knex';
 import * as JWT from 'jsonwebtoken';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
-import { getCookie } from '../../../../../tests/utils/server';
+import { getCookie } from '../../../../utils';
 import { getTrx } from '../../../../../tests/utils/database';
 
 

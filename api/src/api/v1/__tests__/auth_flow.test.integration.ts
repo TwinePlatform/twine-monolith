@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 import { init } from '../../../server';
 import { getConfig } from '../../../../config';
-import { getCookie } from '../../../../tests/utils/server';
+import { getCookie } from '../../../utils';
 
 
 describe('Auth flow', () => {

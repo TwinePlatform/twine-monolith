@@ -1,9 +1,9 @@
 import * as Knex from 'knex';
 import { assoc, compose, evolve, has, filter, invertObj, omit, pick } from 'ramda';
-import { Objects } from 'twine-util';
 import { VolunteerLog, VolunteerLogCollection, RoleEnum } from './types';
 import { CommunityBusinesses } from './community_business';
 import { applyQueryModifiers } from './applyQueryModifiers';
+import { renameKeys, mapKeys } from '../utils';
 import { Map, Dictionary } from '../types/internal';
 import Duration from './duration';
 import Roles from './role';
@@ -36,9 +36,9 @@ const optionalFields: Dictionary<string> = {
 
 };
 
-const stripTablePrefix = Objects.mapKeys((s) => s.replace('volunteer_hours_log.', ''));
+const stripTablePrefix = mapKeys((s) => s.replace('volunteer_hours_log.', ''));
 
-const replaceConstantsWithForeignKeys = Objects.renameKeys({
+const replaceConstantsWithForeignKeys = renameKeys({
   'volunteer_activity.volunteer_activity_name': 'volunteer_hours_log.volunteer_activity_id',
   'volunteer_project.volunteer_project_name': 'volunteer_hours_log.volunteer_project_id',
 });
