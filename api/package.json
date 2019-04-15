@@ -47,6 +47,8 @@
     "start": "node ./build/src/index.js",
     "watch": "tsc -w",
     "build": "tsc && npm run copy",
+    "bootstrap": "lerna bootstrap",
+    "heroku-postinstall": "npm run bootstrap",
     "heroku-postbuild": "npm run build && npm run migrate:latest",
     "exec": "ts-node --files"
   },
