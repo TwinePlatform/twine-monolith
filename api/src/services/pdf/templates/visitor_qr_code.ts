@@ -3,7 +3,7 @@
  */
 import * as path from 'path';
 import { mergeDeepRight } from 'ramda';
-import { toDataUrl, isDataUrl } from '../../../utils';
+import { Url } from 'twine-util';
 import { getConfig } from '../../../../config';
 import { PdfTemplateDefinition } from '../types';
 
@@ -91,10 +91,10 @@ const createTemplate = async (
   { qrCodeDataUrl, logoUrl }: { qrCodeDataUrl: string, logoUrl?: string }
 ) => {
   if (logoUrl) {
-    if (isDataUrl(logoUrl)) {
+    if (Url.isDataUrl(logoUrl)) {
       return createCustomLogoTemplate(qrCodeDataUrl, logoUrl);
     } else {
-      const logoDataUrl = await toDataUrl(logoUrl);
+      const logoDataUrl = await Url.toDataUrl(Url.toPngUrl(logoUrl));
       return createCustomLogoTemplate(qrCodeDataUrl, logoDataUrl);
     }
   } else {

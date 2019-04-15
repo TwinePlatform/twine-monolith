@@ -4,6 +4,7 @@
 import * as Knex from 'knex';
 import { compose, omit, filter, pick, invertObj, evolve } from 'ramda';
 import { hash } from 'bcrypt';
+import { Objects } from 'twine-util';
 import { Map } from '../types/internal';
 import {
   User,
@@ -14,7 +15,6 @@ import {
   EthnicityEnum,
 } from './types';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import { renameKeys, mapKeys } from '../utils';
 import Roles from './role';
 
 
@@ -57,7 +57,7 @@ const applyDefaultConstants = (o: Partial<User>) => ({
   disability: o.disability || DisabilityEnum.PREFER_NOT_TO_SAY,
 });
 
-const replaceConstantsWithForeignKeys = renameKeys({
+const replaceConstantsWithForeignKeys = Objects.renameKeys({
   'gender.gender_name': 'gender_id',
   'ethnicity.ethnicity_name': 'ethnicity_id',
   'disability.disability_name': 'disability_id',
@@ -163,7 +163,7 @@ export const Users: UserCollection = {
     const user = { ..._user, password };
 
     const preProcessUser = compose(
-      mapKeys((k) => k.replace('user_account.', '')),
+      Objects.mapKeys((k) => k.replace('user_account.', '')),
       transformForeignKeysToSubQueries(client),
       replaceConstantsWithForeignKeys,
       Users.toColumnNames,
@@ -192,7 +192,7 @@ export const Users: UserCollection = {
     );
 
     const preProcessChangeSet = compose(
-      mapKeys((k) => k.replace('user_account.', '')),
+      Objects.mapKeys((k) => k.replace('user_account.', '')),
       transformForeignKeysToSubQueries(client),
       replaceConstantsWithForeignKeys,
       Users.toColumnNames
