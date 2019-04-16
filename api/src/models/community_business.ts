@@ -16,7 +16,6 @@ import {
   identity,
 } from 'ramda';
 import { randomBytes } from 'crypto';
-import { Objects } from 'twine-util';
 import { Dictionary, Map } from '../types/internal';
 import {
   CommunityBusiness,
@@ -27,8 +26,8 @@ import {
   SectorEnum,
 } from './types';
 import { Organisations } from './organisation';
-import { AgeList } from './age';
 import { applyQueryModifiers } from './applyQueryModifiers';
+import { renameKeys, ageArrayToBirthYearArray, mapKeys } from '../utils';
 
 
 /*
@@ -211,7 +210,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   async add (client, cb) {
     const preProcessCbChangeset = compose(
-      Objects.mapKeys((s) => s.replace('community_business.', '')),
+      mapKeys((s) => s.replace('community_business.', '')),
       transformForeignKeysToSubQueries(client),
       CommunityBusinesses.toColumnNames,
       pickCbFields
@@ -260,7 +259,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     const [{ organisation_id: id }] = await client.transaction(async (trx) => {
       const cbQuery = preProcessCb(trx)(cb);
       const preProcessCbChangeset = compose(
-        Objects.mapKeys((s) => s.replace('community_business.', '')),
+        mapKeys((s) => s.replace('community_business.', '')),
         transformForeignKeysToSubQueries(trx),
         CommunityBusinesses.toColumnNames,
         pickCbFields
@@ -426,7 +425,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
             .select('visit_activity_category_id')
             .where({ visit_activity_category_name: n }),
       }),
-      Objects.renameKeys({
+      renameKeys({
         name: 'visit_activity_name',
         category: 'visit_activity_category_id',
         createdAt: 'created_at',
@@ -496,13 +495,13 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   async getVisitLogsWithUsers (client, cb, q) {
     const modifyColumnNames = evolve({
-      where: Objects.renameKeys({
+      where: renameKeys({
         visitActivity: 'visit_activity.visit_activity_name',
         gender: 'gender.gender_name',
       }),
       whereBetween: pipe(
-        evolve({ birthYear: AgeList.toBirthYear }),
-        Objects.renameKeys({ birthYear: 'user_account.birth_year' })
+        evolve({ birthYear: ageArrayToBirthYearArray }),
+        renameKeys({ birthYear: 'user_account.birth_year' })
       ),
     });
     const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);
@@ -543,24 +542,24 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     const year = moment().year();
 
     const modifyColumnNames = evolve({
-      where: Objects.renameKeys({
+      where: renameKeys({
         visitActivity: 'visit_activity.visit_activity_name',
         gender: 'gender.gender_name',
       }),
       whereBetween: pipe(
-        evolve({ birthYear: AgeList.toBirthYear }),
-        Objects.renameKeys({ birthYear: 'user_account.birth_year' })
+        evolve({ birthYear: ageArrayToBirthYearArray }),
+        renameKeys({ birthYear: 'user_account.birth_year' })
         ),
     });
 
     const modifyColumnNamesForAge = evolve({
-      where: Objects.renameKeys({
+      where: renameKeys({
         visitActivity: 'visit_activity.visit_activity_name',
         gender: 'gender.gender_name',
       }),
       whereBetween: pipe(
-        evolve({ birthYear: AgeList.toBirthYear }),
-        Objects.renameKeys({ birthYear: 'age_group_table.birth_year' })
+        evolve({ birthYear: ageArrayToBirthYearArray }),
+        renameKeys({ birthYear: 'age_group_table.birth_year' })
         ),
     });
 

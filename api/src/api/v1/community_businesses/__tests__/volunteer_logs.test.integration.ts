@@ -3,7 +3,6 @@ import * as Knex from 'knex';
 import * as moment from 'moment';
 import * as MockDate from 'mockdate';
 import { omit } from 'ramda';
-import { Random } from 'twine-util';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
@@ -14,6 +13,7 @@ import {
   Organisations,
   VolunteerLog,
 } from '../../../../models';
+import { rndPastDateThisMonth } from '../../../../../tests/utils/data';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
 
 
@@ -642,9 +642,9 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
     test('SUCCESS - can sync multiple new logs', async () => {
       const times = [
-        Random.dateThisMonth().toISOString(),
-        Random.dateThisMonth().toISOString(),
-        Random.dateThisMonth().toISOString(),
+        rndPastDateThisMonth().toISOString(),
+        rndPastDateThisMonth().toISOString(),
+        rndPastDateThisMonth().toISOString(),
       ];
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
@@ -812,9 +812,9 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
     test('SUCCESS - can sync a mix of logs for self and others as VOLUNTEER_ADMIN', async () => {
       const times = [
-        Random.dateThisMonth(),
-        Random.dateThisMonth(),
-        Random.dateThisMonth(),
+        rndPastDateThisMonth(),
+        rndPastDateThisMonth(),
+        rndPastDateThisMonth(),
       ];
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
@@ -844,9 +844,9 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
     test('ERROR - cannot sync logs for others as VOLUNTEER', async () => {
       const times = [
-        Random.dateThisMonth(),
-        Random.dateThisMonth(),
-        Random.dateThisMonth(),
+        rndPastDateThisMonth(),
+        rndPastDateThisMonth(),
+        rndPastDateThisMonth(),
       ];
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
