@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
 import NavHeaderItem, { HeaderContent } from './NavHeaderItem';
+import { ColoursEnum } from '../../styles/style_guide';
 
 
 const noop = () => {};
 
 const PaddedRow = styled(Row)`
   padding: 2em 0;
+  background-color: ${ColoursEnum.grey}
 `;
 
 interface NavHeaderProps {

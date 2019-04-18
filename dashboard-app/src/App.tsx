@@ -4,7 +4,7 @@ import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import PrivateRoute from './auth/components/PrivateRoute';
 import HoldingPage from './HoldingPage';
 import Dashboard from './dashboard/Dashboard';
-import Login from './auth/pages/Login/Login';
+import Login from './auth/pages/Login';
 import ResetPassword from './auth/pages/ResetPassword';
 import ForgotPassword from './auth/pages/ForgotPassword';
 import ErrorPage from './Error';

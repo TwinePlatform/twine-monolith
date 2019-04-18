@@ -7,7 +7,7 @@ import {
 } from 'react-testing-library';
 import { renderWithHistory } from '../../../../util/tests';
 import { axios } from '../../../../api';
-import Login from '../Login';
+import Login from '..';
 import 'jest-dom/extend-expect';
 
 describe.skip('Login Page', () => {

@@ -7,7 +7,7 @@ import { Formik, Form as _Form } from 'formik';
 import { CbAdmins, Response } from '../../api';
 import Input from '../../components/Input';
 import { SubmitButton } from '../../components/Buttons';
-import NavHeader from '../../components/NavHeader/NavHeader';
+import NavHeader from '../../components/NavHeader';
 import { redirectOnError, withParams, getQueryObjectFromProps } from '../../util/routing';
 import { validateForm } from '../../util/forms';
 import { AxiosError } from 'axios';
