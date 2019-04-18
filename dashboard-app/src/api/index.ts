@@ -38,6 +38,8 @@ export const CbAdmins = {
 export const CommunityBusinesses = {
   get: (params?: Pick<AxiosRequestConfig, 'params'>) =>
     axios.get('/community-businesses/me', { params }),
+  getLogs: (params?: Pick<AxiosRequestConfig, 'params'>) =>
+    axios.get('/community-businesses/me/volunteer-logs', { params }),
 };
 
 

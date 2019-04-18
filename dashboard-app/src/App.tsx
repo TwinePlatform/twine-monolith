@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import PrivateRoute from './auth/components/PrivateRoute';
 import HoldingPage from './HoldingPage';
+import ByActivity from './dashboard/ByActivity';
+import ByTime from './dashboard/ByTime';
+import ByVolunteer from './dashboard/ByVolunteer';
 import Dashboard from './dashboard/Dashboard';
 import Login from './auth/pages/Login';
 import ResetPassword from './auth/pages/ResetPassword';
@@ -27,6 +30,9 @@ const AppContainer = styled.div`
  */
 const ProtectedRoutes = () => (
   <Switch>
+    <Route exact path="/activities" component={ByActivity} />
+    <Route exact path="/time" component={ByTime} />
+    <Route exact path="/volunteers" component={ByVolunteer} />
     <Route exact path="/" component={Dashboard} />
   </Switch>
 );
