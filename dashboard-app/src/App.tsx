@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
-import Dots from './components/Dots';
 import PrivateRoute from './auth/components/PrivateRoute';
 import HoldingPage from './HoldingPage';
 import Dashboard from './dashboard/Dashboard';
@@ -28,7 +27,6 @@ const ProtectedRoutes = () => (
 );
 
 const App = () => (
-  <Dots>
     <AppContainer>
       {
         process.env.REACT_APP_HOLDING_PAGE
@@ -46,7 +44,6 @@ const App = () => (
           )
       }
     </AppContainer>
-  </Dots>
 );
 
 export default App;
