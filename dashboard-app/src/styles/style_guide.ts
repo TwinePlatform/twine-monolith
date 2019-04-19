@@ -23,6 +23,7 @@ export enum FontSizeEnum {
 }
 
 export enum SpacingEnum {
+  xxSmall = '0.25em',
   xSmall = '0.5em',
   small = '1em',
   medium = '2em',

@@ -78,7 +78,7 @@ const getMessage = (props: LoginProps) => {
  */
 const Login: React.SFC<LoginProps> = (props) => (
   <>
-  <Navbar/>
+  <Navbar loggedIn={false} active={false}/>
   <Grid>
     <Row center="xs">
       <Col>
