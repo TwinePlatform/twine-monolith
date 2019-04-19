@@ -9,17 +9,16 @@ import { Button } from '../Buttons';
 
 
 interface Props {
-  loggedIn: boolean;
-  active: string | false;
+  active: string;
 }
 
 interface LinkProps {
-  active?: boolean;
+  isActive?: boolean;
 }
 
 const Link = styled(L)`
   padding: ${SpacingEnum.xxSmall};
-  border-bottom: ${(props: LinkProps) => props.active
+  border-bottom: ${(props: LinkProps) => props.isActive
     ? `1.5px solid ${ColoursEnum.white}` : 'none'};
 `;
 
@@ -33,11 +32,10 @@ const Logout = styled(Button)`
 const Navigation: React.FunctionComponent<Props> = (props) => (
 
   <Row between={'xs'}>
-      <Link to={'/activites'}>Activity</Link>
-      <Link to={'/volunteer'}>Volunteer</Link>
-      <Link to={'/time'} active>Time</Link>
-      <Link to={'/time'}>[ User ]</Link>
-      <Logout onClick={CbAdmins.logout}>Logout</Logout>
+    {['activity', 'volunteer', 'time'].map((page) =>
+      (<Link to={`./${page}`} key={page} isActive={page === props.active}>{page}</Link>)
+    )}
+      <Link to={'./login'} onClick={CbAdmins.logout}>Logout</Link>
     </Row>
 );
 

@@ -4,12 +4,13 @@ import { Row, Col } from 'react-flexbox-grid';
 
 import { ColoursEnum, FontSizeEnum, FontWeightEnum } from '../../styles/style_guide';
 import Navigation from './Navigation';
+import { Dictionary } from 'ramda';
 
 
 interface Props {
-  loggedIn: boolean;
-  active: string | false;
+  pathname: string;
 }
+
 
 const PaddedRow = styled(Row)`
   height: 4em;
@@ -23,17 +24,34 @@ const Title = styled.p`
   font-size: ${FontSizeEnum.heading};
 `;
 
-const Navbar: React.FunctionComponent<Props> = (props) => (
+
+const pageFromRoute = (url: string): string => {
+  const routes: Dictionary<string> = {
+    '/activity': 'activity',
+    '/time': 'time',
+    '/volunteer': 'volunteer',
+    '/': '/',
+  };
+
+  return routes[url];
+};
+
+const Navbar: React.FunctionComponent<Props> = (props) => {
+  const isLoggedIn = Boolean(pageFromRoute(props.pathname));
+  const active = pageFromRoute(props.pathname);
+
+  return(
   <PaddedRow middle="xs" between="xs">
     <Col xs={6} lg={4}>
       <Title>TWINE</Title>
     </Col>
     <Col xs={6} lg={4}>
-    {props.loggedIn &&
-      <Navigation {...props}/>
+    {isLoggedIn &&
+      <Navigation active={active}/>
     }
     </Col>
   </PaddedRow>
-);
+  );
+};
 
 export default Navbar;
