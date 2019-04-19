@@ -1,6 +1,16 @@
+import { css, BaseThemedCssFunction } from 'styled-components';
+import { Dictionary } from 'ramda';
+
 /*
  * Style guide
  */
+
+export enum ColoursEnum {
+  white = '#FFFFFF',
+  offWhite = '#F8F8F8',
+  grey = '#707070',
+  primary = '#8000FF',
+}
 
 export const colors = {
   highlight_primary: '#FDBD2D',
@@ -17,16 +27,29 @@ export const colors = {
   black: '#000',
 };
 
+export enum FontSizeEnum {
+  heading = '1.6em',
+  heading2 = '1.2em',
+  medium = '0.8em',
+  small = '0.65em',
+}
+
+export enum SpacingEnum {
+  xSmall = '0.5em',
+  small = '1em',
+  medium = '2em',
+  large = '4em',
+}
 export const fonts = {
   family: {
-    default: 'Nunito, sans-serif',
-    highlight: 'Nunito, sans-serif',
+    default: 'Roboto, sans-serif',
+    highlight: 'Roboto, sans-serif',
   },
   size: {
     base: '1rem',
-    heading: '2rem',
-    heading2: '1.5rem',
-    medium: '1rem',
+    heading: '1.6rem',
+    heading2: '1.2rem',
+    medium: '0.8rem',
     small: '0.65rem',
   },
   weight: {
@@ -44,3 +67,10 @@ export default {
   fontSize: fonts.size,
   fontWeight: fonts.weight,
 };
+
+export enum DisplayWidthEnum {
+  small = '@media (max-width: 600px)',
+  medium = '@media (max-width: 1024px)',
+  large = '@media (max-width: 1440px)',
+  xlarge = '@media (max-width: 1920px)',
+}

@@ -2,7 +2,7 @@ import React, { SFC } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { rgba } from 'polished';
-import { colors, fonts } from '../styles/style_guide';
+import { colors, fonts, FontSizeEnum, ColoursEnum } from '../styles/style_guide';
 
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -20,7 +20,7 @@ const Label = styled.label<{ display: string }>`
   margin-bottom: 0.2rem;
   color: ${colors.dark};
   font: ${fonts.family.default};
-  font-size: ${fonts.size.base};
+  font-size: ${FontSizeEnum.medium};
 `;
 
 const Input = styled.input`
@@ -31,8 +31,8 @@ const Input = styled.input`
   outline: none;
   box-shadow: none;
   color: ${colors.dark};
-  background-color: ${rgba(colors.highlight_primary, 0.06)};
-  font-size: ${fonts.size.base};
+  background-color: ${ColoursEnum.white};
+  font-size: ${FontSizeEnum.medium};
 
   &:focus {
     border: 0.1rem solid ${colors.highlight_primary};
@@ -43,6 +43,7 @@ const LabelContent = styled.p`
   width: 100%;
   text-align: left;
   margin: 0;
+  margin-bottom: 0.5em;
 `;
 
 const ErrorText = styled.span`

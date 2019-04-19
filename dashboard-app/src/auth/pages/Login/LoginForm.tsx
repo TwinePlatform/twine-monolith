@@ -5,13 +5,16 @@ import { Formik, Form as _Form, Field, FormikActions } from 'formik';
 import Input from '../../../components/Input';
 import { SubmitButton } from '../../../components/Buttons';
 import { validateForm } from '../../../util/forms';
+import { SpacingEnum } from '../../../styles/style_guide';
 
 
 /**
  * Styled Components
  */
 const Form = styled(_Form)`
-  width: 40%;
+  width: 100%;
+  text-align: left;
+  margin-top: ${SpacingEnum.large}
 `;
 
 export type FormValues = {
@@ -66,7 +69,7 @@ const LoginForm: React.SFC<LoginFormProps> = (props) => (
             />
           }
         />
-        <SubmitButton type="submit">LOGIN</SubmitButton>
+        <SubmitButton type="submit">Log in</SubmitButton>
       </Form>
     )}
   </Formik>

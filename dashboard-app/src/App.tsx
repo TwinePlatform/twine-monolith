@@ -8,15 +8,14 @@ import Login from './auth/pages/Login';
 import ResetPassword from './auth/pages/ResetPassword';
 import ForgotPassword from './auth/pages/ForgotPassword';
 import ErrorPage from './Error';
-import { fonts } from './styles/style_guide';
+import { fonts, ColoursEnum } from './styles/style_guide';
 
 
 const AppContainer = styled.div`
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   max-width: 1280px;
-  overflow-x: hidden;
-  background: transparent;
+  background: ${ColoursEnum.offWhite};
   font-family: ${fonts.family.default};
 `;
 
