@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import * as Joi from 'joi';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { Formik, Form as _Form, FormikActions, Field } from 'formik';
+import { Formik, Form as _Form, FormikActions } from 'formik';
 import { CbAdmins, Response } from '../../api';
 import Input from '../../components/Input';
 import { SubmitButton } from '../../components/Buttons';

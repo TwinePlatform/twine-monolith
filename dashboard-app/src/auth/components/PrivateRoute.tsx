@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, RouteProps, Redirect } from 'react-router-dom';
 import { FullScreenBeatLoader } from '../../components/Loaders';
 import { ColoursEnum } from '../../styles/style_guide';

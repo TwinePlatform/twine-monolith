@@ -1,6 +1,3 @@
-import { css, BaseThemedCssFunction } from 'styled-components';
-import { Dictionary } from 'ramda';
-
 /*
  * Style guide
  */
