@@ -11,7 +11,7 @@ export default () => {
 
   return (
     <Grid>
-      <Row center="xs" middle="xs" style={{ height: '100vh' }}>
+      <Row center="xs">
         <Col>
           <H1>By Activity</H1>
         </Col>
