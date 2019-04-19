@@ -5,8 +5,6 @@ import { Row } from 'react-flexbox-grid';
 import { ColoursEnum, SpacingEnum } from '../../styles/style_guide';
 import L from '../Link';
 import { CbAdmins } from '../../api';
-import { Button } from '../Buttons';
-
 
 interface Props {
   active: string;
@@ -22,15 +20,7 @@ const Link = styled(L)`
     ? `1.5px solid ${ColoursEnum.white}` : 'none'};
 `;
 
-const Logout = styled(Button)`
-  background-color: transparent;
-  font-size: inherit;
-  display: inherit;
-  font-weight: inherit;
-`;
-
 const Navigation: React.FunctionComponent<Props> = (props) => (
-
   <Row between={'xs'}>
     {['activity', 'volunteer', 'time'].map((page) =>
       (<Link to={`./${page}`} key={page} isActive={page === props.active}>{page}</Link>)
