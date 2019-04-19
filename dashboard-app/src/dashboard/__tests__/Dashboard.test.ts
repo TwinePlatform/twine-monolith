@@ -1,8 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import {
-  fireEvent,
   cleanup,
-  waitForElement,
   wait,
 } from 'react-testing-library';
 import { renderWithHistory } from '../../util/tests';
