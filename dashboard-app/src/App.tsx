@@ -8,7 +8,7 @@ import Login from './auth/pages/Login';
 import ResetPassword from './auth/pages/ResetPassword';
 import ForgotPassword from './auth/pages/ForgotPassword';
 import ErrorPage from './Error';
-import { fonts, ColoursEnum } from './styles/style_guide';
+import { ColoursEnum, FontFamilyEnum } from './styles/style_guide';
 
 
 const AppContainer = styled.div`
@@ -16,7 +16,7 @@ const AppContainer = styled.div`
   width: 100vw;
   max-width: 1280px;
   background: ${ColoursEnum.offWhite};
-  font-family: ${fonts.family.default};
+  font-family: ${FontFamilyEnum.default};
 `;
 
 const ProtectedRoutes = () => (

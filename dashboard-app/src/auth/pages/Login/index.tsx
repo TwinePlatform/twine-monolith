@@ -8,7 +8,7 @@ import { CbAdmins, Response } from '../../../api';
 import LoginForm, { FormValues } from './LoginForm';
 import { H1 as _H1, H4 as _H4 } from '../../../components/Headings';
 import { redirectOnError, getQueryObjectFromProps } from '../../../util/routing';
-import { colors, FontSizeEnum, SpacingEnum } from '../../../styles/style_guide';
+import { FontSizeEnum, SpacingEnum, ColoursEnum } from '../../../styles/style_guide';
 import Navbar from '../../../components/Navbar';
 
 
@@ -99,7 +99,7 @@ const Login: React.SFC<LoginProps> = (props) => (
             isActive={getMessage(props).length > 0}
             message={getMessage(props)}
             barStyle={{
-              backgroundColor: colors.dark,
+              backgroundColor: ColoursEnum.font,
               left: getMessage(props).length > 0 ? 'inherit' : '-100%',
               marginTop: SpacingEnum.medium,
               borderRadius: '0.2rem',

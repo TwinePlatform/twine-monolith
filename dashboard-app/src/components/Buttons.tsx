@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { rgba } from 'polished';
-import { colors, fonts, ColoursEnum } from '../styles/style_guide';
+import { ColoursEnum, FontSizeEnum } from '../styles/style_guide';
 
 
 export const Button = styled.button`
@@ -9,7 +9,7 @@ export const Button = styled.button`
   outline: none;
   box-shadow: none;
   color: ${ColoursEnum.white};
-  font-size: ${fonts.size.medium};
+  font-size: ${FontSizeEnum.medium};
 `;
 
 export const PrimaryButton = styled(Button)`
@@ -18,8 +18,8 @@ export const PrimaryButton = styled(Button)`
   &:hover {
     background: linear-gradient(
       0,
-      ${rgba(colors.hover_primary, 0.75)} 0%,
-      ${colors.hover_primary} 100%
+      ${rgba(ColoursEnum.darkPrimary, 0.75)} 0%,
+      ${ColoursEnum.darkPrimary} 100%
     );
   };
 `;
