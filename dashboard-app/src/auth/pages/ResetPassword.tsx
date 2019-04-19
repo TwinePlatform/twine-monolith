@@ -44,7 +44,7 @@ const schema = Joi.object({
 /**
  * Component
  */
-const ResetPassword: React.SFC<ResetPasswordProps> = (props) => (
+const ResetPassword: React.FunctionComponent<ResetPasswordProps> = (props) => (
   <Grid>
     <Row center="xs">
       <Col xs={12} lg={6}>

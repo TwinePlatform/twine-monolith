@@ -1,4 +1,4 @@
-import React, { SFC } from 'react';
+import React, { FunctionComponent } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FontSizeEnum, ColoursEnum } from '../styles/style_guide';
@@ -51,7 +51,7 @@ const ErrorText = styled.span`
 /**
  * Input element
  */
-const LabelledInput: SFC<InputProps> = (props) => {
+const LabelledInput: FunctionComponent<InputProps> = (props) => {
   const { label, error, ...rest } = props;
 
   if (label) {

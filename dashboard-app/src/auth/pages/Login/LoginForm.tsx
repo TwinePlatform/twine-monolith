@@ -35,7 +35,7 @@ type LoginFormProps = {
 /**
  * Component
  */
-const LoginForm: React.SFC<LoginFormProps> = (props) => (
+const LoginForm: React.FunctionComponent<LoginFormProps> = (props) => (
   <Formik
     initialValues={{ email: '', password: '' }}
     onSubmit={props.onSubmit}

@@ -69,7 +69,7 @@ const getMessage = (props: LoginProps) => {
 /*
  * Component
  */
-const Login: React.SFC<LoginProps> = (props) => (
+const Login: React.FunctionComponent<LoginProps> = (props) => (
   <Grid>
     <Row center="xs">
       <Col xs={12} lg={6}>

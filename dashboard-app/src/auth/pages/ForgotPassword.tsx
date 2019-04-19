@@ -60,7 +60,7 @@ const schema = Joi.object({ email: Joi.string().email().required() });
 /**
  * Component
  */
-const ForgotPassword: React.SFC<ForgotPasswordProps> = (props) => (
+const ForgotPassword: React.FunctionComponent<ForgotPasswordProps> = (props) => (
   <Grid>
     <Row center="xs">
       <Col xs={12} lg={6}>

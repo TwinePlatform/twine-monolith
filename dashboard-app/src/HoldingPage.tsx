@@ -3,7 +3,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import { H1, H3 } from './components/Headings';
 
 
-const HoldingPage: React.SFC = () => (
+const HoldingPage: React.FunctionComponent = () => (
   <Grid>
     <Row center="xs" middle="xs" style={{ height: '100vh' }}>
       <Col>

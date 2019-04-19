@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FunctionComponent } from 'react';
 import { Route, RouteProps, Redirect } from 'react-router-dom';
 import { FullScreenBeatLoader } from '../../components/Loaders';
 import { ColoursEnum } from '../../styles/style_guide';
@@ -20,7 +20,7 @@ interface PrivateRouteProps extends RouteProps {}
 /**
  * Component
  */
-const PrivateRoute: React.SFC<PrivateRouteProps> = (props) => {
+const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = (props) => {
   const { component: Comp, ...rest } = props;
   const [authStatus, setAuthStatus] = useState(AuthStatusEnum.PENDING);
 
