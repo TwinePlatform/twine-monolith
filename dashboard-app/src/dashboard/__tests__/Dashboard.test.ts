@@ -21,24 +21,6 @@ describe('Dashboard Page', () => {
 
   afterEach(cleanup);
 
-  test('Successful logout', async () => {
-    expect.assertions(1);
-
-    mock
-      .onGet('/v1/community-businesses/me').reply(200, { result: { name: 'Foo' } })
-      .onGet('/v1/users/logout').reply(200, {});
-
-    const tools = renderWithHistory(Dashboard);
-
-    const [logoutBtn] = await waitForElement(async () => [
-      tools.getByText('Logout'),
-    ]);
-
-    fireEvent.click(logoutBtn);
-
-    await wait(() => expect(tools.history.location.pathname).toEqual('/login'));
-  });
-
   test('Unauthenticated user gets redirected to login', async () => {
     expect.assertions(1);
 
