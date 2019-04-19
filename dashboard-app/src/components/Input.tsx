@@ -1,7 +1,6 @@
 import React, { SFC } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { rgba } from 'polished';
 import { FontSizeEnum, ColoursEnum } from '../styles/style_guide';
 
 

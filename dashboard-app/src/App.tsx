@@ -8,9 +8,12 @@ import Login from './auth/pages/Login';
 import ResetPassword from './auth/pages/ResetPassword';
 import ForgotPassword from './auth/pages/ForgotPassword';
 import ErrorPage from './Error';
+import Navbar from './components/Navbar';
 import { ColoursEnum, FontFamilyEnum } from './styles/style_guide';
 
-
+/*
+ * Styles
+ */
 const AppContainer = styled.div`
   height: 100vh;
   width: 100vw;
@@ -19,12 +22,18 @@ const AppContainer = styled.div`
   font-family: ${FontFamilyEnum.default};
 `;
 
+/*
+ * Helpers
+ */
 const ProtectedRoutes = () => (
   <Switch>
     <Route exact path="/" component={Dashboard} />
   </Switch>
 );
 
+/*
+ * Component
+ */
 const App = () => (
     <AppContainer>
       {
@@ -32,13 +41,16 @@ const App = () => (
           ? <HoldingPage />
           : (
             <BrowserRouter>
-              <Switch>
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/password/reset/:token" component={ResetPassword} />
-                <Route exact path="/password/forgot" component={ForgotPassword} />
-                <Route exact path="/error/:code" component={ErrorPage} />
-                <PrivateRoute path="/*" component={ProtectedRoutes} />
-              </Switch>
+            <>
+              <Navbar loggedIn={false} active={false}/>
+                <Switch>
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/password/reset/:token" component={ResetPassword} />
+                  <Route exact path="/password/forgot" component={ForgotPassword} />
+                  <Route exact path="/error/:code" component={ErrorPage} />
+                  <PrivateRoute path="/*" component={ProtectedRoutes} />
+                </Switch>
+              </>
             </BrowserRouter>
           )
       }

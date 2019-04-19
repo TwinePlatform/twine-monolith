@@ -3,14 +3,15 @@ import styled from 'styled-components';
 import * as Joi from 'joi';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { Formik, Form as _Form, FormikActions } from 'formik';
+import { Formik, Form as _Form, FormikActions, Field } from 'formik';
 import { CbAdmins, Response } from '../../api';
 import Input from '../../components/Input';
 import { SubmitButton } from '../../components/Buttons';
-import NavHeader from '../../components/NavHeader';
 import { redirectOnError, withParams } from '../../util/routing';
 import { validateForm } from '../../util/forms';
 import { AxiosError } from 'axios';
+import { H1 } from '../../components/Headings';
+import { SpacingEnum } from '../../styles/style_guide';
 
 
 /**
@@ -23,7 +24,9 @@ interface ForgotPasswordProps extends RouteComponentProps {}
  * Styled Components
  */
 const Form = styled(_Form)`
-  width: 40%;
+  width: 100%;
+  text-align: left;
+  margin-top: ${SpacingEnum.large};
 `;
 
 /**
@@ -59,14 +62,10 @@ const schema = Joi.object({ email: Joi.string().email().required() });
  */
 const ForgotPassword: React.SFC<ForgotPasswordProps> = (props) => (
   <Grid>
-    <NavHeader
-      centerContent="Forgot Password"
-      leftContent="Back to login"
-      leftTo="/login"
-    />
-    <Row middle="xs" style={{ height: '60vh' }}>
-      <Col xs={12}>
-        <Row center="xs">
+    <Row center="xs">
+      <Col xs={12} lg={6}>
+        <H1>Forgot Password</H1>
+        <Row>
           <Formik
             initialValues={{ email: '' }}
             onSubmit={createSubmitHandler(props)}

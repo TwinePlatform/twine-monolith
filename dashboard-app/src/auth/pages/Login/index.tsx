@@ -6,10 +6,9 @@ import { Form as _Form, FormikActions } from 'formik';
 import { Notification } from 'react-notification';
 import { CbAdmins, Response } from '../../../api';
 import LoginForm, { FormValues } from './LoginForm';
-import { H1 as _H1, H4 as _H4 } from '../../../components/Headings';
+import { H1, H4 as _H4 } from '../../../components/Headings';
 import { redirectOnError, getQueryObjectFromProps } from '../../../util/routing';
 import { FontSizeEnum, SpacingEnum, ColoursEnum } from '../../../styles/style_guide';
-import Navbar from '../../../components/Navbar';
 
 
 /*
@@ -21,24 +20,18 @@ interface LoginProps extends RouteComponentProps {}
 /*
  * Styles
  */
-
-// const ResponsivePage = ()
-const H1 = styled(_H1)`
-margin-top: ${SpacingEnum.medium};
-`;
-
 const H4 = styled(_H4)`
-margin-top: ${SpacingEnum.small};
+  margin-top: ${SpacingEnum.small};
 `;
 
 const Link = styled(L)`
   font-size: ${FontSizeEnum.medium}
   margin-top: ${SpacingEnum.xSmall};
 `;
+
 /*
  * Helpers
  */
-
 // Submit handler creator
 const createSubmitHandler = (props: LoginProps) =>
   (values: FormValues, actions: FormikActions<FormValues>) =>
@@ -77,11 +70,9 @@ const getMessage = (props: LoginProps) => {
  * Component
  */
 const Login: React.SFC<LoginProps> = (props) => (
-  <>
-  <Navbar loggedIn={false} active={false}/>
   <Grid>
     <Row center="xs">
-      <Col>
+      <Col xs={12} lg={6}>
         <Row>
             <H1>Login to the Twine Volunteer Dashboard</H1>
         </Row>
@@ -109,7 +100,6 @@ const Login: React.SFC<LoginProps> = (props) => (
       </Col>
     </Row>
   </Grid>
-  </>
 );
 
 export default withRouter(Login);

@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import { ColoursEnum, FontSizeEnum, FontWeightEnum } from '../styles/style_guide';
+import { ColoursEnum, FontSizeEnum, FontWeightEnum, SpacingEnum } from '../styles/style_guide';
 
 export const H1 = styled.h1`
   font-size: ${FontSizeEnum.heading};
   font-weight: ${FontWeightEnum.light};
   color: ${ColoursEnum.font};
   text-align: center;
+  margin-top: ${SpacingEnum.medium};
 `;
 
 export const H2 = styled.h2`
