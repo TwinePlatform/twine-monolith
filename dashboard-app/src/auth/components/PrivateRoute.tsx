@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Route, RouteProps, Redirect } from 'react-router-dom';
 import { FullScreenBeatLoader } from '../../components/Loaders';
-import { colors } from '../../styles/style_guide';
+import { ColoursEnum } from '../../styles/style_guide';
 import { Roles } from '../../api';
 
 
@@ -20,7 +20,7 @@ interface PrivateRouteProps extends RouteProps {}
 /**
  * Component
  */
-const PrivateRoute: React.SFC<PrivateRouteProps> = (props) => {
+const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = (props) => {
   const { component: Comp, ...rest } = props;
   const [authStatus, setAuthStatus] = useState(AuthStatusEnum.PENDING);
 
@@ -33,7 +33,7 @@ const PrivateRoute: React.SFC<PrivateRouteProps> = (props) => {
   switch (authStatus) {
     case AuthStatusEnum.PENDING:
       return (
-        <FullScreenBeatLoader color={colors.highlight_primary} />
+        <FullScreenBeatLoader color={ColoursEnum.primary} />
       );
 
     case AuthStatusEnum.SUCCESS:

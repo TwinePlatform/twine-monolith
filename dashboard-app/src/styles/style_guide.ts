@@ -2,45 +2,44 @@
  * Style guide
  */
 
-export const colors = {
-  highlight_primary: '#FDBD2D',
-  highlight_secondary: '#833FF7',
-  hover_primary: '#DE9B06',
-  hover_secondary: '#6717F3',
-  darker: '#424242',
-  dark: '#666666',
-  light: '#DBDBDB',
-  lighter: '#FFFFFF',
-  background: '#FFFFFF',
-  error: '#FF4848',
-  white: '#FFF',
-  black: '#000',
-};
+export enum ColoursEnum {
+  white = '#FFFFFF',
+  offWhite = '#F8F8F8',
+  grey = '#707070',
+  light = '#DBDBDB',
+  primary = '#8000FF',
+  darkPrimary = '#5500aa',
+  font = '#222222',
+}
 
-export const fonts = {
-  family: {
-    default: 'Nunito, sans-serif',
-    highlight: 'Nunito, sans-serif',
-  },
-  size: {
-    base: '1rem',
-    heading: '2rem',
-    heading2: '1.5rem',
-    medium: '1rem',
-    small: '0.65rem',
-  },
-  weight: {
-    base: '400',
-    light: '300',
-    medium: '700',
-    heavy: '800',
-  },
-};
+export enum FontSizeEnum {
+  heading = '1.6em',
+  heading2 = '1.2em',
+  medium = '0.8em',
+  small = '0.65em',
+}
 
-export default {
-  colors,
-  fonts,
-  fontFamily: fonts.family,
-  fontSize: fonts.size,
-  fontWeight: fonts.weight,
-};
+export enum SpacingEnum {
+  xxSmall = '0.25em',
+  xSmall = '0.5em',
+  small = '1em',
+  medium = '2em',
+  large = '4em',
+}
+
+export enum DisplayWidthEnum {
+  small = '@media (max-width: 600px)',
+  medium = '@media (max-width: 1024px)',
+  large = '@media (max-width: 1440px)',
+  xlarge = '@media (max-width: 1920px)',
+}
+
+export enum FontFamilyEnum {
+  default = 'Roboto',
+}
+
+export enum FontWeightEnum {
+  thin = '100',
+  light = '300',
+  regular = '400',
+}

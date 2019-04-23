@@ -1,9 +1,9 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { CbAdmins, Response, CommunityBusinesses } from '../api';
+import { Response, CommunityBusinesses } from '../api';
 import { redirectOnError } from '../util/routing';
-import NavHeader from '../components/NavHeader/NavHeader';
+import { H1, H2 } from '../components/Headings';
 
 
 interface DashboardProps extends RouteComponentProps {}
@@ -32,19 +32,10 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
   render () {
     return (
       <Grid>
-        <NavHeader
-          centerContent={
-            <div style={{ textAlign: 'center' }}>
-              <h1>{this.state.organisationName}</h1>
-              <h2>Volunteer Dashboard</h2>
-            </div>
-          }
-          rightContent="Logout"
-          rightTo="/login"
-          rightOnClick={CbAdmins.logout}
-        />
         <Row center="xs">
           <Col>
+            <H1>{this.state.organisationName}</H1>
+            <H2>Volunteer Dashboard</H2>
             <h4>There are currently no visualisations</h4>
           </Col>
         </Row>
