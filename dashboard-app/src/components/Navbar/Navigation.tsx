@@ -33,10 +33,10 @@ const Logout = styled(Button)`
 const Navigation: React.FunctionComponent<Props> = (props) => (
 
   <Row between={'xs'}>
-      <Link to={'./activites'}>Activity</Link>
-      <Link to={'./volunteer'}>Volunteer</Link>
-      <Link to={'./time'} active>Time</Link>
-      <Link to={'./time'}>[ User ]</Link>
+      <Link to={'/activites'}>Activity</Link>
+      <Link to={'/volunteer'}>Volunteer</Link>
+      <Link to={'/time'} active>Time</Link>
+      <Link to={'/time'}>[ User ]</Link>
       <Logout onClick={CbAdmins.logout}>Logout</Logout>
     </Row>
 );
