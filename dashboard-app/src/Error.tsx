@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Grid, Row, Col } from 'react-flexbox-grid';
+import { Grid, Row } from 'react-flexbox-grid';
 import { SpacingEnum } from './styles/style_guide';
 import { H1 as _H1, H3 } from './components/Headings';
 import _Link from './components/Link';
