@@ -85,7 +85,7 @@
     "ramda": "^0.26.1",
     "random-words": "^1.1.0",
     "ts-node": "^8.0.2",
-    "twine-util": "^1.0.0",
+    "twine-util": "file:../lib/twine-util",
     "typescript": "^3.3.3333"
   },
   "devDependencies": {
