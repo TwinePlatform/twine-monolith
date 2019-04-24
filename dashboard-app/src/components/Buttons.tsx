@@ -9,6 +9,7 @@ export const Button = styled.button`
   box-shadow: none;
   color: ${ColoursEnum.white};
   font-size: ${FontSizeEnum.medium};
+  padding: 0.75em 1em;
 `;
 
 export const PrimaryButton = styled(Button)`
@@ -22,5 +23,4 @@ export const PrimaryButton = styled(Button)`
 
 export const SubmitButton = styled(PrimaryButton)`
   width: 50%;
-  padding: 1rem;
 `;
