@@ -4,20 +4,9 @@ import { Row } from 'react-flexbox-grid';
 import { rgba } from 'polished';
 import { Link } from 'react-router-dom';
 import { ColoursEnum } from '../../styles/style_guide';
-import DataCol, { DataColProps } from './DataTableCol';
+import DataCol from './DataTableCol';
+import { RowProps } from './types'
 
-
-/**
- * Types
- */
-export type RowProps = {
-  order: string[]
-  alternateColour: boolean
-  columns: {
-    [k in string]: DataColProps
-  },
-  rowLink?: string
-};
 
 /**
  * Helpers
@@ -44,7 +33,7 @@ const DataTableRow: React.FunctionComponent<RowProps> = (props) => {
   const { columns, rowLink, order, ...rest } = props;
 
   const inner = (
-    <DataRow {...rest} >
+    <DataRow {...rest} middle="xs" data-testid="data-table-row">
       { order.map((col) => <DataCol {...columns[col]}/>) }
     </DataRow>
   );

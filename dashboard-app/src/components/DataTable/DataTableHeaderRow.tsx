@@ -1,18 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Row } from 'react-flexbox-grid';
-import { Link } from 'react-router-dom';
 import { ColoursEnum } from '../../styles/style_guide';
-import DataCol, { DataColProps } from './DataTableCol';
-
-
-/**
- * Types
- */
-export type RowProps = {
-  columns: DataColProps[]
-  onClick?: () => void
-};
+import { HeaderRowProps } from './types';
+import DataCol from './DataTableCol';
 
 
 /**
@@ -25,12 +16,16 @@ const DataRow = styled(Row)`
 /**
  * Component
  */
-const DataTableRow: React.FunctionComponent<RowProps> = (props) => {
-  const { columns, onClick = () => {} } = props;
+const DataTableRow: React.FunctionComponent<HeaderRowProps> = (props) => {
+  const { columns, onClick = () => {}, active, order } = props;
+  const arrow = order === 'desc' ? '↓' : '↑';
 
   return (
-    <DataRow>
-      { columns.map((col) => <DataCol {...col} onClick={onClick}/>) }
+    <DataRow middle="xs">
+      {
+        columns
+          .map((col) => <DataCol {...col} onClick={onClick} prefix={col.content === active ? arrow : undefined} />)
+      }
     </DataRow>
   );
 };
