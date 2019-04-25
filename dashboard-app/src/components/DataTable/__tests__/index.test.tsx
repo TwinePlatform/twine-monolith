@@ -18,30 +18,30 @@ describe('Component :: DataTable', () => {
     rows: [
       {
         columns: {
-          'one': { content: 'foo' },
-          'two': { content: 2 },
-          'three': { content: 3 },
+          one: { content: 'foo' },
+          two: { content: 2 },
+          three: { content: 3 },
         },
       },
       {
         columns: {
-          'one': { content: 'bar' },
-          'two': { content: 4 },
-          'three': { content: 5 },
+          one: { content: 'bar' },
+          two: { content: 4 },
+          three: { content: 5 },
         },
       },
       {
         columns: {
-          'one': { content: 'baz' },
-          'two': { content: 6 },
-          'three': { content: 7 },
+          one: { content: 'baz' },
+          two: { content: 6 },
+          three: { content: 7 },
         },
       },
       {
         columns: {
-          'one': { content: 'bax' },
-          'two': { content: 8 },
-          'three': { content: 9 },
+          one: { content: 'bax' },
+          two: { content: 8 },
+          three: { content: 9 },
         },
       },
     ],
@@ -95,7 +95,7 @@ describe('Component :: DataTable', () => {
 
     const [header, rows] = await waitForElement(() => [
       tools.getByText('one', { exact: false }),
-      tools.getAllByTestId('data-table-row')
+      tools.getAllByTestId('data-table-row'),
     ]);
 
     fireEvent.click(header);
@@ -113,7 +113,7 @@ describe('Component :: DataTable', () => {
     const [header1, header2, rows] = await waitForElement(() => [
       tools.getByText('one', { exact: false }),
       tools.getByText('two', { exact: false }),
-      tools.getAllByTestId('data-table-row')
+      tools.getAllByTestId('data-table-row'),
     ]);
 
     fireEvent.click(header2);

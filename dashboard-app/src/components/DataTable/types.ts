@@ -13,7 +13,7 @@ export type Order = 'desc' | 'asc';
  *
  * Define the public interface of the DataTable component
  */
-export type DataTableContent = number | string
+export type DataTableContent = number | string;
 
 export type DataTableCol = {
   content: DataTableContent
@@ -58,4 +58,4 @@ export type HeaderRowProps = {
   active: string
   order: Order
   onClick?: (f: DataTableContent) => void
-}
+};

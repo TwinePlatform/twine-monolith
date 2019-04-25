@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { FontSizeEnum } from '../styles/style_guide'
+import { FontSizeEnum } from '../styles/style_guide';
+
 
 export default styled(Link)`
   color: inherit;

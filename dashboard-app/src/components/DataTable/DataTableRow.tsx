@@ -5,7 +5,7 @@ import { rgba } from 'polished';
 import { Link } from 'react-router-dom';
 import { ColoursEnum } from '../../styles/style_guide';
 import DataCol from './DataTableCol';
-import { RowProps } from './types'
+import { RowProps } from './types';
 
 
 /**

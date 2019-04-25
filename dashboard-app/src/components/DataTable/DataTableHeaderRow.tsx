@@ -24,7 +24,13 @@ const DataTableRow: React.FunctionComponent<HeaderRowProps> = (props) => {
     <DataRow middle="xs">
       {
         columns
-          .map((col) => <DataCol {...col} onClick={onClick} prefix={col.content === active ? arrow : undefined} />)
+          .map((col) =>
+            <DataCol
+              {...col}
+              onClick={onClick}
+              prefix={col.content === active ? arrow : undefined}
+            />
+          )
       }
     </DataRow>
   );
