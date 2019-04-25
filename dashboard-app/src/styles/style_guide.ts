@@ -15,9 +15,12 @@ export enum ColoursEnum {
 }
 
 export enum FontSizeEnum {
-  heading = '1.6em',
-  heading2 = '1.2em',
-  medium = '0.8em',
+  heading = '2.75em',
+  heading2 = '2.125em',
+  heading3 = '1.625em',
+  heading4 = '1.25em',
+  normal = '1em',
+  medium = '0.875em',
   small = '0.65em',
 }
 
