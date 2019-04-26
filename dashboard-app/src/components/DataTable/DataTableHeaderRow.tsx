@@ -1,41 +1,45 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Row } from 'react-flexbox-grid';
-import { ColoursEnum } from '../../styles/style_guide';
+import { ColoursEnum, SpacingEnum } from '../../styles/style_guide';
 import { HeaderRowProps } from './types';
-import DataCell from './DataTableCell';
 
 
 /**
  * Styles
  */
-const DataRow = styled(Row)`
+const HeaderRow = styled.tr`
   background-color: ${ColoursEnum.light};
-  flex-wrap: nowrap;
 `;
+
+const HeaderCell = styled.th`
+  padding: ${SpacingEnum.small} 27px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 200px;
+`;
+
 
 /**
  * Component
  */
-const DataTableRow: React.FunctionComponent<HeaderRowProps> = (props) => {
-  const { columns, onClick = () => {}, active, order } = props;
+const DataTableHeaderRow: React.FunctionComponent<HeaderRowProps> = (props) => {
+  const { columns, order, sortBy, onClick = () => {} } = props;
   const arrow = order === 'desc' ? '↓' : '↑';
 
   return (
-    <DataRow middle="xs" style={{ flexWrap: 'nowrap', width: 'fit-content' }}>
-      {
-        columns
-          .map((col) =>
-            <DataCell
-              {...col}
-              onClick={onClick}
-              prefix={col.content === active ? arrow : undefined}
-              colour={ColoursEnum.light}
-            />
-          )
-      }
-    </DataRow>
+    <thead>
+      <HeaderRow>
+        {
+          columns.map((h) => (
+            <HeaderCell scope="col" onClick={() => onClick(h.content)}>
+              {sortBy === h.content ? `${arrow} ${h.content}` : h.content}
+            </HeaderCell>
+          ))
+        }
+      </HeaderRow>
+    </thead>
   );
 };
 
-export default DataTableRow;
+export default DataTableHeaderRow;

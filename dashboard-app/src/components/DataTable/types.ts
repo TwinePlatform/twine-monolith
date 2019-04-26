@@ -3,17 +3,32 @@
  */
 import { Dictionary } from 'ramda';
 
+
 /**
  * Basic Types
  */
 export type Order = 'desc' | 'asc';
+
 
 /**
  * Public Types
  *
  * Define the public interface of the DataTable component
  */
+export type DataTableProps = {
+  title?: string
+  headers: string[]
+  order?: Order
+  sortBy?: string
+  rows: DataTableRow[]
+  onHeaderClick?: DataTableCallback
+  onCellClick?: DataTableCallback
+  onRowClick?: DataTableCallback
+};
+
 export type DataTableContent = number | string;
+
+export type DataTableCallback = (f: DataTableContent) => void
 
 export type DataTableCell = {
   content: DataTableContent
@@ -27,13 +42,6 @@ export type DataTableRow = {
   }
 };
 
-export type DataTableProps = {
-  title?: string
-  headers: string[]
-  initialOrder?: Order
-  initialSortColumn?: string
-  rows: DataTableRow[]
-};
 
 /**
  * Internal Types
@@ -42,21 +50,20 @@ export type DataTableProps = {
  */
 export type CellProps = DataTableCell & {
   colour?: string
-  prefix?: string
-  onClick?: (f: CellProps['content']) => void
+  onClick?: DataTableCallback
 };
 
 export type RowProps = {
   columns: Dictionary<CellProps>
   order: string[]
-  alternateColour: boolean
   rowLink?: string
+  onClick?: DataTableCallback
 };
 
 
 export type HeaderRowProps = {
   columns: CellProps[]
-  active: string
-  order: Order
-  onClick?: (f: DataTableContent) => void
+  order?: Order
+  sortBy?: string
+  onClick?: DataTableCallback
 };

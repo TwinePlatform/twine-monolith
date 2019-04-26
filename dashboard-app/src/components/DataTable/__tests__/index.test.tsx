@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render, waitForElement, fireEvent } from 'react-testing-library';
+import { cleanup, render, waitForElement } from 'react-testing-library';
 import DataTable from '..';
 import 'jest-dom/extend-expect';
 
@@ -14,7 +14,6 @@ describe('Component :: DataTable', () => {
       'two',
       'three',
     ],
-    initialSortColumn: 'one',
     rows: [
       {
         columns: {
@@ -72,7 +71,7 @@ describe('Component :: DataTable', () => {
       tools.getByText('9', { exact: false }),
     ]);
 
-    expect(col1).toHaveTextContent('↓one');
+    expect(col1).toHaveTextContent('↓ one');
     expect(col2).toHaveTextContent('two');
     expect(col3).toHaveTextContent('three');
 
@@ -90,39 +89,63 @@ describe('Component :: DataTable', () => {
     expect(cell12).toHaveTextContent('9');
   });
 
-  test('Alter sort order', async () => {
-    const tools = render(<DataTable {...props}/>);
+  test('Sort descending on alphabetic column', async () => {
+    const tools = render(<DataTable {...props} sortBy="one" order="desc"/>);
 
     const [header, rows] = await waitForElement(() => [
       tools.getByText('one', { exact: false }),
       tools.getAllByTestId('data-table-row'),
     ]);
 
-    fireEvent.click(header);
+    expect(header).toHaveTextContent('↓ one');
+    expect(rows[0]).toHaveTextContent('foo23');
+    expect(rows[1]).toHaveTextContent('baz67');
+    expect(rows[2]).toHaveTextContent('bax89');
+    expect(rows[3]).toHaveTextContent('bar45');
+  });
 
-    expect(header).toHaveTextContent('↑one');
+  test('Sort ascending on alphabetic column', async () => {
+    const tools = render(<DataTable {...props} sortBy="one" order="asc"/>);
+
+    const [header, rows] = await waitForElement(() => [
+      tools.getByText('one', { exact: false }),
+      tools.getAllByTestId('data-table-row'),
+    ]);
+
+    expect(header).toHaveTextContent('↑ one');
     expect(rows[0]).toHaveTextContent('bar45');
     expect(rows[1]).toHaveTextContent('bax89');
     expect(rows[2]).toHaveTextContent('baz67');
     expect(rows[3]).toHaveTextContent('foo23');
   });
 
-  test('Sort on different column', async () => {
-    const tools = render(<DataTable {...props}/>);
+  test('Sort descending on numeric column', async () => {
+    const tools = render(<DataTable {...props} sortBy="two" order="desc"/>);
 
-    const [header1, header2, rows] = await waitForElement(() => [
-      tools.getByText('one', { exact: false }),
+    const [header, rows] = await waitForElement(() => [
       tools.getByText('two', { exact: false }),
       tools.getAllByTestId('data-table-row'),
     ]);
 
-    fireEvent.click(header2);
-
-    expect(header1).toHaveTextContent('one');
-    expect(header2).toHaveTextContent('↓two');
+    expect(header).toHaveTextContent('↓ two');
     expect(rows[0]).toHaveTextContent('bax89');
     expect(rows[1]).toHaveTextContent('baz67');
     expect(rows[2]).toHaveTextContent('bar45');
     expect(rows[3]).toHaveTextContent('foo23');
+  });
+
+  test('Sort ascending on numeric column', async () => {
+    const tools = render(<DataTable {...props} sortBy="two" order="asc"/>);
+
+    const [header, rows] = await waitForElement(() => [
+      tools.getByText('two', { exact: false }),
+      tools.getAllByTestId('data-table-row'),
+    ]);
+
+    expect(header).toHaveTextContent('↑ two');
+    expect(rows[0]).toHaveTextContent('foo23');
+    expect(rows[1]).toHaveTextContent('bar45');
+    expect(rows[2]).toHaveTextContent('baz67');
+    expect(rows[3]).toHaveTextContent('bax89');
   });
 });

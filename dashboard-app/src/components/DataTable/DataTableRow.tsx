@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Cell } from 'styled-css-grid';
 import { rgba } from 'polished';
 import { Link } from 'react-router-dom';
 import { ColoursEnum } from '../../styles/style_guide';
@@ -9,34 +8,30 @@ import { RowProps } from './types';
 
 
 /**
- * Helpers
- */
-const pickRowColor = (props: Pick<RowProps, 'alternateColour'>) => {
-  if (props.alternateColour) {
-    return rgba(ColoursEnum.light, 0.2);
-  } else {
-    return ColoursEnum.offWhite;
-  }
-};
-
-/**
  * Styles
  */
-const DataRow = styled(Cell)`
-  background-color: ${pickRowColor};
-  flex-wrap: nowrap;
+const TableRow = styled.tr`
+  &:nth-child(odd) {
+    background-color: ${ColoursEnum.offWhite};
+  }
+
+  &:nth-child(even) {
+    background-color: ${rgba(ColoursEnum.light, 0.2)};
+  }
 `;
 
 /**
  * Component
  */
 const DataTableRow: React.FunctionComponent<RowProps> = (props) => {
-  const { columns, rowLink, order, ...rest } = props;
+  const { columns, rowLink, order, onClick } = props;
 
   const inner = (
-    <DataRow {...rest} data-testid="data-table-row" style={{ flexWrap: 'nowrap' }}>
-      { order.map((col) => <DataCell {...columns[col]} colour={pickRowColor(rest)}/>) }
-    </DataRow>
+    <TableRow data-testid="data-table-row">
+      {
+        order.map((h) => <DataCell content={columns[h].content} onClick={onClick} />)
+      }
+    </TableRow>
   );
 
   return rowLink
