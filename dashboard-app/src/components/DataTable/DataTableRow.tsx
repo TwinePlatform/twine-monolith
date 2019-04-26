@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Row } from 'react-flexbox-grid';
+import { Cell } from 'styled-css-grid';
 import { rgba } from 'polished';
 import { Link } from 'react-router-dom';
 import { ColoursEnum } from '../../styles/style_guide';
-import DataCol from './DataTableCol';
+import DataCell from './DataTableCell';
 import { RowProps } from './types';
 
 
@@ -22,8 +22,9 @@ const pickRowColor = (props: Pick<RowProps, 'alternateColour'>) => {
 /**
  * Styles
  */
-const DataRow = styled(Row)`
-  background-color: ${pickRowColor}
+const DataRow = styled(Cell)`
+  background-color: ${pickRowColor};
+  flex-wrap: nowrap;
 `;
 
 /**
@@ -33,8 +34,8 @@ const DataTableRow: React.FunctionComponent<RowProps> = (props) => {
   const { columns, rowLink, order, ...rest } = props;
 
   const inner = (
-    <DataRow {...rest} middle="xs" data-testid="data-table-row">
-      { order.map((col) => <DataCol {...columns[col]}/>) }
+    <DataRow {...rest} data-testid="data-table-row" style={{ flexWrap: 'nowrap' }}>
+      { order.map((col) => <DataCell {...columns[col]} colour={pickRowColor(rest)}/>) }
     </DataRow>
   );
 

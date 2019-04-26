@@ -15,7 +15,7 @@ export type Order = 'desc' | 'asc';
  */
 export type DataTableContent = number | string;
 
-export type DataTableCol = {
+export type DataTableCell = {
   content: DataTableContent
   cellLink?: string
 };
@@ -23,7 +23,7 @@ export type DataTableCol = {
 export type DataTableRow = {
   rowLink?: string
   columns: {
-    [k in string]: DataTableCol
+    [k in string]: DataTableCell
   }
 };
 
@@ -40,13 +40,14 @@ export type DataTableProps = {
  *
  * Define internal types used by sub-components
  */
-export type ColumnProps = DataTableCol & {
+export type CellProps = DataTableCell & {
+  colour?: string
   prefix?: string
-  onClick?: (f: ColumnProps['content']) => void
+  onClick?: (f: CellProps['content']) => void
 };
 
 export type RowProps = {
-  columns: Dictionary<ColumnProps>
+  columns: Dictionary<CellProps>
   order: string[]
   alternateColour: boolean
   rowLink?: string
@@ -54,7 +55,7 @@ export type RowProps = {
 
 
 export type HeaderRowProps = {
-  columns: ColumnProps[]
+  columns: CellProps[]
   active: string
   order: Order
   onClick?: (f: DataTableContent) => void

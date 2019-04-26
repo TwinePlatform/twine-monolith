@@ -3,10 +3,10 @@
  */
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { Grid } from 'react-flexbox-grid';
+import { Grid, Cell } from 'styled-css-grid';
 import { sortBy, pathOr } from 'ramda';
 import { H3 as _H3 } from '../Headings';
-import { SpacingEnum } from '../../styles/style_guide';
+import { SpacingEnum, ColoursEnum } from '../../styles/style_guide';
 import Card from '../Card';
 import DataTableRow from './DataTableRow';
 import HeaderRow from './DataTableHeaderRow';
@@ -34,17 +34,18 @@ const toggleOrder = (o: Order) => o === 'desc' ? 'asc' : 'desc';
  * Styles
  */
 const TableContainer = styled(Grid)`
-  overflow: scroll;
+  overflow-x: scroll;
+  max-width: calc(100vw - 7em);
+  padding: ${SpacingEnum.small};
 `;
 
 const TitleContainer = styled.div`
-  padding: ${SpacingEnum.small} ${SpacingEnum.small};
+  padding: ${SpacingEnum.small};
 `;
 
 const H3 = styled(_H3)`
   text-align: left;
 `;
-
 
 /**
  * Component
@@ -65,16 +66,18 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
       {
         props.title && <TitleContainer><H3>{props.title}</H3></TitleContainer>
       }
-      <TableContainer>
-        <HeaderRow
-          columns={headers}
-          active={sortCol}
-          order={order}
-          onClick={onClick}
-        />
+      <TableContainer columnGap="54px" columns={"128px ".repeat(headers.length).trim()}>
         {
-          mapProps(sortRows(props.rows, order, sortCol))
-            .map((row) => <DataTableRow {...row} order={props.headers}/>)
+          headers.map((header) => (
+            <Cell width={1} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', backgroundColor: ColoursEnum.light }}>
+              {header.content}
+            </Cell>
+          ))
+        }
+        {
+          props.rows.map((row) => {
+            return headers.map(h => h.content).map((h) => <Cell width={1}>{row.columns[h].content}</Cell>)
+          })
         }
       </TableContainer>
     </Card>
