@@ -28,7 +28,7 @@ export type DataTableProps = {
 
 export type DataTableContent = number | string;
 
-export type DataTableCallback = (f: DataTableContent) => void
+export type DataTableCallback = (f: DataTableContent) => void;
 
 export type DataTableCell = {
   content: DataTableContent

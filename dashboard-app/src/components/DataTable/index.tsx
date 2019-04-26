@@ -1,15 +1,15 @@
 /*
  * DataTable component
  */
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { sortBy, pathOr } from 'ramda';
 import { H3 as _H3 } from '../Headings';
-import { SpacingEnum, ColoursEnum } from '../../styles/style_guide';
+import { SpacingEnum } from '../../styles/style_guide';
 import Card from '../Card';
 import DataTableRow from './DataTableRow';
 import HeaderRow from './DataTableHeaderRow';
-import { DataTableProps, DataTableContent, Order } from './types';
+import { DataTableProps, Order } from './types';
 
 
 /**
@@ -67,7 +67,7 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
             columns={headers.map((name) => ({ content: name }))}
             order={order}
             sortBy={sortBy}
-            onClick={props.onHeaderClick}
+            onClick={onHeaderClick}
           />
           <tbody>
             {
