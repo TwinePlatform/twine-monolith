@@ -37,7 +37,6 @@ class Dashboard extends React.Component<DashboardProps, DashboardState> {
             <H1>{this.state.organisationName}</H1>
             <H2>Volunteer Dashboard</H2>
             <h4>There are currently no visualisations</h4>
-            <div style={{ height: '20px' }}></div>
           </Col>
         </Row>
       </Grid>
