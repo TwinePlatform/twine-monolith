@@ -32,7 +32,7 @@ const DataTableHeaderRow: React.FunctionComponent<HeaderRowProps> = (props) => {
       <HeaderRow>
         {
           columns.map((h) => (
-            <HeaderCell scope="col" onClick={() => onClick(h.content)}>
+            <HeaderCell scope="col" onClick={() => onClick(h.content)} title={String(h.content)}>
               {sortBy === h.content ? `${arrow} ${h.content}` : h.content}
             </HeaderCell>
           ))
