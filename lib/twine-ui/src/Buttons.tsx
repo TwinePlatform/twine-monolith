@@ -36,6 +36,16 @@ export const CancelButton = styled(Button)`
   /* Standard styles */
   background-color: ${ColoursEnum.white};
   color: ${ColoursEnum.black};
+
+  /* Hover styles */
+  &:hover {
+    background-color: ${ColoursEnum.white};
+  }
+
+  /* Pressed styles */
+  &:active {
+    background-color: ${ColoursEnum.white};
+  }
 `;
 
 export const BigButton = styled(Button)`
