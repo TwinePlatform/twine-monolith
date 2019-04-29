@@ -22,7 +22,7 @@ const Link = styled(L)`
 
 const Navigation: React.FunctionComponent<Props> = (props) => (
   <Row between={'xs'}>
-    {['activity', 'volunteer', 'time'].map((page) =>
+    {['Activity', 'Volunteer', 'Time'].map((page) =>
       (<Link to={`./${page}`} key={page} isActive={page === props.active}>{page}</Link>)
     )}
       <Link to={'./login'} onClick={CbAdmins.logout}>Logout</Link>
