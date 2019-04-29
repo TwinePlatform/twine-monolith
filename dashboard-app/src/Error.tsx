@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Grid, Row } from 'react-flexbox-grid';
 import { SpacingEnum } from './styles/style_guide';
-import { H1 as _H1, H3 as _H3 } from './components/Headings';
+import { H1 as _H1, H3 } from './components/Headings';
 import _Link from './components/Link';
 import { PrimaryButton } from './components/Buttons';
 
@@ -67,7 +67,7 @@ const H1 = styled(_H1)`
   margin-bottom: ${SpacingEnum.medium};
 `;
 
-const H3 = styled(_H3)`
+const H3Padded = styled(H3)`
   margin-bottom: ${SpacingEnum.xSmall};
 `;
 
@@ -86,7 +86,7 @@ const Error: React.FunctionComponent<Props> = (props) => {
   return (
   <Grid>
       <H1>{title}</H1>
-      <H3>{subtitle}</H3>
+      <H3Padded>{subtitle}</H3Padded>
       <H3>{error}</H3>
     <Row center={'xs'}>
       <Link to="/"><PrimaryButton>Go to Dashboard</PrimaryButton></Link>
