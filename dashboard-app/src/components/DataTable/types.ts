@@ -18,8 +18,8 @@ export type Order = 'desc' | 'asc';
 export type DataTableProps = {
   title?: string
   headers: string[]
-  order?: Order
-  sortBy?: string
+  initialOrder?: Order
+  initialSortBy?: string
   rows: DataTableRow[]
 };
 

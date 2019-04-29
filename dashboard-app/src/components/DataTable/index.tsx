@@ -48,9 +48,15 @@ const Table = styled.table`
  * Component
  */
 const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
-  const { headers, rows } = props;
-  const [order, setOrder] = useState<Order>('desc');
-  const [sortBy, setSortBy] = useState<string>(headers[1]);
+  const {
+    headers,
+    rows,
+    initialOrder = 'desc',
+    initialSortBy = props.headers[0]
+  } = props;
+
+  const [order, setOrder] = useState<Order>(initialOrder);
+  const [sortBy, setSortBy] = useState<string>(initialSortBy);
 
   const onHeaderClick = useCallback((title) => {
     if (sortBy === title) { // toggling order
