@@ -52,7 +52,7 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
     headers,
     rows,
     initialOrder = 'desc',
-    initialSortBy = props.headers[0]
+    initialSortBy = props.headers[0],
   } = props;
 
   const [order, setOrder] = useState<Order>(initialOrder);
