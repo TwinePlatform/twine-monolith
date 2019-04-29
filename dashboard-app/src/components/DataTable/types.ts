@@ -21,9 +21,6 @@ export type DataTableProps = {
   order?: Order
   sortBy?: string
   rows: DataTableRow[]
-  onHeaderClick?: DataTableCallback
-  onCellClick?: DataTableCallback
-  onRowClick?: DataTableCallback
 };
 
 export type DataTableContent = number | string;

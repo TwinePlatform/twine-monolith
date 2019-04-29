@@ -1,7 +1,7 @@
 /*
  * DataTable component
  */
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { sortBy, pathOr } from 'ramda';
 import { H3 as _H3 } from '../Headings';
@@ -48,13 +48,18 @@ const Table = styled.table`
  * Component
  */
 const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
-  const {
-    order = 'desc',
-    sortBy = props.headers[0],
-    headers,
-    rows,
-    onHeaderClick,
-  } = props;
+  const { headers, rows } = props;
+  const [order, setOrder] = useState<Order>('desc');
+  const [sortBy, setSortBy] = useState<string>(headers[1]);
+
+  const onHeaderClick = useCallback((title) => {
+    if (sortBy === title) { // toggling order
+      setOrder(order === 'desc' ? 'asc' : 'desc');
+    } else { // sorting by new column
+      setSortBy(title);
+      setOrder('desc');
+    }
+  }, [order, sortBy]);
 
   return (
     <Card>
