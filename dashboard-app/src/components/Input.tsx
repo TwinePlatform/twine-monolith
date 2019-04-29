@@ -18,7 +18,7 @@ const Label = styled.label<{ display: string }>`
   width: 100%;
   margin-bottom: 0.2rem;
   color: ${ColoursEnum.font};
-  font-size: ${FontSizeEnum.normal};
+  font-size: ${FontSizeEnum.medium};
 `;
 
 const Input = styled.input`
@@ -30,7 +30,7 @@ const Input = styled.input`
   box-shadow: none;
   color: ${ColoursEnum.font};
   background-color: ${ColoursEnum.white};
-  font-size: ${FontSizeEnum.normal};
+  font-size: ${FontSizeEnum.medium};
 
   &:focus {
     border: 0.1rem solid ${ColoursEnum.primary};

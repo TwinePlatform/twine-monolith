@@ -8,7 +8,7 @@ export const Button = styled.button`
   outline: none;
   box-shadow: none;
   color: ${ColoursEnum.white};
-  font-size: ${FontSizeEnum.normal};
+  font-size: ${FontSizeEnum.medium};
   padding: 0.75em 1em;
 `;
 

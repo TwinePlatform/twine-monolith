@@ -20,7 +20,7 @@ export enum FontSizeEnum {
   heading3 = '1em',
   heading4 = '0.8em',
   normal = '1em',
-  medium = '0.875em',
+  medium = '0.8em',
   small = '0.65em',
 }
 
