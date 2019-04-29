@@ -14,9 +14,9 @@ interface Props {
 
 const PaddedRow = styled(Row)`
   height: 4em;
-  background-color: ${ColoursEnum.grey}
-  color: ${ColoursEnum.white}
-  font-weight: ${FontWeightEnum.light}
+  background-color: ${ColoursEnum.grey};
+  color: ${ColoursEnum.white};
+  font-weight: ${FontWeightEnum.light};
   padding: 0 1.5em;
 `;
 
