@@ -17,8 +17,8 @@ export enum ColoursEnum {
 export enum FontSizeEnum {
   heading = '1.6em',
   heading2 = '1.2em',
-  heading3 = '1.625em', // TODO: From the design system, but needs to be based on screen width
-  heading4 = '0.8em',  // TODO: From the design system, but needs to be based on screen width
+  heading3 = '1em',
+  heading4 = '0.8em',
   normal = '1em',
   medium = '0.875em',
   small = '0.65em',
