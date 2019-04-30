@@ -20,9 +20,9 @@ type UtilityBarProps = {
 const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
   const {
     dateFilter,
-    onFromDateChange = console.log,
-    onToDateChange = console.log,
-    onUnitChange = console.log,
+    onFromDateChange = () => {},
+    onToDateChange = () => {},
+    onUnitChange = () => {},
   } = props;
 
   const [fromDate, setFromDate] = useState(moment().subtract(11, 'months').toDate());
