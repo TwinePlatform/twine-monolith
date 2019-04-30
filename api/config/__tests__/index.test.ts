@@ -11,7 +11,12 @@ describe('Config', () => {
       router: { stripTrailingSlash: true },
       routes: {
         cors: {
-          origin: ['http://localhost:3000', 'http://localhost:8100', 'http://localhost:5000'],
+          origin: [
+            'http://localhost:3000', // Visitor App
+            'http://localhost:8100', // Volunteer App
+            'http://localhost:3100', // Dasboard
+            'http://localhost:3200', // Admin App
+          ],
           credentials: true,
           additionalExposedHeaders: ['set-cookie'],
         },
