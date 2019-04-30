@@ -4,11 +4,14 @@ import { ColoursEnum, Fonts } from '../styles/style_guide';
 import Label from './Label';
 
 
-interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  label: string;
+interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement>, SelectContainerProps {
   options: (React.OptionHTMLAttributes<HTMLOptionElement> & { key: string })[];
-  error?: string;
+}
+
+interface SelectContainerProps {
+  label: string;
   inline?: boolean;
+  error?: string;
 }
 
 const Container = styled.div`
@@ -43,7 +46,6 @@ export const Select = styled.select`
 
 export const SelectWrapper = styled.div`
   width: 100%;
-  margin-bottom: 1em;
   padding: 0.6em;
   border: 0.1em solid ${ColoursEnum.light};
   border-radius: 0.15em;
@@ -64,22 +66,7 @@ const ErrorText = styled.span`
   color: red;
 `;
 
-const Input = styled.input`
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  border: none;
-  outline: none;
-  box-shadow: none;
-  -ms-progress-appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background: transparent;
-  color: ${ColoursEnum.grey};
-`;
-
-export const SelectContainer: React.FunctionComponent<SelectProps> = (props) => {
+export const SelectContainer: React.FunctionComponent<SelectContainerProps> = (props) => {
   const { label, error, inline = false, children } = props;
 
   return (
@@ -115,13 +102,3 @@ const LabelledSelect: React.FunctionComponent<SelectProps> = (props) => {
 };
 
 export default LabelledSelect;
-
-export const FakeSelect: React.FunctionComponent<any> = (props) => {
-  const { label, options, error, inline = false, ...rest } = props;
-
-  return (
-    <SelectContainer {...props}>
-      <Input onClick={rest.onClick} value={rest.value}/>
-    </SelectContainer>
-  );
-};
