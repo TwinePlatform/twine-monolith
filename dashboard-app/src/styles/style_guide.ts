@@ -3,10 +3,12 @@
  */
 
 export enum ColoursEnum {
+  black = '#333333',
   white = '#FFFFFF',
   offWhite = '#F8F8F8',
   grey = '#707070',
-  light = '#DBDBDB',
+  light = '#B7B7B7',
+  orange = '#FFBF00',
   primary = '#8000FF',
   darkPrimary = '#5500aa',
   font = '#222222',
@@ -15,6 +17,9 @@ export enum ColoursEnum {
 export enum FontSizeEnum {
   heading = '1.6em',
   heading2 = '1.2em',
+  heading3 = '1em',
+  heading4 = '0.8em',
+  normal = '1em',
   medium = '0.8em',
   small = '0.65em',
 }

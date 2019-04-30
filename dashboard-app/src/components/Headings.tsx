@@ -17,11 +17,13 @@ export const H2 = styled.h2`
 `;
 
 export const H3 = styled.h3`
+  font-size: ${FontSizeEnum.heading3}
   color: ${ColoursEnum.font};
   text-align: center;
 `;
 
 export const H4 = styled.h4`
+  font-size: ${FontSizeEnum.heading4}
   color: ${ColoursEnum.font};
   text-align: center;
 `;
