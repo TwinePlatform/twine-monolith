@@ -7,6 +7,8 @@ type Side = 'left' | 'right';
 type ToggleProps = {
   left: string
   right: string
+  leftTitle?: string
+  rightTitle?: string
   onChange: (s: string) => void
 };
 
@@ -34,17 +36,28 @@ const Container = styled.div``;
 
 
 const Toggle: React.FunctionComponent<ToggleProps> = (props) => {
+  const {
+    left,
+    right,
+    leftTitle,
+    rightTitle,
+    onChange,
+  } = props;
   const [active, setActive] = useState<Side>('left');
 
   const onClick = useCallback((side: Side) => {
     setActive(side);
-    props.onChange(side === 'left' ? props.left : props.right);
+    onChange(side === 'left' ? left : right);
   }, [active]);
 
   return (
     <Container>
-      <Left active={active === 'left'} onClick={() => onClick('left')}>{props.left}</Left>
-      <Right active={active === 'right'} onClick={() => onClick('right')}>{props.right}</Right>
+      <Left active={active === 'left'} onClick={() => onClick('left')} title={leftTitle}>
+        {left}
+      </Left>
+      <Right active={active === 'right'} onClick={() => onClick('right')} title={rightTitle}>
+        {right}
+      </Right>
     </Container>
   );
 };
