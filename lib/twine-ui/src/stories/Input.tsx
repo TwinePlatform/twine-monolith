@@ -1,15 +1,26 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import styled from 'styled-components';
 import Input from '../Input';
+
+const Container = styled.div`
+  width: 480px;
+`;
 
 storiesOf('Input', module)
   .add('with no label', () => (
-    <Input type="text" />
+    <Container>
+      <Input type="text" />
+    </Container>
   ))
   .add('with label', () => (
-    <Input type="text" label="Name" />
+    <Container>
+      <Input type="text" label="Name" />
+    </Container>
   ))
   .add('with label & error', () => (
-    <Input type="text" label="Name" error="oopsy" />
+    <Container>
+      <Input type="text" label="Name" error="oopsy" />
+    </Container>
   ));

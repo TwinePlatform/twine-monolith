@@ -23,7 +23,7 @@ const Label = styled.label`
 const Input = styled.input`
   width: 100%;
   padding: 0.875em;
-  border: 0.125em solid ${ColoursEnum.grey};
+  border: 0.125em solid ${(props: { error?: string }) => props.error ? 'red' : ColoursEnum.grey};
   border-radius: 0.25em;
   outline: none;
   box-shadow: none;
@@ -42,8 +42,9 @@ const LabelContent = styled(Text)`
   margin-bottom: 0 0 0.5em 0;
 `;
 
-const ErrorText = styled(Span)`
+const ErrorText = styled(Text)`
   color: red;
+  margin-top: 0.65em;
 `;
 
 /**
@@ -59,7 +60,7 @@ const LabelledInput: React.FunctionComponent<InputProps> = (props) => {
           <LabelContent>
             { label }
           </LabelContent>
-          <Input {...rest} />
+          <Input {...rest} error />
         </Label>
         { error && <ErrorText>{error}</ErrorText> }
       </InputContainer>
