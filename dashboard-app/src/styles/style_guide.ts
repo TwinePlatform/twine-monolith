@@ -48,3 +48,9 @@ export enum FontWeightEnum {
   light = '300',
   regular = '400',
 }
+
+export const Fonts = {
+  size: FontSizeEnum,
+  family: FontFamilyEnum,
+  weight: FontWeightEnum,
+};
