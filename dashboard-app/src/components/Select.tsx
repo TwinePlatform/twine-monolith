@@ -80,7 +80,7 @@ export const SelectContainer: React.FunctionComponent<SelectContainerProps> = (p
       { error && <ErrorText>{error}</ErrorText> }
     </Container>
   );
-}
+};
 
 
 const LabelledSelect: React.FunctionComponent<SelectProps> = (props) => {
