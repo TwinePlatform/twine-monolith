@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Knex from 'knex';
 import { compare } from 'bcrypt';
-import { asyncFind } from '../../../utils';
+import { Promises as P } from 'twine-util';
 import { ApiTokenRow } from './types';
 
 
@@ -16,7 +16,7 @@ export const ExternalCredentials = {
     }
 
     try {
-      const match = await asyncFind<ApiTokenRow>((tkn) => compare(token, tkn.api_token), tokens);
+      const match = await P.find<ApiTokenRow>((tkn) => compare(token, tkn.api_token), tokens);
       return {
         isValid: true,
         credentials: { scope: [match.api_token_access], app: match.api_token_name },

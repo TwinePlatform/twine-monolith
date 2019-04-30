@@ -1,5 +1,4 @@
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
+import * as nock from 'nock';
 import visitorQrCodeTemplate from '../visitor_qr_code';
 
 
@@ -26,13 +25,14 @@ describe('Visitor QR Code Template', () => {
       expect(qrCodeColumn.image).toBe(qrCodeDataUrl);
     });
 
-    test('Create template w/ custom logo as data URL', async () => {
+    test('Create template w/ custom logo as image URL', async () => {
       const imageContents = '20t48hwfbekjaofhw08rq3hiofnw';
       const url = 'https://example.com/images/fake.png';
       const qrCodeDataUrl = 'data:image/png;base64,fooqfoi2oitn';
 
-      const mock = new MockAdapter(axios);
-      mock.onGet(url).reply(200, imageContents);
+      nock('https://example.com')
+        .get('/images/fake.png')
+        .reply(200, imageContents, { ['content-type']: 'image/png' });
 
       const result = await visitorQrCodeTemplate.createTemplate({ qrCodeDataUrl, logoUrl: url });
       const [logoColumn, qrCodeColumn] = (<any> result.content)[0].columns;

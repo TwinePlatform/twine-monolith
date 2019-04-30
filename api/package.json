@@ -83,17 +83,20 @@
     "postmark": "^2.2.4",
     "qrcode": "^1.3.3",
     "ramda": "^0.26.1",
+    "random-words": "^1.1.0",
     "ts-node": "^8.0.2",
-    "typescript": "^3.3.3333",
-    "random-words": "^1.1.0"
+    "twine-util": "file:../lib/twine-util",
+    "typescript": "^3.3.3333"
   },
   "devDependencies": {
     "@types/mockdate": "^2.0.0",
+    "@types/nock": "^9.3.1",
     "axios-mock-adapter": "^1.16.0",
     "factory-girl": "^5.0.4",
     "jest": "^24.1.0",
     "minimist": "^1.2.0",
     "mockdate": "^2.0.2",
+    "nock": "^10.0.6",
     "nodemon": "^1.18.10",
     "ts-jest": "^24.0.0",
     "tslint-config-twine": "github:TwinePlatform/tslint-config-twine#2.1.0"
