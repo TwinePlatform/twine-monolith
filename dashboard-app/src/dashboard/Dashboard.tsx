@@ -1,7 +1,8 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { Response, CommunityBusinesses } from '../api';
+import { CommunityBusinesses } from '../api';
+import { Response } from '../util/response';
 import { redirectOnError } from '../util/routing';
 import { H1, H2 } from '../components/Headings';
 

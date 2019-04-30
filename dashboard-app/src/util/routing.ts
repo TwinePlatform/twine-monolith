@@ -2,7 +2,7 @@ import qs from 'querystring';
 import { AxiosError } from 'axios';
 import { Dictionary } from 'ramda';
 import { RouteComponentProps } from 'react-router-dom';
-import { Response } from '../api';
+import { Response } from './response';
 
 /**
  * Utility function to support client-side redirects based on

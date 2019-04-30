@@ -41,25 +41,3 @@ export const CommunityBusinesses = {
   getLogs: (params?: Pick<AxiosRequestConfig, 'params'>) =>
     axios.get('/community-businesses/me/volunteer-logs', { params }),
 };
-
-
-export const Response = {
-  get: <T = Dictionary<any>>(res: AxiosResponse, path: string[] = []): T =>
-    pathOr(null, ['data', 'result', ...path], res),
-
-  status: (res: AxiosResponse): number =>
-    pathOr(null, ['status'], res),
-
-  statusEquals: (res: AxiosResponse, status: number) =>
-    Response.status(res) === status,
-
-  validationError: (res: AxiosResponse): Dictionary<string> =>
-    pathOr({}, ['data', 'error', 'validation'], res),
-
-  isError: (res: AxiosResponse) =>
-    res.status >= 400,
-
-  errorMessage: (res: AxiosResponse): string | undefined =>
-    pathOr(undefined, ['data', 'error', 'message'], res),
-
-};
