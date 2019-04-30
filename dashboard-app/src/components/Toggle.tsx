@@ -14,22 +14,24 @@ type ToggleProps = {
 
 const Left = styled.button<{ active: boolean }>`
   font-size: ${Fonts.size.small};
+  padding: ${SpacingEnum.small};
   outline: none;
   border: 0.05rem solid ${ColoursEnum.light};
   border-top-left-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
   background-color: ${(props) => props.active ? ColoursEnum.light : ColoursEnum.offWhite};
-  padding: ${SpacingEnum.small};
+  color: ${(props) => props.active ? ColoursEnum.white : ColoursEnum.black};
 `;
 
 const Right = styled.button<{ active: boolean }>`
   font-size: ${Fonts.size.small};
+  padding: ${SpacingEnum.small};
   outline: none;
   border: 0.05rem solid ${ColoursEnum.light};
   border-top-right-radius: 0.25rem;
   border-bottom-right-radius: 0.25rem;
   background-color: ${(props) => props.active ? ColoursEnum.light : ColoursEnum.offWhite};
-  padding: ${SpacingEnum.small};
+  color: ${(props) => props.active ? ColoursEnum.white : ColoursEnum.black};
 `;
 
 const Container = styled.div``;
