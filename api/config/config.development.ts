@@ -7,8 +7,13 @@ const config: DeepPartial<Config> = {
   web: {
     port: 4000,
     routes: {
-      cors: { // Local dev servers for Visitor App, Volunteer App, Temp Admin Dashboard
-        origin: ['http://localhost:3000', 'http://localhost:8100', 'http://localhost:5000'],
+      cors: { // Local dev servers for:
+        origin: [
+          'http://localhost:3000', // Visitor App
+          'http://localhost:8100', // Volunteer App
+          'http://localhost:3100', // Dasboard
+          'http://localhost:3200', // Admin App
+        ],
       },
     },
   },
