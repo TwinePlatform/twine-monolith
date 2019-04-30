@@ -11,7 +11,7 @@ const config: DeepPartial<Config> = {
         origin: [
           'http://localhost:3000', // Visitor App
           'http://localhost:8100', // Volunteer App
-          'http://localhost:3100', // Dasboard
+          'http://localhost:3100', // Dashboard
           'http://localhost:3200', // Admin App
         ],
       },
