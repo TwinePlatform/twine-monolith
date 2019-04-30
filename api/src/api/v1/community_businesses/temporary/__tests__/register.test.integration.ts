@@ -63,4 +63,28 @@ describe('POST /community-businesses/register/temporary', () => {
       },
     });
   });
+
+  test('SUCCESS - FLOW TEST - create account & login', async () => {
+    const resRegister = await server.inject({
+      method: 'POST',
+      url: '/v1/community-businesses/register/temporary',
+      payload: {
+        orgName: 'Shinra Electric Power Company',
+      },
+      credentials: adminCreds,
+    });
+
+    expect(resRegister.statusCode).toBe(200);
+    const { email, password } = (<any> resRegister.result).result.cbAdmin;
+
+    const resLogin = await server.inject({
+      method: 'POST',
+      url: '/v1/users/login',
+      payload: {
+        email,
+        password,
+      },
+    });
+    expect(resLogin.statusCode).toBe(200);
+  });
 });
