@@ -1,42 +1,25 @@
 import React, { useState, useCallback } from 'react';
-import styled from 'styled-components';
 import moment from 'moment';
 import { Row, Col } from 'react-flexbox-grid';
 import DatePicker from './DatePicker';
-import Toggle from './Toggle';
+import UnitToggle from './UnitToggle';
 
 
-type UnitToggleProps = {
-  onChange: (u: 'Hours' | 'Days') => void
-};
-
-const UnitToggle: React.FunctionComponent<UnitToggleProps> = (props) => (
-  <Toggle
-    left="Hours"
-    right="Days"
-    onChange={(s) => props.onChange(s === 'Hours' ? 'Hours' : 'Days')}
-  />
-);
+type DurationUnit = 'Hours' | 'Days';
+type DateFilterType = 'day' | 'month';
 
 
 type UtilityBarProps = {
+  dateFilter: DateFilterType
   onFromDateChange?: (d: Date) => void
   onToDateChange?: (d: Date) => void
-  onUnitChange?: (u: 'Hours' | 'Days') => void
+  onUnitChange?: (u: DurationUnit) => void
 };
-
-
-const Tooltip = styled.div`
-  background: red;
-
-  &:hover {
-    opacity: 0.8;
-  }
-`;
 
 
 const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
   const {
+    dateFilter,
     onFromDateChange = console.log,
     onToDateChange = console.log,
     onUnitChange = console.log,
@@ -44,7 +27,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
 
   const [fromDate, setFromDate] = useState(moment().subtract(11, 'months').toDate());
   const [toDate, setToDate] = useState(moment().toDate());
-  const [unit, setUnit] = useState<'Hours' | 'Days'>('Hours');
+  const [unit, setUnit] = useState<DurationUnit>('Hours');
 
   const onFromChange = useCallback((date: Date) => {
     setFromDate(date);
@@ -56,7 +39,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
     onToDateChange(date);
   }, [toDate]);
 
-  const onDisplayUnitChange = useCallback((unit: 'Hours' | 'Days') => {
+  const onDisplayUnitChange = useCallback((unit: DurationUnit) => {
     setUnit(unit);
     onUnitChange(unit);
   }, [unit]);
@@ -65,6 +48,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
     <Row middle="xs" start="xs">
       <Col xs={2}>
         <DatePicker
+          type={dateFilter}
           label="From"
           selected={fromDate}
           onChange={onFromChange}
@@ -74,6 +58,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
       </Col>
       <Col xs={2}>
         <DatePicker
+          type={dateFilter}
           label="To"
           selected={toDate}
           onChange={onToChange}
@@ -82,8 +67,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
         />
       </Col>
       <Col xs={2} xsOffset={6}>
-        <UnitToggle onChange={onDisplayUnitChange} />
-        <Tooltip title="Foo"/>
+        <UnitToggle onChange={onDisplayUnitChange}/>
       </Col>
     </Row>
   );
