@@ -12,7 +12,10 @@ const HeaderRow = styled.tr`
 `;
 
 const HeaderCell = styled.th`
-  padding: ${SpacingEnum.small} 27px;
+  padding-top: ${SpacingEnum.small};
+  padding-bottom: ${SpacingEnum.small};
+  padding-left: ${SpacingEnum.small};
+  padding-right: calc(27px + calc(27px - ${SpacingEnum.small}));
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
