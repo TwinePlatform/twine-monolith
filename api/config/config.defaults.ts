@@ -35,8 +35,8 @@ const config: DeepPartial<Config> = {
   },
   platform: {
     domains: {
-      [AppEnum.ADMIN]: envOr('ADMIN_APP_DOMAIN', 'localhost:5000'),
-      [AppEnum.DASHBOARD]: envOr('DASHBOARD_APP_DOMAIN', 'localhost:3000'),
+      [AppEnum.ADMIN]: envOr('ADMIN_APP_DOMAIN', 'localhost:3200'),
+      [AppEnum.DASHBOARD]: envOr('DASHBOARD_APP_DOMAIN', 'localhost:3100'),
       [AppEnum.TWINE_API]: envOr('TWINE_API_DOMAIN', 'localhost:4000'),
       [AppEnum.VISITOR]: envOr('VISITOR_APP_DOMAIN', 'localhost:3000'),
       [AppEnum.VOLUNTEER]: null,
