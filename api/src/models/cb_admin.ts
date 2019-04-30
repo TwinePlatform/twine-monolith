@@ -81,7 +81,7 @@ export const CbAdmins: CbAdminCollection = {
     const name = 'TEMPORARY ADMIN USER';
     const password = Random.password();
     const newUser = await client.transaction(async (trx) => {
-      const newUser = await Users.add(trx, { name, email, isTemp: true });
+      const newUser = await Users.add(trx, { name, email, isTemp: true, password });
       await Roles.add(trx, { role: RoleEnum.CB_ADMIN, userId: newUser.id, organisationId: cb.id });
       return newUser;
     });
