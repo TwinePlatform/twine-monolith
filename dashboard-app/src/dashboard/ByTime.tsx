@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { H1 } from '../components/Headings';
-
 import { CommunityBusinesses } from '../api';
+import DataTable from '../components/DataTable';
+import useRequestOnLoad from '../util/hooks/useRequestOnLoad';
 
 export default () => {
-  useEffect(() => {
-    CommunityBusinesses.getLogs();
-  }, []);
+  const { error, loading, data } = useRequestOnLoad(CommunityBusinesses.getLogs());
 
   return (
     <Grid>
