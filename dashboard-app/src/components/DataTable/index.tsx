@@ -10,6 +10,7 @@ import Card from '../Card';
 import DataTableRow from './DataTableRow';
 import HeaderRow from './DataTableHeaderRow';
 import { DataTableProps, Order } from './types';
+import { hashJSON } from '../../util/hash';
 
 
 /**
@@ -83,7 +84,13 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
           <tbody>
             {
               sortRows(rows, order, sortBy)
-                .map((row) => <DataTableRow columns={row.columns} order={headers}/>)
+                .map((row) => (
+                  <DataTableRow
+                    columns={row.columns}
+                    order={headers}
+                    key={hashJSON(row)}
+                  />
+                ))
             }
           </tbody>
         </Table>
