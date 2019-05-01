@@ -4,7 +4,7 @@ import { Response } from '../response';
 
 export default (apiCall: AxiosPromise) => {
   const [error, setError] = useState<string>();
-  const [loading, setLoading] = useState<boolean>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState();
   useEffect(() => {
     (async () => {
