@@ -3,8 +3,9 @@
   "name": "twine-util",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "build/index.js",
   "scripts": {
+    "postinstall": "tsc",
     "test": "jest",
     "cover": "jest --coverage",
     "build": "tsc",
