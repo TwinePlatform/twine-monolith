@@ -29,7 +29,9 @@ const DataTableRow: React.FunctionComponent<RowProps> = (props) => {
   const inner = (
     <TableRow data-testid="data-table-row">
       {
-        order.map((h) => <DataCell content={columns[h].content} onClick={onClick} key={hashJSON(h)}/>)
+        order.map((h) => (
+          <DataCell content={columns[h].content} onClick={onClick} key={hashJSON(h)}/>
+        ))
       }
     </TableRow>
   );
