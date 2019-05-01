@@ -9,5 +9,6 @@
     "outDir": "build",
     "sourceMap": true,
     "lib": ["es2017"]
-  }
+  },
+  "exclude": ["__tests__"]
 }
