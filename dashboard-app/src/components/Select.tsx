@@ -63,7 +63,7 @@ export const Option = styled.option`
 `;
 
 const ErrorText = styled.span`
-  color: red;
+  color: ${ColoursEnum.red};
 `;
 
 export const SelectContainer: React.FunctionComponent<SelectContainerProps> = (props) => {
