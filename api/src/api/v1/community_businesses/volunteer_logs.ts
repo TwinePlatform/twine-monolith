@@ -2,7 +2,7 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
 import { omit } from 'ramda';
-import Duration from 'twine-util';
+import { Duration } from 'twine-util';
 import {
   response,
   id,

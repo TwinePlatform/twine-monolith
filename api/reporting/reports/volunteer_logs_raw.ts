@@ -4,7 +4,7 @@
  * Ad hoc data request
  */
 import * as Knex from 'knex';
-import Duration from 'twine-util';
+import { Duration } from 'twine-util';
 import { getConfig } from '../../config';
 import { csv } from '../writers';
 import {

@@ -13,52 +13,47 @@ export type Duration = Partial<{
   days: number
 }>;
 
-const Duration = {
-  toHours: (d: Duration) =>
-    Duration.toSeconds(d) / 3600,
+export const toHours = (d: Duration) =>
+  toSeconds(d) / 3600;
 
-  toSeconds: (d: Duration) => {
-    return Object.entries(d).reduce((acc, [k, v]) => {
-      switch (k) {
-        case 'days':
-          return acc + v * SEC_PER_DAY;
-        case 'hours':
-          return acc + v * SEC_PER_HR;
-        case 'minutes':
-          return acc + v * SEC_PER_MIN;
-        case 'seconds':
-          return acc + v;
-        default:
-          return acc;
-      }
-    }, 0);
-  },
-
-  fromSeconds: (s: number) => {
-    if (s < 0) {
-      throw new Error('negative seconds not supported');
+export const toSeconds = (d: Duration) => {
+  return Object.entries(d).reduce((acc, [k, v]) => {
+    switch (k) {
+      case 'days':
+        return acc + v * SEC_PER_DAY;
+      case 'hours':
+        return acc + v * SEC_PER_HR;
+      case 'minutes':
+        return acc + v * SEC_PER_MIN;
+      case 'seconds':
+        return acc + v;
+      default:
+        return acc;
     }
-
-    const days = Math.floor(s / SEC_PER_DAY);
-
-    const hours = Math.floor(
-      (s - (days * SEC_PER_DAY)) / SEC_PER_HR);
-
-    const minutes = Math.floor(
-      (s - (days * SEC_PER_DAY)
-         - (hours * SEC_PER_HR)) / SEC_PER_MIN);
-
-    const seconds = Math.floor(
-      (s - (days * SEC_PER_DAY)
-         - (hours * SEC_PER_HR)
-         - (minutes * SEC_PER_MIN)));
-
-    return filter((v) => v > 0, { days, hours, minutes, seconds });
-  },
-
-  sum: (d1: Duration, d2: Duration) =>
-    Duration.fromSeconds(Duration.toSeconds(d1) + Duration.toSeconds(d2)),
-
+  }, 0);
 };
 
-export default Duration;
+export const fromSeconds = (s: number) => {
+  if (s < 0) {
+    throw new Error('negative seconds not supported');
+  }
+
+  const days = Math.floor(s / SEC_PER_DAY);
+
+  const hours = Math.floor(
+    (s - (days * SEC_PER_DAY)) / SEC_PER_HR);
+
+  const minutes = Math.floor(
+    (s - (days * SEC_PER_DAY)
+        - (hours * SEC_PER_HR)) / SEC_PER_MIN);
+
+  const seconds = Math.floor(
+    (s - (days * SEC_PER_DAY)
+        - (hours * SEC_PER_HR)
+        - (minutes * SEC_PER_MIN)));
+
+  return filter((v) => v > 0, { days, hours, minutes, seconds });
+};
+
+export const sum = (d1: Duration, d2: Duration) =>
+  fromSeconds(toSeconds(d1) + toSeconds(d2));
