@@ -1,6 +1,7 @@
 {
   "extends": "tslint-config-twine",
   "rules": {
-    "max-line-length": [true, {"limit": 100, "ignore-pattern": "^\\s*//"}]
+    "max-line-length": [true, {"limit": 100, "ignore-pattern": "^\\s*//"}],
+    "variable-name": ["allow-leading-underscore"]
   }
 }
