@@ -2,21 +2,25 @@ import React, { useState, useCallback } from 'react';
 import moment from 'moment';
 import { Row, Col } from 'react-flexbox-grid';
 import DatePicker from './DatePicker';
-import UnitToggle from './UnitToggle';
+import UnitToggle, { DurationUnitEnum } from './UnitToggle';
 
 
-type DurationUnit = 'Hours' | 'Days';
+/**
+ * Types
+ */
 type DateFilterType = 'day' | 'month';
-
 
 type UtilityBarProps = {
   dateFilter: DateFilterType
   onFromDateChange?: (d: Date) => void
   onToDateChange?: (d: Date) => void
-  onUnitChange?: (u: DurationUnit) => void
+  onUnitChange?: (u: DurationUnitEnum) => void
 };
 
 
+/**
+ * Component
+ */
 const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
   const {
     dateFilter,
@@ -27,7 +31,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
 
   const [fromDate, setFromDate] = useState(moment().subtract(11, 'months').toDate());
   const [toDate, setToDate] = useState(moment().toDate());
-  const [unit, setUnit] = useState<DurationUnit>('Hours');
+  const [unit, setUnit] = useState<DurationUnitEnum>(DurationUnitEnum.HOURS);
 
   const onFromChange = useCallback((date: Date) => {
     setFromDate(date);
@@ -39,7 +43,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
     onToDateChange(date);
   }, [toDate]);
 
-  const onDisplayUnitChange = useCallback((unit: DurationUnit) => {
+  const onDisplayUnitChange = useCallback((unit: DurationUnitEnum) => {
     setUnit(unit);
     onUnitChange(unit);
   }, [unit]);

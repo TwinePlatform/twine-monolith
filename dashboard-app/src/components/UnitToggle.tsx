@@ -1,19 +1,29 @@
 import React from 'react';
 import Toggle from './Toggle';
 
-
-type DurationUnit = 'Hours' | 'Days';
+/**
+ * Types
+ */
+export enum DurationUnitEnum {
+  HOURS = 'Hours',
+  DAYS = 'Days',
+}
 
 type UnitToggleProps = {
-  onChange: (u: DurationUnit) => void
+  onChange: (u: DurationUnitEnum) => void
 };
 
+/**
+ * Component
+ */
 const UnitToggle: React.FunctionComponent<UnitToggleProps> = (props) => (
   <Toggle
     left="Hours"
     right="Days"
     rightTitle="Eight (8) hours are counted as one (1) day"
-    onChange={(s) => props.onChange(s === 'Hours' ? 'Hours' : 'Days')}
+    onChange={(s) =>
+      props.onChange(s === DurationUnitEnum.HOURS ? DurationUnitEnum.HOURS : DurationUnitEnum.DAYS)
+    }
   />
 );
 
