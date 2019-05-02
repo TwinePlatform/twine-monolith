@@ -7,14 +7,26 @@ import { roundToDecimal } from '../../util/mathUtil';
 
 interface Params { data: any[]; months: string[]; unit: UnitEnum; }
 
+const toUnitDuration = (unit: UnitEnum, duration: Duration.Duration) => {
+  switch (unit){
+    case UnitEnum.DAYS:
+      return roundToDecimal(Duration.toWorkingDays(duration));
+
+    case UnitEnum.HOURS:
+      return roundToDecimal(Duration.toHours(duration));
+  }
+};
+
 export const timeLogsToTable = ({ data, months, unit }: Params) =>
   data.reduce((acc: DataTableRow[], el: any) => {
     const activityExists = acc.some((x) => x.columns.Activity.content === el.activity);
-    const logMonth = moment(el.createdAt).format('MMMM');
+    // doesn't work for more than 12 months
+    const logMonth = moment(el.startedAt || el.createdAt).format('MMMM');
     if (activityExists) {
       return acc.map((x) => {
         if (x.columns.Activity.content === el.activity) {
-          x.columns[logMonth].content = Number(x.columns[logMonth].content) + 1;
+          x.columns[logMonth].content =
+            Number(x.columns[logMonth].content) + toUnitDuration(unit, el.duration);
         }
         return x;
       });
@@ -25,9 +37,7 @@ export const timeLogsToTable = ({ data, months, unit }: Params) =>
         Activity: { content: el.activity, },
         [`Total ${unit}`]: { content: 0 },
         ...mergeAll(monthsContent),
-        [logMonth]: { content: unit === UnitEnum.HOURS
-          ? roundToDecimal(Duration.toHours(el.duration))
-          : roundToDecimal(Duration.toWorkingDays(el.duration)),
+        [logMonth]: { content: toUnitDuration(unit, el.duration),
         },
       },
     };

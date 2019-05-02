@@ -10,6 +10,7 @@ import DateRange from '../../util/dateRange';
 import { timeLogsToTable } from './helper';
 
 export default () => {
+  // only get logs from last year
   const { error, loading, data } = useRequest({ apiCall: CommunityBusinesses.getLogs });
   const [unit, setUnit] = useState(UnitEnum.HOURS);
   const [months, setMonths] = useState(DateRange.months);
