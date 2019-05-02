@@ -5,6 +5,7 @@ import * as Knex from 'knex';
 import { Maybe, Dictionary, Float, Int, Omit, Map } from '../types/internal';
 import { PermissionLevelEnum } from '../auth';
 import { AccessEnum, ResourceEnum } from '../auth/types';
+import { Duration } from 'twine-util';
 
 /*
  * Common and utility types
@@ -271,7 +272,7 @@ export type VolunteerLog = Readonly<CommonTimestamps & {
   organisationName?: string
   activity: string
   project?: string
-  duration: Duration
+  duration: Duration.Duration
   startedAt: string
 }>;
 

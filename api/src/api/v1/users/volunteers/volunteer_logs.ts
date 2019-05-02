@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
-import Duration from 'twine-util';
+import { Duration } from 'twine-util';
 import { response, since, until, query, id, startedAt } from '../schema';
 import { VolunteerLogs } from '../../../../models';
 import { getCommunityBusiness } from '../../prerequisites';
