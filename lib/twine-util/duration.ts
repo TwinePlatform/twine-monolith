@@ -1,5 +1,4 @@
 import { filter } from 'ramda';
-import { Duration } from './types';
 
 const SEC_PER_MIN = 60;
 const MIN_PER_HR = 60;
@@ -7,6 +6,12 @@ const HRS_PER_DAY = 24;
 const SEC_PER_HR = SEC_PER_MIN * MIN_PER_HR;
 const SEC_PER_DAY = SEC_PER_HR * HRS_PER_DAY;
 
+export type Duration = Partial<{
+  seconds: number
+  minutes: number
+  hours: number
+  days: number
+}>;
 
 const Duration = {
   toHours: (d: Duration) =>
