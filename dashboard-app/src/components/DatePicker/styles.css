@@ -1,0 +1,22 @@
+.react-datepicker__header {
+  background-color: white;
+  padding: 0.5rem 0;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.react-datepicker__month {
+  margin: 0.2em;
+}
+
+.react-datepicker__month--selected {
+  background-color: #707070;
+}
+
+.react-datepicker__month-text.react-datepicker__month--selected:hover {
+  background-color: rgba(112, 112, 112, 0.8);
+}
+
+.react-datepicker__month-text {
+  padding: 0.4em;
+}

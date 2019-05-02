@@ -12,6 +12,7 @@ export enum ColoursEnum {
   primary = '#8000FF',
   darkPrimary = '#5500aa',
   font = '#222222',
+  red = '#E74C3C',
 }
 
 export enum FontSizeEnum {
@@ -48,3 +49,9 @@ export enum FontWeightEnum {
   light = '300',
   regular = '400',
 }
+
+export const Fonts = {
+  size: FontSizeEnum,
+  family: FontFamilyEnum,
+  weight: FontWeightEnum,
+};

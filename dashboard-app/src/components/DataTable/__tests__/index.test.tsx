@@ -59,13 +59,11 @@ describe('Component :: DataTable', () => {
 
   test('Toggle sort order on default column', async () => {
     const tools = render(<DataTable {...props} />);
-
-    const [header, rows] = await waitForElement(() => [
-      tools.getByText('one', { exact: false }),
-      tools.getAllByTestId('data-table-row'),
-    ]);
+    const header = await waitForElement(() => tools.getByText('one', { exact: false }));
 
     fireEvent.click(header);
+
+    const rows = await waitForElement(() => tools.getAllByTestId('data-table-row'));
 
     expect(header).toHaveTextContent('↑ one');
     expect(rows[0]).toHaveTextContent('bar45');
@@ -76,13 +74,11 @@ describe('Component :: DataTable', () => {
 
   test('Choose different column to sort by', async () => {
     const tools = render(<DataTable {...props} />);
-
-    const [header, rows] = await waitForElement(() => [
-      tools.getByText('two', { exact: false }),
-      tools.getAllByTestId('data-table-row'),
-    ]);
+    const header = await waitForElement(() => tools.getByText('two', { exact: false }));
 
     fireEvent.click(header);
+
+    const rows = await waitForElement(() => tools.getAllByTestId('data-table-row'));
 
     expect(header).toHaveTextContent('↓ two');
     expect(rows[0]).toHaveTextContent('bax89');
@@ -93,15 +89,13 @@ describe('Component :: DataTable', () => {
 
   test('Choose different column to sort by then toggle', async () => {
     const tools = render(<DataTable {...props} />);
-
-    const [header, rows] = await waitForElement(() => [
-      tools.getByText('two', { exact: false }),
-      tools.getAllByTestId('data-table-row'),
-    ]);
+    const header = await waitForElement(() => tools.getByText('two', { exact: false }));
 
     fireEvent.click(header);
     await wait();
     fireEvent.click(header);
+
+    const rows = await waitForElement(() => tools.getAllByTestId('data-table-row'));
 
     expect(header).toHaveTextContent('↑ two');
     expect(rows[0]).toHaveTextContent('foo23');

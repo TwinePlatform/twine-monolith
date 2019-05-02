@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { ColoursEnum } from '../../styles/style_guide';
 import DataCell from './DataTableCell';
 import { RowProps } from './types';
-
+import { hashJSON } from '../../util/hash';
 
 /**
  * Styles
@@ -29,7 +29,9 @@ const DataTableRow: React.FunctionComponent<RowProps> = (props) => {
   const inner = (
     <TableRow data-testid="data-table-row">
       {
-        order.map((h) => <DataCell content={columns[h].content} onClick={onClick} />)
+        order.map((h) => (
+          <DataCell content={columns[h].content} onClick={onClick} key={hashJSON(h)}/>
+        ))
       }
     </TableRow>
   );

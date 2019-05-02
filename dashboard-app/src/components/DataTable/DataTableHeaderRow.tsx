@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ColoursEnum, SpacingEnum } from '../../styles/style_guide';
 import { HeaderRowProps } from './types';
-
+import { hashJSON } from '../../util/hash';
 
 /**
  * Styles
@@ -32,7 +32,12 @@ const DataTableHeaderRow: React.FunctionComponent<HeaderRowProps> = (props) => {
       <HeaderRow>
         {
           columns.map((h) => (
-            <HeaderCell scope="col" onClick={() => onClick(h.content)} title={String(h.content)}>
+            <HeaderCell
+              scope="col"
+              onClick={() => onClick(h.content)}
+              title={String(h.content)}
+              key={hashJSON(h)}
+            >
               {sortBy === h.content ? `${arrow} ${h.content}` : h.content}
             </HeaderCell>
           ))

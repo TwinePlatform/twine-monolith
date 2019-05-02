@@ -25,7 +25,7 @@ const H4 = styled(_H4)`
 `;
 
 const Link = styled(L)`
-  font-size: ${FontSizeEnum.medium}
+  font-size: ${FontSizeEnum.medium};
   margin-top: ${SpacingEnum.xSmall};
 `;
 
