@@ -2,6 +2,7 @@ import * as Hapi from 'hapi';
 import * as Boom from 'boom';
 import * as Joi from 'joi';
 import { omit } from 'ramda';
+import Duration from 'twine-util';
 import {
   response,
   id,
@@ -14,7 +15,7 @@ import {
   volunteerProject
 } from './schema';
 import Roles from '../../../models/role';
-import { VolunteerLogs, Duration, Volunteers, VolunteerLog } from '../../../models';
+import { VolunteerLogs, Volunteers, VolunteerLog } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import {
   PostMyVolunteerLogsRequest,

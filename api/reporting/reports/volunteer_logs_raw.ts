@@ -4,13 +4,13 @@
  * Ad hoc data request
  */
 import * as Knex from 'knex';
+import Duration from 'twine-util';
 import { getConfig } from '../../config';
 import { csv } from '../writers';
 import {
   CommunityBusinesses,
   VolunteerLogs,
   Volunteers,
-  Duration,
 } from '../../src/models';
 import Roles from '../../src/models/role';
 
