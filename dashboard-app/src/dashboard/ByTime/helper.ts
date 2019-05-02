@@ -1,6 +1,7 @@
 import { DataTableRow } from '../../components/DataTable/types';
 import DateRange from '../../util/dateRange';
 import { UnitEnum } from '../../types';
+import { assocPath, mergeAll } from 'ramda';
 
 interface Params { data: any[]; months: string[]; unit: UnitEnum; }
 
@@ -18,21 +19,17 @@ export const timeLogsToTable = ({ data, months, unit }: Params) =>
     }
     const monthsContent = months.map((m: string) => ({ [m]: { content: 1 } }));
     const newRow = {
-      columns: Object.assign({
+      columns: {
         Activity: { content: el.activity, },
         [`Total ${unit}`]: { content: 0 },
-      }, ...monthsContent),
+        ...mergeAll(monthsContent),
+      },
     };
     return acc.concat(newRow);
   }, [])
-  .map((x) => {
-    const total = Object.values(x.columns).reduce((total, cell) =>
+  // messy way to calulate totals
+  .map((row): DataTableRow => {
+    const total = Object.values(row.columns).reduce((total, cell) =>
       typeof cell.content === 'number' ? total + cell.content : total, 0);
-    return {
-      ...x,
-      columns: {
-        ...x.columns,
-        [`Total ${unit}`]: { content: total },
-      },
-    };
+    return assocPath(['columns', `Total ${unit}`], { content: total }, row);
   });

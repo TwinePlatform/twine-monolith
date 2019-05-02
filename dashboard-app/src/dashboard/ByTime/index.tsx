@@ -3,14 +3,14 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import { H1 } from '../../components/Headings';
 import { CommunityBusinesses } from '../../api';
 import DataTable from '../../components/DataTable';
-import { DataTableRow, DataTableProps } from '../../components/DataTable/types';
-import useRequestOnLoad from '../../util/hooks/useRequestOnLoad';
+import { DataTableProps } from '../../components/DataTable/types';
+import useRequest from '../../util/hooks/useRequest';
 import { UnitEnum } from '../../types';
 import DateRange from '../../util/dateRange';
 import { timeLogsToTable } from './helper';
 
 export default () => {
-  const { error, loading, data } = useRequestOnLoad(CommunityBusinesses.getLogs);
+  const { error, loading, data } = useRequest({ apiCall: CommunityBusinesses.getLogs });
   const [unit, setUnit] = useState(UnitEnum.HOURS);
   const [months, setMonths] = useState(DateRange.months);
 

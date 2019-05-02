@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react';
-import { AxiosPromise, AxiosResponse } from 'axios';
+import { AxiosPromise, AxiosResponse, AxiosRequestConfig } from 'axios';
 import { Response } from '../response';
 
-export default (apiCall: () => AxiosPromise) => {
+type RequestParams = {
+  apiCall: (params?: Pick<AxiosRequestConfig, 'params'>) => AxiosPromise
+  params?: Pick<AxiosRequestConfig, 'params'>
+  updateOn?: any[]
+};
+
+export default ({ apiCall, params, updateOn = [] }: RequestParams) => {
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState();
@@ -10,13 +16,13 @@ export default (apiCall: () => AxiosPromise) => {
     (async () => {
       setLoading(true);
       try {
-        const res: AxiosResponse = await apiCall();
+        const res: AxiosResponse = await apiCall(params);
         setData(Response.get(res));
       } catch (error) {
         setError(Response.errorMessage(error));
       }
       setLoading(false);
     })();
-  }, [apiCall]);
+  }, updateOn);
   return { error, loading, data };
 };
