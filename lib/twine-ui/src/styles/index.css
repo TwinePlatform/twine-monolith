@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400');
 
 * {
   box-sizing: border-box;
@@ -6,7 +6,8 @@
 }
 
 body {
-  overflow-x: hidden;
+  font-size: 16px;
+  overflow: hidden;
 }
 
 /* http://meyerweb.com/eric/tools/css/reset/
@@ -30,6 +31,7 @@ time, mark, audio, video {
 margin: 0;
 padding: 0;
 border: 0;
+font-size: 100%;
 font: inherit;
 vertical-align: baseline;
 }
@@ -55,35 +57,4 @@ content: none;
 table {
 border-collapse: collapse;
 border-spacing: 0;
-}
-
-/* matches MediaQueriesEnum in design system */
-
-
-/* large desktop */
-@media (max-width: 4200px){
-  html {
-    font-size: 16px;
-  }
-}
-
-/* standard desktop */
-@media (max-width: 1800px){
-  html {
-    font-size: 14px;
-  }
-}
-
-/* tablet */
-@media (max-width: 1200px){
-  html {
-    font-size: 12px;
-  }
-}
-
-/* mobile (currently not supported) */
-@media (max-width: 900px){
-  html {
-    font-size: 10px;
-  }
 }
