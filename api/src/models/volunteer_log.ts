@@ -1,11 +1,10 @@
 import * as Knex from 'knex';
 import { assoc, compose, evolve, has, filter, invertObj, omit, pick } from 'ramda';
-import { Objects } from 'twine-util';
+import { Objects, Duration } from 'twine-util';
 import { VolunteerLog, VolunteerLogCollection, RoleEnum } from './types';
 import { CommunityBusinesses } from './community_business';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { Map, Dictionary } from '../types/internal';
-import Duration from './duration';
 import Roles from './role';
 
 

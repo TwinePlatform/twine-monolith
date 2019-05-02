@@ -1,4 +1,5 @@
-import Duration from '../duration';
+import * as Duration from '../duration';
+
 
 describe('Duration', () => {
   describe('toSeconds', () => {
