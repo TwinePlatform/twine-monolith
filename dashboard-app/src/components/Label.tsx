@@ -16,7 +16,7 @@ const HTMLLabel = styled.label<InlineProps>`
   font-size: ${Fonts.size.normal};
   ${
     (props) => props.inline
-      ? 'display: flex; align-items: baseline;'
+      ? 'display: flex; align-items: center;'
       : ''
   }
 `;
@@ -30,6 +30,7 @@ const BlockLabelContent = styled.p`
 const InlineLabelContent = styled.span`
   text-align: left;
   margin-right: 0.5em;
+  white-space: pre;
 `;
 
 const LabelContent: React.FunctionComponent<InlineProps> = (props) => (

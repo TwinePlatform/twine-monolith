@@ -63,7 +63,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
       <Col xs={2}>
         <DatePicker
           type={dateFilter}
-          label="To"
+          label="  To" // To make both labels take up the same space
           selected={toDate}
           onChange={onToChange}
           maxDate={moment().toDate()}
