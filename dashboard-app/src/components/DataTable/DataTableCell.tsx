@@ -5,7 +5,7 @@ import { CellProps } from './types';
 
 
 const Cell = styled.td`
-  padding: ${SpacingEnum.small} 0;
+  padding: ${SpacingEnum.small};
 `;
 
 

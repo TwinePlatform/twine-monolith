@@ -5,7 +5,7 @@ import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { sortBy, pathOr } from 'ramda';
 import { H3 as _H3 } from '../Headings';
-import { SpacingEnum } from '../../styles/style_guide';
+import { SpacingEnum, ColoursEnum } from '../../styles/style_guide';
 import Card from '../Card';
 import DataTableRow from './DataTableRow';
 import HeaderRow from './DataTableHeaderRow';
@@ -29,6 +29,7 @@ const sortRows = (data: DataTableProps['rows'], order: Order, f?: string) => {
  */
 const TitleContainer = styled.div`
   padding: ${SpacingEnum.small};
+  background-color: ${ColoursEnum.white};
 `;
 
 const H3 = styled(_H3)`
