@@ -1,9 +1,9 @@
 import { Duration } from 'twine-util';
 import { assocPath, mergeAll } from 'ramda';
 import moment from 'moment';
-import { DataTableRow } from '../../components/DataTable/types';
+import { DataTableRow, DataTableProps } from '../../components/DataTable/types';
 import { DurationUnitEnum } from '../../types';
-import { roundToDecimal } from '../../util/mathUtil';
+import { roundToDecimal, addDecimals } from '../../util/mathUtil';
 
 interface Params { data: any[]; months: string[]; unit: DurationUnitEnum; }
 
@@ -17,8 +17,8 @@ const toUnitDuration = (unit: DurationUnitEnum, duration: Duration.Duration) => 
   }
 };
 
-export const timeLogsToTable = ({ data, months, unit }: Params) =>
-  data.reduce((acc: DataTableRow[], el: any) => {
+export const timeLogsToTable = ({ data, months, unit }: Params): DataTableProps => {
+  const rows = data.reduce((acc: DataTableRow[], el: any) => {
     const activityExists = acc.some((x) => x.columns.Activity.content === el.activity);
     // doesn't work for more than 12 months
     const logMonth = moment(el.startedAt || el.createdAt).format('MMMM');
@@ -26,7 +26,7 @@ export const timeLogsToTable = ({ data, months, unit }: Params) =>
       return acc.map((x) => {
         if (x.columns.Activity.content === el.activity) {
           x.columns[logMonth].content =
-            Number(x.columns[logMonth].content) + toUnitDuration(unit, el.duration);
+          addDecimals(Number(x.columns[logMonth].content), toUnitDuration(unit, el.duration));
         }
         return x;
       });
@@ -49,3 +49,10 @@ export const timeLogsToTable = ({ data, months, unit }: Params) =>
       typeof cell.content === 'number' ? total + cell.content : total, 0);
     return assocPath(['columns', `Total ${unit}`], { content: total }, row);
   });
+
+  return {
+    title: 'Volunteer Activity over Months',
+    headers: ['Activity', `Total ${unit}`, ...months],
+    rows,
+  };
+};
