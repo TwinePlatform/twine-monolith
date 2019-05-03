@@ -2,17 +2,17 @@ import { Duration } from 'twine-util';
 import { assocPath, mergeAll } from 'ramda';
 import moment from 'moment';
 import { DataTableRow } from '../../components/DataTable/types';
-import { UnitEnum } from '../../types';
+import { DurationUnitEnum } from '../../types';
 import { roundToDecimal } from '../../util/mathUtil';
 
-interface Params { data: any[]; months: string[]; unit: UnitEnum; }
+interface Params { data: any[]; months: string[]; unit: DurationUnitEnum; }
 
-const toUnitDuration = (unit: UnitEnum, duration: Duration.Duration) => {
+const toUnitDuration = (unit: DurationUnitEnum, duration: Duration.Duration) => {
   switch (unit){
-    case UnitEnum.DAYS:
+    case DurationUnitEnum.DAYS:
       return roundToDecimal(Duration.toWorkingDays(duration));
 
-    case UnitEnum.HOURS:
+    case DurationUnitEnum.HOURS:
       return roundToDecimal(Duration.toHours(duration));
   }
 };

@@ -1,4 +1,4 @@
-export enum UnitEnum {
-  DAYS = 'days',
-  HOURS = 'hours',
+export enum DurationUnitEnum {
+  DAYS = 'Days',
+  HOURS = 'Hours',
 }

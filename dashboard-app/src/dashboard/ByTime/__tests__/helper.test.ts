@@ -1,5 +1,5 @@
 import { timeLogsToTable } from '../helper';
-import { UnitEnum } from '../../../types';
+import { DurationUnitEnum } from '../../../types';
 import DateRange from '../../../util/dateRange';
 
 describe('timeLogsToTable', () => {
@@ -30,7 +30,10 @@ describe('timeLogsToTable', () => {
         activity: 'Outdoor and practical work',
       },
     ];
-    const tData = timeLogsToTable({ data: logs, unit: UnitEnum.HOURS, months: DateRange.months });
+    const tData = timeLogsToTable({
+      data: logs, unit: DurationUnitEnum.HOURS,
+      months: DateRange.months,
+    });
     expect(tData).toEqual([{
       columns:
       { Activity: { content: 'Outdoor and practical work' },
