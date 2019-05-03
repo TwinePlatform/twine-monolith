@@ -17,6 +17,13 @@ const toUnitDuration = (unit: DurationUnitEnum, duration: Duration.Duration) => 
   }
 };
 
+const addDurationToTableContents = (
+  row: DataTableRow,
+  columnKey: string,
+  unit: DurationUnitEnum,
+  duration: Duration.Duration) =>
+    addDecimals(Number(row.columns[columnKey].content), toUnitDuration(unit, duration));
+
 export const timeLogsToTable = ({ data, months, unit }: Params): DataTableProps => {
   const rows = data.reduce((acc: DataTableRow[], el: any) => {
     const activityExists = acc.some((x) => x.columns.Activity.content === el.activity);
@@ -25,8 +32,9 @@ export const timeLogsToTable = ({ data, months, unit }: Params): DataTableProps 
     if (activityExists) {
       return acc.map((x) => {
         if (x.columns.Activity.content === el.activity) {
-          x.columns[logMonth].content =
-          addDecimals(Number(x.columns[logMonth].content), toUnitDuration(unit, el.duration));
+          x.columns[logMonth].content = addDurationToTableContents(x, logMonth, unit, el.duration);
+          x.columns[`Total ${unit}`].content =
+            addDurationToTableContents(x, `Total ${unit}`, unit, el.duration);
         }
         return x;
       });
@@ -37,18 +45,12 @@ export const timeLogsToTable = ({ data, months, unit }: Params): DataTableProps 
         Activity: { content: el.activity, },
         [`Total ${unit}`]: { content: 0 },
         ...mergeAll(monthsContent),
-        [logMonth]: { content: toUnitDuration(unit, el.duration),
-        },
+        [logMonth]: { content: toUnitDuration(unit, el.duration) },
+        [`Total ${unit}`]: { content: toUnitDuration(unit, el.duration) },
       },
     };
     return acc.concat(newRow);
-  }, [])
-  // messy way to calulate totals
-  .map((row): DataTableRow => {
-    const total = Object.values(row.columns).reduce((total, cell) =>
-      typeof cell.content === 'number' ? total + cell.content : total, 0);
-    return assocPath(['columns', `Total ${unit}`], { content: total }, row);
-  });
+  }, []);
 
   return {
     title: 'Volunteer Activity over Months',
