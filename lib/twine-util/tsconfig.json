@@ -6,9 +6,9 @@
     "noImplicitAny": true,
     "removeComments": false,
     "preserveConstEnums": true,
-    "outDir": "build",
     "sourceMap": true,
-    "lib": ["es2017"]
+    "lib": ["es2017"],
+    "declaration": true,
   },
   "exclude": ["__tests__"]
 }
