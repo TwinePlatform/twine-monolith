@@ -3,7 +3,7 @@
   "name": "twine-util",
   "version": "1.0.0",
   "description": "",
-  "main": "build/index.js",
+  "main": "index.js",
   "scripts": {
     "postinstall": "tsc",
     "test": "jest",
