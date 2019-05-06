@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { H1 } from '../../components/Headings';
 import { CommunityBusinesses } from '../../api';
@@ -11,24 +12,38 @@ import { timeLogsToTable } from './helper';
 import UtilityBar from '../../components/UtilityBar';
 
 export default () => {
-  // only get logs from last year
-  const { error, loading, data } = useRequest({ apiCall: CommunityBusinesses.getLogs });
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
-  const [months, setMonths] = useState(DateRange.months);
+  const [fromDate, setFromDate] = useState(moment().subtract(1, 'year').add(1, 'month').toDate());
+  const [toDate, setToDate] = useState(moment().toDate());
   const [tableProps, setTableProps] = useState<DataTableProps>();
+
+  const { error, loading, data } = useRequest({
+    apiCall: CommunityBusinesses.getLogs,
+    params: { since: fromDate, until: toDate },
+    updateOn: [fromDate, toDate],
+  });
 
   useEffect(() => {
     if (data) {
+      const startMonth = Number(moment(fromDate).format('M'));
+      const duration = DateRange.monthsDifference(fromDate, toDate) + 1;
+      const months = DateRange.getPastMonths(startMonth, duration);
       setTableProps(timeLogsToTable({ data, months, unit }));
     }
   }, [data, unit]);
+
 
   return (
     <Grid>
       <Row center="xs">
         <Col>
           <H1>By Time</H1>
-          <UtilityBar dateFilter="month" onUnitChange={setUnit}/>
+          <UtilityBar
+            dateFilter="month"
+            onUnitChange={setUnit}
+            onFromDateChange={setFromDate}
+            onToDateChange={setToDate}
+          />
           {tableProps && <DataTable { ...tableProps } />}
         </Col>
       </Row>

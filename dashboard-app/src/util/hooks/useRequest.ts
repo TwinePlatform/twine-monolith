@@ -4,7 +4,7 @@ import { Response } from '../response';
 
 type RequestParams = {
   apiCall: (params?: Pick<AxiosRequestConfig, 'params'>) => AxiosPromise
-  params?: Pick<AxiosRequestConfig, 'params'>
+  params?: any
   updateOn?: any[]
 };
 
