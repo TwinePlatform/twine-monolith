@@ -4,7 +4,7 @@ import { Route, Switch, BrowserRouter, withRouter } from 'react-router-dom';
 
 import PrivateRoute from './auth/components/PrivateRoute';
 import HoldingPage from './HoldingPage';
-import ByActivity from './dashboard/ByActivity';
+import ByActivity from './dashboard/ByActivity/index';
 import ByTime from './dashboard/ByTime/index';
 import ByVolunteer from './dashboard/ByVolunteer';
 import Dashboard from './dashboard/Dashboard';
