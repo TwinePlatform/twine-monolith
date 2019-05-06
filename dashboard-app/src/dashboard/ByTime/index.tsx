@@ -4,7 +4,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import { H1 } from '../../components/Headings';
 import { CommunityBusinesses } from '../../api';
 import DataTable from '../../components/DataTable';
-import { DataTableProps, DataTableRow } from '../../components/DataTable/types';
+import { DataTableProps } from '../../components/DataTable/types';
 import useRequest from '../../util/hooks/useRequest';
 import { DurationUnitEnum } from '../../types';
 import DateRange from '../../util/dateRange';
@@ -17,7 +17,7 @@ export default () => {
   const [toDate, setToDate] = useState(moment().toDate());
   const [tableProps, setTableProps] = useState<DataTableProps>();
 
-  const { error, loading, data } = useRequest({
+  const { error, loading, data } = useRequest({ // tslint:disable-line
     apiCall: CommunityBusinesses.getLogs,
     params: { since: fromDate, until: toDate },
     updateOn: [fromDate, toDate],

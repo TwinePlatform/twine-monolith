@@ -1,5 +1,5 @@
 import { Duration } from 'twine-util';
-import { assocPath, mergeAll } from 'ramda';
+import { mergeAll } from 'ramda';
 import moment from 'moment';
 import { DataTableRow, DataTableProps } from '../../components/DataTable/types';
 import { DurationUnitEnum } from '../../types';

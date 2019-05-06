@@ -1,5 +1,4 @@
-import _axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
-import { pathOr, Dictionary } from 'ramda';
+import _axios, { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
 const baseURL = process.env.REACT_APP_API_HOST_DOMAIN ?
