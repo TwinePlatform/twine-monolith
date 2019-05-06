@@ -94,8 +94,8 @@ describe('Util DateRange', () => {
       expect(months).toEqual(8);
     });
     test('SUCCESS - gives difference for months in different year', () => {
-      const from = new Date('09-01-18');
-      const until = new Date('10-01-19');
+      const from = new Date('10-01-18');
+      const until = new Date('09-01-19');
       const months = DateRange.monthsDifference(from, until);
       expect(months).toEqual(11);
     });

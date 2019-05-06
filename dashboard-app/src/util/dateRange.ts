@@ -35,16 +35,14 @@ const DateRange: DateRange = {
     const newMonths = months.concat(staticMonths[startingMonth - 1]);
     return DateRange.getPastMonths(startingMonth + 1, numberOfMonths - 1, newMonths);
   },
-  monthsDifference: (from, until) => {
+  monthsDifference: (_from, _until) => {
+    const from = moment(_from);
+    const until = moment(_until);
     if (moment(from).isAfter(until)) {
       return 0;
     }
-    const yearsDifference = (until.getFullYear() - from.getFullYear()) * 12;
-    const monthsDifference = until.getMonth() - from.getMonth();
 
-    return yearsDifference > 0
-      ? yearsDifference - monthsDifference
-      : monthsDifference;
+    return until.diff(from, 'months');
   },
 };
 
