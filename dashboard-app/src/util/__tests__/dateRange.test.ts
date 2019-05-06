@@ -1,6 +1,6 @@
 import DateRange from '../dateRange';
 
-describe('Utils DateRange', () => {
+describe('Util DateRange', () => {
   describe(':: months', () => {
     test('SUCCESS - standrd 12 months', () => {
       const months = DateRange.months;
@@ -84,6 +84,32 @@ describe('Utils DateRange', () => {
     test('FAIL - unspecified month returns empty array', () => {
       const months = DateRange.getPastMonths(30, 3);
       expect(months).toEqual([]);
+    });
+  });
+  describe(':: monthsDifference', () => {
+    test('SUCCESS - gives difference for months in same year', () => {
+      const from = new Date('01-01-19');
+      const until = new Date('09-01-19');
+      const months = DateRange.monthsDifference(from, until);
+      expect(months).toEqual(8);
+    });
+    test('SUCCESS - gives difference for months in different year', () => {
+      const from = new Date('09-01-18');
+      const until = new Date('10-01-19');
+      const months = DateRange.monthsDifference(from, until);
+      expect(months).toEqual(11);
+    });
+    test('SUCCESS - gives difference for months over multiple years', () => {
+      const from = new Date('10-01-17');
+      const until = new Date('10-01-19');
+      const months = DateRange.monthsDifference(from, until);
+      expect(months).toEqual(24);
+    });
+    test('FAIL - from date is after until date returns 0', () => {
+      const from = new Date('09-01-19');
+      const until = new Date('10-01-18');
+      const months = DateRange.monthsDifference(from, until);
+      expect(months).toEqual(0);
     });
   });
 });
