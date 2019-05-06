@@ -6,9 +6,10 @@ type RequestParams = {
   apiCall: (params?: Pick<AxiosRequestConfig, 'params'>) => AxiosPromise
   params?: any
   updateOn?: any[]
+  callback?: (d: any) => void
 };
 
-export default ({ apiCall, params, updateOn = [] }: RequestParams) => {
+export default ({ apiCall, params = {}, updateOn = [], callback }: RequestParams) => {
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState();
@@ -18,6 +19,9 @@ export default ({ apiCall, params, updateOn = [] }: RequestParams) => {
       try {
         const res: AxiosResponse = await apiCall(params);
         setData(Response.get(res));
+        if (callback) {
+          callback(Response.get(res));
+        }
       } catch (error) {
         setError(Response.errorMessage(error));
       }

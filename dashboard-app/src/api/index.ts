@@ -39,4 +39,8 @@ export const CommunityBusinesses = {
     axios.get('/community-businesses/me', { params }),
   getLogs: (params?: Pick<AxiosRequestConfig, 'params'>) =>
     axios.get('/community-businesses/me/volunteer-logs', { params }),
+  getVolunteerActivities: () =>
+    axios.get('/volunteer-activities'),
+  getVolunteers: () => // NB: fields not currently supported
+    axios.get('/community-businesses/me/volunteers', { params: { fields: ['name', 'id'] } }),
 };
