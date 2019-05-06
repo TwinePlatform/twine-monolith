@@ -34,21 +34,42 @@ describe('timeLogsToTable', () => {
       data: logs, unit: DurationUnitEnum.HOURS,
       months: DateRange.months,
     });
-    expect(tData).toEqual([{
-      columns:
-      { Activity: { content: 'Outdoor and practical work' },
-        April: { content: 2 },
-        August: { content: 0 },
-        December: { content: 0 },
-        February: { content: 0 },
-        January: { content: 0 },
-        July: { content: 0 },
-        June: { content: 0 },
-        March: { content: 4 },
-        May: { content: 0 },
-        November: { content: 0 },
-        October: { content: 0 },
-        September: { content: 0 },
-        'Total hours': { content: 6 } } }]);
+    (expect(tData) as any).toEqual({
+      title: 'Volunteer Activity over Months',
+      headers: [
+        'Activity',
+        'Total Hours',
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ],
+      rows : [{
+        columns: {
+          Activity: { content: 'Outdoor and practical work' },
+          April: { content: '2.00' },
+          August: { content: 0 },
+          December: { content: 0 },
+          February: { content: 0 },
+          January: { content: 0 },
+          July: { content: 0 },
+          June: { content: 0 },
+          March: { content: '4.00' },
+          May: { content: 0 },
+          November: { content: 0 },
+          October: { content: 0 },
+          September: { content: 0 },
+          'Total Hours': { content: '6.00' },
+        },
+      }],
+    });
   });
 });
