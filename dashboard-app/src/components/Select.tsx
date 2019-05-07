@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ColoursEnum, Fonts } from '../styles/style_guide';
+import { ColoursEnum, Fonts } from '../styles/design_system';
 import Label from './Label';
 
 
@@ -47,7 +47,7 @@ export const Select = styled.select`
 export const SelectWrapper = styled.div`
   width: 100%;
   padding: 0.6em;
-  border: 0.1em solid ${ColoursEnum.light};
+  border: 0.1em solid ${ColoursEnum.grey};
   border-radius: 0.15em;
   overflow: hidden;
   background-color: ${ColoursEnum.white};
@@ -58,8 +58,8 @@ export const SelectWrapper = styled.div`
 `;
 
 export const Option = styled.option`
-  font: ${Fonts.family.default};
-  font-size: ${Fonts.size.normal};
+  font: ${Fonts.family.main};
+  font-size: ${Fonts.size.body};
 `;
 
 const ErrorText = styled.span`

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SpacingEnum } from '../styles/style_guide';
+import { SpacingEnum } from '../styles/design_system';
 
 
 type CardProps = {

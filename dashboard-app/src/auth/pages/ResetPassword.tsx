@@ -12,7 +12,7 @@ import { redirectOnError, withParams, getQueryObjectFromProps } from '../../util
 import { validateForm } from '../../util/forms';
 import { AxiosError } from 'axios';
 import { H1 } from '../../components/Headings';
-import { SpacingEnum } from '../../styles/style_guide';
+import { SpacingEnum } from '../../styles/design_system';
 
 
 /**
@@ -30,7 +30,7 @@ interface ResetPasswordProps extends RouteComponentProps<Params> {}
 const Form = styled(_Form)`
   width: 100%;
   text-align: left;
-  margin-top: ${SpacingEnum.large};
+  margin-top: ${SpacingEnum.small};
 `;
 
 const schema = Joi.object({

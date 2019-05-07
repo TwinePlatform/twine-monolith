@@ -8,8 +8,9 @@ import { CbAdmins } from '../../../api';
 import { Response } from '../../../util/response';
 import LoginForm, { FormValues } from './LoginForm';
 import { H1, H4 as _H4 } from '../../../components/Headings';
+import { Paragraph } from '../../../components/Typography';
 import { redirectOnError, getQueryObjectFromProps } from '../../../util/routing';
-import { FontSizeEnum, SpacingEnum, ColoursEnum } from '../../../styles/style_guide';
+import { Fonts, SpacingEnum, ColoursEnum } from '../../../styles/design_system';
 
 
 /*
@@ -26,8 +27,8 @@ const H4 = styled(_H4)`
 `;
 
 const Link = styled(L)`
-  font-size: ${FontSizeEnum.medium};
-  margin-top: ${SpacingEnum.xSmall};
+  font-size: ${Fonts.size.body};
+  margin-top: ${SpacingEnum.small};
 `;
 
 /*
@@ -78,7 +79,7 @@ const Login: React.FunctionComponent<LoginProps> = (props) => (
             <H1>Login to the Twine Volunteer Dashboard</H1>
         </Row>
         <Row>
-            <H4>Don't have an account? Register <a href="">here</a></H4>
+            <Paragraph>Don't have an account? Register <a href="">here</a></Paragraph>
         </Row>
         <Row>
           <LoginForm
@@ -91,9 +92,9 @@ const Login: React.FunctionComponent<LoginProps> = (props) => (
             isActive={getMessage(props).length > 0}
             message={getMessage(props)}
             barStyle={{
-              backgroundColor: ColoursEnum.font,
+              backgroundColor: ColoursEnum.black,
               left: getMessage(props).length > 0 ? 'inherit' : '-100%',
-              marginTop: SpacingEnum.medium,
+              marginTop: SpacingEnum.small,
               borderRadius: '0.2rem',
             }}
           />

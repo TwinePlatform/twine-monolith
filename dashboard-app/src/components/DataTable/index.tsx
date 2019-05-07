@@ -5,7 +5,7 @@ import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { sortBy, pathOr } from 'ramda';
 import { H3 as _H3 } from '../Headings';
-import { SpacingEnum, ColoursEnum } from '../../styles/style_guide';
+import { SpacingEnum, ColoursEnum } from '../../styles/design_system';
 import Card from '../Card';
 import DataTableRow from './DataTableRow';
 import HeaderRow from './DataTableHeaderRow';

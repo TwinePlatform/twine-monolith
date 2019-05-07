@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SelectContainer } from '../Select';
-import { ColoursEnum } from '../../styles/style_guide';
+import { ColoursEnum } from '../../styles/design_system';
 
 
 /**

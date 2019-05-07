@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
 
-import { ColoursEnum, FontSizeEnum, FontWeightEnum } from '../../styles/style_guide';
+import { ColoursEnum, Fonts } from '../../styles/design_system';
 import Navigation from './Navigation';
 import { Dictionary } from 'ramda';
 
@@ -16,12 +16,12 @@ const PaddedRow = styled(Row)`
   height: 4em;
   background-color: ${ColoursEnum.grey};
   color: ${ColoursEnum.white};
-  font-weight: ${FontWeightEnum.light};
+  font-weight: ${Fonts.weight.regular};
   padding: 0 1.5em;
 `;
 
 const Title = styled.p`
-  font-size: ${FontSizeEnum.heading};
+  font-size: ${Fonts.size.heading1};
 `;
 
 

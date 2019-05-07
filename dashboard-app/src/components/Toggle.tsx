@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { ColoursEnum, Fonts, SpacingEnum } from '../styles/style_guide';
+import { ColoursEnum, Fonts, SpacingEnum } from '../styles/design_system';
 
 type Side = 'left' | 'right';
 
@@ -13,24 +13,24 @@ type ToggleProps = {
 };
 
 const Left = styled.button<{ active: boolean }>`
-  font-size: ${Fonts.size.small};
+  font-size: ${Fonts.size.body};
   padding: ${SpacingEnum.small};
   outline: none;
-  border: 0.1rem solid ${ColoursEnum.light};
+  border: 0.1rem solid ${ColoursEnum.grey};
   border-top-left-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
-  background-color: ${(props) => props.active ? ColoursEnum.light : ColoursEnum.offWhite};
+  background-color: ${(props) => props.active ? ColoursEnum.grey : ColoursEnum.lightGrey};
   color: ${(props) => props.active ? ColoursEnum.white : ColoursEnum.black};
 `;
 
 const Right = styled.button<{ active: boolean }>`
-  font-size: ${Fonts.size.small};
+  font-size: ${Fonts.size.body};
   padding: ${SpacingEnum.small};
   outline: none;
-  border: 0.1rem solid ${ColoursEnum.light};
+  border: 0.1rem solid ${ColoursEnum.lightGrey};
   border-top-right-radius: 0.25rem;
   border-bottom-right-radius: 0.25rem;
-  background-color: ${(props) => props.active ? ColoursEnum.light : ColoursEnum.offWhite};
+  background-color: ${(props) => props.active ? ColoursEnum.grey : ColoursEnum.lightGrey};
   color: ${(props) => props.active ? ColoursEnum.white : ColoursEnum.black};
 `;
 

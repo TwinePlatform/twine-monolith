@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Grid, Row } from 'react-flexbox-grid';
-import { SpacingEnum } from './styles/style_guide';
+import { SpacingEnum } from './styles/design_system';
 import { H1 as _H1, H3 } from './components/Headings';
-import _Link from './components/Link';
+import _Link from './components/Navbar/Link';
 import { PrimaryButton } from './components/Buttons';
 
 
@@ -64,15 +64,15 @@ const getErrorText = (code: string): ErrorText => {
  * Styles
  */
 const H1 = styled(_H1)`
-  margin-bottom: ${SpacingEnum.medium};
+  margin-bottom: ${SpacingEnum.small};
 `;
 
 const H3Padded = styled(H3)`
-  margin-bottom: ${SpacingEnum.xSmall};
+  margin-bottom: ${SpacingEnum.small};
 `;
 
 const Link = styled(_Link)`
-  margin-top: ${SpacingEnum.large};
+  margin-top: ${SpacingEnum.small};
   margin-bottom: ${SpacingEnum.small};
 `;
 

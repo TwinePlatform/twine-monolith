@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { ColoursEnum, FontSizeEnum } from '../styles/style_guide';
+import { rgba } from 'polished';
+import { ColoursEnum, Fonts } from '../styles/design_system';
 
 
 export const Button = styled.button`
@@ -8,16 +9,16 @@ export const Button = styled.button`
   outline: none;
   box-shadow: none;
   color: ${ColoursEnum.white};
-  font-size: ${FontSizeEnum.medium};
+  font-size: ${Fonts.size.emphasis};
   padding: 0.75em 1em;
 `;
 
 export const PrimaryButton = styled(Button)`
-  background-color: ${ColoursEnum.primary};
+  background-color: ${ColoursEnum.purple};
   transition: background-color ease 0.3s;
 
   &:hover {
-    background-color: ${ColoursEnum.darkPrimary}
+    background-color: ${rgba(ColoursEnum.purple, 0.8)};
   };
 `;
 

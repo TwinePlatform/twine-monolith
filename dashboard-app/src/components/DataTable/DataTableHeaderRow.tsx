@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ColoursEnum, SpacingEnum } from '../../styles/style_guide';
+import { ColoursEnum, SpacingEnum } from '../../styles/design_system';
 import { HeaderRowProps } from './types';
 import { hashJSON } from '../../util/hash';
 
@@ -8,7 +8,7 @@ import { hashJSON } from '../../util/hash';
  * Styles
  */
 const HeaderRow = styled.tr`
-  background-color: ${ColoursEnum.light};
+  background-color: ${ColoursEnum.lightGrey};
 `;
 
 const HeaderCell = styled.th`
