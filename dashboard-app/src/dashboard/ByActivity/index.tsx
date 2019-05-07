@@ -40,12 +40,9 @@ export default () => {
 
   useEffect(() => {
     if (logData && activities && volunteers) {
-      console.log('hi');
       setTableProps(activityLogsToTable({ data: logData, activities, unit, volunteers }));
     }
-  }, [logData, unit]);
-
-  console.log({ logData, activities });
+  }, [logData, unit, activities, volunteers]); // TODO: have single on load variable for trigger
 
   return (
     <Grid>
