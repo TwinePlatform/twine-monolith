@@ -1,8 +1,7 @@
-import { Duration } from 'twine-util';
+import { Duration, MathUtil } from 'twine-util';
 import { mergeAll, assocPath, path, propEq, find } from 'ramda';
 import { DataTableRow, DataTableProps } from '../../components/DataTable/types';
 import { DurationUnitEnum } from '../../types';
-import { roundToDecimal, addDecimals } from '../../util/mathUtil';
 
 interface Params {
   data: any[];
@@ -10,6 +9,8 @@ interface Params {
   activities: string[];
   unit: DurationUnitEnum;
 }
+
+const roundToDecimal = MathUtil.roundTo(2);
 
 const toUnitDuration = (unit: DurationUnitEnum, duration: Duration.Duration) => {
   switch (unit){
@@ -26,7 +27,7 @@ const addDurationToTableContents = (
   columnKey: string,
   unit: DurationUnitEnum,
   duration: Duration.Duration) =>
-    addDecimals(Number(row.columns[columnKey].content), toUnitDuration(unit, duration));
+    roundToDecimal(Number(row.columns[columnKey].content) + toUnitDuration(unit, duration));
 
 export const activityLogsToTable = ({ data, activities, unit, volunteers }
   : Params): DataTableProps => {

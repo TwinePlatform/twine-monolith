@@ -1,9 +1,10 @@
-import { Duration } from 'twine-util';
+import { Duration, MathUtil } from 'twine-util';
 import { mergeAll } from 'ramda';
 import moment from 'moment';
 import { DataTableRow, DataTableProps } from '../../components/DataTable/types';
 import { DurationUnitEnum } from '../../types';
-import { roundToDecimal, addDecimals } from '../../util/mathUtil';
+
+const roundToDecimal = MathUtil.roundTo(2);
 
 interface Params { data: any[]; months: string[]; unit: DurationUnitEnum; }
 
@@ -22,7 +23,7 @@ const addDurationToTableContents = (
   columnKey: string,
   unit: DurationUnitEnum,
   duration: Duration.Duration) =>
-    addDecimals(Number(row.columns[columnKey].content), toUnitDuration(unit, duration));
+  roundToDecimal(Number(row.columns[columnKey].content) + toUnitDuration(unit, duration));
 
 export const timeLogsToTable = ({ data, months, unit }: Params): DataTableProps => {
   const rows = data.reduce((acc: DataTableRow[], el: any) => {
