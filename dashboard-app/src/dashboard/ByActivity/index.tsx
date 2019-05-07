@@ -19,7 +19,7 @@ export default () => {
   const [toDate, setToDate] = useState(moment().toDate());
   const [tableProps, setTableProps] = useState<DataTableProps>();
 
-  const { data: logData } = useRequest({
+  const { data: logs } = useRequest({
     apiCall: CommunityBusinesses.getLogs,
     params: { since: fromDate, until: toDate },
     updateOn: [fromDate, toDate],
@@ -39,11 +39,15 @@ export default () => {
 
 
   useEffect(() => {
-    if (logData && activities && volunteers) {
-      setTableProps(activityLogsToTable({ data: logData, activities, unit, volunteers }));
+    if (logs && activities && volunteers) {
+      const columnHeaders = ['Volunteer Name'].concat(activities);
+      setTableProps(activityLogsToTable({ data: { logs, volunteers }, columnHeaders, unit }));
     }
-  }, [logData, unit, activities, volunteers]); // TODO: have single on load variable for trigger
+  }, [logs, unit, activities, volunteers]); // TODO: have single on load variable for trigger
 
+  if (tableProps) {
+    console.log(tableProps);
+  }
   return (
     <Grid>
       <Row center="xs">

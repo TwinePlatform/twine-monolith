@@ -19,7 +19,7 @@ export default () => {
   const [toDate, setToDate] = useState(moment().toDate());
   const [tableProps, setTableProps] = useState<DataTableProps>();
 
-  const { data } = useRequest({
+  const { data: logs } = useRequest({
     apiCall: CommunityBusinesses.getLogs,
     params: { since: fromDate, until: toDate },
     updateOn: [fromDate, toDate],
@@ -33,13 +33,14 @@ export default () => {
 
 
   useEffect(() => {
-    if (data && volunteers) {
+    if (logs && volunteers) {
       const startMonth = Number(moment(fromDate).format('M'));
       const duration = DateRange.monthsDifference(fromDate, toDate) + 1;
       const months = DateRange.getPastMonths(startMonth, duration);
-      setTableProps(volunteerLogsToTable({ data, unit, volunteers, months }));
+      const columnHeaders = ['Volunteer Name'].concat(months);
+      setTableProps(volunteerLogsToTable({ data: { logs, volunteers }, columnHeaders, unit }));
     }
-  }, [data, unit, volunteers]); // TODO: have single on load variable for trigger
+  }, [logs, unit, volunteers]); // TODO: have single on load variable for trigger
 
   return (
     <Grid>

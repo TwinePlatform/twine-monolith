@@ -28,7 +28,8 @@ export default () => {
       const startMonth = Number(moment(fromDate).format('M'));
       const duration = DateRange.monthsDifference(fromDate, toDate) + 1;
       const months = DateRange.getPastMonths(startMonth, duration);
-      setTableProps(timeLogsToTable({ data, months, unit }));
+      const columnHeaders = ['Volunteer Name'].concat(months);
+      setTableProps(timeLogsToTable({ data, columnHeaders, unit }));
     }
   }, [data, unit]);
 
