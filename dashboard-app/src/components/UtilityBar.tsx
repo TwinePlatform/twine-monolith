@@ -28,6 +28,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
     onFromDateChange = () => {},
     onToDateChange = () => {},
     onUnitChange = () => {},
+    ...rest
   } = props;
 
   const [fromDate, setFromDate] = useState(moment().subtract(11, 'months').toDate());
@@ -50,7 +51,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
   }, [unit]);
 
   return (
-    <Row middle="xs" start="xs">
+    <Row middle="xs" start="xs" {...rest}>
       <Col xs={2}>
         <DatePicker
           type={dateFilter}

@@ -14,14 +14,15 @@ interface Props {
 
 const PaddedRow = styled(Row)`
   height: 4em;
-  background-color: ${ColoursEnum.grey};
+  background-color: ${ColoursEnum.darkGrey};
   color: ${ColoursEnum.white};
   font-weight: ${Fonts.weight.regular};
   padding: 0 1.5em;
 `;
 
 const Title = styled.p`
-  font-size: ${Fonts.size.heading1};
+  font-size: ${Fonts.size.heading2};
+  letter-spacing: 0.2rem;
 `;
 
 

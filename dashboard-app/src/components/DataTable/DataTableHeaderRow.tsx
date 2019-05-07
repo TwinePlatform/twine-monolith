@@ -8,7 +8,7 @@ import { hashJSON } from '../../util/hash';
  * Styles
  */
 const HeaderRow = styled.tr`
-  background-color: ${ColoursEnum.lightGrey};
+  background-color: ${ColoursEnum.grey};
 `;
 
 const HeaderCell = styled.th`

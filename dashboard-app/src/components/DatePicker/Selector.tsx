@@ -29,7 +29,7 @@ const Input = styled.input`
   -moz-appearance: none;
   appearance: none;
   background: transparent;
-  color: ${ColoursEnum.grey};
+  color: ${ColoursEnum.black};
 `;
 
 

@@ -14,23 +14,23 @@ type ToggleProps = {
 
 const Left = styled.button<{ active: boolean }>`
   font-size: ${Fonts.size.body};
-  padding: ${SpacingEnum.small};
+  padding: 0.7rem;
   outline: none;
-  border: 0.1rem solid ${ColoursEnum.grey};
-  border-top-left-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
-  background-color: ${(props) => props.active ? ColoursEnum.grey : ColoursEnum.lightGrey};
+  border: 0.125rem solid ${ColoursEnum.grey};
+  border-top-left-radius: 0.3125rem;
+  border-bottom-left-radius: 0.3125rem;
+  background-color: ${(props) => props.active ? ColoursEnum.darkGrey : ColoursEnum.lightGrey};
   color: ${(props) => props.active ? ColoursEnum.white : ColoursEnum.black};
 `;
 
 const Right = styled.button<{ active: boolean }>`
   font-size: ${Fonts.size.body};
-  padding: ${SpacingEnum.small};
+  padding: 0.7rem;
   outline: none;
-  border: 0.1rem solid ${ColoursEnum.lightGrey};
-  border-top-right-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
-  background-color: ${(props) => props.active ? ColoursEnum.grey : ColoursEnum.lightGrey};
+  border: 0.125rem solid ${ColoursEnum.grey};
+  border-top-right-radius: 0.3125rem;
+  border-bottom-right-radius: 0.3125rem;
+  background-color: ${(props) => props.active ? ColoursEnum.darkGrey : ColoursEnum.lightGrey};
   color: ${(props) => props.active ? ColoursEnum.white : ColoursEnum.black};
 `;
 

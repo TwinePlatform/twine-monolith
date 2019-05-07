@@ -20,12 +20,12 @@ const Container = styled.div`
 
 const SelectArrow = styled.div`
   float: right;
-  margin-top: -0.8em;
+  margin-top: -1em;
   width: 0;
   pointer-events: none;
   border-width: 8px 5px 0 5px;
   border-style: solid;
-  border-color: ${ColoursEnum.grey} transparent transparent transparent;
+  border-color: ${ColoursEnum.darkGrey} transparent transparent transparent;
 `;
 
 
@@ -41,7 +41,7 @@ export const Select = styled.select`
   -moz-appearance: none;
   appearance: none;
   background: transparent;
-  color: ${ColoursEnum.grey};
+  color: ${ColoursEnum.darkGrey};
 `;
 
 export const SelectWrapper = styled.div`
