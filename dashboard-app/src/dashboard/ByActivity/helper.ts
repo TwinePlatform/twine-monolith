@@ -5,12 +5,13 @@ import { logsToRows } from '../../util/tableManipulation';
 
 interface Params {
   data: { logs: any, volunteers: any};
-  columnHeaders: string[];
+  activities: string[];
   unit: DurationUnitEnum;
 }
 
-export const activityLogsToTable = ({ data, columnHeaders, unit }
+export const activityLogsToTable = ({ data, activities, unit }
   : Params): DataTableProps => {
+  const columnHeaders = ['Volunteer Name'].concat(activities);
   const [firstColumn, ...columnRest] = columnHeaders;
   const rows = logsToRows(data.logs, columnHeaders, unit, 'userId', (x) => x.activity)
   // replace userId with name

@@ -40,8 +40,7 @@ export default () => {
 
   useEffect(() => {
     if (logs && activities && volunteers) {
-      const columnHeaders = ['Volunteer Name'].concat(activities);
-      setTableProps(activityLogsToTable({ data: { logs, volunteers }, columnHeaders, unit }));
+      setTableProps(activityLogsToTable({ data: { logs, volunteers }, unit, activities }));
     }
   }, [logs, unit, activities, volunteers]); // TODO: have single on load variable for trigger
 

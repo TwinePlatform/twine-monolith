@@ -34,11 +34,7 @@ export default () => {
 
   useEffect(() => {
     if (logs && volunteers) {
-      const startMonth = Number(moment(fromDate).format('M'));
-      const duration = DateRange.monthsDifference(fromDate, toDate) + 1;
-      const months = DateRange.getPastMonths(startMonth, duration);
-      const columnHeaders = ['Volunteer Name'].concat(months);
-      setTableProps(volunteerLogsToTable({ data: { logs, volunteers }, columnHeaders, unit }));
+      setTableProps(volunteerLogsToTable({ data: { logs, volunteers }, unit, fromDate, toDate }));
     }
   }, [logs, unit, volunteers]); // TODO: have single on load variable for trigger
 

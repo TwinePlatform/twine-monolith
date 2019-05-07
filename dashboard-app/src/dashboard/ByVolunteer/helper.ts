@@ -3,18 +3,24 @@ import { assocPath, path, propEq, find } from 'ramda';
 import { DataTableProps } from '../../components/DataTable/types';
 import { DurationUnitEnum } from '../../types';
 import { logsToRows } from '../../util/tableManipulation';
+import DateRange from '../../util/dateRange';
 
 
 interface Params {
   data: { logs: any, volunteers: any};
-  columnHeaders: string[];
   unit: DurationUnitEnum;
+  fromDate: Date;
+  toDate: Date;
 }
 
 const getColumnId = (x: any) => moment(x.startedAt || x.createdAt).format('MMMM');
 
-export const volunteerLogsToTable = ({ data, columnHeaders, unit }
+export const volunteerLogsToTable = ({ data, unit, fromDate, toDate }
   : Params): DataTableProps => {
+  const startMonth = Number(moment(fromDate).format('M'));
+  const duration = DateRange.monthsDifference(fromDate, toDate) + 1;
+  const months = DateRange.getPastMonths(startMonth, duration);
+  const columnHeaders = ['Volunteer Name'].concat(months);
   const [firstColumn, ...columnRest] = columnHeaders;
   const rows = logsToRows(data.logs, columnHeaders, unit, 'userId', getColumnId)
   // add volunteers names

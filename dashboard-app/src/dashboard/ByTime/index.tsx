@@ -17,7 +17,7 @@ export default () => {
   const [toDate, setToDate] = useState(moment().toDate());
   const [tableProps, setTableProps] = useState<DataTableProps>();
 
-  const { error, loading, data } = useRequest({ // tslint:disable-line
+  const { data } = useRequest({
     apiCall: CommunityBusinesses.getLogs,
     params: { since: fromDate, until: toDate },
     updateOn: [fromDate, toDate],
@@ -25,11 +25,7 @@ export default () => {
 
   useEffect(() => {
     if (data) {
-      const startMonth = Number(moment(fromDate).format('M'));
-      const duration = DateRange.monthsDifference(fromDate, toDate) + 1;
-      const months = DateRange.getPastMonths(startMonth, duration);
-      const columnHeaders = ['Volunteer Name'].concat(months);
-      setTableProps(timeLogsToTable({ data, columnHeaders, unit }));
+      setTableProps(timeLogsToTable({ data, unit, fromDate, toDate }));
     }
   }, [data, unit]);
 

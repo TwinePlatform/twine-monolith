@@ -31,8 +31,10 @@ describe('timeLogsToTable', () => {
       },
     ];
     const tData = timeLogsToTable({
-      data: logs, unit: DurationUnitEnum.HOURS,
-      months: DateRange.months,
+      data: logs,
+      unit: DurationUnitEnum.HOURS,
+      fromDate: new Date('01-01-18'),
+      toDate: new Date('01-01-19'),
     });
     (expect(tData) as any).toEqual({
       title: 'Volunteer Activity over Months',
