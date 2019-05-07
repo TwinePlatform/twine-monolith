@@ -45,9 +45,6 @@ export default () => {
     }
   }, [logs, unit, activities, volunteers]); // TODO: have single on load variable for trigger
 
-  if (tableProps) {
-    console.log(tableProps);
-  }
   return (
     <Grid>
       <Row center="xs">
