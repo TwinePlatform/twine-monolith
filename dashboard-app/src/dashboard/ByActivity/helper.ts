@@ -40,8 +40,8 @@ export const activityLogsToTable = ({ data, activities, unit, volunteers }
         if (Number(x.columns['Volunteer Name'].content) === Number(el.userId)) {
           x.columns[logActivity].content =
             addDurationToTableContents(x, logActivity, unit, el.duration);
-          x.columns[`Total ${unit} volunteered`].content =
-            addDurationToTableContents(x, `Total ${unit} volunteered`, unit, el.duration);
+          x.columns[`Total ${unit}`].content =
+            addDurationToTableContents(x, `Total ${unit}`, unit, el.duration);
         }
         return x;
       });
@@ -50,10 +50,9 @@ export const activityLogsToTable = ({ data, activities, unit, volunteers }
     const newRow = {
       columns: {
         ['Volunteer Name']: { content: el.userId, },
-        [`Total ${unit} volunteered`]: { content: 0 },
         ...mergeAll(activitiesContent),
         [el.activity]: { content: toUnitDuration(unit, el.duration) },
-        [`Total ${unit} volunteered`]: { content: toUnitDuration(unit, el.duration) },
+        [`Total ${unit}`]: { content: toUnitDuration(unit, el.duration) },
       },
     };
     return acc.concat(newRow);
@@ -67,7 +66,7 @@ export const activityLogsToTable = ({ data, activities, unit, volunteers }
   });
   return {
     title: 'Volunteer Data By Activity',
-    headers: ['Volunteer Name', `Total ${unit} volunteered`, ...activities],
+    headers: ['Volunteer Name', `Total ${unit}`, ...activities],
     rows,
   };
 };

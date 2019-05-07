@@ -44,7 +44,6 @@ export const timeLogsToTable = ({ data, months, unit }: Params): DataTableProps 
     const newRow = {
       columns: {
         Activity: { content: el.activity, },
-        [`Total ${unit}`]: { content: 0 },
         ...mergeAll(monthsContent),
         [logMonth]: { content: toUnitDuration(unit, el.duration) },
         [`Total ${unit}`]: { content: toUnitDuration(unit, el.duration) },
