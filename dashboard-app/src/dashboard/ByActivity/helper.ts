@@ -9,7 +9,7 @@ interface Params {
   unit: DurationUnitEnum;
 }
 
-export const activityLogsToTable = ({ data, activities: columnRest, unit }
+export const logsToActivityTable = ({ data, activities: columnRest, unit }
   : Params): DataTableProps => {
   const firstColumn = 'Volunteer Name';
   const columnHeaders = [firstColumn, ...columnRest];

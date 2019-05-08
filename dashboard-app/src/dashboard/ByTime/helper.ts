@@ -13,8 +13,8 @@ interface Params {
 
 const getColumnId = (x: any) => moment(x.startedAt || x.createdAt).format(Months.format);
 
-export const timeLogsToTable = ({ data, unit, fromDate, toDate }: Params): DataTableProps => {
-  const firstColumn = 'Volunteer Name';
+export const logsToTimeTable = ({ data, unit, fromDate, toDate }: Params): DataTableProps => {
+  const firstColumn = 'Activity';
   const columnRest = Months.range(fromDate, toDate);
   const columnHeaders = [firstColumn, ...columnRest];
   const rows = logsToRows(data, columnHeaders, unit, 'activity', getColumnId);

@@ -15,7 +15,7 @@ interface Params {
 
 const getColumnId = (x: any) => moment(x.startedAt || x.createdAt).format(Months.format);
 
-export const volunteerLogsToTable = ({ data, unit, fromDate, toDate }
+export const logsToVolunteerTable = ({ data, unit, fromDate, toDate }
   : Params): DataTableProps => {
   const firstColumn = 'Volunteer Name';
   const columnRest = Months.range(fromDate, toDate);

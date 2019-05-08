@@ -6,7 +6,7 @@ import DataTable from '../../components/DataTable';
 import { DataTableProps } from '../../components/DataTable/types';
 import useRequest from '../../util/hooks/useRequest';
 import { DurationUnitEnum } from '../../types';
-import { timeLogsToTable } from './helper';
+import { logsToTimeTable } from './helper';
 import UtilityBar from '../../components/UtilityBar';
 import Months from '../../util/months';
 
@@ -24,7 +24,7 @@ export default () => {
 
   useEffect(() => {
     if (data) {
-      setTableProps(timeLogsToTable({ data, unit, fromDate, toDate }));
+      setTableProps(logsToTimeTable({ data, unit, fromDate, toDate }));
     }
   }, [data, unit]);
 

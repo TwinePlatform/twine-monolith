@@ -8,7 +8,7 @@ import UtilityBar from '../../components/UtilityBar';
 import { DurationUnitEnum } from '../../types';
 import useRequest from '../../util/hooks/useRequest';
 import { DataTableProps } from '../../components/DataTable/types';
-import { activityLogsToTable } from './helper';
+import { logsToActivityTable } from './helper';
 import Months from '../../util/months';
 
 export default () => {
@@ -40,7 +40,7 @@ export default () => {
 
   useEffect(() => {
     if (logs && activities && volunteers) {
-      setTableProps(activityLogsToTable({ data: { logs, volunteers }, unit, activities }));
+      setTableProps(logsToActivityTable({ data: { logs, volunteers }, unit, activities }));
     }
   }, [logs, unit, activities, volunteers]); // TODO: have single on load variable for trigger
 
