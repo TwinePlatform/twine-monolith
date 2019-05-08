@@ -1,13 +1,10 @@
 import React from 'react';
 import Toggle from './Toggle';
+import { DurationUnitEnum } from '../types';
 
 /**
  * Types
  */
-export enum DurationUnitEnum {
-  HOURS = 'Hours',
-  DAYS = 'Days',
-}
 
 type UnitToggleProps = {
   onChange: (u: DurationUnitEnum) => void

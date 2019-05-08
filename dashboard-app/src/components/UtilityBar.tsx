@@ -2,7 +2,8 @@ import React, { useState, useCallback } from 'react';
 import moment from 'moment';
 import { Row, Col } from 'react-flexbox-grid';
 import DatePicker from './DatePicker';
-import UnitToggle, { DurationUnitEnum } from './UnitToggle';
+import UnitToggle from './UnitToggle';
+import { DurationUnitEnum } from '../types';
 
 
 /**

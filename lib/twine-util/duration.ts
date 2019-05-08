@@ -13,6 +13,9 @@ export type Duration = Partial<{
   days: number
 }>;
 
+export const toWorkingDays = (d: Duration) =>
+  toSeconds(d) / (3600 * 8);
+
 export const toHours = (d: Duration) =>
   toSeconds(d) / 3600;
 

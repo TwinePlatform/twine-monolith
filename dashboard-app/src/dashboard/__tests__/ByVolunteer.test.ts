@@ -2,7 +2,7 @@ import {
   cleanup,
 } from 'react-testing-library';
 import { renderWithHistory } from '../../util/tests';
-import ByVolunteer from '../ByVolunteer';
+import ByVolunteer from '../ByVolunteer/index';
 import 'jest-dom/extend-expect';
 
 describe.skip('By Activity Page', () => {

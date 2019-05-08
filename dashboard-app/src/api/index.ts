@@ -1,5 +1,4 @@
-import _axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
-import { pathOr, Dictionary } from 'ramda';
+import _axios, { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 
 const baseURL = process.env.REACT_APP_API_HOST_DOMAIN ?
@@ -40,26 +39,8 @@ export const CommunityBusinesses = {
     axios.get('/community-businesses/me', { params }),
   getLogs: (params?: Pick<AxiosRequestConfig, 'params'>) =>
     axios.get('/community-businesses/me/volunteer-logs', { params }),
-};
-
-
-export const Response = {
-  get: <T = Dictionary<any>>(res: AxiosResponse, path: string[] = []): T =>
-    pathOr(null, ['data', 'result', ...path], res),
-
-  status: (res: AxiosResponse): number =>
-    pathOr(null, ['status'], res),
-
-  statusEquals: (res: AxiosResponse, status: number) =>
-    Response.status(res) === status,
-
-  validationError: (res: AxiosResponse): Dictionary<string> =>
-    pathOr({}, ['data', 'error', 'validation'], res),
-
-  isError: (res: AxiosResponse) =>
-    res.status >= 400,
-
-  errorMessage: (res: AxiosResponse): string | undefined =>
-    pathOr(undefined, ['data', 'error', 'message'], res),
-
+  getVolunteerActivities: () =>
+    axios.get('/volunteer-activities'),
+  getVolunteers: () => // NB: fields not currently supported
+    axios.get('/community-businesses/me/volunteers', { params: { fields: ['name', 'id'] } }),
 };
