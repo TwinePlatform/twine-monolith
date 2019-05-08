@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render, wait, waitForElement, fireEvent } from 'react-testing-library';
+import { cleanup, render, waitForElement, fireEvent } from 'react-testing-library';
 import DataTable from '..';
 import 'jest-dom/extend-expect';
 
