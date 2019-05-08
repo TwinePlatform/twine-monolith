@@ -23,6 +23,7 @@ const PaddedRow = styled(Row)`
 
 const Title = styled.p`
   font-size: ${Fonts.size.heading2};
+  font-weight: 300;
   letter-spacing: 0.2rem;
 `;
 

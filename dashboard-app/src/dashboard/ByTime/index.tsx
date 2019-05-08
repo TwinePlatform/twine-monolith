@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { assoc } from 'ramda';
 import { displayErrors } from '../../components/ErrorParagraph';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { H1 as _H1 } from '../../components/Headings';
+import { H1 } from '../../components/Headings';
 import { CommunityBusinesses } from '../../api';
 import _DataTable from '../../components/DataTable';
 import { DataTableProps } from '../../components/DataTable/types';
@@ -19,8 +19,10 @@ const DataTable = styled(_DataTable)`
   margin-top: 4rem;
 `;
 
-const H1 = styled(_H1)`
-  margin-top: 6rem;
+const Container = styled(Grid)`
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
 `;
 
 const Uti = styled(UtilityBar)`
@@ -54,7 +56,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   }, [tableProps]);
 
   return (
-    <Grid>
+    <Container>
       <Row center="xs">
         <Col>
           <H1>By Time</H1>
@@ -80,7 +82,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
           }
         </Col>
       </Row>
-    </Grid>
+    </Container>
   );
 };
 

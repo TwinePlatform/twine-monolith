@@ -3,7 +3,7 @@ import { withRouter, RouteComponentProps } from 'react-router';
 import styled from 'styled-components';
 import { assoc } from 'ramda';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { H1 as _H1 } from '../../components/Headings';
+import { H1 } from '../../components/Headings';
 
 import { CommunityBusinesses } from '../../api';
 import _DataTable from '../../components/DataTable';
@@ -19,8 +19,10 @@ const DataTable = styled(_DataTable)`
   margin-top: 4rem;
 `;
 
-const H1 = styled(_H1)`
-  margin-top: 6rem;
+const Container = styled(Grid)`
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
 `;
 
 const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
@@ -70,7 +72,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   }, [tableProps]);
 
   return (
-    <Grid>
+    <Container>
       <Row center="xs">
         <Col>
           <H1>By Activity</H1>
@@ -96,7 +98,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
           }
         </Col>
       </Row>
-    </Grid>
+    </Container>
   );
 };
 

@@ -4,7 +4,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import styled from 'styled-components';
 import { assoc } from 'ramda';
 
-import { H1 as _H1 } from '../../components/Headings';
+import { H1 } from '../../components/Headings';
 import { CommunityBusinesses } from '../../api';
 import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
@@ -20,8 +20,10 @@ const DataTable = styled(_DataTable)`
   margin-top: 4rem;
 `;
 
-const H1 = styled(_H1)`
-  margin-top: 6rem;
+const Container = styled(Grid)`
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
 `;
 
 const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
@@ -61,7 +63,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   }, [tableProps]);
 
   return (
-    <Grid>
+    <Container>
       <Row center="xs">
         <Col>
           <H1>By Volunteer</H1>
@@ -87,7 +89,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
           }
         </Col>
       </Row>
-    </Grid>
+    </Container>
   );
 };
 
