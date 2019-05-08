@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, FunctionComponent } from 'react';
+import { withRouter, RouteComponentProps } from 'react-router';
+import { displayErrors } from '../../components/ErrorParagraph';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { H1 } from '../../components/Headings';
 import { CommunityBusinesses } from '../../api';
@@ -10,24 +12,28 @@ import { logsToTimeTable } from './helper';
 import UtilityBar from '../../components/UtilityBar';
 import Months from '../../util/months';
 
-export default () => {
+
+const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
   const [fromDate, setFromDate] = useState(Months.defaultFrom());
   const [toDate, setToDate] = useState(Months.defaultTo());
+  const [errors, setErrors] = useState();
   const [tableProps, setTableProps] = useState<DataTableProps>();
 
   const { data } = useRequest({
     apiCall: CommunityBusinesses.getLogs,
     params: { since: fromDate, until: toDate },
     updateOn: [fromDate, toDate],
+    setErrors,
+    push: props.history.push,
   });
 
   useEffect(() => {
     if (data) {
       setTableProps(logsToTimeTable({ data, unit, fromDate, toDate }));
+      setErrors(null);
     }
   }, [data, unit]);
-
 
   return (
     <Grid>
@@ -40,9 +46,12 @@ export default () => {
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
           />
+          {displayErrors(errors)}
           {tableProps && <DataTable { ...tableProps } />}
         </Col>
       </Row>
     </Grid>
   );
 };
+
+export default withRouter(ByTime);
