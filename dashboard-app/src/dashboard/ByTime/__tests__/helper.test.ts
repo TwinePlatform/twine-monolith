@@ -1,6 +1,5 @@
 import { timeLogsToTable } from '../helper';
 import { DurationUnitEnum } from '../../../types';
-import DateRange from '../../../util/dateRange';
 
 describe('timeLogsToTable', () => {
   test('SUCCESS - standard 12 months', () => {
