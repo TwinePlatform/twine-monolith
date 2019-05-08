@@ -3,5 +3,10 @@ import { ColoursEnum, Fonts } from '../styles/design_system';
 
 export const Paragraph = styled.p`
   font-size: ${Fonts.size.body};
-  font-color: ${ColoursEnum.black};
+  color: ${ColoursEnum.black};
+`;
+
+export const Span = styled.span`
+  font-size: ${Fonts.size.body};
+  color: ${ColoursEnum.black};
 `;

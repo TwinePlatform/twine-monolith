@@ -13,6 +13,7 @@ import ResetPassword from './auth/pages/ResetPassword';
 import ForgotPassword from './auth/pages/ForgotPassword';
 import ErrorPage from './Error';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import { ColoursEnum, Fonts } from './styles/design_system';
 
 /*
@@ -51,6 +52,7 @@ const AppRouter =
           <Route exact path="/error/:code" component={ErrorPage} />
           <PrivateRoute path="/*" component={ProtectedRoutes} />
         </Switch>
+        <Footer />
       </>)
   );
 
