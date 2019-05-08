@@ -18,7 +18,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [fromDate, setFromDate] = useState(Months.defaultFrom());
   const [toDate, setToDate] = useState(Months.defaultTo());
   const [errors, setErrors] = useState();
-  const [tableProps, setTableProps] = useState<DataTableProps>();
+  const [tableProps, setTableProps] = useState<DataTableProps | null>();
 
   const { data } = useRequest({
     apiCall: CommunityBusinesses.getLogs,
@@ -30,8 +30,8 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
 
   useEffect(() => {
     if (data) {
-      setTableProps(logsToTimeTable({ data, unit, fromDate, toDate }));
       setErrors(null);
+      setTableProps(logsToTimeTable({ data, unit, fromDate, toDate, setErrors }));
     }
   }, [data, unit]);
 

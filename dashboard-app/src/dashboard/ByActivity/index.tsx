@@ -19,7 +19,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [volunteers, setVolunteers] = useState();
   const [fromDate, setFromDate] = useState(Months.defaultFrom());
   const [toDate, setToDate] = useState(Months.defaultTo());
-  const [tableProps, setTableProps] = useState<DataTableProps>();
+  const [tableProps, setTableProps] = useState<DataTableProps | null>();
   const [errors, setErrors] = useState();
 
   const { data: logs } = useRequest({
@@ -49,7 +49,9 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
 
   useEffect(() => {
     if (logs && activities && volunteers) {
-      setTableProps(logsToActivityTable({ data: { logs, volunteers }, unit, activities }));
+      setErrors(null);
+      const tProps = logsToActivityTable({ data: { logs, volunteers }, unit, activities, setErrors }); // tslint:disable:max-line-length
+      setTableProps(tProps);
     }
   }, [logs, unit, activities, volunteers]); // TODO: have single on load variable for trigger
 
