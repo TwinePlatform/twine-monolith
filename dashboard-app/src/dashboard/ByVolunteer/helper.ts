@@ -33,6 +33,7 @@ export const logsToVolunteerTable = ({ data, unit, fromDate, toDate, setErrors }
     return {
       title: 'Data By Volunteer',
       headers: [firstColumn, `Total ${unit}`, ...columnRest],
+      sortBy: `Total ${unit}`,
       rows,
     };
   } catch (e) {

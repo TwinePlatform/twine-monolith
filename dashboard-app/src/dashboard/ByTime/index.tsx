@@ -1,7 +1,8 @@
-import React, { useEffect, useState, FunctionComponent } from 'react';
+import React, { useEffect, useState, useCallback, FunctionComponent } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import moment from 'moment';
 import styled from 'styled-components';
+import { assoc } from 'ramda';
 import { displayErrors } from '../../components/ErrorParagraph';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { H1 as _H1 } from '../../components/Headings';
@@ -48,6 +49,10 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     }
   }, [data, unit]);
 
+  const onChangeSortBy = useCallback((column: string) => {
+    setTableProps(assoc('sortBy', column, tableProps));
+  }, [tableProps]);
+
   return (
     <Grid>
       <Row center="xs">
@@ -68,7 +73,11 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
       <Row center="xs">
         <Col xs={8}>
           {displayErrors(errors)}
-          {tableProps && <DataTable { ...tableProps } initialOrder="desc" />}
+          {
+            tableProps && (
+              <DataTable { ...tableProps } initialOrder="desc" onChangeSortBy={onChangeSortBy} />
+            )
+          }
         </Col>
       </Row>
     </Grid>

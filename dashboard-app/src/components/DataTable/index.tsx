@@ -59,18 +59,18 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
     headers,
     rows,
     initialOrder = 'desc',
-    initialSortBy = props.headers[0],
+    sortBy = props.headers[0],
+    onChangeSortBy = () => {},
     ...rest
   } = props;
 
   const [order, setOrder] = useState<Order>(initialOrder);
-  const [sortBy, setSortBy] = useState<string>(initialSortBy);
 
   const onHeaderClick = useCallback((title) => {
     if (sortBy === title) { // toggling order
       setOrder(order === 'desc' ? 'asc' : 'desc');
     } else { // sorting by new column
-      setSortBy(title);
+      onChangeSortBy(title);
       setOrder('desc');
     }
   }, [order, sortBy]);

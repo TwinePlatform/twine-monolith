@@ -20,6 +20,7 @@ const HeaderCell = styled.th`
   white-space: nowrap;
   text-overflow: ellipsis;
   max-width: 200px;
+  cursor: pointer;
 `;
 
 
