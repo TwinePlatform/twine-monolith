@@ -7,14 +7,14 @@ import DataTable from '../../components/DataTable';
 import { DataTableProps } from '../../components/DataTable/types';
 import useRequest from '../../util/hooks/useRequest';
 import { DurationUnitEnum } from '../../types';
-import DateRange from '../../util/dateRange';
 import { timeLogsToTable } from './helper';
 import UtilityBar from '../../components/UtilityBar';
+import Months from '../../util/months';
 
 export default () => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
-  const [fromDate, setFromDate] = useState(moment().subtract(1, 'year').add(1, 'month').toDate());
-  const [toDate, setToDate] = useState(moment().toDate());
+  const [fromDate, setFromDate] = useState(Months.defaultFrom());
+  const [toDate, setToDate] = useState(Months.defaultTo());
   const [tableProps, setTableProps] = useState<DataTableProps>();
 
   const { data } = useRequest({

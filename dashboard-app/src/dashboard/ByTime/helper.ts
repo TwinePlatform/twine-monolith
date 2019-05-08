@@ -2,7 +2,7 @@ import moment from 'moment';
 import { DataTableProps } from '../../components/DataTable/types';
 import { DurationUnitEnum } from '../../types';
 import { logsToRows } from '../../util/tableManipulation';
-import DateRange from '../../util/dateRange';
+import Months from '../../util/months';
 
 interface Params {
   data: any[];
@@ -11,14 +11,12 @@ interface Params {
   toDate: Date;
 }
 
-const getColumnId = (x: any) => moment(x.startedAt || x.createdAt).format('MMMM');
+const getColumnId = (x: any) => moment(x.startedAt || x.createdAt).format(Months.format);
 
 export const timeLogsToTable = ({ data, unit, fromDate, toDate }: Params): DataTableProps => {
-  const startMonth = Number(moment(fromDate).format('M'));
-  const duration = DateRange.monthsDifference(fromDate, toDate) + 1;
-  const months = DateRange.getPastMonths(startMonth, duration);
-  const columnHeaders = ['Volunteer Name'].concat(months);
-  const [firstColumn, ...columnRest] = columnHeaders;
+  const firstColumn = 'Volunteer Name';
+  const columnRest = Months.range(fromDate, toDate);
+  const columnHeaders = [firstColumn, ...columnRest];
   const rows = logsToRows(data, columnHeaders, unit, 'activity', getColumnId);
 
   return {

@@ -10,13 +10,14 @@ import { DurationUnitEnum } from '../../types';
 import useRequest from '../../util/hooks/useRequest';
 import { DataTableProps } from '../../components/DataTable/types';
 import { activityLogsToTable } from './helper';
+import Months from '../../util/months';
 
 export default () => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
   const [activities, setActivities] = useState();
   const [volunteers, setVolunteers] = useState();
-  const [fromDate, setFromDate] = useState(moment().subtract(1, 'year').add(1, 'month').toDate());
-  const [toDate, setToDate] = useState(moment().toDate());
+  const [fromDate, setFromDate] = useState(Months.defaultFrom());
+  const [toDate, setToDate] = useState(Months.defaultTo());
   const [tableProps, setTableProps] = useState<DataTableProps>();
 
   const { data: logs } = useRequest({

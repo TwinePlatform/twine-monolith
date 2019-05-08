@@ -9,10 +9,10 @@ interface Params {
   unit: DurationUnitEnum;
 }
 
-export const activityLogsToTable = ({ data, activities, unit }
+export const activityLogsToTable = ({ data, activities: columnRest, unit }
   : Params): DataTableProps => {
-  const columnHeaders = ['Volunteer Name'].concat(activities);
-  const [firstColumn, ...columnRest] = columnHeaders;
+  const firstColumn = 'Volunteer Name';
+  const columnHeaders = [firstColumn, ...columnRest];
   const rows = logsToRows(data.logs, columnHeaders, unit, 'userId', (x) => x.activity)
   // replace userId with name
   .map((row) => {
