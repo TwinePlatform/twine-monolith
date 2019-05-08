@@ -57,7 +57,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
       </Row>
       <Row center="xs">
         <Col xs={8}>
-          <Uti
+          <UtilityBar
             dateFilter="month"
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}

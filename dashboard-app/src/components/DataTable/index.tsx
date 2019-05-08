@@ -4,7 +4,7 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { sortBy, pathOr, compose } from 'ramda';
-import { H3 as _H3 } from '../Headings';
+import { H3 } from '../Headings';
 import { SpacingEnum, ColoursEnum } from '../../styles/design_system';
 import Card from '../Card';
 import DataTableRow from './DataTableRow';
@@ -35,8 +35,9 @@ const TitleContainer = styled.div`
   background-color: ${ColoursEnum.white};
 `;
 
-const H3 = styled(_H3)`
+const Title = styled(H3)`
   text-align: left;
+  margin-bottom: 0;
 `;
 
 const Container = styled.div`
@@ -77,7 +78,7 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
   return (
     <Card {...rest}>
       {
-        props.title && <TitleContainer><H3>{props.title}</H3></TitleContainer>
+        props.title && <TitleContainer><Title>{props.title}</Title></TitleContainer>
       }
       <Container>
         <Table>
