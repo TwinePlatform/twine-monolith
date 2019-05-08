@@ -30,6 +30,10 @@ const Form = styled(_Form)`
   margin-top: ${SpacingEnum.small};
 `;
 
+const FormContainer = styled.div`
+  margin-top: 9.2rem;
+`;
+
 /**
  * Helpers
  */
@@ -66,29 +70,33 @@ const ForgotPassword: React.FunctionComponent<ForgotPasswordProps> = (props) => 
     <Row center="xs">
       <Col xs={12} lg={6}>
         <H1>Forgot Password</H1>
-        <Row>
-          <Formik
-            initialValues={{ email: '' }}
-            onSubmit={createSubmitHandler(props)}
-            validate={validateForm<{ email: string }>(schema)}
-            validateOnBlur={false}
-            validateOnChange={false}
-          >
-            {({ values, errors, touched, handleChange }) => (
-              <Form>
-                <Input
-                  type="email"
-                  name="email"
-                  label="E-mail"
-                  value={values.email}
-                  onChange={handleChange}
-                  required
-                  error={(touched.email && errors.email) || ''}
-                />
-                <SubmitButton type="submit">SUBMIT</SubmitButton>
-              </Form>
-            )}
-          </Formik>
+        <Row center="xs">
+          <Col xs={6}>
+            <FormContainer>
+              <Formik
+                initialValues={{ email: '' }}
+                onSubmit={createSubmitHandler(props)}
+                validate={validateForm<{ email: string }>(schema)}
+                validateOnBlur={false}
+                validateOnChange={false}
+              >
+                {({ values, errors, touched, handleChange }) => (
+                  <Form>
+                    <Input
+                      type="email"
+                      name="email"
+                      label="E-mail"
+                      value={values.email}
+                      onChange={handleChange}
+                      required
+                      error={(touched.email && errors.email) || ''}
+                    />
+                    <SubmitButton type="submit">SUBMIT</SubmitButton>
+                  </Form>
+                )}
+              </Formik>
+            </FormContainer>
+          </Col>
         </Row>
       </Col>
     </Row>
