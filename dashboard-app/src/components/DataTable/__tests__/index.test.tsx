@@ -73,11 +73,9 @@ describe('Component :: DataTable', () => {
   });
 
   test('Choose different column to sort by', async () => {
-    const tools = render(<DataTable {...props} />);
+    const tools = render(<DataTable {...props} sortBy="two" />);
+
     const header = await waitForElement(() => tools.getByText('two', { exact: false }));
-
-    fireEvent.click(header);
-
     const rows = await waitForElement(() => tools.getAllByTestId('data-table-row'));
 
     expect(header).toHaveTextContent('↓ two');
@@ -88,11 +86,9 @@ describe('Component :: DataTable', () => {
   });
 
   test('Choose different column to sort by then toggle', async () => {
-    const tools = render(<DataTable {...props} />);
+    const tools = render(<DataTable {...props} sortBy="two" />);
     const header = await waitForElement(() => tools.getByText('two', { exact: false }));
 
-    fireEvent.click(header);
-    await wait();
     fireEvent.click(header);
 
     const rows = await waitForElement(() => tools.getAllByTestId('data-table-row'));
