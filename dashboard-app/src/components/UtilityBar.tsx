@@ -36,18 +36,26 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
   const [unit, setUnit] = useState<DurationUnitEnum>(DurationUnitEnum.HOURS);
 
   const onFromChange = useCallback((date: Date) => {
-    setFromDate(date);
-    onFromDateChange(date);
+    const fd = moment(date).startOf('month').toDate();
+    setFromDate(fd);
+    onFromDateChange(fd);
+
+    if (moment(date).add(11, 'months').isBefore(toDate)) {
+      const td = moment(date).add(11, 'months').endOf('month').toDate();
+      setToDate(td);
+      onToDateChange(td);
+    }
   }, [fromDate]);
 
   const onToChange = useCallback((date: Date) => {
-    setToDate(date);
-    onToDateChange(date);
+    const td = moment(date).endOf('month').toDate();
+    setToDate(td);
+    onToDateChange(td);
   }, [toDate]);
 
-  const onDisplayUnitChange = useCallback((unit: DurationUnitEnum) => {
-    setUnit(unit);
-    onUnitChange(unit);
+  const onDisplayUnitChange = useCallback((u: DurationUnitEnum) => {
+    setUnit(u);
+    onUnitChange(u);
   }, [unit]);
 
   return (
@@ -58,8 +66,6 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
           label="From"
           selected={fromDate}
           onChange={onFromChange}
-          maxDate={moment().subtract(1, 'month').toDate()}
-          minDate={moment().subtract(11, 'months').toDate()}
         />
       </Col>
       <Col xs={2}>
@@ -68,8 +74,8 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
           label="  To" // To make both labels take up the same space
           selected={toDate}
           onChange={onToChange}
-          maxDate={moment().toDate()}
-          minDate={moment().subtract(10, 'months').toDate()}
+          maxDate={moment(fromDate).add(11, 'months').toDate()}
+          minDate={fromDate}
         />
       </Col>
       <Col xs={2} xsOffset={6}>
