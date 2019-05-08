@@ -7,7 +7,7 @@ export const H1 = styled.h1`
   font-weight: ${Fonts.weight.regular};
   color: ${ColoursEnum.black};
   text-align: center;
-  margin-top: ${SpacingEnum.small};
+  margin-bottom: 1.5rem;
 `;
 
 export const H2 = styled.h2`
@@ -15,18 +15,21 @@ export const H2 = styled.h2`
   font-weight: ${Fonts.weight.regular};
   color: ${ColoursEnum.black};
   text-align: center;
+  margin-bottom: 1.5rem;
 `;
 
 export const H3 = styled.h3`
   font-size: ${Fonts.size.heading3};
   color: ${ColoursEnum.black};
   text-align: center;
+  margin-bottom: 1.5rem;
 `;
 
 export const H4 = styled.h4`
   font-size: ${Fonts.size.heading4};
   color: ${ColoursEnum.black};
   text-align: center;
+  margin-bottom: 1.5rem;
 `;
 
 export default H1;

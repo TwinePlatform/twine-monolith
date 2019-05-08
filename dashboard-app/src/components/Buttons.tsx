@@ -5,7 +5,7 @@ import { ColoursEnum, Fonts } from '../styles/design_system';
 
 export const Button = styled.button`
   border: none;
-  border-radius: 0.15rem;
+  border-radius: 0.3rem;
   outline: none;
   box-shadow: none;
   color: ${ColoursEnum.white};

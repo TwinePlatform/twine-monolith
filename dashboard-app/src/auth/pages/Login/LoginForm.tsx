@@ -14,7 +14,8 @@ import { SpacingEnum } from '../../../styles/design_system';
 const Form = styled(_Form)`
   width: 100%;
   text-align: left;
-  margin-top: ${SpacingEnum.small}
+  margin-top: ${SpacingEnum.small};
+  margin-bottom: 1.5rem;
 `;
 
 export type FormValues = {
