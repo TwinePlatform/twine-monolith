@@ -1,4 +1,4 @@
-import React, {forwardRef} from 'react';
+import React from 'react';
 import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker';
 import DateSelector from './Selector';
 import 'react-datepicker/dist/react-datepicker.css';

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SpacingEnum, ColoursEnum, Fonts } from '../styles/design_system';
+import { ColoursEnum, Fonts } from '../styles/design_system';
 
 
 export const H1 = styled.h1`

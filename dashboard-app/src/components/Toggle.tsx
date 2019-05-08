@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { ColoursEnum, Fonts, SpacingEnum } from '../styles/design_system';
+import { ColoursEnum, Fonts } from '../styles/design_system';
 
 type Side = 'left' | 'right';
 

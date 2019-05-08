@@ -1,6 +1,7 @@
 import { logsToTimeTable } from '../helper';
 import { DurationUnitEnum } from '../../../types';
 
+
 describe('logsToTimeTable', () => {
   test('SUCCESS - standard 12 months', () => {
     const logs = [
