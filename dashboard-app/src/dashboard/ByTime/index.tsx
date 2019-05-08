@@ -6,7 +6,7 @@ import { H1 } from '../../components/Headings';
 import { CommunityBusinesses } from '../../api';
 import DataTable from '../../components/DataTable';
 import { DataTableProps } from '../../components/DataTable/types';
-import useRequest from '../../util/hooks/useRequest';
+import useRequest from '../../hooks/useRequest';
 import { DurationUnitEnum } from '../../types';
 import { logsToTimeTable } from './helper';
 import UtilityBar from '../../components/UtilityBar';

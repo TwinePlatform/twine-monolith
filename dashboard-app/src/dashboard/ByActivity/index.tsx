@@ -7,7 +7,7 @@ import { CommunityBusinesses } from '../../api';
 import DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
 import { DurationUnitEnum } from '../../types';
-import useRequest from '../../util/hooks/useRequest';
+import useRequest from '../../hooks/useRequest';
 import { DataTableProps } from '../../components/DataTable/types';
 import { logsToActivityTable } from './helper';
 import Months from '../../util/months';

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AxiosPromise, AxiosResponse, AxiosRequestConfig } from 'axios';
-import { Response } from '../response';
-import { redirectOnError } from '../routing';
+import { Response } from '../util/response';
+import { redirectOnError } from '../util/routing';
 
 type RequestParams = {
   apiCall: (params?: Pick<AxiosRequestConfig, 'params'>) => AxiosPromise
