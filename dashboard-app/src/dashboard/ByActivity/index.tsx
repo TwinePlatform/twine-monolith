@@ -79,7 +79,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
         </Col>
       </Row>
       <Row center="xs">
-        <Col xs={8}>
+        <Col xs={9}>
           <UtilityBar
             dateFilter="month"
             onUnitChange={setUnit}
@@ -89,7 +89,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
         </Col>
       </Row>
       <Row center="xs">
-        <Col xs={8}>
+        <Col xs={9}>
           {displayErrors(errors)}
           {
             tableProps && (
