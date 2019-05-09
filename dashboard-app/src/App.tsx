@@ -12,7 +12,7 @@ import Login from './auth/pages/Login';
 import ResetPassword from './auth/pages/ResetPassword';
 import ForgotPassword from './auth/pages/ForgotPassword';
 import ErrorPage from './Error';
-import Navbar from './components/Navbar';
+import Navbar from './navigation/Navbar';
 import Footer from './components/Footer';
 import { ColoursEnum, Fonts } from './styles/design_system';
 

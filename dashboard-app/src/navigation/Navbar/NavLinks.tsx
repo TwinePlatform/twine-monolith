@@ -8,6 +8,10 @@ import { CbAdmins } from '../../api';
 
 interface Props {
   active: string;
+  links: {
+    to: string,
+    active
+  }[];
 }
 
 interface LinkProps {
@@ -20,7 +24,7 @@ const Link = styled(L)`
     ? `1.5px solid ${ColoursEnum.white}` : 'none'};
 `;
 
-const Navigation: React.FunctionComponent<Props> = (props) => (
+const NavLinks: React.FunctionComponent<Props> = (props) => (
   <Row between="xs" middle="xs">
     {['activity', 'volunteer', 'time'].map((page) =>
       (<Link to={`./${page}`} key={page} isActive={page === props.active}>{page}</Link>)
@@ -29,4 +33,4 @@ const Navigation: React.FunctionComponent<Props> = (props) => (
     </Row>
 );
 
-export default Navigation;
+export default NavLinks;

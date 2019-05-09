@@ -4,7 +4,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Grid, Row } from 'react-flexbox-grid';
 import { SpacingEnum } from './styles/design_system';
 import { H1 as _H1, H3 } from './components/Headings';
-import _Link from './components/Navbar/Link';
+import _Link from './navigation/Navbar/Link';
 import { PrimaryButton } from './components/Buttons';
 
 

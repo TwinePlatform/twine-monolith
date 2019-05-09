@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
+import { Dictionary } from 'ramda';
 
 import { ColoursEnum, Fonts } from '../../styles/design_system';
-import Navigation from './Navigation';
-import { Dictionary } from 'ramda';
+import NavLinks from './NavLinks';
+import { Pages } from '../pages';
 
 
 interface Props {
@@ -40,6 +41,7 @@ const pageFromRoute = (url: string): string => {
 };
 
 const Navbar: React.FunctionComponent<Props> = (props) => {
+  const page = Pages.matchPath(props.pathname);
   const isLoggedIn = Boolean(pageFromRoute(props.pathname));
   const active = pageFromRoute(props.pathname);
 
@@ -49,9 +51,7 @@ const Navbar: React.FunctionComponent<Props> = (props) => {
       <Title>TWINE</Title>
     </Col>
     <Col xs={6} lg={4}>
-    {isLoggedIn &&
-      <Navigation active={active}/>
-    }
+    { page && <NavLinks active={active}/> }
     </Col>
   </PaddedRow>
   );
