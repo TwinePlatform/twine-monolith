@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback, FunctionComponent } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
-import moment from 'moment';
 import styled from 'styled-components';
 import { assoc } from 'ramda';
 import { displayErrors } from '../../components/ErrorParagraph';
@@ -23,10 +22,6 @@ const Container = styled(Grid)`
   margin-left: 0 !important;
   margin-right: 0 !important;
   width: 100% !important;
-`;
-
-const Uti = styled(UtilityBar)`
-  margin-top: 4rem;
 `;
 
 const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
