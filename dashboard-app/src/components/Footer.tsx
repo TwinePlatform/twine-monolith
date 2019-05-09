@@ -16,7 +16,9 @@ const Footer: React.FunctionComponent<{}> = () => (
   <FooterContainer>
     <Row center="xs" middle="xs">
       <Col xs={4}>
-        <Span>&copy; TWINE 2019</Span>
+        <footer>
+          <Span>&copy; TWINE 2019</Span>
+        </footer>
       </Col>
     </Row>
   </FooterContainer>

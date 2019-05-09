@@ -41,17 +41,23 @@ const ProtectedRoutes = () => (
   </Switch>
 );
 
+const Content = styled.div`
+  min-height: calc(100vh - 4.8125rem - 6rem - 13rem);
+`;
+
 const AppRouter =
   withRouter((props) => (
       <>
         <Navbar pathname={props.location.pathname}/>
-        <Switch>
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/password/reset/:token" component={ResetPassword} />
-          <Route exact path="/password/forgot" component={ForgotPassword} />
-          <Route exact path="/error/:code" component={ErrorPage} />
-          <PrivateRoute path="/*" component={ProtectedRoutes} />
-        </Switch>
+        <Content>
+          <Switch>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/password/reset/:token" component={ResetPassword} />
+            <Route exact path="/password/forgot" component={ForgotPassword} />
+            <Route exact path="/error/:code" component={ErrorPage} />
+            <PrivateRoute path="/*" component={ProtectedRoutes} />
+          </Switch>
+        </Content>
         <Footer />
       </>)
   );

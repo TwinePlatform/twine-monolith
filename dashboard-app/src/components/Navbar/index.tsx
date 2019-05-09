@@ -13,11 +13,11 @@ interface Props {
 
 
 const PaddedRow = styled(Row)`
-  height: 4.8125em;
+  height: 4.8125rem;
   background-color: ${ColoursEnum.darkGrey};
   color: ${ColoursEnum.white};
   font-weight: ${Fonts.weight.regular};
-  padding: 0 1.75em;
+  padding: 0 1.75rem;
   margin-bottom: 6rem;
 `;
 
