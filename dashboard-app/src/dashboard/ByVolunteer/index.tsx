@@ -1,40 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import moment from 'moment';
+import React, { useState, useEffect, FunctionComponent } from 'react';
+import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { H1 } from '../../components/Headings';
 
+import { H1 } from '../../components/Headings';
 import { CommunityBusinesses } from '../../api';
 import DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
 import { DurationUnitEnum } from '../../types';
-import useRequest from '../../util/hooks/useRequest';
+import useRequest from '../../hooks/useRequest';
 import { DataTableProps } from '../../components/DataTable/types';
-import { volunteerLogsToTable } from './helper';
-import DateRange from '../../util/dateRange';
+import { logsToVolunteerTable } from './helper';
+import Months from '../../util/months';
+import { displayErrors } from '../../components/ErrorParagraph';
 
-export default () => {
+const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
   const [volunteers, setVolunteers] = useState();
-  const [fromDate, setFromDate] = useState(moment().subtract(1, 'year').add(1, 'month').toDate());
-  const [toDate, setToDate] = useState(moment().toDate());
-  const [tableProps, setTableProps] = useState<DataTableProps>();
+  const [fromDate, setFromDate] = useState(Months.defaultFrom());
+  const [toDate, setToDate] = useState(Months.defaultTo());
+  const [tableProps, setTableProps] = useState<DataTableProps | null>();
+  const [errors, setErrors] = useState();
 
   const { data: logs } = useRequest({
     apiCall: CommunityBusinesses.getLogs,
     params: { since: fromDate, until: toDate },
     updateOn: [fromDate, toDate],
+    setErrors,
+    push: props.history.push,
   });
 
   // bit weird maybe
   useRequest({
     apiCall: CommunityBusinesses.getVolunteers,
     callback: setVolunteers,
+    setErrors,
+    push: props.history.push,
   });
 
 
   useEffect(() => {
     if (logs && volunteers) {
-      setTableProps(volunteerLogsToTable({ data: { logs, volunteers }, unit, fromDate, toDate }));
+      setErrors(null);
+      const tProps = logsToVolunteerTable({ data: { logs, volunteers }, unit, fromDate, toDate, setErrors }); // tslint:disable:max-line-length
+      setTableProps(tProps);
     }
   }, [logs, unit, volunteers]); // TODO: have single on load variable for trigger
 
@@ -49,9 +57,12 @@ export default () => {
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
           />
+          {displayErrors(errors)}
           {tableProps && <DataTable { ...tableProps } />}
         </Col>
       </Row>
     </Grid>
   );
 };
+
+export default withRouter(ByVolunteer);

@@ -1,9 +1,9 @@
 import moment from 'moment';
-import { assocPath, path, propEq, find } from 'ramda';
+import { assocPath, path, propEq, find, Dictionary } from 'ramda';
 import { DataTableProps } from '../../components/DataTable/types';
 import { DurationUnitEnum } from '../../types';
 import { logsToRows } from '../../util/tableManipulation';
-import DateRange from '../../util/dateRange';
+import Months from '../../util/months';
 
 
 interface Params {
@@ -11,28 +11,32 @@ interface Params {
   unit: DurationUnitEnum;
   fromDate: Date;
   toDate: Date;
+  setErrors: (d: Dictionary<string>) => void;
 }
 
-const getColumnId = (x: any) => moment(x.startedAt || x.createdAt).format('MMMM');
+const getColumnId = (x: any) => moment(x.startedAt || x.createdAt).format(Months.format);
 
-export const volunteerLogsToTable = ({ data, unit, fromDate, toDate }
-  : Params): DataTableProps => {
-  const startMonth = Number(moment(fromDate).format('M'));
-  const duration = DateRange.monthsDifference(fromDate, toDate) + 1;
-  const months = DateRange.getPastMonths(startMonth, duration);
-  const columnHeaders = ['Volunteer Name'].concat(months);
-  const [firstColumn, ...columnRest] = columnHeaders;
-  const rows = logsToRows(data.logs, columnHeaders, unit, 'userId', getColumnId)
-  // add volunteers names
-  .map((row) => {
-    const nestedPath = ['columns', 'Volunteer Name', 'content'];
-    const id = path(nestedPath, row);
-    const user = find(propEq('id', id), data.volunteers);
-    return assocPath(nestedPath, user.name, row);
-  });
-  return {
-    title: 'Data By Volunteer',
-    headers: [firstColumn, `Total ${unit}`, ...columnRest],
-    rows,
-  };
+export const logsToVolunteerTable = ({ data, unit, fromDate, toDate, setErrors }
+  : Params): DataTableProps | null => {
+  try {
+    const firstColumn = 'Volunteer Name';
+    const columnRest = Months.range(fromDate, toDate);
+    const columnHeaders = [firstColumn, ...columnRest];
+    const rows = logsToRows(data.logs, columnHeaders, unit, 'userId', getColumnId)
+      // add volunteers names
+      .map((row) => {
+        const nestedPath = ['columns', 'Volunteer Name', 'content'];
+        const id = path(nestedPath, row);
+        const user = find(propEq('id', id), data.volunteers);
+        return assocPath(nestedPath, user.name, row);
+      });
+    return {
+      title: 'Data By Volunteer',
+      headers: [firstColumn, `Total ${unit}`, ...columnRest],
+      rows,
+    };
+  } catch (e) {
+    setErrors({ Table: 'There was an error displaying your data. Please try again' });
+    return null;
+  }
 };

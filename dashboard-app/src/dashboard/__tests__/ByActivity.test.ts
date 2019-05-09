@@ -5,7 +5,7 @@ import { renderWithHistory } from '../../util/tests';
 import ByActivity from '../ByActivity/index';
 import 'jest-dom/extend-expect';
 
-describe.skip('By Activity Page', () => {
+describe('By Activity Page', () => {
   beforeEach(cleanup);
 
   afterEach(cleanup);
