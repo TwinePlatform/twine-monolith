@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Row } from 'react-flexbox-grid';
 
-import { ColoursEnum, SpacingEnum } from '../../styles/design_system';
+import { ColoursEnum } from '../../styles/design_system';
 import L from './Link';
 import { CbAdmins } from '../../api';
 
