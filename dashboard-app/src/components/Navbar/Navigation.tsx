@@ -15,13 +15,13 @@ interface LinkProps {
 }
 
 const Link = styled(L)`
-  padding: ${SpacingEnum.small};
+  padding: 0.5rem;
   border-bottom: ${(props: LinkProps) => props.isActive
     ? `1.5px solid ${ColoursEnum.white}` : 'none'};
 `;
 
 const Navigation: React.FunctionComponent<Props> = (props) => (
-  <Row between={'xs'}>
+  <Row between="xs" middle="xs">
     {['activity', 'volunteer', 'time'].map((page) =>
       (<Link to={`./${page}`} key={page} isActive={page === props.active}>{page}</Link>)
     )}
