@@ -55,6 +55,7 @@ describe('logsToVolunteerTable', () => {
         'March 18',
         'April 18',
         'May 18'],
+      sortBy: 'Total Hours',
       rows: [
         { columns: {
           'April 18': { content: 0 },
