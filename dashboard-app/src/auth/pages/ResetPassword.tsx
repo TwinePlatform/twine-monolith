@@ -12,7 +12,7 @@ import { redirectOnError, withParams, getQueryObjectFromProps } from '../../util
 import { validateForm } from '../../util/forms';
 import { AxiosError } from 'axios';
 import { H1 } from '../../components/Headings';
-import { SpacingEnum } from '../../styles/style_guide';
+import { SpacingEnum } from '../../styles/design_system';
 
 
 /**
@@ -30,7 +30,12 @@ interface ResetPasswordProps extends RouteComponentProps<Params> {}
 const Form = styled(_Form)`
   width: 100%;
   text-align: left;
-  margin-top: ${SpacingEnum.large};
+  margin-top: ${SpacingEnum.small};
+`;
+
+
+const FormContainer = styled.div`
+  margin-top: 9.2rem;
 `;
 
 const schema = Joi.object({
@@ -50,58 +55,62 @@ const ResetPassword: React.FunctionComponent<ResetPasswordProps> = (props) => (
     <Row center="xs">
       <Col xs={12} lg={6}>
       <H1>Reset Password</H1>
-        <Row>
-          <Formik
-            initialValues={{ password: '', passwordConfirm: '' }}
-            onSubmit={(values, actions) => {
-              const query = getQueryObjectFromProps(props);
-              const email = typeof query.email === 'string' ? query.email : query.email[0];
+        <Row center="xs">
+          <Col xs={6}>
+            <FormContainer>
+              <Formik
+                initialValues={{ password: '', passwordConfirm: '' }}
+                onSubmit={(values, actions) => {
+                  const query = getQueryObjectFromProps(props);
+                  const email = typeof query.email === 'string' ? query.email : query.email[0];
 
-              CbAdmins.resetPassword({
-                ...values,
-                email,
-                token: props.match.params.token,
-              })
-                .then(() => props.history.push(
-                  withParams('/login', { referrer: 'reset_password' })))
-                .catch((err: AxiosError) => {
-                  if (!err.response) {
-                    redirectOnError(props.history.push, err);
-                  } else if (Response.statusEquals(err.response, 400)) {
-                    actions.setErrors(Response.validationError(err.response));
-                  } else if (Response.statusEquals(err.response, 401)) {
-                    actions.setErrors({ password: Response.errorMessage(err.response) });
-                  } else if (Response.statusEquals(err.response, 403)) {
-                    actions.setErrors({ password: Response.errorMessage(err.response) });
-                  } else {
-                    redirectOnError(props.history.push, err);
-                  }
-                });
-            }}
-            validate={validateForm<{ password: string, passwordConfirm: string }>(schema)}
-          >
-            {({ values, errors, touched, handleChange }) => (
-              <Form>
-                <Input
-                  name="password"
-                  type="password"
-                  label="Password"
-                  value={values.password}
-                  error={(touched.password && errors.password) || ''}
-                  onChange={handleChange}
-                />
-                <Input
-                  name="passwordConfirm"
-                  type="password"
-                  label="Confirm password"
-                  value={values.passwordConfirm}
-                  error={(touched.passwordConfirm && errors.passwordConfirm) || ''}
-                  onChange={handleChange}
-                />
-                <SubmitButton type="submit">SUBMIT</SubmitButton>
-              </Form>
-            )}
-          </Formik>
+                  CbAdmins.resetPassword({
+                    ...values,
+                    email,
+                    token: props.match.params.token,
+                  })
+                    .then(() => props.history.push(
+                      withParams('/login', { referrer: 'reset_password' })))
+                    .catch((err: AxiosError) => {
+                      if (!err.response) {
+                        redirectOnError(props.history.push, err);
+                      } else if (Response.statusEquals(err.response, 400)) {
+                        actions.setErrors(Response.validationError(err.response));
+                      } else if (Response.statusEquals(err.response, 401)) {
+                        actions.setErrors({ password: Response.errorMessage(err.response) });
+                      } else if (Response.statusEquals(err.response, 403)) {
+                        actions.setErrors({ password: Response.errorMessage(err.response) });
+                      } else {
+                        redirectOnError(props.history.push, err);
+                      }
+                    });
+                }}
+                validate={validateForm<{ password: string, passwordConfirm: string }>(schema)}
+              >
+                {({ values, errors, touched, handleChange }) => (
+                  <Form>
+                    <Input
+                      name="password"
+                      type="password"
+                      label="Password"
+                      value={values.password}
+                      error={(touched.password && errors.password) || ''}
+                      onChange={handleChange}
+                    />
+                    <Input
+                      name="passwordConfirm"
+                      type="password"
+                      label="Confirm password"
+                      value={values.passwordConfirm}
+                      error={(touched.passwordConfirm && errors.passwordConfirm) || ''}
+                      onChange={handleChange}
+                    />
+                    <SubmitButton type="submit">SUBMIT</SubmitButton>
+                  </Form>
+                )}
+              </Formik>
+            </FormContainer>
+          </Col>
         </Row>
       </Col>
     </Row>

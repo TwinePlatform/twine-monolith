@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { ColoursEnum, Fonts, SpacingEnum } from '../styles/style_guide';
+import { ColoursEnum, Fonts } from '../styles/design_system';
 
 type Side = 'left' | 'right';
 
@@ -13,24 +13,24 @@ type ToggleProps = {
 };
 
 const Left = styled.button<{ active: boolean }>`
-  font-size: ${Fonts.size.small};
-  padding: ${SpacingEnum.small};
+  font-size: ${Fonts.size.body};
+  padding: 0.7rem;
   outline: none;
-  border: 0.1rem solid ${ColoursEnum.light};
-  border-top-left-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
-  background-color: ${(props) => props.active ? ColoursEnum.light : ColoursEnum.offWhite};
+  border: 0.125rem solid ${ColoursEnum.darkGrey};
+  border-top-left-radius: 0.3125rem;
+  border-bottom-left-radius: 0.3125rem;
+  background-color: ${(props) => props.active ? ColoursEnum.darkGrey : ColoursEnum.lightGrey};
   color: ${(props) => props.active ? ColoursEnum.white : ColoursEnum.black};
 `;
 
 const Right = styled.button<{ active: boolean }>`
-  font-size: ${Fonts.size.small};
-  padding: ${SpacingEnum.small};
+  font-size: ${Fonts.size.body};
+  padding: 0.7rem;
   outline: none;
-  border: 0.1rem solid ${ColoursEnum.light};
-  border-top-right-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
-  background-color: ${(props) => props.active ? ColoursEnum.light : ColoursEnum.offWhite};
+  border: 0.125rem solid ${ColoursEnum.darkGrey};
+  border-top-right-radius: 0.3125rem;
+  border-bottom-right-radius: 0.3125rem;
+  background-color: ${(props) => props.active ? ColoursEnum.darkGrey : ColoursEnum.lightGrey};
   color: ${(props) => props.active ? ColoursEnum.white : ColoursEnum.black};
 `;
 

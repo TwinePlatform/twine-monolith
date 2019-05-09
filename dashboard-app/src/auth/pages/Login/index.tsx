@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link as L, withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { Form as _Form, FormikActions } from 'formik';
 import { Notification } from 'react-notification';
@@ -8,8 +8,10 @@ import { CbAdmins } from '../../../api';
 import { Response } from '../../../util/response';
 import LoginForm, { FormValues } from './LoginForm';
 import { H1, H4 as _H4 } from '../../../components/Headings';
+import { Paragraph } from '../../../components/Typography';
+import L from '../../../components/Link';
 import { redirectOnError, getQueryObjectFromProps } from '../../../util/routing';
-import { FontSizeEnum, SpacingEnum, ColoursEnum } from '../../../styles/style_guide';
+import { SpacingEnum, ColoursEnum } from '../../../styles/design_system';
 
 
 /*
@@ -21,13 +23,16 @@ interface LoginProps extends RouteComponentProps {}
 /*
  * Styles
  */
-const H4 = styled(_H4)`
-  margin-top: ${SpacingEnum.small};
+const RowLeftAlignText = styled(Row)`
+  text-align: left !important;
 `;
 
 const Link = styled(L)`
-  font-size: ${FontSizeEnum.medium};
-  margin-top: ${SpacingEnum.xSmall};
+  margin-top: ${SpacingEnum.small};
+`;
+
+const FormContainer = styled.div`
+  margin-top: 9.2rem;
 `;
 
 /*
@@ -74,26 +79,28 @@ const Login: React.FunctionComponent<LoginProps> = (props) => (
   <Grid>
     <Row center="xs">
       <Col xs={12} lg={6}>
-        <Row>
-            <H1>Login to the Twine Volunteer Dashboard</H1>
+        <Row center="xs">
+          <H1>Login to the Twine Volunteer Dashboard</H1>
         </Row>
-        <Row>
-            <H4>Don't have an account? Register <a href="">here</a></H4>
+        <Row center="xs">
+          <Paragraph>Don't have an account? Register <a href="">here</a></Paragraph>
         </Row>
-        <Row>
-          <LoginForm
-            onSubmit={createSubmitHandler(props)}
-          />
-          <Link to="/password/forgot">Forgot your password?</Link>
-        </Row>
+        <RowLeftAlignText center="xs">
+          <Col xs={6}>
+            <FormContainer>
+              <LoginForm onSubmit={createSubmitHandler(props)} />
+              <Link to="/password/forgot">Forgot your password?</Link>
+            </FormContainer>
+          </Col>
+        </RowLeftAlignText>
         <Row>
           <Notification
             isActive={getMessage(props).length > 0}
             message={getMessage(props)}
             barStyle={{
-              backgroundColor: ColoursEnum.font,
+              backgroundColor: ColoursEnum.black,
               left: getMessage(props).length > 0 ? 'inherit' : '-100%',
-              marginTop: SpacingEnum.medium,
+              marginTop: SpacingEnum.small,
               borderRadius: '0.2rem',
             }}
           />

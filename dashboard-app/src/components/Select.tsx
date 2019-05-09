@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ColoursEnum, Fonts } from '../styles/style_guide';
+import { ColoursEnum, Fonts } from '../styles/design_system';
 import Label from './Label';
 
 
@@ -20,12 +20,12 @@ const Container = styled.div`
 
 const SelectArrow = styled.div`
   float: right;
-  margin-top: -0.8em;
+  margin-top: -1em;
   width: 0;
   pointer-events: none;
   border-width: 8px 5px 0 5px;
   border-style: solid;
-  border-color: ${ColoursEnum.grey} transparent transparent transparent;
+  border-color: ${ColoursEnum.darkGrey} transparent transparent transparent;
 `;
 
 
@@ -41,25 +41,25 @@ export const Select = styled.select`
   -moz-appearance: none;
   appearance: none;
   background: transparent;
-  color: ${ColoursEnum.grey};
+  color: ${ColoursEnum.darkGrey};
 `;
 
 export const SelectWrapper = styled.div`
   width: 100%;
-  padding: 0.6em;
-  border: 0.1em solid ${ColoursEnum.light};
-  border-radius: 0.15em;
+  padding: 0.7rem;
+  border: 0.1rem solid ${ColoursEnum.darkGrey};
+  border-radius: 0.15rem;
   overflow: hidden;
   background-color: ${ColoursEnum.white};
 
   &:focus-within {
-    border: 0.1em solid ${ColoursEnum.orange};
+    border: 0.1rem solid ${ColoursEnum.orange};
   }
 `;
 
 export const Option = styled.option`
-  font: ${Fonts.family.default};
-  font-size: ${Fonts.size.normal};
+  font: ${Fonts.family.main};
+  font-size: ${Fonts.size.body};
 `;
 
 const ErrorText = styled.span`

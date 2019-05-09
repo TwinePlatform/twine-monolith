@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SelectContainer } from '../Select';
-import { ColoursEnum } from '../../styles/style_guide';
+import { ColoursEnum } from '../../styles/design_system';
 
 
 /**
@@ -29,7 +29,7 @@ const Input = styled.input`
   -moz-appearance: none;
   appearance: none;
   background: transparent;
-  color: ${ColoursEnum.grey};
+  color: ${ColoursEnum.black};
 `;
 
 

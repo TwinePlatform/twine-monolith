@@ -3,9 +3,9 @@
  */
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { sortBy, pathOr } from 'ramda';
-import { H3 as _H3 } from '../Headings';
-import { SpacingEnum, ColoursEnum } from '../../styles/style_guide';
+import { sortBy, pathOr, compose } from 'ramda';
+import { H3 } from '../Headings';
+import { SpacingEnum, ColoursEnum } from '../../styles/design_system';
 import Card from '../Card';
 import DataTableRow from './DataTableRow';
 import HeaderRow from './DataTableHeaderRow';
@@ -16,11 +16,14 @@ import { hashJSON } from '../../util/hash';
 /**
  * Helpers
  */
+const toValidNumber = (s: string) => isNaN(Number.parseFloat(s)) ? s : Number.parseFloat(s);
+
 const sortRows = (data: DataTableProps['rows'], order: Order, f?: string) => {
   if (!f) {
     return data;
   }
-  const sorted = sortBy(pathOr(-1, ['columns', f, 'content']), data);
+  const getContent = compose(toValidNumber, pathOr(-1, ['columns', f, 'content']));
+  const sorted = sortBy(getContent, data);
   return order === 'desc' ? sorted.reverse() : sorted;
 };
 
@@ -32,8 +35,9 @@ const TitleContainer = styled.div`
   background-color: ${ColoursEnum.white};
 `;
 
-const H3 = styled(_H3)`
+const Title = styled(H3)`
   text-align: left;
+  margin-bottom: 0;
 `;
 
 const Container = styled.div`
@@ -43,6 +47,7 @@ const Container = styled.div`
 
 const Table = styled.table`
   overflow-x: scroll;
+  text-align: left;
 `;
 
 
@@ -54,25 +59,26 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
     headers,
     rows,
     initialOrder = 'desc',
-    initialSortBy = props.headers[0],
+    sortBy = props.headers[0],
+    onChangeSortBy = () => {},
+    ...rest
   } = props;
 
   const [order, setOrder] = useState<Order>(initialOrder);
-  const [sortBy, setSortBy] = useState<string>(initialSortBy);
 
   const onHeaderClick = useCallback((title) => {
     if (sortBy === title) { // toggling order
       setOrder(order === 'desc' ? 'asc' : 'desc');
     } else { // sorting by new column
-      setSortBy(title);
+      onChangeSortBy(title);
       setOrder('desc');
     }
   }, [order, sortBy]);
 
   return (
-    <Card>
+    <Card {...rest}>
       {
-        props.title && <TitleContainer><H3>{props.title}</H3></TitleContainer>
+        props.title && <TitleContainer><Title>{props.title}</Title></TitleContainer>
       }
       <Container>
         <Table>

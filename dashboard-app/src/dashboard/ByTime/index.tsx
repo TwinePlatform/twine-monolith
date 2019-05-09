@@ -1,10 +1,12 @@
-import React, { useEffect, useState, FunctionComponent } from 'react';
+import React, { useEffect, useState, useCallback, FunctionComponent } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
+import styled from 'styled-components';
+import { assoc } from 'ramda';
 import { displayErrors } from '../../components/ErrorParagraph';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { H1 } from '../../components/Headings';
 import { CommunityBusinesses } from '../../api';
-import DataTable from '../../components/DataTable';
+import _DataTable from '../../components/DataTable';
 import { DataTableProps } from '../../components/DataTable/types';
 import useRequest from '../../hooks/useRequest';
 import { DurationUnitEnum } from '../../types';
@@ -12,6 +14,15 @@ import { logsToTimeTable } from './helper';
 import UtilityBar from '../../components/UtilityBar';
 import Months from '../../util/months';
 
+const DataTable = styled(_DataTable)`
+  margin-top: 4rem;
+`;
+
+const Container = styled(Grid)`
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
+`;
 
 const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
@@ -35,22 +46,38 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     }
   }, [data, unit]);
 
+  const onChangeSortBy = useCallback((column: string) => {
+    setTableProps(assoc('sortBy', column, tableProps));
+  }, [tableProps]);
+
   return (
-    <Grid>
+    <Container>
       <Row center="xs">
         <Col>
           <H1>By Time</H1>
+        </Col>
+      </Row>
+      <Row center="xs">
+        <Col xs={9}>
           <UtilityBar
             dateFilter="month"
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
           />
-          {displayErrors(errors)}
-          {tableProps && <DataTable { ...tableProps } />}
         </Col>
       </Row>
-    </Grid>
+      <Row center="xs">
+        <Col xs={9}>
+          {displayErrors(errors)}
+          {
+            tableProps && (
+              <DataTable { ...tableProps } initialOrder="desc" onChangeSortBy={onChangeSortBy} />
+            )
+          }
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

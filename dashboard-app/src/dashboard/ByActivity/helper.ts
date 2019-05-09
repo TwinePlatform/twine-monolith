@@ -27,6 +27,7 @@ export const logsToActivityTable = ({ data, activities: columnRest, unit, setErr
     return {
       title: 'Volunteer Data By Activity',
       headers: [firstColumn, `Total ${unit}`, ...columnRest],
+      sortBy: `Total ${unit}`,
       rows,
     };
   } catch (e) {

@@ -19,7 +19,8 @@ export type DataTableProps = {
   title?: string
   headers: string[]
   initialOrder?: Order
-  initialSortBy?: string
+  sortBy?: string
+  onChangeSortBy?: (s: string) => void
   rows: DataTableRow[]
 };
 

@@ -28,6 +28,7 @@ export const logsToTimeTable = ({ data, unit, fromDate, toDate, setErrors }
     return {
       title: 'Volunteer Activity over Months',
       headers: [firstColumn, `Total ${unit}`, ...columnRest],
+      sortBy: `Total ${unit}`,
       rows,
     };
   } catch (e) {

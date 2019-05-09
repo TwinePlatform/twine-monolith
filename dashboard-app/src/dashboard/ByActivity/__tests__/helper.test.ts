@@ -53,6 +53,7 @@ describe('logsToActivityTable', () => {
         'Total Hours',
         'Outdoor and practical work',
       ],
+      sortBy: 'Total Hours',
       rows: [
         {
           columns: {

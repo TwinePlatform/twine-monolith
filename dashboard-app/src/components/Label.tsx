@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ColoursEnum, Fonts } from '../styles/style_guide';
+import { ColoursEnum, Fonts } from '../styles/design_system';
 
 
 export type LabelProps = {
@@ -13,7 +13,7 @@ type InlineProps = Pick<LabelProps, 'inline'>;
 const HTMLLabel = styled.label<InlineProps>`
   width: 100%;
   color: ${ColoursEnum.black};
-  font-size: ${Fonts.size.normal};
+  font-size: ${Fonts.size.body};
   ${
     (props) => props.inline
       ? 'display: flex; align-items: center;'

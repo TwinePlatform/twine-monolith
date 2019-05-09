@@ -15,14 +15,12 @@ describe('Dashboard Page', () => {
     mock = new MockAdapter(axios);
   });
 
-  beforeEach(cleanup);
-
   afterEach(cleanup);
 
   test('Unauthenticated user gets redirected to login', async () => {
     expect.assertions(1);
 
-    mock.onGet('/v1/community-businesses/me').reply(401, { error: { } });
+    mock.onGet('/community-businesses/me').reply(401, { error: {} });
 
     const tools = renderWithHistory(Dashboard);
 
@@ -32,7 +30,7 @@ describe('Dashboard Page', () => {
   test('Unauthorized user gets redirected to login', async () => {
     expect.assertions(1);
 
-    mock.onGet('/v1/community-businesses/me').reply(403, { error: { } });
+    mock.onGet('/community-businesses/me').reply(403, { error: { } });
 
     const tools = renderWithHistory(Dashboard);
 
@@ -42,7 +40,7 @@ describe('Dashboard Page', () => {
   test('Internal server error redirects to error page', async () => {
     expect.assertions(1);
 
-    mock.onGet('/v1/community-businesses/me').reply(500, { error: { } });
+    mock.onGet('/community-businesses/me').reply(500, { error: { } });
 
     const tools = renderWithHistory(Dashboard);
 

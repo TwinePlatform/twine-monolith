@@ -1,9 +1,12 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { ColoursEnum, Fonts } from '../styles/design_system';
 
-export default styled(Link)`
-  color: ${ColoursEnum.black};
-  text-decoration: underline;
+export const Paragraph = styled.p`
   font-size: ${Fonts.size.body};
+  color: ${ColoursEnum.black};
+`;
+
+export const Span = styled.span`
+  font-size: ${Fonts.size.body};
+  color: ${ColoursEnum.black};
 `;

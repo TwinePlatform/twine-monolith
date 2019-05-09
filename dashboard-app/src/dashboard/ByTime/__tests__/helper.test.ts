@@ -1,6 +1,7 @@
 import { logsToTimeTable } from '../helper';
 import { DurationUnitEnum } from '../../../types';
 
+
 describe('logsToTimeTable', () => {
   test('SUCCESS - standard 12 months', () => {
     const logs = [
@@ -54,6 +55,7 @@ describe('logsToTimeTable', () => {
         'November 18',
         'December 18',
       ],
+      sortBy: 'Total Hours',
       rows : [{
         columns: {
           Activity: { content: 'Outdoor and practical work' },

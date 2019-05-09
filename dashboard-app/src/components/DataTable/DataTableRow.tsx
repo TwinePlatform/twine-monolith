@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { rgba } from 'polished';
 import { Link } from 'react-router-dom';
-import { ColoursEnum } from '../../styles/style_guide';
+import { ColoursEnum } from '../../styles/design_system';
 import DataCell from './DataTableCell';
 import { RowProps } from './types';
 import { hashJSON } from '../../util/hash';
@@ -12,11 +12,11 @@ import { hashJSON } from '../../util/hash';
  */
 const TableRow = styled.tr`
   &:nth-child(odd) {
-    background-color: ${ColoursEnum.offWhite};
+    background-color: ${ColoursEnum.lightGrey};
   }
 
   &:nth-child(even) {
-    background-color: ${rgba(ColoursEnum.light, 0.2)};
+    background-color: ${rgba(ColoursEnum.grey, 0.2)};
   }
 `;
 

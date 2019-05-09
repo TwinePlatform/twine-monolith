@@ -13,7 +13,8 @@ import ResetPassword from './auth/pages/ResetPassword';
 import ForgotPassword from './auth/pages/ForgotPassword';
 import ErrorPage from './Error';
 import Navbar from './components/Navbar';
-import { ColoursEnum, FontFamilyEnum } from './styles/style_guide';
+import Footer from './components/Footer';
+import { ColoursEnum, Fonts } from './styles/design_system';
 
 /*
  * Styles
@@ -22,8 +23,8 @@ const AppContainer = styled.div`
   min-height: 100vh;
   min-width: 100vw;
   max-width: 1280px;
-  background: ${ColoursEnum.offWhite};
-  font-family: ${FontFamilyEnum.default};
+  background: ${ColoursEnum.lightGrey};
+  font-family: ${Fonts.family.main};
 `;
 
 /*
@@ -40,17 +41,24 @@ const ProtectedRoutes = () => (
   </Switch>
 );
 
+const Content = styled.div`
+  min-height: calc(100vh - 4.8125rem - 6rem - 13rem);
+`;
+
 const AppRouter =
   withRouter((props) => (
       <>
         <Navbar pathname={props.location.pathname}/>
-        <Switch>
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/password/reset/:token" component={ResetPassword} />
-          <Route exact path="/password/forgot" component={ForgotPassword} />
-          <Route exact path="/error/:code" component={ErrorPage} />
-          <PrivateRoute path="/*" component={ProtectedRoutes} />
-        </Switch>
+        <Content>
+          <Switch>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/password/reset/:token" component={ResetPassword} />
+            <Route exact path="/password/forgot" component={ForgotPassword} />
+            <Route exact path="/error/:code" component={ErrorPage} />
+            <PrivateRoute path="/*" component={ProtectedRoutes} />
+          </Switch>
+        </Content>
+        <Footer />
       </>)
   );
 

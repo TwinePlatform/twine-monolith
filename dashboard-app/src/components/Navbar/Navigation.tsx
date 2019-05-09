@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Row } from 'react-flexbox-grid';
 
-import { ColoursEnum, SpacingEnum } from '../../styles/style_guide';
-import L from '../Link';
+import { ColoursEnum } from '../../styles/design_system';
+import L from './Link';
 import { CbAdmins } from '../../api';
 
 interface Props {
@@ -15,13 +15,13 @@ interface LinkProps {
 }
 
 const Link = styled(L)`
-  padding: ${SpacingEnum.xxSmall};
+  padding: 0.5rem;
   border-bottom: ${(props: LinkProps) => props.isActive
     ? `1.5px solid ${ColoursEnum.white}` : 'none'};
 `;
 
 const Navigation: React.FunctionComponent<Props> = (props) => (
-  <Row between={'xs'}>
+  <Row between="xs" middle="xs">
     {['activity', 'volunteer', 'time'].map((page) =>
       (<Link to={`./${page}`} key={page} isActive={page === props.active}>{page}</Link>)
     )}

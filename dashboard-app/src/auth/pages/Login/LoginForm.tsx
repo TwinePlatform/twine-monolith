@@ -5,7 +5,7 @@ import { Formik, Form as _Form, Field, FormikActions } from 'formik';
 import Input from '../../../components/Input';
 import { SubmitButton } from '../../../components/Buttons';
 import { validateForm } from '../../../util/forms';
-import { SpacingEnum } from '../../../styles/style_guide';
+import { SpacingEnum } from '../../../styles/design_system';
 
 
 /**
@@ -14,7 +14,8 @@ import { SpacingEnum } from '../../../styles/style_guide';
 const Form = styled(_Form)`
   width: 100%;
   text-align: left;
-  margin-top: ${SpacingEnum.large}
+  margin-top: ${SpacingEnum.small};
+  margin-bottom: 1.5rem;
 `;
 
 export type FormValues = {
