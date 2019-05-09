@@ -3,15 +3,17 @@ import styled from 'styled-components';
 import { Row } from 'react-flexbox-grid';
 
 import { ColoursEnum } from '../../styles/design_system';
-import L from './Link';
 import { CbAdmins } from '../../api';
+import L from './Link';
+
 
 interface Props {
-  active: string;
   links: {
     to: string,
-    active
+    content: string,
+    active?: boolean,
   }[];
+  withLogout?: boolean;
 }
 
 interface LinkProps {
@@ -24,13 +26,19 @@ const Link = styled(L)`
     ? `1.5px solid ${ColoursEnum.white}` : 'none'};
 `;
 
-const NavLinks: React.FunctionComponent<Props> = (props) => (
+const NavLinks: React.FunctionComponent<Props> = ({ links, withLogout }) => (
   <Row between="xs" middle="xs">
-    {['activity', 'volunteer', 'time'].map((page) =>
-      (<Link to={`./${page}`} key={page} isActive={page === props.active}>{page}</Link>)
-    )}
-      <Link to={'./login'} onClick={CbAdmins.logout}>Logout</Link>
-    </Row>
+    {
+      links.map((link) => (
+        <Link to={link.to} key={link.to} isActive={link.active}>
+          {link.content}
+        </Link>
+      ))
+    }
+    {
+      withLogout && <Link to={'./login'} onClick={CbAdmins.logout}>Logout</Link>
+    }
+  </Row>
 );
 
 export default NavLinks;

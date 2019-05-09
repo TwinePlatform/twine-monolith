@@ -11,7 +11,6 @@ import ForgotPassword from '../auth/pages/ForgotPassword';
 import ErrorPage from '../Error';
 
 
-
 type Page = {
   url: string
   title: string
@@ -25,7 +24,7 @@ export const PagesDict: PagesDictionary = {
   Dashboard: {
     url: '/',
     component: Dashboard,
-    title: 'Dashboard',
+    title: 'Home',
     protected: true,
   },
   Activity: {
