@@ -46,14 +46,14 @@ export const Select = styled.select`
 
 export const SelectWrapper = styled.div`
   width: 100%;
-  padding: 0.6em;
-  border: 0.1em solid ${ColoursEnum.grey};
-  border-radius: 0.15em;
+  padding: 0.7rem;
+  border: 0.1rem solid ${ColoursEnum.darkGrey};
+  border-radius: 0.15rem;
   overflow: hidden;
   background-color: ${ColoursEnum.white};
 
   &:focus-within {
-    border: 0.1em solid ${ColoursEnum.orange};
+    border: 0.1rem solid ${ColoursEnum.orange};
   }
 `;
 
