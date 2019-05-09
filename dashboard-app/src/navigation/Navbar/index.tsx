@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
-import { Dictionary } from 'ramda';
 
 import { ColoursEnum, Fonts } from '../../styles/design_system';
 import NavLinks from './NavLinks';

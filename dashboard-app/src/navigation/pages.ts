@@ -1,5 +1,4 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
 import { Dictionary, filter } from 'ramda';
 import Dashboard from '../dashboard/Dashboard';
 import ByActivity from '../dashboard/ByActivity';
