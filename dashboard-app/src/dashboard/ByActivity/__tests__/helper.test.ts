@@ -44,8 +44,9 @@ describe('logsToActivityTable', () => {
       data: { logs, volunteers },
       unit: DurationUnitEnum.HOURS,
       activities,
+      setErrors: () => {},
     });
-    (expect(tData) as any).toEqual({
+    expect(tData).toEqual({
       title: 'Volunteer Data By Activity',
       headers: [
         'Volunteer Name',

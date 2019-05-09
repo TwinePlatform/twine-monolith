@@ -44,8 +44,9 @@ describe('logsToVolunteerTable', () => {
       unit: DurationUnitEnum.HOURS,
       fromDate: new Date('02-01-18'),
       toDate: new Date('05-31-18'),
+      setErrors: () => {},
     });
-    (expect(tData) as any).toEqual({
+    expect(tData).toEqual({
       title: 'Data By Volunteer',
       headers: [
         'Volunteer Name',

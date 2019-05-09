@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AxiosPromise, AxiosResponse, AxiosRequestConfig } from 'axios';
+import { Dictionary } from 'ramda';
 import { Response } from '../util/response';
 import { redirectOnError } from '../util/routing';
 
@@ -12,7 +13,14 @@ type RequestParams = {
   push: any
 };
 
-const onError = (error: any, setErrors: any, push: any) => {
+interface OnError {
+  (error: any,
+    setErrors: (d: Dictionary<string>) => void ,
+    push: (p: string) => void
+    ): void;
+}
+
+const onError: OnError = (error, setErrors, push) => {
   const res = error.response;
   if (Response.statusEquals(res, 400)) {
     setErrors(Response.validationError(res));

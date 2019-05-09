@@ -34,8 +34,9 @@ describe('logsToTimeTable', () => {
       unit: DurationUnitEnum.HOURS,
       fromDate: new Date('01-01-18'),
       toDate: new Date('12-31-18'),
+      setErrors: () => {},
     });
-    (expect(tData) as any).toEqual({
+    expect(tData).toEqual({
       title: 'Volunteer Activity over Months',
       headers: [
         'Activity',
