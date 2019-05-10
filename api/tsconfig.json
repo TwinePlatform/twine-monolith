@@ -15,7 +15,6 @@
   "exclude": [
     "docs",
     "node_modules",
-    "build",
-    "bin"
+    "build"
   ]
 }

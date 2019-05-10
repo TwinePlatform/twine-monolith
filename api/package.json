@@ -27,6 +27,7 @@
     "cover": "npm run cover:unit && npm run cover:integration",
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --project tsconfig.json --fix",
+    "checks": "node ./build/bin/server_setup.js",
     "migrate:latest": "knex migrate:latest --knexfile knexfile.ts",
     "migrate:latest:prod": "NODE_ENV=production knex migrate:latest --knexfile knexfile.ts",
     "migrate:latest:test": "NODE_ENV=testing knex migrate:latest --knexfile knexfile.ts",
