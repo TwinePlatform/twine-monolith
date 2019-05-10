@@ -5,6 +5,11 @@ if [ ! -f ./cc-test-reporter ]; then
   exit 1;
 fi
 
+if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  echo "Skipping coverage uploads for PR build"
+  exit 0;
+fi
+
 echo "Formatting coverage reports for applications"
 
 for f in "api" "dashboard-app" "visitor-app"; do
