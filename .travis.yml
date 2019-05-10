@@ -20,7 +20,7 @@ services:
   - postgresql
 
 install:
-  - npm install -g codecov
+  - bash ./.travis/cc-download.sh
   - npm install -g lerna
   - lerna bootstrap
   - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm install; cd ..; done
@@ -39,6 +39,9 @@ jobs:
         - lerna run build
         - lerna run checks
         - lerna run cover
+
+after_success:
+  - bash ./.travis/cc-report.sh
 
 notifications:
   email:
