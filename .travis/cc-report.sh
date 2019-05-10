@@ -10,23 +10,17 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   exit 0;
 fi
 
-echo "Formatting coverage reports for applications"
+function format_lcov () {
+  for f in $@; do
+    if [ -f $1 ]; then
+      echo "Formatting $f";
+      ./cc-test-reporter format-coverage -t lcov -o coverage/coverage.${1//\//-}.json $1;
+    fi
+  done
+}
 
-for f in "api" "dashboard-app" "visitor-app"; do
-  if [ -d $f ]; then
-    echo $f;
-    ./cc-test-reporter format-coverage -t lcov -o coverage/coverage.${f//\//-}.json $f/coverage/lcov.info;
-  fi
-done;
-
-echo "Formatting coverage reports for libraries"
-
-for f in lib/*; do
-  if [ -d $f ]; then
-    echo $f;
-    ./cc-test-reporter format-coverage -t lcov -o coverage/coverage.${f//\//-}.json $f/coverage/lcov.info;
-  fi
-done;
+files=$(find . -name 'lcov.info' -type f -not -path "*/node_modules/*")
+format_lcov ${files[@]}
 
 echo "Summing coverage reports"
 ./cc-test-reporter sum-coverage -o coverage/coverage.total.json coverage/coverage.*.json;
