@@ -3,15 +3,21 @@ import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
 
 import { ColoursEnum, Fonts } from '../../styles/design_system';
-import Navigation from './Navigation';
-import { Dictionary } from 'ramda';
+import NavLinks from './NavLinks';
+import { Pages } from '../pages';
 
 
+/**
+ * Types
+ */
 interface Props {
   pathname: string;
 }
 
 
+/**
+ * Styles
+ */
 const PaddedRow = styled(Row)`
   height: 4.8125rem;
   background-color: ${ColoursEnum.darkGrey};
@@ -28,20 +34,17 @@ const Title = styled.p`
 `;
 
 
-const pageFromRoute = (url: string): string => {
-  const routes: Dictionary<string> = {
-    '/activity': 'activity',
-    '/time': 'time',
-    '/volunteer': 'volunteer',
-    '/': '/',
-  };
-
-  return routes[url];
-};
-
+/**
+ * Component
+ */
 const Navbar: React.FunctionComponent<Props> = (props) => {
-  const isLoggedIn = Boolean(pageFromRoute(props.pathname));
-  const active = pageFromRoute(props.pathname);
+  const currentPage = Pages.matchPath(props.pathname);
+  const isLoggedIn = currentPage.protected;
+  const links = Pages.getProtected().map((page) => ({
+    to: page.url,
+    content: page.title,
+    active: page.url === currentPage.url,
+  }));
 
   return(
   <PaddedRow middle="xs" between="xs">
@@ -49,9 +52,7 @@ const Navbar: React.FunctionComponent<Props> = (props) => {
       <Title>TWINE</Title>
     </Col>
     <Col xs={6} lg={4}>
-    {isLoggedIn &&
-      <Navigation active={active}/>
-    }
+      { isLoggedIn && <NavLinks links={links} withLogout={isLoggedIn}/> }
     </Col>
   </PaddedRow>
   );
