@@ -83,7 +83,9 @@ const Login: React.FunctionComponent<LoginProps> = (props) => (
           <H1>Login to the Twine Volunteer Dashboard</H1>
         </Row>
         <Row center="xs">
-          <Paragraph>Don't have an account? Register <a href="">here</a></Paragraph>
+          <Paragraph>
+            Don't have an account? <a href="mailto:powertochange@gmail.com">Contact us</a>
+          </Paragraph>
         </Row>
         <RowLeftAlignText center="xs">
           <Col xs={6}>
