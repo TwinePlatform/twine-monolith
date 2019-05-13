@@ -19,7 +19,7 @@ type Email = {
 
 export type EmailDispatcher = {
   send: (c: Config, e: Email) => Promise<Postmark.Models.MessageSendingResponse>
-  sendBatch: (c: Config, es: Email []) => Promise<Postmark.Models.MessageSendingResponse[]>
+  sendBatch: (c: Config, es: Email[]) => Promise<Postmark.Models.MessageSendingResponse[]>
 };
 
 
@@ -41,7 +41,9 @@ const toPostmarkAttachment = (a: Attachment): Postmark.Attachment => ({
 const EmailDispatcher: EmailDispatcher = {
   async send (cfg, email) {
     const client = new Postmark.ServerClient(cfg.email.postmarkKey);
-    return client.sendEmailWithTemplate(toPostmarkMsg(email));
+    const res = await client.sendEmailWithTemplate(toPostmarkMsg(email));
+    console.log('>>>>', res);
+    return res;
   },
   async sendBatch (cfg, emails) {
     const client = new Postmark.ServerClient(cfg.email.postmarkKey);
