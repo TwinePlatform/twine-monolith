@@ -2,7 +2,7 @@ import moment from 'moment';
 import { Dictionary } from 'ramda';
 import { DataTableProps } from '../../components/DataTable/types';
 import { DurationUnitEnum } from '../../types';
-import { logsToRows } from '../../util/tableManipulation';
+import { logsToRows } from '../../util/dataManipulation';
 import Months from '../../util/months';
 
 interface Params {
