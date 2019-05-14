@@ -94,4 +94,10 @@ export const Pages = {
   toDisplay (p: Page) {
     return p.title;
   },
+
+  navigateTo (s: keyof PagesDictionary, push: (path: string) => void) {
+    if (PagesDict.hasOwnProperty(s)) {
+      push(PagesDict[s].url);
+    }
+  },
 };
