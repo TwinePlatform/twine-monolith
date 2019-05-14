@@ -1,49 +1,49 @@
-import MockAdapter from 'axios-mock-adapter';
-import {
-  cleanup,
-  wait,
-} from 'react-testing-library';
-import { renderWithHistory } from '../../util/tests';
-import { axios } from '../../api';
+import { cleanup, waitForElement, fireEvent, wait } from 'react-testing-library';
 import Dashboard from '../Dashboard';
 import 'jest-dom/extend-expect';
+import { renderWithHistory } from '../../util/tests';
 
 describe('Dashboard Page', () => {
-  let mock: MockAdapter;
-
-  beforeAll(() => {
-    mock = new MockAdapter(axios);
-  });
-
   afterEach(cleanup);
 
-  test('Unauthenticated user gets redirected to login', async () => {
-    expect.assertions(1);
-
-    mock.onGet('/community-businesses/me').reply(401, { error: {} });
-
+  test('Render', async () => {
     const tools = renderWithHistory(Dashboard);
 
-    await wait(() => expect(tools.history.location.pathname).toEqual('/login'));
+    await waitForElement(() => [
+      tools.getByText('Activity'),
+      tools.getByText('Time'),
+      tools.getByText('Volunteer'),
+      tools.getByText('Projects'),
+    ]);
   });
 
-  test('Unauthorized user gets redirected to login', async () => {
+  test('Clicking time goes to /time', async () => {
     expect.assertions(1);
 
-    mock.onGet('/community-businesses/me').reply(403, { error: { } });
-
     const tools = renderWithHistory(Dashboard);
+    const buttons = await waitForElement(() => tools.getAllByText('View data'));
+    fireEvent.click(buttons[0]);
 
-    await wait(() => expect(tools.history.location.pathname).toEqual('/login'));
+    await wait(() => expect(tools.history.location.pathname).toBe('/time'));
   });
 
-  test('Internal server error redirects to error page', async () => {
+  test('Clicking activity goes to /activity', async () => {
     expect.assertions(1);
 
-    mock.onGet('/community-businesses/me').reply(500, { error: { } });
+    const tools = renderWithHistory(Dashboard);
+    const buttons = await waitForElement(() => tools.getAllByText('View data'));
+    fireEvent.click(buttons[1]);
+
+    await wait(() => expect(tools.history.location.pathname).toBe('/activity'));
+  });
+
+  test('Clicking volunteer goes to /volunteer', async () => {
+    expect.assertions(1);
 
     const tools = renderWithHistory(Dashboard);
+    const buttons = await waitForElement(() => tools.getAllByText('View data'));
+    fireEvent.click(buttons[2]);
 
-    await wait(() => expect(tools.history.location.pathname).toEqual('/error/500'));
+    await wait(() => expect(tools.history.location.pathname).toBe('/volunteer'));
   });
 });
