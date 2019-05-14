@@ -5,6 +5,7 @@
 2. [Migrations](#migrations)
 3. [Seeds](#seeds)
 4. [Backups](#backups)
+5. [Data Sets](#data-sets)
 
 ## Data Model
 
@@ -82,3 +83,26 @@ You can now connect your local app to the restored database.
 ### Resources
 - [Heroku PostgreSQL backups](https://devcenter.heroku.com/articles/heroku-postgres-backups)
 - [Heroku importing and exporting PostgreSQL databases](https://devcenter.heroku.com/articles/heroku-postgres-import-export)
+
+## Data Sets
+Several pre-defined data sets are available for testing, QA and demonstration purposes.
+
+### Testing
+Insert the testing data set using the command:
+```
+$ npm run exec ./bin/insert_data.ts -- testing
+```
+This dataset is automatically added to the testing database before any integration tests are executed.
+
+### QA
+Insert the QA data set using the command:
+```
+$ npm run exec ./bin/insert_data.ts -- qa
+```
+This dataset is shaped by QA data requirements, which are detailed [here](https://docs.google.com/spreadsheets/d/16QeX7SZUS-lHawyEPTa1PnxqQ75qlWDLc5Rkovodds0)
+
+### Demo
+Insert the demo data set using the command:
+```
+$ npm run exec ./bin/insert_data.ts -- demo
+```
