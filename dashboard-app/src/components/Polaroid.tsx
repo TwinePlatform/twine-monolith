@@ -69,7 +69,13 @@ const Polaroid: React.FunctionComponent<PolaroidProps> = (props) => {
       <CaptionSection>
         <H2>{title}</H2>
         <Paragraph>{caption}</Paragraph>
-        { callToAction && <RoundedButton disabled={disabled} onClick={onClick}>{callToAction}</RoundedButton> }
+        {
+          callToAction && (
+            <RoundedButton disabled={disabled} onClick={onClick}>
+              {callToAction}
+            </RoundedButton>
+          )
+        }
       </CaptionSection>
     </Card>
   );
