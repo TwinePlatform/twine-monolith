@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-const perms = require('../data/permissions.seed.json');
+const perms = require('../data/seed/permissions.seed.json');
 
 
 const rx = new RegExp('[-:]');
