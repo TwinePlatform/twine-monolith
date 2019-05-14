@@ -1,7 +1,6 @@
 import * as Knex from 'knex';
-const cls = require('../../static/2018_cls_benchmarks.json');
-const nps = require('../../static/2018_nps_benchmarks.json');
-
+const cls = require('../2018_cls_benchmarks.json');
+const nps = require('../2018_nps_benchmarks.json');
 
 exports.seed = (knex: Knex) => {
   const clsInsertData =

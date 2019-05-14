@@ -1,6 +1,8 @@
+import * as path from 'path';
 import { Environment, Config } from './types';
 import { DeepPartial } from '../src/types/internal';
 import { envListOr } from './util';
+
 
 const config: DeepPartial<Config> = {
   env: Environment.PRODUCTION,
@@ -22,6 +24,9 @@ const config: DeepPartial<Config> = {
     pool: {
       max: 20, // Limit imposed by Heroku on current pricing tier
       connectionTimeoutMillis: 1000,
+    },
+    seeds: {
+      directory: path.resolve(process.cwd(), 'database', 'data', 'seed', 'production'),
     },
   },
   email: {

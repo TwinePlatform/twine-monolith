@@ -59,7 +59,7 @@ const config: DeepPartial<Config> = {
       directory: path.resolve(process.cwd(), 'database', 'migrations'),
     },
     seeds: {
-      directory: path.resolve(process.cwd(), 'database', 'seeds', 'testing'),
+      directory: path.resolve(process.cwd(), 'database', 'data', 'seed', 'testing'),
     },
   },
   auth: {
