@@ -5,8 +5,8 @@ if [ ! -f ./cc-test-reporter ]; then
   exit 1;
 fi
 
-if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-  echo "Skipping coverage uploads for PR build"
+if [ "$TRAVIS_PULL_REQUEST" == "false" -a "$TRAVIS_BRANCH" != "master" ]; then
+  echo "Skipping coverage uploads for push builds on $TRAVIS_BRANCH"
   exit 0;
 fi
 
