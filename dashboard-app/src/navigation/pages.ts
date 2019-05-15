@@ -79,7 +79,7 @@ export const Pages = {
       return null;
     }
 
-    const pages = filter((page) => page.url === match.url, PagesDict);
+    const pages = filter((page) => page.url === match.path, PagesDict);
     const keys = Object.keys(pages);
 
     if (keys.length !== 1) {
