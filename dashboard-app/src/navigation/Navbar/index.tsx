@@ -39,11 +39,11 @@ const Title = styled.p`
  */
 const Navbar: React.FunctionComponent<Props> = (props) => {
   const currentPage = Pages.matchPath(props.pathname);
-  const isLoggedIn = currentPage.protected;
+  const isLoggedIn = currentPage ? currentPage.protected : false;
   const links = Pages.getProtected().map((page) => ({
     to: page.url,
     content: page.title,
-    active: page.url === currentPage.url,
+    active: page.url === (currentPage || { url: '' }).url,
   }));
 
   return(
