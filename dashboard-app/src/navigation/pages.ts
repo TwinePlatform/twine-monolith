@@ -1,4 +1,5 @@
 import React from 'react';
+import { matchPath } from 'react-router';
 import { Dictionary, filter } from 'ramda';
 import Dashboard from '../dashboard/Dashboard';
 import ByActivity from '../dashboard/ByActivity';
@@ -67,17 +68,22 @@ export const PagesDict: PagesDictionary = {
 };
 
 
-const filterBy = (k: keyof Page, v: string) => filter((page) => page[k] === v, PagesDict);
-
-
 export const Pages = {
   matchPath (pathname: string) {
-    const pages = filterBy('url', pathname);
+    const match = Object.values(PagesDict)
+      .map(({ url }) => matchPath(pathname, { path: url, exact: true }))
+      .filter(Boolean)
+      [0];
+
+    if (match === null || match === undefined) {
+      return null;
+    }
+
+    const pages = filter((page) => page.url === match.url, PagesDict);
     const keys = Object.keys(pages);
 
     if (keys.length !== 1) {
-      throw new Error(`One page expected, ${keys.length} returned: ${keys}. ${pathname}`);
-
+      return null;
     }
 
     return pages[keys[0]];
