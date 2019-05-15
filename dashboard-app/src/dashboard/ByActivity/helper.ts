@@ -22,6 +22,9 @@ export const logsToActivityTable = ({ data, activities: columnRest, unit, setErr
     const nestedPath = ['columns', firstColumn, 'content'];
     const id = path(nestedPath, row);
     const user = find(propEq('id', id), data.volunteers);
+    if (!user) {
+      return assocPath(nestedPath, 'Deleted', row);
+    }
     return assocPath(nestedPath, user.name, row);
   });
     return {

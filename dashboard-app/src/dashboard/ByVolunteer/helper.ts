@@ -28,6 +28,9 @@ export const logsToVolunteerTable = ({ data, unit, fromDate, toDate, setErrors }
         const nestedPath = ['columns', 'Volunteer Name', 'content'];
         const id = path(nestedPath, row);
         const user = find(propEq('id', id), data.volunteers);
+        if (!user) {
+          return assocPath(nestedPath, 'Deleted', row);
+        }
         return assocPath(nestedPath, user.name, row);
       });
     return {
