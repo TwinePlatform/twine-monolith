@@ -16,6 +16,6 @@ module.exports = async () => {
 
   await migrate.teardown();
   await client.migrate.latest();
-  await insertData(config, client, 'test');
+  await insertData(config, client, 'testing');
   await client.destroy();
 };

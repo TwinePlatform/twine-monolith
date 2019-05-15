@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as Knex from 'knex';
-import { getEnvironment } from '../../config';
+import { getConfig } from '../../config';
 
 
 exports.up = async (knex: Knex) => {
-  const NODE_ENV = getEnvironment(process.env.NODE_ENV);
-  const basePath = path.resolve(__dirname, '..', 'seeds', NODE_ENV);
+  const config = getConfig(process.env.NODE_ENV);
+  const basePath = config.knex.seeds.directory;
   const files = fs.readdirSync(basePath);
   const fns = files.sort().map((file) => require(path.join(basePath, file)).seed);
 

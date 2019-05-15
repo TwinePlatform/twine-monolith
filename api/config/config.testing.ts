@@ -1,5 +1,7 @@
+import * as path from 'path';
 import { Environment, Config } from './types';
 import { DeepPartial } from '../src/types/internal';
+
 
 const config: DeepPartial<Config> = {
   env: Environment.TESTING,
@@ -13,6 +15,9 @@ const config: DeepPartial<Config> = {
   },
   knex: {
     connection: process.env.DATABASE_URL_TESTING,
+    seeds: {
+      directory: path.resolve(process.cwd(), 'database', 'data', 'seed', 'testing'),
+    },
   },
   email: {
     postmarkKey: process.env.POSTMARK_KEY_TESTING,

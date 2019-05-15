@@ -10,6 +10,8 @@ import { insertData } from '../database/tools';
 
 process.on('unhandledRejection', (reason) => { throw reason; });
 
+const argsSchema = Joi.array().length(1).items(Joi.only('demo', 'testing', 'qa', 'seed'));
+
 (async () => {
   const { _: args } = parse(process.argv.slice(2));
   const config = getConfig(process.env.NODE_ENV);
@@ -17,7 +19,7 @@ process.on('unhandledRejection', (reason) => { throw reason; });
 
   try {
 
-    const result = Joi.array().length(1).items(Joi.only('demo', 'test')).validate(args);
+    const result = argsSchema.validate(args);
     if (result.error) {
       throw result.error;
     }

@@ -4,12 +4,18 @@ import * as Knex from 'knex';
 import { Config } from '../../config';
 
 
-export default async (config: Config, client: Knex, dataSets: string) => {
-  const dir = path.join(config.root, 'database', 'test_data');
+export default async (config: Config, client: Knex, dataSet: string) => {
+  const dir = path.join(config.root, 'database', 'data');
   const files = fs.readdirSync(dir)
-    .filter((f) => f.startsWith(dataSets))
+    .filter((f) => f === dataSet)
     .map((f) => path.join(dir, f))
-    .sort();
+    .map((d) =>
+      fs.readdirSync(d)
+        .filter((f) => f.endsWith('.seed.ts'))
+        .map((f) => path.join(d, f))
+        .sort()
+    )
+    .reduce((acc, x) => acc.concat(x), []);
 
   await client.transaction(async (trx) => {
     // This needs to be a for loop because the data sets should be

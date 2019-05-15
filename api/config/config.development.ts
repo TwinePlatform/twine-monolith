@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { Environment, Config } from './types';
 import { DeepPartial } from '../src/types/internal';
 
@@ -19,6 +20,9 @@ const config: DeepPartial<Config> = {
   },
   knex: {
     connection: process.env.DATABASE_URL_DEVELOPMENT,
+    seeds: {
+      directory: path.resolve(process.cwd(), 'database', 'data', 'seed', 'development'),
+    },
   },
   email: {
     postmarkKey: process.env.POSTMARK_KEY_DEVELOPMENT,
