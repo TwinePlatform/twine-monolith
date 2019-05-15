@@ -1,8 +1,9 @@
-import { assocPath, path, propEq, find, Dictionary } from 'ramda';
+import { Dictionary } from 'ramda';
 import { DataTableProps } from '../../components/DataTable/types';
 import { DurationUnitEnum } from '../../types';
 import { logsToAggregatedData } from '../../util/dataManipulation/logsToAggregatedData';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
+import { tableType } from '../../util/dataManipulation/tableType';
 
 interface Params {
   data: { logs: any, volunteers: any};
@@ -21,8 +22,7 @@ export const logsToActivityTable = ({ data, activities: columnRest, unit, setErr
       logs: data.logs,
       columnHeaders,
       unit,
-      rowIdFromLogs: 'userId',
-      getColumnIdFromLogs: (x) => x.activity,
+      tableType: tableType.ActivityByName,
       volunteers: data.volunteers,
     });
     const tableData =

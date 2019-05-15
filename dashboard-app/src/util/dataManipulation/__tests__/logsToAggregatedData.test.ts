@@ -2,6 +2,7 @@ import { logsToAggregatedData } from '../logsToAggregatedData';
 import moment from 'moment';
 import { DurationUnitEnum } from '../../../types';
 import Months from '../../months';
+import { tableType } from '../tableType';
 // tslint:disable:max-line-length
 
 describe('logsToAggregatedData', () => {
@@ -35,8 +36,7 @@ describe('logsToAggregatedData', () => {
       logs,
       columnHeaders,
       unit: DurationUnitEnum.HOURS,
-      rowIdFromLogs: 'activity',
-      getColumnIdFromLogs: (x: any) => moment(x.startedAt || x.createdAt).format(Months.format),
+      tableType: tableType.MonthByActivity,
     });
     expect(expected).toEqual({
       headers: ['Activity', 'Total Hours', 'February 18', 'March 18', 'April 18'],
@@ -101,8 +101,7 @@ describe('logsToAggregatedData', () => {
       logs,
       columnHeaders,
       unit: DurationUnitEnum.HOURS,
-      rowIdFromLogs: 'userId',
-      getColumnIdFromLogs: (x) => x.activity,
+      tableType: tableType.ActivityByName,
       volunteers,
     });
     expect(expected).toEqual({

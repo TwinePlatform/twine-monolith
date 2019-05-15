@@ -5,6 +5,7 @@ import { DurationUnitEnum } from '../../types';
 import { logsToAggregatedData } from '../../util/dataManipulation/logsToAggregatedData';
 import Months from '../../util/months';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
+import { tableType } from '../../util/dataManipulation/tableType';
 
 interface Params {
   data: any[];
@@ -13,8 +14,6 @@ interface Params {
   toDate: Date;
   setErrors: (d: Dictionary<string>) => void;
 }
-
-const getColumnId = (x: any) => moment(x.startedAt || x.createdAt).format(Months.format);
 
 export const logsToTimeTable = ({ data, unit, fromDate, toDate, setErrors }
   : Params): DataTableProps | null => {
@@ -28,8 +27,7 @@ export const logsToTimeTable = ({ data, unit, fromDate, toDate, setErrors }
       logs: data,
       columnHeaders,
       unit,
-      rowIdFromLogs: 'activity',
-      getColumnIdFromLogs: getColumnId,
+      tableType: tableType.MonthByActivity,
     });
     const tableData =
       aggregatedToTableData({ title: 'Volunteer Activity over Months', data: aggData });

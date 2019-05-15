@@ -1,6 +1,8 @@
 import { Duration, MathUtil } from 'twine-util';
 import { mergeAll, path, find, propEq, assocPath } from 'ramda';
 import { DurationUnitEnum } from '../../types';
+import { TableTypeItem } from './tableType';
+
 
 const roundToDecimal = MathUtil.roundTo(2);
 
@@ -14,7 +16,7 @@ const toUnitDuration = (unit: DurationUnitEnum, duration: Duration.Duration) => 
   }
 };
 
-const addDurationToTableContents = (
+const addDurationsToDataAggs = (
   row: any,
   columnKey: string,
   unit: DurationUnitEnum,
@@ -32,28 +34,28 @@ const mapUserNames = (logs: any[], volunteers: any[]) => logs.map((row) => {
   return assocPath(['Volunteer Name'], activeVolunteer.name, row);
 });
 
+
 interface Params {
   logs: any;
   columnHeaders: string[];
   unit: DurationUnitEnum;
-  rowIdFromLogs: string;
-  getColumnIdFromLogs: (a: any) => string;
+  tableType: TableTypeItem;
   volunteers?: any;
 }
 
-export const logsToAggregatedData = ({ logs, columnHeaders, unit, rowIdFromLogs, getColumnIdFromLogs, volunteers}: Params) => { //tslint:disable-line
+export const logsToAggregatedData = ({ logs, columnHeaders, unit, tableType, volunteers }: Params) => { // tslint:disable:max-line-length
   const [firstColumn, ...columnRest] = columnHeaders;
   const rows = logs.reduce((logsRows: any[], el: any) => {
-    const activeColumn = getColumnIdFromLogs(el);
+    const activeColumn = tableType.getColumnIdFromLogs(el);
     const exists = logsRows.some((logs: any) =>
-      logs[firstColumn] === el[rowIdFromLogs]);
+      logs[firstColumn] === el[tableType.rowIdFromLogs]);
     if (exists) {
       return logsRows.map((logs) => {
-        if (logs[firstColumn] === el[rowIdFromLogs]) {
+        if (logs[firstColumn] === el[tableType.rowIdFromLogs]) {
           logs[activeColumn] =
-            addDurationToTableContents(logs, activeColumn, unit, el.duration);
+            addDurationsToDataAggs(logs, activeColumn, unit, el.duration);
           logs[`Total ${unit}`] =
-            addDurationToTableContents(logs, `Total ${unit}`, unit, el.duration);
+            addDurationsToDataAggs(logs, `Total ${unit}`, unit, el.duration);
         }
         return logs;
       });
@@ -61,7 +63,7 @@ export const logsToAggregatedData = ({ logs, columnHeaders, unit, rowIdFromLogs,
     const columnElements = columnRest.map((a: string) => ({ [a]: 0 }));
     const newRow = {
 
-      [firstColumn]: el[rowIdFromLogs],
+      [firstColumn]: el[tableType.rowIdFromLogs],
       ...mergeAll(columnElements),
       [activeColumn]: toUnitDuration(unit, el.duration),
       [`Total ${unit}`]: toUnitDuration(unit, el.duration),

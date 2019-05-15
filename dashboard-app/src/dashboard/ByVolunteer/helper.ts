@@ -1,10 +1,10 @@
-import moment from 'moment';
-import { assocPath, path, propEq, find, Dictionary } from 'ramda';
+import { Dictionary } from 'ramda';
 import { DataTableProps } from '../../components/DataTable/types';
 import { DurationUnitEnum } from '../../types';
 import { logsToAggregatedData } from '../../util/dataManipulation/logsToAggregatedData';
 import Months from '../../util/months';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
+import { tableType } from '../../util/dataManipulation/tableType';
 
 
 interface Params {
@@ -14,8 +14,6 @@ interface Params {
   toDate: Date;
   setErrors: (d: Dictionary<string>) => void;
 }
-
-const getColumnId = (x: any) => moment(x.startedAt || x.createdAt).format(Months.format);
 
 export const logsToVolunteerTable = ({ data, unit, fromDate, toDate, setErrors }
   : Params): DataTableProps | null => {
@@ -27,8 +25,7 @@ export const logsToVolunteerTable = ({ data, unit, fromDate, toDate, setErrors }
       logs: data.logs,
       columnHeaders,
       unit,
-      rowIdFromLogs: 'userId',
-      getColumnIdFromLogs: getColumnId,
+      tableType: tableType.MonthByName,
       volunteers: data.volunteers,
     });
     const tableData = aggregatedToTableData({ title: 'Data By Volunteer', data: aggData });
