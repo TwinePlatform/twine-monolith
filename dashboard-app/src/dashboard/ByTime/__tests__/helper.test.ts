@@ -55,7 +55,6 @@ describe('logsToTimeTable', () => {
         'November 18',
         'December 18',
       ],
-      sortBy: 'Total Hours',
       rows : [{
         columns: {
           Activity: { content: 'Outdoor and practical work' },

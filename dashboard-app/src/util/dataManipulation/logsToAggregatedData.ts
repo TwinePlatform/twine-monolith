@@ -1,31 +1,34 @@
 import { Duration, MathUtil } from 'twine-util';
 import { mergeAll, path, find, propEq, assocPath } from 'ramda';
-import { DataTableRow } from '../../components/DataTable/types';
 import { DurationUnitEnum } from '../../types';
 
-const rounlogsoDecimal = MathUtil.roundTo(2);
+const roundToDecimal = MathUtil.roundTo(2);
 
 const toUnitDuration = (unit: DurationUnitEnum, duration: Duration.Duration) => {
   switch (unit){
     case DurationUnitEnum.DAYS:
-      return rounlogsoDecimal(Duration.toWorkingDays(duration));
+      return roundToDecimal(Duration.toWorkingDays(duration));
 
     case DurationUnitEnum.HOURS:
-      return rounlogsoDecimal(Duration.toHours(duration));
+      return roundToDecimal(Duration.toHours(duration));
   }
 };
 
 const addDurationToTableContents = (
-  row: DataTableRow,
+  row: any,
   columnKey: string,
   unit: DurationUnitEnum,
-  duration: Duration.Duration) =>
-    rounlogsoDecimal(Number(row.columns[columnKey].content) + toUnitDuration(unit, duration));
+  duration: Duration.Duration) => {
+  return roundToDecimal(Number(row[columnKey]) + toUnitDuration(unit, duration));
+};
 
 
 const mapUserNames = (logs: any[], volunteers: any[]) => logs.map((row) => {
   const id = path(['Volunteer Name'], row);
   const activeVolunteer = find(propEq('id', id), volunteers);
+  if (!activeVolunteer) {
+    return assocPath(['Volunteer Name'], 'Deleted', row);
+  }
   return assocPath(['Volunteer Name'], activeVolunteer.name, row);
 });
 
@@ -43,13 +46,13 @@ export const logsToAggregatedData = ({ logs, columnHeaders, unit, rowIdFromLogs,
   const rows = logs.reduce((logsRows: any[], el: any) => {
     const activeColumn = getColumnIdFromLogs(el);
     const exists = logsRows.some((logs: any) =>
-      logs[firstColumn].content === el[rowIdFromLogs]);
+      logs[firstColumn] === el[rowIdFromLogs]);
     if (exists) {
       return logsRows.map((logs) => {
         if (logs[firstColumn] === el[rowIdFromLogs]) {
           logs[activeColumn] =
             addDurationToTableContents(logs, activeColumn, unit, el.duration);
-          logs.columns[`Total ${unit}`] =
+          logs[`Total ${unit}`] =
             addDurationToTableContents(logs, `Total ${unit}`, unit, el.duration);
         }
         return logs;
@@ -69,7 +72,7 @@ export const logsToAggregatedData = ({ logs, columnHeaders, unit, rowIdFromLogs,
 
 
   return {
-    columnHeaders: [firstColumn, `Total ${unit}`, ...columnRest],
+    headers: [firstColumn, `Total ${unit}`, ...columnRest],
     rows: volunteers ? mapUserNames(rows, volunteers) : rows,
   };
 };

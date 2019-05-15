@@ -1,7 +1,8 @@
 import { assocPath, path, propEq, find, Dictionary } from 'ramda';
 import { DataTableProps } from '../../components/DataTable/types';
 import { DurationUnitEnum } from '../../types';
-import { logsToRows } from '../../util/dataManipulation';
+import { logsToAggregatedData } from '../../util/dataManipulation/logsToAggregatedData';
+import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
 
 interface Params {
   data: { logs: any, volunteers: any};
@@ -16,23 +17,18 @@ export const logsToActivityTable = ({ data, activities: columnRest, unit, setErr
 
     const firstColumn = 'Volunteer Name';
     const columnHeaders = [firstColumn, ...columnRest];
-    const rows = logsToRows(data.logs, columnHeaders, unit, 'userId', (x) => x.activity)
-  // replace userId with name
-  .map((row) => {
-    const nestedPath = ['columns', firstColumn, 'content'];
-    const id = path(nestedPath, row);
-    const user = find(propEq('id', id), data.volunteers);
-    if (!user) {
-      return assocPath(nestedPath, 'Deleted', row);
-    }
-    return assocPath(nestedPath, user.name, row);
-  });
-    return {
-      title: 'Volunteer Data By Activity',
-      headers: [firstColumn, `Total ${unit}`, ...columnRest],
-      sortBy: `Total ${unit}`,
-      rows,
-    };
+    const aggData = logsToAggregatedData({
+      logs: data.logs,
+      columnHeaders,
+      unit,
+      rowIdFromLogs: 'userId',
+      getColumnIdFromLogs: (x) => x.activity,
+      volunteers: data.volunteers,
+    });
+    const tableData =
+      aggregatedToTableData({ title: 'Volunteer Data By Activity', data: aggData });
+
+    return tableData;
   } catch (e) {
     setErrors({ Table: 'There was an error displaying your data. Please try again' });
     return null;
