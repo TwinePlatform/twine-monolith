@@ -41,9 +41,7 @@ const toPostmarkAttachment = (a: Attachment): Postmark.Attachment => ({
 const EmailDispatcher: EmailDispatcher = {
   async send (cfg, email) {
     const client = new Postmark.ServerClient(cfg.email.postmarkKey);
-    const res = await client.sendEmailWithTemplate(toPostmarkMsg(email));
-    console.log('>>>>', res);
-    return res;
+    return client.sendEmailWithTemplate(toPostmarkMsg(email));
   },
   async sendBatch (cfg, emails) {
     const client = new Postmark.ServerClient(cfg.email.postmarkKey);

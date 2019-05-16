@@ -29,7 +29,7 @@ export type EmailService = {
 
 const Service: EmailService = {
   async newVisitor (cfg, visitor, admin, cb, attachment) {
-    EmailDispatcher.sendBatch(cfg, [
+    await EmailDispatcher.sendBatch(cfg, [
       {
         from: cfg.email.fromAddress,
         to: visitor.email,
@@ -64,7 +64,9 @@ const Service: EmailService = {
   },
 
   async visitorReminder (cfg, visitor, cb, attachment) {
-    EmailDispatcher.send(cfg, {
+    console.log('INSIIIIIIIIIIIIDE');
+
+    await EmailDispatcher.send(cfg, {
       from: cfg.email.fromAddress,
       to: visitor.email,
       templateId: EmailTemplate.WELCOME_VISITOR,
@@ -79,12 +81,16 @@ const Service: EmailService = {
         contentType: 'application/octet-stream',
       }],
     });
+
+    console.log('DOOOOOOONNNNNNNNNEEEEEE');
   },
+
   async newVolunteer (cfg, volunteer, admin, cb) {
     return null;
   },
+
   async newCbAdmin (cfg, admin, cb, token) {
-    EmailDispatcher.send(cfg, {
+    await EmailDispatcher.send(cfg, {
       from: cfg.email.fromAddress,
       to: admin.email,
       templateId: EmailTemplate.WELCOME_CB_ADMIN,
@@ -97,8 +103,9 @@ const Service: EmailService = {
       },
     });
   },
+
   async addRole (cfg, user, cb, role, token) {
-    EmailDispatcher.send(cfg, {
+    await EmailDispatcher.send(cfg, {
       from: cfg.email.fromAddress,
       to: user.email,
       templateId: EmailTemplate.NEW_ROLE_CONFIRM,
@@ -116,7 +123,7 @@ const Service: EmailService = {
 
   async resetPassword (cfg, app, user, token) {
     const templateId = Templates.forPwdReset(app);
-    EmailDispatcher.send(cfg, {
+    await EmailDispatcher.send(cfg, {
       from: cfg.email.fromAddress,
       to: user.email,
       templateId,

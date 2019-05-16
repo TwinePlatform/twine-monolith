@@ -85,7 +85,6 @@ const routes: Hapi.ServerRoute[] = [
 
       try {
         await EmailService.visitorReminder(config, visitor, cb, document);
-
         return null;
 
       } catch (error) {

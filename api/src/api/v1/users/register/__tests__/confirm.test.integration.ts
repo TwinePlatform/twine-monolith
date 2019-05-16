@@ -17,26 +17,12 @@ describe('API v1 - confirm adding a new role', () => {
   let trx: Knex.Transaction;
 
   const config = getConfig(process.env.NODE_ENV);
+  const mockNewVisitor = jest.fn();
 
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
-    server.app.EmailService = {
-      send: () => Promise.resolve({
-        To: '',
-        SubmittedAt: '',
-        MessageID: '',
-        ErrorCode: 0,
-        Message: '',
-      }),
-      sendBatch: () => Promise.resolve([{
-        To: '',
-        SubmittedAt: '',
-        MessageID: '',
-        ErrorCode: 0,
-        Message: '',
-      }]),
-    };
+    server.app.EmailService.newVisitor = mockNewVisitor;
   });
 
   afterAll(async () => {
@@ -46,6 +32,7 @@ describe('API v1 - confirm adding a new role', () => {
   beforeEach(async () => {
     trx = await getTrx(knex);
     server.app.knex = trx;
+    mockNewVisitor.mockClear();
   });
 
   afterEach(async () => {
@@ -121,11 +108,8 @@ describe('API v1 - confirm adding a new role', () => {
       }));
     });
 
-    test('SUCCESS :: welcome email sent to add visitor if user already exists at cb',
-    async () => {
-      const realEmailServiceSend = server.app.EmailService.sendBatch;
-      const mock = jest.fn(() => Promise.resolve({} as Postmark.Models.MessageSendingResponse[]));
-      server.app.EmailService.sendBatch = mock;
+    test('SUCCESS :: welcome email sent to add visitor if user already exists at cb', async () => {
+      mockNewVisitor.mockReturnValueOnce(Promise.resolve());
 
       const changeset = await factory.build('volunteer');
       const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Aperture Science' } });
@@ -145,20 +129,14 @@ describe('API v1 - confirm adding a new role', () => {
         },
       });
       expect(res.statusCode).toBe(200);
-      expect(mock).toHaveBeenCalledTimes(1);
-      expect((<any> mock.mock.calls[0])[0]).toEqual(expect.arrayContaining([
-        expect.objectContaining({
-          to: volunteer.email,
-          templateId: EmailTemplate.WELCOME_VISITOR,
-          templateModel: expect.objectContaining({
-            name: volunteer.name,
-            organisation: cb.name,
-          }),
-        }),
-      ]));
-
-      // Reset mock
-      server.app.EmailService.sendBatch = realEmailServiceSend;
+      expect(mockNewVisitor).toHaveBeenCalledTimes(1);
+      expect(mockNewVisitor).toHaveBeenLastCalledWith(
+        expect.objectContaining({}), // config
+        expect.objectContaining({ email: volunteer.email }), // user
+        expect.objectContaining({}), // cb admin
+        expect.objectContaining({ name: cb.name }), // cb
+        expect.stringMatching(/.*/) // attachment
+      );
     });
   });
 });
