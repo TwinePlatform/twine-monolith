@@ -1,5 +1,5 @@
 import { Duration, MathUtil } from 'twine-util';
-import { mergeAll, path, find, propEq, assocPath } from 'ramda';
+import { mergeAll, path, find, propEq, assocPath, Dictionary } from 'ramda';
 import { DurationUnitEnum } from '../../types';
 import { TableTypeItem } from './tableType';
 
@@ -43,7 +43,12 @@ interface Params {
   volunteers?: any;
 }
 
-export const logsToAggregatedData = ({ logs, columnHeaders, unit, tableType, volunteers }: Params) => { // tslint:disable:max-line-length
+export interface AggregatedData {
+  headers: string [];
+  rows: Dictionary<number | string>[];
+}
+
+export const logsToAggregatedData = ({ logs, columnHeaders, unit, tableType, volunteers }: Params): AggregatedData => { // tslint:disable:max-line-length
   const [firstColumn, ...columnRest] = columnHeaders;
   const rows = logs.reduce((logsRows: any[], el: any) => {
     const activeColumn = tableType.getColumnIdFromLogs(el);

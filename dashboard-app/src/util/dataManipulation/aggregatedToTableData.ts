@@ -1,9 +1,10 @@
 import { evolve, map, pipe, merge } from 'ramda';
 import { DataTableProps } from '../../components/DataTable/types';
+import { AggregatedData } from './logsToAggregatedData';
 
 interface Params {
   title: string;
-  data: any;
+  data: AggregatedData;
 }
 
 const addContentObjects = evolve({
@@ -19,5 +20,5 @@ export const aggregatedToTableData = ({ title, data }: Params) => {
     addContentObjects,
     addColumnsKey,
     merge({ title })
-    )(data) as DataTableProps;
+    )(data as any) as DataTableProps;
 };

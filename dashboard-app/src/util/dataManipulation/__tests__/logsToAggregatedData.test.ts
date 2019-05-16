@@ -1,7 +1,5 @@
 import { logsToAggregatedData } from '../logsToAggregatedData';
-import moment from 'moment';
 import { DurationUnitEnum } from '../../../types';
-import Months from '../../months';
 import { tableType } from '../tableType';
 // tslint:disable:max-line-length
 

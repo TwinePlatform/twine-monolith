@@ -1,5 +1,4 @@
 import { aggregatedToTableData } from '../aggregatedToTableData';
-import { DurationUnitEnum } from '../../../types';
 // tslint:disable:max-line-length
 
 describe('aggregatedToTableData', () => {
