@@ -64,8 +64,6 @@ const Service: EmailService = {
   },
 
   async visitorReminder (cfg, visitor, cb, attachment) {
-    console.log('INSIIIIIIIIIIIIDE');
-
     await EmailDispatcher.send(cfg, {
       from: cfg.email.fromAddress,
       to: visitor.email,
@@ -81,8 +79,6 @@ const Service: EmailService = {
         contentType: 'application/octet-stream',
       }],
     });
-
-    console.log('DOOOOOOONNNNNNNNNEEEEEE');
   },
 
   async newVolunteer (cfg, volunteer, admin, cb) {
