@@ -64,7 +64,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   // manipulate data on response
   useCreateAggDataOnRes({
     data: { logs, volunteers },
-    conditionals: [logs, activities, volunteers],
+    conditions: [logs, activities, volunteers],
     updateOn: [logs, unit, activities, volunteers],
     columnHeaders: ['Volunteer Name', ...activities],
     setErrors,

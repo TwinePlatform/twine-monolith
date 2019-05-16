@@ -5,7 +5,7 @@ import { TableTypeItem } from '../util/dataManipulation/tableType';
 
 interface Params {
   data: {logs: any, volunteers?: any};
-  conditionals: any[];
+  conditions: any[];
   updateOn: any[];
   columnHeaders: string[];
   setErrors: (x: any) => void;
@@ -15,9 +15,9 @@ interface Params {
 
 }
 
-export const useCreateAggDataOnRes = ({ data, conditionals, updateOn = [], columnHeaders, setErrors, setAggData, unit, tableType }: Params): void => { // tslint:disable:max-line-length
+export const useCreateAggDataOnRes = ({ data, conditions, updateOn = [], columnHeaders, setErrors, setAggData, unit, tableType }: Params): void => { // tslint:disable:max-line-length
   useEffect(() => {
-    if (conditionals.every((x: any) => x)) {
+    if (conditions.every((x: any) => x)) {
       setErrors(null);
       try {
         const aggData = logsToAggregatedData({

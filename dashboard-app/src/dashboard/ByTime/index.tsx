@@ -47,7 +47,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   // manipulate data on response
   useCreateAggDataOnRes({
     data: { logs },
-    conditionals: [logs],
+    conditions: [logs],
     updateOn: [logs, unit],
     columnHeaders: ['Activity', ...Months.range(fromDate, toDate)],
     setErrors,

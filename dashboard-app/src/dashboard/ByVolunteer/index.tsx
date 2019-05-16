@@ -57,7 +57,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   // manipulate data on response
   useCreateAggDataOnRes({
     data: { logs, volunteers },
-    conditionals: [logs, volunteers],
+    conditions: [logs, volunteers],
     updateOn: [logs, unit, volunteers],
     columnHeaders: ['Volunteer Name', ...Months.range(fromDate, toDate)],
     setErrors,
