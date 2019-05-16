@@ -3,8 +3,8 @@ import { withRouter, RouteComponentProps } from 'react-router';
 import styled from 'styled-components';
 import { assoc } from 'ramda';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { H1 } from '../../components/Headings';
 
+import { H1 } from '../../components/Headings';
 import { CommunityBusinesses } from '../../api';
 import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
@@ -16,6 +16,7 @@ import { displayErrors } from '../../components/ErrorParagraph';
 import { tableType } from '../../util/dataManipulation/tableType';
 import { useCreateAggDataOnRes } from '../../hooks/useCreateAggDataOnRes';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
+import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
 
 const DataTable = styled(_DataTable)`
   margin-top: 4rem;
@@ -97,6 +98,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
+            onDownloadClick={downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity' })} // tslint:disable:max-line-length
           />
         </Col>
       </Row>

@@ -15,6 +15,7 @@ import Months from '../../util/months';
 import { useCreateAggDataOnRes } from '../../hooks/useCreateAggDataOnRes';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
 import { tableType } from '../../util/dataManipulation/tableType';
+import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
 
 const DataTable = styled(_DataTable)`
   margin-top: 4rem;
@@ -80,6 +81,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
+            onDownloadClick={downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_time' })}
           />
         </Col>
       </Row>

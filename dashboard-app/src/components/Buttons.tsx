@@ -39,3 +39,19 @@ export const RoundedButton = styled(PrimaryButton)`
     background-color: ${ColoursEnum.grey};
   }
 `;
+
+
+export const DownloadButton = styled(Button)`
+  margin: 0 1rem;
+  background-color: ${ColoursEnum.darkGrey};
+  transition: background-color ease 0.3s;
+
+  &:hover {
+    background-color: ${ColoursEnum.grey};
+  };
+
+  &:active {
+    background-color: ${ColoursEnum.grey};
+  }
+`;
+

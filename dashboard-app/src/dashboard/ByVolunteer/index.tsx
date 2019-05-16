@@ -16,6 +16,7 @@ import { displayErrors } from '../../components/ErrorParagraph';
 import { useCreateAggDataOnRes } from '../../hooks/useCreateAggDataOnRes';
 import { tableType } from '../../util/dataManipulation/tableType';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
+import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
 
 
 const DataTable = styled(_DataTable)`
@@ -90,6 +91,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
+            onDownloadClick={downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_volunteer' })} // tslint:disable:max-line-length
           />
         </Col>
       </Row>

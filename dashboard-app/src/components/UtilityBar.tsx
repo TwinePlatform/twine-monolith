@@ -4,6 +4,7 @@ import { Row, Col } from 'react-flexbox-grid';
 import DatePicker from './DatePicker';
 import UnitToggle from './UnitToggle';
 import { DurationUnitEnum } from '../types';
+import { DownloadButton } from './Buttons';
 
 
 /**
@@ -16,6 +17,7 @@ type UtilityBarProps = {
   onFromDateChange?: (d: Date) => void
   onToDateChange?: (d: Date) => void
   onUnitChange?: (u: DurationUnitEnum) => void
+  onDownloadClick?: () => void,
 };
 
 
@@ -28,6 +30,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
     onFromDateChange = () => {},
     onToDateChange = () => {},
     onUnitChange = () => {},
+    onDownloadClick = () => {},
     ...rest
   } = props;
 
@@ -60,15 +63,14 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
 
   return (
     <Row middle="xs" start="xs" {...rest}>
-      <Col xs={2}>
+      <Col xs={6}>
+      <Row>
         <DatePicker
           type={dateFilter}
           label="From"
           selected={fromDate}
           onChange={onFromChange}
-        />
-      </Col>
-      <Col xs={2}>
+          />
         <DatePicker
           type={dateFilter}
           label="  To" // To make both labels take up the same space
@@ -76,10 +78,14 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
           onChange={onToChange}
           maxDate={moment(fromDate).add(11, 'months').toDate()}
           minDate={fromDate}
-        />
+          />
+          </Row>
       </Col>
-      <Col xs={2} xsOffset={6}>
-        <UnitToggle onChange={onDisplayUnitChange}/>
+      <Col xs={6}>
+        <Row end="xs">
+          <UnitToggle onChange={onDisplayUnitChange}/>
+          <DownloadButton onClick={onDownloadClick}>Download</DownloadButton>
+        </Row>
       </Col>
     </Row>
   );
