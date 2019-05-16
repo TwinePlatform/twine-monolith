@@ -1,12 +1,10 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
-import * as Postmark from 'postmark';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { User, Organisation, Users, Organisations } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
-import { EmailTemplate } from '../../../../../services/email/templates';
 import { RoleEnum } from '../../../../../models/types';
 
 
@@ -100,7 +98,7 @@ describe('API v1 - register new users', () => {
 
     test(':: SUCCESS - confirmation email sent if user is visitor at same CB', async () => {
       const realEmailServiceSend = server.app.EmailService.addRole;
-      const mock = jest.fn(() => Promise.resolve({} as Postmark.Models.MessageSendingResponse));
+      const mock = jest.fn(() => Promise.resolve());
       server.app.EmailService.addRole = mock;
 
       const res = await server.inject({

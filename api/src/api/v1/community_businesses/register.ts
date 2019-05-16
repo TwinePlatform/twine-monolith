@@ -10,7 +10,6 @@ import {
   userName,
   email,
 } from '../users/schema';
-import { EmailTemplate } from '../../../services/email/templates';
 import { Tokens } from '../../../models/token';
 
 export default [

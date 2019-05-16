@@ -24,7 +24,6 @@ import {
 } from '../../../../models';
 import * as QRCode from '../../../../services/qrcode';
 import * as PdfService from '../../../../services/pdf';
-import { EmailTemplate } from '../../../../services/email/templates';
 import { RegisterRequest } from '../../types';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
 import { getCommunityBusiness } from '../../prerequisites';

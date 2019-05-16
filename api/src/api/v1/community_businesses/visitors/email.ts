@@ -4,7 +4,6 @@ import * as Joi from 'joi';
 import { response, id } from '../schema';
 import { isChildUser } from '../../prerequisites';
 import { Visitors, CommunityBusinesses } from '../../../../models';
-import { EmailTemplate } from '../../../../services/email/templates';
 import * as PdfService from '../../../../services/pdf';
 import * as QRCode from '../../../../services/qrcode';
 import { StandardCredentials } from '../../../../auth/strategies/standard';

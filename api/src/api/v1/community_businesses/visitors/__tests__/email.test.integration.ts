@@ -1,6 +1,5 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
-import * as Postmark from 'postmark';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../../models';
