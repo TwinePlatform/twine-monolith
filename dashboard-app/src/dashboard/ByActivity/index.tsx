@@ -11,9 +11,11 @@ import UtilityBar from '../../components/UtilityBar';
 import { DurationUnitEnum } from '../../types';
 import useRequest from '../../hooks/useRequest';
 import { DataTableProps } from '../../components/DataTable/types';
-import { logsToActivityTable } from './helper';
 import Months from '../../util/months';
 import { displayErrors } from '../../components/ErrorParagraph';
+import { tableType } from '../../util/dataManipulation/tableType';
+import { useCreateAggDataOnRes } from '../../hooks/useCreateAggDataOnRes';
+import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
 
 const DataTable = styled(_DataTable)`
   margin-top: 4rem;
@@ -27,11 +29,12 @@ const Container = styled(Grid)`
 
 const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
-  const [activities, setActivities] = useState();
+  const [activities, setActivities] = useState([]);
   const [volunteers, setVolunteers] = useState();
   const [fromDate, setFromDate] = useState(Months.defaultFrom());
   const [toDate, setToDate] = useState(Months.defaultTo());
   const [tableProps, setTableProps] = useState<DataTableProps | null>();
+  const [aggData, setAggData] = useState();
   const [errors, setErrors] = useState();
 
   const { data: logs } = useRequest({
@@ -42,7 +45,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
     push: props.history.push,
   });
 
-  // bit weird maybe
+  // Onload requests
   useRequest({
     apiCall: CommunityBusinesses.getVolunteerActivities,
     callback: (data) => setActivities(data.map((x: any) => x.name)),
@@ -50,7 +53,6 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
     push: props.history.push,
   });
 
-  // bit weird maybe
   useRequest({
     apiCall: CommunityBusinesses.getVolunteers,
     callback: setVolunteers,
@@ -58,14 +60,24 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
     push: props.history.push,
   });
 
+  // manipulate data on response
+  useCreateAggDataOnRes({
+    data: { logs, volunteers },
+    conditionals: [logs, activities, volunteers],
+    updateOn: [logs, unit, activities, volunteers],
+    columnHeaders: ['Volunteer Name', ...activities],
+    setErrors,
+    setAggData,
+    unit,
+    tableType: tableType.ActivityByName,
+  });
 
+  // manipulate data for table
   useEffect(() => {
-    if (logs && activities && volunteers) {
-      setErrors(null);
-      const tProps = logsToActivityTable({ data: { logs, volunteers }, unit, activities, setErrors }); // tslint:disable:max-line-length
-      setTableProps(tProps);
+    if (aggData) {
+      setTableProps(aggregatedToTableData({ title: 'Volunteer Data By Activity', data: aggData }));
     }
-  }, [logs, unit, activities, volunteers]); // TODO: have single on load variable for trigger
+  }, [aggData]);
 
   const onChangeSortBy = useCallback((column: string) => {
     setTableProps(assoc('sortBy', column, tableProps));

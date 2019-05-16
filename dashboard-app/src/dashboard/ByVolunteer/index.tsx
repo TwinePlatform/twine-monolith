@@ -11,9 +11,11 @@ import UtilityBar from '../../components/UtilityBar';
 import { DurationUnitEnum } from '../../types';
 import useRequest from '../../hooks/useRequest';
 import { DataTableProps } from '../../components/DataTable/types';
-import { logsToVolunteerTable } from './helper';
 import Months from '../../util/months';
 import { displayErrors } from '../../components/ErrorParagraph';
+import { useCreateAggDataOnRes } from '../../hooks/useCreateAggDataOnRes';
+import { tableType } from '../../util/dataManipulation/tableType';
+import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
 
 
 const DataTable = styled(_DataTable)`
@@ -33,6 +35,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   const [toDate, setToDate] = useState(Months.defaultTo());
   const [tableProps, setTableProps] = useState<DataTableProps | null>();
   const [errors, setErrors] = useState();
+  const [aggData, setAggData] = useState();
 
   const { data: logs } = useRequest({
     apiCall: CommunityBusinesses.getLogs,
@@ -42,7 +45,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     push: props.history.push,
   });
 
-  // bit weird maybe
+  // onload request
   useRequest({
     apiCall: CommunityBusinesses.getVolunteers,
     callback: setVolunteers,
@@ -50,13 +53,24 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     push: props.history.push,
   });
 
+  // manipulate data on response
+  useCreateAggDataOnRes({
+    data: { logs, volunteers },
+    conditionals: [logs, volunteers],
+    updateOn: [logs, unit, volunteers],
+    columnHeaders: ['Volunteer Name', ...Months.range(fromDate, toDate)],
+    setErrors,
+    setAggData,
+    unit,
+    tableType: tableType.MonthByName,
+  });
+
+  // manipulate data for table
   useEffect(() => {
-    if (logs && volunteers) {
-      setErrors(null);
-      const tProps = logsToVolunteerTable({ data: { logs, volunteers }, unit, fromDate, toDate, setErrors }); // tslint:disable:max-line-length
-      setTableProps(tProps);
+    if (aggData) {
+      setTableProps(aggregatedToTableData({ title: 'Volunteer Activity over Months', data: aggData })); // tslint:disable:max-line-length
     }
-  }, [logs, unit, volunteers]); // TODO: have single on load variable for trigger
+  }, [aggData]);
 
   const onChangeSortBy = useCallback((column: string) => {
     setTableProps(assoc('sortBy', column, tableProps));
