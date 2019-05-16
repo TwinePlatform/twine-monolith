@@ -11,6 +11,7 @@ import DataTableRow from './DataTableRow';
 import HeaderRow from './DataTableHeaderRow';
 import { DataTableProps, Order } from './types';
 import { hashJSON } from '../../util/hash';
+import { Paragraph } from '../Typography';
 
 
 /**
@@ -50,6 +51,20 @@ const Table = styled.table`
   text-align: left;
 `;
 
+const NoDataContainer = styled.div`
+  height: 10rem;
+  color: ${ColoursEnum.white};
+  background-color: ${ColoursEnum.grey};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const noData = (
+  <NoDataContainer>
+    <Paragraph>NO DATA AVAILABLE</Paragraph>
+  </NoDataContainer>
+);
 
 /**
  * Component
@@ -61,6 +76,7 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
     initialOrder = 'desc',
     sortBy = props.headers[0],
     onChangeSortBy = () => {},
+    title,
     ...rest
   } = props;
 
@@ -75,32 +91,40 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
     }
   }, [order, sortBy]);
 
+  const table = (
+    <Table>
+      <HeaderRow
+        columns={headers.map((name) => ({ content: name }))}
+        order={order}
+        sortBy={sortBy}
+        onClick={onHeaderClick}
+      />
+      <tbody>
+        {
+          sortRows(rows, order, sortBy)
+            .map((row) => (
+              <DataTableRow
+                columns={row.columns}
+                order={headers}
+                key={hashJSON(row)}
+              />
+            ))
+        }
+      </tbody>
+    </Table>
+  );
+
   return (
     <Card {...rest}>
       {
-        props.title && <TitleContainer><Title>{props.title}</Title></TitleContainer>
+        title && <TitleContainer><Title>{title}</Title></TitleContainer>
       }
       <Container>
-        <Table>
-          <HeaderRow
-            columns={headers.map((name) => ({ content: name }))}
-            order={order}
-            sortBy={sortBy}
-            onClick={onHeaderClick}
-          />
-          <tbody>
-            {
-              sortRows(rows, order, sortBy)
-                .map((row) => (
-                  <DataTableRow
-                    columns={row.columns}
-                    order={headers}
-                    key={hashJSON(row)}
-                  />
-                ))
-            }
-          </tbody>
-        </Table>
+        {
+          rows.length > 0
+            ? table
+            : noData
+        }
       </Container>
     </Card>
   );
