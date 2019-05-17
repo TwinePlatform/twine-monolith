@@ -20,3 +20,7 @@
 .react-datepicker__month-text {
   padding: 0.4em;
 }
+
+.react-datepicker__navigation {
+  top: 6px;
+}

@@ -100,4 +100,11 @@ describe('Component :: DataTable', () => {
     expect(rows[3]).toHaveTextContent('bax89');
   });
 
+  test('Empty table displays "empty" message', async () => {
+    const tools = render(<DataTable {...props } rows={[]} sortBy="two" />);
+
+    const message = await waitForElement(() => tools.getByText('NO DATA AVAILABLE'));
+
+    expect(message).toHaveTextContent('NO DATA AVAILABLE');
+  });
 });
