@@ -36,4 +36,14 @@ describe('Util Months', () => {
       expect(diff).toEqual(17);
     });
   });
+  describe(':: defaults', () => {
+    test('SUCCESS - defaultFrom is start of the month', () => {
+      const defaultFrom = Months.defaultFrom();
+      expect(defaultFrom.getDate()).toEqual(1);
+    });
+    test('SUCCESS - defaultTo is start of the month', () => {
+      const defaultTo = Months.defaultTo();
+      expect(defaultTo.getDate()).toEqual(1);
+    });
+  });
 });
