@@ -75,7 +75,7 @@ const routes: Hapi.ServerRoute[] = [
         : visitors.length;
 
       return {
-        result: await Promise.all(visitors.map(Visitors.serialise)),
+        result: await Promise.all((<User[]> visitors).map((v) => Visitors.serialise(v))),
         meta: { total: count },
       };
     },

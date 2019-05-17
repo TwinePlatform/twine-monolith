@@ -15,7 +15,6 @@ import {
 } from '../../../../models';
 import * as QRCode from '../../../../services/qrcode';
 import * as PdfService from '../../../../services/pdf';
-import { EmailTemplate } from '../../../../services/email/templates';
 import { RegisterConfirm } from '../../types';
 import { RoleEnum } from '../../../../models/types';
 import Roles from '../../../../models/role';
@@ -93,30 +92,7 @@ export default [
               );
               return;
             });
-            await EmailService.sendBatch([
-              {
-                from: config.email.fromAddress,
-                to: updatedVisitor.email,
-                templateId: EmailTemplate.WELCOME_VISITOR,
-                templateModel: { name: updatedVisitor.name, organisation: cb.name },
-                attachments: [{
-                  name: `${updatedVisitor.name}-QrCode.pdf`,
-                  content: document,
-                  contentType: 'application/octet-stream',
-                }],
-              },
-              {
-                from: config.email.fromAddress,
-                to: admin.email,
-                templateId: EmailTemplate.NEW_VISITOR_CB_ADMIN,
-                templateModel: { name: updatedVisitor.name, email: updatedVisitor.email },
-                attachments: [{
-                  name: `${updatedVisitor.name}-QrCode.pdf`,
-                  content: document,
-                  contentType: 'application/octet-stream',
-                }],
-              },
-            ]);
+            await EmailService.newVisitor(config, updatedVisitor, admin, cb, document);
             return Visitors.serialise(updatedVisitor);
 
           case RoleEnum.VOLUNTEER:

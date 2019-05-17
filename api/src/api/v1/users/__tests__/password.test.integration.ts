@@ -16,18 +16,12 @@ describe('POST /users/password', () => {
   let trx: Knex.Transaction;
 
   const config = getConfig(process.env.NODE_ENV);
-
-  const mockEmailService = jest.fn();
-  mockEmailService.mockReturnValueOnce({
-    To: '1@aperturescience.com',
-    SubmittedAt: 'today',
-    MessageID: '10100101',
-  });
+  const mock = jest.fn();
 
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
-    server.app.EmailService.send = mockEmailService;
+    server.app.EmailService.resetPassword = mock;
   });
 
   afterAll(async () => {
@@ -42,7 +36,7 @@ describe('POST /users/password', () => {
   afterEach(async () => {
     await trx.rollback();
     server.app.knex = knex;
-    mockEmailService.mockReset();
+    mock.mockReset();
   });
 
   describe('POST /users/password/forgot & POST /users/password/reset', () => {
@@ -57,22 +51,16 @@ describe('POST /users/password', () => {
         payload: { email: '1@aperturescience.com' },
       });
 
+      const token = mock.mock.calls[0][3];
+
       expect(res.statusCode).toBe(200);
-      expect(mockEmailService.mock.calls.length).toBe(1);
-      expect(mockEmailService.mock.calls[0][0]).toEqual(expect.objectContaining({
-        from: 'visitorapp@powertochange.org.uk',
-        templateId: 8786293,
-        templateModel: expect.objectContaining({
-          email: '1@aperturescience.com',
-        }),
-        to: '1@aperturescience.com'}));
-      expect(mockEmailService.mock.calls[0][0].templateModel.token).toBeTruthy();
+      expect(mock).toHaveBeenCalledTimes(1);
+      expect(typeof token).toBe('string');
+      expect(token).toHaveLength(64);
 
       /*
        * Part 2: Reset password with token
        */
-      const token = mockEmailService.mock.calls[0][0].templateModel.token;
-      expect(token).toHaveLength(64);
       const res2 = await server.inject({
         method: 'POST',
         url: '/v1/users/password/reset',
@@ -181,7 +169,7 @@ describe('POST /users/password', () => {
         payload: { email: userOne.email },
       });
 
-      const { templateModel: { token } } = mockEmailService.mock.calls[0][0];
+      const token = mock.mock.calls[0][3];
 
       const res = await server.inject({
         method: 'POST',
@@ -208,7 +196,7 @@ describe('POST /users/password', () => {
         payload: { email: userOne.email },
       });
 
-      const { templateModel: { token } } = mockEmailService.mock.calls[0][0];
+      const token = mock.mock.calls[0][3];
 
       const res = await server.inject({
         method: 'POST',

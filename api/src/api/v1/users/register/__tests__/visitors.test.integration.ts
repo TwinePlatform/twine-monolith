@@ -1,12 +1,10 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
-import * as Postmark from 'postmark';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { Users, User, Organisations, Organisation } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
-import { EmailTemplate } from '../../../../../services/email/templates';
 import { RoleEnum } from '../../../../../models/types';
 
 
@@ -21,26 +19,15 @@ describe('API v1 - register new users', () => {
   let credentials: Hapi.AuthCredentials;
   let credentialsBlackMesa: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
+  const mockNewVisitor = jest.fn();
+  const mockAddRole = jest.fn();
 
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
-    server.app.EmailService = {
-      send: () => Promise.resolve({
-        To: '',
-        SubmittedAt: '',
-        MessageID: '',
-        ErrorCode: 0,
-        Message: '',
-      }),
-      sendBatch: () => Promise.resolve([{
-        To: '',
-        SubmittedAt: '',
-        MessageID: '',
-        ErrorCode: 0,
-        Message: '',
-      }]),
-    };
+    server.app.EmailService.newVisitor = mockNewVisitor;
+    server.app.EmailService.addRole = mockAddRole;
+
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     cbAdminBlackMesa = await Users.getOne(knex, { where: { name: 'Gordon' } });
     organisation = await Organisations.fromUser(knex, { where: user });
@@ -56,6 +43,8 @@ describe('API v1 - register new users', () => {
   beforeEach(async () => {
     trx = await getTrx(knex);
     server.app.knex = trx;
+    mockNewVisitor.mockClear();
+    mockAddRole.mockClear();
   });
 
   afterEach(async () => {
@@ -193,11 +182,8 @@ describe('API v1 - register new users', () => {
         .toBe('User with this e-mail already registered at another Community Business');
     });
 
-    test('SUCCESS :: confirmation email sent to add visitor if user already exists at cb',
-    async () => {
-      const realEmailServiceSend = server.app.EmailService.send;
-      const mock = jest.fn(() => Promise.resolve({} as Postmark.Models.MessageSendingResponse));
-      server.app.EmailService.send = mock;
+    test('SUCCESS :: conf email sent to add visitor if user already exists at cb', async () => {
+      mockAddRole.mockReturnValueOnce(Promise.resolve());
 
       const res = await server.inject({
         method: 'POST',
@@ -218,19 +204,14 @@ describe('API v1 - register new users', () => {
           + 'please see email confirmation to create visitor account'
       );
 
-      expect(mock).toHaveBeenCalledTimes(1);
-      expect((<any> mock.mock.calls[0])[0]).toEqual(expect.objectContaining({
-        to: 'emma@sol.com',
-        templateId: EmailTemplate.NEW_ROLE_CONFIRM,
-        templateModel: expect.objectContaining({
-          organisationId: 2,
-          organisationName: 'Black Mesa Research',
-          role: RoleEnum.VISITOR.toLowerCase(),
-          userId: 6, }),
-      }));
-
-      // Reset mock
-      server.app.EmailService.send = realEmailServiceSend;
+      expect(mockAddRole).toHaveBeenCalledTimes(1);
+      expect(mockAddRole).toHaveBeenLastCalledWith(
+        expect.objectContaining({}), // config
+        expect.objectContaining({ email: 'emma@sol.com' }), // user
+        expect.objectContaining({ name: 'Black Mesa Research' }), // cb
+        RoleEnum.VISITOR,
+        expect.stringMatching(/.*/) // token
+      );
     });
 
     test('FAIL :: cannot register visitor without email & phone number', async () => {

@@ -1,10 +1,8 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
-import * as Postmark from 'postmark';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../../models';
-import { EmailTemplate } from '../../../../../services/email/templates';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
 
 
@@ -15,25 +13,29 @@ describe('API /community-businesses/{id}/visitors', () => {
   let organisation: Organisation;
   let credentials: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
+  const mockVisitorReminder = jest.fn();
 
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
+    server.app.EmailService.visitorReminder = mockVisitorReminder;
 
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     organisation = await Organisations.getOne(knex, { where: { id: 1 } });
     credentials = await StandardCredentials.get(knex, user, organisation);
+
   });
 
   afterAll(async () => {
     await server.shutdown(true);
   });
 
+  beforeEach(() => {
+    mockVisitorReminder.mockClear();
+  });
+
   test('send e-mail w/ qr code attached to visitor of own community business', async () => {
-    // Attach mock
-    const realEmailServiceSend = server.app.EmailService.send;
-    const mock = jest.fn(() => Promise.resolve({} as Postmark.Models.MessageSendingResponse));
-    server.app.EmailService.send = mock;
+    mockVisitorReminder.mockReturnValueOnce(Promise.resolve());
 
     const res = await server.inject({
       method: 'POST',
@@ -46,23 +48,12 @@ describe('API /community-businesses/{id}/visitors', () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual({ result: null });
-    expect(mock).toHaveBeenCalledTimes(1);
-    expect((<any> mock.mock.calls[0])[0]).toEqual(expect.objectContaining({
-      to: '1498@aperturescience.com',
-      templateId: EmailTemplate.WELCOME_VISITOR,
-      templateModel: { name: 'Chell', organisation: 'Aperture Science' },
-      attachments: [
-        expect.objectContaining({
-          contentType: 'application/octet-stream',
-        }),
-      ],
-    }));
-
-    // Reset mock
-    server.app.EmailService.send = realEmailServiceSend;
+    expect(mockVisitorReminder).toHaveBeenCalledTimes(1);
   });
 
   test('return 502 when E-mail service is unavailable', async () => {
+    mockVisitorReminder.mockRejectedValueOnce(null);
+
     const res = await server.inject({
       method: 'POST',
       url: '/v1/community-businesses/me/visitors/1/emails',
@@ -73,6 +64,7 @@ describe('API /community-businesses/{id}/visitors', () => {
     });
 
     expect(res.statusCode).toBe(502);
+    expect(mockVisitorReminder).toHaveBeenCalledTimes(1);
   });
 
   test('return 403 for non-child visitor', async () => {

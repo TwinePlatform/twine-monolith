@@ -23,23 +23,6 @@ describe('PUT /community-businesses', () => {
     server = await init(config);
     knex = server.app.knex;
 
-    server.app.EmailService = {
-      send: () => Promise.resolve({
-        To: '',
-        SubmittedAt: '',
-        MessageID: '',
-        ErrorCode: 0,
-        Message: '',
-      }),
-      sendBatch: () => Promise.resolve([{
-        To: '',
-        SubmittedAt: '',
-        MessageID: '',
-        ErrorCode: 0,
-        Message: '',
-      }]),
-    };
-
     organisation = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
     admin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
     adminCreds = await StandardCredentials.get(knex, admin, organisation);

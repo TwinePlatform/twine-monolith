@@ -1,12 +1,10 @@
 import * as Hapi from 'hapi';
 import * as Knex from 'knex';
-import * as Postmark from 'postmark';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { User, Organisation, Users, Organisations } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
-import { EmailTemplate } from '../../../../../services/email/templates';
 import { RoleEnum } from '../../../../../models/types';
 
 
@@ -98,11 +96,10 @@ describe('API v1 - register new users', () => {
       }));
     });
 
-    test(':: SUCCESS - confirmation email sent to add volunteer role if user is visitor at same CB',
-    async () => {
-      const realEmailServiceSend = server.app.EmailService.send;
-      const mock = jest.fn(() => Promise.resolve({} as Postmark.Models.MessageSendingResponse));
-      server.app.EmailService.send = mock;
+    test(':: SUCCESS - confirmation email sent if user is visitor at same CB', async () => {
+      const realEmailServiceSend = server.app.EmailService.addRole;
+      const mock = jest.fn(() => Promise.resolve());
+      server.app.EmailService.addRole = mock;
 
       const res = await server.inject({
         method: 'POST',
@@ -126,18 +123,9 @@ describe('API v1 - register new users', () => {
       );
 
       expect(mock).toHaveBeenCalledTimes(1);
-      expect((<any> mock.mock.calls[0])[0]).toEqual(expect.objectContaining({
-        to: '1498@aperturescience.com',
-        templateId: EmailTemplate.NEW_ROLE_CONFIRM,
-        templateModel: expect.objectContaining({
-          organisationId: 1,
-          organisationName: 'Aperture Science',
-          role: RoleEnum.VOLUNTEER.toLowerCase(),
-          userId: 1, }),
-      }));
 
-    // Reset mock
-      server.app.EmailService.send = realEmailServiceSend;
+      // Reset mock
+      server.app.EmailService.addRole = realEmailServiceSend;
     });
 
     test(':: success - add volunteer with null birthYear', async () => {

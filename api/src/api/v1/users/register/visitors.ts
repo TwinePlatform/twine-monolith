@@ -24,7 +24,6 @@ import {
 } from '../../../../models';
 import * as QRCode from '../../../../services/qrcode';
 import * as PdfService from '../../../../services/pdf';
-import { EmailTemplate } from '../../../../services/email/templates';
 import { RegisterRequest } from '../../types';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
 import { getCommunityBusiness } from '../../prerequisites';
@@ -102,19 +101,7 @@ export default [
           const { token } = await Tokens.createConfirmAddRoleToken(knex, user);
 
           try {
-            await EmailService.send({
-              from: config.email.fromAddress,
-              to: payload.email,
-              templateId: EmailTemplate.NEW_ROLE_CONFIRM,
-              templateModel: {
-                email,
-                token,
-                organisationName: organisation.name,
-                role: Roles.toDisplay(RoleEnum.VISITOR),
-                userId: user.id,
-                organisationId: organisation.id,
-              },
-            });
+            await EmailService.addRole(config, user, communityBusiness, RoleEnum.VISITOR, token);
 
           } catch (error) {
             /*
@@ -184,30 +171,7 @@ export default [
       // send email to visitor QR code attached
       // send sign-up notification to cb-admin
       // TODO: This should be hidden away
-      await EmailService.sendBatch([
-        {
-          from: config.email.fromAddress,
-          to: visitor.email,
-          templateId: EmailTemplate.WELCOME_VISITOR,
-          templateModel: { name: visitor.name, organisation: cb.name },
-          attachments: [{
-            name: `${visitor.name}-QrCode.pdf`,
-            content: document,
-            contentType: 'application/octet-stream',
-          }],
-        },
-        {
-          from: config.email.fromAddress,
-          to: admin.email,
-          templateId: EmailTemplate.NEW_VISITOR_CB_ADMIN,
-          templateModel: { name: visitor.name, email: visitor.email },
-          attachments: [{
-            name: `${visitor.name}-QrCode.pdf`,
-            content: document,
-            contentType: 'application/octet-stream',
-          }],
-        },
-      ]);
+      await EmailService.newVisitor(config, visitor, admin, cb, document);
 
       // Register login event
       await Visitors.recordLogin(knex, visitor);

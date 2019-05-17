@@ -207,6 +207,9 @@ export interface RegisterRequest extends Hapi.Request {
     smsConsent: boolean
     isAnonymous?: boolean
   };
+  pre: {
+    communityBusiness: CommunityBusiness
+  };
 }
 export interface RegisterConfirm extends Hapi.Request {
   payload: {

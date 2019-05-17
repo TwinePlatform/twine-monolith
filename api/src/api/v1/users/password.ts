@@ -7,7 +7,6 @@ import {
   email as emailSchema,
   password as passwordSchema,
 } from './schema';
-import { Templates } from '../../../services/email';
 import { BoomWithValidation } from '../utils';
 import { AppEnum } from '../../../types/internal';
 import { Tokens } from '../../../models/token';
@@ -59,15 +58,9 @@ const routes: Hapi.ServerRoute[] = [
 
       const { token } = await Tokens.createPasswordResetToken(knex, user);
 
-      const templateId = Templates.passwordResetForApp(redirect);
-
       try {
-        await EmailService.send({
-          from: config.email.fromAddress,
-          to: email,
-          templateId,
-          templateModel: { email, token },
-        });
+        await EmailService.resetPassword(config, redirect, user, token);
+
       } catch (error) {
         /*
          * we should do something meaningful here!

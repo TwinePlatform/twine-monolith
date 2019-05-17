@@ -23,7 +23,6 @@ import {
   CommunityBusinesses
 } from '../../../../models';
 import { VolunteerRegisterRequest } from '../../types';
-import { EmailTemplate } from '../../../../services/email/templates';
 import { RoleEnum } from '../../../../models/types';
 import Roles from '../../../../models/role';
 import { Tokens } from '../../../../models/token';
@@ -93,19 +92,7 @@ export default [
         const { token } = await Tokens.createConfirmAddRoleToken(knex, user);
 
         try {
-          await EmailService.send({
-            from: config.email.fromAddress,
-            to: payload.email,
-            templateId: EmailTemplate.NEW_ROLE_CONFIRM,
-            templateModel: {
-              email,
-              token,
-              organisationName: communityBusiness.name,
-              role: Roles.toDisplay(RoleEnum.VOLUNTEER),
-              userId: user.id,
-              organisationId: communityBusiness.id,
-            },
-          });
+          await EmailService.addRole(config, user, communityBusiness, RoleEnum.VOLUNTEER, token);
 
         } catch (error) {
               /*

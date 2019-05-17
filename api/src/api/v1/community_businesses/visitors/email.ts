@@ -4,7 +4,6 @@ import * as Joi from 'joi';
 import { response, id } from '../schema';
 import { isChildUser } from '../../prerequisites';
 import { Visitors, CommunityBusinesses } from '../../../../models';
-import { EmailTemplate } from '../../../../services/email/templates';
 import * as PdfService from '../../../../services/pdf';
 import * as QRCode from '../../../../services/qrcode';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
@@ -51,7 +50,7 @@ const routes: Hapi.ServerRoute[] = [
       const {
         pre: { isChild },
         params: { userId },
-        server: { app: { knex, EmailService } },
+        server: { app: { knex, EmailService, config } },
       } = request;
 
       const { organisation } = StandardCredentials.fromRequest(request);
@@ -84,18 +83,7 @@ const routes: Hapi.ServerRoute[] = [
       );
 
       try {
-        await EmailService.send({
-          from: 'visitorapp@powertochange.org.uk', // TODO - this should not be hardcoded
-          to: visitor.email,
-          templateId: EmailTemplate.WELCOME_VISITOR,
-          templateModel: { name: visitor.name, organisation: cb.name },
-          attachments: [{
-            name: `${visitor.name}-QrCode.pdf`,
-            content: document,
-            contentType: 'application/octet-stream',
-          }],
-        });
-
+        await EmailService.visitorReminder(config, visitor, cb, document);
         return null;
 
       } catch (error) {

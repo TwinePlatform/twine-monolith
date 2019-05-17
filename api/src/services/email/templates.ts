@@ -14,7 +14,7 @@ export enum EmailTemplate {
 
 
 export const Templates = {
-  passwordResetForApp: (app: AppEnum) => {
+  forPwdReset: (app: AppEnum) => {
     switch (app) {
       case AppEnum.VISITOR:
         return EmailTemplate.PWD_RESET_VISITOR_APP;
