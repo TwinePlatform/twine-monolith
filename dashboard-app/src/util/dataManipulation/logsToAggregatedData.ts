@@ -1,5 +1,5 @@
 import { Duration, MathUtil } from 'twine-util';
-import { mergeAll, path, find, propEq, assocPath, Dictionary } from 'ramda';
+import { pipe, mergeAll, path, find, propEq, assocPath, Dictionary, map, curry } from 'ramda';
 import { DurationUnitEnum } from '../../types';
 import { TableTypeItem } from './tableType';
 
@@ -16,23 +16,25 @@ const toUnitDuration = (unit: DurationUnitEnum, duration: Duration.Duration) => 
   }
 };
 
-const addDurationsToDataAggs = (
-  row: any,
-  columnKey: string,
-  unit: DurationUnitEnum,
-  duration: Duration.Duration) => {
-  return roundToDecimal(Number(row[columnKey]) + toUnitDuration(unit, duration));
-};
+const mapVolunteerNamesIfExists = curry((volunteers: any[] | null, rows: Dictionary<any>[]) =>
+  rows.map((row) => {
+    if (!volunteers) {
+      return row;
+    }
+    const id = path(['Volunteer Name'], row);
+    const activeVolunteer = find(propEq('id', id), volunteers);
+    if (!activeVolunteer) {
+      return assocPath(['Volunteer Name'], 'Deleted', row);
+    }
+    return assocPath(['Volunteer Name'], activeVolunteer.name, row);
+  })) as any;
 
-
-const mapUserNames = (logs: any[], volunteers: any[]) => logs.map((row) => {
-  const id = path(['Volunteer Name'], row);
-  const activeVolunteer = find(propEq('id', id), volunteers);
-  if (!activeVolunteer) {
-    return assocPath(['Volunteer Name'], 'Deleted', row);
-  }
-  return assocPath(['Volunteer Name'], activeVolunteer.name, row);
-});
+const mapDurationToUnitDuration = curry((unit: DurationUnitEnum, rows: any[]) =>
+  map(map((cell) => {
+    return typeof cell === 'object'
+      ? toUnitDuration(unit, cell)
+      : cell;
+  }), rows));
 
 
 interface Params {
@@ -48,19 +50,17 @@ export interface AggregatedData {
   rows: Dictionary<number | string>[];
 }
 
-export const logsToAggregatedData = ({ logs, columnHeaders, unit, tableType, volunteers }: Params): AggregatedData => { // tslint:disable:max-line-length
+export const logsToAggregatedData = ({ logs, columnHeaders, unit, tableType, volunteers = null }: Params): AggregatedData => { // tslint:disable:max-line-length
   const [firstColumn, ...columnRest] = columnHeaders;
-  const rows = logs.reduce((logsRows: any[], el: any) => {
+  const rows: Dictionary<any>[] = logs.reduce((logsRows: Dictionary<any>[], el: any) => {
     const activeColumn = tableType.getColumnIdFromLogs(el);
     const exists = logsRows.some((logs: any) =>
       logs[firstColumn] === el[tableType.rowIdFromLogs]);
     if (exists) {
       return logsRows.map((logs) => {
         if (logs[firstColumn] === el[tableType.rowIdFromLogs]) {
-          logs[activeColumn] =
-            addDurationsToDataAggs(logs, activeColumn, unit, el.duration);
-          logs[`Total ${unit}`] =
-            addDurationsToDataAggs(logs, `Total ${unit}`, unit, el.duration);
+          logs[activeColumn] = Duration.sum(logs[activeColumn], el.duration);
+          logs[`Total ${unit}`] = Duration.sum(logs[`Total ${unit}`], el.duration);
         }
         return logs;
       });
@@ -70,16 +70,20 @@ export const logsToAggregatedData = ({ logs, columnHeaders, unit, tableType, vol
 
       [firstColumn]: el[tableType.rowIdFromLogs],
       ...mergeAll(columnElements),
-      [activeColumn]: toUnitDuration(unit, el.duration),
-      [`Total ${unit}`]: toUnitDuration(unit, el.duration),
+      [activeColumn]: el.duration,
+      [`Total ${unit}`]: el.duration,
 
     };
     return logsRows.concat(newRow);
   }, []);
 
+  const pipeRows: (x: Dictionary<any>[]) => Dictionary<string | number>[] = pipe(
+    mapVolunteerNamesIfExists(volunteers),
+    mapDurationToUnitDuration(unit) as any
+  );
 
   return {
     headers: [firstColumn, `Total ${unit}`, ...columnRest],
-    rows: volunteers ? mapUserNames(rows, volunteers) : rows,
+    rows: pipeRows(rows),
   };
 };
