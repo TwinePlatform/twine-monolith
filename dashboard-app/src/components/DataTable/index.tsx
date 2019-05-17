@@ -49,6 +49,8 @@ const Container = styled.div`
 const Table = styled.table`
   overflow-x: scroll;
   text-align: left;
+  table-layout: fixed;
+  width: ${(props: { cols: number }) => props.cols * 10}rem;
 `;
 
 const NoDataContainer = styled.div`
@@ -92,7 +94,7 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
   }, [order, sortBy]);
 
   const table = (
-    <Table>
+    <Table cols={headers.length}>
       <HeaderRow
         columns={headers.map((name) => ({ content: name }))}
         order={order}
