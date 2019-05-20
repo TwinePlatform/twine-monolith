@@ -10,9 +10,12 @@ import _DataTable from '../../components/DataTable';
 import { DataTableProps } from '../../components/DataTable/types';
 import useRequest from '../../hooks/useRequest';
 import { DurationUnitEnum } from '../../types';
-import { logsToTimeTable } from './helper';
 import UtilityBar from '../../components/UtilityBar';
 import Months from '../../util/months';
+import { useCreateAggDataOnRes } from '../../hooks/useCreateAggDataOnRes';
+import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
+import { tableType } from '../../util/dataManipulation/tableType';
+import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
 
 const DataTable = styled(_DataTable)`
   margin-top: 4rem;
@@ -29,9 +32,11 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [fromDate, setFromDate] = useState(Months.defaultFrom());
   const [toDate, setToDate] = useState(Months.defaultTo());
   const [errors, setErrors] = useState();
+  const [aggData, setAggData] = useState();
   const [tableProps, setTableProps] = useState<DataTableProps | null>();
 
-  const { data } = useRequest({
+  // onload request
+  const { data: logs } = useRequest({
     apiCall: CommunityBusinesses.getLogs,
     params: { since: fromDate, until: toDate },
     updateOn: [fromDate, toDate],
@@ -39,12 +44,24 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     push: props.history.push,
   });
 
+  // manipulate data on response
+  useCreateAggDataOnRes({
+    data: { logs },
+    conditions: [logs],
+    updateOn: [logs, unit],
+    columnHeaders: ['Activity', ...Months.range(fromDate, toDate)],
+    setErrors,
+    setAggData,
+    unit,
+    tableType: tableType.MonthByActivity,
+  });
+
+  // manipulate data for table
   useEffect(() => {
-    if (data) {
-      setErrors(null);
-      setTableProps(logsToTimeTable({ data, unit, fromDate, toDate, setErrors }));
+    if (aggData) {
+      setTableProps(aggregatedToTableData({ title: 'Volunteer Activity over Months', data: aggData })); // tslint:disable:max-line-length
     }
-  }, [data, unit]);
+  }, [aggData]);
 
   const onChangeSortBy = useCallback((column: string) => {
     setTableProps(assoc('sortBy', column, tableProps));
@@ -64,6 +81,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
+            onDownloadClick={downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_time' })}
           />
         </Col>
       </Row>

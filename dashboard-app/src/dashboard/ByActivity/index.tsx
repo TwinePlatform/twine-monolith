@@ -3,17 +3,20 @@ import { withRouter, RouteComponentProps } from 'react-router';
 import styled from 'styled-components';
 import { assoc } from 'ramda';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { H1 } from '../../components/Headings';
 
+import { H1 } from '../../components/Headings';
 import { CommunityBusinesses } from '../../api';
 import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
 import { DurationUnitEnum } from '../../types';
 import useRequest from '../../hooks/useRequest';
 import { DataTableProps } from '../../components/DataTable/types';
-import { logsToActivityTable } from './helper';
 import Months from '../../util/months';
 import { displayErrors } from '../../components/ErrorParagraph';
+import { tableType } from '../../util/dataManipulation/tableType';
+import { useCreateAggDataOnRes } from '../../hooks/useCreateAggDataOnRes';
+import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
+import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
 
 const DataTable = styled(_DataTable)`
   margin-top: 4rem;
@@ -27,11 +30,12 @@ const Container = styled(Grid)`
 
 const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
-  const [activities, setActivities] = useState();
+  const [activities, setActivities] = useState([]);
   const [volunteers, setVolunteers] = useState();
   const [fromDate, setFromDate] = useState(Months.defaultFrom());
   const [toDate, setToDate] = useState(Months.defaultTo());
   const [tableProps, setTableProps] = useState<DataTableProps | null>();
+  const [aggData, setAggData] = useState();
   const [errors, setErrors] = useState();
 
   const { data: logs } = useRequest({
@@ -42,7 +46,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
     push: props.history.push,
   });
 
-  // bit weird maybe
+  // Onload requests
   useRequest({
     apiCall: CommunityBusinesses.getVolunteerActivities,
     callback: (data) => setActivities(data.map((x: any) => x.name)),
@@ -50,7 +54,6 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
     push: props.history.push,
   });
 
-  // bit weird maybe
   useRequest({
     apiCall: CommunityBusinesses.getVolunteers,
     callback: setVolunteers,
@@ -58,14 +61,24 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
     push: props.history.push,
   });
 
+  // manipulate data on response
+  useCreateAggDataOnRes({
+    data: { logs, volunteers },
+    conditions: [logs, activities, volunteers],
+    updateOn: [logs, unit, activities, volunteers],
+    columnHeaders: ['Volunteer Name', ...activities],
+    setErrors,
+    setAggData,
+    unit,
+    tableType: tableType.ActivityByName,
+  });
 
+  // manipulate data for table
   useEffect(() => {
-    if (logs && activities && volunteers) {
-      setErrors(null);
-      const tProps = logsToActivityTable({ data: { logs, volunteers }, unit, activities, setErrors }); // tslint:disable:max-line-length
-      setTableProps(tProps);
+    if (aggData) {
+      setTableProps(aggregatedToTableData({ title: 'Volunteer Data By Activity', data: aggData }));
     }
-  }, [logs, unit, activities, volunteers]); // TODO: have single on load variable for trigger
+  }, [aggData]);
 
   const onChangeSortBy = useCallback((column: string) => {
     setTableProps(assoc('sortBy', column, tableProps));
@@ -85,6 +98,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
+            onDownloadClick={downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity' })} // tslint:disable:max-line-length
           />
         </Col>
       </Row>

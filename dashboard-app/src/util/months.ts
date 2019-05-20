@@ -2,6 +2,7 @@ import moment from 'moment';
 
 interface Months {
   format: string;
+  fileFormat: string;
   range: (from: Date, to: Date) => string [];
   diff: (from: Date, to: Date) => number;
   defaultFrom: () => Date;
@@ -10,6 +11,7 @@ interface Months {
 
 const Months: Months = {
   format: 'MMMM YY',
+  fileFormat: 'MM_YY',
   range: (from, to) => {
     const length = Months.diff(from, to) + 1;
     return [...Array(length)].map((_, i) => moment(from).add(i, 'M').format(Months.format)); //tslint:disable-line
