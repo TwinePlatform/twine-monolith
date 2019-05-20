@@ -41,9 +41,9 @@ describe('Util Months', () => {
       const defaultFrom = Months.defaultFrom();
       expect(defaultFrom.getDate()).toEqual(1);
     });
-    test('SUCCESS - defaultTo is start of the month', () => {
+    test('SUCCESS - defaultTo is end of the month', () => {
       const defaultTo = Months.defaultTo();
-      expect(defaultTo.getDate()).toEqual(1);
+      expect([28, 29, 30, 31].includes(defaultTo.getDate())).toBe(true);
     });
   });
 });

@@ -21,7 +21,7 @@ const Months: Months = {
     return to.diff(from, 'months');
   },
   defaultFrom: () => moment().subtract(1, 'year').add(1, 'month').startOf('month').toDate(),
-  defaultTo: () => moment().startOf('month').toDate(),
+  defaultTo: () => moment().endOf('month').toDate(),
 
 };
 
