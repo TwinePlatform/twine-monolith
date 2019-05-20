@@ -59,7 +59,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     data: { logs, volunteers },
     conditions: [logs, volunteers],
     updateOn: [logs, unit, volunteers],
-    columnHeaders: ['Volunteer Name', ...Months.range(fromDate, toDate)],
+    columnHeaders: ['Volunteer Name', ...Months.range(fromDate, toDate, Months.format.verbose)],
     setErrors,
     setAggData,
     unit,

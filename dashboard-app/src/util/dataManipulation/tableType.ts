@@ -1,5 +1,4 @@
 import moment from 'moment';
-
 import Months from '../months';
 
 export interface TableTypeItem {
@@ -12,7 +11,12 @@ interface TableType {
   MonthByName: TableTypeItem;
 }
 
-const getMonthColumnId = (x: any) => moment(x.startedAt || x.createdAt).format(Months.format);
+// TODO : get log type from api
+const getMonthColumnId = (x: any) =>
+  moment(x.startedAt || x.createdAt)
+    .startOf('month')
+    .startOf('day')
+    .format(Months.format.verbose);
 
 export const tableType: TableType = {
   ActivityByName: {

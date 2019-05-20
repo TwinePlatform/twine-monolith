@@ -5,7 +5,7 @@ import { tableType } from '../tableType';
 
 describe('logsToAggregatedData', () => {
   test('SUCCESS - returns aggregated data without volunteer names', () => {
-    const columnHeaders = ['Activity', 'February 18', 'March 18', 'April 18'];
+    const columnHeaders = ['Activity', 'February 2018', 'March 2018', 'April 2018'];
     const logs = [
       {
         userId: 3,
@@ -37,20 +37,20 @@ describe('logsToAggregatedData', () => {
       tableType: tableType.MonthByActivity,
     });
     expect(expected).toEqual({
-      headers: ['Activity', 'Total Hours', 'February 18', 'March 18', 'April 18'],
+      headers: ['Activity', 'Total Hours', 'February 2018', 'March 2018', 'April 2018'],
       rows: [
         {
           Activity: 'Digging Holes',
-          'April 18': 0,
-          'February 18': 0,
-          'March 18': 0.03,
+          'April 2018': 0,
+          'February 2018': 0,
+          'March 2018': 0.03,
           'Total Hours': 0.03,
         },
         {
           Activity: 'Outdoor and practical work',
-          'April 18': 2,
-          'February 18': 0,
-          'March 18': 2.38,
+          'April 2018': 2,
+          'February 2018': 0,
+          'March 2018': 2.38,
           'Total Hours': 4.38,
         },
       ]}

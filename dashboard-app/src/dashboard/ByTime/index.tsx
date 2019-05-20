@@ -49,7 +49,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     data: { logs },
     conditions: [logs],
     updateOn: [logs, unit],
-    columnHeaders: ['Activity', ...Months.range(fromDate, toDate)],
+    columnHeaders: ['Activity', ...Months.range(fromDate, toDate, Months.format.verbose)],
     setErrors,
     setAggData,
     unit,

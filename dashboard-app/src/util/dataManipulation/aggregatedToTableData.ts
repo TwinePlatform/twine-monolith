@@ -1,11 +1,27 @@
-import { evolve, map, pipe, merge } from 'ramda';
+import { evolve, map, pipe, merge, toPairs, fromPairs } from 'ramda';
+import moment from 'moment';
 import { DataTableProps } from '../../components/DataTable/types';
 import { AggregatedData } from './logsToAggregatedData';
+import Months from '../months';
 
 interface Params {
   title: string;
   data: AggregatedData;
 }
+
+export const isDateString = (x: any): boolean => {
+  if (typeof x !== 'string') return false;
+  const words = x.split(' ');
+  if (words.length !== 2) return false;
+  if (isNaN(Number(words[1]))) return false;
+  return Months.list.includes(words[0]);
+};
+
+export const abbreviateDateString = (x: string): string => {
+  return moment(new Date(x)).format(Months.format.table);
+};
+
+const abbreviateIfDateString = (x: any): string => isDateString(x) ? abbreviateDateString(x) : x;
 
 const addContentObjects = evolve({
   rows: map(map((y: any) => ({ content: y }))),
@@ -15,8 +31,18 @@ const addColumnsKey = evolve({
   rows: map((x) => ({ columns: x })),
 });
 
+const abbreviateMonths = evolve({
+  headers: map(abbreviateIfDateString),
+  rows: pipe(
+    map(toPairs as any),
+    map(map(map(abbreviateIfDateString))) as any,
+    map(fromPairs)
+  ),
+});
+
 export const aggregatedToTableData = ({ title, data }: Params) => {
   return pipe(
+    abbreviateMonths,
     addContentObjects,
     addColumnsKey,
     merge({ title })

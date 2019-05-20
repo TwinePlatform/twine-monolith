@@ -5,20 +5,20 @@ describe('Util Months', () => {
     test('SUCCESS - returns months and years', () => {
       const from = new Date('01-01-18');
       const to = new Date('12-31-18');
-      const months = Months.range(from, to);
+      const months = Months.range(from, to, Months.format.verbose);
       expect(months).toEqual([
-        'January 18',
-        'February 18',
-        'March 18',
-        'April 18',
-        'May 18',
-        'June 18',
-        'July 18',
-        'August 18',
-        'September 18',
-        'October 18',
-        'November 18',
-        'December 18',
+        'January 2018',
+        'February 2018',
+        'March 2018',
+        'April 2018',
+        'May 2018',
+        'June 2018',
+        'July 2018',
+        'August 2018',
+        'September 2018',
+        'October 2018',
+        'November 2018',
+        'December 2018',
       ]);
     });
   });
