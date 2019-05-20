@@ -1,7 +1,7 @@
 /*
  * Types for the DataTable component
  */
-import { Dictionary } from 'ramda';
+import { Dictionary, sum, map, filter, compose, complement } from 'ramda';
 
 
 /**
@@ -22,6 +22,7 @@ export type DataTableProps = {
   sortBy?: string
   onChangeSortBy?: (s: string) => void
   rows: DataTableRow[]
+  showTotals?: boolean
 };
 
 export type DataTableContent = number | string;
@@ -64,4 +65,9 @@ export type HeaderRowProps = {
   order?: Order
   sortBy?: string
   onClick?: DataTableCallback
+};
+
+export type TotalsRowProps = {
+  rows: Pick<RowProps, 'columns' | 'order'>[]
+  order: string[]
 };
