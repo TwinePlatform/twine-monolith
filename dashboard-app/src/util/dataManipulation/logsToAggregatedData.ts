@@ -69,9 +69,9 @@ export const logsToAggregatedData = ({ logs, columnHeaders, unit, tableType, vol
     const newRow = {
 
       [firstColumn]: el[tableType.rowIdFromLogs],
+      [`Total ${unit}`]: el.duration,
       ...mergeAll(columnElements),
       [activeColumn]: el.duration,
-      [`Total ${unit}`]: el.duration,
 
     };
     return logsRows.concat(newRow);
