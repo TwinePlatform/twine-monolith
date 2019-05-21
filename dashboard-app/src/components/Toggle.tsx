@@ -21,6 +21,7 @@ const Left = styled.button<{ active: boolean }>`
   border-bottom-left-radius: 0.3125rem;
   background-color: ${(props) => props.active ? ColoursEnum.darkGrey : ColoursEnum.lightGrey};
   color: ${(props) => props.active ? ColoursEnum.white : ColoursEnum.black};
+  cursor: pointer;
 `;
 
 const Right = styled.button<{ active: boolean }>`
@@ -32,6 +33,7 @@ const Right = styled.button<{ active: boolean }>`
   border-bottom-right-radius: 0.3125rem;
   background-color: ${(props) => props.active ? ColoursEnum.darkGrey : ColoursEnum.lightGrey};
   color: ${(props) => props.active ? ColoursEnum.white : ColoursEnum.black};
+  cursor: pointer;
 `;
 
 const Container = styled.div``;

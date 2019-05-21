@@ -30,6 +30,7 @@ const Input = styled.input`
   appearance: none;
   background: transparent;
   color: ${ColoursEnum.black};
+  cursor: pointer;
 `;
 
 
