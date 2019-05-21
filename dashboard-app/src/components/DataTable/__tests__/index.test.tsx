@@ -107,4 +107,12 @@ describe('Component :: DataTable', () => {
 
     expect(message).toHaveTextContent('NO DATA AVAILABLE');
   });
+
+  test('Display totals row', async () => {
+    const tools = render(<DataTable {...props} sortBy="one" showTotals />);
+    const rows = await waitForElement(() => tools.getAllByTestId('data-table-totals-row'));
+
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toHaveTextContent('Totals2024');
+  });
 });
