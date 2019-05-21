@@ -15,7 +15,7 @@ interface Params {
 
 }
 
-export const useCreateAggDataOnRes = ({ data, conditions, updateOn = [], columnHeaders, setErrors, setAggData, unit, tableType }: Params): void => { // tslint:disable:max-line-length
+export const useAggDataOnRes = ({ data, conditions, updateOn = [], columnHeaders, setErrors, setAggData, unit, tableType }: Params): void => { // tslint:disable:max-line-length
   useEffect(() => {
     if (conditions.every((x: any) => x)) {
       setErrors(null);
