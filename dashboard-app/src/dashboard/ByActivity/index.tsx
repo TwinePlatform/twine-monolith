@@ -107,7 +107,12 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
           {displayErrors(errors)}
           {
             tableProps && (
-              <DataTable { ...tableProps } initialOrder="desc" onChangeSortBy={onChangeSortBy} />
+              <DataTable
+                {...tableProps}
+                initialOrder="desc"
+                onChangeSortBy={onChangeSortBy}
+                showTotals
+              />
             )
           }
         </Col>
