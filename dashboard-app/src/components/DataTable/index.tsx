@@ -9,7 +9,9 @@ import { SpacingEnum, ColoursEnum } from '../../styles/design_system';
 import Card from '../Card';
 import DataTableRow from './DataTableRow';
 import HeaderRow from './DataTableHeaderRow';
+import TotalsRow from './DataTableTotalsRow';
 import { DataTableProps, Order } from './types';
+import { toRowProps } from './util';
 import { hashJSON } from '../../util/hash';
 import { Paragraph } from '../Typography';
 
@@ -79,6 +81,7 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
     sortBy = props.headers[0],
     onChangeSortBy = () => {},
     title,
+    showTotals = false,
     ...rest
   } = props;
 
@@ -111,6 +114,9 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
                 key={hashJSON(row)}
               />
             ))
+        }
+        {
+          showTotals && <TotalsRow rows={rows.map((r) => toRowProps(r, headers))} />
         }
       </tbody>
     </Table>
