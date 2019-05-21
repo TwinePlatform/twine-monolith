@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ColoursEnum, SpacingEnum } from '../../styles/design_system';
-import { TotalsRowProps, make } from './types';
+import { ColoursEnum } from '../../styles/design_system';
+import { TotalsRowProps } from './types';
+import { calculateTotals, formatNumber } from './util';
 import DataCell from './DataTableCell';
-import { hashJSON } from '../../util/hash';
 
 
 /**
@@ -15,15 +15,17 @@ const TableRow = styled.tr`
 `;
 
 
-const DataTableTotalsRow: React.FunctionComponent<TotalsRowProps> = (props) => {
-  const { rows, order } = props;
-  const Aprime = make(rows);
+const DataTableTotalsRow: React.FunctionComponent<TotalsRowProps> = ({ rows }) => {
+  const totals = calculateTotals(rows);
+
   return (
-    <TableRow>
+    <TableRow data-testid="data-table-totals-row">
       {
-        Aprime.map((n: number) => (
-          <DataCell content={n} key={n} />
-        ))
+        totals.map((n: number, idx: number) =>
+          idx === 0
+            ? <DataCell content={'Totals'} key={n} />
+            : <DataCell content={isNaN(n) ? '' : formatNumber(n)} key={`${n}${idx}`} />
+        )
       }
     </TableRow>
   );
