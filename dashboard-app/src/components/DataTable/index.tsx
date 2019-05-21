@@ -10,7 +10,7 @@ import Card from '../Card';
 import DataTableRow from './DataTableRow';
 import HeaderRow from './DataTableHeaderRow';
 import TotalsRow from './DataTableTotalsRow';
-import { DataTableProps, Order, RowProps } from './types';
+import { DataTableProps, Order } from './types';
 import { toRowProps } from './util';
 import { hashJSON } from '../../util/hash';
 import { Paragraph } from '../Typography';
@@ -116,7 +116,7 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
             ))
         }
         {
-          showTotals && <TotalsRow rows={rows.map((r) => toRowProps(r, headers))} order={headers}/>
+          showTotals && <TotalsRow rows={rows.map((r) => toRowProps(r, headers))} />
         }
       </tbody>
     </Table>

@@ -1,7 +1,7 @@
 /*
  * Types for the DataTable component
  */
-import { Dictionary, sum, map, filter, compose, complement } from 'ramda';
+import { Dictionary } from 'ramda';
 
 
 /**
@@ -69,5 +69,4 @@ export type HeaderRowProps = {
 
 export type TotalsRowProps = {
   rows: Pick<RowProps, 'columns' | 'order'>[]
-  order: string[]
 };
