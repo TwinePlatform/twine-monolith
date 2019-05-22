@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Grid, Row as _Row, Col } from 'react-flexbox-grid';
 import { Span } from './Typography';
+import { ReactComponent as _Logo } from './assets/logo_image.svg';
 
 
 const FooterContainer = styled(Grid)`
@@ -9,12 +10,20 @@ const FooterContainer = styled(Grid)`
 `;
 
 const Row = styled(_Row)`
-  height: 100%;
+  height: 33%
+`;
+
+const Logo = styled(_Logo)`
+  height: 3rem;
 `;
 
 const Footer: React.FunctionComponent<{}> = () => (
   <FooterContainer>
-    <Row center="xs" middle="xs">
+    <Row/>
+    <Row center="xs">
+      <Logo/>
+    </Row>
+    <Row center="xs">
       <Col xs={4}>
         <footer>
           <Span>&copy; TWINE 2019</Span>
