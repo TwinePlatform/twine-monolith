@@ -17,6 +17,7 @@ import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
 import { tableType } from '../../util/dataManipulation/tableType';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
+import { VolunteerConfig } from '../../components/DatePicker/constraints';
 
 
 const DataTable = styled(_DataTable)`
@@ -88,6 +89,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
         <Col xs={9}>
           <UtilityBar
             dateFilter="month"
+            datePickerConfig={VolunteerConfig}
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}

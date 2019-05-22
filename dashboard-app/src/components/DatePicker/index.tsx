@@ -21,7 +21,7 @@ interface DatePickerProps extends ReactDatePickerProps {
 const DatePicker: React.FunctionComponent<DatePickerProps> = (props) => {
   return (
     <ReactDatePicker
-      dateFormat="MM/yyyy"
+      dateFormat={props.type === 'month' ? 'MM/yyyy' : 'dd/MM/yyyy'}
       showMonthYearPicker={props.type === 'month'}
       customInput={<DateSelector label={props.label} inline />}
       {...props}

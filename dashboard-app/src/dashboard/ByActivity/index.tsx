@@ -17,6 +17,7 @@ import { tableType } from '../../util/dataManipulation/tableType';
 import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
+import { ActivityConfig } from '../../components/DatePicker/constraints';
 
 const DataTable = styled(_DataTable)`
   margin-top: 4rem;
@@ -94,7 +95,8 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
       <Row center="xs">
         <Col xs={9}>
           <UtilityBar
-            dateFilter="month"
+            dateFilter="day"
+            datePickerConfig={ActivityConfig}
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
