@@ -5,7 +5,7 @@ import DatePicker from './DatePicker';
 import UnitToggle from './UnitToggle';
 import { DurationUnitEnum } from '../types';
 import { DownloadButton } from './Buttons';
-import { DateRangePickerConfig } from './DatePicker/types';
+import { DateRangePickerConstraint } from './DatePicker/types';
 
 
 /**
@@ -15,7 +15,7 @@ type DateFilterType = 'day' | 'month';
 
 type UtilityBarProps = {
   dateFilter: DateFilterType
-  datePickerConfig: DateRangePickerConfig
+  datePickerConfig: DateRangePickerConstraint
   onFromDateChange?: (d: Date) => void
   onToDateChange?: (d: Date) => void
   onUnitChange?: (u: DurationUnitEnum) => void
