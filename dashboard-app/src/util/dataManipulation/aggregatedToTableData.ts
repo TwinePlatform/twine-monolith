@@ -18,7 +18,13 @@ export const isDateString = (x: any): boolean => {
 };
 
 export const abbreviateDateString = (x: string): string => {
-  return moment(new Date(x)).format(Months.format.table);
+  const [month, year] = x.split(' ');
+  const numericalMonth = Months.list.indexOf(month) + 1;
+  const doubleDigitNumericalMonth = numericalMonth > 9
+    ? `${numericalMonth}`
+    : `0${numericalMonth}`;
+  const isoDate = `${year}-${doubleDigitNumericalMonth}`;
+  return moment(isoDate).format(Months.format.table);
 };
 
 const abbreviateIfDateString = (x: any): string => isDateString(x) ? abbreviateDateString(x) : x;
@@ -48,3 +54,4 @@ export const aggregatedToTableData = ({ title, data }: Params) => {
     merge({ title })
     )(data as any) as DataTableProps;
 };
+
