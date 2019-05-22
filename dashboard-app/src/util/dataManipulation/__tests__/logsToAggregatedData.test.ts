@@ -202,8 +202,8 @@ describe('logsToAggregatedData', () => {
     expect(expected).toEqual({
       headers: ['Volunteer Name', 'Total Days', 'Outdoor and practical work'],
       rows: [
-        { 'Outdoor and practical work': 0.09, 'Total Days': 0.09, 'Volunteer Name': 'Deleted' },
-        { 'Outdoor and practical work': 0.05, 'Total Days': 0.05, 'Volunteer Name': 'Deleted' },
+        { 'Outdoor and practical work': 0.09, 'Total Days': 0.09, 'Volunteer Name': 'Deleted User' },
+        { 'Outdoor and practical work': 0.05, 'Total Days': 0.05, 'Volunteer Name': 'Deleted User' },
         { 'Outdoor and practical work': 0.04, 'Total Days': 0.04, 'Volunteer Name': 'Crash Bandicoot' },
       ] });
   });

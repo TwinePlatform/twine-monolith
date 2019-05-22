@@ -69,7 +69,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   // manipulate data for table
   useEffect(() => {
     if (aggData) {
-      setTableProps(aggregatedToTableData({ title: 'Volunteer Activity over Months', data: aggData })); // tslint:disable:max-line-length
+      setTableProps(aggregatedToTableData({ title: 'Volunteer Time per Month', data: aggData }));
     }
   }, [aggData]);
 
