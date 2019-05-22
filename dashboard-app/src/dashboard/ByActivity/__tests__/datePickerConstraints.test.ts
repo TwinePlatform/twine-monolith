@@ -41,7 +41,7 @@ describe('Activity view date-picker constraints', () => {
     });
     test('No future dates', () => {
       const date = DatePickerConstraints.to.max(new Date, new Date); // inputs unimportant here
-      expect(moment().isAfter(date)).toBe(false);
+      expect(moment().startOf('day').isSameOrBefore(date)).toBe(true);
     });
     test('from < to is OK: transformed to end of day', () => {
       const from = moment().subtract(1, 'day');

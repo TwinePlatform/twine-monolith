@@ -41,7 +41,7 @@ describe('Volunteer view date-picker constraints', () => {
     });
     test('No future dates', () => {
       const date = DatePickerConstraints.to.max(new Date, new Date); // inputs unimportant here
-      expect(moment().isAfter(date)).toBe(false);
+      expect(moment().startOf('day').isSameOrBefore(date)).toBe(true);
     });
     test('No dates further than 11 months after "from"', () => {
       const date = DatePickerConstraints.to.max(new Date('2018-01-01'), new Date);

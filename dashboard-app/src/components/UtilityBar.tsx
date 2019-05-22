@@ -64,8 +64,6 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
     onUnitChange(u);
   }, [unit]);
 
-  console.log(cfg.to.max(fromDate, toDate));
-
   return (
     <Row middle="xs" start="xs" {...rest}>
       <Col xs={6}>

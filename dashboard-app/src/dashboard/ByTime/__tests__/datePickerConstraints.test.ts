@@ -10,7 +10,7 @@ describe('Time view date-picker constraints', () => {
     });
     test('No future dates', () => {
       const date = DatePickerConstraints.from.max(new Date, new Date); // inputs unimportant here
-      expect(moment().isAfter(date)).toBe(false);
+      expect(moment().startOf('day').isSameOrBefore(date)).toBe(true);
     });
     test('from < to is OK: transformed to start of month', () => {
       const from = moment().subtract(1, 'month');
