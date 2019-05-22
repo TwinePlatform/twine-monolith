@@ -24,7 +24,7 @@ const mapVolunteerNamesIfExists = curry((volunteers: any[] | null, rows: Diction
     const id = path(['Volunteer Name'], row);
     const activeVolunteer = find(propEq('id', id), volunteers);
     if (!activeVolunteer) {
-      return assocPath(['Volunteer Name'], 'Deleted', row);
+      return assocPath(['Volunteer Name'], 'Deleted User', row);
     }
     return assocPath(['Volunteer Name'], activeVolunteer.name, row);
   })) as any;
