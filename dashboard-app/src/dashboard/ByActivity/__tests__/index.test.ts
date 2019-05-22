@@ -1,8 +1,6 @@
-import {
-  cleanup,
-} from 'react-testing-library';
-import { renderWithHistory } from '../../util/tests';
-import ByActivity from '../ByActivity/index';
+import { cleanup } from 'react-testing-library';
+import { renderWithHistory } from '../../../util/tests';
+import ByActivity from '..';
 import 'jest-dom/extend-expect';
 
 describe('By Activity Page', () => {
