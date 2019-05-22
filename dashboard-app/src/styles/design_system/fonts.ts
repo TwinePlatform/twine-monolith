@@ -1,5 +1,3 @@
-const CANONICAL_WINDOW_WIDTH = 1920; // px
-
 export enum FontSizeEnum {
   base = 16, // px
   body = '1rem',
