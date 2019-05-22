@@ -2,10 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { setBaseFontSize } from './styles/design_system';
 import './styles/index.css';
 
-setBaseFontSize();
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

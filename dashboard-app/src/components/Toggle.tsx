@@ -16,7 +16,7 @@ const Left = styled.button<{ active: boolean }>`
   font-size: ${Fonts.size.body};
   padding: 0.7rem;
   outline: none;
-  border: 0.125rem solid ${ColoursEnum.darkGrey};
+  border: 1px solid ${ColoursEnum.darkGrey};
   border-top-left-radius: 0.3125rem;
   border-bottom-left-radius: 0.3125rem;
   background-color: ${(props) => props.active ? ColoursEnum.darkGrey : ColoursEnum.lightGrey};
@@ -28,7 +28,7 @@ const Right = styled.button<{ active: boolean }>`
   font-size: ${Fonts.size.body};
   padding: 0.7rem;
   outline: none;
-  border: 0.125rem solid ${ColoursEnum.darkGrey};
+  border: 1px solid ${ColoursEnum.darkGrey};
   border-top-right-radius: 0.3125rem;
   border-bottom-right-radius: 0.3125rem;
   background-color: ${(props) => props.active ? ColoursEnum.darkGrey : ColoursEnum.lightGrey};

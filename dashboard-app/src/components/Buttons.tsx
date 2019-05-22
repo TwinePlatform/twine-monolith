@@ -42,6 +42,7 @@ export const RoundedButton = styled(PrimaryButton)`
 
 
 export const DownloadButton = styled(Button)`
+  font-size: ${Fonts.size.body};
   padding: 0em 1em;
   margin: 0 1rem;
   background-color: ${ColoursEnum.darkGrey};

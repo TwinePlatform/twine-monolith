@@ -1,5 +1,3 @@
-const CANONICAL_WINDOW_WIDTH = 1920; // px
-
 export enum FontSizeEnum {
   base = 16, // px
   body = '1rem',
@@ -18,6 +16,7 @@ export enum FontFamilyEnum {
 }
 
 export enum FontWeightEnum {
+  light = 300,
   regular = 400,
   heavy = 700,
 }
@@ -28,12 +27,3 @@ export const Fonts = {
   weight: FontWeightEnum,
 };
 
-export const setBaseFontSize = () => {
-  const ratio = window.innerWidth / CANONICAL_WINDOW_WIDTH;
-  const base = FontSizeEnum.base * ratio;
-  const root = <any> document.querySelector(':root');
-
-  if (root) {
-    root.style.fontSize = `${base}px`;
-  }
-};
