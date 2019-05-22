@@ -38,28 +38,15 @@ const MIN_DATE = moment('2017-01-01');
 const TimeConfig: DateRangePickerConfig = {
   from: {
     min: () => MIN_DATE.toDate(),
-    max: () => moment().toDate(),
-    default: () => moment().subtract(11, 'months').toDate(),
-    validate: (_from, _to) => {
-      const from = moment(_from).startOf('month');
-      const to = moment(_to).endOf('month');
-
-      if (from.isAfter(to)) {
-        return from.toDate();
-      }
-
-      if (to.diff(from, 'months') > 11) {
-        return from.toDate();
-      }
-
-      return from.toDate();
-    },
+    max: () => moment().startOf('month').toDate(),
+    default: () => moment().subtract(11, 'months').startOf('month').toDate(),
+    validate: (_from, _to) => moment(_from).startOf('month').toDate(),
   },
 
   to: {
-    min: (from, to) => moment.max(MIN_DATE, moment(from)).toDate(),
+    min: (from, to) => moment.max(MIN_DATE, moment(from)).endOf('month').toDate(),
     max: (from, to) => moment.min(moment(), moment(from).add(11, 'months').endOf('month')).toDate(),
-    default: () => moment().toDate(),
+    default: () => moment().endOf('month').toDate(),
     validate: (_from, _to) => {
       const from = moment(_from).startOf('month');
       const to = moment(_to).endOf('month');

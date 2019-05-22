@@ -10,7 +10,7 @@ describe('Activity view date-picker constraints', () => {
     });
     test('No future dates', () => {
       const date = DatePickerConstraints.from.max(new Date, new Date); // inputs unimportant here
-      expect(moment().isAfter(date)).toBe(false);
+      expect(moment().startOf('day').isSameOrBefore(date)).toBe(true);
     });
     test('from < to is OK: transformed to start of day', () => {
       const from = moment().subtract(1, 'day');
@@ -26,7 +26,7 @@ describe('Activity view date-picker constraints', () => {
     });
     test('default value: 30 days ago', () => {
       const date = DatePickerConstraints.from.default();
-      expect(moment().subtract(30, 'days').isSame(date)).toBe(true);
+      expect(moment().subtract(30, 'days').startOf('day').isSame(date)).toBe(true);
     });
   });
 
@@ -57,7 +57,7 @@ describe('Activity view date-picker constraints', () => {
     });
     test('default value: now', () => {
       const date = DatePickerConstraints.to.default();
-      expect(moment().isSame(date)).toBe(true);
+      expect(moment().endOf('day').isSame(date)).toBe(true);
     });
   });
 });

@@ -36,33 +36,22 @@ const MIN_DATE = moment('2017-01-01');
 export const ActivityConfig: DateRangePickerConfig = {
   from: {
     min: () => MIN_DATE.toDate(),
-    max: () => moment().toDate(),
-    default: () => moment().subtract(30, 'days').toDate(),
-    validate: (_from, _to) => {
-      const from = moment(_from).startOf('day');
-      const to = moment(_to).endOf('day');
-
-      if (from.isAfter(to)) {
-        return from.toDate();
-      }
-
-      return from.toDate();
-    },
+    max: () => moment().endOf('day').toDate(),
+    default: () => moment().subtract(30, 'days').startOf('day').toDate(),
+    validate: (_from, _to) => moment(_from).startOf('day').toDate(),
   },
 
   to: {
-    min: (from, to) => moment.max(MIN_DATE, moment(from)).toDate(),
-    max: () => moment().toDate(),
-    default: () => moment().toDate(),
+    min: (from, to) => moment.max(MIN_DATE, moment(from)).startOf('day').toDate(),
+    max: () => moment().endOf('day').toDate(),
+    default: () => moment().endOf('day').toDate(),
     validate: (_from, _to) => {
       const from = moment(_from).startOf('day');
       const to = moment(_to).endOf('day');
 
-      if (from.isAfter(to)) {
-        return from.endOf('day').toDate();
-      }
-
-      return to.toDate();
+      return from.isAfter(to)
+        ? from.endOf('day').toDate()
+        : to.toDate();
     },
   },
 };
