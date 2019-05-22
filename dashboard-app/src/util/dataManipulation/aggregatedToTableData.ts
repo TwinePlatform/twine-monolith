@@ -24,7 +24,6 @@ export const abbreviateDateString = (x: string): string => {
     ? `${numericalMonth}`
     : `0${numericalMonth}`;
   const isoDate = `${year}-${doubleDigitNumericalMonth}`;
-  console.log(isoDate);
   return moment(isoDate).format(Months.format.table);
 };
 
