@@ -70,7 +70,11 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   // manipulate data for table
   useEffect(() => {
     if (aggData) {
-      setTableProps(aggregatedToTableData({ title: 'Volunteer Time per Month', data: aggData }));
+      setTableProps(aggregatedToTableData({
+        title: 'Volunteer Time per Month',
+        sortBy: aggData.headers[1],
+        data: aggData
+      }));
     }
   }, [aggData]);
 
