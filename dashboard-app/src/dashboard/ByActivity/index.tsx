@@ -14,7 +14,7 @@ import { DataTableProps } from '../../components/DataTable/types';
 import Months from '../../util/months';
 import { displayErrors } from '../../components/ErrorParagraph';
 import { tableType } from '../../util/dataManipulation/tableType';
-import { useCreateAggDataOnRes } from '../../hooks/useCreateAggDataOnRes';
+import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
 
@@ -62,7 +62,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   });
 
   // manipulate data on response
-  useCreateAggDataOnRes({
+  useAggDataOnRes({
     data: { logs, volunteers },
     conditions: [logs, activities, volunteers],
     updateOn: [logs, unit, activities, volunteers],

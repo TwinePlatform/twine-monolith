@@ -1,20 +1,26 @@
 import moment from 'moment';
 
 interface Months {
-  format: string;
-  fileFormat: string;
-  range: (from: Date, to: Date) => string [];
+  list: string [];
+  format: typeof MonthsFormatEnum;
+  range: (from: Date, to: Date, format: MonthsFormatEnum) => string [];
   diff: (from: Date, to: Date) => number;
   defaultFrom: () => Date;
   defaultTo: () => Date;
 }
 
-const Months: Months = {
-  format: 'MMMM YY',
-  fileFormat: 'MM_YY',
-  range: (from, to) => {
-    const length = Months.diff(from, to) + 1;
-    return [...Array(length)].map((_, i) => moment(from).add(i, 'M').format(Months.format)); //tslint:disable-line
+enum MonthsFormatEnum {
+  verbose= 'MMMM YYYY',
+  table= 'MMM YY',
+  filename= 'MM_YY',
+}
+
+const months: Months = {
+  list: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], // tslint:disable:max-line-length
+  format: MonthsFormatEnum,
+  range: (from, to, format) => {
+    const length = months.diff(from, to) + 1;
+    return [...Array(length)].map((_, i) => moment(from).add(i, 'M').format(format));
   },
   diff: (_from, _to) => {
     const from = moment(_from);
@@ -27,4 +33,4 @@ const Months: Months = {
 
 };
 
-export default Months;
+export default months;

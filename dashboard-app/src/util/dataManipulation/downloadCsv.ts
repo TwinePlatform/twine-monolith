@@ -17,8 +17,8 @@ export const downloadCsv = (({ aggData, fromDate, toDate, setErrors, fileName }:
   return (async () => {
     try {
       const csv = await aggregatedToCsv(aggData);
-      const from = moment(fromDate).format(Months.fileFormat);
-      const to = moment(toDate).format(Months.fileFormat);
+      const from = moment(fromDate).format(Months.format.filename);
+      const to = moment(toDate).format(Months.format.filename);
       const file = new File([csv], `${fileName}_${from}-${to}.csv`, {
         type: 'text/plain;charset=utf-8',
       });

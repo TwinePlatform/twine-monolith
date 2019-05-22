@@ -12,7 +12,7 @@ import useRequest from '../../hooks/useRequest';
 import { DurationUnitEnum } from '../../types';
 import UtilityBar from '../../components/UtilityBar';
 import Months from '../../util/months';
-import { useCreateAggDataOnRes } from '../../hooks/useCreateAggDataOnRes';
+import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
 import { tableType } from '../../util/dataManipulation/tableType';
 import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
@@ -45,11 +45,11 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   });
 
   // manipulate data on response
-  useCreateAggDataOnRes({
+  useAggDataOnRes({
     data: { logs },
     conditions: [logs],
     updateOn: [logs, unit],
-    columnHeaders: ['Activity', ...Months.range(fromDate, toDate)],
+    columnHeaders: ['Activity', ...Months.range(fromDate, toDate, Months.format.verbose)],
     setErrors,
     setAggData,
     unit,
