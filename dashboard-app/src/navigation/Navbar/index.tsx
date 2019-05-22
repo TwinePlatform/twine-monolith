@@ -48,7 +48,6 @@ const Navbar: React.FunctionComponent<Props> = (props) => {
   return(
   <PaddedRow middle="xs" between="xs">
     <Col xs={6} md={8} lg={9}>
-      {/* <Title>TWINE</Title> */}
       <TextLogo/>
     </Col>
     <Col xs={6} md={4} lg={3}>
