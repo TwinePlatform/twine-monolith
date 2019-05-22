@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
 
+import { ReactComponent as _TextLogo } from '../../components/assets/logo_text.svg';
 import { ColoursEnum, Fonts } from '../../styles/design_system';
 import NavLinks from './NavLinks';
 import { Pages } from '../pages';
@@ -27,10 +28,8 @@ const PaddedRow = styled(Row)`
   margin-bottom: 6rem;
 `;
 
-const Title = styled.p`
-  font-size: ${Fonts.size.heading2};
-  font-weight: 300;
-  letter-spacing: 0.2rem;
+const TextLogo = styled(_TextLogo)`
+  height: 1.75rem;
 `;
 
 
@@ -49,7 +48,8 @@ const Navbar: React.FunctionComponent<Props> = (props) => {
   return(
   <PaddedRow middle="xs" between="xs">
     <Col xs={6} md={8} lg={9}>
-      <Title>TWINE</Title>
+      {/* <Title>TWINE</Title> */}
+      <TextLogo/>
     </Col>
     <Col xs={6} md={4} lg={3}>
       { isLoggedIn && <NavLinks links={links} withLogout={isLoggedIn}/> }
