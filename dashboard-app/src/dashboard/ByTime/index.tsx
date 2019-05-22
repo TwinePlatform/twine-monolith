@@ -96,7 +96,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
             tableProps && (
               <DataTable
                 {...tableProps}
-                initialOrder="desc"
+                initialOrder="asc"
                 onChangeSortBy={onChangeSortBy}
                 showTotals
               />
