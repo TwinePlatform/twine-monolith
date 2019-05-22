@@ -5,7 +5,7 @@ import DatePicker from './DatePicker';
 import UnitToggle from './UnitToggle';
 import { DurationUnitEnum } from '../types';
 import { DownloadButton } from './Buttons';
-import { DateRangePickerConfig } from './DatePicker/constraints'
+import { DateRangePickerConfig } from './DatePicker/types';
 
 
 /**
