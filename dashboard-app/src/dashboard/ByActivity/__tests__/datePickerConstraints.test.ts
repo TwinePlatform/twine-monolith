@@ -19,6 +19,8 @@ describe('Activity view date-picker constraints', () => {
       expect(from.startOf('day').isSame(date)).toBe(true);
     });
     test('from > to is OK: transformed to start of day', () => {
+      // "OK" in the sense that the `from` date remains valid. The `to` date is
+      // transformed in the `to.validate` function
       const from = moment();
       const to = moment().subtract(1, 'day');
       const date = DatePickerConstraints.from.validate(from.toDate(), to.toDate());
