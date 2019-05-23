@@ -1,38 +1,25 @@
 import moment from 'moment';
 import { DateRangePickerConstraint } from '../../components/DatePicker/types';
 
+
 // Date rules:
-// all:
-// 1. no future dates for either from or to
-// 2. from < to
-// 3. from >= 01 Jan 2017
 //
-// volunteer:
-// 7. month picker
-// 8. min diff (to - from) = 0
-// 9. max diff (to - from) = 11
-// 10. default from: 11 months ago
-// 11. default to: now
+// - min from: 01 Jan 2017
+// - max from: now
 //
-// Volunteer:
-// - min from: 01 Jan 2017       (3)
-// - max from: now               (1)
+// - min to: 01 Jan 2017
+// - max to: now
 //
-// - min to: 01 Jan 2017         (3)
-// - max to: now                 (1)
-//
-// - default from: 11 months ago (10)
-// - default to: now             (11)
+// - default from: 11 months ago
+// - default to: now
 //
 // - validate:
 //   - from:
-//     - from < to || from       (2, 8)
-//     - to - from <= 11 || from (9)
+//     - (from < to) || from
+//     - (to - from <= 11 months) || from
 //   - to:
-//     - from < to || from       (2, 8)
-//     - to - from <= 11 || from + 11 months (9)
-//
-// (1, 2, 3, 7, 8, 9, 10, 11)
+//     - (from < to) || from
+//     - (to - from <= 11 months) || from + 11 months
 
 const MIN_DATE = moment('2017-01-01');
 

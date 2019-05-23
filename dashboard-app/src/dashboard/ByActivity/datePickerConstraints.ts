@@ -2,33 +2,21 @@ import moment from 'moment';
 import { DateRangePickerConstraint } from '../../components/DatePicker/types';
 
 // Date rules:
-// all:
-// 1. no future dates for either from or to
-// 2. from < to
-// 3. from >= 01 Jan 2017
 //
-// activity:
-// 4. day picker
-// 5. default from: 30 days ago
-// 6. default to: now
+// - min from: 01 Jan 2017
+// - max from: now
 //
-// Activity:
-// - min from: 01 Jan 2017     (3)
-// - max from: now             (1)
+// - min to: 01 Jan 2017
+// - max to: now
 //
-// - min to: 01 Jan 2017       (3)
-// - max to: now               (1)
-//
-// - default from: 30 days ago (5)
-// - default to: now           (6)
+// - default from: 30 days ago
+// - default to: now
 //
 // - validate:
 //   - from:
-//     - from < to || from     (2)
+//     - (from < to) || from
 //   - to:
-//     - from < to || from     (2)
-//
-// (1, 2, 3, 4, 5, 6)
+//     - (from < to) || from
 
 const MIN_DATE = moment('2017-01-01');
 
