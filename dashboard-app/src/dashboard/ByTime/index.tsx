@@ -81,7 +81,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
         <Col xs={9}>
           <UtilityBar
             dateFilter="month"
-            datePickerConfig={TimeConfig}
+            datePickerConstraint={TimeConfig}
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}

@@ -96,7 +96,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
         <Col xs={9}>
           <UtilityBar
             dateFilter="day"
-            datePickerConfig={DatePickerConstraints}
+            datePickerConstraint={DatePickerConstraints}
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}

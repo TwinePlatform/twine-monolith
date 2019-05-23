@@ -15,7 +15,7 @@ type DateFilterType = 'day' | 'month';
 
 type UtilityBarProps = {
   dateFilter: DateFilterType
-  datePickerConfig: DateRangePickerConstraint
+  datePickerConstraint: DateRangePickerConstraint
   onFromDateChange?: (d: Date) => void
   onToDateChange?: (d: Date) => void
   onUnitChange?: (u: DurationUnitEnum) => void
@@ -29,7 +29,7 @@ type UtilityBarProps = {
 const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
   const {
     dateFilter,
-    datePickerConfig: cfg,
+    datePickerConstraint: constraint,
     onFromDateChange = () => {},
     onToDateChange = () => {},
     onUnitChange = () => {},
@@ -37,16 +37,16 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
     ...rest
   } = props;
 
-  const [fromDate, setFromDate] = useState(cfg.from.default());
-  const [toDate, setToDate] = useState(cfg.to.default());
+  const [fromDate, setFromDate] = useState(constraint.from.default());
+  const [toDate, setToDate] = useState(constraint.to.default());
   const [unit, setUnit] = useState<DurationUnitEnum>(DurationUnitEnum.HOURS);
 
   const onFromChange = useCallback((date: Date) => {
-    const fd = cfg.from.validate(date, toDate);
+    const fd = constraint.from.validate(date, toDate);
     setFromDate(fd);
     onFromDateChange(fd);
 
-    const td = cfg.to.validate(fd, toDate);
+    const td = constraint.to.validate(fd, toDate);
     if (! moment(td).isSame(toDate)) {
       setToDate(td);
       onToDateChange(td);
@@ -54,7 +54,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
   }, [fromDate, toDate]);
 
   const onToChange = useCallback((date: Date) => {
-    const td = cfg.to.validate(fromDate, date);
+    const td = constraint.to.validate(fromDate, date);
     setToDate(td);
     onToDateChange(td);
   }, [fromDate, toDate]);
@@ -73,16 +73,16 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
             label="From"
             selected={fromDate}
             onChange={onFromChange}
-            minDate={cfg.from.min(fromDate, toDate)}
-            maxDate={cfg.from.max(fromDate, toDate)}
+            minDate={constraint.from.min(fromDate, toDate)}
+            maxDate={constraint.from.max(fromDate, toDate)}
           />
           <DatePicker
             type={dateFilter}
             label="  To" // To make both labels take up the same space
             selected={toDate}
             onChange={onToChange}
-            minDate={cfg.to.min(fromDate, toDate)}
-            maxDate={cfg.to.max(fromDate, toDate)}
+            minDate={constraint.to.min(fromDate, toDate)}
+            maxDate={constraint.to.max(fromDate, toDate)}
           />
         </Row>
       </Col>
