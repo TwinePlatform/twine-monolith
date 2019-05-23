@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { DateRangePickerConstraint } from '../../components/DatePicker/types';
+import { DateRangePickerConstraint, MIN_DATE } from '../../components/DatePicker/types';
 
 // Date rules:
 //
@@ -17,8 +17,6 @@ import { DateRangePickerConstraint } from '../../components/DatePicker/types';
 //     - (from < to) || from
 //   - to:
 //     - (from < to) || from
-
-const MIN_DATE = moment('2017-01-01');
 
 
 export const ActivityConstraints: DateRangePickerConstraint = {
