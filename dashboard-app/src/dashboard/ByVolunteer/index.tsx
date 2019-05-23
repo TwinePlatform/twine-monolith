@@ -4,16 +4,17 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import styled from 'styled-components';
 import { assoc } from 'ramda';
 
-import { H1 } from '../../components/Headings';
-import { CommunityBusinesses } from '../../api';
+import VolunteerConfig from './datePickerConstraints';
 import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
+import { DataTableProps } from '../../components/DataTable/types';
+import { displayErrors } from '../../components/ErrorParagraph';
+import { H1 } from '../../components/Headings';
+import { CommunityBusinesses } from '../../api';
 import { DurationUnitEnum } from '../../types';
 import useRequest from '../../hooks/useRequest';
-import { DataTableProps } from '../../components/DataTable/types';
-import Months from '../../util/months';
-import { displayErrors } from '../../components/ErrorParagraph';
 import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
+import Months from '../../util/months';
 import { tableType } from '../../util/dataManipulation/tableType';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
@@ -88,6 +89,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
         <Col xs={9}>
           <UtilityBar
             dateFilter="month"
+            datePickerConstraint={VolunteerConfig}
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}

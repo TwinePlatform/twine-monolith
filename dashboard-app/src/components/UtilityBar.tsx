@@ -5,6 +5,7 @@ import DatePicker from './DatePicker';
 import UnitToggle from './UnitToggle';
 import { DurationUnitEnum } from '../types';
 import { DownloadButton } from './Buttons';
+import { DateRangePickerConstraint } from './DatePicker/types';
 
 
 /**
@@ -14,10 +15,11 @@ type DateFilterType = 'day' | 'month';
 
 type UtilityBarProps = {
   dateFilter: DateFilterType
+  datePickerConstraint: DateRangePickerConstraint
   onFromDateChange?: (d: Date) => void
   onToDateChange?: (d: Date) => void
   onUnitChange?: (u: DurationUnitEnum) => void
-  onDownloadClick?: () => void,
+  onDownloadClick?: () => void
 };
 
 
@@ -27,6 +29,7 @@ type UtilityBarProps = {
 const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
   const {
     dateFilter,
+    datePickerConstraint: constraint,
     onFromDateChange = () => {},
     onToDateChange = () => {},
     onUnitChange = () => {},
@@ -34,27 +37,27 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
     ...rest
   } = props;
 
-  const [fromDate, setFromDate] = useState(moment().subtract(11, 'months').toDate());
-  const [toDate, setToDate] = useState(moment().toDate());
+  const [fromDate, setFromDate] = useState(constraint.from.default());
+  const [toDate, setToDate] = useState(constraint.to.default());
   const [unit, setUnit] = useState<DurationUnitEnum>(DurationUnitEnum.HOURS);
 
   const onFromChange = useCallback((date: Date) => {
-    const fd = moment(date).startOf('month').toDate();
+    const fd = constraint.from.validate(date, toDate);
     setFromDate(fd);
     onFromDateChange(fd);
 
-    if (moment(date).add(11, 'months').isBefore(toDate)) {
-      const td = moment(date).add(11, 'months').endOf('month').toDate();
+    const td = constraint.to.validate(fd, toDate);
+    if (! moment(td).isSame(toDate)) {
       setToDate(td);
       onToDateChange(td);
     }
-  }, [fromDate]);
+  }, [fromDate, toDate]);
 
   const onToChange = useCallback((date: Date) => {
-    const td = moment(date).endOf('month').toDate();
+    const td = constraint.to.validate(fromDate, date);
     setToDate(td);
     onToDateChange(td);
-  }, [toDate]);
+  }, [fromDate, toDate]);
 
   const onDisplayUnitChange = useCallback((u: DurationUnitEnum) => {
     setUnit(u);
@@ -64,22 +67,24 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
   return (
     <Row middle="xs" start="xs" {...rest}>
       <Col xs={6}>
-      <Row>
-        <DatePicker
-          type={dateFilter}
-          label="From"
-          selected={fromDate}
-          onChange={onFromChange}
+        <Row>
+          <DatePicker
+            type={dateFilter}
+            label="From"
+            selected={fromDate}
+            onChange={onFromChange}
+            minDate={constraint.from.min(fromDate, toDate)}
+            maxDate={constraint.from.max(fromDate, toDate)}
           />
-        <DatePicker
-          type={dateFilter}
-          label="  To" // To make both labels take up the same space
-          selected={toDate}
-          onChange={onToChange}
-          maxDate={moment(fromDate).add(11, 'months').toDate()}
-          minDate={fromDate}
+          <DatePicker
+            type={dateFilter}
+            label="  To" // To make both labels take up the same space
+            selected={toDate}
+            onChange={onToChange}
+            minDate={constraint.to.min(fromDate, toDate)}
+            maxDate={constraint.to.max(fromDate, toDate)}
           />
-          </Row>
+        </Row>
       </Col>
       <Col xs={6}>
         <Row end="xs">

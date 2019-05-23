@@ -1,21 +1,24 @@
 import React, { useEffect, useState, useCallback, FunctionComponent } from 'react';
-import { withRouter, RouteComponentProps } from 'react-router';
 import styled from 'styled-components';
+import { withRouter, RouteComponentProps } from 'react-router';
 import { assoc } from 'ramda';
-import { displayErrors } from '../../components/ErrorParagraph';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { H1 } from '../../components/Headings';
+
+import TimeConfig from './datePickerConstraints';
 import { CommunityBusinesses } from '../../api';
 import _DataTable from '../../components/DataTable';
+import UtilityBar from '../../components/UtilityBar';
+import { displayErrors } from '../../components/ErrorParagraph';
+import { H1 } from '../../components/Headings';
 import { DataTableProps } from '../../components/DataTable/types';
 import useRequest from '../../hooks/useRequest';
 import { DurationUnitEnum } from '../../types';
-import UtilityBar from '../../components/UtilityBar';
 import Months from '../../util/months';
 import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
 import { tableType } from '../../util/dataManipulation/tableType';
 import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
+
 
 const DataTable = styled(_DataTable)`
   margin-top: 4rem;
@@ -78,6 +81,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
         <Col xs={9}>
           <UtilityBar
             dateFilter="month"
+            datePickerConstraint={TimeConfig}
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
@@ -92,7 +96,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
             tableProps && (
               <DataTable
                 {...tableProps}
-                initialOrder="desc"
+                initialOrder="asc"
                 onChangeSortBy={onChangeSortBy}
                 showTotals
               />

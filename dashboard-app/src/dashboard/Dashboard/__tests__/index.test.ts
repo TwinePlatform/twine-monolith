@@ -1,7 +1,7 @@
 import { cleanup, waitForElement, fireEvent, wait } from 'react-testing-library';
-import Dashboard from '../Dashboard';
+import Dashboard from '..';
 import 'jest-dom/extend-expect';
-import { renderWithHistory } from '../../util/tests';
+import { renderWithHistory } from '../../../util/tests';
 
 describe('Dashboard Page', () => {
   afterEach(cleanup);
