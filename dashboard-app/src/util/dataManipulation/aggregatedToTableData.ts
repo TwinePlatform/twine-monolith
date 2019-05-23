@@ -6,6 +6,7 @@ import Months from '../months';
 
 interface Params {
   title: string;
+  sortBy: string;
   data: AggregatedData;
 }
 
@@ -46,12 +47,12 @@ const abbreviateMonths = evolve({
   ),
 });
 
-export const aggregatedToTableData = ({ title, data }: Params) => {
+export const aggregatedToTableData = ({ title, data, sortBy }: Params) => {
   return pipe(
     abbreviateMonths,
     addContentObjects,
     addColumnsKey,
-    merge({ title })
+    merge({ title, sortBy })
     )(data as any) as DataTableProps;
 };
 

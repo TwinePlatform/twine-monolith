@@ -70,7 +70,11 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   // manipulate data for table
   useEffect(() => {
     if (aggData) {
-      setTableProps(aggregatedToTableData({ title: 'Volunteer Time per Month', data: aggData }));
+      setTableProps(aggregatedToTableData({
+        title: 'Volunteer Time per Month',
+        sortBy: aggData.headers[1],
+        data: aggData,
+      }));
     }
   }, [aggData]);
 
@@ -93,7 +97,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
-            onDownloadClick={downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_volunteer' })} // tslint:disable:max-line-length
+            onDownloadClick={downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_volunteer' })} // tslint:disable-line:max-line-length
           />
         </Col>
       </Row>

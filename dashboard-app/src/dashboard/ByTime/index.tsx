@@ -62,7 +62,11 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   // manipulate data for table
   useEffect(() => {
     if (aggData) {
-      setTableProps(aggregatedToTableData({ title: 'Volunteer Activity over Months', data: aggData })); // tslint:disable:max-line-length
+      setTableProps(aggregatedToTableData({
+        title: 'Volunteer Activity over Months',
+        sortBy: aggData.headers[0],
+        data: aggData,
+      }));
     }
   }, [aggData]);
 
@@ -85,7 +89,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
-            onDownloadClick={downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_time' })}
+            onDownloadClick={downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_time' })} // tslint:disable-line:max-line-length
           />
         </Col>
       </Row>
