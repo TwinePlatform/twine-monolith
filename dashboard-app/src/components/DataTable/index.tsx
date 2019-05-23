@@ -94,7 +94,7 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
       onChangeSortBy(title);
       setOrder('desc');
     }
-  }, [order, sortBy]);
+  }, [order, sortBy, headers]);
 
   const table = (
     <Table cols={headers.length}>
