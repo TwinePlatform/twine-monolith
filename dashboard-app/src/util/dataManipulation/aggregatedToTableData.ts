@@ -1,4 +1,4 @@
-import { evolve, map, pipe, merge, toPairs, fromPairs } from 'ramda';
+import { evolve, map, pipe, merge, toPairs, fromPairs, compose } from 'ramda';
 import moment from 'moment';
 import { Duration, MathUtil, Objects } from 'twine-util';
 import { DataTableProps } from '../../components/DataTable/types';
@@ -6,9 +6,8 @@ import { AggregatedData } from './logsToAggregatedData';
 import Months from '../months';
 import { DurationUnitEnum } from '../../types';
 
+
 interface Params {
-  title: string;
-  sortBy: string;
   unit: DurationUnitEnum;
   data: AggregatedData;
 }
@@ -66,19 +65,22 @@ const toUnitDuration = (unit: DurationUnitEnum, duration: Duration.Duration) => 
 const add = (a: number, b: any) => a + (isNaN(b) ? 0 : Number(b));
 
 export const calculateTotalsUsing = (unit: DurationUnitEnum) => evolve({
-  rows: (rows: AggregatedData['rows']) => rows.map((row) => ({
-    ...row,
-    [`Total ${unit}`]: Objects.reduceValues(add, 0, row),
-  })),
+  headers: ([first, ...rest]: string[]) => [first, `Total ${unit}`, ...rest],
+  rows: (rows: AggregatedData['rows']) => rows.map((row) => {
+    const _row = Objects.mapValues((v) => typeof v === 'object' ? toUnitDuration(unit, v) : v, row);
+    return {
+      ..._row,
+      [`Total ${unit}`]: roundToDecimal(Objects.reduceValues(add, 0, _row)),
+    };
+  }),
 });
 
-export const aggregatedToTableData = ({ title, data, sortBy, unit }: Params) => {
+export const aggregatedToTableData = ({ data, unit }: Params) => {
   return pipe(
+    calculateTotalsUsing(unit),
     abbreviateMonths,
     addContentObjects,
     addColumnsKey,
-    calculateTotalsUsing(unit) as any,
-    merge({ title, sortBy })
     )(data as any) as DataTableProps;
 };
 

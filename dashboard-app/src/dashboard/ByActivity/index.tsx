@@ -28,13 +28,16 @@ const Container = styled(Grid)`
   width: 100% !important;
 `;
 
+const TABLE_TITLE = 'Volunteer time on activities';
+
 const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
+  const [sortBy, setSortBy] = useState(`Total ${unit}`);
   const [activities, setActivities] = useState([]);
   const [volunteers, setVolunteers] = useState();
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
-  const [tableProps, setTableProps] = useState<DataTableProps | null>();
+  const [tableProps, setTableProps] = useState<Pick<DataTableProps, 'headers' | 'rows'> | null>();
   const [aggData, setAggData] = useState();
   const [errors, setErrors] = useState();
 
@@ -69,24 +72,18 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
     columnHeaders: ['Volunteer Name', ...activities],
     setErrors,
     setAggData,
-    unit,
     tableType: tableType.ActivityByName,
   });
 
   // manipulate data for table
   useEffect(() => {
     if (aggData) {
-      setTableProps(aggregatedToTableData({
-        title: 'Volunteer time on activities',
-        sortBy: aggData.headers[1],
-        data: aggData,
-        unit,
-      }));
+      setTableProps(aggregatedToTableData({ data: aggData, unit }));
     }
   }, [aggData]);
 
   const onChangeSortBy = useCallback((column: string) => {
-    setTableProps(assoc('sortBy', column, tableProps));
+    setSortBy(column);
   }, [tableProps]);
 
   return (
@@ -115,6 +112,8 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
             tableProps && (
               <DataTable
                 {...tableProps}
+                title={TABLE_TITLE}
+                sortBy={sortBy}
                 initialOrder="desc"
                 onChangeSortBy={onChangeSortBy}
                 showTotals

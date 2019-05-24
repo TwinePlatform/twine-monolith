@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { DurationUnitEnum } from '../types';
 import { logsToAggregatedData } from '../util/dataManipulation/logsToAggregatedData';
 import { TableTypeItem } from '../util/dataManipulation/tableType';
 
@@ -10,7 +9,6 @@ interface Params {
   columnHeaders: string[];
   setErrors: (x: any) => void;
   setAggData: (x: any) => void;
-  unit: DurationUnitEnum;
   tableType: TableTypeItem;
 
 }

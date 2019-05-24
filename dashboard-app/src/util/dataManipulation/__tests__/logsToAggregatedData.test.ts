@@ -1,7 +1,6 @@
-import { logsToAggregatedData } from '../logsToAggregatedData';
-import { DurationUnitEnum } from '../../../types';
-import { tableType } from '../tableType';
 // tslint:disable:max-line-length
+import { logsToAggregatedData } from '../logsToAggregatedData';
+import { tableType } from '../tableType';
 
 describe('logsToAggregatedData', () => {
   test('SUCCESS - returns aggregated data without volunteer names', () => {
@@ -33,25 +32,22 @@ describe('logsToAggregatedData', () => {
     const expected = logsToAggregatedData({
       logs,
       columnHeaders,
-      unit: DurationUnitEnum.HOURS,
       tableType: tableType.MonthByActivity,
     });
     expect(expected).toEqual({
-      headers: ['Activity', 'Total Hours', 'February 2018', 'March 2018', 'April 2018'],
+      headers: ['Activity', 'February 2018', 'March 2018', 'April 2018'],
       rows: [
         {
           Activity: 'Digging Holes',
-          'April 2018': 0,
-          'February 2018': 0,
-          'March 2018': 0.03,
-          'Total Hours': 0.03,
+          'April 2018': {},
+          'February 2018': {},
+          'March 2018': { minutes: 2 },
         },
         {
           Activity: 'Outdoor and practical work',
-          'April 2018': 2,
-          'February 2018': 0,
-          'March 2018': 2.38,
-          'Total Hours': 4.38,
+          'April 2018': { hours: 2 },
+          'February 2018': {},
+          'March 2018': { hours: 2, minutes: 23 },
         },
       ]}
       );
@@ -85,28 +81,21 @@ describe('logsToAggregatedData', () => {
       },
     ];
     const volunteers = [
-      {
-        id: 1,
-        name: 'Crash Bandicoot',
-      },
-      {
-        id: 3,
-        name: 'Aku Aku',
-      },
+      { id: 1, name: 'Crash Bandicoot' },
+      { id: 3, name: 'Aku Aku' },
     ];
 
     const expected = logsToAggregatedData({
       logs,
       columnHeaders,
-      unit: DurationUnitEnum.HOURS,
       tableType: tableType.ActivityByName,
       volunteers,
     });
     expect(expected).toEqual({
-      headers: ['Volunteer Name', 'Total Hours', 'Outdoor and practical work'],
+      headers: ['Volunteer Name', 'Outdoor and practical work'],
       rows: [
-          { 'Outdoor and practical work': 0.03, 'Total Hours': 0.03, 'Volunteer Name': 'Aku Aku' },
-          { 'Outdoor and practical work': 4.38, 'Total Hours': 4.38, 'Volunteer Name': 'Crash Bandicoot' },
+          { 'Outdoor and practical work': { minutes: 2 }, 'Volunteer Name': 'Aku Aku' },
+          { 'Outdoor and practical work': { hours: 4, minutes: 23 }, 'Volunteer Name': 'Crash Bandicoot' },
       ]});
   });
   test('SUCCESS - days aggregates data with correct precision', () => {
@@ -137,24 +126,18 @@ describe('logsToAggregatedData', () => {
         activity: 'Outdoor and practical work',
       },
     ];
-    const volunteers = [
-      {
-        id: 1,
-        name: 'Crash Bandicoot',
-      },
-    ];
+    const volunteers = [ { id: 1, name: 'Crash Bandicoot' } ];
 
     const expected = logsToAggregatedData({
       logs,
       columnHeaders,
-      unit: DurationUnitEnum.DAYS,
       tableType: tableType.ActivityByName,
       volunteers,
     });
     expect(expected).toEqual({
-      headers: ['Volunteer Name', 'Total Days', 'Outdoor and practical work'],
+      headers: ['Volunteer Name', 'Outdoor and practical work'],
       rows: [
-          { 'Outdoor and practical work': 0.14, 'Total Days': 0.14, 'Volunteer Name': 'Crash Bandicoot' },
+          { 'Outdoor and practical work': { hours: 1, minutes: 9 }, 'Volunteer Name': 'Crash Bandicoot' },
       ]});
   });
   test('SUCCESS - deleted user have own row, name replaced with deleted', () => {
@@ -185,26 +168,20 @@ describe('logsToAggregatedData', () => {
         activity: 'Outdoor and practical work',
       },
     ];
-    const volunteers = [
-      {
-        id: 1,
-        name: 'Crash Bandicoot',
-      },
-    ];
+    const volunteers = [ { id: 1, name: 'Crash Bandicoot' } ];
 
     const expected = logsToAggregatedData({
       logs,
       columnHeaders,
-      unit: DurationUnitEnum.DAYS,
       tableType: tableType.ActivityByName,
       volunteers,
     });
     expect(expected).toEqual({
-      headers: ['Volunteer Name', 'Total Days', 'Outdoor and practical work'],
+      headers: ['Volunteer Name', 'Outdoor and practical work'],
       rows: [
-        { 'Outdoor and practical work': 0.09, 'Total Days': 0.09, 'Volunteer Name': 'Deleted User' },
-        { 'Outdoor and practical work': 0.05, 'Total Days': 0.05, 'Volunteer Name': 'Deleted User' },
-        { 'Outdoor and practical work': 0.04, 'Total Days': 0.04, 'Volunteer Name': 'Crash Bandicoot' },
+        { 'Outdoor and practical work': { minutes: 45 }, 'Volunteer Name': 'Deleted User' },
+        { 'Outdoor and practical work': { minutes: 23 }, 'Volunteer Name': 'Deleted User' },
+        { 'Outdoor and practical work': { minutes: 17 }, 'Volunteer Name': 'Crash Bandicoot' },
       ] });
   });
 });

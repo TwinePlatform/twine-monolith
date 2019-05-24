@@ -46,7 +46,7 @@ interface Params {
 
 export interface AggregatedData {
   headers: string [];
-  rows: Dictionary<number | string>[];
+  rows: Dictionary<number | string | Duration.Duration>[];
 }
 
 export const logsToAggregatedData = ({ logs, columnHeaders, tableType, volunteers = null }: Params): AggregatedData => { // tslint:disable:max-line-length
@@ -63,7 +63,7 @@ export const logsToAggregatedData = ({ logs, columnHeaders, tableType, volunteer
         return logs;
       });
     }
-    const columnElements = columnRest.map((a: string) => ({ [a]: 0 }));
+    const columnElements = columnRest.map((a: string) => ({ [a]: Duration.fromSeconds(0) }));
     const newRow = {
 
       [firstColumn]: el[tableType.rowIdFromLogs],
