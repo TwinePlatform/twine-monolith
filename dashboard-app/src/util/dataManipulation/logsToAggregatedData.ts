@@ -40,7 +40,6 @@ const mapDurationToUnitDuration = curry((unit: DurationUnitEnum, rows: any[]) =>
 interface Params {
   logs: any;
   columnHeaders: string[];
-  unit: DurationUnitEnum;
   tableType: TableTypeItem;
   volunteers?: any;
 }
@@ -50,7 +49,7 @@ export interface AggregatedData {
   rows: Dictionary<number | string>[];
 }
 
-export const logsToAggregatedData = ({ logs, columnHeaders, unit, tableType, volunteers = null }: Params): AggregatedData => { // tslint:disable:max-line-length
+export const logsToAggregatedData = ({ logs, columnHeaders, tableType, volunteers = null }: Params): AggregatedData => { // tslint:disable:max-line-length
   const [firstColumn, ...columnRest] = columnHeaders;
   const rows: Dictionary<any>[] = logs.reduce((logsRows: Dictionary<any>[], el: any) => {
     const activeColumn = tableType.getColumnIdFromLogs(el);
@@ -60,7 +59,6 @@ export const logsToAggregatedData = ({ logs, columnHeaders, unit, tableType, vol
       return logsRows.map((logs) => {
         if (logs[firstColumn] === el[tableType.rowIdFromLogs]) {
           logs[activeColumn] = Duration.sum(logs[activeColumn], el.duration);
-          logs[`Total ${unit}`] = Duration.sum(logs[`Total ${unit}`], el.duration);
         }
         return logs;
       });
@@ -69,7 +67,6 @@ export const logsToAggregatedData = ({ logs, columnHeaders, unit, tableType, vol
     const newRow = {
 
       [firstColumn]: el[tableType.rowIdFromLogs],
-      [`Total ${unit}`]: el.duration,
       ...mergeAll(columnElements),
       [activeColumn]: el.duration,
 
@@ -78,12 +75,11 @@ export const logsToAggregatedData = ({ logs, columnHeaders, unit, tableType, vol
   }, []);
 
   const pipeRows: (x: Dictionary<any>[]) => Dictionary<string | number>[] = pipe(
-    mapVolunteerNamesIfExists(volunteers),
-    mapDurationToUnitDuration(unit) as any
+    mapVolunteerNamesIfExists(volunteers)
   );
 
   return {
-    headers: [firstColumn, `Total ${unit}`, ...columnRest],
+    headers: [firstColumn, ...columnRest],
     rows: pipeRows(rows),
   };
 };

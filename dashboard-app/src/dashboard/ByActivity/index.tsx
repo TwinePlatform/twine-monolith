@@ -80,6 +80,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
         title: 'Volunteer time on activities',
         sortBy: aggData.headers[1],
         data: aggData,
+        unit,
       }));
     }
   }, [aggData]);

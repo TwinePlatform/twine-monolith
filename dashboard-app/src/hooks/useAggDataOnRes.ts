@@ -15,7 +15,7 @@ interface Params {
 
 }
 
-export const useAggDataOnRes = ({ data, conditions, updateOn = [], columnHeaders, setErrors, setAggData, unit, tableType }: Params): void => { // tslint:disable:max-line-length
+export const useAggDataOnRes = ({ data, conditions, updateOn = [], columnHeaders, setErrors, setAggData, tableType }: Params): void => { // tslint:disable:max-line-length
   useEffect(() => {
     if (conditions.every((x: any) => x)) {
       setErrors(null);
@@ -23,7 +23,6 @@ export const useAggDataOnRes = ({ data, conditions, updateOn = [], columnHeaders
         const aggData = logsToAggregatedData({
           logs: data.logs,
           columnHeaders,
-          unit,
           tableType,
           volunteers: data.volunteers,
         });
