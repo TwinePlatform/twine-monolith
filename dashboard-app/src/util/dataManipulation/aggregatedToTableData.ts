@@ -49,16 +49,16 @@ const abbreviateMonths = evolve({
   ),
 });
 
-const roundToDecimal = MathUtil.roundTo(2);
+const round = MathUtil.roundTo(2);
 
 
 const toUnitDuration = (unit: DurationUnitEnum, duration: Duration.Duration) => {
   switch (unit){
     case DurationUnitEnum.DAYS:
-      return roundToDecimal(Duration.toWorkingDays(duration));
+      return round(Duration.toWorkingDays(duration));
 
     case DurationUnitEnum.HOURS:
-      return roundToDecimal(Duration.toHours(duration));
+      return round(Duration.toHours(duration));
   }
 };
 
@@ -70,7 +70,7 @@ export const calculateTotalsUsing = (unit: DurationUnitEnum) => evolve({
     const _row = Objects.mapValues((v) => typeof v === 'object' ? toUnitDuration(unit, v) : v, row);
     return {
       ..._row,
-      [`Total ${unit}`]: roundToDecimal(Objects.reduceValues(add, 0, _row)),
+      [`Total ${unit}`]: round(Objects.reduceValues(add, 0, _row)),
     };
   }),
 });
@@ -81,6 +81,6 @@ export const aggregatedToTableData = ({ data, unit }: Params) => {
     abbreviateMonths,
     addContentObjects,
     addColumnsKey
-    )(data as any) as DataTableProps;
+  )(data) as Pick<DataTableProps, 'headers' | 'rows'>;
 };
 
