@@ -1,34 +1,33 @@
 import { Duration } from 'twine-util';
-import { pipe, mergeAll, path, find, propEq, assocPath, Dictionary, curry } from 'ramda';
+import { mergeAll, path, find, propEq, assocPath, Dictionary } from 'ramda';
 import { TableTypeItem } from './tableType';
 
-
-const mapVolunteerNamesIfExists = curry((volunteers: any[] | null, rows: Dictionary<any>[]) =>
-  rows.map((row) => {
-    if (!volunteers) {
-      return row;
-    }
-    const id = path(['Volunteer Name'], row);
-    const activeVolunteer = find(propEq('id', id), volunteers);
-    if (!activeVolunteer) {
-      return assocPath(['Volunteer Name'], 'Deleted User', row);
-    }
-    return assocPath(['Volunteer Name'], activeVolunteer.name, row);
-  })) as any;
 
 interface Params {
   logs: any;
   columnHeaders: string[];
   tableType: TableTypeItem;
-  volunteers?: any;
+  volunteers?: { id: string, name: string }[];
 }
 
 export interface AggregatedData {
   headers: string [];
-  rows: Dictionary<number | string | Duration.Duration>[];
+  rows: Dictionary<string | Duration.Duration>[];
 }
 
-export const logsToAggregatedData = ({ logs, columnHeaders, tableType, volunteers = null }: Params): AggregatedData => { // tslint:disable:max-line-length
+const mapVolunteerNamesIfExists = (vols: Params['volunteers'], rows: AggregatedData['rows']) =>
+  !vols
+    ? rows
+    : rows.map((row) => {
+      const id = path(['Volunteer Name'], row);
+      const activeVolunteer = find(propEq('id', id), vols);
+      return !activeVolunteer
+        ? assocPath(['Volunteer Name'], 'Deleted User', row)
+        : assocPath(['Volunteer Name'], activeVolunteer.name, row);
+    });
+
+
+export const logsToAggregatedData = ({ logs, columnHeaders, tableType, volunteers }: Params): AggregatedData => { // tslint:disable:max-line-length
   const [firstColumn, ...columnRest] = columnHeaders;
   const rows: Dictionary<any>[] = logs.reduce((logsRows: Dictionary<any>[], el: any) => {
     const activeColumn = tableType.getColumnIdFromLogs(el);
@@ -53,12 +52,8 @@ export const logsToAggregatedData = ({ logs, columnHeaders, tableType, volunteer
     return logsRows.concat(newRow);
   }, []);
 
-  const pipeRows: (x: Dictionary<any>[]) => Dictionary<string | number>[] = pipe(
-    mapVolunteerNamesIfExists(volunteers)
-  );
-
   return {
     headers: [firstColumn, ...columnRest],
-    rows: pipeRows(rows),
+    rows: mapVolunteerNamesIfExists(volunteers, rows),
   };
 };
