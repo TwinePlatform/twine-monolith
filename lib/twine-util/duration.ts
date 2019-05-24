@@ -20,7 +20,7 @@ export const toHours = (d: Duration) =>
   toSeconds(d) / 3600;
 
 export const toSeconds = (d: Duration) => {
-  return Object.entries(d).reduce((acc, [k, v]) => {
+  return Object.entries(d).reduce((acc, [k, v = 0]) => {
     switch (k) {
       case 'days':
         return acc + v * SEC_PER_DAY;
