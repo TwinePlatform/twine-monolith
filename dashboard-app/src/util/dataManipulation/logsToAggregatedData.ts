@@ -1,20 +1,7 @@
-import { Duration, MathUtil } from 'twine-util';
-import { pipe, mergeAll, path, find, propEq, assocPath, Dictionary, map, curry } from 'ramda';
-import { DurationUnitEnum } from '../../types';
+import { Duration } from 'twine-util';
+import { pipe, mergeAll, path, find, propEq, assocPath, Dictionary, curry } from 'ramda';
 import { TableTypeItem } from './tableType';
 
-
-const roundToDecimal = MathUtil.roundTo(2);
-
-const toUnitDuration = (unit: DurationUnitEnum, duration: Duration.Duration) => {
-  switch (unit){
-    case DurationUnitEnum.DAYS:
-      return roundToDecimal(Duration.toWorkingDays(duration));
-
-    case DurationUnitEnum.HOURS:
-      return roundToDecimal(Duration.toHours(duration));
-  }
-};
 
 const mapVolunteerNamesIfExists = curry((volunteers: any[] | null, rows: Dictionary<any>[]) =>
   rows.map((row) => {
@@ -28,14 +15,6 @@ const mapVolunteerNamesIfExists = curry((volunteers: any[] | null, rows: Diction
     }
     return assocPath(['Volunteer Name'], activeVolunteer.name, row);
   })) as any;
-
-const mapDurationToUnitDuration = curry((unit: DurationUnitEnum, rows: any[]) =>
-  map(map((cell) => {
-    return typeof cell === 'object'
-      ? toUnitDuration(unit, cell)
-      : cell;
-  }), rows));
-
 
 interface Params {
   logs: any;

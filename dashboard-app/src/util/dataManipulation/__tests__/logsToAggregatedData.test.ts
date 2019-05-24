@@ -126,7 +126,7 @@ describe('logsToAggregatedData', () => {
         activity: 'Outdoor and practical work',
       },
     ];
-    const volunteers = [ { id: 1, name: 'Crash Bandicoot' } ];
+    const volunteers = [{ id: 1, name: 'Crash Bandicoot' }];
 
     const expected = logsToAggregatedData({
       logs,
@@ -168,7 +168,7 @@ describe('logsToAggregatedData', () => {
         activity: 'Outdoor and practical work',
       },
     ];
-    const volunteers = [ { id: 1, name: 'Crash Bandicoot' } ];
+    const volunteers = [{ id: 1, name: 'Crash Bandicoot' }];
 
     const expected = logsToAggregatedData({
       logs,

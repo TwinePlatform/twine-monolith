@@ -1,4 +1,4 @@
-import { evolve, map, pipe, merge, toPairs, fromPairs, compose } from 'ramda';
+import { evolve, map, pipe, toPairs, fromPairs } from 'ramda';
 import moment from 'moment';
 import { Duration, MathUtil, Objects } from 'twine-util';
 import { DataTableProps } from '../../components/DataTable/types';
@@ -80,7 +80,7 @@ export const aggregatedToTableData = ({ data, unit }: Params) => {
     calculateTotalsUsing(unit),
     abbreviateMonths,
     addContentObjects,
-    addColumnsKey,
+    addColumnsKey
     )(data as any) as DataTableProps;
 };
 

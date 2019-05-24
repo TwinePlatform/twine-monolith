@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, FunctionComponent } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import styled from 'styled-components';
-import { assoc } from 'ramda';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import DatePickerConstraints from './datePickerConstraints';
