@@ -33,7 +33,7 @@ const TABLE_TITLE = 'Volunteer Activity over Months';
 
 const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
-  const [sortBy, setSortBy] = useState(`Total ${unit}`);
+  const [sortBy, setSortBy] = useState('Activity');
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [errors, setErrors] = useState();
