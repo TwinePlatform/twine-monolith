@@ -118,13 +118,13 @@ describe('API /users/me/volunteer-logs', () => {
           expect.objectContaining({
             organisationId: organisation.id,
             userId: volAdmin.id,
-            activity: 'Helping with raising funds (shop, events…)',
+            activity: 'Helping with raising funds (shop, events...)',
             duration: { minutes: 35 },
           }),
           expect.objectContaining({
             organisationId: organisation.id,
             userId: volAdmin.id,
-            activity: 'Helping with raising funds (shop, events…)',
+            activity: 'Helping with raising funds (shop, events...)',
             duration: { minutes: 12 },
           }),
         ],
@@ -149,7 +149,7 @@ describe('API /users/me/volunteer-logs', () => {
           organisationId: organisation.id,
           userId: user.id,
           duration: { minutes: 10, seconds: 20 },
-          activity: 'Helping with raising funds (shop, events…)',
+          activity: 'Helping with raising funds (shop, events...)',
         }),
       });
     });
@@ -163,7 +163,7 @@ describe('API /users/me/volunteer-logs', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
-        result: { activity: 'Helping with raising funds (shop, events…)' },
+        result: { activity: 'Helping with raising funds (shop, events...)' },
       });
     });
 

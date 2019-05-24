@@ -56,7 +56,7 @@ describe('VolunteerLog model', () => {
       expect(logs).toEqual(expect.objectContaining({
         userId: 7,
         organisationId: 2,
-        activity: 'Helping with raising funds (shop, events…)',
+        activity: 'Helping with raising funds (shop, events...)',
         duration: { minutes: 35 },
       }));
     });
