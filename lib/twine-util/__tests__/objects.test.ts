@@ -2,6 +2,36 @@ import { Objects } from '..';
 
 
 describe('Utilities :: Objects', () => {
+  describe('reduceKeys', () => {
+    test('empty object returns initial value', () => {
+      expect(Objects.reduceKeys((a, b) => b, 'foo', {})).toBe('foo');
+    });
+
+    test('non-empty object applies function on each key', () => {
+      const cb = jest.fn((a, b) => a + b);
+      const result = Objects.reduceKeys(cb, '', { foo: 1, bar: 2 });
+      expect(result).toBe('foobar');
+      expect(cb).toHaveBeenCalledTimes(2);
+      expect(cb).toHaveBeenLastCalledWith('foo', 'bar');
+      expect(cb).toHaveBeenCalledWith('', 'foo');
+    });
+  });
+
+  describe('reduceValues', () => {
+    test('empty object returns initial value', () => {
+      expect(Objects.reduceValues<string, string>((a, b) => b, 'foo', {})).toBe('foo');
+    });
+
+    test('non-empty object applies function on each value', () => {
+      const cb = jest.fn((a, b) => a + b);
+      const result = Objects.reduceValues(cb, 0, { foo: 1, bar: 2 });
+      expect(result).toBe(3);
+      expect(cb).toHaveBeenCalledTimes(2);
+      expect(cb).toHaveBeenLastCalledWith(1, 2);
+      expect(cb).toHaveBeenCalledWith(0, 1);
+    });
+  });
+
   describe('renameKeys', () => {
     test('should rename object keys', () => {
       const o = { a: 1, b: 2, c: 3 };
