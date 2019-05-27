@@ -1,6 +1,6 @@
 import csv from 'fast-csv';
 import { AggregatedData } from './logsToAggregatedData';
-import { aggregatedToTableData, abbreviateDateString } from './aggregatedToTableData';
+import { aggregatedToTableData } from './aggregatedToTableData';
 import { DurationUnitEnum } from '../../types';
 import { Objects } from 'twine-util';
 
