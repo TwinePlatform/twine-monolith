@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { assoc } from 'ramda';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
-import DatePickerConstraints, { ActivityConstraints } from './datePickerConstraints';
+import DatePickerConstraints from './datePickerConstraints';
 import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
 import { H1 } from '../../components/Headings';
@@ -32,8 +32,8 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
   const [activities, setActivities] = useState([]);
   const [volunteers, setVolunteers] = useState();
-  const [fromDate, setFromDate] = useState<Date>(ActivityConstraints.from.default());
-  const [toDate, setToDate] = useState<Date>(ActivityConstraints.to.default());
+  const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
+  const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableProps, setTableProps] = useState<DataTableProps | null>();
   const [aggData, setAggData] = useState();
   const [errors, setErrors] = useState();
@@ -87,7 +87,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const onChangeSortBy = useCallback((column: string) => {
     setTableProps(assoc('sortBy', column, tableProps));
   }, [tableProps]);
-  console.log({ fromDate, toDate });
+
   return (
     <Container>
       <Row center="xs">

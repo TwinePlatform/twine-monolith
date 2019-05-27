@@ -5,8 +5,6 @@ interface Months {
   format: typeof MonthsFormatEnum;
   range: (from: Date, to: Date, format: MonthsFormatEnum) => string [];
   diff: (from: Date, to: Date) => number;
-  defaultFrom: () => Date;
-  defaultTo: () => Date;
 }
 
 enum MonthsFormatEnum {
@@ -28,9 +26,6 @@ const months: Months = {
 
     return to.diff(from, 'months');
   },
-  defaultFrom: () => moment().subtract(1, 'year').add(1, 'month').startOf('month').toDate(),
-  defaultTo: () => moment().endOf('month').toDate(),
-
 };
 
 export default months;
