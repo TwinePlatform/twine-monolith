@@ -4,7 +4,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import styled from 'styled-components';
 import { assoc } from 'ramda';
 
-import VolunteerConfig from './datePickerConstraints';
+import DatePickerConstraints from './datePickerConstraints';
 import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
 import { DataTableProps } from '../../components/DataTable/types';
@@ -33,8 +33,8 @@ const Container = styled(Grid)`
 const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
   const [volunteers, setVolunteers] = useState();
-  const [fromDate, setFromDate] = useState(Months.defaultFrom());
-  const [toDate, setToDate] = useState(Months.defaultTo());
+  const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
+  const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableProps, setTableProps] = useState<DataTableProps | null>();
   const [errors, setErrors] = useState();
   const [aggData, setAggData] = useState();
@@ -93,7 +93,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
         <Col xs={9}>
           <UtilityBar
             dateFilter="month"
-            datePickerConstraint={VolunteerConfig}
+            datePickerConstraint={DatePickerConstraints}
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}

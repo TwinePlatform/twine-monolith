@@ -4,7 +4,7 @@ import { withRouter, RouteComponentProps } from 'react-router';
 import { assoc } from 'ramda';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
-import TimeConfig from './datePickerConstraints';
+import DatePickerConstraints from './datePickerConstraints';
 import { CommunityBusinesses } from '../../api';
 import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
@@ -32,8 +32,8 @@ const Container = styled(Grid)`
 
 const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
-  const [fromDate, setFromDate] = useState(Months.defaultFrom());
-  const [toDate, setToDate] = useState(Months.defaultTo());
+  const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
+  const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [errors, setErrors] = useState();
   const [aggData, setAggData] = useState();
   const [tableProps, setTableProps] = useState<DataTableProps | null>();
@@ -85,7 +85,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
         <Col xs={9}>
           <UtilityBar
             dateFilter="month"
-            datePickerConstraint={TimeConfig}
+            datePickerConstraint={DatePickerConstraints}
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}

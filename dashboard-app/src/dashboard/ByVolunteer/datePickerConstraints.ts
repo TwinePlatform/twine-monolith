@@ -22,7 +22,7 @@ import { DateRangePickerConstraint, MIN_DATE } from '../../components/DatePicker
 //     - (to - from <= 11 months) || from + 11 months
 
 
-export const VolunteerConstraints: DateRangePickerConstraint = {
+const VolunteerConstraints: DateRangePickerConstraint = {
   from: {
     min: () => MIN_DATE.toDate(),
     max: () => moment().startOf('month').toDate(),

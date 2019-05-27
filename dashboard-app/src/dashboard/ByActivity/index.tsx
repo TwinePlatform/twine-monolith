@@ -14,7 +14,6 @@ import { CommunityBusinesses } from '../../api';
 import { DurationUnitEnum } from '../../types';
 import useRequest from '../../hooks/useRequest';
 import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
-import Months from '../../util/months';
 import { tableType } from '../../util/dataManipulation/tableType';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
@@ -33,8 +32,8 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
   const [activities, setActivities] = useState([]);
   const [volunteers, setVolunteers] = useState();
-  const [fromDate, setFromDate] = useState(Months.defaultFrom());
-  const [toDate, setToDate] = useState(Months.defaultTo());
+  const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
+  const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableProps, setTableProps] = useState<DataTableProps | null>();
   const [aggData, setAggData] = useState();
   const [errors, setErrors] = useState();
