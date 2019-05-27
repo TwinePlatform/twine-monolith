@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { assoc } from 'ramda';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
-import DatePickerConstraints from './datePickerConstraints';
+import DatePickerConstraints, { ActivityConstraints } from './datePickerConstraints';
 import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
 import { H1 } from '../../components/Headings';
@@ -14,7 +14,6 @@ import { CommunityBusinesses } from '../../api';
 import { DurationUnitEnum } from '../../types';
 import useRequest from '../../hooks/useRequest';
 import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
-import Months from '../../util/months';
 import { tableType } from '../../util/dataManipulation/tableType';
 import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
@@ -33,8 +32,8 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
   const [activities, setActivities] = useState([]);
   const [volunteers, setVolunteers] = useState();
-  const [fromDate, setFromDate] = useState(Months.defaultFrom());
-  const [toDate, setToDate] = useState(Months.defaultTo());
+  const [fromDate, setFromDate] = useState<Date>(ActivityConstraints.from.default());
+  const [toDate, setToDate] = useState<Date>(ActivityConstraints.to.default());
   const [tableProps, setTableProps] = useState<DataTableProps | null>();
   const [aggData, setAggData] = useState();
   const [errors, setErrors] = useState();
@@ -88,7 +87,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const onChangeSortBy = useCallback((column: string) => {
     setTableProps(assoc('sortBy', column, tableProps));
   }, [tableProps]);
-
+  console.log({ fromDate, toDate });
   return (
     <Container>
       <Row center="xs">
