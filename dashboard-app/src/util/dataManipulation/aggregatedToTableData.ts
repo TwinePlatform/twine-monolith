@@ -30,7 +30,8 @@ export const abbreviateDateString = (x: string): string => {
   return moment(isoDate).format(Months.format.table);
 };
 
-const abbreviateIfDateString = (x: any): string => isDateString(x) ? abbreviateDateString(x) : x;
+export const abbreviateIfDateString = (x: any): string =>
+  isDateString(x) ? abbreviateDateString(x) : x;
 
 const addContentObjects = evolve({
   rows: map(map((y: any) => ({ content: y }))),
@@ -83,4 +84,3 @@ export const aggregatedToTableData = ({ data, unit }: Params) => {
     addColumnsKey
   )(data) as Pick<DataTableProps, 'headers' | 'rows'>;
 };
-
