@@ -37,7 +37,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   const [volunteers, setVolunteers] = useState();
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
-  const [tableProps, setTableProps] = useState<DataTableProps | null>();
+  const [tableData, setTableData] = useState<Pick<DataTableProps, 'headers' | 'rows'> | null>();
   const [errors, setErrors] = useState();
   const [aggData, setAggData] = useState();
 
@@ -71,13 +71,17 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   // manipulate data for table
   useEffect(() => {
     if (aggData) {
-      setTableProps(aggregatedToTableData({ data: aggData, unit }));
+      setTableData(aggregatedToTableData({ data: aggData, unit }));
     }
   }, [aggData]);
 
   const onChangeSortBy = useCallback((column: string) => {
     setSortBy(column);
-  }, [tableProps]);
+  }, [tableData]);
+
+  const downloadAsCsv = useCallback(() => {
+    downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
+  }, [aggData, fromDate, toDate, unit]);
 
   return (
     <Container>
@@ -94,7 +98,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
-            onDownloadClick={downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_volunteer' })} // tslint:disable-line:max-line-length
+            onDownloadClick={downloadAsCsv}
           />
         </Col>
       </Row>
@@ -102,9 +106,9 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
         <Col xs={9}>
           {displayErrors(errors)}
           {
-            tableProps && (
+            tableData && (
               <DataTable
-                { ...tableProps }
+                { ...tableData }
                 title={TABLE_TITLE}
                 sortBy={sortBy}
                 initialOrder="desc"

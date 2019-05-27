@@ -25,7 +25,8 @@ describe('aggregatedToTableData', () => {
             'February 2018': Duration.fromSeconds(0),
             'March 2018': Duration.fromSeconds(213),
           },
-        ]};
+        ],
+      };
 
       const expected = aggregatedToTableData({ data, unit: DurationUnitEnum.HOURS });
 

@@ -7,7 +7,7 @@ interface Params {
   logs: any;
   columnHeaders: string[];
   tableType: TableTypeItem;
-  volunteers?: { id: string, name: string }[];
+  volunteers?: { id: string, name: string }[]; // TODO: replace with Volunteer | User type
 }
 
 export interface AggregatedData {

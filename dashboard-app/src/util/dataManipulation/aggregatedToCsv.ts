@@ -1,15 +1,18 @@
 import csv from 'fast-csv';
 import { AggregatedData } from './logsToAggregatedData';
+import { aggregatedToTableData, abbreviateDateString } from './aggregatedToTableData';
+import { DurationUnitEnum } from '../../types';
+import { Objects } from 'twine-util';
 
-export const aggregatedToCsv = async (aggData: AggregatedData): Promise<string> => {
-  return new Promise((resolve, reject) => {
+
+// tslint:disable-next-line: max-line-length
+export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEnum): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const tableData = aggregatedToTableData({ data, unit });
+    const rows = tableData.rows
+      .map((row) =>
+        Objects.mapValues((v) => typeof v === 'object' ? v.content : v, row.columns));
+
     // TODO reorder columns to avoid depending on object property order
-    csv.writeToString(aggData.rows, { headers: true }, (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
-    });
+    csv.writeToString(rows, { headers: true }, (err, data) => err ? reject(err) : resolve(data));
   });
-};

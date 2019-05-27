@@ -36,7 +36,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [volunteers, setVolunteers] = useState();
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
-  const [tableProps, setTableProps] = useState<Pick<DataTableProps, 'headers' | 'rows'> | null>();
+  const [tableData, setTableData] = useState<Pick<DataTableProps, 'headers' | 'rows'> | null>();
   const [aggData, setAggData] = useState();
   const [errors, setErrors] = useState();
 
@@ -77,13 +77,17 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   // manipulate data for table
   useEffect(() => {
     if (aggData) {
-      setTableProps(aggregatedToTableData({ data: aggData, unit }));
+      setTableData(aggregatedToTableData({ data: aggData, unit }));
     }
   }, [aggData]);
 
   const onChangeSortBy = useCallback((column: string) => {
     setSortBy(column);
-  }, [tableProps]);
+  }, [tableData]);
+
+  const downloadAsCsv = useCallback(() => {
+    downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
+  }, [aggData, fromDate, toDate, unit]);
 
   return (
     <Container>
@@ -100,7 +104,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
-            onDownloadClick={downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity' })} // tslint:disable:max-line-length
+            onDownloadClick={downloadAsCsv}
           />
         </Col>
       </Row>
@@ -108,9 +112,9 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
         <Col xs={9}>
           {displayErrors(errors)}
           {
-            tableProps && (
+            tableData && (
               <DataTable
-                {...tableProps}
+                {...tableData}
                 title={TABLE_TITLE}
                 sortBy={sortBy}
                 initialOrder="desc"
