@@ -1,5 +1,5 @@
 import moment from 'moment';
-import Months from '../months';
+import Months from '../../util/months';
 
 export interface TableTypeItem {
   rowIdFromLogs: string;

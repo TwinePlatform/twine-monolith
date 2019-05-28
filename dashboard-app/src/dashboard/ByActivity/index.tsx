@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, FunctionComponent } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import styled from 'styled-components';
-import { assoc } from 'ramda';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import DatePickerConstraints from './datePickerConstraints';
@@ -14,9 +13,9 @@ import { CommunityBusinesses } from '../../api';
 import { DurationUnitEnum } from '../../types';
 import useRequest from '../../hooks/useRequest';
 import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
-import { tableType } from '../../util/dataManipulation/tableType';
-import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
-import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
+import { tableType } from '../dataManipulation/tableType';
+import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
+import { downloadCsv } from '../dataManipulation/downloadCsv';
 
 const DataTable = styled(_DataTable)`
   margin-top: 4rem;
@@ -28,13 +27,16 @@ const Container = styled(Grid)`
   width: 100% !important;
 `;
 
+const TABLE_TITLE = 'Volunteer time on activities';
+
 const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
+  const [sortBy, setSortBy] = useState(`Total ${unit}`);
   const [activities, setActivities] = useState([]);
   const [volunteers, setVolunteers] = useState();
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
-  const [tableProps, setTableProps] = useState<DataTableProps | null>();
+  const [tableData, setTableData] = useState<Pick<DataTableProps, 'headers' | 'rows'> | null>();
   const [aggData, setAggData] = useState();
   const [errors, setErrors] = useState();
 
@@ -69,24 +71,23 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
     columnHeaders: ['Volunteer Name', ...activities],
     setErrors,
     setAggData,
-    unit,
     tableType: tableType.ActivityByName,
   });
 
   // manipulate data for table
   useEffect(() => {
     if (aggData) {
-      setTableProps(aggregatedToTableData({
-        title: 'Volunteer time on activities',
-        sortBy: aggData.headers[1],
-        data: aggData,
-      }));
+      setTableData(aggregatedToTableData({ data: aggData, unit }));
     }
   }, [aggData]);
 
   const onChangeSortBy = useCallback((column: string) => {
-    setTableProps(assoc('sortBy', column, tableProps));
-  }, [tableProps]);
+    setSortBy(column);
+  }, [tableData]);
+
+  const downloadAsCsv = useCallback(() => {
+    downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
+  }, [aggData, fromDate, toDate, unit]);
 
   return (
     <Container>
@@ -103,7 +104,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
             onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
-            onDownloadClick={downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity' })} // tslint:disable:max-line-length
+            onDownloadClick={downloadAsCsv}
           />
         </Col>
       </Row>
@@ -111,9 +112,11 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
         <Col xs={9}>
           {displayErrors(errors)}
           {
-            tableProps && (
+            tableData && (
               <DataTable
-                {...tableProps}
+                {...tableData}
+                title={TABLE_TITLE}
+                sortBy={sortBy}
                 initialOrder="desc"
                 onChangeSortBy={onChangeSortBy}
                 showTotals

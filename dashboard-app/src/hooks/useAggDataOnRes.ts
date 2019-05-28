@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
-import { DurationUnitEnum } from '../types';
-import { logsToAggregatedData } from '../util/dataManipulation/logsToAggregatedData';
-import { TableTypeItem } from '../util/dataManipulation/tableType';
+import { logsToAggregatedData } from '../dashboard/dataManipulation/logsToAggregatedData';
+import { TableTypeItem } from '../dashboard/dataManipulation/tableType';
 
 interface Params {
   data: {logs: any, volunteers?: any};
@@ -10,12 +9,11 @@ interface Params {
   columnHeaders: string[];
   setErrors: (x: any) => void;
   setAggData: (x: any) => void;
-  unit: DurationUnitEnum;
   tableType: TableTypeItem;
 
 }
 
-export const useAggDataOnRes = ({ data, conditions, updateOn = [], columnHeaders, setErrors, setAggData, unit, tableType }: Params): void => { // tslint:disable:max-line-length
+export const useAggDataOnRes = ({ data, conditions, updateOn = [], columnHeaders, setErrors, setAggData, tableType }: Params): void => { // tslint:disable:max-line-length
   useEffect(() => {
     if (conditions.every((x: any) => x)) {
       setErrors(null);
@@ -23,7 +21,6 @@ export const useAggDataOnRes = ({ data, conditions, updateOn = [], columnHeaders
         const aggData = logsToAggregatedData({
           logs: data.logs,
           columnHeaders,
-          unit,
           tableType,
           volunteers: data.volunteers,
         });
