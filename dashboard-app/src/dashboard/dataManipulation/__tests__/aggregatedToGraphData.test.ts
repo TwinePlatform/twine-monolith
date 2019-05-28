@@ -1,0 +1,4 @@
+describe('aggregatedToGraphData', () => {
+  describe('aggregatedToStackedGraph', () => {
+  });
+});
