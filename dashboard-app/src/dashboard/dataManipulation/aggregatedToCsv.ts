@@ -1,8 +1,8 @@
 import csv from 'fast-csv';
 import { Objects } from 'twine-util';
 import { AggregatedData } from './logsToAggregatedData';
-import { calculateTotalsUsing, abbreviateIfDateString } from './aggregatedToTableData';
 import { DurationUnitEnum } from '../../types';
+import { abbreviateIfDateString, calculateTotalsUsing } from './util';
 
 
 // tslint:disable-next-line: max-line-length
