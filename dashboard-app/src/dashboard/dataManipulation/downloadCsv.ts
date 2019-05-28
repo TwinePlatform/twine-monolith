@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { aggregatedToCsv } from './aggregatedToCsv';
-import Months from '../months';
+import Months from '../../util/months';
 import { saveAs } from 'file-saver';
 import { AggregatedData } from './logsToAggregatedData';
 import { Dictionary } from 'ramda';

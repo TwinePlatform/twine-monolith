@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { logsToAggregatedData } from '../util/dataManipulation/logsToAggregatedData';
-import { TableTypeItem } from '../util/dataManipulation/tableType';
+import { logsToAggregatedData } from '../dashboard/dataManipulation/logsToAggregatedData';
+import { TableTypeItem } from '../dashboard/dataManipulation/tableType';
 
 interface Params {
   data: {logs: any, volunteers?: any};

@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Duration, MathUtil, Objects } from 'twine-util';
 import { DataTableProps } from '../../components/DataTable/types';
 import { AggregatedData } from './logsToAggregatedData';
-import Months from '../months';
+import Months from '../../util/months';
 import { DurationUnitEnum } from '../../types';
 
 

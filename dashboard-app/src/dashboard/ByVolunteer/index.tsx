@@ -14,9 +14,9 @@ import { DurationUnitEnum } from '../../types';
 import useRequest from '../../hooks/useRequest';
 import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
 import Months from '../../util/months';
-import { tableType } from '../../util/dataManipulation/tableType';
-import { aggregatedToTableData } from '../../util/dataManipulation/aggregatedToTableData';
-import { downloadCsv } from '../../util/dataManipulation/downloadCsv';
+import { tableType } from '../dataManipulation/tableType';
+import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
+import { downloadCsv } from '../dataManipulation/downloadCsv';
 
 
 const DataTable = styled(_DataTable)`

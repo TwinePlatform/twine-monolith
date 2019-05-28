@@ -34,11 +34,11 @@ export const logsToAggregatedData = ({ logs, columnHeaders, tableType, volunteer
     const exists = logsRows.some((logs: any) =>
       logs[firstColumn] === el[tableType.rowIdFromLogs]);
     if (exists) {
-      return logsRows.map((logs) => {
-        if (logs[firstColumn] === el[tableType.rowIdFromLogs]) {
-          logs[activeColumn] = Duration.sum(logs[activeColumn], el.duration);
+      return logsRows.map((row) => {
+        if (row[firstColumn] === el[tableType.rowIdFromLogs]) {
+          row[activeColumn] = Duration.sum(row[activeColumn], el.duration);
         }
-        return logs;
+        return row;
       });
     }
     const columnElements = columnRest.map((a: string) => ({ [a]: Duration.fromSeconds(0) }));
@@ -57,3 +57,10 @@ export const logsToAggregatedData = ({ logs, columnHeaders, tableType, volunteer
     rows: mapVolunteerNamesIfExists(volunteers, rows),
   };
 };
+
+// has rows/cells | headers
+// project object onto existing matrix
+
+// project(rowId, colId, (a, b) => T, logs, emptyMatrix)
+
+// augment headers and cols
