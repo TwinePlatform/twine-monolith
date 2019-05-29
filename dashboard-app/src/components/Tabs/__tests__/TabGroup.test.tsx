@@ -5,5 +5,11 @@ import 'jest-dom/extend-expect';
 
 
 describe('TabGroup', () => {
-  test('', async () => {});
+  afterEach(cleanup);
+
+  test('empty TabGroup', async () => {
+    const tools = render(<TabGroup titles={[]} />);
+
+
+  });
 });
