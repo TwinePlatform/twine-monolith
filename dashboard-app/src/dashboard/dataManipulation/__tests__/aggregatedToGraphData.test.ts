@@ -1,4 +1,32 @@
+import { aggregatedToStackedGraph } from '../aggregatedToGraphData';
+import { DurationUnitEnum } from '../../../types';
+
 describe('aggregatedToGraphData', () => {
-  describe('aggregatedToStackedGraph', () => {
+  test('aggregatedToStackedGraph returns correct data', () => {
+    const aggData = {
+      headers: ['Activity', 'February 2018', 'March 2018', 'April 2018'],
+      rows: [
+        {
+          Activity: 'Digging Holes',
+          'April 2018': {},
+          'February 2018': {},
+          'March 2018': { minutes: 2 },
+        },
+        {
+          Activity: 'Outdoor and practical work',
+          'April 2018': { hours: 2 },
+          'February 2018': {},
+          'March 2018': { hours: 2, minutes: 23 },
+        },
+      ]};
+
+    const expected = aggregatedToStackedGraph(aggData, DurationUnitEnum.HOURS);
+    expect(expected).toEqual({
+      datasets: [
+        { backgroundColor: '#F44336', data: [0, 0.03, 0], label: 'Digging Holes' },
+        { backgroundColor: '#E91E63', data: [0, 2.38, 2], label: 'Outdoor and practical work' },
+      ],
+      labels: ['February 2018', 'March 2018', 'April 2018'],
+    });
   });
 });
