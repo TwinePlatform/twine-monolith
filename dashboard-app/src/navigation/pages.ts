@@ -71,7 +71,7 @@ const NavBarOrder = [
   'Home',
   'Time',
   'Activity',
-  'Volunteer'
+  'Volunteer',
 ];
 
 
