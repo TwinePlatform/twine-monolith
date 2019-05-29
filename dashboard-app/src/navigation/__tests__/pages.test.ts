@@ -59,4 +59,15 @@ describe('Pages', () => {
       }));
     });
   });
+
+  describe('getNavbarLinks', () => {
+    test('Returns pages in the correct order', () => {
+      expect(Pages.getNavbarLinks().map((p) => p.title)).toEqual([
+        'Home',
+        'Time',
+        'Activity',
+        'Volunteer',
+      ]);
+    });
+  });
 });
