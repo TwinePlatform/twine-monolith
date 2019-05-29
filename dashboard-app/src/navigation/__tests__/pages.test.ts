@@ -60,9 +60,9 @@ describe('Pages', () => {
     });
   });
 
-  describe('getProtected', () => {
+  describe('getNavbarLinks', () => {
     test('Returns pages in the correct order', () => {
-      expect(Pages.getProtected().map((p) => p.title)).toEqual([
+      expect(Pages.getNavbarLinks().map((p) => p.title)).toEqual([
         'Home',
         'Time',
         'Activity',

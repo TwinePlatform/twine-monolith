@@ -39,7 +39,7 @@ const TextLogo = styled(_TextLogo)`
 const Navbar: React.FunctionComponent<Props> = (props) => {
   const currentPage = Pages.matchPath(props.pathname);
   const isLoggedIn = currentPage ? currentPage.protected : false;
-  const links = Pages.getProtected().map((page) => ({
+  const links = Pages.getNavbarLinks().map((page) => ({
     to: page.url,
     content: page.title,
     active: page.url === (currentPage || { url: '' }).url,

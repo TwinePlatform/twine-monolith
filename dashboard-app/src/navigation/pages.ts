@@ -27,16 +27,16 @@ export const PagesDict: PagesDictionary = {
     title: 'Home',
     protected: true,
   },
-  Time: {
-    url: '/time',
-    component: ByTime,
-    title: 'Time',
-    protected: true,
-  },
   Activity: {
     url: '/activity',
     component: ByActivity,
     title: 'Activity',
+    protected: true,
+  },
+  Time: {
+    url: '/time',
+    component: ByTime,
+    title: 'Time',
     protected: true,
   },
   Volunteer: {
@@ -67,6 +67,13 @@ export const PagesDict: PagesDictionary = {
   },
 };
 
+const NavBarOrder = [
+  'Home',
+  'Time',
+  'Activity',
+  'Volunteer'
+];
+
 
 export const Pages = {
   matchPath (pathname: string) {
@@ -87,6 +94,11 @@ export const Pages = {
     }
 
     return pages[keys[0]];
+  },
+
+  getNavbarLinks () {
+    return Pages.getProtected()
+      .sort((a, b) => NavBarOrder.indexOf(a.title) - NavBarOrder.indexOf(b.title));
   },
 
   getProtected () {
