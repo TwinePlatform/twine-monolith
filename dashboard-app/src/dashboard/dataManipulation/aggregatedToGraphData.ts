@@ -5,6 +5,9 @@ import { DurationUnitEnum } from '../../types';
 import { GraphColourList } from '../../styles/design_system';
 
 export const STACKED_TABLE_OPTIONS = {
+  legend: {
+    position: 'right',
+  },
   scales: {
     xAxes: [{
       stacked: true,
