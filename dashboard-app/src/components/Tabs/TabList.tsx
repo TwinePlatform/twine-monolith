@@ -39,6 +39,7 @@ export const TabList: React.FunctionComponent<TabListProps> = (props) => {
             title={item}
             isActive={idx === activeTab}
             onClick={() => onClickTab(idx)}
+            key={item}
           />
         ))
       }

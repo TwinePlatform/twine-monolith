@@ -23,9 +23,13 @@ export const TabGroup: React.FunctionComponent<TabProps> = (props) => {
   const onClickTab = useCallback(setActiveTab, []);
 
   const children = React.Children.map(props.children, (child, idx) => (
-    <Tab isActive={idx === activeTab} idx={idx}>
-      {child}
-    </Tab>
+    idx === activeTab
+      ? (
+        <Tab isActive idx={idx}>
+          {child}
+        </Tab>
+      )
+      : null
   ));
 
   return (
