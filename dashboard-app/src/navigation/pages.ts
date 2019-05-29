@@ -27,16 +27,16 @@ export const PagesDict: PagesDictionary = {
     title: 'Home',
     protected: true,
   },
-  Activity: {
-    url: '/activity',
-    component: ByActivity,
-    title: 'Activity',
-    protected: true,
-  },
   Time: {
     url: '/time',
     component: ByTime,
     title: 'Time',
+    protected: true,
+  },
+  Activity: {
+    url: '/activity',
+    component: ByActivity,
+    title: 'Activity',
     protected: true,
   },
   Volunteer: {

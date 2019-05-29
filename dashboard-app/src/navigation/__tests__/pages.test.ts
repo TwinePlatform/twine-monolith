@@ -59,4 +59,15 @@ describe('Pages', () => {
       }));
     });
   });
+
+  describe('getProtected', () => {
+    test('Returns pages in the correct order', () => {
+      expect(Pages.getProtected().map((p) => p.title)).toEqual([
+        'Home',
+        'Time',
+        'Activity',
+        'Volunteer',
+      ]);
+    });
+  });
 });
