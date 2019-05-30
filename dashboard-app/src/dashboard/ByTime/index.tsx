@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { Bar } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 import DatePickerConstraints from './datePickerConstraints';
 import { CommunityBusinesses } from '../../api';
@@ -20,10 +21,8 @@ import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData
 import { tableType } from '../dataManipulation/tableType';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
-import {
-  aggregatedToStackedGraph,
-  STACKED_TABLE_OPTIONS
-} from '../dataManipulation/aggregatedToGraphData';
+import { aggregatedToStackedGraph } from '../dataManipulation/aggregatedToGraphData';
+import { STACKED_TABLE_OPTIONS, totalizer } from '../dataManipulation/stackedGraphs';
 
 
 /**
@@ -129,6 +128,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
       <Col style={{ width: '70%', 'margin-top': '3rem' }}>
       {aggData &&
         (<Bar
+          plugins={[totalizer, ChartDataLabels]}
           data={aggregatedToStackedGraph(aggData, unit)}
           options={STACKED_TABLE_OPTIONS}
       />)}
