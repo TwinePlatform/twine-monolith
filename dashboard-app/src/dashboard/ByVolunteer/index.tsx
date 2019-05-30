@@ -106,12 +106,6 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
   }, [aggData, fromDate, toDate, unit]);
 
-  if (loadingLogs || loadingVols) {
-    return (
-      <FullScreenBeatLoader color={ColoursEnum.purple}/>
-    );
-  }
-
   return (
     <Container>
       <Row center="xs">
@@ -131,7 +125,9 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
           />
         </Col>
       </Row>
-      <Row center="xs">
+      { loadingLogs || loadingVols
+      ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
+      : (<Row center="xs">
         <Col xs={9}>
           {displayErrors(errors)}
           {
@@ -147,9 +143,10 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
             )
           }
         </Col>
-      </Row>
+      </Row>)}
     </Container>
   );
 };
 
 export default withRouter(ByVolunteer);
+
