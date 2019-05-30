@@ -22,18 +22,18 @@ export const aggregatedToStackedGraph = (aggData: AggregatedData, unit: Duration
   const [groupBy, ...labels] = aggData.headers;
   return {
     labels,
-    datasets: aggData.rows.map((x, i) => {
-      const label = x[groupBy];
-      const withoutGroupBy = omit([groupBy], x);
-      const dataObject = map((v) =>
+    datasets: aggData.rows.map((row, i) => {
+      const label = row[groupBy];
+      const rowData = omit([groupBy], row);
+      const numericData = map((v) =>
         typeof v === 'object'
           ? toUnitDuration(unit, v)
           : v
-        , withoutGroupBy) as Dictionary<any>;
+        , rowData) as Dictionary<any>;
       return {
         backgroundColor: GraphColourList[i],
         label,
-        data: labels.map((y) => dataObject[y]),
+        data: labels.map((y) => numericData[y]),
       };
     }),
   };
