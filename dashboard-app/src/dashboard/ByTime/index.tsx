@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, FunctionComponent } from 'reac
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
+import { Bar } from 'react-chartjs-2';
 
 import DatePickerConstraints from './datePickerConstraints';
 import { CommunityBusinesses } from '../../api';
@@ -19,6 +20,10 @@ import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData
 import { tableType } from '../dataManipulation/tableType';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
+import {
+  aggregatedToStackedGraph,
+  STACKED_TABLE_OPTIONS
+} from '../dataManipulation/aggregatedToGraphData';
 
 
 /**
@@ -116,10 +121,20 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
             onDownloadClick={downloadAsCsv}
           />
         </Col>
-      </Row>
-{ loading
+      </Row>;
+  { loading
   ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
-  : (<Row center="xs">
+  : (<>
+      <Row center="xs">
+      <Col style={{ width: '70%', 'margin-top': '3rem' }}>
+      {aggData &&
+        (<Bar
+          data={aggregatedToStackedGraph(aggData, unit)}
+          options={STACKED_TABLE_OPTIONS}
+      />)}
+      </Col>
+    </Row>
+      <Row center="xs">
         <Col xs={9}>
           {displayErrors(errors)}
           {
@@ -135,7 +150,8 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
             )
           }
         </Col>
-      </Row>)
+      </Row>
+    </>)
   }
     </Container>
   );
