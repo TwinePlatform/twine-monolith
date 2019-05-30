@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, FunctionComponent } from 'reac
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import styled from 'styled-components';
+import { Bar } from 'react-chartjs-2';
 
 import DatePickerConstraints from './datePickerConstraints';
 import _DataTable from '../../components/DataTable';
@@ -132,6 +133,15 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
             onToDateChange={setToDate}
             onDownloadClick={downloadAsCsv}
           />
+        </Col>
+      </Row>
+      <Row center="xs">
+        <Col style={{ width: '70%', 'margin-top': '3rem' }}>
+        {aggData &&
+          (<Bar
+            data={aggregatedToStackedGraph(aggData, unit)}
+            options={STACKED_TABLE_OPTIONS}
+        />)}
         </Col>
       </Row>
       <Row center="xs">
