@@ -18,7 +18,8 @@ type TabProps = {
 const TabContainer = styled.div``;
 
 export const TabGroup: React.FunctionComponent<TabProps> = (props) => {
-  const [activeTab, setActiveTab] = useState(0);
+  const { initialActiveTab = 0 } = props;
+  const [activeTab, setActiveTab] = useState(initialActiveTab);
 
   const onClickTab = useCallback(setActiveTab, []);
 
