@@ -8,6 +8,7 @@ import { CommunityBusinesses } from '../../api';
 import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
 import { displayErrors } from '../../components/ErrorParagraph';
+import { FullScreenBeatLoader } from '../../components/Loaders';
 import { H1 } from '../../components/Headings';
 import { DataTableProps } from '../../components/DataTable/types';
 import useRequest from '../../hooks/useRequest';
@@ -17,8 +18,18 @@ import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
 import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
 import { tableType } from '../dataManipulation/tableType';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
+import { ColoursEnum } from '../../styles/design_system';
 
 
+/**
+ * Types
+ */
+type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
+
+
+/**
+ * Styles
+ */
 const DataTable = styled(_DataTable)`
   margin-top: 4rem;
 `;
@@ -29,19 +40,28 @@ const Container = styled(Grid)`
   width: 100% !important;
 `;
 
-const TABLE_TITLE = 'Volunteer Activity over Months';
 
+/**
+ * Helpers
+ */
+const TABLE_TITLE = 'Volunteer Activity over Months';
+const initTableData = { headers: [], rows: [] };
+
+
+/**
+ * Component
+ */
 const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
-  const [sortBy, setSortBy] = useState('Activity');
+  const [sortBy, setSortBy] = useState(0);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [errors, setErrors] = useState();
   const [aggData, setAggData] = useState();
-  const [tableData, setTableData] = useState<Pick<DataTableProps, 'headers' | 'rows'> | null>();
+  const [tableData, setTableData] = useState<TableData>(initTableData);
 
   // onload request
-  const { data: logs } = useRequest({
+  const { data: logs, loading } = useRequest({
     apiCall: CommunityBusinesses.getLogs,
     params: { since: fromDate, until: toDate },
     updateOn: [fromDate, toDate],
@@ -68,12 +88,21 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   }, [aggData]);
 
   const onChangeSortBy = useCallback((column: string) => {
-    setSortBy(column);
+    const idx = tableData.headers.indexOf(column);
+    if (idx > -1) {
+      setSortBy(idx);
+    }
   }, [tableData]);
 
   const downloadAsCsv = useCallback(() => {
     downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
   }, [aggData, fromDate, toDate, unit]);
+
+  if (loading) {
+    return (
+      <FullScreenBeatLoader color={ColoursEnum.purple}/>
+    );
+  }
 
   return (
     <Container>
@@ -102,7 +131,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
               <DataTable
                 {...tableData}
                 title={TABLE_TITLE}
-                sortBy={sortBy}
+                sortBy={tableData.headers[sortBy]}
                 initialOrder="asc"
                 onChangeSortBy={onChangeSortBy}
                 showTotals
