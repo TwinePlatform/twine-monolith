@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { Environment, Config } from './types';
 import { DeepPartial } from '../src/types/internal';
-import { envListOr } from './util';
+import { envListOr, envNumberOr } from './util';
 
 
 const config: DeepPartial<Config> = {
@@ -22,7 +22,7 @@ const config: DeepPartial<Config> = {
   knex: {
     connection: process.env.DATABASE_URL,
     pool: {
-      max: 20, // Limit imposed by Heroku on current pricing tier
+      max: envNumberOr('DATABASE_POOL_LIMIT', 20),
       connectionTimeoutMillis: 1000,
     },
     seeds: {
