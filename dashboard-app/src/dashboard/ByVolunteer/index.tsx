@@ -22,7 +22,7 @@ import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
 import { aggregatedToStackedGraph } from '../dataManipulation/aggregatedToGraphData';
-import { STACKED_TABLE_OPTIONS, totalizer } from '../dataManipulation/stackedGraphs';
+import { getStackedGraphOptions, totalizer } from '../dataManipulation/stackedGraphs';
 
 /**
  * Types
@@ -137,7 +137,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
           (<Bar
             plugins={[totalizer, ChartDataLabels]}
             data={aggregatedToStackedGraph(aggData, unit)}
-            options={STACKED_TABLE_OPTIONS}
+            options={getStackedGraphOptions('Months', `Volunteer ${unit}`)}
         />)}
         </Col>
       </Row>

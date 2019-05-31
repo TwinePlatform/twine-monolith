@@ -23,17 +23,25 @@ export const totalizer = {
   },
 };
 
-export const STACKED_TABLE_OPTIONS = {
+export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string) => ({
   legend: {
     position: 'right',
   },
   scales: {
     xAxes: [{
+      scaleLabel: {
+        display: true,
+        labelString: xAxisTitle,
+      },
       stacked: true,
       gridLines: false,
       ticks: { padding: 5 },
     }],
     yAxes: [{
+      scaleLabel: {
+        display: true,
+        labelString: yAxisTitle,
+      },
       stacked: true,
       gridLines: false,
       ticks: { display: false },
@@ -57,4 +65,4 @@ export const STACKED_TABLE_OPTIONS = {
       },
     },
   },
-};
+});
