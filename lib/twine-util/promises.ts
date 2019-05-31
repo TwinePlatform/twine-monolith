@@ -6,7 +6,7 @@ import * as stream from 'stream';
 
 export const series = <T>(ps: PromiseLike<T>[]): Promise<T[]> =>
   ps.reduce(
-    (fp, p) => fp.then((res) => p.then((rp) => res.concat(rp))),
+    (fp, p) => fp.then((res) => p.then((rp) => res.concat(Array.isArray(rp) ? [rp] : rp))),
     Promise.resolve([])
   );
 

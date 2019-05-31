@@ -3,7 +3,7 @@
  */
 import { createHmac, randomBytes } from 'crypto';
 import { assoc, omit, pick, evolve, compose, pipe, filter } from 'ramda';
-import { Objects } from 'twine-util';
+import { Objects, Promises } from 'twine-util';
 import { Map } from '../types/internal';
 import { User, VisitorCollection, LinkedVisitEvent, RoleEnum } from './types';
 import { Users, ModelToColumn } from './user';
@@ -185,7 +185,7 @@ export const Visitors: VisitorCollection = {
       query
     );
 
-    const userVisits: LinkedVisitEvent[][] = await Promise.all(rows.map((user) =>
+    const userVisits: LinkedVisitEvent[][] = await Promises.series(rows.map((user) =>
       client
         .select(additionalColumnMap)
         .from('visit_log')

@@ -34,6 +34,18 @@ describe('Utilities :: Promises', () => {
       then.mock.calls[1][0]((a: number) => expect(a).toBe(1));
       then.mock.calls[2][0]((a: number) => expect(a).toBe(2));
     });
+
+    test('Does not flatten results', async () => {
+      const ps = [
+        Promise.resolve([1]),
+        Promise.resolve([2]),
+        Promise.resolve([3]),
+      ];
+
+      const xs = await Promises.series(ps);
+
+      expect(xs).toEqual([[1], [2], [3]]);
+    });
   });
 
   describe('fromStream', () => {
