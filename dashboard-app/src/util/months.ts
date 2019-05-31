@@ -7,9 +7,10 @@ interface Months {
   diff: (from: Date, to: Date) => number;
 }
 
-enum MonthsFormatEnum {
+export enum MonthsFormatEnum {
   verbose= 'MMMM YYYY',
   table= 'MMM YY',
+  graph= 'MMM YYYY',
   filename= 'MM_YY',
 }
 

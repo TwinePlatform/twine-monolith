@@ -31,6 +31,7 @@ export const STACKED_TABLE_OPTIONS = {
     xAxes: [{
       stacked: true,
       gridLines: false,
+      ticks: { padding: 5 },
     }],
     yAxes: [{
       stacked: true,
@@ -41,7 +42,6 @@ export const STACKED_TABLE_OPTIONS = {
   layout: {
     padding: {
       top: 20,
-
     },
   },
   plugins: {
