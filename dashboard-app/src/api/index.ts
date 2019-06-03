@@ -35,12 +35,19 @@ export const CbAdmins = {
 };
 
 export const CommunityBusinesses = {
+  configs: {
+    get: { method: 'GET', url: '/community-businesses/me' },
+    getLogs: { method: 'GET', url: '/community-businesses/me/volunteer-logs' },
+    getVolunteerActivities: { method: 'GET', url: '/volunteer-activities' },
+    getVolunteers: { method: 'GET', url: '/community-businesses/me/volunteers' },
+  },
+
   get: (params?: Pick<AxiosRequestConfig, 'params'>) =>
-    axios.get('/community-businesses/me', { params }),
+    axios({ ...CommunityBusinesses.configs.get, params }),
   getLogs: (params?: Pick<AxiosRequestConfig, 'params'>) =>
-    axios.get('/community-businesses/me/volunteer-logs', { params }),
+    axios({ ...CommunityBusinesses.configs.getLogs, params }),
   getVolunteerActivities: () =>
-    axios.get('/volunteer-activities'),
+    axios({ ...CommunityBusinesses.configs.getVolunteerActivities }),
   getVolunteers: () => // NB: fields not currently supported
-    axios.get('/community-businesses/me/volunteers', { params: { fields: ['name', 'id'] } }),
+    axios({ ...CommunityBusinesses.configs.getVolunteers, params: { fields: ['name', 'id'] } }),
 };
