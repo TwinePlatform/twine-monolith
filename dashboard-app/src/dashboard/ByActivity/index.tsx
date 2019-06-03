@@ -17,7 +17,7 @@ import { tableType } from '../dataManipulation/tableType';
 import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
-import Errors from '../../components/ErrorParagraph';
+import Errors from '../../components/Errors';
 
 
 /**

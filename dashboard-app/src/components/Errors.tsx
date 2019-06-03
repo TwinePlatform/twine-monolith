@@ -30,7 +30,7 @@ export const ErrorParagraph = styled.p`
 const Errors: FunctionComponent<Props> = (props) =>
   (<Row center="xs">
     <Col>
-      <ErrorParagraph>{toPairs(props.errors).map((x: any) => x.join(': ')) || ''}</ErrorParagraph>
+      <ErrorParagraph>{toPairs(props.errors).map((x) => x.join(': ')) || ''}</ErrorParagraph>
     </Col>
 </Row>);
 

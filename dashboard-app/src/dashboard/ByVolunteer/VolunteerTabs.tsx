@@ -20,7 +20,7 @@ interface Props {
   tableData: TableData;
   sortBy: number;
   onChangeSortBy: (x: string) => void;
-  TITLE: string;
+  title: string;
 }
 
 /*
@@ -34,29 +34,29 @@ const DataTable = styled(_DataTable)`
  * Component
  */
 const VolunteerTabs: FunctionComponent<Props> = (props) => {
-  const { aggData, unit, tableData, sortBy, onChangeSortBy, TITLE } = props;
+  const { aggData, unit, tableData, sortBy, onChangeSortBy, title } = props;
 
   return(
-  <TabGroup titles={['Chart', 'Table']}>
+    <TabGroup titles={['Chart', 'Table']}>
       {aggData && <StackedBarChart
-        title={TITLE}
+        title={title}
         data={aggregatedToStackedGraph(aggData, unit)}
         xAxisTitle={'Months'}
         yAxisTitle={`Volunteer ${unit}`}/>}
-  <Row center="xs">
-    <Col xs={12}>
-      { tableData && (<DataTable
-        {...tableData}
-        title={TITLE}
-        sortBy={tableData.headers[sortBy]}
-        initialOrder="asc"
-        onChangeSortBy={onChangeSortBy}
-        showTotals
-      />
-      )}
-    </Col>
-  </Row>
-</TabGroup>);
+      <Row center="xs">
+        <Col xs={12}>
+          { tableData && (<DataTable
+          {...tableData}
+          title={title}
+          sortBy={tableData.headers[sortBy]}
+          initialOrder="asc"
+          onChangeSortBy={onChangeSortBy}
+          showTotals
+          />)}
+        </Col>
+      </Row>
+    </TabGroup>
+  );
 };
 
 export default VolunteerTabs;

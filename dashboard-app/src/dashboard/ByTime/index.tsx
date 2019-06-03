@@ -18,7 +18,7 @@ import { tableType } from '../dataManipulation/tableType';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
 import TimeTabs from './TimeTabs';
-import Errors from '../../components/ErrorParagraph';
+import Errors from '../../components/Errors';
 
 /**
  * Styles
@@ -87,7 +87,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
   }, [aggData, fromDate, toDate, unit]);
 
-  const tabProps = { aggData, unit, tableData, sortBy, onChangeSortBy, TITLE };
+  const tabProps = { aggData, unit, tableData, sortBy, onChangeSortBy, title: TITLE };
 
   return (
     <Container>

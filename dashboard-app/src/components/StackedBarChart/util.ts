@@ -1,4 +1,5 @@
-import { round } from '../../dashboard/dataManipulation/util';
+import { MathUtil } from 'twine-util';
+const round = MathUtil.roundTo(2);
 
 export const totalizer = {
   id: 'totalizer',
