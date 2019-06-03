@@ -33,7 +33,7 @@ export const aggregatedToTableData = ({ data, unit }: Params) => {
   return pipe(
     calculateTotalsUsing(unit),
     abbreviateMonths,
-    addContentObjects,
+    addContentObjects as any,
     addColumnsKey
   )(data) as Pick<DataTableProps, 'headers' | 'rows'>;
 };

@@ -45,7 +45,7 @@ export const logsToAggregatedData = ({ logs, columnHeaders, tableType, volunteer
     const newRow = {
 
       [firstColumn]: el[tableType.rowIdFromLogs],
-      ...mergeAll(columnElements),
+      ...mergeAll(columnElements) as Dictionary<string>,
       [activeColumn]: el.duration,
 
     };
