@@ -9,7 +9,6 @@ import UtilityBar from '../../components/UtilityBar';
 import { H1 } from '../../components/Headings';
 import { DataTableProps } from '../../components/DataTable/types';
 import { FullScreenBeatLoader } from '../../components/Loaders';
-import { displayErrors } from '../../components/ErrorParagraph';
 import { CommunityBusinesses } from '../../api';
 import { DurationUnitEnum } from '../../types';
 import useRequest from '../../hooks/useRequest';
@@ -18,6 +17,7 @@ import { tableType } from '../dataManipulation/tableType';
 import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
+import Errors from '../../components/ErrorParagraph';
 
 
 /**
@@ -136,7 +136,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
       ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
       : (<Row center="xs">
         <Col xs={9}>
-          {displayErrors(errors)}
+        <Errors errors={errors}/>
           {
             tableData && (
               <DataTable

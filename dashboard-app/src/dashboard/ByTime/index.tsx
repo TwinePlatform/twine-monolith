@@ -2,42 +2,27 @@ import React, { useEffect, useState, useCallback, FunctionComponent } from 'reac
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { Bar } from 'react-chartjs-2';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 import DatePickerConstraints from './datePickerConstraints';
 import { CommunityBusinesses } from '../../api';
 import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
-import { displayErrors } from '../../components/ErrorParagraph';
 import { FullScreenBeatLoader } from '../../components/Loaders';
 import { H1 } from '../../components/Headings';
-import { DataTableProps } from '../../components/DataTable/types';
 import useRequest from '../../hooks/useRequest';
 import { DurationUnitEnum } from '../../types';
 import Months from '../../util/months';
 import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
-import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
+import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
 import { tableType } from '../dataManipulation/tableType';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
-import { aggregatedToStackedGraph } from '../dataManipulation/aggregatedToGraphData';
-import { getStackedGraphOptions, totalizer } from '../dataManipulation/stackedGraphs';
-
-
-/**
- * Types
- */
-type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
-
+import TimeTabs from './TimeTabs';
+import Errors from '../../components/ErrorParagraph';
 
 /**
  * Styles
  */
-const DataTable = styled(_DataTable)`
-  margin-top: 4rem;
-`;
-
 const Container = styled(Grid)`
   margin-left: 0 !important;
   margin-right: 0 !important;
@@ -48,7 +33,7 @@ const Container = styled(Grid)`
 /**
  * Helpers
  */
-const TABLE_TITLE = 'Volunteer Activity over Months';
+const TITLE = 'Volunteer Activity over Months';
 const initTableData = { headers: [], rows: [] };
 
 
@@ -102,6 +87,8 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
   }, [aggData, fromDate, toDate, unit]);
 
+  const tabProps = { aggData, unit, tableData, sortBy, onChangeSortBy, TITLE };
+
   return (
     <Container>
       <Row center="xs">
@@ -121,40 +108,15 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
           />
         </Col>
       </Row>;
+      <Errors errors={errors}/>
   { loading
   ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
-  : (<>
-      <Row center="xs">
-      <Col style={{ width: '70%', 'margin-top': '3rem' }}>
-      {aggData &&
-        (<Bar
-          plugins={[totalizer, ChartDataLabels]}
-          data={aggregatedToStackedGraph(aggData, unit)}
-          options={getStackedGraphOptions('Months', `Volunteer ${unit}`)}
-      />)}
-      </Col>
-    </Row>
-      <Row center="xs">
-        <Col xs={9}>
-          {displayErrors(errors)}
-          {
-            tableData && (
-              <DataTable
-                {...tableData}
-                title={TABLE_TITLE}
-                sortBy={tableData.headers[sortBy]}
-                initialOrder="asc"
-                onChangeSortBy={onChangeSortBy}
-                showTotals
-              />
-            )
-          }
-        </Col>
-      </Row>
-    </>)
+  : (<TimeTabs {...tabProps}
+  />)
   }
     </Container>
   );
 };
 
 export default withRouter(ByTime);
+

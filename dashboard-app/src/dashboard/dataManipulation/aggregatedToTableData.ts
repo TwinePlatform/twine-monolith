@@ -10,6 +10,7 @@ interface Params {
   unit: DurationUnitEnum;
   data: AggregatedData;
 }
+export type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
 
 const addContentObjects = evolve({
   rows: map(map((y: any) => ({ content: y }))),
