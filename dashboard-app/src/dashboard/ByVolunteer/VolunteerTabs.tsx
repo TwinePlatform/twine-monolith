@@ -38,21 +38,30 @@ const VolunteerTabs: FunctionComponent<Props> = (props) => {
 
   return(
     <TabGroup titles={['Chart', 'Table']}>
-      {aggData && <StackedBarChart
-        title={title}
-        data={aggregatedToStackedGraph(aggData, unit)}
-        xAxisTitle={'Months'}
-        yAxisTitle={`Volunteer ${unit}`}/>}
+      {
+        aggData && (
+          <StackedBarChart
+            title={title}
+            data={aggregatedToStackedGraph(aggData, unit)}
+            xAxisTitle={'Months'}
+            yAxisTitle={`Volunteer ${unit}`}
+          />
+        )
+      }
       <Row center="xs">
         <Col xs={12}>
-          { tableData && (<DataTable
-          {...tableData}
-          title={title}
-          sortBy={tableData.headers[sortBy]}
-          initialOrder="asc"
-          onChangeSortBy={onChangeSortBy}
-          showTotals
-          />)}
+          {
+            tableData && (
+              <DataTable
+                {...tableData}
+                title={title}
+                sortBy={tableData.headers[sortBy]}
+                initialOrder="asc"
+                onChangeSortBy={onChangeSortBy}
+                showTotals
+              />
+            )
+          }
         </Col>
       </Row>
     </TabGroup>

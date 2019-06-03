@@ -16,6 +16,7 @@ import TimeTabs from './TimeTabs';
 import Errors from '../../components/Errors';
 import useAggregatedDataByTime from '../hooks/useAggregatedDataByTime';
 
+
 /**
  * Styles
  */
@@ -89,13 +90,13 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
             onDownloadClick={downloadAsCsv}
           />
         </Col>
-      </Row>;
+      </Row>
       <Errors errors={errors}/>
-  { loading
-  ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
-  : (<TimeTabs {...tabProps}
-  />)
-  }
+      {
+        loading
+          ? <FullScreenBeatLoader color={ColoursEnum.purple} />
+          : <TimeTabs {...tabProps} />
+      }
     </Container>
   );
 };

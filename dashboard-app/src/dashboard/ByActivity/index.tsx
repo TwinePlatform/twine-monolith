@@ -101,25 +101,28 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
           />
         </Col>
       </Row>
-      {loading
-      ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
-      : (<Row center="xs">
-        <Col xs={9}>
-        <Errors errors={errors}/>
-          {
-            tableData && (
-              <DataTable
-                {...tableData}
-                title={TABLE_TITLE}
-                sortBy={tableData.headers[sortBy]}
-                initialOrder="desc"
-                onChangeSortBy={onChangeSortBy}
-                showTotals
-              />
-            )
-          }
-        </Col>
-      </Row>)
+      {
+        loading
+          ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
+          : (
+            <Row center="xs">
+              <Col xs={9}>
+              <Errors errors={errors}/>
+                {
+                  tableData && (
+                    <DataTable
+                      {...tableData}
+                      title={TABLE_TITLE}
+                      sortBy={tableData.headers[sortBy]}
+                      initialOrder="desc"
+                      onChangeSortBy={onChangeSortBy}
+                      showTotals
+                    />
+                  )
+                }
+              </Col>
+            </Row>
+          )
       }
     </Container>
   );

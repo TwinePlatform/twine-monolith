@@ -15,10 +15,10 @@ import VolunteerTabs from './VolunteerTabs';
 import Errors from '../../components/Errors';
 import useAggregatedDataByVolunteer from '../hooks/useAggregatedDataByVolunteer';
 
+
 /**
  * Styles
  */
-
 const Container = styled(Grid)`
   margin-left: 0 !important;
   margin-right: 0 !important;
@@ -91,9 +91,11 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
         </Col>
       </Row>
       <Errors errors={errors}/>
-      { loading
-      ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
-      : (<VolunteerTabs {...tabProps}/>)}
+      {
+        loading
+          ? <FullScreenBeatLoader color={ColoursEnum.purple}/>
+          : <VolunteerTabs {...tabProps}/>
+      }
     </Container>
   );
 };
