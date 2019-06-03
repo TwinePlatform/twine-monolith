@@ -2,41 +2,12 @@ import { cleanup, waitForElement } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import { renderWithHistory } from '../../../util/tests';
 import { axios } from '../../../api';
+import { logs } from '../../__data__/api_data';
 import ByTime from '..';
 import 'jest-dom/extend-expect';
 
 describe('By Time Page', () => {
   let mock: MockAdapter;
-  const logs = [
-    {
-      id: 1,
-      startedAt: '2018-10-11T10:34:22.001',
-      duration: { hours: 2 },
-      activity: 'Cafe',
-      userId: 1,
-    },
-    {
-      id: 2,
-      startedAt: '2019-02-11T10:34:22.001',
-      duration: { hours: 1, minutes: 20 },
-      activity: 'Running away',
-      userId: 1,
-    },
-    {
-      id: 2,
-      startedAt: '2018-11-11T10:34:22.001',
-      duration: { hours: 0, minutes: 20 },
-      activity: 'Cafe',
-      userId: 2,
-    },
-    {
-      id: 2,
-      startedAt: '2018-12-11T10:34:22.001',
-      duration: { hours: 3, minutes: 20 },
-      activity: 'Cafe',
-      userId: 2,
-    },
-  ];
 
   beforeEach(() => {
     mock = new MockAdapter(axios);
