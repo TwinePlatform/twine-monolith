@@ -9,15 +9,12 @@ import UtilityBar from '../../components/UtilityBar';
 import { H1 } from '../../components/Headings';
 import { DataTableProps } from '../../components/DataTable/types';
 import { FullScreenBeatLoader } from '../../components/Loaders';
-import { CommunityBusinesses } from '../../api';
 import { DurationUnitEnum } from '../../types';
-import useRequest from '../../hooks/useRequest';
-import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
-import { tableType } from '../dataManipulation/tableType';
 import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
 import Errors from '../../components/Errors';
+import useAggregatedDataByActivity from '../hooks/useAggregatedDataByActivity';
 
 
 /**
@@ -53,54 +50,24 @@ const initTableData = { headers: [], rows: [] };
 const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
   const [sortBy, setSortBy] = useState(1);
-  const [activities, setActivities] = useState([]);
-  const [volunteers, setVolunteers] = useState();
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
-  const [aggData, setAggData] = useState();
   const [errors, setErrors] = useState();
+  const { loading, error, data } = useAggregatedDataByActivity({ from: fromDate, to: toDate });
 
-  // Onload requests
-  const { data: logs, loading: loadingLogs } = useRequest({
-    apiCall: CommunityBusinesses.getLogs,
-    params: { since: fromDate, until: toDate },
-    updateOn: [fromDate, toDate],
-    setErrors,
-    push: props.history.push,
-  });
-
-  const { loading: loadingAct } = useRequest({
-    apiCall: CommunityBusinesses.getVolunteerActivities,
-    callback: (data) => setActivities(data.map((x: any) => x.name)),
-    setErrors,
-    push: props.history.push,
-  });
-
-  const { loading: loadingVols } = useRequest({
-    apiCall: CommunityBusinesses.getVolunteers,
-    callback: setVolunteers,
-    setErrors,
-    push: props.history.push,
-  });
-
-  // manipulate data on response
-  useAggDataOnRes({
-    data: { logs, volunteers },
-    conditions: [logs, activities, volunteers],
-    updateOn: [logs, unit, activities, volunteers],
-    columnHeaders: ['Volunteer Name', ...activities],
-    setErrors,
-    setAggData,
-    tableType: tableType.ActivityByName,
-  });
+  useEffect(() => {
+    if (error) {
+      setErrors({ data: error.message });
+    }
+  }, [error]);
 
   // manipulate data for table
   useEffect(() => {
-    if (aggData) {
-      setTableData(aggregatedToTableData({ data: aggData, unit }));
+    if (!loading && data) {
+      setTableData(aggregatedToTableData({ data, unit }));
     }
-  }, [aggData]);
+  }, [data]);
 
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
@@ -110,8 +77,10 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   }, [tableData]);
 
   const downloadAsCsv = useCallback(() => {
-    downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
-  }, [aggData, fromDate, toDate, unit]);
+    if (!loading && data) {
+      downloadCsv({ aggData: data, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
+    }
+  }, [data, fromDate, toDate, unit]);
 
   return (
     <Container>
@@ -132,7 +101,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
           />
         </Col>
       </Row>
-      {loadingLogs || loadingAct || loadingVols
+      {loading
       ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
       : (<Row center="xs">
         <Col xs={9}>

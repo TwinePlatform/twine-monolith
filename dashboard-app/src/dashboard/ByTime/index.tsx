@@ -4,21 +4,17 @@ import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import DatePickerConstraints from './datePickerConstraints';
-import { CommunityBusinesses } from '../../api';
 import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
 import { FullScreenBeatLoader } from '../../components/Loaders';
 import { H1 } from '../../components/Headings';
-import useRequest from '../../hooks/useRequest';
 import { DurationUnitEnum } from '../../types';
-import Months from '../../util/months';
-import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
 import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
-import { tableType } from '../dataManipulation/tableType';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
 import TimeTabs from './TimeTabs';
 import Errors from '../../components/Errors';
+import useAggregatedDataByTime from '../hooks/useAggregatedDataByTime';
 
 /**
  * Styles
@@ -46,35 +42,21 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [errors, setErrors] = useState();
-  const [aggData, setAggData] = useState();
   const [tableData, setTableData] = useState<TableData>(initTableData);
+  const { data, loading, error } = useAggregatedDataByTime({ from: fromDate, to: toDate });
 
-  // onload request
-  const { data: logs, loading } = useRequest({
-    apiCall: CommunityBusinesses.getLogs,
-    params: { since: fromDate, until: toDate },
-    updateOn: [fromDate, toDate],
-    setErrors,
-    push: props.history.push,
-  });
-
-  // manipulate data on response
-  useAggDataOnRes({
-    data: { logs },
-    conditions: [logs],
-    updateOn: [logs, unit],
-    columnHeaders: ['Activity', ...Months.range(fromDate, toDate, Months.format.verbose)],
-    setErrors,
-    setAggData,
-    tableType: tableType.MonthByActivity,
-  });
+  useEffect(() => {
+    if (error) {
+      setErrors({ data: error.message });
+    }
+  }, [error]);
 
   // manipulate data for table
   useEffect(() => {
-    if (aggData) {
-      setTableData(aggregatedToTableData({ data: aggData, unit }));
+    if (data) {
+      setTableData(aggregatedToTableData({ data, unit }));
     }
-  }, [aggData]);
+  }, [data]);
 
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
@@ -84,10 +66,10 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   }, [tableData]);
 
   const downloadAsCsv = useCallback(() => {
-    downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
-  }, [aggData, fromDate, toDate, unit]);
+    downloadCsv({ aggData: data, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
+  }, [data, fromDate, toDate, unit]);
 
-  const tabProps = { aggData, unit, tableData, sortBy, onChangeSortBy, title: TITLE };
+  const tabProps = { aggData: data, unit, tableData, sortBy, onChangeSortBy, title: TITLE };
 
   return (
     <Container>

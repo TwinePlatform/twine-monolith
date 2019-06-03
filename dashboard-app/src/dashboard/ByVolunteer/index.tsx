@@ -7,17 +7,13 @@ import DatePickerConstraints from './datePickerConstraints';
 import UtilityBar from '../../components/UtilityBar';
 import { FullScreenBeatLoader } from '../../components/Loaders';
 import { H1 } from '../../components/Headings';
-import { CommunityBusinesses } from '../../api';
 import { DurationUnitEnum } from '../../types';
-import useRequest from '../../hooks/useRequest';
-import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
-import Months from '../../util/months';
-import { tableType } from '../dataManipulation/tableType';
 import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
 import VolunteerTabs from './VolunteerTabs';
 import Errors from '../../components/Errors';
+import useAggregatedDataByVolunteer from '../hooks/useAggregatedDataByVolunteer';
 
 /**
  * Styles
@@ -43,46 +39,24 @@ const initTableData = { headers: [], rows: [] };
 const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
   const [sortBy, setSortBy] = useState(1);
-  const [volunteers, setVolunteers] = useState();
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [errors, setErrors] = useState();
-  const [aggData, setAggData] = useState();
+  const { loading, data, error } = useAggregatedDataByVolunteer({ from: fromDate, to: toDate });
 
-  const { data: logs, loading: loadingLogs } = useRequest({
-    apiCall: CommunityBusinesses.getLogs,
-    params: { since: fromDate, until: toDate },
-    updateOn: [fromDate, toDate],
-    setErrors,
-    push: props.history.push,
-  });
-
-  // onload request
-  const { loading: loadingVols } = useRequest({
-    apiCall: CommunityBusinesses.getVolunteers,
-    callback: setVolunteers,
-    setErrors,
-    push: props.history.push,
-  });
-
-  // manipulate data on response
-  useAggDataOnRes({
-    data: { logs, volunteers },
-    conditions: [logs, volunteers],
-    updateOn: [logs, unit, volunteers],
-    columnHeaders: ['Volunteer Name', ...Months.range(fromDate, toDate, Months.format.verbose)],
-    setErrors,
-    setAggData,
-    tableType: tableType.MonthByName,
-  });
+  useEffect(() => {
+    if (error) {
+      setErrors({ data: error.message });
+    }
+  }, [error]);
 
   // manipulate data for table
   useEffect(() => {
-    if (aggData) {
-      setTableData(aggregatedToTableData({ data: aggData, unit }));
+    if (data) {
+      setTableData(aggregatedToTableData({ data, unit }));
     }
-  }, [aggData]);
+  }, [data]);
 
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
@@ -92,10 +66,10 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   }, [tableData]);
 
   const downloadAsCsv = useCallback(() => {
-    downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
-  }, [aggData, fromDate, toDate, unit]);
+    downloadCsv({ aggData: data, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
+  }, [data, fromDate, toDate, unit]);
 
-  const tabProps = { aggData, unit, tableData, sortBy, onChangeSortBy, title: TITLE };
+  const tabProps = { aggData: data, unit, tableData, sortBy, onChangeSortBy, title: TITLE };
 
   return (
     <Container>
@@ -117,7 +91,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
         </Col>
       </Row>
       <Errors errors={errors}/>
-      { loadingLogs || loadingVols
+      { loading
       ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
       : (<VolunteerTabs {...tabProps}/>)}
     </Container>
