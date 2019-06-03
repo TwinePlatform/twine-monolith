@@ -1,10 +1,10 @@
-import { Dictionary } from 'ramda';
+import { round } from '../../dashboard/dataManipulation/util';
 
 export const totalizer = {
   id: 'totalizer',
 
   beforeUpdate: (chart: any) => {
-    const totals: Dictionary<any> = {};
+    const totals: number[] = [];
     let utmost = 0;
 
     chart.data.datasets.forEach((dataset: any, datasetIndex: number) => {
@@ -17,7 +17,7 @@ export const totalizer = {
     });
 
     chart.$totalizer = {
-      totals,
+      totals: totals.map(round),
       utmost,
     };
   },
@@ -54,7 +54,7 @@ export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string) =
   },
   plugins: {
     datalabels: {
-      formatter (value: any, ctx: any) {
+      formatter (_: any, ctx: any) {
         const total = ctx.chart.$totalizer.totals[ctx.dataIndex];
         return total.toString();
       },
