@@ -42,7 +42,7 @@ describe('By Activity Page', () => {
 
     const tools = renderWithHistory(ByActivity);
 
-    const [title, ...rest] = await waitForElement(() => [
+    const [title] = await waitForElement(() => [
       tools.getByText('By', { exact: false }),
       tools.getByText('Cafe', { exact: true }),
       tools.getByText('Running away', { exact: true }),
