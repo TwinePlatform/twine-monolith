@@ -1,27 +1,14 @@
 import { AggregatedData } from './logsToAggregatedData';
-import { toUnitDuration } from './util';
+import { toUnitDuration, abbreviateIfDateString } from './util';
 import { omit, map, Dictionary } from 'ramda';
 import { DurationUnitEnum } from '../../types';
 import { GraphColourList } from '../../styles/design_system';
-
-export const STACKED_TABLE_OPTIONS = {
-  legend: {
-    position: 'right',
-  },
-  scales: {
-    xAxes: [{
-      stacked: true,
-    }],
-    yAxes: [{
-      stacked: true,
-    }],
-  },
-};
+import Months from '../../util/months';
 
 export const aggregatedToStackedGraph = (aggData: AggregatedData, unit: DurationUnitEnum) => {
   const [groupBy, ...labels] = aggData.headers;
   return {
-    labels,
+    labels: labels.map((x) => abbreviateIfDateString(Months.format.graph, x).split(' ')),
     datasets: aggData.rows.map((row, i) => {
       const label = row[groupBy];
       const rowData = omit([groupBy], row);

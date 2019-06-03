@@ -3,12 +3,14 @@ import { DataTableProps } from '../../components/DataTable/types';
 import { AggregatedData } from './logsToAggregatedData';
 import { DurationUnitEnum } from '../../types';
 import { abbreviateIfDateString, calculateTotalsUsing } from './util';
+import Months from '../../util/months';
 
 
 interface Params {
   unit: DurationUnitEnum;
   data: AggregatedData;
 }
+export type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
 
 const addContentObjects = evolve({
   rows: map(map((y: any) => ({ content: y }))),
@@ -19,10 +21,10 @@ const addColumnsKey = evolve({
 });
 
 const abbreviateMonths = evolve({
-  headers: map(abbreviateIfDateString),
+  headers: map((x) => abbreviateIfDateString(Months.format.table, x)),
   rows: pipe(
     map(toPairs as any),
-    map(map(map(abbreviateIfDateString))) as any,
+    map(map(map((x) => abbreviateIfDateString(Months.format.table, x)))) as any,
     map(fromPairs)
   ),
 });

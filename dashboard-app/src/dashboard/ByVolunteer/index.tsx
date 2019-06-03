@@ -2,13 +2,9 @@ import React, { useState, useEffect, useCallback, FunctionComponent } from 'reac
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import styled from 'styled-components';
-import { Bar } from 'react-chartjs-2';
 
 import DatePickerConstraints from './datePickerConstraints';
-import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
-import { DataTableProps } from '../../components/DataTable/types';
-import { displayErrors } from '../../components/ErrorParagraph';
 import { FullScreenBeatLoader } from '../../components/Loaders';
 import { H1 } from '../../components/Headings';
 import { CommunityBusinesses } from '../../api';
@@ -17,26 +13,15 @@ import useRequest from '../../hooks/useRequest';
 import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
 import Months from '../../util/months';
 import { tableType } from '../dataManipulation/tableType';
-import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
+import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
-import {
-  aggregatedToStackedGraph,
-  STACKED_TABLE_OPTIONS
-} from '../dataManipulation/aggregatedToGraphData';
-
-/**
- * Types
- */
-type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
-
+import VolunteerTabs from './VolunteerTabs';
+import Errors from '../../components/Errors';
 
 /**
  * Styles
  */
-const DataTable = styled(_DataTable)`
-  margin-top: 4rem;
-`;
 
 const Container = styled(Grid)`
   margin-left: 0 !important;
@@ -48,7 +33,7 @@ const Container = styled(Grid)`
 /**
  * Helpers
  */
-const TABLE_TITLE = 'Volunteer Time per Month';
+const TITLE = 'Volunteer Time per Month';
 const initTableData = { headers: [], rows: [] };
 
 
@@ -110,6 +95,8 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
   }, [aggData, fromDate, toDate, unit]);
 
+  const tabProps = { aggData, unit, tableData, sortBy, onChangeSortBy, title: TITLE };
+
   return (
     <Container>
       <Row center="xs">
@@ -129,36 +116,10 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
           />
         </Col>
       </Row>
+      <Errors errors={errors}/>
       { loadingLogs || loadingVols
       ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
-      : (<>
-      <Row center="xs">
-        <Col style={{ width: '70%', 'margin-top': '3rem' }}>
-        {aggData &&
-          (<Bar
-            data={aggregatedToStackedGraph(aggData, unit)}
-            options={STACKED_TABLE_OPTIONS}
-        />)}
-        </Col>
-      </Row>
-      <Row center="xs">
-        <Col xs={9}>
-          {displayErrors(errors)}
-          {
-            tableData && (
-              <DataTable
-                { ...tableData }
-                title={TABLE_TITLE}
-                sortBy={tableData.headers[sortBy]}
-                initialOrder="desc"
-                onChangeSortBy={onChangeSortBy}
-                showTotals
-              />
-            )
-          }
-        </Col>
-      </Row>
-      </>)}
+      : (<VolunteerTabs {...tabProps}/>)}
     </Container>
   );
 };

@@ -23,7 +23,7 @@ describe('aggregatedToCsv', () => {
       ],
     };
     const expected = await aggregatedToCsv(data, unit);
-    expect(expected).toEqual(`Activity,Feb 18,Mar 18,Apr 18,Total Hours
+    expect(expected).toEqual(`Activity,February 2018,March 2018,April 2018,Total Hours
 Digging Holes,0,0.03,0,0.03
 Outdoor and practical work,0,0.06,3.09,3.15`);
   });
@@ -48,7 +48,7 @@ Outdoor and practical work,0,0.06,3.09,3.15`);
       ],
     };
     const expected = await aggregatedToCsv(data, unit);
-    expect(expected).toEqual(`Activity,Feb 18,Mar 18,Apr 18,Total Days
+    expect(expected).toEqual(`Activity,February 2018,March 2018,April 2018,Total Days
 Digging Holes,0,0.42,0,0.42
 Outdoor and practical work,0,0.07,0.39,0.46`);
   });

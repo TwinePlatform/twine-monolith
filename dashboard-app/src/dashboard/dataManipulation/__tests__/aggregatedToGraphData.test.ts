@@ -26,7 +26,7 @@ describe('aggregatedToGraphData', () => {
         { backgroundColor: '#F44336', data: [0, 0.03, 0], label: 'Digging Holes' },
         { backgroundColor: '#E91E63', data: [0, 2.38, 2], label: 'Outdoor and practical work' },
       ],
-      labels: ['February 2018', 'March 2018', 'April 2018'],
+      labels: [['Feb', '2018'], ['Mar', '2018'], ['Apr', '2018']],
     });
   });
 });
