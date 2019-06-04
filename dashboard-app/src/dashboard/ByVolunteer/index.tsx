@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, FunctionComponent } from 'react';
+import moment from 'moment';
+import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import styled from 'styled-components';
 
 import DatePickerConstraints from './datePickerConstraints';
 import UtilityBar from '../../components/UtilityBar';
@@ -14,6 +15,7 @@ import { ColoursEnum } from '../../styles/design_system';
 import VolunteerTabs from './VolunteerTabs';
 import Errors from '../../components/Errors';
 import useAggregateDataByVolunteer from '../hooks/useAggregateDataByVolunteer';
+import Months from '../../util/months';
 
 
 /**
@@ -29,8 +31,10 @@ const Container = styled(Grid)`
 /**
  * Helpers
  */
-const TITLE = 'Volunteer Time per Month';
 const initTableData = { headers: [], rows: [] };
+const getTitle = (from: Date, to: Date) =>
+  `Volunteer Time per month: \
+    ${moment(from).format(Months.format.table)} - ${moment(to).format(Months.format.table)}`;
 
 
 /**
@@ -69,7 +73,14 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     downloadCsv({ data, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
   }, [data, fromDate, toDate, unit]);
 
-  const tabProps = { data, unit, tableData, sortBy, onChangeSortBy, title: TITLE };
+  const tabProps = {
+    data,
+    unit,
+    tableData,
+    sortBy,
+    onChangeSortBy,
+    title: getTitle(fromDate, toDate),
+  };
 
   return (
     <Container>

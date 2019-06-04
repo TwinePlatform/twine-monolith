@@ -3,7 +3,7 @@ import moment from 'moment';
 interface Months {
   list: string [];
   format: typeof MonthsFormatEnum;
-  range: (from: Date, to: Date, format: MonthsFormatEnum) => string [];
+  range: (from: Date, to: Date, format: MonthsFormatEnum) => string[];
   diff: (from: Date, to: Date) => number;
 }
 
