@@ -37,19 +37,19 @@ const TimeTabs: FunctionComponent<Props> = (props) => {
   const { aggData, unit, tableData, sortBy, onChangeSortBy, title } = props;
 
   return(
-    <TabGroup titles={['Chart', 'Table']}>
-      {
-        aggData && (
-          <StackedBarChart
-            title={title}
-            data={aggregatedToStackedGraph(aggData, unit)}
-            xAxisTitle={'Months'}
-            yAxisTitle={`Volunteer ${unit}`}
-          />
-        )
-      }
-      <Row center="xs">
-        <Col xs={12}>
+    <Row center="xs">
+      <Col xs={12}>
+        <TabGroup titles={['Chart', 'Table']}>
+          {
+            aggData && (
+              <StackedBarChart
+                title={title}
+                data={aggregatedToStackedGraph(aggData, unit)}
+                xAxisTitle={'Months'}
+                yAxisTitle={`Volunteer ${unit}`}
+              />
+            )
+          }
           {
             tableData && (
               <DataTable
@@ -62,9 +62,9 @@ const TimeTabs: FunctionComponent<Props> = (props) => {
               />
             )
           }
-        </Col>
-      </Row>
-    </TabGroup>
+        </TabGroup>
+      </Col>
+    </Row>
   );
 };
 

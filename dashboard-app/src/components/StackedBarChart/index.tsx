@@ -15,7 +15,6 @@ import { ColoursEnum } from '../../styles/design_system';
 /*
  * Types
  */
-
 interface Props {
   data: any;
   xAxisTitle: string;
@@ -29,7 +28,7 @@ interface Props {
 const Card = styled(_Card)`
   margin-top: 4rem;
   padding: 1rem;
-  background: ${ColoursEnum.white}
+  background: ${ColoursEnum.white};
 `;
 const Title = styled(H3)`
   text-align: left;
@@ -41,7 +40,6 @@ const Title = styled(H3)`
 const StackedBarChart: FunctionComponent<Props> = (props) => {
   const { data, xAxisTitle, yAxisTitle, title } = props;
   return (
-
     <Card>
       <Row center="xs">
         <Col xs={12}>
@@ -50,14 +48,15 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
       </Row>
       <Row center="xs">
         <Col xs={12} md={9}>
-        <Bar
-          plugins={[totalizer, ChartDataLabels]}
-          data={data}
-          options={getStackedGraphOptions(xAxisTitle, yAxisTitle)}
-        />
+          <Bar
+            plugins={[totalizer, ChartDataLabels]}
+            data={data}
+            options={getStackedGraphOptions(xAxisTitle, yAxisTitle)}
+          />
         </Col>
       </Row>
-    </Card>);
+    </Card>
+  );
 };
 
 export default StackedBarChart;

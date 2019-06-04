@@ -15,6 +15,7 @@ import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
 import Errors from '../../components/Errors';
 import useAggregatedDataByActivity from '../hooks/useAggregatedDataByActivity';
+import { TabGroup } from '../../components/Tabs';
 
 
 /**
@@ -107,19 +108,21 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
           : (
             <Row center="xs">
               <Col xs={9}>
-              <Errors errors={errors}/>
-                {
-                  tableData && (
-                    <DataTable
-                      {...tableData}
-                      title={TABLE_TITLE}
-                      sortBy={tableData.headers[sortBy]}
-                      initialOrder="desc"
-                      onChangeSortBy={onChangeSortBy}
-                      showTotals
-                    />
-                  )
-                }
+                <Errors errors={errors}/>
+                <TabGroup titles={['Table']}>
+                  {
+                    tableData && (
+                      <DataTable
+                        {...tableData}
+                        title={TABLE_TITLE}
+                        sortBy={tableData.headers[sortBy]}
+                        initialOrder="desc"
+                        onChangeSortBy={onChangeSortBy}
+                        showTotals
+                      />
+                    )
+                  }
+                </TabGroup>
               </Col>
             </Row>
           )
