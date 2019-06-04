@@ -57,7 +57,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
 
   // manipulate data for table
   useEffect(() => {
-    if (data) {
+    if (!loading && data) {
       setTableData(aggregatedToTableData({ data, unit }));
     }
   }, [data, unit]);
