@@ -80,6 +80,8 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
       downloadCsv({ data, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
+    } else {
+      setErrors({ Download: 'No data available to download' });
     }
   }, [data, fromDate, toDate, unit]);
 
