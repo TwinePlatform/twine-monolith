@@ -26,10 +26,7 @@ export const totalizer = {
 
 export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string) => ({
   legend: {
-    position: 'right',
-    labels: {
-      usePointStyle: true,
-    },
+    display: false,
   },
   scales: {
     xAxes: [{

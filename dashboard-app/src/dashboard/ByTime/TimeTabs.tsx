@@ -44,7 +44,8 @@ const TimeTabs: FunctionComponent<Props> = (props) => {
             data && (
               <StackedBarChart
                 title={title}
-                data={aggregatedToStackedGraph(data, unit)}
+                data={data}
+                unit={unit}
                 xAxisTitle={'Months'}
                 yAxisTitle={`Volunteer ${unit}`}
               />

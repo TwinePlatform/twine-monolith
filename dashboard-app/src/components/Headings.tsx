@@ -24,13 +24,12 @@ export const H3 = styled.h3`
   color: ${ColoursEnum.black};
   text-align: center;
   margin-bottom: 1.5rem;
-`;
+  `;
 
 export const H4 = styled.h4`
   font-size: ${Fonts.size.heading4};
+  font-weight: ${Fonts.weight.light};
   color: ${ColoursEnum.black};
   text-align: center;
   margin-bottom: 1.5rem;
 `;
-
-export default H1;
