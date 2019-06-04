@@ -68,7 +68,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
     if (!loading && data) {
       setTableData(aggregatedToTableData({ data, unit }));
     }
-  }, [data]);
+  }, [data, unit]);
 
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
