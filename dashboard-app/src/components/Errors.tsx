@@ -9,10 +9,10 @@ import { ColoursEnum, SpacingEnum } from '../styles/design_system';
 /*
  * Types
  */
-
 interface Props {
   errors: Dictionary<string>;
 }
+
 
 /*
  * Styles
@@ -27,11 +27,18 @@ export const ErrorParagraph = styled.p`
 /*
  * Component
  */
-const Errors: FunctionComponent<Props> = (props) =>
-  (<Row center="xs">
-    <Col>
-      <ErrorParagraph>{toPairs(props.errors).map((x) => x.join(': ')) || ''}</ErrorParagraph>
-    </Col>
-</Row>);
+const Errors: FunctionComponent<Props> = ({ errors }) => {
+  if (Object.keys(errors).length === 0) {
+    return null;
+  }
+
+  return (
+    <Row center="xs">
+      <Col>
+        <ErrorParagraph>{toPairs(errors).map((x) => x.join(': ')) || ''}</ErrorParagraph>
+      </Col>
+    </Row>
+  );
+};
 
 export default Errors;
