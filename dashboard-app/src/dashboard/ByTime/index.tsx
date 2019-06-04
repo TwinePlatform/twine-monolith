@@ -17,6 +17,7 @@ import TimeTabs from './TimeTabs';
 import Errors from '../../components/Errors';
 import useAggregateDataByTime from '../hooks/useAggregateDataByTime';
 import Months from '../../util/months';
+import { Dictionary } from 'ramda';
 
 
 /**
@@ -45,7 +46,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [sortBy, setSortBy] = useState(0);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
-  const [errors, setErrors] = useState();
+  const [errors, setErrors] = useState<Dictionary<string>>({});
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const { data, loading, error } = useAggregateDataByTime({ from: fromDate, to: toDate });
 
@@ -78,7 +79,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   }, [data, fromDate, toDate, unit]);
 
   const tabProps = {
-    data,
+    data: data || { headers: [], rows: [] },
     unit,
     tableData,
     sortBy,

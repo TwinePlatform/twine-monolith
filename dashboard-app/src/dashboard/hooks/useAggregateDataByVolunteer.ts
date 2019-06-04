@@ -1,7 +1,7 @@
 import { DependencyList, useEffect, useState } from 'react';
 import { useBatchRequest } from '../../hooks';
 import { CommunityBusinesses } from '../../api';
-import { logsToAggregatedData } from '../dataManipulation/logsToAggregatedData';
+import { logsToAggregatedData, AggregatedData } from '../dataManipulation/logsToAggregatedData';
 import { tableType } from '../dataManipulation/tableType';
 import Months from '../../util/months';
 
@@ -13,7 +13,7 @@ interface UseAggregatedDataParams {
 }
 
 export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
-  const [aggregatedData, setAggregatedData] = useState();
+  const [aggregatedData, setAggregatedData] = useState<AggregatedData>({ rows: [], headers: [] });
 
   const {
     loading,

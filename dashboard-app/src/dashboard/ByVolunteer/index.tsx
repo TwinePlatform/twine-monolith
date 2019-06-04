@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, FunctionComponent } from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
+import { Dictionary } from 'ramda';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
@@ -46,7 +47,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
-  const [errors, setErrors] = useState();
+  const [errors, setErrors] = useState<Dictionary<string>>({});
   const { loading, data, error } = useAggregateDataByVolunteer({ from: fromDate, to: toDate });
 
   useEffect(() => {
@@ -78,7 +79,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   }, [data, fromDate, toDate, unit]);
 
   const tabProps = {
-    data,
+    data: data || { headers: [], rows: [] },
     unit,
     tableData,
     sortBy,
