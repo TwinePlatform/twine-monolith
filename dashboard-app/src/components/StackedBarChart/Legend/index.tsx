@@ -15,8 +15,9 @@ import { Dictionary } from 'ramda';
  */
 
 interface Props {
+  title: string;
   activeData: any[];
-  setActiveDataPoint: (t: string) => void;
+  setActivityOfDatum: (t: string) => void;
 }
 
 /*
@@ -39,15 +40,15 @@ const Title = styled(H4)`
  */
 
 const Legend: FunctionComponent<Props> = (props) => {
-  const { activeData, setActiveDataPoint } = props;
+  const { activeData, setActivityOfDatum, title } = props;
   return (
   <Col xs={3}>
     <Card>
-      <Title>Volunteers</Title> {/*TD*/}
+      <Title>{title}</Title> {/*TD*/}
       {activeData.map((x, i) => (
         <LegendItem
           key={x.key}
-          setActiveDataPoint={setActiveDataPoint}
+          setActivityOfDatum={setActivityOfDatum}
           colour={GraphColourList[i]}
           title={x.key}
           active={x.active}

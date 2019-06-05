@@ -11,6 +11,8 @@ interface Params {
 }
 
 export interface AggregatedData {
+  groupByX: string;
+  groupByY: string;
   headers: string [];
   rows: Dictionary<string | Duration.Duration>[];
 }
@@ -53,14 +55,10 @@ export const logsToAggregatedData = ({ logs, columnHeaders, tableType, volunteer
   }, []);
 
   return {
+    groupByX: firstColumn,
+    groupByY: '',
     headers: [firstColumn, ...columnRest],
     rows: mapVolunteerNamesIfExists(volunteers, rows),
   };
 };
 
-// has rows/cells | headers
-// project object onto existing matrix
-
-// project(rowId, colId, (a, b) => T, logs, emptyMatrix)
-
-// augment headers and cols

@@ -1,8 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
-import { Bar } from 'react-chartjs-2';
+import { Bar, ChartData } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import * as chartjs from 'chart.js';
 
 
 import _DataTable from '../DataTable';
@@ -10,8 +11,6 @@ import { getStackedGraphOptions, totalizer } from './util';
 import _Card from '../Card';
 import { H3 } from '../Headings';
 import { ColoursEnum } from '../../styles/design_system';
-import { DurationUnitEnum } from '../../types';
-import { AggregatedData } from '../../dashboard/dataManipulation/logsToAggregatedData';
 import { aggregatedToStackedGraph } from '../../dashboard/dataManipulation/aggregatedToGraphData';
 
 
@@ -20,8 +19,7 @@ import { aggregatedToStackedGraph } from '../../dashboard/dataManipulation/aggre
  */
 
 interface Props {
-  data: AggregatedData;
-  unit: DurationUnitEnum;
+  data: ChartData<chartjs.ChartData>;
   xAxisTitle: string;
   yAxisTitle: string;
   title: string;
@@ -32,7 +30,8 @@ interface Props {
 const Card = styled(_Card)`
   margin-top: 4rem;
   padding: 1rem;
-  background: ${ColoursEnum.white}
+  background: ${ColoursEnum.white};
+  height: 100%;
 `;
 const Title = styled(H3)`
   text-align: left;
@@ -43,7 +42,7 @@ const Title = styled(H3)`
  */
 
 const Chart: FunctionComponent<Props> = (props) => {
-  const { data, xAxisTitle, yAxisTitle, title, unit } = props;
+  const { data, xAxisTitle, yAxisTitle, title } = props;
   return (
   <Col xs={9}>
     <Card>
@@ -52,11 +51,11 @@ const Chart: FunctionComponent<Props> = (props) => {
           <Title>{title}</Title>
         </Col>
       </Row>
-      <Row center="xs">
+      <Row center="xs" middle="xs">
         <Col xs={12} md={9}>
         <Bar
           plugins={[totalizer, ChartDataLabels]}
-          data={aggregatedToStackedGraph(data, unit)}
+          data={data}
           options={getStackedGraphOptions(xAxisTitle, yAxisTitle)}
         />
         </Col>

@@ -21,7 +21,7 @@ interface TitleProps {
 
 interface Props extends KeyProps, TitleProps{
   title: string;
-  setActiveDataPoint: any;
+  setActivityOfDatum: any;
 }
 
 /*
@@ -53,11 +53,11 @@ const KeyTitle = styled(Paragraph)<TitleProps>`
 
 
 const LegendItem: FunctionComponent<Props> = (props) => {
-  const { setActiveDataPoint, title, active } = props;
+  const { setActivityOfDatum, title, active } = props;
   return (
-  <Button onClick={() => setActiveDataPoint(title)}>
+  <Button onClick={() => setActivityOfDatum(title)}>
     <Grid>
-      <Row>
+      <Row middle="xs">
           <Col xs={2}>
             <Key colour={props.colour} active={props.active}/> {/*TD*/}
           </Col>

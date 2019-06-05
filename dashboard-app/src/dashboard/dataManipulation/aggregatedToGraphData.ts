@@ -10,7 +10,7 @@ export const aggregatedToStackedGraph = (aggData: AggregatedData, unit: Duration
   return {
     labels: labels.map((x) => abbreviateIfDateString(Months.format.graph, x).split(' ')),
     datasets: aggData.rows.map((row, i) => {
-      const label = row[groupBy];
+      const label = row[groupBy] as string;
       const rowData = omit([groupBy], row);
       const numericData = map((v) =>
         typeof v === 'object'

@@ -6,6 +6,7 @@ import { evolve } from 'ramda';
 import Legend from './Legend/index';
 import { DurationUnitEnum } from '../../types';
 import Chart from './Chart';
+import { aggregatedToStackedGraph } from '../../dashboard/dataManipulation/aggregatedToGraphData';
 
 
 /*
@@ -20,12 +21,29 @@ interface Props {
   title: string;
 }
 
-interface StateItem {
+interface ActiveDatum {
   key: string;
   active: boolean;
 }
 
-type State = StateItem[];
+type ActiveData = ActiveDatum[];
+
+/*
+ * Helpers
+ */
+
+const createActiveData = (data: AggregatedData): ActiveData => {
+  return data.rows.map((row) => ({ key: row[data.groupByX] as string, active: true }));
+};
+
+const tareInactiveData = (data: AggregatedData, activeData: ActiveData) => evolve({
+  rows: ((rows) => rows.map((row: any, i: number) => activeData[i].active
+      ? row
+      : Object.keys(row).slice(1).reduce((acc: object, el) => ({ ...acc, [el]: 0 }),
+        { [data.groupByX]: row[data.groupByX] })
+    )),
+}, data);
+
 
 /*
  * Components
@@ -33,11 +51,11 @@ type State = StateItem[];
 
 const StackedBarChart: FunctionComponent<Props> = (props) => {
   const { data, xAxisTitle, yAxisTitle, title, unit } = props;
-  const initialState = data.rows.map((x) => ({ key: x[data.headers[0]] as string, active: true })); {/*TD*/}
-  const [activeData, setActiveData] = useState<State>(initialState);
+  const initialState = createActiveData(data);
+  const [activeData, setActiveData] = useState(initialState);
 
-  const setActiveDataPoint = (t: string) => {
-    setActiveData((prevState: State) => prevState.map((x) =>
+  const setActivityOfDatum = (t: string) => {
+    setActiveData((prevState: ActiveData) => prevState.map((x) =>
       x.key === t
         ? {
           key: t,
@@ -47,16 +65,11 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
      ));
   };
 
-  const chartData = evolve({
-    rows: ((row) => row.map((x: any, i: number) => activeData[i].active
-      ? x
-      : Object.keys(x).reduce((acc: object, el) => ({ ...acc, [el]: 0 }), {})
-    )),
-  }, data);
-
-  console.log({ data, activeData });
+  const taredData = tareInactiveData(data, activeData);
+  const chartData = aggregatedToStackedGraph(taredData, unit);
   const chartProps = { data: chartData, xAxisTitle, yAxisTitle, title, unit };
-  const legendProps = { activeData, setActiveDataPoint };
+  const legendProps = { activeData, setActivityOfDatum, title: data.groupByX };
+
   return (
     <Grid>
       <Row>

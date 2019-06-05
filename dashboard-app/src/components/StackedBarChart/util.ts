@@ -24,7 +24,7 @@ export const totalizer = {
   },
 };
 
-export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string) => ({
+export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string): any => ({
   legend: {
     display: false,
   },
@@ -35,7 +35,7 @@ export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string) =
         labelString: xAxisTitle,
       },
       stacked: true,
-      gridLines: false,
+      gridLines: { display: false },
       ticks: { padding: 5 },
     }],
     yAxes: [{
@@ -44,7 +44,7 @@ export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string) =
         labelString: yAxisTitle,
       },
       stacked: true,
-      gridLines: false,
+      gridLines: { display: false },
       ticks: { display: false },
     }],
   },
