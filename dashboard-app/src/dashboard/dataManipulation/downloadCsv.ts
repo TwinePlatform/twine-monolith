@@ -8,7 +8,7 @@ import { DurationUnitEnum } from '../../types';
 
 interface Params {
   fileName: string;
-  aggData: AggregatedData;
+  data: AggregatedData;
   fromDate: Date;
   toDate: Date;
   setErrors: (x: Dictionary<string>) => void;
@@ -16,7 +16,7 @@ interface Params {
 }
 
 // tslint:disable-next-line: max-line-length
-export const downloadCsv = async ({ aggData, fromDate, toDate, setErrors, fileName, unit }: Params) => {
+export const downloadCsv = async ({ data: aggData, fromDate, toDate, setErrors, fileName, unit }: Params) => {
   try {
     const csv = await aggregatedToCsv(aggData, unit);
     const from = moment(fromDate).format(Months.format.filename);

@@ -1,7 +1,7 @@
 /*
  * useBatchRequest
  *
- * Note that due this hook causes the requests to be made immediately.
+ * Note that this hook causes the requests to be made immediately.
  * If deferred execution of requests is required, create a new hook:
  * `useBatchRequestDeferred` which returns not only the state but a
  * function which is used to trigger the request. `useEffect` will

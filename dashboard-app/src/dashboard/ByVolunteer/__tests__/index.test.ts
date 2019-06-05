@@ -75,13 +75,6 @@ describe('By Volunteer Page', () => {
       await waitForElement(() => tools.getByText('Totals', { exact: true }));
 
       const rows = await waitForElement(() => tools.getAllByTestId('data-table-row'));
-      // console.log(rows.map((row) => row.textContent));
-      // console.log(rows.map((row) => row.textContent));
-      // console.log(rows.map((row) => row.textContent));
-
-      console.log(sortedHeader.textContent);
-      console.log(sortedHeader.textContent);
-      console.log(sortedHeader.textContent);
 
       expect(rows[0]).toHaveTextContent('Wilma3.6600000.333.33000000');
       expect(rows[1]).toHaveTextContent('Betty3.3300020001.330000');

@@ -14,7 +14,7 @@ import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
 import Errors from '../../components/Errors';
-import useAggregatedDataByActivity from '../hooks/useAggregatedDataByActivity';
+import useAggregateDataByActivity from '../hooks/useAggregateDataByActivity';
 import { TabGroup } from '../../components/Tabs';
 
 
@@ -55,7 +55,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [errors, setErrors] = useState();
-  const { loading, error, data } = useAggregatedDataByActivity({ from: fromDate, to: toDate });
+  const { loading, error, data } = useAggregateDataByActivity({ from: fromDate, to: toDate });
 
   useEffect(() => {
     if (error) {
@@ -79,7 +79,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
 
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
-      downloadCsv({ aggData: data, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
+      downloadCsv({ data, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
     }
   }, [data, fromDate, toDate, unit]);
 

@@ -13,7 +13,7 @@ import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
 import VolunteerTabs from './VolunteerTabs';
 import Errors from '../../components/Errors';
-import useAggregatedDataByVolunteer from '../hooks/useAggregatedDataByVolunteer';
+import useAggregateDataByVolunteer from '../hooks/useAggregateDataByVolunteer';
 
 
 /**
@@ -43,7 +43,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [errors, setErrors] = useState();
-  const { loading, data, error } = useAggregatedDataByVolunteer({ from: fromDate, to: toDate });
+  const { loading, data, error } = useAggregateDataByVolunteer({ from: fromDate, to: toDate });
 
   useEffect(() => {
     if (error) {
@@ -66,10 +66,10 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   }, [tableData]);
 
   const downloadAsCsv = useCallback(() => {
-    downloadCsv({ aggData: data, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
+    downloadCsv({ data, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
   }, [data, fromDate, toDate, unit]);
 
-  const tabProps = { aggData: data, unit, tableData, sortBy, onChangeSortBy, title: TITLE };
+  const tabProps = { data, unit, tableData, sortBy, onChangeSortBy, title: TITLE };
 
   return (
     <Container>
