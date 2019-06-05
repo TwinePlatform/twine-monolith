@@ -17,6 +17,8 @@ import {
 import Legend from './Legend/index';
 import Chart from './Chart';
 import { LegendData } from './types';
+import _DataTable from '../DataTable';
+import _Card from '../Card';
 
 
 /*
@@ -71,7 +73,8 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   }, [legendData]);
 
   const chartProps = { data: chartData, xAxisTitle, yAxisTitle, title, unit };
-  const legendProps = { legendData, setLegendActivityOfAll, setLegendActivityOnUpdate, title: data.groupByX }; // tslint:disable-line:max-line-length
+// tslint:disable-next-line: max-line-length
+  const legendProps = { legendData, setLegendActivityOfAll, setLegendActivityOnUpdate, title: data.groupByX };
 
   return (
     <Grid>

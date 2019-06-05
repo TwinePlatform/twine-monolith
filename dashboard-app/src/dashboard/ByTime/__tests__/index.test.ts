@@ -7,7 +7,7 @@ import ByTime from '..';
 import 'jest-dom/extend-expect';
 
 
-jest.mock('react-chartjs-2', () => ({ Bar: () => null }));
+jest.mock('react-chartjs-2', () => ({ __esModule: true, default: () => null }));
 
 
 describe('By Time Page', () => {

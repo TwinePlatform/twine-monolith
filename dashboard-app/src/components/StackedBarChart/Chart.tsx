@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
-import { Bar, ChartData } from 'react-chartjs-2';
+import { ChartData } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import * as chartjs from 'chart.js';
 
+import RoundedBar from './RoundedBar';
 import { getStackedGraphOptions, totalizer } from './utils/chartjsUtils';
 import _Card from '../Card';
 import { H3 } from '../Headings';
@@ -56,7 +57,7 @@ const Chart: FunctionComponent<Props> = (props) => {
       </Row>
       <Row center="xs" middle="xs">
         <Col xs={12} md={9}>
-        <Bar
+        <RoundedBar
           datasetKeyProvider={datasetKeyProvider}
           plugins={[totalizer, ChartDataLabels]}
           data={data}
