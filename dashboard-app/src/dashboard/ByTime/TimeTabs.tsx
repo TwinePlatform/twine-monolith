@@ -15,7 +15,7 @@ import StackedBarChart from '../../components/StackedBarChart/index';
  */
 
 interface Props {
-  aggData: AggregatedData;
+  data: AggregatedData;
   unit: DurationUnitEnum;
   tableData: TableData;
   sortBy: number;
@@ -34,28 +34,37 @@ const DataTable = styled(_DataTable)`
  * Component
  */
 const TimeTabs: FunctionComponent<Props> = (props) => {
-  const { aggData, unit, tableData, sortBy, onChangeSortBy, title } = props;
+  const { data, unit, tableData, sortBy, onChangeSortBy, title } = props;
 
   return(
-    <TabGroup titles={['Chart', 'Table']}>
-      {aggData && <StackedBarChart
-        title={title}
-        data={aggregatedToStackedGraph(aggData, unit)}
-        xAxisTitle={'Months'}
-        yAxisTitle={`Volunteer ${unit}`}/>}
-      <Row center="xs">
-        <Col xs={12}>
-          { tableData && (<DataTable
-          {...tableData}
-          title={title}
-          sortBy={tableData.headers[sortBy]}
-          initialOrder="asc"
-          onChangeSortBy={onChangeSortBy}
-          showTotals
-          />)}
-        </Col>
-      </Row>
-    </TabGroup>
+    <Row center="xs">
+      <Col xs={12}>
+        <TabGroup titles={['Chart', 'Table']}>
+          {
+            data && (
+              <StackedBarChart
+                title={title}
+                data={aggregatedToStackedGraph(data, unit)}
+                xAxisTitle={'Months'}
+                yAxisTitle={`Volunteer ${unit}`}
+              />
+            )
+          }
+          {
+            tableData && (
+              <DataTable
+                {...tableData}
+                title={title}
+                sortBy={tableData.headers[sortBy]}
+                initialOrder="asc"
+                onChangeSortBy={onChangeSortBy}
+                showTotals
+              />
+            )
+          }
+        </TabGroup>
+      </Col>
+    </Row>
   );
 };
 
