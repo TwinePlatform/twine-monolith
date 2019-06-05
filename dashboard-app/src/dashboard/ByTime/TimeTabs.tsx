@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
 
 import _DataTable from '../../components/DataTable';
-import { aggregatedToStackedGraph } from '../dataManipulation/aggregatedToGraphData';
 import { TabGroup } from '../../components/Tabs';
 import { AggregatedData } from '../dataManipulation/logsToAggregatedData';
 import { DurationUnitEnum } from '../../types';
