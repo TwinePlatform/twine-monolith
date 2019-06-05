@@ -41,10 +41,15 @@ const TitleRow = styled(Row)`
  */
 
 const isEveryDatumActive = (data: ActiveData): boolean => data.every((datum) => datum.active);
+const isEveryDatumInactive = (data: ActiveData): boolean => data.every((datum) => !datum.active);
 
-const flipActivityOfAll = (data: ActiveData): ActiveData => {
-  const currentActivity = isEveryDatumActive(data);
-  return data.map((x) => ({ ...x, activity: currentActivity }));
+const flipActiveOfAll = (data: ActiveData): ActiveData => {
+  const active: boolean = isEveryDatumActive(data)
+    ? false
+    : isEveryDatumInactive(data);
+
+  const newActiveData = data.map((x) => ({ ...x, active }));
+  return newActiveData;
 };
 
 /*
@@ -55,7 +60,7 @@ const Legend: FunctionComponent<Props> = (props) => {
   const { activeData, setActiveData, title } = props;
 
   const setActivityOfDatum = (t: string) => {
-    setActiveData((prevState: ActiveData): ActiveData =>
+    return () => setActiveData((prevState: ActiveData): ActiveData =>
       prevState.map((x) =>
         x.key === t
           ? {
@@ -67,7 +72,7 @@ const Legend: FunctionComponent<Props> = (props) => {
   };
 
   const setActivityOfAll = () => {
-    setActiveData(flipActivityOfAll);
+    setActiveData(flipActiveOfAll);
   };
 
   return (
@@ -89,7 +94,7 @@ const Legend: FunctionComponent<Props> = (props) => {
       {activeData.map((x, i) => (
         <LegendItem
           key={x.key}
-          onClick={setActivityOfDatum}
+          onClick={setActivityOfDatum(x.key)}
           colour={GraphColourList[i]}
           title={x.key}
           active={x.active}

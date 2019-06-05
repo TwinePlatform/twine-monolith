@@ -28,12 +28,10 @@ interface Props extends KeyProps, TitleProps{
  * Styles
  */
 
-
 const Row = styled(_Row)`
   padding-left: 1rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-
 `;
 
 const Key = styled.div<KeyProps>`
@@ -47,15 +45,15 @@ const KeyTitle = styled(Paragraph)<TitleProps>`
   text-align: left;
   ${(props) => props.active ? '' : `color: ${ColoursEnum.grey}`}
 `;
+
 /*
  * Components
  */
 
-
 const LegendItem: FunctionComponent<Props> = (props) => {
   const { onClick, title, active } = props;
   return (
-  <Button onClick={() => onClick(title)}>
+  <Button onClick={onClick}>
     <Grid>
       <Row middle="xs">
           <Col xs={2}>
