@@ -6,8 +6,7 @@ import _Card from '../../Card';
 import { H4 } from '../../Headings';
 import { ColoursEnum, GraphColourList } from '../../../styles/design_system';
 import LegendItem from './LegendItem';
-import { AggregatedData } from '../../../dashboard/dataManipulation/logsToAggregatedData';
-import { Dictionary } from 'ramda';
+import { ActiveData } from '..';
 
 
 /*
@@ -16,8 +15,8 @@ import { Dictionary } from 'ramda';
 
 interface Props {
   title: string;
-  activeData: any[];
-  setActivityOfDatum: (t: string) => void;
+  activeData: ActiveData;
+  setActiveData: any;
 }
 
 /*
@@ -32,23 +31,65 @@ const Card = styled(_Card)`
 const Title = styled(H4)`
   text-align: left;
   padding: 1rem;
+`;
+
+const TitleRow = styled(Row)`
   border-bottom: ${ColoursEnum.grey} 1px solid;
 `;
+/*
+ * Components
+ */
+
+const isEveryDatumActive = (data: ActiveData): boolean => data.every((datum) => datum.active);
+
+const flipActivityOfAll = (data: ActiveData): ActiveData => {
+  const currentActivity = isEveryDatumActive(data);
+  return data.map((x) => ({ ...x, activity: currentActivity }));
+};
 
 /*
  * Components
  */
 
 const Legend: FunctionComponent<Props> = (props) => {
-  const { activeData, setActivityOfDatum, title } = props;
+  const { activeData, setActiveData, title } = props;
+
+  const setActivityOfDatum = (t: string) => {
+    setActiveData((prevState: ActiveData): ActiveData =>
+      prevState.map((x) =>
+        x.key === t
+          ? {
+            key: t,
+            active: !x.active,
+          }
+        : x
+      ));
+  };
+
+  const setActivityOfAll = () => {
+    setActiveData(flipActivityOfAll);
+  };
+
   return (
   <Col xs={3}>
     <Card>
-      <Title>{title}</Title> {/*TD*/}
+      <TitleRow middle="xs" between="xs">
+        <Col xs={3}>
+          <Title>{title}</Title>
+        </Col>
+        <Col xs={6}>
+          <LegendItem
+            key="all"
+            onClick={setActivityOfAll}
+            colour={ColoursEnum.darkGrey}
+            title="All"
+            active={isEveryDatumActive(activeData)}/>
+        </Col>
+      </TitleRow>
       {activeData.map((x, i) => (
         <LegendItem
           key={x.key}
-          setActivityOfDatum={setActivityOfDatum}
+          onClick={setActivityOfDatum}
           colour={GraphColourList[i]}
           title={x.key}
           active={x.active}

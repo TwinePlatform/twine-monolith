@@ -35,7 +35,7 @@ export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string): 
         labelString: xAxisTitle,
       },
       stacked: true,
-      gridLines: { display: false },
+      gridLines: false,
       ticks: { padding: 5 },
     }],
     yAxes: [{
@@ -44,7 +44,7 @@ export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string): 
         labelString: yAxisTitle,
       },
       stacked: true,
-      gridLines: { display: false },
+      gridLines: false,
       ticks: { display: false },
     }],
   },

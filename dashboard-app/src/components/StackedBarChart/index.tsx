@@ -26,7 +26,7 @@ interface ActiveDatum {
   active: boolean;
 }
 
-type ActiveData = ActiveDatum[];
+export type ActiveData = ActiveDatum[];
 
 /*
  * Helpers
@@ -54,21 +54,10 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   const initialState = createActiveData(data);
   const [activeData, setActiveData] = useState(initialState);
 
-  const setActivityOfDatum = (t: string) => {
-    setActiveData((prevState: ActiveData) => prevState.map((x) =>
-      x.key === t
-        ? {
-          key: t,
-          active: !x.active,
-        }
-      : x
-     ));
-  };
-
   const taredData = tareInactiveData(data, activeData);
   const chartData = aggregatedToStackedGraph(taredData, unit);
   const chartProps = { data: chartData, xAxisTitle, yAxisTitle, title, unit };
-  const legendProps = { activeData, setActivityOfDatum, title: data.groupByX };
+  const legendProps = { activeData, setActiveData, title: data.groupByX };
 
   return (
     <Grid>

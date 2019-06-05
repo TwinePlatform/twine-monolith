@@ -12,7 +12,7 @@ import { AccessibilityButton as Button } from '../../Buttons';
  */
 
 interface KeyProps {
-  colour: GraphColoursEnum;
+  colour: GraphColoursEnum | ColoursEnum;
   active: boolean;
 }
 interface TitleProps {
@@ -21,7 +21,7 @@ interface TitleProps {
 
 interface Props extends KeyProps, TitleProps{
   title: string;
-  setActivityOfDatum: any;
+  onClick: any;
 }
 
 /*
@@ -53,9 +53,9 @@ const KeyTitle = styled(Paragraph)<TitleProps>`
 
 
 const LegendItem: FunctionComponent<Props> = (props) => {
-  const { setActivityOfDatum, title, active } = props;
+  const { onClick, title, active } = props;
   return (
-  <Button onClick={() => setActivityOfDatum(title)}>
+  <Button onClick={() => onClick(title)}>
     <Grid>
       <Row middle="xs">
           <Col xs={2}>
