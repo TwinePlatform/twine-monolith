@@ -16,6 +16,7 @@ import { ColoursEnum } from '../../styles/design_system';
 import Errors from '../../components/Errors';
 import useAggregateDataByActivity from '../hooks/useAggregateDataByActivity';
 import { TabGroup } from '../../components/Tabs';
+import { Dictionary } from 'ramda';
 
 
 /**
@@ -54,7 +55,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
-  const [errors, setErrors] = useState();
+  const [errors, setErrors] = useState<Dictionary<string>>({});
   const { loading, error, data } = useAggregateDataByActivity({ from: fromDate, to: toDate });
 
   useEffect(() => {
