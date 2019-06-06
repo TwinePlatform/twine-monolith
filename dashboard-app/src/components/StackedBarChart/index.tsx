@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
-import { Bar } from 'react-chartjs-2';
+import { Bar, ChartComponentProps } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 
@@ -17,7 +17,7 @@ import { ColoursEnum } from '../../styles/design_system';
  */
 
 interface Props {
-  data: any;
+  data: ChartComponentProps['data'];
   xAxisTitle: string;
   yAxisTitle: string;
   title: string;
