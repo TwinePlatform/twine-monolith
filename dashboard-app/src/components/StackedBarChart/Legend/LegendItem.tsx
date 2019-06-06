@@ -1,10 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
-import { Row as _Row, Col, Grid } from 'react-flexbox-grid';
+import { Row } from 'react-flexbox-grid';
 
 import { ColoursEnum, GraphColoursEnum } from '../../../styles/design_system';
-import { Paragraph } from '../../Typography';
-import { AccessibilityButton as Button } from '../../Buttons';
+import { Span } from '../../Typography';
 
 
 /*
@@ -27,45 +26,45 @@ interface Props extends KeyProps, TitleProps{
 /*
  * Styles
  */
-
-const Row = styled(_Row)`
+const Container = styled.div`
   padding-left: 1rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 `;
 
 const Key = styled.div<KeyProps>`
-  ${(props) => props.active ? `background:${props.colour}` : `border: solid 2px ${props.colour}`}
+  ${(props) => props.active ? `background: ${props.colour};` : `border: solid 2px ${props.colour};`}
   height: 1.5rem;
   width: 1.5rem;
   border-radius: 2px;
+  display: inline-block;
+  margin-right: 0.4rem;
+  cursor: pointer;
 `;
 
-const KeyTitle = styled(Paragraph)<TitleProps>`
+const KeyTitle = styled(Span)<TitleProps>`
+  ${(props) => props.active ? '' : `color: ${ColoursEnum.grey};`}
   text-align: left;
-  ${(props) => props.active ? '' : `color: ${ColoursEnum.grey}`}
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 80%;
+  cursor: pointer;
+  line-height: initial;
 `;
 
 /*
  * Components
  */
-
 const LegendItem: FunctionComponent<Props> = (props) => {
-  const { onClick, title, active } = props;
+  const { onClick, title, active, colour } = props;
   return (
-  <Button onClick={onClick}>
-    <Grid>
-      <Row middle="xs">
-          <Col xs={2}>
-            <Key colour={props.colour} active={props.active}/> {/*TD*/}
-          </Col>
-          <Col xs={10}>
-            <KeyTitle active={active}>{title}</KeyTitle> {/*TD*/}
-          </Col>
+    <Container>
+      <Row start="xs" middle="xs" onClick={onClick}>
+        <Key colour={colour} active={active}/>
+        <KeyTitle title={title} active={active}>{title}</KeyTitle>
       </Row>
-    </Grid>
-  </Button>
-
+    </Container>
   );
 };
 

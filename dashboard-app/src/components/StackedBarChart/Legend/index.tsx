@@ -87,7 +87,7 @@ const Legend: FunctionComponent<Props> = (props) => {
         <Col xs={6}>
           <Title>{title}</Title>
         </Col>
-        <Col xs={6}>
+        <Col xs={3} xsOffset={3}>
           <LegendItem
             key="all"
             onClick={setActivityOfAll}
