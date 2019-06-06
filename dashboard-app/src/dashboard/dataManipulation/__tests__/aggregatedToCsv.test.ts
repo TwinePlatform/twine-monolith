@@ -6,6 +6,8 @@ describe('aggregatedToCsv', () => {
   test('SUCCESS - returns string in csv format', async () => {
     const unit = DurationUnitEnum.HOURS;
     const data = {
+      groupByX: 'Activity',
+      groupByY: 'Months',
       headers: ['Activity', 'February 2018', 'March 2018', 'April 2018'],
       rows: [
         {
@@ -31,6 +33,8 @@ Outdoor and practical work,0,0.06,3.09,3.15`);
   test('SUCCESS - returns string in csv format in correct units', async () => {
     const unit = DurationUnitEnum.DAYS;
     const data = {
+      groupByX: 'Activity',
+      groupByY: 'Months',
       headers: ['Activity', 'February 2018', 'March 2018', 'April 2018'],
       rows: [
         {

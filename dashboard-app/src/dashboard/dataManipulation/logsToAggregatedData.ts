@@ -33,12 +33,12 @@ const mapVolunteerNamesIfExists = (vols: Params['volunteers'], rows: AggregatedD
 export const logsToAggregatedData = ({ logs, columnHeaders, tableType, volunteers }: Params): AggregatedData => { // tslint:disable:max-line-length
   const [firstColumn, ...columnRest] = columnHeaders;
   const rows: Dictionary<any>[] = logs.reduce((logsRows: Dictionary<any>[], el: any) => {
-    const activeColumn = tableType.getColumnIdFromLogs(el);
+    const activeColumn = tableType.getYIdFromLogs(el);
     const exists = logsRows.some((logs: any) =>
-      logs[firstColumn] === el[tableType.rowIdFromLogs]);
+      logs[firstColumn] === el[tableType.xIdFromLogs]);
     if (exists) {
       return logsRows.map((row) => {
-        if (row[firstColumn] === el[tableType.rowIdFromLogs]) {
+        if (row[firstColumn] === el[tableType.xIdFromLogs]) {
           row[activeColumn] = Duration.sum(row[activeColumn], el.duration);
         }
         return row;
@@ -47,7 +47,7 @@ export const logsToAggregatedData = ({ logs, columnHeaders, tableType, volunteer
     const columnElements = columnRest.map((a: string) => ({ [a]: Duration.fromSeconds(0) }));
     const newRow = {
 
-      [firstColumn]: el[tableType.rowIdFromLogs],
+      [firstColumn]: el[tableType.xIdFromLogs],
       ...mergeAll(columnElements) as Dictionary<string>,
       [activeColumn]: el.duration,
 
@@ -55,9 +55,10 @@ export const logsToAggregatedData = ({ logs, columnHeaders, tableType, volunteer
     return logsRows.concat(newRow);
   }, []);
 
+  const { groupByX, groupByY } = tableType;
   return {
-    groupByX: firstColumn,
-    groupByY: '',
+    groupByX,
+    groupByY,
     headers: [firstColumn, ...columnRest],
     rows: mapVolunteerNamesIfExists(volunteers, rows),
   };

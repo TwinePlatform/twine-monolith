@@ -7,6 +7,8 @@ describe('aggregatedToTableData', () => {
   describe(':: convert aggreagated data to table data format', () => {
     test('SUCCESS - returns aggregated data with months headers', () => {
       const data = {
+        groupByX: 'Volunteer Name',
+        groupByY: 'Activity',
         headers: ['Activity', 'February 2018', 'March 2018', 'April 2018'],
         rows: [
           {
@@ -25,8 +27,9 @@ describe('aggregatedToTableData', () => {
       };
 
       const expected = aggregatedToTableData({ data, unit: DurationUnitEnum.HOURS });
-
       expect(expected).toEqual({
+        groupByX: 'Volunteer Name',
+        groupByY: 'Activity',
         headers: ['Activity', 'Total Hours', 'Feb 18', 'Mar 18', 'Apr 18'],
         rows: [{
           columns: {
@@ -48,6 +51,8 @@ describe('aggregatedToTableData', () => {
 
     test('SUCCESS - returns aggregated data with volunteer names', () => {
       const data = {
+        groupByX: 'Volunteer Name',
+        groupByY: 'Activity',
         headers: ['Volunteer Name', 'Outdoor and practical work'],
         rows: [
           {
@@ -67,6 +72,8 @@ describe('aggregatedToTableData', () => {
       const expected = aggregatedToTableData({ data, unit: DurationUnitEnum.HOURS });
 
       expect(expected).toEqual({
+        groupByX: 'Volunteer Name',
+        groupByY: 'Activity',
         headers: ['Volunteer Name', 'Total Hours', 'Outdoor and practical work'],
         rows: [{
           columns: {
@@ -89,6 +96,8 @@ describe('aggregatedToTableData', () => {
 
     test('SUCCESS - changes aggregation & "Total" column based on unit input', () => {
       const data = {
+        groupByX: 'Volunteer Name',
+        groupByY: 'Activity',
         headers: ['Volunteer Name', 'Outdoor and practical work'],
         rows: [
           {
@@ -108,6 +117,8 @@ describe('aggregatedToTableData', () => {
       const expected = aggregatedToTableData({ data, unit: DurationUnitEnum.DAYS });
 
       expect(expected).toEqual({
+        groupByX: 'Volunteer Name',
+        groupByY: 'Activity',
         headers: ['Volunteer Name', 'Total Days', 'Outdoor and practical work'],
         rows: [{
           columns: {

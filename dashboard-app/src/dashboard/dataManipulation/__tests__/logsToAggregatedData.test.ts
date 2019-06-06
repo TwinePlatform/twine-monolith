@@ -35,6 +35,8 @@ describe('logsToAggregatedData', () => {
       tableType: tableType.MonthByActivity,
     });
     expect(expected).toEqual({
+      groupByX: 'Activity',
+      groupByY: 'Month',
       headers: ['Activity', 'February 2018', 'March 2018', 'April 2018'],
       rows: [
         {
@@ -92,6 +94,8 @@ describe('logsToAggregatedData', () => {
       volunteers,
     });
     expect(expected).toEqual({
+      groupByX: 'Volunteer Name',
+      groupByY: 'Activity',
       headers: ['Volunteer Name', 'Outdoor and practical work'],
       rows: [
           { 'Outdoor and practical work': { minutes: 2 }, 'Volunteer Name': 'Aku Aku' },
@@ -135,6 +139,8 @@ describe('logsToAggregatedData', () => {
       volunteers,
     });
     expect(expected).toEqual({
+      groupByX: 'Volunteer Name',
+      groupByY: 'Activity',
       headers: ['Volunteer Name', 'Outdoor and practical work'],
       rows: [
           { 'Outdoor and practical work': { hours: 1, minutes: 9 }, 'Volunteer Name': 'Crash Bandicoot' },
@@ -177,6 +183,8 @@ describe('logsToAggregatedData', () => {
       volunteers,
     });
     expect(expected).toEqual({
+      groupByX: 'Volunteer Name',
+      groupByY: 'Activity',
       headers: ['Volunteer Name', 'Outdoor and practical work'],
       rows: [
         { 'Outdoor and practical work': { minutes: 45 }, 'Volunteer Name': 'Deleted User' },

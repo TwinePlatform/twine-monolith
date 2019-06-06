@@ -4,6 +4,8 @@ import { DurationUnitEnum } from '../../../types';
 describe('aggregatedToGraphData', () => {
   test('aggregatedToStackedGraph returns correct data', () => {
     const aggData = {
+      groupByX: 'Activity',
+      groupByY: 'Months',
       headers: ['Activity', 'February 2018', 'March 2018', 'April 2018'],
       rows: [
         {
