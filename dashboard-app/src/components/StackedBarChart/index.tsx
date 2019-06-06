@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Grid, Row } from 'react-flexbox-grid';
 import { ChartComponentProps } from 'react-chartjs-2';
-import { evolve } from 'ramda';
+import { evolve, omit } from 'ramda';
 
 import Legend from './Legend/index';
 import { DurationUnitEnum } from '../../types';
@@ -32,14 +32,15 @@ export type ActiveData = ActiveDatum[];
  * Helpers
  */
 
-const createActiveData = (data: AggregatedData): ActiveData => {
-  return data.rows.map((row) => ({ key: row[data.groupByX] as string, active: true }));
-};
+export const createActiveData = (data: AggregatedData): ActiveData => data.rows
+  .map((row) => ({ key: row[data.groupByX] as string, active: true }));
 
-const tareInactiveData = (data: AggregatedData, activeData: ActiveData) => evolve({
+export const getYHeaderList = (row: Row, groupByX: string) => Object.keys(omit([groupByX], row));
+
+export const zeroOutInactiveData = (data: AggregatedData, activeData: ActiveData) => evolve({
   rows: ((rows) => rows.map((row: any, i: number) => activeData[i].active
       ? row
-      : Object.keys(row).slice(1).reduce((acc: object, el) => ({ ...acc, [el]: 0 }),
+      : getYHeaderList(row, data.groupByX).reduce((acc: object, el) => ({ ...acc, [el]: 0 }),
         { [data.groupByX]: row[data.groupByX] })
     )),
 }, data);
@@ -54,8 +55,8 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   const initialState = createActiveData(data);
   const [activeData, setActiveData] = useState(initialState);
 
-  const taredData = tareInactiveData(data, activeData);
-  const chartData = aggregatedToStackedGraph(taredData, unit);
+  const zeroedData = zeroOutInactiveData(data, activeData);
+  const chartData = aggregatedToStackedGraph(zeroedData, unit);
   const chartProps = { data: chartData, xAxisTitle, yAxisTitle, title, unit };
   const legendProps = { activeData, setActiveData, title: data.groupByX };
 

@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
-import { Row, Col } from 'react-flexbox-grid';
+import { Row, Col, Grid } from 'react-flexbox-grid';
 
 import _Card from '../../Card';
 import { H4 } from '../../Headings';
@@ -22,34 +22,38 @@ interface Props {
 /*
  * Styles
  */
+
 const Card = styled(_Card)`
-  margin-top: 4rem;
   background: ${ColoursEnum.white};
-  height: 100%
+  height: 100%;
+  padding: 1rem;
 `;
 
 const Title = styled(H4)`
   text-align: left;
-  padding: 1rem;
+  margin: 0;
 `;
 
 const TitleRow = styled(Row)`
   border-bottom: ${ColoursEnum.grey} 1px solid;
 `;
+
 /*
- * Components
+ * Helpers
  */
 
-const isEveryDatumActive = (data: ActiveData): boolean => data.every((datum) => datum.active);
-const isEveryDatumInactive = (data: ActiveData): boolean => data.every((datum) => !datum.active);
+export const isEveryDatumActive = (data: ActiveData): boolean =>
+  data.every((datum) => datum.active);
 
-const flipActiveOfAll = (data: ActiveData): ActiveData => {
+export const isEveryDatumInactive = (data: ActiveData): boolean =>
+  data.every((datum) => !datum.active);
+
+export const flipActiveOfAll = (data: ActiveData): ActiveData => {
   const active: boolean = isEveryDatumActive(data)
     ? false
     : isEveryDatumInactive(data);
 
-  const newActiveData = data.map((x) => ({ ...x, active }));
-  return newActiveData;
+  return data.map((x) => ({ ...x, active }));
 };
 
 /*
@@ -78,8 +82,9 @@ const Legend: FunctionComponent<Props> = (props) => {
   return (
   <Col xs={3}>
     <Card>
-      <TitleRow middle="xs" between="xs">
-        <Col xs={3}>
+      <Grid>
+      <TitleRow middle="xs">
+        <Col xs={6}>
           <Title>{title}</Title>
         </Col>
         <Col xs={6}>
@@ -99,8 +104,9 @@ const Legend: FunctionComponent<Props> = (props) => {
           title={x.key}
           active={x.active}
         />))}
+      </Grid>
     </Card>
-  </Col>
+  </Col >
   );
 };
 

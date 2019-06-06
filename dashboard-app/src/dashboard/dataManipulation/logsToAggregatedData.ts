@@ -10,11 +10,12 @@ interface Params {
   volunteers?: { id: string, name: string }[]; // TODO: replace with Volunteer | User type
 }
 
+export type Row = Dictionary<string | Duration.Duration>;
 export interface AggregatedData {
   groupByX: string;
   groupByY: string;
   headers: string [];
-  rows: Dictionary<string | Duration.Duration>[];
+  rows: Row[];
 }
 
 const mapVolunteerNamesIfExists = (vols: Params['volunteers'], rows: AggregatedData['rows']) =>
