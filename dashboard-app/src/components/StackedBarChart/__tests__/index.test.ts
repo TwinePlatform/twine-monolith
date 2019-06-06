@@ -1,5 +1,4 @@
 import { createActiveData, zeroOutInactiveData, getYHeaderList } from '../index';
-import { Row } from '../../../dashboard/dataManipulation/logsToAggregatedData';
 
 // tslint:disable:max-line-length
 describe('Helpers', () => {
