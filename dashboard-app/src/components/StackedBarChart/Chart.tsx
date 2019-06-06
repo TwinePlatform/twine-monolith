@@ -25,8 +25,6 @@ interface Props {
  * Styles
  */
 const Card = styled(_Card)`
-  margin-top: 4rem;
-  padding: 1rem;
   background: ${ColoursEnum.white};
   height: 100%;
 `;
