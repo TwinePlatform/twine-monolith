@@ -26,7 +26,6 @@ interface Props {
  * Styles
  */
 const DataTable = styled(_DataTable)`
-  margin-top: 4rem;
 `;
 
 /*

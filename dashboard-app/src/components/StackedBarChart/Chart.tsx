@@ -24,10 +24,17 @@ interface Props {
 /*
  * Styles
  */
+
+const MainCol = styled(Col)`
+  padding: 0 !important;
+`;
+
 const Card = styled(_Card)`
   background: ${ColoursEnum.white};
   height: 100%;
+  padding: 1rem;
 `;
+
 const Title = styled(H3)`
   text-align: left;
 `;
@@ -39,7 +46,7 @@ const Title = styled(H3)`
 const Chart: FunctionComponent<Props> = (props) => {
   const { data, xAxisTitle, yAxisTitle, title } = props;
   return (
-  <Col xs={9}>
+  <MainCol xs={9}>
     <Card>
       <Row center="xs">
         <Col xs={12}>
@@ -56,7 +63,7 @@ const Chart: FunctionComponent<Props> = (props) => {
         </Col>
       </Row>
     </Card>
-  </Col>);
+  </MainCol>);
 };
 
 export default Chart;

@@ -36,6 +36,7 @@ const Title = styled(H4)`
 
 const TitleRow = styled(Row)`
   border-bottom: ${ColoursEnum.grey} 1px solid;
+  margin-bottom: 0.5rem;
 `;
 
 /*
