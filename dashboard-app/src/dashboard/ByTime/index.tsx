@@ -79,7 +79,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   }, [data, fromDate, toDate, unit]);
 
   const tabProps = {
-    data: data || { headers: [], rows: [] },
+    data,
     unit,
     tableData,
     sortBy,

@@ -12,7 +12,7 @@ interface UseAggregatedDataParams {
 }
 
 export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
-  const [aggregatedData, setAggregatedData] = useState<AggregatedData>({ rows: [], headers: [] });
+  const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
 
   const {
     loading,

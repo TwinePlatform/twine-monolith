@@ -14,7 +14,7 @@ import StackedBarChart from '../../components/StackedBarChart/index';
  */
 
 interface Props {
-  data: AggregatedData;
+  data?: AggregatedData;
   unit: DurationUnitEnum;
   tableData: TableData;
   sortBy: number;
