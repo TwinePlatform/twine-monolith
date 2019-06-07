@@ -1,12 +1,12 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Grid, Row } from 'react-flexbox-grid';
-import { ChartComponentProps } from 'react-chartjs-2';
 import { evolve, omit } from 'ramda';
 
 import Legend from './Legend/index';
 import { DurationUnitEnum } from '../../types';
 import Chart from './Chart';
 import { aggregatedToStackedGraph } from '../../dashboard/dataManipulation/aggregatedToGraphData';
+import { AggregatedData } from '../../dashboard/dataManipulation/logsToAggregatedData';
 
 
 /*
@@ -14,7 +14,7 @@ import { aggregatedToStackedGraph } from '../../dashboard/dataManipulation/aggre
  */
 
 interface Props {
-  data: ChartComponentProps['data'];
+  data: AggregatedData;
   unit: DurationUnitEnum;
   xAxisTitle: string;
   yAxisTitle: string;
