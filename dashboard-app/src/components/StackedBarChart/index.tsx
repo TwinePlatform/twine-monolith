@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import { Grid, Row } from 'react-flexbox-grid';
 import { evolve, omit } from 'ramda';
 
@@ -52,11 +52,21 @@ export const zeroOutInactiveData = (data: AggregatedData, activeData: ActiveData
 
 const StackedBarChart: FunctionComponent<Props> = (props) => {
   const { data, xAxisTitle, yAxisTitle, title, unit } = props;
-  const initialState = createActiveData(data);
-  const [activeData, setActiveData] = useState(initialState);
+  const [activeData, setActiveData] = useState(createActiveData(data));
+  const [chartData, setChartData] = useState();
 
-  const zeroedData = zeroOutInactiveData(data, activeData);
-  const chartData = aggregatedToStackedGraph(zeroedData, unit);
+  useEffect(() => {
+    const activeData = createActiveData(data); // TD: update: data, oldActiveData -> newActiveData
+    const zeroedOutData = zeroOutInactiveData(data, activeData);
+    setActiveData(activeData);
+    setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
+  }, [data]);
+
+  useEffect(() => {
+    const zeroedOutData = zeroOutInactiveData(data, activeData);
+    setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
+  }, [activeData]);
+
   const chartProps = { data: chartData, xAxisTitle, yAxisTitle, title, unit };
   const legendProps = { activeData, setActiveData, title: data.groupByX };
 
