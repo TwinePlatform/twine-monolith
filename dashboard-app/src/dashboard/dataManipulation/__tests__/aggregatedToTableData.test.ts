@@ -1,35 +1,43 @@
 import { Duration } from 'twine-util';
 import { aggregatedToTableData } from '../aggregatedToTableData';
 import { DurationUnitEnum } from '../../../types';
+import { AggregatedData } from '../logsToAggregatedData';
 
 
 describe('aggregatedToTableData', () => {
   describe(':: convert aggreagated data to table data format', () => {
     test('SUCCESS - returns aggregated data with months headers', () => {
       const data = {
-        groupByX: 'Volunteer Name',
-        groupByY: 'Activity',
-        headers: ['Activity', 'February 2018', 'March 2018', 'April 2018'],
+        groupByX: 'Activity',
+        groupByY: 'Month',
         rows: [
           {
-            Activity: 'Digging Holes',
+            id: 2,
+            name: 'Digging Holes',
             'April 2018': Duration.fromSeconds(0),
             'February 2018': Duration.fromSeconds(0),
             'March 2018': Duration.fromSeconds(120),
           },
           {
-            Activity: 'Outdoor and practical work',
+            id: 8,
+            name: 'Outdoor and practical work',
             'April 2018': Duration.fromSeconds(0),
             'February 2018': Duration.fromSeconds(0),
             'March 2018': Duration.fromSeconds(213),
           },
         ],
-      };
+      } as AggregatedData;
 
-      const expected = aggregatedToTableData({ data, unit: DurationUnitEnum.HOURS });
+      const months = [
+        { id: 182, name: 'February 2018' },
+        { id: 183, name: 'March 2018' },
+        { id: 184, name: 'April 2018' },
+      ];
+
+      const expected = aggregatedToTableData({ data, unit: DurationUnitEnum.HOURS, yData: months });
       expect(expected).toEqual({
-        groupByX: 'Volunteer Name',
-        groupByY: 'Activity',
+        groupByX: 'Activity',
+        groupByY: 'Month',
         headers: ['Activity', 'Total Hours', 'Feb 18', 'Mar 18', 'Apr 18'],
         rows: [{
           columns: {
@@ -49,27 +57,33 @@ describe('aggregatedToTableData', () => {
       });
     });
 
-    test('SUCCESS - returns aggregated data with volunteer names', () => {
+    test.only('SUCCESS - returns aggregated data with volunteer names', () => {
       const data = {
         groupByX: 'Volunteer Name',
         groupByY: 'Activity',
-        headers: ['Volunteer Name', 'Outdoor and practical work'],
         rows: [
           {
             'Outdoor and practical work': Duration.fromSeconds(312),
-            'Volunteer Name': 'Aku Aku',
+            name: 'Aku Aku',
+            id: 2,
           },
           {
             'Outdoor and practical work': Duration.fromSeconds(102),
-            'Volunteer Name': 'Crash Bandicoot',
+            name: 'Crash Bandicoot',
+            id: 3,
           },
-          {
-            'Outdoor and practical work': Duration.fromSeconds(1110),
-            'Volunteer Name': 'Crash Bandicoot',
-          },
-        ]};
+        ]} as AggregatedData;
 
-      const expected = aggregatedToTableData({ data, unit: DurationUnitEnum.HOURS });
+      const activities = [
+          { id: 1, name: 'Digging Holes' },
+          { id: 2, name: 'Outdoor and practical work' },
+      ];
+
+      const expected = aggregatedToTableData({
+        data,
+        unit: DurationUnitEnum.HOURS,
+        yData: activities,
+      });
 
       expect(expected).toEqual({
         groupByX: 'Volunteer Name',
