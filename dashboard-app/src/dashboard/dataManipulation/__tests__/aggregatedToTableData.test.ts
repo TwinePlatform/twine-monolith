@@ -57,7 +57,7 @@ describe('aggregatedToTableData', () => {
       });
     });
 
-    test.only('SUCCESS - returns aggregated data with volunteer names', () => {
+    test('SUCCESS - returns aggregated data with volunteer names', () => {
       const data = {
         groupByX: 'Volunteer Name',
         groupByY: 'Activity',
@@ -88,7 +88,7 @@ describe('aggregatedToTableData', () => {
       expect(expected).toEqual({
         groupByX: 'Volunteer Name',
         groupByY: 'Activity',
-        headers: ['Volunteer Name', 'Total Hours', 'Outdoor and practical work'],
+        headers: ['Volunteer Name', 'Total Hours', 'Digging Holes', 'Outdoor and practical work'],
         rows: [{
           columns: {
             'Outdoor and practical work': { content: 0.09 },
@@ -99,11 +99,6 @@ describe('aggregatedToTableData', () => {
           'Outdoor and practical work': { content: 0.03 },
           'Total Hours': { content: 0.03 },
           'Volunteer Name': { content: 'Crash Bandicoot' } },
-        },
-        { columns: {
-          'Outdoor and practical work': { content: 0.31 },
-          'Total Hours': { content: 0.31 },
-          'Volunteer Name': { content: 'Crash Bandicoot' } },
         }],
       });
     });
@@ -112,7 +107,6 @@ describe('aggregatedToTableData', () => {
       const data = {
         groupByX: 'Volunteer Name',
         groupByY: 'Activity',
-        headers: ['Volunteer Name', 'Outdoor and practical work'],
         rows: [
           {
             'Outdoor and practical work': Duration.fromSeconds(31200),
@@ -126,14 +120,23 @@ describe('aggregatedToTableData', () => {
             'Outdoor and practical work': Duration.fromSeconds(111000),
             'Volunteer Name': 'Crash Bandicoot',
           },
-        ]};
+        ]} as AggregatedData;
 
-      const expected = aggregatedToTableData({ data, unit: DurationUnitEnum.DAYS });
+      const activities = [
+          { id: 1, name: 'Digging Holes' },
+          { id: 2, name: 'Outdoor and practical work' },
+      ];
+
+      const expected = aggregatedToTableData({
+        data,
+        unit: DurationUnitEnum.DAYS,
+        yData: activities,
+      });
 
       expect(expected).toEqual({
         groupByX: 'Volunteer Name',
         groupByY: 'Activity',
-        headers: ['Volunteer Name', 'Total Days', 'Outdoor and practical work'],
+        headers: ['Volunteer Name', 'Total Days', 'Digging Holes', 'Outdoor and practical work'],
         rows: [{
           columns: {
             'Outdoor and practical work': { content: 1.08 },
