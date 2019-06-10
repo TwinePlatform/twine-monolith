@@ -1,34 +1,26 @@
 import { Duration } from 'twine-util';
-import { mergeAll, path, find, propEq, assocPath, Dictionary } from 'ramda';
+import { mergeAll, Dictionary } from 'ramda';
 import { TableTypeItem } from './tableType';
 
 
-interface Params {
-  logs: any;
-  // columnHeaders: string[]; // replaced by yData?
-  tableType: TableTypeItem;
-  xData: { id: number, name: string }[]; // TODO: replace with Volunteer | User type
-  yData: { id: number, name: string }[]; // TODO: replace with Volunteer | User type
+export interface IdAndName {
+  id: number;
+  name: string;
 }
 
-export type Row = Dictionary<string | Duration.Duration>;
+interface Params {
+  logs: any;
+  tableType: TableTypeItem;
+  xData: IdAndName[];
+  yData: IdAndName[];
+}
+
+export type Row = Dictionary<string | Duration.Duration> & {};
 export interface AggregatedData {
   groupByX: string;
   groupByY: string;
-  // headers: string [];
   rows: Row[];
 }
-
-// const mapVolunteerNamesIfExists = (vols: Params['xData'], rows: AggregatedData['rows']) =>
-//   !vols
-//     ? rows
-//     : rows.map((row) => {
-//       const id = path(['Volunteer Name'], row);
-//       const activeVolunteer = find(propEq('id', id), vols);
-//       return !activeVolunteer
-//         ? assocPath(['Volunteer Name'], 'Deleted User', row)
-//         : assocPath(['Volunteer Name'], activeVolunteer.name, row);
-//     });
 
 const getIdAndName = (xData: Params['xData'], tableType: TableTypeItem, log: Params['logs']) => {
   switch (tableType.xIdFromLogs){
@@ -68,7 +60,6 @@ const checkIfRowExistsInList = (acc: Row[], tableType: TableTypeItem, log: Param
 
 export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params): AggregatedData => { // tslint:disable:max-line-length
   const { groupByX, groupByY } = tableType;
-  // const [firstColumn, ...columnRest] = [groupByX, ...yData.map((x) => x.name)];
   const rows: Row[] = logs.reduce((rowsAcc: Dictionary<any>[], log: any) => {
     const activeColumn = tableType.getYIdFromLogs(log);
 
@@ -95,14 +86,7 @@ export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params):
   return {
     groupByX,
     groupByY,
-    // headers: [firstColumn, ...columnRest],
     rows,
   };
 };
 
-// Row groups
-// Volunteer Name: [{id: 1, name: 'Me'}, {id: 2, name: 'You'}]
-// Activity: [{id: 1, name: 'Jump'}, {id: 2, name: 'Cry'}]
-// Month: [{id: 191, name: 'Jan 19'}, {id: 192, name: 'Feb 19'}]
-
-// Column groups

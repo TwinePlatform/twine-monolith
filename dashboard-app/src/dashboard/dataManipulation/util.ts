@@ -1,9 +1,10 @@
 import moment from 'moment';
-import { evolve, curry } from 'ramda';
+import { evolve, curry, omit, map, pipe, toPairs, fromPairs } from 'ramda';
 import { Duration, MathUtil, Objects } from 'twine-util';
 import { DurationUnitEnum } from '../../types';
 import { AggregatedData } from './logsToAggregatedData';
 import Months, { MonthsFormatEnum } from '../../util/months';
+import { renameKeys } from 'twine-util/objects';
 
 
 export const isDateString = (x: any): boolean => {
@@ -51,3 +52,28 @@ export const calculateTotalsUsing = (unit: DurationUnitEnum) => evolve({
     };
   }),
 });
+
+
+export const createHeaders = (yData: {name: string}[]) => (data: AggregatedData) => {
+  const headers = [data.groupByX, ...yData.map((x) => x.name)];
+  return { ...data, headers };
+}; // TODO: add test
+
+export const renameAllNameKeys = (data: AggregatedData) => {
+  const newRows = data.rows.map(renameKeys({ name: data.groupByX }));
+  return { ...data, rows: newRows };
+}; // TODO: add test
+
+export const removeIdInRows = (data: AggregatedData) => {
+  const newRows = data.rows.map(omit(['id']));
+  return { ...data, rows: newRows };
+}; // TODO: add test
+
+export const abbreviateMonths = (format: MonthsFormatEnum) => evolve({
+  headers: map((x) => abbreviateIfDateString(format, x)),
+  rows: pipe(
+    map(toPairs as any),
+    map(map(map((x) => abbreviateIfDateString(format, x)))) as any,
+    map(fromPairs)
+  ),
+}); // TODO: add test

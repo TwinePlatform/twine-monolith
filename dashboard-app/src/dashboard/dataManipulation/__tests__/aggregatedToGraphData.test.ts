@@ -1,26 +1,28 @@
 import { aggregatedToStackedGraph } from '../aggregatedToGraphData';
 import { DurationUnitEnum } from '../../../types';
+import { AggregatedData } from '../logsToAggregatedData';
 
 describe('aggregatedToGraphData', () => {
   test('aggregatedToStackedGraph returns correct data', () => {
     const aggData = {
       groupByX: 'Activity',
       groupByY: 'Months',
-      headers: ['Activity', 'February 2018', 'March 2018', 'April 2018'],
       rows: [
         {
-          Activity: 'Digging Holes',
-          'April 2018': {},
+          id: 3,
+          name: 'Digging Holes',
           'February 2018': {},
           'March 2018': { minutes: 2 },
+          'April 2018': {},
         },
         {
-          Activity: 'Outdoor and practical work',
-          'April 2018': { hours: 2 },
+          id: 5,
+          name: 'Outdoor and practical work',
           'February 2018': {},
           'March 2018': { hours: 2, minutes: 23 },
+          'April 2018': { hours: 2 },
         },
-      ]};
+      ]} as AggregatedData;
 
     const expected = aggregatedToStackedGraph(aggData, DurationUnitEnum.HOURS);
     expect(expected).toEqual({
