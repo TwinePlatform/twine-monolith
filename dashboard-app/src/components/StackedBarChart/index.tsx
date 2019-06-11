@@ -58,7 +58,7 @@ export const zeroOutInactiveData = (data: AggregatedData, legendData: LegendData
         { id: row.id, name: row.name });
   }
     )),
-}, data);
+}, data) as AggregatedData;
 
 
 /*
