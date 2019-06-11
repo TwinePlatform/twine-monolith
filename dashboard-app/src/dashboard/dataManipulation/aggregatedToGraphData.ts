@@ -6,6 +6,7 @@ import { GraphColourList } from '../../styles/design_system';
 import Months from '../../util/months';
 
 export const aggregatedToStackedGraph = (data: AggregatedData, unit: DurationUnitEnum) => {
+  console.log({ data });
   const labels = Object.keys(omit(['id', 'name'], data.rows[0]));
   return {
     labels: labels.map((x) => abbreviateIfDateString(Months.format.graph, x).split(' ')),
@@ -20,6 +21,7 @@ export const aggregatedToStackedGraph = (data: AggregatedData, unit: DurationUni
       return {
         backgroundColor: GraphColourList[i],
         label,
+        key: row.id,
         data: labels.map((y) => numericData[y]),
       };
     }),

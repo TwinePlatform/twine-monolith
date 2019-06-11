@@ -65,11 +65,11 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   }, [error]);
 
   // manipulate data for table
-  useEffect(() => {
-    if (!loading && data) {
-      setTableData(aggregatedToTableData({ data, unit }));
-    }
-  }, [data, unit]);
+  // useEffect(() => {
+  //   if (!loading && data) {
+  //     setTableData(aggregatedToTableData({ data, unit }));
+  //   }
+  // }, [data, unit]);
 
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);

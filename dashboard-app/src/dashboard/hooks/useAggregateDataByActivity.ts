@@ -1,8 +1,14 @@
 import { DependencyList, useEffect, useState } from 'react';
+import { pick, map } from 'ramda';
 import { useBatchRequest } from '../../hooks';
 import { CommunityBusinesses } from '../../api';
-import { logsToAggregatedData, AggregatedData } from '../dataManipulation/logsToAggregatedData';
+import {
+  logsToAggregatedData,
+  AggregatedData,
+  IdAndName,
+} from '../dataManipulation/logsToAggregatedData';
 import { tableType } from '../dataManipulation/tableType';
+import { activities } from '../__data__/api_data';
 
 
 interface UseAggregatedDataParams {
@@ -44,14 +50,14 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     }
 
     const logs = logsData.data;
-    const activities = activitiesData.data;
-    const volunteers = volunteersData.data;
+    const activities = activitiesData.data as IdAndName[];
+    const volunteers = volunteersData.data as IdAndName[];
 
     const data = logsToAggregatedData({
       logs,
-      columnHeaders: ['Volunteer Name', ...activities],
       tableType: tableType.ActivityByName,
-      volunteers,
+      xData: volunteers,
+      yData: activities,
     });
 
     setAggregatedData(data);
@@ -68,7 +74,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
 
   } else {
 
-    return { loading, data: aggregatedData, error };
+    return { loading, data: aggregatedData, error, yData: activities };
 
   }
 };

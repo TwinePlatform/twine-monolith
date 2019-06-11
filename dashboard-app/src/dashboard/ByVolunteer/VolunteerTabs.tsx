@@ -4,7 +4,7 @@ import { Row, Col } from 'react-flexbox-grid';
 
 import _DataTable from '../../components/DataTable';
 import { TabGroup } from '../../components/Tabs';
-import { AggregatedData } from '../dataManipulation/logsToAggregatedData';
+import { AggregatedData, IdAndName } from '../dataManipulation/logsToAggregatedData';
 import { DurationUnitEnum } from '../../types';
 import { TableData } from '../dataManipulation/aggregatedToTableData';
 import StackedBarChart from '../../components/StackedBarChart/index';
@@ -20,6 +20,7 @@ interface Props {
   sortBy: number;
   onChangeSortBy: (x: string) => void;
   title: string;
+  legendData?: IdAndName[];
 }
 
 /*
@@ -33,18 +34,19 @@ const DataTable = styled(_DataTable)`
  * Component
  */
 const VolunteerTabs: FunctionComponent<Props> = (props) => {
-  const { data, unit, tableData, sortBy, onChangeSortBy, title } = props;
+  const { data, unit, tableData, sortBy, onChangeSortBy, title, legendData } = props;
 
   return(
     <Row center="xs">
       <Col xs={12}>
         <TabGroup titles={['Chart', 'Table']}>
           {
-            data && (
+            data && legendData && (
               <StackedBarChart
                 title={title}
                 data={data}
                 unit={unit}
+                legendData={legendData}
                 xAxisTitle={'Months'}
                 yAxisTitle={`Volunteer ${unit}`}
               />

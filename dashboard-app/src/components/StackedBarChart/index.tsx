@@ -2,11 +2,12 @@ import React, { FunctionComponent, useState, useEffect } from 'react';
 import { Grid, Row } from 'react-flexbox-grid';
 import { evolve, omit } from 'ramda';
 
-import Legend from './Legend/index';
 import { DurationUnitEnum } from '../../types';
-import Chart from './Chart';
 import { aggregatedToStackedGraph } from '../../dashboard/dataManipulation/aggregatedToGraphData';
-import { AggregatedData } from '../../dashboard/dataManipulation/logsToAggregatedData';
+import { AggregatedData, IdAndName } from '../../dashboard/dataManipulation/logsToAggregatedData';
+
+import Legend from './Legend/index';
+import Chart from './Chart';
 
 
 /*
@@ -15,60 +16,73 @@ import { AggregatedData } from '../../dashboard/dataManipulation/logsToAggregate
 
 interface Props {
   data: AggregatedData;
+  legendData: IdAndName[];
   unit: DurationUnitEnum;
   xAxisTitle: string;
   yAxisTitle: string;
   title: string;
 }
 
-interface ActiveDatum {
-  key: string;
+interface LegendDatum {
+  id: number;
+  name: string;
   active: boolean;
 }
 
-export type ActiveData = ActiveDatum[];
+export type LegendData = LegendDatum[];
 
 /*
  * Helpers
  */
 
-export const createActiveData = (data: AggregatedData): ActiveData => data.rows
-  .map((row) => ({ key: row[data.groupByX] as string, active: true }));
+// export const createActiveLegendData = (data: IdAndName[]): LegendData =>
+//   data.map((x) => ({ active: true, ...x }));
 
-export const getYHeaderList = (row: Row, groupByX: string) => Object.keys(omit([groupByX], row));
+export const createActiveLegendData = (data: AggregatedData, legendData: IdAndName[]): LegendData =>
+  data.rows
+    .map((row) => {
+      const legendRow = legendData.find((x) => row.name === x.name);
+      return { ...legendRow, active: true } as LegendDatum;
+    });
 
-export const zeroOutInactiveData = (data: AggregatedData, activeData: ActiveData) => evolve({
-  rows: ((rows) => rows.map((row: any, i: number) => activeData[i].active
+export const getYHeaderList = (row: Row) => Object.keys(omit(['id', 'name'], row));
+
+export const zeroOutInactiveData = (data: AggregatedData, legendData: LegendData) => evolve({
+  rows: ((rows: Row[]) => rows.map((row, i: number) => {
+    console.log(row);
+    return legendData[i].active
       ? row
-      : getYHeaderList(row, data.groupByX).reduce((acc: object, el) => ({ ...acc, [el]: 0 }),
-        { [data.groupByX]: row[data.groupByX] })
+      : getYHeaderList(row).reduce((acc: object, el) => ({ ...acc, [el]: 0 }), {}) as Row;
+  }
     )),
-}, data);
+}, data as any) as AggregatedData;
 
 
 /*
  * Components
  */
-
+// tslint:disable:max-line-length
 const StackedBarChart: FunctionComponent<Props> = (props) => {
-  const { data, xAxisTitle, yAxisTitle, title, unit } = props;
-  const [activeData, setActiveData] = useState(createActiveData(data));
+  const { data, xAxisTitle, yAxisTitle, title, unit, legendData } = props;
+  const [activeLegendData, setActiveLegendData] = useState(createActiveLegendData(data, legendData));
   const [chartData, setChartData] = useState();
 
   useEffect(() => {
-    const activeData = createActiveData(data); // TD: update: data, oldActiveData -> newActiveData
-    const zeroedOutData = zeroOutInactiveData(data, activeData);
-    setActiveData(activeData);
+    const newData = createActiveLegendData(data, legendData); // TD: data, oldActiveData -> newActiveData
+    const zeroedOutData = zeroOutInactiveData(data, newData);
+    setActiveLegendData(newData);
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
   }, [data]);
 
   useEffect(() => {
-    const zeroedOutData = zeroOutInactiveData(data, activeData);
+    const zeroedOutData = zeroOutInactiveData(data, activeLegendData);
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
-  }, [activeData]);
+  }, [activeLegendData]);
+
+  console.log({ chartData });
 
   const chartProps = { data: chartData, xAxisTitle, yAxisTitle, title, unit };
-  const legendProps = { activeData, setActiveData, title: data.groupByX };
+  const legendProps = { activeLegendData, setActiveLegendData, title: data.groupByX };
 
   return (
     <Grid>

@@ -1,6 +1,6 @@
 import { evolve, map, pipe } from 'ramda';
 import { DataTableProps } from '../../components/DataTable/types';
-import { AggregatedData } from './logsToAggregatedData';
+import { AggregatedData, IdAndName } from './logsToAggregatedData';
 import { DurationUnitEnum } from '../../types';
 import Months from '../../util/months';
 import {
@@ -14,7 +14,7 @@ import {
 interface Params {
   unit: DurationUnitEnum;
   data: AggregatedData;
-  yData: { name: string }[];
+  yData: IdAndName[];
 }
 export type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
 
