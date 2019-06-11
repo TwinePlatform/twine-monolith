@@ -45,6 +45,7 @@ const Title = styled(H3)`
 
 const Chart: FunctionComponent<Props> = (props) => {
   const { data, xAxisTitle, yAxisTitle, title } = props;
+  const datasetKeyProvider = (d: any) => d.id;
   return (
   <MainCol xs={9}>
     <Card>
@@ -56,6 +57,7 @@ const Chart: FunctionComponent<Props> = (props) => {
       <Row center="xs" middle="xs">
         <Col xs={12} md={9}>
         <Bar
+          datasetKeyProvider={datasetKeyProvider}
           plugins={[totalizer, ChartDataLabels]}
           data={data}
           options={getStackedGraphOptions(xAxisTitle, yAxisTitle)}

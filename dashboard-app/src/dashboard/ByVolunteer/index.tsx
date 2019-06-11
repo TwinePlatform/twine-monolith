@@ -48,7 +48,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [errors, setErrors] = useState<Dictionary<string>>({});
-  const { loading, data, error, months } =
+  const { loading, data, error, months, volunteers } =
     useAggregateDataByVolunteer({ from: fromDate, to: toDate });
 
   useEffect(() => {
@@ -58,11 +58,11 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   }, [error]);
 
   // manipulate data for table
-  // useEffect(() => {
-  //   if (!loading && data) {
-  //     setTableData(aggregatedToTableData({ data, unit }));
-  //   }
-  // }, [data, unit]);
+  useEffect(() => {
+    if (!loading && data && months) {
+      setTableData(aggregatedToTableData({ data, unit, yData: months }));
+    }
+  }, [data, unit]);
 
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
@@ -85,7 +85,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     tableData,
     sortBy,
     onChangeSortBy,
-    yData: months,
+    legendData: volunteers,
     title: getTitle(fromDate, toDate),
   };
 
