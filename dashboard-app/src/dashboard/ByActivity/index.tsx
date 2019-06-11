@@ -56,7 +56,8 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [errors, setErrors] = useState<Dictionary<string>>({});
-  const { loading, error, data } = useAggregateDataByActivity({ from: fromDate, to: toDate });
+  const { loading, error, data, activities } =
+    useAggregateDataByActivity({ from: fromDate, to: toDate });
 
   useEffect(() => {
     if (error) {
@@ -65,11 +66,11 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   }, [error]);
 
   // manipulate data for table
-  // useEffect(() => {
-  //   if (!loading && data) {
-  //     setTableData(aggregatedToTableData({ data, unit }));
-  //   }
-  // }, [data, unit]);
+  useEffect(() => {
+    if (!loading && data && activities) {
+      setTableData(aggregatedToTableData({ data, unit, yData: activities }));
+    }
+  }, [data, unit]);
 
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
