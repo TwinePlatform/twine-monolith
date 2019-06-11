@@ -85,7 +85,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     tableData,
     sortBy,
     onChangeSortBy,
-    legendData: volunteers,
+    legendOptions: volunteers,
     title: getTitle(fromDate, toDate),
   };
 

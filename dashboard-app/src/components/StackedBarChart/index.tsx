@@ -20,7 +20,7 @@ import Chart from './Chart';
 
 interface Props {
   data: AggregatedData;
-  legendData: IdAndName[];
+  legendOptions: IdAndName[];
   unit: DurationUnitEnum;
   xAxisTitle: string;
   yAxisTitle: string;
@@ -39,13 +39,30 @@ export type LegendData = LegendDatum[];
  * Helpers
  */
 
-export const createActiveLegendData =
-  (data: AggregatedData, legendData: IdAndName[]): LegendData => {
-    const allValues = legendData.map((x) => ({ ...x, active: true }));
+export const createLegendData =
+  (data: AggregatedData, legendOption: IdAndName[]): LegendData => {
+    const allPossibleLegendData = legendOption.map((x) => ({ ...x, active: true }));
     const visibleValues = data.rows
-    .map((row) => ({ id: row.id }));
+      .map((row) => ({ id: row.id }));
 
-    return allValues.filter((x) => visibleValues.find((y) => y.id === x.id));
+    return allPossibleLegendData
+    .filter((possibleItem) => visibleValues
+      .find((visibleItem) => visibleItem.id === possibleItem.id));
+  };
+
+export const updateLegendData =
+  (data: AggregatedData, legendOption: IdAndName[], oldActiveData: LegendData): LegendData => {
+    const allPossibleLegendData = legendOption.map((x) => ({ ...x, active: true }));
+    const visibleValues = data.rows
+      .map((row) => ({ id: row.id }));
+
+    const newLegendData = allPossibleLegendData
+      .filter((possibleItem) => visibleValues
+        .find((visibleValue) => visibleValue.id === possibleItem.id));
+
+    return newLegendData.map((newItem) =>
+      oldActiveData.find((oldItem) => newItem.id === oldItem.id) || newItem
+    );
   };
 
 export const getYHeaderList = (row: AggDataRow) => Object.keys(omit(['id', 'name'], row));
@@ -66,24 +83,24 @@ export const zeroOutInactiveData = (data: AggregatedData, legendData: LegendData
  */
 // tslint:disable:max-line-length
 const StackedBarChart: FunctionComponent<Props> = (props) => {
-  const { data, xAxisTitle, yAxisTitle, title, unit, legendData } = props;
-  const [activeLegendData, setActiveLegendData] = useState(createActiveLegendData(data, legendData));
+  const { data, xAxisTitle, yAxisTitle, title, unit, legendOptions } = props;
+  const [legendData, setLegendData] = useState(createLegendData(data, legendOptions));
   const [chartData, setChartData] = useState();
 
   useEffect(() => {
-    const newData = createActiveLegendData(data, legendData); // TD: data, oldActiveData -> newActiveData
+    const newData = updateLegendData(data, legendOptions, legendData);
     const zeroedOutData = zeroOutInactiveData(data, newData);
-    setActiveLegendData(newData);
+    setLegendData(newData);
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
   }, [data, unit]);
 
   useEffect(() => {
-    const zeroedOutData = zeroOutInactiveData(data, activeLegendData);
+    const zeroedOutData = zeroOutInactiveData(data, legendData);
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
-  }, [activeLegendData]);
+  }, [legendData]);
 
   const chartProps = { data: chartData, xAxisTitle, yAxisTitle, title, unit };
-  const legendProps = { activeLegendData, setActiveLegendData, title: data.groupByX };
+  const legendProps = { legendData, setLegendData, title: data.groupByX };
 
   return (
     <Grid>

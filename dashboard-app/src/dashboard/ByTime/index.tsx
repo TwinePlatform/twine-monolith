@@ -86,7 +86,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     tableData,
     sortBy,
     onChangeSortBy,
-    legendData: activities as IdAndName[],
+    legendOptions: activities as IdAndName[],
     title: getTitle(fromDate, toDate),
   };
 

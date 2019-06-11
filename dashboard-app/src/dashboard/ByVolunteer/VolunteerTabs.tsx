@@ -20,7 +20,7 @@ interface Props {
   sortBy: number;
   onChangeSortBy: (x: string) => void;
   title: string;
-  legendData?: IdAndName[];
+  legendOptions?: IdAndName[];
 }
 
 /*
@@ -34,19 +34,19 @@ const DataTable = styled(_DataTable)`
  * Component
  */
 const VolunteerTabs: FunctionComponent<Props> = (props) => {
-  const { data, unit, tableData, sortBy, onChangeSortBy, title, legendData } = props;
+  const { data, unit, tableData, sortBy, onChangeSortBy, title, legendOptions } = props;
 
   return(
     <Row center="xs">
       <Col xs={12}>
         <TabGroup titles={['Chart', 'Table']}>
           {
-            data && legendData && (
+            data && legendOptions && (
               <StackedBarChart
                 title={title}
                 data={data}
                 unit={unit}
-                legendData={legendData}
+                legendOptions={legendOptions}
                 xAxisTitle={'Months'}
                 yAxisTitle={`Volunteer ${unit}`}
               />

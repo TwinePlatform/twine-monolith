@@ -15,7 +15,7 @@ import StackedBarChart from '../../components/StackedBarChart/index';
 
 interface Props {
   data?: AggregatedData;
-  legendData: IdAndName[];
+  legendOptions: IdAndName[];
   unit: DurationUnitEnum;
   tableData: TableData;
   sortBy: number;
@@ -33,7 +33,7 @@ const DataTable = styled(_DataTable)`
  * Component
  */
 const TimeTabs: FunctionComponent<Props> = (props) => {
-  const { data, unit, tableData, sortBy, onChangeSortBy, title, legendData } = props;
+  const { data, unit, tableData, sortBy, onChangeSortBy, title, legendOptions } = props;
 
   return(
     <Row center="xs">
@@ -42,7 +42,7 @@ const TimeTabs: FunctionComponent<Props> = (props) => {
           {
             data && (
               <StackedBarChart
-                legendData={legendData}
+                legendOptions={legendOptions}
                 title={title}
                 data={data}
                 unit={unit}

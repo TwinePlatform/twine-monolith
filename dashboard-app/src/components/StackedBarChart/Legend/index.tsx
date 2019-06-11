@@ -15,8 +15,8 @@ import { LegendData } from '..';
 
 interface Props {
   title: string;
-  activeLegendData: LegendData;
-  setActiveLegendData: Dispatch<SetStateAction<LegendData>>;
+  legendData: LegendData;
+  setLegendData: Dispatch<SetStateAction<LegendData>>;
 }
 
 /*
@@ -62,10 +62,10 @@ export const flipActiveOfAll = (data: LegendData): LegendData => {
  */
 
 const Legend: FunctionComponent<Props> = (props) => {
-  const { activeLegendData, setActiveLegendData, title } = props;
+  const { legendData, setLegendData, title } = props;
 
   const updateLegendActivity = (id: number) => {
-    return () => setActiveLegendData((prevState: LegendData): LegendData =>
+    return () => setLegendData((prevState: LegendData): LegendData =>
       prevState.map((x) =>
         x.id === id
           ? {
@@ -77,8 +77,8 @@ const Legend: FunctionComponent<Props> = (props) => {
   };
 
   const setActivityOfAll = useCallback(() => {
-    setActiveLegendData(flipActiveOfAll);
-  }, [activeLegendData]);
+    setLegendData(flipActiveOfAll);
+  }, [legendData]);
 
   return (
   <Col xs={3}>
@@ -94,10 +94,10 @@ const Legend: FunctionComponent<Props> = (props) => {
             onClick={setActivityOfAll}
             colour={ColoursEnum.darkGrey}
             title="All"
-            active={isEveryDatumActive(activeLegendData)}/>
+            active={isEveryDatumActive(legendData)}/>
         </Col>
       </TitleRow>
-      {activeLegendData.map((x, i) => (
+      {legendData.map((x, i) => (
         <LegendItem
           key={x.id}
           onClick={updateLegendActivity(x.id)}
