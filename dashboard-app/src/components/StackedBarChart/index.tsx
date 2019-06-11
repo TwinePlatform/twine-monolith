@@ -54,7 +54,8 @@ export const zeroOutInactiveData = (data: AggregatedData, legendData: LegendData
   rows: ((rows: AggDataRow[]) => rows.map((row, i: number) => {
     return legendData[i].active
       ? row
-      : getYHeaderList(row).reduce((acc: object, el) => ({ ...acc, [el]: 0 }), {});
+      : getYHeaderList(row).reduce((acc: object, el) => ({ ...acc, [el]: 0 }),
+        { id: row.id, name: row.name });
   }
     )),
 }, data);

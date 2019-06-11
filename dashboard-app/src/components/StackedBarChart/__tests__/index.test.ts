@@ -1,21 +1,31 @@
-import { createActiveData, zeroOutInactiveData, getYHeaderList } from '../index';
+import { createActiveLegendData, zeroOutInactiveData, getYHeaderList } from '../index';
+import { AggregatedData, Row } from '../../../dashboard/dataManipulation/logsToAggregatedData';
 
 // tslint:disable:max-line-length
 describe('Helpers', () => {
-  describe(':: createActiveData', async () => {
+  describe(':: createActiveLegendData', async () => {
     test('Success :: creates a list of active data', async () => {
       const aggregatedData = {
         groupByX: 'Volunteer Name',
-        groupByY: '',
-        headers: ['Volunteer Name', 'Outdoor and practical work'],
+        groupByY: 'Activity',
         rows: [
-            { 'Outdoor and practical work': { minutes: 2 }, 'Volunteer Name': 'Aku Aku' },
-            { 'Outdoor and practical work': { hours: 4, minutes: 23 }, 'Volunteer Name': 'Crash Bandicoot' },
-        ]};
-      const expected = createActiveData(aggregatedData);
+            { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
+            { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
+        ]} as AggregatedData;
+      const vols = [
+        {
+          name: 'Aku Aku',
+          id: 2,
+        },
+        {
+          name: 'Crash Bandicoot',
+          id: 3,
+        },
+      ];
+      const expected = createActiveLegendData(aggregatedData, vols);
       expect(expected).toEqual([
-        { active: true, key: 'Aku Aku' },
-        { active: true, key: 'Crash Bandicoot' },
+        { active: true, name: 'Aku Aku', id: 2 },
+        { active: true, name: 'Crash Bandicoot', id: 3 },
       ]);
     });
   });
@@ -26,10 +36,11 @@ describe('Helpers', () => {
         'Outdoor and practical work': { minutes: 2 },
         Dancing: { minutes: 2 },
         Singing: { minutes: 2 },
-        'Volunteer Name': 'Aku Aku',
-      };
+        name: 'Aku Aku',
+        id: 2,
+      } as Row;
 
-      const expected = getYHeaderList(row, 'Volunteer Name');
+      const expected = getYHeaderList(row);
       expect(expected).toEqual(['Outdoor and practical work', 'Dancing', 'Singing']);
     });
   });
@@ -39,24 +50,22 @@ describe('Helpers', () => {
       const aggregatedData = {
         groupByX: 'Volunteer Name',
         groupByY: '',
-        headers: ['Volunteer Name', 'Outdoor and practical work'],
         rows: [
-            { 'Outdoor and practical work': { minutes: 2 }, 'Volunteer Name': 'Aku Aku' },
-            { 'Outdoor and practical work': { hours: 4, minutes: 23 }, 'Volunteer Name': 'Crash Bandicoot' },
-        ]};
+            { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 3 },
+            { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 4 },
+        ]} as AggregatedData;
 
       const activeData = [
-        { active: false, key: 'Aku Aku' },
-        { active: true, key: 'Crash Bandicoot' },
+        { active: false, name: 'Aku Aku', id: 3 },
+        { active: true, name: 'Crash Bandicoot', id: 4 },
       ];
       const expected = zeroOutInactiveData(aggregatedData, activeData);
       expect(expected).toEqual({
         groupByX: 'Volunteer Name',
         groupByY: '',
-        headers: ['Volunteer Name', 'Outdoor and practical work'],
         rows: [
-          { 'Outdoor and practical work': 0, 'Volunteer Name': 'Aku Aku' },
-          { 'Outdoor and practical work': { hours: 4, minutes: 23 }, 'Volunteer Name': 'Crash Bandicoot' },
+          { 'Outdoor and practical work': 0, name: 'Aku Aku', id: 3 },
+          { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 4 },
         ] }
       );
     });
