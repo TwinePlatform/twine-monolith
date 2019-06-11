@@ -52,18 +52,15 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     }
 
     const logs = logsData.data;
-    setActivies(activitiesData.data);
-
-    console.log({ activitiesData });
 
     const data = logsToAggregatedData({
       logs,
-      // columnHeaders: ['Activity', ...Months.range(from, to, Months.format.verbose)],
       tableType: tableType.MonthByActivity,
       xData: activitiesData.data,
       yData: months,
     });
 
+    setActivies(activitiesData.data);
     setAggregatedData(data);
   }, [logsData]);
 

@@ -53,12 +53,6 @@ export const calculateTotalsUsing = (unit: DurationUnitEnum) => evolve({
   }),
 });
 
-
-export const createHeaders = (yData: {name: string}[]) => (data: AggregatedData) => {
-  const headers = [data.groupByX, ...yData.map((x) => x.name)];
-  return { ...data, headers };
-}; // TODO: add test
-
 export const renameAllNameKeys = (data: AggregatedData) => {
   const newRows = data.rows.map(renameKeys({ name: data.groupByX }));
   return { ...data, rows: newRows };
