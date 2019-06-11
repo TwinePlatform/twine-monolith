@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, Dispatch, SetStateAction, useCallback } from 'react';
 import styled from 'styled-components';
 import { Row, Col, Grid } from 'react-flexbox-grid';
 
@@ -16,7 +16,7 @@ import { LegendData } from '..';
 interface Props {
   title: string;
   activeLegendData: LegendData;
-  setActiveLegendData: any;
+  setActiveLegendData: Dispatch<SetStateAction<LegendData>>;
 }
 
 /*
@@ -76,9 +76,9 @@ const Legend: FunctionComponent<Props> = (props) => {
       ));
   };
 
-  const setActivityOfAll = () => {
+  const setActivityOfAll = useCallback(() => {
     setActiveLegendData(flipActiveOfAll);
-  };
+  }, [activeLegendData]);
 
   return (
   <Col xs={3}>
