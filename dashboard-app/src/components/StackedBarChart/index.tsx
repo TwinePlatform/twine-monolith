@@ -4,7 +4,11 @@ import { evolve, omit } from 'ramda';
 
 import { DurationUnitEnum } from '../../types';
 import { aggregatedToStackedGraph } from '../../dashboard/dataManipulation/aggregatedToGraphData';
-import { AggregatedData, IdAndName } from '../../dashboard/dataManipulation/logsToAggregatedData';
+import {
+  AggregatedData,
+  IdAndName,
+  Row as AggDataRow
+} from '../../dashboard/dataManipulation/logsToAggregatedData';
 
 import Legend from './Legend/index';
 import Chart from './Chart';
@@ -44,16 +48,16 @@ export const createActiveLegendData =
     return allValues.filter((x) => visibleValues.find((y) => y.id === x.id));
   };
 
-export const getYHeaderList = (row: Row) => Object.keys(omit(['id', 'name'], row));
+export const getYHeaderList = (row: AggDataRow) => Object.keys(omit(['id', 'name'], row));
 
 export const zeroOutInactiveData = (data: AggregatedData, legendData: LegendData) => evolve({
-  rows: ((rows: Row[]) => rows.map((row, i: number) => {
+  rows: ((rows: AggDataRow[]) => rows.map((row, i: number) => {
     return legendData[i].active
       ? row
-      : getYHeaderList(row).reduce((acc: object, el) => ({ ...acc, [el]: 0 }), {}) as Row;
+      : getYHeaderList(row).reduce((acc: object, el) => ({ ...acc, [el]: 0 }), {});
   }
     )),
-}, data as any) as AggregatedData;
+}, data);
 
 
 /*
