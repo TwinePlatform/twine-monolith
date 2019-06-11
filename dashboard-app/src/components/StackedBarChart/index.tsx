@@ -35,21 +35,19 @@ export type LegendData = LegendDatum[];
  * Helpers
  */
 
-// export const createActiveLegendData = (data: IdAndName[]): LegendData =>
-//   data.map((x) => ({ active: true, ...x }));
+export const createActiveLegendData =
+  (data: AggregatedData, legendData: IdAndName[]): LegendData => {
+    const allValues = legendData.map((x) => ({ ...x, active: true }));
+    const visibleValues = data.rows
+    .map((row) => ({ id: row.id }));
 
-export const createActiveLegendData = (data: AggregatedData, legendData: IdAndName[]): LegendData =>
-  data.rows
-    .map((row) => {
-      const legendRow = legendData.find((x) => row.name === x.name);
-      return { ...legendRow, active: true } as LegendDatum;
-    });
+    return allValues.filter((x) => visibleValues.find((y) => y.id === x.id));
+  };
 
 export const getYHeaderList = (row: Row) => Object.keys(omit(['id', 'name'], row));
 
 export const zeroOutInactiveData = (data: AggregatedData, legendData: LegendData) => evolve({
   rows: ((rows: Row[]) => rows.map((row, i: number) => {
-    console.log(row);
     return legendData[i].active
       ? row
       : getYHeaderList(row).reduce((acc: object, el) => ({ ...acc, [el]: 0 }), {}) as Row;
@@ -72,14 +70,12 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
     const zeroedOutData = zeroOutInactiveData(data, newData);
     setActiveLegendData(newData);
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
-  }, [data]);
+  }, [data, unit]);
 
   useEffect(() => {
     const zeroedOutData = zeroOutInactiveData(data, activeLegendData);
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
   }, [activeLegendData]);
-
-  console.log({ chartData });
 
   const chartProps = { data: chartData, xAxisTitle, yAxisTitle, title, unit };
   const legendProps = { activeLegendData, setActiveLegendData, title: data.groupByX };
