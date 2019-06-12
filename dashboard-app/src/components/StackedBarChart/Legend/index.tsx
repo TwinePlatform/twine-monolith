@@ -1,4 +1,4 @@
-import React, { FunctionComponent, Dispatch, SetStateAction, useCallback } from 'react';
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { Row, Col, Grid } from 'react-flexbox-grid';
 
@@ -6,8 +6,8 @@ import _Card from '../../Card';
 import { H4 } from '../../Headings';
 import { ColoursEnum, GraphColourList } from '../../../styles/design_system';
 import LegendItem from './LegendItem';
-import { LegendData } from '..';
 import { isEveryDatumActive } from '../utils/util';
+import { LegendData } from '../types';
 
 
 /*

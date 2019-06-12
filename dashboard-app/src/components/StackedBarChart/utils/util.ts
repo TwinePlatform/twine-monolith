@@ -6,7 +6,7 @@ import {
   IdAndName,
   Row
 } from '../../../dashboard/dataManipulation/logsToAggregatedData';
-import { LegendData } from '..';
+import { LegendData } from '../types';
 
 export const sortByNameCaseInsensitive = sortBy(pipe(prop('name'), toLower));
 

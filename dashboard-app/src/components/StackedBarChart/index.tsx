@@ -16,6 +16,7 @@ import {
 
 import Legend from './Legend/index';
 import Chart from './Chart';
+import { LegendData } from './types';
 
 
 /*
@@ -30,14 +31,6 @@ interface Props {
   yAxisTitle: string;
   title: string;
 }
-
-interface LegendDatum {
-  id: number;
-  name: string;
-  active: boolean;
-}
-
-export type LegendData = LegendDatum[];
 
 /*
  * Components
