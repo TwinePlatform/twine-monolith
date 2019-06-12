@@ -18,6 +18,7 @@ import Errors from '../../components/Errors';
 import useAggregateDataByTime from '../hooks/useAggregateDataByTime';
 import Months from '../../util/months';
 import { Dictionary } from 'ramda';
+import { IdAndName } from '../dataManipulation/logsToAggregatedData';
 
 
 /**
@@ -48,7 +49,8 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [errors, setErrors] = useState<Dictionary<string>>({});
   const [tableData, setTableData] = useState<TableData>(initTableData);
-  const { data, loading, error } = useAggregateDataByTime({ from: fromDate, to: toDate });
+  const { data, loading, error, activities, months } =
+    useAggregateDataByTime({ from: fromDate, to: toDate });
 
   useEffect(() => {
     if (error) {
@@ -58,8 +60,8 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
 
   // manipulate data for table
   useEffect(() => {
-    if (!loading && data) {
-      setTableData(aggregatedToTableData({ data, unit }));
+    if (!loading && data && months) {
+      setTableData(aggregatedToTableData({ data, unit, yData: months }));
     }
   }, [data, unit]);
 
@@ -79,11 +81,12 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   }, [data, fromDate, toDate, unit]);
 
   const tabProps = {
-    data: data || { headers: [], rows: [] },
+    data,
     unit,
     tableData,
     sortBy,
     onChangeSortBy,
+    legendOptions: activities as IdAndName[],
     title: getTitle(fromDate, toDate),
   };
 

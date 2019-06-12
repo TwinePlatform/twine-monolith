@@ -1,7 +1,11 @@
 import { DependencyList, useEffect, useState } from 'react';
 import { useBatchRequest } from '../../hooks';
 import { CommunityBusinesses } from '../../api';
-import { logsToAggregatedData, AggregatedData } from '../dataManipulation/logsToAggregatedData';
+import {
+  logsToAggregatedData,
+  AggregatedData,
+  IdAndName
+} from '../dataManipulation/logsToAggregatedData';
 import { tableType } from '../dataManipulation/tableType';
 import Months from '../../util/months';
 
@@ -13,11 +17,17 @@ interface UseAggregatedDataParams {
 }
 
 export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
-  const [aggregatedData, setAggregatedData] = useState<AggregatedData>({ rows: [], headers: [] });
+  const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
+  const [activities, setActivies] = useState<IdAndName[]>();
+  const months = [...Months.range(from, to, Months.format.verbose)]
+      .map((month, i) => ({
+        id: i,
+        name: month,
+      }));
 
   const {
     loading,
-    results: [logsData],
+    results: [logsData, activitiesData],
     error,
   } = useBatchRequest({
     requests: [
@@ -25,6 +35,11 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
         ...CommunityBusinesses.configs.getLogs,
         params: { since: from, until: to },
         transformResponse: [(res: any) => res.result],
+      },
+      {
+        ...CommunityBusinesses.configs.getVolunteerActivities,
+        transformResponse: [(res: any) => res.result.map(({ id, name }: IdAndName) =>
+          ({ id, name }))],
       },
     ],
     updateOn: [...updateOn, from, to],
@@ -40,10 +55,12 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
 
     const data = logsToAggregatedData({
       logs,
-      columnHeaders: ['Activity', ...Months.range(from, to, Months.format.verbose)],
       tableType: tableType.MonthByActivity,
+      xData: activitiesData.data,
+      yData: months,
     });
 
+    setActivies(activitiesData.data);
     setAggregatedData(data);
   }, [logsData]);
 
@@ -58,7 +75,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
 
   } else {
 
-    return { loading, data: aggregatedData, error };
+    return { loading, data: aggregatedData, error, activities, months };
 
   }
 };

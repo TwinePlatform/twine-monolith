@@ -2,7 +2,7 @@ import { cleanup, waitForElement, fireEvent } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import { renderWithHistory } from '../../../util/tests';
 import { axios } from '../../../api';
-import { logs } from '../../__data__/api_data';
+import { logs, activities } from '../../__data__/api_data';
 import ByTime from '..';
 import 'jest-dom/extend-expect';
 
@@ -42,6 +42,7 @@ describe('By Time Page', () => {
       expect.assertions(3);
 
       mock.onGet('/community-businesses/me/volunteer-logs').reply(200, { result: logs });
+      mock.onGet('/volunteer-activities').reply(200, { result: activities });
 
       const tools = renderWithHistory(ByTime);
       const tableTab = await waitForElement(() => tools.getByText('Table', { exact: true }));

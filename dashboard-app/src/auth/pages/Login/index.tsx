@@ -7,7 +7,7 @@ import { Notification } from 'react-notification';
 import { CbAdmins } from '../../../api';
 import { Response } from '../../../util/response';
 import LoginForm, { FormValues } from './LoginForm';
-import { H1, H4 as _H4 } from '../../../components/Headings';
+import { H1 } from '../../../components/Headings';
 import { Paragraph } from '../../../components/Typography';
 import L from '../../../components/Link';
 import { redirectOnError, getQueryObjectFromProps } from '../../../util/routing';

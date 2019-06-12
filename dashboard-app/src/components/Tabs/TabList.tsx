@@ -19,6 +19,7 @@ type TabListProps = {
  * Styles
  */
 const List = styled.ol`
+  margin-bottom: 4rem;
   list-style: none;
   display: flex;
   border-bottom: 1px solid ${rgba(ColoursEnum.grey, 0.4)};

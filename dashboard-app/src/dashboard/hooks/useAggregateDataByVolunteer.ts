@@ -1,7 +1,11 @@
 import { DependencyList, useEffect, useState } from 'react';
 import { useBatchRequest } from '../../hooks';
 import { CommunityBusinesses } from '../../api';
-import { logsToAggregatedData, AggregatedData } from '../dataManipulation/logsToAggregatedData';
+import {
+  logsToAggregatedData,
+  AggregatedData,
+  IdAndName
+} from '../dataManipulation/logsToAggregatedData';
 import { tableType } from '../dataManipulation/tableType';
 import Months from '../../util/months';
 
@@ -13,7 +17,13 @@ interface UseAggregatedDataParams {
 }
 
 export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
-  const [aggregatedData, setAggregatedData] = useState<AggregatedData>({ rows: [], headers: [] });
+  const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
+  const [volunteers, setVolunteers] = useState<IdAndName[]>();
+  const months = [...Months.range(from, to, Months.format.verbose)]
+  .map((month, i) => ({
+    id: i,
+    name: month,
+  }));
 
   const {
     loading,
@@ -28,7 +38,8 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       },
       {
         ...CommunityBusinesses.configs.getVolunteers,
-        transformResponse: [(res: any) => res.result],
+        transformResponse: [(res: any) => res.result.map(({ id, name }: IdAndName) =>
+          ({ id, name }))],
       },
     ],
     updateOn: [...updateOn, from, to],
@@ -41,15 +52,15 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     }
 
     const logs = logsData.data;
-    const volunteers = volunteersData.data;
 
     const data = logsToAggregatedData({
       logs,
-      columnHeaders: ['Volunteer Name', ...Months.range(from, to, Months.format.verbose)],
       tableType: tableType.MonthByName,
-      volunteers,
+      xData: volunteersData.data,
+      yData: months,
     });
 
+    setVolunteers(volunteersData.data);
     setAggregatedData(data);
   }, [logsData, volunteersData]);
 
@@ -64,7 +75,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
 
   } else {
 
-    return { loading, data: aggregatedData, error };
+    return { loading, data: aggregatedData, error, months, volunteers };
 
   }
 };

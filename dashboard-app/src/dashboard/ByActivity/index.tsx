@@ -56,7 +56,8 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [errors, setErrors] = useState<Dictionary<string>>({});
-  const { loading, error, data } = useAggregateDataByActivity({ from: fromDate, to: toDate });
+  const { loading, error, data, activities } =
+    useAggregateDataByActivity({ from: fromDate, to: toDate });
 
   useEffect(() => {
     if (error) {
@@ -66,8 +67,8 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
 
   // manipulate data for table
   useEffect(() => {
-    if (!loading && data) {
-      setTableData(aggregatedToTableData({ data, unit }));
+    if (!loading && data && activities) {
+      setTableData(aggregatedToTableData({ data, unit, yData: activities }));
     }
   }, [data, unit]);
 

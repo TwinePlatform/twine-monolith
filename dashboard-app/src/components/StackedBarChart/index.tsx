@@ -1,15 +1,22 @@
-import React, { FunctionComponent } from 'react';
-import styled from 'styled-components';
-import { Row, Col } from 'react-flexbox-grid';
-import { Bar, ChartComponentProps } from 'react-chartjs-2';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import React, { FunctionComponent, useState, useEffect, useCallback } from 'react';
+import { Grid, Row } from 'react-flexbox-grid';
 
+import {
+  createLegendData,
+  flipActiveOfAll,
+  updateLegendData,
+  sortAndZeroOutInactiveData
+} from './utils/util';
+import { DurationUnitEnum } from '../../types';
+import { aggregatedToStackedGraph } from '../../dashboard/dataManipulation/aggregatedToGraphData';
+import {
+  AggregatedData,
+  IdAndName,
+} from '../../dashboard/dataManipulation/logsToAggregatedData';
 
-import _DataTable from '../DataTable';
-import { getStackedGraphOptions, totalizer } from './util';
-import _Card from '../Card';
-import { H3 } from '../Headings';
-import { ColoursEnum } from '../../styles/design_system';
+import Legend from './Legend/index';
+import Chart from './Chart';
+import { LegendData } from './types';
 
 
 /*
@@ -17,47 +24,63 @@ import { ColoursEnum } from '../../styles/design_system';
  */
 
 interface Props {
-  data: ChartComponentProps['data'];
+  data: AggregatedData;
+  legendOptions: IdAndName[];
+  unit: DurationUnitEnum;
   xAxisTitle: string;
   yAxisTitle: string;
   title: string;
 }
 
 /*
- * Styles
+ * Components
  */
-const Card = styled(_Card)`
-  margin-top: 4rem;
-  padding: 1rem;
-  background: ${ColoursEnum.white}
-`;
-const Title = styled(H3)`
-  text-align: left;
-`;
 
-/*
- * Component
- */
 const StackedBarChart: FunctionComponent<Props> = (props) => {
-  const { data, xAxisTitle, yAxisTitle, title } = props;
-  return (
+  const { data, xAxisTitle, yAxisTitle, title, unit, legendOptions } = props;
+  const [legendData, setLegendData] = useState(createLegendData(data, legendOptions));
+  const [chartData, setChartData] = useState();
 
-    <Card>
-      <Row center="xs">
-        <Col xs={12}>
-          <Title>{title}</Title>
-        </Col>
+  const setLegendActivityOnUpdate = (id: number) => {
+    return () => setLegendData((prevState: LegendData): LegendData =>
+      prevState.map((x) =>
+        x.id === id
+          ? {
+            ...x,
+            active: !x.active,
+          }
+        : x
+      ));
+  };
+
+  const setLegendActivityOfAll = useCallback(() => {
+    setLegendData(flipActiveOfAll);
+  }, [legendData]);
+
+
+  useEffect(() => {
+    const newLegendData = updateLegendData(data, legendOptions, legendData);
+    const zeroedOutData = sortAndZeroOutInactiveData(data, newLegendData);
+    setLegendData(newLegendData);
+    setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
+  }, [data, unit]);
+
+  useEffect(() => {
+    const zeroedOutData = sortAndZeroOutInactiveData(data, legendData);
+    setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
+  }, [legendData]);
+
+  const chartProps = { data: chartData, xAxisTitle, yAxisTitle, title, unit };
+  const legendProps = { legendData, setLegendActivityOfAll, setLegendActivityOnUpdate, title: data.groupByX }; // tslint:disable-line:max-line-length
+
+  return (
+    <Grid>
+      <Row>
+        <Chart {...chartProps}/>
+        <Legend {...legendProps}/>
       </Row>
-      <Row center="xs">
-        <Col xs={12} md={9}>
-        <Bar
-          plugins={[totalizer, ChartDataLabels]}
-          data={data}
-          options={getStackedGraphOptions(xAxisTitle, yAxisTitle)}
-        />
-        </Col>
-      </Row>
-    </Card>);
+    </Grid>);
 };
 
 export default StackedBarChart;
+

@@ -1,7 +1,11 @@
 import { DependencyList, useEffect, useState } from 'react';
 import { useBatchRequest } from '../../hooks';
 import { CommunityBusinesses } from '../../api';
-import { logsToAggregatedData, AggregatedData } from '../dataManipulation/logsToAggregatedData';
+import {
+  logsToAggregatedData,
+  AggregatedData,
+  IdAndName,
+} from '../dataManipulation/logsToAggregatedData';
 import { tableType } from '../dataManipulation/tableType';
 
 
@@ -12,7 +16,8 @@ interface UseAggregatedDataParams {
 }
 
 export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
-  const [aggregatedData, setAggregatedData] = useState<AggregatedData>({ rows: [], headers: [] });
+  const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
+  const [activities, setActivities] = useState<IdAndName[]>();
 
   const {
     loading,
@@ -27,11 +32,11 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       },
       {
         ...CommunityBusinesses.configs.getVolunteers,
-        transformResponse: [(res: any) => res.result],
+        transformResponse: [(res: any) => res.result.map((a: any) => ({ id: a.id, name: a.name }))],
       },
       {
         ...CommunityBusinesses.configs.getVolunteerActivities,
-        transformResponse: [(res: any) => res.result.map((a: any) => a.name)],
+        transformResponse: [(res: any) => res.result.map((a: any) => ({ id: a.id, name: a.name }))],
       },
     ],
     updateOn: [...updateOn, from, to],
@@ -44,16 +49,16 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     }
 
     const logs = logsData.data;
-    const activities = activitiesData.data;
-    const volunteers = volunteersData.data;
+    const volunteers = volunteersData.data as IdAndName[];
 
     const data = logsToAggregatedData({
       logs,
-      columnHeaders: ['Volunteer Name', ...activities],
       tableType: tableType.ActivityByName,
-      volunteers,
+      xData: volunteers,
+      yData: activitiesData.data,
     });
 
+    setActivities(activitiesData.data);
     setAggregatedData(data);
   }, [logsData, volunteersData, activitiesData]);
 
@@ -68,7 +73,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
 
   } else {
 
-    return { loading, data: aggregatedData, error };
+    return { loading, data: aggregatedData, error, activities };
 
   }
 };

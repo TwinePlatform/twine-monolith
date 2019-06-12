@@ -5,13 +5,13 @@ import { DurationUnitEnum } from '../../types';
 import { GraphColourList } from '../../styles/design_system';
 import Months from '../../util/months';
 
-export const aggregatedToStackedGraph = (aggData: AggregatedData, unit: DurationUnitEnum) => {
-  const [groupBy, ...labels] = aggData.headers;
+export const aggregatedToStackedGraph = (data: AggregatedData, unit: DurationUnitEnum) => {
+  const labels = Object.keys(omit(['id', 'name'], data.rows[0]));
   return {
     labels: labels.map((x) => abbreviateIfDateString(Months.format.graph, x).split(' ')),
-    datasets: aggData.rows.map((row, i) => {
-      const label = row[groupBy];
-      const rowData = omit([groupBy], row);
+    datasets: data.rows.map((row, i) => {
+      const label = row.name as string;
+      const rowData = omit(['id', 'name'], row);
       const numericData = map((v) =>
         typeof v === 'object'
           ? toUnitDuration(unit, v)
@@ -20,6 +20,7 @@ export const aggregatedToStackedGraph = (aggData: AggregatedData, unit: Duration
       return {
         backgroundColor: GraphColourList[i],
         label,
+        id: row.id,
         data: labels.map((y) => numericData[y]),
       };
     }),
