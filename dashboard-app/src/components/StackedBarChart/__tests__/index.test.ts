@@ -1,4 +1,10 @@
-import { createLegendData, updateLegendData, zeroOutInactiveData, getYHeaderList } from '../index';
+import {
+  createLegendData,
+  updateLegendData,
+  sortByNameCaseInsensitive,
+  sortAndZeroOutInactiveData,
+  getYHeaderList
+} from '../index';
 import { AggregatedData, Row } from '../../../dashboard/dataManipulation/logsToAggregatedData';
 
 // tslint:disable:max-line-length
@@ -57,6 +63,7 @@ describe('Helpers', () => {
       ]);
     });
   });
+
   describe(':: updateLegendData', async () => {
     test('Success :: creates an updated list of active data', async () => {
       const aggregatedData = {
@@ -111,7 +118,31 @@ describe('Helpers', () => {
     });
   });
 
-  describe(':: zeroOutInactiveData', async () => {
+  describe(':: sortByNameCaseInsensitive', async () => {
+    test('Success :: reorders list of objects based on "name"', async () => {
+      const activeData = [
+        { active: false, name: 'Papu Papu', id: 35 },
+        { active: false, name: 'nina cortex', id: 31 },
+        { active: false, name: 'dingodile', id: 13 },
+        { active: false, name: 'Ripper Roo', id: 3 },
+        { active: true, name: 'Coco Bandicoot', id: 4 },
+        { active: false, name: 'Aku Aku', id: 2 },
+        { active: true, name: 'Crash Bandicoot', id: 9 },
+      ];
+      const expected = sortByNameCaseInsensitive(activeData);
+      expect(expected).toEqual([
+        { active: false, id: 2, name: 'Aku Aku' },
+        { active: true, id: 4, name: 'Coco Bandicoot' },
+        { active: true, id: 9, name: 'Crash Bandicoot' },
+        { active: false, id: 13, name: 'dingodile' },
+        { active: false, id: 31, name: 'nina cortex' },
+        { active: false, id: 35, name: 'Papu Papu' },
+        { active: false, id: 3, name: 'Ripper Roo' },
+      ]);
+    });
+  });
+
+  describe(':: sortAndZeroOutInactiveData', async () => {
     test('Success :: replaces all inactive data with 0', async () => {
       const aggregatedData = {
         groupByX: 'Volunteer Name',
@@ -125,7 +156,7 @@ describe('Helpers', () => {
         { active: false, name: 'Aku Aku', id: 3 },
         { active: true, name: 'Crash Bandicoot', id: 4 },
       ];
-      const expected = zeroOutInactiveData(aggregatedData, activeData);
+      const expected = sortAndZeroOutInactiveData(aggregatedData, activeData);
       expect(expected).toEqual({
         groupByX: 'Volunteer Name',
         groupByY: '',
@@ -136,5 +167,4 @@ describe('Helpers', () => {
       );
     });
   });
-
 });
