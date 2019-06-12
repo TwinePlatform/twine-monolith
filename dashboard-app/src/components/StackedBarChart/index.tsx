@@ -1,13 +1,17 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent, useState, useEffect, useCallback } from 'react';
 import { Grid, Row } from 'react-flexbox-grid';
-import { evolve, omit, sortBy, pipe, toLower, prop } from 'ramda';
 
+import {
+  createLegendData,
+  flipActiveOfAll,
+  updateLegendData,
+  sortAndZeroOutInactiveData
+} from './utils/util';
 import { DurationUnitEnum } from '../../types';
 import { aggregatedToStackedGraph } from '../../dashboard/dataManipulation/aggregatedToGraphData';
 import {
   AggregatedData,
   IdAndName,
-  Row as AggDataRow
 } from '../../dashboard/dataManipulation/logsToAggregatedData';
 
 import Legend from './Legend/index';
@@ -36,57 +40,6 @@ interface LegendDatum {
 export type LegendData = LegendDatum[];
 
 /*
- * Helpers
- */
-
-export const sortByNameCaseInsensitive = sortBy(pipe(prop('name'), toLower));
-
-export const createLegendData =
-  (data: AggregatedData, legendOption: IdAndName[]): LegendData => {
-    const allPossibleLegendData = legendOption
-      .map((x) => ({ ...x, active: true }));
-    const visibleValues = data.rows
-      .map((row) => ({ id: row.id }));
-
-    const newLegendData = allPossibleLegendData
-      .filter((possibleItem) => visibleValues
-        .find((visibleItem) => visibleItem.id === possibleItem.id));
-
-    return sortByNameCaseInsensitive(newLegendData);
-  };
-
-export const updateLegendData =
-  (data: AggregatedData, legendOption: IdAndName[], oldActiveData: LegendData): LegendData => {
-    const allPossibleLegendData = legendOption.map((x) => ({ ...x, active: true }));
-    const visibleValues = data.rows
-      .map((row) => ({ id: row.id }));
-
-    const newLegendDataWithoutUpdatedActive = allPossibleLegendData
-      .filter((possibleItem) => visibleValues
-        .find((visibleValue) => visibleValue.id === possibleItem.id));
-
-    const newLegendData = newLegendDataWithoutUpdatedActive.map((newItem) =>
-      oldActiveData.find((oldItem) => newItem.id === oldItem.id) || newItem
-    );
-    return sortByNameCaseInsensitive(newLegendData);
-  };
-
-export const getYHeaderList = (row: AggDataRow) => Object.keys(omit(['id', 'name'], row));
-
-const zeroOutInactiveData = (legendData: LegendData) => (rows: AggDataRow[]) =>
-  rows.
-    map((row, i: number) => {
-      return legendData[i].active
-    ? row
-    : getYHeaderList(row).reduce((acc: object, el) => ({ ...acc, [el]: 0 }),
-      { id: row.id, name: row.name });
-    });
-
-export const sortAndZeroOutInactiveData = (data: AggregatedData, legendData: LegendData) => evolve({
-  rows: pipe(sortByNameCaseInsensitive, zeroOutInactiveData(legendData)),
-}, data) as AggregatedData;
-
-/*
  * Components
  */
 
@@ -94,6 +47,23 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   const { data, xAxisTitle, yAxisTitle, title, unit, legendOptions } = props;
   const [legendData, setLegendData] = useState(createLegendData(data, legendOptions));
   const [chartData, setChartData] = useState();
+
+  const setLegendActivityOnUpdate = (id: number) => {
+    return () => setLegendData((prevState: LegendData): LegendData =>
+      prevState.map((x) =>
+        x.id === id
+          ? {
+            ...x,
+            active: !x.active,
+          }
+        : x
+      ));
+  };
+
+  const setLegendActivityOfAll = useCallback(() => {
+    setLegendData(flipActiveOfAll);
+  }, [legendData]);
+
 
   useEffect(() => {
     const newLegendData = updateLegendData(data, legendOptions, legendData);
@@ -108,7 +78,7 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   }, [legendData]);
 
   const chartProps = { data: chartData, xAxisTitle, yAxisTitle, title, unit };
-  const legendProps = { legendData, setLegendData, title: data.groupByX };
+  const legendProps = { legendData, setLegendActivityOfAll, setLegendActivityOnUpdate, title: data.groupByX }; // tslint:disable-line:max-line-length
 
   return (
     <Grid>

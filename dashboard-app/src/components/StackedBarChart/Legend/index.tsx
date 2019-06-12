@@ -7,6 +7,7 @@ import { H4 } from '../../Headings';
 import { ColoursEnum, GraphColourList } from '../../../styles/design_system';
 import LegendItem from './LegendItem';
 import { LegendData } from '..';
+import { isEveryDatumActive } from '../utils/util';
 
 
 /*
@@ -16,7 +17,8 @@ import { LegendData } from '..';
 interface Props {
   title: string;
   legendData: LegendData;
-  setLegendData: Dispatch<SetStateAction<LegendData>>;
+  setLegendActivityOfAll: () => void;
+  setLegendActivityOnUpdate: (id: number) => void;
 }
 
 /*
@@ -40,45 +42,11 @@ const TitleRow = styled(Row)`
 `;
 
 /*
- * Helpers
- */
-
-export const isEveryDatumActive = (data: LegendData): boolean =>
-  data.every((datum) => datum.active);
-
-export const isEveryDatumInactive = (data: LegendData): boolean =>
-  data.every((datum) => !datum.active);
-
-export const flipActiveOfAll = (data: LegendData): LegendData => {
-  const active: boolean = isEveryDatumActive(data)
-    ? false
-    : isEveryDatumInactive(data);
-
-  return data.map((x) => ({ ...x, active }));
-};
-
-/*
  * Components
  */
 
 const Legend: FunctionComponent<Props> = (props) => {
-  const { legendData, setLegendData, title } = props;
-
-  const updateLegendActivity = (id: number) => {
-    return () => setLegendData((prevState: LegendData): LegendData =>
-      prevState.map((x) =>
-        x.id === id
-          ? {
-            ...x,
-            active: !x.active,
-          }
-        : x
-      ));
-  };
-
-  const setActivityOfAll = useCallback(() => {
-    setLegendData(flipActiveOfAll);
-  }, [legendData]);
+  const { legendData, setLegendActivityOfAll, setLegendActivityOnUpdate, title } = props;
 
   return (
   <Col xs={3}>
@@ -91,7 +59,7 @@ const Legend: FunctionComponent<Props> = (props) => {
         <Col xs={3} xsOffset={3}>
           <LegendItem
             key="all"
-            onClick={setActivityOfAll}
+            onClick={setLegendActivityOfAll}
             colour={ColoursEnum.darkGrey}
             title="All"
             active={isEveryDatumActive(legendData)}/>
@@ -100,7 +68,7 @@ const Legend: FunctionComponent<Props> = (props) => {
       {legendData.map((x, i) => (
         <LegendItem
           key={x.id}
-          onClick={updateLegendActivity(x.id)}
+          onClick={setLegendActivityOnUpdate(x.id)}
           colour={GraphColourList[i]}
           title={x.name}
           active={x.active}
