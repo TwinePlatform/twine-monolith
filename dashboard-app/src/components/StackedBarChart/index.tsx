@@ -13,12 +13,9 @@ import {
   AggregatedData,
   IdAndName,
 } from '../../dashboard/dataManipulation/logsToAggregatedData';
-
 import Legend from './Legend/index';
 import Chart from './Chart';
 import { LegendData } from './types';
-import _DataTable from '../DataTable';
-import _Card from '../Card';
 
 
 /*
