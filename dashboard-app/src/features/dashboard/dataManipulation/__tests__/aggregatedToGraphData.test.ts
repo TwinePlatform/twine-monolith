@@ -28,13 +28,13 @@ describe('aggregatedToGraphData', () => {
     expect(expected).toEqual({
       datasets: [
         {
-          backgroundColor: '#E91E63',
+          backgroundColor: '#EF7CA3',
           data: [0, 2.38, 2],
           label: 'Outdoor and practical work',
           id: 5,
         },
         {
-          backgroundColor: '#F44336',
+          backgroundColor: '#E36860',
           data: [0, 0.03, 0],
           label: 'Digging Holes',
           id: 3,
