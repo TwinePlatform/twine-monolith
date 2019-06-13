@@ -25,9 +25,6 @@ import { IdAndName } from '../dataManipulation/logsToAggregatedData';
  * Styles
  */
 const Container = styled(Grid)`
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  width: 100% !important;
 `;
 
 
@@ -98,7 +95,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
         </Col>
       </Row>
       <Row center="xs">
-        <Col xs={9}>
+        <Col xs={12}>
           <UtilityBar
             dateFilter="month"
             datePickerConstraint={DatePickerConstraints}

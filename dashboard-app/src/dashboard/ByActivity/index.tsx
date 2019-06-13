@@ -33,9 +33,6 @@ const DataTable = styled(_DataTable)`
 `;
 
 const Container = styled(Grid)`
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  width: 100% !important;
 `;
 
 
@@ -95,7 +92,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
         </Col>
       </Row>
       <Row center="xs">
-        <Col xs={9}>
+        <Col xs={12}>
           <UtilityBar
             dateFilter="day"
             datePickerConstraint={DatePickerConstraints}
@@ -111,7 +108,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
           ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
           : (
             <Row center="xs">
-              <Col xs={9}>
+              <Col xs={12}>
                 <Errors errors={errors}/>
                 <TabGroup titles={['Table']}>
                   {
