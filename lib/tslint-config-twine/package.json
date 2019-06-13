@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/TwinePlatform/tslint-config-twine#readme",
   "dependencies": {
-    "tslint": "^5.11.0",
+    "tslint": "^5.17.0",
     "tslint-config-airbnb": "^5.9.2"
   }
 }
