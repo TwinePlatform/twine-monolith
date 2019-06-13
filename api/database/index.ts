@@ -25,10 +25,12 @@ const templates = {
   ].join('\n'),
 };
 
+const headOrId = <T>(xs: T | T[]) => Array.isArray(xs) ? xs[0] : xs;
+
 export const migrate = {
   make: async (name: string) => {
     const config = getConfig(process.env.NODE_ENV);
-    const MIGRATIONS_BASE_PATH = config.knex.migrations.directory;
+    const MIGRATIONS_BASE_PATH = headOrId(config.knex.migrations.directory);
 
     const date = (new Date()).toISOString().slice(0, 10).replace(/-/g, '');
     const newFilename = `${date}_${name.toLowerCase().replace(/\s/g, '_')}`;
