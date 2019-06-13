@@ -68,6 +68,13 @@ const draw = ({ ctx, rectangle, corner, radius, ...params }: DrawingParams) => {
 const calculateRadius = (height: number, width: number, radius: number = 0) =>
   clamp(0, Math.min(height, width) / 2, radius);
 
+export const checkShouldRound = (datasets: any, datasetIdx: number, dataIdx: number) =>
+  !datasets
+    .slice(datasetIdx + 1)
+    .some((dataset: any) =>
+      dataset.data[dataIdx] > 0 &&
+      !(dataset._meta && dataset._meta[0] && dataset._meta[0].hidden)
+    );
 
 /*
  * !!MUTATION!!
@@ -98,15 +105,17 @@ export default () => {
         this._chart.config.options.cornerRadius
       );
 
-      const remainingDatasets = this._chart.data.datasets.slice(this._datasetIndex + 1);
-      const shouldNotRound = remainingDatasets
-        .some((dataset: any) => dataset.data[this._index] > 0 && !dataset._meta[0].hidden);
+      const shouldRound = checkShouldRound(
+        this._chart.data.datasets,
+        this._datasetIndex,
+        this._index
+      );
 
       draw({
         ctx,
         rectangle: rect,
         corner: corners[0],
-        radius: shouldNotRound ? 0 : radius,
+        radius: shouldRound ? radius : 0,
         fillStyle: vm.backgroundColor,
         strokeStyle: vm.borderColor,
         borderWidth,
