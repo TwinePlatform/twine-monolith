@@ -10,6 +10,7 @@ import {
 } from './util';
 import Months from '../../util/months';
 
+const getStringContainingTotal = (xs: string []) => xs.find((x) => x.includes('Total'));
 
 // tslint:disable-next-line: max-line-length
 export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEnum): Promise<string> =>
@@ -20,10 +21,14 @@ export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEn
       calculateTotalsUsing(unit),
       abbreviateMonths(Months.format.verbose)
     )(data);
+    const groupBy = data.groupByX;
+    const rowKeys = Object.keys(rows[0]);
+    const totalHeader = getStringContainingTotal(rowKeys);
+    const monthHeaders = rowKeys.filter((x) => x !== groupBy && x !== totalHeader);
+    const headers = [groupBy, totalHeader, ...monthHeaders];
 
-    // TODO reorder columns to avoid depending on object property order
     csv.writeToString(
       rows,
-      { headers: true },
+      { headers },
       (err, res) => err ? reject(err) : resolve(res));
   });

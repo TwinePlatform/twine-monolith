@@ -28,9 +28,9 @@ describe('aggregatedToCsv', () => {
     } as AggregatedData;
 
     const expected = await aggregatedToCsv(data, unit);
-    expect(expected).toEqual(`Activity,February 2018,March 2018,April 2018,Total Hours
-Digging Holes,0,0.03,0,0.03
-Outdoor and practical work,0,0.06,3.09,3.15`);
+    expect(expected).toEqual(`Activity,Total Hours,February 2018,March 2018,April 2018
+Digging Holes,0.03,0,0.03,0
+Outdoor and practical work,3.15,0,0.06,3.09`);
   });
 
   test('SUCCESS - returns string in csv format in correct units', async () => {
@@ -57,8 +57,8 @@ Outdoor and practical work,0,0.06,3.09,3.15`);
     } as AggregatedData;
 
     const expected = await aggregatedToCsv(data, unit);
-    expect(expected).toEqual(`Activity,February 2018,March 2018,April 2018,Total Days
-Digging Holes,0,0.42,0,0.42
-Outdoor and practical work,0,0.07,0.39,0.46`);
+    expect(expected).toEqual(`Activity,Total Days,February 2018,March 2018,April 2018
+Digging Holes,0.42,0,0.42,0
+Outdoor and practical work,0.46,0,0.07,0.39`);
   });
 });
