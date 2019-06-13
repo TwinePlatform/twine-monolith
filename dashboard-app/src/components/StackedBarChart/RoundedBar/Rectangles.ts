@@ -42,7 +42,7 @@ export const Rectangles = {
 
   // Border width should be less than bar width and bar height
   adjustBorderWidth: (borderWidth: number, r: Rectangle) =>
-    Math.min(r.absWidth, r.absHeight, borderWidth),
+    Math.min(r.absWidth, r.absHeight, Math.max(0, borderWidth)),
 
   adjustByBorder: (borderSkipped: PositionType, borderWidth: number, r: Rectangle) => {
     // Canvas doesn't allow us to stroke inside the width so we can
