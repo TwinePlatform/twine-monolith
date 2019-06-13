@@ -4,7 +4,14 @@
 # Set heroku app environment variables from a file
 #
 # See https://emirkarsiyakali.com/heroku-copying-environment-variables-from-an-existing-app-to-another-9253929198d9
-
+#
+# Usage
+#   $ bash config.sh [MODE] [app_name] [output_file]
+#
+# MODE        - "get" or "put"
+# app_name    - Name of heroku app to target
+# output_file - File to write to (if MODE="get") or read from (if MODE="put")
+#
 
 FUNCTION=$1
 HEROKU_APP=$2
