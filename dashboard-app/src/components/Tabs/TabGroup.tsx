@@ -16,7 +16,6 @@ type TabProps = {
  * Styles
  */
 const TabContainer = styled.div`
-  margin: 0 5rem
 `;
 
 export const TabGroup: React.FunctionComponent<TabProps> = (props) => {
