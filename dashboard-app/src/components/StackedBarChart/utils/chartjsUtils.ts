@@ -1,6 +1,7 @@
 import { MathUtil } from 'twine-util';
 const round = MathUtil.roundTo(2);
 
+
 export const totalizer = {
   id: 'totalizer',
 
@@ -35,7 +36,7 @@ export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string): 
         labelString: xAxisTitle,
       },
       stacked: true,
-      gridLines: false,
+      gridLines: { display: false },
       ticks: { padding: 5 },
     }],
     yAxes: [{
@@ -44,7 +45,7 @@ export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string): 
         labelString: yAxisTitle,
       },
       stacked: true,
-      gridLines: false,
+      gridLines: { display: false },
       ticks: { display: false },
     }],
   },
@@ -59,11 +60,12 @@ export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string): 
         const total = ctx.chart.$totalizer.totals[ctx.dataIndex];
         return total.toString();
       },
-      align: 'end',
-      anchor: 'end',
+      align: 'end' as 'end',
+      anchor: 'end' as 'end',
       display (ctx: any) {
         return ctx.datasetIndex === ctx.chart.$totalizer.utmost;
       },
     },
   },
+  cornerRadius: 5,
 });

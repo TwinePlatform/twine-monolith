@@ -1,6 +1,7 @@
+import { Objects } from 'twine-util';
 import { AggregatedData } from './logsToAggregatedData';
 import { toUnitDuration, abbreviateIfDateString } from './util';
-import { omit, map, Dictionary } from 'ramda';
+import { omit } from 'ramda';
 import { DurationUnitEnum } from '../../types';
 import { GraphColourList } from '../../styles/design_system';
 import Months from '../../util/months';
@@ -12,11 +13,11 @@ export const aggregatedToStackedGraph = (data: AggregatedData, unit: DurationUni
     datasets: data.rows.map((row, i) => {
       const label = row.name as string;
       const rowData = omit(['id', 'name'], row);
-      const numericData = map((v) =>
+      const numericData = Objects.mapValues((v) =>
         typeof v === 'object'
           ? toUnitDuration(unit, v)
-          : v
-        , rowData) as Dictionary<any>;
+          : Number(v)
+        , rowData);
       return {
         backgroundColor: GraphColourList[i],
         label,
