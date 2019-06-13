@@ -95,13 +95,14 @@ const Login: React.FunctionComponent<LoginProps> = (props) => (
             </FormContainer>
           </Col>
         </RowLeftAlignText>
-        <Row>
+        <Row center="xs">
           <Notification
             isActive={getMessage(props).length > 0}
             message={getMessage(props)}
             barStyle={{
               backgroundColor: ColoursEnum.black,
               left: getMessage(props).length > 0 ? 'inherit' : '-100%',
+              bottom: 'inherit',
               marginTop: SpacingEnum.small,
               borderRadius: '0.2rem',
             }}
