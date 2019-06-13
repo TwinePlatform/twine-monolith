@@ -89,7 +89,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
       <Col xs={6}>
         <Row end="xs">
           <UnitToggle onChange={onDisplayUnitChange}/>
-          <DownloadButton onClick={onDownloadClick}>Download</DownloadButton>
+          <DownloadButton onClick={onDownloadClick}>Download Csv</DownloadButton>
         </Row>
       </Col>
     </Row>
