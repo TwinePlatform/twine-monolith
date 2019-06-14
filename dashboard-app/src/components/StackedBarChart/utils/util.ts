@@ -1,11 +1,7 @@
 
 
 import { sortBy, pipe, prop, toLower, omit, evolve } from 'ramda';
-import {
-  AggregatedData,
-  IdAndName,
-  Row
-} from '../../../dashboard/dataManipulation/logsToAggregatedData';
+import { AggregatedData, Row } from '../../../dashboard/dataManipulation/logsToAggregatedData';
 import { LegendData, LegendDatum } from '../types';
 
 export const sortByNameCaseInsensitive = sortBy(pipe(prop('name'), toLower));

@@ -9,10 +9,7 @@ import {
 } from './utils/util';
 import { DurationUnitEnum } from '../../types';
 import { aggregatedToStackedGraph } from '../../dashboard/dataManipulation/aggregatedToGraphData';
-import {
-  AggregatedData,
-  IdAndName,
-} from '../../dashboard/dataManipulation/logsToAggregatedData';
+import { AggregatedData } from '../../dashboard/dataManipulation/logsToAggregatedData';
 import Legend from './Legend/index';
 import Chart from './Chart';
 import { LegendData } from './types';
