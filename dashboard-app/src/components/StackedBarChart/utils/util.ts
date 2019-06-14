@@ -45,6 +45,7 @@ export const getYHeaderList = (row: Row) => Object.keys(omit(['id', 'name'], row
 const zeroOutInactiveData = (legendData: LegendData) => (rows: Row[]) =>
   rows.
     map((row, i: number) => {
+      if (! legendData[i]) return row;
       return legendData[i].active
     ? row
     : getYHeaderList(row).reduce((acc: object, el) => ({ ...acc, [el]: 0 }),
