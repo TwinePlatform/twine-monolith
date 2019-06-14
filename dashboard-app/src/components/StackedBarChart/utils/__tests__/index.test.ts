@@ -110,17 +110,7 @@ describe('Helpers', () => {
             { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
             { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
         ]} as AggregatedData;
-      const vols = [
-        {
-          name: 'Aku Aku',
-          id: 2,
-        },
-        {
-          name: 'Crash Bandicoot',
-          id: 3,
-        },
-      ];
-      const expected = createLegendData(aggregatedData, vols);
+      const expected = createLegendData(aggregatedData);
       expect(expected).toEqual([
         { active: true, name: 'Aku Aku', id: 2 },
         { active: true, name: 'Crash Bandicoot', id: 3 },
@@ -134,21 +124,8 @@ describe('Helpers', () => {
             { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
             { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
         ]} as AggregatedData;
-      const vols = [
-        {
-          name: 'Aku Aku',
-          id: 2,
-        },
-        {
-          name: 'Crash Bandicoot',
-          id: 3,
-        },
-        {
-          name: 'Dr Neo Cortex',
-          id: 7,
-        },
-      ];
-      const expected = createLegendData(aggregatedData, vols);
+
+      const expected = createLegendData(aggregatedData);
       expect(expected).toEqual([
         { active: true, name: 'Aku Aku', id: 2 },
         { active: true, name: 'Crash Bandicoot', id: 3 },
@@ -165,16 +142,7 @@ describe('Helpers', () => {
             { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
             { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
         ]} as AggregatedData;
-      const vols = [
-        {
-          name: 'Aku Aku',
-          id: 2,
-        },
-        {
-          name: 'Crash Bandicoot',
-          id: 3,
-        },
-      ];
+
       const oldActiveData = [
         {
           active: true,
@@ -187,7 +155,7 @@ describe('Helpers', () => {
           id: 3,
         },
       ];
-      const expected = updateLegendData(aggregatedData, vols, oldActiveData);
+      const expected = updateLegendData(aggregatedData, oldActiveData);
       expect(expected).toEqual([
         { active: true, name: 'Aku Aku', id: 2 },
         { active: false, name: 'Crash Bandicoot', id: 3 },
@@ -234,6 +202,31 @@ describe('Helpers', () => {
     });
   });
 
+  describe(':: sortAndZeroOutInactiveData', async () => {
+    test('Success :: replaces all inactive data with 0', async () => {
+      const aggregatedData = {
+        groupByX: 'Volunteer Name',
+        groupByY: '',
+        rows: [
+            { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 3 },
+            { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 4 },
+        ]} as AggregatedData;
+
+      const activeData = [
+        { active: false, name: 'Aku Aku', id: 3 },
+        { active: true, name: 'Crash Bandicoot', id: 4 },
+      ];
+      const expected = sortAndZeroOutInactiveData(aggregatedData, activeData);
+      expect(expected).toEqual({
+        groupByX: 'Volunteer Name',
+        groupByY: '',
+        rows: [
+          { 'Outdoor and practical work': 0, name: 'Aku Aku', id: 3 },
+          { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 4 },
+        ] }
+      );
+    });
+  });
   describe(':: sortAndZeroOutInactiveData', async () => {
     test('Success :: replaces all inactive data with 0', async () => {
       const aggregatedData = {

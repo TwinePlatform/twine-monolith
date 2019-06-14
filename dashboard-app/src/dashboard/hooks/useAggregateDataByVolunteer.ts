@@ -18,7 +18,6 @@ interface UseAggregatedDataParams {
 
 export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
   const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
-  const [volunteers, setVolunteers] = useState<IdAndName[]>();
   const months = [...Months.range(from, to, Months.format.verbose)]
   .map((month, i) => ({
     id: i,
@@ -60,7 +59,6 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       yData: months,
     });
 
-    setVolunteers(volunteersData.data);
     setAggregatedData(data);
   }, [logsData, volunteersData]);
 
@@ -75,7 +73,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
 
   } else {
 
-    return { loading, data: aggregatedData, error, months, volunteers };
+    return { loading, data: aggregatedData, error, months };
 
   }
 };
