@@ -24,7 +24,6 @@ import { LegendData } from './types';
 
 interface Props {
   data: AggregatedData;
-  legendOptions: IdAndName[];
   unit: DurationUnitEnum;
   xAxisTitle: string;
   yAxisTitle: string;
@@ -36,8 +35,8 @@ interface Props {
  */
 
 const StackedBarChart: FunctionComponent<Props> = (props) => {
-  const { data, xAxisTitle, yAxisTitle, title, unit, legendOptions } = props;
-  const [legendData, setLegendData] = useState(createLegendData(data, legendOptions));
+  const { data, xAxisTitle, yAxisTitle, title, unit } = props;
+  const [legendData, setLegendData] = useState(createLegendData(data));
   const [chartData, setChartData] = useState();
 
   const setLegendActivityOnUpdate = (id: number) => {
@@ -58,7 +57,7 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
 
 
   useEffect(() => {
-    const newLegendData = updateLegendData(data, legendOptions, legendData);
+    const newLegendData = updateLegendData(data, legendData);
     const zeroedOutData = sortAndZeroOutInactiveData(data, newLegendData);
     setLegendData(newLegendData);
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));

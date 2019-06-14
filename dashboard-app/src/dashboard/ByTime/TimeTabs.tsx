@@ -4,7 +4,7 @@ import { Row, Col } from 'react-flexbox-grid';
 
 import _DataTable from '../../components/DataTable';
 import { TabGroup } from '../../components/Tabs';
-import { AggregatedData, IdAndName } from '../dataManipulation/logsToAggregatedData';
+import { AggregatedData } from '../dataManipulation/logsToAggregatedData';
 import { DurationUnitEnum } from '../../types';
 import { TableData } from '../dataManipulation/aggregatedToTableData';
 import StackedBarChart from '../../components/StackedBarChart/index';
@@ -15,7 +15,6 @@ import StackedBarChart from '../../components/StackedBarChart/index';
 
 interface Props {
   data?: AggregatedData;
-  legendOptions: IdAndName[];
   unit: DurationUnitEnum;
   tableData: TableData;
   sortBy: number;
@@ -33,7 +32,7 @@ const DataTable = styled(_DataTable)`
  * Component
  */
 const TimeTabs: FunctionComponent<Props> = (props) => {
-  const { data, unit, tableData, sortBy, onChangeSortBy, title, legendOptions } = props;
+  const { data, unit, tableData, sortBy, onChangeSortBy, title } = props;
 
   return(
     <Row center="xs">
@@ -42,7 +41,6 @@ const TimeTabs: FunctionComponent<Props> = (props) => {
           {
             data && (
               <StackedBarChart
-                legendOptions={legendOptions}
                 title={title}
                 data={data}
                 unit={unit}

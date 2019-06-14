@@ -6,35 +6,23 @@ import {
   IdAndName,
   Row
 } from '../../../dashboard/dataManipulation/logsToAggregatedData';
-import { LegendData } from '../types';
+import { LegendData, LegendDatum } from '../types';
 
 export const sortByNameCaseInsensitive = sortBy(pipe(prop('name'), toLower));
 
 export const createLegendData =
-  (data: AggregatedData, legendOption: IdAndName[]): LegendData => {
-    const allPossibleLegendData = legendOption
-      .map((x) => ({ ...x, active: true }));
-    const visibleValues = data.rows
-      .map((row) => ({ id: row.id }));
+  (data: AggregatedData): LegendData => {
+    const visibleData = data.rows
+      .map((row) => ({ id: row.id, name: row.name, active: true } as LegendDatum));
 
-    const newLegendData = allPossibleLegendData
-      .filter((possibleItem) => visibleValues
-        .find((visibleItem) => visibleItem.id === possibleItem.id));
-
-    return sortByNameCaseInsensitive(newLegendData);
+    return sortByNameCaseInsensitive(visibleData);
   };
 
 export const updateLegendData =
-  (data: AggregatedData, legendOption: IdAndName[], oldActiveData: LegendData): LegendData => {
-    const allPossibleLegendData = legendOption.map((x) => ({ ...x, active: true }));
-    const visibleValues = data.rows
-      .map((row) => ({ id: row.id }));
+  (data: AggregatedData, oldActiveData: LegendData): LegendData => {
+    const visibleData = createLegendData(data);
 
-    const newLegendDataWithoutUpdatedActive = allPossibleLegendData
-      .filter((possibleItem) => visibleValues
-        .find((visibleValue) => visibleValue.id === possibleItem.id));
-
-    const newLegendData = newLegendDataWithoutUpdatedActive.map((newItem) =>
+    const newLegendData = visibleData.map((newItem) =>
       oldActiveData.find((oldItem) => newItem.id === oldItem.id) || newItem
     );
     return sortByNameCaseInsensitive(newLegendData);
@@ -44,9 +32,10 @@ export const getYHeaderList = (row: Row) => Object.keys(omit(['id', 'name'], row
 
 const zeroOutInactiveData = (legendData: LegendData) => (rows: Row[]) =>
   rows.
-    map((row, i: number) => {
-      if (! legendData[i]) return row;
-      return legendData[i].active
+    map((row) => {
+      const matchingLegendData = legendData.find((data) => data.id === row.id);
+      if (!matchingLegendData) return row;
+      return matchingLegendData.active
     ? row
     : getYHeaderList(row).reduce((acc: object, el) => ({ ...acc, [el]: 0 }),
       { id: row.id, name: row.name });
