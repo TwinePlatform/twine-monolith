@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from 'react';
-import { Grid, Row, Col } from 'react-flexbox-grid';
+import { Row, Col } from 'react-flexbox-grid';
 
 import {
   createLegendData,
