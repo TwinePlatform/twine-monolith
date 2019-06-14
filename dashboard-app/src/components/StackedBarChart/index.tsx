@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from 'react';
 import { Grid, Row } from 'react-flexbox-grid';
+import styled from 'styled-components';
 
 import {
   createLegendData,
@@ -13,6 +14,8 @@ import { AggregatedData } from '../../dashboard/dataManipulation/logsToAggregate
 import Legend from './Legend/index';
 import Chart from './Chart';
 import { LegendData } from './types';
+import { ColoursEnum } from '../../styles/design_system';
+import { Paragraph } from '../Typography';
 
 
 /*
@@ -27,6 +30,24 @@ interface Props {
   title: string;
 }
 
+const NoDataContainer = styled.div`
+  height: 10rem;
+  color: ${ColoursEnum.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const noData = (
+  <NoDataContainer>
+    <Paragraph>NO DATA AVAILABLE</Paragraph>
+  </NoDataContainer>
+);
+
+const checkIsDataEmpty = (cd: any) => {
+  return (!cd || cd.datasets.length === 0);
+};
+
 /*
  * Components
  */
@@ -36,22 +57,17 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   const [legendData, setLegendData] = useState(createLegendData(data));
   const [chartData, setChartData] = useState();
 
-  const setLegendActivityOnUpdate = (id: number) => {
-    return () => setLegendData((prevState: LegendData): LegendData =>
+  const setLegendActivityOnUpdate = (id: number) => () =>
+    setLegendData((prevState: LegendData) =>
       prevState.map((x) =>
         x.id === id
-          ? {
-            ...x,
-            active: !x.active,
-          }
-        : x
+          ? { ...x, active: !x.active }
+          : x
       ));
-  };
 
   const setLegendActivityOfAll = useCallback(() => {
     setLegendData(flipActiveOfAll);
   }, [legendData]);
-
 
   useEffect(() => {
     const newLegendData = updateLegendData(data, legendData);
@@ -66,16 +82,31 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   }, [legendData]);
 
   const chartProps = { data: chartData, xAxisTitle, yAxisTitle, title, unit };
-// tslint:disable-next-line: max-line-length
-  const legendProps = { legendData, setLegendActivityOfAll, setLegendActivityOnUpdate, title: data.groupByX };
+  const legendProps = {
+    legendData,
+    setLegendActivityOfAll,
+    setLegendActivityOnUpdate,
+    title: data.groupByX,
+  };
+
+  const graph = (
+    <>
+      <Chart {...chartProps}/>
+      <Legend {...legendProps}/>
+    </>
+  );
 
   return (
     <Grid>
-      <Row>
-        <Chart {...chartProps}/>
-        <Legend {...legendProps}/>
+      <Row center="xs">
+        {
+          !checkIsDataEmpty(chartData)
+            ? graph
+            : noData
+        }
       </Row>
-    </Grid>);
+    </Grid>
+  );
 };
 
 export default StackedBarChart;
