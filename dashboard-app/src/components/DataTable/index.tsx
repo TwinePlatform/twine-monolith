@@ -57,8 +57,7 @@ const Table = styled.table`
 
 const NoDataContainer = styled.div`
   height: 10rem;
-  color: ${ColoursEnum.white};
-  background-color: ${ColoursEnum.grey};
+  background-color: ${ColoursEnum.white};
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from 'react';
-import { Grid, Row } from 'react-flexbox-grid';
+import { Row, Col } from 'react-flexbox-grid';
 
 import {
   createLegendData,
@@ -36,22 +36,17 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   const [legendData, setLegendData] = useState(createLegendData(data));
   const [chartData, setChartData] = useState();
 
-  const setLegendActivityOnUpdate = (id: number) => {
-    return () => setLegendData((prevState: LegendData): LegendData =>
+  const setLegendActivityOnUpdate = (id: number) => () =>
+    setLegendData((prevState: LegendData) =>
       prevState.map((x) =>
         x.id === id
-          ? {
-            ...x,
-            active: !x.active,
-          }
-        : x
+          ? { ...x, active: !x.active }
+          : x
       ));
-  };
 
   const setLegendActivityOfAll = useCallback(() => {
     setLegendData(flipActiveOfAll);
   }, [legendData]);
-
 
   useEffect(() => {
     const newLegendData = updateLegendData(data, legendData);
@@ -66,16 +61,23 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   }, [legendData]);
 
   const chartProps = { data: chartData, xAxisTitle, yAxisTitle, title, unit };
-// tslint:disable-next-line: max-line-length
-  const legendProps = { legendData, setLegendActivityOfAll, setLegendActivityOnUpdate, title: data.groupByX };
+  const legendProps = {
+    legendData,
+    setLegendActivityOfAll,
+    setLegendActivityOnUpdate,
+    title: data.groupByX,
+  };
 
   return (
-    <Grid>
-      <Row>
+    <Row center="xs">
+      <Col xs={9}>
         <Chart {...chartProps}/>
+      </Col>
+      <Col xs={3}>
         <Legend {...legendProps}/>
-      </Row>
-    </Grid>);
+      </Col>
+    </Row>
+  );
 };
 
 export default StackedBarChart;
