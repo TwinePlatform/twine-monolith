@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, useCallback } from 'react';
-import { Grid, Row } from 'react-flexbox-grid';
-import styled from 'styled-components';
+import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import {
   createLegendData,
@@ -14,8 +13,6 @@ import { AggregatedData } from '../../dashboard/dataManipulation/logsToAggregate
 import Legend from './Legend/index';
 import Chart from './Chart';
 import { LegendData } from './types';
-import { ColoursEnum } from '../../styles/design_system';
-import { Paragraph } from '../Typography';
 
 
 /*
@@ -29,24 +26,6 @@ interface Props {
   yAxisTitle: string;
   title: string;
 }
-
-const NoDataContainer = styled.div`
-  height: 10rem;
-  color: ${ColoursEnum.white};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const noData = (
-  <NoDataContainer>
-    <Paragraph>NO DATA AVAILABLE</Paragraph>
-  </NoDataContainer>
-);
-
-const checkIsDataEmpty = (cd: any) => {
-  return (!cd || cd.datasets.length === 0);
-};
 
 /*
  * Components
@@ -89,23 +68,15 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
     title: data.groupByX,
   };
 
-  const graph = (
-    <>
-      <Chart {...chartProps}/>
-      <Legend {...legendProps}/>
-    </>
-  );
-
   return (
-    <Grid>
-      <Row center="xs">
-        {
-          !checkIsDataEmpty(chartData)
-            ? graph
-            : noData
-        }
-      </Row>
-    </Grid>
+    <Row center="xs">
+      <Col xs={9}>
+        <Chart {...chartProps}/>
+      </Col>
+      <Col xs={3}>
+        <Legend {...legendProps}/>
+      </Col>
+    </Row>
   );
 };
 

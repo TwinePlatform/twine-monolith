@@ -49,33 +49,35 @@ const Legend: FunctionComponent<Props> = (props) => {
   const { legendData, setLegendActivityOfAll, setLegendActivityOnUpdate, title } = props;
 
   return (
-  <Col xs={3}>
     <Card>
       <Grid>
-      <TitleRow middle="xs">
-        <Col xs={6}>
-          <Title>{title}</Title>
-        </Col>
-        <Col xs={3} xsOffset={3}>
-          <LegendItem
-            key="all"
-            onClick={setLegendActivityOfAll}
-            colour={ColoursEnum.darkGrey}
-            title="All"
-            active={isEveryDatumActive(legendData)}/>
-        </Col>
-      </TitleRow>
-      {legendData.map((x, i) => (
-        <LegendItem
-          key={x.id}
-          onClick={setLegendActivityOnUpdate(x.id)}
-          colour={GraphColourList[i]}
-          title={x.name}
-          active={x.active}
-        />))}
+        <TitleRow middle="xs">
+          <Col xs={6}>
+            <Title>{title}</Title>
+          </Col>
+          <Col xs={3} xsOffset={3}>
+            <LegendItem
+              key="all"
+              onClick={setLegendActivityOfAll}
+              colour={ColoursEnum.darkGrey}
+              title="All"
+              active={isEveryDatumActive(legendData)}
+            />
+          </Col>
+        </TitleRow>
+        {
+          legendData.map((x, i) => (
+            <LegendItem
+              key={x.id}
+              onClick={setLegendActivityOnUpdate(x.id)}
+              colour={GraphColourList[i]}
+              title={x.name}
+              active={x.active}
+            />
+          ))
+        }
       </Grid>
     </Card>
-  </Col >
   );
 };
 
