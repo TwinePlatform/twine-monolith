@@ -5,7 +5,8 @@ import {
   createLegendData,
   flipActiveOfAll,
   updateLegendData,
-  sortAndZeroOutInactiveData
+  sortAndZeroOutInactiveData,
+  isEveryDatumInactive
 } from './utils/util';
 import { DurationUnitEnum } from '../../types';
 import { aggregatedToStackedGraph } from '../../dashboard/dataManipulation/aggregatedToGraphData';
@@ -60,7 +61,15 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
   }, [legendData]);
 
-  const chartProps = { data: chartData, xAxisTitle, yAxisTitle, title, unit };
+  const chartProps = {
+    data: chartData,
+    xAxisTitle,
+    yAxisTitle,
+    title,
+    unit,
+    isAllLegendDataInactive: isEveryDatumInactive(legendData),
+  };
+
   const legendProps = {
     legendData,
     setLegendActivityOfAll,

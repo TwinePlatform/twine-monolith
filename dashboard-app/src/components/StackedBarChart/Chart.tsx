@@ -10,7 +10,7 @@ import { getStackedGraphOptions, totalizer } from './utils/chartjsUtils';
 import _Card from '../Card';
 import { H3 } from '../Headings';
 import { ColoursEnum } from '../../styles/design_system';
-import { Paragraph } from '../Typography';
+import { FullWidthTextBox } from '../FullWidthTextBox';
 
 
 /*
@@ -21,8 +21,12 @@ interface Props {
   xAxisTitle: string;
   yAxisTitle: string;
   title: string;
+  isAllLegendDataInactive: boolean;
 }
 
+type HidableTextBoxProp = {
+  isVisible: boolean;
+};
 
 /*
  * Styles
@@ -37,36 +41,23 @@ const Title = styled(H3)`
   text-align: left;
 `;
 
-const NoDataContainer = styled.div`
-  height: 10rem;
-  width: 100%;
-  color: ${ColoursEnum.white};
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const HidableTextBox = styled(FullWidthTextBox)<HidableTextBoxProp>`
+  visibility: ${({ isVisible }) => isVisible ? 'inherit' : 'hidden'};
 `;
 
-
-/**
+/*
  * Helpers
  */
 const datasetKeyProvider = (d: { id: number }) => d.id;
 const checkIsDataEmpty = (cd: any) => (!cd || cd.datasets.length === 0);
 
 
-/**
+/*
  * Components
  */
-const noData = (
-  <Col xs={12}>
-    <NoDataContainer>
-      <Paragraph>NO DATA AVAILABLE</Paragraph>
-    </NoDataContainer>
-  </Col>
-);
 
 const Chart: FunctionComponent<Props> = (props) => {
-  const { data, xAxisTitle, yAxisTitle, title } = props;
+  const { data, xAxisTitle, yAxisTitle, title, isAllLegendDataInactive } = props;
   const graph = (
     <RoundedBar
       datasetKeyProvider={datasetKeyProvider}
@@ -75,7 +66,6 @@ const Chart: FunctionComponent<Props> = (props) => {
       options={getStackedGraphOptions(xAxisTitle, yAxisTitle)}
     />
   );
-
   return (
     <Card>
       <Row center="xs">
@@ -85,9 +75,14 @@ const Chart: FunctionComponent<Props> = (props) => {
       </Row>
       <Row center="xs" middle="xs">
         <Col xs={12} md={9}>
+        <HidableTextBox
+          height="2rem"
+          isVisible={isAllLegendDataInactive}
+          text ="Select a volunteer to show their hours"
+        />
           {
             checkIsDataEmpty(data)
-              ? noData
+              ? <FullWidthTextBox text ="NO DATA AVAILABLE"/>
               : graph
           }
         </Col>
