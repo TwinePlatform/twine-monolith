@@ -21,6 +21,7 @@ interface Props {
   xAxisTitle: string;
   yAxisTitle: string;
   title: string;
+  noActiveLegendText: string;
   isAllLegendDataInactive: boolean;
 }
 
@@ -57,7 +58,15 @@ const checkIsDataEmpty = (cd: any) => (!cd || cd.datasets.length === 0);
  */
 
 const Chart: FunctionComponent<Props> = (props) => {
-  const { data, xAxisTitle, yAxisTitle, title, isAllLegendDataInactive } = props;
+  const {
+    data,
+    xAxisTitle,
+    yAxisTitle,
+    title,
+    isAllLegendDataInactive,
+    noActiveLegendText,
+  } = props;
+
   const graph = (
     <RoundedBar
       datasetKeyProvider={datasetKeyProvider}
@@ -66,6 +75,7 @@ const Chart: FunctionComponent<Props> = (props) => {
       options={getStackedGraphOptions(xAxisTitle, yAxisTitle)}
     />
   );
+
   return (
     <Card>
       <Row center="xs">
@@ -78,7 +88,7 @@ const Chart: FunctionComponent<Props> = (props) => {
         <HidableTextBox
           height="2rem"
           isVisible={isAllLegendDataInactive}
-          text ="Select a volunteer to show their hours"
+          text ={noActiveLegendText}
         />
           {
             checkIsDataEmpty(data)
