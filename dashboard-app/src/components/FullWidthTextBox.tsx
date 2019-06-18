@@ -12,7 +12,7 @@ type Prop = {
 const NoDataContainer = styled.div<Pick<Prop, 'height'>>`
   height: ${({ height = '10rem' }) => height};
   width: 100%;
-  color: ${ColoursEnum.white};
+  background-color: ${ColoursEnum.white};
   display: flex;
   align-items: center;
   justify-content: center;
