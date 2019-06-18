@@ -3,6 +3,7 @@
  */
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
+import { pathOr } from 'ramda';
 import { Order, sort } from 'twine-util/arrays';
 import { H3 } from '../Headings';
 import { SpacingEnum, ColoursEnum } from '../../styles/design_system';
@@ -67,12 +68,12 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
     }
   }, [order, sortBy, headers]);
 
-  const sorter = useCallback(() => {
-    return sort([
-      { path: ['columns', sortBy, 'content'], order },
-      { path: ['columns', headers[0], 'content'], order: 'asc' },
-    ], rows);
-  }, [order, sortBy, headers, rows]);
+  const sorter = useCallback((_rows: DataTableProps['rows']) =>
+    sort([
+      { accessor: pathOr('', ['columns', sortBy, 'content']), order },
+      { accessor: pathOr('', ['columns', headers[0], 'content']), order: 'asc' as Order },
+    ], _rows)
+  , [order, sortBy, headers]);
 
   const table = (
     <Table cols={headers.length}>
@@ -84,7 +85,7 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
       />
       <tbody>
         {
-          sorter()
+          sorter(rows)
             .map((row) => (
               <DataTableRow
                 columns={row.columns}
