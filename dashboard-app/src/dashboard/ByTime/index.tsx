@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback, FunctionComponent } from 'react';
 import styled from 'styled-components';
-import moment from 'moment';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 

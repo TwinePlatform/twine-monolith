@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, FunctionComponent } from 'react';
-import moment from 'moment';
 import styled from 'styled-components';
 import { Dictionary } from 'ramda';
 import { withRouter, RouteComponentProps } from 'react-router';
@@ -16,7 +15,6 @@ import { ColoursEnum } from '../../styles/design_system';
 import VolunteerTabs from './VolunteerTabs';
 import Errors from '../../components/Errors';
 import useAggregateDataByVolunteer from '../hooks/useAggregateDataByVolunteer';
-import Months from '../../util/months';
 import { getTitleForMonthPicker } from '../util';
 
 
