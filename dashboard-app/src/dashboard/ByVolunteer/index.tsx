@@ -17,6 +17,7 @@ import VolunteerTabs from './VolunteerTabs';
 import Errors from '../../components/Errors';
 import useAggregateDataByVolunteer from '../hooks/useAggregateDataByVolunteer';
 import Months from '../../util/months';
+import { getTitleForMonthPicker } from '../util';
 
 
 /**
@@ -30,11 +31,6 @@ const Container = styled(Grid)`
  * Helpers
  */
 const initTableData = { headers: [], rows: [] };
-const getTitle = (from: Date, to: Date) =>
-  `Volunteer Time per month: \
-    ${moment(from).format(Months.format.abreviated)} -
-    \ ${moment(to).format(Months.format.abreviated)}`;
-
 
 /**
  * Component
@@ -83,7 +79,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     tableData,
     sortBy,
     onChangeSortBy,
-    title: getTitle(fromDate, toDate),
+    title: getTitleForMonthPicker('Volunteer Time per month', fromDate, toDate),
   };
 
   return (

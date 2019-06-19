@@ -16,8 +16,8 @@ import { ColoursEnum } from '../../styles/design_system';
 import TimeTabs from './TimeTabs';
 import Errors from '../../components/Errors';
 import useAggregateDataByTime from '../hooks/useAggregateDataByTime';
-import Months from '../../util/months';
 import { Dictionary } from 'ramda';
+import { getTitleForMonthPicker } from '../util';
 
 
 /**
@@ -31,10 +31,6 @@ const Container = styled(Grid)`
  * Helpers
  */
 const initTableData = { headers: [], rows: [] };
-const getTitle = (from: Date, to: Date) =>
-  `Volunteer Activity per month: \
-    ${moment(from).format(Months.format.abreviated)} -
-    \ ${moment(to).format(Months.format.abreviated)}`;
 
 /**
  * Component
@@ -83,7 +79,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     tableData,
     sortBy,
     onChangeSortBy,
-    title: getTitle(fromDate, toDate),
+    title: getTitleForMonthPicker('Volunteer Activity per month', fromDate, toDate),
   };
 
   return (

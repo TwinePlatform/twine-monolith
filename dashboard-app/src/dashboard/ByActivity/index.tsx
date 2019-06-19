@@ -17,6 +17,7 @@ import Errors from '../../components/Errors';
 import useAggregateDataByActivity from '../hooks/useAggregateDataByActivity';
 import { TabGroup } from '../../components/Tabs';
 import { Dictionary } from 'ramda';
+import { getTitleForDayPicker } from '../util';
 
 
 /**
@@ -115,7 +116,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
                     tableData && (
                       <DataTable
                         {...tableData}
-                        title={TABLE_TITLE}
+                        title={getTitleForDayPicker(TABLE_TITLE, fromDate, toDate)}
                         sortBy={tableData.headers[sortBy]}
                         initialOrder="desc"
                         onChangeSortBy={onChangeSortBy}
