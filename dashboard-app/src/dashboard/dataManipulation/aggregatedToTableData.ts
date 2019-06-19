@@ -37,7 +37,7 @@ export const aggregatedToTableData = ({ data, unit, yData }: Params) => {
     renameAllNameKeys,
     removeIdInRows,
     calculateTotalsUsing(unit),
-    abbreviateMonths(Months.format.table),
+    abbreviateMonths(Months.format.abreviated),
     addContentObjects as any,
     addColumnsKey
   )(data) as Pick<DataTableProps, 'headers' | 'rows'>;

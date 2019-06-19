@@ -32,7 +32,8 @@ const Container = styled(Grid)`
 const initTableData = { headers: [], rows: [] };
 const getTitle = (from: Date, to: Date) =>
   `Volunteer Time per month: \
-    ${moment(from).format(Months.format.table)} - ${moment(to).format(Months.format.table)}`;
+    ${moment(from).format(Months.format.abreviated)} -
+    \ ${moment(to).format(Months.format.abreviated)}`;
 
 
 /**
