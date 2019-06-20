@@ -29,29 +29,29 @@ describe('aggregatedToTableData', () => {
       } as AggregatedData;
 
       const months = [
-        { id: 182, name: 'February 2018' },
-        { id: 183, name: 'March 2018' },
-        { id: 184, name: 'April 2018' },
+        { id: 20182, name: 'February 2018' },
+        { id: 20183, name: 'March 2018' },
+        { id: 20184, name: 'April 2018' },
       ];
 
       const expected = aggregatedToTableData({ data, unit: DurationUnitEnum.HOURS, yData: months });
       expect(expected).toEqual({
         groupByX: 'Activity',
         groupByY: 'Month',
-        headers: ['Activity', 'Total Hours', 'Feb 18', 'Mar 18', 'Apr 18'],
+        headers: ['Activity', 'Total Hours', 'Feb 2018', 'Mar 2018', 'Apr 2018'],
         rows: [{
           columns: {
             Activity: { content: 'Digging Holes' },
-            'Apr 18': { content: 0 },
-            'Feb 18': { content: 0 },
-            'Mar 18': { content: 0.03 },
+            'Apr 2018': { content: 0 },
+            'Feb 2018': { content: 0 },
+            'Mar 2018': { content: 0.03 },
             'Total Hours': { content: 0.03 } },
         },
         { columns: {
           Activity: { content: 'Outdoor and practical work' },
-          'Apr 18': { content: 0 },
-          'Feb 18': { content: 0 },
-          'Mar 18': { content: 0.06 },
+          'Apr 2018': { content: 0 },
+          'Feb 2018': { content: 0 },
+          'Mar 2018': { content: 0.06 },
           'Total Hours': { content: 0.06 } },
         }],
       });

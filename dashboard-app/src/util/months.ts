@@ -8,10 +8,9 @@ interface Months {
 }
 
 export enum MonthsFormatEnum {
-  verbose= 'MMMM YYYY',
-  table= 'MMM YY',
-  graph= 'MMM YYYY',
-  filename= 'MM_YY',
+  verbose = 'MMMM YYYY',
+  abreviated = 'MMM YYYY',
+  filename = 'MM_YY',
 }
 
 const months: Months = {

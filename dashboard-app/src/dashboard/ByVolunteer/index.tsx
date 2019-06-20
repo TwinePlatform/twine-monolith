@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, FunctionComponent } from 'react';
-import moment from 'moment';
 import styled from 'styled-components';
 import { Dictionary } from 'ramda';
 import { withRouter, RouteComponentProps } from 'react-router';
@@ -16,7 +15,7 @@ import { ColoursEnum } from '../../styles/design_system';
 import VolunteerTabs from './VolunteerTabs';
 import Errors from '../../components/Errors';
 import useAggregateDataByVolunteer from '../hooks/useAggregateDataByVolunteer';
-import Months from '../../util/months';
+import { getTitleForMonthPicker } from '../util';
 
 
 /**
@@ -30,10 +29,6 @@ const Container = styled(Grid)`
  * Helpers
  */
 const initTableData = { headers: [], rows: [] };
-const getTitle = (from: Date, to: Date) =>
-  `Volunteer Time per month: \
-    ${moment(from).format(Months.format.table)} - ${moment(to).format(Months.format.table)}`;
-
 
 /**
  * Component
@@ -82,7 +77,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     tableData,
     sortBy,
     onChangeSortBy,
-    title: getTitle(fromDate, toDate),
+    title: getTitleForMonthPicker('Volunteer Time per month', fromDate, toDate),
   };
 
   return (
