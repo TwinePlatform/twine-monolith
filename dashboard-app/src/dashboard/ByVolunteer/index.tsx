@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, FunctionComponent } from 'react';
 import styled from 'styled-components';
-import { Dictionary } from 'ramda';
+import { Dictionary, assoc, omit } from 'ramda';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
@@ -16,6 +16,7 @@ import VolunteerTabs from './VolunteerTabs';
 import Errors from '../../components/Errors';
 import useAggregateDataByVolunteer from '../hooks/useAggregateDataByVolunteer';
 import { getTitleForMonthPicker } from '../util';
+import { isDataEmpty } from '../dataManipulation/logsToAggregatedData';
 
 
 /**
@@ -47,7 +48,8 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     if (error) {
       setErrors({ data: error.message });
     }
-  }, [error]);
+    setErrors(omit(['Download']));
+  }, [error, fromDate, toDate]);
 
   // manipulate data for table
   useEffect(() => {
@@ -64,10 +66,11 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   }, [tableData]);
 
   const downloadAsCsv = useCallback(() => {
-    if (!loading && data) {
-      downloadCsv({ data, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
+    if (loading || !data || isDataEmpty(data)) {
+      setErrors(assoc('Download', 'There is no data available to download'));
     } else {
-      setErrors({ Download: 'No data available to download' });
+      downloadCsv({ data, fromDate, toDate, fileName: 'by_volunteer', unit })
+        .catch((error: Error) => setErrors(assoc('Download', error.message)));
     }
   }, [data, fromDate, toDate, unit]);
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, FunctionComponent } from 'reac
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
+import { Dictionary, assoc, omit } from 'ramda';
 
 import DatePickerConstraints from './datePickerConstraints';
 import _DataTable from '../../components/DataTable';
@@ -15,8 +16,8 @@ import { ColoursEnum } from '../../styles/design_system';
 import TimeTabs from './TimeTabs';
 import Errors from '../../components/Errors';
 import useAggregateDataByTime from '../hooks/useAggregateDataByTime';
-import { Dictionary } from 'ramda';
 import { getTitleForMonthPicker } from '../util';
+import { isDataEmpty } from '../dataManipulation/logsToAggregatedData';
 
 
 /**
@@ -48,7 +49,8 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     if (error) {
       setErrors({ data: error.message });
     }
-  }, [error]);
+    setErrors(omit(['Download']));
+  }, [error, fromDate, toDate]);
 
   // manipulate data for table
   useEffect(() => {
@@ -65,10 +67,11 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   }, [tableData]);
 
   const downloadAsCsv = useCallback(() => {
-    if (!loading && data) {
-      downloadCsv({ data, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
+    if (loading || !data || isDataEmpty(data)) {
+      setErrors(assoc('Download', 'There is no data available to download'));
     } else {
-      setErrors({ Download: 'No data available to download' });
+      downloadCsv({ data, fromDate, toDate, fileName: 'by_time', unit })
+        .catch((error: Error) => setErrors(assoc('Download', error.message)));
     }
   }, [data, fromDate, toDate, unit]);
 

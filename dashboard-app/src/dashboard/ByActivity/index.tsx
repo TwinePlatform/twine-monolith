@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, FunctionComponent } from 'reac
 import { withRouter, RouteComponentProps } from 'react-router';
 import styled from 'styled-components';
 import { Grid, Row, Col } from 'react-flexbox-grid';
+import { Dictionary, omit, assoc } from 'ramda';
 
 import DatePickerConstraints from './datePickerConstraints';
 import _DataTable from '../../components/DataTable';
@@ -16,8 +17,8 @@ import { ColoursEnum } from '../../styles/design_system';
 import Errors from '../../components/Errors';
 import useAggregateDataByActivity from '../hooks/useAggregateDataByActivity';
 import { TabGroup } from '../../components/Tabs';
-import { Dictionary } from 'ramda';
 import { getTitleForDayPicker } from '../util';
+import { isDataEmpty } from '../dataManipulation/logsToAggregatedData';
 
 
 /**
@@ -54,14 +55,15 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [errors, setErrors] = useState<Dictionary<string>>({});
-  const { loading, error, data, activities } =
+  const { loading, error: dataError, data, activities } =
     useAggregateDataByActivity({ from: fromDate, to: toDate });
 
   useEffect(() => {
-    if (error) {
-      setErrors({ data: error.message });
+    if (dataError) {
+      setErrors({ data: dataError.message });
     }
-  }, [error]);
+    setErrors(omit(['Download']));
+  }, [dataError, fromDate, toDate]);
 
   // manipulate data for table
   useEffect(() => {
@@ -78,10 +80,11 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   }, [tableData]);
 
   const downloadAsCsv = useCallback(() => {
-    if (!loading && data) {
-      downloadCsv({ data, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
+    if (loading || !data || isDataEmpty(data)) {
+      setErrors(assoc('Download', 'There is no data available to download'));
     } else {
-      setErrors({ Download: 'No data available to download' });
+      downloadCsv({ data, fromDate, toDate, fileName: 'by_activity', unit })
+        .catch((error: Error) => setErrors(assoc('Download', error.message)));
     }
   }, [data, fromDate, toDate, unit]);
 

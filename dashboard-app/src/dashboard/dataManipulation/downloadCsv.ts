@@ -12,12 +12,11 @@ interface Params {
   data: AggregatedData;
   fromDate: Date;
   toDate: Date;
-  setErrors: (x: Dictionary<string>) => void;
   unit: DurationUnitEnum;
 }
 
 // tslint:disable-next-line: max-line-length
-export const downloadCsv = async ({ data: aggData, fromDate, toDate, setErrors, fileName, unit }: Params) => {
+export const downloadCsv = async ({ data: aggData, fromDate, toDate, fileName, unit }: Params) => {
   try {
     const csv = await aggregatedToCsv(aggData, unit);
     const from = moment(fromDate).format(Months.format.filename);
@@ -27,10 +26,6 @@ export const downloadCsv = async ({ data: aggData, fromDate, toDate, setErrors, 
     });
     saveAs(file);
   } catch (error) {
-    if (isDataEmpty(aggData)) {
-      setErrors({ Download: 'There is no data available to download' });
-    } else {
-      setErrors({ Download: 'There was a problem downloading your data' });
-    }
+    throw new Error('There was a problem downloading your data');
   }
 };
