@@ -32,6 +32,7 @@ export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string): 
     display: false,
   },
   tooltips: {
+    position: 'center',
     backgroundColor: ColoursEnum.transparentWhite,
     titleFontColor: ColoursEnum.darkGrey,
     titleFontStyle: 'bold',

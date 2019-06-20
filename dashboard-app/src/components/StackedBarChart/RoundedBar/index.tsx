@@ -1,12 +1,14 @@
 import React from 'react';
+
 import { ChartType } from 'chart.js';
 import ChartComponent, { ChartComponentProps } from 'react-chartjs-2';
 import augmentChartJs from './RoundedBarChart';
+import augmentChartJsTooltip from './tooltipCenter';
 
 
 // MUTATES `Chart`
 augmentChartJs();
-
+augmentChartJsTooltip();
 
 class RoundedBar extends React.Component<ChartComponentProps> {
   render () {
