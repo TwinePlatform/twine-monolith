@@ -10,7 +10,8 @@ import {
 } from './util';
 import Months from '../../util/months';
 
-const getStringContainingTotal = (xs: string []) => xs.find((x) => x.includes('Total'));
+
+const getStringContainingTotal = (xs: string[]) => xs.find((x) => x.includes('Total'));
 
 // tslint:disable-next-line: max-line-length
 export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEnum): Promise<string> =>

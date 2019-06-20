@@ -22,6 +22,8 @@ export interface AggregatedData {
   rows: Row[];
 }
 
+export const isDataEmpty = (d: AggregatedData) => d.rows.length === 0;
+
 const getIdAndName = (xData: Params['xData'], tableType: TableTypeItem, log: Params['logs']) => {
   switch (tableType.xIdFromLogs){
     case('userId'):
