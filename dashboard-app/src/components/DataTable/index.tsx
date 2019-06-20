@@ -3,32 +3,19 @@
  */
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { sortBy, pathOr, compose } from 'ramda';
+import { pathOr } from 'ramda';
+import { Order, sort } from 'twine-util/arrays';
 import { H3 } from '../Headings';
 import { SpacingEnum, ColoursEnum } from '../../styles/design_system';
 import Card from '../Card';
 import DataTableRow from './DataTableRow';
 import HeaderRow from './DataTableHeaderRow';
 import TotalsRow from './DataTableTotalsRow';
-import { DataTableProps, Order } from './types';
+import { DataTableProps } from './types';
 import { toRowProps } from './util';
 import { hashJSON } from '../../util/hash';
 import { FullWidthTextBox } from '../FullWidthTextBox';
 
-
-/**
- * Helpers
- */
-const toValidNumber = (s: string) => isNaN(Number.parseFloat(s)) ? s : Number.parseFloat(s);
-
-const sortRows = (data: DataTableProps['rows'], order: Order, f?: string) => {
-  if (!f) {
-    return data;
-  }
-  const getContent = compose(toValidNumber, pathOr(-1, ['columns', f, 'content']));
-  const sorted = sortBy(getContent, data);
-  return order === 'desc' ? sorted.reverse() : sorted;
-};
 
 /**
  * Styles
@@ -81,6 +68,13 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
     }
   }, [order, sortBy, headers]);
 
+  const sorter = useCallback((_rows: DataTableProps['rows']) =>
+    sort([
+      { accessor: pathOr('', ['columns', sortBy, 'content']), order },
+      { accessor: pathOr('', ['columns', headers[0], 'content']), order: 'asc' as Order },
+    ], _rows)
+  , [order, sortBy, headers]);
+
   const table = (
     <Table cols={headers.length}>
       <HeaderRow
@@ -91,7 +85,7 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
       />
       <tbody>
         {
-          sortRows(rows, order, sortBy)
+          sorter(rows)
             .map((row) => (
               <DataTableRow
                 columns={row.columns}

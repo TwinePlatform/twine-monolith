@@ -2,12 +2,7 @@
  * Types for the DataTable component
  */
 import { Dictionary } from 'ramda';
-
-
-/**
- * Basic Types
- */
-export type Order = 'desc' | 'asc';
+import { Order } from 'twine-util/arrays';
 
 
 /**

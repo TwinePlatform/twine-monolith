@@ -115,4 +115,30 @@ describe('Component :: DataTable', () => {
     expect(rows).toHaveLength(1);
     expect(rows[0]).toHaveTextContent('Totals2024');
   });
+
+  test('Secondary sort by first header', async () => {
+    // Update props so that two values of the primary sort column "two"
+    // have the same value, so that the secondary sort becomes significant
+    const _props = {
+      ...props,
+      rows: [
+        ...props.rows.slice(0, 3),
+        {
+          columns: {
+            ...props.rows[3].columns,
+            two: { content: 6 },
+          },
+        },
+      ],
+    };
+    const tools = render(<DataTable {..._props} sortBy="two" />);
+    const header = await waitForElement(() => tools.getByText('two', { exact: false }));
+    const rows = await waitForElement(() => tools.getAllByTestId('data-table-row'));
+
+    expect(header).toHaveTextContent('↓ two');
+    expect(rows[0]).toHaveTextContent('bax69');
+    expect(rows[1]).toHaveTextContent('baz67');
+    expect(rows[2]).toHaveTextContent('bar45');
+    expect(rows[3]).toHaveTextContent('foo23');
+  });
 });
