@@ -55,15 +55,15 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [errors, setErrors] = useState<Dictionary<string>>({});
-  const { loading, error: dataError, data, activities } =
+  const { loading, error, data, activities } =
     useAggregateDataByActivity({ from: fromDate, to: toDate });
 
   useEffect(() => {
-    if (dataError) {
-      setErrors({ data: dataError.message });
+    if (error) {
+      setErrors({ data: error.message });
     }
     setErrors(omit(['Download']));
-  }, [dataError, fromDate, toDate]);
+  }, [error, fromDate, toDate]);
 
   // manipulate data for table
   useEffect(() => {
@@ -84,7 +84,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
       setErrors(assoc('Download', 'There is no data available to download'));
     } else {
       downloadCsv({ data, fromDate, toDate, fileName: 'by_activity', unit })
-        .catch((error: Error) => setErrors(assoc('Download', error.message)));
+        .catch((err: Error) => setErrors(assoc('Download', err.message)));
     }
   }, [data, fromDate, toDate, unit]);
 
