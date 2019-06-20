@@ -1,4 +1,5 @@
 import { MathUtil } from 'twine-util';
+import { ColoursEnum } from '../../../styles/design_system';
 const round = MathUtil.roundTo(2);
 
 
@@ -25,9 +26,23 @@ export const totalizer = {
   },
 };
 
+
 export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string): any => ({
   legend: {
     display: false,
+  },
+  tooltips: {
+    backgroundColor: ColoursEnum.transparentWhite,
+    titleFontColor: ColoursEnum.darkGrey,
+    titleFontStyle: 'bold',
+    bodyFontColor: ColoursEnum.darkGrey,
+    borderColor: ColoursEnum.darkGrey,
+    borderWidth: 1,
+    callbacks: {
+      title (data: any) {
+        return data[0].label.replace(',', ' ');
+      },
+    },
   },
   scales: {
     xAxes: [{
