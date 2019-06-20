@@ -1,5 +1,6 @@
 import { MathUtil } from 'twine-util';
 import { ColoursEnum } from '../../../styles/design_system';
+import { DurationUnitEnum } from '../../../types';
 const round = MathUtil.roundTo(2);
 
 
@@ -27,61 +28,71 @@ export const totalizer = {
 };
 
 
-export const getStackedGraphOptions = (xAxisTitle: string, yAxisTitle: string): any => ({
-  legend: {
-    display: false,
-  },
-  tooltips: {
-    position: 'center',
-    backgroundColor: ColoursEnum.transparentWhite,
-    titleFontColor: ColoursEnum.darkGrey,
-    titleFontStyle: 'bold',
-    bodyFontColor: ColoursEnum.darkGrey,
-    borderColor: ColoursEnum.darkGrey,
-    borderWidth: 1,
-    callbacks: {
-      title (data: any) {
-        return data[0].label.replace(',', ' ');
+export const getStackedGraphOptions = (
+  xAxisTitle: string,
+  yAxisTitle: string,
+  unit: DurationUnitEnum): any => ({
+    legend: {
+      display: false,
+    },
+    tooltips: {
+      position: 'center',
+      backgroundColor: ColoursEnum.transparentWhite,
+      titleFontColor: ColoursEnum.darkGrey,
+      titleFontStyle: 'bold',
+      bodyFontColor: ColoursEnum.darkGrey,
+      borderColor: ColoursEnum.darkGrey,
+      borderWidth: 1,
+      callbacks: {
+        title (data: any, other: any) {
+          const abbreviatedUnit = unit === DurationUnitEnum.DAYS
+          ? 'days'
+          : 'hrs';
+
+          return `${data[0].value} ${abbreviatedUnit}`;
+        },
+        label (tooltipItem: any, data: any) {
+          return data.datasets[tooltipItem.datasetIndex].label;
+        },
       },
     },
-  },
-  scales: {
-    xAxes: [{
-      scaleLabel: {
-        display: true,
-        labelString: xAxisTitle,
-      },
-      stacked: true,
-      gridLines: { display: false },
-      ticks: { padding: 5 },
-    }],
-    yAxes: [{
-      scaleLabel: {
-        display: true,
-        labelString: yAxisTitle,
-      },
-      stacked: true,
-      gridLines: { display: false },
-      ticks: { display: false },
-    }],
-  },
-  layout: {
-    padding: {
-      top: 20,
+    scales: {
+      xAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: xAxisTitle,
+        },
+        stacked: true,
+        gridLines: { display: false },
+        ticks: { padding: 5 },
+      }],
+      yAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: yAxisTitle,
+        },
+        stacked: true,
+        gridLines: { display: false },
+        ticks: { display: false },
+      }],
     },
-  },
-  plugins: {
-    datalabels: {
-      formatter (_: any, ctx: any) {
-        const total = ctx.chart.$totalizer.totals[ctx.dataIndex];
-        return total.toString();
-      },
-      align: 'end' as 'end',
-      anchor: 'end' as 'end',
-      display (ctx: any) {
-        return ctx.datasetIndex === ctx.chart.$totalizer.utmost;
+    layout: {
+      padding: {
+        top: 20,
       },
     },
-  },
-  cornerRadius: 5,
-});
+    plugins: {
+      datalabels: {
+        formatter (_: any, ctx: any) {
+          const total = ctx.chart.$totalizer.totals[ctx.dataIndex];
+          return total.toString();
+        },
+        align: 'end' as 'end',
+        anchor: 'end' as 'end',
+        display (ctx: any) {
+          return ctx.datasetIndex === ctx.chart.$totalizer.utmost;
+        },
+      },
+    },
+    cornerRadius: 5,
+  });

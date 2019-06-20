@@ -11,6 +11,7 @@ import _Card from '../Card';
 import { H3 } from '../Headings';
 import { ColoursEnum } from '../../styles/design_system';
 import { FullWidthTextBox } from '../FullWidthTextBox';
+import { DurationUnitEnum } from '../../types';
 
 
 /*
@@ -23,6 +24,7 @@ interface Props {
   title: string;
   noActiveLegendText: string;
   isAllLegendDataInactive: boolean;
+  unit: DurationUnitEnum;
 }
 
 type HidableTextBoxProp = {
@@ -65,6 +67,7 @@ const Chart: FunctionComponent<Props> = (props) => {
     title,
     isAllLegendDataInactive,
     noActiveLegendText,
+    unit,
   } = props;
 
   const graph = (
@@ -72,7 +75,7 @@ const Chart: FunctionComponent<Props> = (props) => {
       datasetKeyProvider={datasetKeyProvider}
       plugins={[totalizer, ChartDataLabels]}
       data={data}
-      options={getStackedGraphOptions(xAxisTitle, yAxisTitle)}
+      options={getStackedGraphOptions(xAxisTitle, yAxisTitle, unit)}
     />
   );
 
