@@ -13,7 +13,7 @@ import TotalsRow from './DataTableTotalsRow';
 import { DataTableProps, Order } from './types';
 import { toRowProps } from './util';
 import { hashJSON } from '../../util/hash';
-import { Paragraph } from '../Typography';
+import { FullWidthTextBox } from '../FullWidthTextBox';
 
 
 /**
@@ -54,20 +54,6 @@ const Table = styled.table`
   table-layout: fixed;
   width: ${(props: { cols: number }) => props.cols * 10}rem;
 `;
-
-const NoDataContainer = styled.div`
-  height: 10rem;
-  background-color: ${ColoursEnum.white};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const noData = (
-  <NoDataContainer>
-    <Paragraph>NO DATA AVAILABLE</Paragraph>
-  </NoDataContainer>
-);
 
 /**
  * Component
@@ -130,7 +116,7 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
         {
           rows.length > 0
             ? table
-            : noData
+            : <FullWidthTextBox text="NO DATA AVAILABLE"/>
         }
       </Container>
     </Card>
