@@ -17,6 +17,7 @@ import Errors from '../../components/Errors';
 import useAggregateDataByTime from '../hooks/useAggregateDataByTime';
 import { Dictionary } from 'ramda';
 import { getTitleForMonthPicker } from '../util';
+import { LegendData } from '../../components/StackedBarChart/types';
 
 
 /**
@@ -41,6 +42,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [errors, setErrors] = useState<Dictionary<string>>({});
   const [tableData, setTableData] = useState<TableData>(initTableData);
+  const [legendData, setLegendData] = useState<LegendData>([]);
   const { data, loading, error, months } =
     useAggregateDataByTime({ from: fromDate, to: toDate });
 
@@ -79,6 +81,8 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     sortBy,
     onChangeSortBy,
     title: getTitleForMonthPicker('Volunteer Activity per month', fromDate, toDate),
+    legendData,
+    setLegendData,
   };
 
   return (

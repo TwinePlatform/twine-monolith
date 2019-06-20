@@ -7,6 +7,7 @@ import { AggregatedData } from '../dataManipulation/logsToAggregatedData';
 import { DurationUnitEnum } from '../../types';
 import { TableData } from '../dataManipulation/aggregatedToTableData';
 import StackedBarChart from '../../components/StackedBarChart/index';
+import { LegendData } from '../../components/StackedBarChart/types';
 
 
 /*
@@ -19,6 +20,8 @@ interface Props {
   sortBy: number;
   onChangeSortBy: (x: string) => void;
   title: string;
+  legendData: LegendData;
+  setLegendData: React.Dispatch<React.SetStateAction<LegendData>>;
 }
 
 
@@ -26,7 +29,7 @@ interface Props {
  * Component
  */
 const TimeTabs: FunctionComponent<Props> = (props) => {
-  const { data, unit, tableData, sortBy, onChangeSortBy, title } = props;
+  const { data, unit, tableData, sortBy, onChangeSortBy, title, legendData, setLegendData } = props;
 
   return (
     <Row center="xs">
@@ -35,6 +38,8 @@ const TimeTabs: FunctionComponent<Props> = (props) => {
           {
             data && (
               <StackedBarChart
+                legendData={legendData}
+                setLegendData={setLegendData}
                 title={title}
                 data={data}
                 unit={unit}
