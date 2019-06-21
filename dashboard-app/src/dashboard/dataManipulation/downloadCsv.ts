@@ -2,8 +2,7 @@ import moment from 'moment';
 import { aggregatedToCsv } from './aggregatedToCsv';
 import Months from '../../util/months';
 import { saveAs } from 'file-saver';
-import { AggregatedData, isDataEmpty } from './logsToAggregatedData';
-import { Dictionary } from 'ramda';
+import { AggregatedData } from './logsToAggregatedData';
 import { DurationUnitEnum } from '../../types';
 
 
