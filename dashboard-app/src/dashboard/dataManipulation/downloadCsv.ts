@@ -2,9 +2,10 @@ import moment from 'moment';
 import { aggregatedToCsv } from './aggregatedToCsv';
 import Months from '../../util/months';
 import { saveAs } from 'file-saver';
-import { AggregatedData } from './logsToAggregatedData';
+import { AggregatedData, isDataEmpty } from './logsToAggregatedData';
 import { Dictionary } from 'ramda';
 import { DurationUnitEnum } from '../../types';
+
 
 interface Params {
   fileName: string;
@@ -17,6 +18,10 @@ interface Params {
 
 // tslint:disable-next-line: max-line-length
 export const downloadCsv = async ({ data: aggData, fromDate, toDate, setErrors, fileName, unit }: Params) => {
+  if (isDataEmpty(aggData)) {
+    setErrors({ Download: 'There is no data available to download' });
+    return;
+  }
   try {
     const csv = await aggregatedToCsv(aggData, unit);
     const from = moment(fromDate).format(Months.format.filename);

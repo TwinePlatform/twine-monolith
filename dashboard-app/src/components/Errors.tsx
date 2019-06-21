@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
 import { toPairs, Dictionary } from 'ramda';
 
-import { ColoursEnum, SpacingEnum } from '../styles/design_system';
+import { ColoursEnum } from '../styles/design_system';
 
 
 /*
@@ -13,14 +13,17 @@ interface Props {
   errors: Dictionary<string>;
 }
 
+type ErrorParagraphProps = {
+  isVisible: boolean
+};
 
 /*
  * Styles
  */
-export const ErrorParagraph = styled.p`
+export const ErrorParagraph = styled.p<ErrorParagraphProps>`
   min-height: 2rem;
-  padding: ${SpacingEnum.small} 0;
   color: ${ColoursEnum.red};
+  visibility: ${({ isVisible }) => isVisible ? 'inherit' : 'hidden'};
 `;
 
 
@@ -28,14 +31,13 @@ export const ErrorParagraph = styled.p`
  * Component
  */
 const Errors: FunctionComponent<Props> = ({ errors }) => {
-  if (Object.keys(errors).length === 0) {
-    return null;
-  }
-
+  const isVisible = Object.keys(errors).length >= 1;
   return (
     <Row center="xs">
       <Col>
-        <ErrorParagraph>{toPairs(errors).map((x) => x.join(': ')) || ''}</ErrorParagraph>
+        <ErrorParagraph isVisible={isVisible}>
+          {toPairs(errors).map((x) => x.join(': ')) || ''}
+        </ErrorParagraph>
       </Col>
     </Row>
   );
