@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
 import { toPairs, Dictionary } from 'ramda';
 
-import { ColoursEnum, SpacingEnum } from '../styles/design_system';
+import { ColoursEnum } from '../styles/design_system';
 
 
 /*
