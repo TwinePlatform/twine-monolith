@@ -1,6 +1,5 @@
 import { MathUtil } from 'twine-util';
 import { ColoursEnum } from '../../../styles/design_system';
-import { DurationUnitEnum } from '../../../types';
 const round = MathUtil.roundTo(2);
 
 
@@ -31,7 +30,7 @@ export const totalizer = {
 export const getStackedGraphOptions = (
   xAxisTitle: string,
   yAxisTitle: string,
-  unit: DurationUnitEnum): any => ({
+  tooltipUnit: string) => ({
     legend: {
       display: false,
     },
@@ -44,12 +43,8 @@ export const getStackedGraphOptions = (
       borderColor: ColoursEnum.darkGrey,
       borderWidth: 1,
       callbacks: {
-        title (data: any, other: any) {
-          const abbreviatedUnit = unit === DurationUnitEnum.DAYS
-          ? 'days'
-          : 'hrs';
-
-          return `${data[0].value} ${abbreviatedUnit}`;
+        title (tooltipItem: any) {
+          return `${tooltipItem[0].value} ${tooltipUnit}`;
         },
         label (tooltipItem: any, data: any) {
           return data.datasets[tooltipItem.datasetIndex].label;

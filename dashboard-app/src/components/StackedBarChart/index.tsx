@@ -36,6 +36,7 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   const { data, xAxisTitle, yAxisTitle, title, unit } = props;
   const [legendData, setLegendData] = useState(createLegendData(data));
   const [chartData, setChartData] = useState();
+  const [tooltipUnit, setTooltipUnit] = useState('');
 
   const setLegendActivityOnUpdate = (id: number) => () =>
     setLegendData((prevState: LegendData) =>
@@ -61,6 +62,13 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
   }, [legendData]);
 
+  useEffect(() => {
+    const newValue = unit === DurationUnitEnum.DAYS
+          ? 'days'
+          : 'hrs';
+    setTooltipUnit(newValue);
+  });
+
   const noActiveLegendText = data.groupByX === 'Activity'
     ? 'Select an activity to show data'
     : 'Select a volunteer to show their hours';
@@ -70,7 +78,7 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
     xAxisTitle,
     yAxisTitle,
     title,
-    unit,
+    tooltipUnit,
     noActiveLegendText,
     isAllLegendDataInactive: isEveryDatumInactive(legendData) && isThereData,
   };
