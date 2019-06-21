@@ -2,7 +2,6 @@ import React, { FunctionComponent, useState, useEffect, useCallback } from 'reac
 import { Row, Col } from 'react-flexbox-grid';
 
 import {
-  createLegendData,
   flipActiveOfAll,
   updateLegendData,
   sortAndZeroOutInactiveData,
