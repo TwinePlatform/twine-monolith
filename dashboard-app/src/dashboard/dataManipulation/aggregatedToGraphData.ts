@@ -24,6 +24,8 @@ export const aggregatedToStackedGraph = (data: AggregatedData, unit: DurationUni
         id: row.id,
         data: labels.map((y) => numericData[y]),
       };
-    }),
+    })
+    // display stacks in same colour order as legend
+    .reverse(),
   };
 };
