@@ -11,7 +11,6 @@ import _Card from '../Card';
 import { H3 } from '../Headings';
 import { ColoursEnum } from '../../styles/design_system';
 import { FullWidthTextBox } from '../FullWidthTextBox';
-import { DurationUnitEnum } from '../../types';
 
 
 /*
