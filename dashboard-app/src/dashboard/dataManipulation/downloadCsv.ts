@@ -18,6 +18,10 @@ interface Params {
 
 // tslint:disable-next-line: max-line-length
 export const downloadCsv = async ({ data: aggData, fromDate, toDate, setErrors, fileName, unit }: Params) => {
+  if (isDataEmpty(aggData)) {
+    setErrors({ Download: 'There is no data available to download' });
+    return;
+  }
   try {
     const csv = await aggregatedToCsv(aggData, unit);
     const from = moment(fromDate).format(Months.format.filename);
@@ -27,10 +31,6 @@ export const downloadCsv = async ({ data: aggData, fromDate, toDate, setErrors, 
     });
     saveAs(file);
   } catch (error) {
-    if (isDataEmpty(aggData)) {
-      setErrors({ Download: 'There is no data available to download' });
-    } else {
-      setErrors({ Download: 'There was a problem downloading your data' });
-    }
+    setErrors({ Download: 'There was a problem downloading your data' });
   }
 };
