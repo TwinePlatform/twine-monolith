@@ -14,10 +14,11 @@ import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
 import TimeTabs from './TimeTabs';
 import Errors from '../../components/Errors';
-import useAggregateDataByTime from '../hooks/useAggregateDataByTime';
+import useAggregateDataByTime from './useAggregateDataByTime';
 import { Dictionary } from 'ramda';
 import { getTitleForMonthPicker } from '../util';
 import { LegendData } from '../../components/StackedBarChart/types';
+import { useErrorsEffect } from '../../hooks/useErrorsEffect';
 
 
 /**
@@ -46,11 +47,8 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const { data, loading, error, months } =
     useAggregateDataByTime({ from: fromDate, to: toDate });
 
-  useEffect(() => {
-    if (error) {
-      setErrors({ data: error.message });
-    }
-  }, [error]);
+  // set and clear errors on response
+  useErrorsEffect(error, data, setErrors);
 
   // manipulate data for table
   useEffect(() => {

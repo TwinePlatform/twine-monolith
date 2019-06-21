@@ -14,10 +14,11 @@ import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
 import Errors from '../../components/Errors';
-import useAggregateDataByActivity from '../hooks/useAggregateDataByActivity';
+import useAggregateDataByActivity from './useAggregateDataByActivity';
 import { TabGroup } from '../../components/Tabs';
 import { Dictionary } from 'ramda';
 import { getTitleForDayPicker } from '../util';
+import { useErrorsEffect } from '../../hooks/useErrorsEffect';
 
 
 /**
@@ -57,11 +58,9 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const { loading, error, data, activities } =
     useAggregateDataByActivity({ from: fromDate, to: toDate });
 
-  useEffect(() => {
-    if (error) {
-      setErrors({ data: error.message });
-    }
-  }, [error]);
+
+  // set and clear errors on response
+  useErrorsEffect(error, data, setErrors);
 
   // manipulate data for table
   useEffect(() => {
