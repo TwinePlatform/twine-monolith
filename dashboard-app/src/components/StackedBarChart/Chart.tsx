@@ -23,6 +23,7 @@ interface Props {
   title: string;
   noActiveLegendText: string;
   isAllLegendDataInactive: boolean;
+  tooltipUnit: string;
 }
 
 type HidableTextBoxProp = {
@@ -65,6 +66,7 @@ const Chart: FunctionComponent<Props> = (props) => {
     title,
     isAllLegendDataInactive,
     noActiveLegendText,
+    tooltipUnit,
   } = props;
 
   const graph = (
@@ -72,7 +74,7 @@ const Chart: FunctionComponent<Props> = (props) => {
       datasetKeyProvider={datasetKeyProvider}
       plugins={[totalizer, ChartDataLabels]}
       data={data}
-      options={getStackedGraphOptions(xAxisTitle, yAxisTitle)}
+      options={getStackedGraphOptions(xAxisTitle, yAxisTitle, tooltipUnit)}
     />
   );
 
