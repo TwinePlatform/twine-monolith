@@ -2,7 +2,6 @@ import React, { FunctionComponent, useState, useEffect, useCallback } from 'reac
 import { Row, Col } from 'react-flexbox-grid';
 
 import {
-  createLegendData,
   flipActiveOfAll,
   updateLegendData,
   sortAndZeroOutInactiveData,
@@ -26,6 +25,8 @@ interface Props {
   xAxisTitle: string;
   yAxisTitle: string;
   title: string;
+  legendData: LegendData;
+  setLegendData: React.Dispatch<React.SetStateAction<LegendData>>;
 }
 
 /*
@@ -33,8 +34,7 @@ interface Props {
  */
 
 const StackedBarChart: FunctionComponent<Props> = (props) => {
-  const { data, xAxisTitle, yAxisTitle, title, unit } = props;
-  const [legendData, setLegendData] = useState(createLegendData(data));
+  const { data, xAxisTitle, yAxisTitle, title, unit, legendData, setLegendData } = props;
   const [chartData, setChartData] = useState();
   const [tooltipUnit, setTooltipUnit] = useState('');
 

@@ -16,6 +16,7 @@ import VolunteerTabs from './VolunteerTabs';
 import Errors from '../../components/Errors';
 import useAggregateDataByVolunteer from '../hooks/useAggregateDataByVolunteer';
 import { getTitleForMonthPicker } from '../util';
+import { LegendData } from '../../components/StackedBarChart/types';
 
 
 /**
@@ -40,6 +41,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [errors, setErrors] = useState<Dictionary<string>>({});
+  const [legendData, setLegendData] = useState<LegendData>([]);
   const { loading, data, error, months } =
     useAggregateDataByVolunteer({ from: fromDate, to: toDate });
 
@@ -78,6 +80,8 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     sortBy,
     onChangeSortBy,
     title: getTitleForMonthPicker('Volunteer Time per month', fromDate, toDate),
+    legendData,
+    setLegendData,
   };
 
   return (
