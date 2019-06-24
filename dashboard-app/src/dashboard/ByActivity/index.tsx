@@ -18,7 +18,7 @@ import useAggregateDataByActivity from './useAggregateDataByActivity';
 import { TabGroup } from '../../components/Tabs';
 import { Dictionary } from 'ramda';
 import { getTitleForDayPicker } from '../util';
-import { useErrorsEffect } from '../../hooks/useErrorsEffect';
+import { useAxiosErrors } from '../../hooks/useAxiosErrors';
 
 
 /**
@@ -54,13 +54,11 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
-  const [errors, setErrors] = useState<Dictionary<string>>({});
   const { loading, error, data, activities } =
     useAggregateDataByActivity({ from: fromDate, to: toDate });
 
-
   // set and clear errors on response
-  useErrorsEffect(error, data, setErrors);
+  const [errors, setErrors] = useAxiosErrors(error, data);
 
   // manipulate data for table
   useEffect(() => {

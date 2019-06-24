@@ -2,11 +2,14 @@ import { Dispatch, SetStateAction, useEffect } from 'react';
 import { AxiosError } from 'axios';
 import { AggregatedData } from '../dashboard/dataManipulation/logsToAggregatedData';
 import { Dictionary } from 'ramda';
+import { useResettableState } from './useResettableState';
 
-export const useErrorsEffect = (
+export const useAxiosErrors = (
   error: AxiosError | undefined,
-  data: AggregatedData | undefined,
-  setErrors: Dispatch<SetStateAction<Dictionary<string>>>) => {
+  data: AggregatedData | undefined) => {
+
+  const [errors, setErrors] = useResettableState<Dictionary<string>>({}, [data]);
+
   // set errors on response error
   useEffect(() => {
     if (error) {
@@ -14,8 +17,5 @@ export const useErrorsEffect = (
     }
   }, [error]);
 
-  // clear all errors on response success
-  useEffect(() => {
-    setErrors({});
-  }, [data]);
+  return [errors, setErrors] as [Dictionary<string>, Dispatch<SetStateAction<Dictionary<string>>>];
 };

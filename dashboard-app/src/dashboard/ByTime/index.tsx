@@ -19,6 +19,7 @@ import { Dictionary } from 'ramda';
 import { getTitleForMonthPicker } from '../util';
 import { LegendData } from '../../components/StackedBarChart/types';
 import { useErrorsEffect } from '../../hooks/useErrorsEffect';
+import { useAxiosErrors } from '../../hooks/useAxiosErrors';
 
 
 /**
@@ -41,14 +42,13 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [sortBy, setSortBy] = useState(0);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
-  const [errors, setErrors] = useState<Dictionary<string>>({});
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [legendData, setLegendData] = useState<LegendData>([]);
   const { data, loading, error, months } =
     useAggregateDataByTime({ from: fromDate, to: toDate });
 
   // set and clear errors on response
-  useErrorsEffect(error, data, setErrors);
+  const [errors, setErrors] = useAxiosErrors(error, data);
 
   // manipulate data for table
   useEffect(() => {
