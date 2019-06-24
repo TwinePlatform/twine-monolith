@@ -67,7 +67,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
 
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
-      downloadCsv({ data, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
+      downloadCsv({ data, fromDate, toDate, setErrors, fileName: 'by_volunteer', unit });
     } else {
       setErrors({ Download: 'No data available to download' });
     }
