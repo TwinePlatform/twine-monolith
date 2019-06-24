@@ -17,7 +17,7 @@ import Errors from '../../components/Errors';
 import useAggregateDataByVolunteer from './useAggregateDataByVolunteer';
 import { getTitleForMonthPicker } from '../util';
 import { LegendData } from '../../components/StackedBarChart/types';
-import { useAxiosErrors } from '../../hooks/useAxiosErrors';
+import { useErrors } from '../../hooks/useErrors';
 
 
 /**
@@ -46,7 +46,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     useAggregateDataByVolunteer({ from: fromDate, to: toDate });
 
   // set and clear errors on response
-  const [errors, setErrors] = useAxiosErrors(error, data);
+  const [errors, setErrors] = useErrors(error, data);
 
   // manipulate data for table
   useEffect(() => {

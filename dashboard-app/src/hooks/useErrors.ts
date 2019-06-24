@@ -4,7 +4,7 @@ import { AggregatedData } from '../dashboard/dataManipulation/logsToAggregatedDa
 import { Dictionary } from 'ramda';
 import { useResettableState } from './useResettableState';
 
-export const useAxiosErrors = (
+export const useErrors = (
   error: AxiosError | undefined,
   data: AggregatedData | undefined) => {
 

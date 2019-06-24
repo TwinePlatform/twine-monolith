@@ -18,8 +18,7 @@ import useAggregateDataByTime from './useAggregateDataByTime';
 import { Dictionary } from 'ramda';
 import { getTitleForMonthPicker } from '../util';
 import { LegendData } from '../../components/StackedBarChart/types';
-import { useErrorsEffect } from '../../hooks/useErrorsEffect';
-import { useAxiosErrors } from '../../hooks/useAxiosErrors';
+import { useErrors } from '../../hooks/useErrors';
 
 
 /**
@@ -48,7 +47,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     useAggregateDataByTime({ from: fromDate, to: toDate });
 
   // set and clear errors on response
-  const [errors, setErrors] = useAxiosErrors(error, data);
+  const [errors, setErrors] = useErrors(error, data);
 
   // manipulate data for table
   useEffect(() => {

@@ -18,7 +18,7 @@ import useAggregateDataByActivity from './useAggregateDataByActivity';
 import { TabGroup } from '../../components/Tabs';
 import { Dictionary } from 'ramda';
 import { getTitleForDayPicker } from '../util';
-import { useAxiosErrors } from '../../hooks/useAxiosErrors';
+import { useErrors } from '../../hooks/useErrors';
 
 
 /**
@@ -58,7 +58,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
     useAggregateDataByActivity({ from: fromDate, to: toDate });
 
   // set and clear errors on response
-  const [errors, setErrors] = useAxiosErrors(error, data);
+  const [errors, setErrors] = useErrors(error, data);
 
   // manipulate data for table
   useEffect(() => {
