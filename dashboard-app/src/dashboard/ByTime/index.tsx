@@ -15,7 +15,6 @@ import { ColoursEnum } from '../../styles/design_system';
 import TimeTabs from './TimeTabs';
 import Errors from '../../components/Errors';
 import useAggregateDataByTime from './useAggregateDataByTime';
-import { Dictionary } from 'ramda';
 import { getTitleForMonthPicker } from '../util';
 import { LegendData } from '../../components/StackedBarChart/types';
 import { useErrors } from '../../hooks/useErrors';

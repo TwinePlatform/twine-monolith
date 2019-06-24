@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, FunctionComponent } from 'react';
 import styled from 'styled-components';
-import { Dictionary } from 'ramda';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 

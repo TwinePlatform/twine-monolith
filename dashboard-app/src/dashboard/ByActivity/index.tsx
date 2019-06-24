@@ -16,7 +16,6 @@ import { ColoursEnum } from '../../styles/design_system';
 import Errors from '../../components/Errors';
 import useAggregateDataByActivity from './useAggregateDataByActivity';
 import { TabGroup } from '../../components/Tabs';
-import { Dictionary } from 'ramda';
 import { getTitleForDayPicker } from '../util';
 import { useErrors } from '../../hooks/useErrors';
 
