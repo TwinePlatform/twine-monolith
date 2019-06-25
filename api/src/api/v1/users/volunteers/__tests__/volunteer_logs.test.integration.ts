@@ -97,7 +97,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can get no logs for non-volunteer', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: `/v1/users/volunteers/me/volunteer-logs`,
+        url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: nonVolCreds,
       });
 
@@ -107,7 +107,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can get all logs in future by default', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: `/v1/users/volunteers/me/volunteer-logs`,
+        url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: volAdminCreds,
       });
 

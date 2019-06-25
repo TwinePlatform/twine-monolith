@@ -46,7 +46,7 @@ const up = compose(
       }
     });
 
-    console.log('\n\n' + ch.green(`twine-api listening on ${server.info.uri}`));
+    console.log(`\n\n${ch.green(`twine-api listening on ${server.info.uri}`)}`);
   } catch (error) {
     console.error(error);
   }

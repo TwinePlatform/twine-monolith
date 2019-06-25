@@ -68,7 +68,7 @@ describe('GET /community-businesses/temporary/:id/password/reset', () => {
 
     const res2 = await server.inject({
       method: 'GET',
-      url: `/v1/community-businesses/temporary/1/password/reset`,
+      url: '/v1/community-businesses/temporary/1/password/reset',
       credentials: twAdminCreds,
     });
 

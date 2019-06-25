@@ -99,7 +99,7 @@ describe('GET /volunteer-logs', () => {
   test('failure :: funding body cannot access as not implemented', async () => {
     const res = await server.inject({
       method: 'GET',
-      url: `/v1/volunteer-logs`,
+      url: '/v1/volunteer-logs',
       credentials: {
         ...credentials,
         user: {

@@ -120,7 +120,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     test('SUCCESS - can get select fields for own organisations logs', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: `/v1/community-businesses/me/volunteer-logs?fields[0]=userName`,
+        url: '/v1/community-businesses/me/volunteer-logs?fields[0]=userName',
         credentials: vAdminCreds,
       });
 
