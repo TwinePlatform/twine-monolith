@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, FunctionComponent } from 'react';
 import styled from 'styled-components';
-import { Dictionary } from 'ramda';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
@@ -14,9 +13,10 @@ import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
 import VolunteerTabs from './VolunteerTabs';
 import Errors from '../../components/Errors';
-import useAggregateDataByVolunteer from '../hooks/useAggregateDataByVolunteer';
+import useAggregateDataByVolunteer from './useAggregateDataByVolunteer';
 import { getTitleForMonthPicker } from '../util';
 import { LegendData } from '../../components/StackedBarChart/types';
+import { useErrors } from '../../hooks/useErrors';
 
 
 /**
@@ -40,16 +40,12 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
-  const [errors, setErrors] = useState<Dictionary<string>>({});
   const [legendData, setLegendData] = useState<LegendData>([]);
   const { loading, data, error, months } =
     useAggregateDataByVolunteer({ from: fromDate, to: toDate });
 
-  useEffect(() => {
-    if (error) {
-      setErrors({ data: error.message });
-    }
-  }, [error]);
+  // set and clear errors on response
+  const [errors, setErrors] = useErrors(error, data);
 
   // manipulate data for table
   useEffect(() => {

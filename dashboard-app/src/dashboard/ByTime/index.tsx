@@ -14,10 +14,10 @@ import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
 import TimeTabs from './TimeTabs';
 import Errors from '../../components/Errors';
-import useAggregateDataByTime from '../hooks/useAggregateDataByTime';
-import { Dictionary } from 'ramda';
+import useAggregateDataByTime from './useAggregateDataByTime';
 import { getTitleForMonthPicker } from '../util';
 import { LegendData } from '../../components/StackedBarChart/types';
+import { useErrors } from '../../hooks/useErrors';
 
 
 /**
@@ -40,17 +40,13 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [sortBy, setSortBy] = useState(0);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
-  const [errors, setErrors] = useState<Dictionary<string>>({});
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [legendData, setLegendData] = useState<LegendData>([]);
   const { data, loading, error, months } =
     useAggregateDataByTime({ from: fromDate, to: toDate });
 
-  useEffect(() => {
-    if (error) {
-      setErrors({ data: error.message });
-    }
-  }, [error]);
+  // set and clear errors on response
+  const [errors, setErrors] = useErrors(error, data);
 
   // manipulate data for table
   useEffect(() => {

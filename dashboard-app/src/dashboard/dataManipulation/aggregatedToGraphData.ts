@@ -25,7 +25,11 @@ export const aggregatedToStackedGraph = (data: AggregatedData, unit: DurationUni
         data: labels.map((y) => numericData[y]),
       };
     })
-    // display stacks in same colour order as legend
+    // Reverse data-set order because Chart.js iterates
+    // through list backwards, while Legend component
+    // iterates through it forwards.
+    // This ensures the legend and the stacks have the
+    // same colour order.
     .reverse(),
   };
 };
