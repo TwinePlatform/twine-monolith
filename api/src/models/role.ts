@@ -1,5 +1,6 @@
 import { Users, Organisations } from '.';
 import { RolesCollection, RoleEnum } from './types';
+import { onlynl } from 'twine-util/string';
 
 
 const Roles: RolesCollection = {
@@ -21,9 +22,8 @@ const Roles: RolesCollection = {
       switch (error.code) {
         case '23505':
           throw new Error(
-            `Constraint violation: ${error.constraint}\n` +
-            `Tried to associate User ${userId} with role ${role} ` +
-            `at organistion ${organisationId}`
+            onlynl`Constraint violation: ${error.constraint}
+            Tried to associate User ${userId} with role ${role} at organistion ${organisationId}`
           );
 
         case '23503':

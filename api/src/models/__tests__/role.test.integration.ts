@@ -5,6 +5,7 @@ import { getTrx } from '../../../tests/utils/database';
 import { Users } from '..';
 import factory from '../../../tests/utils/factory';
 import { RoleEnum } from '../types';
+import { onlynl } from 'twine-util/string';
 
 
 describe('Roles Model', () => {
@@ -67,8 +68,7 @@ describe('Roles Model', () => {
         await Roles.add(trx, { role: RoleEnum.VISITOR, userId: 1, organisationId: 1 });
       } catch (error) {
         expect(error.message)
-          .toBe(
-            `Constraint violation: user_account_access_role_unique_row
+          .toBe(onlynl`Constraint violation: user_account_access_role_unique_row
             Tried to associate User 1 with role VISITOR at organistion 1`);
       }
     });
@@ -93,9 +93,8 @@ describe('Roles Model', () => {
         await Roles.add(trx, { role: RoleEnum.VISITOR, userId: 1, organisationId: 1 });
       } catch (error) {
         expect(error.message)
-          .toEqual(
-            'Constraint violation: user_account_access_role_unique_row\n' +
-            'Tried to associate User 1 with role VISITOR at organistion 1'
+          .toEqual(onlynl`Constraint violation: user_account_access_role_unique_row
+            Tried to associate User 1 with role VISITOR at organistion 1`
           );
       }
     });
@@ -161,8 +160,8 @@ describe('Roles Model', () => {
           { to: RoleEnum.VOLUNTEER, from: RoleEnum.VISITOR, userId: 1, organisationId: 1 });
       } catch (error) {
         expect(error.message).toEqual(
-          'Constraint violation: user_account_access_role_unique_row\n' +
-          'Tried to associate User 1 with role VOLUNTEER at organistion 1');
+          onlynl`Constraint violation: user_account_access_role_unique_row
+          Tried to associate User 1 with role VOLUNTEER at organistion 1`);
       }
     });
   });
