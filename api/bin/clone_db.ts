@@ -41,9 +41,9 @@ if (!dbName) {
     await exec(`createdb ${dbName}`);
 
     if (await exists(path.resolve(__dirname, '..', 'latest.dump'))) {
-      console.log(`Using existing dumpfile`);
+      console.log('Using existing dumpfile');
     } else {
-      await exec(`heroku pg:backups:download -a twine-api`);
+      await exec('heroku pg:backups:download -a twine-api');
     }
 
     await exec(`pg_restore --clean --no-acl --no-owner -h localhost -d ${dbName} latest.dump`);

@@ -19,20 +19,22 @@ import {
 
 
 const ignoreRe = new RegExp(
-  '(' +
   [
-    'Sonja\'s demo organisation',
-    'Twine Community Center',
-    'Power to Change',
-    'Reason Digital',
-    'Extra Workspace',
-    'Extra workspace',
-    'nerv',
-    'trainer',
-    'Edward',
-    'Inspired Neighbourhoods CIC',
-  ].join('|')
-  + ')'
+    '(',
+    [
+      'Sonja\'s demo organisation',
+      'Twine Community Center',
+      'Power to Change',
+      'Reason Digital',
+      'Extra Workspace',
+      'Extra workspace',
+      'nerv',
+      'trainer',
+      'Edward',
+      'Inspired Neighbourhoods CIC',
+    ].join('|'),
+    ')',
+  ].join()
 );
 
 export default async () => {

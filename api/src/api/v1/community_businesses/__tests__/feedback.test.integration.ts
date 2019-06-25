@@ -166,7 +166,7 @@ describe('/community-business/{id}/feedback', () => {
     test('Get 403 when organisation is not a "child" of user', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: `/v1/community-businesses/1/feedback`,
+        url: '/v1/community-businesses/1/feedback',
         credentials: creds.glados,
       });
 

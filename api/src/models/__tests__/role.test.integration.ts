@@ -68,8 +68,8 @@ describe('Roles Model', () => {
       } catch (error) {
         expect(error.message)
           .toBe(
-            'Constraint violation: user_account_access_role_unique_row\n' +
-            'Tried to associate User 1 with role VISITOR at organistion 1');
+            `Constraint violation: user_account_access_role_unique_row
+            Tried to associate User 1 with role VISITOR at organistion 1`);
       }
     });
 
