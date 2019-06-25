@@ -1,3 +1,10 @@
+/*
+ * useErrors
+ *
+ * Specific use case (used in dashboard pages):
+ * - Automatically handle API errors via arguments
+ * - Allow setting other arbitrary error state values via state-setter
+ */
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { AxiosError } from 'axios';
 import { AggregatedData } from '../dashboard/dataManipulation/logsToAggregatedData';
