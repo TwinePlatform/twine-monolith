@@ -75,22 +75,22 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
   return (
     <MainRow middle="xs" start="xs" {...rest}>
       <Col xs={6}>
-          <DatePicker
-            type={dateFilter}
-            label="From"
-            selected={fromDate}
-            onChange={onFromChange}
-            minDate={constraint.from.min(fromDate, toDate)}
-            maxDate={constraint.from.max(fromDate, toDate)}
-          />
-          <DatePicker
-            type={dateFilter}
-            label="  To" // To make both labels take up the same space
-            selected={toDate}
-            onChange={onToChange}
-            minDate={constraint.to.min(fromDate, toDate)}
-            maxDate={constraint.to.max(fromDate, toDate)}
-          />
+        <DatePicker
+          type={dateFilter}
+          label="From"
+          selected={fromDate}
+          onChange={onFromChange}
+          minDate={constraint.from.min(fromDate, toDate)}
+          maxDate={constraint.from.max(fromDate, toDate)}
+        />
+        <DatePicker
+          type={dateFilter}
+          label="  To" // To make both labels take up the same space
+          selected={toDate}
+          onChange={onToChange}
+          minDate={constraint.to.min(fromDate, toDate)}
+          maxDate={constraint.to.max(fromDate, toDate)}
+        />
       </Col>
       <Col xs={6}>
         <Row end="xs">
