@@ -60,30 +60,31 @@ border-spacing: 0;
 
 /* matches MediaQueriesEnum in design system */
 
-/* mobile (currently not supported) */
-@media (min-width: 0px){
-  html {
-    font-size: 10px;
-  }
-}
 
-/* tablet */
-@media (min-width: 900px){
+/* large desktop */
+@media (max-width: 4200px){
   html {
-    font-size: 10px;
+    font-size: 16px;
   }
 }
 
 /* standard desktop */
-@media (min-width: 1200px){
+@media (max-width: 1800px){
+  html {
+    font-size: 14px;
+  }
+}
+
+/* tablet */
+@media (max-width: 1200px){
   html {
     font-size: 12px;
   }
 }
 
-/* large desktop */
-@media (min-width: 1800px){
+/* mobile (currently not supported) */
+@media (max-width: 900px){
   html {
-    font-size: 16px;
+    font-size: 10px;
   }
 }

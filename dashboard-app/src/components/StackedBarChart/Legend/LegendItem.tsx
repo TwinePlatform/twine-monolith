@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { Row } from 'react-flexbox-grid';
 
-import { ColoursEnum, GraphColoursEnum } from '../../../styles/design_system';
+import { ColoursEnum, GraphColoursEnum, Fonts } from '../../../styles/design_system';
 import { Span } from '../../Typography';
 
 
@@ -44,6 +44,7 @@ const Key = styled.div<KeyProps>`
 
 const KeyTitle = styled(Span)<TitleProps>`
   ${(props) => props.active ? '' : `color: ${ColoursEnum.grey};`}
+  font-size: ${Fonts.size.footer}
   text-align: left;
   overflow: hidden;
   white-space: nowrap;

@@ -52,10 +52,10 @@ const Legend: FunctionComponent<Props> = (props) => {
     <Card>
       <Grid>
         <TitleRow middle="xs">
-          <Col xs={6}>
+          <Col xs={9}>
             <Title>{title}</Title>
           </Col>
-          <Col xs={3} xsOffset={3}>
+          <Col xs={3}>
             <LegendItem
               key="all"
               onClick={setLegendActivityOfAll}
