@@ -1,4 +1,4 @@
-import _axios, { AxiosRequestConfig } from 'axios';
+import _axios, { AxiosRequestConfig, Method } from 'axios';
 import qs from 'qs';
 
 const baseURL = process.env.REACT_APP_API_HOST_DOMAIN ?
@@ -36,10 +36,10 @@ export const CbAdmins = {
 
 export const CommunityBusinesses = {
   configs: {
-    get: { method: 'GET', url: '/community-businesses/me' },
-    getLogs: { method: 'GET', url: '/community-businesses/me/volunteer-logs' },
-    getVolunteerActivities: { method: 'GET', url: '/volunteer-activities' },
-    getVolunteers: { method: 'GET', url: '/community-businesses/me/volunteers' },
+    get: { method: 'GET' as Method, url: '/community-businesses/me' },
+    getLogs: { method: 'GET' as Method, url: '/community-businesses/me/volunteer-logs' },
+    getVolunteerActivities: { method: 'GET' as Method, url: '/volunteer-activities' },
+    getVolunteers: { method: 'GET' as Method, url: '/community-businesses/me/volunteers' },
   },
 
   get: (params?: Pick<AxiosRequestConfig, 'params'>) =>
