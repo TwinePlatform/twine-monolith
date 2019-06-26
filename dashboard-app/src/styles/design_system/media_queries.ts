@@ -1,8 +1,9 @@
 // matches font size media queries in index css
+// designed to be Deskop first
 
 export enum MediaQueriesEnum {
-  mobile = '@media  (min-width: 0px)', // currently not supported
-  landscapeTablet = '@media (min-width: 900px)',
-  standardDesktop = '@media (min-width: 1200px)',
-  largeDesktop = '@media (min-width: 1800px)',
+  mobile = '@media  (max-width: 900px)', // currently not supported
+  landscapeTablet = '@media (max-width: 1200px)',
+  standardDesktop = '@media (max-width: 1800px)',
+  largeDesktop = '@media (max-width: 4200px)',
 }

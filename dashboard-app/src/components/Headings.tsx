@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ColoursEnum, Fonts } from '../styles/design_system';
+import { ColoursEnum, Fonts, MediaQueriesEnum } from '../styles/design_system';
 
 export const H1 = styled.h1`
   font-size: ${Fonts.size.heading1};
@@ -7,6 +7,10 @@ export const H1 = styled.h1`
   color: ${ColoursEnum.black};
   text-align: center;
   margin-bottom: 1.5rem;
+
+  ${MediaQueriesEnum.standardDesktop}{
+    font-size: ${Fonts.size.heading2}
+}
 `;
 
 export const H2 = styled.h2`
@@ -15,6 +19,10 @@ export const H2 = styled.h2`
   color: ${ColoursEnum.black};
   text-align: center;
   margin-bottom: 1.5rem;
+
+  ${MediaQueriesEnum.standardDesktop}{
+    font-size: ${Fonts.size.heading3}
+}
 `;
 
 export const H3 = styled.h3`
@@ -23,6 +31,10 @@ export const H3 = styled.h3`
   color: ${ColoursEnum.black};
   text-align: center;
   margin-bottom: 1.5rem;
+
+  ${MediaQueriesEnum.standardDesktop}{
+    font-size: 1.4rem
+}
 `;
 
 export const H4 = styled.h4`
