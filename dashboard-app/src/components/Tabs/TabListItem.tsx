@@ -18,6 +18,7 @@ type TabListItemProps = {
  */
 const Item = styled.li`
   padding: 1rem;
+  cursor: pointer;
   ${
     (props: Pick<TabListItemProps, 'isActive'>) => props.isActive
       ? `border-bottom: 2px solid ${ColoursEnum.darkGrey};`
