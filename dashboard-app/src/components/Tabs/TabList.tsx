@@ -22,7 +22,7 @@ const List = styled.ol`
   margin-bottom: 4rem;
   list-style: none;
   display: flex;
-  border-bottom: 1px solid ${rgba(ColoursEnum.grey, 0.4)};
+  border-bottom: 1px solid ${rgba(ColoursEnum.darkGrey, 0.5)};
 `;
 
 export const TabList: React.FunctionComponent<TabListProps> = (props) => {
