@@ -1,5 +1,5 @@
-import * as Hapi from 'hapi';
-import * as Boom from 'boom';
+import * as Hapi from '@hapi/hapi';
+import * as Boom from '@hapi/boom';
 import { Users, Organisations } from '../../../models';
 import Roles from '../../../models/role';
 import Permissions from '../../../models/permission';
@@ -26,7 +26,7 @@ export const StandardCredentials: TCredentials = {
   },
 
   fromRequest (request: Hapi.Request) {
-    return { ...request.auth.credentials.user, scope: request.auth.credentials.scope };
+    return Object.assign({ scope: request.auth.credentials.scope }, request.auth.credentials.user);
   },
 };
 

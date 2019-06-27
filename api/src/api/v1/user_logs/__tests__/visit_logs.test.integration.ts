@@ -1,13 +1,15 @@
 /*
  * API functional tests
  */
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { init } from '../../../../server';
+import { assocPath } from 'ramda';
 import * as moment from 'moment';
 import { getConfig } from '../../../../../config';
 import { User, Organisation, Users, Organisations } from '../../../../models';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
 import { RoleEnum } from '../../../../models/types';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('GET /visit-logs', () => {
@@ -31,11 +33,11 @@ describe('GET /visit-logs', () => {
   });
 
   test('success :: returns all logs', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/visit-logs',
       credentials,
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toEqual(expect.arrayContaining([
@@ -57,11 +59,11 @@ describe('GET /visit-logs', () => {
     const today = moment();
     const until = today.clone().format('YYYY-MM-DD');
     const since = today.clone().subtract(1, 'day').format('YYYY-MM-DD');
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: `/v1/visit-logs?since=${since}&until=${until}`,
       credentials,
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toEqual(expect.arrayContaining([
@@ -88,17 +90,11 @@ describe('GET /visit-logs', () => {
   });
 
   test('failure :: funding body cannot access as not implemented', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/visit-logs',
-      credentials: {
-        ...credentials,
-        user: {
-          ...credentials.user,
-          roles: [RoleEnum.FUNDING_BODY],
-        },
-      },
-    });
+      credentials: assocPath(['user', 'roles'], [RoleEnum.FUNDING_BODY], credentials),
+    }));
 
     expect(res.statusCode).toBe(403);
   });

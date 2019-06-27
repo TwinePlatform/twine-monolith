@@ -1,9 +1,10 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { getCookie } from '../../../../../tests/utils/server';
 import { getTrx } from '../../../../../tests/utils/database';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('GET /users/logout', () => {
@@ -32,11 +33,11 @@ describe('GET /users/logout', () => {
   });
 
   test(':: successful logout', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/users/logout',
       credentials: {},
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect(res.headers).toHaveProperty('set-cookie');

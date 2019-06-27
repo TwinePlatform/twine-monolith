@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import * as moment from 'moment';
 import { omit } from 'ramda';
@@ -54,7 +54,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       expect(res.statusCode).toBe(200);
@@ -77,7 +77,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/users/volunteers/me/volunteer-logs?since=${since}&until=${until}`,
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       expect(res.statusCode).toBe(200);
@@ -98,7 +98,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: nonVolCreds,
+        auth: { strategy: 'standard', credentials: nonVolCreds },
       });
 
       expect(res.statusCode).toBe(403);
@@ -108,7 +108,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: volAdminCreds,
+        auth: { strategy: 'standard', credentials: volAdminCreds },
       });
 
       expect(res.statusCode).toBe(200);
@@ -139,7 +139,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       expect(res.statusCode).toBe(200);
@@ -158,7 +158,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1?fields[]=activity',
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       expect(res.statusCode).toBe(200);
@@ -171,7 +171,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/9',
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       expect(res.statusCode).toBe(404);
@@ -183,7 +183,7 @@ describe('API /users/me/volunteer-logs', () => {
       const resPre = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       const log = <VolunteerLog> (<any> resPre.result).result;
@@ -191,7 +191,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials,
+        auth: { strategy: 'standard', credentials },
         payload: {
           activity: 'Committee work, AGM',
         },
@@ -211,7 +211,7 @@ describe('API /users/me/volunteer-logs', () => {
       const resPre = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       const log = <VolunteerLog> (<any> resPre.result).result;
@@ -220,7 +220,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials,
+        auth: { strategy: 'standard', credentials },
         payload: {
           activity: 'Committee work, AGM',
           duration: {
@@ -254,7 +254,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials,
+        auth: { strategy: 'standard', credentials },
         payload: {
           project: null,
         },
@@ -273,7 +273,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials,
+        auth: { strategy: 'standard', credentials },
         payload: {
           userId: 2,
         },
@@ -286,7 +286,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials,
+        auth: { strategy: 'standard', credentials },
         payload: {
           organisationId: 1,
         },
@@ -299,7 +299,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/9',
-        credentials,
+        auth: { strategy: 'standard', credentials },
         payload: {
           activity: 'Committee work, AGM',
         },
@@ -314,7 +314,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       expect(res.statusCode).toBe(200);
@@ -323,7 +323,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res2 = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       expect(res2.statusCode).toBe(404);
@@ -331,7 +331,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res3 = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       expect(res3.statusCode).toBe(200);
@@ -343,7 +343,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'DELETE',
         url: '/v1/users/volunteers/me/volunteer-logs/9',
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       expect(res.statusCode).toBe(404);
@@ -355,7 +355,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/summary',
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       expect(res.statusCode).toBe(200);
@@ -377,7 +377,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: `/v1/users/volunteers/me/volunteer-logs/summary?since=${then}&until=${now}`,
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       expect(res.statusCode).toBe(200);
@@ -396,7 +396,7 @@ describe('API /users/me/volunteer-logs', () => {
       const res = await server.inject({
         method: 'GET',
         url: '/v1/users/4/volunteer-logs/summary',
-        credentials,
+        auth: { strategy: 'standard', credentials },
       });
 
       expect(res.statusCode).toBe(404);

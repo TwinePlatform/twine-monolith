@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
@@ -7,6 +7,7 @@ import { getTrx } from '../../../../../tests/utils/database';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
 import { RegionEnum, SectorEnum, RoleEnum } from '../../../../models/types';
 import Roles from '../../../../models/role';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('PUT /community-businesses', () => {
@@ -44,7 +45,7 @@ describe('PUT /community-businesses', () => {
 
   describe('POST /community-businesses/register', () => {
     test('SUCCESS - create CB and admin user with successful payload', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/register',
         payload: {
@@ -57,7 +58,7 @@ describe('PUT /community-businesses', () => {
           adminEmail: 'twiggie@stick.house',
         },
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -79,7 +80,7 @@ describe('PUT /community-businesses', () => {
     });
 
     test('FAILURE - return error for duplicate 360 giving id', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/register',
         payload: {
@@ -92,14 +93,14 @@ describe('PUT /community-businesses', () => {
           adminEmail: 'twiggie@stick.house',
         },
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
       expect((<any> res.result).error.message).toEqual('360 Giving Id already exists');
     });
 
     test('FAILURE - return error for duplicate email', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/register',
         payload: {
@@ -112,7 +113,7 @@ describe('PUT /community-businesses', () => {
           adminEmail: admin.email,
         },
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(409);
       expect((<any> res.result).error.message).toEqual('User already exists with this email');
@@ -121,14 +122,14 @@ describe('PUT /community-businesses', () => {
 
   describe('POST /community-businesses/register/temporary', () => {
     test('SUCCESS - create a temporary marked CB and admin user', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/register/temporary',
         payload: {
           orgName: 'Stick House',
         },
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({

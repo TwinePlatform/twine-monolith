@@ -5,7 +5,7 @@
  * actual server
  */
 import * as Knex from 'knex';
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Shot from 'shot';
 import { Config } from '../../config';
 

@@ -10,7 +10,7 @@
  * - User is a Twine admin
  *
  */
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { GetCommunityBusinessRequest } from '../types';
 import { StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';

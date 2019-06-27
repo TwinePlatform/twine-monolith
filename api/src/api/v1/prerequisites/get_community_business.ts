@@ -6,8 +6,8 @@
  * - Fetching the org using a database ID
  * - Fetching the org using a 360 Giving ID
  */
-import * as Hapi from 'hapi';
-import * as Boom from 'boom';
+import * as Hapi from '@hapi/hapi';
+import * as Boom from '@hapi/boom';
 import { isNil } from 'ramda';
 import { CommunityBusinesses } from '../../../models';
 import { GetCommunityBusinessRequest } from '../types';

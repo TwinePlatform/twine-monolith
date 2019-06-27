@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
@@ -56,19 +56,19 @@ describe('DELETE /v1/users/volunteers/:id', () => {
     const getRes = await server.inject({
       method: 'GET',
       url: '/v1/users/volunteers/6',
-      credentials,
+      auth: { strategy: 'standard', credentials },
     });
 
     const res = await server.inject({
       method: 'DELETE',
       url: '/v1/users/volunteers/6',
-      credentials,
+      auth: { strategy: 'standard', credentials },
     });
 
     const getRes2 = await server.inject({
       method: 'GET',
       url: '/v1/users/volunteers/6',
-      credentials,
+      auth: { strategy: 'standard', credentials },
     });
 
     // volunteer exists
@@ -84,7 +84,7 @@ describe('DELETE /v1/users/volunteers/:id', () => {
     const res = await server.inject({
       method: 'DELETE',
       url: '/v1/users/volunteers/3',
-      credentials,
+      auth: { strategy: 'standard', credentials },
     });
 
     expect(res.statusCode).toBe(404);
@@ -94,7 +94,7 @@ describe('DELETE /v1/users/volunteers/:id', () => {
     const res = await server.inject({
       method: 'DELETE',
       url: '/v1/users/volunteers/7',
-      credentials: twAdminCreds,
+      auth: { strategy: 'standard', credentials: twAdminCreds },
     });
     expect(res.statusCode).toBe(200);
   });
@@ -103,7 +103,7 @@ describe('DELETE /v1/users/volunteers/:id', () => {
     const res = await server.inject({
       method: 'DELETE',
       url: '/v1/users/volunteers/7',
-      credentials: otherCredentials,
+      auth: { strategy: 'standard', credentials: otherCredentials },
     });
     expect(res.statusCode).toBe(403);
   });

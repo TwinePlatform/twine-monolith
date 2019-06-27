@@ -1,9 +1,10 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('GET /community-businesses/{id}/cb-admins', () => {
@@ -28,11 +29,11 @@ describe('GET /community-businesses/{id}/cb-admins', () => {
   });
 
   test('query child organisation as TWINE_ADMIN', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/community-businesses/1/cb-admins',
       credentials: adminCreds,
-    });
+    }));
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toHaveLength(1);
     expect((<any> res.result).result[0]).toEqual(expect.objectContaining({

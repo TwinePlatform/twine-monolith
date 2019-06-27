@@ -1,8 +1,9 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { Organisations, Organisation, User, Users } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('POST /v1/visitor/search', () => {
@@ -27,28 +28,28 @@ describe('POST /v1/visitor/search', () => {
   });
 
   test('Find visitor using valid QR code hash', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'POST',
       url: '/v1/users/visitors/search',
       payload: {
         qrCode: 'chellsqrcode',
       },
       credentials,
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toEqual(expect.objectContaining({ name: 'Chell' }));
   });
 
   test('Fail to find visitor using invalid QR code hash', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'POST',
       url: '/v1/users/visitors/search',
       payload: {
         qrCode: 'definitely invalid qrCode',
       },
       credentials,
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toEqual(null);

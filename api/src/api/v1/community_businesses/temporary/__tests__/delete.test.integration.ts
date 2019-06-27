@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
@@ -10,6 +10,7 @@ import { User,
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { RoleEnum } from '../../../../../models/types';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('DELETE /community-businesses/temporary/:id', () => {
@@ -47,21 +48,21 @@ describe('DELETE /community-businesses/temporary/:id', () => {
 
   test('success :: user TWINE_ADMIN successfully deletes temp cb & cb admin', async () => {
     // create temp cb
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'POST',
       url: '/v1/community-businesses/register/temporary',
       credentials: twAdminCreds,
       payload: { orgName: 'Shinra Electric Power Company' },
-    });
+    }));
     expect(res.statusCode).toBe(200);
     const { communityBusiness: tempCb, cbAdmin: tempCbAdmin } = (<any> res.result).result;
 
     // delete account
-    const res2 = await server.inject({
+    const res2 = await server.inject(injectCfg({
       method: 'DELETE',
       url: `/v1/community-businesses/temporary/${tempCb.id}`,
       credentials: twAdminCreds,
-    });
+    }));
     expect(res2.statusCode).toBe(200);
     const cbExists = await CommunityBusinesses.exists(trx, { where: { id: tempCb.id } });
     const adminExists = await Users.exists(trx, { where: { id: tempCbAdmin.id } });
@@ -71,12 +72,12 @@ describe('DELETE /community-businesses/temporary/:id', () => {
 
   test('success :: successfully deletes related logs', async () => {
     // create temp cb
-    const resCreate = await server.inject({
+    const resCreate = await server.inject(injectCfg({
       method: 'POST',
       url: '/v1/community-businesses/register/temporary',
       credentials: twAdminCreds,
       payload: { orgName: 'Shinra Electric Power Company' },
-    });
+    }));
     expect(resCreate.statusCode).toBe(200);
     const { communityBusiness: tempCb, cbAdmin: tempCbAdmin } = (<any> resCreate.result).result;
 
@@ -85,7 +86,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
       await StandardCredentials.get(trx, tempCbAdmin, tempCb);
 
     // create visitor
-    const resAddVisitor = await server.inject({
+    const resAddVisitor = await server.inject(injectCfg({
       method: 'POST',
       url: '/v1/users/register/visitors',
       payload: {
@@ -96,12 +97,12 @@ describe('DELETE /community-businesses/temporary/:id', () => {
         email: 'cstrife@soldier.com',
       },
       credentials: tempCredentials,
-    });
+    }));
     expect(resAddVisitor.statusCode).toBe(200);
     const visitor = (<any> resAddVisitor.result).result;
 
     // add visit activty
-    const resAddVisitActivity = await server.inject({
+    const resAddVisitActivity = await server.inject(injectCfg({
       method: 'POST',
       url: '/v1/community-businesses/me/visit-activities',
       payload: {
@@ -109,12 +110,12 @@ describe('DELETE /community-businesses/temporary/:id', () => {
         category: 'Adult skills building',
       },
       credentials: tempCredentials,
-    });
+    }));
     expect(resAddVisitActivity.statusCode).toBe(200);
     const visitActity = (<any> resAddVisitActivity.result).result;
 
     // add visitor log
-    const resAddLog = await server.inject({
+    const resAddLog = await server.inject(injectCfg({
       method: 'POST',
       url: '/v1/community-businesses/me/visit-logs',
       payload: {
@@ -122,12 +123,12 @@ describe('DELETE /community-businesses/temporary/:id', () => {
         visitActivityId: visitActity.id,
       },
       credentials: tempCredentials,
-    });
+    }));
     expect(resAddLog.statusCode).toBe(200);
     const visitLog = (<any> resAddLog.result).result;
 
     // add volunteer
-    const resAddVolunteer = await server.inject({
+    const resAddVolunteer = await server.inject(injectCfg({
       method: 'POST',
       url: '/v1/users/register/volunteers',
       payload: {
@@ -140,12 +141,12 @@ describe('DELETE /community-businesses/temporary/:id', () => {
         role: RoleEnum.VOLUNTEER,
       },
       credentials: tempCredentials,
-    });
+    }));
     expect(resAddVolunteer.statusCode).toBe(200);
     const volunteer = (<any> resAddVolunteer.result).result;
 
     // add volunteer log
-    const resAddVolunteerLog = await server.inject({
+    const resAddVolunteerLog = await server.inject(injectCfg({
       method: 'POST',
       url: '/v1/community-businesses/me/volunteer-logs',
       payload: {
@@ -158,16 +159,16 @@ describe('DELETE /community-businesses/temporary/:id', () => {
         startedAt: (new Date).toISOString(),
       },
       credentials: tempCredentials,
-    });
+    }));
     expect(resAddVolunteerLog.statusCode).toBe(200);
     const volunteerLog = (<any> resAddVolunteerLog.result).result;
 
     // delete account
-    const resDelete = await server.inject({
+    const resDelete = await server.inject(injectCfg({
       method: 'DELETE',
       url: `/v1/community-businesses/temporary/${tempCb.id}`,
       credentials: twAdminCreds,
-    });
+    }));
     expect(resDelete.statusCode).toBe(200);
 
     // check everything is deleted

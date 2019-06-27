@@ -1,10 +1,11 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { Users, Organisations, LinkedFeedback, User, Organisation } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('/community-business/{id}/feedback', () => {
@@ -51,22 +52,22 @@ describe('/community-business/{id}/feedback', () => {
 
   describe('GET /community-businesses/{id}/feebdack', () => {
     test('Get empty feedback for own org as CB_ADMIN when no data', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback',
         credentials: creds.gordon,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(0);
     });
 
     test('Get all feedback for own org as CB_ADMIN', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback',
         credentials: creds.glados,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(9);
@@ -80,11 +81,11 @@ describe('/community-business/{id}/feedback', () => {
       const since = '2018-07-01T10:43:22.231';
       const until = '2018-07-31T10:43:22.231';
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: `/v1/community-businesses/me/feedback?since=${since}&until=${until}`,
         credentials: creds.glados,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result.length).toBeLessThan(9);
@@ -98,31 +99,31 @@ describe('/community-business/{id}/feedback', () => {
       const since = 'nope';
       const until = 'never';
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: `/v1/community-businesses/me/feedback?since=${since}&until=${until}`,
         credentials: creds.glados,
-      });
+      }));
       expect(res.statusCode).toBe(400);
     });
 
     test('Get empty feedback for child org as TWINE_ADMIN when no data', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/2/feedback',
         credentials: creds.bigboss,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(0);
     });
 
     test('Get all feedback for child org as TWINE_ADMIN', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/1/feedback',
         credentials: creds.bigboss,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(9);
@@ -136,11 +137,11 @@ describe('/community-business/{id}/feedback', () => {
       const since = '2018-07-01T10:43:22.231';
       const until = '2018-07-31T10:43:22.231';
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: `/v1/community-businesses/1/feedback?since=${since}&until=${until}`,
         credentials: creds.bigboss,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result.length).toBeLessThan(9);
@@ -154,21 +155,21 @@ describe('/community-business/{id}/feedback', () => {
       const since = 'nope';
       const until = 'never';
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: `/v1/community-businesses/1/feedback?since=${since}&until=${until}`,
         credentials: creds.bigboss,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
 
     test('Get 403 when organisation is not a "child" of user', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/1/feedback',
         credentials: creds.glados,
-      });
+      }));
 
       expect(res.statusCode).toBe(403);
     });
@@ -176,11 +177,11 @@ describe('/community-business/{id}/feedback', () => {
 
   describe('GET /community-businesses/{id}/feedback/aggregates', () => {
     test('Get zeros for own organisation when has no feedback', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback/aggregates',
         credentials: creds.gordon,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual({
@@ -192,11 +193,11 @@ describe('/community-business/{id}/feedback', () => {
     });
 
     test('Get summary results for own organisation', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback/aggregates',
         credentials: creds.glados,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual({
@@ -211,11 +212,11 @@ describe('/community-business/{id}/feedback', () => {
       const since = '2018-07-01T00:00:00.000Z';
       const until = '2018-07-31T23:59:59.999Z';
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: `/v1/community-businesses/me/feedback/aggregates?since=${since}&until=${until}`,
         credentials: creds.glados,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual({
@@ -227,11 +228,11 @@ describe('/community-business/{id}/feedback', () => {
     });
 
     test('Get 400 for invalid date limits', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/feedback/aggregates?since=nope&until=never',
         credentials: creds.glados,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
@@ -239,12 +240,12 @@ describe('/community-business/{id}/feedback', () => {
 
   describe('POST /community-businesses/{id}/feedback', () => {
     test('Leave feedback on own org as CB_ADMIN', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/feedback',
         payload: { feedbackScore: 1 },
         credentials: creds.gordon,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({

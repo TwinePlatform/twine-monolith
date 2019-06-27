@@ -4,7 +4,7 @@
  * Exports functions used to generate a single normalised configuration object
  */
 require('dotenv').config({ path: './config/.env' });
-import * as Joi from 'joi';
+import * as Joi from '@hapi/joi';
 import { mergeDeepLeft, compose, converge, identity } from 'ramda';
 import configSchema from './config.schema';
 import configDefaults from './config.defaults';

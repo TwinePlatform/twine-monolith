@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import factory from '../../../../../../tests/utils/factory';
 import { init } from '../../../../../server';

@@ -3,7 +3,7 @@
  *
  * Specifies the required shape and content of the configuration object.
  */
-import * as Joi from 'joi';
+import * as Joi from '@hapi/joi';
 import { Environment } from './types';
 import { AppEnum } from '../src/types/internal';
 
@@ -28,7 +28,7 @@ export default Joi.object({
         Joi.object({
           hsts: Joi.object({
             maxAge: Joi.number().integer().min(365 * 24 * 60 * 60).required(),
-            includeSubdomains: Joi.boolean().default(true),
+            includeSubDomains: Joi.boolean().default(true),
             preload: Joi.boolean().default(true),
           }),
         })

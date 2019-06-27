@@ -1,6 +1,6 @@
-import * as Hapi from 'hapi';
-import * as Boom from 'boom';
-import * as Joi from 'joi';
+import * as Hapi from '@hapi/hapi';
+import * as Boom from '@hapi/boom';
+import * as Joi from '@hapi/joi';
 import { has, mergeDeepRight, omit, keys, assoc } from 'ramda';
 import { Visitors, User, ModelQuery } from '../../../../models';
 import { query, filterQuery, response } from '../../users/schema';

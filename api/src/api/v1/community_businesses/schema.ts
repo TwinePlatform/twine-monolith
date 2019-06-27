@@ -1,7 +1,7 @@
 /*
  * Route validation schema for Community business routes
  */
-import * as Joi from 'joi';
+import * as Joi from '@hapi/joi';
 import { query } from '../users/schema';
 import { id } from '../schema/request';
 

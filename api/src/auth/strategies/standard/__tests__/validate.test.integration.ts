@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as jwt from 'jsonwebtoken';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';

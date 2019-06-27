@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
@@ -6,6 +6,7 @@ import { getTrx } from '../../../../../../tests/utils/database';
 import { Users, User, Organisations, Organisation } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
 import { RoleEnum } from '../../../../../models/types';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('API v1 - register new users', () => {
@@ -54,7 +55,7 @@ describe('API v1 - register new users', () => {
 
   describe('POST /users/register/visitors', () => {
     test('FAIL :: cannot create visitor if email is associated to another vistor', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -65,7 +66,7 @@ describe('API v1 - register new users', () => {
           email: '1498@aperturescience.com',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(409);
       expect((<any> res.result).error.message)
@@ -74,7 +75,7 @@ describe('API v1 - register new users', () => {
 
     test('FAIL :: cannot create visitor if phone number is associated to another user',
     async () => {
-      await server.inject({
+      await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -85,9 +86,9 @@ describe('API v1 - register new users', () => {
           phoneNumber: '090909090909',
         },
         credentials,
-      });
+      }));
 
-      const res2 = await server.inject({
+      const res2 = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -98,7 +99,7 @@ describe('API v1 - register new users', () => {
           phoneNumber: '090909090909',
         },
         credentials,
-      });
+      }));
 
       expect(res2.statusCode).toBe(409);
       expect((<any> res2.result).error.message)
@@ -106,7 +107,7 @@ describe('API v1 - register new users', () => {
     });
 
     test('FAIL :: non-existent community business', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -117,7 +118,7 @@ describe('API v1 - register new users', () => {
           email: '13542@google.com',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
       expect((<any> res.result).error.message)
@@ -125,7 +126,7 @@ describe('API v1 - register new users', () => {
     });
 
     test('FAIL :: cannot register against a different community business', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -136,7 +137,7 @@ describe('API v1 - register new users', () => {
           email: '13542@google.com',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
       expect((<any> res.result).error.message)
@@ -144,7 +145,7 @@ describe('API v1 - register new users', () => {
     });
 
     test('FAIL :: cannot register additonal role against VOLUNTEER_ADMIN', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -155,7 +156,7 @@ describe('API v1 - register new users', () => {
           email: 'raiden@aotd.com', // email of VOLUNTEER_ADMIN
         },
         credentials: credentialsBlackMesa,
-      });
+      }));
 
       expect(res.statusCode).toBe(409);
       expect((<any> res.result).error.message)
@@ -164,7 +165,7 @@ describe('API v1 - register new users', () => {
 
     test('FAIL :: cannot register as a visitor if user is registered under a different cb',
     async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -175,7 +176,7 @@ describe('API v1 - register new users', () => {
           email: 'emma@sol.com',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(409);
       expect((<any> res.result).error.message)
@@ -185,7 +186,7 @@ describe('API v1 - register new users', () => {
     test('SUCCESS :: conf email sent to add visitor if user already exists at cb', async () => {
       mockAddRole.mockReturnValueOnce(Promise.resolve());
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -196,7 +197,7 @@ describe('API v1 - register new users', () => {
           email: 'emma@sol.com',
         },
         credentials: credentialsBlackMesa,
-      });
+      }));
 
       expect(res.statusCode).toBe(409);
       expect((<any> res.result).error.message).toBe(
@@ -215,7 +216,7 @@ describe('API v1 - register new users', () => {
     });
 
     test('FAIL :: cannot register visitor without email & phone number', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -225,14 +226,14 @@ describe('API v1 - register new users', () => {
           birthYear: null,
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
       expect((<any> res.result).error.message).toBe('Please supply either email or phone number');
     });
 
     test('SUCCESS :: happy path for standard visitor', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -243,7 +244,7 @@ describe('API v1 - register new users', () => {
           email: '13542@google.com',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual(expect.objectContaining({
@@ -255,7 +256,7 @@ describe('API v1 - register new users', () => {
     });
 
     test('SUCCESS :: happy path for anonymous visitor', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -266,7 +267,7 @@ describe('API v1 - register new users', () => {
           isAnonymous: true,
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual(expect.objectContaining({
@@ -276,7 +277,7 @@ describe('API v1 - register new users', () => {
         email: 'anon_0_org_1',
       }));
 
-      const res2 = await server.inject({
+      const res2 = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -287,7 +288,7 @@ describe('API v1 - register new users', () => {
           isAnonymous: true,
         },
         credentials,
-      });
+      }));
 
       expect(res2.statusCode).toBe(200);
       expect((<any> res2.result).result).toEqual(expect.objectContaining({
@@ -299,7 +300,7 @@ describe('API v1 - register new users', () => {
     });
 
     test('SUCCESS :: register visitor with null birthYear', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -310,14 +311,14 @@ describe('API v1 - register new users', () => {
           email: '666@aperturescience.com',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
     });
 
 
     test('SUCCESS :: register visitor with only phone number', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
         payload: {
@@ -328,7 +329,7 @@ describe('API v1 - register new users', () => {
           phoneNumber: '090909090909',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual(expect.objectContaining({

@@ -1,10 +1,11 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('API v1 :: Community Businesses :: Visit Logs', () => {
@@ -41,7 +42,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
 
   describe('POST', () => {
     test(':: successfully add new visit log', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/visit-logs',
         payload: {
@@ -49,7 +50,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
           visitActivityId: 2,
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -58,7 +59,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
     });
 
     test(':: user from another cb returns error', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/visit-logs',
         payload: {
@@ -66,7 +67,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
           visitActivityId: 2,
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(403);
       expect((<any> res.result).error.message)
@@ -74,7 +75,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
     });
 
     test(':: incorrect activity id returns error', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/visit-logs',
         payload: {
@@ -82,7 +83,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
           visitActivityId: 200,
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
       expect((<any> res.result).error.message)
@@ -92,11 +93,11 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
 
   describe('GET', () => {
     test(':: get all visit logs for a cb', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-logs',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).meta).toEqual({ total: 11 });
@@ -113,12 +114,12 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
     });
 
     test(':: filtered visit logs with query', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-logs?'
         + '&filter[visitActivity]=Wear%20Pink',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).meta).toEqual({ total: 4 });

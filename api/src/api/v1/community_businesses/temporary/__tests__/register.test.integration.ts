@@ -1,10 +1,11 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { Organisation, Organisations, User, Users } from '../../../../../models';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('POST /community-businesses/register/temporary', () => {
@@ -41,14 +42,14 @@ describe('POST /community-businesses/register/temporary', () => {
   });
 
   test('SUCCESS - create a temporary marked CB and admin user', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'POST',
       url: '/v1/community-businesses/register/temporary',
       payload: {
         orgName: 'Shinra Electric Power Company',
       },
       credentials: adminCreds,
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual({
@@ -65,14 +66,14 @@ describe('POST /community-businesses/register/temporary', () => {
   });
 
   test('SUCCESS - FLOW TEST - create account & login', async () => {
-    const resRegister = await server.inject({
+    const resRegister = await server.inject(injectCfg({
       method: 'POST',
       url: '/v1/community-businesses/register/temporary',
       payload: {
         orgName: 'Shinra Electric Power Company',
       },
       credentials: adminCreds,
-    });
+    }));
 
     expect(resRegister.statusCode).toBe(200);
     const { email, password } = (<any> resRegister.result).result.cbAdmin;

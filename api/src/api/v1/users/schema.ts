@@ -1,7 +1,7 @@
 /*
  * Route validation schema for User routes
  */
-import * as Joi from 'joi';
+import * as Joi from '@hapi/joi';
 import { gender } from '../schema/request';
 
 export { query, gender, id, since, until, startedAt, ApiRequestQuery } from '../schema/request';

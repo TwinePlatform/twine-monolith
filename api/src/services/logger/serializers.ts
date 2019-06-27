@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Cookie from 'cookie';
 import * as JWT from 'jsonwebtoken';
 import { compose, evolve, omit } from 'ramda';

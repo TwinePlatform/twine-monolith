@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { isChildOrganisation } from '../../prerequisites';
 import { response } from '../schema';
 import { CommunityBusinesses } from '../../../../models';

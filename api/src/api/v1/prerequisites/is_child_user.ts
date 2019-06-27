@@ -13,7 +13,7 @@
  * NOTE: Funding body admins should not be allowed to access user information of
  *       VISITOR or VOLUNTEER users at child community-businesses for GDPR reasons
  */
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { PutUserRequest } from '../types';
 import Roles from '../../../models/role';
 import { StandardCredentials } from '../../../auth/strategies/standard';

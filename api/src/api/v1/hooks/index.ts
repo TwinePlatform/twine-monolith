@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import onPostHandler from './on_post_handler';
 import onPreResponse from './on_pre_response';
 

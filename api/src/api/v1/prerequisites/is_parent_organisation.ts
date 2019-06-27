@@ -17,7 +17,7 @@
  *   > communityBusiness
  *   > fundingBody
  */
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { Organisation, CommunityBusiness } from '../../../models';
 import { GetCommunityBusinessRequest } from '../types';
 import getOrganisation from './get_organisation';

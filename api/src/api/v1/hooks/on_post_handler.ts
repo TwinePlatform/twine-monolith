@@ -17,7 +17,7 @@
  *
  * See also: https://hapijs.com/api#request-lifecycle
  */
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { formatBoom, formatResponse, BoomWithValidation } from '../utils';
 
 

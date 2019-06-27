@@ -1,10 +1,11 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { Organisation, Organisations, User, Users } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('PUT /community-businesses', () => {
@@ -45,7 +46,7 @@ describe('PUT /community-businesses', () => {
 
   describe('PUT /community-businesses/me', () => {
     test('can update own community business', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me',
         payload: {
@@ -53,7 +54,7 @@ describe('PUT /community-businesses', () => {
           sector: 'Housing',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -65,27 +66,27 @@ describe('PUT /community-businesses', () => {
     });
 
     test('cannot update own community business w/ unrecognised region', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me',
         payload: {
           region: 'Narnia',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
 
     test('cannot update own community business w/ unrecognised sector', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me',
         payload: {
           sector: 'Hedge Fund',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
@@ -96,7 +97,7 @@ describe('PUT /community-businesses', () => {
 
   describe('PUT /community-businesses/:id', () => {
     test('can update child community business', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/1',
         payload: {
@@ -104,7 +105,7 @@ describe('PUT /community-businesses', () => {
           sector: 'Housing',
         },
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -116,7 +117,7 @@ describe('PUT /community-businesses', () => {
     });
 
     test('can update casing of child community business name', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/1',
         payload: {
@@ -124,7 +125,7 @@ describe('PUT /community-businesses', () => {
           sector: 'Housing',
         },
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -136,62 +137,62 @@ describe('PUT /community-businesses', () => {
     });
 
     test('cannot update non-child community business', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/1',
         payload: {
           sector: 'Hedge Fund',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(403);
     });
 
     test('cannot update own community business w/ unrecognised region', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/1',
         payload: {
           region: 'Narnia',
         },
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
 
     test('cannot update own community business w/ unrecognised sector', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/1',
         payload: {
           sector: 'Hedge Fund',
         },
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
 
     test('cannot update own temporary community business', async () => {
 
-      const resCreate = await server.inject({
+      const resCreate = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/register/temporary',
         credentials: adminCreds,
         payload: { orgName: 'Shinra Electric Power Company' },
-      });
+      }));
       expect(resCreate.statusCode).toBe(200);
       const { communityBusiness: tempCb } = (<any> resCreate.result).result;
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: `/v1/community-businesses/${tempCb.id}`,
         payload: {
           name: 'Not Temp',
         },
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(403);
     });

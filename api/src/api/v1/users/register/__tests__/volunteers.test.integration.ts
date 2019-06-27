@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
@@ -6,6 +6,7 @@ import { getTrx } from '../../../../../../tests/utils/database';
 import { User, Organisation, Users, Organisations } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
 import { RoleEnum } from '../../../../../models/types';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('API v1 - register new users', () => {
@@ -101,7 +102,7 @@ describe('API v1 - register new users', () => {
       const mock = jest.fn(() => Promise.resolve());
       server.app.EmailService.addRole = mock;
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/volunteers',
         payload: {
@@ -114,7 +115,7 @@ describe('API v1 - register new users', () => {
           role: RoleEnum.VOLUNTEER,
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(409);
       expect((<any> res.result).error.message).toBe(
@@ -148,7 +149,7 @@ describe('API v1 - register new users', () => {
 
     test(':: fail - user already exists - cannot create second role for VOLUNTEER_ADMIN',
      async () => {
-       const res = await server.inject({
+       const res = await server.inject(injectCfg({
          method: 'POST',
          url: '/v1/users/register/volunteers',
          payload: {
@@ -161,7 +162,7 @@ describe('API v1 - register new users', () => {
            role: RoleEnum.VOLUNTEER_ADMIN,
          },
          credentials,
-       });
+       }));
 
        expect(res.statusCode).toBe(409);
        expect((<any> res.result).error.message).toBe('User with this e-mail already registered');
@@ -169,7 +170,7 @@ describe('API v1 - register new users', () => {
 
     test(':: fail - user already exists - cannot create second role if user is already a VOLUNTEER',
      async () => {
-       const res = await server.inject({
+       const res = await server.inject(injectCfg({
          method: 'POST',
          url: '/v1/users/register/volunteers',
          payload: {
@@ -182,7 +183,7 @@ describe('API v1 - register new users', () => {
            role: RoleEnum.VOLUNTEER,
          },
          credentials: credentialsBlackMesa,
-       });
+       }));
 
        expect(res.statusCode).toBe(409);
        expect((<any> res.result).error.message)
@@ -191,7 +192,7 @@ describe('API v1 - register new users', () => {
 
     test(':: fail - user already exists - cannot create second role if user signed upto another CB',
      async () => {
-       const res = await server.inject({
+       const res = await server.inject(injectCfg({
          method: 'POST',
          url: '/v1/users/register/volunteers',
          payload: {
@@ -204,7 +205,7 @@ describe('API v1 - register new users', () => {
            role: RoleEnum.VOLUNTEER,
          },
          credentials: credentialsBlackMesa,
-       });
+       }));
 
        expect(res.statusCode).toBe(409);
        expect((<any> res.result).error.message)

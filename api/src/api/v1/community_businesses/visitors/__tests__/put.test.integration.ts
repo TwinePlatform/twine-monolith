@@ -1,10 +1,11 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../../models';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('API /community-businesses/{id}/visitors', () => {
@@ -43,14 +44,14 @@ describe('API /community-businesses/{id}/visitors', () => {
 
   describe('PUT /community-businesses/me/visitors/{id}', () => {
     test('can perform partial update of user model', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: `/v1/community-businesses/me/visitors/${visitor.id}`,
         payload: {
           name: 'Tubby',
         },
         credentials,
-      });
+      }));
 
       const { modifiedAt, createdAt, deletedAt, password, qrCode, ...rest } = visitor;
 
@@ -63,7 +64,7 @@ describe('API /community-businesses/{id}/visitors', () => {
     });
 
     test('can perform full update of user model', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: `/v1/community-businesses/me/visitors/${visitor.id}`,
         payload: {
@@ -79,7 +80,7 @@ describe('API /community-businesses/{id}/visitors', () => {
           ethnicity: 'prefer not to say',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -102,7 +103,7 @@ describe('API /community-businesses/{id}/visitors', () => {
     });
 
     test('bad update data returns 400', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: `/v1/community-businesses/me/visitors/${visitor.id}`,
         payload: {
@@ -110,29 +111,29 @@ describe('API /community-businesses/{id}/visitors', () => {
           ethnicity: 'thisisprobablynotaethnicity',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
 
     test('idempotency', async () => {
-      const res1 = await server.inject({
+      const res1 = await server.inject(injectCfg({
         method: 'PUT',
         url: `/v1/community-businesses/me/visitors/${visitor.id}`,
         payload: {
           name: 'Tubby',
         },
         credentials,
-      });
+      }));
 
-      const res2 = await server.inject({
+      const res2 = await server.inject(injectCfg({
         method: 'PUT',
         url: `/v1/community-businesses/me/visitors/${visitor.id}`,
         payload: {
           name: 'Tubby',
         },
         credentials,
-      });
+      }));
 
       expect(res1.statusCode).toBe(200);
       expect(res2.statusCode).toBe(200);
