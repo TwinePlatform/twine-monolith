@@ -1,4 +1,5 @@
 import { isDateString, abbreviateDateString } from '../util';
+import Months from '../../../util/months';
 
 
 describe('Data manipulation utilities', () => {
@@ -19,8 +20,8 @@ describe('Data manipulation utilities', () => {
 
   describe(':: abbreviateDateString helper', () => {
     test('SUCCESS - returns abbreviated month in date string', () => {
-      const expected = abbreviateDateString('January 2019');
-      expect(expected).toBe('Jan 19');
+      const expected = abbreviateDateString(Months.format.abreviated, 'January 2019');
+      expect(expected).toBe('Jan 2019');
     });
   });
 });

@@ -14,6 +14,17 @@ export const Button = styled.button`
   cursor: pointer;
 `;
 
+export const AccessibilityButton = styled.button`
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background: inherit;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  cursor: pointer;
+`;
+
 export const PrimaryButton = styled(Button)`
   background-color: ${ColoursEnum.purple};
   transition: background-color ease 0.3s;

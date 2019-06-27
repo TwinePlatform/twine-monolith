@@ -1,9 +1,10 @@
 import moment from 'moment';
-import { evolve } from 'ramda';
+import { evolve, curry, omit, map, pipe, toPairs, fromPairs } from 'ramda';
 import { Duration, MathUtil, Objects } from 'twine-util';
 import { DurationUnitEnum } from '../../types';
 import { AggregatedData } from './logsToAggregatedData';
-import Months from '../../util/months';
+import Months, { MonthsFormatEnum } from '../../util/months';
+import { renameKeys } from 'twine-util/objects';
 
 
 export const isDateString = (x: any): boolean => {
@@ -14,18 +15,18 @@ export const isDateString = (x: any): boolean => {
   return Months.list.includes(words[0]);
 };
 
-export const abbreviateDateString = (x: string): string => {
+export const abbreviateDateString = curry((format: MonthsFormatEnum, x: string): string => {
   const [month, year] = x.split(' ');
   const numericalMonth = Months.list.indexOf(month) + 1;
   const doubleDigitNumericalMonth = numericalMonth > 9
     ? `${numericalMonth}`
     : `0${numericalMonth}`;
   const isoDate = `${year}-${doubleDigitNumericalMonth}`;
-  return moment(isoDate).format(Months.format.table);
-};
+  return moment(isoDate).format(format);
+});
 
-export const abbreviateIfDateString = (x: any): string =>
-  isDateString(x) ? abbreviateDateString(x) : x;
+export const abbreviateIfDateString = curry((format: MonthsFormatEnum, x: any): string =>
+  isDateString(x) ? abbreviateDateString(format, x) : x);
 
 export const round = MathUtil.roundTo(2);
 
@@ -51,3 +52,22 @@ export const calculateTotalsUsing = (unit: DurationUnitEnum) => evolve({
     };
   }),
 });
+
+export const renameAllNameKeys = (data: AggregatedData) => {
+  const newRows = data.rows.map(renameKeys({ name: data.groupByX }));
+  return { ...data, rows: newRows };
+}; // TODO: add test
+
+export const removeIdInRows = (data: AggregatedData) => {
+  const newRows = data.rows.map(omit(['id']));
+  return { ...data, rows: newRows };
+}; // TODO: add test
+
+export const abbreviateMonths = (format: MonthsFormatEnum) => evolve({
+  headers: map((x) => abbreviateIfDateString(format, x)),
+  rows: pipe(
+    map(toPairs as any),
+    map(map(map((x) => abbreviateIfDateString(format, x)))) as any,
+    map(fromPairs)
+  ),
+}); // TODO: add test

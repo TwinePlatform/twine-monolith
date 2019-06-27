@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import moment from 'moment';
+import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
 import DatePicker from './DatePicker';
 import UnitToggle from './UnitToggle';
@@ -22,6 +23,13 @@ type UtilityBarProps = {
   onDownloadClick?: () => void
 };
 
+
+/*
+ * Styles
+ */
+const MainRow = styled(Row)`
+  margin-bottom: 2rem;
+`;
 
 /**
  * Component
@@ -65,26 +73,24 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
   }, [unit]);
 
   return (
-    <Row middle="xs" start="xs" {...rest}>
+    <MainRow middle="xs" start="xs" {...rest}>
       <Col xs={6}>
-        <Row>
-          <DatePicker
-            type={dateFilter}
-            label="From"
-            selected={fromDate}
-            onChange={onFromChange}
-            minDate={constraint.from.min(fromDate, toDate)}
-            maxDate={constraint.from.max(fromDate, toDate)}
-          />
-          <DatePicker
-            type={dateFilter}
-            label="  To" // To make both labels take up the same space
-            selected={toDate}
-            onChange={onToChange}
-            minDate={constraint.to.min(fromDate, toDate)}
-            maxDate={constraint.to.max(fromDate, toDate)}
-          />
-        </Row>
+        <DatePicker
+          type={dateFilter}
+          label="From"
+          selected={fromDate}
+          onChange={onFromChange}
+          minDate={constraint.from.min(fromDate, toDate)}
+          maxDate={constraint.from.max(fromDate, toDate)}
+        />
+        <DatePicker
+          type={dateFilter}
+          label="  To" // To make both labels take up the same space
+          selected={toDate}
+          onChange={onToChange}
+          minDate={constraint.to.min(fromDate, toDate)}
+          maxDate={constraint.to.max(fromDate, toDate)}
+        />
       </Col>
       <Col xs={6}>
         <Row end="xs">
@@ -92,7 +98,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
           <DownloadButton onClick={onDownloadClick}>Download</DownloadButton>
         </Row>
       </Col>
-    </Row>
+    </MainRow>
   );
 };
 

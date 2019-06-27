@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
 
 import { ReactComponent as _TextLogo } from '../../components/assets/logo_text.svg';
-import { ColoursEnum, Fonts } from '../../styles/design_system';
+import { ColoursEnum, Fonts, MediaQueriesEnum } from '../../styles/design_system';
 import NavLinks from './NavLinks';
 import { Pages } from '../pages';
 
@@ -20,12 +20,16 @@ interface Props {
  * Styles
  */
 const PaddedRow = styled(Row)`
-  height: 4.8125rem;
+  height: 4rem;
   background-color: ${ColoursEnum.darkGrey};
   color: ${ColoursEnum.white};
   font-weight: ${Fonts.weight.regular};
   padding: 0 1.75rem;
   margin-bottom: 6rem;
+
+  ${MediaQueriesEnum.standardDesktop}{
+    margin-bottom: 4rem;
+}
 `;
 
 const TextLogo = styled(_TextLogo)`

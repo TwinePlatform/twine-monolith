@@ -3,14 +3,14 @@ import moment from 'moment';
 interface Months {
   list: string [];
   format: typeof MonthsFormatEnum;
-  range: (from: Date, to: Date, format: MonthsFormatEnum) => string [];
+  range: (from: Date, to: Date, format: MonthsFormatEnum) => string[];
   diff: (from: Date, to: Date) => number;
 }
 
-enum MonthsFormatEnum {
-  verbose= 'MMMM YYYY',
-  table= 'MMM YY',
-  filename= 'MM_YY',
+export enum MonthsFormatEnum {
+  verbose = 'MMMM YYYY',
+  abreviated = 'MMM YYYY',
+  filename = 'MM_YY',
 }
 
 const months: Months = {

@@ -7,7 +7,7 @@ import { Notification } from 'react-notification';
 import { CbAdmins } from '../../../api';
 import { Response } from '../../../util/response';
 import LoginForm, { FormValues } from './LoginForm';
-import { H1, H4 as _H4 } from '../../../components/Headings';
+import { H1 } from '../../../components/Headings';
 import { Paragraph } from '../../../components/Typography';
 import L from '../../../components/Link';
 import { redirectOnError, getQueryObjectFromProps } from '../../../util/routing';
@@ -95,13 +95,14 @@ const Login: React.FunctionComponent<LoginProps> = (props) => (
             </FormContainer>
           </Col>
         </RowLeftAlignText>
-        <Row>
+        <Row center="xs">
           <Notification
             isActive={getMessage(props).length > 0}
             message={getMessage(props)}
             barStyle={{
               backgroundColor: ColoursEnum.black,
               left: getMessage(props).length > 0 ? 'inherit' : '-100%',
+              bottom: 'inherit',
               marginTop: SpacingEnum.small,
               borderRadius: '0.2rem',
             }}

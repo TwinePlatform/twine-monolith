@@ -4,7 +4,12 @@ import { tableType } from '../tableType';
 
 describe('logsToAggregatedData', () => {
   test('SUCCESS - returns aggregated data without volunteer names', () => {
-    const columnHeaders = ['Activity', 'February 2018', 'March 2018', 'April 2018'];
+    const months = [
+      { id: 182, name: 'February 2018' },
+      { id: 183, name: 'March 2018' },
+      { id: 184, name: 'April 2018' },
+    ];
+
     const logs = [
       {
         userId: 3,
@@ -29,22 +34,32 @@ describe('logsToAggregatedData', () => {
       },
     ];
 
+    const activities = [
+      { id: 1, name: 'Digging Holes' },
+      { id: 2, name: 'Outdoor and practical work' },
+    ];
+
     const expected = logsToAggregatedData({
       logs,
-      columnHeaders,
       tableType: tableType.MonthByActivity,
+      xData: activities,
+      yData: months,
     });
+
     expect(expected).toEqual({
-      headers: ['Activity', 'February 2018', 'March 2018', 'April 2018'],
+      groupByX: 'Activity',
+      groupByY: 'Month',
       rows: [
         {
-          Activity: 'Digging Holes',
+          id: 1,
+          name: 'Digging Holes',
           'April 2018': {},
           'February 2018': {},
           'March 2018': { minutes: 2 },
         },
         {
-          Activity: 'Outdoor and practical work',
+          id: 2,
+          name: 'Outdoor and practical work',
           'April 2018': { hours: 2 },
           'February 2018': {},
           'March 2018': { hours: 2, minutes: 23 },
@@ -53,7 +68,6 @@ describe('logsToAggregatedData', () => {
       );
   });
   test('SUCCESS - returns aggregated data with volunteer names', () => {
-    const columnHeaders = ['Volunteer Name', 'Outdoor and practical work'];
     const logs = [
       {
         id: 1,
@@ -84,22 +98,36 @@ describe('logsToAggregatedData', () => {
       { id: 1, name: 'Crash Bandicoot' },
       { id: 3, name: 'Aku Aku' },
     ];
+    const activities = [
+      { id: 1, name: 'Digging Holes' },
+      { id: 2, name: 'Outdoor and practical work' },
+    ];
 
     const expected = logsToAggregatedData({
       logs,
-      columnHeaders,
       tableType: tableType.ActivityByName,
-      volunteers,
+      xData: volunteers,
+      yData: activities,
     });
     expect(expected).toEqual({
-      headers: ['Volunteer Name', 'Outdoor and practical work'],
+      groupByX: 'Volunteer Name',
+      groupByY: 'Activity',
       rows: [
-          { 'Outdoor and practical work': { minutes: 2 }, 'Volunteer Name': 'Aku Aku' },
-          { 'Outdoor and practical work': { hours: 4, minutes: 23 }, 'Volunteer Name': 'Crash Bandicoot' },
+        {
+          'Digging Holes': {},
+          'Outdoor and practical work': { minutes: 2 },
+          id: 3,
+          name: 'Aku Aku',
+        },
+        {
+          'Digging Holes': {},
+          'Outdoor and practical work': { hours: 4, minutes: 23 },
+          id: 1,
+          name: 'Crash Bandicoot' ,
+        },
       ]});
   });
   test('SUCCESS - days aggregates data with correct precision', () => {
-    const columnHeaders = ['Volunteer Name', 'Outdoor and practical work'];
     const logs = [
       {
         id: 1,
@@ -127,21 +155,30 @@ describe('logsToAggregatedData', () => {
       },
     ];
     const volunteers = [{ id: 1, name: 'Crash Bandicoot' }];
+    const activities = [
+      { id: 11, name: 'Digging Holes' },
+      { id: 12, name: 'Outdoor and practical work' },
+    ];
 
     const expected = logsToAggregatedData({
       logs,
-      columnHeaders,
       tableType: tableType.ActivityByName,
-      volunteers,
+      xData: volunteers,
+      yData: activities,
     });
     expect(expected).toEqual({
-      headers: ['Volunteer Name', 'Outdoor and practical work'],
+      groupByX: 'Volunteer Name',
+      groupByY: 'Activity',
       rows: [
-          { 'Outdoor and practical work': { hours: 1, minutes: 9 }, 'Volunteer Name': 'Crash Bandicoot' },
+        {
+          'Digging Holes': {},
+          'Outdoor and practical work': { hours: 1, minutes: 9 },
+          name: 'Crash Bandicoot',
+          id: 1,
+        },
       ]});
   });
   test('SUCCESS - deleted user have own row, name replaced with deleted', () => {
-    const columnHeaders = ['Volunteer Name', 'Outdoor and practical work'];
     const logs = [
       {
         id: 1,
@@ -169,19 +206,39 @@ describe('logsToAggregatedData', () => {
       },
     ];
     const volunteers = [{ id: 1, name: 'Crash Bandicoot' }];
+    const activities = [
+      { id: 1, name: 'Digging Holes' },
+      { id: 2, name: 'Outdoor and practical work' },
+    ];
 
     const expected = logsToAggregatedData({
       logs,
-      columnHeaders,
       tableType: tableType.ActivityByName,
-      volunteers,
+      xData: volunteers,
+      yData: activities,
     });
     expect(expected).toEqual({
-      headers: ['Volunteer Name', 'Outdoor and practical work'],
+      groupByX: 'Volunteer Name',
+      groupByY: 'Activity',
       rows: [
-        { 'Outdoor and practical work': { minutes: 45 }, 'Volunteer Name': 'Deleted User' },
-        { 'Outdoor and practical work': { minutes: 23 }, 'Volunteer Name': 'Deleted User' },
-        { 'Outdoor and practical work': { minutes: 17 }, 'Volunteer Name': 'Crash Bandicoot' },
+        {
+          'Digging Holes': {},
+          'Outdoor and practical work': { minutes: 45 },
+          id: 3,
+          name: 'Deleted User',
+        },
+        {
+          'Digging Holes': {},
+          'Outdoor and practical work': { minutes: 23 },
+          name: 'Deleted User',
+          id: 2,
+        },
+        {
+          'Digging Holes': {},
+          'Outdoor and practical work': { minutes: 17 },
+          name: 'Crash Bandicoot',
+          id: 1,
+        },
       ] });
   });
 });

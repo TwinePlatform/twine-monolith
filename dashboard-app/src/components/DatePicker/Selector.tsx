@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { SelectContainer } from '../Select';
-import { ColoursEnum } from '../../styles/design_system';
+import { ColoursEnum, Fonts } from '../../styles/design_system';
 
 
 /**
@@ -31,6 +31,7 @@ const Input = styled.input`
   background: transparent;
   color: ${ColoursEnum.black};
   cursor: pointer;
+  font-size: ${Fonts.size.body}
 `;
 
 

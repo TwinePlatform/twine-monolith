@@ -2,8 +2,10 @@ import moment from 'moment';
 import Months from '../../util/months';
 
 export interface TableTypeItem {
-  rowIdFromLogs: string;
-  getColumnIdFromLogs: (x: any) => string;
+  groupByX: string;
+  groupByY: string;
+  xIdFromLogs: string;
+  getYIdFromLogs: (x: any) => string;
 }
 interface TableType {
   ActivityByName: TableTypeItem;
@@ -20,15 +22,21 @@ const getMonthColumnId = (x: any) =>
 
 export const tableType: TableType = {
   ActivityByName: {
-    rowIdFromLogs: 'userId',
-    getColumnIdFromLogs: (x: any) => x.activity,
+    groupByX: 'Volunteer Name',
+    groupByY: 'Activity',
+    xIdFromLogs: 'userId',
+    getYIdFromLogs: (x: any) => x.activity,
   },
   MonthByActivity: {
-    rowIdFromLogs: 'activity',
-    getColumnIdFromLogs: getMonthColumnId,
+    groupByX: 'Activity',
+    groupByY: 'Month',
+    xIdFromLogs: 'activity',
+    getYIdFromLogs: getMonthColumnId,
   },
   MonthByName: {
-    rowIdFromLogs: 'userId',
-    getColumnIdFromLogs: getMonthColumnId,
+    groupByX: 'Volunteer Name',
+    groupByY: 'Month',
+    xIdFromLogs: 'userId',
+    getYIdFromLogs: getMonthColumnId,
   },
 };

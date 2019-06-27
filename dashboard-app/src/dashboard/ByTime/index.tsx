@@ -4,49 +4,33 @@ import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import DatePickerConstraints from './datePickerConstraints';
-import { CommunityBusinesses } from '../../api';
 import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
-import { displayErrors } from '../../components/ErrorParagraph';
 import { FullScreenBeatLoader } from '../../components/Loaders';
 import { H1 } from '../../components/Headings';
-import { DataTableProps } from '../../components/DataTable/types';
-import useRequest from '../../hooks/useRequest';
 import { DurationUnitEnum } from '../../types';
-import Months from '../../util/months';
-import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
-import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
-import { tableType } from '../dataManipulation/tableType';
+import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
-
-
-/**
- * Types
- */
-type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
+import TimeTabs from './TimeTabs';
+import Errors from '../../components/Errors';
+import useAggregateDataByTime from './useAggregateDataByTime';
+import { getTitleForMonthPicker } from '../util';
+import { LegendData } from '../../components/StackedBarChart/types';
+import { useErrors } from '../../hooks/useErrors';
 
 
 /**
  * Styles
  */
-const DataTable = styled(_DataTable)`
-  margin-top: 4rem;
-`;
-
 const Container = styled(Grid)`
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  width: 100% !important;
 `;
 
 
 /**
  * Helpers
  */
-const TABLE_TITLE = 'Volunteer Activity over Months';
 const initTableData = { headers: [], rows: [] };
-
 
 /**
  * Component
@@ -56,36 +40,20 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [sortBy, setSortBy] = useState(0);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
-  const [errors, setErrors] = useState();
-  const [aggData, setAggData] = useState();
   const [tableData, setTableData] = useState<TableData>(initTableData);
+  const [legendData, setLegendData] = useState<LegendData>([]);
+  const { data, loading, error, months } =
+    useAggregateDataByTime({ from: fromDate, to: toDate });
 
-  // onload request
-  const { data: logs, loading } = useRequest({
-    apiCall: CommunityBusinesses.getLogs,
-    params: { since: fromDate, until: toDate },
-    updateOn: [fromDate, toDate],
-    setErrors,
-    push: props.history.push,
-  });
-
-  // manipulate data on response
-  useAggDataOnRes({
-    data: { logs },
-    conditions: [logs],
-    updateOn: [logs, unit],
-    columnHeaders: ['Activity', ...Months.range(fromDate, toDate, Months.format.verbose)],
-    setErrors,
-    setAggData,
-    tableType: tableType.MonthByActivity,
-  });
+  // set and clear errors on response
+  const [errors, setErrors] = useErrors(error, data);
 
   // manipulate data for table
   useEffect(() => {
-    if (aggData) {
-      setTableData(aggregatedToTableData({ data: aggData, unit }));
+    if (!loading && data && months) {
+      setTableData(aggregatedToTableData({ data, unit, yData: months }));
     }
-  }, [aggData]);
+  }, [data, unit]);
 
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
@@ -95,8 +63,23 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   }, [tableData]);
 
   const downloadAsCsv = useCallback(() => {
-    downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
-  }, [aggData, fromDate, toDate, unit]);
+    if (!loading && data) {
+      downloadCsv({ data, fromDate, toDate, setErrors, fileName: 'by_time', unit });
+    } else {
+      setErrors({ Download: 'No data available to download' });
+    }
+  }, [data, fromDate, toDate, unit]);
+
+  const tabProps = {
+    data,
+    unit,
+    tableData,
+    sortBy,
+    onChangeSortBy,
+    title: getTitleForMonthPicker('Volunteer Activity per month', fromDate, toDate),
+    legendData,
+    setLegendData,
+  };
 
   return (
     <Container>
@@ -106,7 +89,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
         </Col>
       </Row>
       <Row center="xs">
-        <Col xs={9}>
+        <Col xs={12}>
           <UtilityBar
             dateFilter="month"
             datePickerConstraint={DatePickerConstraints}
@@ -117,28 +100,15 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
           />
         </Col>
       </Row>
-{ loading
-  ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
-  : (<Row center="xs">
-        <Col xs={9}>
-          {displayErrors(errors)}
-          {
-            tableData && (
-              <DataTable
-                {...tableData}
-                title={TABLE_TITLE}
-                sortBy={tableData.headers[sortBy]}
-                initialOrder="asc"
-                onChangeSortBy={onChangeSortBy}
-                showTotals
-              />
-            )
-          }
-        </Col>
-      </Row>)
-  }
+      <Errors errors={errors}/>
+      {
+        loading
+          ? <FullScreenBeatLoader color={ColoursEnum.purple} />
+          : <TimeTabs {...tabProps} />
+      }
     </Container>
   );
 };
 
 export default withRouter(ByTime);
+

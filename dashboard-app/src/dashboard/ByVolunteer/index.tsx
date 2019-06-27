@@ -1,52 +1,35 @@
 import React, { useState, useEffect, useCallback, FunctionComponent } from 'react';
+import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import styled from 'styled-components';
 
 import DatePickerConstraints from './datePickerConstraints';
-import _DataTable from '../../components/DataTable';
 import UtilityBar from '../../components/UtilityBar';
-import { DataTableProps } from '../../components/DataTable/types';
-import { displayErrors } from '../../components/ErrorParagraph';
 import { FullScreenBeatLoader } from '../../components/Loaders';
 import { H1 } from '../../components/Headings';
-import { CommunityBusinesses } from '../../api';
 import { DurationUnitEnum } from '../../types';
-import useRequest from '../../hooks/useRequest';
-import { useAggDataOnRes } from '../../hooks/useAggDataOnRes';
-import Months from '../../util/months';
-import { tableType } from '../dataManipulation/tableType';
-import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
+import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../styles/design_system';
-
-
-/**
- * Types
- */
-type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
+import VolunteerTabs from './VolunteerTabs';
+import Errors from '../../components/Errors';
+import useAggregateDataByVolunteer from './useAggregateDataByVolunteer';
+import { getTitleForMonthPicker } from '../util';
+import { LegendData } from '../../components/StackedBarChart/types';
+import { useErrors } from '../../hooks/useErrors';
 
 
 /**
  * Styles
  */
-const DataTable = styled(_DataTable)`
-  margin-top: 4rem;
-`;
-
 const Container = styled(Grid)`
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  width: 100% !important;
 `;
 
 
 /**
  * Helpers
  */
-const TABLE_TITLE = 'Volunteer Time per Month';
 const initTableData = { headers: [], rows: [] };
-
 
 /**
  * Component
@@ -54,46 +37,22 @@ const initTableData = { headers: [], rows: [] };
 const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
   const [sortBy, setSortBy] = useState(1);
-  const [volunteers, setVolunteers] = useState();
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
-  const [errors, setErrors] = useState();
-  const [aggData, setAggData] = useState();
+  const [legendData, setLegendData] = useState<LegendData>([]);
+  const { loading, data, error, months } =
+    useAggregateDataByVolunteer({ from: fromDate, to: toDate });
 
-  const { data: logs, loading: loadingLogs } = useRequest({
-    apiCall: CommunityBusinesses.getLogs,
-    params: { since: fromDate, until: toDate },
-    updateOn: [fromDate, toDate],
-    setErrors,
-    push: props.history.push,
-  });
-
-  // onload request
-  const { loading: loadingVols } = useRequest({
-    apiCall: CommunityBusinesses.getVolunteers,
-    callback: setVolunteers,
-    setErrors,
-    push: props.history.push,
-  });
-
-  // manipulate data on response
-  useAggDataOnRes({
-    data: { logs, volunteers },
-    conditions: [logs, volunteers],
-    updateOn: [logs, unit, volunteers],
-    columnHeaders: ['Volunteer Name', ...Months.range(fromDate, toDate, Months.format.verbose)],
-    setErrors,
-    setAggData,
-    tableType: tableType.MonthByName,
-  });
+  // set and clear errors on response
+  const [errors, setErrors] = useErrors(error, data);
 
   // manipulate data for table
   useEffect(() => {
-    if (aggData) {
-      setTableData(aggregatedToTableData({ data: aggData, unit }));
+    if (!loading && data && months) {
+      setTableData(aggregatedToTableData({ data, unit, yData: months }));
     }
-  }, [aggData]);
+  }, [data, unit]);
 
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
@@ -103,8 +62,23 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
   }, [tableData]);
 
   const downloadAsCsv = useCallback(() => {
-    downloadCsv({ aggData, fromDate, toDate, setErrors, fileName: 'by_activity', unit });
-  }, [aggData, fromDate, toDate, unit]);
+    if (!loading && data) {
+      downloadCsv({ data, fromDate, toDate, setErrors, fileName: 'by_volunteer', unit });
+    } else {
+      setErrors({ Download: 'No data available to download' });
+    }
+  }, [data, fromDate, toDate, unit]);
+
+  const tabProps = {
+    data,
+    unit,
+    tableData,
+    sortBy,
+    onChangeSortBy,
+    title: getTitleForMonthPicker('Volunteer Time per month', fromDate, toDate),
+    legendData,
+    setLegendData,
+  };
 
   return (
     <Container>
@@ -114,7 +88,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
         </Col>
       </Row>
       <Row center="xs">
-        <Col xs={9}>
+        <Col xs={12}>
           <UtilityBar
             dateFilter="month"
             datePickerConstraint={DatePickerConstraints}
@@ -125,25 +99,12 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
           />
         </Col>
       </Row>
-      { loadingLogs || loadingVols
-      ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
-      : (<Row center="xs">
-        <Col xs={9}>
-          {displayErrors(errors)}
-          {
-            tableData && (
-              <DataTable
-                { ...tableData }
-                title={TABLE_TITLE}
-                sortBy={tableData.headers[sortBy]}
-                initialOrder="desc"
-                onChangeSortBy={onChangeSortBy}
-                showTotals
-              />
-            )
-          }
-        </Col>
-      </Row>)}
+      <Errors errors={errors}/>
+      {
+        loading
+          ? <FullScreenBeatLoader color={ColoursEnum.purple}/>
+          : <VolunteerTabs {...tabProps}/>
+      }
     </Container>
   );
 };
