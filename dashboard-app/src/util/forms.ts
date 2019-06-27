@@ -1,4 +1,4 @@
-import * as Joi from 'joi';
+import * as Joi from '@hapi/joi';
 import { Dictionary } from 'ramda';
 
 export const validateForm = <T>(schema: Joi.Schema) => (values: T): Partial<T> => {

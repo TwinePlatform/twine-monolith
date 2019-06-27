@@ -1,4 +1,4 @@
-import * as Joi from 'joi';
+import * as Joi from '@hapi/joi';
 import React from 'react';
 import styled from 'styled-components';
 import { Formik, Form as _Form, Field, FormikActions } from 'formik';
