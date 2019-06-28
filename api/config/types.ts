@@ -1,6 +1,7 @@
 import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import * as JWT from 'jsonwebtoken';
+import { RedisOptions } from 'ioredis';
 import { AppEnum } from '../src/types/internal';
 
 
@@ -55,12 +56,15 @@ type QrCodeConfig = {
   secret: string
 };
 
+type RedisConfig = Pick<RedisOptions, 'host' | 'port' | 'db' | 'tls'>;
+
 export type Config = {
   root: string
   env: Environment
   web: WebConfig
   platform: PlatformConfig
   knex: Knex.Config
+  redis: RedisConfig
   email: EmailConfig
   auth: AuthConfig
   qrcode: QrCodeConfig
