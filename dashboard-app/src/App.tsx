@@ -2,19 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 import { Route, Switch, BrowserRouter, withRouter } from 'react-router-dom';
 
-import PrivateRoute from './auth/components/PrivateRoute';
-import HoldingPage from './HoldingPage';
-import ByActivity from './dashboard/ByActivity/index';
-import ByTime from './dashboard/ByTime/index';
-import ByVolunteer from './dashboard/ByVolunteer/index';
-import Dashboard from './dashboard/Dashboard';
-import Login from './auth/pages/Login';
-import ResetPassword from './auth/pages/ResetPassword';
-import ForgotPassword from './auth/pages/ForgotPassword';
-import ErrorPage from './Error';
-import Navbar from './navigation/Navbar';
-import Footer from './components/Footer';
-import { ColoursEnum, Fonts } from './styles/design_system';
+import PrivateRoute from './features/auth/components/PrivateRoute';
+import HoldingPage from './features/HoldingPage';
+import ByActivity from './features/dashboard/ByActivity/index';
+import ByTime from './features/dashboard/ByTime/index';
+import ByVolunteer from './features/dashboard/ByVolunteer/index';
+import Dashboard from './features/dashboard/Dashboard';
+import Login from './features/auth/pages/Login';
+import ResetPassword from './features/auth/pages/ResetPassword';
+import ForgotPassword from './features/auth/pages/ForgotPassword';
+import ErrorPage from './features/Error';
+import Navbar from './features/navigation/Navbar';
+import Footer from './lib/ui/components/Footer';
+import { ColoursEnum, Fonts } from './lib/ui/design_system';
 
 /*
  * Styles
