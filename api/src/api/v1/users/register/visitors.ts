@@ -85,12 +85,12 @@ export default [
           // check role doesnt exist on user account
           if (await Roles.userHas(knex, user, RoleEnum.VISITOR)) {
             throw Boom.conflict(
-              `Visitor with this e-mail already registered`);
+              'Visitor with this e-mail already registered');
           }
           // check user is VOLUNTEER - only role allowed to have an additional role
           if (!(await Roles.userHas(knex, user, RoleEnum.VOLUNTEER))) {
             throw Boom.conflict(
-              `User with this e-mail already registered`);
+              'User with this e-mail already registered');
           }
           // currently not supporting roles at different cbs
           if (!(await Users.isMemberOf(knex, user, communityBusiness))) {

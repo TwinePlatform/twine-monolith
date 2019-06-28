@@ -236,7 +236,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     });
   });
 
-  describe('DELETE /community-businesses/me/volunteers/projects/{id}', async () => {
+  describe('DELETE /community-businesses/me/volunteers/projects/{id}', () => {
     test('can mark own project deleted', async () => {
       const res = await server.inject({
         method: 'DELETE',

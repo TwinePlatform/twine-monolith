@@ -58,7 +58,7 @@ export default {
         'via',
         'connect-time',
       ]),
-    }),
+    }) as any,
     attachUserId
   ),
 
