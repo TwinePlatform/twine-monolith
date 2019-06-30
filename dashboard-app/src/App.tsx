@@ -44,7 +44,7 @@ export const DashboardContext = createContext<any>({ unit: DurationUnitEnum.HOUR
  */
 
 
-const ProtectedRoutes = () => {
+const DashboardRoutes = () => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
   return(
     <DashboardContext.Provider value={{ unit, setUnit }}>
@@ -70,7 +70,7 @@ const AppRouter =
             <Route exact path="/password/reset/:token" component={ResetPassword} />
             <Route exact path="/password/forgot" component={ForgotPassword} />
             <Route exact path="/error/:code" component={ErrorPage} />
-            <PrivateRoute path="/*" component={ProtectedRoutes} />
+            <PrivateRoute path="/*" component={DashboardRoutes} />
           </Switch>
         </Content>
         <Footer />
