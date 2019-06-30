@@ -5,6 +5,7 @@ import { tap } from 'ramda';
 import { Promises } from 'twine-util';
 import { getConfig, Environment } from '../config';
 import { write } from './utils';
+import { headOrId } from 'twine-util/arrays';
 
 
 type Args = Partial<{ env: string; client: Knex }>;
@@ -24,8 +25,6 @@ const templates = {
     '',
   ].join('\n'),
 };
-
-const headOrId = <T>(xs: T | T[]) => Array.isArray(xs) ? xs[0] : xs;
 
 export const migrate = {
   make: async (name: string) => {

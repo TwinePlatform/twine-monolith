@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { Environment, Config } from './types';
 import { DeepPartial } from '../src/types/internal';
-import { envListOr, envNumberOr } from './util';
+import { envListOr, envNumberOr, parseRedisUrl } from './util';
 
 
 const config: DeepPartial<Config> = {
@@ -32,6 +32,7 @@ const config: DeepPartial<Config> = {
   email: {
     postmarkKey: process.env.POSTMARK_KEY_PRODUCTION,
   },
+  cache: { session: parseRedisUrl(process.env.REDIS_URL) },
 };
 
 export default config;

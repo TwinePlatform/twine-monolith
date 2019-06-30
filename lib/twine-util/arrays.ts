@@ -55,3 +55,5 @@ export const truncate = <T>(xs: T[], limit: number, placeholder: T) =>
   limit < xs.length
     ? xs.slice(0, limit).concat(placeholder)
     : xs;
+
+export const headOrId = <T>(xs: T | T[]) => Array.isArray(xs) ? xs[0] : xs;

@@ -1,7 +1,7 @@
 import * as Hapi from '@hapi/hapi';
+import { CatboxRedisOptions } from '@hapi/catbox-redis';
 import * as Knex from 'knex';
 import * as JWT from 'jsonwebtoken';
-import { RedisOptions } from 'ioredis';
 import { AppEnum } from '../src/types/internal';
 
 
@@ -56,7 +56,9 @@ type QrCodeConfig = {
   secret: string
 };
 
-type RedisConfig = Pick<RedisOptions, 'host' | 'port' | 'db' | 'tls'>;
+type CacheConfig = {
+  session: CatboxRedisOptions
+};
 
 export type Config = {
   root: string
@@ -64,7 +66,7 @@ export type Config = {
   web: WebConfig
   platform: PlatformConfig
   knex: Knex.Config
-  redis: RedisConfig
+  cache: CacheConfig
   email: EmailConfig
   auth: AuthConfig
   qrcode: QrCodeConfig

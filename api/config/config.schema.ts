@@ -70,12 +70,14 @@ export default Joi.object({
       directory: Joi.string().min(1).required(),
     }).required(),
   }).required(),
-  redis: Joi.object({
-    host: Joi.string().min(1).required(),
-    port: Joi.number().integer().min(0).max(2 ** 16 - 1).required(),
-    db: Joi.number().integer().min(0).max(10).required(),
-    tls: Joi.object(),
-  }),
+  cache: Joi.object({
+    session: {
+      host: Joi.string().min(1).required(),
+      port: Joi.number().integer().min(0).max(2 ** 16 - 1).required(),
+      database: Joi.number().integer().min(0).max(10).required(),
+      tls: Joi.object(),
+    },
+  }).required(),
   email: Joi.object({
     postmarkKey: Joi.string().required(),
     fromAddress: Joi.string().email().required(),
