@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, FunctionComponent } from 'react';
+import React, { useState, useEffect, useCallback, FunctionComponent, useContext } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
@@ -7,7 +7,6 @@ import DatePickerConstraints from './datePickerConstraints';
 import UtilityBar from '../components/UtilityBar';
 import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
 import { H1 } from '../../../lib/ui/components/Headings';
-import { DurationUnitEnum } from '../../../types';
 import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../../lib/ui/design_system';
@@ -19,6 +18,7 @@ import { LegendData } from '../components/StackedBarChart/types';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
+import { DashboardContext } from '../../../App';
 
 
 /**
@@ -37,7 +37,8 @@ const initTableData = { headers: [], rows: [] };
  * Component
  */
 const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
-  const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
+  const { unit, setUnit } = useContext(DashboardContext);
+  const [sortBy, setSortBy] = useState(1);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
@@ -77,7 +78,6 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
 
   const tabProps = {
     data,
-    unit,
     tableData,
     orderable,
     onChangeSortBy,

@@ -1,24 +1,23 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
 
 import _DataTable from '../components/DataTable';
 import { TabGroup } from '../components/Tabs';
 import { AggregatedData } from '../dataManipulation/logsToAggregatedData';
-import { DurationUnitEnum } from '../../../types';
 import { TableData } from '../dataManipulation/aggregatedToTableData';
 import StackedBarChart from '../components/StackedBarChart/index';
 import { LegendData } from '../components/StackedBarChart/types';
 import { TitleString } from '../components/Title';
 import { Orderable } from '../hooks/useOrderable';
 
+import { DashboardContext } from '../../../App';
 
 /*
  * Types
  */
 interface Props {
   data?: AggregatedData;
-  unit: DurationUnitEnum;
   tableData: TableData;
   orderable: Orderable;
   onChangeSortBy: (x: string) => void;
@@ -42,7 +41,6 @@ const DataTable = styled(_DataTable)`
 const VolunteerTabs: FunctionComponent<Props> = (props) => {
   const {
     data,
-    unit,
     tableData,
     onChangeSortBy,
     title,
@@ -50,6 +48,7 @@ const VolunteerTabs: FunctionComponent<Props> = (props) => {
     setLegendData,
     orderable,
   } = props;
+  const { unit } = useContext(DashboardContext);
 
   return (
     <Row center="xs">
@@ -62,7 +61,6 @@ const VolunteerTabs: FunctionComponent<Props> = (props) => {
                 setLegendData={setLegendData}
                 title={title}
                 data={data}
-                unit={unit}
                 xAxisTitle={'Months'}
                 yAxisTitle={`Volunteer ${unit}`}
                 defaultSelection={false}

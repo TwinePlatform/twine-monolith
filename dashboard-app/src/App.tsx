@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext, useState } from 'react';
 import styled from 'styled-components';
 import { Route, Switch, BrowserRouter, withRouter } from 'react-router-dom';
 
@@ -16,6 +16,7 @@ import ErrorPage from './features/Error';
 import Navbar from './features/navigation/Navbar';
 import Footer from './lib/ui/components/Footer';
 import { ColoursEnum, Fonts } from './lib/ui/design_system';
+import { DurationUnitEnum } from './types';
 
 /*
  * Styles
@@ -34,17 +35,29 @@ const Content = styled.div`
 
 
 /*
+ * Context
+ */
+export const DashboardContext = createContext<any>(null);
+
+/*
  * Helpers
  */
-const ProtectedRoutes = () => (
-  <Switch>
-    <Route exact path="/" component={Dashboard} />
-    <Route exact path="/activities" component={ByActivity} />
-    <Route exact path="/time" component={ByTime} />
-    <Route exact path="/volunteers" component={ByVolunteer} />
-    <Route exact path="/faqs" component={FAQPage} />
-  </Switch>
-);
+
+
+const ProtectedRoutes = () => {
+  const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
+  return(
+    <DashboardContext.Provider value={{ unit, setUnit }}>
+      <Switch>
+        <Route exact path="/" component={Dashboard} />
+        <Route exact path="/activity" component={ByActivity} />
+        <Route exact path="/time" component={ByTime} />
+        <Route exact path="/volunteer" component={ByVolunteer} />
+        <Route exact path="/faqs" component={FAQPage} />
+      </Switch>
+    </DashboardContext.Provider>
+  );
+};
 
 
 const AppRouter =

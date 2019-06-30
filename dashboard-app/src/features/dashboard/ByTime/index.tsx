@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, FunctionComponent } from 'react';
+import React, { useEffect, useState, useCallback, FunctionComponent, useContext } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
@@ -20,6 +20,7 @@ import { LegendData } from '../components/StackedBarChart/types';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
+import { DashboardContext } from '../../../App';
 
 
 /**
@@ -37,8 +38,9 @@ const initTableData = { headers: [], rows: [] };
 /**
  * Component
  */
-const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
-  const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
+const ByTime: FunctionComponent<RouteComponentProps> = () => {
+  const { unit } = useContext(DashboardContext);
+  const [sortBy, setSortBy] = useState(0);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
@@ -78,7 +80,6 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
 
   const tabProps = {
     data,
-    unit,
     tableData,
     onChangeSortBy,
     title: getTitleForMonthPicker(TitlesCopy.Time.subtitle, fromDate, toDate),
@@ -99,7 +100,6 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
           <UtilityBar
             dateFilter="month"
             datePickerConstraint={DatePickerConstraints}
-            onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
             onDownloadClick={downloadAsCsv}

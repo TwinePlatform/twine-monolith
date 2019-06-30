@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, FunctionComponent } from 'react';
+import React, { useEffect, useState, useCallback, FunctionComponent, useContext } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import styled from 'styled-components';
 import { Grid, Row, Col } from 'react-flexbox-grid';
@@ -20,6 +20,8 @@ import { getTitleForDayPicker } from '../util';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
+import { DashboardContext } from '../../../App';
+
 
 /**
  * Types
@@ -48,8 +50,8 @@ const initTableData = { headers: [], rows: [] };
  * Component
  */
 const ByActivity: FunctionComponent<RouteComponentProps> = () => {
-  const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
-
+  const { unit, setUnit } = useContext(DashboardContext);
+  const [sortBy, setSortBy] = useState(1);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
@@ -98,7 +100,6 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
           <UtilityBar
             dateFilter="day"
             datePickerConstraint={DatePickerConstraints}
-            onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
             onDownloadClick={downloadAsCsv}
