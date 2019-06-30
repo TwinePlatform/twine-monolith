@@ -37,7 +37,7 @@ const Content = styled.div`
 /*
  * Context
  */
-export const DashboardContext = createContext<any>(null);
+export const DashboardContext = createContext<any>({ unit: DurationUnitEnum.HOURS });
 
 /*
  * Helpers
