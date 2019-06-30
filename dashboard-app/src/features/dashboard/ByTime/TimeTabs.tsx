@@ -4,7 +4,6 @@ import { Row, Col } from 'react-flexbox-grid';
 import DataTable from '../components/DataTable';
 import { TabGroup } from '../components/Tabs';
 import { AggregatedData } from '../dataManipulation/logsToAggregatedData';
-import { DurationUnitEnum } from '../../../types';
 import { TableData } from '../dataManipulation/aggregatedToTableData';
 import StackedBarChart from '../components/StackedBarChart/index';
 import { LegendData } from '../components/StackedBarChart/types';

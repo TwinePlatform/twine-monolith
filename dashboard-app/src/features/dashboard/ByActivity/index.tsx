@@ -9,7 +9,6 @@ import UtilityBar from '../components/UtilityBar';
 import { H1 } from '../../../lib/ui/components/Headings';
 import { DataTableProps } from '../components/DataTable/types';
 import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
-import { DurationUnitEnum } from '../../../types';
 import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../../lib/ui/design_system';
@@ -50,8 +49,7 @@ const initTableData = { headers: [], rows: [] };
  * Component
  */
 const ByActivity: FunctionComponent<RouteComponentProps> = () => {
-  const { unit, setUnit } = useContext(DashboardContext);
-  const [sortBy, setSortBy] = useState(1);
+  const { unit } = useContext(DashboardContext);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);

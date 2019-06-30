@@ -8,7 +8,6 @@ import _DataTable from '../components/DataTable';
 import UtilityBar from '../components/UtilityBar';
 import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
 import { H1 } from '../../../lib/ui/components/Headings';
-import { DurationUnitEnum } from '../../../types';
 import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../../lib/ui/design_system';
