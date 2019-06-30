@@ -10,11 +10,13 @@ type Options = {
     Promise<Hapi.AuthenticationData & { isValid: boolean }>
 };
 
+
 export default {
   name: 'session id schema',
-  register: async (server: Hapi.Server) => {
+  register: async (server: Hapi.Server, options: any) => {
+
     server.register([
-      { plugin: Yar, options: { once: true } },
+      { plugin: Yar, options: { ...options, once: true } },
     ]);
 
     server.auth.scheme('session_id', (server, opts: Options) => {
