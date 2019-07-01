@@ -1,10 +1,12 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
+import { assocPath } from 'ramda';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
 import { User, Users, Organisation, Organisations } from '../../../../models';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('PUT /users/{userId}', () => {
@@ -44,14 +46,14 @@ describe('PUT /users/{userId}', () => {
 
   describe('PUT /users/me', () => {
     test('can perform partial update of user model', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/users/me',
         payload: {
           name: 'Wheatley',
         },
         credentials,
-      });
+      }));
 
       const { modifiedAt, createdAt, deletedAt, password, qrCode, ...rest } = user;
 
@@ -64,7 +66,7 @@ describe('PUT /users/{userId}', () => {
     });
 
     test('can perform full update of user model', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/users/me',
         payload: {
@@ -80,7 +82,7 @@ describe('PUT /users/{userId}', () => {
           ethnicity: 'prefer not to say',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -103,7 +105,7 @@ describe('PUT /users/{userId}', () => {
     });
 
     test('can change casing on case-insensitive fields of user model', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/users/me',
         payload: {
@@ -111,7 +113,7 @@ describe('PUT /users/{userId}', () => {
           email: '1@APERTUREscience.com',
         },
         credentials,
-      });
+      }));
 
       const { modifiedAt, createdAt, deletedAt, password, qrCode, ...rest } = user;
 
@@ -127,7 +129,7 @@ describe('PUT /users/{userId}', () => {
     });
 
     test('bad update data returns 400', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/users/me',
         payload: {
@@ -135,38 +137,29 @@ describe('PUT /users/{userId}', () => {
           ethnicity: 'thisisprobablynotaethnicity',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
 
     test('idempotency', async () => {
-      const res1 = await server.inject({
+      const res1 = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/users/me',
         payload: {
           name: 'Wheatley',
         },
         credentials,
-      });
+      }));
 
-      const res2 = await server.inject({
+      const res2 = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/users/me',
         payload: {
           name: 'Wheatley',
         },
-        credentials: {
-          ...credentials,
-          user: {
-            ...credentials.user,
-            user: {
-              ...credentials.user.user,
-              name: 'Wheatley',
-            },
-          },
-        },
-      });
+        credentials: assocPath(['user', 'user', 'name'], 'Wheatley', credentials),
+      }));
 
       expect(res1.statusCode).toBe(200);
       expect(res2.statusCode).toBe(200);
@@ -176,14 +169,14 @@ describe('PUT /users/{userId}', () => {
 
   describe('PUT /users/{userId}', () => {
     test('can perform partial update of user model', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: `/v1/users/${visitor.id}`,
         payload: {
           name: 'Tubby',
         },
         credentials,
-      });
+      }));
 
       const { modifiedAt, createdAt, deletedAt, password, qrCode, ...rest } = visitor;
 
@@ -196,7 +189,7 @@ describe('PUT /users/{userId}', () => {
     });
 
     test('can perform full update of user model', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: `/v1/users/${visitor.id}`,
         payload: {
@@ -212,7 +205,7 @@ describe('PUT /users/{userId}', () => {
           ethnicity: 'prefer not to say',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -235,7 +228,7 @@ describe('PUT /users/{userId}', () => {
     });
 
     test('can change casing on case-insensitive fields of user model', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: `/v1/users/${visitor.id}`,
         payload: {
@@ -243,7 +236,7 @@ describe('PUT /users/{userId}', () => {
           email: '1498@apertureSCIENCE.com',
         },
         credentials,
-      });
+      }));
 
       const { modifiedAt, createdAt, deletedAt, password, qrCode, ...rest } = visitor;
 
@@ -259,7 +252,7 @@ describe('PUT /users/{userId}', () => {
     });
 
     test('bad update data returns 400', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: `/v1/users/${visitor.id}`,
         payload: {
@@ -267,29 +260,29 @@ describe('PUT /users/{userId}', () => {
           ethnicity: 'thisisprobablynotaethnicity',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
 
     test('idempotency', async () => {
-      const res1 = await server.inject({
+      const res1 = await server.inject(injectCfg({
         method: 'PUT',
         url: `/v1/users/${visitor.id}`,
         payload: {
           name: 'Tubby',
         },
         credentials,
-      });
+      }));
 
-      const res2 = await server.inject({
+      const res2 = await server.inject(injectCfg({
         method: 'PUT',
         url: `/v1/users/${visitor.id}`,
         payload: {
           name: 'Tubby',
         },
         credentials,
-      });
+      }));
 
       expect(res1.statusCode).toBe(200);
       expect(res2.statusCode).toBe(200);

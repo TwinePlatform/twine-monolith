@@ -1,7 +1,7 @@
 /*
  * Authentication Strategies
  */
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as AuthJwt from 'hapi-auth-jwt2';
 import * as standardStrategy from '../../auth/strategies/standard';
 import * as externalStrategy from '../../auth/strategies/external';

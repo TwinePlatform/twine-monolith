@@ -9,7 +9,7 @@
  * See also
  * - api.json
  */
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { assocPath, has, nthArg, path } from 'ramda';
 import constants from './constants';
 import users from './users';

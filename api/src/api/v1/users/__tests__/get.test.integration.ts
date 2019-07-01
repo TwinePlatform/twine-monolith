@@ -1,11 +1,12 @@
 /*
  * User API functional tests
  */
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
 import { Organisation, User, Users, Organisations } from '../../../../models';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('API /users', () => {
@@ -30,11 +31,11 @@ describe('API /users', () => {
 
   describe('GET /users', () => {
     test('happy path', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({

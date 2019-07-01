@@ -1,6 +1,6 @@
-import * as Hapi from 'hapi';
-import * as Boom from 'boom';
-import * as Joi from 'joi';
+import * as Hapi from '@hapi/hapi';
+import * as Boom from '@hapi/boom';
+import * as Joi from '@hapi/joi';
 import { compare } from 'bcrypt';
 import { Users, Organisations } from '../../../models';
 import { email, DEPRECATED_password, response } from './schema';

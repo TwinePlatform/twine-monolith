@@ -1,10 +1,11 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../tests/utils/server';
 import { getConfig } from '../../../../../config';
 import { Users, Organisations } from '../../../../models';
 import pre from '../is_child_user';
 import { RoleEnum } from '../../../../models/types';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('Pre-requisite :: is_child_user', () => {
@@ -30,7 +31,7 @@ describe('Pre-requisite :: is_child_user', () => {
   });
 
   test('returns true when TWINE_ADMIN', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/foo/1',
       credentials: {
@@ -41,14 +42,14 @@ describe('Pre-requisite :: is_child_user', () => {
         },
         scope: [],
       },
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual({ is: true });
   });
 
   test('returns true when CB_ADMIN accesses own VISITOR', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/foo/1',
       credentials: {
@@ -59,14 +60,14 @@ describe('Pre-requisite :: is_child_user', () => {
         },
         scope: [],
       },
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual({ is: true });
   });
 
   test('returns true when CB_ADMIN accesses own VOLUNTEER', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/foo/6',
       credentials: {
@@ -78,14 +79,14 @@ describe('Pre-requisite :: is_child_user', () => {
         },
         scope: [],
       },
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual({ is: true });
   });
 
   test('returns false otherwise', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/foo/1',
       credentials: {
@@ -97,7 +98,7 @@ describe('Pre-requisite :: is_child_user', () => {
         },
         scope: [],
       },
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual({ is: false });

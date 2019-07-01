@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../tests/utils/server';
 import Roles from '../../../../models/role';
@@ -6,6 +6,7 @@ import { getConfig } from '../../../../../config';
 import { Users, CommunityBusinesses } from '../../../../models';
 import pre from '../is_parent_organisation';
 import { RoleEnum } from '../../../../models/types';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('Pre-requisite :: is_parent_organisation', () => {
@@ -31,7 +32,7 @@ describe('Pre-requisite :: is_parent_organisation', () => {
   });
 
   test('pre-req returns false when user is admin for community business', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/foo/1',
       credentials: {
@@ -42,7 +43,7 @@ describe('Pre-requisite :: is_parent_organisation', () => {
         },
         scope: [],
       },
-    });
+    }));
 
     expect(res.result).toEqual({ is: false });
   });
@@ -58,7 +59,7 @@ describe('Pre-requisite :: is_parent_organisation', () => {
       role: RoleEnum.VOLUNTEER,
     });
 
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/foo/2',
       credentials: {
@@ -69,7 +70,7 @@ describe('Pre-requisite :: is_parent_organisation', () => {
         },
         scope: [],
       },
-    });
+    }));
 
     expect(res.result).toEqual({ is: true });
 

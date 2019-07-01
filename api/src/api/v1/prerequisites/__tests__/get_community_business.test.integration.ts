@@ -1,9 +1,10 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../tests/utils/server';
 import { getConfig } from '../../../../../config';
 import pre from '../get_community_business';
 import { CommunityBusinesses, Organisations, CbAdmins, Users } from '../../../../models';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('Prerequisites :: getCommunityBusiness', () => {
@@ -54,11 +55,11 @@ describe('Prerequisites :: getCommunityBusiness', () => {
     const [user] = await CbAdmins.fromOrganisation(knex, organisation);
     const cb = await CommunityBusinesses.getOne(knex, { where: { id: organisation.id } });
 
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/foo/me',
       credentials: { scope: [], user: { organisation, user, roles: [] } },
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual(cb);
@@ -91,7 +92,7 @@ describe('Prerequisites :: getCommunityBusiness', () => {
       await CommunityBusinesses.getOne(knex, { where: { id: organisation.id } });
     const user = await Users.getOne(knex, { where: { name: 'Chell' } });
 
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/poo',
       credentials: {
@@ -102,7 +103,7 @@ describe('Prerequisites :: getCommunityBusiness', () => {
           roles: [],
         },
       },
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual(communityBusiness);

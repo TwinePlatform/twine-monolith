@@ -3,13 +3,13 @@
  */
 import { Config } from '../config/types';
 
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import Service, { EmailService } from './services/email';
 
 
 // Extend declaration from hapi
-declare module 'hapi' {
+declare module '@hapi/hapi' {
   interface Server {
     shutdown: (a?: boolean) => Promise<void>;
   }
@@ -18,7 +18,7 @@ declare module 'hapi' {
     knex: Knex;
   }
 
-  interface ApplicationState {
+  interface ServerApplicationState {
     config: Config;
     knex: Knex;
     EmailService: EmailService;

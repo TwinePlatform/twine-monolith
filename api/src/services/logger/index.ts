@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { Environment } from '../../../config/types';
 import serializers from './serializers';
 const hapiPino = require('hapi-pino');

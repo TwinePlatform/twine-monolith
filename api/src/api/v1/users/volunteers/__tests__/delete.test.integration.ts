@@ -1,10 +1,11 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { Organisation, User, Volunteers, CommunityBusinesses, Users } from '../../../../../models';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('DELETE /v1/users/volunteers/:id', () => {
@@ -53,23 +54,23 @@ describe('DELETE /v1/users/volunteers/:id', () => {
   });
 
   test(':: success - volunteer deleted', async () => {
-    const getRes = await server.inject({
+    const getRes = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/users/volunteers/6',
       credentials,
-    });
+    }));
 
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'DELETE',
       url: '/v1/users/volunteers/6',
       credentials,
-    });
+    }));
 
-    const getRes2 = await server.inject({
+    const getRes2 = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/users/volunteers/6',
       credentials,
-    });
+    }));
 
     // volunteer exists
     expect(getRes.statusCode).toBe(200);
@@ -81,30 +82,30 @@ describe('DELETE /v1/users/volunteers/:id', () => {
   });
 
   test(':: fail - user that is not a volunteer returns 404', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'DELETE',
       url: '/v1/users/volunteers/3',
       credentials,
-    });
+    }));
 
     expect(res.statusCode).toBe(404);
   });
 
   test(':: success - twine admin can delete any volunteer', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'DELETE',
       url: '/v1/users/volunteers/7',
       credentials: twAdminCreds,
-    });
+    }));
     expect(res.statusCode).toBe(200);
   });
 
   test(':: fail - org admin from another cb cannot delete volunteer', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'DELETE',
       url: '/v1/users/volunteers/7',
       credentials: otherCredentials,
-    });
+    }));
     expect(res.statusCode).toBe(403);
   });
 });

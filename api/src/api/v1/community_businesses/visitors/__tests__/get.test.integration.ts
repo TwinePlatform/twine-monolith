@@ -1,9 +1,10 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('API /community-businesses/{id}/visitors', () => {
@@ -33,11 +34,11 @@ describe('API /community-businesses/{id}/visitors', () => {
 
   describe('GET /community-businesses/{id}/visitors', () => {
     test('non-filtered query', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors',
         credentials,
-      });
+      }));
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(3);
       expect((<any> res.result).result.visits).not.toBeDefined();
@@ -49,18 +50,18 @@ describe('API /community-businesses/{id}/visitors', () => {
     });
 
     test('filtered query', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors?fields[]=name&filter[gender]=male',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: [{ name: 'Turret' }], meta: { total: 1 } });
     });
 
     test('filtered query with visits', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors?'
           + 'fields[]=name'
@@ -68,7 +69,7 @@ describe('API /community-businesses/{id}/visitors', () => {
           + '&filter[age][]=60'
           + '&visits=true',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -88,14 +89,14 @@ describe('API /community-businesses/{id}/visitors', () => {
     });
 
     test('filtered query without visits', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors?'
           + 'fields[]=name'
           + '&filter[age][]=0'
           + '&filter[age][]=20',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -106,7 +107,7 @@ describe('API /community-businesses/{id}/visitors', () => {
     });
 
     test('filtered query on activities', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors?'
           + 'fields[]=name'
@@ -115,7 +116,7 @@ describe('API /community-businesses/{id}/visitors', () => {
           + '&filter[visitActivity]=Free Running'
           + '&visits=true',
         credentials,
-      });
+      }));
 
       const result = (<any> res.result).result;
 
@@ -140,11 +141,11 @@ describe('API /community-businesses/{id}/visitors', () => {
     });
 
     test('query child organisation as TWINE_ADMIN', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/1/visitors',
         credentials: adminCreds,
-      });
+      }));
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(3);
       expect((<any> res.result).result.visits).not.toBeDefined();
@@ -156,11 +157,11 @@ describe('API /community-businesses/{id}/visitors', () => {
     });
 
     test('can filter users by name', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors?fields[]=name&filter[name]=Chell',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: [{ name: 'Chell' }], meta: { total: 1 } });
@@ -169,11 +170,11 @@ describe('API /community-businesses/{id}/visitors', () => {
 
   describe('GET /community-businesses/me/visitors/{userId}', () => {
     test('get specific visitor details of own cb w/o visits', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors/1?visits=false',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -185,11 +186,11 @@ describe('API /community-businesses/{id}/visitors', () => {
     });
 
     test('get specific visitor details of own cb w/ visits', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors/1?visits=true',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -206,11 +207,11 @@ describe('API /community-businesses/{id}/visitors', () => {
     });
 
     test('get 403 when trying to get non-child visitor', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors/4',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(403);
     });

@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import {
@@ -9,6 +9,7 @@ import {
   CbAdmins,
 } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('GET /v1/users/volunteers/:id', () => {
@@ -46,11 +47,11 @@ describe('GET /v1/users/volunteers/:id', () => {
   });
 
   test(':: success - volunteer admin can access volunteer from same org', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/users/volunteers/6',
       credentials: volunteerCreds,
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toEqual(expect.objectContaining({
@@ -59,11 +60,11 @@ describe('GET /v1/users/volunteers/:id', () => {
   });
 
   test(':: success - org admin can access volunteer from same org', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/users/volunteers/6',
       credentials: adminCreds,
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toEqual(expect.objectContaining({
@@ -72,21 +73,21 @@ describe('GET /v1/users/volunteers/:id', () => {
   });
 
   test(':: fail - non volunteer user returns a 404', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/users/volunteers/1',
       credentials: wrongAdminCreds,
-    });
+    }));
 
     expect(res.statusCode).toBe(404);
   });
 
   test(':: fail - volunteer admin from a different org cannot access user details', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/users/volunteers/6',
       credentials: wrongAdminCreds,
-    });
+    }));
 
     expect(res.statusCode).toBe(403);
   });

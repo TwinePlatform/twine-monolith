@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { init } from '../../../server';
 import { getConfig } from '../../../../config';
 import { getCookie } from '../../../../tests/utils/server';

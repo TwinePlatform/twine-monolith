@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import * as moment from 'moment';
 import * as MockDate from 'mockdate';
@@ -15,6 +15,7 @@ import {
   VolunteerLog,
 } from '../../../../models';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('API /community-businesses/me/volunteer-logs', () => {
@@ -60,11 +61,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
   describe('GET /community-businesses/me/volunteer-logs', () => {
     test('SUCCESS - can get own organisations logs as VOLUNTEER_ADMIN', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: vAdminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(9);
@@ -76,11 +77,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('SUCCESS - can get own organisations logs as CB_ADMIN', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(9);
@@ -92,22 +93,22 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('ERROR - cannot get own organisations logs as VOLUNTEER', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: volCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(403);
     });
 
     test('SUCCESS - can get own organisations logs between dates', async () => {
       const until = moment().utc().subtract(3, 'day');
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: `/v1/community-businesses/me/volunteer-logs?until=${until.toISOString()}`,
         credentials: vAdminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(6);
@@ -118,11 +119,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('SUCCESS - can get select fields for own organisations logs', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs?fields[0]=userName',
         credentials: vAdminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(9);
@@ -134,21 +135,21 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
   describe('GET /community-businesses/me/volunteer-logs/:id', () => {
     test('ERROR - cannot get own volunteer log as VOLUNTEER', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/2',
         credentials: volCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(403);
     });
 
     test('SUCCESS - can get other volunteer\'s log as VOLUNTEER_ADMIN', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/2',
         credentials: vAdminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -161,11 +162,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('SUCCESS - can get other volunteer\'s log as CB_ADMIN', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/2',
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -178,31 +179,31 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('SUCCESS - cannot get other volunteer\'s log as VOLUNTEER', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/9',
         credentials: volCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(403);
     });
 
     test('ERROR - cannot get non-existent log', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/142',
         credentials: vAdminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(404);
     });
 
     test('ERROR - cannot get existing log from other organisation', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/8',
         credentials: vAdminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(404);
     });
@@ -210,14 +211,14 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
   describe('PUT /community-businesses/me/volunteer-logs/:id', () => {
     test('SUCCESS - can partially update other users log', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/2',
         credentials: vAdminCreds,
         payload: {
           activity: 'Other',
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -228,7 +229,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     test('SUCCESS - can fully update other users log', async () => {
       const date = moment().startOf('month').add(3, 'days');
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/2',
         credentials: vAdminCreds,
@@ -237,7 +238,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           duration: { minutes: 17 },
           startedAt: date.toISOString(),
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -253,7 +254,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     test('SUCCESS - can update logs as CB_ADMIN', async () => {
       const date = moment().startOf('month').add(13, 'days');
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/2',
         credentials: adminCreds,
@@ -262,7 +263,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           duration: { minutes: 17 },
           startedAt: date.toISOString(),
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -278,7 +279,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     test('ERROR - cannot update logs of different organisation', async () => {
       const date = moment().startOf('month').add(23, 'days');
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteer-logs/8',
         credentials: adminCreds,
@@ -287,7 +288,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           duration: { minutes: 17 },
           startedAt: date.toISOString(),
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(404);
     });
@@ -295,59 +296,59 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
   describe('DELETE /community-businesses/me/volunteer-logs/:id', () => {
     test('SUCCESS - can mark other users log as deleted as VOLUNTEER_ADMIN', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/3',
         credentials: vAdminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: null });
 
-      const resGet = await server.inject({
+      const resGet = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
         credentials: vAdminCreds,
-      });
+      }));
 
       expect(resGet.statusCode).toBe(404);
     });
 
     test('SUCCESS - can mark other users log as deleted as CB_ADMIN', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/3',
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: null });
 
-      const resGet = await server.inject({
+      const resGet = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
         credentials: adminCreds,
-      });
+      }));
 
       expect(resGet.statusCode).toBe(404);
     });
 
     test('ERROR - cannot mark other users log as deleted as VOLUNTEER', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/3',
         credentials: volCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(403);
     });
 
     test('Error - cannot mark other users log as deleted from different organisation', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteer-logs/8',
         credentials: vAdminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(404);
     });
@@ -357,13 +358,13 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     test('SUCCESS - can create log for own user', async () => {
       const when = new Date();
 
-      const resCount1 = await server.inject({
+      const resCount1 = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: volCreds,
-      });
+      }));
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: volCreds,
@@ -375,13 +376,13 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           },
           startedAt: when.toISOString(),
         },
-      });
+      }));
 
-      const resCount2 = await server.inject({
+      const resCount2 = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: volCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -405,7 +406,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     test('SUCCESS - creating log without start date defaults to "now"', async () => {
       const before = new Date();
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: volCreds,
@@ -416,7 +417,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
             hours: 2,
           },
         },
-      });
+      }));
 
       const after = new Date();
 
@@ -428,7 +429,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('SUCCESS - can create log for other user if admin at CB', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: vAdminCreds,
@@ -440,7 +441,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
             hours: 2,
           },
         },
-      });
+      }));
 
       expect(res.statusCode).toEqual(200);
       expect(res.result).toEqual({
@@ -458,7 +459,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('ERROR - cannot create log for other user if not admin at CB', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: volCreds,
@@ -467,13 +468,13 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           activity: 'Office support',
           duration: { minutes: 20, hours: 2 },
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(403);
     });
 
     test('ERROR - cannot create log for other organisation', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: volCreds,
@@ -485,13 +486,13 @@ describe('API /community-businesses/me/volunteer-logs', () => {
             hours: 2,
           },
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
 
     test('ERROR - non-existent activity', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: volCreds,
@@ -502,13 +503,13 @@ describe('API /community-businesses/me/volunteer-logs', () => {
             hours: 2,
           },
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
 
     test('ERROR - malformed duration', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: volCreds,
@@ -518,13 +519,13 @@ describe('API /community-businesses/me/volunteer-logs', () => {
             foo: 20,
           },
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
 
     test('ERROR - negative duration', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: volCreds,
@@ -534,7 +535,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
             minutes: -1,
           },
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
@@ -542,11 +543,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
   describe('GET /community-businesses/me/volunteer-logs/summary', () => {
     test('SUCCESS - can get own summaries as VOLUNTEER', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/summary',
         credentials: volCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -562,11 +563,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('SUCCESS - can get own summaries as CB_ADMIN', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/summary',
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -583,11 +584,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
     test('SUCCESS - can get summaries between dates', async () => {
       const since = moment().subtract(5, 'days');
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: `/v1/community-businesses/me/volunteer-logs/summary?since=${since.toISOString()}`,
         credentials: volCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -603,11 +604,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('ERROR - cannot get other orgs summaries', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/3/volunteer-logs/summary',
         credentials: volCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(404);
     });
@@ -620,21 +621,21 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         duration: { minutes: 20 },
       }];
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: volCreds,
         payload: logs,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: null });
 
-      const resLogs = await server.inject({
+      const resLogs = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: volCreds,
-      });
+      }));
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(8);
@@ -652,21 +653,21 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         { activity: 'Shop/Sales', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
       ];
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: volCreds,
         payload: logs,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: null });
 
-      const resLogs = await server.inject({
+      const resLogs = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: volCreds,
-      });
+      }));
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(10);
@@ -684,21 +685,21 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         { activity: 'Shop/Sales', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
       ];
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: volCreds,
         payload: logs,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: null });
 
-      const resLogs = await server.inject({
+      const resLogs = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs?sort=startedAt&order=asc',
         credentials: volCreds,
-      });
+      }));
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(10);
@@ -714,32 +715,32 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     test('SUCCESS - empty array in payload does nothing', async () => {
       const logs: any[] = [];
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: volCreds,
         payload: logs,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: null });
 
-      const resLogs = await server.inject({
+      const resLogs = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: volCreds,
-      });
+      }));
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(7);
     });
 
     test('SUCCESS - can sync existing log', async () => {
-      const resGet = await server.inject({
+      const resGet = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
         credentials: vAdminCreds,
-      });
+      }));
 
       MockDate.set((<any> resGet.result).result.startedAt);
 
@@ -750,21 +751,21 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         { ...(<any> resGet.result).result, duration: { hours: 1, minutes: 34 } }
       );
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: vAdminCreds,
         payload: [log],
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: null });
 
-      const resCheck = await server.inject({
+      const resCheck = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
         credentials: vAdminCreds,
-      });
+      }));
 
       expect(resCheck.statusCode).toBe(200);
       expect(resCheck.result).toEqual({ result: expect.objectContaining(log) });
@@ -774,11 +775,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
 
     test('SUCCESS - can sync existing log for deletion', async () => {
-      const resGet = await server.inject({
+      const resGet = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
         credentials: vAdminCreds,
-      });
+      }));
 
       MockDate.set((<any> resGet.result).result.startedAt);
 
@@ -789,21 +790,21 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         { ...(<any> resGet.result).result, deletedAt: new Date().toISOString() }
       );
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: vAdminCreds,
         payload: [log],
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: null });
 
-      const resCheck = await server.inject({
+      const resCheck = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs/3',
         credentials: vAdminCreds,
-      });
+      }));
 
       expect(resCheck.statusCode).toBe(404);
 
@@ -822,21 +823,21 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         { activity: 'Shop/Sales', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
       ];
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: vAdminCreds,
         payload: logs,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: null });
 
-      const resLogs = await server.inject({
+      const resLogs = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteer-logs',
         credentials: vAdminCreds,
-      });
+      }));
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(12);
@@ -854,12 +855,12 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         { activity: 'Shop/Cafe work', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
       ];
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: volCreds,
         payload: logs,
-      });
+      }));
 
       expect(res.statusCode).toBe(403);
     });
@@ -871,31 +872,31 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: now },
       ];
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: volCreds,
         payload: logs,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
 
-      const resLogs = await server.inject({
+      const resLogs = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: volCreds,
-      });
+      }));
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(7);
     });
 
     test('ERROR - fails when trying to sync logs w/ same "startedAt" as existing log', async () => {
-      const resLogs = await server.inject({
+      const resLogs = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
         credentials: volCreds,
-      });
+      }));
 
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(7);
@@ -906,12 +907,12 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         { activity: 'Office support', duration: { minutes: 20 }, startedAt },
       ];
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: volCreds,
         payload: logs,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
@@ -921,12 +922,12 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         { activity: 'Office support', duration: { minutes: 20 }, userId: 1 },
       ];
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: vAdminCreds,
         payload: logs,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
@@ -936,12 +937,12 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         { activity: 'Doesn\'t exist', duration: { minutes: 20 }, userId: 1 },
       ];
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: vAdminCreds,
         payload: logs,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });

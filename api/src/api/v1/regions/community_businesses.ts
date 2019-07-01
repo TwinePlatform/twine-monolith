@@ -1,5 +1,5 @@
-import * as Hapi from 'hapi';
-import * as Boom from 'boom';
+import * as Hapi from '@hapi/hapi';
+import * as Boom from '@hapi/boom';
 import { pick, map, filter } from 'ramda';
 import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { response } from '../schema/response';

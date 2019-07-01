@@ -1,10 +1,11 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
@@ -41,23 +42,23 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
 
   describe('GET', () => {
     test(':: no fields returns empty response', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-logs/aggregates',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual({});
     });
 
     test(':: get aggregated visit logs with one field', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-logs/aggregates?'
           + 'fields[0]=visitActivity',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual({
@@ -66,14 +67,14 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
     });
 
     test(':: get aggregated visit logs with all fields', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-logs/aggregates?'
           + 'fields[0]=visitActivity&'
           + 'fields[1]=age&'
           + 'fields[2]=gender',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toEqual({
@@ -84,12 +85,12 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
     });
 
     test(':: unsupported field returns error', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-logs/aggregates?'
           + 'fields[0]=lightspeed',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
       expect((<any> res.result).error.message)

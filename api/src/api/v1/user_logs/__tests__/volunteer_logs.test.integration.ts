@@ -1,13 +1,15 @@
 /*
  * API functional tests
  */
-import * as Hapi from 'hapi';
-import { init } from '../../../../server';
+import * as Hapi from '@hapi/hapi';
 import * as moment from 'moment';
+import { assocPath } from 'ramda';
+import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Organisation, Users, Organisations } from '../../../../models';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
 import { RoleEnum } from '../../../../models/types';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('GET /volunteer-logs', () => {
@@ -31,11 +33,11 @@ describe('GET /volunteer-logs', () => {
   });
 
   test('success :: returns all logs', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/volunteer-logs',
       credentials,
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toHaveLength(9);
@@ -44,11 +46,11 @@ describe('GET /volunteer-logs', () => {
   test('success :: returns subset of logs with date querystring', async () => {
     const until = moment().utc().add(5, 'minute').toISOString();
     const since = moment().utc().subtract(5, 'day').add(5, 'minute').toISOString();
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: `/v1/volunteer-logs?since=${since}&until=${until}`,
       credentials,
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toHaveLength(5);
@@ -97,17 +99,11 @@ describe('GET /volunteer-logs', () => {
   });
 
   test('failure :: funding body cannot access as not implemented', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/volunteer-logs',
-      credentials: {
-        ...credentials,
-        user: {
-          ...credentials.user,
-          roles: [RoleEnum.FUNDING_BODY],
-        },
-      },
-    });
+      credentials: assocPath(['user', 'roles'], [RoleEnum.FUNDING_BODY], credentials),
+    }));
 
     expect(res.statusCode).toBe(403);
   });

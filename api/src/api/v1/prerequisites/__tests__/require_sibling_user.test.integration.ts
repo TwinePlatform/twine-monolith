@@ -1,10 +1,11 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../tests/utils/server';
 import { getConfig } from '../../../../../config';
 import { Users, Organisation, User, CommunityBusinesses, Volunteers } from '../../../../models';
 import pre from '../require_sibling_user';
 import { RoleEnum } from '../../../../models/types';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('Pre-requisite :: is_sibling_user', () => {
@@ -40,7 +41,7 @@ describe('Pre-requisite :: is_sibling_user', () => {
   });
 
   test('returns true when TWINE_ADMIN accesses any user', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/aliens/6',
       credentials: {
@@ -51,14 +52,14 @@ describe('Pre-requisite :: is_sibling_user', () => {
         },
         scope: [],
       },
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual({ isSiblingUser: true });
   });
 
   test('returns true when CB_ADMIN accesses user at the same org', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/aliens/6',
       credentials: {
@@ -69,14 +70,14 @@ describe('Pre-requisite :: is_sibling_user', () => {
         },
         scope: [],
       },
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual({ isSiblingUser: true });
   });
 
   test('returns true when VOLUNTEER_ADMIN accesses user at the same org', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/aliens/6',
       credentials: {
@@ -87,14 +88,14 @@ describe('Pre-requisite :: is_sibling_user', () => {
         },
         scope: [],
       },
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual({ isSiblingUser: true });
   });
 
   test('returns error when CB_ADMIN at another org accesses user', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/aliens/6',
       credentials: {
@@ -105,7 +106,7 @@ describe('Pre-requisite :: is_sibling_user', () => {
         },
         scope: [],
       },
-    });
+    }));
 
     expect(res.statusCode).toBe(403);
   });

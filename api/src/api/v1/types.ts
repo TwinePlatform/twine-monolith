@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { Dictionary } from 'ramda';
 import { ApiRequestQuery, ApiRequestBody } from './schema/request';
 import { ApiResponse } from './schema/response';
@@ -9,7 +9,7 @@ import { Omit } from '../../types/internal';
 import { RegionEnum, SectorEnum, RoleEnum } from '../../models/types';
 
 
-declare module 'hapi' {
+declare module '@hapi/hapi' {
   interface UserCredentials extends StandardUserCredentials {}
   interface AppCredentials extends ExternalAppCredentials {}
 }

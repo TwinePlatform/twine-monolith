@@ -1,10 +1,11 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
 import { getTrx } from '../../../../../tests/utils/database';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('API HOOK - on pre response', () => {
@@ -51,14 +52,14 @@ describe('API HOOK - on pre response', () => {
 
       expect(eventCheck).toHaveLength(0);
 
-      await server.inject({
+      await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors',
         credentials,
         headers: {
           origin: 'test:0000',
         },
-      });
+      }));
 
       // TODO: replace set timeout
       await new Promise((resolve) => setTimeout(resolve, 100));
@@ -84,23 +85,23 @@ describe('API HOOK - on pre response', () => {
 
       expect(eventCheck).toHaveLength(0);
 
-      await server.inject({
+      await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors',
         credentials,
         headers: {
           origin: 'test:0000',
         },
-      });
+      }));
 
-      await server.inject({
+      await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visitors',
         credentials,
         headers: {
           origin: 'test:0000',
         },
-      });
+      }));
 
       // check event is inserted
       const eventCheck2 = await trx('user_account_active_day')

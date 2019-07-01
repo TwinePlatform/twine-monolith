@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { Users } from '../../../models';
 import { query, response } from './schema';
 import { StandardCredentials } from '../../../auth/strategies/standard';

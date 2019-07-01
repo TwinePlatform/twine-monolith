@@ -1,10 +1,11 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
 import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('API v1 :: Community Businesses :: Visit Activities', () => {
@@ -51,11 +52,11 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
 
   describe('GET', () => {
     test(':: successfully gets all activities for own cb', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-activities',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: expect.arrayContaining(
@@ -89,22 +90,22 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     });
 
     test(':: get activities for child cb', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/2/visit-activities',
         credentials: twAdminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: [] });
     });
 
     test(':: try to get activities for non-child cb', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/1/visit-activities',
         credentials: otherCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(403);
     });
@@ -112,12 +113,12 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
 
   describe('PUT', () => {
     test(':: successfully updates a visit activity', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me/visit-activities/2',
         payload: { monday: true, category: 'Sports' },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -137,12 +138,12 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     });
 
     test(':: successfully change casing on a visit activity', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me/visit-activities/2',
         payload: { name: 'wear pink', category: 'Sports' },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -162,12 +163,12 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     });
 
     test(':: cannot update activity owned by different CB', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me/visit-activities/2',
         payload: { monday: true },
         credentials: otherCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(403);
     });
@@ -175,7 +176,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
 
   describe('POST', () => {
     test(':: successfully add a new activity', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/visit-activities',
         payload: {
@@ -183,7 +184,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
           category: 'Adult skills building',
         },
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual(
@@ -205,20 +206,20 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
 
   describe('DELETE', () => {
     test(':: successfully deletes an activity', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'DELETE',
         url: '/v1/community-businesses/me/visit-activities/1',
         credentials,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result.deletedAt).toBeTruthy();
 
-      const check = await server.inject({
+      const check = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-activities',
         credentials,
-      });
+      }));
 
       expect(
         (<any> check.result).result
@@ -228,21 +229,21 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     });
 
     test(':: any payload and/or querystring is ignored', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'DELETE',
         url: '/v1/community-businesses/me/visit-activities/1?foo=bar',
         credentials,
         payload: { activity: 2 },
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result.deletedAt).toBeTruthy();
 
-      const check = await server.inject({
+      const check = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-activities',
         credentials,
-      });
+      }));
 
       expect(
         (<any> check.result).result

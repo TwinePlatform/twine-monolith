@@ -1,9 +1,10 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { CommunityBusinesses, Organisation, User, Volunteers } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('API /community-businesses/me/volunteers/projects', () => {
@@ -33,11 +34,11 @@ describe('API /community-businesses/me/volunteers/projects', () => {
 
   describe('GET /community-businesses/me/volunteers/projects', () => {
     test('can fetch own projects', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects',
         credentials: volCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -49,11 +50,11 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     });
 
     test('cannot fetch other orgs projects', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/2/volunteers/projects',
         credentials: volCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(404);
     });
@@ -61,14 +62,14 @@ describe('API /community-businesses/me/volunteers/projects', () => {
 
   describe('POST /community-businesses/me/volunteers/projects', () => {
     test('can create new project for own org', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteers/projects',
         credentials: adminCreds,
         payload: {
           name: 'new project',
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -78,23 +79,23 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         }),
       });
 
-      const res2 = await server.inject({
+      const res2 = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects',
         credentials: adminCreds,
-      });
+      }));
 
       expect(res2.statusCode).toBe(200);
       expect((<any> res2.result).result).toHaveLength(3);
     });
 
     test('cannot create project with a duplicate name', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteers/projects',
         credentials: adminCreds,
         payload: { name: 'Party' },
-      });
+      }));
 
       expect(res.statusCode).toBe(409);
       expect(res.result)
@@ -103,11 +104,11 @@ describe('API /community-businesses/me/volunteers/projects', () => {
 
     // General {id} routes not implemented yet, remove the 'skip' when they are
     test.skip('cannot create new project for other org', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/community-businesses/2/volunteers/projects',
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(401);
     });
@@ -115,11 +116,11 @@ describe('API /community-businesses/me/volunteers/projects', () => {
 
   describe('GET /community-businesses/me/volunteers/projects/{id}', () => {
     test('can get single project', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: volCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -132,21 +133,21 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     });
 
     test('cannot get non-existent project', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects/99999',
         credentials: volCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(404);
     });
 
     test('cannot get project belonging to other CB', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/volunteers/projects/2',
         credentials: volCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(404);
     });
@@ -154,14 +155,14 @@ describe('API /community-businesses/me/volunteers/projects', () => {
 
   describe('PUT /community-businesses/me/volunteers/projects/{id}', () => {
     test('can update project name', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
           name: 'Foo',
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -174,14 +175,14 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     });
 
     test('can update casing on project name', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
           name: 'party',
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -194,27 +195,27 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     });
 
     test('cannot update organisationId', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
           organisationId: 3,
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
 
     test('cannot update name to already existing name', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
           name: 'Take over the world',
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(409);
       expect(res.result)
@@ -223,14 +224,14 @@ describe('API /community-businesses/me/volunteers/projects', () => {
 
     // General {id} routes not implemented yet, remove the 'skip' when they are
     test.skip('cannot update other organisations projects', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/2/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
           name: 'Foo',
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(401);
     });
@@ -238,33 +239,33 @@ describe('API /community-businesses/me/volunteers/projects', () => {
 
   describe('DELETE /community-businesses/me/volunteers/projects/{id}', () => {
     test('can mark own project deleted', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: null });
     });
 
     test('cannot mark non-existent project as deleted', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'DELETE',
         url: '/v1/community-businesses/me/volunteers/projects/999',
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(404);
     });
 
     // General {id} routes not implemented yet, remove the 'skip' when they are
     test.skip('cannot delete other organisations project', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'DELETE',
         url: '/v1/community-businesses/2/volunteers/projects/2',
         credentials: adminCreds,
-      });
+      }));
 
       expect(res.statusCode).toBe(401);
     });

@@ -22,7 +22,7 @@ describe('Config', () => {
         },
         security: {
           hsts: {
-            includeSubdomains: true,
+            includeSubDomains: true,
             maxAge: 31536000,
             preload: true,
           },
@@ -46,7 +46,7 @@ describe('Config', () => {
         },
         security: {
           hsts: {
-            includeSubdomains: true,
+            includeSubDomains: true,
             maxAge: 31536000,
             preload: true,
           },
@@ -74,7 +74,7 @@ describe('Config', () => {
         },
         security: {
           hsts: {
-            includeSubdomains: true,
+            includeSubDomains: true,
             maxAge: 31536000,
             preload: true,
           },

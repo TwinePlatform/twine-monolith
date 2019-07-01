@@ -27,7 +27,7 @@ const config: DeepPartial<Config> = {
       security: {
         hsts: {
           maxAge: 365 * 24 * 60 * 60,
-          includeSubdomains: true,
+          includeSubDomains: true,
           preload: true,
         },
       },

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import * as Joi from 'joi';
+import * as Joi from '@hapi/joi';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { Formik, Form as _Form } from 'formik';

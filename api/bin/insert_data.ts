@@ -2,7 +2,7 @@
  * DB CLI
  */
 import * as parse from 'minimist';
-import * as Joi from 'joi';
+import * as Joi from '@hapi/joi';
 import * as Knex from 'knex';
 import { getConfig } from '../config';
 import { insertData } from '../database/tools';

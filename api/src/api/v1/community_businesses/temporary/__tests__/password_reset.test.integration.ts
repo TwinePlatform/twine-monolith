@@ -1,4 +1,4 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { compare } from 'bcrypt';
 import { init } from '../../../../../server';
@@ -6,6 +6,7 @@ import { getConfig } from '../../../../../../config';
 import { User, Users, Organisations } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
 import { getTrx } from '../../../../../../tests/utils/database';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('GET /community-businesses/temporary/:id/password/reset', () => {
@@ -43,21 +44,21 @@ describe('GET /community-businesses/temporary/:id/password/reset', () => {
 
   test('success:: user TWINE_ADMIN successfully resets a password for a temp user', async () => {
     // create temp cb
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'POST',
       url: '/v1/community-businesses/register/temporary',
       credentials: twAdminCreds,
       payload: { orgName: 'Shinra Electric Power Company' },
-    });
+    }));
 
     const { communityBusiness: tempCb, cbAdmin: tempCbAdmin } = (<any> res.result).result;
 
     // reset password
-    const res2 = await server.inject({
+    const res2 = await server.inject(injectCfg({
       method: 'GET',
       url: `/v1/community-businesses/temporary/${tempCb.id}/password/reset`,
       credentials: twAdminCreds,
-    });
+    }));
 
     const newPassword = (<any> res2.result).result.password;
     const { password: hashedPw } = await Users.getOne(trx, { where: { id: tempCbAdmin.id } });
@@ -66,11 +67,11 @@ describe('GET /community-businesses/temporary/:id/password/reset', () => {
 
   test('fail:: does not work for non temp account', async () => {
 
-    const res2 = await server.inject({
+    const res2 = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/community-businesses/temporary/1/password/reset',
       credentials: twAdminCreds,
-    });
+    }));
 
     expect(res2.statusCode).toBe(403);
     expect((<any> res2.result).error.message).toEqual('Not a temporary organisation');

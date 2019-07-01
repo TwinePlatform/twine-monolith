@@ -1,10 +1,11 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { Organisation, User, Volunteers, CommunityBusinesses } from '../../../../../models';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('PUT /v1/users/volunteers/:id', () => {
@@ -39,18 +40,18 @@ describe('PUT /v1/users/volunteers/:id', () => {
   });
 
   test(':: success - volunteers details updated', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'PUT',
       url: '/v1/users/volunteers/6',
       payload: {
         name: 'Snake',
-        email: 'box@shadowmoses.ak',
+        email: 'box@shadowmoses.com',
         phoneNumber: '10101010101010',
         gender: 'prefer not to say',
         birthYear: 1972,
       },
       credentials,
-    });
+    }));
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toEqual(expect.objectContaining({
@@ -60,23 +61,23 @@ describe('PUT /v1/users/volunteers/:id', () => {
   });
 
   test(':: idempotency', async () => {
-    const res1 = await server.inject({
+    const res1 = await server.inject(injectCfg({
       method: 'PUT',
       url: '/v1/users/volunteers/6',
       payload: {
         name: 'Snake',
       },
       credentials,
-    });
+    }));
 
-    const res2 = await server.inject({
+    const res2 = await server.inject(injectCfg({
       method: 'PUT',
       url: '/v1/users/volunteers/6',
       payload: {
         name: 'Snake',
       },
       credentials,
-    });
+    }));
 
     expect(res1.statusCode).toBe(200);
     expect(res2.statusCode).toBe(200);
@@ -84,27 +85,27 @@ describe('PUT /v1/users/volunteers/:id', () => {
   });
 
   test(':: fail - unsupported payload returns 400', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'PUT',
       url: '/v1/users/volunteers/6',
       payload: {
         favouritePet: 'Snake',
       },
       credentials,
-    });
+    }));
 
     expect(res.statusCode).toBe(400);
   });
 
   test(':: fail - non volunteer cannot be updated', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'PUT',
       url: '/v1/users/volunteers/3',
       payload: {
         name: 'Snake',
       },
       credentials,
-    });
+    }));
 
     expect(res.statusCode).toBe(404);
   });

@@ -1,5 +1,5 @@
-import * as Hapi from 'hapi';
-import * as Boom from 'boom';
+import * as Hapi from '@hapi/hapi';
+import * as Boom from '@hapi/boom';
 import * as Knex from 'knex';
 import { compare } from 'bcrypt';
 import { Promises as P } from 'twine-util';

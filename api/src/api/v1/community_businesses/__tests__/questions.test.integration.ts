@@ -1,6 +1,7 @@
-import * as Hapi from 'hapi';
+import * as Hapi from '@hapi/hapi';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
+import { injectCfg } from '../../../../../tests/utils/inject';
 
 
 describe('API v1 :: Organisations :: Questions', () => {
@@ -16,11 +17,12 @@ describe('API v1 :: Organisations :: Questions', () => {
   });
 
   test('CLS benchmarks :: use DB ID', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/community-businesses/1/questions/g/cls',
       credentials: { scope: ['frontline'] },
-    });
+      strategy: 'external',
+    }));
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result)
@@ -28,11 +30,12 @@ describe('API v1 :: Organisations :: Questions', () => {
   });
 
   test('CLS benchmarks :: use 360 Giving ID', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/community-businesses/GB-COH-3205/questions/bf/cls',
       credentials: { scope: ['frontline'] },
-    });
+      strategy: 'external',
+    }));
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result)
@@ -40,11 +43,12 @@ describe('API v1 :: Organisations :: Questions', () => {
   });
 
   test('NPS benchmarks :: use DB ID', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/community-businesses/1/questions/e/cls',
       credentials: { scope: ['frontline'] },
-    });
+      strategy: 'external',
+    }));
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toEqual({
@@ -57,11 +61,12 @@ describe('API v1 :: Organisations :: Questions', () => {
   });
 
   test('NPS benchmarks :: use 360 Giving ID', async () => {
-    const res = await server.inject({
+    const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/v1/community-businesses/GB-COH-3205/questions/e/cls',
       credentials: { scope: ['frontline'] },
-    });
+      strategy: 'external',
+    }));
 
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toEqual({

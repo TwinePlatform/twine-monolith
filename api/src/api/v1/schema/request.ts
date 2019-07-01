@@ -9,7 +9,7 @@
  *
  * Used, overridden and extended by individual routes
  */
-import * as Joi from 'joi';
+import * as Joi from '@hapi/joi';
 import * as moment from 'moment';
 import { Dictionary } from 'ramda';
 import { Map } from '../../../types/internal';

@@ -24,8 +24,8 @@
  * - VOLUNTEERs & VISITORs will pass this check but cannot access these routes as they
  *   do not have the correct scope
  */
-import * as Hapi from 'hapi';
-import * as Boom from 'boom';
+import * as Hapi from '@hapi/hapi';
+import * as Boom from '@hapi/boom';
 import { Organisations } from '../../../models';
 import { RequireSiblingPreReq } from '../types';
 import { StandardCredentials } from '../../../auth/strategies/standard';
