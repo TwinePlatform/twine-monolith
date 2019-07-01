@@ -44,7 +44,7 @@ export const migrate = {
     const config = getConfig(env);
     const _client = client ? client : Knex(config.knex);
 
-    console.log(`Tearing down the "${config.env}" database\n`);
+    console.log(`\nTearing down the "${config.env}" database\n`);
 
     const tables = await _client('pg_catalog.pg_tables')
       .select('tablename')
