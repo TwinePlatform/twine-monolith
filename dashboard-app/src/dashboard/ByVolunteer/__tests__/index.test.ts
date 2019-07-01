@@ -1,5 +1,6 @@
 import { cleanup, waitForElement, fireEvent } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
+import MockDate from 'mockdate';
 import { renderWithHistory } from '../../../util/tests';
 import { axios } from '../../../api';
 import { logs, users } from '../../__data__/api_data';
@@ -14,10 +15,15 @@ describe('By Volunteer Page', () => {
   let mock: MockAdapter;
 
   beforeEach(() => {
+    MockDate.set('2019-06-30');
     mock = new MockAdapter(axios);
   });
 
   afterEach(cleanup);
+
+  afterAll(() => {
+    MockDate.reset();
+  });
 
   describe('Table view', () => {
     test('Success :: Display Title', async () => {
