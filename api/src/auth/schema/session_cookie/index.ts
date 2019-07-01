@@ -1,4 +1,5 @@
 import * as Hapi from '@hapi/hapi';
+import * as Boom from '@hapi/boom';
 import * as Yar from '@hapi/yar';
 import * as Cookie from 'cookie';
 
@@ -26,7 +27,7 @@ export default {
           const sid = extractSid(request, opts);
 
           if (!sid) {
-            return h.unauthenticated(new Error('No session id present in cookie or header'));
+            return h.unauthenticated(Boom.unauthorized('No session id present'));
           }
 
           try {
