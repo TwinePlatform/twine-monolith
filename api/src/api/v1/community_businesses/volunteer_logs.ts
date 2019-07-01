@@ -264,6 +264,16 @@ const routes: Hapi.ServerRoute[] = [
         if (!hasPermission) {
           return Boom.forbidden('Insufficient permission');
         }
+      } else {
+        const isVolunteer = await Roles.userHasAtCb(knex, {
+          userId: user.id,
+          organisationId: communityBusiness.id,
+          role: [RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN],
+        });
+
+        if (!isVolunteer) {
+          return Boom.forbidden('Only volunteers may add logs');
+        }
       }
 
       try {
