@@ -11,6 +11,7 @@ import _Card from '../../../../lib/ui/components/Card';
 import { H3 } from '../../../../lib/ui/components/Headings';
 import { ColoursEnum } from '../../../../lib/ui/design_system';
 import { FullWidthTextBox } from '../../../../lib/ui/components/FullWidthTextBox';
+import { TitleString, Title } from '../Title';
 
 
 /*
@@ -20,7 +21,7 @@ interface Props {
   data: ChartData<chartjs.ChartData>;
   xAxisTitle: string;
   yAxisTitle: string;
-  title: string;
+  title: TitleString;
   noActiveLegendText: string;
   isAllLegendDataInactive: boolean;
   tooltipUnit: string;
@@ -36,11 +37,6 @@ type HidableTextBoxProp = {
 const Card = styled(_Card)`
   background: ${ColoursEnum.white};
   height: 100%;
-  padding: 1rem;
-`;
-
-const Title = styled(H3)`
-  text-align: left;
 `;
 
 const HidableTextBox = styled(FullWidthTextBox)<HidableTextBoxProp>`
@@ -80,11 +76,7 @@ const Chart: FunctionComponent<Props> = (props) => {
 
   return (
     <Card>
-      <Row center="xs">
-        <Col xs={12}>
-          <Title>{title}</Title>
-        </Col>
-      </Row>
+      <Title title={title}/>
       <Row center="xs" middle="xs">
         <Col xs={12} md={9}>
         <HidableTextBox

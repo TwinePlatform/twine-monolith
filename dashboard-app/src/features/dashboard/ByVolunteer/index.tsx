@@ -29,6 +29,7 @@ const Container = styled(Grid)`
 /**
  * Helpers
  */
+const TABLE_TITLE = 'Who volunteers and the time they give';
 const initTableData = { headers: [], rows: [] };
 
 /**
@@ -83,7 +84,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     tableData,
     sortBy,
     onChangeSortBy,
-    title: getTitleForMonthPicker('Volunteer Time per month', fromDate, toDate),
+    title: getTitleForMonthPicker(TABLE_TITLE, fromDate, toDate),
     legendData,
     setLegendData,
   };

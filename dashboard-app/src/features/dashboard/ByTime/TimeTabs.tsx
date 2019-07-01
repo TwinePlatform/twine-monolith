@@ -8,6 +8,7 @@ import { DurationUnitEnum } from '../../../types';
 import { TableData } from '../dataManipulation/aggregatedToTableData';
 import StackedBarChart from '../components/StackedBarChart/index';
 import { LegendData } from '../components/StackedBarChart/types';
+import { TitleString } from '../components/Title';
 
 
 /*
@@ -19,7 +20,7 @@ interface Props {
   tableData: TableData;
   sortBy: number;
   onChangeSortBy: (x: string) => void;
-  title: string;
+  title: TitleString;
   legendData: LegendData;
   setLegendData: React.Dispatch<React.SetStateAction<LegendData>>;
 }

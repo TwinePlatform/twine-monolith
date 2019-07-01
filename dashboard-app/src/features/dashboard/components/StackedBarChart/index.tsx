@@ -13,6 +13,7 @@ import { AggregatedData } from '../../dataManipulation/logsToAggregatedData';
 import Legend from './Legend/index';
 import Chart from './Chart';
 import { LegendData } from './types';
+import { TitleString } from '../Title';
 
 
 /*
@@ -24,7 +25,7 @@ interface Props {
   unit: DurationUnitEnum;
   xAxisTitle: string;
   yAxisTitle: string;
-  title: string;
+  title: TitleString;
   legendData: LegendData;
   setLegendData: React.Dispatch<React.SetStateAction<LegendData>>;
 }

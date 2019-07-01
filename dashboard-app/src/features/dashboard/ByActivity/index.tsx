@@ -40,7 +40,7 @@ const Container = styled(Grid)`
 /**
  * Helpers
  */
-const TABLE_TITLE = 'Volunteer time on activities';
+const TABLE_TITLE = 'The activities volunteers deliver';
 const initTableData = { headers: [], rows: [] };
 
 
