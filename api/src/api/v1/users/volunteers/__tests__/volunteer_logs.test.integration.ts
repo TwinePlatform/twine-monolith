@@ -7,6 +7,7 @@ import { getConfig } from '../../../../../../config';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { User, Users, Organisation, Organisations, VolunteerLog } from '../../../../../models';
 import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
 describe('API /users/me/volunteer-logs', () => {
@@ -51,11 +52,11 @@ describe('API /users/me/volunteer-logs', () => {
 
   describe('GET /users/me/volunteers-logs', () => {
     test('can get own logs', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(7);
@@ -74,11 +75,11 @@ describe('API /users/me/volunteer-logs', () => {
       const since = moment().utc().subtract(6, 'day').toDate().toISOString();
       const until = moment().utc().subtract(5, 'day').toDate().toISOString();
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: `/v1/users/volunteers/me/volunteer-logs?since=${since}&until=${until}`,
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(1);
@@ -95,21 +96,21 @@ describe('API /users/me/volunteer-logs', () => {
     });
 
     test('can get no logs for non-volunteer', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        auth: { strategy: 'standard', credentials: nonVolCreds },
-      });
+        credentials: nonVolCreds,
+      }));
 
       expect(res.statusCode).toBe(403);
     });
 
     test('can get all logs in future by default', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        auth: { strategy: 'standard', credentials: volAdminCreds },
-      });
+        credentials: volAdminCreds,
+      }));
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(2);
@@ -136,11 +137,11 @@ describe('API /users/me/volunteer-logs', () => {
 
   describe('GET /users/me/volunteer-logs/{logId}', () => {
     test('can get own volunteer log', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -155,11 +156,11 @@ describe('API /users/me/volunteer-logs', () => {
     });
 
     test('can filter fields of own volunteer log', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1?fields[]=activity',
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -168,11 +169,11 @@ describe('API /users/me/volunteer-logs', () => {
     });
 
     test('cannot get other users volunteer log', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/9',
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       expect(res.statusCode).toBe(404);
     });
@@ -180,22 +181,22 @@ describe('API /users/me/volunteer-logs', () => {
 
   describe('PUT /users/me/volunteer-logs/{logId}', () => {
     test('can partial update own log', async () => {
-      const resPre = await server.inject({
+      const resPre = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       const log = <VolunteerLog> (<any> resPre.result).result;
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        auth: { strategy: 'standard', credentials },
+        credentials,
         payload: {
           activity: 'Committee work, AGM',
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -208,19 +209,19 @@ describe('API /users/me/volunteer-logs', () => {
     });
 
     test('can full update own log', async () => {
-      const resPre = await server.inject({
+      const resPre = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       const log = <VolunteerLog> (<any> resPre.result).result;
 
       const then = moment();
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        auth: { strategy: 'standard', credentials },
+        credentials,
         payload: {
           activity: 'Committee work, AGM',
           duration: {
@@ -231,7 +232,7 @@ describe('API /users/me/volunteer-logs', () => {
           startedAt: then.toISOString(),
           project: 'Take over the world',
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -251,14 +252,14 @@ describe('API /users/me/volunteer-logs', () => {
     });
 
     test('can unassign project from log', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        auth: { strategy: 'standard', credentials },
+        credentials,
         payload: {
           project: null,
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -270,40 +271,40 @@ describe('API /users/me/volunteer-logs', () => {
     });
 
     test('cannot re-assign log to another user', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        auth: { strategy: 'standard', credentials },
+        credentials,
         payload: {
           userId: 2,
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
 
     test('cannot re-assign log to another organisation', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        auth: { strategy: 'standard', credentials },
+        credentials,
         payload: {
           organisationId: 1,
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(400);
     });
 
     test('cannot update other user\'s log', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/users/volunteers/me/volunteer-logs/9',
-        auth: { strategy: 'standard', credentials },
+        credentials,
         payload: {
           activity: 'Committee work, AGM',
         },
-      });
+      }));
 
       expect(res.statusCode).toBe(404);
     });
@@ -311,28 +312,28 @@ describe('API /users/me/volunteer-logs', () => {
 
   describe('DELETE /users/me/volunteer-logs', () => {
     test('can mark own volunteer log as deleted', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'DELETE',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: null });
 
-      const res2 = await server.inject({
+      const res2 = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/1',
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       expect(res2.statusCode).toBe(404);
 
-      const res3 = await server.inject({
+      const res3 = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       expect(res3.statusCode).toBe(200);
       expect((<any> res3.result).result).toHaveLength(6);
@@ -340,11 +341,11 @@ describe('API /users/me/volunteer-logs', () => {
     });
 
     test('cannot mark other user\'s volunteer log as deleted', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'DELETE',
         url: '/v1/users/volunteers/me/volunteer-logs/9',
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       expect(res.statusCode).toBe(404);
     });
@@ -352,11 +353,11 @@ describe('API /users/me/volunteer-logs', () => {
 
   describe('GET /users/volunteers/me/volunteer-logs/summary', () => {
     test('can get own summary', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs/summary',
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -374,11 +375,11 @@ describe('API /users/me/volunteer-logs', () => {
       const then = moment().utc().subtract(6, 'day').startOf('day').toISOString();
       const now = moment().utc().subtract(4, 'day').endOf('day').toISOString();
 
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: `/v1/users/volunteers/me/volunteer-logs/summary?since=${then}&until=${now}`,
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
@@ -393,11 +394,11 @@ describe('API /users/me/volunteer-logs', () => {
     });
 
     test('cannot get other users summary', async () => {
-      const res = await server.inject({
+      const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/4/volunteer-logs/summary',
-        auth: { strategy: 'standard', credentials },
-      });
+        credentials,
+      }));
 
       expect(res.statusCode).toBe(404);
     });
