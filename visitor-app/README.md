@@ -1,5 +1,4 @@
 # Twine Visitor App
-![travis badge](https://img.shields.io/travis/TwinePlatform/twine-visitor.svg) ![coverage badge](https://img.shields.io/codecov/c/github/TwinePlatform/twine-visitor.svg)
 
 A user data-collection service for [Power to Change](http://www.powertochange.org.uk/)'s [Twine](http://www.twine-together.com/) platform. See it in action at [visitor.twine-together.com](https://visitor.twine-together.com).
 
