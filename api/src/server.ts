@@ -8,7 +8,7 @@ import v1 from './api/v1';
 import setup from './setup';
 import { Config } from '../config/types';
 import Logger from './services/logger';
-import Caches from './services/cache';
+import Caches from './cache';
 
 
 const queryParser = (raw: Dictionary<string>) => qs.parse(qs.stringify(raw));

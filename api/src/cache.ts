@@ -1,5 +1,5 @@
 import * as CatboxRedis from '@hapi/catbox-redis';
-import { Config } from '../../../config';
+import { Config } from '../config';
 
 
 export const SessionCacheConfig = (config: Config) => {
