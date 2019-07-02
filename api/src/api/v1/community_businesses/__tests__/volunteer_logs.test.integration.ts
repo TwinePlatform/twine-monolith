@@ -355,7 +355,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
   });
 
   describe('POST /community-businesses/me/volunteer-logs', () => {
-    test('SUCCESS - can create log for own user', async () => {
+    test('SUCCESS - can create log for own volunteer user', async () => {
       const when = new Date();
 
       const resCount1 = await server.inject(injectCfg({
@@ -465,6 +465,20 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         credentials: volCreds,
         payload: {
           userId: user.id,
+          activity: 'Office support',
+          duration: { minutes: 20, hours: 2 },
+        },
+      }));
+
+      expect(res.statusCode).toBe(403);
+    });
+
+    test('ERROR - cannot create log for self if admin at CB', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs',
+        credentials: adminCreds,
+        payload: {
           activity: 'Office support',
           duration: { minutes: 20, hours: 2 },
         },
