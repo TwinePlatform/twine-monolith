@@ -1,4 +1,4 @@
-import { cleanup, waitForElement, fireEvent } from 'react-testing-library';
+import { cleanup, waitForElement, fireEvent, wait } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import MockDate from 'mockdate';
 import { renderWithHistory } from '../../../../lib/util/tests';
@@ -83,6 +83,36 @@ describe('By Time Page', () => {
       expect(rows[0]).toHaveTextContent('Cafe5.6600020.333.33000000');
       expect(rows[1]).toHaveTextContent('Running away1.3300000001.330000');
       expect(firstHeader).toHaveTextContent('↑ Activity');
+    });
+
+    test('Sort on first column is ascending (A-Z) by default', async () => {
+      expect.assertions(4);
+
+      mock.onGet('/community-businesses/me/volunteer-logs').reply(200, { result: logs });
+      mock.onGet('/volunteer-activities').reply(200, { result: activities });
+
+      const tools = renderWithHistory(ByTime);
+      const tableTab = await waitForElement(() => tools.getByText('Table', { exact: true }));
+      fireEvent.click(tableTab);
+
+      const [header1, header2] = await waitForElement(() => [
+        tools.getByText('↑ Activity', { exact: true }),
+        tools.getByText('Total Hours', { exact: true }),
+      ]);
+
+      fireEvent.click(header2);
+      await wait();
+      fireEvent.click(header1);
+
+      const [sortedHeader, rows] = await waitForElement(() => [
+        tools.getByText('↑ Activity', { exact: true }),
+        tools.getAllByTestId('data-table-row'),
+      ]);
+
+      expect(sortedHeader).toHaveTextContent('↑ Activity');
+      expect(rows).toHaveLength(2);
+      expect(rows[0]).toHaveTextContent('Cafe5.6600020.333.33000000');
+      expect(rows[1]).toHaveTextContent('Running away1.3300000001.330000');
     });
   });
 
