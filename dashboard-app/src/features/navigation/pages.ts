@@ -41,7 +41,7 @@ export const PagesDict: PagesDictionary = {
     protected: true,
   },
   Volunteer: {
-    url: '/volunteer',
+    url: '/volunteers',
     component: ByVolunteer,
     title: TitlesCopy.Volunteers.title,
     protected: true,

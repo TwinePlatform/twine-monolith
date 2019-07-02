@@ -34,9 +34,9 @@ const AppContainer = styled.div`
 
 const ProtectedRoutes = () => (
   <Switch>
-    <Route exact path="/activity" component={ByActivity} />
+    <Route exact path="/activities" component={ByActivity} />
     <Route exact path="/time" component={ByTime} />
-    <Route exact path="/volunteer" component={ByVolunteer} />
+    <Route exact path="/volunteers" component={ByVolunteer} />
     <Route exact path="/" component={Dashboard} />
   </Switch>
 );
