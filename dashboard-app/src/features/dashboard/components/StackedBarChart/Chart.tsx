@@ -8,7 +8,6 @@ import * as chartjs from 'chart.js';
 import RoundedBar from './RoundedBar';
 import { getStackedGraphOptions, totalizer } from './utils/chartjsUtils';
 import _Card from '../../../../lib/ui/components/Card';
-import { H3 } from '../../../../lib/ui/components/Headings';
 import { ColoursEnum } from '../../../../lib/ui/design_system';
 import { FullWidthTextBox } from '../../../../lib/ui/components/FullWidthTextBox';
 import { TitleString, Title } from '../Title';
