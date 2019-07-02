@@ -26,12 +26,12 @@ describe('By Activity Page', () => {
     const tools = renderWithHistory(ByActivity);
 
     const [title, message] = await waitForElement(() => [
-      tools.getByText('By', { exact: false }),
+      tools.getByText('Activities', { exact: false }),
       tools.getByText('AVAILABLE', { exact: false }),
     ]);
 
-    expect(title).toHaveTextContent('By Activity');
-    expect(message).toHaveTextContent('NO DATA AVAILABLE');
+    expect(title.textContent).toBe('Activities');
+    expect(message.textContent).toBe('NO DATA AVAILABLE');
   });
 
   test('Render data to table', async () => {
@@ -44,14 +44,14 @@ describe('By Activity Page', () => {
     const tools = renderWithHistory(ByActivity);
 
     const [title] = await waitForElement(() => [
-      tools.getByText('By', { exact: false }),
+      tools.getByText('Activities', { exact: false }),
       tools.getByText('Cafe', { exact: true }),
       tools.getByText('Running away', { exact: true }),
       tools.getByText('Betty', { exact: true }),
       tools.getByText('Wilma', { exact: true }),
     ]);
 
-    expect(title).toHaveTextContent('By Activity');
+    expect(title).toHaveTextContent('Activity');
   });
 
   test('Sort on first column is ascending (A-Z) by default', async () => {

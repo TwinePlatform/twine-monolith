@@ -3,11 +3,11 @@ import { Pages } from '../pages';
 
 describe('Pages', () => {
   describe('matchPath', () => {
-    test('matches a static url: /activity', () => {
-      const match = Pages.matchPath('/activity');
+    test('matches a static url: /activities', () => {
+      const match = Pages.matchPath('/activities');
       expect(match).toEqual(expect.objectContaining({
-        url: '/activity',
-        title: 'Activity',
+        url: '/activities',
+        title: 'Activities',
       }));
     });
 
@@ -65,8 +65,8 @@ describe('Pages', () => {
       expect(Pages.getNavbarLinks().map((p) => p.title)).toEqual([
         'Home',
         'Time',
-        'Activity',
-        'Volunteer',
+        'Activities',
+        'Volunteers',
       ]);
     });
   });
