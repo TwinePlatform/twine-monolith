@@ -170,13 +170,18 @@ describe('POST /users/login', () => {
       url: '/v1/users/login',
       payload: {
         restrict: ['VOLUNTEER'],
-        email: '1498@aperturescience.com',
+        email: '1498@aperturescience.com', // This is VISITOR!
         password: 'CakeisaLi3!',
       },
     });
 
     expect(res.statusCode).toBe(403);
     expect(typeof res.headers['set-cookie']).toBe('undefined');
-    expect(res.result).toEqual({ error: expect.objectContaining({ statusCode: 403 }) });
+    expect(res.result).toEqual({
+      error: expect.objectContaining({
+        statusCode: 403,
+        message: 'User does not have required role',
+      }),
+    });
   });
 });
