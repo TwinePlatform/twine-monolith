@@ -18,7 +18,6 @@ import useAggregateDataByActivity from './useAggregateDataByActivity';
 import { TabGroup } from '../components/Tabs';
 import { getTitleForDayPicker } from '../util';
 import { useErrors } from '../../../lib/hooks/useErrors';
-import { Order } from 'twine-util/arrays';
 
 
 /**
