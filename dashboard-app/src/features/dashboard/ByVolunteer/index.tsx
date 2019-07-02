@@ -17,6 +17,7 @@ import useAggregateDataByVolunteer from './useAggregateDataByVolunteer';
 import { getTitleForMonthPicker } from '../util';
 import { LegendData } from '../components/StackedBarChart/types';
 import { useErrors } from '../../../lib/hooks/useErrors';
+import { TitlesCopy } from '../copy/titles';
 
 
 /**
@@ -29,7 +30,6 @@ const Container = styled(Grid)`
 /**
  * Helpers
  */
-const TABLE_TITLE = 'Who volunteers and the time they give';
 const initTableData = { headers: [], rows: [] };
 
 /**
@@ -84,7 +84,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     tableData,
     sortBy,
     onChangeSortBy,
-    title: getTitleForMonthPicker(TABLE_TITLE, fromDate, toDate),
+    title: getTitleForMonthPicker(TitlesCopy.Volunteers.subtitle, fromDate, toDate),
     legendData,
     setLegendData,
   };
@@ -93,7 +93,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
     <Container>
       <Row center="xs">
         <Col>
-          <H1>By Volunteer</H1>
+          <H1>{TitlesCopy.Volunteers.title}</H1>
         </Col>
       </Row>
       <Row center="xs">

@@ -9,6 +9,7 @@ import Login from '../auth/pages/Login';
 import ResetPassword from '../auth/pages/ResetPassword';
 import ForgotPassword from '../auth/pages/ForgotPassword';
 import ErrorPage from '../Error';
+import { TitlesCopy } from '../dashboard/copy/titles';
 
 
 type Page = {
@@ -28,21 +29,21 @@ export const PagesDict: PagesDictionary = {
     protected: true,
   },
   Activity: {
-    url: '/activity',
+    url: '/activities',
     component: ByActivity,
-    title: 'Activity',
+    title: TitlesCopy.Activities.title,
     protected: true,
   },
   Time: {
     url: '/time',
     component: ByTime,
-    title: 'Time',
+    title: TitlesCopy.Time.title,
     protected: true,
   },
   Volunteer: {
     url: '/volunteer',
     component: ByVolunteer,
-    title: 'Volunteer',
+    title: TitlesCopy.Volunteers.title,
     protected: true,
   },
   Login: {
@@ -69,9 +70,9 @@ export const PagesDict: PagesDictionary = {
 
 const NavBarOrder = [
   'Home',
-  'Time',
-  'Activity',
-  'Volunteer',
+  TitlesCopy.Time.title,
+  TitlesCopy.Activities.title,
+  TitlesCopy.Volunteers.title,
 ];
 
 

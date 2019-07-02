@@ -18,6 +18,7 @@ import useAggregateDataByActivity from './useAggregateDataByActivity';
 import { TabGroup } from '../components/Tabs';
 import { getTitleForDayPicker } from '../util';
 import { useErrors } from '../../../lib/hooks/useErrors';
+import { TitlesCopy } from '../copy/titles';
 
 
 /**
@@ -40,7 +41,6 @@ const Container = styled(Grid)`
 /**
  * Helpers
  */
-const TABLE_TITLE = 'The activities volunteers deliver';
 const initTableData = { headers: [], rows: [] };
 
 
@@ -93,7 +93,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
     <Container>
       <Row center="xs">
         <Col>
-          <H1>By Activity</H1>
+          <H1>{TitlesCopy.Activities.title}</H1>
         </Col>
       </Row>
       <Row center="xs">
@@ -120,7 +120,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
                     tableData && (
                       <DataTable
                         {...tableData}
-                        title={getTitleForDayPicker(TABLE_TITLE, fromDate, toDate)}
+                        title={getTitleForDayPicker(TitlesCopy.Activities.subtitle, fromDate, toDate)} // tslint:disable:max-line-length
                         sortBy={tableData.headers[sortBy]}
                         initialOrder="desc"
                         onChangeSortBy={onChangeSortBy}
