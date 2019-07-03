@@ -193,7 +193,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
   async destroy (client, log) {
     const preProcessLog = compose(
       transformForeignKeysToSubQueries(client, log.organisationId),
-      replaceConstantsWithForeignKeys,
+      (a: Dictionary<any>) => replaceConstantsWithForeignKeys<any>(a),
       VolunteerLogs.toColumnNames,
       dropUnwhereableUserFields
     );

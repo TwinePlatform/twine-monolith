@@ -25,10 +25,18 @@ import {
   VisitEvent,
   RegionEnum,
   SectorEnum,
+  VisitActivity,
 } from './types';
 import { Organisations } from './organisation';
 import { AgeList } from './age';
 import { applyQueryModifiers } from './applyQueryModifiers';
+
+const renameKeysToColumns = Objects.renameKeys({
+  name: 'visit_activity_name',
+  category: 'visit_activity_category_id',
+  createdAt: 'created_at',
+  modifiedAt: 'modified_at',
+});
 
 
 /*
@@ -426,12 +434,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
             .select('visit_activity_category_id')
             .where({ visit_activity_category_name: n }),
       }),
-      Objects.renameKeys({
-        name: 'visit_activity_name',
-        category: 'visit_activity_category_id',
-        createdAt: 'created_at',
-        modifiedAt: 'modified_at',
-      }),
+      (v: Omit<VisitActivity, 'id'>) => renameKeysToColumns<string | boolean>(v),
       omit(['id'])
     );
 

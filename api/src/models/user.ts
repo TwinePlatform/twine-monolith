@@ -5,7 +5,7 @@ import * as Knex from 'knex';
 import { compose, omit, filter, pick, invertObj, evolve } from 'ramda';
 import { hash } from 'bcrypt';
 import { Objects } from 'twine-util';
-import { Map } from '../types/internal';
+import { Map, Dictionary } from '../types/internal';
 import {
   User,
   UserRow,
@@ -213,7 +213,7 @@ export const Users: UserCollection = {
   async destroy (client, user) {
     const preProcessUser = compose(
       transformForeignKeysToSubQueries(client),
-      replaceConstantsWithForeignKeys,
+      (a: Dictionary<any>) => replaceConstantsWithForeignKeys<any>(a),
       Users.toColumnNames,
       dropUnwhereableUserFields
     );
