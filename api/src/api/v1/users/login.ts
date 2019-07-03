@@ -38,22 +38,23 @@ const route: Hapi.ServerRoute[] = [
       const user = await Users.getOne(knex, { where: { email } });
       if (! user) return Boom.unauthorized('Unknown account');
 
-      const authorisePassword = await compare(password, user.password);
-      if (!authorisePassword) return Boom.unauthorized('Incorrect password');
-
       const organisation = await Organisations.fromUser(knex, { where: { email } });
       if (!organisation) return Boom.unauthorized('User has no associated organisation');
 
       if (restrict) {
-        const hasRole = await Roles.userHasAtCb(
-          knex,
-          { userId: user.id, organisationId: organisation.id, role: restrict }
-        );
+        const hasRole = await Roles.userHasAtCb(knex, {
+          userId: user.id,
+          organisationId: organisation.id,
+          role: restrict,
+        });
 
         if (!hasRole) {
           return Boom.forbidden('User does not have required role');
         }
       }
+
+      const isPwdValid = await compare(password, user.password);
+      if (!isPwdValid) return Boom.unauthorized('Incorrect password');
 
       try {
         await Users.recordLogin(knex, user);

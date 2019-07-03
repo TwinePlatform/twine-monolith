@@ -163,4 +163,25 @@ describe('POST /users/login', () => {
     expect(typeof res.headers['set-cookie']).toBe('undefined');
     expect(res.result).toEqual({ error: expect.objectContaining({ statusCode: 400 }) });
   });
+
+  test(':: unsuccessful login | type body | mismatched role', async () => {
+    const res = await server.inject({
+      method: 'POST',
+      url: '/v1/users/login',
+      payload: {
+        restrict: ['VOLUNTEER'],
+        email: '1498@aperturescience.com', // This is VISITOR!
+        password: 'CakeisaLi3!',
+      },
+    });
+
+    expect(res.statusCode).toBe(403);
+    expect(typeof res.headers['set-cookie']).toBe('undefined');
+    expect(res.result).toEqual({
+      error: expect.objectContaining({
+        statusCode: 403,
+        message: 'User does not have required role',
+      }),
+    });
+  });
 });
