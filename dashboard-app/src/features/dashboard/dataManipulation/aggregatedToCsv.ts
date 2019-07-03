@@ -1,5 +1,6 @@
 import csv from 'fast-csv';
-import { pipe } from 'ramda';
+import { pathOr, pipe } from 'ramda';
+import { Arrays } from 'twine-util';
 import { AggregatedData } from './logsToAggregatedData';
 import { DurationUnitEnum } from '../../../types';
 import {
@@ -14,7 +15,7 @@ import Months from '../../../lib/util/months';
 const getStringContainingTotal = (xs: string[]) => xs.find((x) => x.includes('Total'));
 
 // tslint:disable-next-line: max-line-length
-export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEnum): Promise<string> =>
+export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEnum, sortBy: number): Promise<string> =>
   new Promise((resolve, reject) => {
     const { rows } = pipe(
       renameAllNameKeys,
@@ -26,10 +27,17 @@ export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEn
     const rowKeys = Object.keys(rows[0]);
     const totalHeader = getStringContainingTotal(rowKeys);
     const monthHeaders = rowKeys.filter((x) => x !== groupBy && x !== totalHeader);
-    const headers = [groupBy, totalHeader, ...monthHeaders];
+    const headers = totalHeader
+      ? [groupBy, totalHeader, ...monthHeaders]
+      : [groupBy, ...monthHeaders];
+
+    const sortedRows = Arrays.sort([
+      { accessor: pathOr('', [headers[sortBy]]), order: 'desc' },
+      { accessor: pathOr('', [groupBy]), order: 'asc' },
+    ], rows);
 
     csv.writeToString(
-      rows,
+      sortedRows,
       { headers },
       (err, res) => err ? reject(err) : resolve(res));
   });

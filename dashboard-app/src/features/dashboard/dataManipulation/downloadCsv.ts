@@ -3,7 +3,6 @@ import { aggregatedToCsv } from './aggregatedToCsv';
 import Months from '../../../lib/util/months';
 import { saveAs } from 'file-saver';
 import { AggregatedData, isDataEmpty } from './logsToAggregatedData';
-import { Dictionary } from 'ramda';
 import { DurationUnitEnum } from '../../../types';
 
 
@@ -13,16 +12,17 @@ interface Params {
   fromDate: Date;
   toDate: Date;
   unit: DurationUnitEnum;
+  sortBy: number;
 }
 
 // tslint:disable-next-line: max-line-length
-export const downloadCsv = async ({ data: aggData, fromDate, toDate, fileName, unit }: Params) => {
+export const downloadCsv = async ({ data: aggData, fromDate, toDate, fileName, unit, sortBy }: Params) => {
   if (isDataEmpty(aggData)) {
     throw new Error('No data available to download');
   }
 
   try {
-    const csv = await aggregatedToCsv(aggData, unit);
+    const csv = await aggregatedToCsv(aggData, unit, sortBy);
     const from = moment(fromDate).format(Months.format.filename);
     const to = moment(toDate).format(Months.format.filename);
     const file = new File([csv], `${fileName}_${from}-${to}.csv`, {
