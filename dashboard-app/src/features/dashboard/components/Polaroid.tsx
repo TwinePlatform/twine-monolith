@@ -26,6 +26,7 @@ const CaptionSection = styled.div`
 
 const Paragraph = styled(P)`
   margin-bottom: 2rem;
+  min-height: 2rem;
 `;
 
 const DefaultPicFiller = styled(Paragraph)`
