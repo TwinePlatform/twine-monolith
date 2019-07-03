@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { evolve, curry, omit, map, pipe, toPairs, fromPairs } from 'ramda';
+import { evolve, curry, omit, Dictionary } from 'ramda';
 import { Duration, MathUtil, Objects } from 'twine-util';
 import { DurationUnitEnum } from '../../../types';
 import { AggregatedData } from './logsToAggregatedData';
@@ -46,10 +46,10 @@ export const calculateTotalsUsing = (unit: DurationUnitEnum) => evolve({
   headers: ([first, ...rest]: string[]) => [first, `Total ${unit}`, ...rest],
   rows: (rows: AggregatedData['rows']) => rows.map((row) => {
     const _row = Objects.mapValues((v) => typeof v === 'object' ? toUnitDuration(unit, v) : v, row);
-    return {
-      ..._row,
-      [`Total ${unit}`]: round(Objects.reduceValues(add, 0, _row)),
-    };
+    return Object.assign(
+      { [`Total ${unit}`]: round(Objects.reduceValues(add, 0, _row)) },
+      _row
+    );
   }),
 });
 
@@ -64,10 +64,7 @@ export const removeIdInRows = (data: AggregatedData) => {
 }; // TODO: add test
 
 export const abbreviateMonths = (format: MonthsFormatEnum) => evolve({
-  headers: map((x) => abbreviateIfDateString(format, x)),
-  rows: pipe(
-    map(toPairs as any),
-    map(map(map((x) => abbreviateIfDateString(format, x)))) as any,
-    map(fromPairs)
-  ),
+  headers: (headers: string[]) => headers.map((x) => abbreviateIfDateString(format, x)),
+  rows: (rows: Dictionary<string | number>[]) => rows
+    .map((row) => Objects.mapKeys((k) => abbreviateIfDateString(format, k))(row)),
 }); // TODO: add test
