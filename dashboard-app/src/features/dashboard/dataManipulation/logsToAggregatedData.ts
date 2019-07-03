@@ -15,7 +15,7 @@ interface Params {
   yData: IdAndName[];
 }
 
-export type Row = Dictionary<string | Duration.Duration> & {};
+export type Row = Dictionary<string | Duration.Duration>;
 export interface AggregatedData {
   groupByX: string;
   groupByY: string;
