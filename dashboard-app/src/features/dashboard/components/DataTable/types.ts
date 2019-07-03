@@ -15,7 +15,7 @@ export type DataTableProps = {
   headers: string[]
   initialOrder?: Order
   sortBy?: string
-  onChangeSortBy?: (s: string) => void
+  onChangeSortBy?: (s: string) => Order | void
   rows: DataTableRow[]
   showTotals?: boolean
 };

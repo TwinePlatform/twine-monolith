@@ -59,6 +59,13 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     const idx = tableData.headers.indexOf(column);
     if (idx > -1) {
       setSortBy(idx);
+
+      // Requirement: If column being selected for sorting is "Volunteer Name"
+      //              (i.e. the first column), sort ascending (A-Z) instead of
+      //              descending (Z-A)
+      if (idx === 0) {
+        return 'asc';
+      }
     }
   }, [tableData]);
 

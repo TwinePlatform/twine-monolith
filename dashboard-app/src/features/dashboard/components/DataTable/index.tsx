@@ -63,8 +63,8 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
     if (sortBy === title) { // toggling order
       setOrder(order === 'desc' ? 'asc' : 'desc');
     } else { // sorting by new column
-      onChangeSortBy(title);
-      setOrder('desc');
+      const order = onChangeSortBy(title);
+      setOrder(order || 'desc');
     }
   }, [order, sortBy, headers]);
 
