@@ -3,19 +3,19 @@ import { DurationUnitEnum } from '../../../../types';
 
 
 describe('downloadCsv', () => {
-  test('Calls error callback on empty dataset', async () => {
-    const onError = jest.fn();
-    await downloadCsv({
+  test('Throws on empty dataset', async () => {
+    expect.assertions(1);
+
+    downloadCsv({
       data: { groupByX: '', groupByY: '', rows: [] },
       fromDate: new Date,
       toDate: new Date,
       fileName: '',
       unit: DurationUnitEnum.DAYS,
-      setErrors: onError,
-    });
-
-    expect(onError).toHaveBeenCalledTimes(1);
-    expect(onError)
-      .toHaveBeenLastCalledWith({ Download: 'There is no data available to download' });
+      sortBy: 0,
+    })
+      .catch((error) => {
+        expect(error.message).toBe('No data available to download');
+      });
   });
 });

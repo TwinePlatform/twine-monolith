@@ -1,4 +1,4 @@
-import { identity, descend, ascend, sortWith, path } from 'ramda';
+import { identity, descend, ascend, sortWith } from 'ramda';
 
 
 /**
