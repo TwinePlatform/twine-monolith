@@ -51,7 +51,7 @@ describe('By Activity Page', () => {
       tools.getByText('Wilma', { exact: true }),
     ]);
 
-    expect(title).toHaveTextContent('Activity');
+    expect(title).toHaveTextContent('Activities');
   });
 
   test('Sort on first column is ascending (A-Z) by default', async () => {
