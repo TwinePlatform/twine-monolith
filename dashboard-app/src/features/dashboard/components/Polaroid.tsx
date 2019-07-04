@@ -39,34 +39,35 @@ type PolaroidProps = {
   title: string
   caption: string
   callToAction?: string
-  picture?: (() => React.FunctionComponent) | string
+  placeHolder?: string
   disabled?: boolean
   onClick?: () => void,
 };
 
-const DefaultPicture: React.FunctionComponent = (props) => (
+const TopContainer: React.FunctionComponent <Pick<PolaroidProps, 'placeHolder'>> = (props) => {
+  return (
   <CardFiller>
-    <DefaultPicFiller>{props.children}</DefaultPicFiller>
+    {props.children
+      ? props.children
+      : <DefaultPicFiller>{props.placeHolder || ''}</DefaultPicFiller>}
   </CardFiller>
-);
+  );
+};
 
 const Polaroid: React.FunctionComponent<PolaroidProps> = (props) => {
   const {
+    children,
+    placeHolder,
     title,
     caption,
     callToAction,
-    picture = '',
     disabled = false,
     onClick = () => {},
   } = props;
 
-  const image = typeof picture === 'string'
-    ? () => <DefaultPicture>{picture}</DefaultPicture>
-    : () => <CardFiller>{picture()}</CardFiller>;
-
   return (
     <Card>
-      { image() }
+      <TopContainer placeHolder={placeHolder} children={children}/>
       <CaptionSection>
         <H2>{title}</H2>
         <Paragraph>{caption}</Paragraph>

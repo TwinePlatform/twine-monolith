@@ -8,6 +8,7 @@ export enum ColoursEnum {
   orange = '#FFBF00',
   purple = '#8000FF',
   red = '#F44336',
+  mustard = '#FFBF00',
 }
 
 export enum GraphColoursEnum {
