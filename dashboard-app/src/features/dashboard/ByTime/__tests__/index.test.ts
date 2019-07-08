@@ -36,11 +36,11 @@ describe('By Time Page', () => {
       fireEvent.click(tableTab);
 
       const [title, message] = await waitForElement(() => [
-        tools.getByText('By', { exact: false }),
+        tools.getByText('Time', { exact: false }),
         tools.getByText('AVAILABLE', { exact: false }),
       ]);
 
-      expect(title.textContent).toEqual('By Time');
+      expect(title.textContent).toEqual('Time');
       expect(message.textContent).toBe('NO DATA AVAILABLE');
     });
 

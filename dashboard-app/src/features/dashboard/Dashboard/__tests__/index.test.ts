@@ -10,9 +10,9 @@ describe('Dashboard Page', () => {
     const tools = renderWithHistory(Dashboard);
 
     await waitForElement(() => [
-      tools.getByText('Activity'),
+      tools.getByText('Activities'),
       tools.getByText('Time'),
-      tools.getByText('Volunteer'),
+      tools.getByText('Volunteers'),
       tools.getByText('Projects'),
     ]);
   });
@@ -27,23 +27,23 @@ describe('Dashboard Page', () => {
     await wait(() => expect(tools.history.location.pathname).toBe('/time'));
   });
 
-  test('Clicking activity goes to /activity', async () => {
+  test('Clicking activity goes to /activities', async () => {
     expect.assertions(1);
 
     const tools = renderWithHistory(Dashboard);
     const buttons = await waitForElement(() => tools.getAllByText('View data'));
     fireEvent.click(buttons[1]);
 
-    await wait(() => expect(tools.history.location.pathname).toBe('/activity'));
+    await wait(() => expect(tools.history.location.pathname).toBe('/activities'));
   });
 
-  test('Clicking volunteer goes to /volunteer', async () => {
+  test('Clicking volunteer goes to /volunteers', async () => {
     expect.assertions(1);
 
     const tools = renderWithHistory(Dashboard);
     const buttons = await waitForElement(() => tools.getAllByText('View data'));
     fireEvent.click(buttons[2]);
 
-    await wait(() => expect(tools.history.location.pathname).toBe('/volunteer'));
+    await wait(() => expect(tools.history.location.pathname).toBe('/volunteers'));
   });
 });

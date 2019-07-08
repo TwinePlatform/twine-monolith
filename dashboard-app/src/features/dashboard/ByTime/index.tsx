@@ -18,6 +18,7 @@ import useAggregateDataByTime from './useAggregateDataByTime';
 import { getTitleForMonthPicker } from '../util';
 import { LegendData } from '../components/StackedBarChart/types';
 import { useErrors } from '../../../lib/hooks/useErrors';
+import { TitlesCopy } from '../copy/titles';
 
 
 /**
@@ -71,7 +72,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
 
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
-      downloadCsv({ data, fromDate, toDate, fileName: 'by_time', unit, sortBy })
+      downloadCsv({ data, fromDate, toDate, fileName: 'time', unit, sortBy })
         .catch((error) => setErrors({ Download: error.message }));
     } else {
       setErrors({ Download: 'No data available to download' });
@@ -84,7 +85,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     tableData,
     sortBy,
     onChangeSortBy,
-    title: getTitleForMonthPicker('Volunteer Activity per month', fromDate, toDate),
+    title: getTitleForMonthPicker(TitlesCopy.Time.subtitle, fromDate, toDate),
     legendData,
     setLegendData,
   };
@@ -93,7 +94,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     <Container>
       <Row center="xs">
         <Col>
-          <H1>By Time</H1>
+          <H1>{TitlesCopy.Time.title}</H1>
         </Col>
       </Row>
       <Row center="xs">

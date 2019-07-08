@@ -37,11 +37,11 @@ describe('By Volunteer Page', () => {
       fireEvent.click(tableTab);
 
       const [title, message] = await waitForElement(() => [
-        tools.getByText('By', { exact: false }),
+        tools.getByText('Volunteers', { exact: false }),
         tools.getByText('AVAILABLE', { exact: false }),
       ]);
 
-      expect(title.textContent).toBe('By Volunteer');
+      expect(title.textContent).toBe('Volunteers');
       expect(message.textContent).toBe('NO DATA AVAILABLE');
     });
 

@@ -3,6 +3,7 @@
  */
 import { Dictionary } from 'ramda';
 import { Order } from 'twine-util/arrays';
+import { TitleString } from '../Title';
 
 
 /**
@@ -11,7 +12,7 @@ import { Order } from 'twine-util/arrays';
  * Define the public interface of the DataTable component
  */
 export type DataTableProps = {
-  title?: string
+  title?: TitleString
   headers: string[]
   initialOrder?: Order
   sortBy?: string
