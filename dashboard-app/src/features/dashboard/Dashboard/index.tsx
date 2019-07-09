@@ -6,7 +6,7 @@ import { H1 as Heading1 } from '../../../lib/ui/components/Headings';
 import { Pages } from '../../navigation/pages';
 import Polaroid from '../components/Polaroid';
 import { TitlesCopy } from '../copy/titles';
-import { DataCard } from '../components/DataCard';
+import { DataCard, LayoutMode } from '../components/DataCard';
 
 
 const H1 = styled(Heading1)`
@@ -17,6 +17,21 @@ const H1 = styled(Heading1)`
 /**
  * Component
  */
+
+const testProps = {
+  topText: ['Over the past ', '6 months'],
+  left: {
+    label: 'Most volunteer days were in',
+    data: ['Sept', 'July'],
+  },
+  right: {
+    label: 'hours each',
+    data: 600,
+    layoutMode: 'number' as LayoutMode,
+  },
+  bottomText: ['Least popular months were', 'Jan and March 2019'],
+};
+
 const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
   return (
     <Grid>
@@ -36,7 +51,7 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                 placeHolder="T"
                 onClick={() => Pages.navigateTo('Time', props.history.push)}
               >
-                <DataCard></DataCard>
+                <DataCard {...testProps}></DataCard>
               </Polaroid>
             </Col>
             <Col xs={6}>

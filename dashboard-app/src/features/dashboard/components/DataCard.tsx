@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { Paragraph, Bold } from '../../../lib/ui/components/Typography';
 import { ColoursEnum, Fonts } from '../../../lib/ui/design_system';
@@ -7,6 +7,19 @@ import { ColoursEnum, Fonts } from '../../../lib/ui/design_system';
 /*
  * Types
  */
+type TileDataPoint<T> = {
+  label: string
+  data: T
+};
+
+export type LayoutMode = 'number' | 'text';
+
+type TileProps = {
+  topText: string []
+  left: TileDataPoint<string[]>
+  right: TileDataPoint<number | string[]> & { layoutMode: LayoutMode }
+  bottomText: string []
+};
 
 /*
  * Styles
@@ -28,7 +41,7 @@ const TopTextContainer = styled.div`
 
 const MiddleTopLeftContainer = styled.div`
   // background: pink;
-  grid-area: 2 /1 /3 /2;
+  grid-area: 2 / 1 / 3 / 2;
   border-bottom: 0.5rem ${ColoursEnum.mustard} solid;
   align-self: end;
   text-align: left;
@@ -37,14 +50,14 @@ const MiddleTopLeftContainer = styled.div`
 
 const MiddleTopRightContainer = styled.div`
   // background: purple;
-  grid-area: 2 /2 /3 /3;
+  grid-area: 2 / 2 / 3 / 3;
   border-bottom: 0.5rem ${ColoursEnum.mustard} solid;
   align-self: end;
   text-align: right;
 `;
 const MiddleBottomRightContainer = styled.div`
   // background: purple;
-  grid-area: 3 /2 /3 /3;
+  grid-area: 3 / 2 / 3 / 3;
   margin-top: 0.25rem;
   text-align: right;
 `;
@@ -56,34 +69,42 @@ const BigText = styled(Paragraph)`
 
 const BottomContainer = styled.div`
   // background: green;
-  grid-area: 4 /1 /span 1 / span 2;
+  grid-area: 4 / 1 / span 1 / span 2;
   text-align: left;
   align-self: end;
   padding:
 `;
 
+const alternateBold = (xs: string[]) => (
+  <Paragraph>{xs.map((x, i) => {
+    return i % 2 > 0
+      ? (<Bold>{x}</Bold>)
+      : x;
+  })}</Paragraph>
+);
+
 /*
  * Component
  */
-export const DataCard = () => {
+export const DataCard: FunctionComponent<TileProps> = (props) => {
 
   return(
   <Grid>
     <TopTextContainer>
-      <Paragraph>Over the past <Bold>6 months</Bold></Paragraph>
+      {alternateBold(props.topText)}
     </TopTextContainer>
     <MiddleTopLeftContainer>
-      <Paragraph>Most volunteer days were in</Paragraph>
-      <Paragraph><Bold>Sept and July</Bold></Paragraph>
+      <Paragraph>{props.left.label}</Paragraph>
+      <Paragraph><Bold>{props.left.data.join(' and ')}</Bold></Paragraph>
     </MiddleTopLeftContainer>
     <MiddleTopRightContainer>
-      <BigText>600</BigText>
+      <BigText>{props.right.data}</BigText>
     </MiddleTopRightContainer>
     <MiddleBottomRightContainer>
-      <Paragraph>hours each</Paragraph>
+      <Paragraph>{props.right.label}</Paragraph>
     </MiddleBottomRightContainer>
     <BottomContainer>
-      <Paragraph>Over the past <Bold>6 months</Bold></Paragraph>
+      {alternateBold(props.bottomText)}
     </BottomContainer>
   </Grid>);
 };
