@@ -6,6 +6,8 @@ import { H1 as Heading1 } from '../../../lib/ui/components/Headings';
 import { Pages } from '../../navigation/pages';
 import Polaroid from '../components/Polaroid';
 import { TitlesCopy } from '../copy/titles';
+import { NumberDataCard, TextDataCard } from '../components/DataCard/index';
+import useDashboardStatistics from './useDashboardStatistics';
 
 
 const H1 = styled(Heading1)`
@@ -18,6 +20,22 @@ const H1 = styled(Heading1)`
  */
 
 const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
+  const { loading, error, data } = useDashboardStatistics();
+
+  if (!loading && !error && data) {
+    console.log('ACTIVITIES', data.mostActiveActivities);
+    console.log('MONTHS', data.mostActiveMonths);
+    console.log('VOLUNTEERS', data.mostActiveVolunteers);
+
+    // Activities tile
+    const activitiesTileProps = {
+      topText: '',
+      left: { label: '', data: data.mostActiveActivities.map((x) => x.label) },
+      right: { label: '', data: data.mostActiveActivities.map((x) => x.hours) },
+      bottomText: '',
+    };
+  }
+
   return (
     <Grid>
       <Row center="xs">
