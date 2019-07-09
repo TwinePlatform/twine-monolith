@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Paragraph, Bold } from '../../../../lib/ui/components/Typography';
 import { ColoursEnum, Fonts } from '../../../../lib/ui/design_system';
 import { TextTileProps, NumberTileProps, TileDataPoint } from './types';
+import { sentenceCreator } from './util';
 
 /*
  * Styles
@@ -64,7 +65,7 @@ const BottomContainer = styled.div`
 const alternateBold = (xs: string[]) => (
   <Paragraph>{xs.map((x, i) => {
     return i % 2 > 0
-      ? (<Bold>{x}</Bold>)
+      ? (<Bold key={`bold_${x}`}>{x}</Bold>)
       : x;
   })}</Paragraph>
 );
@@ -73,7 +74,7 @@ const alternateBold = (xs: string[]) => (
  * Components
  */
 const LeftContainer: FunctionComponent<TileDataPoint<string[]>> = (props) => {
-  const dataSentence = ['', ...props.data.join(' and ').split(' ').map((x) => `${x} `)];
+  const dataSentence = ['', ...sentenceCreator(props.data)];
   return (
     <MiddleTopLeftContainer>
       <Paragraph>{props.label}</Paragraph>
@@ -99,7 +100,7 @@ const TextRightContainer: FunctionComponent<TextTileProps['right']> = (props) =>
   return (
     <>
       <TextMiddleTopRightContainer>
-        {props.data.map((x) => (<Paragraph><Bold>{x}</Bold></Paragraph>))}
+        {props.data.map((x) => (<Paragraph key={`right_${x}`}><Bold>{x}</Bold></Paragraph>))}
       </TextMiddleTopRightContainer>
       <MiddleBottomRightContainer>
         <Paragraph>{props.label}</Paragraph>
