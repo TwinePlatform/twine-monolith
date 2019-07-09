@@ -17,12 +17,12 @@
   ],
   "dependencies": {
     "@types/node": "^11.13.2",
-    "@types/ramda": "^0.26.6",
+    "@types/ramda": "^0.26.15",
     "axios": "^0.18.0",
     "moment": "^2.24.0",
     "ramda": "^0.26.1",
     "random-words": "^1.1.0",
-    "typescript": "^3.4.2"
+    "typescript": "^3.5.3"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",

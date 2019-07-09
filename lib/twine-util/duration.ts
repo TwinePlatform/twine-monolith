@@ -55,8 +55,17 @@ export const fromSeconds = (s: number) => {
         - (hours * SEC_PER_HR)
         - (minutes * SEC_PER_MIN)));
 
-  return filter((v) => v > 0, { days, hours, minutes, seconds });
+  return filter((v) => v > 0, { days, hours, minutes, seconds }) as Duration;
 };
 
 export const sum = (d1: Duration, d2: Duration) =>
   fromSeconds(toSeconds(d1) + toSeconds(d2));
+
+export const diff = (d1: Duration, d2: Duration) =>
+  fromSeconds(toSeconds(d1) - toSeconds(d2));
+
+export const equals = (d1: Duration, d2: Duration) =>
+  toSeconds(d1) === toSeconds(d2);
+
+export const greaterThan = (d1: Duration, d2: Duration) =>
+  toSeconds(d1) > toSeconds(d2);
