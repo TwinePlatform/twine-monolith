@@ -3,6 +3,14 @@ import styled from 'styled-components';
 import { Paragraph, Bold } from '../../../lib/ui/components/Typography';
 import { ColoursEnum, Fonts } from '../../../lib/ui/design_system';
 
+
+/*
+ * Types
+ */
+
+/*
+ * Styles
+ */
 const Grid = styled.div`
   height: 100%;
   width: 100%;
@@ -54,6 +62,9 @@ const BottomContainer = styled.div`
   padding:
 `;
 
+/*
+ * Component
+ */
 export const DataCard = () => {
 
   return(

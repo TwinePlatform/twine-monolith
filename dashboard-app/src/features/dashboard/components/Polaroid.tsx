@@ -7,6 +7,21 @@ import { RoundedButton } from '../../../lib/ui/components/Buttons';
 import { ColoursEnum, Fonts } from '../../../lib/ui/design_system';
 
 
+/*
+ * Types
+ */
+type PolaroidProps = {
+  title: string
+  caption: string
+  callToAction?: string
+  placeHolder?: string
+  disabled?: boolean
+  onClick?: () => void,
+};
+
+/*
+ * Style
+ */
 const Card = styled(_Card)`
   max-width: 30rem;
   margin-bottom: 2rem;
@@ -34,16 +49,9 @@ const DefaultPicFiller = styled(Paragraph)`
   color: ${ColoursEnum.white};
 `;
 
-
-type PolaroidProps = {
-  title: string
-  caption: string
-  callToAction?: string
-  placeHolder?: string
-  disabled?: boolean
-  onClick?: () => void,
-};
-
+/*
+ * Component
+ */
 const TopContainer: React.FunctionComponent <Pick<PolaroidProps, 'placeHolder'>> = (props) => {
   return (
   <CardFiller>
