@@ -6,7 +6,7 @@ import { H1 as Heading1 } from '../../../lib/ui/components/Headings';
 import { Pages } from '../../navigation/pages';
 import Polaroid from '../components/Polaroid';
 import { TitlesCopy } from '../copy/titles';
-import { DataCard, LayoutMode } from '../components/DataCard';
+import { NumberDataCard, TextDataCard } from '../components/DataCard/index';
 
 
 const H1 = styled(Heading1)`
@@ -18,7 +18,7 @@ const H1 = styled(Heading1)`
  * Component
  */
 
-const testProps = {
+const testNumberProps = {
   topText: ['Over the past ', '6 months'],
   left: {
     label: 'Most volunteer days were in',
@@ -27,9 +27,18 @@ const testProps = {
   right: {
     label: 'hours each',
     data: 600,
-    layoutMode: 'number' as LayoutMode,
   },
-  bottomText: ['Least popular months were', 'Jan and March 2019'],
+};
+const testTextProps = {
+  topText: ['During ', 'April 2019'],
+  left: {
+    label: 'Top Volunteers',
+    data: [],
+  },
+  right: {
+    label: '48 hours each',
+    data: ['one', 'two', 'three'],
+  },
 };
 
 const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
@@ -51,7 +60,7 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                 placeHolder="T"
                 onClick={() => Pages.navigateTo('Time', props.history.push)}
               >
-                <DataCard {...testProps}></DataCard>
+                <NumberDataCard {...testNumberProps}/>
               </Polaroid>
             </Col>
             <Col xs={6}>
@@ -61,7 +70,9 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                 callToAction="View data"
                 placeHolder="A"
                 onClick={() => Pages.navigateTo('Activity', props.history.push)}
-              />
+                >
+                <TextDataCard {...testTextProps}/>
+              </Polaroid>
             </Col>
             <Col xs={6}>
               <Polaroid
