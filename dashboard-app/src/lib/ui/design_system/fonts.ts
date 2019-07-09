@@ -8,6 +8,7 @@ export enum FontSizeEnum {
   footer = '0.875rem',
   special = '3rem',
   emphasis = '1.125rem',
+  XL = '4rem',
 }
 
 export enum FontFamilyEnum {

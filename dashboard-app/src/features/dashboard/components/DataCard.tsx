@@ -24,6 +24,7 @@ const MiddleTopLeftContainer = styled.div`
   border-bottom: 0.5rem ${ColoursEnum.mustard} solid;
   align-self: end;
   text-align: left;
+  line-height: 1.5rem;
 `;
 
 const MiddleTopRightContainer = styled.div`
@@ -41,7 +42,8 @@ const MiddleBottomRightContainer = styled.div`
 `;
 
 const BigText = styled(Paragraph)`
-  font-size: ${Fonts.size.heading1}
+  font-size: ${Fonts.size.XL}
+  font-weight: ${Fonts.weight.light}
 `;
 
 const BottomContainer = styled.div`
