@@ -8,7 +8,7 @@ import { CommunityBusinesses } from '../../../lib/api';
 import Months from '../../../lib/util/months';
 
 
-type MostActive = {
+export type LabelledHours = {
   label: string
   hours: number
 };
@@ -49,13 +49,16 @@ const findMostActive = compose(
   sumLogDurations
 );
 
-export default () => {
-  const [fromYear, toYear] = [moment().subtract(12, 'months'), moment()].map((d) => d.toDate());
-  const [fromMonth, toMonth] = [moment().subtract(2, 'months').startOf('month'), moment().subtract(2, 'months').endOf('month')];
 
-  const [mostActiveMonths, setMostActiveMonths] = useState<MostActive[]>([]);
-  const [mostActiveVolunteers, setMostActiveVolunteers] = useState<MostActive[]>([]);
-  const [mostActiveActivities, setMostActiveActivities] = useState<MostActive[]>([]);
+export default () => {
+  const oneYearAgo = moment().subtract(1, 'year').toDate();
+  const now = moment().toDate();
+  const startOfThisMonth = moment().subtract(2, 'months').startOf('month');
+  const endOfThisMonth = moment().subtract(2, 'months').endOf('month');
+
+  const [mostActiveMonths, setMostActiveMonths] = useState<LabelledHours[]>([]);
+  const [mostActiveVolunteers, setMostActiveVolunteers] = useState<LabelledHours[]>([]);
+  const [mostActiveActivities, setMostActiveActivities] = useState<LabelledHours[]>([]);
 
   const {
     loading,
@@ -65,7 +68,7 @@ export default () => {
     requests: [
       {
         ...CommunityBusinesses.configs.getLogs,
-        params: { since: fromYear, until: toYear },
+        params: { since: oneYearAgo, until: now },
         transformResponse: [(res: any) => res.result],
       },
       {
@@ -80,15 +83,16 @@ export default () => {
       return;
     }
 
-    const logs = logsData.data;
-    const volunteers = volunteersData.data;
+    const logs: any[] = logsData.data;
+    const volunteers: any[] = volunteersData.data;
 
     const fullLogs = innerJoin(
       logs,
       volunteers,
-      (log: any, volunteer: any) => log.userId === volunteer.id
+      (log, volunteer) => log.userId === volunteer.id
     );
-    const monthLogs = fullLogs.filter((log) => moment(log.startedAt).isBetween(fromMonth, toMonth));
+    const monthLogs = fullLogs.filter((log) =>
+      moment(log.startedAt).isBetween(startOfThisMonth, endOfThisMonth));
 
     // most active months (12 months)
     setMostActiveMonths(
@@ -134,4 +138,45 @@ export default () => {
     };
 
   }
+};
+
+/*
+ * - Dates in hook or as arguments to hook?
+ * - No data case handled by DataCard or by other logic? -- DataCard to be consistent with DataTable?
+ */
+export const mostActiveActivitiesToProps = (acts?: LabelledHours[]) => {
+  const currentMonth = moment().format(Months.format.abreviated);
+
+  if (! acts) {
+    return {
+      topText: ['During', currentMonth],
+      left: {
+        label: 'No data available',
+        data: [],
+      },
+      right: {
+        label: 'hours',
+        data: 0,
+      },
+    };
+  }
+
+  const leftLabel = acts.length > 1
+    ? 'Most popular activities were'
+    : acts.length === 1
+      ? 'Most popular activity was'
+      : 'No data available';
+  const rightLabel = `hours${acts.length > 1 ? ' each' : ''}`;
+
+  return {
+    topText: ['During', currentMonth],
+    left: {
+      label: leftLabel,
+      data: acts.map((x) => x.label),
+    },
+    right: {
+      label: rightLabel,
+      data: acts.map((x) => x.hours)[0],
+    },
+  };
 };
