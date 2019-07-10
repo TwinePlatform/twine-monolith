@@ -181,7 +181,15 @@ describe('Arrays', () => {
     });
 
     test('constant key function collects all elements into the same key', () => {
-      expect(collectBy(() => 'foo', [1, 2, 3, 4])).toEqual({});
+      expect(collectBy(() => 'foo', [1, 2, 3, 4])).toEqual({ foo: [1, 2, 3, 4]});
+    });
+
+    test('values are collected into buckets defined by key function', () => {
+      expect(collectBy((a) => a % 2 === 1 ? 'odd': 'even', [1, 2, 3, 4]))
+        .toEqual({
+          odd: [1, 3],
+          even: [2, 4],
+        });
     });
   });
 });
