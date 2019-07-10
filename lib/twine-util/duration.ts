@@ -1,4 +1,5 @@
 import { filter } from 'ramda';
+import { Duration } from '.';
 
 const SEC_PER_MIN = 60;
 const MIN_PER_HR = 60;
@@ -69,3 +70,6 @@ export const equals = (d1: Duration, d2: Duration) =>
 
 export const greaterThan = (d1: Duration, d2: Duration) =>
   toSeconds(d1) > toSeconds(d2);
+
+export const accumulate = (ds: Duration[]) =>
+  ds.reduce((acc, d) => Duration.sum(acc, d), fromSeconds(0));

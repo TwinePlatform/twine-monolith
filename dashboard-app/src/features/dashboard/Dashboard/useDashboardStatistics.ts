@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { Dictionary, toPairs, compose } from 'ramda';
 import { Duration, Objects } from 'twine-util';
 import { innerJoin, collectBy } from 'twine-util/arrays';
 import { useBatchRequest } from '../../../lib/hooks';
@@ -12,6 +13,41 @@ type MostActive = {
   hours: number
 };
 
+
+const logsToDurations = compose(
+  Duration.accumulate,
+  (logs: any[]) => logs.map((log) => log.duration)
+);
+
+const sumLogDurations = (a: Dictionary<any[]>) =>
+  Objects.mapValues(logsToDurations, a);
+
+const sortByDuration = (xs: [string, Duration.Duration][]) =>
+  xs.sort(([monthLeft, durationLeft], [monthRight, durationRight]) =>
+    Duration.toSeconds(durationRight) - Duration.toSeconds(durationLeft));
+
+const maxByDuration = (xs: [string, Duration.Duration][]) =>
+  xs.reduce((acc, [month, duration]) => {
+    if (!acc[0]) {
+      return [[month, duration] as [string, Duration.Duration]];
+    } else if (Duration.greaterThan(duration, acc[0][1])) {
+      return [[month, duration] as [string, Duration.Duration]];
+    } else if (Duration.equals(duration, acc[0][1])) {
+      return acc.concat([month, duration]);
+    } else {
+      return acc;
+    }
+  }, [] as [string, Duration.Duration][]);
+
+const findMostActive = compose(
+  (ds) => ds
+    .slice(0, 3)
+    .map(([label, duration]) => ({ label, hours: Math.round(Duration.toHours(duration)) })),
+  maxByDuration,
+  sortByDuration,
+  toPairs,
+  sumLogDurations
+);
 
 export default () => {
   const [fromYear, toYear] = [moment().subtract(12, 'months'), moment()].map((d) => d.toDate());
@@ -55,85 +91,25 @@ export default () => {
     const monthLogs = fullLogs.filter((log) => moment(log.startedAt).isBetween(fromMonth, toMonth));
 
     // most active months (12 months)
-    const x = collectBy((log) => moment(log.startedAt).format(Months.format.abreviated), fullLogs);
-    const y = Objects.mapValues(
-      (logs): Duration.Duration =>
-        logs.reduce((acc, log) => Duration.sum(acc, log.duration), Duration.fromSeconds(0)),
-      x
+    setMostActiveMonths(
+      findMostActive(
+        collectBy((log) => moment(log.startedAt).format(Months.format.abreviated), fullLogs)
+      )
     );
-    const z = Object.entries(y)
-      .sort(([monthLeft, durationLeft], [monthRight, durationRight]) => {
-        return Duration.toSeconds(durationRight) - Duration.toSeconds(durationLeft);
-      })
-      .reduce((acc, [month, duration]) => {
-        if (!acc[0]) {
-          return [[month, duration] as [string, Duration.Duration]];
-        } else if (Duration.greaterThan(duration, acc[0][1])) {
-          return [[month, duration] as [string, Duration.Duration]];
-        } else if (Duration.equals(duration, acc[0][1])) {
-          return acc.concat([month, duration]);
-        } else {
-          return acc;
-        }
-      }, [] as [string, Duration.Duration][])
-      .slice(0, 3)
-      .map(([label, duration]) => ({ label, hours: Math.round(Duration.toHours(duration)) }));
-
-    setMostActiveMonths(z);
 
     // most ctive activities (current month)
-    const a = collectBy((log) => log.activity, monthLogs);
-    const b = Objects.mapValues(
-      (logs): Duration.Duration =>
-        logs.reduce((acc, log) => Duration.sum(acc, log.duration), Duration.fromSeconds(0)),
-      a
+    setMostActiveActivities(
+      findMostActive(
+        collectBy((log) => log.activity, monthLogs)
+      )
     );
-    const c = Object.entries(b)
-      .sort(([monthLeft, durationLeft], [monthRight, durationRight]) => {
-        return Duration.toSeconds(durationRight) - Duration.toSeconds(durationLeft);
-      })
-      .reduce((acc, [month, duration]) => {
-        if (!acc[0]) {
-          return [[month, duration] as [string, Duration.Duration]];
-        } else if (Duration.greaterThan(duration, acc[0][1])) {
-          return [[month, duration] as [string, Duration.Duration]];
-        } else if (Duration.equals(duration, acc[0][1])) {
-          return acc.concat([month, duration]);
-        } else {
-          return acc;
-        }
-      }, [] as [string, Duration.Duration][])
-      .slice(0, 3)
-      .map(([label, duration]) => ({ label, hours: Math.round(Duration.toHours(duration)) }));
-
-    setMostActiveActivities(c);
 
     // most active volunteers (current month)
-    const i = collectBy((log) => log.name, monthLogs);
-    const j = Objects.mapValues(
-      (logs): Duration.Duration =>
-        logs.reduce((acc, log) => Duration.sum(acc, log.duration), Duration.fromSeconds(0)),
-      i
+    setMostActiveVolunteers(
+      findMostActive(
+        collectBy((log) => log.name, monthLogs)
+      )
     );
-    const k = Object.entries(j)
-      .sort(([monthLeft, durationLeft], [monthRight, durationRight]) => {
-        return Duration.toSeconds(durationRight) - Duration.toSeconds(durationLeft);
-      })
-      .reduce((acc, [month, duration]) => {
-        if (!acc[0]) {
-          return [[month, duration] as [string, Duration.Duration]];
-        } else if (Duration.greaterThan(duration, acc[0][1])) {
-          return [[month, duration] as [string, Duration.Duration]];
-        } else if (Duration.equals(duration, acc[0][1])) {
-          return acc.concat([month, duration]);
-        } else {
-          return acc;
-        }
-      }, [] as [string, Duration.Duration][])
-      .slice(0, 3)
-      .map(([label, duration]) => ({ label, hours: Math.round(Duration.toHours(duration)) }));
-
-    setMostActiveVolunteers(k);
   }, [logsData, volunteersData]);
 
 

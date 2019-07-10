@@ -1,4 +1,4 @@
-import { sort, innerJoin, Order } from '../arrays';
+import { sort, innerJoin, collectBy, Order } from '../arrays';
 
 
 describe('Arrays', () => {
@@ -127,7 +127,7 @@ describe('Arrays', () => {
       })
   });
 
-  describe.only('innerJoin', () => {
+  describe('innerJoin', () => {
     test('should do nothing to two empty arrays', () => {
       expect(innerJoin([], [], (a, b) => true)).toEqual([]);
     });
@@ -172,6 +172,16 @@ describe('Arrays', () => {
       ]);
       expect((<any> res[0]).data).toBe(data1);
       expect((<any> res[1]).data).toBe(data2);
+    });
+  });
+
+  describe('collectBy', () => {
+    test('empty array should return empty object', () => {
+      expect(collectBy(() => '1', [])).toEqual({});
+    });
+
+    test('constant key function collects all elements into the same key', () => {
+      expect(collectBy(() => 'foo', [1, 2, 3, 4])).toEqual({});
     });
   });
 });
