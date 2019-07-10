@@ -7,7 +7,11 @@ import { Pages } from '../../navigation/pages';
 import Polaroid from '../components/Polaroid';
 import { TitlesCopy } from '../copy/titles';
 import { NumberDataCard, TextDataCard } from '../components/DataCard/index';
-import useDashboardStatistics, { mostActiveActivitiesToProps } from './useDashboardStatistics';
+import useDashboardStatistics, {
+  mostActiveActivitiesToProps,
+  mostActiveMonthsToProps,
+  mostActiveVolunteersToProps,
+} from './useDashboardStatistics';
 
 
 const H1 = styled(Heading1)`
@@ -46,12 +50,6 @@ const testTextProps = {
 const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
   const { loading, error, data } = useDashboardStatistics();
 
-  if (!loading && !error && data) {
-    console.log('ACTIVITIES', data.mostActiveActivities);
-    console.log('MONTHS', data.mostActiveMonths);
-    console.log('VOLUNTEERS', data.mostActiveVolunteers);
-  }
-
   return (
     <Grid>
       <Row center="xs">
@@ -70,6 +68,7 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                 placeHolder="T"
                 onClick={() => Pages.navigateTo('Time', props.history.push)}
               >
+                <NumberDataCard {...mostActiveMonthsToProps(data && data.mostActiveMonths)}/>
               </Polaroid>
             </Col>
             <Col xs={6}>
@@ -79,13 +78,10 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                 callToAction="View data"
                 placeHolder="A"
                 onClick={() => Pages.navigateTo('Activity', props.history.push)}
-                >
-<<<<<<< HEAD
-=======
+              >
                 <NumberDataCard
                   {...mostActiveActivitiesToProps(data && data.mostActiveActivities)}
-                />
->>>>>>> hookup one tile
+               />
               </Polaroid>
             </Col>
             <Col xs={6}>
@@ -95,7 +91,9 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                 callToAction="View data"
                 placeHolder="V"
                 onClick={() => Pages.navigateTo('Volunteer', props.history.push)}
-              />
+              >
+                <TextDataCard {...mostActiveVolunteersToProps(data && data.mostActiveVolunteers)} />
+              </Polaroid>
             </Col>
             <Col xs={6}>
               <Polaroid

@@ -1,10 +1,9 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { Dictionary, toPairs, compose } from 'ramda';
-import { Duration, Objects } from 'twine-util';
 import { innerJoin, collectBy } from 'twine-util/arrays';
 import { useBatchRequest } from '../../../lib/hooks';
 import { CommunityBusinesses } from '../../../lib/api';
+import { findMostActive } from './util';
 import Months from '../../../lib/util/months';
 
 
@@ -12,42 +11,6 @@ export type LabelledHours = {
   label: string
   hours: number
 };
-
-
-const logsToDurations = compose(
-  Duration.accumulate,
-  (logs: any[]) => logs.map((log) => log.duration)
-);
-
-const sumLogDurations = (a: Dictionary<any[]>) =>
-  Objects.mapValues(logsToDurations, a);
-
-const sortByDuration = (xs: [string, Duration.Duration][]) =>
-  xs.sort(([monthLeft, durationLeft], [monthRight, durationRight]) =>
-    Duration.toSeconds(durationRight) - Duration.toSeconds(durationLeft));
-
-const maxByDuration = (xs: [string, Duration.Duration][]) =>
-  xs.reduce((acc, [month, duration]) => {
-    if (!acc[0]) {
-      return [[month, duration] as [string, Duration.Duration]];
-    } else if (Duration.greaterThan(duration, acc[0][1])) {
-      return [[month, duration] as [string, Duration.Duration]];
-    } else if (Duration.equals(duration, acc[0][1])) {
-      return acc.concat([month, duration]);
-    } else {
-      return acc;
-    }
-  }, [] as [string, Duration.Duration][]);
-
-const findMostActive = compose(
-  (ds) => ds
-    .slice(0, 3)
-    .map(([label, duration]) => ({ label, hours: Math.round(Duration.toHours(duration)) })),
-  maxByDuration,
-  sortByDuration,
-  toPairs,
-  sumLogDurations
-);
 
 
 export default () => {
@@ -83,6 +46,7 @@ export default () => {
       return;
     }
 
+    // NOTE: Should use `VolunteerLog` types instead of `any`
     const logs: any[] = logsData.data;
     const volunteers: any[] = volunteersData.data;
 
@@ -142,14 +106,15 @@ export default () => {
 
 /*
  * - Dates in hook or as arguments to hook?
- * - No data case handled by DataCard or by other logic? -- DataCard to be consistent with DataTable?
+ * - No data case handled by DataCard or by other logic?
+ *   -- DataCard to be consistent with DataTable?
  */
 export const mostActiveActivitiesToProps = (acts?: LabelledHours[]) => {
   const currentMonth = moment().format(Months.format.abreviated);
 
   if (! acts) {
     return {
-      topText: ['During', currentMonth],
+      topText: ['During ', currentMonth],
       left: {
         label: 'No data available',
         data: [],
@@ -170,6 +135,78 @@ export const mostActiveActivitiesToProps = (acts?: LabelledHours[]) => {
 
   return {
     topText: ['During', currentMonth],
+    left: {
+      label: leftLabel,
+      data: acts.map((x) => x.label),
+    },
+    right: {
+      label: rightLabel,
+      data: acts.map((x) => x.hours)[0],
+    },
+  };
+};
+
+
+export const mostActiveVolunteersToProps = (acts?: LabelledHours[]) => {
+  const currentMonth = moment().format(Months.format.abreviated);
+
+  if (! acts) {
+    return {
+      topText: ['During ', currentMonth],
+      left: {
+        label: 'No data available',
+        data: [],
+      },
+      right: {
+        label: 'hours',
+        data: [],
+      },
+    };
+  }
+
+  const leftLabel = acts.length > 1
+    ? 'Top volunteers'
+    : acts.length === 1
+      ? 'Top volunteer'
+      : 'No data available';
+  const rightLabel = `hours${acts.length > 1 ? ' each' : ''}`;
+
+  return {
+    topText: ['During', currentMonth],
+    left: {
+      label: leftLabel,
+      data: [],
+    },
+    right: {
+      label: rightLabel,
+      data: acts.map((x) => x.label),
+    },
+  };
+};
+
+
+export const mostActiveMonthsToProps = (acts?: LabelledHours[]) => {
+  if (! acts) {
+    return {
+      topText: ['Over the past ', '12 months'],
+      left: {
+        label: 'No data available',
+        data: [],
+      },
+      right: {
+        label: 'hours',
+        data: 0,
+      },
+    };
+  }
+
+  const leftLabel = acts.length >= 1
+    ? 'Most volunteer days were in'
+    : 'No data available';
+  const rightLabel = `hours${acts.length > 1 ? ' each' : ''}`;
+
+  return {
+    topText: ['Over the past', '12 months'],
     left: {
       label: leftLabel,
       data: acts.map((x) => x.label),
