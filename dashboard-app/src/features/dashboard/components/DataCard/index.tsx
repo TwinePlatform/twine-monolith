@@ -48,15 +48,14 @@ const MiddleBottomRightContainer = styled.div`
 `;
 
 const BigText = styled(Paragraph)`
-  font-size: ${Fonts.size.XL}
-  font-weight: ${Fonts.weight.light}
+  font-size: ${Fonts.size.XL};
+  font-weight: ${Fonts.weight.light};
 `;
 
 const BottomContainer = styled.div`
   grid-area: 4 / 1 / span 1 / span 2;
   text-align: left;
   align-self: end;
-  padding:
 `;
 
 /*

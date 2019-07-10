@@ -12,5 +12,5 @@ export const Span = styled.span`
 `;
 
 export const Bold = styled(Span)`
-  font-weight: ${FontWeightEnum.heavy}
+  font-weight: ${FontWeightEnum.heavy};
 `;
