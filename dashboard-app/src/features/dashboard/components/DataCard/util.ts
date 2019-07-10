@@ -1,3 +1,4 @@
+import { intersperse } from 'ramda';
 
 export const sentenceCreator = (xs: string[]) => {
   switch (xs.length) {
@@ -5,16 +6,11 @@ export const sentenceCreator = (xs: string[]) => {
     case 1:
       return xs;
     case 2:
-      return [xs[0], ' and ', xs[1]];
+      return intersperse(' and ', xs);
     case 3:
     default:
-      const first = xs.slice(0, -1);
-      const firstWithComma = first
-        .reduce((a: string[], e: string) => a.concat(e, ', '), [])
-        .slice(0, -1);
-      const [last] = xs.slice(-1);
-      return firstWithComma
-        .concat([' and ', last]);
-
+      return intersperse(', ', xs.slice(0, -1))
+        .concat(' and ')
+        .concat(xs.slice(-1));
   }
 };
