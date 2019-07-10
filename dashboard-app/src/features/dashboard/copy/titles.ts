@@ -1,7 +1,7 @@
 export const TitlesCopy = {
   Activities : {
     title: 'Activities',
-    subtitle: 'Who volunteers and the time they give',
+    subtitle: 'The activities volunteers deliver',
   },
   Time : {
     title: 'Time',
@@ -9,6 +9,6 @@ export const TitlesCopy = {
   },
   Volunteers : {
     title: 'Volunteers',
-    subtitle: 'The activities volunteers deliver',
+    subtitle: 'Who volunteers and the time they give',
   },
 };
