@@ -32,7 +32,7 @@ export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEn
       : [groupBy, ...monthHeaders];
 
     const sortedRows = Arrays.sort([
-      { accessor: pathOr('', [headers[sortBy]]), order: 'desc' },
+      { accessor: pathOr('', [headers[sortBy]]), order: sortBy === 0 ? 'asc' : 'desc' },
       { accessor: pathOr('', [groupBy]), order: 'asc' },
     ], rows);
 

@@ -77,7 +77,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     } else {
       setErrors({ Download: 'No data available to download' });
     }
-  }, [data, fromDate, toDate, unit]);
+  }, [data, fromDate, toDate, unit, sortBy]);
 
   const tabProps = {
     data,
