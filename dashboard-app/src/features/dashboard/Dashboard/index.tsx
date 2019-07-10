@@ -7,7 +7,7 @@ import { Pages } from '../../navigation/pages';
 import Polaroid from '../components/Polaroid';
 import { TitlesCopy } from '../copy/titles';
 import { NumberDataCard, TextDataCard } from '../components/DataCard/index';
-import useDashboardStatistics from './useDashboardStatistics';
+import useDashboardStatistics, { mostActiveActivitiesToProps } from './useDashboardStatistics';
 
 
 const H1 = styled(Heading1)`
@@ -19,6 +19,30 @@ const H1 = styled(Heading1)`
  * Component
  */
 
+const testNumberProps = {
+  topText: ['Over the past ', '6 months'],
+  left: {
+    label: 'Most volunteer days were in',
+    data: ['Sept', 'July'],
+  },
+  right: {
+    label: 'hours each',
+    data: 600,
+  },
+};
+const testTextProps = {
+  topText: ['During ', 'April 2019'],
+  left: {
+    label: 'Top Volunteers',
+    data: [],
+  },
+  right: {
+    label: '48 hours each',
+    data: ['one', 'two', 'three'],
+  },
+};
+
+
 const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
   const { loading, error, data } = useDashboardStatistics();
 
@@ -26,14 +50,6 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
     console.log('ACTIVITIES', data.mostActiveActivities);
     console.log('MONTHS', data.mostActiveMonths);
     console.log('VOLUNTEERS', data.mostActiveVolunteers);
-
-    // Activities tile
-    const activitiesTileProps = {
-      topText: '',
-      left: { label: '', data: data.mostActiveActivities.map((x) => x.label) },
-      right: { label: '', data: data.mostActiveActivities.map((x) => x.hours) },
-      bottomText: '',
-    };
   }
 
   return (
@@ -64,6 +80,12 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                 placeHolder="A"
                 onClick={() => Pages.navigateTo('Activity', props.history.push)}
                 >
+<<<<<<< HEAD
+=======
+                <NumberDataCard
+                  {...mostActiveActivitiesToProps(data && data.mostActiveActivities)}
+                />
+>>>>>>> hookup one tile
               </Polaroid>
             </Col>
             <Col xs={6}>
