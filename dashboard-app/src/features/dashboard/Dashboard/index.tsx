@@ -22,31 +22,6 @@ const H1 = styled(Heading1)`
 /**
  * Component
  */
-
-const testNumberProps = {
-  topText: ['Over the past ', '6 months'],
-  left: {
-    label: 'Most volunteer days were in',
-    data: ['Sept', 'July'],
-  },
-  right: {
-    label: 'hours each',
-    data: 600,
-  },
-};
-const testTextProps = {
-  topText: ['During ', 'April 2019'],
-  left: {
-    label: 'Top Volunteers',
-    data: [],
-  },
-  right: {
-    label: '48 hours each',
-    data: ['one', 'two', 'three'],
-  },
-};
-
-
 const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
   const { loading, error, data } = useDashboardStatistics();
 

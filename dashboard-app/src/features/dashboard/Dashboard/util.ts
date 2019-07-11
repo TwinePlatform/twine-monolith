@@ -1,38 +1,43 @@
-import { Dictionary, toPairs, compose } from 'ramda';
+import { Dictionary, compose } from 'ramda';
 import { Duration, Objects } from 'twine-util';
 
 
+type VolunteerLog = any;
+
+const collectMaxDurations = (ds: Dictionary<Duration.Duration>) => {
+  const init = {
+    labels: [] as string[],
+    value: Duration.fromSeconds(0),
+  };
+
+  return Object.entries(ds)
+    .reduce((acc, [k, v]) => {
+      if (Duration.equals(v, acc.value)) {
+        return { value: acc.value, labels: acc.labels.concat(k) };
+
+      } else if (Duration.greaterThan(v, acc.value)) {
+        return { value: v, labels: [k] };
+
+      } else {
+        return acc;
+
+      }
+    }, init);
+};
+
 export const logsToDurations = compose(
   Duration.accumulate,
-  (logs: any[]) => logs.map((log) => log.duration)
+  (logs: VolunteerLog[]) => logs.map((log) => log.duration)
 );
 
-export const sumLogDurations = (a: Dictionary<any[]>) =>
+export const sumLogDurations = (a: Dictionary<VolunteerLog[]>) =>
   Objects.mapValues(logsToDurations, a);
 
-export const sortByDuration = (xs: [string, Duration.Duration][]) =>
-  xs.sort(([monthLeft, durationLeft], [monthRight, durationRight]) =>
-    Duration.toSeconds(durationRight) - Duration.toSeconds(durationLeft));
-
-export const maxByDuration = (xs: [string, Duration.Duration][]) =>
-  xs.reduce((acc, [month, duration]) => {
-    if (!acc[0]) {
-      return [[month, duration] as [string, Duration.Duration]];
-    } else if (Duration.greaterThan(duration, acc[0][1])) {
-      return [[month, duration] as [string, Duration.Duration]];
-    } else if (Duration.equals(duration, acc[0][1])) {
-      return acc.concat([month, duration]);
-    } else {
-      return acc;
-    }
-  }, [] as [string, Duration.Duration][]);
-
 export const findMostActive = compose(
-  (ds) => ds
-    .slice(0, 3)
-    .map(([label, duration]) => ({ label, hours: Math.round(Duration.toHours(duration)) })),
-  maxByDuration,
-  sortByDuration,
-  toPairs,
+  ({ labels, value }) => ({
+    labels: labels.slice(0, 3),
+    value: Math.round(Duration.toHours(value)),
+  }),
+  collectMaxDurations,
   sumLogDurations
 );
