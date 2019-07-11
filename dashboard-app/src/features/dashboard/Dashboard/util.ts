@@ -1,5 +1,6 @@
 import { Dictionary, compose } from 'ramda';
 import { Duration, Objects } from 'twine-util';
+import Months from '../../../lib/util/months';
 
 
 // Just to make it clearer whats being expected without reproducing the type def
@@ -36,7 +37,7 @@ export const sumLogDurations = (a: Dictionary<VolunteerLog[]>) =>
 
 export const findMostActive = compose(
   ({ labels, value }) => ({
-    labels: labels.slice(0, 3),
+    labels: labels.slice(0, 3).sort((a, b) => Months.diff(new Date(b), new Date(a))),
     value: Math.round(Duration.toHours(value)),
   }),
   collectMaxDurations,

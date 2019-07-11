@@ -63,7 +63,7 @@ export default () => {
     // most active months (12 months)
     setTimeStats(
       findMostActive(
-        collectBy((log) => moment(log.startedAt).format(Months.format.abreviated), fullLogs)
+        collectBy((log) => moment(log.startedAt).format(Months.format.verbose), fullLogs)
       )
     );
 
