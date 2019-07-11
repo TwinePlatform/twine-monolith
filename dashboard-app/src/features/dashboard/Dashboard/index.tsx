@@ -23,14 +23,6 @@ const H1 = styled(Heading1)`
   margin-bottom: 3rem;
 `;
 
-const loader = <BeatLoader color={ColoursEnum.purple} />;
-const errorView = (
-  <>
-    <Paragraph>Something went wrong</Paragraph>
-    <Paragraph>Your data cannot currently be displayed</Paragraph>
-  </>
-);
-
 /**
  * Component
  */
