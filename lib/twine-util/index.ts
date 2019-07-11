@@ -7,6 +7,8 @@ import * as Arrays from './arrays';
 import * as Time from './time';
 import * as File from './file';
 import * as Url from './url';
+import * as Misc from './misc'
+
 
 export {
   Duration,
@@ -18,4 +20,5 @@ export {
   Time,
   File,
   Url,
+  Misc,
 };

@@ -16,9 +16,10 @@ import { ColoursEnum } from '../../../lib/ui/design_system';
 import Errors from '../components/Errors';
 import useAggregateDataByActivity from './useAggregateDataByActivity';
 import { TabGroup } from '../components/Tabs';
-import { getTitleForDayPicker } from '../util';
+import { getTitleForDayPicker, toggleOrder } from '../util';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
+import { Order } from 'twine-util/arrays';
 
 
 /**
@@ -47,9 +48,10 @@ const initTableData = { headers: [], rows: [] };
 /**
  * Component
  */
-const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
+const ByActivity: FunctionComponent<RouteComponentProps> = () => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
   const [sortBy, setSortBy] = useState(1);
+  const [order, setOrder] = useState<Order>('desc');
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
@@ -69,14 +71,14 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
     if (idx > -1) {
-      setSortBy(idx);
 
-      // Requirement: If column being selected for sorting is "Volunteer Name"
-      //              (i.e. the first column), sort ascending (A-Z) instead of
-      //              descending (Z-A)
-      if (idx === 0) {
-        return 'asc';
-      }
+      // setSortBy((prevIndex) => {
+      // if (idx === sortBy) setOrder((prev) => toggleOrder(prev));
+        // return idx;
+      // });
+      setSortBy(idx);
+      console.log({ idx, sortBy });
+
     }
   }, [tableData]);
 
@@ -122,7 +124,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
                         {...tableData}
                         title={getTitleForDayPicker(TitlesCopy.Activities.subtitle, fromDate, toDate)} // tslint:disable:max-line-length
                         sortBy={tableData.headers[sortBy]}
-                        initialOrder="desc"
+                        order={order}
                         onChangeSortBy={onChangeSortBy}
                         showTotals
                       />

@@ -1,6 +1,8 @@
 import moment from 'moment';
 import Months from '../../lib/util/months';
 import { TitleString } from './components/Title';
+import { toggle } from 'twine-util/misc';
+import { Order } from 'twine-util/arrays';
 
 export const getTitleForMonthPicker = (title: string, from: Date, to: Date): TitleString => {
   const dateRangeString = `${moment(from).format(Months.format.abreviated)} -\
@@ -24,3 +26,4 @@ export const getTitleForDayPicker = (title: string, from: Date, to: Date): Title
   ];
 };
 
+export const toggleOrder = toggle<Order>('asc', 'desc');
