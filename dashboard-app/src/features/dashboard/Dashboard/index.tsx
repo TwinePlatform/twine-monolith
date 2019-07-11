@@ -8,9 +8,9 @@ import Polaroid from '../components/Polaroid';
 import { TitlesCopy } from '../copy/titles';
 import { NumberDataCard, TextDataCard } from '../components/DataCard/index';
 import useDashboardStatistics, {
-  mostActiveActivitiesToProps,
-  mostActiveMonthsToProps,
-  mostActiveVolunteersToProps,
+  activityStatsToProps,
+  timeStatsToProps,
+  volunteerStatsToProps,
 } from './useDashboardStatistics';
 
 
@@ -43,7 +43,7 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                 placeHolder="T"
                 onClick={() => Pages.navigateTo('Time', props.history.push)}
               >
-                <NumberDataCard {...mostActiveMonthsToProps(data && data.mostActiveMonths)}/>
+                <NumberDataCard {...timeStatsToProps(data && data.timeStats)}/>
               </Polaroid>
             </Col>
             <Col xs={6}>
@@ -55,7 +55,7 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                 onClick={() => Pages.navigateTo('Activity', props.history.push)}
               >
                 <NumberDataCard
-                  {...mostActiveActivitiesToProps(data && data.mostActiveActivities)}
+                  {...activityStatsToProps(data && data.activityStats)}
                />
               </Polaroid>
             </Col>
@@ -67,7 +67,7 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                 placeHolder="V"
                 onClick={() => Pages.navigateTo('Volunteer', props.history.push)}
               >
-                <TextDataCard {...mostActiveVolunteersToProps(data && data.mostActiveVolunteers)} />
+                <TextDataCard {...volunteerStatsToProps(data && data.volunteerStats)} />
               </Polaroid>
             </Col>
             <Col xs={6}>

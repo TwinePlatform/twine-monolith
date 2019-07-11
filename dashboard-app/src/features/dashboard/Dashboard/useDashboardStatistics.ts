@@ -94,9 +94,9 @@ export default () => {
       loading,
       error,
       data: {
-        mostActiveMonths: timeStats,
-        mostActiveActivities: activityStats,
-        mostActiveVolunteers: volunteerStats,
+        timeStats,
+        activityStats,
+        volunteerStats,
       },
     };
 
@@ -108,7 +108,7 @@ export default () => {
  * - No data case handled by DataCard or by other logic?
  *   -- DataCard to be consistent with DataTable?
  */
-export const mostActiveActivitiesToProps = (pts?: EqualDataPoints) => {
+export const activityStatsToProps = (pts?: EqualDataPoints) => {
   const currentMonth = moment().format(Months.format.abreviated);
 
   if (! pts) {
@@ -146,7 +146,7 @@ export const mostActiveActivitiesToProps = (pts?: EqualDataPoints) => {
 };
 
 
-export const mostActiveVolunteersToProps = (pts?: EqualDataPoints) => {
+export const volunteerStatsToProps = (pts?: EqualDataPoints) => {
   const currentMonth = moment().format(Months.format.abreviated);
 
   if (! pts) {
@@ -184,7 +184,7 @@ export const mostActiveVolunteersToProps = (pts?: EqualDataPoints) => {
 };
 
 
-export const mostActiveMonthsToProps = (pts?: EqualDataPoints) => {
+export const timeStatsToProps = (pts?: EqualDataPoints) => {
   if (! pts) {
     return {
       topText: ['Over the past ', '12 months'],
