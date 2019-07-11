@@ -34,7 +34,7 @@ const DataTableHeaderRow: React.FunctionComponent<HeaderRowProps> = (props) => {
     <thead>
       <HeaderRow>
         {
-          columns.map((h, i) => (
+          columns.map((h) => (
             <HeaderCell
               scope="col"
               onClick={() => onClick(h.content)}
