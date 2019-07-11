@@ -63,7 +63,8 @@ const VolunteerTabs: FunctionComponent<Props> = (props) => {
               <DataTable
                 {...tableData}
                 title={title}
-                orderable={orderable}
+                sortBy={tableData.headers[orderable.sortByIndex]}
+                order={orderable.order}
                 onChangeSortBy={onChangeSortBy}
                 showTotals
               />

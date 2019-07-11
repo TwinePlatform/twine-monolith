@@ -56,7 +56,8 @@ const TimeTabs: FunctionComponent<Props> = (props) => {
               <DataTable
                 {...tableData}
                 title={title}
-                orderable={orderable}
+                order={orderable.order}
+                sortBy={tableData.headers[orderable.sortByIndex]}
                 onChangeSortBy={onChangeSortBy}
                 showTotals
               />

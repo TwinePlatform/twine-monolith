@@ -38,7 +38,8 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
   const {
     headers,
     rows,
-    orderable,
+    sortBy = props.headers[0],
+    order = 'desc',
     onChangeSortBy = () => {},
     title,
     showTotals = false,
@@ -47,24 +48,21 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
 
   const onHeaderClick = useCallback((title) => {
     onChangeSortBy(title);
-  }, [orderable, headers]);
+  }, [sortBy, order, headers]);
 
   const sorter = useCallback((_rows: DataTableProps['rows']) =>
     sort([
-      {
-        accessor: pathOr('', ['columns', orderable.sortByIndex, 'content']),
-        order: orderable.order,
-      },
+      { accessor: pathOr('', ['columns', sortBy, 'content']), order },
       { accessor: pathOr('', ['columns', headers[0], 'content']), order: 'asc' as Order },
     ], _rows)
-  , [orderable, headers]);
+  , [sortBy, order, headers]);
 
   const table = (
     <Table cols={headers.length}>
       <HeaderRow
         columns={headers.map((name) => ({ content: name }))}
-        order={orderable.order}
-        sortBy={orderable.sortByIndex}
+        order={order}
+        sortBy={sortBy}
         onClick={onHeaderClick}
       />
       <tbody>

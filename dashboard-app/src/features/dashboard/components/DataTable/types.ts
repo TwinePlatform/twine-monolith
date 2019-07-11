@@ -15,10 +15,11 @@ import { Orderable } from '../../hooks/useOrderable';
 export type DataTableProps = {
   title?: TitleString
   headers: string[]
+  sortBy?: string
+  order?: Order
   onChangeSortBy?: (s: string) => void
   rows: DataTableRow[]
   showTotals?: boolean
-  orderable: Orderable
 };
 
 export type DataTableContent = number | string;
@@ -59,7 +60,7 @@ export type RowProps = {
 export type HeaderRowProps = {
   columns: CellProps[]
   order?: Order
-  sortBy?: number
+  sortBy?: string
   onClick?: DataTableCallback
 };
 

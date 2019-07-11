@@ -118,9 +118,8 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
                       <DataTable
                         {...tableData}
                         title={getTitleForDayPicker(TitlesCopy.Activities.subtitle, fromDate, toDate)} // tslint:disable:max-line-length
-                        // sortBy={tableData.headers[sortBy]}
-                        // order={order}
-                        orderable={orderable}
+                        sortBy={tableData.headers[orderable.sortByIndex]}
+                        order={orderable.order}
                         onChangeSortBy={onChangeSortBy}
                         showTotals
                       />

@@ -41,7 +41,7 @@ const DataTableHeaderRow: React.FunctionComponent<HeaderRowProps> = (props) => {
               title={String(h.content)}
               key={hashJSON(h)}
             >
-              {sortBy === i ? `${arrow} ${h.content}` : h.content}
+              {sortBy === h.content ? `${arrow} ${h.content}` : h.content}
             </HeaderCell>
           ))
         }
