@@ -35,7 +35,10 @@ export default () => {
       },
       {
         ...CommunityBusinesses.configs.getVolunteers,
-        transformResponse: [(res: any) => res.result.map(({ id, name }: any) => ({ id, name }))],
+        transformResponse: [
+          (res: any) => res.result,
+          (res: any) => Array.isArray(res) ? res.map(({ id, name }: any) => ({ id, name })) : res,
+        ],
       },
     ],
   });

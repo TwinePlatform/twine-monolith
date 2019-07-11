@@ -10,6 +10,10 @@ type ErrorBoundaryState = {
   message: string
 };
 
+const isHttpError = (error: Error) =>
+  ['isAxiosError', 'response']
+    .reduce((acc, s) => acc || error.hasOwnProperty(s), false);
+
 class Boundary<T extends {}> extends React.Component<T, ErrorBoundaryState> {
   constructor (props: Readonly<T>) {
     super(props);
@@ -24,14 +28,16 @@ class Boundary<T extends {}> extends React.Component<T, ErrorBoundaryState> {
   static getDerivedStateFromError (error: Error | AxiosError) {
     return {
       hasError: true,
-      isHttpError: error.hasOwnProperty('isAxiosError'),
+      isHttpError: isHttpError(error),
       statusCode: propOr(0, 'code', error),
       message: error.message,
     };
   }
 
   componentDidCatch (error: Error, errorInfo: { componentStack: any }) {
-    console.log(error, errorInfo);
+    if (process.env.NODE_ENV !== 'test') {
+      console.log(error, errorInfo);
+    }
   }
 
   renderError () {
@@ -40,7 +46,7 @@ class Boundary<T extends {}> extends React.Component<T, ErrorBoundaryState> {
         <div>
           {
             this.state.isHttpError
-              ? 'There was an problem fetching your data'
+              ? 'There was a problem fetching your data'
               : 'There was a problem with the application'
           }
         </div>
