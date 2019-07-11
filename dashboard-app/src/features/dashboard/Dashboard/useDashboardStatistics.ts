@@ -106,17 +106,12 @@ export default () => {
   }
 };
 
-/*
- * - Dates in hook or as arguments to hook?
- * - No data case handled by DataCard or by other logic?
- *   -- DataCard to be consistent with DataTable?
- */
-export const activityStatsToProps = (pts?: EqualDataPoints) => {
-  const currentMonth = moment().format(Months.format.abreviated);
+const getCurrentMonth = () => moment().format(Months.format.abreviated);
 
+export const activityStatsToProps = (pts?: EqualDataPoints) => {
   if (! pts) {
     return {
-      topText: ['During ', currentMonth],
+      topText: ['During ', getCurrentMonth()],
       left: {
         label: 'No data available',
         data: [],
@@ -136,7 +131,7 @@ export const activityStatsToProps = (pts?: EqualDataPoints) => {
   const rightLabel = `hours${pts.labels.length > 1 ? ' each' : ''}`;
 
   return {
-    topText: ['During ', currentMonth],
+    topText: ['During ', getCurrentMonth()],
     left: {
       label: leftLabel,
       data: pts.labels,
@@ -150,11 +145,9 @@ export const activityStatsToProps = (pts?: EqualDataPoints) => {
 
 
 export const volunteerStatsToProps = (pts?: EqualDataPoints) => {
-  const currentMonth = moment().format(Months.format.abreviated);
-
   if (! pts) {
     return {
-      topText: ['During ', currentMonth],
+      topText: ['During ', getCurrentMonth()],
       left: {
         label: 'No data available',
         data: [],
@@ -174,7 +167,7 @@ export const volunteerStatsToProps = (pts?: EqualDataPoints) => {
   const rightLabel = `${pts.value} hours${pts.labels.length > 1 ? ' each' : ''}`;
 
   return {
-    topText: ['During ', currentMonth],
+    topText: ['During ', getCurrentMonth()],
     left: {
       label: leftLabel,
       data: [],

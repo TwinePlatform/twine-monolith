@@ -46,7 +46,7 @@ describe('Dashboard statistics utilities', () => {
 
       expect(findMostActive(logs)).toEqual({
         labels: ['Jun 2018', 'Sept 2018'],
-        value: 3, // TODO: Check if should be _FLOORED_
+        value: 3,
       });
     });
 
@@ -68,7 +68,7 @@ describe('Dashboard statistics utilities', () => {
 
       expect(findMostActive(logs)).toEqual({
         labels: ['Jun 2018'],
-        value: 3, // TODO: Check if should be _FLOORED_
+        value: 3,
       });
     });
 
@@ -90,7 +90,7 @@ describe('Dashboard statistics utilities', () => {
 
       expect(findMostActive(logs)).toEqual({
         labels: ['Jun 2018', 'Sept 2018'],
-        value: 3, // TODO: Check if should be _FLOORED_
+        value: 3,
       });
     });
   });
