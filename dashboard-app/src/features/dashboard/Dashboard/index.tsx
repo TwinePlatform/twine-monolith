@@ -12,12 +12,24 @@ import useDashboardStatistics, {
   timeStatsToProps,
   volunteerStatsToProps,
 } from './useDashboardStatistics';
+import { BeatLoader } from 'react-spinners';
+import { ColoursEnum } from '../../../lib/ui/design_system';
+import { Paragraph } from '../../../lib/ui/components/Typography';
+import LoadingBoundary from '../../../lib/ui/components/Boundaries/LoadingBoundary';
+import ThrowIfError from '../../../lib/ui/components/Boundaries/ThrowIfError';
 
 
 const H1 = styled(Heading1)`
   margin-bottom: 3rem;
 `;
 
+const loader = <BeatLoader color={ColoursEnum.purple} />;
+const errorView = (
+  <>
+    <Paragraph>Something went wrong</Paragraph>
+    <Paragraph>Your data cannot currently be displayed</Paragraph>
+  </>
+);
 
 /**
  * Component
@@ -33,54 +45,57 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
         </Col>
       </Row>
       <Row center="xs">
-        <Col xs={8}>
-          <Row>
-            <Col xs={6}>
-              <Polaroid
-                title={TitlesCopy.Time.title}
-                caption={TitlesCopy.Time.subtitle}
-                callToAction="View data"
-                placeHolder="T"
-                onClick={() => Pages.navigateTo('Time', props.history.push)}
-              >
-                <NumberDataCard {...timeStatsToProps(data && data.timeStats)}/>
-              </Polaroid>
-            </Col>
-            <Col xs={6}>
-              <Polaroid
-                title={TitlesCopy.Activities.title}
-                caption={TitlesCopy.Activities.subtitle}
-                callToAction="View data"
-                placeHolder="A"
-                onClick={() => Pages.navigateTo('Activity', props.history.push)}
-              >
-                <NumberDataCard
-                  {...activityStatsToProps(data && data.activityStats)}
-               />
-              </Polaroid>
-            </Col>
-            <Col xs={6}>
-              <Polaroid
-                title={TitlesCopy.Volunteers.title}
-                caption={TitlesCopy.Volunteers.subtitle}
-                callToAction="View data"
-                placeHolder="V"
-                onClick={() => Pages.navigateTo('Volunteer', props.history.push)}
-              >
-                <TextDataCard {...volunteerStatsToProps(data && data.volunteerStats)} />
-              </Polaroid>
-            </Col>
-            <Col xs={6}>
-              <Polaroid
-                title="Projects"
-                caption="See what projects volunteers spend their time doing."
-                callToAction="Coming soon"
-                placeHolder="P"
-                disabled
-              />
-            </Col>
-          </Row>
-        </Col>
+        <LoadingBoundary isLoading={loading}>
+          <ThrowIfError error={error} />
+          <Col xs={8}>
+            <Row>
+              <Col xs={6}>
+                <Polaroid
+                  title={TitlesCopy.Time.title}
+                  caption={TitlesCopy.Time.subtitle}
+                  callToAction="View data"
+                  placeHolder="T"
+                  onClick={() => Pages.navigateTo('Time', props.history.push)}
+                >
+                  <NumberDataCard {...timeStatsToProps(data && data.timeStats)}/>
+                </Polaroid>
+              </Col>
+              <Col xs={6}>
+                <Polaroid
+                  title={TitlesCopy.Activities.title}
+                  caption={TitlesCopy.Activities.subtitle}
+                  callToAction="View data"
+                  placeHolder="A"
+                  onClick={() => Pages.navigateTo('Activity', props.history.push)}
+                >
+                  <NumberDataCard
+                    {...activityStatsToProps(data && data.activityStats)}
+                  />
+                </Polaroid>
+              </Col>
+              <Col xs={6}>
+                <Polaroid
+                  title={TitlesCopy.Volunteers.title}
+                  caption={TitlesCopy.Volunteers.subtitle}
+                  callToAction="View data"
+                  placeHolder="V"
+                  onClick={() => Pages.navigateTo('Volunteer', props.history.push)}
+                >
+                  <TextDataCard {...volunteerStatsToProps(data && data.volunteerStats)} />
+                </Polaroid>
+              </Col>
+              <Col xs={6}>
+                <Polaroid
+                  title="Projects"
+                  caption="See what projects volunteers spend their time doing."
+                  callToAction="Coming soon"
+                  placeHolder="P"
+                  disabled
+                />
+              </Col>
+            </Row>
+          </Col>
+        </LoadingBoundary>
       </Row>
     </Grid>
   );
