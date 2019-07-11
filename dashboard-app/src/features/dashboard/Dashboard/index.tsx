@@ -12,8 +12,7 @@ import useDashboardStatistics, {
   timeStatsToProps,
   volunteerStatsToProps,
 } from './useDashboardStatistics';
-import LoadingBoundary from '../../../lib/ui/components/Boundaries/LoadingBoundary';
-import ThrowIfError from '../../../lib/ui/components/Boundaries/ThrowIfError';
+import { LoadingHookBoundary } from '../../../lib/ui/components/Boundaries/LoadingHookBoundary';
 
 
 const H1 = styled(Heading1)`
@@ -34,8 +33,7 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
         </Col>
       </Row>
       <Row center="xs">
-        <LoadingBoundary isLoading={loading}>
-          <ThrowIfError error={error} />
+        <LoadingHookBoundary loading={loading} error={error}>
           <Col xs={8}>
             <Row>
               <Col xs={6}>
@@ -84,7 +82,7 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
               </Col>
             </Row>
           </Col>
-        </LoadingBoundary>
+        </LoadingHookBoundary>
       </Row>
     </Grid>
   );
