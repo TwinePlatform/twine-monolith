@@ -10,6 +10,7 @@ import StackedBarChart from '../components/StackedBarChart/index';
 import { LegendData } from '../components/StackedBarChart/types';
 import { TitleString } from '../components/Title';
 import { Order } from 'twine-util/arrays';
+import { Orderable } from '../hooks/useOrderable';
 
 
 /*
@@ -19,8 +20,7 @@ interface Props {
   data?: AggregatedData;
   unit: DurationUnitEnum;
   tableData: TableData;
-  sortBy: number;
-  order: Order;
+  orderable: Orderable;
   onChangeSortBy: (x: string) => void;
   title: TitleString;
   legendData: LegendData;
@@ -32,7 +32,7 @@ interface Props {
  * Component
  */
 const TimeTabs: FunctionComponent<Props> = (props) => {
-  const { data, unit, tableData, sortBy, onChangeSortBy, title, legendData, setLegendData, order } = props;
+  const { data, unit, tableData, onChangeSortBy, title, legendData, setLegendData, orderable } = props;
 
   return (
     <Row center="xs">
@@ -56,8 +56,7 @@ const TimeTabs: FunctionComponent<Props> = (props) => {
               <DataTable
                 {...tableData}
                 title={title}
-                sortBy={tableData.headers[sortBy]}
-                order={order}
+                orderable={orderable}
                 onChangeSortBy={onChangeSortBy}
                 showTotals
               />

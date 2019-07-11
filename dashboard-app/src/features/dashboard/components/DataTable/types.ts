@@ -4,6 +4,7 @@
 import { Dictionary } from 'ramda';
 import { Order } from 'twine-util/arrays';
 import { TitleString } from '../Title';
+import { Orderable } from '../../hooks/useOrderable';
 
 
 /**
@@ -14,11 +15,10 @@ import { TitleString } from '../Title';
 export type DataTableProps = {
   title?: TitleString
   headers: string[]
-  sortBy?: string
-  order?: Order
   onChangeSortBy?: (s: string) => void
   rows: DataTableRow[]
   showTotals?: boolean
+  orderable: Orderable
 };
 
 export type DataTableContent = number | string;
@@ -59,7 +59,7 @@ export type RowProps = {
 export type HeaderRowProps = {
   columns: CellProps[]
   order?: Order
-  sortBy?: string
+  sortBy?: number
   onClick?: DataTableCallback
 };
 
