@@ -52,7 +52,7 @@ const DefaultPicFiller = styled(Paragraph)`
 /*
  * Component
  */
-const TopContainer: React.FunctionComponent <Pick<PolaroidProps, 'placeHolder'>> = (props) => {
+const TopContainer: React.FunctionComponent<Pick<PolaroidProps, 'placeHolder'>> = (props) => {
   return (
   <CardFiller>
     {props.children

@@ -2,6 +2,7 @@ import { Dictionary, compose } from 'ramda';
 import { Duration, Objects } from 'twine-util';
 
 
+// Just to make it clearer whats being expected without reproducing the type def
 type VolunteerLog = any;
 
 const collectMaxDurations = (ds: Dictionary<Duration.Duration>) => {
