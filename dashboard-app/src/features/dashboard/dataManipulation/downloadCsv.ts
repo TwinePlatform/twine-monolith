@@ -4,7 +4,6 @@ import Months from '../../../lib/util/months';
 import { saveAs } from 'file-saver';
 import { AggregatedData, isDataEmpty } from './logsToAggregatedData';
 import { DurationUnitEnum } from '../../../types';
-import { Order } from 'twine-util/arrays';
 import { Orderable } from '../hooks/useOrderable';
 
 
@@ -14,8 +13,6 @@ interface Params {
   fromDate: Date;
   toDate: Date;
   unit: DurationUnitEnum;
-  // sortBy: number;
-  // order?: Order;
   orderable: Orderable;
 }
 
@@ -32,9 +29,7 @@ export const downloadCsv = async ({ data: aggData, fromDate, toDate, fileName, u
     const file = new File([csv], `${fileName}_${from}-${to}.csv`, {
       type: 'text/plain;charset=utf-8',
     });
-    // saveAs(file);
-    console.log(csv);
-
+    saveAs(file);
 
   } catch (error) {
     throw new Error('There was a problem downloading your data');

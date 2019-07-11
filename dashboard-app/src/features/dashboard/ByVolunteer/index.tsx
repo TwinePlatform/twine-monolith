@@ -14,11 +14,10 @@ import { ColoursEnum } from '../../../lib/ui/design_system';
 import VolunteerTabs from './VolunteerTabs';
 import Errors from '../components/Errors';
 import useAggregateDataByVolunteer from './useAggregateDataByVolunteer';
-import { getTitleForMonthPicker, toggleOrder } from '../util';
+import { getTitleForMonthPicker } from '../util';
 import { LegendData } from '../components/StackedBarChart/types';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
-import { Order } from 'twine-util/arrays';
 import { useOrderable } from '../hooks/useOrderable';
 
 

@@ -10,7 +10,6 @@ import { TableData } from '../dataManipulation/aggregatedToTableData';
 import StackedBarChart from '../components/StackedBarChart/index';
 import { LegendData } from '../components/StackedBarChart/types';
 import { TitleString } from '../components/Title';
-import { Order } from 'twine-util/arrays';
 import { Orderable } from '../hooks/useOrderable';
 
 /*
@@ -39,7 +38,16 @@ const DataTable = styled(_DataTable)`
  * Component
  */
 const VolunteerTabs: FunctionComponent<Props> = (props) => {
-  const { data, unit, tableData, onChangeSortBy, title, legendData, setLegendData, orderable } = props;
+  const {
+    data,
+    unit,
+    tableData,
+    onChangeSortBy,
+    title,
+    legendData,
+    setLegendData,
+    orderable,
+  } = props;
 
   return(
     <Row center="xs">

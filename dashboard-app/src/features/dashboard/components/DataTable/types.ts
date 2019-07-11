@@ -4,7 +4,6 @@
 import { Dictionary } from 'ramda';
 import { Order } from 'twine-util/arrays';
 import { TitleString } from '../Title';
-import { Orderable } from '../../hooks/useOrderable';
 
 
 /**

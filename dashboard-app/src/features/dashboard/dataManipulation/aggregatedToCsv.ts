@@ -10,7 +10,6 @@ import {
   abbreviateMonths
 } from './util';
 import Months from '../../../lib/util/months';
-import { Order } from 'twine-util/arrays';
 import { Orderable } from '../hooks/useOrderable';
 
 
@@ -34,7 +33,7 @@ export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEn
       : [groupBy, ...monthHeaders];
 
     const sortedRows = Arrays.sort([
-      { accessor: pathOr('', [headers[orderable.sortByIndex]]), order : orderable.order },
+      { accessor: pathOr('', [headers[orderable.sortByIndex]]), order: orderable.order },
       { accessor: pathOr('', [groupBy]), order: 'asc' },
     ], rows);
 

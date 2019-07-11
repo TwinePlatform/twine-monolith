@@ -1,7 +1,7 @@
 /*
  * DataTable component
  */
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { pathOr } from 'ramda';
 import { Order, sort } from 'twine-util/arrays';

@@ -15,11 +15,10 @@ import { ColoursEnum } from '../../../lib/ui/design_system';
 import TimeTabs from './TimeTabs';
 import Errors from '../components/Errors';
 import useAggregateDataByTime from './useAggregateDataByTime';
-import { getTitleForMonthPicker, toggleOrder } from '../util';
+import { getTitleForMonthPicker } from '../util';
 import { LegendData } from '../components/StackedBarChart/types';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
-import { Order } from 'twine-util/arrays';
 import { useOrderable } from '../hooks/useOrderable';
 
 
@@ -40,8 +39,6 @@ const initTableData = { headers: [], rows: [] };
  */
 const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
-  // const [sortBy, setSortBy] = useState(0);
-  // const [order, setOrder] = useState<Order>('desc');
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
