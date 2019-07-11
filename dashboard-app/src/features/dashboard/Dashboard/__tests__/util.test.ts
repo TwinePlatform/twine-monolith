@@ -2,25 +2,25 @@ import { logsToDurations, findMostActive } from '../util';
 
 
 describe('Dashboard statistics utilities', () => {
-  // describe('logsToDurations', () => {
-  //   test('empty array gives zero duration', () => {
-  //     expect(logsToDurations([])).toEqual({});
-  //   });
+  describe('logsToDurations', () => {
+    test('empty array gives zero duration', () => {
+      expect(logsToDurations([])).toEqual({});
+    });
 
-  //   test('single log returns that logs duration', () => {
-  //     expect(logsToDurations([{ duration: { minutes: 0 } }])).toEqual({});
-  //     expect(logsToDurations([{ duration: { minutes: 10 } }])).toEqual({ minutes: 10 });
-  //   });
+    test('single log returns that logs duration', () => {
+      expect(logsToDurations([{ duration: { minutes: 0 } }])).toEqual({});
+      expect(logsToDurations([{ duration: { minutes: 10 } }])).toEqual({ minutes: 10 });
+    });
 
-  //   test('multiple logs have their durations extracted and summed', () => {
-  //     expect(logsToDurations([
-  //       { duration: { minutes: 10 } },
-  //       { duration: { hours: 1 } },
-  //       { duration: { hours: 2, seconds: 10 } },
-  //     ]))
-  //       .toEqual({ hours: 3, minutes: 10, seconds: 10 });
-  //   });
-  // });
+    test('multiple logs have their durations extracted and summed', () => {
+      expect(logsToDurations([
+        { duration: { minutes: 10 } },
+        { duration: { hours: 1 } },
+        { duration: { hours: 2, seconds: 10 } },
+      ]))
+        .toEqual({ hours: 3, minutes: 10, seconds: 10 });
+    });
+  });
 
   describe('findMostActive', () => {
     test('empty dictionary gives empty value', () => {

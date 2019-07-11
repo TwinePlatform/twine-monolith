@@ -12,9 +12,6 @@ import useDashboardStatistics, {
   timeStatsToProps,
   volunteerStatsToProps,
 } from './useDashboardStatistics';
-import { BeatLoader } from 'react-spinners';
-import { ColoursEnum } from '../../../lib/ui/design_system';
-import { Paragraph } from '../../../lib/ui/components/Typography';
 import LoadingBoundary from '../../../lib/ui/components/Boundaries/LoadingBoundary';
 import ThrowIfError from '../../../lib/ui/components/Boundaries/ThrowIfError';
 
