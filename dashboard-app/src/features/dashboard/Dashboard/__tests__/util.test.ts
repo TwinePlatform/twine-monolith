@@ -34,13 +34,57 @@ describe('Dashboard statistics utilities', () => {
 
     test('multiple equal entries are all returned', () => {
       const logs = {
+        ['Sept 2018']: [
+          { duration: { hours: 1, minutes: 50 } },
+          { duration: { hours: 1 } },
+        ],
         ['Jun 2018']: [
           { duration: { hours: 2, minutes: 20 } },
           { duration: { minutes: 30 } },
         ],
+      };
+
+      expect(findMostActive(logs)).toEqual({
+        labels: ['Jun 2018', 'Sept 2018'], // TODO: Check ordering
+        value: 3, // TODO: Check if should be _FLOORED_
+      });
+    });
+
+    test('multiple different entries -- only max is returned', () => {
+      const logs = {
+        ['Sept 2018']: [
+          { duration: { hours: 0.5, minutes: 50 } },
+          { duration: { hours: 1 } },
+        ],
+        ['Jun 2018']: [
+          { duration: { hours: 2, minutes: 20 } },
+          { duration: { minutes: 30 } },
+        ],
+        ['Jan 2019']: [
+          { duration: { hours: 1 } },
+          { duration: { minutes: 10 } },
+        ],
+      };
+
+      expect(findMostActive(logs)).toEqual({
+        labels: ['Jun 2018'], // TODO: Check ordering
+        value: 3, // TODO: Check if should be _FLOORED_
+      });
+    });
+
+    test('mix of equal and non-equal entries -- only max are returned', () => {
+      const logs = {
         ['Sept 2018']: [
           { duration: { hours: 1, minutes: 50 } },
           { duration: { hours: 1 } },
+        ],
+        ['Jun 2018']: [
+          { duration: { hours: 2, minutes: 20 } },
+          { duration: { minutes: 30 } },
+        ],
+        ['Jan 2019']: [
+          { duration: { hours: 1 } },
+          { duration: { minutes: 10 } },
         ],
       };
 
