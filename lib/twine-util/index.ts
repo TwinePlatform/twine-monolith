@@ -3,6 +3,7 @@ import * as Promises from './promises';
 import * as MathUtil from './mathUtil';
 import * as Objects from './objects';
 import * as Random from './random';
+import * as String from './string';
 import * as Arrays from './arrays';
 import * as Time from './time';
 import * as File from './file';
@@ -14,6 +15,7 @@ export {
   MathUtil,
   Objects,
   Random,
+  String,
   Arrays,
   Time,
   File,

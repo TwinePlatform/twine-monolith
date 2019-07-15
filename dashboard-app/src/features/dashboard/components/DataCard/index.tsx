@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
+import { String } from 'twine-util';
 import { Paragraph, Bold } from '../../../../lib/ui/components/Typography';
 import { ColoursEnum, Fonts } from '../../../../lib/ui/design_system';
 import { TextTileProps, NumberTileProps, TileDataPoint } from './types';
-import { sentenceCreator } from './util';
 
 /*
  * Styles
@@ -73,7 +73,7 @@ const alternateBold = (xs: string[]) => (
  * Components
  */
 const LeftContainer: FunctionComponent<TileDataPoint<string[]>> = (props) => {
-  const dataSentence = ['', ...sentenceCreator(props.data)];
+  const dataSentence = ['', ...String.listify(props.data)];
   return (
     <MiddleTopLeftContainer>
       <Paragraph>{props.label}</Paragraph>
