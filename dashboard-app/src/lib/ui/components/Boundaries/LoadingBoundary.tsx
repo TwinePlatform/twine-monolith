@@ -1,5 +1,5 @@
 import React from 'react';
-import ErrorBoundary from './ErrorBoundary';
+import RenderErrorBoundary from './RenderErrorBoundary';
 import { ColoursEnum } from '../../design_system';
 import { BeatLoader } from 'react-spinners';
 
@@ -9,7 +9,7 @@ type LoadingBoundaryProps = {
 };
 
 
-class LoadingBoundary extends ErrorBoundary<LoadingBoundaryProps> {
+class LoadingBoundary extends RenderErrorBoundary<LoadingBoundaryProps> {
   render () {
     const { isLoading = false } = this.props;
 
@@ -21,7 +21,7 @@ class LoadingBoundary extends ErrorBoundary<LoadingBoundaryProps> {
       return <BeatLoader color={ColoursEnum.purple} />;
     }
 
-    return super.render();
+    return this.props.children;
   }
 }
 

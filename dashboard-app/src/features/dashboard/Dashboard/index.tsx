@@ -12,7 +12,7 @@ import useDashboardStatistics, {
   timeStatsToProps,
   volunteerStatsToProps,
 } from './useDashboardStatistics';
-import { LoadingHookBoundary } from '../../../lib/ui/components/Boundaries/LoadingHookBoundary';
+import { RedirectHttpErrorBoundary } from '../../../lib/ui/components/Boundaries';
 
 
 const H1 = styled(Heading1)`
@@ -33,7 +33,7 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
         </Col>
       </Row>
       <Row center="xs">
-        <LoadingHookBoundary loading={loading} error={error}>
+        <RedirectHttpErrorBoundary loading={loading} error={error}>
           <Col xs={8}>
             <Row>
               <Col xs={6}>
@@ -82,7 +82,7 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
               </Col>
             </Row>
           </Col>
-        </LoadingHookBoundary>
+        </RedirectHttpErrorBoundary>
       </Row>
     </Grid>
   );

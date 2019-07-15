@@ -10,11 +10,13 @@ type ErrorBoundaryState = {
   message: string
 };
 
+
 const isHttpError = (error: Error) =>
   ['isAxiosError', 'response']
     .reduce((acc, s) => acc || error.hasOwnProperty(s), false);
 
-class Boundary<T extends {}> extends React.Component<T, ErrorBoundaryState> {
+
+class BaseErrorBoundary<T extends {}> extends React.Component<T, ErrorBoundaryState> {
   constructor (props: Readonly<T>) {
     super(props);
     this.state = {
@@ -40,28 +42,8 @@ class Boundary<T extends {}> extends React.Component<T, ErrorBoundaryState> {
     }
   }
 
-  renderError () {
-    return (
-      <div>
-        <div>
-          {
-            this.state.isHttpError
-              ? 'There was a problem fetching your data'
-              : 'There was a problem with the application'
-          }
-        </div>
-        <div>
-          {
-            this.state.message
-          }
-        </div>
-        <div>
-          {
-            this.state.isHttpError && <span>Status Code: {this.state.statusCode}</span>
-          }
-        </div>
-      </div>
-    );
+  renderError (): JSX.Element {
+    throw new Error('Must be implemented');
   }
 
   render () {
@@ -73,4 +55,4 @@ class Boundary<T extends {}> extends React.Component<T, ErrorBoundaryState> {
   }
 }
 
-export default Boundary;
+export default BaseErrorBoundary;

@@ -4,6 +4,25 @@ import { Dictionary } from 'ramda';
 import { RouteComponentProps } from 'react-router-dom';
 import { Response } from './response';
 
+
+export const DEFAULT_REDIRECTS = {
+  400: '/error/400',
+  401: '/login',
+  403: '/login',
+  404: '/error/404',
+  500: '/error/500',
+  default: '/error/unknown',
+};
+
+export const getUrlFromStatusCode = (code: number, map: Dictionary<string>) => {
+  const redirs = Object.assign(DEFAULT_REDIRECTS, map);
+
+  return redirs.hasOwnProperty(code)
+    ? redirs[code]
+    : redirs['default'];
+};
+
+
 /**
  * Utility function to support client-side redirects based on
  * common status codes
@@ -15,40 +34,13 @@ export const redirectOnError = (
   error: AxiosError,
   custom: Dictionary<string> = {}
 ) => {
-  const defaults = {
-    400: '/error/400',
-    401: '/login',
-    403: '/login',
-    404: '/error/404',
-    500: '/error/500',
-    default: '/error/unknown',
-  };
-
-  const redirs = { ...defaults, ...custom };
+  const redirs = { ...DEFAULT_REDIRECTS, ...custom };
   const res = error.response;
+  const url = !res
+    ? redirs.default
+    : getUrlFromStatusCode(Response.status(res), redirs);
 
-  if (!res) {
-    return historyPush(redirs.default);
-  }
-
-  if (Response.statusEquals(res, 400)) {
-    historyPush(redirs[400]);
-
-  } else if (Response.statusEquals(res, 401)) {
-    historyPush(redirs[401]);
-
-  } else if (Response.statusEquals(res, 403)) {
-    historyPush(redirs[403]);
-
-  } else if (Response.statusEquals(res, 404)) {
-    historyPush(redirs[404]);
-
-  } else if (Response.statusEquals(res, 500)) {
-    historyPush(redirs[500]);
-
-  } else {
-    historyPush(redirs.default);
-  }
+  return historyPush(url);
 };
 
 
