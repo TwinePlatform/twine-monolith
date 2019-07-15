@@ -85,6 +85,15 @@ const config: DeepPartial<Config> = {
           path: '/',
         },
       },
+      session_cookie: {
+        options: {
+          name: 'twine-api-session',
+          cookieOptions: {
+            password: 'pefwj48208tfh29pd9cm10cprmhx94pfry28ctnc2mkrx0dufpog3',
+            isHttpOnly: true,
+          },
+        },
+      },
     },
   },
   qrcode: {

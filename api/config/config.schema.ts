@@ -106,6 +106,22 @@ export default Joi.object({
           domain: Joi.string(),
         }).required(),
       }).required(),
+      session_cookie: Joi.object({
+        options: Joi.object({
+          name: Joi.string().required(),
+          cache: Joi.object({
+            expiresIn: Joi.number().integer().positive(),
+          }),
+          cookieOptions: Joi.object({
+            password: Joi.string().min(32).required(),
+            ttl: Joi.number().integer().positive(),
+            isSecure: Joi.boolean(),
+            isHttpOnly: Joi.boolean(),
+            isSameSite: Joi.only([false, 'Lax', 'Strict']),
+            path: Joi.string(),
+          }),
+        }),
+      }),
     },
   }).required(),
   qrcode: Joi.object({

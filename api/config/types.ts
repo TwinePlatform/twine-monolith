@@ -2,6 +2,7 @@ import * as Hapi from '@hapi/hapi';
 import { CatboxRedisOptions } from '@hapi/catbox-redis';
 import * as Knex from 'knex';
 import * as JWT from 'jsonwebtoken';
+import * as Yar from '@hapi/yar';
 import { AppEnum } from '../src/types/internal';
 
 
@@ -46,8 +47,11 @@ type AuthConfig = {
       decodeOptions?: JWT.DecodeOptions
     }
     cookie: {
-      name: string,
+      name: string
       options: Hapi.ServerStateCookieOptions
+    },
+    session_cookie?: {
+      options: Yar.YarOptions
     }
   }
 };

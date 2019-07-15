@@ -23,7 +23,6 @@ export default {
     server.auth.scheme('session_id', (server, opts: Options) => {
       return {
         async authenticate (request, h) {
-          // extract sid
           const sid = extractSid(request, opts);
 
           if (!sid) {
