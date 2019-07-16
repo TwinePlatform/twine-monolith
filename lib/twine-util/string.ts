@@ -30,4 +30,4 @@ export const listify = (xs: string[]) => {
 
 
 export const readableListify = (xs: string[]) =>
-  listify(xs).join();
+  listify(xs).join('');
