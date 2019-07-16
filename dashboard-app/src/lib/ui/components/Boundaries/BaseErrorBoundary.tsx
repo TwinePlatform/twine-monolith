@@ -1,6 +1,6 @@
 import React from 'react';
 import { AxiosError } from 'axios';
-import { propOr } from 'ramda';
+import { propOr, pathOr } from 'ramda';
 
 
 type ErrorBoundaryState = {
@@ -31,7 +31,7 @@ class BaseErrorBoundary<T extends {}> extends React.Component<T, ErrorBoundarySt
     return {
       hasError: true,
       isHttpError: isHttpError(error),
-      statusCode: propOr(0, 'code', error),
+      statusCode: propOr(pathOr(0, ['response', 'status'], error), 'code', error),
       message: error.message,
     };
   }

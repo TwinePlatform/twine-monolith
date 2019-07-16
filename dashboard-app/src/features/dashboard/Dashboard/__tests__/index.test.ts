@@ -30,31 +30,25 @@ describe('Dashboard Page', () => {
   });
 
   test('API requests fail', async () => {
-    expect.assertions(2);
+    expect.assertions(1);
 
     mock.onGet('/community-businesses/me/volunteer-logs').reply(500, { error: {} });
     mock.onGet('/community-businesses/me/volunteers').reply(500, { error: {} });
 
     const tools = renderWithHistory(Dashboard);
-    const errorText = await waitForElement(() =>
-      tools.getByText('There was a problem', { exact: false }));
 
-    expect(errorText).toHaveTextContent('There was a problem fetching your data');
-    expect(tools.history.location.pathname).toBe('/'); // remains on the same page
+    await wait(() => expect(tools.history.location.pathname).toBe('/error/500'));
   });
 
   test('Response processing failure', async () => {
-    expect.assertions(2);
+    expect.assertions(1);
 
     // Don't setup mock responses to force a type error
     // in the response processing code.
 
     const tools = renderWithHistory(Dashboard);
-    const errorText = await waitForElement(() =>
-      tools.getByText('There was a problem', { exact: false }));
 
-    expect(errorText).toHaveTextContent('There was a problem with the application');
-    expect(tools.history.location.pathname).toBe('/'); // remains on the same page
+    await wait(() => expect(tools.history.location.pathname).toBe('/error/unknown'));
   });
 
   test('Clicking time goes to /time', async () => {
