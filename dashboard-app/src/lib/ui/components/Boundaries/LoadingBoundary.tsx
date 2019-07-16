@@ -1,5 +1,4 @@
 import React from 'react';
-import RenderErrorBoundary from './RenderErrorBoundary';
 import { ColoursEnum } from '../../design_system';
 import { BeatLoader } from 'react-spinners';
 
