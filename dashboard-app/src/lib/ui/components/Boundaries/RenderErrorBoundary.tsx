@@ -10,7 +10,7 @@ class RenderErrorBoundary<T extends {}> extends BaseErrorBoundary<T> {
           {
             this.state.isHttpError
               ? 'There was a problem fetching your data'
-              : 'There was a problem with the application'
+              : 'There was a problem with this component'
           }
         </div>
         <div>

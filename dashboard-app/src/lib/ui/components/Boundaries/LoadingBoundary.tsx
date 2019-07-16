@@ -9,7 +9,7 @@ type LoadingBoundaryProps = {
 };
 
 
-class LoadingBoundary extends RenderErrorBoundary<LoadingBoundaryProps> {
+class LoadingBoundary extends React.Component<LoadingBoundaryProps> {
   render () {
     const { isLoading = false } = this.props;
 

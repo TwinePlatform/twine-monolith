@@ -12,16 +12,33 @@ import useDashboardStatistics, {
   timeStatsToProps,
   volunteerStatsToProps,
 } from './useDashboardStatistics';
-import { RedirectHttpErrorBoundary } from '../../../lib/ui/components/Boundaries';
+import {
+  RedirectHttpErrorBoundary,
+  RenderErrorBoundary
+} from '../../../lib/ui/components/Boundaries';
 
-
+/*
+ * Styles
+ */
 const H1 = styled(Heading1)`
   margin-bottom: 3rem;
 `;
 
-/**
- * Component
+/*
+ * Components
  */
+const VolunteerTile: React.FC<{ stats: any }> = ({ stats }) => (
+  stats && <TextDataCard {...volunteerStatsToProps(stats)} />
+);
+
+const TimeTile: React.FC<{ stats: any }> = ({ stats }) => (
+  stats && <NumberDataCard {...timeStatsToProps(stats)} />
+);
+
+const ActivityTile: React.FC<{ stats: any }> = ({ stats }) => (
+  stats && <NumberDataCard {...activityStatsToProps(stats)} />
+);
+
 const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
   const { loading, error, data } = useDashboardStatistics();
 
@@ -44,7 +61,9 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                   placeHolder="T"
                   onClick={() => Pages.navigateTo('Time', props.history.push)}
                 >
-                  <NumberDataCard {...timeStatsToProps(data && data.timeStats)}/>
+                  <RenderErrorBoundary>
+                    <TimeTile stats={data && data.timeStats} />
+                  </RenderErrorBoundary>
                 </Polaroid>
               </Col>
               <Col xs={6}>
@@ -55,9 +74,9 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                   placeHolder="A"
                   onClick={() => Pages.navigateTo('Activity', props.history.push)}
                 >
-                  <NumberDataCard
-                    {...activityStatsToProps(data && data.activityStats)}
-                  />
+                  <RenderErrorBoundary>
+                    <ActivityTile stats={data && data.activityStats} />
+                  </RenderErrorBoundary>
                 </Polaroid>
               </Col>
               <Col xs={6}>
@@ -68,7 +87,9 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                   placeHolder="V"
                   onClick={() => Pages.navigateTo('Volunteer', props.history.push)}
                 >
-                  <TextDataCard {...volunteerStatsToProps(data && data.volunteerStats)} />
+                  <RenderErrorBoundary>
+                    <VolunteerTile stats={data && data.volunteerStats} />
+                  </RenderErrorBoundary>
                 </Polaroid>
               </Col>
               <Col xs={6}>
