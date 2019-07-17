@@ -15,7 +15,7 @@ import {
 
 // tslint:disable:max-line-length
 describe('Helpers', () => {
-  describe(':: isEveryDatumActive', async () => {
+  describe(':: isEveryDatumActive', () => {
     test('Success :: return true if all data is active', async () => {
       const activeData = [
         { active: true, name: 'Aku Aku', id: 7 },
@@ -42,7 +42,7 @@ describe('Helpers', () => {
     });
   });
 
-  describe(':: isEveryDatumInactive', async () => {
+  describe(':: isEveryDatumInactive', () => {
     test('Success :: return true if all data is inactive', async () => {
       const activeData = [
         { active: false, name: 'Aku Aku', id: 3 },
@@ -69,7 +69,7 @@ describe('Helpers', () => {
     });
   });
 
-  describe(':: flipActiveOfAll', async () => {
+  describe(':: flipActiveOfAll', () => {
     test('Success :: sets all to false if all are true', async () => {
       const activeData = [
         { active: true, name: 'Aku Aku', id: 2 },
@@ -104,7 +104,7 @@ describe('Helpers', () => {
       ]);
     });
   });
-  describe(':: createLegendData', async () => {
+  describe(':: createLegendData', () => {
     test('Success :: creates a list of active data', async () => {
       const aggregatedData = {
         groupByX: 'Volunteer Name',
@@ -136,7 +136,7 @@ describe('Helpers', () => {
     });
   });
 
-  describe(':: updateLegendData', async () => {
+  describe(':: updateLegendData', () => {
     test('Success :: creates an updated list of active data', async () => {
       const aggregatedData = {
         groupByX: 'Volunteer Name',
@@ -166,7 +166,7 @@ describe('Helpers', () => {
     });
   });
 
-  describe(':: getYHeaderList', async () => {
+  describe(':: getYHeaderList', () => {
     test('Success :: lists all Y headers', async () => {
       const row = {
         'Outdoor and practical work': { minutes: 2 },
@@ -181,7 +181,7 @@ describe('Helpers', () => {
     });
   });
 
-  describe(':: sortByNameCaseInsensitive', async () => {
+  describe(':: sortByNameCaseInsensitive', () => {
     test('Success :: reorders list of objects based on "name"', async () => {
       const activeData = [
         { active: false, name: 'Papu Papu', id: 35 },
@@ -205,7 +205,7 @@ describe('Helpers', () => {
     });
   });
 
-  describe(':: sortAndZeroOutInactiveData', async () => {
+  describe(':: sortAndZeroOutInactiveData', () => {
     test('Success :: replaces all inactive data with 0', async () => {
       const aggregatedData = {
         groupByX: 'Volunteer Name',
@@ -230,7 +230,7 @@ describe('Helpers', () => {
       );
     });
   });
-  describe(':: sortAndZeroOutInactiveData', async () => {
+  describe(':: sortAndZeroOutInactiveData', () => {
     test('Success :: replaces all inactive data with 0', async () => {
       const aggregatedData = {
         groupByX: 'Volunteer Name',

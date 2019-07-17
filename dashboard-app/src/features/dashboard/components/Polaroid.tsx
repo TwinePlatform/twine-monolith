@@ -7,6 +7,21 @@ import { RoundedButton } from '../../../lib/ui/components/Buttons';
 import { ColoursEnum, Fonts } from '../../../lib/ui/design_system';
 
 
+/*
+ * Types
+ */
+type PolaroidProps = {
+  title: string
+  caption: string
+  callToAction?: string
+  placeHolder?: string
+  disabled?: boolean
+  onClick?: () => void,
+};
+
+/*
+ * Style
+ */
 const Card = styled(_Card)`
   max-width: 30rem;
   margin-bottom: 2rem;
@@ -34,39 +49,33 @@ const DefaultPicFiller = styled(Paragraph)`
   color: ${ColoursEnum.white};
 `;
 
-
-type PolaroidProps = {
-  title: string
-  caption: string
-  callToAction?: string
-  picture?: (() => React.FunctionComponent) | string
-  disabled?: boolean
-  onClick?: () => void,
-};
-
-const DefaultPicture: React.FunctionComponent = (props) => (
+/*
+ * Component
+ */
+const TopContainer: React.FunctionComponent<Pick<PolaroidProps, 'placeHolder'>> = (props) => {
+  return (
   <CardFiller>
-    <DefaultPicFiller>{props.children}</DefaultPicFiller>
+    {props.children
+      ? props.children
+      : <DefaultPicFiller>{props.placeHolder || ''}</DefaultPicFiller>}
   </CardFiller>
-);
+  );
+};
 
 const Polaroid: React.FunctionComponent<PolaroidProps> = (props) => {
   const {
+    children,
+    placeHolder,
     title,
     caption,
     callToAction,
-    picture = '',
     disabled = false,
     onClick = () => {},
   } = props;
 
-  const image = typeof picture === 'string'
-    ? () => <DefaultPicture>{picture}</DefaultPicture>
-    : () => <CardFiller>{picture()}</CardFiller>;
-
   return (
     <Card>
-      { image() }
+      <TopContainer placeHolder={placeHolder} children={children}/>
       <CaptionSection>
         <H2>{title}</H2>
         <Paragraph>{caption}</Paragraph>
