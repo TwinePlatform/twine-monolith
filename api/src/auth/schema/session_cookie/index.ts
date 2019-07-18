@@ -4,17 +4,18 @@ import * as Yar from '@hapi/yar';
 import * as Cookie from 'cookie';
 
 
+export type ValidateFunction = (sid: string, req: Hapi.Request) => Promise<Hapi.AuthenticationData>;
+
 type Options = {
   cookieKey?: string
   headerKey?: string
-  validate: (sid: string, req: Hapi.Request) =>
-    Promise<Hapi.AuthenticationData & { isValid: boolean }>
+  validate: ValidateFunction
 };
 
 
 export default {
   name: 'session id schema',
-  register: async (server: Hapi.Server, options: any) => {
+  register: async (server: Hapi.Server, options: Yar.YarOptions) => {
 
     server.register([
       { plugin: Yar, options: { ...options, once: true } },
@@ -31,15 +32,12 @@ export default {
 
           try {
             const res = await opts.validate(sid, request);
+            return h.authenticated(res);
 
-            if (res.isValid) {
-              return h.authenticated(res);
-            }
           } catch (error) {
             return h.unauthenticated(error);
 
           }
-          return h.authenticated({ credentials: {} });
         },
       };
     });
