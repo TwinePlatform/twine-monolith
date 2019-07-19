@@ -2,12 +2,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Paragraph } from '../../../shared/components/text/base';
 
 
 const Video = styled.video`
   background-color: black;
   border-radius: 0.2em;
   width: 100%;
+`;
+
+const NoVideo = styled.div`
+  background-color: black;
+  border-radius: 0.2em;
+  width: 100%;
+  padding: 4rem 0;
 `;
 
 const QrContainer = styled.div`
@@ -29,6 +37,7 @@ export default class QrScanner extends React.Component {
     this.state = {
       hasScanned: false,
       errors: {},
+      camNotAllowed: false,
     };
 
     this.playbackRef = null;
@@ -55,7 +64,14 @@ export default class QrScanner extends React.Component {
         }
         return this.scanner.start(cameras[0]);
       })
-      .catch(error => this.props.onCameraError(error));
+      .catch((error) => {
+        if (error.message === 'Cannot access video stream (NotAllowedError).') {
+          this.setState({ camNotAllowed: true });
+          return;
+        }
+
+        this.props.onCameraError(error);
+      });
 
     if (!this.state.hasScanned) {
       this.scanner.addListener('scan', this.scanListener);
@@ -83,7 +99,12 @@ export default class QrScanner extends React.Component {
   render() {
     return (
       <QrContainer id="qr-scanner-container">
-        <Video ref={this.setPlaybackRef} />
+        <NoVideo>
+          {this.state.camNotAllowed
+            ? <Paragraph>Camera is not available</Paragraph>
+            : <Video ref={this.setPlaybackRef} />
+          }
+        </NoVideo>
       </QrContainer>
     );
   }
