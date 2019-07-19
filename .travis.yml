@@ -6,10 +6,6 @@ env:
   global:
     - NODE_ENV=testing
 
-cache:
-  directories:
-    - "node_modules"
-
 addons:
   postgresql: "9.5"
   apt:
@@ -23,7 +19,7 @@ install:
   - bash ./.travis/cc-download.sh
   - npm install -g lerna
   - lerna bootstrap
-  - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm install; cd ..; done
+  - for x in "api" "dashboard-app" "visitor-app" "lib/twine-util"; do cd $x; npm install; cd ..; done
 
 jobs:
   include:
