@@ -19,6 +19,7 @@ import { getTitleForMonthPicker } from '../util';
 import { LegendData } from '../components/StackedBarChart/types';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
+import { useOrderable } from '../hooks/useOrderable';
 
 
 /**
@@ -38,7 +39,6 @@ const initTableData = { headers: [], rows: [] };
  */
 const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
-  const [sortBy, setSortBy] = useState(0);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
@@ -56,38 +56,35 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
     }
   }, [data, unit]);
 
+  // get sorting state values
+  const {
+    orderable,
+    onChangeOrderable,
+  } = useOrderable({ initialOrderable: { sortByIndex: 0, order: 'desc' }, updateOn: [tableData] });
+
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
-    if (idx > -1) {
-      setSortBy(idx);
-
-      // Requirement: If column being selected for sorting is "Volunteer Name"
-      //              (i.e. the first column), sort ascending (A-Z) instead of
-      //              descending (Z-A)
-      if (idx === 0) {
-        return 'asc';
-      }
-    }
-  }, [tableData]);
+    onChangeOrderable(idx);
+  }, [tableData, orderable]);
 
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
-      downloadCsv({ data, fromDate, toDate, fileName: 'time', unit, sortBy })
+      downloadCsv({ data, fromDate, toDate, fileName: 'time', unit, orderable })
         .catch((error) => setErrors({ Download: error.message }));
     } else {
       setErrors({ Download: 'No data available to download' });
     }
-  }, [data, fromDate, toDate, unit]);
+  }, [data, fromDate, toDate, orderable]);
 
   const tabProps = {
     data,
     unit,
     tableData,
-    sortBy,
     onChangeSortBy,
     title: getTitleForMonthPicker(TitlesCopy.Time.subtitle, fromDate, toDate),
     legendData,
     setLegendData,
+    orderable,
   };
 
   return (

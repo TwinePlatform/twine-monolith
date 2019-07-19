@@ -27,7 +27,7 @@ describe('aggregatedToCsv', () => {
       ],
     } as AggregatedData;
 
-    const expected = await aggregatedToCsv(data, unit);
+    const expected = await aggregatedToCsv(data, unit, { order: 'asc', sortByIndex: 0 });
     expect(expected).toEqual(`Activity,Total Hours,February 2018,March 2018,April 2018
 Digging Holes,0.03,0,0.03,0
 Outdoor and practical work,3.15,0,0.06,3.09`);
@@ -56,7 +56,7 @@ Outdoor and practical work,3.15,0,0.06,3.09`);
       ],
     } as AggregatedData;
 
-    const expected = await aggregatedToCsv(data, unit);
+    const expected = await aggregatedToCsv(data, unit, { order: 'asc', sortByIndex: 0 });
     expect(expected).toEqual(`Activity,Total Days,February 2018,March 2018,April 2018
 Digging Holes,0.42,0,0.42,0
 Outdoor and practical work,0.46,0,0.07,0.39`);

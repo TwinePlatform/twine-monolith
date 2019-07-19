@@ -1,7 +1,7 @@
 /*
  * DataTable component
  */
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { pathOr } from 'ramda';
 import { Order, sort } from 'twine-util/arrays';
@@ -38,31 +38,24 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
   const {
     headers,
     rows,
-    initialOrder = 'desc',
     sortBy = props.headers[0],
+    order = 'desc',
     onChangeSortBy = () => {},
     title,
     showTotals = false,
     ...rest
   } = props;
 
-  const [order, setOrder] = useState<Order>(initialOrder);
-
   const onHeaderClick = useCallback((title) => {
-    if (sortBy === title) { // toggling order
-      setOrder(order === 'desc' ? 'asc' : 'desc');
-    } else { // sorting by new column
-      const order = onChangeSortBy(title);
-      setOrder(order || 'desc');
-    }
-  }, [order, sortBy, headers]);
+    onChangeSortBy(title);
+  }, [sortBy, order, headers]);
 
   const sorter = useCallback((_rows: DataTableProps['rows']) =>
     sort([
       { accessor: pathOr('', ['columns', sortBy, 'content']), order },
       { accessor: pathOr('', ['columns', headers[0], 'content']), order: 'asc' as Order },
     ], _rows)
-  , [order, sortBy, headers]);
+  , [sortBy, order, headers]);
 
   const table = (
     <Table cols={headers.length}>

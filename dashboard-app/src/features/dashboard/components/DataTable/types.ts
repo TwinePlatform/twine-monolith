@@ -14,9 +14,9 @@ import { TitleString } from '../Title';
 export type DataTableProps = {
   title?: TitleString
   headers: string[]
-  initialOrder?: Order
   sortBy?: string
-  onChangeSortBy?: (s: string) => Order | void
+  order?: Order
+  onChangeSortBy?: (s: string) => void
   rows: DataTableRow[]
   showTotals?: boolean
 };

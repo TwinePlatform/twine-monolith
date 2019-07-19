@@ -9,6 +9,7 @@ import { TableData } from '../dataManipulation/aggregatedToTableData';
 import StackedBarChart from '../components/StackedBarChart/index';
 import { LegendData } from '../components/StackedBarChart/types';
 import { TitleString } from '../components/Title';
+import { Orderable } from '../hooks/useOrderable';
 
 
 /*
@@ -18,7 +19,7 @@ interface Props {
   data?: AggregatedData;
   unit: DurationUnitEnum;
   tableData: TableData;
-  sortBy: number;
+  orderable: Orderable;
   onChangeSortBy: (x: string) => void;
   title: TitleString;
   legendData: LegendData;
@@ -30,7 +31,16 @@ interface Props {
  * Component
  */
 const TimeTabs: FunctionComponent<Props> = (props) => {
-  const { data, unit, tableData, sortBy, onChangeSortBy, title, legendData, setLegendData } = props;
+  const {
+    data,
+    unit,
+    tableData,
+    onChangeSortBy,
+    title,
+    legendData,
+    setLegendData,
+    orderable,
+  } = props;
 
   return (
     <Row center="xs">
@@ -54,8 +64,8 @@ const TimeTabs: FunctionComponent<Props> = (props) => {
               <DataTable
                 {...tableData}
                 title={title}
-                sortBy={tableData.headers[sortBy]}
-                initialOrder="asc"
+                order={orderable.order}
+                sortBy={tableData.headers[orderable.sortByIndex]}
                 onChangeSortBy={onChangeSortBy}
                 showTotals
               />

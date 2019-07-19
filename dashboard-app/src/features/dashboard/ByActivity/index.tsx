@@ -19,7 +19,7 @@ import { TabGroup } from '../components/Tabs';
 import { getTitleForDayPicker } from '../util';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
-
+import { useOrderable } from '../hooks/useOrderable';
 
 /**
  * Types
@@ -47,9 +47,9 @@ const initTableData = { headers: [], rows: [] };
 /**
  * Component
  */
-const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
+const ByActivity: FunctionComponent<RouteComponentProps> = () => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
-  const [sortBy, setSortBy] = useState(1);
+
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
@@ -59,6 +59,17 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
   // set and clear errors on response
   const [errors, setErrors] = useErrors(error, data);
 
+  // get sorting state values
+  const {
+    orderable,
+    onChangeOrderable,
+  } = useOrderable({ initialOrderable: { sortByIndex: 1, order: 'desc' }, updateOn: [tableData] });
+
+  const onChangeSortBy = useCallback((column: string) => {
+    const idx = tableData.headers.indexOf(column);
+    onChangeOrderable(idx);
+  }, [tableData, orderable]);
+
   // manipulate data for table
   useEffect(() => {
     if (!loading && data && activities) {
@@ -66,28 +77,14 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
     }
   }, [data, unit]);
 
-  const onChangeSortBy = useCallback((column: string) => {
-    const idx = tableData.headers.indexOf(column);
-    if (idx > -1) {
-      setSortBy(idx);
-
-      // Requirement: If column being selected for sorting is "Volunteer Name"
-      //              (i.e. the first column), sort ascending (A-Z) instead of
-      //              descending (Z-A)
-      if (idx === 0) {
-        return 'asc';
-      }
-    }
-  }, [tableData]);
-
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
-      downloadCsv({ data, fromDate, toDate, fileName: 'activity', unit, sortBy })
+      downloadCsv({ data, fromDate, toDate, fileName: 'activity', unit, orderable })
         .catch((error) => setErrors({ Download: error.message }));
     } else {
       setErrors({ Download: 'No data available to download' });
     }
-  }, [data, fromDate, toDate, unit]);
+  }, [data, fromDate, toDate, unit, orderable]);
 
   return (
     <Container>
@@ -121,8 +118,8 @@ const ByActivity: FunctionComponent<RouteComponentProps> = (props) => {
                       <DataTable
                         {...tableData}
                         title={getTitleForDayPicker(TitlesCopy.Activities.subtitle, fromDate, toDate)} // tslint:disable:max-line-length
-                        sortBy={tableData.headers[sortBy]}
-                        initialOrder="desc"
+                        sortBy={tableData.headers[orderable.sortByIndex]}
+                        order={orderable.order}
                         onChangeSortBy={onChangeSortBy}
                         showTotals
                       />

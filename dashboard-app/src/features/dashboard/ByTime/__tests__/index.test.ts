@@ -55,7 +55,7 @@ describe('By Time Page', () => {
       fireEvent.click(tableTab);
 
       const [firstHeader] = await waitForElement(() => [
-        tools.getByText('↑', { exact: false }),
+        tools.getByText('↓', { exact: false }),
         tools.getByText('Total Hours', { exact: true }),
         tools.getByText('Jul 2018', { exact: true }),
         tools.getByText('Aug 2018', { exact: true }),
@@ -80,13 +80,13 @@ describe('By Time Page', () => {
 
       const rows = await waitForElement(() => tools.getAllByTestId('data-table-row'));
 
-      expect(rows[0]).toHaveTextContent('Cafe5.6600020.333.33000000');
-      expect(rows[1]).toHaveTextContent('Running away1.3300000001.330000');
-      expect(firstHeader).toHaveTextContent('↑ Activity');
+      expect(firstHeader).toHaveTextContent('↓ Activity');
+      expect(rows[0]).toHaveTextContent('Running away1.3300000001.330000');
+      expect(rows[1]).toHaveTextContent('Cafe5.6600020.333.33000000');
     });
 
-    test('Sort on first column is ascending (A-Z) by default', async () => {
-      expect.assertions(4);
+    test('Success :: Sort on first column is ascending (A-Z) by default', async () => {
+      expect.assertions(5);
 
       mock.onGet('/community-businesses/me/volunteer-logs').reply(200, { result: logs });
       mock.onGet('/volunteer-activities').reply(200, { result: activities });
@@ -96,16 +96,18 @@ describe('By Time Page', () => {
       fireEvent.click(tableTab);
 
       const [header1, header2] = await waitForElement(() => [
-        tools.getByText('↑ Activity', { exact: true }),
+        tools.getByText('Activity', { exact: false }),
         tools.getByText('Total Hours', { exact: true }),
       ]);
+
+      expect(header1).toHaveTextContent('↓ Activity');
 
       fireEvent.click(header2);
       await wait();
       fireEvent.click(header1);
 
       const [sortedHeader, rows] = await waitForElement(() => [
-        tools.getByText('↑ Activity', { exact: true }),
+        tools.getByText('Activity', { exact: false }),
         tools.getAllByTestId('data-table-row'),
       ]);
 
