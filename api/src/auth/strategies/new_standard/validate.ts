@@ -1,13 +1,13 @@
 import * as Boom from '@hapi/boom';
 import { Users, Organisations } from '../../../models';
 import { ValidateFunction } from '../../schema/session_cookie';
-import { Session } from './types';
 import { Credentials } from './credentials';
+import { Sessions } from './session';
 
 
 const validate: ValidateFunction = async (sid, req) => {
   const { knex } = req;
-  const session: Session = req.yar.get(sid);
+  const session = Sessions.get(req, sid);
 
   if (!session) {
     throw Boom.unauthorized('No valid session');
