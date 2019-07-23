@@ -53,12 +53,13 @@ const PrintOption = props =>
     <NotPrint>
       <FlexContainerCol>
         <NavHeader
-          leftTo="/cb/dashboard"
-          leftContent="Back to dashboard"
+          leftTo="/admin"
+          leftContent="Back to Dashboard"
           centerContent="Anonymous User QR code"
         />
         <CenteredParagraph>
-        Please print this page. If you loose the QR code it can be reprinted from the Visitor page.
+          Please print this page.
+          If you loose the QR code it can be reprinted from the Visitor page.
         </CenteredParagraph>
         <FlexContainerRow>
           <QRContainer>
