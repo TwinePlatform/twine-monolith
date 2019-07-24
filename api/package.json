@@ -47,7 +47,7 @@
     "copy": "npm run copy:assets && npm run copy:fonts",
     "start": "node ./build/src/index.js",
     "watch": "tsc -w",
-    "build": "tsc && npm run copy",
+    "build": "tsc --skipLibCheck && npm run copy",
     "heroku-postbuild": "npm run build",
     "exec": "ts-node --files"
   },
