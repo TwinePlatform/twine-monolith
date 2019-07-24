@@ -6,7 +6,7 @@
  */
 import * as Knex from 'knex';
 import * as Hapi from '@hapi/hapi';
-import * as Shot from 'shot';
+import * as Shot from '@hapi/shot';
 import { Config } from '../../config';
 
 
