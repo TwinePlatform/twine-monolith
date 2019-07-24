@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest",
     "cover": "jest --coverage",
-    "build": "tsc",
+    "build": "tsc --skipLibCheck",
     "lint": "tslint --project tsconfig.json"
   },
   "contributors": [
