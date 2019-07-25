@@ -2,13 +2,14 @@
  * Clone remote heroku database to local database
  *
  * Usage:
- *  npm run exec ./bin/clone_db.ts -- db_name [--clean]
+ *  npm run exec ./bin/clone_db.ts -- db_name [--clean] [--app=APP_NAME]
  *
  * Arguments:
  *  db_name: Name of local database to create to hold the contents of the remote
  *
  * Flags:
  *  clean: Boolean flag; determines whether to delete any existing dump file
+ *  app: Name of heroku app from which to clone DB. Default = twine-api
  *
  * Note: Including the argument separator `--` before any of the flags is important.
  *       Without it, the argument parsing will not work.
@@ -25,7 +26,7 @@ const exists = promisify(existsOld);
 
 process.on('unhandledRejection', (err) => { throw err; });
 
-const { _: [dbName], clean } = parse(process.argv.slice(2));
+const { _: [dbName], clean, app = 'twine-api' } = parse(process.argv.slice(2));
 
 if (!dbName) {
   throw new Error('Missing arguments');
@@ -43,7 +44,7 @@ if (!dbName) {
     if (await exists(path.resolve(__dirname, '..', 'latest.dump'))) {
       console.log('Using existing dumpfile');
     } else {
-      await exec('heroku pg:backups:download -a twine-api');
+      await exec(`heroku pg:backups:download -a ${app}`);
     }
 
     await exec(`pg_restore --clean --no-acl --no-owner -h localhost -d ${dbName} latest.dump`);
