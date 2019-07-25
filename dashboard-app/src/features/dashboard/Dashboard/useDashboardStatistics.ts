@@ -15,8 +15,8 @@ export type EqualDataPoints = {
 export default () => {
   const oneYearAgo = moment().subtract(1, 'year').toDate();
   const now = moment().toDate();
-  const startOfThisMonth = moment().subtract(2, 'months').startOf('month');
-  const endOfThisMonth = moment().subtract(2, 'months').endOf('month');
+  const startOfThisMonth = moment().startOf('month');
+  const endOfThisMonth = moment().endOf('month');
 
   const [timeStats, setTimeStats] = useState<EqualDataPoints>({ labels: [], value: 0 });
   const [volunteerStats, setVolunteerStats] = useState<EqualDataPoints>({ labels: [], value: 0 });

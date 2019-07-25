@@ -94,8 +94,8 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
               </Col>
               <Col xs={6}>
                 <Polaroid
-                  title="Projects"
-                  caption="See what projects volunteers spend their time doing."
+                  title={TitlesCopy.Projects.title}
+                  caption={TitlesCopy.Projects.subtitle}
                   callToAction="Coming soon"
                   placeHolder="P"
                   disabled
