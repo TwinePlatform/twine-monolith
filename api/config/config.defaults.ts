@@ -89,7 +89,7 @@ const config: DeepPartial<Config> = {
         options: {
           name: 'twine-api-session',
           cookieOptions: {
-            password: 'pefwj48208tfh29pd9cm10cprmhx94pfry28ctnc2mkrx0dufpog3',
+            password: process.env.COOKIE_PASSWORD,
             isHttpOnly: true,
           },
         },

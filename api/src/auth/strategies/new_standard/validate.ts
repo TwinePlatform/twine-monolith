@@ -5,13 +5,9 @@ import { Credentials } from './credentials';
 import { Sessions } from './session';
 
 
-const validate: ValidateFunction = async (sid, req) => {
-  const { knex } = req;
-  const session = Sessions.get(req, sid);
-
-  if (!session) {
-    throw Boom.unauthorized('No valid session');
-  }
+const validate: ValidateFunction = async (req) => {
+  const { server: { app: { knex } } } = req;
+  const session = Sessions.get(req);
 
   const { userId, organisationId } = session;
 

@@ -5,6 +5,7 @@ import { compare } from 'bcrypt';
 import { Users, Organisations } from '../../../models';
 import { email, DEPRECATED_password, response } from './schema';
 import { Session, Token } from '../../../auth/strategies/standard';
+import { Sessions } from '../../../auth/strategies/new_standard';
 import { LoginRequest } from '../types';
 import Roles from '../../../models/role';
 import { RoleEnum } from '../../../models/types';
@@ -62,18 +63,13 @@ const route: Hapi.ServerRoute[] = [
         request.log('warning', `Recording user login failed: ${user.id}`);
       }
 
+      Sessions.authenticate(request, user.id, organisation.id);
+
       if (type === 'cookie') {
-        return Session.create(
-          request,
-          h.response({}),
-          { userId: user.id, organisationId: organisation.id }
-        );
+        return null;
       } else {
         return {
-          token: Token.create({
-            userId: user.id,
-            organisationId: organisation.id,
-          }),
+          token: request.yar.id,
         };
       }
     },

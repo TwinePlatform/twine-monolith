@@ -35,6 +35,13 @@ const config: DeepPartial<Config> = {
           isSecure: false,
         },
       },
+      session_cookie: {
+        options: {
+          cookieOptions: {
+            isSecure: false,
+          },
+        },
+      },
     },
   },
   cache: { session: parseRedisUrl(process.env.REDIS_URL_DEVELOPMENT) },
