@@ -55,7 +55,7 @@ describe('By Time Page', () => {
       fireEvent.click(tableTab);
 
       const [firstHeader] = await waitForElement(() => [
-        tools.getByText('↓', { exact: false }),
+        tools.getByText('↑', { exact: false }),
         tools.getByText('Total Hours', { exact: true }),
         tools.getByText('Jul 2018', { exact: true }),
         tools.getByText('Aug 2018', { exact: true }),
@@ -80,9 +80,9 @@ describe('By Time Page', () => {
 
       const rows = await waitForElement(() => tools.getAllByTestId('data-table-row'));
 
-      expect(firstHeader).toHaveTextContent('↓ Activity');
-      expect(rows[0]).toHaveTextContent('Running away1.3300000001.330000');
-      expect(rows[1]).toHaveTextContent('Cafe5.6600020.333.33000000');
+      expect(firstHeader).toHaveTextContent('↑ Activity');
+      expect(rows[0]).toHaveTextContent('Cafe5.6600020.333.33000000');
+      expect(rows[1]).toHaveTextContent('Running away1.3300000001.330000');
     });
 
     test('Success :: Sort on first column is ascending (A-Z) by default', async () => {
@@ -100,7 +100,7 @@ describe('By Time Page', () => {
         tools.getByText('Total Hours', { exact: true }),
       ]);
 
-      expect(header1).toHaveTextContent('↓ Activity');
+      expect(header1).toHaveTextContent('↑ Activity');
 
       fireEvent.click(header2);
       await wait();

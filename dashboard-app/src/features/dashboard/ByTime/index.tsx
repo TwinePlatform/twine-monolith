@@ -60,7 +60,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = (props) => {
   const {
     orderable,
     onChangeOrderable,
-  } = useOrderable({ initialOrderable: { sortByIndex: 0, order: 'desc' }, updateOn: [tableData] });
+  } = useOrderable({ initialOrderable: { sortByIndex: 0, order: 'asc' }, updateOn: [tableData] });
 
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
