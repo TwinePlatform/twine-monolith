@@ -2,7 +2,7 @@ import * as Hapi from '@hapi/hapi';
 import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { Organisations, Organisation, User, Users } from '../../../../../models';
-import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../../../auth/strategies/standard';
 import { injectCfg } from '../../../../../../tests/utils/inject';
 
 

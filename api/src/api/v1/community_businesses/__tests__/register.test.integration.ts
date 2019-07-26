@@ -4,7 +4,7 @@ import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { Organisation, Organisations, User, Users, CommunityBusinesses } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
-import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
 import { RegionEnum, SectorEnum, RoleEnum } from '../../../../models/types';
 import Roles from '../../../../models/role';
 import { injectCfg } from '../../../../../tests/utils/inject';

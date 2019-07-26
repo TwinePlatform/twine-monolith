@@ -3,7 +3,7 @@ import * as Knex from 'knex';
 import { init } from '../../../../server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisations, Organisation } from '../../../../models';
-import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
 import { injectCfg } from '../../../../../tests/utils/inject';
 
 

@@ -7,7 +7,7 @@ import { assocPath } from 'ramda';
 import * as moment from 'moment';
 import { getConfig } from '../../../../../config';
 import { User, Organisation, Users, Organisations } from '../../../../models';
-import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
 import { RoleEnum } from '../../../../models/types';
 import { injectCfg } from '../../../../../tests/utils/inject';
 

@@ -18,7 +18,7 @@ import {
 } from './schema';
 import { PutUserRequest } from '../types';
 import { isChildUser } from '../prerequisites';
-import { StandardCredentials } from '../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 
 
 const routes: Hapi.ServerRoute[] = [

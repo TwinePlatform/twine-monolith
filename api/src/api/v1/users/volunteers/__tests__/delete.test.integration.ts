@@ -4,7 +4,7 @@ import { init } from '../../../../../server';
 import { getConfig } from '../../../../../../config';
 import { Organisation, User, Volunteers, CommunityBusinesses, Users } from '../../../../../models';
 import { getTrx } from '../../../../../../tests/utils/database';
-import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../../../auth/strategies/standard';
 import { injectCfg } from '../../../../../../tests/utils/inject';
 
 

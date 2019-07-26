@@ -5,7 +5,7 @@ import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { GetFeedbackRequest, PostFeedbackRequest } from '../types';
 import { query, response, since, until } from './schema';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
-import { StandardCredentials } from '../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 
 
 export default [

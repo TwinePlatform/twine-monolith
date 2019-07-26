@@ -8,7 +8,7 @@ import {
   CommunityBusinesses,
   CbAdmins,
 } from '../../../../../models';
-import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../../../auth/strategies/standard';
 import { injectCfg } from '../../../../../../tests/utils/inject';
 
 

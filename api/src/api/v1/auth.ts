@@ -3,7 +3,7 @@
  */
 import * as Hapi from '@hapi/hapi';
 import SessionCookieSchema from '../../auth/schema/session_cookie';
-import * as standardStrategy from '../../auth/strategies/new_standard';
+import * as standardStrategy from '../../auth/strategies/standard';
 import * as externalStrategy from '../../auth/strategies/external';
 const AuthBearer = require('hapi-auth-bearer-token');
 

@@ -22,7 +22,7 @@ import { Organisation, CommunityBusiness } from '../../../models';
 import { GetCommunityBusinessRequest } from '../types';
 import getOrganisation from './get_organisation';
 import Roles from '../../../models/role';
-import { StandardCredentials } from '../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
 
 

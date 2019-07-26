@@ -1,7 +1,6 @@
 import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Yar from '@hapi/yar';
-import * as Cookie from 'cookie';
 
 
 export type ValidateFunction = (req: Hapi.Request) => Promise<Hapi.AuthenticationData>;

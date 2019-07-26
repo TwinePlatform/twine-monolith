@@ -1,3 +1,7 @@
+declare module '@hapi/hapi' {
+  interface AppCredentials extends ExternalAppCredentials {}
+}
+
 export type ExternalAppCredentials = {
   scope: string[],
   app: 'frontline',

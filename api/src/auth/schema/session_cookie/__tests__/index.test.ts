@@ -1,5 +1,4 @@
 import { Server } from '@hapi/hapi';
-import * as Cookie from 'cookie';
 import { init } from '../../../../../tests/utils/server';
 import { getConfig } from '../../../../../config';
 import plugin from '..';

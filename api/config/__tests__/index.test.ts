@@ -113,6 +113,13 @@ describe('Config', () => {
           [AppEnum.VOLUNTEER]: null,
         },
       },
+      cache: {
+        session: {
+          host: 'localhost',
+          port: 6379,
+          database: '0',
+        },
+      },
       knex: {
         client: 'pg',
         connection: {
@@ -182,6 +189,13 @@ describe('Config', () => {
           [AppEnum.TWINE_API]: 'localhost:4000',
           [AppEnum.VISITOR]: 'localhost:3000',
           [AppEnum.VOLUNTEER]: null,
+        },
+      },
+      cache: {
+        session: {
+          host: 'localhost',
+          port: 6379,
+          database: '0',
         },
       },
       knex: {
