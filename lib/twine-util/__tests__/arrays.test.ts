@@ -208,7 +208,7 @@ describe('Arrays', () => {
   describe('headOrId', () => {
     test('returns head if array is passed in', () => {
       expect(headOrId([1, 2, 3, 4])).toBe(1);
-      expect(headOrId(['foo', 'bar'])).toBe(1);
+      expect(headOrId(['foo', 'bar'])).toBe('foo');
       expect(headOrId([{ a: 1 }, 'foo', 1])).toEqual({ a: 1 });
     });
 
@@ -216,7 +216,7 @@ describe('Arrays', () => {
       expect(headOrId(1)).toBe(1);
       expect(headOrId('foo')).toBe('foo');
       expect(headOrId(null)).toBe(null);
-      expect(headOrId({ b: 1 })).toBe({ b: 1 });
+      expect(headOrId({ b: 1 })).toEqual({ b: 1 });
     });
   });
 });
