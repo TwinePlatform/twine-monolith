@@ -1,4 +1,3 @@
-import * as JWT from 'jsonwebtoken';
 import { getConfig } from '../../../../config';
 import serializers from '../serializers';
 
