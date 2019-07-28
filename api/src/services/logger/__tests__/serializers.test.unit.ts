@@ -37,12 +37,8 @@ describe('Logger Service :: Serializers', () => {
       });
     });
 
-    test('request with valid cookie', () => {
-      const token = JWT.sign(
-        { userId: 1, organisationId: 2 },
-        config.auth.standard.jwt.secret,
-        config.auth.standard.jwt.signOptions
-      );
+    test('request with cookie', () => {
+      const token = 'fpiwg239-tjfi42tjr-0few9ingr429t0jewf';
 
       const result = serializers.req(<any> {
         id: '1',
@@ -72,51 +68,12 @@ describe('Logger Service :: Serializers', () => {
           referrer: 'https://bar.com',
           cookie: `${config.auth.standard.cookie.name}=${token}`,
         },
-        sessionUserId: 1,
-        sessionOrgId: 2,
-      });
-    });
-
-    test('request with invalid cookie', () => {
-      const token = 'gibberish';
-
-      const result = serializers.req(<any> {
-        id: '1',
-        method: 'GET',
-        url: '/foo/bar',
-        query: { fields: ['name'] },
-        headers: {
-          host: 'https://bar.com',
-          accept: '',
-          'accept-encoding': '',
-          'accept-language': '',
-          connection: '',
-          dnt: '',
-          'upgrade-insecure-requests': '',
-          origin: 'https://foo.com',
-          referrer: 'https://bar.com',
-          cookie: `${config.auth.standard.cookie.name}=${token}`,
-        },
-      });
-
-      expect(result).toEqual({
-        method: 'GET',
-        url: '/foo/bar',
-        query: { fields: ['name'] },
-        headers: {
-          origin: 'https://foo.com',
-          referrer: 'https://bar.com',
-          cookie: `${config.auth.standard.cookie.name}=${token}`,
-        },
+        sessionUserId: token,
       });
     });
 
     test('request with valid authorization token', () => {
-      const token = JWT.sign(
-        { userId: 2, organisationId: 5 },
-        config.auth.standard.jwt.secret,
-        config.auth.standard.jwt.signOptions
-      );
+      const token = 'kmfe429yj032fk0-12jr32092jr20fen2093refo-w0d';
 
       const result = serializers.req(<any> {
         id: '1',
@@ -146,48 +103,12 @@ describe('Logger Service :: Serializers', () => {
           referrer: 'https://bar.com',
           authorization: `${token}`,
         },
-        sessionUserId: 2,
-        sessionOrgId: 5,
-      });
-    });
-
-    test('request with invalid authorization token', () => {
-      const token = 'nonsense';
-
-      const result = serializers.req(<any> {
-        id: '1',
-        method: 'GET',
-        url: '/foo/bar',
-        query: { fields: ['name'] },
-        headers: {
-          host: 'https://bar.com',
-          accept: '',
-          'accept-encoding': '',
-          'accept-language': '',
-          connection: '',
-          dnt: '',
-          'upgrade-insecure-requests': '',
-          origin: 'https://foo.com',
-          referrer: 'https://bar.com',
-          authorization: `${token}`,
-        },
-      });
-
-      expect(result).toEqual({
-        method: 'GET',
-        url: '/foo/bar',
-        query: { fields: ['name'] },
-        headers: {
-          origin: 'https://foo.com',
-          referrer: 'https://bar.com',
-          authorization: `${token}`,
-        },
+        sessionUserId: token,
       });
     });
 
     test('request with authorization bearer token', () => {
       // Bearer tokens are used for external app access (Frontline)
-      // They are not JWTs and do not have a payload to decode
       const token = 'anything';
 
       const result = serializers.req(<any> {
@@ -218,6 +139,7 @@ describe('Logger Service :: Serializers', () => {
           referrer: 'https://bar.com',
           authorization: `Bearer ${token}`,
         },
+        sessionUserId: token,
       });
     });
   });
