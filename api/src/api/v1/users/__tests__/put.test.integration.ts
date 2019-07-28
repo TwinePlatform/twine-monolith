@@ -1,7 +1,7 @@
 import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { assocPath } from 'ramda';
-import { init } from '../../../../server';
+import { init } from '../../../../../tests/utils/server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
 import { User, Users, Organisation, Organisations } from '../../../../models';

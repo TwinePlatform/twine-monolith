@@ -1,8 +1,7 @@
 import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
-import { init } from '../../../../server';
+import { init, getCookie } from '../../../../../tests/utils/server';
 import { getConfig } from '../../../../../config';
-import { getCookie } from '../../../../../tests/utils/server';
 import { getTrx } from '../../../../../tests/utils/database';
 import { injectCfg } from '../../../../../tests/utils/inject';
 
@@ -41,6 +40,7 @@ describe('GET /users/logout', () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.headers).toHaveProperty('set-cookie');
-    expect(getCookie(res)).toEqual('');
+    // Session is terminated server side, client keeps cookie
+    expect(getCookie(res)).toEqual(expect.stringContaining('Fe'));
   });
 });

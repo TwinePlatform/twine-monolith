@@ -1,6 +1,6 @@
 import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
-import { init } from '../../../../../tests/utils/server';
+import { initBlank as init } from '../../../../../tests/utils/server';
 import factory from '../../../../../tests/utils/factory';
 import { getConfig } from '../../../../../config';
 import pre from '../get_organisation';

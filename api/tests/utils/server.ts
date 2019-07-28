@@ -8,6 +8,7 @@ import * as Knex from 'knex';
 import * as Hapi from '@hapi/hapi';
 import * as Shot from 'shot';
 import { Config } from '../../config';
+import { init as initServer } from '../../src/server';
 
 
 type Options = {
@@ -17,7 +18,7 @@ type Options = {
   hooks?: ((s: Hapi.Server) => void)[]
 };
 
-export const init = async (config: Config, options: Options = {}): Promise<Hapi.Server> => {
+export const initBlank = async (config: Config, options: Options = {}): Promise<Hapi.Server> => {
   const server = new Hapi.Server(config.web);
 
   if (options.knex) {
@@ -35,6 +36,16 @@ export const init = async (config: Config, options: Options = {}): Promise<Hapi.
 
   if (options.routes) {
     server.route(options.routes);
+  }
+
+  return server;
+};
+
+export const init = async (config: Config, initialize = true) => {
+  const server = await initServer(config);
+
+  if (initialize) {
+    await server.initialize();
   }
 
   return server;

@@ -2,7 +2,7 @@
  * API functional tests
  */
 import * as Hapi from '@hapi/hapi';
-import { init } from '../../../../server';
+import { init } from '../../../../../tests/utils/server';
 import { assocPath } from 'ramda';
 import * as moment from 'moment';
 import { getConfig } from '../../../../../config';

@@ -1,13 +1,12 @@
 import * as Hapi from '@hapi/hapi';
-import { init } from '../../../server';
 import { getConfig } from '../../../../config';
-import { getCookie } from '../../../../tests/utils/server';
+import { init, getCookie } from '../../../../tests/utils/server';
 
 
-describe('Auth flow', () => {
+describe('Authentication integration', () => {
   let server: Hapi.Server;
   const config = getConfig(process.env.NODE_ENV);
-  const cookieName = config.auth.standard.cookie.name;
+  const cookieName = config.auth.standard.session_cookie.options.name;
 
   beforeAll(async () => {
     server = await init(config);
@@ -17,8 +16,16 @@ describe('Auth flow', () => {
     await server.shutdown(true);
   });
 
-  describe('Login', () => {
-    test('CB login from elsewhere :: full session', async () => {
+  describe('Cookie authentication', () => {
+    test('CB login -> access -> logout', async () => {
+      // 0. Try to access resource X -> 401
+      const resPreAccess = await server.inject({
+        method: 'GET',
+        url: '/v1/users/me',
+      });
+
+      expect(resPreAccess.statusCode).toBe(401);
+
       // 1. Login -> 200
       const resLogin = await server.inject({
         method: 'POST',
@@ -42,10 +49,27 @@ describe('Auth flow', () => {
       });
 
       expect(resAccess.statusCode).toBe(200);
+
+      // 3. Logout
+      const resLogout = await server.inject({
+        method: 'GET',
+        url: '/v1/users/logout',
+        headers: { cookie: `${cookieName}=${token}` },
+      });
+
+      expect(resLogout.statusCode).toBe(200);
+
+      // 4. Try to access resource X -> 401
+      const resPostAccess = await server.inject({
+        method: 'GET',
+        url: '/v1/users/me',
+      });
+
+      expect(resPostAccess.statusCode).toBe(401);
     });
   });
 
-  describe('Header authorisation', () => {
+  describe('Header authentication', () => {
     test('User login and fetch resource with Authorization header', async () => {
       // 1. Login -> 200
       const resLogin = await server.inject({
@@ -60,7 +84,6 @@ describe('Auth flow', () => {
       });
 
       expect(resLogin.statusCode).toBe(200);
-      expect(typeof resLogin.headers['set-cookie']).toBe('undefined');
       const token = (<any> resLogin.result).result.token;
 
       // 2. Try to access resource X -> 200

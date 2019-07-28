@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import * as MockDate from 'mockdate';
 import { omit } from 'ramda';
 import { Random } from 'twine-util';
-import { init } from '../../../../server';
+import { init } from '../../../../../tests/utils/server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
 import {
