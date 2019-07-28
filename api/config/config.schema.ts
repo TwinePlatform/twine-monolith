@@ -109,6 +109,7 @@ export default Joi.object({
       session_cookie: Joi.object({
         options: Joi.object({
           name: Joi.string().required(),
+          maxCookieSize: Joi.number().integer(),
           cache: Joi.object({
             expiresIn: Joi.number().integer().positive(),
           }),
