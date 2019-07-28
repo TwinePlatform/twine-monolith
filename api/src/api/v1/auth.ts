@@ -11,11 +11,15 @@ const AuthBearer = require('hapi-auth-bearer-token');
 export default async (server: Hapi.Server) => {
   const { config: { auth: { standard } } } = server.app;
 
+  const opts = {
+    ...standard.session_cookie.options,
+    cache: { cache: 'session-cache' },
+  };
   /*
    * Pre-requisite plugins
    */
   await server.register([
-    { plugin: SessionCookieSchema, options: { once: true, ...standard.session_cookie.options } },
+    { plugin: SessionCookieSchema, options: { once: true, ...opts } },
     { plugin: AuthBearer, once: true },
   ]);
 

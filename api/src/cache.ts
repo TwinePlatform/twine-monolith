@@ -9,7 +9,7 @@ export const SessionCacheConfig = (config: Config) => {
       constructor: CatboxRedis,
       options: {
         ...config.cache.session,
-        partition: 'sess',
+        partition: 'session-cache',
       },
     },
   };

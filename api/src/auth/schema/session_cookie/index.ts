@@ -16,6 +16,15 @@ export default {
   name: 'session id schema',
   register: async (server: Hapi.Server, options: Yar.YarOptions) => {
 
+    server.ext('onPreAuth', (request, h) => {
+      if (request.headers.hasOwnProperty('authorization')) {
+        const token = request.headers['authorization'];
+        const state = { id: token };
+        request.state[options.name] = state;
+      }
+      return h.continue;
+    });
+
     server.register([
       { plugin: Yar, options: { ...options, once: true } },
     ]);
