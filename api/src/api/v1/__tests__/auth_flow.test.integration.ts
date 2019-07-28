@@ -6,7 +6,7 @@ import { init, getCookie } from '../../../../tests/utils/server';
 describe('Authentication integration', () => {
   let server: Hapi.Server;
   const config = getConfig(process.env.NODE_ENV);
-  const cookieName = config.auth.standard.session_cookie.options.name;
+  const cookieName = config.auth.schema.session_cookie.options.name;
 
   beforeAll(async () => {
     server = await init(config);

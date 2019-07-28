@@ -4,12 +4,12 @@ import { Config } from '../config';
 
 export const SessionCacheConfig = (config: Config) => {
   return {
-    name: 'session-cache',
+    name: config.cache.session.name,
     provider: {
       constructor: CatboxRedis,
       options: {
-        ...config.cache.session,
-        partition: 'session-cache',
+        ...config.cache.session.options,
+        partition: config.cache.session.name,
       },
     },
   };

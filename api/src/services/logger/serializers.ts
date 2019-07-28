@@ -4,9 +4,9 @@ import { compose, evolve, omit } from 'ramda';
 import { getConfig } from '../../../config';
 
 
-const { auth: { standard } } = getConfig(process.env.NODE_ENV);
+const { auth: { schema } } = getConfig(process.env.NODE_ENV);
 
-const extractCookie = (c: string) => Cookie.parse(c)[standard.cookie.name];
+const extractCookie = (c: string) => Cookie.parse(c)[schema.session_cookie.options.name];
 
 const extractBearerToken = (c: string = '') => c.split('Bearer ')[1] || c || '';
 

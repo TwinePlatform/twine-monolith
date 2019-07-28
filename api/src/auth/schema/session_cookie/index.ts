@@ -6,8 +6,6 @@ import * as Yar from '@hapi/yar';
 export type ValidateFunction = (req: Hapi.Request) => Promise<Hapi.AuthenticationData>;
 
 type Options = {
-  cookieKey?: string
-  headerKey?: string
   validate: ValidateFunction
 };
 
@@ -29,7 +27,7 @@ export default {
       { plugin: Yar, options: { ...options, once: true } },
     ]);
 
-    server.auth.scheme('session_id', (server, opts: Options) => {
+    server.auth.scheme('session_cookie', (server, opts: Options) => {
       return {
         async authenticate (request, h) {
           const isAuthenticated = request.yar.get('isAuthenticated');

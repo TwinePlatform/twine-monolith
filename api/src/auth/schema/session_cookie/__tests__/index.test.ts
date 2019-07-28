@@ -15,13 +15,13 @@ describe('"session_id" Auth Schema', () => {
     });
 
     test('can register strategy against schema', async () => {
-      server.auth.strategy('foo', 'session_id', { validate: jest.fn() });
+      server.auth.strategy('foo', 'session_cookie', { validate: jest.fn() });
     });
 
     test('no session id present', async () => {
       const validate = jest.fn();
 
-      server.auth.strategy('foo', 'session_id', { validate, cookieHeader: 'blah' });
+      server.auth.strategy('foo', 'session_cookie', { validate, cookieHeader: 'blah' });
 
       server.route({
         method: 'GET',
@@ -42,7 +42,7 @@ describe('"session_id" Auth Schema', () => {
     test('session id present in cookie', async () => {
       const validate = jest.fn(() => ({ isValid: true, credentials: {} }));
 
-      server.auth.strategy('foo', 'session_id', { validate, cookieHeader: 'blah' });
+      server.auth.strategy('foo', 'session_cookie', { validate, cookieHeader: 'blah' });
 
       server.route([{
         method: 'GET',

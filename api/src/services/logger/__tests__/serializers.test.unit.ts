@@ -54,7 +54,7 @@ describe('Logger Service :: Serializers', () => {
           'upgrade-insecure-requests': '',
           origin: 'https://foo.com',
           referrer: 'https://bar.com',
-          cookie: `${config.auth.standard.cookie.name}=${token}`,
+          cookie: `${config.auth.schema.session_cookie.options.name}=${token}`,
         },
       });
 
@@ -65,7 +65,7 @@ describe('Logger Service :: Serializers', () => {
         headers: {
           origin: 'https://foo.com',
           referrer: 'https://bar.com',
-          cookie: `${config.auth.standard.cookie.name}=${token}`,
+          cookie: `${config.auth.schema.session_cookie.options.name}=${token}`,
         },
         sessionUserId: token,
       });

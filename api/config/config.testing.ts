@@ -24,15 +24,18 @@ const config: DeepPartial<Config> = {
     postmarkKey: process.env.POSTMARK_KEY_TESTING,
   },
   auth: {
-    standard: {
-      cookie: {
+    schema: {
+      session_cookie: {
         options: {
-          isSecure: false,
+          cookieOptions: {
+            isSecure: false,
+          },
+          cache: { cache: 'session' },
         },
       },
     },
   },
-  cache: { session: parseRedisUrl(process.env.REDIS_URL_TESTING) },
+  cache: { session: { name: 'session', options: parseRedisUrl(process.env.REDIS_URL_TESTING) } },
 };
 
 export default config;

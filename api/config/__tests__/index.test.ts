@@ -115,9 +115,12 @@ describe('Config', () => {
       },
       cache: {
         session: {
-          host: 'localhost',
-          port: 6379,
-          database: '0',
+          name: 'session',
+          options: {
+            host: 'localhost',
+            port: 6379,
+            database: '0',
+          },
         },
       },
       knex: {
@@ -141,18 +144,13 @@ describe('Config', () => {
         fromAddress: 'boo@coo.com',
       },
       auth: {
-        standard: {
-          jwt: {
-            secret: 'lol',
-          },
-          cookie: {
-            name: 'foo',
-            options : {
-              ttl: 24 * 60 * 60 * 1000,
-              isSecure: true,
-              isHttpOnly: true,
-              isSameSite: 'Lax',
-              path: '/',
+        schema: {
+          session_cookie: {
+            options: {
+              name: 'wpppp',
+              cookieOptions: {
+                password: 'rt49089y5h3j9u0894thugirbv90u8r9g7tu4fevu9rguib2fwe',
+              },
             },
           },
         },
@@ -193,9 +191,12 @@ describe('Config', () => {
       },
       cache: {
         session: {
-          host: 'localhost',
-          port: 6379,
-          database: '0',
+          name: 'session',
+          options: {
+            host: 'localhost',
+            port: 6379,
+            database: '0',
+          },
         },
       },
       knex: {
@@ -211,18 +212,13 @@ describe('Config', () => {
         fromAddress: 'fooo',
       },
       auth: {
-        standard: {
-          jwt: {
-            secret: '',
-          },
-          cookie: {
-            name: '',
+        schema: {
+          session_cookie: {
             options: {
-              ttl: 24 * 60 * 60 * 1000,
-              isSecure: true,
-              isHttpOnly: true,
-              isSameSite: 'Lax',
-              path: '/',
+              name: 'fooo',
+              cookieOptions: {
+                password: 'rt49089y5h3j9u0894thugirbv90u8r9g7tu4fevu9rguib2fwe',
+              },
             },
           },
         },

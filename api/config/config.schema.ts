@@ -72,10 +72,13 @@ export default Joi.object({
   }).required(),
   cache: Joi.object({
     session: {
-      host: Joi.string().min(1).required(),
-      port: Joi.number().integer().min(0).max(2 ** 16 - 1).required(),
-      database: Joi.number().integer().min(0).max(10).required(),
-      tls: Joi.object(),
+      name: Joi.string().min(1).required(),
+      options: {
+        host: Joi.string().min(1).required(),
+        port: Joi.number().integer().min(0).max(2 ** 16 - 1).required(),
+        database: Joi.number().integer().min(0).max(10).required(),
+        tls: Joi.object(),
+      },
     },
   }).required(),
   email: Joi.object({
@@ -83,34 +86,13 @@ export default Joi.object({
     fromAddress: Joi.string().email().required(),
   }).required(),
   auth: Joi.object({
-    standard: {
-      jwt: Joi.object({
-        secret: Joi.string().required(),
-        signOptions: Joi.object({
-          algorithm: Joi.string(),
-          expiresIn: Joi.alt([Joi.string(), Joi.number().integer().positive()]),
-        }),
-        verifyOptions: Joi.object({
-          algorithms: Joi.array().items(Joi.string()),
-          maxAge: Joi.alt([Joi.string(), Joi.number().integer().positive()]),
-        }),
-      }),
-      cookie: Joi.object({
-        name: Joi.string().required(),
-        options: Joi.object({
-          ttl: Joi.number().integer().positive(),
-          isSecure: Joi.boolean(),
-          isHttpOnly: Joi.boolean(),
-          isSameSite: Joi.only([false, 'Lax', 'Strict']),
-          path: Joi.string().required(),
-          domain: Joi.string(),
-        }).required(),
-      }).required(),
+    schema: {
       session_cookie: Joi.object({
         options: Joi.object({
           name: Joi.string().required(),
           maxCookieSize: Joi.number().integer(),
           cache: Joi.object({
+            cache: Joi.string().min(1),
             expiresIn: Joi.number().integer().positive(),
           }),
           cookieOptions: Joi.object({
