@@ -89,7 +89,6 @@ describe('POST /users/login', () => {
     });
 
     expect(res.statusCode).toBe(403);
-    // expect(typeof res.headers['set-cookie']).toBe('undefined');
     expect(res.result).toEqual({ error: expect.objectContaining({ statusCode: 403 }) });
   });
 
@@ -106,7 +105,6 @@ describe('POST /users/login', () => {
     });
 
     expect(res.statusCode).toBe(200);
-    // expect(typeof res.headers['set-cookie']).toBe('undefined');
     expect((<any> res.result).result.token).toEqual(expect.stringContaining(''));
   });
 
@@ -123,7 +121,6 @@ describe('POST /users/login', () => {
     });
 
     expect(res.statusCode).toBe(403);
-    // expect(typeof res.headers['set-cookie']).toBe('undefined');
     expect(res.result).toEqual({ error: expect.objectContaining({ statusCode: 403 }) });
   });
 
@@ -139,7 +136,6 @@ describe('POST /users/login', () => {
     });
 
     expect(res.statusCode).toBe(400);
-    // expect(typeof res.headers['set-cookie']).toBe('undefined');
     expect(res.result).toEqual({ error: expect.objectContaining({ statusCode: 400 }) });
   });
 
@@ -155,7 +151,6 @@ describe('POST /users/login', () => {
     });
 
     expect(res.statusCode).toBe(403);
-    // expect(typeof res.headers['set-cookie']).not.toBe('undefined');
     expect(res.result).toEqual({
       error: expect.objectContaining({
         statusCode: 403,

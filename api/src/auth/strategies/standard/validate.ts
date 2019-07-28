@@ -25,7 +25,7 @@ const validate: ValidateFunction = async (req) => {
 
   const credentials = await Credentials.get(knex, user, organisation, session);
 
-  return { credentials } as any;
+  return { credentials };
 };
 
 export default validate;
