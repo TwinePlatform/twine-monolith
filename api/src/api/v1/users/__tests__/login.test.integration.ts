@@ -1,6 +1,5 @@
 import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
-import * as JWT from 'jsonwebtoken';
 import { init } from '../../../../../tests/utils/server';
 import { getConfig } from '../../../../../config';
 import { getTrx } from '../../../../../tests/utils/database';
@@ -11,7 +10,6 @@ describe('POST /users/login', () => {
   let knex: Knex;
   let trx: Knex.Transaction;
   const config = getConfig(process.env.NODE_ENV);
-  const { auth: { standard: { jwt: { secret, verifyOptions } } } } = config;
 
   beforeAll(async () => {
     server = await init(config);
