@@ -93,5 +93,27 @@ describe('Dashboard statistics utilities', () => {
         value: 3,
       });
     });
+
+    test('non-date labels are sorted alphabetically', () => {
+      const logs = {
+        ['Toad']: [
+          { duration: { hours: 1, minutes: 50 } },
+          { duration: { hours: 1 } },
+        ],
+        ['Badger']: [
+          { duration: { hours: 2, minutes: 20 } },
+          { duration: { minutes: 30 } },
+        ],
+        ['Mole']: [
+          { duration: { hours: 1 } },
+          { duration: { minutes: 10 } },
+        ],
+      };
+
+      expect(findMostActive(logs)).toEqual({
+        labels: ['Badger', 'Toad'],
+        value: 3,
+      });
+    });
   });
 });
