@@ -3,8 +3,8 @@ import { AggregatedData } from './logsToAggregatedData';
 import { toUnitDuration, abbreviateIfDateString } from './util';
 import { omit } from 'ramda';
 import { DurationUnitEnum } from '../../types';
-import { GraphColourList } from '../../styles/design_system';
 import Months from '../../util/months';
+import { getColourByIndex } from '../util';
 
 export const aggregatedToStackedGraph = (data: AggregatedData, unit: DurationUnitEnum) => {
   const labels = Object.keys(omit(['id', 'name'], data.rows[0]));
@@ -19,7 +19,7 @@ export const aggregatedToStackedGraph = (data: AggregatedData, unit: DurationUni
           : Number(v)
         , rowData);
       return {
-        backgroundColor: GraphColourList[i],
+        backgroundColor: getColourByIndex(i),
         label,
         id: row.id,
         data: labels.map((y) => numericData[y]),
