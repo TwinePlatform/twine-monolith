@@ -6,6 +6,8 @@
 export type TileDataPoint<T> = {
   label: string
   data: T
+  limit?: number
+  placeholder?: string
 };
 
 export type NumberTileProps = {

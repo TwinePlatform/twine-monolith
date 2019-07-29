@@ -12,6 +12,7 @@ export type EqualDataPoints = {
   value: number
 };
 
+
 export default () => {
   const oneYearAgo = moment().subtract(1, 'year').toDate();
   const now = moment().toDate();
@@ -135,6 +136,8 @@ export const activityStatsToProps = (pts?: EqualDataPoints) => {
     left: {
       label: leftLabel,
       data: pts.labels,
+      limit: 2,
+      placeholder: '...',
     },
     right: {
       label: rightLabel,
@@ -175,6 +178,8 @@ export const volunteerStatsToProps = (pts?: EqualDataPoints) => {
     right: {
       label: rightLabel,
       data: pts.labels,
+      limit: 3,
+      placeholder: '...',
     },
   };
 };
@@ -205,6 +210,8 @@ export const timeStatsToProps = (pts?: EqualDataPoints) => {
     left: {
       label: leftLabel,
       data: pts.labels,
+      limit: 3,
+      placeholder: '...',
     },
     right: {
       label: rightLabel,

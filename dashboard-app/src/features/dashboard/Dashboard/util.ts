@@ -37,7 +37,7 @@ export const sumLogDurations = (a: Dictionary<VolunteerLog[]>) =>
 
 export const findMostActive = compose(
   ({ labels, value }) => ({
-    labels: labels.slice(0, 3).sort((a, b) => Months.diff(new Date(b), new Date(a))),
+    labels: labels.sort((a, b) => Months.diff(new Date(b), new Date(a))),
     value: Math.round(Duration.toHours(value)),
   }),
   collectMaxDurations,
