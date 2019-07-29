@@ -50,3 +50,8 @@ export const collectBy = <T>(fn: (a: T) => string, xs: T[]) =>
     assoc(fn(x), acc.hasOwnProperty(fn(x)) ? acc[fn(x)].concat(x) : [x], acc),
     {} as Dictionary<T[]>
   );
+
+export const truncate = <T>(xs: T[], limit: number, placeholder: T) =>
+  limit < xs.length
+    ? xs.slice(0, limit).concat(placeholder)
+    : xs;

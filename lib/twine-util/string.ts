@@ -13,7 +13,11 @@ export const onlynl = (ss: TemplateStringsArray, ...placeholders: any[]) =>
     .replace(/[\ \t][\ \t]+/g, '');
 
 
-export const listify = (xs: string[]) => {
+export const listify = (xs: string[], opts: { and?: boolean } = { and: true }) => {
+  if (!opts.and) {
+    return intersperse(', ', xs);
+  }
+
   switch (xs.length) {
     case 0:
     case 1:
@@ -29,5 +33,5 @@ export const listify = (xs: string[]) => {
 };
 
 
-export const readableListify = (xs: string[]) =>
-  listify(xs).join('');
+export const readableListify = (xs: string[], opts?: { and: boolean }) =>
+  listify(xs, opts).join('');
