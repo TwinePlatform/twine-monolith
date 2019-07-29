@@ -156,7 +156,7 @@ export const volunteerStatsToProps = (pts?: EqualDataPoints) => {
         data: [],
       },
       right: {
-        label: 'hours',
+        label: '0 hours',
         data: [],
       },
     };
