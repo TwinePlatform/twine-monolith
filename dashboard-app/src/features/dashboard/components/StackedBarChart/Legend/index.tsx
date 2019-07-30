@@ -29,6 +29,8 @@ interface Props {
 const Card = styled(_Card)`
   background: ${ColoursEnum.white};
   height: 100%;
+  max-height: 70vh;
+  overflow-x: scroll;
   padding: 1rem;
 `;
 
