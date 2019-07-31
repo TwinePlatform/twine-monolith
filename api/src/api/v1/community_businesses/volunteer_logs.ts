@@ -302,7 +302,7 @@ const routes: Hapi.ServerRoute[] = [
           userId: meOrId.default('me'),
           activity: volunteerLogActivity.required(),
           duration: volunteerLogDuration.required(),
-          startedAt: startedAt.default(() => new Date(), 'now'),
+          startedAt: Joi.alt().try(startedAt, Joi.string()).default(() => new Date(), 'now'),
           deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
           project: volunteerProject.allow(null),
         })).required(),
@@ -316,10 +316,16 @@ const routes: Hapi.ServerRoute[] = [
       const {
         server: { app: { knex } },
         pre: { communityBusiness },
-        payload,
+        payload: _payload,
       } = request;
 
       const { user, scope } = StandardCredentials.fromRequest(request);
+
+      /*
+       * HACK - Temp fix to be removed
+       * Silently ignore logs with invalid start dates
+       */
+      const payload = _payload.filter((log) => !isNaN(new Date(log.startedAt).valueOf()));
 
       if (
         payload.some((log) => log.userId !== 'me') && // If some logs correspond to other users

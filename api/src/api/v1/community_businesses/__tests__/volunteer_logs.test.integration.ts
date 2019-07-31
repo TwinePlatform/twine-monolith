@@ -945,5 +945,32 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
       expect(res.statusCode).toBe(400);
     });
+
+    test('HACK - allows invalid log through but ignores it', async () => {
+      const logs = [
+        { activity: 'Office support', duration: { minutes: 20 }, startedAt: 'undefined 13:03:22' },
+        { activity: 'Other', duration: { minutes: 10 }, startedAt: '2019-07-05 13:03:22' },
+      ];
+
+      const res = await server.inject(injectCfg({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: volCreds,
+        payload: logs,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: null });
+
+      const dbLogs: any[] = await server.app.knex('volunteer_hours_log')
+        .select('*')
+        .where({
+          organisation_id: volCreds.user.organisation.id,
+          user_account_id: volCreds.user.user.id,
+        });
+
+      expect(dbLogs).toHaveLength(8);
+      dbLogs.some((log) => log.startedAt === '2019-07-05T13:03:22.000Z');
+    });
   });
 });
