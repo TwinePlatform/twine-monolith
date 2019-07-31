@@ -952,12 +952,12 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         { activity: 'Other', duration: { minutes: 10 }, startedAt: '2019-07-05 13:03:22' },
       ];
 
-      const res = await server.inject(injectCfg({
+      const res = await server.inject({
         method: 'POST',
         url: '/v1/community-businesses/me/volunteer-logs/sync',
         credentials: volCreds,
         payload: logs,
-      }));
+      });
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: null });
