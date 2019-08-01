@@ -206,7 +206,7 @@ export default class VisitsDataPage extends React.Component {
           .reduce((acc, x) => acc.concat(x), []) // flatten
           .map(x =>
             pipe(
-              assoc('visitTime', moment(x.createdAt).format('HH:MM')),
+              assoc('visitTime', moment(x.createdAt).format('HH:mm')),
               assoc('visitDate', moment(x.createdAt).format('DD-MM-YYYY')),
               omit(['createdAt', 'deletedAt', 'modifiedAt']),
             )(x),
