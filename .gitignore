@@ -76,3 +76,6 @@ build
 # Local script files
 *.local.js
 *.local.ts
+
+# db dump files
+*.dump
