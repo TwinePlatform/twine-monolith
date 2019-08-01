@@ -1,22 +1,13 @@
 import * as Hapi from '@hapi/hapi';
-import * as Boom from '@hapi/boom';
 import * as Knex from 'knex';
 import { ApiTokens, Organisations } from '../../../models';
 
 
 export const ExternalCredentials = {
-  async get (knex: Knex, token: string) {
-    try {
-      const match = await ApiTokens.find(knex, token);
-      const org = await Organisations.getOne(knex, { where: { name: match.name } });
-
-      return {
-        isValid: true,
-        credentials: { scope: [match.access], app: { organisation: org } },
-      };
-    } catch (error) {
-      return { isValid: false, credentials: {} };
-    }
+  async get (knex: Knex, token: string): Promise<Hapi.AuthCredentials> {
+    const match = await ApiTokens.find(knex, token);
+    const org = await Organisations.getOne(knex, { where: { name: match.name } });
+    return { scope: [match.access], app: { scope: [match.access], app: { organisation: org } } };
   },
 
   fromRequest (req: Hapi.Request) {
@@ -25,13 +16,15 @@ export const ExternalCredentials = {
 };
 
 const validateExternal = async (request: Hapi.Request, token: string, h: Hapi.ResponseToolkit) => {
-  const { log, server: { app: { knex } } } = request;
+  const { server: { app: { knex } } } = request;
 
   try {
-    return ExternalCredentials.get(knex, token);
+    const credentials = await ExternalCredentials.get(knex, token);
+    return { isValid: true, credentials };
+
   } catch (error) {
-    log('error', error);
-    return Boom.badImplementation('Error with route authentication for 3rd party clients');
+    return { isValid: false, artifacts: error };
+
   }
 };
 

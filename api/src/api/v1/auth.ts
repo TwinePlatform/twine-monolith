@@ -17,7 +17,7 @@ export const getCredentialsFromRequest = (request: Hapi.Request) => {
       return externalStrategy.ExternalCredentials.fromRequest(request);
 
     default:
-      throw new Error('');
+      throw new Error(`Unrecognised strategy: ${request.auth.strategy}`);
   }
 };
 

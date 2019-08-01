@@ -6,6 +6,7 @@ import { User, Users, Organisation, Organisations } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
 import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
 import { injectCfg } from '../../../../../tests/utils/inject';
+import { ExternalCredentials } from '../../../../auth/strategies/external';
 
 
 describe('API v1 :: Community Businesses :: Visit Logs', () => {
@@ -15,15 +16,17 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
   let cbAdmin: User;
   let organisation: Organisation;
   let credentials: Hapi.AuthCredentials;
+  let extCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
     server = await init(config);
     knex = server.app.knex;
 
-    cbAdmin = await Users.getOne(server.app.knex, { where: { id: 2 } });
-    organisation = await Organisations.getOne(server.app.knex, { where: { id: 1 } });
-    credentials = await StandardCredentials.get(server.app.knex, cbAdmin, organisation);
+    cbAdmin = await Users.getOne(knex, { where: { id: 2 } });
+    organisation = await Organisations.getOne(knex, { where: { id: 1 } });
+    credentials = await StandardCredentials.get(knex, cbAdmin, organisation);
+    extCreds = await ExternalCredentials.get(knex, 'aperture-token');
   });
 
   afterAll(async () => {
@@ -132,6 +135,28 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
             visitActivity: 'Free Running',
             category: 'Sports',
           }),
+        ]));
+    });
+
+    test(':: accessible via external strategy', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visit-logs',
+        credentials: extCreds,
+        strategy: 'external',
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).meta).toEqual({ total: 11 });
+      expect((<any> res.result).result).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            visitActivity: 'Free Running',
+            birthYear: 1988,
+            category: 'Sports',
+            gender: 'female',
+            id: 1,
+            userId: 1}),
         ]));
     });
   });

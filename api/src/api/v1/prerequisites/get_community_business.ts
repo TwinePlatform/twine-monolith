@@ -27,7 +27,7 @@ export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseTool
   const communityBusiness =
     (id === 'me' || isNil(id))
       ? await getCbFromCredentials(request)
-      : (is360GivingId(id))
+      : is360GivingId(id)
         ? await CommunityBusinesses.getOne(knex, { where: { _360GivingId: id } })
         : await CommunityBusinesses.getOne(knex, { where: { id: Number(id) } });
 
