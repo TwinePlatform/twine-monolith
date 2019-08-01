@@ -31,7 +31,7 @@ export const ApiTokens = {
   },
 
   async add (client: Knex, token: Partial<ApiToken>): Promise<ApiToken> {
-    const hashedToken = await hash(token, 12);
+    const hashedToken = await hash(token.token, 12);
     const [res] = await client('api_token')
       .insert({
         api_token: hashedToken,
