@@ -4,10 +4,11 @@ import { Row, Col, Grid } from 'react-flexbox-grid';
 
 import _Card from '../../../../../lib/ui/components/Card';
 import { H4 } from '../../../../../lib/ui/components/Headings';
-import { ColoursEnum, GraphColourList } from '../../../../../lib/ui/design_system';
+import { ColoursEnum } from '../../../../../lib/ui/design_system';
 import LegendItem from './LegendItem';
 import { isEveryDatumActive } from '../utils/util';
 import { LegendData } from '../types';
+import { getColourByIndex } from '../../../util';
 
 
 /*
@@ -72,7 +73,7 @@ const Legend: FunctionComponent<Props> = (props) => {
             <LegendItem
               key={x.id}
               onClick={setLegendActivityOnUpdate(x.id)}
-              colour={GraphColourList[i]}
+              colour={getColourByIndex(i)}
               title={x.name}
               active={x.active}
             />
