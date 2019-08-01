@@ -48,9 +48,13 @@ export default [
     options: {
       description: 'Retrieve information about users own community business',
       auth: {
-        strategy: 'standard',
+        strategies: ['standard', 'external'],
         access: {
-          scope: ['organisations_details-own:read', 'organisations_details-parent:read'],
+          scope: [
+            'organisations_details-own:read',
+            'organisations_details-parent:read',
+            'api:visitor:read',
+          ],
         },
       },
       validate: {

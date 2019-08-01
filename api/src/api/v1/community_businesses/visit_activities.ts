@@ -31,9 +31,9 @@ export default [
     options: {
       description: 'Retrieve all visit activities for a community business',
       auth: {
-        strategy: 'standard',
+        strategies: ['standard', 'external'],
         access: {
-          scope: ['visit_activities-own:read'],
+          scope: ['visit_activities-own:read', 'api:visitor:read'],
         },
       },
       pre: [

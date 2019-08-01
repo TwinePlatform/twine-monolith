@@ -14,9 +14,9 @@ const routes: Hapi.ServerRoute[] = [
     options: {
       description: 'Retrieve a list of aggregated visit data for your community businesses',
       auth: {
-        strategy: 'standard',
+        strategies: ['standard', 'external'],
         access: {
-          scope: ['visit_logs-child:read'],
+          scope: ['visit_logs-child:read', 'api:visitor:read'],
         },
       },
       validate: {

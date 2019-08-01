@@ -142,6 +142,13 @@ export type CommunityBusinessRow = {
   'organisation.is_temp': boolean
 };
 
+export type ApiTokenRow = {
+  api_token: string,
+  api_token_access: string,
+  api_token_name: string,
+};
+
+
 /*
  * Base declarations
  *
@@ -275,6 +282,13 @@ export type VolunteerLog = Readonly<CommonTimestamps & {
   project?: string
   duration: Duration.Duration
   startedAt: string
+}>;
+
+export type ApiToken = Readonly<CommonTimestamps & {
+  id: Int
+  name: string
+  access: string
+  token: string
 }>;
 
 
