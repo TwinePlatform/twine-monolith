@@ -480,21 +480,33 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return res || null;
   },
 
-  async addVisitLog (client, visitActivity, user) {
-    const [res] = await client('visit_log')
-      .insert({
-        user_account_id: user.id,
-        visit_activity_id: visitActivity.id,
-      })
-      .returning([
-        'visit_log_id AS id',
-        'user_account_id AS userId',
-        'visit_activity_id AS visitActivityId',
-        'created_at AS createdAt',
-        'modified_at AS modifiedAt',
-        'deleted_at AS deletedAt',
-      ]);
+  async addVisitLog (client, visitActivity, user, attendanceType) {
+    const res = await client.transaction(async (trx) => {
+      const [log] = await trx('visit_log')
+        .insert({
+          user_account_id: user.id,
+          visit_activity_id: visitActivity.id,
+        })
+        .returning([
+          'visit_log_id AS id',
+          'user_account_id AS userId',
+          'visit_activity_id AS visitActivityId',
+          'created_at AS createdAt',
+          'modified_at AS modifiedAt',
+          'deleted_at AS deletedAt',
+        ]);
+
+      await trx('visit_log_attendance')
+        .insert({
+          visit_log_id: log.id,
+          attendance_type: attendanceType,
+        });
+
+      return log;
+    });
+
     return <VisitEvent> res;
+
   },
 
   async getVisitLogsWithUsers (client, cb, q) {
