@@ -20,6 +20,6 @@ export const parseRedisUrl = (url: string) => {
   return {
     host: redisURL.hostname,
     port: Number(redisURL.port),
-    database: headOrId(redisURL.query.db),
+    database: headOrId(redisURL.query.db) || 0,
   };
 };
