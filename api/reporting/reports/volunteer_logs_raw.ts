@@ -10,7 +10,7 @@ import { csv } from '../writers';
 import {
   CommunityBusinesses,
   VolunteerLogs,
-  Volunteers,
+  Users,
 } from '../../src/models';
 import Roles from '../../src/models/role';
 
@@ -41,10 +41,10 @@ export default async () => {
   const logs = await VolunteerLogs.get(client, { order: ['startedAt', 'asc'] });
 
   const data = (await Promise.all(logs.map(async (log) => {
-    const user = await Volunteers.getOne(client, { where: { id: log.userId } });
+    const user = await Users.getOne(client, { where: { id: log.userId } });
     const org = await CommunityBusinesses.getOne(client, { where: { id: log.organisationId } });
     const creator = log.createdBy
-      ? await Volunteers.getOne(client, { where: { id: log.createdBy } })
+      ? await Users.getOne(client, { where: { id: log.createdBy } })
       : null;
     const roles = creator
       ? await Roles.fromUserWithOrg(client, { userId: log.createdBy, organisationId: org.id })
