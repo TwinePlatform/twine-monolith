@@ -4,6 +4,7 @@ import { innerJoin, collectBy } from 'twine-util/arrays';
 import { useBatchRequest } from '../../../lib/hooks';
 import { CommunityBusinesses } from '../../../lib/api';
 import { findMostActive } from './util';
+import { NumberTileProps, TextTileProps } from '../components/DataCard/types';
 import Months from '../../../lib/util/months';
 
 
@@ -109,7 +110,7 @@ export default () => {
 
 const getCurrentMonth = () => moment().format(Months.format.abreviated);
 
-export const activityStatsToProps = (pts?: EqualDataPoints) => {
+export const activityStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
   if (! pts) {
     return {
       topText: ['During ', getCurrentMonth()],
@@ -137,7 +138,7 @@ export const activityStatsToProps = (pts?: EqualDataPoints) => {
       label: leftLabel,
       data: pts.labels,
       limit: 2,
-      placeholder: '...',
+      truncationString: '...',
     },
     right: {
       label: rightLabel,
@@ -147,7 +148,7 @@ export const activityStatsToProps = (pts?: EqualDataPoints) => {
 };
 
 
-export const volunteerStatsToProps = (pts?: EqualDataPoints) => {
+export const volunteerStatsToProps = (pts?: EqualDataPoints): TextTileProps => {
   if (! pts) {
     return {
       topText: ['During ', getCurrentMonth()],
@@ -179,13 +180,13 @@ export const volunteerStatsToProps = (pts?: EqualDataPoints) => {
       label: rightLabel,
       data: pts.labels,
       limit: 3,
-      placeholder: '...',
+      truncationString: '...',
     },
   };
 };
 
 
-export const timeStatsToProps = (pts?: EqualDataPoints) => {
+export const timeStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
   if (! pts) {
     return {
       topText: ['Over the past ', '12 months'],
@@ -211,7 +212,7 @@ export const timeStatsToProps = (pts?: EqualDataPoints) => {
       label: leftLabel,
       data: pts.labels,
       limit: 3,
-      placeholder: '...',
+      truncationString: '...',
     },
     right: {
       label: rightLabel,
