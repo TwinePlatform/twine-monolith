@@ -74,9 +74,7 @@ export default Joi.object({
     session: {
       name: Joi.string().min(1).required(),
       options: {
-        host: Joi.string().min(1).required(),
-        port: Joi.number().integer().min(0).max(2 ** 16 - 1).required(),
-        database: Joi.number().integer().min(0).max(10).required(),
+        url: Joi.string().min('redis://localhost:6379'.length),
         tls: Joi.object(),
       },
     },

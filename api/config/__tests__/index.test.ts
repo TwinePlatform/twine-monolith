@@ -117,9 +117,7 @@ describe('Config', () => {
         session: {
           name: 'session',
           options: {
-            host: 'localhost',
-            port: 6379,
-            database: '0',
+            url: 'redis://localhost:6379',
           },
         },
       },
@@ -193,9 +191,7 @@ describe('Config', () => {
         session: {
           name: 'session',
           options: {
-            host: 'localhost',
-            port: 6379,
-            database: '0',
+            url: 'redis://localhost:6379',
           },
         },
       },

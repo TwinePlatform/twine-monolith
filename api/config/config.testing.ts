@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { parseRedisUrl, envOr } from './util';
+import { envOr } from './util';
 import { Environment, Config } from './types';
 import { DeepPartial } from '../src/types/internal';
 
@@ -38,7 +38,7 @@ const config: DeepPartial<Config> = {
   cache: {
     session: {
       name: 'session',
-      options: parseRedisUrl(envOr('REDIS_URL_TESTING', 'redis://localhost:6379 ')),
+      options: { url: envOr('REDIS_URL_TESTING', 'redis://localhost:6379 ') },
     },
   },
 };
