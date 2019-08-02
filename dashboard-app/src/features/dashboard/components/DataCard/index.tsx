@@ -74,18 +74,18 @@ const alternateBold = (xs: string[], offset = 0) => (
   </Paragraph>
 );
 
-const truncateWords = (xs: string[], limit: number, placeholder: string) =>
-  String.listify(Arrays.truncate(xs, limit, placeholder), { and: limit >= xs.length });
+const truncateWords = (xs: string[], limit: number, truncationString: string) =>
+  String.listify(Arrays.truncate(xs, limit, truncationString), { and: limit >= xs.length });
 
 /*
  * Components
  */
 const LeftContainer: FunctionComponent<TileDataPoint<string[]>> = (props) => {
-  const { limit = Infinity, data, placeholder = '' } = props;
+  const { limit = Infinity, data, truncationString = '' } = props;
   return (
     <MiddleTopLeftContainer>
       <Paragraph>{props.label}</Paragraph>
-      {alternateBold(truncateWords(data, limit, placeholder))}
+      {alternateBold(truncateWords(data, limit, truncationString))}
     </MiddleTopLeftContainer>
   );
 };
@@ -104,8 +104,8 @@ const NumberRightContainer: FunctionComponent<NumberTileProps['right']> = (props
 };
 
 const TextRightContainer: FunctionComponent<TextTileProps['right']> = (props) => {
-  const { limit = Infinity, data, placeholder = '' } = props;
-  const items = Arrays.truncate(data, limit, placeholder);
+  const { limit = Infinity, data, truncationString = '' } = props;
+  const items = Arrays.truncate(data, limit, truncationString);
   return (
     <>
       <TextMiddleTopRightContainer>
