@@ -26,7 +26,12 @@ describe('timeStatsToProps', () => {
   test('one data point', () => {
     expect(timeStatsToProps({ labels: ['foo'], value: 10 })).toEqual({
       topText: ['Over the past ', '12 months'],
-      left: { label: 'Most volunteer days were in', data: ['foo'], limit: 3, truncationString: '...' },
+      left: {
+        label: 'Most volunteer days were in',
+        data: ['foo'],
+        limit: 3,
+        truncationString: '...',
+      },
       right: { label: 'hours', data: 10 },
     });
   });
@@ -162,7 +167,12 @@ describe('activityStatsToProps', () => {
   test('one data point', () => {
     expect(activityStatsToProps({ labels: ['foo'], value: 10 })).toEqual({
       topText: ['During ', moment().format('MMM YYYY')],
-      left: { label: 'Most popular activity was', data: ['foo'], limit: 2, truncationString: '...' },
+      left: {
+        label: 'Most popular activity was',
+        data: ['foo'],
+        limit: 2,
+        truncationString: '...',
+      },
       right: { label: 'hours', data: 10 },
     });
   });
