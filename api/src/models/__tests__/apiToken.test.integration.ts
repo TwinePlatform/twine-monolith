@@ -43,11 +43,13 @@ describe('API Tokens Model', () => {
     });
 
     test('does not return tokens marked as deleted', async () => {
-      expect.assertions(1);
+      expect.assertions(2);
 
       const res = await trx('api_token')
         .update({ deleted_at: new Date() })
         .where({ api_token_name: 'Aperture Science' });
+
+      expect(res).toBe(1);
 
       try {
         await ApiTokens.find(trx, 'aperture-token');
