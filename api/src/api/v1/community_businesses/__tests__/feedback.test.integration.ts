@@ -5,6 +5,7 @@ import { getConfig } from '../../../../../config';
 import { Users, Organisations, LinkedFeedback, User, Organisation } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
 import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
+import { ExternalCredentials, name as ExtName } from '../../../../auth/strategies/external';
 import { injectCfg } from '../../../../../tests/utils/inject';
 
 
@@ -34,6 +35,7 @@ describe('/community-business/{id}/feedback', () => {
     creds.gordon = await StandardCredentials.get(knex, users.gordon, orgs.blackMesa);
     creds.glados = await StandardCredentials.get(knex, users.glados, orgs.aperture);
     creds.bigboss = await StandardCredentials.get(knex, users.bigboss, orgs.aperture);
+    creds.ext = await ExternalCredentials.get(knex, 'aperture-token');
   });
 
   beforeEach(async () => {
@@ -173,6 +175,22 @@ describe('/community-business/{id}/feedback', () => {
 
       expect(res.statusCode).toBe(403);
     });
+
+    test('can access feedback for own org via external strategy', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/feedback',
+        credentials: creds.ext,
+        strategy: ExtName,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toHaveLength(9);
+      (<any> res.result).result.forEach((feedback: LinkedFeedback) => {
+        expect(typeof feedback.id).toBe('number');
+        expect([-1, 0, 1].includes(feedback.score)).toBeTruthy();
+      });
+    });
   });
 
   describe('GET /community-businesses/{id}/feedback/aggregates', () => {
@@ -235,6 +253,23 @@ describe('/community-business/{id}/feedback', () => {
       }));
 
       expect(res.statusCode).toBe(400);
+    });
+
+    test('can access feedback aggregates for own org w/ external strategy', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/feedback/aggregates',
+        credentials: creds.ext,
+        strategy: ExtName,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toEqual({
+        totalFeedback: 9,
+        '-1': 2,
+        0: 4,
+        1: 3,
+      });
     });
   });
 

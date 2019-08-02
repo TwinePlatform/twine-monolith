@@ -5,7 +5,7 @@ import { getConfig } from '../../../../../config';
 import pre from '../get_community_business';
 import { CommunityBusinesses, Organisations, CbAdmins, Users } from '../../../../models';
 import { injectCfg } from '../../../../../tests/utils/inject';
-import { ExternalCredentials } from '../../../../auth/strategies/external';
+import { ExternalCredentials, name as ExtName } from '../../../../auth/strategies/external';
 
 
 describe('Prerequisites :: getCommunityBusiness', () => {
@@ -117,7 +117,7 @@ describe('Prerequisites :: getCommunityBusiness', () => {
       method: 'GET',
       url: '/foo/me',
       credentials: <any> ExternalCredentials.get(knex, 'aperture-token'),
-      strategy: 'external',
+      strategy: ExtName,
     }));
 
     expect(res.statusCode).toBe(200);

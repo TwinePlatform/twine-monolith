@@ -5,6 +5,7 @@ import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
 import { getTrx } from '../../../../../tests/utils/database';
 import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
+import { ExternalCredentials, name as ExtName } from '../../../../auth/strategies/external';
 import { injectCfg } from '../../../../../tests/utils/inject';
 
 
@@ -20,6 +21,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
   let credentials: Hapi.AuthCredentials;
   let twAdminCreds: Hapi.AuthCredentials;
   let otherCreds: Hapi.AuthCredentials;
+  let extCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -34,6 +36,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     credentials = await StandardCredentials.get(server.app.knex, user, organisation);
     otherCreds = await StandardCredentials.get(server.app.knex, wrongUser, otherOrganisation);
     twAdminCreds = await StandardCredentials.get(server.app.knex, twAdmin, organisation);
+    extCreds = await ExternalCredentials.get(knex, 'aperture-token');
   });
 
   afterAll(async () => {
@@ -108,6 +111,45 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       }));
 
       expect(res.statusCode).toBe(403);
+    });
+
+    test(':: can access activities using external strategy', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visit-activities',
+        credentials: extCreds,
+        strategy: ExtName,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: expect.arrayContaining(
+        [
+          expect.objectContaining({
+            category: 'Socialising',
+            id: 2,
+            name: 'Wear Pink',
+            monday: false,
+            tuesday: false,
+            wednesday: true,
+            thursday: false,
+            friday: false,
+            saturday: false,
+            sunday: false,
+          }),
+          expect.objectContaining({
+            id: 3,
+            name: 'Free Running',
+            category: 'Sports',
+            monday: false,
+            tuesday: true,
+            wednesday: true,
+            thursday: false,
+            friday: true,
+            saturday: true,
+            sunday: true,
+          }),
+        ]),
+      });
     });
   });
 

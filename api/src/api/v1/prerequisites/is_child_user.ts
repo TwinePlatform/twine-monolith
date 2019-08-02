@@ -18,6 +18,7 @@ import { PutUserRequest } from '../types';
 import Roles from '../../../models/role';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
+import { ExternalCredentials } from '../../../auth/strategies/external';
 
 
 export default async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
@@ -26,13 +27,23 @@ export default async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
     params: { userId },
   } = request;
 
+  if (request.auth.strategy === 'external') {
+    const { organisation } = ExternalCredentials.fromRequest(request);
+
+    return Roles.userHasAtCb(knex, {
+      role: [RoleEnum.VISITOR, RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN],
+      userId: Number(userId),
+      organisationId: organisation.id,
+    });
+  }
+
   const { user, roles, organisation } = StandardCredentials.fromRequest(request);
 
   if (roles.includes(RoleEnum.TWINE_ADMIN)) {
     return true;
   }
 
-  const [isOrgAdmin, targetIsVisitor, targetIsVolunteer, targetIsVolunteerAdmin] =
+  const [isOrgAdmin, targetIsVisitorOrVolunteer] =
     await Promise.all([
       Roles.userHasAtCb(knex, {
         role: RoleEnum.CB_ADMIN,
@@ -41,27 +52,11 @@ export default async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
       }),
 
       Roles.userHasAtCb(knex, {
-        role: RoleEnum.VISITOR,
-        userId: Number(userId),
-        organisationId: organisation.id,
-      }),
-
-      Roles.userHasAtCb(knex, {
-        role: RoleEnum.VOLUNTEER,
-        userId: Number(userId),
-        organisationId: organisation.id,
-      }),
-
-      Roles.userHasAtCb(knex, {
-        role: RoleEnum.VOLUNTEER_ADMIN,
+        role: [RoleEnum.VISITOR, RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN],
         userId: Number(userId),
         organisationId: organisation.id,
       }),
     ]);
 
-  if (isOrgAdmin && (targetIsVisitor || targetIsVolunteer || targetIsVolunteerAdmin)) {
-    return true;
-  }
-
-  return false;
+  return isOrgAdmin && targetIsVisitorOrVolunteer;
 };
