@@ -114,12 +114,13 @@ export const Visitors = {
   sendQrCode: ({ id } = {}) =>
     axios.post(`/community-businesses/me/visitors/${id}/emails`, { type: 'qrcode' }),
 
-  createVisit: ({ visitorId, activityId } = {}) =>
+  createVisit: ({ visitorId, activityId, attendanceType } = {}) =>
     axios.post(
       '/community-businesses/me/visit-logs',
       {
         userId: visitorId,
         visitActivityId: activityId,
+        attendanceType,
       },
     ),
   addRole: ({ userId, organisationId, role, token } = {}) =>

@@ -96,7 +96,7 @@ export default class SignInForm extends React.Component {
           return this.setState(evolve({ fields: concatUnlessExists(nextField) }));
         }
 
-        return onSuccess(res.data.result[0]); // { id, name }
+        return onSuccess({ ...res.data.result[0], attendanceType: 'sign_in_with_name' }); // { id, name }
       })
       .catch((err) => {
         this.setState({ isFetching: false });
