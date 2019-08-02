@@ -116,7 +116,7 @@ describe('Prerequisites :: getCommunityBusiness', () => {
     const res = await server.inject(injectCfg({
       method: 'GET',
       url: '/foo/me',
-      credentials: <any> ExternalCredentials.get(knex, 'aperture-token'),
+      credentials: await ExternalCredentials.get(knex, 'aperture-token'),
       strategy: ExtName,
     }));
 

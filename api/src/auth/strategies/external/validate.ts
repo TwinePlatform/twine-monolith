@@ -7,11 +7,11 @@ export const ExternalCredentials = {
   async get (knex: Knex, token: string): Promise<Hapi.AuthCredentials> {
     const match = await ApiTokens.find(knex, token);
     const org = await Organisations.getOne(knex, { where: { name: match.name } });
-    return { scope: [match.access], app: { scope: [match.access], app: { organisation: org } } };
+    return { scope: [match.access], app: { scope: [match.access], organisation: org } };
   },
 
   fromRequest (req: Hapi.Request) {
-    return Object.assign({ scope: req.auth.credentials.scope }, req.auth.credentials.app.app);
+    return Object.assign({ scope: req.auth.credentials.scope }, req.auth.credentials.app);
   },
 };
 
