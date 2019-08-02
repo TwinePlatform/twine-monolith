@@ -18,7 +18,7 @@ describe('timeStatsToProps', () => {
   test('zero data points', () => {
     expect(timeStatsToProps({ labels: [], value: 0 })).toEqual({
       topText: ['Over the past ', '12 months'],
-      left: { label: 'No data available', data: [], limit: 3, placeholder: '...' },
+      left: { label: 'No data available', data: [], limit: 3, truncationString: '...' },
       right: { label: 'hours', data: 0 },
     });
   });
@@ -26,7 +26,7 @@ describe('timeStatsToProps', () => {
   test('one data point', () => {
     expect(timeStatsToProps({ labels: ['foo'], value: 10 })).toEqual({
       topText: ['Over the past ', '12 months'],
-      left: { label: 'Most volunteer days were in', data: ['foo'], limit: 3, placeholder: '...' },
+      left: { label: 'Most volunteer days were in', data: ['foo'], limit: 3, truncationString: '...' },
       right: { label: 'hours', data: 10 },
     });
   });
@@ -38,7 +38,7 @@ describe('timeStatsToProps', () => {
         label: 'Most volunteer days were in',
         data: ['foo', 'bar'],
         limit: 3,
-        placeholder: '...',
+        truncationString: '...',
       },
       right: { label: 'hours each', data: 10 },
     });
@@ -51,7 +51,7 @@ describe('timeStatsToProps', () => {
         label: 'Most volunteer days were in',
         data: ['foo', 'bar', 'woo'],
         limit: 3,
-        placeholder: '...',
+        truncationString: '...',
       },
       right: { label: 'hours each', data: 10 },
     });
@@ -64,7 +64,7 @@ describe('timeStatsToProps', () => {
         label: 'Most volunteer days were in',
         data: ['foo', 'bar', 'woo', 'war'],
         limit: 3,
-        placeholder: '...',
+        truncationString: '...',
       },
       right: { label: 'hours each', data: 10 },
     });
@@ -84,7 +84,7 @@ describe('volunteerStatsToProps', () => {
     expect(volunteerStatsToProps({ labels: [], value: 0 })).toEqual({
       topText: ['During ', moment().format('MMM YYYY')],
       left: { label: 'No data available', data: [] },
-      right: { label: '0 hours', data: [], limit: 3, placeholder: '...' },
+      right: { label: '0 hours', data: [], limit: 3, truncationString: '...' },
     });
   });
 
@@ -92,7 +92,7 @@ describe('volunteerStatsToProps', () => {
     expect(volunteerStatsToProps({ labels: ['foo'], value: 10 })).toEqual({
       topText: ['During ', moment().format('MMM YYYY')],
       left: { label: 'Top volunteer', data: [] },
-      right: { label: '10 hours', data: ['foo'], limit: 3, placeholder: '...' },
+      right: { label: '10 hours', data: ['foo'], limit: 3, truncationString: '...' },
     });
   });
 
@@ -107,7 +107,7 @@ describe('volunteerStatsToProps', () => {
         label: '10 hours each',
         data: ['foo', 'bar'],
         limit: 3,
-        placeholder: '...', },
+        truncationString: '...', },
     });
   });
 
@@ -122,7 +122,7 @@ describe('volunteerStatsToProps', () => {
         label: '10 hours each',
         data: ['foo', 'bar', 'woo'],
         limit: 3,
-        placeholder: '...', },
+        truncationString: '...', },
     });
   });
 
@@ -137,7 +137,7 @@ describe('volunteerStatsToProps', () => {
         label: '10 hours each',
         data: ['foo', 'bar', 'woo', 'war'],
         limit: 3,
-        placeholder: '...', },
+        truncationString: '...', },
     });
   });
 });
@@ -154,7 +154,7 @@ describe('activityStatsToProps', () => {
   test('zero data points', () => {
     expect(activityStatsToProps({ labels: [], value: 0 })).toEqual({
       topText: ['During ', moment().format('MMM YYYY')],
-      left: { label: 'No data available', data: [], limit: 2, placeholder: '...' },
+      left: { label: 'No data available', data: [], limit: 2, truncationString: '...' },
       right: { label: 'hours', data: 0 },
     });
   });
@@ -162,7 +162,7 @@ describe('activityStatsToProps', () => {
   test('one data point', () => {
     expect(activityStatsToProps({ labels: ['foo'], value: 10 })).toEqual({
       topText: ['During ', moment().format('MMM YYYY')],
-      left: { label: 'Most popular activity was', data: ['foo'], limit: 2, placeholder: '...' },
+      left: { label: 'Most popular activity was', data: ['foo'], limit: 2, truncationString: '...' },
       right: { label: 'hours', data: 10 },
     });
   });
@@ -174,7 +174,7 @@ describe('activityStatsToProps', () => {
         label: 'Most popular activities were',
         data: ['foo', 'bar'],
         limit: 2,
-        placeholder: '...',
+        truncationString: '...',
       },
       right: {
         label: 'hours each',
@@ -189,7 +189,7 @@ describe('activityStatsToProps', () => {
         label: 'Most popular activities were',
         data: ['foo', 'bar', 'woo'],
         limit: 2,
-        placeholder: '...',
+        truncationString: '...',
       },
       right: {
         label: 'hours each',
@@ -204,7 +204,7 @@ describe('activityStatsToProps', () => {
         label: 'Most popular activities were',
         data: ['foo', 'bar', 'woo', 'war'],
         limit: 2,
-        placeholder: '...',
+        truncationString: '...',
       },
       right: {
         label: 'hours each',
