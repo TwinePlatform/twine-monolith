@@ -157,6 +157,11 @@ describe('Config', () => {
       qrcode: {
         secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
       },
+      webhooks: {
+        heroku: {
+          secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
+        },
+      },
     };
 
     expect(() => validateConfig(cfg)).not.toThrow();
@@ -223,6 +228,11 @@ describe('Config', () => {
       },
       qrcode: {
         secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
+      },
+      webhooks: {
+        heroku: {
+          secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
+        },
       },
     };
 
