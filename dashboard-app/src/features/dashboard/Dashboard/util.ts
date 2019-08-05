@@ -35,9 +35,19 @@ export const logsToDurations = compose(
 export const sumLogDurations = (a: Dictionary<VolunteerLog[]>) =>
   Objects.mapValues(logsToDurations, a);
 
+const sortByMonthOrAlpha = (xs: string[]) =>
+  xs.sort((a, b) => {
+    if (isNaN(new Date(`01 ${b}`).valueOf())) {
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
+    }
+    return Months.diff(new Date(`01 ${b}`), new Date(`01 ${a}`));
+  });
+
 export const findMostActive = compose(
   ({ labels, value }) => ({
-    labels: labels.slice(0, 3).sort((a, b) => Months.diff(new Date(b), new Date(a))),
+    labels: sortByMonthOrAlpha(labels),
     value: Math.round(Duration.toHours(value)),
   }),
   collectMaxDurations,

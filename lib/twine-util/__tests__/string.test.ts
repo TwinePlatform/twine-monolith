@@ -35,24 +35,44 @@ describe('String', () => {
     test('returns empty array when empty', () => {
       expect(listify([])).toEqual([]);
     });
+
     test('returns array when it contains 1 element', () => {
       expect(listify(['hi'])).toEqual(['hi']);
     });
+
     test('adds "and" for 2 elements', () => {
       const sentence = listify(['chocolate', 'bananas']);
       const readableSentence = readableListify(['chocolate', 'bananas']);
       expect(sentence).toEqual(['chocolate', ' and ', 'bananas']);
       expect(readableSentence).toBe('chocolate and bananas');
     });
+
     test('adds "," & "and" for 3 elements', () => {
       const sentence = listify(['chocolate', 'bananas', 'peanut butter']);
       const readableSentence = readableListify(['chocolate', 'bananas', 'peanut butter']);
       expect(sentence).toEqual(['chocolate', ', ', 'bananas', ' and ', 'peanut butter']);
       expect(readableSentence).toBe('chocolate, bananas and peanut butter');
     });
+
     test('adds multiple "," & "and" for 4 elements', () => {
       const sentence = listify(['chocolate', 'bananas', 'peanut butter', 'ice cream']);
       const readableSentence = readableListify(['chocolate', 'bananas', 'peanut butter', 'ice cream']);
+      expect(sentence)
+        .toEqual(['chocolate', ', ', 'bananas', ', ', 'peanut butter', ' and ', 'ice cream']);
+      expect(readableSentence).toBe('chocolate, bananas, peanut butter and ice cream');
+    });
+
+    test('adds only commas if "and" option is present and false', () => {
+      const sentence = listify(['chocolate', 'bananas', 'peanut butter', 'ice cream'], { and: false });
+      const readableSentence = readableListify(['chocolate', 'bananas', 'peanut butter', 'ice cream'], { and: false });
+      expect(sentence)
+        .toEqual(['chocolate', ', ', 'bananas', ', ', 'peanut butter', ', ', 'ice cream']);
+      expect(readableSentence).toBe('chocolate, bananas, peanut butter, ice cream');
+    });
+
+    test('adds "," and "and" normally if "and" option is present and true', () => {
+      const sentence = listify(['chocolate', 'bananas', 'peanut butter', 'ice cream'], { and: true });
+      const readableSentence = readableListify(['chocolate', 'bananas', 'peanut butter', 'ice cream'], { and: true });
       expect(sentence)
         .toEqual(['chocolate', ', ', 'bananas', ', ', 'peanut butter', ' and ', 'ice cream']);
       expect(readableSentence).toBe('chocolate, bananas, peanut butter and ice cream');

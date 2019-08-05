@@ -1,9 +1,10 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
-import { String } from 'twine-util';
+import { String, Arrays } from 'twine-util';
 import { Paragraph, Bold } from '../../../../lib/ui/components/Typography';
 import { ColoursEnum, Fonts } from '../../../../lib/ui/design_system';
 import { TextTileProps, NumberTileProps, TileDataPoint } from './types';
+
 
 /*
  * Styles
@@ -61,23 +62,30 @@ const BottomContainer = styled.div`
 /*
  * Helpers
  */
-const alternateBold = (xs: string[]) => (
-  <Paragraph>{xs.map((x, i) => {
-    return i % 2 > 0
-      ? (<Bold key={`bold_${x}`}>{x}</Bold>)
-      : x;
-  })}</Paragraph>
+const alternateBold = (xs: string[], offset = 0) => (
+  <Paragraph>
+    {
+      xs.map((x, i) =>
+        (i + offset) % 2 === 0
+          ? <Bold key={`bold_${x}`}>{x}</Bold>
+          : x
+      )
+    }
+  </Paragraph>
 );
+
+const truncateWords = (xs: string[], limit: number, truncationString: string) =>
+  String.listify(Arrays.truncate(xs, limit, truncationString), { and: limit >= xs.length });
 
 /*
  * Components
  */
 const LeftContainer: FunctionComponent<TileDataPoint<string[]>> = (props) => {
-  const dataSentence = ['', ...String.listify(props.data)];
+  const { limit = Infinity, data, truncationString = '' } = props;
   return (
     <MiddleTopLeftContainer>
       <Paragraph>{props.label}</Paragraph>
-      {alternateBold(dataSentence)}
+      {alternateBold(truncateWords(data, limit, truncationString))}
     </MiddleTopLeftContainer>
   );
 };
@@ -96,10 +104,12 @@ const NumberRightContainer: FunctionComponent<NumberTileProps['right']> = (props
 };
 
 const TextRightContainer: FunctionComponent<TextTileProps['right']> = (props) => {
+  const { limit = Infinity, data, truncationString = '' } = props;
+  const items = Arrays.truncate(data, limit, truncationString);
   return (
     <>
       <TextMiddleTopRightContainer>
-        {props.data.map((x) => (<Paragraph key={`right_${x}`}><Bold>{x}</Bold></Paragraph>))}
+        {items.map((x) => <Paragraph key={`right_${x}`}><Bold>{x}</Bold></Paragraph>)}
       </TextMiddleTopRightContainer>
       <MiddleBottomRightContainer>
         <Paragraph>{props.label}</Paragraph>
@@ -110,22 +120,23 @@ const TextRightContainer: FunctionComponent<TextTileProps['right']> = (props) =>
 
 const DataCard: FunctionComponent<NumberTileProps | TextTileProps> = (props) => {
   const { topText, left, bottomText, children } = props;
-  return(
-  <Grid>
-    <TopTextContainer>
-      {alternateBold(topText)}
-    </TopTextContainer>
-    <LeftContainer {...left}/>
-    {children}
-    <BottomContainer>
-      {bottomText && alternateBold(bottomText)}
-    </BottomContainer>
-  </Grid>);
+  return (
+    <Grid>
+      <TopTextContainer>
+        {alternateBold(topText, 1)}
+      </TopTextContainer>
+      <LeftContainer {...left}/>
+      {children}
+      <BottomContainer>
+        {bottomText && alternateBold(bottomText, 1)}
+      </BottomContainer>
+    </Grid>
+  );
 };
 
 export const NumberDataCard: FunctionComponent<NumberTileProps> = (props) => {
   const { right } = props;
-  return(
+  return (
     <DataCard {...props} >
       <NumberRightContainer {...right}/>
     </DataCard>
@@ -134,7 +145,7 @@ export const NumberDataCard: FunctionComponent<NumberTileProps> = (props) => {
 
 export const TextDataCard: FunctionComponent<TextTileProps> = (props) => {
   const { right } = props;
-  return(
+  return (
     <DataCard {...props} >
       <TextRightContainer {...right}/>
     </DataCard>

@@ -1,4 +1,4 @@
-import { sort, innerJoin, collectBy, Order } from '../arrays';
+import { sort, innerJoin, collectBy, truncate, Order } from '../arrays';
 
 
 describe('Arrays', () => {
@@ -191,5 +191,17 @@ describe('Arrays', () => {
           even: [2, 4],
         });
     });
+  });
+
+  describe('truncate', () => {
+    test('array below limit', () => {
+      const xs = ['1', '2', '3'];
+      expect(truncate(xs, 10, '...')).toEqual(xs);
+    });
+
+    test('array above limit', () => {
+      const xs = ['1', '2', '3'];
+      expect(truncate(xs, 2, '...')).toEqual(['1', '2', '...']);
+    })
   });
 });

@@ -4,6 +4,7 @@ import { innerJoin, collectBy } from 'twine-util/arrays';
 import { useBatchRequest } from '../../../lib/hooks';
 import { CommunityBusinesses } from '../../../lib/api';
 import { findMostActive } from './util';
+import { NumberTileProps, TextTileProps } from '../components/DataCard/types';
 import Months from '../../../lib/util/months';
 
 
@@ -11,6 +12,7 @@ export type EqualDataPoints = {
   labels: string[]
   value: number
 };
+
 
 export default () => {
   const oneYearAgo = moment().subtract(1, 'year').toDate();
@@ -63,7 +65,7 @@ export default () => {
     // most active months (12 months)
     setTimeStats(
       findMostActive(
-        collectBy((log) => moment(log.startedAt).format(Months.format.verbose), fullLogs)
+        collectBy((log) => moment(log.startedAt).format(Months.format.abreviated), fullLogs)
       )
     );
 
@@ -108,7 +110,7 @@ export default () => {
 
 const getCurrentMonth = () => moment().format(Months.format.abreviated);
 
-export const activityStatsToProps = (pts?: EqualDataPoints) => {
+export const activityStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
   if (! pts) {
     return {
       topText: ['During ', getCurrentMonth()],
@@ -135,6 +137,8 @@ export const activityStatsToProps = (pts?: EqualDataPoints) => {
     left: {
       label: leftLabel,
       data: pts.labels,
+      limit: 2,
+      truncationString: '...',
     },
     right: {
       label: rightLabel,
@@ -144,7 +148,7 @@ export const activityStatsToProps = (pts?: EqualDataPoints) => {
 };
 
 
-export const volunteerStatsToProps = (pts?: EqualDataPoints) => {
+export const volunteerStatsToProps = (pts?: EqualDataPoints): TextTileProps => {
   if (! pts) {
     return {
       topText: ['During ', getCurrentMonth()],
@@ -153,7 +157,7 @@ export const volunteerStatsToProps = (pts?: EqualDataPoints) => {
         data: [],
       },
       right: {
-        label: 'hours',
+        label: '0 hours',
         data: [],
       },
     };
@@ -175,12 +179,14 @@ export const volunteerStatsToProps = (pts?: EqualDataPoints) => {
     right: {
       label: rightLabel,
       data: pts.labels,
+      limit: 3,
+      truncationString: '...',
     },
   };
 };
 
 
-export const timeStatsToProps = (pts?: EqualDataPoints) => {
+export const timeStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
   if (! pts) {
     return {
       topText: ['Over the past ', '12 months'],
@@ -205,6 +211,8 @@ export const timeStatsToProps = (pts?: EqualDataPoints) => {
     left: {
       label: leftLabel,
       data: pts.labels,
+      limit: 3,
+      truncationString: '...',
     },
     right: {
       label: rightLabel,
