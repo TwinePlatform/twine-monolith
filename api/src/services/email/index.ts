@@ -1,5 +1,5 @@
 import EmailDispatcher from './dispatcher';
-import { EmailTemplate, Templates } from './templates';
+import { EmailTemplate, Templates, WebhookEmailTemplates } from './templates';
 import { Config } from '../../../config';
 import { User, CommunityBusiness } from '../../models';
 import { RoleEnum } from '../../models/types';
@@ -24,8 +24,36 @@ export type EmailService = {
 
   resetPassword:
     (c: Config, ap: AppEnum, a: User, t: string) => Promise<void>
+
+  webhooks: {
+    onHerokuStagingRelease: (c: Config, appName: string) => Promise<void>
+  }
 };
 
+const webhooks: EmailService['webhooks'] = {
+  async onHerokuStagingRelease (cfg, appName) {
+    await EmailDispatcher.sendBatch(cfg, [
+      {
+        from: cfg.email.fromAddress,
+        to: cfg.email.developers[0],
+        templateId: WebhookEmailTemplates.ON_HEROKU_RELEASE,
+        templateModel: {
+          app_name: appName,
+          product_name: 'Twine Platform',
+        },
+      },
+      {
+        from: cfg.email.fromAddress,
+        to: cfg.email.developers[1],
+        templateId: WebhookEmailTemplates.ON_HEROKU_RELEASE,
+        templateModel: {
+          app_name: appName,
+          product_name: 'Twine Platform',
+        },
+      },
+    ]);
+  },
+};
 
 const Service: EmailService = {
   async newVisitor (cfg, visitor, admin, cb, attachment) {
@@ -130,6 +158,7 @@ const Service: EmailService = {
       },
     });
   },
+  webhooks,
 };
 
 export default Service;

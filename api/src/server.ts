@@ -5,6 +5,7 @@ import * as Hapi from '@hapi/hapi';
 import * as qs from 'qs';
 import { Dictionary } from 'ramda';
 import v1 from './api/v1';
+import webhooks from './webhooks/v1';
 import setup from './setup';
 import { Config } from '../config/types';
 import Logger from './services/logger';
@@ -32,6 +33,10 @@ const init = async (config: Config): Promise<Hapi.Server> => {
     {
       plugin: v1,
       routes: { prefix: '/v1' },
+    },
+    {
+      plugin: webhooks,
+      routes: { prefix: '/webhooks/v1' },
     },
   ]);
 

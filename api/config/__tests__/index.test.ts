@@ -140,6 +140,7 @@ describe('Config', () => {
       email: {
         postmarkKey: 'foo',
         fromAddress: 'boo@coo.com',
+        developers: ['boo@coo.com', 'hi@yo.com'],
       },
       auth: {
         schema: {
@@ -206,6 +207,7 @@ describe('Config', () => {
       email: {
         postmarkKey: '',
         fromAddress: 'fooo',
+        developers: ['boo@coo.com', 'hi@yo.com'],
       },
       auth: {
         schema: {

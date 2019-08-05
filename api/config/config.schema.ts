@@ -82,6 +82,7 @@ export default Joi.object({
   email: Joi.object({
     postmarkKey: Joi.string().required(),
     fromAddress: Joi.string().email().required(),
+    developers: Joi.array().items(Joi.string()).length(2),
   }).required(),
   auth: Joi.object({
     schema: {
@@ -107,5 +108,10 @@ export default Joi.object({
   }).required(),
   qrcode: Joi.object({
     secret: Joi.string().min(32).required(),
+  }).required(),
+  webhooks: Joi.object({
+    heroku: Joi.object({
+      secret: Joi.string().min(32).required(),
+    }).required(),
   }).required(),
 });
