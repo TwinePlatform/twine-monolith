@@ -1,13 +1,8 @@
 /*
- * Twine API v1
+ * Twine Webhooks v1
  *
- * The API is written as a self-contained plugin. The API tries
- * to minimise its dependencies on other plugins, providing its
- * own authentication strategies, request lifecycle hooks, route
- * definitions, etc.
+ * To handle auxilary action to subscribed webhooks
  *
- * See also
- * - api.json
  */
 import * as Hapi from '@hapi/hapi';
 import heroku from './heroku';
@@ -18,7 +13,7 @@ export default {
   register: async (server: Hapi.Server) => {
 
     /*
-     * API Routes
+     * Routes
      */
 
     // Pre-process routes
