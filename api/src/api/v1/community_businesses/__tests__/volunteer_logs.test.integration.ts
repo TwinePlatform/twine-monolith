@@ -915,7 +915,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(7);
 
-      const { startedAt } = (<any> resLogs.result).result[0];
+      const { startedAt } = (<any> resLogs.result).result[6];
 
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt },
@@ -959,6 +959,44 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(400);
+    });
+
+    test('HACK - allows invalid logs through but ignores them', async () => {
+      const month = moment().format('MM');
+      const prev = moment().subtract(1, 'month').format('MM');
+
+      const logs = [
+        // valid
+        { activity: 'Other', duration: { minutes: 10 }, startedAt: `2019-${month}-05 13:03:22` },
+        // invalid "startedAt"
+        { activity: 'Office support', duration: { minutes: 20 }, startedAt: 'undefined 13:03:22' },
+        // invalid "deletedAt"
+        { activity: 'Other', duration: { hours: 1 }, startedAt: `2019-${month}-01 03:13:02`,
+          deletedAt: 'foo' },
+        // "startedAt" from previous month
+        { activity: 'Other', duration: { hours: 1 }, startedAt: `2019-${prev}-01 03:13:02` },
+      ];
+
+      const res = await server.inject(injectCfg({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: volCreds,
+        payload: logs,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: null });
+
+      const dbLogs: any[] = await server.app.knex('volunteer_hours_log')
+        .select('*')
+        .where({
+          organisation_id: volCreds.user.organisation.id,
+          user_account_id: volCreds.user.user.id,
+        });
+
+      expect(dbLogs).toHaveLength(8);
+      expect(dbLogs.some((log) => log.started_at === '2019-07-05T13:03:22.000Z')).toBe(true);
+      expect(dbLogs.some((log) => log.started_at === '2019-07-01T03:13:02.000Z')).toBe(false);
     });
   });
 });

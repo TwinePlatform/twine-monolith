@@ -31,6 +31,21 @@ import { Credentials as StandardCredentials } from '../../../auth/strategies/sta
 import { RoleEnum } from '../../../models/types';
 
 
+const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) => {
+  const schema = Joi.object({
+    startedAt,
+    deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
+  });
+
+  return logs
+    // Ignore invalid date strings for startedAt and deletedAt
+    .filter((log) => {
+      const result = Joi.validate({ startedAt: log.startedAt, deletedAt: log.deletedAt }, schema);
+      return !result.error;
+    });
+};
+
+
 const routes: Hapi.ServerRoute[] = [
 
   {
@@ -312,8 +327,16 @@ const routes: Hapi.ServerRoute[] = [
           userId: meOrId.default('me'),
           activity: volunteerLogActivity.required(),
           duration: volunteerLogDuration.required(),
-          startedAt: startedAt.default(() => new Date(), 'now'),
-          deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
+          // TODO: Weak validation for "startedAt" required by
+          // https://github.com/TwinePlatform/twine-monolith/issues/246
+          // Once, resolved, replace with:
+          // `startedAt.default(() => new Date(), 'now')`
+          startedAt: Joi.string().default(() => new Date(), 'now'),
+          // TODO: Weak validation for "deletedAt" required by
+          // https://github.com/TwinePlatform/twine-monolith/issues/246
+          // Once, resolved, replace with:
+          // `Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null))`
+          deletedAt: Joi.alt().try(Joi.string(), Joi.only(null)),
           project: volunteerProject.allow(null),
         })).required(),
       },
@@ -326,10 +349,12 @@ const routes: Hapi.ServerRoute[] = [
       const {
         server: { app: { knex } },
         pre: { communityBusiness },
-        payload,
+        payload: _payload,
       } = request;
 
       const { user, scope } = StandardCredentials.fromRequest(request);
+
+      const payload = ignoreInvalidLogs(_payload);
 
       if (
         payload.some((log) => log.userId !== 'me') && // If some logs correspond to other users
