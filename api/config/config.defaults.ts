@@ -83,7 +83,7 @@ const config: DeepPartial<Config> = {
   },
   email: {
     fromAddress: envOr('EMAIL_FROM_ADDRESS', 'visitorapp@powertochange.org.uk'),
-    developers: envListOr('DEVELOPER_EMAILS', ['', ''], ','),
+    developers: envListOr('DEVELOPER_EMAILS', ['one', 'two'], ','),
   },
   webhooks: {
     heroku: {
