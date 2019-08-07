@@ -3,24 +3,36 @@ import * as URL from 'url';
 import { Config } from '../../../../config';
 
 
-const createListener = async (config: Config) => {
-  const opts = URL.parse(config.cache.session.options.url);
-  const client = new IoRedis({ port: Number(opts.port), host: opts.host });
+const createListener = async (url: string) => {
+  const client = new IoRedis(url);
+  const getter = new IoRedis(url);
 
-  client.psubscribe('*', <any> ((err: any, key: any) => {
-    console.log('ALL', err, key);
+  client.psubscribe('*', <any> ((...args: any[]) => {
+    console.log('ALL', ...args);
   }));
 
-  client.psubscribe('__keyevent@0__:set', <any> ((err: any, key: any) => {
-    console.log('SET', err, key);
+  client.subscribe('__keyevent@0__:set', <any> ((...args: any[]) => {
+    console.log('SET', ...args);
   }));
 
-  client.psubscribe('__keyevent@0__:expired', <any> ((err: any, key: any) => {
-    console.log(err);
-    console.log(key);
+  client.subscribe('__keyevent@0__:expired', <any> ((...args: any[]) => {
+    console.log('EXPIRED', ...args);
+  }));
+
+  client.on('message', <any> (async (...args: any[]) => {
+    console.log('MESSAGE', ...args);
+    switch (args[0]) {
+      case '__keyevent@0__:expired':
+        const x = await getter.get(args[1]);
+        console.log('GOT', x);
+        break;
+
+      default:
+        break;
+    }
   }));
 
   return client;
 };
 
-export { createListener };
+createListener('redis://localhost:6379');

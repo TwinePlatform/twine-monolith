@@ -9,6 +9,9 @@ export const Sessions = {
       isAuthenticated: req.yar.get('isAuthenticated'),
       userId: req.yar.get('userId'),
       organisationId: req.yar.get('organisationId'),
+      startedAt: req.yar.get('startedAt'),
+      referrers: req.yar.get('referrers'),
+      sessionEndType: req.yar.get('sessionEndType'),
     }),
 
   set: (req: Hapi.Request, key: string, value: any) =>
@@ -19,6 +22,8 @@ export const Sessions = {
       isAuthenticated: true,
       userId,
       organisationId,
+      startedAt: new Date(),
+      referrers: [],
     }),
 
   destroy: (req: Hapi.Request) =>

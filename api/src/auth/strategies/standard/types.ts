@@ -15,7 +15,7 @@ export type Session = {
   startedAt: Date
   endedAt?: Date
   referrers: string[]
-  sessionEndType: 'log_out' | 'expired'
+  sessionEndType?: 'log_out' | 'expired'
 };
 
 export type UserCredential = {
