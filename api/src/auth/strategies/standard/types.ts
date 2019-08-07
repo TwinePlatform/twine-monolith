@@ -12,6 +12,10 @@ declare module '@hapi/hapi' {
 export type Session = {
   userId: number
   organisationId: number
+  startedAt: Date
+  endedAt?: Date
+  referrers: string[]
+  sessionEndType: 'log_out' | 'expired'
 };
 
 export type UserCredential = {

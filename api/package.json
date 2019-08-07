@@ -81,6 +81,7 @@
     "dotenv": "^6.2.0",
     "hapi-auth-bearer-token": "^6.2.1",
     "hapi-pino": "^5.4.1",
+    "ioredis": "^4.10.0",
     "knex": "^0.16.5",
     "moment": "^2.24.0",
     "pdfmake": "^0.1.53",
