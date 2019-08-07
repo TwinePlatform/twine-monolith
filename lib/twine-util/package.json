@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "@types/node": "^11.13.2",
-    "@types/ramda": "^0.26.18",
+    "@types/ramda": "0.26.18",
     "axios": "^0.18.0",
     "moment": "^2.24.0",
     "ramda": "^0.26.1",
