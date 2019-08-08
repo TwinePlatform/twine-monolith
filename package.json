@@ -3,5 +3,13 @@
   "private": true,
   "devDependencies": {
     "lerna": "^3.13.1"
-  }
+  },
+  "workspaces": [
+    "api",
+    "dashboard-app",
+    "lib/twine-util",
+    "lib/tslint-config-twine",
+    "temp-admin-dashboard-app",
+    "visitor-app"
+  ]
 }

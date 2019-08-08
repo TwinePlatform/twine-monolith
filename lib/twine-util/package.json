@@ -5,7 +5,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "tsc",
     "test": "jest",
     "cover": "jest --coverage",
     "build": "tsc",
