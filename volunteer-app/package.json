@@ -23,7 +23,7 @@
     "@ionic/v1-toolkit": "1.0.8",
     "angular-mocks": "^1.4.3",
     "eslint": "^5.16.0",
-    "jest": "^24.7.1"
+    "jest": "24.7.1"
   },
   "scripts": {
     "test": "jest"
