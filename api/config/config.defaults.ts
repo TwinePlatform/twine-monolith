@@ -63,26 +63,17 @@ const config: DeepPartial<Config> = {
     },
   },
   auth: {
-    standard: {
-      jwt: {
-        secret: process.env.JWT_SECRET,
-        signOptions: {
-          algorithm: 'HS256',
-          expiresIn: '7 days',
-        },
-        verifyOptions: {
-          algorithms: ['HS256'],
-          maxAge: '6 days',
-        },
-      },
-      cookie: {
-        name: 'tw-api-session',
+    schema: {
+      session_cookie: {
         options: {
-          ttl: 1000 * 60 * 60 * 24 * 7, // A week
-          isSecure: true,
-          isHttpOnly: true,
-          isSameSite: 'Lax',
-          path: '/',
+          name: 'twine-api-session',
+          maxCookieSize: 0,
+          cookieOptions: {
+            password: process.env.COOKIE_PASSWORD,
+            isHttpOnly: true,
+            path: '/',
+          },
+          cache: { cache: 'session' }, // Must match one of the caches
         },
       },
     },

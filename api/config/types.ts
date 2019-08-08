@@ -1,6 +1,7 @@
 import * as Hapi from '@hapi/hapi';
+import { CatboxRedisOptions } from '@hapi/catbox-redis';
 import * as Knex from 'knex';
-import * as JWT from 'jsonwebtoken';
+import * as Yar from '@hapi/yar';
 import { AppEnum } from '../src/types/internal';
 
 
@@ -37,16 +38,9 @@ type EmailConfig = {
 };
 
 type AuthConfig = {
-  standard: {
-    jwt: {
-      secret: string
-      signOptions?: JWT.SignOptions
-      verifyOptions?: JWT.VerifyOptions
-      decodeOptions?: JWT.DecodeOptions
-    }
-    cookie: {
-      name: string,
-      options: Hapi.ServerStateCookieOptions
+  schema: {
+    session_cookie: {
+      options: Yar.YarOptions
     }
   }
 };
@@ -55,12 +49,17 @@ type QrCodeConfig = {
   secret: string
 };
 
+type CacheConfig = {
+  session: { name: string, options: CatboxRedisOptions }
+};
+
 export type Config = {
   root: string
   env: Environment
   web: WebConfig
   platform: PlatformConfig
   knex: Knex.Config
+  cache: CacheConfig
   email: EmailConfig
   auth: AuthConfig
   qrcode: QrCodeConfig

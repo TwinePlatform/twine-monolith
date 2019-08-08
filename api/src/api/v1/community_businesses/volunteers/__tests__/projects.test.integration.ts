@@ -1,9 +1,9 @@
 import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
-import { init } from '../../../../../server';
+import { init } from '../../../../../../tests/utils/server';
 import { getConfig } from '../../../../../../config';
 import { CommunityBusinesses, Organisation, User, Volunteers } from '../../../../../models';
-import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../../../auth/strategies/standard';
 import { injectCfg } from '../../../../../../tests/utils/inject';
 
 

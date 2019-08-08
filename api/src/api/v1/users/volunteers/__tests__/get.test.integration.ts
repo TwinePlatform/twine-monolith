@@ -1,5 +1,5 @@
 import * as Hapi from '@hapi/hapi';
-import { init } from '../../../../../server';
+import { init } from '../../../../../../tests/utils/server';
 import { getConfig } from '../../../../../../config';
 import {
   Organisation,
@@ -8,7 +8,7 @@ import {
   CommunityBusinesses,
   CbAdmins,
 } from '../../../../../models';
-import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../../../auth/strategies/standard';
 import { injectCfg } from '../../../../../../tests/utils/inject';
 
 

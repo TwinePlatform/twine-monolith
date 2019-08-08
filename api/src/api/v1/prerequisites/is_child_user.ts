@@ -16,7 +16,7 @@
 import * as Hapi from '@hapi/hapi';
 import { PutUserRequest } from '../types';
 import Roles from '../../../models/role';
-import { StandardCredentials } from '../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
 
 

@@ -14,6 +14,7 @@ addons:
 
 services:
   - postgresql
+  - redis-server
 
 install:
   - bash ./.travis/cc-download.sh

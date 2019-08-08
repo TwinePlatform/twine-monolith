@@ -27,7 +27,7 @@ import {
 } from '../types';
 import { requestQueryToModelQuery } from '../utils';
 import { query } from '../users/schema';
-import { StandardCredentials } from '../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
 
 

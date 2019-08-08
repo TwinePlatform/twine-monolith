@@ -6,7 +6,7 @@ import { isChildUser } from '../../prerequisites';
 import { Visitors, CommunityBusinesses } from '../../../../models';
 import * as PdfService from '../../../../services/pdf';
 import * as QRCode from '../../../../services/qrcode';
-import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
 
 
 interface UserEmailRequest extends Hapi.Request {

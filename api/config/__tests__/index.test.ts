@@ -113,6 +113,14 @@ describe('Config', () => {
           [AppEnum.VOLUNTEER]: null,
         },
       },
+      cache: {
+        session: {
+          name: 'session',
+          options: {
+            url: 'redis://localhost:6379',
+          },
+        },
+      },
       knex: {
         client: 'pg',
         connection: {
@@ -134,18 +142,13 @@ describe('Config', () => {
         fromAddress: 'boo@coo.com',
       },
       auth: {
-        standard: {
-          jwt: {
-            secret: 'lol',
-          },
-          cookie: {
-            name: 'foo',
-            options : {
-              ttl: 24 * 60 * 60 * 1000,
-              isSecure: true,
-              isHttpOnly: true,
-              isSameSite: 'Lax',
-              path: '/',
+        schema: {
+          session_cookie: {
+            options: {
+              name: 'wpppp',
+              cookieOptions: {
+                password: 'rt49089y5h3j9u0894thugirbv90u8r9g7tu4fevu9rguib2fwe',
+              },
             },
           },
         },
@@ -184,6 +187,14 @@ describe('Config', () => {
           [AppEnum.VOLUNTEER]: null,
         },
       },
+      cache: {
+        session: {
+          name: 'session',
+          options: {
+            url: 'redis://localhost:6379',
+          },
+        },
+      },
       knex: {
         connection: {
           host: 'localhost',
@@ -197,18 +208,13 @@ describe('Config', () => {
         fromAddress: 'fooo',
       },
       auth: {
-        standard: {
-          jwt: {
-            secret: '',
-          },
-          cookie: {
-            name: '',
+        schema: {
+          session_cookie: {
             options: {
-              ttl: 24 * 60 * 60 * 1000,
-              isSecure: true,
-              isHttpOnly: true,
-              isSameSite: 'Lax',
-              path: '/',
+              name: 'fooo',
+              cookieOptions: {
+                password: 'rt49089y5h3j9u0894thugirbv90u8r9g7tu4fevu9rguib2fwe',
+              },
             },
           },
         },

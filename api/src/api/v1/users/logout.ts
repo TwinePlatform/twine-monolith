@@ -1,6 +1,6 @@
 import * as Hapi from '@hapi/hapi';
 import { query, response } from './schema';
-import { Session } from '../../../auth/strategies/standard';
+import { Sessions } from '../../../auth/strategies/standard';
 
 
 export default [
@@ -15,7 +15,8 @@ export default [
       response: { schema: response },
     },
     handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      return Session.destroy(request, h.response({}));
+      Sessions.destroy(request);
+      return {};
     },
   },
 ] as Hapi.ServerRoute[];

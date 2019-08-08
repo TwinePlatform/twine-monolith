@@ -1,4 +1,4 @@
-import { sort, innerJoin, collectBy, truncate, Order } from '../arrays';
+import { sort, headOrId, innerJoin, collectBy, truncate, Order } from '../arrays';
 
 
 describe('Arrays', () => {
@@ -203,5 +203,20 @@ describe('Arrays', () => {
       const xs = ['1', '2', '3'];
       expect(truncate(xs, 2, '...')).toEqual(['1', '2', '...']);
     })
+  });
+
+  describe('headOrId', () => {
+    test('returns head if array is passed in', () => {
+      expect(headOrId([1, 2, 3, 4])).toBe(1);
+      expect(headOrId(['foo', 'bar'])).toBe('foo');
+      expect(headOrId([{ a: 1 }, 'foo', 1])).toEqual({ a: 1 });
+    });
+
+    test('returns argument if not array', () => {
+      expect(headOrId(1)).toBe(1);
+      expect(headOrId('foo')).toBe('foo');
+      expect(headOrId(null)).toBe(null);
+      expect(headOrId({ b: 1 })).toEqual({ b: 1 });
+    });
   });
 });

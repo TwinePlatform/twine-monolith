@@ -1,39 +1,25 @@
 import * as Hapi from '@hapi/hapi';
 import * as Cookie from 'cookie';
-import * as JWT from 'jsonwebtoken';
 import { compose, evolve, omit } from 'ramda';
 import { getConfig } from '../../../config';
-import { Session } from '../../auth/strategies/standard/types';
 
 
-const { auth: { standard } } = getConfig(process.env.NODE_ENV);
+const { auth: { schema } } = getConfig(process.env.NODE_ENV);
 
-const extractCookie = (c: string) => Cookie.parse(c)[standard.cookie.name];
+const extractCookie = (c: string) => Cookie.parse(c)[schema.session_cookie.options.name];
 
 const extractBearerToken = (c: string = '') => c.split('Bearer ')[1] || c || '';
 
 const extractToken = (headers: Hapi.Util.Dictionary<string>) =>
   headers.cookie
     ? extractCookie(headers.cookie)
-    : extractBearerToken(headers.authorization);
+    : headers.authorization && headers.authorization.includes('Bearer')
+      ? extractBearerToken(headers.authorization)
+      : headers.authorization;
 
-const decodeToken = (c: string): Partial<Session> => {
-  let decoded: Partial<Session>;
-  try {
-    decoded = <any> JWT.verify(c, standard.jwt.secret, standard.jwt.verifyOptions);
-
-  } catch (error) {
-    decoded = {};
-  }
-
-  return decoded;
-};
-
-const getIds = compose(decodeToken, extractToken);
-
-const attachUserId = (req: { headers: Hapi.Util.Dictionary<string> }) => {
-  const { userId, organisationId } = getIds(req.headers);
-  return { ...req, sessionUserId: userId, sessionOrgId: organisationId };
+const attachUserId = (req: Hapi.Request) => {
+  const sid = extractToken(req.headers);
+  return { ...req, sessionUserId: sid };
 };
 
 

@@ -11,7 +11,7 @@ import * as Boom from '@hapi/boom';
 import { isNil } from 'ramda';
 import { CommunityBusinesses } from '../../../models';
 import { GetCommunityBusinessRequest } from '../types';
-import { StandardCredentials } from '../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 
 
 export const is360GivingId = (s: string) => isNaN(parseInt(s, 10));

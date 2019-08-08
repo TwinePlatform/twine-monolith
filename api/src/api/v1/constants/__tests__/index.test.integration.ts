@@ -2,7 +2,7 @@
  * User API functional tests
  */
 import * as Hapi from '@hapi/hapi';
-import { init } from '../../../../server';
+import { init } from '../../../../../tests/utils/server';
 import { getConfig } from '../../../../../config';
 
 describe('API Constants', () => {

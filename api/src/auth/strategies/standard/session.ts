@@ -1,50 +1,26 @@
-import * as JWT from 'jsonwebtoken';
-import { getConfig } from '../../../../config';
-import { TTokenManager, TSessionManager, Session } from './types';
-import { StandardCredentials } from './validate';
+import * as Hapi from '@hapi/hapi';
+import { Session } from './types';
 
 
-const {
-  auth: {
-    standard: {
-      cookie: { name: cookieName },
-      jwt: { secret: jwtSecret, signOptions, verifyOptions },
-    },
-  },
-} = getConfig(process.env.NODE_ENV);
+export const Sessions = {
+  get: (req: Hapi.Request): Session & { id: string, isAuthenticated: boolean } =>
+    ({
+      id: req.yar.id,
+      isAuthenticated: req.yar.get('isAuthenticated'),
+      userId: req.yar.get('userId'),
+      organisationId: req.yar.get('organisationId'),
+    }),
 
-export const TokenManager: TTokenManager = {
-  create (s) {
-    return JWT.sign({ ...s, version: 'v1' }, jwtSecret, signOptions);
-  },
+  set: (req: Hapi.Request, key: string, value: any) =>
+    req.yar.set(key, value),
 
-  verify (s) {
-    return <Session> JWT.verify(s, jwtSecret, verifyOptions);
-  },
+  authenticate: (req: Hapi.Request, userId: number, organisationId: number) =>
+    req.yar.set({
+      isAuthenticated: true,
+      userId,
+      organisationId,
+    }),
 
-  decode (s) {
-    return <Session> JWT.decode(s);
-  },
-};
-
-export const SessionManager: TSessionManager = {
-  create (request, res, payload) {
-    const session = { ...payload };
-
-    const token = TokenManager.create(session);
-
-    return res.state(cookieName, token);
-  },
-
-  refresh (request, res) {
-    const { session } = StandardCredentials.fromRequest(request);
-
-    const token = TokenManager.create(session);
-
-    return res.state(cookieName, token);
-  },
-
-  destroy (request, res) {
-    return res.unstate(cookieName);
-  },
+  destroy: (req: Hapi.Request) =>
+    req.yar.reset(),
 };

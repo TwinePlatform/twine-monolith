@@ -5,7 +5,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "tsc",
     "test": "jest",
     "cover": "jest --coverage",
     "build": "tsc",
@@ -17,7 +16,7 @@
   ],
   "dependencies": {
     "@types/node": "^11.13.2",
-    "@types/ramda": "^0.26.18",
+    "@types/ramda": "^0.26.19",
     "axios": "^0.18.0",
     "moment": "^2.24.0",
     "ramda": "^0.26.1",

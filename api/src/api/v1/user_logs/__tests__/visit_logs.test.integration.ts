@@ -2,12 +2,12 @@
  * API functional tests
  */
 import * as Hapi from '@hapi/hapi';
-import { init } from '../../../../server';
+import { init } from '../../../../../tests/utils/server';
 import { assocPath } from 'ramda';
 import * as moment from 'moment';
 import { getConfig } from '../../../../../config';
 import { User, Organisation, Users, Organisations } from '../../../../models';
-import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
 import { RoleEnum } from '../../../../models/types';
 import { injectCfg } from '../../../../../tests/utils/inject';
 

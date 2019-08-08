@@ -1,10 +1,10 @@
 import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { compare } from 'bcrypt';
-import { init } from '../../../../../server';
+import { init } from '../../../../../../tests/utils/server';
 import { getConfig } from '../../../../../../config';
 import { User, Users, Organisations } from '../../../../../models';
-import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../../../auth/strategies/standard';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { injectCfg } from '../../../../../../tests/utils/inject';
 

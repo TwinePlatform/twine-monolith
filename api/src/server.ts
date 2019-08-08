@@ -6,9 +6,9 @@ import * as qs from 'qs';
 import { Dictionary } from 'ramda';
 import v1 from './api/v1';
 import setup from './setup';
-import routes from './routes';
 import { Config } from '../config/types';
 import Logger from './services/logger';
+import Caches from './cache';
 
 
 const queryParser = (raw: Dictionary<string>) => qs.parse(qs.stringify(raw));
@@ -16,7 +16,11 @@ const queryParser = (raw: Dictionary<string>) => qs.parse(qs.stringify(raw));
 
 const init = async (config: Config): Promise<Hapi.Server> => {
 
-  const server = new Hapi.Server({ ...config.web, query: { parser: queryParser } });
+  const server = new Hapi.Server({
+    ...config.web,
+    query: { parser: queryParser },
+    cache: Caches(config),
+  });
 
   setup(server, config);
 
@@ -30,8 +34,6 @@ const init = async (config: Config): Promise<Hapi.Server> => {
       routes: { prefix: '/v1' },
     },
   ]);
-
-  server.route(routes);
 
   return server;
 };

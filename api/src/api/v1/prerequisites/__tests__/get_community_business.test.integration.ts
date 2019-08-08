@@ -1,6 +1,6 @@
 import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
-import { init } from '../../../../../tests/utils/server';
+import { initBlank as init } from '../../../../../tests/utils/server';
 import { getConfig } from '../../../../../config';
 import pre from '../get_community_business';
 import { CommunityBusinesses, Organisations, CbAdmins, Users } from '../../../../models';

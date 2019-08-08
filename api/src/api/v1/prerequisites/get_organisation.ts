@@ -10,7 +10,7 @@ import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { Organisations } from '../../../models';
 import { GetCommunityBusinessRequest } from '../types';
-import { StandardCredentials } from '../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 
 
 const is360GivingId = (s: string) => isNaN(parseInt(s, 10));

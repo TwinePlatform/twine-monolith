@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { Environment, Config } from './types';
 import { DeepPartial } from '../src/types/internal';
-import { envListOr, envNumberOr } from './util';
+import { envListOr, envNumberOr, envOr } from './util';
 
 
 const config: DeepPartial<Config> = {
@@ -31,6 +31,27 @@ const config: DeepPartial<Config> = {
   },
   email: {
     postmarkKey: process.env.POSTMARK_KEY_PRODUCTION,
+  },
+  auth: {
+    schema: {
+      session_cookie: {
+        options: {
+          cookieOptions: {
+            isSecure: true,
+          },
+          cache: {
+            cache: 'session', // Must match one of the caches
+            expiresIn: envNumberOr('SESSION_TTL', 7 * 24 * 60 * 60 * 1000), // default: 7 days
+          },
+        },
+      },
+    },
+  },
+  cache: {
+    session: {
+      name: 'session',
+      options: { url: envOr('REDIS_URL', 'redis://localhost:6379 ') },
+    },
   },
 };
 

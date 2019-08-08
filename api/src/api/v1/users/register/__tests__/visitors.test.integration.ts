@@ -1,10 +1,10 @@
 import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
-import { init } from '../../../../../server';
+import { init } from '../../../../../../tests/utils/server';
 import { getConfig } from '../../../../../../config';
 import { getTrx } from '../../../../../../tests/utils/database';
 import { Users, User, Organisations, Organisation } from '../../../../../models';
-import { StandardCredentials } from '../../../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../../../auth/strategies/standard';
 import { RoleEnum } from '../../../../../models/types';
 import { injectCfg } from '../../../../../../tests/utils/inject';
 

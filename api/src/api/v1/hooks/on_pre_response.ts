@@ -15,7 +15,7 @@ import * as Boom from '@hapi/boom';
 import { formatBoom, BoomWithValidation } from '../utils';
 import { Environment } from '../../../../config';
 import { Users } from '../../../models';
-import { StandardCredentials } from '../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 
 
 export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {

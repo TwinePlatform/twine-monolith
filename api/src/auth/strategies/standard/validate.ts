@@ -1,64 +1,31 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { Users, Organisations } from '../../../models';
-import Roles from '../../../models/role';
-import Permissions from '../../../models/permission';
-import { scopeToString } from '../../scopes';
-import { ValidateUser, TCredentials } from './types';
+import { ValidateFunction } from '../../schema/session_cookie';
+import { Credentials } from './credentials';
+import { Sessions } from './session';
 
 
-export const StandardCredentials: TCredentials = {
-  async get (knex, user, organisation, session) {
-    const roles = await Roles.fromUserWithOrg(
-      knex,
-      { userId: user.id, organisationId: organisation.id });
-    const permissions = await Permissions.forRoles(knex, { roles });
+const validate: ValidateFunction = async (req) => {
+  const { server: { app: { knex } } } = req;
+  const session = Sessions.get(req);
 
-    return {
-      scope: permissions.map(scopeToString),
-      user: {
-        user,
-        organisation,
-        roles,
-        session,
-      },
-    };
-  },
+  const { userId, organisationId } = session;
 
-  fromRequest (request: Hapi.Request) {
-    return Object.assign({ scope: request.auth.credentials.scope }, request.auth.credentials.user);
-  },
-};
+  const [
+    user,
+    organisation,
+  ] = await Promise.all([
+    Users.getOne(knex, { where: { id: userId, deletedAt: null } }),
+    Organisations.getOne(knex, { where: { id: organisationId, deletedAt: null } }),
+  ]);
 
-
-const validateUser: ValidateUser = async (decoded, request) => {
-  try {
-    const { server: { app: { knex } } } = request;
-    const { userId, organisationId } = decoded;
-
-    if (!userId || !organisationId) {
-      return { isValid: false };
-    }
-
-    const [
-      user,
-      organisation,
-      roles,
-    ] = await Promise.all([
-      Users.getOne(knex, { where: { id: userId, deletedAt: null } }),
-      Organisations.getOne(knex, { where: { id: organisationId, deletedAt: null } }),
-      Roles.fromUserWithOrg(knex, { userId, organisationId }),
-    ]);
-
-    return {
-      credentials: await StandardCredentials.get(knex, user, organisation, decoded),
-      isValid: Boolean(user && organisation && roles.length > 0),
-    };
-
-  } catch (error) {
-    request.log('error', error);
-    return Boom.badImplementation('Error with route authentication for users');
+  if (!user || !organisation) {
+    throw Boom.unauthorized('Unrecognised user or organisation');
   }
+
+  const credentials = await Credentials.get(knex, user, organisation, session);
+
+  return { credentials };
 };
 
-export default validateUser;
+export default validate;

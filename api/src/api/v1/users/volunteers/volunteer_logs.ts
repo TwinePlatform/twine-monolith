@@ -11,7 +11,7 @@ import {
   PutMyVolunteerLogRequest,
   GetMyVolunteerLogsAggregateRequest,
 } from '../../types';
-import { StandardCredentials } from '../../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
 import {
   volunteerProject,
   volunteerLogActivity,

@@ -1,7 +1,7 @@
 import * as Hapi from '@hapi/hapi';
 import { Users } from '../../../models';
 import { query, response } from './schema';
-import { StandardCredentials } from '../../../auth/strategies/standard';
+import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 
 
 const routes: Hapi.ServerRoute[] = [

@@ -49,7 +49,7 @@ export default Joi.object({
     connection: Joi.alternatives().try(
       Joi.object({
         host: Joi.string().min(1).required(),
-        port: Joi.number().min(0).max(65535).required(),
+        port: Joi.number().min(0).max(2 ** 16 - 1).required(),
         database: Joi.string().min(1).replace(/^\//, '').required(),
         user: Joi.string().min(1).required(),
         password: Joi.string().optional(),
@@ -70,34 +70,39 @@ export default Joi.object({
       directory: Joi.string().min(1).required(),
     }).required(),
   }).required(),
+  cache: Joi.object({
+    session: {
+      name: Joi.string().min(1).required(),
+      options: {
+        url: Joi.string().min('redis://localhost:6379'.length),
+        tls: Joi.object(),
+      },
+    },
+  }).required(),
   email: Joi.object({
     postmarkKey: Joi.string().required(),
     fromAddress: Joi.string().email().required(),
   }).required(),
   auth: Joi.object({
-    standard: {
-      jwt: Joi.object({
-        secret: Joi.string().required(),
-        signOptions: Joi.object({
-          algorithm: Joi.string(),
-          expiresIn: Joi.alt([Joi.string(), Joi.number().integer().positive()]),
-        }),
-        verifyOptions: Joi.object({
-          algorithms: Joi.array().items(Joi.string()),
-          maxAge: Joi.alt([Joi.string(), Joi.number().integer().positive()]),
+    schema: {
+      session_cookie: Joi.object({
+        options: Joi.object({
+          name: Joi.string().required(),
+          maxCookieSize: Joi.number().integer(),
+          cache: Joi.object({
+            cache: Joi.string().min(1),
+            expiresIn: Joi.number().integer().positive(),
+          }),
+          cookieOptions: Joi.object({
+            password: Joi.string().min(32).required(),
+            ttl: Joi.number().integer().positive(),
+            isSecure: Joi.boolean(),
+            isHttpOnly: Joi.boolean(),
+            isSameSite: Joi.only([false, 'Lax', 'Strict']),
+            path: Joi.string(),
+          }),
         }),
       }),
-      cookie: Joi.object({
-        name: Joi.string().required(),
-        options: Joi.object({
-          ttl: Joi.number().integer().positive(),
-          isSecure: Joi.boolean(),
-          isHttpOnly: Joi.boolean(),
-          isSameSite: Joi.only([false, 'Lax', 'Strict']),
-          path: Joi.string().required(),
-          domain: Joi.string(),
-        }).required(),
-      }).required(),
     },
   }).required(),
   qrcode: Joi.object({

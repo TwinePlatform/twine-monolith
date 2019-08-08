@@ -1,4 +1,5 @@
 import * as path from 'path';
+import { envOr } from './util';
 import { Environment, Config } from './types';
 import { DeepPartial } from '../src/types/internal';
 
@@ -28,12 +29,21 @@ const config: DeepPartial<Config> = {
     postmarkKey: process.env.POSTMARK_KEY_DEVELOPMENT,
   },
   auth: {
-    standard: {
-      cookie: {
+    schema: {
+      session_cookie: {
         options: {
-          isSecure: false,
+          cookieOptions: {
+            isSecure: false,
+          },
+          cache: { cache: 'session' }, // Must match one of the caches
         },
       },
+    },
+  },
+  cache: {
+    session: {
+      name: 'session',
+      options: { url: envOr('REDIS_URL_DEVELOPMENT', 'redis://localhost:6379 ') },
     },
   },
 };
