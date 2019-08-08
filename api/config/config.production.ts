@@ -39,7 +39,10 @@ const config: DeepPartial<Config> = {
           cookieOptions: {
             isSecure: true,
           },
-          cache: { cache: 'session' }, // Must match one of the caches
+          cache: {
+            cache: 'session', // Must match one of the caches
+            expiresIn: envNumberOr('SESSION_TTL', 7 * 24 * 60 * 60 * 1000), // default: 7 days
+          },
         },
       },
     },
