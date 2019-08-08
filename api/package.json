@@ -48,7 +48,7 @@
     "start": "node ./build/src/index.js",
     "watch": "tsc -w",
     "build": "tsc && npm run copy",
-    "heroku-postbuild": "cd ../lib/twine-util && npm i && cd ../../api && npm run build",
+    "heroku-postbuild": "cd ../lib/twine-util && npm i && npm run build && cd ../../api && npm run build",
     "exec": "ts-node --files"
   },
   "dependencies": {
