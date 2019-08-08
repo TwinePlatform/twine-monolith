@@ -22,4 +22,9 @@ Configures the redis cache, using the [options allowed by `catbox-redis`](https:
 Configures the session manager Yar, as well as the cookie options, using the [options allow by `yar`](https://github.com/hapijs/yar/blob/master/API.md#options).
 
 ## Redis
-Redis is used as the session cache
+Redis is used as the session cache. Sessions are monitored using Redis' Pub/Sub features, specifically, keyspace events. This is feature that is [disabled by default](https://redis.io/topics/notifications), so must be enabled.
+
+In order to do this manually, connect to the redis server using your client and use the command:
+```
+> CONFIG SET notify-keyspace-events xE
+```

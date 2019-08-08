@@ -15,6 +15,9 @@
   "exclude": [
     "docs",
     "node_modules",
-    "build"
+    "build",
+    "__mocks__",
+    "tests",
+    "**/*.test.*"
   ]
 }
