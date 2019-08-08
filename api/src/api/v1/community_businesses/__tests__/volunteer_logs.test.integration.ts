@@ -994,9 +994,18 @@ describe('API /community-businesses/me/volunteer-logs', () => {
           user_account_id: volCreds.user.user.id,
         });
 
+      const monitoring: any[] = await server.app.knex('invalid_synced_logs_monitoring').select('*');
+
       expect(dbLogs).toHaveLength(8);
-      expect(dbLogs.some((log) => log.started_at === '2019-07-05T13:03:22.000Z')).toBe(true);
-      expect(dbLogs.some((log) => log.started_at === '2019-07-01T03:13:02.000Z')).toBe(false);
+      expect(dbLogs.some((log) =>
+        log.started_at.toISOString().startsWith(`2019-${prev}-01`))).toBe(false);
+      expect(dbLogs.some((log) =>
+        log.started_at.toISOString().startsWith(`2019-${month}-05`))).toBe(true);
+
+      expect(monitoring).toHaveLength(1);
+      expect(monitoring[0].payload).toEqual(logs.map((log) => ({ ...log, userId: 'me' })));
+      expect(monitoring[0].user_account_id).toBe(volCreds.user.user.id);
+      expect(monitoring[0].organisation_id).toBe(volCreds.user.organisation.id);
     });
   });
 });

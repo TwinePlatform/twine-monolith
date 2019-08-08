@@ -352,9 +352,21 @@ const routes: Hapi.ServerRoute[] = [
         payload: _payload,
       } = request;
 
-      const { user, scope } = StandardCredentials.fromRequest(request);
+      const { user, organisation, scope } = StandardCredentials.fromRequest(request);
 
       const payload = ignoreInvalidLogs(_payload);
+
+      if (payload.length !== _payload.length) {
+        // Do not await - this is an auxiliary action
+        knex('invalid_synced_logs_monitoring')
+          .insert({
+            payload: JSON.stringify(_payload),
+            user_account_id: user.id,
+            organisation_id: organisation.id,
+          })
+          .then(() => {})
+          .catch(() => {});
+      }
 
       if (
         payload.some((log) => log.userId !== 'me') && // If some logs correspond to other users
