@@ -50,7 +50,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "serve": "node index.js",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "cd ../lib/twine-util && npm i && npm run build && cd ../../visitor-app && npm run build"
   },
   "contributors": [
     "James Inglis <jinglis12@gmail.com>",

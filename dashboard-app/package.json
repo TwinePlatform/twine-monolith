@@ -73,7 +73,7 @@
     "lint": "tslint --project tsconfig.json",
     "cover": "npm test -- --coverage",
     "serve": "node index.js",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "cd ../lib/twine-util && npm i && npm run build && cd ../../dashboard-app && npm run build"
   },
   "browserslist": [
     ">0.2%",
