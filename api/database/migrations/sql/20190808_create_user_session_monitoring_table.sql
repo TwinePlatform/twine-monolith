@@ -18,3 +18,9 @@ CREATE TABLE user_session_record (
   CONSTRAINT user_session_record_to_user_account FOREIGN KEY (user_account_id) REFERENCES user_account ON DELETE CASCADE,
   CONSTRAINT user_session_record_to_organisation FOREIGN KEY (organisation_id) REFERENCES organisation ON DELETE CASCADE
 );
+
+/*
+ * Triggers
+ */
+CREATE TRIGGER update_user_session_record_modified_at BEFORE UPDATE ON user_session_record
+  FOR EACH ROW EXECUTE PROCEDURE update_modified_at_column();
