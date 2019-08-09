@@ -9,6 +9,7 @@ import { Dictionary, omit } from 'ramda';
 import { RegionEnum, SectorEnum, RoleEnum } from '../types';
 import { CbAdmins } from '../cb_admin';
 import Roles from '../role';
+import { Visitors } from '../visitor';
 
 
 describe('Community Business Model', () => {
@@ -220,6 +221,36 @@ describe('Community Business Model', () => {
       expect(deletedOrgs[0].id).toBe(1);
       expect(deletedOrgs[0].modifiedAt).not.toEqual(null);
       expect(deletedOrgs[0].deletedAt).not.toEqual(null);
+    });
+
+    describe('addVisitLog', () => {
+      test(':: adds visit log', async () => {
+        const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Aperture Science' } });
+        const activity = await CommunityBusinesses.getVisitActivityById(trx, cb, 1);
+        const visitor = await Visitors.getOne(trx, { where: { name: 'Chell' } });
+        const log = await CommunityBusinesses.addVisitLog(trx, activity, visitor, 'qr_code');
+        expect(log).toEqual(expect.objectContaining({
+          id: 12,
+          userId: 1,
+          visitActivityId: 1,
+        }));
+      });
+      test(':: tracks sign in type', async () => {
+        const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Aperture Science' } });
+        const activity = await CommunityBusinesses.getVisitActivityById(trx, cb, 1);
+        const visitor = await Visitors.getOne(trx, { where: { name: 'Chell' } });
+        const log = await CommunityBusinesses.addVisitLog(trx, activity, visitor, 'qr_code');
+
+        const [signInTypeEntry] = await trx('visit_log_attendance')
+          .select('*')
+          .where({ visit_log_id: log.id });
+
+        expect(signInTypeEntry).toEqual(expect.objectContaining({
+          visit_log_attendance_id: 2,
+          sign_in_type: 'qr_code',
+          visit_log_id: 13,
+        }));
+      });
     });
   });
 
@@ -456,4 +487,5 @@ describe('Community Business Model', () => {
       expect(cbs2).toHaveLength(1);
     });
   });
+
 });

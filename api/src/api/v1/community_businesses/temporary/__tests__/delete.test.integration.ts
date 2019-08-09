@@ -121,6 +121,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
       payload: {
         userId: visitor.id,
         visitActivityId: visitActity.id,
+        signInType: 'qr_code',
       },
       credentials: tempCredentials,
     }));
