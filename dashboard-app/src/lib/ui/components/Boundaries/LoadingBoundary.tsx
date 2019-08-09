@@ -1,6 +1,6 @@
 import React from 'react';
 import { ColoursEnum } from '../../design_system';
-import { BeatLoader } from 'react-spinners';
+import { BallSpinner } from 'react-spinners-kit';
 
 
 type LoadingBoundaryProps = {
@@ -17,7 +17,7 @@ class LoadingBoundary extends React.Component<LoadingBoundaryProps> {
       : isLoading;
 
     if (showLoading) {
-      return <BeatLoader color={ColoursEnum.purple} />;
+      return <BallSpinner color={ColoursEnum.purple} />;
     }
 
     return this.props.children;
