@@ -55,7 +55,7 @@ export default class SignIn extends Component {
       qrCodeContent: '',
       activities: [],
       errors: {},
-      attendanceType: null,
+      signInType: null,
     };
   }
 
@@ -89,7 +89,7 @@ export default class SignIn extends Component {
       visitorName: res.name,
       visitorId: res.id,
       qrCodeContent: res.qrCodeContent,
-      attendanceType: res.attendanceType,
+      signInType: res.signInType,
     });
   }
 
@@ -107,7 +107,7 @@ export default class SignIn extends Component {
         return this.onSignInSuccess({
           ...res.data.result,
           qrCodeContent: content,
-          attendanceType: 'qr_code',
+          signInType: 'qr_code',
         });
       })
       .catch(err => redirectOnError(this.props.history.push, err, { default: '/visitor/qrerror' }));
@@ -126,7 +126,7 @@ export default class SignIn extends Component {
     Visitors.createVisit({
       activityId: activity.id,
       visitorId: this.state.visitorId,
-      attendanceType: this.state.attendanceType,
+      signInType: this.state.signInType,
     })
       .then(() => this.props.history.push('/visitor/end'))
       .catch(err => redirectOnError(this.props.history.push, err));

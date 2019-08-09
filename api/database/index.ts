@@ -62,7 +62,7 @@ export const migrate = {
         'ENUM_access_type',
         'ENUM_invitation_status',
         'ENUM_subscription_status',
-        'ENUM_visitor_log_attendance_type',
+        'ENUM_visitor_log_sign_in_type',
       ]
         .map(tap((t) => {
           if (config.env !== Environment.TESTING) console.log(`Dropping type ${t}`);

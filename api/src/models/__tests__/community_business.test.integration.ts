@@ -241,13 +241,13 @@ describe('Community Business Model', () => {
         const visitor = await Visitors.getOne(trx, { where: { name: 'Chell' } });
         const log = await CommunityBusinesses.addVisitLog(trx, activity, visitor, 'qr_code');
 
-        const [attendanceTypeEntry] = await trx('visit_log_attendance')
+        const [signInTypeEntry] = await trx('visit_log_attendance')
           .select('*')
           .where({ visit_log_id: log.id });
 
-        expect(attendanceTypeEntry).toEqual(expect.objectContaining({
+        expect(signInTypeEntry).toEqual(expect.objectContaining({
           visit_log_attendance_id: 2,
-          attendance_type: 'qr_code',
+          sign_in_type: 'qr_code',
           visit_log_id: 13,
         }));
       });

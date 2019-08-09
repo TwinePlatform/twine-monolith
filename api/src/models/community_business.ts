@@ -480,7 +480,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return res || null;
   },
 
-  async addVisitLog (client, visitActivity, user, attendanceType) {
+  async addVisitLog (client, visitActivity, user, signInType) {
     const res = await client.transaction(async (trx) => {
       const [log] = await trx('visit_log')
         .insert({
@@ -499,7 +499,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       await trx('visit_log_attendance')
         .insert({
           visit_log_id: log.id,
-          attendance_type: attendanceType,
+          sign_in_type: signInType,
         });
 
       return log;

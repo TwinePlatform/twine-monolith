@@ -14,13 +14,13 @@ import { ApiRequestQuery } from '../schema/request';
 import Roles from '../../../models/role';
 import { RoleEnum } from '../../../models/types';
 
-export type VisitAttendanceType = 'sign_in_with_name' | 'qr_code';
+export type VisitsignInType = 'sign_in_with_name' | 'qr_code';
 
 interface PostVisitLogRequest extends Hapi.Request {
   payload: {
     userId: number
     visitActivityId: number
-    attendanceType: VisitAttendanceType
+    signInType: VisitsignInType
   };
 }
 
@@ -50,7 +50,7 @@ const routes: Hapi.ServerRoute[] = [
         payload: {
           userId: id.required(),
           visitActivityId: id.required(),
-          attendanceType: Joi.string().valid(['sign_in_with_name', 'qr_code']).required(),
+          signInType: Joi.string().valid(['sign_in_with_name', 'qr_code']).required(),
         },
       },
       response: { schema: response },
@@ -60,7 +60,7 @@ const routes: Hapi.ServerRoute[] = [
     },
     handler: async (request: PostVisitLogRequest, h) => {
       const {
-        payload: { userId, visitActivityId, attendanceType },
+        payload: { userId, visitActivityId, signInType },
         server: { app: { knex } } } = request;
       const communityBusiness = <CommunityBusiness> request.pre.communityBusiness;
 
@@ -86,7 +86,7 @@ const routes: Hapi.ServerRoute[] = [
         return Boom.badRequest('Activity not associated to Community Business');
       }
 
-      return CommunityBusinesses.addVisitLog(knex, activity, visitor, attendanceType);
+      return CommunityBusinesses.addVisitLog(knex, activity, visitor, signInType);
     },
   },
   {

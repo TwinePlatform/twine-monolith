@@ -48,7 +48,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
         payload: {
           userId: 1,
           visitActivityId: 2,
-          attendanceType: 'sign_in_with_name',
+          signInType: 'sign_in_with_name',
         },
         credentials,
       }));
@@ -66,7 +66,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
         payload: {
           userId: 2,
           visitActivityId: 2,
-          attendanceType: 'sign_in_with_name',
+          signInType: 'sign_in_with_name',
         },
         credentials,
       }));
@@ -83,7 +83,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
         payload: {
           userId: 1,
           visitActivityId: 200,
-          attendanceType: 'sign_in_with_name',
+          signInType: 'sign_in_with_name',
         },
         credentials,
       }));
