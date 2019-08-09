@@ -83,7 +83,6 @@ export default class SignIn extends Component {
   }
 
   onSignInSuccess = (res) => {
-    console.log({ res });
     this.setState({
       hasSignedIn: true,
       visitorName: res.name,
@@ -122,7 +121,6 @@ export default class SignIn extends Component {
       this.props.history.push('/error/unknown');
     }
 
-    console.log(this.state);
     Visitors.createVisit({
       activityId: activity.id,
       visitorId: this.state.visitorId,
