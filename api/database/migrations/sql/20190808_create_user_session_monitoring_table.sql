@@ -6,6 +6,7 @@ CREATE TABLE user_session_record (
   user_session_record_id SERIAL NOT NULL UNIQUE,
   user_account_id        INT NOT NULL,
   organisation_id        INT NOT NULL,
+  session_id             VARCHAR NOT NULL UNIQUE,
   session_end_type       VARCHAR,
   referrers              JSONB NOT NULL,
   started_at             TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,

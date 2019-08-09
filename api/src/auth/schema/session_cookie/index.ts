@@ -14,6 +14,12 @@ export default {
   name: 'session id schema',
   register: async (server: Hapi.Server, options: Yar.YarOptions) => {
 
+    /*
+     * Setup our own onPreAuth hook BEFORE @hapi/yar's own onPreAuth hook
+     * This call MUST happen before @hapi/yar is registered
+     *
+     * See api/docs/sessions#schema for more detail
+     */
     server.ext('onPreAuth', (request, h) => {
       if (request.headers.hasOwnProperty('authorization')) {
         const token = request.headers['authorization'];

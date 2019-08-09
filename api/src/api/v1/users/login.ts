@@ -8,6 +8,7 @@ import { Sessions } from '../../../auth/strategies/standard';
 import { LoginRequest } from '../types';
 import Roles from '../../../models/role';
 import { RoleEnum } from '../../../models/types';
+import { UserSessionRecords } from '../../../models/user_session_record';
 
 
 const route: Hapi.ServerRoute[] = [
@@ -56,13 +57,16 @@ const route: Hapi.ServerRoute[] = [
       const isPwdValid = await compare(password, user.password);
       if (!isPwdValid) return Boom.unauthorized('Incorrect password');
 
-      try {
-        await Users.recordLogin(knex, user);
-      } catch (error) {
-        request.log('warning', `Recording user login failed: ${user.id}`);
-      }
-
       Sessions.authenticate(request, user.id, organisation.id);
+
+      // Don't await -- auxiliary action
+      UserSessionRecords.initSession(
+        knex,
+        user,
+        organisation,
+        request.yar.id,
+        [request.headers.referrer]
+      );
 
       if (type === 'cookie') {
         return null;

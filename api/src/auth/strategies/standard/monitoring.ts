@@ -7,10 +7,6 @@ const createListener = async (url: string) => {
   const client = new IoRedis(url);
   const getter = new IoRedis(url);
 
-  client.psubscribe('*', <any> ((...args: any[]) => {
-    console.log('ALL', ...args);
-  }));
-
   client.subscribe('__keyevent@0__:set', <any> ((...args: any[]) => {
     console.log('SET', ...args);
   }));
