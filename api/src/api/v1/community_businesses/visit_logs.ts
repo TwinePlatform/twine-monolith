@@ -14,13 +14,13 @@ import { ApiRequestQuery } from '../schema/request';
 import Roles from '../../../models/role';
 import { RoleEnum } from '../../../models/types';
 
-export type VisitsignInType = 'sign_in_with_name' | 'qr_code';
+export type VisitSignInType = 'sign_in_with_name' | 'qr_code';
 
 interface PostVisitLogRequest extends Hapi.Request {
   payload: {
     userId: number
     visitActivityId: number
-    signInType: VisitsignInType
+    signInType: VisitSignInType
   };
 }
 
