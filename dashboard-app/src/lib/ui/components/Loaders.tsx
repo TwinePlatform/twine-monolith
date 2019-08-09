@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BallSpinner } from 'react-spinners-kit';
+import { BeatLoader } from 'react-spinners';
 
 
 const FullScreenLoaderContainer = styled.div`
@@ -14,6 +14,6 @@ const FullScreenLoaderContainer = styled.div`
 
 export const FullScreenBeatLoader = ({ ...rest }) => (
   <FullScreenLoaderContainer>
-    <BallSpinner {...rest} size={30}/>
+    <BeatLoader {...rest} size={30}/>
   </FullScreenLoaderContainer>
 );
