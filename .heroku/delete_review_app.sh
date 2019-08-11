@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-# Deletes all apps created against a specific PR
+# Deletes all apps created against a specific PR.
+# Note no user confirmation is required in this script, because the
+# Heroku CLI already requires user confirmation for each app deletion
 #
 # Usage:
 #  $ bash delete_app.sh <PR>
@@ -19,13 +21,6 @@ PR=$1
 
 APPS=$(heroku apps | grep "pr-$PR" | cut -f1 -d" ")
 
-echo "This will delete the following apps:"
-echo $APPS
-read "Are you sure? (y/n)" -n 1 -r
-echo
-
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-  for APP in $APPS; do
-    heroku apps:destroy -a $APP
-  done
-fi
+for APP in $APPS; do
+  heroku apps:destroy -a $APP
+done
