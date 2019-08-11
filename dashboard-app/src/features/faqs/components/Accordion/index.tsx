@@ -1,4 +1,6 @@
 import React, { FunctionComponent } from 'react';
+import styled from 'styled-components';
+import { Row } from 'react-flexbox-grid';
 import {
   Accordion as AccordionComponent,
   AccordionItem,
@@ -6,7 +8,9 @@ import {
   AccordionItemHeading,
   AccordionItemPanel,
 } from 'react-accessible-accordion';
-import { Paragraph } from '../../../lib/ui/components/Typography';
+import { Paragraph } from '../../../../lib/ui/components/Typography';
+
+import './styles.css';
 
 
 type AccordionProps = {
@@ -15,6 +19,10 @@ type AccordionProps = {
     contents: string[]
   }[]
 };
+
+const PanelItem = styled(Paragraph)`
+  margin-bottom: 2em;
+`;
 
 export const Accordion: FunctionComponent<AccordionProps> = (props) => {
   return (
@@ -30,9 +38,11 @@ export const Accordion: FunctionComponent<AccordionProps> = (props) => {
             <AccordionItemPanel>
               {
                 contents.map((content) =>
-                  <Paragraph>
-                    {content}
-                  </Paragraph>
+                  <Row start="xs">
+                    <PanelItem>
+                      {content}
+                    </PanelItem>
+                  </Row>
                 )
               }
             </AccordionItemPanel>
