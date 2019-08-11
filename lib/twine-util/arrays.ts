@@ -5,7 +5,7 @@ import { assoc, identity, descend, ascend, sortWith, Dictionary } from 'ramda';
  * Types
  */
 export type Order = 'desc' | 'asc';
-export type SortCriterion = { accessor?: (<T, U>(a: T) => U), order: Order };
+export type SortCriterion = { accessor?: (<T>(a: T) => string), order: Order };
 
 
 const getSorter = (o: Order) => {

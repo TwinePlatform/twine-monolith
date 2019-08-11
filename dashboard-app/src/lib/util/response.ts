@@ -2,10 +2,10 @@ import { AxiosResponse } from 'axios';
 import { Dictionary, pathOr } from 'ramda';
 
 export const Response = {
-  get: <T = Dictionary<any>>(res: AxiosResponse, path: string[] = []): T =>
+  get: <T = Dictionary<any>>(res: AxiosResponse, path: string[] = []): T | null =>
     pathOr(null, ['data', 'result', ...path], res),
 
-  status: (res: AxiosResponse): number =>
+  status: (res: AxiosResponse): number | null =>
     pathOr(null, ['status'], res),
 
   statusEquals: (res: AxiosResponse, status: number) =>

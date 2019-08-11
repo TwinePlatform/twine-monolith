@@ -38,7 +38,7 @@ export const redirectOnError = (
   const res = error.response;
   const url = !res
     ? redirs.default
-    : getUrlFromStatusCode(Response.status(res), redirs);
+    : getUrlFromStatusCode(Response.status(res) || 0, redirs);
 
   return historyPush(url);
 };
