@@ -12764,15 +12764,6 @@ react-spinners@0.5.5:
     prop-types "^15.5.10"
     recompose "0.27.1 - 0.30.0"
 
-react-spinners@^0.5.13:
-  version "0.5.13"
-  resolved "https://registry.yarnpkg.com/react-spinners/-/react-spinners-0.5.13.tgz#09da41ee6b321083ff9670cbf78e11effb3feb87"
-  integrity sha512-zrQTWlyhqs+3nQ4Zpg19eW4elYQgrrvu0fXL1tIP3CKgLBxkO+rmXdL8l34qTHrpDZnukMFGLxyqQebijeVSJA==
-  dependencies:
-    "@emotion/core" "^10.0.4"
-    prop-types "^15.5.10"
-    recompose "0.27.1 - 0.30.0"
-
 react-testing-library@^5.8.0:
   version "5.9.0"
   resolved "https://registry.yarnpkg.com/react-testing-library/-/react-testing-library-5.9.0.tgz#e1c8a586d2f2cbd5f0035474ca90258eef1fece6"
