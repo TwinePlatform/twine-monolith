@@ -11,7 +11,7 @@ const AuthBearer = require('hapi-auth-bearer-token');
 export const getCredentialsFromRequest = (request: Hapi.Request) => {
   switch (request.auth.strategy) {
     case standardStrategy.name:
-      return standardStrategy.StandardCredentials.fromRequest(request);
+      return standardStrategy.Credentials.fromRequest(request);
 
     case externalStrategy.name:
       return externalStrategy.ExternalCredentials.fromRequest(request);

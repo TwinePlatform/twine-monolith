@@ -21,6 +21,6 @@ export const Credentials: ICredentials = {
   },
 
   fromRequest (req) {
-    return Object.assign({ scope: req.auth.credentials.scope }, req.auth.credentials.user) as any;
+    return Object.assign({ scope: req.auth.credentials.scope }, req.auth.credentials.user);
   },
 };
