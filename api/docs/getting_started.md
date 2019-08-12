@@ -2,38 +2,13 @@
 
 ## Contents
 
-1.  [Pre-requisites](#prerequisites)
-2.  [Getting started](#getting-started)
-3.  [Running the server](#running-the-server)
-4.  [Database](#database)
-5.  [Configuration](#configuration)
-6.  [Server app](#server-app)
-7.  [Client app](#client-app)
-
-## Pre-requisites
-
-* `node` (v10+) and `npm` (v6+)
-* `postgresql` (v10+)
+1.  [Getting started](#getting-started)
+1.  [Running the server](#running-the-server)
+1.  [Database](#database)
+1.  [Configuration](#configuration)
 
 ## Getting Started
-
-Clone the repo with `https` or `ssh`:
-
-```sh
-# https
-git clone https://github.com/TwinePlatform/twine-visitor.git
-```
-
-```sh
-# ssh
-git clone git@github.com:TwinePlatform/twine-visitor.git
-```
-
-After cloning, `cd` into the repo and install dependencies:
-
-```sh
-npm i
-```
+Instructions for setting up the monorepo [can be found here](../../docs).
 
 ## Running the server
 
