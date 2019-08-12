@@ -82,7 +82,7 @@ export default Joi.object({
   email: Joi.object({
     postmarkKey: Joi.string().required(),
     fromAddress: Joi.string().email().required(),
-    developers: Joi.array().items(Joi.string()).length(2),
+    developers: Joi.array().items(Joi.string().email()),
   }).required(),
   auth: Joi.object({
     schema: {
