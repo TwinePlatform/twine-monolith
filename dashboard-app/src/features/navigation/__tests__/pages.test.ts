@@ -67,6 +67,7 @@ describe('Pages', () => {
         'Time',
         'Activities',
         'Volunteers',
+        'FAQs',
       ]);
     });
   });
