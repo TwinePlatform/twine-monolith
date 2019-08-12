@@ -9,7 +9,7 @@ Mono-repo home to all the applications comprising the [Twine platform](https://t
 
 ## Applications
 - [API](./api)
-- [Dashboard](./dashboard-app)
+- [Volunteer Dashboard](./dashboard-app)
 - [Temporary Admin Dashboard](./temp-admin-dashboard)
 - [Visitor app](./visitor-app)
 - [Volunteer app](./volunteer-app)

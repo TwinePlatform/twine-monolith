@@ -1,12 +1,18 @@
-# Test & Demo Data
+# Test, Demo & QA Data
 
-All test and demo data is stored in `/database/test_data`. Data intended for use in automated testing is stored in files beginning with `test_NN`, and data intended for use during demonstrations, training and manual user testing is stored in files beginniner with `demo_NN`.
+Dummy data is provided for test, QA and demo environments. All dummy data is stored in `/database/data`.
 
-In order to insert demo data, run the following command:
+| Directory | Intended use |
+|-----------|--------------|
+| `/database/data/testing` | Automated testing |
+| `/database/data/qa` | Manual QA testing |
+| `/database/data/demo` | Demonstrations and training |
+
+In order to insert any of these datasets, run the following command:
 ```
-$ npm run exec bin/insert_data.ts demo
+$ npm run exec bin/insert_data.ts -- <DATASET>
 ```
-You can affect which database is targeted through use of the `NODE_ENV` environment variable in the standard way.
+Where `<DATASET>` is one of the subdirectories. You can affect which database is targeted through use of the `NODE_ENV` environment variable in the standard way.
 
 Each data file should export an object:
 ```ts
