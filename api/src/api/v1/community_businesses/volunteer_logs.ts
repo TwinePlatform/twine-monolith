@@ -318,7 +318,11 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
+          scope: [
+            'volunteer_logs-sibling:write',
+            'volunteer_logs-child:write',
+            'volunteer_logs-own:write',
+          ],
         },
       },
       validate: {
