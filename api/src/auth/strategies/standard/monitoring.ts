@@ -13,7 +13,9 @@ export const createListener = (knex: Knex, url: string) => {
 
     switch (args[0]) {
       case '__keyevent@0__:expired':
-        UserSessionRecords.endSession(knex, args[1], 'expired');
+        const x = await UserSessionRecords.endSession(knex, args[1], 'expired');
+        console.log('RECORDED', x);
+
         break;
 
       default:
