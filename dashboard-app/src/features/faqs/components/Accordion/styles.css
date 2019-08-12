@@ -1,6 +1,7 @@
 /**
 * ----------------------------------------------
-* Demo styles
+* Mostly copied from
+* https://github.com/springload/react-accessible-accordion/blob/master/src/css/fancy-example.css
 * ----------------------------------------------
 **/
 .accordion__item + .accordion__item {

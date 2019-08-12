@@ -24,31 +24,29 @@ const PanelItem = styled(Paragraph)`
   margin-bottom: 2em;
 `;
 
-export const Accordion: FunctionComponent<AccordionProps> = (props) => {
-  return (
-    <AccordionComponent>
-      {
-        props.panels.map(({ heading, contents }) =>
-          <AccordionItem>
-            <AccordionItemHeading>
-              <AccordionItemButton>
-                {heading}
-              </AccordionItemButton>
-            </AccordionItemHeading>
-            <AccordionItemPanel>
-              {
-                contents.map((content) =>
-                  <Row start="xs">
-                    <PanelItem>
-                      {content}
-                    </PanelItem>
-                  </Row>
-                )
-              }
-            </AccordionItemPanel>
-          </AccordionItem>
-        )
-      }
-    </AccordionComponent>
-  );
-};
+export const Accordion: FunctionComponent<AccordionProps> = ({ panels = [] }) => (
+  <AccordionComponent>
+    {
+      panels.map(({ heading, contents }) =>
+        <AccordionItem>
+          <AccordionItemHeading>
+            <AccordionItemButton>
+              {heading}
+            </AccordionItemButton>
+          </AccordionItemHeading>
+          <AccordionItemPanel>
+            {
+              contents.map((content) =>
+                <Row start="xs">
+                  <PanelItem>
+                    {content}
+                  </PanelItem>
+                </Row>
+              )
+            }
+          </AccordionItemPanel>
+        </AccordionItem>
+      )
+    }
+  </AccordionComponent>
+);
