@@ -140,6 +140,7 @@ describe('Config', () => {
       email: {
         postmarkKey: 'foo',
         fromAddress: 'boo@coo.com',
+        developers: ['boo@coo.com', 'hi@yo.com'],
       },
       auth: {
         schema: {
@@ -155,6 +156,11 @@ describe('Config', () => {
       },
       qrcode: {
         secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
+      },
+      webhooks: {
+        heroku: {
+          secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
+        },
       },
     };
 
@@ -206,6 +212,7 @@ describe('Config', () => {
       email: {
         postmarkKey: '',
         fromAddress: 'fooo',
+        developers: ['boo@coo.com', 'hi@yo.com'],
       },
       auth: {
         schema: {
@@ -221,6 +228,11 @@ describe('Config', () => {
       },
       qrcode: {
         secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
+      },
+      webhooks: {
+        heroku: {
+          secret: 'wftg4yj93g0irwfone49t2jwfeefwrgeijot3efwrtnjkbh',
+        },
       },
     };
 

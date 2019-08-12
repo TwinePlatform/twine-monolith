@@ -7,7 +7,7 @@
 import * as path from 'path';
 import { Environment, Config } from './types';
 import { DeepPartial, AppEnum } from '../src/types/internal';
-import { envOr } from './util';
+import { envOr, envListOr } from './util';
 
 const config: DeepPartial<Config> = {
   root: path.resolve(__dirname, '..'),
@@ -83,6 +83,12 @@ const config: DeepPartial<Config> = {
   },
   email: {
     fromAddress: envOr('EMAIL_FROM_ADDRESS', 'visitorapp@powertochange.org.uk'),
+    developers: envListOr('DEVELOPER_EMAILS', [], ','),
+  },
+  webhooks: {
+    heroku: {
+      secret: envOr('HEROKU_WEBHOOK_SECRET', 'nosecretisethereatthemomentpleaseaddone'),
+    },
   },
 };
 

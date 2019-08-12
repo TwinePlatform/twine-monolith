@@ -32,3 +32,7 @@ export const Templates = {
     }
   },
 };
+
+export enum WebhookEmailTemplates {
+  ON_HEROKU_RELEASE = 12904099,
+}

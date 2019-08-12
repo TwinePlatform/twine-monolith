@@ -67,6 +67,13 @@ VOLUNTEER_APP_DOMAIN=...
 # Supported environments testing | development | production
 
 NODE_ENV=...
+
+# Heroku Webhook Config
+
+# list of emails separated by ,
+DEVELOPER_EMAILS=...
+# secret supplied by heroku, contact team if this is needed
+HEROKU_WEBHOOK_SECRET=
 ```
 
 ### Note

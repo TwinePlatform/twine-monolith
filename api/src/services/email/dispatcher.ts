@@ -1,5 +1,5 @@
 import * as Postmark from 'postmark';
-import { EmailTemplate } from './templates';
+import { EmailTemplate, WebhookEmailTemplates } from './templates';
 import { Config } from '../../../config';
 
 
@@ -9,10 +9,10 @@ type Attachment = {
   contentType: string,
 };
 
-type Email = {
+export type Email = {
   from: string,
   to: string,
-  templateId: EmailTemplate,
+  templateId: EmailTemplate | WebhookEmailTemplates,
   templateModel?: object,
   attachments?: Attachment[],
 };

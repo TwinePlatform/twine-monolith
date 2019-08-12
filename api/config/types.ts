@@ -35,6 +35,7 @@ type PlatformConfig = {
 type EmailConfig = {
   postmarkKey: string
   fromAddress: string
+  developers: string []
 };
 
 type AuthConfig = {
@@ -50,7 +51,13 @@ type QrCodeConfig = {
 };
 
 type CacheConfig = {
-  session: { name: string, options: CatboxRedisOptions }
+  session: { name: string, options: CatboxRedisOptions };
+};
+
+type WebHooksConfig = {
+  heroku: {
+    secret: string
+  }
 };
 
 export type Config = {
@@ -63,4 +70,5 @@ export type Config = {
   email: EmailConfig
   auth: AuthConfig
   qrcode: QrCodeConfig
+  webhooks: WebHooksConfig
 };
