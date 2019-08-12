@@ -7,6 +7,7 @@ import {
   AccordionItemButton,
   AccordionItemHeading,
   AccordionItemPanel,
+  AccordionItemState,
 } from 'react-accessible-accordion';
 import { Paragraph } from '../../../../lib/ui/components/Typography';
 
@@ -21,6 +22,7 @@ type AccordionProps = {
 };
 
 const PanelItem = styled(Paragraph)`
+  line-height: 1.3;
   margin-bottom: 2em;
 `;
 
@@ -35,15 +37,18 @@ export const Accordion: FunctionComponent<AccordionProps> = ({ panels = [] }) =>
             </AccordionItemButton>
           </AccordionItemHeading>
           <AccordionItemPanel>
-            {
-              contents.map((content) =>
-                <Row start="xs">
-                  <PanelItem>
-                    {content}
-                  </PanelItem>
-                </Row>
-              )
-            }
+            <AccordionItemState>
+              {
+                (state: object) =>
+                  contents.map((content) =>
+                    <Row start="xs">
+                      <PanelItem>
+                        {content}
+                      </PanelItem>
+                    </Row>
+                  )
+              }
+            </AccordionItemState>
           </AccordionItemPanel>
         </AccordionItem>
       )

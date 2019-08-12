@@ -40,12 +40,27 @@
 
 .accordion__panel {
   padding: 20px;
-  animation: fadein 0.35s ease-in;
+  height: 0;
+  transition: height 0.5s linear;
+}
+
+.accordion__panel[aria-expanded='true'] {
+  height: 100vh;
 }
 
 /* -------------------------------------------------- */
 /* ---------------- Animation part ------------------ */
 /* -------------------------------------------------- */
+
+@keyframes slidein {
+  0% {
+    max-height: 0;
+  }
+
+  100% {
+    max-height: 100%;
+  }
+}
 
 @keyframes fadein {
   0% {

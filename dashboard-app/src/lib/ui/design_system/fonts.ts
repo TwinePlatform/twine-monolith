@@ -27,4 +27,3 @@ export const Fonts = {
   family: FontFamilyEnum,
   weight: FontWeightEnum,
 };
-
