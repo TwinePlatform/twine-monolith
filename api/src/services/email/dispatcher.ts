@@ -9,7 +9,7 @@ type Attachment = {
   contentType: string,
 };
 
-type Email = {
+export type Email = {
   from: string,
   to: string,
   templateId: EmailTemplate | WebhookEmailTemplates,

@@ -1,4 +1,4 @@
-import EmailDispatcher from './dispatcher';
+import EmailDispatcher, { Email } from './dispatcher';
 import { EmailTemplate, Templates, WebhookEmailTemplates } from './templates';
 import { Config } from '../../../config';
 import { User, CommunityBusiness } from '../../models';
@@ -32,26 +32,15 @@ export type EmailService = {
 
 const webhooks: EmailService['webhooks'] = {
   async onHerokuStagingRelease (cfg, appName) {
-    await EmailDispatcher.sendBatch(cfg, [
-      {
-        from: cfg.email.fromAddress,
-        to: cfg.email.developers[0],
-        templateId: WebhookEmailTemplates.ON_HEROKU_RELEASE,
-        templateModel: {
-          app_name: appName,
-          product_name: 'Twine Platform',
-        },
+    await EmailDispatcher.sendBatch(cfg, cfg.email.developers.map((email) => ({
+      from: cfg.email.fromAddress,
+      to: email,
+      templateId: WebhookEmailTemplates.ON_HEROKU_RELEASE,
+      templateModel: {
+        app_name: appName,
+        product_name: 'Twine Platform',
       },
-      {
-        from: cfg.email.fromAddress,
-        to: cfg.email.developers[1],
-        templateId: WebhookEmailTemplates.ON_HEROKU_RELEASE,
-        templateModel: {
-          app_name: appName,
-          product_name: 'Twine Platform',
-        },
-      },
-    ]);
+    } as Email)));
   },
 };
 
