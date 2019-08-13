@@ -11,10 +11,13 @@ const Video = styled.video`
   width: 100%;
 `;
 
-const NoVideo = styled.div`
+const VideoContainer = styled.div`
   background-color: black;
   border-radius: 0.2em;
   width: 100%;
+  `;
+
+const NoVideoParagraph = styled(Paragraph)`
   padding: 4rem 0;
 `;
 
@@ -99,12 +102,12 @@ export default class QrScanner extends React.Component {
   render() {
     return (
       <QrContainer id="qr-scanner-container">
-        <NoVideo>
+        <VideoContainer>
           {this.state.camNotAllowed
-            ? <Paragraph>Camera is not available</Paragraph>
+            ? <NoVideoParagraph>Camera is not available</NoVideoParagraph>
             : <Video ref={this.setPlaybackRef} />
           }
-        </NoVideo>
+        </VideoContainer>
       </QrContainer>
     );
   }
