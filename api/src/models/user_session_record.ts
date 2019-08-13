@@ -3,8 +3,28 @@ import { uniq } from 'ramda';
 import { User, Organisation } from './types';
 
 
-export const UserSessionRecords = {
-  async initSession (client: Knex, user: User, org: Organisation, sessionId: string, referrers: string[] = []) {
+type UserSessionRecord = {
+  id: number
+  sessionId: string
+  userId: number
+  organisationId: number
+  referrers: string[]
+  startedAt: Date
+  createdAt: Date
+};
+
+interface UserSessionRecordCollection {
+  initSession (k: Knex, u: User, o: Organisation, sid: string, refs?: string[]):
+    Promise<UserSessionRecord>;
+
+  updateSession (k: Knex, sid: string, refs?: string[]): Promise<number>;
+
+  endSession (k: Knex, sid: string, type: string): Promise<number>;
+}
+
+
+export const UserSessionRecords: UserSessionRecordCollection = {
+  async initSession (client, user, org, sessionId, referrers = []) {
     const [result] = await client('user_session_record')
       .insert({
         user_account_id: user.id,
@@ -22,10 +42,11 @@ export const UserSessionRecords = {
       organisationId: org.id,
       referrers,
       startedAt: result.started_at,
+      createdAt: result.created_at,
     };
   },
 
-  async updateSession (client: Knex, sessionId: string, referrers: string[] = []) {
+  async updateSession (client, sessionId, referrers = []) {
     if (referrers.length < 1) {
       return null;
     }
@@ -41,9 +62,9 @@ export const UserSessionRecords = {
       .where({ session_id: sessionId });
   },
 
-  async endSession (client: Knex, sessionId: string, type: string) {
+  async endSession (client, sessionId, type) {
     return await client('user_session_record')
       .update({ ended_at: new Date(), session_end_type: type })
-      .where({ user_session_record_id: sessionId });
+      .where({ session_id: sessionId });
   },
 };
