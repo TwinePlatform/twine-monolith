@@ -28,6 +28,7 @@ interface Props {
   title: TitleString;
   legendData: LegendData;
   setLegendData: React.Dispatch<React.SetStateAction<LegendData>>;
+  defaultSelection: boolean;
 }
 
 /*
@@ -35,7 +36,7 @@ interface Props {
  */
 
 const StackedBarChart: FunctionComponent<Props> = (props) => {
-  const { data, xAxisTitle, yAxisTitle, title, unit, legendData, setLegendData } = props;
+  const { data, xAxisTitle, yAxisTitle, title, unit, legendData, setLegendData, defaultSelection } = props;
   const [chartData, setChartData] = useState();
   const [tooltipUnit, setTooltipUnit] = useState('');
 
@@ -52,7 +53,7 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   }, [legendData]);
 
   useEffect(() => {
-    const newLegendData = updateLegendData(data, legendData);
+    const newLegendData = updateLegendData(data, legendData, defaultSelection);
     const zeroedOutData = sortAndZeroOutInactiveData(data, newLegendData);
     setLegendData(newLegendData);
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
@@ -86,6 +87,7 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
     setLegendActivityOfAll,
     setLegendActivityOnUpdate,
     title: data.groupByX,
+    defaultSelection
   };
 
   return (

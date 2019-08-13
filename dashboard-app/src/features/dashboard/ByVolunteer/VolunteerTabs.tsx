@@ -65,6 +65,7 @@ const VolunteerTabs: FunctionComponent<Props> = (props) => {
                 unit={unit}
                 xAxisTitle={'Months'}
                 yAxisTitle={`Volunteer ${unit}`}
+                defaultSelection={false}
               />
             )
           }

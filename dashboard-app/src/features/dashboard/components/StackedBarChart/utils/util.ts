@@ -8,16 +8,16 @@ import { LegendData, LegendDatum } from '../types';
 export const sortByNameCaseInsensitive = sortBy(pipe(prop('name'), toLower));
 
 export const createLegendData =
-  (data: AggregatedData) => {
+  (data: AggregatedData, defaultSelection: boolean) => {
     const visibleData = data.rows
-      .map((row) => ({ id: row.id, name: row.name, active: false } as LegendDatum));
+      .map((row) => ({ id: row.id, name: row.name, active: defaultSelection } as LegendDatum));
 
     return sortByNameCaseInsensitive(visibleData);
   };
 
 export const updateLegendData =
-  (data: AggregatedData, oldActiveData: LegendData) => {
-    const visibleData = createLegendData(data);
+  (data: AggregatedData, oldActiveData: LegendData, defaultSelection: boolean) => {
+    const visibleData = createLegendData(data, defaultSelection);
 
     const newLegendData = visibleData.map((newItem) =>
       oldActiveData.find((oldItem) => newItem.id === oldItem.id) || newItem
