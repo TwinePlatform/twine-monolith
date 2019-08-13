@@ -1,6 +1,7 @@
 import * as Knex from 'knex';
 import * as Redis from 'ioredis';
 import { delay } from 'twine-util/time';
+import { getTrx } from '../../../../../tests/utils/database';
 import { getConfig } from '../../../../../config';
 import { UserSessionRecords } from '../../../../models/user_session_record';
 import { Users, Organisations } from '../../../../models';
@@ -10,6 +11,15 @@ import { monitorSessionExpiry } from '../monitoring';
 describe('Session expiry monitoring', () => {
   const config = getConfig(process.env.NODE_ENV);
   const knex = Knex(config.knex);
+  let trx: Knex.Transaction;
+
+  beforeAll(async () => {
+    trx = await getTrx(knex);
+  });
+
+  afterEach(async () => {
+    await trx.rollback();
+  });
 
   afterAll(async () => {
     await knex.destroy();
@@ -18,18 +28,18 @@ describe('Session expiry monitoring', () => {
   test('user session record table is updated when record expires', async () => {
     const client = new Redis(config.cache.session.options.url);
     const sid = 'foo';
-    const user = await Users.getOne(knex, { where: { id: 1 } });
-    const org = await Organisations.fromUser(knex, { where: user });
+    const user = await Users.getOne(trx, { where: { id: 1 } });
+    const org = await Organisations.fromUser(trx, { where: user });
 
-    const resultBefore = await UserSessionRecords.initSession(knex, user, org, sid);
+    const resultBefore = await UserSessionRecords.initSession(trx, user, org, sid);
 
-    const listener = monitorSessionExpiry(knex, config.cache.session.options.url);
+    const listener = monitorSessionExpiry(trx, config.cache.session.options.url);
 
     await client.set(sid, 2);
     await client.pexpire(sid, 1);
     await delay(100);
 
-    const resultAfter = await knex('user_session_record').select('*');
+    const resultAfter = await trx('user_session_record').select('*');
 
     // Clean up first in case assertions fail
     await listener.quit();

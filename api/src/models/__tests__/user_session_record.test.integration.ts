@@ -39,20 +39,21 @@ describe('UserSessionRecords model', () => {
     test(':: creates partial session record in DB -- no referrers', async () => {
       MockDate.set('2019-08-10T22:11:19');
 
-      const record = await UserSessionRecords.initSession(trx, user, org);
+      const sid = 'foo';
+      const record = await UserSessionRecords.initSession(trx, user, org, sid);
       const check = await trx('user_session_record').select('*');
 
-      expect(record).toEqual({
-        id: 1,
+      expect(record).toEqual(expect.objectContaining({
+        sessionId: sid,
         userId: user.id,
         organisationId: org.id,
         referrers: [],
         startedAt: new Date('2019-08-10T22:11:19'),
-      });
+      }));
 
       expect(check).toHaveLength(1);
-      expect(omit(['created_at'], check[0])).toEqual({
-        user_session_record_id: 1,
+      expect(omit(['created_at', 'user_session_record_id'], check[0])).toEqual({
+        session_id: sid,
         user_account_id: user.id,
         organisation_id: org.id,
         referrers: [],
@@ -67,23 +68,24 @@ describe('UserSessionRecords model', () => {
     test(':: creates partial session record in DB -- with referrers', async () => {
       MockDate.set('2019-08-10T22:11:19');
 
+      const sid = 'foo';
       const referrers = ['https://foo.com/bar'];
-      const record = await UserSessionRecords.initSession(trx, user, org, referrers);
+      const record = await UserSessionRecords.initSession(trx, user, org, sid, referrers);
       const check = await trx('user_session_record').select('*');
 
-      expect(record).toEqual({
-        id: 2,
+      expect(record).toEqual(expect.objectContaining({
+        sessionId: sid,
         userId: user.id,
         organisationId: org.id,
         referrers,
         startedAt: new Date('2019-08-10T22:11:19'),
-      });
+      }));
 
       expect(check).toHaveLength(1);
-      expect(omit(['created_at'], check[0])).toEqual({
-        user_session_record_id: 2,
+      expect(omit(['created_at', 'user_session_record_id'], check[0])).toEqual({
         user_account_id: user.id,
         organisation_id: org.id,
+        session_id: sid,
         referrers,
         session_end_type: null,
         started_at: new Date('2019-08-10T22:11:19'),
@@ -96,9 +98,10 @@ describe('UserSessionRecords model', () => {
 
   describe('updateSession', () => {
     test('update with no new referrers', async () => {
+      const sid = 'foo';
       const referrers = ['https://foo.com/bar'];
-      const record = await UserSessionRecords.initSession(trx, user, org, referrers);
-      const result = await UserSessionRecords.updateSession(trx, record.id);
+      const record = await UserSessionRecords.initSession(trx, user, org, sid, referrers);
+      const result = await UserSessionRecords.updateSession(trx, record.sessionId);
       const query = await trx('user_session_record')
         .select('*')
         .where({ user_session_record_id: record.id });
@@ -110,10 +113,11 @@ describe('UserSessionRecords model', () => {
     });
 
     test('update with new referrers', async () => {
+      const sid = 'foo';
       const referrers1 = ['https://foo.com/bar'];
       const referrers2 = ['https://foo.com/lol'];
-      const record = await UserSessionRecords.initSession(trx, user, org, referrers1);
-      const result = await UserSessionRecords.updateSession(trx, record.id, referrers2);
+      const record = await UserSessionRecords.initSession(trx, user, org, sid, referrers1);
+      const result = await UserSessionRecords.updateSession(trx, record.sessionId, referrers2);
       const query = await trx('user_session_record')
         .select('*')
         .where({ user_session_record_id: record.id });
@@ -129,12 +133,13 @@ describe('UserSessionRecords model', () => {
     test('marks session ended with current timestamp', async () => {
       MockDate.set('2019-10-10T13:45:22');
 
+      const sid = 'foo';
       const referrers = ['https://foo.com/bar'];
-      const record = await UserSessionRecords.initSession(trx, user, org, referrers);
+      const record = await UserSessionRecords.initSession(trx, user, org, sid, referrers);
 
       MockDate.set('2019-10-10T14:15:43');
 
-      const result = await UserSessionRecords.endSession(trx, record.id, 'log_out');
+      const result = await UserSessionRecords.endSession(trx, record.sessionId, 'log_out');
       const query = await trx('user_session_record')
         .select('*')
         .where({ user_session_record_id: record.id });
