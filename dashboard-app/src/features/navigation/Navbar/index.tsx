@@ -49,15 +49,15 @@ const Navbar: React.FunctionComponent<Props> = (props) => {
     active: page.url === (currentPage || { url: '' }).url,
   }));
 
-  return(
-  <PaddedRow middle="xs" between="xs">
-    <Col xs={6} md={8} lg={9}>
-      <TextLogo/>
-    </Col>
-    <Col xs={6} md={4} lg={3}>
-      { isLoggedIn && <NavLinks links={links} withLogout={isLoggedIn}/> }
-    </Col>
-  </PaddedRow>
+  return (
+    <PaddedRow middle="xs" between="xs">
+      <Col xs={5} md={7} lg={8}>
+        <TextLogo/>
+      </Col>
+      <Col xs={7} md={5} lg={4}>
+        { isLoggedIn && <NavLinks links={links} withLogout={isLoggedIn}/> }
+      </Col>
+    </PaddedRow>
   );
 };
 

@@ -8,6 +8,7 @@ import ByVolunteer from '../dashboard/ByVolunteer';
 import Login from '../auth/pages/Login';
 import ResetPassword from '../auth/pages/ResetPassword';
 import ForgotPassword from '../auth/pages/ForgotPassword';
+import FAQPage from '../faqs';
 import ErrorPage from '../Error';
 import { TitlesCopy } from '../dashboard/copy/titles';
 
@@ -46,6 +47,12 @@ export const PagesDict: PagesDictionary = {
     title: TitlesCopy.Volunteers.title,
     protected: true,
   },
+  FAQs: {
+    url: '/faqs',
+    component: FAQPage,
+    title: 'FAQs',
+    protected: true,
+  },
   Login: {
     url: '/login',
     component: Login,
@@ -73,6 +80,7 @@ const NavBarOrder = [
   TitlesCopy.Time.title,
   TitlesCopy.Activities.title,
   TitlesCopy.Volunteers.title,
+  'FAQs',
 ];
 
 

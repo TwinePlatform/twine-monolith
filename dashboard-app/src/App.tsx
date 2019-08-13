@@ -11,6 +11,7 @@ import Dashboard from './features/dashboard/Dashboard';
 import Login from './features/auth/pages/Login';
 import ResetPassword from './features/auth/pages/ResetPassword';
 import ForgotPassword from './features/auth/pages/ForgotPassword';
+import FAQPage from './features/faqs';
 import ErrorPage from './features/Error';
 import Navbar from './features/navigation/Navbar';
 import Footer from './lib/ui/components/Footer';
@@ -27,23 +28,24 @@ const AppContainer = styled.div`
   font-family: ${Fonts.family.main};
 `;
 
-/*
- * Helpers
- */
-
-
-const ProtectedRoutes = () => (
-  <Switch>
-    <Route exact path="/activities" component={ByActivity} />
-    <Route exact path="/time" component={ByTime} />
-    <Route exact path="/volunteers" component={ByVolunteer} />
-    <Route exact path="/" component={Dashboard} />
-  </Switch>
-);
-
 const Content = styled.div`
   min-height: calc(100vh - 4.8125rem - 6rem - 13rem);
 `;
+
+
+/*
+ * Helpers
+ */
+const ProtectedRoutes = () => (
+  <Switch>
+    <Route exact path="/" component={Dashboard} />
+    <Route exact path="/activities" component={ByActivity} />
+    <Route exact path="/time" component={ByTime} />
+    <Route exact path="/volunteers" component={ByVolunteer} />
+    <Route exact path="/faqs" component={FAQPage} />
+  </Switch>
+);
+
 
 const AppRouter =
   withRouter((props) => (
@@ -61,6 +63,7 @@ const AppRouter =
         <Footer />
       </>)
   );
+
 
 /*
  * Component
