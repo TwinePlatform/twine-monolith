@@ -115,8 +115,8 @@ describe('Helpers', () => {
         ]} as AggregatedData;
       const expected = createLegendData(aggregatedData);
       expect(expected).toEqual([
-        { active: true, name: 'Aku Aku', id: 2 },
-        { active: true, name: 'Crash Bandicoot', id: 3 },
+        { active: false, name: 'Aku Aku', id: 2 },
+        { active: false, name: 'Crash Bandicoot', id: 3 },
       ]);
     });
     test('Success :: Only creates items for users there is data for', async () => {
@@ -130,8 +130,8 @@ describe('Helpers', () => {
 
       const expected = createLegendData(aggregatedData);
       expect(expected).toEqual([
-        { active: true, name: 'Aku Aku', id: 2 },
-        { active: true, name: 'Crash Bandicoot', id: 3 },
+        { active: false, name: 'Aku Aku', id: 2 },
+        { active: false, name: 'Crash Bandicoot', id: 3 },
       ]);
     });
   });
