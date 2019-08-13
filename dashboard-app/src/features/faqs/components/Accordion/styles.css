@@ -1,28 +1,35 @@
-/**
-* ----------------------------------------------
-* Mostly copied from
-* https://github.com/springload/react-accessible-accordion/blob/master/src/css/fancy-example.css
-* ----------------------------------------------
-**/
-.accordion__item + .accordion__item {
-  border-top: 1px solid rgba(112, 112, 112, 0.4);
+.Collapsible {
+  border-top: 1px solid #d1d1d1;
 }
 
-.accordion__button {
-  color: #333333;
-  font-weight: 700;
-  cursor: pointer;
-  padding: 18px;
-  width: 100%;
+.Collapsible:last-of-type {
+  border-bottom: 1px solid #d1d1d1;
+}
+
+.Collapsible__contentInner {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+.Collapsible__contentInner p {
   text-align: left;
-  border: none;
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
 }
 
-.accordion__button:hover {
-  background-color: #ddd;
+.Collapsible__contentInner p:last-child {
+  margin-bottom: 0;
 }
 
-.accordion__button:before {
+.Collapsible__trigger {
+  display: block;
+  text-align: left;
+  font-weight: 700;
+  position: relative;
+  padding: 1.5rem;
+}
+
+
+.Collapsible__trigger:after {
   display: inline-block;
   content: '';
   height: 10px;
@@ -30,44 +37,35 @@
   margin-right: 12px;
   border-bottom: 2px solid currentColor;
   border-right: 2px solid currentColor;
-  transform: rotate(-45deg);
-}
-
-.accordion__button[aria-expanded='true']::before,
-.accordion__button[aria-selected='true']::before {
   transform: rotate(45deg);
+
+  position: absolute;
+  right: 1.5rem;
+  top: calc(1.5rem + 10px / 2);
+  transition: transform 300ms;
 }
 
-.accordion__panel {
-  padding: 20px;
-  height: 0;
-  transition: height 0.5s linear;
+.Collapsible__trigger.is-open:after {
+  transform: rotate(225deg);
 }
 
-.accordion__panel[aria-expanded='true'] {
-  height: 100vh;
+.Collapsible__trigger.is-disabled {
+  opacity: 0.5;
+  background-color: grey;
 }
 
-/* -------------------------------------------------- */
-/* ---------------- Animation part ------------------ */
-/* -------------------------------------------------- */
-
-@keyframes slidein {
-  0% {
-    max-height: 0;
-  }
-
-  100% {
-    max-height: 100%;
-  }
+.CustomTriggerCSS {
+  background-color: lightcoral;
+  transition: background-color 200ms ease;
 }
 
-@keyframes fadein {
-  0% {
-    opacity: 0;
-  }
+.CustomTriggerCSS--open {
+  background-color: darkslateblue;
+}
 
-  100% {
-    opacity: 1;
-  }
+.Collapsible__custom-sibling {
+  padding: 5px;
+  font-size: 12px;
+  background-color: #CBB700;
+  color: black;
 }
