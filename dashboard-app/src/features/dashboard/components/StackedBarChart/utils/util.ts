@@ -8,7 +8,7 @@ import { LegendData, LegendDatum } from '../types';
 export const sortByNameCaseInsensitive = sortBy(pipe(prop('name'), toLower));
 
 export const createLegendData =
-  (data: AggregatedData, defaultSelection: boolean) => {
+  (data: AggregatedData, defaultSelection: boolean): LegendData => {
     const visibleData = data.rows
       .map((row) => ({ id: row.id, name: row.name, active: defaultSelection } as LegendDatum));
 
@@ -16,7 +16,7 @@ export const createLegendData =
   };
 
 export const updateLegendData =
-  (data: AggregatedData, oldActiveData: LegendData, defaultSelection: boolean) => {
+  (data: AggregatedData, oldActiveData: LegendData, defaultSelection: boolean): LegendData => {
     const visibleData = createLegendData(data, defaultSelection);
 
     const newLegendData = visibleData.map((newItem) =>
@@ -43,13 +43,13 @@ export const sortAndZeroOutInactiveData = (data: AggregatedData, legendData: Leg
 }, data) as AggregatedData;
 
 
-export const isEveryDatumActive = (data: LegendData) =>
+export const isEveryDatumActive = (data: LegendData): boolean =>
   data.every((datum) => datum.active);
 
-export const isEveryDatumInactive = (data: LegendData) =>
+export const isEveryDatumInactive = (data: LegendData): boolean =>
   data.every((datum) => !datum.active);
 
-export const flipActiveOfAll = (data: LegendData) => {
+export const flipActiveOfAll = (data: LegendData): LegendData => {
   const active: boolean = isEveryDatumActive(data)
     ? false
     : isEveryDatumInactive(data);
