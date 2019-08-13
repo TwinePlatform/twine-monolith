@@ -2,11 +2,12 @@ import * as Knex from 'knex';
 import * as Redis from 'ioredis';
 import { delay } from 'twine-util/time';
 import { getConfig } from '../../../../../config';
-import { createListener } from '../monitoring';
 import { UserSessionRecords } from '../../../../models/user_session_record';
 import { Users, Organisations } from '../../../../models';
+import { monitorSessionExpiry } from '../monitoring';
 
-describe('REDIS', () => {
+
+describe('Session expiry monitoring', () => {
   const config = getConfig(process.env.NODE_ENV);
   const knex = Knex(config.knex);
 
@@ -14,7 +15,7 @@ describe('REDIS', () => {
     await knex.destroy();
   });
 
-  test('TEST', async () => {
+  test('user session record table is updated when record expires', async () => {
     const client = new Redis(config.cache.session.options.url);
     const sid = 'foo';
     const user = await Users.getOne(knex, { where: { id: 1 } });
@@ -22,7 +23,7 @@ describe('REDIS', () => {
 
     const resultBefore = await UserSessionRecords.initSession(knex, user, org, sid);
 
-    const listener = createListener(knex, config.cache.session.options.url);
+    const listener = monitorSessionExpiry(knex, config.cache.session.options.url);
 
     await client.set(sid, 2);
     await client.pexpire(sid, 1);

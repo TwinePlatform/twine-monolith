@@ -24,7 +24,7 @@ export const getCredentialsFromRequest = (request: Hapi.Request) => {
 
 
 export default async (server: Hapi.Server) => {
-  const { config: { auth: { schema } } } = server.app;
+  const { config: { auth: { schema }, cache }, knex } = server.app;
 
   /*
    * Pre-requisite plugins
@@ -38,6 +38,8 @@ export default async (server: Hapi.Server) => {
    * Standard strategy
    */
   server.auth.strategy('standard', 'session_cookie', { validate: standardStrategy.validate });
+  const client = standardStrategy.monitorSessionExpiry(knex, cache.session.options.url);
+  server.events.on('stop', () => client.quit());
 
   /*
    * External strategy
