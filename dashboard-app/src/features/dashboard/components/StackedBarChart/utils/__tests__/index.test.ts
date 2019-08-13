@@ -113,12 +113,28 @@ describe('Helpers', () => {
             { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
             { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
         ]} as AggregatedData;
-      const expected = createLegendData(aggregatedData);
+      const expected = createLegendData(aggregatedData, true);
       expect(expected).toEqual([
         { active: true, name: 'Aku Aku', id: 2 },
         { active: true, name: 'Crash Bandicoot', id: 3 },
       ]);
     });
+
+    test('Success :: creates a list of deselected active data', async () => {
+      const aggregatedData = {
+        groupByX: 'Volunteer Name',
+        groupByY: 'Activity',
+        rows: [
+            { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
+            { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
+        ]} as AggregatedData;
+      const expected = createLegendData(aggregatedData, false);
+      expect(expected).toEqual([
+        { active: false, name: 'Aku Aku', id: 2 },
+        { active: false, name: 'Crash Bandicoot', id: 3 },
+      ]);
+    });
+
     test('Success :: Only creates items for users there is data for', async () => {
       const aggregatedData = {
         groupByX: 'Volunteer Name',
@@ -128,7 +144,7 @@ describe('Helpers', () => {
             { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
         ]} as AggregatedData;
 
-      const expected = createLegendData(aggregatedData);
+      const expected = createLegendData(aggregatedData, true);
       expect(expected).toEqual([
         { active: true, name: 'Aku Aku', id: 2 },
         { active: true, name: 'Crash Bandicoot', id: 3 },
@@ -158,7 +174,7 @@ describe('Helpers', () => {
           id: 3,
         },
       ];
-      const expected = updateLegendData(aggregatedData, oldActiveData);
+      const expected = updateLegendData(aggregatedData, oldActiveData, false);
       expect(expected).toEqual([
         { active: true, name: 'Aku Aku', id: 2 },
         { active: false, name: 'Crash Bandicoot', id: 3 },

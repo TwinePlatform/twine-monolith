@@ -1,5 +1,3 @@
-
-
 import { sortBy, pipe, prop, toLower, omit, evolve } from 'ramda';
 import {
   AggregatedData,
@@ -10,16 +8,16 @@ import { LegendData, LegendDatum } from '../types';
 export const sortByNameCaseInsensitive = sortBy(pipe(prop('name'), toLower));
 
 export const createLegendData =
-  (data: AggregatedData): LegendData => {
+  (data: AggregatedData, defaultSelection: boolean): LegendData => {
     const visibleData = data.rows
-      .map((row) => ({ id: row.id, name: row.name, active: true } as LegendDatum));
+      .map((row) => ({ id: row.id, name: row.name, active: defaultSelection } as LegendDatum));
 
     return sortByNameCaseInsensitive(visibleData);
   };
 
 export const updateLegendData =
-  (data: AggregatedData, oldActiveData: LegendData): LegendData => {
-    const visibleData = createLegendData(data);
+  (data: AggregatedData, oldActiveData: LegendData, defaultSelection: boolean): LegendData => {
+    const visibleData = createLegendData(data, defaultSelection);
 
     const newLegendData = visibleData.map((newItem) =>
       oldActiveData.find((oldItem) => newItem.id === oldItem.id) || newItem
@@ -35,9 +33,9 @@ const zeroOutInactiveData = (legendData: LegendData) => (rows: Row[]) =>
       const matchingLegendData = legendData.find((data) => data.id === row.id);
       if (!matchingLegendData) return row;
       return matchingLegendData.active
-    ? row
-    : getYHeaderList(row).reduce((acc: object, el) => ({ ...acc, [el]: 0 }),
-      { id: row.id, name: row.name });
+        ? row
+        : getYHeaderList(row)
+            .reduce((acc: object, el) => ({ ...acc, [el]: 0 }), { id: row.id, name: row.name });
     });
 
 export const sortAndZeroOutInactiveData = (data: AggregatedData, legendData: LegendData) => evolve({
@@ -56,5 +54,5 @@ export const flipActiveOfAll = (data: LegendData): LegendData => {
     ? false
     : isEveryDatumInactive(data);
 
-  return data.map((x) => ({ ...x, active }));
+  return data.map<LegendDatum>((x) => ({ ...x, active }));
 };
