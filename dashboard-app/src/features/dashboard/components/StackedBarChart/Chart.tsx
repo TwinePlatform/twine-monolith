@@ -9,7 +9,6 @@ import RoundedBar from './RoundedBar';
 import { getStackedGraphOptions, totalizer } from './utils/chartjsUtils';
 import _Card from '../../../../lib/ui/components/Card';
 import { ColoursEnum } from '../../../../lib/ui/design_system';
-import { FullWidthTextBox } from '../../../../lib/ui/components/FullWidthTextBox';
 import { TitleString, Title } from '../Title';
 
 
@@ -26,9 +25,6 @@ interface Props {
   tooltipUnit: string;
 }
 
-type HidableTextBoxProp = {
-  isVisible: boolean;
-};
 
 /*
  * Styles
@@ -38,9 +34,21 @@ const Card = styled(_Card)`
   height: 100%;
 `;
 
-const HidableTextBox = styled(FullWidthTextBox)<HidableTextBoxProp>`
-  visibility: ${({ isVisible }) => isVisible ? 'inherit' : 'hidden'};
+const GraphContentContainer = styled.div`
+  position: relative;
 `;
+
+const HideableTextOverlay = styled.div<{ isVisible: boolean }>`
+  position: absolute;
+  background-color: white;
+  opacity: ${(props) => props.isVisible ? 1 : 0};
+  transition: opacity 0.2s linear;
+  display: block;
+  height: 100%;
+  width: 100%;
+  padding: 10rem;
+`;
+
 
 /*
  * Helpers
@@ -64,30 +72,22 @@ const Chart: FunctionComponent<Props> = (props) => {
     tooltipUnit,
   } = props;
 
-  const graph = (
-    <RoundedBar
-      datasetKeyProvider={datasetKeyProvider}
-      plugins={[totalizer, ChartDataLabels]}
-      data={data}
-      options={getStackedGraphOptions(xAxisTitle, yAxisTitle, tooltipUnit)}
-    />
-  );
-
   return (
     <Card>
       <Title title={title}/>
       <Row center="xs" middle="xs">
         <Col xs={12} md={9}>
-        <HidableTextBox
-          height="2rem"
-          isVisible={isAllLegendDataInactive}
-          text ={noActiveLegendText}
-        />
-          {
-            checkIsDataEmpty(data)
-              ? <FullWidthTextBox text ="NO DATA AVAILABLE"/>
-              : graph
-          }
+          <GraphContentContainer>
+            <HideableTextOverlay isVisible={checkIsDataEmpty(data) || isAllLegendDataInactive}>
+              {noActiveLegendText}
+            </HideableTextOverlay>
+            <RoundedBar
+              datasetKeyProvider={datasetKeyProvider}
+              plugins={[totalizer, ChartDataLabels]}
+              data={data}
+              options={getStackedGraphOptions(xAxisTitle, yAxisTitle, tooltipUnit)}
+            />
+          </GraphContentContainer>
         </Col>
       </Row>
     </Card>

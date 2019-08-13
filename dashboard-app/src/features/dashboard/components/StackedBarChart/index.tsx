@@ -64,11 +64,8 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   }, [legendData]);
 
   useEffect(() => {
-    const newValue = unit === DurationUnitEnum.DAYS
-          ? 'days'
-          : 'hrs';
-    setTooltipUnit(newValue);
-  });
+    setTooltipUnit(unit === DurationUnitEnum.DAYS ? 'days' : 'hrs');
+  }, [unit]);
 
   const noActiveLegendText = data.groupByX === 'Activity'
     ? 'Select an activity to show data'

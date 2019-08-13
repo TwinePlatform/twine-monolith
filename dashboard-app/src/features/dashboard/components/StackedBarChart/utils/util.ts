@@ -1,5 +1,3 @@
-
-
 import { sortBy, pipe, prop, toLower, omit, evolve } from 'ramda';
 import {
   AggregatedData,
@@ -10,15 +8,15 @@ import { LegendData, LegendDatum } from '../types';
 export const sortByNameCaseInsensitive = sortBy(pipe(prop('name'), toLower));
 
 export const createLegendData =
-  (data: AggregatedData): LegendData => {
+  (data: AggregatedData) => {
     const visibleData = data.rows
-      .map((row) => ({ id: row.id, name: row.name, active: true } as LegendDatum));
+      .map((row) => ({ id: row.id, name: row.name, active: false } as LegendDatum));
 
     return sortByNameCaseInsensitive(visibleData);
   };
 
 export const updateLegendData =
-  (data: AggregatedData, oldActiveData: LegendData): LegendData => {
+  (data: AggregatedData, oldActiveData: LegendData) => {
     const visibleData = createLegendData(data);
 
     const newLegendData = visibleData.map((newItem) =>
@@ -35,9 +33,9 @@ const zeroOutInactiveData = (legendData: LegendData) => (rows: Row[]) =>
       const matchingLegendData = legendData.find((data) => data.id === row.id);
       if (!matchingLegendData) return row;
       return matchingLegendData.active
-    ? row
-    : getYHeaderList(row).reduce((acc: object, el) => ({ ...acc, [el]: 0 }),
-      { id: row.id, name: row.name });
+        ? row
+        : getYHeaderList(row)
+            .reduce((acc: object, el) => ({ ...acc, [el]: 0 }), { id: row.id, name: row.name });
     });
 
 export const sortAndZeroOutInactiveData = (data: AggregatedData, legendData: LegendData) => evolve({
@@ -45,16 +43,16 @@ export const sortAndZeroOutInactiveData = (data: AggregatedData, legendData: Leg
 }, data) as AggregatedData;
 
 
-export const isEveryDatumActive = (data: LegendData): boolean =>
+export const isEveryDatumActive = (data: LegendData) =>
   data.every((datum) => datum.active);
 
-export const isEveryDatumInactive = (data: LegendData): boolean =>
+export const isEveryDatumInactive = (data: LegendData) =>
   data.every((datum) => !datum.active);
 
-export const flipActiveOfAll = (data: LegendData): LegendData => {
+export const flipActiveOfAll = (data: LegendData) => {
   const active: boolean = isEveryDatumActive(data)
     ? false
     : isEveryDatumInactive(data);
 
-  return data.map((x) => ({ ...x, active }));
+  return data.map<LegendDatum>((x) => ({ ...x, active }));
 };

@@ -12,10 +12,10 @@ import { LegendData } from '../components/StackedBarChart/types';
 import { TitleString } from '../components/Title';
 import { Orderable } from '../hooks/useOrderable';
 
+
 /*
  * Types
  */
-
 interface Props {
   data?: AggregatedData;
   unit: DurationUnitEnum;
@@ -27,12 +27,14 @@ interface Props {
   setLegendData: React.Dispatch<React.SetStateAction<LegendData>>;
 }
 
+
 /*
  * Styles
  */
 const DataTable = styled(_DataTable)`
   margin-top: 4rem;
 `;
+
 
 /*
  * Component
@@ -49,7 +51,7 @@ const VolunteerTabs: FunctionComponent<Props> = (props) => {
     orderable,
   } = props;
 
-  return(
+  return (
     <Row center="xs">
       <Col xs={12}>
         <TabGroup titles={['Chart', 'Table']}>
@@ -85,4 +87,3 @@ const VolunteerTabs: FunctionComponent<Props> = (props) => {
 };
 
 export default VolunteerTabs;
-
