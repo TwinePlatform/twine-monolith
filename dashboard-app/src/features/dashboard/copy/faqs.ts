@@ -2,7 +2,7 @@
 
 export default [
   {
-    heading: 'What is the dashboard',
+    heading: 'What is the dashboard?',
     contents: [
       'The Twine dashboard visualises data from the volunteer app. It makes identifying trends and reporting on data much simpler and faster than our old dashboard.',
       'From the main page, click on any of the ‘tiles’ to choose the data you want to see, as per the description. You can also navigate the dashboard using the menu in the top right of the screen.',
