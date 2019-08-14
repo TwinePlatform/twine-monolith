@@ -14,6 +14,7 @@ import {
   volunteerLogDuration,
   volunteerProject
 } from './schema';
+import * as Scopes from '../../../auth/scopes';
 import Roles from '../../../models/role';
 import { VolunteerLogs, Volunteers, VolunteerLog } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
@@ -29,6 +30,8 @@ import { requestQueryToModelQuery } from '../utils';
 import { query } from '../users/schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
+import { PermissionLevelEnum } from '../../../auth';
+import { AccessEnum, ResourceEnum } from '../../../auth/types';
 
 
 const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) => {
@@ -356,27 +359,25 @@ const routes: Hapi.ServerRoute[] = [
         payload: _payload,
       } = request;
 
-      const { user, organisation, scope } = StandardCredentials.fromRequest(request);
+      const { user, scope } = StandardCredentials.fromRequest(request);
 
+      // Ignore invalid logs silently because of
+      // https://github.com/TwinePlatform/twine-monolith/issues/246
       const payload = ignoreInvalidLogs(_payload);
 
       if (payload.length !== _payload.length) {
         // Do not await - this is an auxiliary action
-        knex('invalid_synced_logs_monitoring')
-          .insert({
-            payload: JSON.stringify(_payload),
-            user_account_id: user.id,
-            organisation_id: organisation.id,
-          })
-          .then(() => {})
-          .catch(() => {});
+        VolunteerLogs.recordInvalidLog(knex, user, communityBusiness, _payload);
       }
 
       if (
-        payload.some((log) => log.userId !== 'me') && // If some logs correspond to other users
-        !scope.includes('volunteer_logs-sibling:write') // And client doesn't have the sibling scope
+        // If some logs correspond to other users...
+        payload.some((log) => log.userId !== 'me') &&
+        // ...and we don't have permission to write to other users
+        !Scopes.has(['volunteer_logs-sibling:write', 'volunteer_logs-child:write'], scope)
       ) {
-        return Boom.forbidden('Insufficient scope'); // Then 403
+        // Then 403
+        return Boom.forbidden('Insufficient scope: cannot write other users logs');
       }
 
       const targetUserChecks = payload

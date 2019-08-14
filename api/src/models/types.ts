@@ -398,17 +398,22 @@ export type CommunityBusinessCollection = Collection<CommunityBusiness> & {
 
 export type VolunteerLogCollection = Collection<VolunteerLog> & {
   fromUser: (
-      k: Knex,
-      u: User,
-      q?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
+    k: Knex,
+    u: User,
+    q?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
   fromCommunityBusiness: (
-      k: Knex,
-      c: CommunityBusiness,
-      q?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
+    k: Knex,
+    c: CommunityBusiness,
+    q?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
   fromUserAtCommunityBusiness: (
-      k: Knex,
-      u: User, c: CommunityBusiness,
-      q?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
+    k: Knex,
+    u: User, c: CommunityBusiness,
+    q?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>
+  recordInvalidLog: (
+    k: Knex,
+    u: User,
+    c: CommunityBusiness,
+    payload: object) => Promise<void>
   getProjects: (
     k: Knex,
     c: CommunityBusiness) => Promise<VolunteerProject[]>

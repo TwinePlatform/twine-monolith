@@ -240,6 +240,15 @@ export const VolunteerLogs: VolunteerLogCollection = {
     });
   },
 
+  async recordInvalidLog (client, user, organisation, payload) {
+    return client('invalid_synced_logs_monitoring')
+      .insert({
+        payload: JSON.stringify(payload),
+        user_account_id: user.id,
+        organisation_id: organisation.id,
+      });
+  },
+
   async serialise (log) {
     return log;
   },
