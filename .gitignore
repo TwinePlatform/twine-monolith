@@ -79,3 +79,4 @@ build
 
 # db dump files
 *.dump
+*.rdb
