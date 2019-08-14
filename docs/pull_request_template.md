@@ -1,7 +1,7 @@
 fixes ...
 
 ### Changes
-- create table to track visitor sign in type
+- 
 -
 
 ### Testing Requirements
@@ -13,4 +13,4 @@ fixes ...
 - 
 
 ### Manual Deployment
-- [ ] 
+-

@@ -8,6 +8,7 @@
 - PRs should be code reviewed first then manually tested. If this process is strung out and other major work has been merged in the meantime, PRs need to be retested.
 - PRs should be clearly marked if they are waiting for a release schedule/comms
 - [PR Template](./pull_request_template.md)
+- on production release PR issue to be moved release column in pipeline
 
 **Deployment workflow**
 - Heroku `staging` manually deployed from Github `master`
