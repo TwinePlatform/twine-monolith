@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { uniq } from 'ramda';
+import { compose, uniq, concat } from 'ramda';
 import { User, Organisation } from './types';
 
 
@@ -55,7 +55,7 @@ export const UserSessionRecords: UserSessionRecordCollection = {
       .select('referrers')
       .where({ session_id: sessionId });
 
-    const newReferrers = JSON.stringify(uniq(existingReferrers.referrers.concat(referrers)));
+    const newReferrers = combineReferrers(existingReferrers.referrers, referrers);
 
     return await client('user_session_record')
       .update({ referrers: newReferrers })
@@ -68,3 +68,10 @@ export const UserSessionRecords: UserSessionRecordCollection = {
       .where({ session_id: sessionId });
   },
 };
+
+const combineReferrers = (xs: string[], ys: string[]) => compose(
+  JSON.stringify,
+  uniq,
+  concat(xs),
+  (xs: string[]) => xs.filter(Boolean)
+)(ys);

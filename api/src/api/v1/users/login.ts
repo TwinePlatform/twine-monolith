@@ -68,13 +68,9 @@ const route: Hapi.ServerRoute[] = [
         [request.headers.referrer]
       );
 
-      if (type === 'cookie') {
-        return null;
-      } else {
-        return {
-          token: request.yar.id,
-        };
-      }
+      return type === 'body'
+        ? { token: request.yar.id }
+        : null;
     },
   },
 ];
