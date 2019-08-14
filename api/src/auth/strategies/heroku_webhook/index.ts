@@ -1,5 +1,4 @@
 import * as Hapi from '@hapi/hapi';
-import * as Boom from '@hapi/boom';
 import { createHmac } from 'crypto';
 
 const validateHerokuWebhook =
