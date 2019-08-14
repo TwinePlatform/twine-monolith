@@ -3,8 +3,7 @@ import { withRouter } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import { Accordion } from './components/Accordion';
 import { H1 } from '../../lib/ui/components/Headings';
-import copy from './copy';
-
+import copy from '../dashboard/copy/faqs';
 
 const FAQPage: FunctionComponent = () => (
   <Grid>
