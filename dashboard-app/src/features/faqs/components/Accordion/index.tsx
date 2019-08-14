@@ -12,12 +12,11 @@ type AccordionProps = {
   }[]
 };
 
-
 export const Accordion: FunctionComponent<AccordionProps> = ({ panels = [] }) => (
   <div>
     {
       panels.map(({ heading, contents }) =>
-        <Collapsible trigger={heading}>
+        <Collapsible trigger={heading} triggerStyle={{ cursor: 'pointer' }}>
           {
             contents.map((content) =>
               <Paragraph>
