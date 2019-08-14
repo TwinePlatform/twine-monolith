@@ -6,7 +6,7 @@
  *
  * Flags:
  *  cb: Name of the CB for which to create the API token
- *  scope: What scope to give the token (corresponds to api_token_access column)
+ *  scope: What scope to give the token (see /docs/permissions#api-token-permissions)
  *
  * Note: Including the argument separator `--` before any of the flags is important.
  *   Without it, the argument parsing will not work.
@@ -14,7 +14,7 @@
 import * as parse from 'minimist';
 import * as Knex from 'knex';
 import { getConfig } from '../config';
-import { ApiTokens } from '../src/models';
+import { ApiTokens, CommunityBusinesses } from '../src/models';
 
 
 process.on('unhandledRejection', (err) => { throw err; });
@@ -30,6 +30,12 @@ if (!cb || !scope) {
   const client = Knex(config);
 
   try {
+    const exists = await CommunityBusinesses.exists(client, { where: { name: cb } });
+
+    if (!exists) {
+      throw new Error(`No community business by the name ${cb} was found`);
+    }
+
     const tkn = await ApiTokens.add(client, ApiTokens.create(cb, scope));
 
     console.log(`
