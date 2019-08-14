@@ -57,6 +57,7 @@ type CacheConfig = {
 type WebHooksConfig = {
   heroku: {
     secret: string
+    authToken: string
   }
 };
 

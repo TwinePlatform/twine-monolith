@@ -112,6 +112,7 @@ export default Joi.object({
   webhooks: Joi.object({
     heroku: Joi.object({
       secret: Joi.string().min(32).required(),
+      authToken: Joi.string().min(32).required(),
     }).required(),
   }).required(),
 });

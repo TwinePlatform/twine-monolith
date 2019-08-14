@@ -5,10 +5,9 @@ import { createHmac } from 'crypto';
 const validateHerokuWebhook =
   async (request: Hapi.Request, token: string, h: Hapi.ResponseToolkit) => {
     const { server: { app: { config } } } = request;
-    const error = Boom.forbidden('Error with authentication for 3rd party clients');
 
     if (config.webhooks.heroku.authToken !== token) {
-      return error;
+      return { isValid: false };
     }
     const signature = request.headers['Heroku-Webhook-Hmac-SHA256'];
     const hmac = createHmac('sha256', config.webhooks.heroku.secret);
@@ -16,7 +15,7 @@ const validateHerokuWebhook =
 
     return signature === hashedPayload
       ? { isValid: true, credentials: { user: 'heroku' } }
-      : error;
+      : { isValid: false };
   };
 
 export default validateHerokuWebhook;

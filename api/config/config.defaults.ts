@@ -87,7 +87,8 @@ const config: DeepPartial<Config> = {
   },
   webhooks: {
     heroku: {
-      secret: envOr('HEROKU_WEBHOOK_SECRET', 'nosecretisethereatthemomentpleaseaddone'),
+      secret: envOr('HEROKU_WEBHOOK_SECRET', 'nosecretissethereatthemomentpleaseaddone'),
+      authToken: envOr('HEROKU_WEBHOOK_AUTH_TOKEN', 'notokenissethereatthemomentpleaseaddone'),
     },
   },
 };
