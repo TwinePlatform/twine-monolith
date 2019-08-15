@@ -1,7 +1,6 @@
 import * as Hapi from '@hapi/hapi';
 import { getConfig } from '../../../../config';
 import { init, getCookie } from '../../../../tests/utils/server';
-import { UserSessionRecords } from '../../../models/user_session_record';
 import { delay } from 'twine-util/time';
 
 
@@ -86,7 +85,6 @@ describe('Authentication integration', () => {
       await delay(100);
 
       const recordsLogout = await knex('user_session_record').select('*');
-      console.log(recordsLogout);
 
       expect(resLogout.statusCode).toBe(200);
       expect(recordsLogout).toHaveLength(1);
@@ -142,6 +140,8 @@ describe('Authentication integration', () => {
         url: '/v1/users/me',
         headers: { Authorization: token },
       });
+
+      await delay(100);
 
       expect(resAccess.statusCode).toBe(200);
     });
