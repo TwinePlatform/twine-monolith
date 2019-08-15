@@ -92,18 +92,18 @@ export const scopeToString = (s: Scope): string =>
   `${s.resource}-${s.permissionLevel}:${s.access}`;
 
 export const stringToScope = (s: string): Scope => {
-  const match = s.match(/(\w)\-(\w)\:(\w)/);
+  const match = s.match(/(\w+)\-(\w+)\:(\w+)/);
 
   if (!match) {
     throw new Error(`Not a valid scope: ${s}`);
   }
 
   return {
-    resource: toResourceEnum(match[0]),
-    access: toAccessEnum(match[1]),
+    resource: toResourceEnum(match[1]),
     permissionLevel: toPermissionLevelEnum(match[2]),
+    access: toAccessEnum(match[3]),
   };
 };
 
-export const has = (left: string[], right: string[]) =>
+export const intersect = (left: string[], right: string[]) =>
   intersection(left.map(stringToScope), right.map(stringToScope)).length > 0;

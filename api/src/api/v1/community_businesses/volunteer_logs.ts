@@ -372,7 +372,7 @@ const routes: Hapi.ServerRoute[] = [
         // If some logs correspond to other users...
         payload.some((log) => log.userId !== 'me') &&
         // ...and we don't have permission to write to other users
-        !Scopes.has(['volunteer_logs-sibling:write', 'volunteer_logs-child:write'], scope)
+        !Scopes.intersect(['volunteer_logs-sibling:write', 'volunteer_logs-child:write'], scope)
       ) {
         // Then 403
         return Boom.forbidden('Insufficient scope: cannot write other users logs');
