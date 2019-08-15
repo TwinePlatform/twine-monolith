@@ -38,8 +38,8 @@ export default async (server: Hapi.Server) => {
    * Standard strategy
    */
   server.auth.strategy('standard', 'session_cookie', { validate: standardStrategy.validate });
-  const client = standardStrategy.monitorSessionExpiry(knex, cache.session.options.url);
-  server.events.on('stop', () => client.quit());
+  const cleanup = standardStrategy.monitorSessionExpiry(knex, cache.session.options.url);
+  server.events.on('stop', cleanup);
 
   /*
    * External strategy

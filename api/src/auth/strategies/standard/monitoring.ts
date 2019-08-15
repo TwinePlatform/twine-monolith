@@ -31,6 +31,6 @@ export const monitorSessionExpiry = (knex: Knex, url: string) => {
     }
   }));
 
-  // Return client so we can clean up after ourselves
-  return client;
+  // Return cleanup function
+  return () => client.quit();
 };

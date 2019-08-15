@@ -33,7 +33,7 @@ describe('Session expiry monitoring', () => {
 
     const resultBefore = await UserSessionRecords.initSession(trx, user, org, sid);
 
-    const listener = monitorSessionExpiry(trx, config.cache.session.options.url);
+    const cleanup = monitorSessionExpiry(trx, config.cache.session.options.url);
 
     await client.set(sid, 2);
     await client.pexpire(sid, 1);
@@ -42,7 +42,7 @@ describe('Session expiry monitoring', () => {
     const resultAfter = await trx('user_session_record').select('*');
 
     // Clean up first in case assertions fail
-    await listener.quit();
+    await cleanup();
     await client.quit();
 
     expect(resultAfter).toHaveLength(1);
