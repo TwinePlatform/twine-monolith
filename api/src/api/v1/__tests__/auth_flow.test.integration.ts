@@ -26,7 +26,7 @@ describe('Authentication integration', () => {
         method: 'GET',
         url: '/v1/users/me',
       });
-      await delay(100);
+      await delay(10);
 
       const recordsPreAccess = await knex('user_session_record').select('*');
 
@@ -47,7 +47,7 @@ describe('Authentication integration', () => {
           password: 'CakeisaLi3!',
         },
       });
-      await delay(100);
+      await delay(10);
 
       const recordsLogin = await knex('user_session_record').select('*');
 
@@ -65,7 +65,7 @@ describe('Authentication integration', () => {
           cookie: `${cookieName}=${token}`,
         },
       });
-      await delay(100);
+      await delay(10);
 
       const recordsAccess = await knex('user_session_record').select('*');
 
@@ -82,7 +82,7 @@ describe('Authentication integration', () => {
         url: '/v1/users/logout',
         headers: { cookie: `${cookieName}=${token}` },
       });
-      await delay(100);
+      await delay(10);
 
       const recordsLogout = await knex('user_session_record').select('*');
 
@@ -101,7 +101,7 @@ describe('Authentication integration', () => {
         url: '/v1/users/me',
         headers: { referrer: 'https://data.twine-together.com/time' },
       });
-      await delay(100);
+      await delay(10);
 
       const recordsPostAccess = await knex('user_session_record').select('*');
 
@@ -141,7 +141,7 @@ describe('Authentication integration', () => {
         headers: { Authorization: token },
       });
 
-      await delay(100);
+      await delay(10);
 
       expect(resAccess.statusCode).toBe(200);
     });
