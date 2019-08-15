@@ -30,8 +30,6 @@ import { requestQueryToModelQuery } from '../utils';
 import { query } from '../users/schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
-import { PermissionLevelEnum } from '../../../auth';
-import { AccessEnum, ResourceEnum } from '../../../auth/types';
 
 
 const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) => {
