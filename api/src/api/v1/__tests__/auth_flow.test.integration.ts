@@ -41,7 +41,7 @@ describe('Authentication integration', () => {
         method: 'GET',
         url: '/v1/users/me',
       });
-      await delay(10);
+      await delay(10); // waiting for user session record to be updated
 
       const recordsPreAccess = await knex('user_session_record').select('*');
 
@@ -62,7 +62,7 @@ describe('Authentication integration', () => {
           password: 'CakeisaLi3!',
         },
       });
-      await delay(10);
+      await delay(10); // waiting for user session record to be updated
 
       const recordsLogin = await knex('user_session_record').select('*');
 
@@ -80,7 +80,7 @@ describe('Authentication integration', () => {
           cookie: `${cookieName}=${token}`,
         },
       });
-      await delay(10);
+      await delay(10); // waiting for user session record to be updated
 
       const recordsAccess = await knex('user_session_record').select('*');
 
@@ -97,7 +97,7 @@ describe('Authentication integration', () => {
         url: '/v1/users/logout',
         headers: { cookie: `${cookieName}=${token}` },
       });
-      await delay(10);
+      await delay(10); // waiting for user session record to be updated
 
       const recordsLogout = await knex('user_session_record').select('*');
 
@@ -116,7 +116,7 @@ describe('Authentication integration', () => {
         url: '/v1/users/me',
         headers: { referrer: 'https://data.twine-together.com/time' },
       });
-      await delay(10);
+      await delay(10); // waiting for user session record to be updated
 
       const recordsPostAccess = await knex('user_session_record').select('*');
 
@@ -134,11 +134,13 @@ describe('Authentication integration', () => {
 
   describe('Header authentication', () => {
     test('User login and fetch resource with Authorization header', async () => {
+      const { app: { knex } } = server;
+
       // 1. Login -> 200
       const resLogin = await server.inject({
         method: 'POST',
         url: '/v1/users/login',
-        headers: { origin: 'https://dashboard.twine-together.com' },
+        headers: { referrer: 'https://data.twine-together.com/login' },
         payload: {
           type: 'body',
           email: '1@aperturescience.com',
@@ -153,12 +155,22 @@ describe('Authentication integration', () => {
       const resAccess = await server.inject({
         method: 'GET',
         url: '/v1/users/me',
-        headers: { Authorization: token },
+        headers: {
+          Authorization: token,
+          referrer: 'https://data.twine-together.com/',
+        },
       });
 
-      await delay(10);
+      await delay(10); // waiting for user session record to be updated
+
+      const recordsAccess = await knex('user_session_record').select('*');
 
       expect(resAccess.statusCode).toBe(200);
+      expect(recordsAccess).toHaveLength(1);
+      expect(recordsAccess[0].referrers).toEqual([
+        'https://data.twine-together.com/login',
+        'https://data.twine-together.com/',
+      ]);
     });
   });
 });
