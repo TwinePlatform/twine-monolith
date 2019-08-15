@@ -9,6 +9,20 @@ import herokuWebhookStrategy from '../../auth/strategies/heroku_webhook';
 const AuthBearer = require('hapi-auth-bearer-token');
 
 
+export const getCredentialsFromRequest = (request: Hapi.Request) => {
+  switch (request.auth.strategy) {
+    case standardStrategy.name:
+      return standardStrategy.Credentials.fromRequest(request);
+
+    case externalStrategy.name:
+      return externalStrategy.ExternalCredentials.fromRequest(request);
+
+    default:
+      throw new Error(`Unrecognised strategy: ${request.auth.strategy}`);
+  }
+};
+
+
 export default async (server: Hapi.Server) => {
   const { config: { auth: { schema } } } = server.app;
 

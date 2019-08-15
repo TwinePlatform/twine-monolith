@@ -11,13 +11,13 @@ import * as Boom from '@hapi/boom';
 import { isNil } from 'ramda';
 import { CommunityBusinesses } from '../../../models';
 import { GetCommunityBusinessRequest } from '../types';
-import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
+import { getCredentialsFromRequest } from '../auth';
 
 
 export const is360GivingId = (s: string) => isNaN(parseInt(s, 10));
 const getCbFromCredentials = async (request: GetCommunityBusinessRequest) => {
   const knex = request.server.app.knex;
-  const id = StandardCredentials.fromRequest(request).organisation.id;
+  const id = getCredentialsFromRequest(request).organisation.id;
   return CommunityBusinesses.getOne(knex, { where: { id } });
 };
 
@@ -27,7 +27,7 @@ export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseTool
   const communityBusiness =
     (id === 'me' || isNil(id))
       ? await getCbFromCredentials(request)
-      : (is360GivingId(id))
+      : is360GivingId(id)
         ? await CommunityBusinesses.getOne(knex, { where: { _360GivingId: id } })
         : await CommunityBusinesses.getOne(knex, { where: { id: Number(id) } });
 

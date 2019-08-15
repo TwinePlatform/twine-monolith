@@ -4,6 +4,7 @@ import { init } from '../../../../../../tests/utils/server';
 import { getConfig } from '../../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../../models';
 import { Credentials as StandardCredentials } from '../../../../../auth/strategies/standard';
+import { ExternalCredentials, name as ExtName } from '../../../../../auth/strategies/external';
 import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
@@ -15,6 +16,7 @@ describe('API /community-businesses/{id}/visitors', () => {
   let organisation: Organisation;
   let credentials: Hapi.AuthCredentials;
   let adminCreds: Hapi.AuthCredentials;
+  let extCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -26,6 +28,7 @@ describe('API /community-businesses/{id}/visitors', () => {
     organisation = await Organisations.getOne(knex, { where: { id: 1 } });
     credentials = await StandardCredentials.get(knex, user, organisation);
     adminCreds = await StandardCredentials.get(knex, admin, organisation);
+    extCreds = await ExternalCredentials.get(knex, 'aperture-token');
   });
 
   afterAll(async () => {
@@ -183,6 +186,35 @@ describe('API /community-businesses/{id}/visitors', () => {
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({ result: [{ name: 'Chell' }], meta: { total: 1 } });
     });
+
+    test('can access own visitors using external strategy', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors',
+        credentials: extCreds,
+        strategy: ExtName,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toHaveLength(3);
+      expect((<any> res.result).result.visits).not.toBeDefined();
+      expect((<any> res.result).result[0]).toEqual(expect.objectContaining({
+        name: 'Chell',
+        deletedAt: null,
+      }));
+      expect((<any> res.result).meta).toEqual({ total: 3 });
+    });
+
+    test('cannot access other CBs visitors using external strategy', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/2/visitors',
+        credentials: extCreds,
+        strategy: ExtName,
+      }));
+
+      expect(res.statusCode).toBe(403);
+    });
   });
 
   describe('GET /community-businesses/me/visitors/{userId}', () => {
@@ -231,6 +263,23 @@ describe('API /community-businesses/{id}/visitors', () => {
       }));
 
       expect(res.statusCode).toBe(403);
+    });
+
+    test('can get own visitor details using external strategy', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors/1?visits=false',
+        credentials: extCreds,
+        strategy: ExtName,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          name: 'Chell',
+        }),
+      });
+      expect((<any> res.result).visits).not.toBeDefined();
     });
   });
 });

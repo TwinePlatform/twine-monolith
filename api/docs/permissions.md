@@ -1,5 +1,7 @@
 # Permissions
-## Resources and their ownership
+
+## User Permissions
+### Resources and their ownership
 | Resource | Owner | Description |
 |----------|-------|-------------|
 | `organisations_details` | 🏢 Organisation | Core organisation details |
@@ -19,12 +21,20 @@
 * In the application, the "Organisation" is represented by `CB_ADMIN` users.
 * The resource `users_details_anonymised` is not currently used but may be needed for funding bodies to access anonymised user data.
 
-## Permission flags
+### Permission flags
 * `*-children` - data of all child catagories
 * `*-parent` - data of all parent catagories
 * `*-own` - data directly owned by user
 * `*-sibling` - data owned by a sibling (same level) user
 
+## API Token Permissions
+API tokens (currently) use a different set of permissions. This is simply to make the initial implementation simple. In future, as third-party access to the API is widened, it may be beneficial for API tokens to use the same permission set as regular users.
+
+For now the only permission is:
+```
+api:visitor:read
+```
+Which is intended to allow read access to all resources related to the visitor app.
 
 ## References
 

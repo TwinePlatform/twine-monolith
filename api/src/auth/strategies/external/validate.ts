@@ -1,40 +1,30 @@
 import * as Hapi from '@hapi/hapi';
-import * as Boom from '@hapi/boom';
 import * as Knex from 'knex';
-import { compare } from 'bcrypt';
-import { Promises as P } from 'twine-util';
-import { ApiTokenRow } from './types';
+import { ApiTokens, Organisations } from '../../../models';
 
 
 export const ExternalCredentials = {
-  async get (knex: Knex, token: string) {
-    const tokens: ApiTokenRow[] = await knex('api_token')
-      .select(['api_token', 'api_token_access', 'api_token_name']);
+  async get (knex: Knex, token: string): Promise<Hapi.AuthCredentials> {
+    const match = await ApiTokens.find(knex, token);
+    const org = await Organisations.getOne(knex, { where: { name: match.name } });
+    return { scope: [match.access], app: { scope: [match.access], organisation: org } };
+  },
 
-    if (tokens.length < 1) {
-      return { isValid: false, credentials: {} };
-    }
-
-    try {
-      const match = await P.find<ApiTokenRow>((tkn) => compare(token, tkn.api_token), tokens);
-      return {
-        isValid: true,
-        credentials: { scope: [match.api_token_access], app: match.api_token_name },
-      };
-    } catch (error) {
-      return { isValid: false, credentials: {} };
-    }
+  fromRequest (req: Hapi.Request) {
+    return Object.assign({ scope: req.auth.credentials.scope }, req.auth.credentials.app);
   },
 };
 
 const validateExternal = async (request: Hapi.Request, token: string, h: Hapi.ResponseToolkit) => {
-  const { log, server: { app: { knex } } } = request;
+  const { server: { app: { knex } } } = request;
 
   try {
-    return ExternalCredentials.get(knex, token);
+    const credentials = await ExternalCredentials.get(knex, token);
+    return { isValid: true, credentials };
+
   } catch (error) {
-    log('error', error);
-    return Boom.badImplementation('Error with route authentication for 3rd party clients');
+    return { isValid: false, artifacts: error };
+
   }
 };
 

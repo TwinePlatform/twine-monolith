@@ -5,6 +5,7 @@ import { getConfig } from '../../../../../config';
 import pre from '../get_community_business';
 import { CommunityBusinesses, Organisations, CbAdmins, Users } from '../../../../models';
 import { injectCfg } from '../../../../../tests/utils/inject';
+import { ExternalCredentials, name as ExtName } from '../../../../auth/strategies/external';
 
 
 describe('Prerequisites :: getCommunityBusiness', () => {
@@ -107,5 +108,19 @@ describe('Prerequisites :: getCommunityBusiness', () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.result).toEqual(communityBusiness);
+  });
+
+  test('can be accessed by external auth strategy', async () => {
+    const cb = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
+
+    const res = await server.inject(injectCfg({
+      method: 'GET',
+      url: '/foo/me',
+      credentials: await ExternalCredentials.get(knex, 'aperture-token'),
+      strategy: ExtName,
+    }));
+
+    expect(res.statusCode).toBe(200);
+    expect(res.result).toEqual(cb);
   });
 });

@@ -4,6 +4,7 @@ import { init } from '../../../../../tests/utils/server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisations, Organisation } from '../../../../models';
 import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
+import { ExternalCredentials, name as ExtName } from '../../../../auth/strategies/external';
 import { injectCfg } from '../../../../../tests/utils/inject';
 
 
@@ -17,6 +18,7 @@ describe('GET /community-businesses', () => {
   let twAdminCreds: Hapi.AuthCredentials;
   let cbAdminCreds: Hapi.AuthCredentials;
   let volunteerCreds: Hapi.AuthCredentials;
+  let extCreds: Hapi.AuthCredentials;
   const config = getConfig(process.env.NODE_ENV);
 
   beforeAll(async () => {
@@ -34,6 +36,7 @@ describe('GET /community-businesses', () => {
     twAdminCreds = await StandardCredentials.get(knex, twAdmin, aperture);
     cbAdminCreds = await StandardCredentials.get(knex, cbAdmin, organisation);
     volunteerCreds = await StandardCredentials.get(knex, volunteer, organisation);
+    extCreds = await ExternalCredentials.get(knex, 'aperture-token');
   });
 
   afterAll(async () => {
@@ -102,6 +105,21 @@ describe('GET /community-businesses', () => {
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
         result: expect.objectContaining({ _360GivingId: 'GB-COH-9302' }),
+      });
+      expect(Object.keys((<any> res.result).result)).toHaveLength(16);
+    });
+
+    test('can get own CB when using external strategy', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me',
+        credentials: extCreds,
+        strategy: ExtName,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({ _360GivingId: 'GB-COH-3205' }),
       });
       expect(Object.keys((<any> res.result).result)).toHaveLength(16);
     });

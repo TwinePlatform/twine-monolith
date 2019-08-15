@@ -17,6 +17,10 @@ import { RoleEnum } from '../../../models/types';
 
 
 export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
+  if (request.auth.strategy === 'external') {
+    return false;
+  }
+
   const { roles } = StandardCredentials.fromRequest(request);
 
   if (roles.includes(RoleEnum.TWINE_ADMIN)) {

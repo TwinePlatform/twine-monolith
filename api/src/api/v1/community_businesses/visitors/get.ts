@@ -25,9 +25,9 @@ const routes: Hapi.ServerRoute[] = [
     options: {
       description: 'Retreive list of all visitors from an organisation',
       auth: {
-        strategy: 'standard',
+        strategies: ['standard', 'external'],
         access: {
-          scope: ['user_details-child:read'],
+          scope: ['user_details-child:read', 'api:visitor:read'],
         },
       },
       validate: {
@@ -103,9 +103,9 @@ const routes: Hapi.ServerRoute[] = [
     options: {
       description: 'Retreive list of all visitors from an organisation',
       auth: {
-        strategy: 'standard',
+        strategies: ['standard', 'external'],
         access: {
-          scope: ['user_details-child:read'],
+          scope: ['user_details-child:read', 'api:visitor:read'],
         },
       },
       validate: {

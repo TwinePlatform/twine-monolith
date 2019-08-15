@@ -15,9 +15,9 @@ export default [
     options: {
       description: 'Retrieve information about own community business',
       auth: {
-        strategy: 'standard',
+        strategies: ['standard', 'external'],
         access: {
-          scope: ['organisations_feedback-own:read'],
+          scope: ['organisations_feedback-own:read', 'api:visitor:read'],
         },
       },
       validate: {
@@ -115,9 +115,9 @@ export default [
     options: {
       description: 'Retrieve information about own community business',
       auth: {
-        strategy: 'standard',
+        strategies: ['standard', 'external'],
         access: {
-          scope: ['organisations_feedback-own:read'],
+          scope: ['organisations_feedback-own:read', 'api:visitor:read'],
         },
       },
       validate: { query: { since, until, ...query } },

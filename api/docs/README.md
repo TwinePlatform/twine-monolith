@@ -12,3 +12,4 @@
 1. [Stack](./stack.md)
 1. [Deployment](./deployment.md)
 1. [Reporting](./reporting.md)
+1. [Authentication](./authentication.md)
