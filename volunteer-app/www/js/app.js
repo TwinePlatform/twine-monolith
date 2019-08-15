@@ -33,7 +33,7 @@
 			$rootScope.options = {
 				appName: 'Twine',
 				debug: false,
-				environment: 'live',	// dev | stage | live
+				environment: 'dev',	// dev | stage | live
 				apiBaseUrl: {
 					local: 'http://localhost:4000/v1/',
 					dev:   'http://localhost:4000/v1/',
@@ -193,7 +193,7 @@
 						logsData.logs = logsData.logs.map(function (log) {
 							return {
 								id: log.id || undefined,
-								userId: log.userId === userId ? undefined : log.userId,
+								userId: log.user_id === userId ? undefined : log.user_id,
 								duration: typeof log.duration === 'number' ? { minutes: log.duration } : log.duration,
 								activity: log.activity,
 								startedAt: log.date_of_log,
