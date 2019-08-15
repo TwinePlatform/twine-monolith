@@ -81,15 +81,15 @@ describe('Helpers', () => {
         { active: false, name: 'Crash Bandicoot', id: 6 },
       ]);
     });
-    test('Success :: sets all to false if one is false', async () => {
+    test('Success :: sets all to true if one is false', async () => {
       const activeData = [
         { active: false, name: 'Aku Aku', id: 2 },
         { active: true, name: 'Crash Bandicoot', id: 6 },
       ];
       const expected = flipActiveOfAll(activeData);
       expect(expected).toEqual([
-        { active: false, name: 'Aku Aku', id: 2 },
-        { active: false, name: 'Crash Bandicoot', id: 6 },
+        { active: true, name: 'Aku Aku', id: 2 },
+        { active: true, name: 'Crash Bandicoot', id: 6 },
       ]);
     });
     test('Success :: sets all to true if all are false', async () => {

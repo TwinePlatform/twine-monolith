@@ -22,7 +22,7 @@ interface Props {
   yAxisTitle: string;
   title: TitleString;
   noActiveLegendText: string;
-  isAllLegendDataInactive: boolean;
+  isVisible: boolean;
   tooltipUnit: string;
 }
 
@@ -65,7 +65,6 @@ const TransitionText = styled(Paragraph)<{ isVisible: boolean }>`
  */
 
 const datasetKeyProvider = (d: { id: number }) => d.id;
-const checkIsDataEmpty = (cd: any) => (!cd || cd.datasets.length === 0);
 
 /*
  * Components
@@ -77,12 +76,10 @@ const Chart: FunctionComponent<Props> = (props) => {
     xAxisTitle,
     yAxisTitle,
     title,
-    isAllLegendDataInactive,
+    isVisible,
     noActiveLegendText,
     tooltipUnit,
   } = props;
-
-  const isVisible = checkIsDataEmpty(data) || isAllLegendDataInactive;
 
   return (
     <Card>

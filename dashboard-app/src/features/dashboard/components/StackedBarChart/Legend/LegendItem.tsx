@@ -33,7 +33,9 @@ const Container = styled.div`
 `;
 
 const Key = styled.div<KeyProps>`
-  ${(props) => props.active ? `background: ${props.colour};` : `border: solid 2px ${props.colour};`}
+  border: solid 2px ${(props) => props.colour};
+  background: ${(props) => props.active ? props.colour : 'inherit'};
+  transition: background 0.2s linear;
   height: 1.5rem;
   width: 1.5rem;
   border-radius: 2px;
