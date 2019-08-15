@@ -50,9 +50,7 @@ export const isEveryDatumInactive = (data: LegendData): boolean =>
   data.every((datum) => !datum.active);
 
 export const flipActiveOfAll = (data: LegendData): LegendData => {
-  const active: boolean = isEveryDatumActive(data)
-    ? false
-    : isEveryDatumInactive(data);
+  const active: boolean = !isEveryDatumActive(data);
 
   return data.map<LegendDatum>((x) => ({ ...x, active }));
 };

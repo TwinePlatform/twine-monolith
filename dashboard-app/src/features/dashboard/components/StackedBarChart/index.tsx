@@ -80,7 +80,7 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
     title,
     tooltipUnit,
     noActiveLegendText,
-    isAllLegendDataInactive: isEveryDatumInactive(legendData) && isThereData,
+    isVisible: isEveryDatumInactive(legendData) && isThereData,
   };
 
   const legendProps = {
