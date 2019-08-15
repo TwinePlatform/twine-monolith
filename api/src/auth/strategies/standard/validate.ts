@@ -1,4 +1,5 @@
 import * as Boom from '@hapi/boom';
+import { quiet } from 'twine-util/promises';
 import { Users, Organisations } from '../../../models';
 import { ValidateFunction } from '../../schema/session_cookie';
 import { Credentials } from './credentials';
@@ -26,8 +27,7 @@ const validate: ValidateFunction = async (req) => {
 
   const credentials = await Credentials.get(knex, user, organisation, session);
 
-  // Do not await -- auxiliary action
-  UserSessionRecords.updateSession(knex, session.id, [req.headers.referrer]);
+  quiet(UserSessionRecords.updateSession(knex, session.id, [req.headers.referrer]));
 
   return { credentials };
 };

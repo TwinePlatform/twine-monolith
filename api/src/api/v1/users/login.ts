@@ -2,6 +2,7 @@ import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { compare } from 'bcrypt';
+import { quiet } from 'twine-util/promises';
 import { Users, Organisations } from '../../../models';
 import { email, DEPRECATED_password, response } from './schema';
 import { Sessions } from '../../../auth/strategies/standard';
@@ -59,14 +60,13 @@ const route: Hapi.ServerRoute[] = [
 
       Sessions.authenticate(request, user.id, organisation.id);
 
-      // Don't await -- auxiliary action
-      UserSessionRecords.initSession(
+      quiet(UserSessionRecords.initSession(
         knex,
         user,
         organisation,
         request.yar.id,
         [request.headers.referrer]
-      );
+      ));
 
       return type === 'body'
         ? { token: request.yar.id }

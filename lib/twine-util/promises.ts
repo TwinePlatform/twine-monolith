@@ -33,3 +33,7 @@ export const find = async <T>(fn: (a: T) => Promise<boolean>, xs: T[]): Promise<
 export const some = async <T>(ps: Promise<T>[]) => {
   return Promise.all(ps.map((p) => p.catch((error) => error)));
 };
+
+export const quiet = <T>(p: Promise<T>): void => {
+  p.catch(console.error);
+};

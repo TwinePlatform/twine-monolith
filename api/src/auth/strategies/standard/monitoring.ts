@@ -4,6 +4,7 @@
 import * as Knex from 'knex';
 import * as IoRedis from 'ioredis';
 import { UserSessionRecords } from '../../../models/user_session_record';
+import { quiet } from 'twine-util/promises';
 
 
 export const monitorSessionExpiry = (knex: Knex, url: string) => {
@@ -22,7 +23,7 @@ export const monitorSessionExpiry = (knex: Knex, url: string) => {
   client.on('pmessage', <any> ((...args: any[]) => {
     switch (args[0]) {
       case '__keyevent@*__:expired':
-        UserSessionRecords.endSession(knex, args[2], 'expired');
+        quiet(UserSessionRecords.endSession(knex, args[2], 'expired'));
         break;
 
       default:

@@ -1,20 +1,35 @@
 import * as Hapi from '@hapi/hapi';
+import * as Knex from 'knex';
 import { getConfig } from '../../../../config';
 import { init, getCookie } from '../../../../tests/utils/server';
+import { getTrx } from '../../../../tests/utils/database';
 import { delay } from 'twine-util/time';
 
 
 describe('Authentication integration', () => {
   let server: Hapi.Server;
+  let _knex: Knex;
+  let trx: Knex.Transaction;
   const config = getConfig(process.env.NODE_ENV);
   const cookieName = config.auth.schema.session_cookie.options.name;
 
   beforeAll(async () => {
     server = await init(config);
+    _knex = server.app.knex;
   });
 
   afterAll(async () => {
     await server.shutdown(true);
+  });
+
+  beforeEach(async () => {
+    trx = await getTrx(_knex);
+    server.app.knex = trx;
+  });
+
+  afterEach(async () => {
+    await trx.rollback();
+    server.app.knex = _knex;
   });
 
   describe('Cookie authentication', () => {
