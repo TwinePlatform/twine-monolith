@@ -24,15 +24,12 @@ install:
 
 jobs:
   include:
-    - stage: Build
-      script:
-        - lerna run lint
-        - lerna run build
-    - stage: Test
+    - stage: Build & Test
       before_script:
         - psql -U postgres -c 'create database twine_api_test'
         - psql -U postgres -c 'create extension postgis'
       script:
+        - lerna run lint
         - lerna run build
         - lerna run checks
         - lerna run cover
