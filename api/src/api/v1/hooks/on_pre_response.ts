@@ -12,22 +12,18 @@
  */
 import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
+import { quiet } from 'twine-util/promises';
 import { formatBoom, BoomWithValidation } from '../utils';
 import { Environment } from '../../../../config';
-import { Users } from '../../../models';
-import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
+import { UserSessionRecords } from '../../../models/user_session_record';
 
 
 export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-  const env = request.server.app.config.env;
+  const { config: { env }, knex } = request.server.app;
 
 
   if (request.auth.credentials) { // only for authenticated routes
-    const { user } = StandardCredentials.fromRequest(request);
-
-    Users.addActiveDayEvent(request.server.app.knex, user, request.headers.origin)
-      .then(() => {})
-      .catch(() => {});
+    quiet(UserSessionRecords.updateSession(knex, request.yar.id, [request.headers.referrer]));
   }
 
   if ((<Boom<any>> request.response).isBoom) {

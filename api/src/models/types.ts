@@ -332,7 +332,6 @@ type UsersBaseCollection = Collection<User> & {
 };
 
 export type UserCollection = UsersBaseCollection & {
-  addActiveDayEvent: (k: Knex, u: User, o: string) => Promise<void>
   isMemberOf: (k: Knex, u: User, cb: CommunityBusiness) => Promise<boolean>
 };
 

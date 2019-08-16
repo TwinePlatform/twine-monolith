@@ -243,25 +243,6 @@ export const Users: UserCollection = {
     return omit(['password', 'qrCode'], user);
   },
 
-  async addActiveDayEvent (client, user, origin) {
-    const [exists] = await client('user_account_active_day')
-      .where({
-        user_account_id: user.id,
-        origin,
-      })
-      .andWhereRaw('created_at >= DATE_TRUNC(\'day\', CURRENT_DATE)');
-
-    if (exists) return;
-
-    await client('user_account_active_day')
-      .insert({
-        user_account_id: user.id,
-        origin,
-      });
-
-    return;
-  },
-
   async isMemberOf (client, user, cb) {
     const currentRoles = await Roles.fromUser(client, user);
     // currently not supporting roles at different cbs

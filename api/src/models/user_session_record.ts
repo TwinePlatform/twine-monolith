@@ -47,13 +47,17 @@ export const UserSessionRecords: UserSessionRecordCollection = {
   },
 
   async updateSession (client, sessionId, referrers = []) {
-    if (referrers.length < 1) {
+    if (referrers.length < 1 || !sessionId) {
       return null;
     }
 
     const [existingReferrers]: { referrers: string[] }[] = await client('user_session_record')
       .select('referrers')
       .where({ session_id: sessionId });
+
+    if (!existingReferrers) {
+      return null;
+    }
 
     const newReferrers = combineReferrers(existingReferrers.referrers, referrers);
 
