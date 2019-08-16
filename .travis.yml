@@ -38,7 +38,7 @@ jobs:
         - lerna run cover
 
 after_success:
-  - bash ./.travis/cc-report.sh
+  - bash $TRAVIS_BUILD_DIR/.travis/cc-report.sh
 
 notifications:
   email:
