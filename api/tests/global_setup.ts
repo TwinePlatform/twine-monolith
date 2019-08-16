@@ -7,7 +7,7 @@
 import * as Knex from 'knex';
 import { getConfig } from '../config';
 import { insertData } from '../database/tools';
-import configureRedis from '../database/redis/configure';
+import { configureRedis } from '../database/redis/configure';
 const { migrate } = require('../database');
 
 

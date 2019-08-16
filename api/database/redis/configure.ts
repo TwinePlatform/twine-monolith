@@ -5,7 +5,7 @@ import * as Redis from 'ioredis';
 import { getConfig, Config } from '../../config';
 
 
-const configureRedis = async (_config?: Config) => {
+export const configureRedis = async (_config?: Config) => {
   const config = _config ? _config : getConfig(process.env.NODE_ENV);
   const client = new Redis(config.cache.session.options.url);
 
