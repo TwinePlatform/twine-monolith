@@ -9,7 +9,6 @@ CREATE TABLE user_session_record (
   session_id             VARCHAR NOT NULL UNIQUE,
   session_end_type       VARCHAR,
   referrers              JSONB NOT NULL,
-  started_at             TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   ended_at               TIMESTAMP WITH TIME ZONE,
   created_at             TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at            TIMESTAMP WITH TIME ZONE,

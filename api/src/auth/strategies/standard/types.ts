@@ -12,7 +12,7 @@ declare module '@hapi/hapi' {
 export type Session = {
   userId: number
   organisationId: number
-  startedAt: Date
+  createdAt: Date
   endedAt?: Date
   referrers: string[]
   sessionEndType?: 'log_out' | 'expired'

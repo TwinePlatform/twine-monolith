@@ -9,7 +9,6 @@ type UserSessionRecord = {
   userId: number
   organisationId: number
   referrers: string[]
-  startedAt: Date
   createdAt: Date
 };
 
@@ -30,7 +29,6 @@ export const UserSessionRecords: UserSessionRecordCollection = {
         user_account_id: user.id,
         organisation_id: org.id,
         referrers: JSON.stringify(referrers),
-        started_at: new Date(),
         session_id: sessionId,
       })
       .returning('*');
@@ -41,7 +39,6 @@ export const UserSessionRecords: UserSessionRecordCollection = {
       userId: user.id,
       organisationId: org.id,
       referrers,
-      startedAt: result.started_at,
       createdAt: result.created_at,
     };
   },
