@@ -56,7 +56,7 @@ const route: Hapi.ServerRoute[] = [
       const isPwdValid = await compare(password, user.password);
       if (!isPwdValid) return Boom.unauthorized('Incorrect password');
 
-      Sessions.authenticate(request, user.id, organisation.id);
+      Sessions.authenticate(request, user, organisation);
 
       return type === 'body'
         ? { token: request.yar.id }
