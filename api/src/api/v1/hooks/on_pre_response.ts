@@ -12,18 +12,18 @@
  */
 import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
-import { quiet } from 'twine-util/promises';
 import { formatBoom, BoomWithValidation } from '../utils';
 import { Environment } from '../../../../config';
-import { UserSessionRecords } from '../../../models/user_session_record';
+import * as Standard from '../../../auth/strategies/standard';
 
 
 export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-  const { config: { env }, knex } = request.server.app;
+  const { config: { env } } = request.server.app;
 
 
-  if (request.auth.credentials) { // only for authenticated routes
-    quiet(UserSessionRecords.updateSession(knex, request.yar.id, [request.headers.referrer]));
+  if (request.auth.credentials && request.auth.strategy === Standard.name) {
+    // only for routes authenticated with the standard strategy
+    Standard.Sessions.update(request);
   }
 
   if ((<Boom<any>> request.response).isBoom) {

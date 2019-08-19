@@ -2,14 +2,12 @@ import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { compare } from 'bcrypt';
-import { quiet } from 'twine-util/promises';
 import { Users, Organisations } from '../../../models';
 import { email, DEPRECATED_password, response } from './schema';
 import { Sessions } from '../../../auth/strategies/standard';
 import { LoginRequest } from '../types';
 import Roles from '../../../models/role';
 import { RoleEnum } from '../../../models/types';
-import { UserSessionRecords } from '../../../models/user_session_record';
 
 
 const route: Hapi.ServerRoute[] = [
@@ -59,14 +57,6 @@ const route: Hapi.ServerRoute[] = [
       if (!isPwdValid) return Boom.unauthorized('Incorrect password');
 
       Sessions.authenticate(request, user.id, organisation.id);
-
-      quiet(UserSessionRecords.initSession(
-        knex,
-        user,
-        organisation,
-        request.yar.id,
-        [request.headers.referrer]
-      ));
 
       return type === 'body'
         ? { token: request.yar.id }
