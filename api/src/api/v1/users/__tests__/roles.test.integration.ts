@@ -7,7 +7,7 @@ import { Credentials as StandardCredentials } from '../../../../auth/strategies/
 import { injectCfg } from '../../../../../tests/utils/inject';
 
 
-describe('GET /users/me/roles}', () => {
+describe('GET /users/me/roles', () => {
   let server: Hapi.Server;
   let knex: Knex;
   let user: User;
