@@ -64,6 +64,7 @@ describe('API v1 - register new users', () => {
           gender: 'female',
           birthYear: 1988,
           email: '1498@aperturescience.com',
+          postCode: 'ST10 4DB',
         },
         credentials,
       }));
@@ -84,6 +85,7 @@ describe('API v1 - register new users', () => {
           gender: 'male',
           birthYear: null,
           phoneNumber: '090909090909',
+          postCode: 'ST10 4DB',
         },
         credentials,
       }));
@@ -97,6 +99,7 @@ describe('API v1 - register new users', () => {
           gender: 'male',
           birthYear: null,
           phoneNumber: '090909090909',
+          postCode: 'ST10 4DB',
         },
         credentials,
       }));
@@ -116,6 +119,7 @@ describe('API v1 - register new users', () => {
           gender: 'female',
           birthYear: 1988,
           email: '13542@google.com',
+          postCode: 'ST10 4DB',
         },
         credentials,
       }));
@@ -135,6 +139,7 @@ describe('API v1 - register new users', () => {
           gender: 'female',
           birthYear: 1988,
           email: '13542@google.com',
+          postCode: 'ST10 4DB',
         },
         credentials,
       }));
@@ -154,6 +159,7 @@ describe('API v1 - register new users', () => {
           gender: 'female',
           birthYear: 1988,
           email: 'raiden@aotd.com', // email of VOLUNTEER_ADMIN
+          postCode: 'ST10 4DB',
         },
         credentials: credentialsBlackMesa,
       }));
@@ -174,6 +180,7 @@ describe('API v1 - register new users', () => {
           gender: 'female',
           birthYear: 1900,
           email: 'emma@sol.com',
+          postCode: 'ST10 4DB',
         },
         credentials,
       }));
@@ -195,6 +202,7 @@ describe('API v1 - register new users', () => {
           gender: 'female',
           birthYear: 1900,
           email: 'emma@sol.com',
+          postCode: 'ST10 4DB',
         },
         credentials: credentialsBlackMesa,
       }));
@@ -224,6 +232,7 @@ describe('API v1 - register new users', () => {
           name: 'Ratman',
           gender: 'male',
           birthYear: null,
+          postCode: 'ST10 4DB',
         },
         credentials,
       }));
@@ -242,6 +251,7 @@ describe('API v1 - register new users', () => {
           gender: 'female',
           birthYear: 1988,
           email: '13542@google.com',
+          postCode: 'ST10 4DB',
         },
         credentials,
       }));
@@ -265,6 +275,7 @@ describe('API v1 - register new users', () => {
           gender: 'female',
           birthYear: 1988,
           isAnonymous: true,
+          postCode: 'ST10 4DB',
         },
         credentials,
       }));
@@ -286,6 +297,7 @@ describe('API v1 - register new users', () => {
           gender: 'female',
           birthYear: 1988,
           isAnonymous: true,
+          postCode: 'ST10 4DB',
         },
         credentials,
       }));
@@ -309,6 +321,7 @@ describe('API v1 - register new users', () => {
           gender: 'male',
           birthYear: null,
           email: '666@aperturescience.com',
+          postCode: 'ST10 4DB',
         },
         credentials,
       }));
@@ -327,6 +340,7 @@ describe('API v1 - register new users', () => {
           gender: 'male',
           birthYear: null,
           phoneNumber: '090909090909',
+          postCode: 'ST10 4DB',
         },
         credentials,
       }));

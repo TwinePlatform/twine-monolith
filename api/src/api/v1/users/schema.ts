@@ -63,6 +63,7 @@ export const postCode =
   Joi.string()
     .min(4)
     .max(10)
+    .regex(/^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i)
     .trim();
 
 export const isEmailConsentGranted =
