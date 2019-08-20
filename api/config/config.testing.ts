@@ -38,7 +38,7 @@ const config: DeepPartial<Config> = {
   cache: {
     session: {
       name: 'session',
-      options: { url: envOr('REDIS_URL_TESTING', 'redis://localhost:6379 ') },
+      options: { url: envOr('REDIS_URL_TESTING', 'redis://localhost:6379') },
     },
   },
 };
