@@ -49,7 +49,7 @@ export const UserSessionRecords: UserSessionRecordCollection = {
     }
 
     return client.transaction(async (trx) => {
-      const [existingReferrers]: { referrers: string[] }[] = await client('user_session_record')
+      const [existingReferrers]: { referrers: string[] }[] = await trx('user_session_record')
         .select('referrers')
         .where({ session_id: sessionId });
 
@@ -59,7 +59,7 @@ export const UserSessionRecords: UserSessionRecordCollection = {
 
       const newReferrers = combineReferrers(existingReferrers.referrers, referrers);
 
-      return client('user_session_record')
+      return trx('user_session_record')
         .update({ referrers: newReferrers })
         .where({ session_id: sessionId });
     });

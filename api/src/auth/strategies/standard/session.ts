@@ -1,7 +1,6 @@
 import * as Hapi from '@hapi/hapi';
 import { Session } from './types';
 import { UserSessionRecords } from '../../../models/user_session_record';
-import { Credentials } from '.';
 import { quiet } from 'twine-util/promises';
 import { User, Organisation } from '../../../models';
 
@@ -22,7 +21,13 @@ export const Sessions = {
     req.yar.set(key, value),
 
   authenticate: (req: Hapi.Request, user: User, organisation: Organisation) => {
-    quiet(UserSessionRecords.initSession(req.server.app.knex, user, organisation, req.yar.id));
+    quiet(UserSessionRecords.initSession(
+      req.server.app.knex,
+      user,
+      organisation,
+      req.yar.id,
+      [req.headers.referrer]
+    ));
 
     return req.yar.set({
       isAuthenticated: true,
@@ -34,8 +39,7 @@ export const Sessions = {
   },
 
   destroy: (req: Hapi.Request) => {
-    const { user, organisation } = Credentials.fromRequest(req);
-    quiet(UserSessionRecords.initSession(req.server.app.knex, user, organisation, req.yar.id));
+    quiet(UserSessionRecords.endSession(req.server.app.knex, req.yar.id, 'log_out'));
     return req.yar.reset();
   },
 
