@@ -63,8 +63,9 @@ export const postCode =
   Joi.string()
     .min(4)
     .max(10)
-    .regex(/^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i)
-    .trim();
+    .regex(/^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i, { name: 'format' })
+    .trim()
+    .options({ language: { string: { regex: { name: 'invalid post code' } } } });
 
 export const isEmailConsentGranted =
   Joi.boolean();

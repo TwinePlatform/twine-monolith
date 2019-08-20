@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import SignupForm from '../components/signup_form';
-import NotFound from '../../shared/components/NotFound';
-import { CommunityBusiness, Visitors, ErrorUtils } from '../../api';
-import { Heading, Paragraph, Link } from '../../shared/components/text/base';
-import { PrimaryButton } from '../../shared/components/form/base';
-import { FlexContainerCol, FlexContainerRow } from '../../shared/components/layout/base';
-import { renameKeys, redirectOnError } from '../../util';
-import { BirthYear } from '../../shared/constants';
-import PrintableQrCode from '../../shared/components/PrintableQrCode';
+import SignupForm from './signup_form';
+import NotFound from '../../../shared/components/NotFound';
+import { CommunityBusiness, Visitors, ErrorUtils } from '../../../api';
+import { Heading, Paragraph, Link } from '../../../shared/components/text/base';
+import { PrimaryButton } from '../../../shared/components/form/base';
+import { FlexContainerCol, FlexContainerRow } from '../../../shared/components/layout/base';
+import { renameKeys, redirectOnError } from '../../../util';
+import { BirthYear } from '../../../shared/constants';
+import PrintableQrCode from '../../../shared/components/PrintableQrCode';
 
 
 const ButtonsFlexContainerCol = styled(FlexContainerCol)`
@@ -146,6 +146,7 @@ export default class Main extends Component {
       return this.setState({ errors: { ageCheck: 'You must be over 13 to register' } });
     }
 
+    console.log(this.state);
     return Visitors.create({
       name: this.state.fullname,
       gender: this.state.gender,
@@ -155,6 +156,7 @@ export default class Main extends Component {
       emailConsent: this.state.emailContact,
       smsConsent: this.state.smsContact,
       organisationId: this.state.organisationId,
+      postCode: this.state.postCode,
     })
       .then((res) => {
         this.setState({ qrCode: res.data.result.qrCode });
