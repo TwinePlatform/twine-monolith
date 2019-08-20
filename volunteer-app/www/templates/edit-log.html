@@ -41,6 +41,15 @@
             </label>
             <!-- /minutes -->
 
+            <!-- Project -->
+            <span class="input-label" ng-if="hasProjects">Project (optional)</span>
+            <label class="item item-select" ng-if="hasProjects">
+                <select ng-model="formData.project" name="project" id="project">
+                    <option ng-repeat="option in projects track by option.id" ng-selected="option.name === formData.project" value="{{option.name}}">{{option.name}}</option>
+                </select>
+            </label>
+            <!-- /Project -->
+
             <!-- Activity -->
             <span class="input-label">Activity</span>
             <label class="item item-select">
@@ -50,15 +59,6 @@
                 </select>
             </label>
             <!-- /Activity -->
-
-            <!-- Project -->
-            <span class="input-label" ng-if="hasProjects">Project (optional)</span>
-            <label class="item item-select" ng-if="hasProjects">
-                <select ng-model="formData.project" name="project" id="project">
-                    <option ng-repeat="option in projects track by option.id" ng-selected="option.name === formData.project" value="{{option.name}}">{{option.name}}</option>
-                </select>
-            </label>
-            <!-- /Project -->
 
             <!-- duration -->
             <label class="item item-input ng-hide">
