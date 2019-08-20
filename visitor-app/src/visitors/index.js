@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Home from './pages/homeVisitor';
-import Signup from './pages/Signup';
+import Signup from './pages/SignUp/index';
 import Thanks from './pages/thanks';
 import ThanksFeedback from './pages/thank_you_feedback';
 import QrError from './pages/qrerror';

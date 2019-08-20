@@ -8,7 +8,7 @@ import { ExternalCredentials, name as ExtName } from '../../../../../auth/strate
 import { injectCfg } from '../../../../../../tests/utils/inject';
 
 
-describe('API /community-businesses/{id}/visitors', () => {
+describe('API', () => {
   let server: Hapi.Server;
   let knex: Knex;
   let user: User;

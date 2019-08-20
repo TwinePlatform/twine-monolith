@@ -48,7 +48,7 @@ export default [
           birthYear: birthYear.default(null),
           email,
           phoneNumber,
-          postCode: postCode.allow(''),
+          postCode: postCode.required(),
           emailConsent: isEmailConsentGranted.default(false),
           smsConsent: isSMSConsentGranted.default(false),
           isAnonymous: Joi.boolean().default(false) ,

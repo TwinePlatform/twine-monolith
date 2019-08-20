@@ -95,6 +95,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
         gender: 'male',
         birthYear: 1988,
         email: 'cstrife@soldier.com',
+        postCode: 'NB3 0LL',
       },
       credentials: tempCredentials,
     }));
@@ -139,6 +140,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
         birthYear: 1988,
         email: 'yuff@thethief.com',
         password: 'I<3daggers',
+        postCode: 'L3 3TT',
         role: RoleEnum.VOLUNTEER,
       },
       credentials: tempCredentials,

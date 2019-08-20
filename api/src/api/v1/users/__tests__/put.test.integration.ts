@@ -9,7 +9,7 @@ import { Credentials as StandardCredentials } from '../../../../auth/strategies/
 import { injectCfg } from '../../../../../tests/utils/inject';
 
 
-describe('PUT /users/{userId}', () => {
+describe('PUT /users', () => {
   let server: Hapi.Server;
   let knex: Knex;
   let trx: Knex.Transaction;
@@ -198,7 +198,7 @@ describe('PUT /users/{userId}', () => {
           birthYear: 1972,
           email: 'tubbs@aperture.com',
           phoneNumber: '07892374881',
-          postCode: 'N4 98H',
+          postCode: 'N4 9HH',
           isEmailConsentGranted: false,
           isSMSConsentGranted: true,
           disability: 'yes',
@@ -216,7 +216,7 @@ describe('PUT /users/{userId}', () => {
           birthYear: 1972,
           email: 'tubbs@aperture.com',
           phoneNumber: '07892374881',
-          postCode: 'N4 98H',
+          postCode: 'N4 9HH',
           isEmailConsentGranted: false,
           isSMSConsentGranted: true,
           disability: 'yes',

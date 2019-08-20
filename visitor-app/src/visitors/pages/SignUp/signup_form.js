@@ -11,15 +11,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Grid, Row } from 'react-flexbox-grid';
-import { Form as FM, FormSection, PrimaryButton } from '../../shared/components/form/base';
-import { Paragraph } from '../../shared/components/text/base';
-import LabelledInput from '../../shared/components/form/LabelledInput';
-import StyledLabelledCheckbox from '../../shared/components/form/StyledLabelledCheckbox';
-import LabelledSelect from '../../shared/components/form/LabelledSelect';
-import { FlexContainerRow } from '../../shared/components/layout/base';
-import NavHeader from '../../shared/components/NavHeader';
-import { colors, fonts } from '../../shared/style_guide';
-import { VISITOR_NAME_INVALID } from '../../cb_admin/constants/error_text';
+import { Form as FM, FormSection, PrimaryButton } from '../../../shared/components/form/base';
+import { Paragraph } from '../../../shared/components/text/base';
+import LabelledInput from '../../../shared/components/form/LabelledInput';
+import StyledLabelledCheckbox from '../../../shared/components/form/StyledLabelledCheckbox';
+import LabelledSelect from '../../../shared/components/form/LabelledSelect';
+import { FlexContainerRow } from '../../../shared/components/layout/base';
+import NavHeader from '../../../shared/components/NavHeader';
+import { colors, fonts } from '../../../shared/style_guide';
+import { VISITOR_NAME_INVALID } from '../../../cb_admin/constants/error_text';
 
 
 const Form = styled(FM)`
@@ -90,9 +90,17 @@ const signupForm = (props) => {
               <LabelledInput
                 id="visitor-signup-phonenumber"
                 label="Phone Number"
-                name={`phone$${props.uuid}`}
+                name={`phoneNumber$${props.uuid}`}
                 type="text"
-                error={props.errors.number}
+                error={props.errors.phoneNumber}
+              />
+              <LabelledInput
+                id="visitor-signup-postcode"
+                label="Post Code"
+                name={`postCode$${props.uuid}`}
+                type="text"
+                error={props.errors.postCode}
+                required
               />
               <LabelledSelect
                 id="visitor-signup-gender"

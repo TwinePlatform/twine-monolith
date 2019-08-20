@@ -71,6 +71,7 @@ export const Visitors = {
       smsConsent,
       organisationId,
       isAnonymous,
+      postCode,
     } = {},
   ) =>
     axios.post(
@@ -85,6 +86,7 @@ export const Visitors = {
         smsConsent,
         organisationId,
         isAnonymous,
+        postCode,
       }),
     ),
 
