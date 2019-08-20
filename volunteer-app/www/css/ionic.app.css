@@ -3570,7 +3570,7 @@ ion-infinite-scroll {
   transition-duration: 0;
   z-index: 1; }
 
-.view {..
+.view {
   z-index: 1; }
 
 .pane {
@@ -12698,6 +12698,7 @@ select[disabled], .item-select-disabled:after {
 .login .login-input {
   border: 1px solid;
   border-color: rgba(255, 255, 255, 0.2);
+  padding: 25px;
 }
 .selectedVolunteers i {
   zoom: 2;
@@ -12727,6 +12728,9 @@ select[disabled], .item-select-disabled:after {
 .login .register {
   color: #fff;
   text-decoration: none;
+}
+.login .input-label {
+  color: #afafaf;
 }
   .login .item {
     background: transparent;
