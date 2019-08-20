@@ -48,21 +48,19 @@ export const UserSessionRecords: UserSessionRecordCollection = {
       return null;
     }
 
-    return client.transaction(async (trx) => {
-      const [existingReferrers]: { referrers: string[] }[] = await trx('user_session_record')
-        .select('referrers')
-        .where({ session_id: sessionId });
+    const [existingReferrers]: { referrers: string[] }[] = await client('user_session_record')
+      .select('referrers')
+      .where({ session_id: sessionId });
 
-      if (!existingReferrers) {
-        return null;
-      }
+    if (!existingReferrers) {
+      return null;
+    }
 
-      const newReferrers = combineReferrers(existingReferrers.referrers, referrers);
+    const newReferrers = combineReferrers(existingReferrers.referrers, referrers);
 
-      return trx('user_session_record')
-        .update({ referrers: newReferrers })
-        .where({ session_id: sessionId });
-    });
+    return client('user_session_record')
+      .update({ referrers: newReferrers })
+      .where({ session_id: sessionId });
   },
 
   async endSession (client, sessionId, type) {
