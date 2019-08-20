@@ -41,4 +41,11 @@ export default [
       'You can currently download your data into a CSV file (comma separated value). This is compatible with Microsoft Excel and Google Sheets.',
     ],
   },
+
+  {
+    heading: 'How do I contact you if I have a different question?',
+    contents: [
+      'You can email us at: powertochangetwine@gmail.com or call on: 07384 466801. We look forward to hearing from you!',
+    ],
+  },
 ];
