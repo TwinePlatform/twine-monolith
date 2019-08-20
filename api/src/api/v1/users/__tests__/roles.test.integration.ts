@@ -7,7 +7,7 @@ import { Credentials as StandardCredentials } from '../../../../auth/strategies/
 import { injectCfg } from '../../../../../tests/utils/inject';
 
 
-describe('PUT /users/{userId}', () => {
+describe('GET /users/me/roles}', () => {
   let server: Hapi.Server;
   let knex: Knex;
   let user: User;
@@ -32,34 +32,32 @@ describe('PUT /users/{userId}', () => {
     await server.shutdown(true);
   });
 
-  describe('GET /users/me/roles', () => {
-    test('can get own roles', async () => {
-      const res = await server.inject(injectCfg({
-        method: 'GET',
-        url: '/v1/users/me/roles',
-        credentials,
-      }));
+  test('can get own roles', async () => {
+    const res = await server.inject(injectCfg({
+      method: 'GET',
+      url: '/v1/users/me/roles',
+      credentials,
+    }));
 
-      expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({
-        result: expect.objectContaining({ organisationId: organisation.id, roles: ['CB_ADMIN'] }),
-      });
+    expect(res.statusCode).toBe(200);
+    expect(res.result).toEqual({
+      result: expect.objectContaining({ organisationId: organisation.id, roles: ['CB_ADMIN'] }),
     });
+  });
 
-    test('can get own roles if have multiple', async () => {
-      const res = await server.inject(injectCfg({
-        method: 'GET',
-        url: '/v1/users/me/roles',
-        credentials: multiCredentials,
-      }));
+  test('can get own roles if have multiple', async () => {
+    const res = await server.inject(injectCfg({
+      method: 'GET',
+      url: '/v1/users/me/roles',
+      credentials: multiCredentials,
+    }));
 
-      expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({
-        result: expect.objectContaining({
-          organisationId: organisation.id,
-          roles: ['VISITOR', 'VOLUNTEER_ADMIN'],
-        }),
-      });
+    expect(res.statusCode).toBe(200);
+    expect(res.result).toEqual({
+      result: expect.objectContaining({
+        organisationId: organisation.id,
+        roles: ['VISITOR', 'VOLUNTEER_ADMIN'],
+      }),
     });
   });
 });
