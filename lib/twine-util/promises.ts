@@ -34,6 +34,6 @@ export const some = async <T>(ps: Promise<T>[]) => {
   return Promise.all(ps.map((p) => p.catch((error) => error)));
 };
 
-export const quiet = <T>(p: Promise<T>): void => {
-  p.catch((err) => console.log(err));
+export const silent = <T>(p: Promise<T>): void => {
+  p.catch(() => {});
 };
