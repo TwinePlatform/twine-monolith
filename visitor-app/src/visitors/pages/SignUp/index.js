@@ -67,13 +67,6 @@ export default class Main extends Component {
     super(props);
 
     this.state = {
-      fullname: '',
-      email: '',
-      phone: '',
-      gender: '',
-      year: '',
-      emailContact: false,
-      smsContact: false,
       users: [],
       genders: [],
       qrCode: '',
@@ -138,7 +131,7 @@ export default class Main extends Component {
   createVisitor = (e) => {
     e.preventDefault();
 
-    if (!this.state.phone && !this.state.email) {
+    if (!this.state.phoneNumber && !this.state.email) {
       return this.setState({ errors: { email: 'You must supply a phone number or email address' } });
     }
 
@@ -146,13 +139,12 @@ export default class Main extends Component {
       return this.setState({ errors: { ageCheck: 'You must be over 13 to register' } });
     }
 
-    console.log(this.state);
     return Visitors.create({
       name: this.state.fullname,
       gender: this.state.gender,
       birthYear: this.state.year,
       email: this.state.email,
-      phoneNumber: this.state.phone,
+      phoneNumber: this.state.phoneNumber,
       emailConsent: this.state.emailContact,
       smsConsent: this.state.smsContact,
       organisationId: this.state.organisationId,
