@@ -36,9 +36,8 @@ const initTableData = { headers: [], rows: [] };
 /**
  * Component
  */
-const ByVolunteer: FunctionComponent<RouteComponentProps> = (props) => {
+const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
   const { unit, setUnit } = useContext(DashboardContext);
-  const [sortBy, setSortBy] = useState(1);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);

@@ -50,9 +50,9 @@ const DashboardRoutes = () => {
     <DashboardContext.Provider value={{ unit, setUnit }}>
       <Switch>
         <Route exact path="/" component={Dashboard} />
-        <Route exact path="/activity" component={ByActivity} />
+        <Route exact path="/activities" component={ByActivity} />
         <Route exact path="/time" component={ByTime} />
-        <Route exact path="/volunteer" component={ByVolunteer} />
+        <Route exact path="/volunteers" component={ByVolunteer} />
         <Route exact path="/faqs" component={FAQPage} />
       </Switch>
     </DashboardContext.Provider>
