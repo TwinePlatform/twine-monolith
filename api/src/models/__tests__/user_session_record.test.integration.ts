@@ -37,8 +37,6 @@ describe('UserSessionRecords model', () => {
     afterAll(() => MockDate.reset());
 
     test(':: creates partial session record in DB -- no referrers', async () => {
-      MockDate.set('2019-08-10T22:11:19');
-
       const sid = 'foo';
       const record = await UserSessionRecords.initSession(trx, user, org, sid);
       const check = await trx('user_session_record').select('*');
@@ -48,17 +46,17 @@ describe('UserSessionRecords model', () => {
         userId: user.id,
         organisationId: org.id,
         referrers: [],
-        startedAt: new Date('2019-08-10T22:11:19'),
+        createdAt: expect.any(Date),
       }));
 
       expect(check).toHaveLength(1);
-      expect(omit(['created_at', 'user_session_record_id'], check[0])).toEqual({
+      expect(omit(['user_session_record_id'], check[0])).toEqual({
         session_id: sid,
         user_account_id: user.id,
         organisation_id: org.id,
         referrers: [],
         session_end_type: null,
-        started_at: new Date('2019-08-10T22:11:19'),
+        created_at: expect.any(Date),
         ended_at: null,
         modified_at: null,
         deleted_at: null,
@@ -66,8 +64,6 @@ describe('UserSessionRecords model', () => {
     });
 
     test(':: creates partial session record in DB -- with referrers', async () => {
-      MockDate.set('2019-08-10T22:11:19');
-
       const sid = 'foo';
       const referrers = ['https://foo.com/bar'];
       const record = await UserSessionRecords.initSession(trx, user, org, sid, referrers);
@@ -78,17 +74,17 @@ describe('UserSessionRecords model', () => {
         userId: user.id,
         organisationId: org.id,
         referrers,
-        startedAt: new Date('2019-08-10T22:11:19'),
+        createdAt: expect.any(Date),
       }));
 
       expect(check).toHaveLength(1);
-      expect(omit(['created_at', 'user_session_record_id'], check[0])).toEqual({
+      expect(omit(['user_session_record_id'], check[0])).toEqual({
         user_account_id: user.id,
         organisation_id: org.id,
         session_id: sid,
         referrers,
         session_end_type: null,
-        started_at: new Date('2019-08-10T22:11:19'),
+        created_at: expect.any(Date),
         ended_at: null,
         modified_at: null,
         deleted_at: null,
@@ -147,7 +143,7 @@ describe('UserSessionRecords model', () => {
       expect(result).toEqual(1);
       expect(query).toHaveLength(1);
       expect(query[0]).toEqual(expect.objectContaining({
-        started_at: new Date('2019-10-10T13:45:22'),
+        created_at: expect.any(Date),
         ended_at: new Date('2019-10-10T14:15:43'),
         session_end_type: 'log_out',
         referrers,
