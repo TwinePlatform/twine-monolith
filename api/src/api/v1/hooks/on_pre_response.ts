@@ -21,7 +21,7 @@ export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
   const { config: { env } } = request.server.app;
 
 
-  if (request.auth.credentials && request.auth.strategy === Standard.name) {
+  if (request.auth.isAuthenticated && request.auth.strategy === Standard.name) {
     // only for routes authenticated with the standard strategy
     Standard.Sessions.update(request);
   }
