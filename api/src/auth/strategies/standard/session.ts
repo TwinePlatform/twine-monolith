@@ -17,9 +17,6 @@ export const Sessions = {
       sessionEndType: req.yar.get('sessionEndType'),
     }),
 
-  set: (req: Hapi.Request, key: string, value: any) =>
-    req.yar.set(key, value),
-
   authenticate: (req: Hapi.Request, user: User, organisation: Organisation) => {
     silent(UserSessionRecords.initSession(
       req.server.app.knex,

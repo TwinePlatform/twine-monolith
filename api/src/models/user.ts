@@ -234,11 +234,6 @@ export const Users: UserCollection = {
       });
   },
 
-  async recordLogin (client, user) {
-    return client('login_event')
-      .insert({ user_account_id: user.id });
-  },
-
   async serialise (user: User) {
     return omit(['password', 'qrCode'], user);
   },

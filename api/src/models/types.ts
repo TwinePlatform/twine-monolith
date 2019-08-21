@@ -327,9 +327,7 @@ export type Collection<T extends Model> = {
   serialise: (a: Partial<T>) => Promise<Partial<T>>
 };
 
-type UsersBaseCollection = Collection<User> & {
-  recordLogin: (k: Knex, u: User) => Promise<void>
-};
+type UsersBaseCollection = Collection<User>;
 
 export type UserCollection = UsersBaseCollection & {
   isMemberOf: (k: Knex, u: User, cb: CommunityBusiness) => Promise<boolean>
