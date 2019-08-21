@@ -26,6 +26,7 @@ export const monitorSessionExpiry = (knex: Knex, url: string) => {
         silent(UserSessionRecords.endSession(knex, args[2], 'expired'));
         break;
 
+      /* istanbul ignore next */
       default:
         break;
     }

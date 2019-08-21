@@ -47,6 +47,7 @@ export default {
             return h.authenticated(res);
 
           } catch (error) {
+            /* istanbul ignore next */
             return h.unauthenticated(error);
 
           }

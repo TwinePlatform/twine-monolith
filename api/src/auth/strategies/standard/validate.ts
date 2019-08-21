@@ -19,7 +19,10 @@ const validate: ValidateFunction = async (req) => {
     Organisations.getOne(knex, { where: { id: organisationId, deletedAt: null } }),
   ]);
 
+  /* istanbul ignore if */
   if (!user || !organisation) {
+    // Functionally impossible to get here given the login handler and the auth schema,
+    // but kept just in case (and to decouple from the above)
     throw Boom.unauthorized('Unrecognised user or organisation');
   }
 
