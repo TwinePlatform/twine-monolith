@@ -392,6 +392,13 @@
 							});
 						},
 
+						logout: function () {
+							return $http({
+								method: 'GET',
+								url: $$api.url('users/logout'),
+							});
+						},
+
 					/*
 						>>> register user
 					*/
