@@ -53,7 +53,7 @@ export const migrate = {
     const queries = tables
       .map((t: any) => t.tablename)
       .map(tap((t) => {
-        if (config.env !== Environment.TESTING) console.log(`Dropping table ${t}`);
+        if (config.env !== Environment.TEST) console.log(`Dropping table ${t}`);
       }))
       .map((tablename: string) => _client.raw(`DROP TABLE IF EXISTS "${tablename}" CASCADE`))
       .concat([
@@ -65,7 +65,7 @@ export const migrate = {
         'ENUM_visitor_log_sign_in_type',
       ]
         .map(tap((t) => {
-          if (config.env !== Environment.TESTING) console.log(`Dropping type ${t}`);
+          if (config.env !== Environment.TEST) console.log(`Dropping type ${t}`);
         }))
         .map((e) => _client.raw(`DROP TYPE IF EXISTS ${e} CASCADE`))
       );

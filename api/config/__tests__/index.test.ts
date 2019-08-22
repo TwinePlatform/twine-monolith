@@ -31,8 +31,8 @@ describe('Config', () => {
     });
   });
 
-  test(`getConfig | ${Environment.TESTING}`, () => {
-    const config = getConfig(Environment.TESTING);
+  test(`getConfig | ${Environment.TEST}`, () => {
+    const config = getConfig(Environment.TEST);
 
     expect(config.web).toEqual({
       host: 'localhost',

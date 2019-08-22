@@ -5,7 +5,7 @@ import { DeepPartial } from '../src/types/internal';
 
 
 const config: DeepPartial<Config> = {
-  env: Environment.TESTING,
+  env: Environment.TEST,
   web: {
     port: 4001,
     routes: {
