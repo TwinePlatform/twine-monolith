@@ -643,7 +643,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 1 } });
 
       const resLogs = await server.inject(injectCfg({
         method: 'GET',
@@ -675,7 +675,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 3 } });
 
       const resLogs = await server.inject(injectCfg({
         method: 'GET',
@@ -707,7 +707,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 3 } });
 
       const resLogs = await server.inject(injectCfg({
         method: 'GET',
@@ -737,7 +737,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 0 } });
 
       const resLogs = await server.inject(injectCfg({
         method: 'GET',
@@ -773,7 +773,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 1 } });
 
       const resCheck = await server.inject(injectCfg({
         method: 'GET',
@@ -812,7 +812,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 1 } });
 
       const resCheck = await server.inject(injectCfg({
         method: 'GET',
@@ -845,7 +845,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 3 } });
 
       const resLogs = await server.inject(injectCfg({
         method: 'GET',
@@ -879,7 +879,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(403);
     });
 
-    test('ERROR - fails when trying to sync logs w/ identical "startedAt" in payload', async () => {
+    test('SUCCESS - ignores logs w/ identical "startedAt" in payload', async () => {
       const now = new Date().toISOString();
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: now },
@@ -893,19 +893,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         payload: logs,
       }));
 
-      expect(res.statusCode).toBe(400);
-
-      const resLogs = await server.inject(injectCfg({
-        method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: volCreds,
-      }));
-
-      expect(resLogs.statusCode).toBe(200);
-      expect((<any> resLogs.result).result).toHaveLength(7);
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: { ignored: 2, synced: 0 } });
     });
 
-    test('ERROR - fails when trying to sync logs w/ same "startedAt" as existing log', async () => {
+    test('SUCCESS - ignores logs w/ same "startedAt" as existing log', async () => {
       const resLogs = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
@@ -928,7 +920,8 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         payload: logs,
       }));
 
-      expect(res.statusCode).toBe(400);
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: { ignored: 1, synced: 0 } });
     });
 
     test('ERROR - fails when one user isn\'t a volunteer', async () => {
@@ -985,7 +978,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 3, synced: 1 } });
 
       const dbLogs: any[] = await server.app.knex('volunteer_hours_log')
         .select('*')

@@ -2,7 +2,7 @@ import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { omit } from 'ramda';
-import { Duration } from 'twine-util';
+import { Duration, Promises } from 'twine-util';
 import {
   response,
   id,
@@ -358,6 +358,7 @@ const routes: Hapi.ServerRoute[] = [
       } = request;
 
       const { user, scope } = StandardCredentials.fromRequest(request);
+      const stats = { ignored: 0, synced: 0 };
 
       // Ignore invalid logs silently because of
       // https://github.com/TwinePlatform/twine-monolith/issues/246
@@ -366,6 +367,7 @@ const routes: Hapi.ServerRoute[] = [
       if (payload.length !== _payload.length) {
         // Do not await - this is an auxiliary action
         VolunteerLogs.recordInvalidLog(knex, user, communityBusiness, _payload);
+        stats.ignored = _payload.length - payload.length;
       }
 
       if (
@@ -398,51 +400,52 @@ const routes: Hapi.ServerRoute[] = [
       }
 
       try {
-        await knex.transaction(async (trx) =>
-          Promise.all(payload.map(async (log) => {
-            const existsInDB = log.hasOwnProperty('id');
-            const shouldUpdate = existsInDB && !log.deletedAt;
-            const shouldDelete = existsInDB && log.deletedAt;
+        const results = await Promises.some(payload.map(async (log) => {
+          const existsInDB = log.hasOwnProperty('id');
+          const shouldUpdate = existsInDB && !log.deletedAt;
+          const shouldDelete = existsInDB && log.deletedAt;
 
-            if (shouldUpdate) {
+          if (shouldUpdate) {
 
-              return VolunteerLogs.update(trx,
-                { id: log.id, organisationId: communityBusiness.id },
-                {
-                  ...omit(['id', 'deletedAt'], log),
-                  organisationId: communityBusiness.id,
-                  userId: log.userId === 'me' ? user.id : Number(log.userId),
-                }
-              );
-
-            } else if (shouldDelete) {
-
-              return VolunteerLogs.update(trx, { id: log.id }, { deletedAt: log.deletedAt });
-
-            } else {
-              // otherwise, add log to DB
-
-              return VolunteerLogs.add(trx, {
-                ...log,
-                createdBy: user.id,
+            return VolunteerLogs.update(knex,
+              { id: log.id, organisationId: communityBusiness.id },
+              {
+                ...omit(['id', 'deletedAt'], log),
                 organisationId: communityBusiness.id,
                 userId: log.userId === 'me' ? user.id : Number(log.userId),
-              });
+              }
+            );
 
-            }
-          }))
-        );
+          } else if (shouldDelete) {
 
-        return null;
+            return VolunteerLogs.update(knex, { id: log.id }, { deletedAt: log.deletedAt });
+
+          } else {
+            // otherwise, add log to DB
+
+            return VolunteerLogs.add(knex, {
+              ...log,
+              createdBy: user.id,
+              organisationId: communityBusiness.id,
+              userId: log.userId === 'me' ? user.id : Number(log.userId),
+            });
+
+          }
+        }));
+
+        return results.reduce((acc, result) => {
+          if (result instanceof Error) {
+            acc.ignored = acc.ignored + 1;
+          } else {
+            acc.synced = acc.synced + 1;
+          }
+          return acc;
+        }, stats);
 
       } catch (error) {
-        if (error.code === '23502') { // Violation of null constraint implies invalid activity
-          return Boom.badRequest('Invalid activity or project');
-        }
-        if (error.code === '23505') { // Violation of unique constraint => duplicate log
-          return Boom.badRequest('Duplicate logs in payload, check start times');
-        }
-        throw error;
+        console.log(error);
+
+        return stats;
       }
     },
   },
