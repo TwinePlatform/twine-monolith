@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
@@ -7,6 +7,7 @@ import UnitToggle from './UnitToggle';
 import { DurationUnitEnum } from '../../../types';
 import { DownloadButton } from '../../../lib/ui/components/Buttons';
 import { DateRangePickerConstraint } from './DatePicker/types';
+import { DashboardContext } from '../../../App';
 
 
 /**
@@ -47,7 +48,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
 
   const [fromDate, setFromDate] = useState(constraint.from.default());
   const [toDate, setToDate] = useState(constraint.to.default());
-  const [unit, setUnit] = useState<DurationUnitEnum>(DurationUnitEnum.HOURS);
+  const { unit, setUnit } = useContext(DashboardContext);
 
   const onFromChange = useCallback((date: Date) => {
     const fd = constraint.from.validate(date, toDate);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, FunctionComponent } from 'react';
+import React, { useEffect, useState, useCallback, FunctionComponent, useContext } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import styled from 'styled-components';
 import { Grid, Row, Col } from 'react-flexbox-grid';
@@ -9,7 +9,6 @@ import UtilityBar from '../components/UtilityBar';
 import { H1 } from '../../../lib/ui/components/Headings';
 import { DataTableProps } from '../components/DataTable/types';
 import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
-import { DurationUnitEnum } from '../../../types';
 import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../../lib/ui/design_system';
@@ -20,6 +19,8 @@ import { getTitleForDayPicker } from '../util';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
+import { DashboardContext } from '../../../App';
+
 
 /**
  * Types
@@ -48,8 +49,7 @@ const initTableData = { headers: [], rows: [] };
  * Component
  */
 const ByActivity: FunctionComponent<RouteComponentProps> = () => {
-  const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
-
+  const { unit } = useContext(DashboardContext);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
@@ -98,7 +98,6 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
           <UtilityBar
             dateFilter="day"
             datePickerConstraint={DatePickerConstraints}
-            onUnitChange={setUnit}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
             onDownloadClick={downloadAsCsv}

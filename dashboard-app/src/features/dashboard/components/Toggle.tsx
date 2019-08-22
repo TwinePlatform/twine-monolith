@@ -2,13 +2,14 @@ import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { ColoursEnum, Fonts } from '../../../lib/ui/design_system';
 
-type Side = 'left' | 'right';
+export type Side = 'left' | 'right';
 
 type ToggleProps = {
   left: string
   right: string
   leftTitle?: string
   rightTitle?: string
+  active?: Side
   onChange: (s: string) => void
 };
 
@@ -47,7 +48,7 @@ const Toggle: React.FunctionComponent<ToggleProps> = (props) => {
     rightTitle,
     onChange,
   } = props;
-  const [active, setActive] = useState<Side>('left');
+  const [active, setActive] = useState<Side>(props.active || 'left');
 
   const onClick = useCallback((side: Side) => {
     setActive(side);

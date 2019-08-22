@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext, useState } from 'react';
 import styled from 'styled-components';
 import { Route, Switch, BrowserRouter, withRouter } from 'react-router-dom';
 
@@ -16,6 +16,7 @@ import ErrorPage from './features/Error';
 import Navbar from './features/navigation/Navbar';
 import Footer from './lib/ui/components/Footer';
 import { ColoursEnum, Fonts } from './lib/ui/design_system';
+import { DurationUnitEnum } from './types';
 
 /*
  * Styles
@@ -34,17 +35,29 @@ const Content = styled.div`
 
 
 /*
+ * Context
+ */
+export const DashboardContext = createContext<any>({ unit: DurationUnitEnum.HOURS });
+
+/*
  * Helpers
  */
-const ProtectedRoutes = () => (
-  <Switch>
-    <Route exact path="/" component={Dashboard} />
-    <Route exact path="/activities" component={ByActivity} />
-    <Route exact path="/time" component={ByTime} />
-    <Route exact path="/volunteers" component={ByVolunteer} />
-    <Route exact path="/faqs" component={FAQPage} />
-  </Switch>
-);
+
+
+const DashboardRoutes = () => {
+  const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
+  return(
+    <DashboardContext.Provider value={{ unit, setUnit }}>
+      <Switch>
+        <Route exact path="/" component={Dashboard} />
+        <Route exact path="/activities" component={ByActivity} />
+        <Route exact path="/time" component={ByTime} />
+        <Route exact path="/volunteers" component={ByVolunteer} />
+        <Route exact path="/faqs" component={FAQPage} />
+      </Switch>
+    </DashboardContext.Provider>
+  );
+};
 
 
 const AppRouter =
@@ -57,7 +70,7 @@ const AppRouter =
             <Route exact path="/password/reset/:token" component={ResetPassword} />
             <Route exact path="/password/forgot" component={ForgotPassword} />
             <Route exact path="/error/:code" component={ErrorPage} />
-            <PrivateRoute path="/*" component={ProtectedRoutes} />
+            <PrivateRoute path="/*" component={DashboardRoutes} />
           </Switch>
         </Content>
         <Footer />

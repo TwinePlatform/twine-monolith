@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect, useCallback } from 'react';
+import React, { FunctionComponent, useState, useEffect, useCallback, useContext } from 'react';
 import { Row, Col } from 'react-flexbox-grid';
 
 import {
@@ -14,6 +14,7 @@ import Legend from './Legend/index';
 import Chart from './Chart';
 import { LegendData } from './types';
 import { TitleString } from '../Title';
+import { DashboardContext } from '../../../../App';
 
 
 /*
@@ -22,7 +23,6 @@ import { TitleString } from '../Title';
 
 interface Props {
   data: AggregatedData;
-  unit: DurationUnitEnum;
   xAxisTitle: string;
   yAxisTitle: string;
   title: TitleString;
@@ -36,7 +36,8 @@ interface Props {
  */
 
 const StackedBarChart: FunctionComponent<Props> = (props) => {
-  const { data, xAxisTitle, yAxisTitle, title, unit, legendData, setLegendData, defaultSelection } = props;
+  const { data, xAxisTitle, yAxisTitle, title, legendData, setLegendData, defaultSelection } = props;
+  const {unit} = useContext(DashboardContext)
   const [chartData, setChartData] = useState();
   const [tooltipUnit, setTooltipUnit] = useState('');
 
