@@ -20,7 +20,7 @@ install:
   - bash ./.travis/cc-download.sh
   - npm install -g lerna
   - lerna bootstrap
-  - for x in "api" "dashboard-app" "visitor-app" "lib/twine-util"; do cd $x; npm install; cd ..; done
+  - for x in "api" "dashboard-app" "visitor-app" "lib/twine-util" "lib/twine-ui"; do cd $x; npm install; cd ..; done
 
 jobs:
   include:
