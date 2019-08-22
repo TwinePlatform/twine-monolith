@@ -60,7 +60,7 @@ const LabelledInput: React.FunctionComponent<InputProps> = (props) => {
           <LabelContent>
             { label }
           </LabelContent>
-          <Input {...rest} error />
+          <Input {...rest} error={error} />
         </Label>
         { error && <ErrorText>{error}</ErrorText> }
       </InputContainer>
