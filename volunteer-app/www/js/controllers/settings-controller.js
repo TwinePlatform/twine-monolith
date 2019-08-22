@@ -126,7 +126,12 @@
 	                    window.geofence.initialize().then(function () {
 	                    	$scope.enableLocationReminders();
                         }, function (error) {
-                            $$shout("In order to work the location reminders in the background mode, turn on your location settings into \"Always\"", 7000);
+													$ionicPopup.alert({
+														title: 'Error',
+														template: 'In order to work the location reminders in the background mode, turn on your location settings into "Always"',
+														okType: 'button-assertive',
+														cssClass: 'error'
+													});
                         });
 	                }
 
