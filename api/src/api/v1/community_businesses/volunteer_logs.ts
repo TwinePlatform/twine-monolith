@@ -446,7 +446,7 @@ const routes: Hapi.ServerRoute[] = [
               user,
               communityBusiness,
               { message: result.message, stack: result.stack, payload: payload[i] }
-            );
+            ).catch(() => {});
           } else {
             acc.synced = acc.synced + 1;
           }

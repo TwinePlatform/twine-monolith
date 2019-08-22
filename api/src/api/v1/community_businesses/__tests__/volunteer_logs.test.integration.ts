@@ -996,7 +996,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         log.started_at.toISOString().startsWith(`2019-${month}-05`))).toBe(true);
 
       expect(monitoring).toHaveLength(1);
-      expect(monitoring[0].payload).toEqual(logs.map((log) => ({ ...log, userId: 'me' })));
+      expect(monitoring[0].payload).toEqual(logs.slice(1).map((log) => ({ ...log, userId: 'me' })));
       expect(monitoring[0].user_account_id).toBe(volCreds.user.user.id);
       expect(monitoring[0].organisation_id).toBe(volCreds.user.organisation.id);
     });
