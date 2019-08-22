@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PaddingEnum } from './styles'
+import { PaddingEnum } from '../styles'
 
 type CardProps = {
   padded?: boolean

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Span, Text } from './Typography'
-import { ColoursEnum, Fonts } from './styles';
+import { ColoursEnum, Fonts } from '../styles';
 
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {

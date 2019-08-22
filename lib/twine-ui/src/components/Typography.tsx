@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Fonts, ColoursEnum } from './styles'
+import { Fonts, ColoursEnum } from '../styles'
 
 
 export const H1 = styled.h1`

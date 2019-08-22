@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { rgba } from 'polished';
-import { ColoursEnum, Fonts } from './styles';
+import { ColoursEnum, Fonts } from '../styles';
 
 
 export const Button = styled.button`
