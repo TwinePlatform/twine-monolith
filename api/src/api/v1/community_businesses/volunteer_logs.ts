@@ -40,10 +40,15 @@ const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) => {
 
   return logs
     // Ignore invalid date strings for startedAt and deletedAt
-    .filter((log) => {
+    .reduce((acc, log) => {
       const result = Joi.validate({ startedAt: log.startedAt, deletedAt: log.deletedAt }, schema);
-      return !result.error;
-    });
+      if (result.error) {
+        acc.invalid = acc.invalid.concat(log);
+      } else {
+        acc.valid = acc.valid.concat(log);
+      }
+      return acc;
+    }, { valid: [], invalid: [] });
 };
 
 
@@ -362,11 +367,11 @@ const routes: Hapi.ServerRoute[] = [
 
       // Ignore invalid logs silently because of
       // https://github.com/TwinePlatform/twine-monolith/issues/246
-      const payload = ignoreInvalidLogs(_payload);
+      const { valid: payload, invalid } = ignoreInvalidLogs(_payload);
 
       if (payload.length !== _payload.length) {
         // Do not await - this is an auxiliary action
-        VolunteerLogs.recordInvalidLog(knex, user, communityBusiness, _payload);
+        VolunteerLogs.recordInvalidLog(knex, user, communityBusiness, invalid);
         stats.ignored = _payload.length - payload.length;
       }
 
@@ -433,9 +438,15 @@ const routes: Hapi.ServerRoute[] = [
           }
         }));
 
-        return results.reduce((acc, result) => {
+        return results.reduce((acc, result, i) => {
           if (result instanceof Error) {
             acc.ignored = acc.ignored + 1;
+            VolunteerLogs.recordInvalidLog(
+              knex,
+              user,
+              communityBusiness,
+              { message: result.message, stack: result.stack, payload: payload[i] }
+            );
           } else {
             acc.synced = acc.synced + 1;
           }
