@@ -193,10 +193,10 @@
 						logsData.logs = logsData.logs.map(function (log) {
 							return {
 								id: log.id || undefined,
-								userId: log.userId === userId ? undefined : log.userId,
+								userId: (log.userId || log.user_id) == userId ? undefined : (log.userId || log.user_id),
 								duration: typeof log.duration === 'number' ? { minutes: log.duration } : log.duration,
 								activity: log.activity,
-								startedAt: log.date_of_log,
+								startedAt: log.date_of_log || log.startedAt,
 								project: log.project,
 								deletedAt: log.deletedAt || undefined,
 							}
