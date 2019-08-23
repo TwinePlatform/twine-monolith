@@ -29,3 +29,7 @@ export const find = async <T>(fn: (a: T) => Promise<boolean>, xs: T[]): Promise<
     ? head
     : find(fn, tail);
 };
+
+export const some = async <T>(ps: Promise<T>[]) => {
+  return Promise.all(ps.map((p) => p.catch((error) => error)));
+};

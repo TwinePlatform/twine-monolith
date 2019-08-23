@@ -2,7 +2,7 @@ import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { omit } from 'ramda';
-import { Duration } from 'twine-util';
+import { Duration, Promises } from 'twine-util';
 import {
   response,
   id,
@@ -14,6 +14,7 @@ import {
   volunteerLogDuration,
   volunteerProject
 } from './schema';
+import * as Scopes from '../../../auth/scopes';
 import Roles from '../../../models/role';
 import { VolunteerLogs, Volunteers, VolunteerLog } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
@@ -29,6 +30,26 @@ import { requestQueryToModelQuery } from '../utils';
 import { query } from '../users/schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
+
+
+const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) => {
+  const schema = Joi.object({
+    startedAt,
+    deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
+  });
+
+  return logs
+    // Ignore invalid date strings for startedAt and deletedAt
+    .reduce((acc, log) => {
+      const result = Joi.validate({ startedAt: log.startedAt, deletedAt: log.deletedAt }, schema);
+      if (result.error) {
+        acc.invalid = acc.invalid.concat(log);
+      } else {
+        acc.valid = acc.valid.concat(log);
+      }
+      return acc;
+    }, { valid: [], invalid: [] });
+};
 
 
 const routes: Hapi.ServerRoute[] = [
@@ -303,7 +324,11 @@ const routes: Hapi.ServerRoute[] = [
       auth: {
         strategy: 'standard',
         access: {
-          scope: ['volunteer_logs-own:write', 'volunteer_logs-sibling:write'],
+          scope: [
+            'volunteer_logs-sibling:write',
+            'volunteer_logs-child:write',
+            'volunteer_logs-own:write',
+          ],
         },
       },
       validate: {
@@ -312,8 +337,16 @@ const routes: Hapi.ServerRoute[] = [
           userId: meOrId.default('me'),
           activity: volunteerLogActivity.required(),
           duration: volunteerLogDuration.required(),
-          startedAt: startedAt.default(() => new Date(), 'now'),
-          deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
+          // TODO: Weak validation for "startedAt" required by
+          // https://github.com/TwinePlatform/twine-monolith/issues/246
+          // Once, resolved, replace with:
+          // `startedAt.default(() => new Date(), 'now')`
+          startedAt: Joi.string().default(() => new Date(), 'now'),
+          // TODO: Weak validation for "deletedAt" required by
+          // https://github.com/TwinePlatform/twine-monolith/issues/246
+          // Once, resolved, replace with:
+          // `Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null))`
+          deletedAt: Joi.alt().try(Joi.string(), Joi.only(null)),
           project: volunteerProject.allow(null),
         })).required(),
       },
@@ -326,16 +359,30 @@ const routes: Hapi.ServerRoute[] = [
       const {
         server: { app: { knex } },
         pre: { communityBusiness },
-        payload,
+        payload: _payload,
       } = request;
 
       const { user, scope } = StandardCredentials.fromRequest(request);
+      const stats = { ignored: 0, synced: 0 };
+
+      // Ignore invalid logs silently because of
+      // https://github.com/TwinePlatform/twine-monolith/issues/246
+      const { valid: payload, invalid } = ignoreInvalidLogs(_payload);
+
+      if (payload.length !== _payload.length) {
+        // Do not await - this is an auxiliary action
+        VolunteerLogs.recordInvalidLog(knex, user, communityBusiness, invalid);
+        stats.ignored = _payload.length - payload.length;
+      }
 
       if (
-        payload.some((log) => log.userId !== 'me') && // If some logs correspond to other users
-        !scope.includes('volunteer_logs-sibling:write') // And client doesn't have the sibling scope
+        // If some logs correspond to other users...
+        payload.some((log) => log.userId !== 'me') &&
+        // ...and we don't have permission to write to other users
+        !Scopes.intersect(['volunteer_logs-sibling:write', 'volunteer_logs-child:write'], scope)
       ) {
-        return Boom.forbidden('Insufficient scope'); // Then 403
+        // Then 403
+        return Boom.forbidden('Insufficient scope: cannot write other users logs');
       }
 
       const targetUserChecks = payload
@@ -358,51 +405,58 @@ const routes: Hapi.ServerRoute[] = [
       }
 
       try {
-        await knex.transaction(async (trx) =>
-          Promise.all(payload.map(async (log) => {
-            const existsInDB = log.hasOwnProperty('id');
-            const shouldUpdate = existsInDB && !log.deletedAt;
-            const shouldDelete = existsInDB && log.deletedAt;
+        const results = await Promises.some(payload.map(async (log) => {
+          const existsInDB = log.hasOwnProperty('id');
+          const shouldUpdate = existsInDB && !log.deletedAt;
+          const shouldDelete = existsInDB && log.deletedAt;
 
-            if (shouldUpdate) {
+          if (shouldUpdate) {
 
-              return VolunteerLogs.update(trx,
-                { id: log.id, organisationId: communityBusiness.id },
-                {
-                  ...omit(['id', 'deletedAt'], log),
-                  organisationId: communityBusiness.id,
-                  userId: log.userId === 'me' ? user.id : Number(log.userId),
-                }
-              );
-
-            } else if (shouldDelete) {
-
-              return VolunteerLogs.update(trx, { id: log.id }, { deletedAt: log.deletedAt });
-
-            } else {
-              // otherwise, add log to DB
-
-              return VolunteerLogs.add(trx, {
-                ...log,
-                createdBy: user.id,
+            return VolunteerLogs.update(knex,
+              { id: log.id, organisationId: communityBusiness.id },
+              {
+                ...omit(['id', 'deletedAt'], log),
                 organisationId: communityBusiness.id,
                 userId: log.userId === 'me' ? user.id : Number(log.userId),
-              });
+              }
+            );
 
-            }
-          }))
-        );
+          } else if (shouldDelete) {
 
-        return null;
+            return VolunteerLogs.update(knex, { id: log.id }, { deletedAt: log.deletedAt });
+
+          } else {
+            // otherwise, add log to DB
+
+            return VolunteerLogs.add(knex, {
+              ...log,
+              createdBy: user.id,
+              organisationId: communityBusiness.id,
+              userId: log.userId === 'me' ? user.id : Number(log.userId),
+            });
+
+          }
+        }));
+
+        return results.reduce((acc, result, i) => {
+          if (result instanceof Error) {
+            acc.ignored = acc.ignored + 1;
+            VolunteerLogs.recordInvalidLog(
+              knex,
+              user,
+              communityBusiness,
+              { message: result.message, stack: result.stack, payload: payload[i] }
+            ).catch(() => {});
+          } else {
+            acc.synced = acc.synced + 1;
+          }
+          return acc;
+        }, stats);
 
       } catch (error) {
-        if (error.code === '23502') { // Violation of null constraint implies invalid activity
-          return Boom.badRequest('Invalid activity or project');
-        }
-        if (error.code === '23505') { // Violation of unique constraint => duplicate log
-          return Boom.badRequest('Duplicate logs in payload, check start times');
-        }
-        throw error;
+        console.log(error);
+
+        return stats;
       }
     },
   },

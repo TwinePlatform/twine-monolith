@@ -643,7 +643,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 1 } });
 
       const resLogs = await server.inject(injectCfg({
         method: 'GET',
@@ -675,7 +675,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 3 } });
 
       const resLogs = await server.inject(injectCfg({
         method: 'GET',
@@ -707,7 +707,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 3 } });
 
       const resLogs = await server.inject(injectCfg({
         method: 'GET',
@@ -737,7 +737,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 0 } });
 
       const resLogs = await server.inject(injectCfg({
         method: 'GET',
@@ -773,7 +773,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 1 } });
 
       const resCheck = await server.inject(injectCfg({
         method: 'GET',
@@ -812,7 +812,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 1 } });
 
       const resCheck = await server.inject(injectCfg({
         method: 'GET',
@@ -845,7 +845,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: null });
+      expect(res.result).toEqual({ result: { ignored: 0, synced: 3 } });
 
       const resLogs = await server.inject(injectCfg({
         method: 'GET',
@@ -879,7 +879,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(403);
     });
 
-    test('ERROR - fails when trying to sync logs w/ identical "startedAt" in payload', async () => {
+    test('SUCCESS - ignores logs w/ identical "startedAt" in payload', async () => {
       const now = new Date().toISOString();
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: now },
@@ -893,19 +893,11 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         payload: logs,
       }));
 
-      expect(res.statusCode).toBe(400);
-
-      const resLogs = await server.inject(injectCfg({
-        method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs',
-        credentials: volCreds,
-      }));
-
-      expect(resLogs.statusCode).toBe(200);
-      expect((<any> resLogs.result).result).toHaveLength(7);
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: { ignored: 2, synced: 0 } });
     });
 
-    test('ERROR - fails when trying to sync logs w/ same "startedAt" as existing log', async () => {
+    test('SUCCESS - ignores logs w/ same "startedAt" as existing log', async () => {
       const resLogs = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/users/volunteers/me/volunteer-logs',
@@ -915,7 +907,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(resLogs.statusCode).toBe(200);
       expect((<any> resLogs.result).result).toHaveLength(7);
 
-      const { startedAt } = (<any> resLogs.result).result[0];
+      const { startedAt } = (<any> resLogs.result).result[6];
 
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt },
@@ -928,7 +920,8 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         payload: logs,
       }));
 
-      expect(res.statusCode).toBe(400);
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: { ignored: 1, synced: 0 } });
     });
 
     test('ERROR - fails when one user isn\'t a volunteer', async () => {
@@ -959,6 +952,53 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toBe(400);
+    });
+
+    test('HACK - allows invalid logs through but ignores them', async () => {
+      const month = moment().format('MM');
+      const prev = moment().subtract(1, 'month').format('MM');
+
+      const logs = [
+        // valid
+        { activity: 'Other', duration: { minutes: 10 }, startedAt: `2019-${month}-05 13:03:22` },
+        // invalid "startedAt"
+        { activity: 'Office support', duration: { minutes: 20 }, startedAt: 'undefined 13:03:22' },
+        // invalid "deletedAt"
+        { activity: 'Other', duration: { hours: 1 }, startedAt: `2019-${month}-01 03:13:02`,
+          deletedAt: 'foo' },
+        // "startedAt" from previous month
+        { activity: 'Other', duration: { hours: 1 }, startedAt: `2019-${prev}-01 03:13:02` },
+      ];
+
+      const res = await server.inject(injectCfg({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs/sync',
+        credentials: volCreds,
+        payload: logs,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: { ignored: 3, synced: 1 } });
+
+      const dbLogs: any[] = await server.app.knex('volunteer_hours_log')
+        .select('*')
+        .where({
+          organisation_id: volCreds.user.organisation.id,
+          user_account_id: volCreds.user.user.id,
+        });
+
+      const monitoring: any[] = await server.app.knex('invalid_synced_logs_monitoring').select('*');
+
+      expect(dbLogs).toHaveLength(8);
+      expect(dbLogs.some((log) =>
+        log.started_at.toISOString().startsWith(`2019-${prev}-01`))).toBe(false);
+      expect(dbLogs.some((log) =>
+        log.started_at.toISOString().startsWith(`2019-${month}-05`))).toBe(true);
+
+      expect(monitoring).toHaveLength(1);
+      expect(monitoring[0].payload).toEqual(logs.slice(1).map((log) => ({ ...log, userId: 'me' })));
+      expect(monitoring[0].user_account_id).toBe(volCreds.user.user.id);
+      expect(monitoring[0].organisation_id).toBe(volCreds.user.organisation.id);
     });
   });
 });

@@ -107,4 +107,39 @@ describe('Utilities :: Promises', () => {
       expect(x).toBe(2);
     });
   });
+
+  describe('some', () => {
+    test('All promises resolve', async () => {
+      const ps = [1, 2, 3, 4].map((n) => Promise.resolve(n));
+
+      const results = await Promises.some(ps);
+
+      expect(results).toHaveLength(ps.length);
+      expect(results).toEqual([1, 2, 3, 4]);
+    });
+
+    test('Some promises resolve', async () => {
+      const ps = [1, 2, 3, 4].map((n) => n % 2 ? Promise.resolve(n) : Promise.reject(new Error('nope')));
+
+      const results = await Promises.some(ps);
+
+      expect(results).toHaveLength(ps.length);
+      expect(results[0]).toEqual(1);
+      expect(results[1].message).toEqual('nope');
+      expect(results[2]).toEqual(3);
+      expect(results[3].message).toEqual('nope');
+    });
+
+    test('All promises reject', async () => {
+      const ps = [1, 2, 3, 4].map((n) => Promise.reject(new Error('nope')));
+
+      const results = await Promises.some(ps);
+
+      expect(results).toHaveLength(ps.length);
+      results.forEach((result) => {
+        expect(result).toBeInstanceOf(Error);
+        expect(result.message).toEqual('nope');
+      });
+    });
+  });
 });
