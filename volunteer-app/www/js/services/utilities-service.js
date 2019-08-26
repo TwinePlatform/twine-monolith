@@ -214,6 +214,7 @@
 					}
 					delete $localStorage.user;
 					delete $localStorage.offlineData;
+					$$api.user.logout();
 					$$api.token.clear();
 					$state.go('login');
 				},

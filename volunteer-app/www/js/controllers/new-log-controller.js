@@ -161,18 +161,7 @@
         $scope.fillActivities();
 
 
-        $scope.calculateTotalDurationThisDate = function() {
-
-            var sqlDate = $scope.formData.date_of_log.split(' ')[0];
-
-            $$api.user.totalHoursForDay($localStorage.user.id, sqlDate).success(function(result) {
-                if ($scope.formData.duration === undefined) {
-                    $scope.formData.duration = 0;
-                }
-                $scope.formData.totalDurationThisDate = result.data.duration + $scope.formData.duration;
-            });
-
-				}
+        $scope.calculateTotalDurationThisDate = function() {}
 
 				function populateProjects () {
 					if ($rootScope.offlineMode) {
