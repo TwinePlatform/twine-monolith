@@ -4,7 +4,7 @@
 </div>
 
 <ion-tabs ng-if="currentUser.role==='VOLUNTEER'" class="tabs-icon-top">
-    <ion-tab title="Dashboard" icon="icon-custom-dashboard" href="#/tab/dashboard">
+    <ion-tab title="Home" icon="icon-custom-dashboard" href="#/tab/dashboard">
         <ion-nav-view name="dashboard-tab" ng-init="refreshDashboard()"></ion-nav-view>
     </ion-tab>
     <ion-tab title="View logs" icon="icon-custom-logs" href="#/tab/view-logs">
@@ -16,7 +16,7 @@
 </ion-tabs>
 
 <ion-tabs style="border-top: 1px solid #ccc" ng-if="['VOLUNTEER_ADMIN', 'CB_ADMIN'].includes(currentUser.role)" class="tabs-icon-top">
-    <ion-tab title="View volunteers" icon="icon-custom-volunteers" href="#/tab/volunteers">
+    <ion-tab title="Volunteers" icon="icon-custom-volunteers" href="#/tab/volunteers">
         <ion-nav-view name="view-volunteers-tab"></ion-nav-view>
     </ion-tab>
     <ion-tab title="View logs" icon="icon-custom-logs" href="#/tab/view-logs">

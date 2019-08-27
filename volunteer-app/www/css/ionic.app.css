@@ -3570,7 +3570,7 @@ ion-infinite-scroll {
   transition-duration: 0;
   z-index: 1; }
 
-.view {..
+.view {
   z-index: 1; }
 
 .pane {
@@ -12682,13 +12682,13 @@ select[disabled], .item-select-disabled:after {
     bottom: 10px;
     left: 0;
     right: 0;
-    top: 232px; }
+    top: 189px; }
     @media (min-width: 375px) {
       .login-form {
-        top: 330px; } }
+        top: 291px; } }
     @media (min-width: 414px) {
       .login-form {
-        top: 398px; } }
+        top: 355px; } }
     @media (min-width: 768px) {
       .login-form {
         top: 588px; } }
@@ -12698,6 +12698,7 @@ select[disabled], .item-select-disabled:after {
 .login .login-input {
   border: 1px solid;
   border-color: rgba(255, 255, 255, 0.2);
+  padding: 20px;
 }
 .selectedVolunteers i {
   zoom: 2;
@@ -12727,6 +12728,9 @@ select[disabled], .item-select-disabled:after {
 .login .register {
   color: #fff;
   text-decoration: none;
+}
+.login .input-label {
+  color: #afafaf;
 }
   .login .item {
     background: transparent;
