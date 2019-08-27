@@ -425,6 +425,11 @@ export type VolunteerLogCollection = Collection<VolunteerLog> & {
   deleteProject: (
     k: Knex,
     p: VolunteerProject) => Promise<Int>
+  syncLogs: (
+    k: Knex,
+    c: CommunityBusiness,
+    u: User,
+    ls: VolunteerLog[]) => Promise<{ synced: Int, ignored: Int }>
 };
 
 

@@ -1,6 +1,6 @@
 import * as Knex from 'knex';
 import { assoc, compose, evolve, has, filter, invertObj, omit, pick } from 'ramda';
-import { Objects, Duration } from 'twine-util';
+import { Objects, Duration, Promises } from 'twine-util';
 import { VolunteerLog, VolunteerLogCollection, RoleEnum } from './types';
 import { CommunityBusinesses } from './community_business';
 import { applyQueryModifiers } from './applyQueryModifiers';
@@ -350,5 +350,40 @@ export const VolunteerLogs: VolunteerLogCollection = {
 
       return rows.length;
     });
+  },
+
+  async syncLogs (client, communityBusiness, user, logs) {
+    Promises.some(logs.map(async (log) => {
+      const existsInDB = log.hasOwnProperty('id');
+      const shouldUpdate = existsInDB && !log.deletedAt;
+      const shouldDelete = existsInDB && log.deletedAt;
+
+      if (shouldUpdate) {
+
+        return VolunteerLogs.update(client,
+          { id: log.id, organisationId: communityBusiness.id },
+          {
+            ...omit(['id', 'deletedAt'], log),
+            organisationId: communityBusiness.id,
+            userId: log.userId === 'me' ? user.id : Number(log.userId),
+          }
+        );
+
+      } else if (shouldDelete) {
+
+        return VolunteerLogs.update(client, { id: log.id }, { deletedAt: log.deletedAt });
+
+      } else {
+        // otherwise, add log to DB
+
+        return VolunteerLogs.add(client, {
+          ...log,
+          createdBy: user.id,
+          organisationId: communityBusiness.id,
+          userId: log.userId === 'me' ? user.id : Number(log.userId),
+        });
+
+      }
+    }));
   },
 };

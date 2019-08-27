@@ -29,7 +29,8 @@ import {
 import { requestQueryToModelQuery } from '../utils';
 import { query } from '../users/schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
-import { RoleEnum } from '../../../models/types';
+import { RoleEnum, User } from '../../../models/types';
+import { Unpack } from '../../../types/internal';
 
 
 const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) => {
@@ -48,7 +49,7 @@ const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) => {
         acc.valid = acc.valid.concat(log);
       }
       return acc;
-    }, { valid: [], invalid: [] });
+    }, { valid: [] as typeof logs, invalid: [] as typeof logs });
 };
 
 
@@ -376,6 +377,11 @@ const routes: Hapi.ServerRoute[] = [
         stats.ignored = _payload.length - payload.length;
       }
 
+      const uniformLogs = (user: User) => (log: Unpack<typeof payload>): Partial<VolunteerLog> => ({
+        ...log,
+        userId: log.userId === 'me' ? user.id : log.userId,
+      });
+
       if (
         // If some logs correspond to other users...
         payload.some((log) => log.userId !== 'me') &&
@@ -406,7 +412,7 @@ const routes: Hapi.ServerRoute[] = [
       }
 
       try {
-        const results = await Promises.some(payload.map(async (log) => {
+        const results = await Promises.some(payload.map(uniformLogs(user)).map(async (log) => {
           const existsInDB = log.hasOwnProperty('id');
           const shouldUpdate = existsInDB && !log.deletedAt;
           const shouldDelete = existsInDB && log.deletedAt;
@@ -418,7 +424,6 @@ const routes: Hapi.ServerRoute[] = [
               {
                 ...omit(['id', 'deletedAt'], log),
                 organisationId: communityBusiness.id,
-                userId: log.userId === 'me' ? user.id : Number(log.userId),
               }
             );
 
@@ -433,7 +438,6 @@ const routes: Hapi.ServerRoute[] = [
               ...log,
               createdBy: user.id,
               organisationId: communityBusiness.id,
-              userId: log.userId === 'me' ? user.id : Number(log.userId),
             });
 
           }

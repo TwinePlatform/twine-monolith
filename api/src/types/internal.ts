@@ -11,6 +11,12 @@ export type Dictionary<T> = {
 
 export type ValueOf<T> = T[keyof T];
 
+export type Unpack<T> =
+  T extends (infer U)[] ? U :
+  T extends (...args: any[]) => infer U ? U :
+  T extends Promise<infer U> ? U : T;
+
+
 /*
  * Recursive definition of deep partial without breaking array types
  */
