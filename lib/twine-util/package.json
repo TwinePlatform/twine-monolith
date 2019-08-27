@@ -8,7 +8,8 @@
     "test": "jest",
     "cover": "jest --coverage",
     "build": "tsc",
-    "lint": "tslint --project tsconfig.json"
+    "lint": "tslint --project tsconfig.json",
+    "postinstall": "npm run build"
   },
   "contributors": [
     "Elias Malik <elias@foundersandcoders.com>",
