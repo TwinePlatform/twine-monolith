@@ -124,7 +124,7 @@ describe('Logger Service :: Serializers', () => {
           dnt: '',
           'upgrade-insecure-requests': '',
           origin: 'https://foo.com',
-          referrer: 'https://bar.com',
+          referer: 'https://bar.com',
           authorization: `Bearer ${token}`,
         },
       });
@@ -135,7 +135,7 @@ describe('Logger Service :: Serializers', () => {
         query: { fields: ['name'] },
         headers: {
           origin: 'https://foo.com',
-          referrer: 'https://bar.com',
+          referer: 'https://bar.com',
           authorization: `Bearer ${token}`,
         },
         sessionUserId: token,

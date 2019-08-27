@@ -55,7 +55,7 @@ describe('Authentication integration', () => {
         url: '/v1/users/login',
         headers: {
           origin: 'https://data.twine-together.com',
-          referrer: 'https://data.twine-together.com/login',
+          referer: 'https://data.twine-together.com/login',
         },
         payload: {
           email: '1@aperturescience.com',
@@ -76,7 +76,7 @@ describe('Authentication integration', () => {
         method: 'GET',
         url: '/v1/users/me',
         headers: {
-          referrer: 'https://data.twine-together.com/',
+          referer: 'https://data.twine-together.com/',
           cookie: `${cookieName}=${token}`,
         },
       });
@@ -114,7 +114,7 @@ describe('Authentication integration', () => {
       const resPostAccess = await server.inject({
         method: 'GET',
         url: '/v1/users/me',
-        headers: { referrer: 'https://data.twine-together.com/time' },
+        headers: { referer: 'https://data.twine-together.com/time' },
       });
       await delay(10); // waiting for user session record to be updated
 
@@ -140,7 +140,7 @@ describe('Authentication integration', () => {
       const resLogin = await server.inject({
         method: 'POST',
         url: '/v1/users/login',
-        headers: { referrer: 'https://data.twine-together.com/login' },
+        headers: { referer: 'https://data.twine-together.com/login' },
         payload: {
           type: 'body',
           email: '1@aperturescience.com',
@@ -157,7 +157,7 @@ describe('Authentication integration', () => {
         url: '/v1/users/me',
         headers: {
           Authorization: token,
-          referrer: 'https://data.twine-together.com/',
+          referer: 'https://data.twine-together.com/',
         },
       });
 

@@ -23,7 +23,7 @@ export const Sessions = {
       user,
       organisation,
       req.yar.id,
-      [req.headers.referrer]
+      [req.headers.referer]
     ));
 
     return req.yar.set({
@@ -42,7 +42,7 @@ export const Sessions = {
 
   update: (req: Hapi.Request) => {
     silent(
-      UserSessionRecords.updateSession(req.server.app.knex, req.yar.id, [req.headers.referrer])
+      UserSessionRecords.updateSession(req.server.app.knex, req.yar.id, [req.headers.referer])
     );
   },
 };
