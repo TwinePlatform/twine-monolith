@@ -1,20 +1,18 @@
-<ion-view title="Dashboard" hide-back-button="true">
+<ion-view title="Your Contribution" hide-back-button="true">
 
     <!--<organisation-subheader></organisation-subheader>-->
     <div class="noResults fadeIn" ng-if="totalHours === 0">
-        <h4 class="text-center label">You haven't created any hours yet.</h4>
+        <h4 class="text-center label">You haven't added any time yet.</h4>
     </div>
 
     <ion-content scroll="false" overflow-scroll="false" has-bouncing="true" class="has-header dashboard">
 
         <div class="total-hours-container padding-left padding-right row">
             <div class="col text-center" style="background-color: white; border: 1px solid gainsboro;">
-                <h4 class="dashboard-label">Total Hours</h4>
+                <h4 class="dashboard-label">You have given...</h4>
                 <span class="total-hours animated fadeIn" ng-class="{'ng-hide': totalHours < 0}" ng-bind-html="totalHours | hoursAndMinutesAsString"></span>
+                <span>...since you started volunteering</span>
             </div>
-            <!--<div class="col chart-container">-->
-                <!--&lt;!&ndash; <canvas id="logsChart" class="chart" width="400" height="100"></canvas> &ndash;&gt;-->
-            <!--</div>-->
         </div>
 
         <!-- .hours-summary -->
