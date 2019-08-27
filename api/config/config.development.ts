@@ -37,7 +37,7 @@ const config: DeepPartial<Config> = {
           },
           cache: {
             cache: 'session', // Must match one of the caches
-            expiresIn: 10 * 1000,
+            expiresIn: 1 * 24 * 60 * 60 * 1000,
           },
         },
       },
