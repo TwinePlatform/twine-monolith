@@ -1,27 +1,10 @@
-import Card from './Card';
-import Input from './Input';
-import LabelledSelect, { Select, SelectWrapper, Option } from './Select';
-import { H1, H2, H3, H4, Text, Span, Special } from './Typography';
-import { Button, BigButton, CancelButton } from './Buttons';
+import { Bold, Paragraph, Span } from './Typography';
 import ReleaseRibbon from './ReleaseRibbon/ReleaseRibbon';
 
 
 export {
-  Card,
-  Input,
-  LabelledSelect,
-  Select,
-  SelectWrapper,
-  Option,
-  H1,
-  H2,
-  H3,
-  H4,
-  Text,
+  Bold,
+  Paragraph,
   Span,
-  Special,
-  Button,
-  BigButton,
-  CancelButton,
   ReleaseRibbon,
 }
