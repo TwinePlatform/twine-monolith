@@ -47,7 +47,12 @@ function _deploy_branch () {
     fi
 
     git pull origin $BRANCH
-    git push "heroku-$APP_NAME" "$BRANCH:master"
+
+    if [ "$FORCE_PUSH" = "true" ]; then
+      git push -f "heroku-$APP_NAME" "$BRANCH:master"
+    else
+      git push "heroku-$APP_NAME" "$BRANCH:master"
+    fi
 
     if [ -z $REMOTE_EXISTS ]; then
       git remote rm "heroku-$APP_NAME"
@@ -161,7 +166,7 @@ function _delete () {
 # Argument Processing #
 #######################
 
-while getopts avd opt; do
+while getopts avdf opt; do
   case $opt in
     a) ACT_ON_API="true";;
     v) ACT_ON_VISITOR="true";;
