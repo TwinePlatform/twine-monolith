@@ -12,8 +12,8 @@ export const Sessions = {
       isAuthenticated: req.yar.get('isAuthenticated'),
       userId: req.yar.get('userId'),
       organisationId: req.yar.get('organisationId'),
-      createdAt: req.yar.get('startedAt'),
-      referrers: req.yar.get('referrers'),
+      createdAt: req.yar.get('createdAt'),
+      headers: req.yar.get('headers'),
       sessionEndType: req.yar.get('sessionEndType'),
     }),
 
@@ -23,7 +23,7 @@ export const Sessions = {
       user,
       organisation,
       req.yar.id,
-      [req.headers.referer]
+      req.headers
     ));
 
     return req.yar.set({
@@ -31,7 +31,7 @@ export const Sessions = {
       userId: user.id,
       organisationId: organisation.id,
       createdAt: new Date(),
-      referrers: [],
+      headers: [],
     });
   },
 
@@ -42,7 +42,7 @@ export const Sessions = {
 
   update: (req: Hapi.Request) => {
     silent(
-      UserSessionRecords.updateSession(req.server.app.knex, req.yar.id, [req.headers.referer])
+      UserSessionRecords.updateSession(req.server.app.knex, req.yar.id, req.headers)
     );
   },
 };

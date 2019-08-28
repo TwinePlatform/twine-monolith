@@ -2,6 +2,7 @@ import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { User, Organisation } from '../../../models';
 import { RoleEnum } from '../../../models/types';
+import { Dictionary } from '../../../types/internal';
 
 
 declare module '@hapi/hapi' {
@@ -14,7 +15,7 @@ export type Session = {
   organisationId: number
   createdAt: Date
   endedAt?: Date
-  referrers: string[]
+  headers: Dictionary<string>[]
   sessionEndType?: 'log_out' | 'expired'
 };
 

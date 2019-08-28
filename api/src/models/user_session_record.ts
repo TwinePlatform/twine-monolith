@@ -1,6 +1,7 @@
 import * as Knex from 'knex';
-import { compose, uniq, concat } from 'ramda';
+import { omit } from 'ramda';
 import { User, Organisation } from './types';
+import { Dictionary } from '../types/internal';
 
 
 type UserSessionRecord = {
@@ -8,27 +9,50 @@ type UserSessionRecord = {
   sessionId: string
   userId: number
   organisationId: number
-  referrers: string[]
+  headers: Dictionary<string>[]
   createdAt: Date
 };
 
 interface UserSessionRecordCollection {
-  initSession (k: Knex, u: User, o: Organisation, sid: string, refs?: string[]):
+  initSession (k: Knex, u: User, o: Organisation, sid: string, headers?: Dictionary<string>):
     Promise<UserSessionRecord>;
 
-  updateSession (k: Knex, sid: string, refs?: string[]): Promise<number>;
+  updateSession (k: Knex, sid: string, headers?: Dictionary<string>): Promise<number>;
 
   endSession (k: Knex, sid: string, type: string): Promise<number>;
 }
 
+const filterHeaders = omit([
+  'accept',
+  'accept-encoding',
+  'accept-language',
+  'authorization',
+  'connection',
+  'content-length',
+  'content-type',
+  'cookie',
+  'dnt',
+  'host',
+  'origin',
+  'upgrade-insecure-requests',
+  'x-request-id',
+  'x-forwarded-for',
+  'x-forwarded-proto',
+  'x-forwarded-port',
+  'x-request-start',
+  'total-route-time',
+  'via',
+  'connect-time',
+]);
+
 
 export const UserSessionRecords: UserSessionRecordCollection = {
-  async initSession (client, user, org, sessionId, referrers = []) {
+  async initSession (client, user, org, sessionId, headers) {
     const [result] = await client('user_session_record')
       .insert({
         user_account_id: user.id,
         organisation_id: org.id,
-        referrers: JSON.stringify(referrers),
+        request_headers: JSON.stringify(headers ? [filterHeaders(headers)] : []),
         session_id: sessionId,
       })
       .returning('*');
@@ -38,28 +62,29 @@ export const UserSessionRecords: UserSessionRecordCollection = {
       sessionId,
       userId: user.id,
       organisationId: org.id,
-      referrers,
+      headers: result.request_headers,
       createdAt: result.created_at,
     };
   },
 
-  async updateSession (client, sessionId, referrers = []) {
-    if (referrers.length < 1 || !sessionId) {
+  async updateSession (client, sessionId, headers) {
+    if (!headers || !sessionId) {
       return null;
     }
 
-    const [existingReferrers]: { referrers: string[] }[] = await client('user_session_record')
-      .select('referrers')
-      .where({ session_id: sessionId });
+    const [existingHeaders]: { headers: Dictionary<string>[] }[] =
+      await client('user_session_record')
+        .select('request_headers AS headers')
+        .where({ session_id: sessionId });
 
-    if (!existingReferrers) {
+    if (!existingHeaders) {
       return null;
     }
 
-    const newReferrers = combineReferrers(existingReferrers.referrers, referrers);
+    const newHeaders = existingHeaders.headers.concat(filterHeaders(headers));
 
     return client('user_session_record')
-      .update({ referrers: newReferrers })
+      .update({ request_headers: JSON.stringify(newHeaders) })
       .where({ session_id: sessionId });
   },
 
@@ -69,10 +94,3 @@ export const UserSessionRecords: UserSessionRecordCollection = {
       .where({ session_id: sessionId });
   },
 };
-
-const combineReferrers = (xs: string[], ys: string[]) => compose(
-  JSON.stringify,
-  uniq,
-  concat(xs),
-  (xs: string[]) => xs.filter(Boolean)
-)(ys);

@@ -55,7 +55,7 @@ describe('Session expiry monitoring', () => {
       organisationId: resultAfter[0].organisation_id,
       startedAt: resultAfter[0].started_at,
       createdAt: resultAfter[0].created_at,
-      referrers: resultAfter[0].referrers,
+      headers: resultAfter[0].request_headers,
     });
   });
 });

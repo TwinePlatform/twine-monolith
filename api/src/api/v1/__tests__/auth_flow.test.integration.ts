@@ -86,10 +86,10 @@ describe('Authentication integration', () => {
 
       expect(resAccess.statusCode).toBe(200);
       expect(recordsAccess).toHaveLength(1);
-      expect(recordsAccess[0].referrers).toEqual([
-        'https://data.twine-together.com/login',
-        'https://data.twine-together.com/',
-      ]);
+      expect(recordsAccess[0].request_headers).toEqual([
+        { referer: 'https://data.twine-together.com/login' },
+        { referer: 'https://data.twine-together.com/' },
+      ].map((o) => ({ ...o, 'user-agent': 'shot' })));
 
       // 3. Logout
       const resLogout = await server.inject({
@@ -103,10 +103,11 @@ describe('Authentication integration', () => {
 
       expect(resLogout.statusCode).toBe(200);
       expect(recordsLogout).toHaveLength(1);
-      expect(recordsLogout[0].referrers).toEqual([
-        'https://data.twine-together.com/login',
-        'https://data.twine-together.com/',
-      ]);
+      expect(recordsLogout[0].request_headers).toEqual([
+        { referer: 'https://data.twine-together.com/login' },
+        { referer: 'https://data.twine-together.com/' },
+        {},
+      ].map((o) => ({ ...o, 'user-agent': 'shot' })));
       expect(recordsLogout[0].session_end_type).toEqual('log_out');
       expect(recordsLogout[0].ended_at).not.toBe(null);
 
@@ -122,10 +123,11 @@ describe('Authentication integration', () => {
 
       expect(resPostAccess.statusCode).toBe(401);
       expect(recordsPostAccess).toHaveLength(1);
-      expect(recordsPostAccess[0].referrers).toEqual([
-        'https://data.twine-together.com/login',
-        'https://data.twine-together.com/',
-      ]);
+      expect(recordsPostAccess[0].request_headers).toEqual([
+        { referer: 'https://data.twine-together.com/login' },
+        { referer: 'https://data.twine-together.com/' },
+        {},
+      ].map((o) => ({ ...o, 'user-agent': 'shot' })));
       expect(recordsPostAccess[0].session_end_type).toEqual('log_out');
       expect(recordsPostAccess[0].ended_at).not.toBe(null);
       expect(recordsPostAccess[0].modified_at).toEqual(recordsLogout[0].modified_at);
@@ -167,10 +169,10 @@ describe('Authentication integration', () => {
 
       expect(resAccess.statusCode).toBe(200);
       expect(recordsAccess).toHaveLength(1);
-      expect(recordsAccess[0].referrers).toEqual([
-        'https://data.twine-together.com/login',
-        'https://data.twine-together.com/',
-      ]);
+      expect(recordsAccess[0].request_headers).toEqual([
+        { referer: 'https://data.twine-together.com/login' },
+        { referer: 'https://data.twine-together.com/' },
+      ].map((o) => ({ ...o, 'user-agent': 'shot' })));
     });
   });
 });

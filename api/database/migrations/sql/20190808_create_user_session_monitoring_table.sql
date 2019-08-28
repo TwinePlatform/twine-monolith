@@ -8,7 +8,7 @@ CREATE TABLE user_session_record (
   organisation_id        INT NOT NULL,
   session_id             VARCHAR NOT NULL UNIQUE,
   session_end_type       VARCHAR,
-  referrers              JSONB NOT NULL,
+  request_headers        JSONB NOT NULL, /* Array of request header objects */
   ended_at               TIMESTAMP WITH TIME ZONE,
   created_at             TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   modified_at            TIMESTAMP WITH TIME ZONE,

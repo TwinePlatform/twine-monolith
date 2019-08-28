@@ -36,7 +36,7 @@ describe('UserSessionRecords model', () => {
   describe('initSession', () => {
     afterAll(() => MockDate.reset());
 
-    test(':: creates partial session record in DB -- no referrers', async () => {
+    test(':: creates partial session record in DB -- no headers', async () => {
       const sid = 'foo';
       const record = await UserSessionRecords.initSession(trx, user, org, sid);
       const check = await trx('user_session_record').select('*');
@@ -45,7 +45,7 @@ describe('UserSessionRecords model', () => {
         sessionId: sid,
         userId: user.id,
         organisationId: org.id,
-        referrers: [],
+        headers: [],
         createdAt: expect.any(Date),
       }));
 
@@ -54,7 +54,7 @@ describe('UserSessionRecords model', () => {
         session_id: sid,
         user_account_id: user.id,
         organisation_id: org.id,
-        referrers: [],
+        request_headers: [],
         session_end_type: null,
         created_at: expect.any(Date),
         ended_at: null,
@@ -63,17 +63,17 @@ describe('UserSessionRecords model', () => {
       });
     });
 
-    test(':: creates partial session record in DB -- with referrers', async () => {
+    test(':: creates partial session record in DB -- with headers', async () => {
       const sid = 'foo';
-      const referrers = ['https://foo.com/bar'];
-      const record = await UserSessionRecords.initSession(trx, user, org, sid, referrers);
+      const headers = { referer: 'https://foo.com/bar' };
+      const record = await UserSessionRecords.initSession(trx, user, org, sid, headers);
       const check = await trx('user_session_record').select('*');
 
       expect(record).toEqual(expect.objectContaining({
         sessionId: sid,
         userId: user.id,
         organisationId: org.id,
-        referrers,
+        headers: [headers],
         createdAt: expect.any(Date),
       }));
 
@@ -82,7 +82,7 @@ describe('UserSessionRecords model', () => {
         user_account_id: user.id,
         organisation_id: org.id,
         session_id: sid,
-        referrers,
+        request_headers: [headers],
         session_end_type: null,
         created_at: expect.any(Date),
         ended_at: null,
@@ -93,10 +93,10 @@ describe('UserSessionRecords model', () => {
   });
 
   describe('updateSession', () => {
-    test('update with no new referrers', async () => {
+    test('update with no new headers', async () => {
       const sid = 'foo';
-      const referrers = ['https://foo.com/bar'];
-      const record = await UserSessionRecords.initSession(trx, user, org, sid, referrers);
+      const headers = { referer: 'https://foo.com/bar' };
+      const record = await UserSessionRecords.initSession(trx, user, org, sid, headers);
       const result = await UserSessionRecords.updateSession(trx, record.sessionId);
       const query = await trx('user_session_record')
         .select('*')
@@ -104,23 +104,23 @@ describe('UserSessionRecords model', () => {
 
       expect(result).toEqual(null);
       expect(query).toHaveLength(1);
-      expect(query[0].referrers).toEqual(referrers);
+      expect(query[0].request_headers).toEqual([headers]);
       expect(query[0].modified_at).toBe(null);
     });
 
-    test('update with new referrers', async () => {
+    test('update with new headers', async () => {
       const sid = 'foo';
-      const referrers1 = ['https://foo.com/bar'];
-      const referrers2 = ['https://foo.com/lol'];
-      const record = await UserSessionRecords.initSession(trx, user, org, sid, referrers1);
-      const result = await UserSessionRecords.updateSession(trx, record.sessionId, referrers2);
+      const headers1 = { referer: 'https://foo.com/bar' };
+      const headers2 = { referer: 'https://foo.com/lol' };
+      const record = await UserSessionRecords.initSession(trx, user, org, sid, headers1);
+      const result = await UserSessionRecords.updateSession(trx, record.sessionId, headers2);
       const query = await trx('user_session_record')
         .select('*')
         .where({ user_session_record_id: record.id });
 
       expect(result).toEqual(1);
       expect(query).toHaveLength(1);
-      expect(query[0].referrers).toEqual(referrers1.concat(referrers2));
+      expect(query[0].request_headers).toEqual([headers1, headers2]);
       expect(query[0].modified_at).not.toBe(null);
     });
   });
@@ -130,8 +130,8 @@ describe('UserSessionRecords model', () => {
       MockDate.set('2019-10-10T13:45:22');
 
       const sid = 'foo';
-      const referrers = ['https://foo.com/bar'];
-      const record = await UserSessionRecords.initSession(trx, user, org, sid, referrers);
+      const headers = { referer: 'https://foo.com/bar' };
+      const record = await UserSessionRecords.initSession(trx, user, org, sid, headers);
 
       MockDate.set('2019-10-10T14:15:43');
 
@@ -146,7 +146,7 @@ describe('UserSessionRecords model', () => {
         created_at: expect.any(Date),
         ended_at: new Date('2019-10-10T14:15:43'),
         session_end_type: 'log_out',
-        referrers,
+        request_headers: [headers],
       }));
     });
   });
