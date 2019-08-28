@@ -27,7 +27,7 @@
 #######################
 
 function terminate () {
-  if [ ! -z $1 ]; then
+  if [ ! -z "$1" ]; then
     echo $1
   fi
   exit 1
@@ -37,24 +37,28 @@ function _deploy_branch () {
   local APP_NAME=$1
   local BRANCH=$2
 
-  if [ ! -z $BRANCH ]; then
+  if [ ! -z "$BRANCH" ]; then
+    if [ -z "$(git ls-remote origin $BRANCH)" ]; then
+      terminate "No branch $BRANCH found"
+    fi
+
     echo "Deploying branch $BRANCH to app $APP_NAME"
 
     REMOTE_EXISTS=$(git remote -v | grep "git.heroku.com/$APP_NAME.git")
 
-    if [ -z $REMOTE_EXISTS ]; then
+    if [ -z "$REMOTE_EXISTS" ]; then
       heroku git:remote -a $APP_NAME -r "heroku-$APP_NAME"
     fi
 
-    git pull origin $BRANCH
+    git fetch origin $BRANCH
 
     if [ "$FORCE_PUSH" = "true" ]; then
-      git push -f "heroku-$APP_NAME" "$BRANCH:master"
+      git push -f "heroku-$APP_NAME" "refs/remotes/origin/$BRANCH:master"
     else
-      git push "heroku-$APP_NAME" "$BRANCH:master"
+      git push "heroku-$APP_NAME" "refs/remotes/origin/$BRANCH:master"
     fi
 
-    if [ -z $REMOTE_EXISTS ]; then
+    if [ -z "$REMOTE_EXISTS" ]; then
       git remote rm "heroku-$APP_NAME"
     fi
   fi
@@ -84,7 +88,7 @@ function _create_app () {
   heroku pipelines:add $PIPELINE_NAME -a $APP_NAME -s staging
 
   # Point proxy at given API
-  if [ ! -z $API_APP ]; then
+  if [ ! -z "$API_APP" ]; then
     heroku config:set PROXY_API_URL="https://$API_APP.herokuapp.com" -a $APP_NAME
   fi
 
