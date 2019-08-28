@@ -201,8 +201,8 @@ fi
 #         Main        #
 #######################
 case $CMD in
-  create) _create "$PR" "$BRANCH"
-  update) _update "$PR" "$BRANCH"
-  delete) _delete "$PR"
+  create) _create "$PR" "$BRANCH";;
+  update) _update "$PR" "$BRANCH";;
+  delete) _delete "$PR";;
   *)      terminate "First argument must be 'create', 'update' or 'delete'"
 esac
