@@ -367,9 +367,17 @@ const routes: Hapi.ServerRoute[] = [
       const { user, scope } = StandardCredentials.fromRequest(request);
       const stats = { ignored: 0, synced: 0 };
 
+
+      const uniformLogs = (user: User) => (log: Unpack<SyncMyVolunteerLogsRequest['payload']>): Partial<VolunteerLog> => ({
+        ...log,
+        userId: log.userId === 'me' ? user.id : log.userId,
+      });
+
       // Ignore invalid logs silently because of
       // https://github.com/TwinePlatform/twine-monolith/issues/246
-      const { valid: payload, invalid } = ignoreInvalidLogs(_payload);
+      const { valid, invalid } = ignoreInvalidLogs(_payload);
+
+      const payload = valid.map(uniformLogs(user));
 
       if (payload.length !== _payload.length) {
         // Do not await - this is an auxiliary action
@@ -377,14 +385,11 @@ const routes: Hapi.ServerRoute[] = [
         stats.ignored = _payload.length - payload.length;
       }
 
-      const uniformLogs = (user: User) => (log: Unpack<typeof payload>): Partial<VolunteerLog> => ({
-        ...log,
-        userId: log.userId === 'me' ? user.id : log.userId,
-      });
+      VolunteerLogs.syncLogs(knex, communityBusiness, user, payload);
 
       if (
         // If some logs correspond to other users...
-        payload.some((log) => log.userId !== 'me') &&
+        payload.some((log) => log.userId !== user.id) &&
         // ...and we don't have permission to write to other users
         !Scopes.intersect(['volunteer_logs-sibling:write', 'volunteer_logs-child:write'], scope)
       ) {
@@ -393,7 +398,7 @@ const routes: Hapi.ServerRoute[] = [
       }
 
       const targetUserChecks = payload
-        .filter((l) => l.userId !== 'me')
+        .filter((l) => l.userId !== user.id)
         .map((l) =>
           Roles.userHasAtCb(
             knex,

@@ -1,11 +1,14 @@
 import * as Knex from 'knex';
 import { assoc, compose, evolve, has, filter, invertObj, omit, pick } from 'ramda';
 import { Objects, Duration, Promises } from 'twine-util';
-import { VolunteerLog, VolunteerLogCollection, RoleEnum } from './types';
+import { VolunteerLog, VolunteerLogCollection, RoleEnum, User } from './types';
 import { CommunityBusinesses } from './community_business';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { Map, Dictionary } from '../types/internal';
 import Roles from './role';
+import Permissions from './permission';
+import { PermissionLevelEnum } from '../auth';
+import { ResourceEnum, AccessEnum } from '../auth/types';
 
 
 /*
@@ -353,37 +356,99 @@ export const VolunteerLogs: VolunteerLogCollection = {
   },
 
   async syncLogs (client, communityBusiness, user, logs) {
-    Promises.some(logs.map(async (log) => {
+    // can user write logs for others?
+    const someLogsTargetOtherUsers = logs.some((log) => log.userId !== user.id);
+    const canWriteOthersLogs = await VolunteerLogPermissions.canWriteOthers(client, user);
+    if (someLogsTargetOtherUsers && !canWriteOthersLogs) {
+      throw new Error('Insufficient permissions to write other users logs');
+    }
+
+    // do all logs correspond to users who can add logs?
+    const targetUsersCheck = await Promise.all(logs
+      .filter((log) => log.userId !== user.id)
+      .map((log) => VolunteerLogPermissions.canWriteOwn(client, log.userId)));
+
+    if (!targetUsersCheck.every((a) => a)) {
+      throw new Error('Some users do not have permission to write volunteer logs');
+    }
+
+    const results = await Promises.some(logs.map(async (log) => {
       const existsInDB = log.hasOwnProperty('id');
       const shouldUpdate = existsInDB && !log.deletedAt;
       const shouldDelete = existsInDB && log.deletedAt;
 
-      if (shouldUpdate) {
+      try {
+        if (shouldUpdate) {
 
-        return VolunteerLogs.update(client,
-          { id: log.id, organisationId: communityBusiness.id },
-          {
-            ...omit(['id', 'deletedAt'], log),
+          return VolunteerLogs.update(client,
+            { id: log.id, organisationId: communityBusiness.id },
+            {
+              ...omit(['id', 'deletedAt'], log),
+              organisationId: communityBusiness.id,
+            }
+          );
+
+        } else if (shouldDelete) {
+
+          return VolunteerLogs.update(client, { id: log.id }, { deletedAt: log.deletedAt });
+
+        } else {
+          // otherwise, add log to DB
+
+          return VolunteerLogs.add(client, {
+            ...log,
+            createdBy: user.id,
             organisationId: communityBusiness.id,
-            userId: log.userId === 'me' ? user.id : Number(log.userId),
-          }
-        );
+          });
 
-      } else if (shouldDelete) {
+        }
 
-        return VolunteerLogs.update(client, { id: log.id }, { deletedAt: log.deletedAt });
+      } catch (error) {
+        VolunteerLogs.recordInvalidLog(
+          client,
+          user,
+          communityBusiness,
+          { message: error.message, stack: error.stack, payload: log }
+        ).catch(() => {});
 
-      } else {
-        // otherwise, add log to DB
-
-        return VolunteerLogs.add(client, {
-          ...log,
-          createdBy: user.id,
-          organisationId: communityBusiness.id,
-          userId: log.userId === 'me' ? user.id : Number(log.userId),
-        });
-
+        throw error;
       }
     }));
+
+    return results.reduce((acc, result, i) => {
+      if (result instanceof Error) {
+        acc.ignored = acc.ignored + 1;
+      } else {
+        acc.synced = acc.synced + 1;
+      }
+      return acc;
+    }, { ignored: 0, synced: 0 });
+  },
+};
+
+
+const VolunteerLogPermissions = {
+  async canWriteOwn (client: Knex, user: User | number) {
+    return Permissions.userHas(client, {
+      resource: ResourceEnum.VOLUNTEER_LOGS,
+      access: AccessEnum.WRITE,
+      permissionLevel: PermissionLevelEnum.OWN,
+      userId: typeof user === 'number' ? user : user.id,
+    });
+  },
+
+  async canWriteOthers (client: Knex, user: User) {
+    const canWrite = await Promise.all(
+      [PermissionLevelEnum.SIBLING, PermissionLevelEnum.CHILD]
+        .map((permissionLevel) => ({
+          permissionLevel,
+          resource: ResourceEnum.VOLUNTEER_LOGS,
+          access: AccessEnum.WRITE,
+          userId: user.id,
+        }))
+        .map((args) => Permissions.userHas(client, args))
+    );
+
+    return canWrite.some((a) => a);
   },
 };

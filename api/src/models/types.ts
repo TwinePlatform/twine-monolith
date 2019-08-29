@@ -429,14 +429,42 @@ export type VolunteerLogCollection = Collection<VolunteerLog> & {
     k: Knex,
     c: CommunityBusiness,
     u: User,
-    ls: VolunteerLog[]) => Promise<{ synced: Int, ignored: Int }>
+    ls: Partial<VolunteerLog>[]) => Promise<{ synced: Int, ignored: Int }>
+};
+
+export type RolesCollection = {
+  add: (k: Knex, a: RoleQuery) => Promise<QueryResponse>
+  remove: (k: Knex, a: RoleQuery) => Promise<QueryResponse>
+  move: (k: Knex, a: MoveRoleQuery) => Promise<QueryResponse>
+  userHas: (k: Knex, u: User, r: RoleEnum) => Promise<boolean>
+  userHasAtCb: (k: Knex, a: RolesQuery) => Promise<boolean>
+  fromUser: (k: Knex, a: User) => Promise<{organisationId: Int, role: RoleEnum}[]>
+  fromUserWithOrg: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum[]>
+  toDisplay: (r: RoleEnum) => string
+};
+
+export type PermissionCollection = {
+  grantExisting: (k: Knex, a: PermissionQuery) => Promise<QueryResponse>
+  grantNew: (k: Knex, a: PermissionQuery) => Promise<QueryResponse>
+  revoke: (k: Knex, a: PermissionQuery) => Promise<QueryResponse>
+  roleHas: (k: Knex, a: PermissionQuery) => Promise<boolean>
+  userHas: (k: Knex, a: UserPermissionQuery) => Promise<boolean>
+  forRoles: (k: Knex, a: RolesPermissionQuery) => Promise<PermissionTuple[]>
+};
+
+export type TokenCollection = {
+  create: (k: Knex, u: User, t: string) => Promise<SingleUseToken>
+  createPasswordResetToken: (k: Knex, u: User) => Promise<SingleUseToken>
+  createConfirmAddRoleToken: (k: Knex, u: User) => Promise<SingleUseToken>
+  use: (k: Knex, e: string, t: string, tb: string) => Promise<null>
+  usePasswordResetToken: (k: Knex, e: string, t: string) => Promise<null>
+  useConfirmAddRoleToken: (k: Knex, e: string, t: string) => Promise<null>
 };
 
 
 /*
  * Input query types
  */
-
 type QueryResponse = Dictionary<any>;
 export type PermissionTuple = {
   permissionLevel: PermissionLevelEnum
@@ -458,46 +486,7 @@ type RolesQuery = { role: RoleEnum | RoleEnum[], userId: number, organisationId:
 type MoveRoleQuery = Omit<RoleQuery, 'role'> & { from: RoleEnum, to: RoleEnum };
 type UserRoleQuery = Omit<RoleQuery, 'role'>;
 
-export type RolesCollection = {
-  add: (k: Knex, a: RoleQuery) => Promise<QueryResponse>
 
-  remove: (k: Knex, a: RoleQuery) => Promise<QueryResponse>
-
-  move: (k: Knex, a: MoveRoleQuery) => Promise<QueryResponse>
-
-  userHas: (k: Knex, u: User, r: RoleEnum) => Promise<boolean>
-
-  userHasAtCb: (k: Knex, a: RolesQuery) => Promise<boolean>
-
-  fromUser: (k: Knex, a: User) => Promise<{organisationId: Int, role: RoleEnum}[]>
-
-  fromUserWithOrg: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum[]>
-
-  toDisplay: (r: RoleEnum) => string
-};
-
-export type PermissionCollection = {
-  grantExisting: (k: Knex, a: PermissionQuery) => Promise<QueryResponse>
-
-  grantNew: (k: Knex, a: PermissionQuery) => Promise<QueryResponse>
-
-  revoke: (k: Knex, a: PermissionQuery) => Promise<QueryResponse>
-
-  roleHas: (k: Knex, a: PermissionQuery) => Promise<boolean>
-
-  userHas: (k: Knex, a: UserPermissionQuery) => Promise<boolean>
-
-  forRoles: (k: Knex, a: RolesPermissionQuery) => Promise<PermissionTuple[]>
-};
-
-export type TokenCollection = {
-  create: (k: Knex, u: User, t: string) => Promise<SingleUseToken>
-  createPasswordResetToken: (k: Knex, u: User) => Promise<SingleUseToken>
-  createConfirmAddRoleToken: (k: Knex, u: User) => Promise<SingleUseToken>
-  use: (k: Knex, e: string, t: string, tb: string) => Promise<null>
-  usePasswordResetToken: (k: Knex, e: string, t: string) => Promise<null>
-  useConfirmAddRoleToken: (k: Knex, e: string, t: string) => Promise<null>
-};
 /*
  * Model query declarations
  */

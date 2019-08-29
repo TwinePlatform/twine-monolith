@@ -1,5 +1,7 @@
+import * as Knex from 'knex';
 import { intersection } from 'ramda';
 import { AccessEnum, ResourceEnum, PermissionLevelEnum } from '../types';
+import { User } from '../../models';
 
 export type Scope = {
   permissionLevel: PermissionLevelEnum
