@@ -25,8 +25,8 @@
     "cover:unit": "npm run test:unit -- --coverage",
     "cover:integration": "npm run test:integration -- --coverage",
     "cover": "npm run cover:unit && npm run cover:integration",
-    "lint": "tslint --project tsconfig.json",
-    "lint:fix": "tslint --project tsconfig.json --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "checks": "node ./build/bin/server_setup.js",
     "migrate:latest": "knex migrate:latest --knexfile knexfile.ts",
     "migrate:latest:prod": "NODE_ENV=production knex migrate:latest --knexfile knexfile.ts",
@@ -93,22 +93,23 @@
     "ramda": "^0.26.1",
     "random-words": "^1.1.0",
     "ts-node": "^8.3.0",
-    "tslint": "^5.18.0",
     "twine-util": "file:../lib/twine-util",
     "typescript": "^3.5.3"
   },
   "devDependencies": {
     "@types/mockdate": "^2.0.0",
     "@types/nock": "^9.3.1",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
     "axios-mock-adapter": "^1.16.0",
+    "eslint": "^6.2.2",
+    "eslint-config-twine": "file:../lib/eslint-config-twine",
     "factory-girl": "^5.0.4",
     "jest": "^24.8.0",
     "minimist": "^1.2.0",
     "mockdate": "^2.0.2",
     "nock": "^10.0.6",
     "nodemon": "^1.19.1",
-    "ts-jest": "^24.0.2",
-    "tslint-config-airbnb": "^5.11.1",
-    "tslint-config-twine": "file:../lib/tslint-config-twine"
+    "ts-jest": "^24.0.2"
   }
 }
