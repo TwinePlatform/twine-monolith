@@ -16,13 +16,8 @@ export const createLegendData =
   };
 
 export const updateLegendData =
-  (data: AggregatedData, oldActiveData: LegendData, defaultSelection: boolean): LegendData => {
-    const visibleData = createLegendData(data, defaultSelection);
-
-    const newLegendData = visibleData.map((newItem) =>
-      oldActiveData.find((oldItem) => newItem.id === oldItem.id) || newItem
-    );
-    return sortByNameCaseInsensitive(newLegendData);
+  (data: AggregatedData, defaultSelection: boolean): LegendData => {
+    return sortByNameCaseInsensitive(createLegendData(data, defaultSelection));
   };
 
 export const getYHeaderList = (row: Row) => Object.keys(omit(['id', 'name'], row));
@@ -35,7 +30,7 @@ const zeroOutInactiveData = (legendData: LegendData) => (rows: Row[]) =>
       return matchingLegendData.active
         ? row
         : getYHeaderList(row)
-            .reduce((acc: object, el) => ({ ...acc, [el]: 0 }), { id: row.id, name: row.name });
+          .reduce((acc: object, el) => ({ ...acc, [el]: 0 }), { id: row.id, name: row.name });
     });
 
 export const sortAndZeroOutInactiveData = (data: AggregatedData, legendData: LegendData) => evolve({

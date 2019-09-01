@@ -7,7 +7,15 @@ import Months from '../../../lib/util/months';
 import { getColourByIndex } from '../util';
 
 export const aggregatedToStackedGraph = (data: AggregatedData, unit: DurationUnitEnum) => {
-  const labels = Object.keys(omit(['id', 'name'], data.rows[0]));
+  const labels = Object.keys(omit(['id', 'name'], data.rows[0])).sort((a, b) => {
+    const ad = new Date(`01-${a}`);
+    const bd = new Date(`01-${b}`);
+    if (!isNaN(ad.valueOf()) && !isNaN(bd.valueOf())) {
+      return ad < bd ? -1 : ad > bd ? 1 : 0;
+    } else {
+      return 0;
+    }
+  });
   return {
     labels: labels.map((x) => abbreviateIfDateString(Months.format.abreviated, x).split(' ')),
     datasets: data.rows.map((row, i) => {
@@ -25,11 +33,11 @@ export const aggregatedToStackedGraph = (data: AggregatedData, unit: DurationUni
         data: labels.map((y) => numericData[y]),
       };
     })
-    // Reverse data-set order because Chart.js iterates
-    // through list backwards, while Legend component
-    // iterates through it forwards.
-    // This ensures the legend and the stacks have the
-    // same colour order.
-    .reverse(),
+      // Reverse data-set order because Chart.js iterates
+      // through list backwards, while Legend component
+      // iterates through it forwards.
+      // This ensures the legend and the stacks have the
+      // same colour order.
+      .reverse(),
   };
 };

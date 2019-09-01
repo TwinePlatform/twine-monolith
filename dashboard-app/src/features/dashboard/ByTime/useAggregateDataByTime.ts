@@ -33,8 +33,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       },
       {
         ...CommunityBusinesses.configs.getVolunteerActivities,
-        transformResponse: [(res: any) => res.result.map(({ id, name }: IdAndName) =>
-          ({ id, name }))],
+        transformResponse: [(res: any) => res.result.map(({ id, name }: IdAndName) => ({ id, name }))],
       },
     ],
     updateOn: [...updateOn, from, to],

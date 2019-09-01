@@ -54,7 +54,7 @@ const HideableTextOverlay = styled.div<{ isVisible: boolean }>`
   };
 `;
 
-const TransitionText = styled(Paragraph)<{ isVisible: boolean }>`
+const TransitionText = styled(Paragraph) <{ isVisible: boolean }>`
   opacity: ${(props) => props.isVisible ? 1 : 0};
   transition: opacity 0.1s linear;
   transition-delay: 0.1s;
@@ -83,7 +83,7 @@ const Chart: FunctionComponent<Props> = (props) => {
 
   return (
     <Card>
-      <Title title={title}/>
+      <Title title={title} />
       <Row center="xs" middle="xs">
         <Col xs={12} md={9}>
           <GraphContentContainer>

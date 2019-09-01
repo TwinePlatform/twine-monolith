@@ -32,7 +32,7 @@ export const useOrderable = ({ initialOrderable, updateOn = [] }: InitialValues)
       }
       setSortByIndex(idx);
     }
-  }, [...updateOn, sortByIndex, order]);
+  }, [...updateOn, sortByIndex]);
 
   return {
     orderable: { sortByIndex, order },

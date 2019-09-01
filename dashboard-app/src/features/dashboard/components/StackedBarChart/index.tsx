@@ -8,7 +8,7 @@ import {
   isEveryDatumInactive
 } from './utils/util';
 import { DurationUnitEnum } from '../../../../types';
-import { aggregatedToStackedGraph } from '../../dataManipulation/aggregatedToGraphData'; //tslint:disable
+import { aggregatedToStackedGraph } from '../../dataManipulation/aggregatedToGraphData';
 import { AggregatedData } from '../../dataManipulation/logsToAggregatedData';
 import Legend from './Legend/index';
 import Chart from './Chart';
@@ -73,11 +73,11 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   const setLegendActivityOfAll = useCallback(() => setLegendData(flipActiveOfAll), [setLegendData]);
 
   useEffect(() => {
-    const newLegendData = updateLegendData(data, legendData, defaultSelection);
+    const newLegendData = updateLegendData(data, defaultSelection);
     const zeroedOutData = sortAndZeroOutInactiveData(data, newLegendData);
     setLegendData(newLegendData);
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
-  }, [data, defaultSelection, legendData, setLegendData, unit]);
+  }, [data, setLegendData, setChartData, unit, defaultSelection]);
 
   useEffect(() => {
     const zeroedOutData = sortAndZeroOutInactiveData(data, legendData);
