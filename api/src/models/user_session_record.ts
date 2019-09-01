@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { omit } from 'ramda';
+import { pick } from 'ramda';
 import { User, Organisation } from './types';
 import { Dictionary } from '../types/internal';
 
@@ -22,27 +22,9 @@ interface UserSessionRecordCollection {
   endSession (k: Knex, sid: string, type: string): Promise<number>;
 }
 
-const filterHeaders = omit([
-  'accept',
-  'accept-encoding',
-  'accept-language',
-  'authorization',
-  'connection',
-  'content-length',
-  'content-type',
-  'cookie',
-  'dnt',
-  'host',
-  'origin',
-  'upgrade-insecure-requests',
-  'x-request-id',
-  'x-forwarded-for',
-  'x-forwarded-proto',
-  'x-forwarded-port',
-  'x-request-start',
-  'total-route-time',
-  'via',
-  'connect-time',
+const filterHeaders = pick([
+  'user-agent',
+  'referer',
 ]);
 
 
