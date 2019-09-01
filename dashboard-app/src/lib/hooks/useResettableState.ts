@@ -5,7 +5,7 @@ export const useResettableState = <T>(init: T, resetOn: any[] = []) => {
 
   useEffect(() => {
     setState(init);
-  }, resetOn);
+  }, resetOn); // eslint-disable-line react-hooks/exhaustive-deps
 
   return [state, setState] as [T, Dispatch<SetStateAction<T>>];
 };

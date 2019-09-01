@@ -1,17 +1,18 @@
 import moment from 'moment';
 
-interface Months {
-  list: string [];
-  format: typeof MonthsFormatEnum;
-  range: (from: Date, to: Date, format: MonthsFormatEnum) => string[];
-  diff: (from: Date, to: Date) => number;
-}
-
 export enum MonthsFormatEnum {
   verbose = 'MMMM YYYY',
   abreviated = 'MMM YYYY',
   filename = 'MM_YY',
 }
+
+interface Months {
+  list: string[];
+  format: typeof MonthsFormatEnum;
+  range: (from: Date, to: Date, format: MonthsFormatEnum) => string[];
+  diff: (from: Date, to: Date) => number;
+}
+
 
 const months: Months = {
   list: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], // tslint:disable:max-line-length

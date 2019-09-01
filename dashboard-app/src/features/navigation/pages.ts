@@ -85,11 +85,10 @@ const NavBarOrder = [
 
 
 export const Pages = {
-  matchPath (pathname: string) {
-    const match = Object.values(PagesDict)
+  matchPath(pathname: string) {
+    const [match] = Object.values(PagesDict)
       .map(({ url }) => matchPath(pathname, { path: url, exact: true }))
-      .filter(Boolean)
-      [0];
+      .filter(Boolean);
 
     if (match === null || match === undefined) {
       return null;
@@ -105,24 +104,24 @@ export const Pages = {
     return pages[keys[0]];
   },
 
-  getNavbarLinks () {
+  getNavbarLinks() {
     return Pages.getProtected()
       .sort((a, b) => NavBarOrder.indexOf(a.title) - NavBarOrder.indexOf(b.title));
   },
 
-  getProtected () {
+  getProtected() {
     return Object.values(filter((page) => Boolean(page.protected), PagesDict));
   },
 
-  getPublic () {
+  getPublic() {
     return Object.values(filter((page) => !Boolean(page.protected), PagesDict));
   },
 
-  toDisplay (p: Page) {
+  toDisplay(p: Page) {
     return p.title;
   },
 
-  navigateTo (s: keyof PagesDictionary, push: (path: string) => void) {
+  navigateTo(s: keyof PagesDictionary, push: (path: string) => void) {
     if (PagesDict.hasOwnProperty(s)) {
       push(PagesDict[s].url);
     }

@@ -23,8 +23,8 @@ export const updateLegendData =
 export const getYHeaderList = (row: Row) => Object.keys(omit(['id', 'name'], row));
 
 const zeroOutInactiveData = (legendData: LegendData) => (rows: Row[]) =>
-  rows.
-    map((row) => {
+  rows
+    .map((row) => {
       const matchingLegendData = legendData.find((data) => data.id === row.id);
       if (!matchingLegendData) return row;
       return matchingLegendData.active
