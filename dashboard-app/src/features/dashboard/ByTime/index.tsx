@@ -41,7 +41,6 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
-  const [title, setTitle] = useState<[string, string]>(['', '']);
   const [legendData, setLegendData] = useState<LegendData>([]);
   const { data, loading, error, months } =
     useAggregateDataByTime({ from: fromDate, to: toDate });
@@ -76,15 +75,11 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
     }
   }, [data, fromDate, toDate, orderable, loading, unit, setErrors]);
 
-  useEffect(() => {
-    setTitle(getTitleForMonthPicker(TitlesCopy.Time.subtitle, fromDate, toDate));
-  }, [fromDate, toDate]);
-
   const tabProps = {
     data,
     tableData,
     onChangeSortBy,
-    title,
+    title: getTitleForMonthPicker(TitlesCopy.Time.subtitle, fromDate, toDate),
     legendData,
     setLegendData,
     orderable,
