@@ -4,7 +4,6 @@ import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import DatePickerConstraints from './datePickerConstraints';
-import _DataTable from '../components/DataTable';
 import UtilityBar from '../components/UtilityBar';
 import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
 import { H1 } from '../../../lib/ui/components/Headings';
@@ -54,18 +53,18 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
     if (!loading && data && months) {
       setTableData(aggregatedToTableData({ data, unit, yData: months }));
     }
-  }, [data, unit]);
+  }, [data, unit, loading, months]);
 
   // get sorting state values
-  const {
-    orderable,
-    onChangeOrderable,
-  } = useOrderable({ initialOrderable: { sortByIndex: 0, order: 'asc' }, updateOn: [tableData] });
+  const { orderable, onChangeOrderable } = useOrderable({
+    initialOrderable: { sortByIndex: 0, order: 'asc' },
+    updateOn: [tableData]
+  });
 
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
     onChangeOrderable(idx);
-  }, [tableData, orderable]);
+  }, [tableData.headers, onChangeOrderable]);
 
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
@@ -74,7 +73,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
     } else {
       setErrors({ Download: 'No data available to download' });
     }
-  }, [data, fromDate, toDate, orderable]);
+  }, [data, fromDate, toDate, orderable, loading, unit, setErrors]);
 
   const tabProps = {
     data,
@@ -104,7 +103,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
           />
         </Col>
       </Row>
-      <Errors errors={errors}/>
+      <Errors errors={errors} />
       {
         loading
           ? <FullScreenBeatLoader color={ColoursEnum.purple} />

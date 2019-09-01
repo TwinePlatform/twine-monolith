@@ -25,12 +25,12 @@ export interface AggregatedData {
 export const isDataEmpty = (d: AggregatedData) => d.rows.length === 0;
 
 const getIdAndName = (xData: Params['xData'], tableType: TableTypeItem, log: Params['logs']) => {
-  switch (tableType.xIdFromLogs){
-    case('userId'):
+  switch (tableType.xIdFromLogs) {
+    case ('userId'):
       const user = xData.find((x) => x.id === log.userId);
       return { id: log.userId, name: user ? user.name : 'Deleted User' };
 
-    case('activity'):
+    case ('activity'):
     default:
       const activity = xData.find((x) => x.name === log.activity);
       return { id: activity ? activity.id : NaN, name: log.activity };
@@ -38,22 +38,22 @@ const getIdAndName = (xData: Params['xData'], tableType: TableTypeItem, log: Par
 };
 
 const checkIfRowExists = (row: Row, tableType: TableTypeItem, log: Params['logs']) => {
-  switch (tableType.xIdFromLogs){
-    case('userId'):
+  switch (tableType.xIdFromLogs) {
+    case 'userId':
       return row.id === log.userId;
 
-    case('activity'):
+    case 'activity':
     default:
       return row.name === log.activity;
   }
 };
 
 const checkIfRowExistsInList = (acc: Row[], tableType: TableTypeItem, log: Params['logs']) => {
-  switch (tableType.xIdFromLogs){
-    case('userId'):
+  switch (tableType.xIdFromLogs) {
+    case ('userId'):
       return acc.some((row) => row.id === log.userId);
 
-    case('activity'):
+    case ('activity'):
     default:
       return acc.some((row) => row.name === log.activity);
   }

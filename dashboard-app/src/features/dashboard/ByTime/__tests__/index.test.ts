@@ -25,7 +25,7 @@ describe('By Time Page', () => {
     MockDate.reset();
   });
 
-  describe('Table view', async () => {
+  describe('Table view', () => {
     test('Success :: Display Title', async () => {
       expect.assertions(2);
 

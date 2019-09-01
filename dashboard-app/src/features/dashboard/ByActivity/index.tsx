@@ -60,22 +60,22 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
   const [errors, setErrors] = useErrors(error, data);
 
   // get sorting state values
-  const {
-    orderable,
-    onChangeOrderable,
-  } = useOrderable({ initialOrderable: { sortByIndex: 1, order: 'desc' }, updateOn: [tableData] });
+  const { orderable, onChangeOrderable } = useOrderable({
+    initialOrderable: { sortByIndex: 1, order: 'desc' },
+    updateOn: [tableData]
+  });
 
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
     onChangeOrderable(idx);
-  }, [tableData, orderable]);
+  }, [tableData.headers, onChangeOrderable]);
 
   // manipulate data for table
   useEffect(() => {
     if (!loading && data && activities) {
       setTableData(aggregatedToTableData({ data, unit, yData: activities }));
     }
-  }, [data, unit]);
+  }, [activities, data, loading, unit]);
 
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
@@ -84,7 +84,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
     } else {
       setErrors({ Download: 'No data available to download' });
     }
-  }, [data, fromDate, toDate, unit, orderable]);
+  }, [loading, data, fromDate, toDate, unit, orderable, setErrors]);
 
   return (
     <Container>
@@ -106,11 +106,11 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
       </Row>
       {
         loading
-          ? (<FullScreenBeatLoader color={ColoursEnum.purple}/>)
+          ? (<FullScreenBeatLoader color={ColoursEnum.purple} />)
           : (
             <Row center="xs">
               <Col xs={12}>
-                <Errors errors={errors}/>
+                <Errors errors={errors} />
                 <TabGroup titles={['Table']}>
                   {
                     tableData && (

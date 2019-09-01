@@ -57,14 +57,14 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
   const onChangeSortBy = useCallback((column: string) => {
     const idx = tableData.headers.indexOf(column);
     onChangeOrderable(idx);
-  }, [tableData, orderable]);
+  }, [tableData.headers, onChangeOrderable]);
 
   // manipulate data for table
   useEffect(() => {
     if (!loading && data && months) {
       setTableData(aggregatedToTableData({ data, unit, yData: months }));
     }
-  }, [data, unit]);
+  }, [data, loading, months, unit]);
 
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
@@ -73,7 +73,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
     } else {
       setErrors({ Download: 'No data available to download' });
     }
-  }, [data, fromDate, toDate, unit, orderable]);
+  }, [loading, data, fromDate, toDate, unit, orderable, setErrors]);
 
   const tabProps = {
     data,
@@ -104,11 +104,11 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
           />
         </Col>
       </Row>
-      <Errors errors={errors}/>
+      <Errors errors={errors} />
       {
         loading
-          ? <FullScreenBeatLoader color={ColoursEnum.purple}/>
-          : <VolunteerTabs {...tabProps}/>
+          ? <FullScreenBeatLoader color={ColoursEnum.purple} />
+          : <VolunteerTabs {...tabProps} />
       }
     </Container>
   );
