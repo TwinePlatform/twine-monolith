@@ -30,7 +30,7 @@ const fetchIdAndName = (type: string, xData: Params['xData'], value: string | nu
   switch (type) {
     case 'userId':
       const user = xData.find((x) => x.id === Number(value));
-      return { id: user ? user.id : -1, name: user ? user.name : 'Deleted User' };
+      return { id: user ? user.id : Number(value), name: user ? user.name : 'Deleted User' };
 
     case 'activity':
     default:
