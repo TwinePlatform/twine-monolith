@@ -42,27 +42,31 @@ const fetchIdAndName = (type: string, xData: Params['xData'], value: string | nu
 export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params): AggregatedData => { // tslint:disable:max-line-length
   const { groupByX, groupByY } = tableType;
 
+  // Collect logs into buckets by X-data
   // Log[] -> { [X]: Log[] }
   const w = collectBy((log: any) => log[tableType.xIdFromLogs], logs);
 
+  // Collect each bucket into sub-buckets by Y-data
   // { [X]: Log[] } -> { [X]: { [Y]: Log[] } }
   const x = Objects.mapValues((logs) => collectBy(tableType.getYIdFromLogs, logs), w);
 
-  // { [X]: { [Y]: Log[] } } -> { [X]: { [Y]: Number } }
+  // Sum all log durations within buckets
+  // { [X]: { [Y]: Log[] } } -> { [X]: { [Y]: Duration } }
   const y = Objects.mapValues((ys) => Objects.mapValues((_logs) => Duration.accumulate(_logs.map((l) => l.duration)), ys), x);
 
-  // Interpolate months
-  // { [X]: { [Y]: Number } } -> { [X]: { [Y]: Number } }
+  // Interpolate Y-data (necessary when Y-data is month based)
+  // { [X]: { [Y]: Duration } } -> { [X]: { [Y]: Duration } }
   const z = Objects.mapValues((ys) =>
     yData.reduce((acc, yDataPt) =>
       ys.hasOwnProperty(yDataPt.name)
         ? acc
         : { ...acc, [yDataPt.name]: Duration.fromSeconds(0) },
       ys),
-    y)
+    y);
 
-  // { [X]: { [Y]: Number } } -> ({ [Y]: Number } & { name: [X], id: number })[]
-  const a = Object.entries(z).reduce((acc, [k, v]) => {
+  // Transform into row
+  // { [X]: { [Y]: Duration } } -> ({ [Y]: Duration } & { name: [X], id: number })[]
+  const rows = Object.entries(z).reduce((acc, [k, v]) => {
     const q = fetchIdAndName(tableType.xIdFromLogs, xData, k);
     return acc.concat({ ...v, ...q } as any);
   }, []);
@@ -70,7 +74,7 @@ export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params):
   return {
     groupByX,
     groupByY,
-    rows: a,
+    rows,
   };
 };
 
