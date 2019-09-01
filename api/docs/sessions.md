@@ -28,3 +28,5 @@ In order to do this manually, connect to the redis server using your client and 
 ```
 > CONFIG SET notify-keyspace-events xE
 ```
+
+**NOTE**: Keyspace notifications are disabled on [Heroku Redis](https://github.com/TwinePlatform/twine-monolith/issues/302).
