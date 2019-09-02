@@ -248,7 +248,7 @@ const routes: Hapi.ServerRoute[] = [
           userId: id.default('me'),
           activity: volunteerLogActivity.required(),
           duration: volunteerLogDuration.required(),
-          startedAt: Joi.date().iso().min(new Date(0)).default('now'),
+          startedAt: Joi.date().iso().min(new Date(0)).default(() => new Date(), 'now'),
           project: volunteerProject.allow(null),
         },
       },
