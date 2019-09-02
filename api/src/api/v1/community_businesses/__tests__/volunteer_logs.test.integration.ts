@@ -502,7 +502,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toEqual(200);
-      expect((<any>res.result).result.startedAt.toISOString()).toBe(date.toISOString());
+      expect((<any> res.result).result.startedAt.toISOString()).toBe(date.toISOString());
       expect(res.result).toEqual({
         result: expect.objectContaining({
           userId: user.id,
