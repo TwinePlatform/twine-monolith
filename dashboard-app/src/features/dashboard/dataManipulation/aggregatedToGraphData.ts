@@ -7,7 +7,7 @@ import Months from '../../../lib/util/months';
 import { getColourByIndex } from '../util';
 
 export const aggregatedToStackedGraph = (data: AggregatedData, unit: DurationUnitEnum) => {
-  const labels = Months.sortFormatted(Object.keys(omit(['id', 'name'], data.rows[0])));
+  const labels = Object.keys(omit(['id', 'name'], data.rows[0]));
   return {
     labels: labels.map((x) => abbreviateIfDateString(Months.format.abreviated, x).split(' ')),
     datasets: data.rows
