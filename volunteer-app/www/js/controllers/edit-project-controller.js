@@ -119,6 +119,9 @@ angular.module('app.controllers').controller('EditProjectController', function (
 
                 }).error(function (result, error) {
 
+                    // hide loader
+                    $ionicLoading.hide();
+
                     $$shout('Could not edit project. Please try again later.');
 
                     // go back to view projects
