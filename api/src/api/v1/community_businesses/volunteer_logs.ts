@@ -68,7 +68,8 @@ const routes: Hapi.ServerRoute[] = [
       validate: {
         query: {
           ...query,
-          ...{ since, until: Joi.date().iso().greater(Joi.ref('since')) }, },
+          ...{ since, until: Joi.date().iso().greater(Joi.ref('since')) },
+        },
       },
       response: { schema: response },
       pre: [
@@ -156,7 +157,7 @@ const routes: Hapi.ServerRoute[] = [
         payload: {
           activity: volunteerLogActivity,
           duration: volunteerLogDuration,
-          startedAt,
+          startedAt: Joi.date().iso().min(new Date(0)),
           project: volunteerProject.allow(null),
         },
       },
@@ -247,7 +248,7 @@ const routes: Hapi.ServerRoute[] = [
           userId: id.default('me'),
           activity: volunteerLogActivity.required(),
           duration: volunteerLogDuration.required(),
-          startedAt: startedAt.default(() => new Date(), 'now'),
+          startedAt: Joi.date().iso().min(new Date(0)).default('now'),
           project: volunteerProject.allow(null),
         },
       },
@@ -446,7 +447,7 @@ const routes: Hapi.ServerRoute[] = [
               user,
               communityBusiness,
               { message: result.message, stack: result.stack, payload: payload[i] }
-            ).catch(() => {});
+            ).catch(() => { });
           } else {
             acc.synced = acc.synced + 1;
           }

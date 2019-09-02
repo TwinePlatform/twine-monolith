@@ -276,6 +276,31 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       });
     });
 
+    test('SUCCESS - can update log to date before start of current month', async () => {
+      const date = moment().startOf('month').subtract(13, 'days');
+
+      const res = await server.inject(injectCfg({
+        method: 'PUT',
+        url: '/v1/community-businesses/me/volunteer-logs/2',
+        credentials: adminCreds,
+        payload: {
+          activity: 'Other',
+          duration: { minutes: 17 },
+          startedAt: date.toISOString(),
+        },
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          id: 2,
+          activity: 'Other',
+          duration: { minutes: 17 },
+          startedAt: date.toDate(),
+        }),
+      });
+    });
+
     test('ERROR - cannot update logs of different organisation', async () => {
       const date = moment().startOf('month').add(23, 'days');
 
@@ -444,6 +469,40 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       }));
 
       expect(res.statusCode).toEqual(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          userId: user.id,
+          createdBy: vAdminCreds.user.user.id,
+          organisationId: organisation.id,
+          activity: 'Office support',
+          duration: {
+            minutes: 20,
+            hours: 2,
+          },
+        }),
+      });
+    });
+
+    test('SUCCESS - can create log with date before start of current month', async () => {
+      const date = moment().startOf('month').subtract(13, 'days');
+
+      const res = await server.inject(injectCfg({
+        method: 'POST',
+        url: '/v1/community-businesses/me/volunteer-logs',
+        credentials: vAdminCreds,
+        payload: {
+          userId: user.id,
+          activity: 'Office support',
+          duration: {
+            minutes: 20,
+            hours: 2,
+          },
+          startedAt: date.toISOString(),
+        },
+      }));
+
+      expect(res.statusCode).toEqual(200);
+      expect((<any>res.result).result.startedAt.toISOString()).toBe(date.toISOString());
       expect(res.result).toEqual({
         result: expect.objectContaining({
           userId: user.id,
