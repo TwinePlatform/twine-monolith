@@ -41,6 +41,16 @@
 	    	        </label>
 	    	        <!-- /password -->
 
+                <!-- post code -->
+                <span class="input-label">Post Code</span>
+                <label class="item item-input">
+                    <input type="text" name="post_code" id="post_code" placeholder="E.g. SH3 4NU" ng-model="formData.postCode" minlength="4" maxlength="10" required>
+                </label>
+                <label class="error block text-right padding assertive" ng-show="register.post_code.$invalid && formSubmitted" for="post_code">
+                    Please enter a valid post code
+                </label>
+                <!-- /phone -->
+
 	    	        <!-- phone -->
 	    	            <span class="input-label">Phone number</span>
 	    	        <label class="item item-input">

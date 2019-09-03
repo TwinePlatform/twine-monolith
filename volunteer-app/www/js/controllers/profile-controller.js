@@ -40,6 +40,9 @@
 			// email
 			$scope.formData.email = $localStorage.user.email;
 
+			// postCode
+			$scope.formData.postCode = $localStorage.user.postCode;
+
 			// phone
 			$scope.formData.phoneNumber = $localStorage.user.phoneNumber;
 			
