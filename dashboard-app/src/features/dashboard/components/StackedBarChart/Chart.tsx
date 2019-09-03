@@ -21,7 +21,7 @@ interface Props {
   xAxisTitle: string;
   yAxisTitle: string;
   title: TitleString;
-  noActiveLegendText: string;
+  overlayText?: string;
   isVisible: boolean;
   tooltipUnit: string;
 }
@@ -77,7 +77,7 @@ const Chart: FunctionComponent<Props> = (props) => {
     yAxisTitle,
     title,
     isVisible,
-    noActiveLegendText,
+    overlayText,
     tooltipUnit,
   } = props;
 
@@ -88,7 +88,7 @@ const Chart: FunctionComponent<Props> = (props) => {
         <Col xs={12} md={9}>
           <GraphContentContainer>
             <HideableTextOverlay isVisible={isVisible}>
-              <TransitionText isVisible={isVisible}>{noActiveLegendText}</TransitionText >
+              <TransitionText isVisible={isVisible}>{overlayText}</TransitionText >
             </HideableTextOverlay>
             <RoundedBar
               datasetKeyProvider={datasetKeyProvider}
