@@ -1,0 +1,15 @@
+{
+  "name": "types-twine-api",
+  "version": "1.0.0",
+  "description": "Typescript Types for twine-api",
+  "main": "index.ts",
+  "scripts": {},
+  "keywords": [],
+  "contributors": [
+    "Elias Malik <elias@foundersandcoders.com>",
+    "Aisha Nasir <aisha@foundersandcoders.com>"
+  ],
+  "dependencies": {
+    "@types/hapi__hapi": "^18.2.5"
+  }
+}

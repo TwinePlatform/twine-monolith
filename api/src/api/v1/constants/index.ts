@@ -1,5 +1,6 @@
 import * as Hapi from '@hapi/hapi';
 import { query, response } from './schema';
+import { Constants } from 'types-twine-api';
 
 
 const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
@@ -19,7 +20,8 @@ const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
       validate: { query },
       response: { schema: response },
     },
-    handler: async ({ server: { app: { knex } } }: Hapi.Request, h: Hapi.ResponseToolkit) => {
+    handler: async (request: Constants.getRequest, h: Hapi.ResponseToolkit) => {
+      const { server: { app: { knex } } } = request;
       const rows = await knex(tableName)
         .select()
         .orderBy(`${resourceName}_name`)
@@ -28,7 +30,7 @@ const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
       return rows.map((row: any) => ({
         id: row[`${tableName}_id`],
         name: row[`${resourceName}_name`],
-      }));
+      })) as Constants.getResponse;
     },
   };
 };

@@ -1,4 +1,6 @@
 import { DependencyList, useEffect, useState } from 'react';
+import { Constants, ServerResponse } from 'types-twine-api';
+
 import { useBatchRequest } from '../../../lib/hooks';
 import { CommunityBusinesses } from '../../../lib/api';
 import {
@@ -32,7 +34,8 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       },
       {
         ...CommunityBusinesses.configs.getVolunteers,
-        transformResponse: [(res: any) => res.result.map((a: any) => ({ id: a.id, name: a.name }))],
+        transformResponse: [(res: ServerResponse<Constants.getResponse>) =>
+          res.result.map((a) => ({ id: a.id, name: a.name }))],
       },
       {
         ...CommunityBusinesses.configs.getVolunteerActivities,

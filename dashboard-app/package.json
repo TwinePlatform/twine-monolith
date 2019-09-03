@@ -65,6 +65,7 @@
     "rebound": "^0.1.0",
     "styled-components": "^4.3.2",
     "twine-util": "file:../lib/twine-util",
+    "types-twine-api": "file:../lib/types-twine-api",
     "typescript": "^3.5.2"
   },
   "scripts": {
