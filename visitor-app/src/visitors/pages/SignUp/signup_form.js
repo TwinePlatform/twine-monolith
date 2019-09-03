@@ -11,7 +11,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Grid, Row } from 'react-flexbox-grid';
-import { Form as FM, FormSection, PrimaryButton } from '../../../shared/components/form/base';
+import { Form as FM, FormSection, PrimaryButton, DisabledButton as DB } from '../../../shared/components/form/base';
 import { Paragraph } from '../../../shared/components/text/base';
 import LabelledInput from '../../../shared/components/form/LabelledInput';
 import StyledLabelledCheckbox from '../../../shared/components/form/StyledLabelledCheckbox';
@@ -20,6 +20,7 @@ import { FlexContainerRow } from '../../../shared/components/layout/base';
 import NavHeader from '../../../shared/components/NavHeader';
 import { colors, fonts } from '../../../shared/style_guide';
 import { VISITOR_NAME_INVALID } from '../../../cb_admin/constants/error_text';
+import { status } from '../../../util';
 
 
 const Form = styled(FM)`
@@ -27,6 +28,11 @@ const Form = styled(FM)`
 `;
 
 const SubmitButton = styled(PrimaryButton)`
+  height: 4em;
+  width: 100%;
+`;
+
+const DisabledButton = styled(DB)`
   height: 4em;
   width: 100%;
 `;
@@ -122,7 +128,10 @@ const signupForm = (props) => {
 
               <ErrorText show={props.errors.ageCheck}>{props.errors.ageCheck}</ErrorText>
             </div>
-            <SubmitButton type="submit">CONTINUE</SubmitButton>
+            { props.status === status.PENDING
+              ? <DisabledButton disabled>CONTINUE</DisabledButton>
+              : <SubmitButton type="submit">CONTINUE</SubmitButton>
+            }
           </FormSection>
           <FormSection flexOrder={2}>
             <TitleParagraph>Why are we collecting this information?</TitleParagraph>
@@ -163,6 +172,7 @@ signupForm.propTypes = {
   uuid: PropTypes.string.isRequired, // See header comment
   genders: PropTypes.arrayOf(PropTypes.object).isRequired,
   hasGivenAge: PropTypes.bool.isRequired,
+  status: PropTypes.arrayOf(Object.values(status).concat(null)).isRequired,
 };
 
 export default signupForm;

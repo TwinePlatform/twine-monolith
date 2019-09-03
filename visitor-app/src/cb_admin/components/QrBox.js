@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Grid, Row } from 'react-flexbox-grid';
 import { PrimaryButton } from '../../shared/components/form/base';
 import { fonts, colors } from '../../shared/style_guide';
+import { status as reqStatus } from '../../util';
 
 
 const Img = styled.img`
@@ -23,15 +24,9 @@ const ErrorText = styled.p`
   color: ${colors.error};
 `;
 
-const resendQrCodeState = {
-  PENDING: 'PENDING',
-  SUCCESS: 'SUCCESS',
-  ERROR: 'ERROR',
-};
-
 const QrBox = ({ qrCodeUrl, print, send, error, status }) => {
-  const hasSent = status === resendQrCodeState.SUCCESS;
-  const hasError = status === resendQrCodeState.ERROR;
+  const hasSent = status === reqStatus.SUCCESS;
+  const hasError = status === reqStatus.FAILURE;
 
   return (
     <Grid>

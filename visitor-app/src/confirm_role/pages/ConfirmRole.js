@@ -9,6 +9,7 @@ import { Heading, Paragraph } from '../../shared/components/text/base';
 import NavHeader from '../../shared/components/NavHeader';
 import { Visitors, ResponseUtils, ErrorUtils } from '../../api';
 import { colors } from '../../shared/style_guide';
+import { status } from '../../util';
 
 
 const StyledSection = styled.section`
@@ -21,12 +22,6 @@ const StyledSection = styled.section`
 const ErrorText = styled(Paragraph)`
   color: ${colors.error};
 `;
-
-const status = {
-  PENDING: 'PENDING',
-  SUCCESS: 'SUCCESS',
-  FAILURE: 'FAILURE',
-};
 
 class ConfirmRole extends Component {
   constructor(props) {

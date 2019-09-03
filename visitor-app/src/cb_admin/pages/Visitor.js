@@ -13,7 +13,7 @@ import NavHeader from '../../shared/components/NavHeader';
 import DetailsTable from '../components/DetailsTable';
 import QrBox from '../components/QrBox';
 import { CommunityBusiness, Visitors, ErrorUtils } from '../../api';
-import { renameKeys, redirectOnError } from '../../util';
+import { renameKeys, redirectOnError, status } from '../../util';
 import { BirthYear } from '../../shared/constants';
 
 import PrintableQrCode from '../../shared/components/PrintableQrCode';
@@ -47,12 +47,6 @@ const payloadFromState = compose(
   pick(['name', 'gender', 'email', 'birthYear', 'phoneNumber', 'isSMSConsentGranted', 'isEmailConsentGranted']),
   prop('form'),
 );
-
-const resendQrCodeState = {
-  PENDING: 'PENDING',
-  SUCCESS: 'SUCCESS',
-  ERROR: 'ERROR',
-};
 
 
 export default class VisitorProfile extends React.Component {
@@ -102,13 +96,13 @@ export default class VisitorProfile extends React.Component {
   };
 
   onClickResend = () => {
-    this.setState({ resendQrCodeState: resendQrCodeState.PENDING });
+    this.setState({ resendQrCodeState: status.PENDING });
     Visitors.sendQrCode({ id: this.state.id })
-      .then(() => this.setState({ resendQrCodeState: resendQrCodeState.SUCCESS }))
+      .then(() => this.setState({ resendQrCodeState: status.SUCCESS }))
       .catch((err) => {
         if (ErrorUtils.errorStatusEquals(err, 400)) {
           this.setState({
-            resendQrCodeState: resendQrCodeState.ERROR,
+            resendQrCodeState: status.ERROR,
             errors: { ...this.state.errors, resendButton: err.response.data.error },
           });
         } else {

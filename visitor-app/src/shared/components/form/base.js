@@ -102,6 +102,17 @@ export const SecondaryButton = styled(Button)`
   border-radius: 0;
 `;
 
+export const DisabledButton = styled(Button)`
+  color: ${colors.white};
+  background-color: ${colors.dark}; /* Fallback */
+  background: linear-gradient(
+    0,
+    ${rgba(colors.dark, 0.75)} 0%,
+    ${colors.dark} 100%
+  );
+  border-radius: 0;
+`;
+
 export const PrimaryButtonNoFill = styled(PrimaryButton)`
   background: transparent;
   border: 0.1em solid ${colors.highlight_primary};
