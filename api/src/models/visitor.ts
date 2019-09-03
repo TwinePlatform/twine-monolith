@@ -101,10 +101,6 @@ export const Visitors: VisitorCollection = {
     return Users.destroy(client, user);
   },
 
-  async recordLogin (client, user) {
-    return Users.recordLogin(client, user);
-  },
-
   async fromCommunityBusiness (client, cb, q = {}) {
     const query = evolve({
       where: Visitors.toColumnNames,

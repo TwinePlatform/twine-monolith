@@ -100,10 +100,6 @@ export const Volunteers: VolunteerCollection = {
     throw new Error('User is not a volunteer');
   },
 
-  async recordLogin (client, user) {
-    return Users.recordLogin(client, user);
-  },
-
   async fromCommunityBusiness (client, cb, q = {}) {
     const query = evolve({
       where: Volunteers.toColumnNames,

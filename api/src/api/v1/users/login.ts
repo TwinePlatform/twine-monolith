@@ -56,21 +56,11 @@ const route: Hapi.ServerRoute[] = [
       const isPwdValid = await compare(password, user.password);
       if (!isPwdValid) return Boom.unauthorized('Incorrect password');
 
-      try {
-        await Users.recordLogin(knex, user);
-      } catch (error) {
-        request.log('warning', `Recording user login failed: ${user.id}`);
-      }
+      Sessions.authenticate(request, user, organisation);
 
-      Sessions.authenticate(request, user.id, organisation.id);
-
-      if (type === 'cookie') {
-        return null;
-      } else {
-        return {
-          token: request.yar.id,
-        };
-      }
+      return type === 'body'
+        ? { token: request.yar.id }
+        : null;
     },
   },
 ];

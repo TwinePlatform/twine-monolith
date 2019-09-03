@@ -234,32 +234,8 @@ export const Users: UserCollection = {
       });
   },
 
-  async recordLogin (client, user) {
-    return client('login_event')
-      .insert({ user_account_id: user.id });
-  },
-
   async serialise (user: User) {
     return omit(['password', 'qrCode'], user);
-  },
-
-  async addActiveDayEvent (client, user, origin) {
-    const [exists] = await client('user_account_active_day')
-      .where({
-        user_account_id: user.id,
-        origin,
-      })
-      .andWhereRaw('created_at >= DATE_TRUNC(\'day\', CURRENT_DATE)');
-
-    if (exists) return;
-
-    await client('user_account_active_day')
-      .insert({
-        user_account_id: user.id,
-        origin,
-      });
-
-    return;
   },
 
   async isMemberOf (client, user, cb) {

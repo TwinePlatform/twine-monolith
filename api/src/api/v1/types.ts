@@ -96,7 +96,7 @@ export interface PostFeedbackRequest extends Hapi.Request {
 export interface LoginRequest extends Hapi.Request {
   payload: {
     restrict?: RoleEnum | RoleEnum[]
-    type: 'cookie' | 'header'
+    type: 'cookie' | 'body'
     email: string
     password: string
   };

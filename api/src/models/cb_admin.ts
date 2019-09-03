@@ -117,10 +117,6 @@ export const CbAdmins: CbAdminCollection = {
         });
   },
 
-  async recordLogin (client, user) {
-    return Users.recordLogin(client, user);
-  },
-
   async serialise (user) {
     return omit(['password', 'qrCode'], user);
   },

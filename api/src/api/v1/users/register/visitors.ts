@@ -173,9 +173,6 @@ export default [
       // TODO: This should be hidden away
       await EmailService.newVisitor(config, visitor, admin, cb, document);
 
-      // Register login event
-      await Visitors.recordLogin(knex, visitor);
-
       /*
        * Response payload
        */

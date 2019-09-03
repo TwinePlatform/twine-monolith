@@ -30,7 +30,10 @@ const config: DeepPartial<Config> = {
           cookieOptions: {
             isSecure: false,
           },
-          cache: { cache: 'session' },
+          cache: {
+            cache: 'session', // Must match one of the caches
+            expiresIn: 3000,
+          },
         },
       },
     },

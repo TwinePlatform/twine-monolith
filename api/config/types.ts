@@ -51,7 +51,7 @@ type QrCodeConfig = {
 };
 
 type CacheConfig = {
-  session: { name: string, options: CatboxRedisOptions };
+  session: { name: string, options: Pick<CatboxRedisOptions, 'url'> }
 };
 
 type WebHooksConfig = {
