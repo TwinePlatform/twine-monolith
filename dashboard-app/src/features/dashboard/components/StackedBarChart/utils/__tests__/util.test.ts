@@ -11,7 +11,7 @@ import {
 import {
   AggregatedData,
   Row
-} from '../../../../../../features/dashboard/dataManipulation/logsToAggregatedData';
+} from '../../../../dataManipulation/logsToAggregatedData';
 
 describe('Helpers', () => {
   describe(':: isEveryDatumActive', () => {
@@ -165,9 +165,21 @@ describe('Helpers', () => {
         ]
       } as AggregatedData;
 
-      const expected = updateLegendData(aggregatedData, false);
+      const oldActiveData = [
+        {
+          active: true,
+          name: 'Aku Aku',
+          id: 2,
+        },
+        {
+          active: false,
+          name: 'Crash Bandicoot',
+          id: 3,
+        },
+      ];
+      const expected = updateLegendData(aggregatedData, oldActiveData, false);
       expect(expected).toEqual([
-        { active: false, name: 'Aku Aku', id: 2 },
+        { active: true, name: 'Aku Aku', id: 2 },
         { active: false, name: 'Crash Bandicoot', id: 3 },
       ]);
     });

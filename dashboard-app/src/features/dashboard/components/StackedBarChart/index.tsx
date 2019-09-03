@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState, useEffect, useCallback, useContext } from 'react';
 import { Row, Col } from 'react-flexbox-grid';
+import { equals } from 'ramda';
 
 import {
   flipActiveOfAll,
@@ -70,14 +71,18 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
           : x
       ));
 
-  const setLegendActivityOfAll = useCallback(() => setLegendData(flipActiveOfAll), [setLegendData]);
+  const setLegendActivityOfAll = useCallback(() => {
+    setLegendData(flipActiveOfAll);
+  }, [setLegendData]);
 
   useEffect(() => {
-    const newLegendData = updateLegendData(data, defaultSelection);
+    const newLegendData = updateLegendData(data, legendData, defaultSelection);
     const zeroedOutData = sortAndZeroOutInactiveData(data, newLegendData);
-    setLegendData(newLegendData);
+    if (!equals(legendData, newLegendData)) {
+      setLegendData(newLegendData);
+    }
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
-  }, [data, setLegendData, setChartData, unit, defaultSelection]);
+  }, [data, setLegendData, setChartData, unit, defaultSelection, legendData]);
 
   useEffect(() => {
     const zeroedOutData = sortAndZeroOutInactiveData(data, legendData);

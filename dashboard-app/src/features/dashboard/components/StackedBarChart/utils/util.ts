@@ -16,8 +16,13 @@ export const createLegendData =
   };
 
 export const updateLegendData =
-  (data: AggregatedData, defaultSelection: boolean): LegendData => {
-    return sortByNameCaseInsensitive(createLegendData(data, defaultSelection));
+  (data: AggregatedData, oldActiveData: LegendData, defaultSelection: boolean): LegendData => {
+    const visibleData = createLegendData(data, defaultSelection);
+
+    const newLegendData = visibleData.map((newItem) =>
+      oldActiveData.find((oldItem) => newItem.id === oldItem.id) || newItem
+    );
+    return sortByNameCaseInsensitive(newLegendData);
   };
 
 export const getYHeaderList = (row: Row) => Object.keys(omit(['id', 'name'], row));
