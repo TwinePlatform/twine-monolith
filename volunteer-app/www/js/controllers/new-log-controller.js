@@ -193,7 +193,7 @@
 		*/
 
 			$('#createLog .datepicker').pickadate({
-				min: $$utilities.getDateFirstOfMonth(),
+				min: $rootScope.isAdmin ? undefined : $$utilities.getDateFirstOfMonth(),
 				date: new Date(),
 				container: '.datepicker-container',
 				clear: false,

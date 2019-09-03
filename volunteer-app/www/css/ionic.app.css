@@ -12533,7 +12533,7 @@ select[disabled], .item-select-disabled:after {
 
 .noResults {
   position: absolute;
-  top: 40%;
+  top: 55%;
   margin-left: 5%;
   margin-right: 5%;
   min-width: 90%;

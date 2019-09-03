@@ -365,6 +365,7 @@
 									email: data.email,
 									phoneNumber: data.phoneNumber,
 									password: data.password,
+									postCode: data.postCode,
 									birthYear: data.yearOfBirth,
 									gender: data.gender,
 								},

@@ -22,7 +22,7 @@
 */
 
 	angular.module('app.controllers').controller('EditLogController', function (
-		$scope, $state, $ionicLoading, $filter, $localStorage, $rootScope, $timeout,
+		$scope, $rootScope, $state, $ionicLoading, $filter, $localStorage, $rootScope, $timeout,
 		$$api, $$utilities, $$shout, $$offline
 	) {
 
@@ -84,7 +84,7 @@
 		*/
 
 			var $datepickerInput = $('.editLog .datepicker').pickadate({
-				min: $$utilities.getDateFirstOfMonth(),
+				min: $rootScope.isAdmin ? undefined : $$utilities.getDateFirstOfMonth(),
 				container: '.datepicker-container',
 				clear: false,
 				onSet: function(context) {
@@ -148,8 +148,6 @@
 		*/
 
 			$scope.displayLogData = function(result) {
-
-				console.log('result: ', result);
 
 				// set datepicker date
 				var picker = $datepickerInput.pickadate('picker');
