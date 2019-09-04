@@ -1,9 +1,4 @@
-import {
-  fireEvent,
-  cleanup,
-  waitForElement,
-  wait,
-} from 'react-testing-library';
+import { fireEvent, cleanup, waitForElement, wait } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import 'jest-dom/extend-expect';
 import { axios } from '../../../api';
@@ -28,12 +23,12 @@ describe('ConfirmPassword Component', () => {
     const { getByText, getByLabelText } = renderWithRouter()(ConfirmPassword);
     const password = getByLabelText('Password');
     const submit = getByText('CONTINUE');
-    password.value = 'lolLOL123';
-    fireEvent.change(password);
+
+    fireEvent.change(password, { target: { value: 'lolLOL123' } });
     fireEvent.click(submit);
 
     const error = await waitForElement(() => getByText('Wrong password'));
-    expect(error.textContent).toEqual('Wrong password');
+    expect(error).toHaveTextContent('Wrong password');
   });
 
   test(':: correct password redirects to dashboard', async () => {
@@ -49,8 +44,8 @@ describe('ConfirmPassword Component', () => {
         renderWithRouter({ route: '/admin' })(ConfirmPassword);
     const password = getByLabelText('Password');
     const submit = getByText('CONTINUE');
-    password.value = 'Funnyfingers11!';
-    fireEvent.change(password);
+
+    fireEvent.change(password, { target: { value: 'Funnyfingers11!' } });
     fireEvent.click(submit);
 
     await wait(() => history.length === 2);

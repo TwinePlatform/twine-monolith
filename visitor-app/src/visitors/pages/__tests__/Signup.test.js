@@ -1,13 +1,9 @@
-import {
-  cleanup,
-  waitForElement,
-  fireEvent,
-  wait,
-} from 'react-testing-library';
+import 'jest-dom/extend-expect';
+import { cleanup, waitForElement, fireEvent, wait } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import { axios } from '../../../api';
 import { renderWithRouter } from '../../../tests';
-import main from '../SignUp/index';
+import main from '../SignUp';
 
 
 describe('Visitor Registration Component', () => {
@@ -242,7 +238,7 @@ describe('Visitor Registration Component', () => {
     fireEvent.click(submit);
 
     const error = await waitForElement(() => tools.getByText('already registered', { exact: false }));
-    expect(error.textContent).toBe('User with this e-mail already registered');
+    expect(error).toHaveTextContent('User with this e-mail already registered');
   });
 
   test('submit form w/o email or phone number', async () => {
@@ -275,6 +271,6 @@ describe('Visitor Registration Component', () => {
     fireEvent.click(submit);
 
     const error = await waitForElement(() => tools.getByText('supply', { exact: false }));
-    expect(error.textContent).toBe('You must supply a phone number or email address');
+    expect(error).toHaveTextContent('You must supply a phone number or email address');
   });
 });

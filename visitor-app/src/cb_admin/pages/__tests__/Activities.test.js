@@ -1,9 +1,4 @@
-import {
-  fireEvent,
-  cleanup,
-  waitForElement,
-  wait,
-} from 'react-testing-library';
+import { fireEvent, cleanup, waitForElement, wait } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import 'jest-dom/extend-expect';
 import { axios } from '../../../api';
@@ -119,9 +114,9 @@ describe('Activities Component', () => {
       getByText('Skating'),
     ]);
 
-    expect(french.textContent).toEqual('French Lessons');
-    expect(yoga.textContent).toEqual('Yoga');
-    expect(skating.textContent).toEqual('Skating');
+    expect(french).toHaveTextContent('French Lessons');
+    expect(yoga).toHaveTextContent('Yoga');
+    expect(skating).toHaveTextContent('Skating');
   });
 
   test('add :: correct response adds new row', async () => {
@@ -130,20 +125,19 @@ describe('Activities Component', () => {
 
     const input = getByLabelText('Add an activity');
     const add = getByText('ADD');
-    input.value = 'Cycling';
-    fireEvent.change(input);
     await waitForElement(() => getByText('French Lessons'));
+
+    fireEvent.change(input, { target: { value: 'Cycling' } });
     fireEvent.click(add);
 
     const cycling = await waitForElement(() => getByText('Cycling'));
 
-    expect(cycling.textContent).toEqual('Cycling');
+    expect(cycling).toHaveTextContent('Cycling');
   });
 
   test('update :: correct response updates specified row', async () => {
     expect.assertions(2);
-    const { getByAltText } =
-          renderWithRouter()(Activities);
+    const { getByAltText } = renderWithRouter()(Activities);
 
     const checkbox = await waitForElement(() => getByAltText('French Lessons monday update button'));
     expect(checkbox.checked).toBeFalsy();
@@ -151,22 +145,21 @@ describe('Activities Component', () => {
 
     await wait(() => {
       const updatedCheck = getByAltText('French Lessons monday update button');
-      return expect(updatedCheck.checked).toBeTruthy();
+      expect(updatedCheck.checked).toBeTruthy();
     });
   });
 
   test('delete :: correct response deletes specified row', async () => {
     expect.assertions(1);
-    const { getByText, getByTestId } =
-        renderWithRouter()(Activities);
+    const { getByText, getByTestId } = renderWithRouter()(Activities);
 
     const [frenchLessons, deleteButton] = await waitForElement(() => [
       getByText('French Lessons'),
-      getByTestId('Delete French Lessons')]);
+      getByTestId('Delete French Lessons'),
+    ]);
 
     fireEvent.click(deleteButton);
 
-    await wait(() => expect(frenchLessons).not.toBeInTheDocument(),
-    );
+    await wait(() => expect(frenchLessons).not.toBeInTheDocument());
   });
 });

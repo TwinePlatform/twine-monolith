@@ -1,14 +1,10 @@
-import {
-  cleanup,
-  waitForElement,
-  fireEvent,
-  wait,
-} from 'react-testing-library';
+import { cleanup, waitForElement, fireEvent, wait } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import { axios } from '../../../api';
 import { renderWithRouter, MockResponses, MockInstaScan } from '../../../tests';
 import SignInForm from '../SignIn/SignInForm';
 import main from '../SignIn';
+
 
 describe('Visitor SignIn Component', () => {
   let mock;

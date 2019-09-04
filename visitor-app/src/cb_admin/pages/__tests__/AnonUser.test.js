@@ -1,8 +1,4 @@
-import {
-  cleanup,
-  waitForElement,
-  fireEvent,
-} from 'react-testing-library';
+import { cleanup, waitForElement, fireEvent } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import 'jest-dom/extend-expect';
 import { axios } from '../../../api';
@@ -82,6 +78,6 @@ describe('AnonUser Component', () => {
     await waitForElement(() => getByText('print this', { exact: false }));
 
     const printButton = getByText('PRINT QR', { exact: false });
-    expect(printButton.textContent).toBe('PRINT QR CODE');
+    expect(printButton).toHaveTextContent('PRINT QR CODE');
   });
 });

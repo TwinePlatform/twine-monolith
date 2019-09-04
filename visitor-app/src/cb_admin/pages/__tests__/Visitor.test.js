@@ -1,9 +1,5 @@
-import {
-  cleanup,
-  waitForElement,
-  wait,
-  fireEvent,
-} from 'react-testing-library';
+import 'jest-dom/extend-expect';
+import { cleanup, waitForElement, wait, fireEvent } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import { axios } from '../../../api';
 import { renderWithRouter } from '../../../tests';
@@ -69,14 +65,13 @@ describe('Visitor Component', () => {
       getByText('maemail@gmail.com'),
     ]);
 
-    expect(name.textContent).toEqual('yusra mardini');
-    expect(gender.textContent).toEqual('female');
-    expect(email.textContent).toEqual('maemail@gmail.com');
+    expect(name).toHaveTextContent('yusra mardini');
+    expect(gender).toHaveTextContent('female');
+    expect(email).toHaveTextContent('maemail@gmail.com');
   });
 
   test(':: unauthorised request redirects to login', async () => {
     expect.assertions(1);
-
 
     mock.onPut('/community-businesses/me')
       .reply(200, { result: null });

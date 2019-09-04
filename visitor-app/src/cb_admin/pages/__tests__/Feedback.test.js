@@ -1,7 +1,4 @@
-import {
-  cleanup,
-  waitForElement,
-} from 'react-testing-library';
+import { cleanup, waitForElement } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import 'jest-dom/extend-expect';
 import { axios } from '../../../api';
