@@ -397,7 +397,15 @@
 							$ionicLoading.hide();
 
 							// push to offline data and mark as 'needs_pushing'
-							$scope.newLogOffline($scope.formData, true, 'Log saved offline.');
+							if (payloads) {
+								payloads.forEach(function (log, i) {
+									var message = (i === payloads.length - 1) ? 'Log saved offline.' : undefined;
+									$scope.newLogOffline(log, true, message);
+								});
+							} else {
+								// push to offline data, mark as 'needs_pushing'
+								$scope.newLogOffline(payload, true, 'Log saved offline.');
+							}
 
 							// go back to dashboard
 							if ($rootScope.isAdmin) {
