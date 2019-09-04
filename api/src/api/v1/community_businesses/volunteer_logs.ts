@@ -31,6 +31,7 @@ import { query } from '../users/schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum, User } from '../../../models/types';
 import { Unpack } from '../../../types/internal';
+import { silent } from 'twine-util/promises';
 
 
 const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) => {
@@ -52,6 +53,10 @@ const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) => {
     }, { valid: [] as typeof logs, invalid: [] as typeof logs });
 };
 
+const uniformLogs = (user: User) => (log: Unpack<SyncMyVolunteerLogsRequest['payload']>): Partial<VolunteerLog> => ({
+  ...log,
+  userId: log.userId === 'me' ? user.id : log.userId,
+});
 
 const routes: Hapi.ServerRoute[] = [
 
@@ -364,14 +369,7 @@ const routes: Hapi.ServerRoute[] = [
         payload: _payload,
       } = request;
 
-      const { user, scope } = StandardCredentials.fromRequest(request);
-      const stats = { ignored: 0, synced: 0 };
-
-
-      const uniformLogs = (user: User) => (log: Unpack<SyncMyVolunteerLogsRequest['payload']>): Partial<VolunteerLog> => ({
-        ...log,
-        userId: log.userId === 'me' ? user.id : log.userId,
-      });
+      const { user } = StandardCredentials.fromRequest(request);
 
       // Ignore invalid logs silently because of
       // https://github.com/TwinePlatform/twine-monolith/issues/246
@@ -379,94 +377,26 @@ const routes: Hapi.ServerRoute[] = [
 
       const payload = valid.map(uniformLogs(user));
 
-      if (payload.length !== _payload.length) {
+      if (invalid.length > 0) {
         // Do not await - this is an auxiliary action
-        VolunteerLogs.recordInvalidLog(knex, user, communityBusiness, invalid);
-        stats.ignored = _payload.length - payload.length;
-      }
-
-      VolunteerLogs.syncLogs(knex, communityBusiness, user, payload);
-
-      if (
-        // If some logs correspond to other users...
-        payload.some((log) => log.userId !== user.id) &&
-        // ...and we don't have permission to write to other users
-        !Scopes.intersect(['volunteer_logs-sibling:write', 'volunteer_logs-child:write'], scope)
-      ) {
-        // Then 403
-        return Boom.forbidden('Insufficient scope: cannot write other users logs');
-      }
-
-      const targetUserChecks = payload
-        .filter((l) => l.userId !== user.id)
-        .map((l) =>
-          Roles.userHasAtCb(
-            knex,
-            {
-              userId: Number(l.userId),
-              organisationId: communityBusiness.id,
-              role: [RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN],
-            }
-          )
-        );
-
-      const areVolunteers = await Promise.all(targetUserChecks);
-
-      if (!areVolunteers.every((a) => a)) {
-        return Boom.badRequest('Some users are not volunteers');
+        silent(VolunteerLogs.recordInvalidLog(knex, user, communityBusiness, invalid));
       }
 
       try {
-        const results = await Promises.some(payload.map(uniformLogs(user)).map(async (log) => {
-          const existsInDB = log.hasOwnProperty('id');
-          const shouldUpdate = existsInDB && !log.deletedAt;
-          const shouldDelete = existsInDB && log.deletedAt;
+        const result = await VolunteerLogs.syncLogs(knex, communityBusiness, user, payload);
 
-          if (shouldUpdate) {
-
-            return VolunteerLogs.update(knex,
-              { id: log.id, organisationId: communityBusiness.id },
-              {
-                ...omit(['id', 'deletedAt'], log),
-                organisationId: communityBusiness.id,
-              }
-            );
-
-          } else if (shouldDelete) {
-
-            return VolunteerLogs.update(knex, { id: log.id }, { deletedAt: log.deletedAt });
-
-          } else {
-            // otherwise, add log to DB
-
-            return VolunteerLogs.add(knex, {
-              ...log,
-              createdBy: user.id,
-              organisationId: communityBusiness.id,
-            });
-
-          }
-        }));
-
-        return results.reduce((acc, result, i) => {
-          if (result instanceof Error) {
-            acc.ignored = acc.ignored + 1;
-            VolunteerLogs.recordInvalidLog(
-              knex,
-              user,
-              communityBusiness,
-              { message: result.message, stack: result.stack, payload: payload[i] }
-            ).catch(() => { });
-          } else {
-            acc.synced = acc.synced + 1;
-          }
-          return acc;
-        }, stats);
+        return {
+          synced: result.synced,
+          ignored: result.ignored + invalid.length,
+        };
 
       } catch (error) {
         console.log(error);
 
-        return stats;
+        // Route attempts not to respond with non-200 status code because of
+        // how offline mode is written in the legacy volunteer app.
+        // See https://github.com/TwinePlatform/twine-monolith/issues/246
+        return { ignored: invalid.length, synced: 0 };
       }
     },
   },

@@ -9,6 +9,7 @@ import Roles from './role';
 import Permissions from './permission';
 import { PermissionLevelEnum } from '../auth';
 import { ResourceEnum, AccessEnum } from '../auth/types';
+import { silent } from 'twine-util/promises';
 
 
 /*
@@ -404,12 +405,12 @@ export const VolunteerLogs: VolunteerLogCollection = {
         }
 
       } catch (error) {
-        VolunteerLogs.recordInvalidLog(
+        silent(VolunteerLogs.recordInvalidLog(
           client,
           user,
           communityBusiness,
           { message: error.message, stack: error.stack, payload: log }
-        ).catch(() => {});
+        ));
 
         throw error;
       }
