@@ -41,7 +41,8 @@ const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) =>
 // Ignore invalid date strings for startedAt and deletedAt
   logs
     .reduce((acc, log) => {
-      const result = Joi.validate({ startedAt: log.startedAt, deletedAt: log.deletedAt }, logDatesSchema);
+      const dates = { startedAt: log.startedAt, deletedAt: log.deletedAt };
+      const result = Joi.validate(dates, logDatesSchema);
       if (result.error) {
         acc.invalid = acc.invalid.concat(log);
       } else {
@@ -50,10 +51,12 @@ const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) =>
       return acc;
     }, { valid: [] as typeof logs, invalid: [] as typeof logs });
 
-const uniformLogs = (user: User) => (log: Unpack<SyncMyVolunteerLogsRequest['payload']>): Partial<VolunteerLog> => ({
-  ...log,
-  userId: log.userId === 'me' ? user.id : log.userId,
-});
+const uniformLogs = (user: User) =>
+  (log: Unpack<SyncMyVolunteerLogsRequest['payload']>): Partial<VolunteerLog> =>
+    ({
+      ...log,
+      userId: log.userId === 'me' ? user.id : log.userId,
+    });
 
 const routes: Hapi.ServerRoute[] = [
 
