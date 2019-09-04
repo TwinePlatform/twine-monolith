@@ -1,8 +1,8 @@
 import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
-import { omit } from 'ramda';
-import { Duration, Promises } from 'twine-util';
+import { Duration } from 'twine-util';
+import { silent } from 'twine-util/promises';
 import {
   response,
   id,
@@ -14,7 +14,6 @@ import {
   volunteerLogDuration,
   volunteerProject
 } from './schema';
-import * as Scopes from '../../../auth/scopes';
 import Roles from '../../../models/role';
 import { VolunteerLogs, Volunteers, VolunteerLog } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
@@ -31,19 +30,18 @@ import { query } from '../users/schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum, User } from '../../../models/types';
 import { Unpack } from '../../../types/internal';
-import { silent } from 'twine-util/promises';
 
 
-const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) => {
-  const schema = Joi.object({
-    startedAt,
-    deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
-  });
+const logDatesSchema = Joi.object({
+  startedAt,
+  deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
+});
 
-  return logs
-    // Ignore invalid date strings for startedAt and deletedAt
+const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) =>
+// Ignore invalid date strings for startedAt and deletedAt
+  logs
     .reduce((acc, log) => {
-      const result = Joi.validate({ startedAt: log.startedAt, deletedAt: log.deletedAt }, schema);
+      const result = Joi.validate({ startedAt: log.startedAt, deletedAt: log.deletedAt }, logDatesSchema);
       if (result.error) {
         acc.invalid = acc.invalid.concat(log);
       } else {
@@ -51,7 +49,6 @@ const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) => {
       }
       return acc;
     }, { valid: [] as typeof logs, invalid: [] as typeof logs });
-};
 
 const uniformLogs = (user: User) => (log: Unpack<SyncMyVolunteerLogsRequest['payload']>): Partial<VolunteerLog> => ({
   ...log,
