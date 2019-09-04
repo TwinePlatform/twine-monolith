@@ -924,7 +924,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       ];
       const logs = [
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: times[0] },
-        { userId: 6, activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
+        { userId: volAdmin.id, activity: 'Other', duration: { hours: 2 }, startedAt: times[1] },
         { activity: 'Shop/Cafe work', duration: { minutes: 50, seconds: 2 }, startedAt: times[2] },
       ];
 
@@ -1000,7 +1000,7 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
     test('ERROR - fails when activity is invalid', async () => {
       const logs = [
-        { activity: 'Doesn\'t exist', duration: { minutes: 20 }, userId: 1 },
+        { activity: 'Doesn\'t exist', duration: { minutes: 20 } },
       ];
 
       const res = await server.inject(injectCfg({
@@ -1010,7 +1010,8 @@ describe('API /community-businesses/me/volunteer-logs', () => {
         payload: logs,
       }));
 
-      expect(res.statusCode).toBe(400);
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: { ignored: 1, synced: 0 } });
     });
 
     test('HACK - allows invalid logs through but ignores them', async () => {

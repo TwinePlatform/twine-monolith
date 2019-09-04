@@ -374,11 +374,9 @@ const routes: Hapi.ServerRoute[] = [
       // Ignore invalid logs silently because of
       // https://github.com/TwinePlatform/twine-monolith/issues/246
       const { valid, invalid } = ignoreInvalidLogs(_payload);
-
       const payload = valid.map(uniformLogs(user));
 
       if (invalid.length > 0) {
-        // Do not await - this is an auxiliary action
         silent(VolunteerLogs.recordInvalidLog(knex, user, communityBusiness, invalid));
       }
 
@@ -391,12 +389,20 @@ const routes: Hapi.ServerRoute[] = [
         };
 
       } catch (error) {
-        console.log(error);
+        switch (error.message) {
+          case 'Insufficient permissions to write other users logs':
+            return Boom.forbidden(error.message);
 
-        // Route attempts not to respond with non-200 status code because of
-        // how offline mode is written in the legacy volunteer app.
-        // See https://github.com/TwinePlatform/twine-monolith/issues/246
-        return { ignored: invalid.length, synced: 0 };
+          case 'Some users do not have permission to write volunteer logs':
+            return Boom.badRequest(error.message);
+
+          default:
+            console.log(error);
+            // We attempt not to respond with non-200 status code because of
+            // how offline mode is written in the legacy volunteer app.
+            // See https://github.com/TwinePlatform/twine-monolith/issues/246
+            return { ignored: invalid.length + valid.length, synced: 0 };
+        }
       }
     },
   },
