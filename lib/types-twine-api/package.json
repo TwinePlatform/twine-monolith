@@ -3,13 +3,25 @@
   "version": "1.0.0",
   "description": "Typescript Types for twine-api",
   "main": "index.ts",
-  "scripts": {},
+  "scripts": {
+    "lint": "eslint . --ext .js,.tsx,.ts"
+  },
   "keywords": [],
   "contributors": [
     "Elias Malik <elias@foundersandcoders.com>",
     "Aisha Nasir <aisha@foundersandcoders.com>"
   ],
   "dependencies": {
-    "@types/hapi__hapi": "^18.2.5"
+    "@types/hapi__hapi": "^18.2.5",
+    "typescript": "^3.6.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.1.0",
+    "@typescript-eslint/parser": "^2.1.0",
+    "eslint": "^6.3.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3"
   }
 }
