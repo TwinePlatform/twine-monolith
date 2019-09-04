@@ -40,8 +40,8 @@ describe('By Time Page', () => {
         tools.getByText('AVAILABLE', { exact: false }),
       ]);
 
-      expect(title.textContent).toEqual('Time');
-      expect(message.textContent).toBe('NO DATA AVAILABLE');
+      expect(title).toHaveTextContent('Time');
+      expect(message).toHaveTextContent('NO DATA AVAILABLE');
     });
 
     test('Success :: Render data to table', async () => {

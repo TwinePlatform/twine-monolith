@@ -41,8 +41,8 @@ describe('By Volunteer Page', () => {
         tools.getByText('AVAILABLE', { exact: false }),
       ]);
 
-      expect(title.textContent).toBe('Volunteers');
-      expect(message.textContent).toBe('NO DATA AVAILABLE');
+      expect(title).toHaveTextContent('Volunteers');
+      expect(message).toHaveTextContent('NO DATA AVAILABLE');
     });
 
 
