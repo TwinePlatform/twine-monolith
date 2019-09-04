@@ -3,7 +3,6 @@
  */
 import * as Knex from 'knex';
 import { compose, omit, evolve, filter, pick, invertObj } from 'ramda';
-import { Map } from '../types/internal';
 import { Organisation, OrganisationCollection, OrganisationRow, } from './types';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { Users } from './user';
@@ -15,7 +14,7 @@ import { Users } from './user';
  * ColumnToModel - DB column names       -> keys of the User type
  * ModelToColumn - keys of the User type -> DB column names
  */
-const ColumnToModel: Map<keyof OrganisationRow, keyof Organisation> = {
+const ColumnToModel: Record<keyof OrganisationRow, keyof Organisation> = {
   'organisation.organisation_id': 'id',
   'organisation.organisation_name': 'name',
   'organisation._360_giving_id': '_360GivingId',

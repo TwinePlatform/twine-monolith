@@ -3,7 +3,6 @@ import { Dictionary } from 'ramda';
 import { ApiRequestQuery, ApiRequestBody } from './schema/request';
 import { ApiResponse } from './schema/response';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../models';
-import { Omit } from '../../types/internal';
 import { RegionEnum, SectorEnum, RoleEnum } from '../../models/types';
 
 

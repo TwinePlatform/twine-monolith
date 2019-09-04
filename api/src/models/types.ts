@@ -2,7 +2,7 @@
  * Type declarations for the models
  */
 import * as Knex from 'knex';
-import { Maybe, Dictionary, Float, Int, Omit, Map } from '../types/internal';
+import { Maybe, Dictionary, Float, Int } from '../types/internal';
 import { PermissionLevelEnum } from '../auth';
 import { AccessEnum, ResourceEnum } from '../auth/types';
 import { Duration } from 'twine-util';
@@ -316,7 +316,7 @@ export type Model =
  * collection of model objects
  */
 export type Collection<T extends Model> = {
-  toColumnNames: (a: Partial<Map<keyof T, any>>) => Dictionary<any>
+  toColumnNames: (a: Partial<Record<keyof T, any>>) => Dictionary<any>
   create: (a: Partial<T>) => T
   exists: (c: Knex, a?: ModelQuery<T>) => Promise<boolean>
   get: (c: Knex, a?: ModelQuery<T>) => Promise<T[]>

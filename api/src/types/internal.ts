@@ -1,15 +1,7 @@
 export type Nothing = null;
 export type Maybe<T> = T | Nothing;
-
-export type Map<K extends string | number | symbol, V> = {
-  [k in K]: V
-};
-
-export type Dictionary<T> = {
-  [key: string]: T
-};
-
 export type ValueOf<T> = T[keyof T];
+export type Dictionary<T> = Record<string, T>;
 
 /*
  * Recursive definition of deep partial without breaking array types
@@ -37,8 +29,6 @@ export type JsonTypes =
   | JsonPrimitives[];
 
 export type Json = Dictionary<JsonTypes> | Dictionary<JsonTypes>[] | JsonTypes[];
-
-export type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
 export type Day =
   'monday'

@@ -12,7 +12,6 @@
 import * as Joi from '@hapi/joi';
 import * as moment from 'moment';
 import { Dictionary } from 'ramda';
-import { Map } from '../../../types/internal';
 
 /*
  * Types
@@ -75,7 +74,7 @@ export const DateJoi = Joi.extend((joi: any) => ({
 /*
  * Request query schema
  */
-export const query: Map<keyof ApiRequestQuery, Joi.Schema> = {
+export const query: Record<keyof ApiRequestQuery, Joi.Schema> = {
   fields: Joi.array().items(Joi.string().min(1).max(255).trim()),
   sort: Joi.string(),
   order: Joi.string().only('asc', 'desc'),

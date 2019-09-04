@@ -4,7 +4,7 @@ import { Objects, Duration } from 'twine-util';
 import { VolunteerLog, VolunteerLogCollection, RoleEnum } from './types';
 import { CommunityBusinesses } from './community_business';
 import { applyQueryModifiers } from './applyQueryModifiers';
-import { Map, Dictionary } from '../types/internal';
+import { Dictionary } from '../types/internal';
 import Roles from './role';
 
 
@@ -14,7 +14,7 @@ import Roles from './role';
  * ColumnToModel - DB column names       -> keys of the User type
  * ModelToColumn - keys of the User type -> DB column names
  */
-export const ColumnToModel: Map<string, keyof VolunteerLog> = {
+export const ColumnToModel: Record<string, keyof VolunteerLog> = {
   'volunteer_hours_log.volunteer_hours_log_id': 'id',
   'volunteer_hours_log.user_account_id': 'userId',
   'volunteer_hours_log.created_by': 'createdBy',

@@ -4,7 +4,6 @@
 import { createHmac, randomBytes } from 'crypto';
 import { assoc, omit, pick, evolve, compose, pipe, filter } from 'ramda';
 import { Objects, Promises } from 'twine-util';
-import { Map } from '../types/internal';
 import { User, VisitorCollection, LinkedVisitEvent, RoleEnum } from './types';
 import { Users, ModelToColumn } from './user';
 import { AgeList } from './age';
@@ -146,7 +145,7 @@ export const Visitors: VisitorCollection = {
       whereBetween: pipe(evolve({ birthYear: AgeList.toBirthYear }), Visitors.toColumnNames),
     }, q);
 
-    const additionalColumnMap: Map<keyof LinkedVisitEvent, string> = {
+    const additionalColumnMap: Record<keyof LinkedVisitEvent, string> = {
       id: 'visit_log.visit_log_id',
       createdAt: 'visit_log.created_at',
       modifiedAt: 'visit_log.modified_at',

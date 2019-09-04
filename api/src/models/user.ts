@@ -5,7 +5,7 @@ import * as Knex from 'knex';
 import { compose, omit, filter, pick, invertObj, evolve } from 'ramda';
 import { hash } from 'bcrypt';
 import { Objects } from 'twine-util';
-import { Map, Dictionary } from '../types/internal';
+import { Dictionary } from '../types/internal';
 import {
   User,
   UserRow,
@@ -24,7 +24,7 @@ import Roles from './role';
  * ColumnToModel - DB column names       -> keys of the User type
  * ModelToColumn - keys of the User type -> DB column names
  */
-export const ColumnToModel: Map<keyof UserRow, keyof User> = {
+export const ColumnToModel: Record<keyof UserRow, keyof User> = {
   'user_account.user_account_id': 'id',
   'user_account.user_name': 'name',
   'user_account.user_password': 'password',
