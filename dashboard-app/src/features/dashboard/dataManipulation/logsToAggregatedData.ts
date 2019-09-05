@@ -69,7 +69,7 @@ export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params):
     if (exists) {
       return rowsAcc.map((row) => {
         if (checkIfRowExists(row, tableType, log)) {
-          row[activeColumn] = Duration.sum(row[activeColumn], log.duration);
+          row[activeColumn] = Duration.sum(row[activeColumn] || {}, log.duration);
         }
         return row;
       });

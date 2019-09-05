@@ -31,10 +31,31 @@ interface Props {
   defaultSelection: boolean;
 }
 
+
+/*
+ * Helpers
+ */
+
+const getOverlayText = (data: AggregatedData, legendItemsActive: boolean): [boolean, string] => {
+  const noActiveLegendText = data.groupByX === 'Activity'
+    ? 'Select an activity to show data'
+    : 'Select volunteers to show their hours';
+
+  const dataExists = data.rows.length > 0;
+
+  if (!dataExists) {
+    return [true, 'No data for this range']
+  } else if (!legendItemsActive) {
+    return [true, noActiveLegendText];
+  } else {
+    return [false, ''];
+  }
+};
+
+
 /*
  * Components
  */
-
 const StackedBarChart: FunctionComponent<Props> = (props) => {
   const { data, xAxisTitle, yAxisTitle, title, legendData, setLegendData, defaultSelection } = props;
   const {unit} = useContext(DashboardContext)
@@ -69,19 +90,16 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
     setTooltipUnit(unit === DurationUnitEnum.DAYS ? 'days' : 'hrs');
   }, [unit]);
 
-  const noActiveLegendText = data.groupByX === 'Activity'
-    ? 'Select an activity to show data'
-    : 'Select volunteers to show their hours';
+  const [isVisible, overlayText] = getOverlayText(data, !isEveryDatumInactive(legendData));
 
-  const isThereData = data.rows.length > 0;
   const chartProps = {
     data: chartData,
     xAxisTitle,
     yAxisTitle,
     title,
     tooltipUnit,
-    noActiveLegendText,
-    isVisible: isEveryDatumInactive(legendData) && isThereData,
+    overlayText,
+    isVisible,
   };
 
   const legendProps = {
@@ -105,4 +123,3 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
 };
 
 export default StackedBarChart;
-
