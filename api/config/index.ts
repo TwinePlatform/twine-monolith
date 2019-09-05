@@ -28,7 +28,7 @@ declare module 'knex' {
  */
 const Configs: { [k in Environment]: DeepPartial<Config> } = {
   [Environment.DEVELOPMENT]: configDevelopment,
-  [Environment.TESTING]: configTesting,
+  [Environment.TEST]: configTesting,
   [Environment.PRODUCTION]: configProduction,
 };
 
@@ -55,8 +55,8 @@ const getEnvironment = (env: string): Environment => {
     case Environment.DEVELOPMENT:
       return Environment.DEVELOPMENT;
 
-    case Environment.TESTING:
-      return Environment.TESTING;
+    case Environment.TEST:
+      return Environment.TEST;
 
     case Environment.PRODUCTION:
       return Environment.PRODUCTION;

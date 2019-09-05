@@ -21,7 +21,7 @@ export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
 
   if ((<Boom<any>> request.response).isBoom) {
     const err = <BoomWithValidation> request.response;
-    if (env !== Environment.TESTING) console.log(err);
+    if (env !== Environment.TEST) console.log(err);
     return h.response(formatBoom(err)).code(err.output.statusCode);
   } else {
     return h.continue;

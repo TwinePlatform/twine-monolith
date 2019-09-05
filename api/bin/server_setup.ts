@@ -8,7 +8,7 @@ import { getConfig, Environment } from '../config';
 (async () => {
   console.log('Setting up server');
 
-  const server = await init(getConfig(Environment.TESTING));
+  const server = await init(getConfig(Environment.TEST));
 
   console.log('Server initialising');
 

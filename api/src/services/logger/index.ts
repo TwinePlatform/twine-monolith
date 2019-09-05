@@ -13,7 +13,7 @@ const loggerConfig = {
 export default {
   name: 'twine-logger',
   register: async (server: Hapi.Server, options: {env: Environment}) =>
-    options.env === Environment.TESTING
+    options.env === Environment.TEST
       ? Promise.resolve()
       : server.register({
         plugin: hapiPino,

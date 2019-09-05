@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/TwinePlatform/twine-api#readme",
   "scripts": {
-    "test:unit": "NODE_ENV=testing jest --config=jest.unit.config.js",
-    "test:integration": "NODE_ENV=testing jest --config=jest.integration.config.js",
+    "test:unit": "NODE_ENV=test jest --config=jest.unit.config.js",
+    "test:integration": "NODE_ENV=test jest --config=jest.integration.config.js",
     "test": "npm run test:unit && npm run test:integration",
     "cover:unit": "npm run test:unit -- --coverage",
     "cover:integration": "npm run test:integration -- --coverage",

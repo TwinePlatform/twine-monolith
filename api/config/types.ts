@@ -7,7 +7,7 @@ import { AppEnum } from '../src/types/internal';
 
 export enum Environment {
   DEVELOPMENT = 'development',
-  TESTING = 'testing',
+  TEST = 'test',
   PRODUCTION = 'production',
 }
 
