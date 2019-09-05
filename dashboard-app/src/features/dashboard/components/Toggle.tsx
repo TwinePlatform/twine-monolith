@@ -41,19 +41,13 @@ const Container = styled.div``;
 
 
 const Toggle: React.FunctionComponent<ToggleProps> = (props) => {
-  const {
-    left,
-    right,
-    leftTitle,
-    rightTitle,
-    onChange,
-  } = props;
+  const { left, right, leftTitle, rightTitle, onChange } = props;
   const [active, setActive] = useState<Side>(props.active || 'left');
 
   const onClick = useCallback((side: Side) => {
     setActive(side);
     onChange(side === 'left' ? left : right);
-  }, [active]);
+  }, [left, onChange, right]);
 
   return (
     <Container>

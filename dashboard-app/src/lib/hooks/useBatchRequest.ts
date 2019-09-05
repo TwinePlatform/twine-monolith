@@ -56,7 +56,7 @@ export default (args: UseBatchRequestParams) => {
       .catch((error) => {
         setState({ loading: false, results: [], error });
       });
-  }, updateOn);
+  }, updateOn); // eslint-disable-line react-hooks/exhaustive-deps
 
   return state;
 };

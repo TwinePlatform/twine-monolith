@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { Form as _Form, FormikActions } from 'formik';
+import { FormikActions } from 'formik';
 import { Notification } from 'react-notification';
 import { CbAdmins } from '../../../../lib/api';
 import { Response } from '../../../../lib/util/response';
@@ -17,7 +17,7 @@ import { SpacingEnum, ColoursEnum } from '../../../../lib/ui/design_system';
 /*
  * Types
  */
-interface LoginProps extends RouteComponentProps {}
+interface LoginProps extends RouteComponentProps { }
 
 
 /*

@@ -73,11 +73,11 @@ export const SelectContainer: React.FunctionComponent<SelectContainerProps> = (p
     <Container>
       <Label inline={inline} content={label}>
         <SelectWrapper>
-          { children }
+          {children}
           <SelectArrow />
         </SelectWrapper>
       </Label>
-      { error && <ErrorText>{error}</ErrorText> }
+      {error && <ErrorText>{error}</ErrorText>}
     </Container>
   );
 };
@@ -87,7 +87,7 @@ const LabelledSelect: React.FunctionComponent<SelectProps> = (props) => {
   const { label, options, error, inline = false, ...rest } = props;
 
   return (
-    <SelectContainer {...props}>
+    <SelectContainer inline={inline} {...props}>
       <Select {...rest}>
         {
           options.map((o) => (

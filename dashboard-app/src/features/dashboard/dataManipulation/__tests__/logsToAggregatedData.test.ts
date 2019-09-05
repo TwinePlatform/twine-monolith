@@ -64,8 +64,9 @@ describe('logsToAggregatedData', () => {
           'February 2018': {},
           'March 2018': { hours: 2, minutes: 23 },
         },
-      ]}
-      );
+      ]
+    }
+    );
   });
   test('SUCCESS - returns aggregated data with volunteer names', () => {
     const logs = [
@@ -112,7 +113,7 @@ describe('logsToAggregatedData', () => {
     expect(expected).toEqual({
       groupByX: 'Volunteer Name',
       groupByY: 'Activity',
-      rows: [
+      rows: expect.arrayContaining([
         {
           'Digging Holes': {},
           'Outdoor and practical work': { minutes: 2 },
@@ -123,9 +124,10 @@ describe('logsToAggregatedData', () => {
           'Digging Holes': {},
           'Outdoor and practical work': { hours: 4, minutes: 23 },
           id: 1,
-          name: 'Crash Bandicoot' ,
+          name: 'Crash Bandicoot',
         },
-      ]});
+      ])
+    });
   });
   test('SUCCESS - days aggregates data with correct precision', () => {
     const logs = [
@@ -176,7 +178,8 @@ describe('logsToAggregatedData', () => {
           name: 'Crash Bandicoot',
           id: 1,
         },
-      ]});
+      ]
+    });
   });
   test('SUCCESS - deleted user have own row, name replaced with deleted', () => {
     const logs = [
@@ -220,7 +223,7 @@ describe('logsToAggregatedData', () => {
     expect(expected).toEqual({
       groupByX: 'Volunteer Name',
       groupByY: 'Activity',
-      rows: [
+      rows: expect.arrayContaining([
         {
           'Digging Holes': {},
           'Outdoor and practical work': { minutes: 45 },
@@ -239,6 +242,7 @@ describe('logsToAggregatedData', () => {
           name: 'Crash Bandicoot',
           id: 1,
         },
-      ] });
+      ])
+    });
   });
 });

@@ -60,7 +60,7 @@ const checkIfRowExistsInList = (acc: Row[], tableType: TableTypeItem, log: Param
 };
 
 
-export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params): AggregatedData => { // tslint:disable:max-line-length
+export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params): AggregatedData => {
   const { groupByX, groupByY } = tableType;
   const rows: Row[] = logs.reduce((rowsAcc: Dictionary<any>[], log: any) => {
     const activeColumn = tableType.getYIdFromLogs(log);

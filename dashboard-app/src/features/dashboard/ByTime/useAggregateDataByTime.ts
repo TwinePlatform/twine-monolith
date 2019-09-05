@@ -18,11 +18,7 @@ interface UseAggregatedDataParams {
 
 export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
   const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
-  const months = [...Months.range(from, to, Months.format.verbose)]
-      .map((month, i) => ({
-        id: i,
-        name: month,
-      }));
+  const [months, setMonths] = useState<IdAndName[]>([]);
 
   const {
     loading,
@@ -37,30 +33,33 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       },
       {
         ...CommunityBusinesses.configs.getVolunteerActivities,
-        transformResponse: [(res: any) => res.result.map(({ id, name }: IdAndName) =>
-          ({ id, name }))],
+        transformResponse: [(res: any) => res.result.map(({ id, name }: IdAndName) => ({ id, name }))],
       },
     ],
     updateOn: [...updateOn, from, to],
   });
 
+  useEffect(() => {
+    setMonths(
+      [...Months.range(from, to, Months.format.verbose)]
+        .map((month, i) => ({ id: i, name: month }))
+    );
+  }, [from, to]);
 
   useEffect(() => {
     if (loading || error) {
       return;
     }
 
-    const logs = logsData.data;
-
     const data = logsToAggregatedData({
-      logs,
+      logs: logsData.data,
       tableType: tableType.MonthByActivity,
       xData: activitiesData.data,
       yData: months,
     });
 
     setAggregatedData(data);
-  }, [logsData]);
+  }, [logsData, activitiesData, error, loading, months]);
 
 
   if (loading) {

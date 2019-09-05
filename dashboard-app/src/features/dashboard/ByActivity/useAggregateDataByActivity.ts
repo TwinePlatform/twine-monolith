@@ -60,7 +60,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
 
     setActivities(activitiesData.data);
     setAggregatedData(data);
-  }, [logsData, volunteersData, activitiesData]);
+  }, [logsData, volunteersData, activitiesData, loading, error]);
 
 
   if (loading) {

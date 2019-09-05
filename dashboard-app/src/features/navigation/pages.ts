@@ -86,10 +86,9 @@ const NavBarOrder = [
 
 export const Pages = {
   matchPath (pathname: string) {
-    const match = Object.values(PagesDict)
+    const [match] = Object.values(PagesDict)
       .map(({ url }) => matchPath(pathname, { path: url, exact: true }))
-      .filter(Boolean)
-      [0];
+      .filter(Boolean);
 
     if (match === null || match === undefined) {
       return null;

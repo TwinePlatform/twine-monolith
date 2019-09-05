@@ -39,16 +39,16 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
   const {
     dateFilter,
     datePickerConstraint: constraint,
-    onFromDateChange = () => {},
-    onToDateChange = () => {},
-    onUnitChange = () => {},
-    onDownloadClick = () => {},
+    onFromDateChange = () => { },
+    onToDateChange = () => { },
+    onUnitChange = () => { },
+    onDownloadClick = () => { },
     ...rest
   } = props;
 
   const [fromDate, setFromDate] = useState(constraint.from.default());
   const [toDate, setToDate] = useState(constraint.to.default());
-  const { unit, setUnit } = useContext(DashboardContext);
+  const { setUnit } = useContext(DashboardContext);
 
   const onFromChange = useCallback((date: Date) => {
     const fd = constraint.from.validate(date, toDate);
@@ -56,22 +56,22 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
     onFromDateChange(fd);
 
     const td = constraint.to.validate(fd, toDate);
-    if (! moment(td).isSame(toDate)) {
+    if (!moment(td).isSame(toDate)) {
       setToDate(td);
       onToDateChange(td);
     }
-  }, [fromDate, toDate]);
+  }, [constraint.from, constraint.to, onFromDateChange, onToDateChange, toDate]);
 
   const onToChange = useCallback((date: Date) => {
     const td = constraint.to.validate(fromDate, date);
     setToDate(td);
     onToDateChange(td);
-  }, [fromDate, toDate]);
+  }, [constraint.to, fromDate, onToDateChange]);
 
   const onDisplayUnitChange = useCallback((u: DurationUnitEnum) => {
     setUnit(u);
     onUnitChange(u);
-  }, [unit]);
+  }, [onUnitChange, setUnit]);
 
   return (
     <MainRow middle="xs" start="xs" {...rest}>
@@ -95,7 +95,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
       </Col>
       <Col xs={6}>
         <Row end="xs">
-          <UnitToggle onChange={onDisplayUnitChange}/>
+          <UnitToggle onChange={onDisplayUnitChange} />
           <DownloadButton onClick={onDownloadClick}>Download</DownloadButton>
         </Row>
       </Col>

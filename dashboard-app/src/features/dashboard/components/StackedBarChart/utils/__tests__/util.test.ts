@@ -11,9 +11,8 @@ import {
 import {
   AggregatedData,
   Row
-} from '../../../../../../features/dashboard/dataManipulation/logsToAggregatedData';
+} from '../../../../dataManipulation/logsToAggregatedData';
 
-// tslint:disable:max-line-length
 describe('Helpers', () => {
   describe(':: isEveryDatumActive', () => {
     test('Success :: return true if all data is active', async () => {
@@ -110,9 +109,10 @@ describe('Helpers', () => {
         groupByX: 'Volunteer Name',
         groupByY: 'Activity',
         rows: [
-            { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
-            { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
-        ]} as AggregatedData;
+          { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
+          { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
+        ]
+      } as AggregatedData;
       const expected = createLegendData(aggregatedData, true);
       expect(expected).toEqual([
         { active: true, name: 'Aku Aku', id: 2 },
@@ -125,9 +125,10 @@ describe('Helpers', () => {
         groupByX: 'Volunteer Name',
         groupByY: 'Activity',
         rows: [
-            { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
-            { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
-        ]} as AggregatedData;
+          { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
+          { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
+        ]
+      } as AggregatedData;
       const expected = createLegendData(aggregatedData, false);
       expect(expected).toEqual([
         { active: false, name: 'Aku Aku', id: 2 },
@@ -140,9 +141,10 @@ describe('Helpers', () => {
         groupByX: 'Volunteer Name',
         groupByY: 'Activity',
         rows: [
-            { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
-            { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
-        ]} as AggregatedData;
+          { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
+          { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
+        ]
+      } as AggregatedData;
 
       const expected = createLegendData(aggregatedData, true);
       expect(expected).toEqual([
@@ -158,9 +160,10 @@ describe('Helpers', () => {
         groupByX: 'Volunteer Name',
         groupByY: 'Activity',
         rows: [
-            { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
-            { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
-        ]} as AggregatedData;
+          { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 2 },
+          { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 3 },
+        ]
+      } as AggregatedData;
 
       const oldActiveData = [
         {
@@ -227,9 +230,10 @@ describe('Helpers', () => {
         groupByX: 'Volunteer Name',
         groupByY: '',
         rows: [
-            { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 3 },
-            { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 4 },
-        ]} as AggregatedData;
+          { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 3 },
+          { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 4 },
+        ]
+      } as AggregatedData;
 
       const activeData = [
         { active: false, name: 'Aku Aku', id: 3 },
@@ -242,7 +246,8 @@ describe('Helpers', () => {
         rows: [
           { 'Outdoor and practical work': 0, name: 'Aku Aku', id: 3 },
           { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 4 },
-        ] }
+        ]
+      }
       );
     });
   });
@@ -252,9 +257,10 @@ describe('Helpers', () => {
         groupByX: 'Volunteer Name',
         groupByY: '',
         rows: [
-            { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 3 },
-            { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 4 },
-        ]} as AggregatedData;
+          { 'Outdoor and practical work': { minutes: 2 }, name: 'Aku Aku', id: 3 },
+          { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 4 },
+        ]
+      } as AggregatedData;
 
       const activeData = [
         { active: false, name: 'Aku Aku', id: 3 },
@@ -267,7 +273,8 @@ describe('Helpers', () => {
         rows: [
           { 'Outdoor and practical work': 0, name: 'Aku Aku', id: 3 },
           { 'Outdoor and practical work': { hours: 4, minutes: 23 }, name: 'Crash Bandicoot', id: 4 },
-        ] }
+        ]
+      }
       );
     });
   });

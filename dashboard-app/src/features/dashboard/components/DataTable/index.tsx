@@ -40,7 +40,7 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
     rows,
     sortBy = props.headers[0],
     order = 'desc',
-    onChangeSortBy = () => {},
+    onChangeSortBy = () => { },
     title,
     showTotals = false,
     ...rest
@@ -48,14 +48,14 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
 
   const onHeaderClick = useCallback((title) => {
     onChangeSortBy(title);
-  }, [sortBy, order, headers]);
+  }, [onChangeSortBy]);
 
   const sorter = useCallback((_rows: DataTableProps['rows']) =>
     sort([
       { accessor: pathOr('', ['columns', sortBy, 'content']), order },
       { accessor: pathOr('', ['columns', headers[0], 'content']), order: 'asc' as Order },
     ], _rows)
-  , [sortBy, order, headers]);
+    , [sortBy, order, headers]);
 
   const table = (
     <Table cols={headers.length}>
@@ -92,7 +92,7 @@ const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
         {
           rows.length > 0
             ? table
-            : <FullWidthTextBox text="NO DATA AVAILABLE"/>
+            : <FullWidthTextBox text="NO DATA AVAILABLE" />
         }
       </Container>
     </Card>

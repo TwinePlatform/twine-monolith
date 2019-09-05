@@ -17,8 +17,6 @@ export type EqualDataPoints = {
 export default () => {
   const oneYearAgo = moment().subtract(1, 'year').toDate();
   const now = moment().toDate();
-  const startOfThisMonth = moment().startOf('month');
-  const endOfThisMonth = moment().endOf('month');
 
   const [timeStats, setTimeStats] = useState<EqualDataPoints>({ labels: [], value: 0 });
   const [volunteerStats, setVolunteerStats] = useState<EqualDataPoints>({ labels: [], value: 0 });
@@ -49,6 +47,9 @@ export default () => {
     if (loading || error) {
       return;
     }
+
+    const startOfThisMonth = moment().startOf('month');
+    const endOfThisMonth = moment().endOf('month');
 
     // NOTE: Should use `VolunteerLog` types instead of `any`
     const logs: any[] = logsData.data;
@@ -82,7 +83,7 @@ export default () => {
         collectBy((log) => log.name, monthLogs)
       )
     );
-  }, [logsData, volunteersData]);
+  }, [error, loading, logsData, volunteersData]);
 
 
   if (loading) {
@@ -111,7 +112,7 @@ export default () => {
 const getCurrentMonth = () => moment().format(Months.format.abreviated);
 
 export const activityStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
-  if (! pts) {
+  if (!pts) {
     return {
       topText: ['During ', getCurrentMonth()],
       left: {
@@ -149,7 +150,7 @@ export const activityStatsToProps = (pts?: EqualDataPoints): NumberTileProps => 
 
 
 export const volunteerStatsToProps = (pts?: EqualDataPoints): TextTileProps => {
-  if (! pts) {
+  if (!pts) {
     return {
       topText: ['During ', getCurrentMonth()],
       left: {
@@ -187,7 +188,7 @@ export const volunteerStatsToProps = (pts?: EqualDataPoints): TextTileProps => {
 
 
 export const timeStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
-  if (! pts) {
+  if (!pts) {
     return {
       topText: ['Over the past ', '12 months'],
       left: {

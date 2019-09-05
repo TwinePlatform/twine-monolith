@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState, useEffect, useCallback, useContext } from 'react';
 import { Row, Col } from 'react-flexbox-grid';
+import { equals } from 'ramda';
 
 import {
   flipActiveOfAll,
@@ -8,7 +9,7 @@ import {
   isEveryDatumInactive
 } from './utils/util';
 import { DurationUnitEnum } from '../../../../types';
-import { aggregatedToStackedGraph } from '../../dataManipulation/aggregatedToGraphData'; //tslint:disable
+import { aggregatedToStackedGraph } from '../../dataManipulation/aggregatedToGraphData';
 import { AggregatedData } from '../../dataManipulation/logsToAggregatedData';
 import Legend from './Legend/index';
 import Chart from './Chart';
@@ -58,7 +59,7 @@ const getOverlayText = (data: AggregatedData, legendItemsActive: boolean): [bool
  */
 const StackedBarChart: FunctionComponent<Props> = (props) => {
   const { data, xAxisTitle, yAxisTitle, title, legendData, setLegendData, defaultSelection } = props;
-  const {unit} = useContext(DashboardContext)
+  const { unit } = useContext(DashboardContext)
   const [chartData, setChartData] = useState();
   const [tooltipUnit, setTooltipUnit] = useState('');
 
@@ -72,19 +73,21 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
 
   const setLegendActivityOfAll = useCallback(() => {
     setLegendData(flipActiveOfAll);
-  }, [legendData]);
+  }, [setLegendData]);
 
   useEffect(() => {
     const newLegendData = updateLegendData(data, legendData, defaultSelection);
     const zeroedOutData = sortAndZeroOutInactiveData(data, newLegendData);
-    setLegendData(newLegendData);
+    if (!equals(legendData, newLegendData)) {
+      setLegendData(newLegendData);
+    }
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
-  }, [data, unit]);
+  }, [data, setLegendData, setChartData, unit, defaultSelection, legendData]);
 
   useEffect(() => {
     const zeroedOutData = sortAndZeroOutInactiveData(data, legendData);
     setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
-  }, [legendData]);
+  }, [data, legendData, unit]);
 
   useEffect(() => {
     setTooltipUnit(unit === DurationUnitEnum.DAYS ? 'days' : 'hrs');
@@ -113,10 +116,10 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
   return (
     <Row center="xs">
       <Col xs={9}>
-        <Chart {...chartProps}/>
+        <Chart {...chartProps} />
       </Col>
       <Col xs={3}>
-        <Legend {...legendProps}/>
+        <Legend {...legendProps} />
       </Col>
     </Row>
   );

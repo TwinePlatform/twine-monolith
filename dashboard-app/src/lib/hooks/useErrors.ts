@@ -22,7 +22,7 @@ export const useErrors = (
     if (error) {
       setErrors({ data: error.message });
     }
-  }, [error]);
+  }, [error, setErrors]);
 
   return [errors, setErrors] as [Dictionary<string>, Dispatch<SetStateAction<Dictionary<string>>>];
 };
