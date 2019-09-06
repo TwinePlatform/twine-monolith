@@ -8,7 +8,7 @@ import { Users, Organisations } from '../../../../models';
 import { monitorSessionExpiry } from '../monitoring';
 
 
-describe('Session expiry monitoring', () => {
+describe.skip('Session expiry monitoring', () => {
   const config = getConfig(process.env.NODE_ENV);
   const knex = Knex(config.knex);
   let trx: Knex.Transaction;
