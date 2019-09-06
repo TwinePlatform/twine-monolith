@@ -1,9 +1,5 @@
-import {
-  fireEvent,
-  cleanup,
-  waitForElement,
-  wait,
-} from 'react-testing-library';
+import 'jest-dom/extend-expect';
+import { fireEvent, cleanup, waitForElement, wait } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import { axios } from '../../../api';
 import { renderWithRouter } from '../../../tests';
@@ -30,25 +26,22 @@ describe('ResetPassword Component', () => {
           message: '"passwordConfirm" must match password',
           validation: { passwordConfirm: 'must match password' } } });
 
-    const { getByText, getByLabelText } =
-        renderWithRouter({
-          route: '/admin/password/reset/tickettonarnia?email=lion@inthecloset.com',
-          match: { params: { token: 'tickettonarnia' } },
-          location: { search: '?email=lion@inthecloset.com' },
-        })(ResetPassword);
+    const { getByText, getByLabelText } = renderWithRouter({
+      route: '/admin/password/reset/tickettonarnia?email=lion@inthecloset.com',
+      match: { params: { token: 'tickettonarnia' } },
+      location: { search: '?email=lion@inthecloset.com' },
+    })(ResetPassword);
 
     const newPassword = getByLabelText('New password');
     const confirmPassword = getByLabelText('Confirm new password');
-    newPassword.value = 'lolLOL123!';
-    confirmPassword.value = 'lolLOL123';
-
     const submit = getByText('SUBMIT');
-    fireEvent.change(newPassword);
-    fireEvent.change(confirmPassword);
+
+    fireEvent.change(newPassword, { target: { value: 'lolLOL123!' } });
+    fireEvent.change(confirmPassword, { target: { value: 'lolLOL123' } });
     fireEvent.click(submit);
 
     const error = await waitForElement(() => getByText('match', { exact: false }));
-    expect(error.textContent).toEqual('must match password');
+    expect(error).toHaveTextContent('must match password');
   });
 
   test(':: invalid token returns 401 and displays error message', async () => {
@@ -63,50 +56,42 @@ describe('ResetPassword Component', () => {
         },
       });
 
-    const { getByText, getByLabelText } =
-        renderWithRouter({
-          route: '/admin/password/reset/tickettonarnia?email=lion@inthecloset.com',
-          match: { params: { token: 'tickettonarnia' } },
-          location: { search: '?email=lion@inthecloset.com' },
-        })(ResetPassword);
+    const { getByText, getByLabelText } = renderWithRouter({
+      route: '/admin/password/reset/tickettonarnia?email=lion@inthecloset.com',
+      match: { params: { token: 'tickettonarnia' } },
+      location: { search: '?email=lion@inthecloset.com' },
+    })(ResetPassword);
 
     const newPassword = getByLabelText('New password');
     const confirmPassword = getByLabelText('Confirm new password');
-    newPassword.value = 'lolLOL123!';
-    confirmPassword.value = 'lolLOL123!';
-
     const submit = getByText('SUBMIT');
-    fireEvent.change(newPassword);
-    fireEvent.change(confirmPassword);
+
+    fireEvent.change(newPassword, { target: { value: 'lolLOL123!' } });
+    fireEvent.change(confirmPassword, { target: { value: 'lolLOL123!' } });
     fireEvent.click(submit);
 
     const error = await waitForElement(() => getByText('token', { exact: false }));
-    expect(error.textContent).toEqual('Invalid token. Reset password again.');
+    expect(error).toHaveTextContent('Invalid token. Reset password again.');
   });
 
   test(':: matching passwords returns 200 and redirect', async () => {
     expect.assertions(2);
 
     mock.onPost('/users/password/reset')
-      .reply(200, {
-        result: null,
-      });
+      .reply(200, { result: null });
 
-    const { getByText, getByLabelText, history } =
-        renderWithRouter({
-          route: '/admin/password/reset/tickettonarnia?email=lion@inthecloset.com',
-          match: { params: { token: 'tickettonarnia' } },
-          location: { search: '?email=lion@inthecloset.com' },
-        })(ResetPassword);
+    const { getByText, getByLabelText, history } = renderWithRouter({
+      route: '/admin/password/reset/tickettonarnia?email=lion@inthecloset.com',
+      match: { params: { token: 'tickettonarnia' } },
+      location: { search: '?email=lion@inthecloset.com' },
+    })(ResetPassword);
 
     const newPassword = getByLabelText('New password');
     const confirmPassword = getByLabelText('Confirm new password');
-    newPassword.value = 'lolLOL123!';
-    confirmPassword.value = 'lolLOL123!';
-
     const submit = getByText('SUBMIT');
-    fireEvent.change(newPassword);
-    fireEvent.change(confirmPassword);
+
+    fireEvent.change(newPassword, { target: { value: 'lolLOL123!' } });
+    fireEvent.change(confirmPassword, { target: { value: 'lolLOL123!' } });
     fireEvent.click(submit);
 
     await wait(() => {

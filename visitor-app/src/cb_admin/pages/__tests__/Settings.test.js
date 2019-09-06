@@ -1,9 +1,5 @@
-import {
-  cleanup,
-  waitForElement,
-  wait,
-  fireEvent,
-} from 'react-testing-library';
+import 'jest-dom/extend-expect';
+import { cleanup, waitForElement, wait, fireEvent } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import { renderWithRouter } from '../../../tests';
 import Settings from '../Settings';
@@ -39,9 +35,9 @@ describe('Settings Component', () => {
       getByText('Environment or nature'),
       getByText('findmyfroggy@frogfinders.com'),
     ]);
-    expect(title.textContent).toEqual('Frog Finders');
-    expect(cbType.textContent).toEqual('Environment or nature');
-    expect(email.textContent).toEqual('findmyfroggy@frogfinders.com');
+    expect(title).toHaveTextContent('Frog Finders');
+    expect(cbType).toHaveTextContent('Environment or nature');
+    expect(email).toHaveTextContent('findmyfroggy@frogfinders.com');
   });
 
   test(':: unauthorised request redirects to ', async () => {

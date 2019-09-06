@@ -1,9 +1,5 @@
-import {
-  fireEvent,
-  cleanup,
-  waitForElement,
-  wait,
-} from 'react-testing-library';
+import 'jest-dom/extend-expect';
+import { fireEvent, cleanup, waitForElement, wait } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import { axios } from '../../../api';
 import { renderWithRouter } from '../../../tests';
@@ -25,14 +21,12 @@ describe('ForgotPassword Component', () => {
     mock.onPost('/users/password/forgot')
       .reply(200, { result: null });
 
-    const { getByText, getByLabelText, history } =
-      renderWithRouter()(ForgotPassword);
+    const { getByText, getByLabelText, history } = renderWithRouter()(ForgotPassword);
 
     const email = getByLabelText('Email');
     const submit = getByText('CONTINUE');
 
-    email.value = 'frogfindmyfroggy@frogfinders.com';
-    fireEvent.change(email);
+    fireEvent.change(email, { target: { value: 'frogfindmyfroggy@frogfinders.com' } });
     fireEvent.click(submit);
 
     await wait(() => expect(history.location.pathname).toEqual('/login'));
@@ -49,12 +43,11 @@ describe('ForgotPassword Component', () => {
     const email = getByLabelText('Email');
     const submit = getByText('CONTINUE');
 
-    email.value = 'notreal@frogfinders.com';
-    fireEvent.change(email);
+    fireEvent.change(email, { target: { value: 'notreal@frogfinders.com' } });
     fireEvent.click(submit);
 
     const error = await waitForElement(() => getByText('Email not recognised'));
-    expect(error.textContent).toEqual('Email not recognised');
+    expect(error).toHaveTextContent('Email not recognised');
   });
 
 

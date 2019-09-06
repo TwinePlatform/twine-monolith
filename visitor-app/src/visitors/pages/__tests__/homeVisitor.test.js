@@ -1,9 +1,4 @@
-import {
-  cleanup,
-  waitForElement,
-  fireEvent,
-  wait,
-} from 'react-testing-library';
+import { cleanup, waitForElement, fireEvent, wait } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import { axios } from '../../../api';
 import { renderWithRouter } from '../../../tests';

@@ -30,8 +30,8 @@ describe('By Activity Page', () => {
       tools.getByText('AVAILABLE', { exact: false }),
     ]);
 
-    expect(title.textContent).toBe('Activities');
-    expect(message.textContent).toBe('NO DATA AVAILABLE');
+    expect(title).toHaveTextContent('Activities');
+    expect(message).toHaveTextContent('NO DATA AVAILABLE');
   });
 
   test('Render data to table', async () => {
@@ -72,7 +72,7 @@ describe('By Activity Page', () => {
       tools.getAllByTestId('data-table-row'),
     ]);
 
-    expect(sortedHeader.textContent).toBe('↑ Volunteer Name');
+    expect(sortedHeader).toHaveTextContent('↑ Volunteer Name');
     expect(rows).toHaveLength(2);
     expect(rows[0]).toHaveTextContent('Betty3.3321.33');
     expect(rows[1]).toHaveTextContent('Wilma3.673.670');

@@ -1,9 +1,5 @@
-import {
-  fireEvent,
-  cleanup,
-  waitForElement,
-  wait,
-} from 'react-testing-library';
+import 'jest-dom/extend-expect';
+import { fireEvent, cleanup, waitForElement, wait } from 'react-testing-library';
 import MockAdapter from 'axios-mock-adapter';
 import { renderWithRouter } from '../../../tests';
 import Login from '../Login';
@@ -29,14 +25,13 @@ describe('Login Component', () => {
     const email = getByLabelText('Email');
     const password = getByLabelText('Password');
     const submit = getByText('LOGIN');
-    email.value = '123@hi.com';
-    password.value = 'lolLOL123';
-    fireEvent.change(email);
-    fireEvent.change(password);
+
+    fireEvent.change(email, { target: { value: '123@hi.com' } });
+    fireEvent.change(password, { target: { value: 'lolLOL123' } });
     fireEvent.click(submit);
 
     const error = await waitForElement(() => getByText('Credentials', { exact: false }));
-    expect(error.textContent).toEqual('Credentials not recognised');
+    expect(error).toHaveTextContent('Credentials not recognised');
   });
 
   test(':: incorrect user returns 403 and displays error message', async () => {
@@ -49,14 +44,13 @@ describe('Login Component', () => {
     const email = getByLabelText('Email');
     const password = getByLabelText('Password');
     const submit = getByText('LOGIN');
-    email.value = '123@hi.com';
-    password.value = 'lolLOL123';
-    fireEvent.change(email);
-    fireEvent.change(password);
+
+    fireEvent.change(email, { target: { value: '123@hi.com' } });
+    fireEvent.change(password, { target: { value: 'lolLOL123' } });
     fireEvent.click(submit);
 
     const error = await waitForElement(() => getByText('required', { exact: false }));
-    expect(error.textContent).toEqual('User does not have required role');
+    expect(error).toHaveTextContent('User does not have required role');
   });
 
   test(':: correct user details returns 200 and redirects to homepage', async () => {
@@ -70,10 +64,9 @@ describe('Login Component', () => {
     const email = getByLabelText('Email');
     const password = getByLabelText('Password');
     const submit = getByText('LOGIN');
-    email.value = 'findmyfroggy@frogfinders.com';
-    password.value = 'Funnyfingers11!';
-    fireEvent.change(email);
-    fireEvent.change(password);
+
+    fireEvent.change(email, { target: { value: 'findmyfroggy@frogfinders.com' } });
+    fireEvent.change(password, { target: { value: 'Funnyfingers11!' } });
     fireEvent.click(submit);
 
     await wait(() => expect(history.location.pathname).toEqual('/'));
