@@ -5,7 +5,7 @@ import { ICredentials } from './types';
 
 
 export const Credentials: ICredentials = {
-  async get (knex, user, org, session) {
+  async create (knex, user, org, session) {
     const roles = await Roles.fromUserWithOrg(knex, { userId: user.id, organisationId: org.id });
     const permissions = await Permissions.forRoles(knex, { roles });
 

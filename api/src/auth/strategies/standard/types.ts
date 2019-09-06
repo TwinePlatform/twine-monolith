@@ -29,6 +29,6 @@ export type UserCredential = {
 export type Credential = { scope: string[], user: UserCredential };
 
 export interface ICredentials {
-  get (k: Knex, u: User, o: Organisation, s?: Session): Promise<Credential>;
+  create (k: Knex, u: User, o: Organisation, s?: Session): Promise<Credential>;
   fromRequest (req: Hapi.Request): UserCredential & { scope: string[] };
 }

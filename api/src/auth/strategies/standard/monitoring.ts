@@ -20,10 +20,10 @@ export const monitorSessionExpiry = (knex: Knex, url: string) => {
   // are subscribed to using "psubscribe"
   // Note: need to cast second argument to <any> because `ioredis` typings
   //       are bad and wrong.
-  client.on('pmessage', <any> ((...args: any[]) => {
-    switch (args[0]) {
+  client.on('pmessage', <any> ((channel: string, event: string, key: string) => {
+    switch (channel) {
       case '__keyevent@*__:expired':
-        silent(UserSessionRecords.endSession(knex, args[2], 'expired'));
+        silent(UserSessionRecords.endSession(knex, key, 'expired'));
         break;
 
       /* istanbul ignore next */
