@@ -17,7 +17,7 @@ import {
 } from 'ramda';
 import { randomBytes } from 'crypto';
 import { Objects } from 'twine-util';
-import { Dictionary, Map } from '../types/internal';
+import { Dictionary } from '../types/internal';
 import {
   CommunityBusiness,
   CommunityBusinessCollection,
@@ -45,7 +45,7 @@ const renameKeysToColumns = Objects.renameKeys({
  * ColumnToModel - DB column names                    -> keys of the CommunityBusiness type
  * ModelToColumn - keys of the CommunityBusiness type -> DB column names
  */
-const ColumnToModel: Map<keyof CommunityBusinessRow, keyof CommunityBusiness> = {
+const ColumnToModel: Record<keyof CommunityBusinessRow, keyof CommunityBusiness> = {
   'community_business.organisation_id': 'id',
   'organisation.organisation_name': 'name',
   'organisation._360_giving_id': '_360GivingId',
