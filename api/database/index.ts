@@ -71,7 +71,7 @@ export const migrate = {
       );
 
     await _client.transaction((trx) =>
-      Promises.series(queries.map((q: Knex.QueryBuilder) => q.transacting(trx)))
+      Promises.series(queries.map((q) => q.transacting(trx)))
         .then(trx.commit)
         .catch(trx.rollback)
     );
@@ -79,7 +79,7 @@ export const migrate = {
     return client ? null : _client.destroy();
   },
 
-  truncate: async ({ env= process.env.NODE_ENV, client }: Args = {}) => {
+  truncate: async ({ env = process.env.NODE_ENV, client }: Args = {}) => {
     const config = getConfig(env);
     const _client = client ? client : Knex(config.knex);
 

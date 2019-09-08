@@ -15,23 +15,23 @@ const Permissions: PermissionCollection = {
             ['access_type']: access,
           })
       )
-      .insert({
-        ['access_role_id']: client('access_role')
-          .select('access_role_id')
-          .where({ ['access_role_name']: role }),
-        ['permission_id']: client('new_permission_id')
-          .select('permission_id'),
-      })
-      .into('access_role_permission')
-      .returning('*');
+        .insert({
+          ['access_role_id']: client('access_role')
+            .select('access_role_id')
+            .where({ ['access_role_name']: role }),
+          ['permission_id']: client('new_permission_id')
+            .select('permission_id'),
+        })
+        .into('access_role_permission')
+        .returning('*');
 
     } catch (error) {
       switch (error.code) {
-        case '23505':
-          throw new Error('Permission already exists, please use grantExisting method');
+      case '23505':
+        throw new Error('Permission already exists, please use grantExisting method');
         /* istanbul ignore next */
-        default:
-          throw error;
+      default:
+        throw error;
       }
     }
   },
@@ -51,18 +51,18 @@ const Permissions: PermissionCollection = {
             ['access_type']: access,
           }),
       })
-      .into('access_role_permission')
-      .returning('*');
+        .into('access_role_permission')
+        .returning('*');
 
     } catch (error) {
       switch (error.code) {
-        case '23502':
-          throw new Error('Permission entry or role does not exist, please use grantNew method');
-        case '23505':
-          throw new Error('Permission entry is already associated to this role');
+      case '23502':
+        throw new Error('Permission entry or role does not exist, please use grantNew method');
+      case '23505':
+        throw new Error('Permission entry is already associated to this role');
         /* istanbul ignore next */
-        default:
-          throw error;
+      default:
+        throw error;
       }
     }
   },

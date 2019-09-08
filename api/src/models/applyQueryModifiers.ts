@@ -32,31 +32,31 @@ export const applyQueryModifiers =
     const modifiers = intersection(Object.keys(opts), Object.keys(Utils));
 
     const query = modifiers
-    .reduce((acc, k: keyof ModelQuery<T>) => {
-      if (k === 'limit' && !isNil(opts.limit)) {
-        return compose(Utils.limit(opts.limit), acc);
+      .reduce((acc, k: keyof ModelQuery<T>) => {
+        if (k === 'limit' && !isNil(opts.limit)) {
+          return compose(Utils.limit(opts.limit), acc);
 
-      } else if (k === 'offset' && !isNil(opts.offset)) {
-        return compose(Utils.offset(opts.offset), acc);
+        } else if (k === 'offset' && !isNil(opts.offset)) {
+          return compose(Utils.offset(opts.offset), acc);
 
-      } else if (k === 'order' && !isNil(opts.order)) {
-        return compose(Utils.order(...opts.order), acc);
+        } else if (k === 'order' && !isNil(opts.order)) {
+          return compose(Utils.order(...opts.order), acc);
 
-      } else if (k === 'where' && !isNil(opts.where)) {
-        return compose(Utils.where(opts.where), acc);
+        } else if (k === 'where' && !isNil(opts.where)) {
+          return compose(Utils.where(opts.where), acc);
 
-      } else if (k === 'whereNot' && !isNil(opts.whereNot)) {
-        return compose(Utils.whereNot(opts.whereNot), acc);
+        } else if (k === 'whereNot' && !isNil(opts.whereNot)) {
+          return compose(Utils.whereNot(opts.whereNot), acc);
 
-      } else if (k === 'whereBetween' && !isNil(opts.whereBetween)) {
-        return compose(Utils.whereBetween(opts.whereBetween), acc);
+        } else if (k === 'whereBetween' && !isNil(opts.whereBetween)) {
+          return compose(Utils.whereBetween(opts.whereBetween), acc);
 
-      } else {
+        } else {
         /* istanbul ignore next */
-        return acc;
+          return acc;
 
-      }
-    }, (a?: any) => p);
+        }
+      }, () => p);
 
     return query();
   };

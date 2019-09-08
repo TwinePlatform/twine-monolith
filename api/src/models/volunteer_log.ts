@@ -345,7 +345,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
       const rows = await VolunteerLogs.updateProject(
         trx,
         project,
-        { deletedAt: new Date().toISOString() }
+        { deletedAt: new Date() }
       );
 
       await trx('volunteer_hours_log')
