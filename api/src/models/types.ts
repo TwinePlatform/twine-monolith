@@ -6,6 +6,7 @@ import { Maybe, Dictionary, Float, Int } from '../types/internal';
 import { PermissionLevelEnum } from '../auth';
 import { AccessEnum, ResourceEnum } from '../auth/types';
 import { Duration } from 'twine-util';
+import { user_account, user_accountFields } from '../../database/types';
 
 /*
  * Common and utility types
@@ -157,22 +158,22 @@ export type ApiTokenRow = {
  * but combined with other declarations
  */
 export type User = Readonly<CommonTimestamps & {
-  id?: Int;
-  name: string;
-  email: string;
-  phoneNumber?: string;
-  password?: string;
-  qrCode?: string;
+  id?: user_accountFields.user_account_id;
+  name: user_accountFields.user_name;
+  email: user_accountFields.email;
+  phoneNumber?: user_accountFields.phone_number;
+  password?: user_accountFields.user_password;
+  qrCode?: user_accountFields.qr_code;
   gender: GenderEnum;
   disability: DisabilityEnum;
   ethnicity: EthnicityEnum;
-  birthYear?: Int | null;
-  postCode?: string;
-  isEmailConfirmed: boolean;
-  isPhoneNumberConfirmed: boolean;
-  isEmailConsentGranted: boolean;
-  isSMSConsentGranted: boolean;
-  isTemp: boolean;
+  birthYear?: user_accountFields.birth_year;
+  postCode?: user_accountFields.post_code;
+  isEmailConfirmed: user_accountFields.is_email_confirmed;
+  isPhoneNumberConfirmed: user_accountFields.is_phone_number_confirmed;
+  isEmailConsentGranted: user_accountFields.is_email_contact_consent_granted;
+  isSMSConsentGranted: user_accountFields.is_sms_contact_consent_granted;
+  isTemp: user_accountFields.is_temp;
 }>;
 
 export type Organisation = Readonly<CommonTimestamps & {
@@ -195,7 +196,12 @@ export type CommunityBusiness = Organisation & Readonly<{
   adminCode?: string;
 }>;
 
-export type FundingBody = Organisation;
+export type Subscription = Readonly<CommonTimestamps & {
+  id: Int;
+  type: string;
+  status: string;
+  expiresAt: string;
+}>;
 
 export type VisitActivity = Readonly<CommonTimestamps & {
   id: Int;
@@ -273,7 +279,7 @@ export type Model =
   User
   | Organisation
   | CommunityBusiness
-  | FundingBody
+  | Subscription
   | VisitActivity
   | VisitEvent
   | LinkedVisitEvent

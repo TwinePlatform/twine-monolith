@@ -38,6 +38,7 @@
     "db:reset": "npm run migrate:teardown && npm run migrate:latest",
     "db:reset:prod": "npm run migrate:teardown:prod && npm run migrate:latest:prod",
     "db:reset:test": "npm run migrate:teardown:test && npm run migrate:latest:test",
+    "db:typegen": "schemats generate -c postgres://elias@localhost:5432/twine-api-clone -s public -o database/index.d.ts",
     "seed:make": "knex seed:make --knexfile knexfile.ts",
     "seed:run": "knex seed:run --knexfile knexfile.ts",
     "seed:run:test": "NODE_ENV=testing knex seed:run",
@@ -112,6 +113,8 @@
     "mockdate": "^2.0.2",
     "nock": "^10.0.6",
     "nodemon": "^1.19.1",
-    "ts-jest": "^24.0.2"
+    "schemats": "^3.0.3",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.19.0"
   }
 }
