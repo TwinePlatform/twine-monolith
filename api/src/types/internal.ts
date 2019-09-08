@@ -11,6 +11,8 @@ export type Dictionary<T> = {
 
 export type ValueOf<T> = T[keyof T];
 
+// Extracts wrapped type. See:
+// https://typescriptlang.org/docs/handbook/advanced-types.html#type-inference-in-conditional-types
 export type Unpack<T> =
   T extends (infer U)[] ? U :
   T extends (...args: any[]) => infer U ? U :

@@ -358,9 +358,9 @@ export const VolunteerLogs: VolunteerLogCollection = {
 
   async syncLogs (client, communityBusiness, user, logs) {
     // can user write logs for others?
-    const someLogsTargetOtherUsers = logs.some((log) => log.userId !== user.id);
-    const canWriteOthersLogs = await VolunteerLogPermissions.canWriteOthers(client, user);
-    if (someLogsTargetOtherUsers && !canWriteOthersLogs) {
+    const doAnyLogsTargetOtherUsers = logs.some((log) => log.userId !== user.id);
+    const canUserWriteOthersLogs = await VolunteerLogPermissions.canWriteOthers(client, user);
+    if (doAnyLogsTargetOtherUsers && !canUserWriteOthersLogs) {
       throw new Error('Insufficient permissions to write other users logs');
     }
 

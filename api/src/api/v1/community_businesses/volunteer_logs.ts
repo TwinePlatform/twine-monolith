@@ -20,6 +20,7 @@ import { getCommunityBusiness } from '../prerequisites';
 import {
   PostMyVolunteerLogsRequest,
   SyncMyVolunteerLogsRequest,
+  SyncVolunteerLogPayload,
   GetMyVolunteerLogsRequest,
   GetVolunteerLogRequest,
   PutMyVolunteerLogRequest,
@@ -29,7 +30,6 @@ import { requestQueryToModelQuery } from '../utils';
 import { query } from '../users/schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum, User } from '../../../models/types';
-import { Unpack } from '../../../types/internal';
 
 
 const logDatesSchema = Joi.object({
@@ -37,8 +37,8 @@ const logDatesSchema = Joi.object({
   deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
 });
 
-const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) =>
-// Ignore invalid date strings for startedAt and deletedAt
+const ignoreInvalidLogs = (logs: SyncVolunteerLogPayload[]) =>
+  // Ignore invalid date strings for startedAt and deletedAt
   logs
     .reduce((acc, log) => {
       const dates = { startedAt: log.startedAt, deletedAt: log.deletedAt };
@@ -51,12 +51,11 @@ const ignoreInvalidLogs = (logs: SyncMyVolunteerLogsRequest['payload']) =>
       return acc;
     }, { valid: [] as typeof logs, invalid: [] as typeof logs });
 
-const uniformLogs = (user: User) =>
-  (log: Unpack<SyncMyVolunteerLogsRequest['payload']>): Partial<VolunteerLog> =>
-    ({
-      ...log,
-      userId: log.userId === 'me' ? user.id : log.userId,
-    });
+const uniformLogs = (user: User) => (log: SyncVolunteerLogPayload): Partial<VolunteerLog> =>
+  ({
+    ...log,
+    userId: log.userId === 'me' ? user.id : log.userId,
+  });
 
 const routes: Hapi.ServerRoute[] = [
 
