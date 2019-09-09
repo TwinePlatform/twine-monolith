@@ -178,10 +178,6 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
           'community_business.organisation_id')
         // joins for optional fields
         .leftOuterJoin(
-          'subscription',
-          'subscription.beneficiary_id',
-          'community_business.organisation_id')
-        .leftOuterJoin(
           'volunteer_admin_code',
           'organisation.organisation_id',
           'volunteer_admin_code.organisation_id'),

@@ -407,23 +407,6 @@
       }
     }
   },
-  "/community-businesses/me/outreach-campaigns": {
-    "GET": {
-      "isImplemented": false,
-      "permissions": {
-        "CB_ADMIN": "organisations_outreach-own:read"
-      }
-    }
-  },
-  "/community-businesses/:id/outreach-campaigns": {
-    "GET": {
-      "isImplemented": false,
-      "permissions": {
-        "TWINE_ADMIN": "organisations_outreach-child:read",
-        "FUNDING_BODY": "organisations_outreach-child:read"
-      }
-    }
-  },
   "/community-businesses/register": {
     "POST": {
       "isImplemented": false,
@@ -434,43 +417,6 @@
     "GET": {
       "isImplemented": true,
       "permissions": "frontline"
-    }
-  },
-  "/funding-bodies/": {},
-  "/funding-bodies/:id": {},
-  "/funding-bodies/:id/subscriptions": {
-    "GET": {
-      "isImplemented": false,
-      "permissions": {
-        "TWINE_ADMIN": "organisations_subscriptions-child:read",
-        "FUNDING_BODY": "organisations_subscriptions-child:read"
-      }
-    },
-    "POST": {
-      "isImplemented": false,
-      "permissions": {
-        "TWINE_ADMIN": "organisations_subscriptions-child:write",
-        "FUNDING_BODY": "organisations_subscriptions-child:write"
-      }
-    }
-  },
-  "/funding-bodies/:id/child": {
-    "GET": {
-      "isImplemented": false,
-      "permissions": {
-        "TWINE_ADMIN": "organisations_details-child:read",
-        "FUNDING_BODY": "organisations_details-child:read"
-      }
-    }
-  },
-  "/funding-bodies/:id/training-sessions": {},
-  "/funding-bodies/:id/training-sessions/:id": {},
-  "/users/": {
-    "GET": {
-      "isImplemented": false,
-      "permissions": {
-        "TWINE_ADMIN": "user_details-child:read"
-      }
     }
   },
   "/users/register/volunteers": {
@@ -651,24 +597,6 @@
       }
     }
   },
-  "/users/me/outreach-campaigns": {
-    "GET": {
-      "isImplemented": false,
-      "permissions": {
-        "CB_ADMIN": "organisations_outreach-own:read",
-        "VOLUNTEER_ADMIN": "organisations_outreach-parent:read"
-      }
-    }
-  },
-  "/users/:id/outreach-campaigns": {
-    "GET": {
-      "isImplemented": false,
-      "permissions": {
-        "TWINE_ADMIN": "organisations_outreach-child:read",
-        "FUNDING_BODY": "organisations_outreach-child:read"
-      }
-    }
-  },
   "/users/visitors/search": {
     "POST": {
       "isImplemented": true,
@@ -706,52 +634,6 @@
     }
   },
   "/disabilities/": {
-    "GET": {
-      "isImplemented": true,
-      "permissions": false
-    }
-  },
-  "/outreach-campaigns/types": {
-    "GET": {
-      "isImplemented": true,
-      "permissions": false
-    }
-  },
-  "/outreach-campaigns/types/:id/campaign-targets": {
-    "GET": {
-      "isImplemented": false,
-      "permissions": false
-    },
-    "POST": {
-      "isImplemented": false,
-      "permissions": {
-        "TWINE_ADMIN": "constants-all:write"
-      }
-    },
-    "PUT": {
-      "isImplemented": false,
-      "permissions": {
-        "TWINE_ADMIN": "constants-all:write"
-      }
-    },
-    "DELETE": {
-      "isImplemented": false,
-      "permissions": {
-        "TWINE_ADMIN": "constants-all:delete"
-      }
-    }
-  },
-  "/outreach-campaigns/:id/meetings": {
-    "GET": {
-      "isImplemented": false,
-      "permissions": {
-        "TWINE_ADMIN": "organisations_outreach-child:read",
-        "FUNDING_BODY": "organisations_outreach-child:read",
-        "CB_ADMIN": "organisations_outreach-child:read"
-      }
-    }
-  },
-  "/subscription-types/": {
     "GET": {
       "isImplemented": true,
       "permissions": false

@@ -30,7 +30,7 @@ describe('Permisions Module', () => {
           .select('')
           .count();
         const query = await Permissions.grantNew(trx, {
-          resource: ResourceEnum.ORG_OUTREACH,
+          resource: ResourceEnum.ORG_FEEDBACK,
           access: AccessEnum.WRITE,
           permissionLevel: PermissionLevelEnum.PARENT,
           role: RoleEnum.VOLUNTEER,
@@ -179,7 +179,7 @@ describe('Permisions Module', () => {
     test('SUCCESS - returns true for matching permissions & user', async () => {
       try {
         const query = await Permissions.roleHas(trx, {
-          resource: ResourceEnum.ORG_OUTREACH,
+          resource: ResourceEnum.ORG_FEEDBACK,
           access: AccessEnum.READ,
           permissionLevel: PermissionLevelEnum.PARENT,
           role: RoleEnum.VOLUNTEER_ADMIN,
@@ -232,11 +232,6 @@ describe('Permisions Module', () => {
         {
           access: AccessEnum.READ,
           resource: ResourceEnum.ORG_DETAILS,
-          permissionLevel: PermissionLevelEnum.PARENT,
-        },
-        {
-          access: AccessEnum.READ,
-          resource: ResourceEnum.ORG_OUTREACH,
           permissionLevel: PermissionLevelEnum.PARENT,
         },
         {
@@ -318,11 +313,6 @@ describe('Permisions Module', () => {
         {
           access: AccessEnum.READ,
           resource: ResourceEnum.ORG_DETAILS,
-          permissionLevel: PermissionLevelEnum.PARENT,
-        },
-        {
-          access: AccessEnum.READ,
-          resource: ResourceEnum.ORG_OUTREACH,
           permissionLevel: PermissionLevelEnum.PARENT,
         },
         {

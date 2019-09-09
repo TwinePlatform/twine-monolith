@@ -10,9 +10,7 @@ const createConstantRoute = (tableName: string): Hapi.ServerRoute => {
 
   return {
     method: 'GET',
-    path: `/${ tableName === 'outreach_type'
-      ? 'outreach-campaigns/types'
-      : resourceNamePlural }`,
+    path: `/${resourceNamePlural}`,
     options: {
       description: `Retreive list of ${resourceNamePlural}`,
       auth: false,
@@ -37,8 +35,6 @@ export default [
   'gender',
   'ethnicity',
   'disability',
-  'outreach_type',
-  'subscription_type',
   'community_business_sector',
   'community_business_region',
   'visit_activity_category',

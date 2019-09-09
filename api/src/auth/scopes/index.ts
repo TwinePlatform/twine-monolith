@@ -18,18 +18,6 @@ const toResourceEnum = (s: string): ResourceEnum => {
     case ResourceEnum.ORG_FEEDBACK:
       return ResourceEnum.ORG_FEEDBACK;
 
-    case ResourceEnum.ORG_INVITATIONS:
-      return ResourceEnum.ORG_INVITATIONS;
-
-    case ResourceEnum.ORG_OUTREACH:
-      return ResourceEnum.ORG_OUTREACH;
-
-    case ResourceEnum.ORG_SUBSCRIPTIONS:
-      return ResourceEnum.ORG_SUBSCRIPTIONS;
-
-    case ResourceEnum.ORG_TRAINING:
-      return ResourceEnum.ORG_TRAINING;
-
     case ResourceEnum.ORG_VOLUNTEERS:
       return ResourceEnum.USER_DETAILS;
 
