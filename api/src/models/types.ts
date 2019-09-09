@@ -192,8 +192,6 @@ export type CommunityBusiness = Organisation & Readonly<{
   coordinates: Coordinates
   turnoverBand: string
   adminCode?: string
-  frontlineWorkspaceId?: string
-  frontlineApiKey?: string
 }>;
 
 export type FundingBody = Organisation;

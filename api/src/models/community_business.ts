@@ -68,8 +68,6 @@ const ModelToColumn = invertObj(ColumnToModel);
 
 const optionalFields: Dictionary<string> = {
   adminCode: 'volunteer_admin_code.code',
-  frontlineApiKey: 'frontline_account.frontline_api_key',
-  frontlineWorkspaceId: 'frontline_account.frontline_workspace_id',
 };
 
 /*
@@ -183,10 +181,6 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
           'subscription',
           'subscription.beneficiary_id',
           'community_business.organisation_id')
-        .leftOuterJoin(
-          'frontline_account',
-          'frontline_account.frontline_account_id',
-          'subscription.frontline_account_id')
         .leftOuterJoin(
           'volunteer_admin_code',
           'organisation.organisation_id',
