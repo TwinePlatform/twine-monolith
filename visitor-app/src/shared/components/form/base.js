@@ -74,7 +74,8 @@ export const Button = styled.button`
   letter-spacing: 0.2em;
 `;
 
-export const PrimaryButton = styled(Button)`
+const standardPrimaryButtonStyling = `
+  cursor: pointer;
   background-color: ${colors.highlight_primary}; /* Fallback */
   background: linear-gradient(
     0,
@@ -91,6 +92,24 @@ export const PrimaryButton = styled(Button)`
   }
 `;
 
+const disabledButtonStyling = `
+  color: ${colors.white};
+  background-color: ${colors.dark}; /* Fallback */
+  background: linear-gradient(
+    0,
+    ${rgba(colors.dark, 0.75)} 0%,
+    ${colors.dark} 100%
+  );
+  border-radius: 0;
+`;
+
+export const PrimaryButton = styled(Button)`
+  ${props => props.disabled
+    ? disabledButtonStyling
+    : standardPrimaryButtonStyling
+}
+`;
+
 export const SecondaryButton = styled(Button)`
   color: ${colors.white};
   background-color: ${colors.highlight_secondary}; /* Fallback */
@@ -98,17 +117,6 @@ export const SecondaryButton = styled(Button)`
     0,
     ${rgba(colors.highlight_secondary, 0.75)} 0%,
     ${colors.highlight_secondary} 100%
-  );
-  border-radius: 0;
-`;
-
-export const DisabledButton = styled(Button)`
-  color: ${colors.white};
-  background-color: ${colors.dark}; /* Fallback */
-  background: linear-gradient(
-    0,
-    ${rgba(colors.dark, 0.75)} 0%,
-    ${colors.dark} 100%
   );
   border-radius: 0;
 `;
