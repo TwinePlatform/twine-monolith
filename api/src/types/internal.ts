@@ -23,6 +23,8 @@ export type DeepPartial<T> = {
         : DeepPartial<T[P]>
 };
 
+export type Require<T, U extends keyof T> = Required<Pick<T, U>> & Omit<T, U>;
+
 export type JsonPrimitives =
   string
   | number
