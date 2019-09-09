@@ -20,7 +20,7 @@ import { getCommunityBusiness } from '../prerequisites';
 import {
   PostMyVolunteerLogsRequest,
   SyncMyVolunteerLogsRequest,
-  SyncVolunteerLogPayload,
+  SyncVolunteerLogPayloadItem,
   GetMyVolunteerLogsRequest,
   GetVolunteerLogRequest,
   PutMyVolunteerLogRequest,
@@ -37,7 +37,7 @@ const logDatesSchema = Joi.object({
   deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
 });
 
-const ignoreInvalidLogs = (logs: SyncVolunteerLogPayload[]) =>
+const ignoreInvalidLogs = (logs: SyncVolunteerLogPayloadItem[]) =>
   // Ignore invalid date strings for startedAt and deletedAt
   logs
     .reduce((acc, log) => {
@@ -51,7 +51,7 @@ const ignoreInvalidLogs = (logs: SyncVolunteerLogPayload[]) =>
       return acc;
     }, { valid: [] as typeof logs, invalid: [] as typeof logs });
 
-const uniformLogs = (user: User) => (log: SyncVolunteerLogPayload): Partial<VolunteerLog> =>
+const uniformLogs = (user: User) => (log: SyncVolunteerLogPayloadItem): Partial<VolunteerLog> =>
   ({
     ...log,
     userId: log.userId === 'me' ? user.id : log.userId,
