@@ -179,14 +179,14 @@ describe('Permisions Module', () => {
     test('SUCCESS - returns true for matching permissions & user', async () => {
       try {
         const query = await Permissions.roleHas(trx, {
-          resource: ResourceEnum.ORG_FEEDBACK,
+          resource: ResourceEnum.ORG_DETAILS,
           access: AccessEnum.READ,
           permissionLevel: PermissionLevelEnum.PARENT,
           role: RoleEnum.VOLUNTEER_ADMIN,
         });
         expect(query).toBe(true);
       } catch (error) {
-        expect(error).toBeFalsy();
+        expect(error).toBe({});
       }
     });
   });
@@ -227,7 +227,7 @@ describe('Permisions Module', () => {
         { roles: [RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN] }
       );
 
-      expect(result).toHaveLength(15);
+      expect(result).toHaveLength(14);
       expect(result).toEqual(expect.arrayContaining([
         {
           access: AccessEnum.READ,
@@ -308,7 +308,7 @@ describe('Permisions Module', () => {
         { roles: [RoleEnum.VOLUNTEER, RoleEnum.VISITOR] }
       );
 
-      expect(result).toHaveLength(8);
+      expect(result).toHaveLength(7);
       expect(result).toEqual(expect.arrayContaining([
         {
           access: AccessEnum.READ,
