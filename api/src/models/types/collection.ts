@@ -1,7 +1,7 @@
 import * as Knex from 'knex';
 import { Maybe, Dictionary } from '../../types/internal';
 import { ModelQueryValues, ModelQuery, ModelQueryPartial, SimpleModelQuery } from './query';
-import { User, Visitor, CommunityBusiness, Volunteer, CbAdmin, Organisation } from './model';
+import { User, Visitor, CommunityBusiness, Volunteer, CbAdmin, Organisation, VolunteerActivity } from './model';
 import * as _ from '../../../database/types';
 
 
@@ -79,3 +79,5 @@ interface OrganisationCollection extends Collection<Organisation, _.organisation
 }
 
 interface CommunityBusinessCollection extends Collection<CommunityBusiness, _.community_business> {}
+
+interface VolunteerActivityCollection extends Collection<VolunteerActivity, _.volunteer_activity> {}
