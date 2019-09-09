@@ -39,7 +39,10 @@ export default {
           const isAuthenticated = request.yar.get('isAuthenticated');
 
           if (!isAuthenticated) {
-            return h.unauthenticated(Boom.unauthorized());
+            // Must pass `null` as the error and schema name to Boom constructor
+            // in order to allow other auth schema to attempt authentication
+            // See https://hapi.dev/api/?v=18.3.2#server.auth.scheme()
+            return h.unauthenticated(Boom.unauthorized(null, 'session_cookie'));
           }
 
           try {
