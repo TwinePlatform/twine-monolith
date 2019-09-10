@@ -22,7 +22,7 @@ describe('API /users', () => {
     user = await Users.getOne(server.app.knex, { where: { name: 'Big Boss' } });
     organisation =
       await Organisations.getOne(server.app.knex, { where: { name: 'Aperture Science' } });
-    credentials = await StandardCredentials.get(server.app.knex, user, organisation);
+    credentials = await StandardCredentials.create(server.app.knex, user, organisation);
   });
 
   afterAll(async () => {

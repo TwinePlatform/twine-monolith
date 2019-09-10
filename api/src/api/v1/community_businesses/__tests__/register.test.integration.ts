@@ -26,7 +26,7 @@ describe('PUT /community-businesses', () => {
 
     organisation = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
     admin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
-    adminCreds = await StandardCredentials.get(knex, admin, organisation);
+    adminCreds = await StandardCredentials.create(knex, admin, organisation);
   });
 
   afterAll(async () => {

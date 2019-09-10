@@ -23,7 +23,7 @@ describe('API /community-businesses/{id}/visitors', () => {
 
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     organisation = await Organisations.getOne(knex, { where: { id: 1 } });
-    credentials = await StandardCredentials.get(knex, user, organisation);
+    credentials = await StandardCredentials.create(knex, user, organisation);
 
   });
 

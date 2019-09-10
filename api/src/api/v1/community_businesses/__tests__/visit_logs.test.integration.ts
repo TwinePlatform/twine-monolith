@@ -25,7 +25,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
 
     cbAdmin = await Users.getOne(knex, { where: { id: 2 } });
     organisation = await Organisations.getOne(knex, { where: { id: 1 } });
-    credentials = await StandardCredentials.get(knex, cbAdmin, organisation);
+    credentials = await StandardCredentials.create(knex, cbAdmin, organisation);
     extCreds = await ExternalCredentials.get(knex, 'aperture-token');
   });
 

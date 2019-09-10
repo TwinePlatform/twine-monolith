@@ -25,8 +25,8 @@ describe('API /community-businesses/{id}/volunteers', () => {
     volunteerAdmin = await Volunteers.getOne(knex, { where: { id: 7 } });
     orgAdmin = await Users.getOne(knex, { where: { name: 'Gordon' } });
 
-    vCreds = await StandardCredentials.get(knex, volunteerAdmin, organisation);
-    aCreds = await StandardCredentials.get(knex, orgAdmin, organisation);
+    vCreds = await StandardCredentials.create(knex, volunteerAdmin, organisation);
+    aCreds = await StandardCredentials.create(knex, orgAdmin, organisation);
   });
 
   afterAll(async () => {

@@ -24,7 +24,7 @@ describe('POST /community-businesses/register/temporary', () => {
 
     organisation = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
     admin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
-    adminCreds = await StandardCredentials.get(knex, admin, organisation);
+    adminCreds = await StandardCredentials.create(knex, admin, organisation);
   });
 
   beforeEach(async () => {

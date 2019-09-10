@@ -34,9 +34,9 @@ describe('DELETE /v1/users/volunteers/:id', () => {
     otherUser = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     twAdmin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
 
-    credentials = await StandardCredentials.get(knex, user, organisation);
-    otherCredentials = await StandardCredentials.get(knex, otherUser, otherOrganisation);
-    twAdminCreds = await StandardCredentials.get(knex, twAdmin, otherOrganisation);
+    credentials = await StandardCredentials.create(knex, user, organisation);
+    otherCredentials = await StandardCredentials.create(knex, otherUser, otherOrganisation);
+    twAdminCreds = await StandardCredentials.create(knex, twAdmin, otherOrganisation);
   });
 
   beforeEach(async () => {

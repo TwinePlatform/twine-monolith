@@ -21,7 +21,7 @@ describe('GET /community-businesses/{id}/cb-admins', () => {
 
     admin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
     organisation = await Organisations.getOne(knex, { where: { id: 1 } });
-    adminCreds = await StandardCredentials.get(knex, admin, organisation);
+    adminCreds = await StandardCredentials.create(knex, admin, organisation);
   });
 
   afterAll(async () => {

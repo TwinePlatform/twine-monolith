@@ -29,8 +29,8 @@ describe('API v1 - register new users', () => {
     cbAdminBlackMesa = await Users.getOne(knex, { where: { name: 'Gordon' } });
     organisation = await Organisations.fromUser(knex, { where: user });
     blackMesa = await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } });
-    credentials = await StandardCredentials.get(knex, user, organisation);
-    credentialsBlackMesa = await StandardCredentials.get(knex, cbAdminBlackMesa, blackMesa);
+    credentials = await StandardCredentials.create(knex, user, organisation);
+    credentialsBlackMesa = await StandardCredentials.create(knex, cbAdminBlackMesa, blackMesa);
   });
 
   afterAll(async () => {

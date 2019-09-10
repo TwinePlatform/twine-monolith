@@ -22,7 +22,7 @@ describe('PUT /v1/users/volunteers/:id', () => {
     knex = server.app.knex;
     organisation = await CommunityBusinesses.getOne(server.app.knex, { where: { id: 2 } });
     user = await Volunteers.getOne(server.app.knex, { where: { id: 7 } });
-    credentials = await StandardCredentials.get(knex, user, organisation);
+    credentials = await StandardCredentials.create(knex, user, organisation);
   });
 
   beforeEach(async () => {

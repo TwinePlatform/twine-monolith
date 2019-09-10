@@ -27,7 +27,7 @@ describe('PUT /users', () => {
     visitor = await Users.getOne(knex, { where: { name: 'Chell' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
 
-    credentials = await StandardCredentials.get(knex, user, organisation);
+    credentials = await StandardCredentials.create(knex, user, organisation);
   });
 
   afterAll(async () => {

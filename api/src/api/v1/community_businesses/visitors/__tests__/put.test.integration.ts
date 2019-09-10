@@ -25,7 +25,7 @@ describe('API PUT /community-businesses/me/visitors/{id}', () => {
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     visitor = await Users.getOne(knex, { where: { name: 'Chell' } });
     organisation = await Organisations.getOne(knex, { where: { id: 1 } });
-    credentials = await StandardCredentials.get(knex, user, organisation);
+    credentials = await StandardCredentials.create(knex, user, organisation);
   });
 
   afterAll(async () => {

@@ -26,8 +26,8 @@ describe('API', () => {
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     admin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
     organisation = await Organisations.getOne(knex, { where: { id: 1 } });
-    credentials = await StandardCredentials.get(knex, user, organisation);
-    adminCreds = await StandardCredentials.get(knex, admin, organisation);
+    credentials = await StandardCredentials.create(knex, user, organisation);
+    adminCreds = await StandardCredentials.create(knex, admin, organisation);
     extCreds = await ExternalCredentials.get(knex, 'aperture-token');
   });
 
