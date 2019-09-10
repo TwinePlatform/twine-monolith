@@ -229,11 +229,13 @@ export interface GetMyVolunteerLogsAggregateRequest extends Hapi.Request {
   };
 }
 
+export type SyncVolunteerLogPayloadItem = (
+  Pick<VolunteerLog, 'id' | 'activity' | 'duration' | 'startedAt' | 'deletedAt'>
+  & { userId: number | 'me' }
+);
+
 export interface SyncMyVolunteerLogsRequest extends Hapi.Request {
-  payload: (
-    Pick<VolunteerLog, 'id' | 'activity' | 'duration' | 'startedAt' | 'deletedAt'> &
-    { userId: number | string }
-  )[];
+  payload: SyncVolunteerLogPayloadItem[];
   pre: {
     communityBusiness: CommunityBusiness
   };

@@ -3,6 +3,14 @@ export type Maybe<T> = T | Nothing;
 export type ValueOf<T> = T[keyof T];
 export type Dictionary<T> = Record<string, T>;
 
+// Extracts wrapped type. See:
+// https://typescriptlang.org/docs/handbook/advanced-types.html#type-inference-in-conditional-types
+export type Unpack<T> =
+  T extends (infer U)[] ? U :
+  T extends (...args: any[]) => infer U ? U :
+  T extends Promise<infer U> ? U : T;
+
+
 /*
  * Recursive definition of deep partial without breaking array types
  */

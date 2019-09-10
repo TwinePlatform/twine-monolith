@@ -425,13 +425,17 @@ export type VolunteerLogCollection = Collection<VolunteerLog> & {
   deleteProject: (
     k: Knex,
     p: VolunteerProject) => Promise<Int>
+  syncLogs: (
+    k: Knex,
+    c: CommunityBusiness,
+    u: User,
+    ls: Partial<VolunteerLog>[]) => Promise<{ synced: Int, ignored: Int }>
 };
 
 
 /*
  * Input query types
  */
-
 type QueryResponse = Dictionary<any>;
 export type PermissionTuple = {
   permissionLevel: PermissionLevelEnum
@@ -493,6 +497,8 @@ export type TokenCollection = {
   usePasswordResetToken: (k: Knex, e: string, t: string) => Promise<null>
   useConfirmAddRoleToken: (k: Knex, e: string, t: string) => Promise<null>
 };
+
+
 /*
  * Model query declarations
  */
