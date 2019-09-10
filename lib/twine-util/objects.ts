@@ -35,5 +35,4 @@ export const evolveKeys = <T>(map: Dictionary<((a: string) => string)>, o: Dicti
     {} as Dictionary<T>);
 
 
-export const pickOrAll = curry(
-  (xs: string[] | undefined, o: object) => xs ? pick(xs, o) : { ...o });
+export const pickOrAll = (xs: string[] | undefined, o: object) => xs ? pick(xs, o) : { ...o };
