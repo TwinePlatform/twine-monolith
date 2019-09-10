@@ -1,11 +1,11 @@
 import * as _ from '../../../database/types';
-import { Require } from '../../types/internal'
+import { Require, Dictionary } from '../../types/internal'
 import { CommonTimestamps, GenderEnum, DisabilityEnum, EthnicityEnum, RegionEnum, SectorEnum, Coordinates } from './constants'
 import { Duration } from 'twine-util';
 
-type HasOne<T> = T;
-type HasMany<T> = T;
-type BelongsTo<T> = T;
+export type HasOne<T, U> = T & { has: U };
+export type HasMany<T, U> = T & { has: Dictionary<U> };
+export type BelongsTo<T, U> = T & { belongs: U };
 
 
 /**

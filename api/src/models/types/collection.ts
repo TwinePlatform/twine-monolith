@@ -1,7 +1,7 @@
 import * as Knex from 'knex';
 import { Maybe, Dictionary } from '../../types/internal';
 import { ModelQueryValues, ModelQuery, ModelQueryPartial, SimpleModelQuery } from './query';
-import { User, Visitor, CommunityBusiness, Volunteer, CbAdmin, Organisation, VolunteerActivity } from './model';
+import { User, Visitor, CommunityBusiness, Volunteer, CbAdmin, Organisation, VolunteerActivity, VolunteerProject, VolunteerLog } from './model';
 import * as _ from '../../../database/types';
 
 
@@ -75,9 +75,29 @@ interface VisitorCollection extends UserCollection {
  * Organisation Collections
  */
 interface OrganisationCollection extends Collection<Organisation, _.organisation> {
-  fromUser (k: Knex, u: ModelQuery<User>): Promise<any>
+  fromUser (k: Knex, u: ModelQuery<User>): Promise<Maybe<Organisation>>
 }
 
-interface CommunityBusinessCollection extends Collection<CommunityBusiness, _.community_business> {}
+interface CommunityBusinessCollection extends Collection<CommunityBusiness, _.community_business> {
+  fromVisitor (k: Knex, u: ModelQuery<Visitor>): Promise<Maybe<CommunityBusiness>>;
+  fromVolunteer (k: Knex, u: ModelQuery<Volunteer>): Promise<Maybe<CommunityBusiness>>;
+  fromCbAdmin (k: Knex, u: ModelQuery<CbAdmin>): Promise<Maybe<CommunityBusiness>>;
+}
 
+/**
+ * Volunteer Log Collections
+ */
 interface VolunteerActivityCollection extends Collection<VolunteerActivity, _.volunteer_activity> {}
+
+interface VolunteerLogCollection extends Collection<VolunteerLog, _.volunteer_hours_log> {
+  recordInvalidLog (k: Knex, u: Volunteer, cb: CommunityBusiness, payload: object): Promise<void>;
+  fromUser (k: Knex, u: Volunteer, cb?: CommunityBusiness): Promise<VolunteerLog[]>;
+  fromCommunityBusiness (k: Knex, cb: CommunityBusiness): Promise<VolunteerLog[]>;
+}
+
+interface VolunteerProjectCollection extends Collection<VolunteerLog, _.volunteer_project> {}
+
+
+/**
+ * Visitor Log Collections
+ */
