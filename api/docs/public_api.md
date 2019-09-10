@@ -1,6 +1,6 @@
 # Public API
 
-Some parts of the API are publicly exposed and accessible to registered users who have an API access token. See the [authentication](./authentication) section for more information on this.
+Some parts of the API are publicly exposed and accessible to registered users who have an API access token. See the [authentication](./authentication.md) section for more information on this.
 
 The endpoints of the API that are made public are documented below.
 
@@ -41,7 +41,7 @@ Example: `?limit=10`
 
 Specify the offset from the first record when returning results (used for pagination)
 
-Example: `?offset:100`
+Example: `?offset=100`
 
 ### `sort`
 - String (field name)
