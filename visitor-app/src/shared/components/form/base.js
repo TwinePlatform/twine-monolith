@@ -64,6 +64,7 @@ export const Label = styled.label`
 `;
 
 export const Button = styled.button`
+  cursor: pointer;
   border: none;
   border-radius: 0.15em;
   outline: none;
@@ -72,10 +73,10 @@ export const Button = styled.button`
   font-size: ${fonts.size.base};
   color: ${colors.black};
   letter-spacing: 0.2em;
+  border-radius: 0;
 `;
 
 const standardPrimaryButtonStyling = `
-  cursor: pointer;
   background-color: ${colors.highlight_primary}; /* Fallback */
   background: linear-gradient(
     0,
@@ -93,6 +94,7 @@ const standardPrimaryButtonStyling = `
 `;
 
 const disabledButtonStyling = `
+  cursor: inherit;
   color: ${colors.white};
   background-color: ${colors.dark}; /* Fallback */
   background: linear-gradient(
@@ -100,7 +102,6 @@ const disabledButtonStyling = `
     ${rgba(colors.dark, 0.75)} 0%,
     ${colors.dark} 100%
   );
-  border-radius: 0;
 `;
 
 export const PrimaryButton = styled(Button)`
@@ -118,14 +119,11 @@ export const SecondaryButton = styled(Button)`
     ${rgba(colors.highlight_secondary, 0.75)} 0%,
     ${colors.highlight_secondary} 100%
   );
-  border-radius: 0;
 `;
 
 export const PrimaryButtonNoFill = styled(PrimaryButton)`
   background: transparent;
   border: 0.1em solid ${colors.highlight_primary};
-  border-radius: 0;
-
   &:hover {
     background: transparent;
   }
