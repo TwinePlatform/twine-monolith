@@ -35,14 +35,15 @@ if (!cb || !scope) {
     if (!exists) {
       throw new Error(`No community business by the name ${cb} was found`);
     }
-
-    const tkn = await ApiTokens.add(client, ApiTokens.create(cb, scope));
+    const tkn = ApiTokens.create(cb, scope)
+    const { id } = await ApiTokens.add(client, tkn);
 
     console.log(`
       API token added to ${env} database:
-        ID: ${tkn.id}
+        ID: ${id}
         Name: ${tkn.name}
         Access: ${tkn.access}
+        Token: ${tkn.token}
     `);
 
   } catch (error) {
