@@ -20,7 +20,7 @@ describe('POST /v1/visitor/search', () => {
       { where: { name: 'Aperture Science' } }
     );
     user = await Users.getOne(server.app.knex, { where: { name: 'GlaDos' } });
-    credentials = await StandardCredentials.get(server.app.knex, user, organisation);
+    credentials = await StandardCredentials.create(server.app.knex, user, organisation);
   });
 
   afterAll(async () => {

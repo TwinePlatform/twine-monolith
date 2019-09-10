@@ -33,9 +33,9 @@ describe('GET /community-businesses', () => {
     // In fact, TWINE_ADMIN users shouldn't be registered against any ORG
     // Data model, however, doesn't currently support this.
     const aperture = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
-    twAdminCreds = await StandardCredentials.get(knex, twAdmin, aperture);
-    cbAdminCreds = await StandardCredentials.get(knex, cbAdmin, organisation);
-    volunteerCreds = await StandardCredentials.get(knex, volunteer, organisation);
+    twAdminCreds = await StandardCredentials.create(knex, twAdmin, aperture);
+    cbAdminCreds = await StandardCredentials.create(knex, cbAdmin, organisation);
+    volunteerCreds = await StandardCredentials.create(knex, volunteer, organisation);
     extCreds = await ExternalCredentials.get(knex, 'aperture-token');
   });
 

@@ -24,8 +24,8 @@ describe('GET /users/me/roles', () => {
     user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
     multiRoleUser = await Users.getOne(knex, { where: { name: 'Turret' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
-    credentials = await StandardCredentials.get(knex, user, organisation);
-    multiCredentials = await StandardCredentials.get(knex, multiRoleUser, organisation);
+    credentials = await StandardCredentials.create(knex, user, organisation);
+    multiCredentials = await StandardCredentials.create(knex, multiRoleUser, organisation);
   });
 
   afterAll(async () => {

@@ -40,9 +40,9 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     cbAdmin = await Users.getOne(knex, { where: { name: 'Gordon' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } });
 
-    volCreds = await StandardCredentials.get(knex, user, organisation);
-    vAdminCreds = await StandardCredentials.get(knex, volAdmin, organisation);
-    adminCreds = await StandardCredentials.get(knex, cbAdmin, organisation);
+    volCreds = await StandardCredentials.create(knex, user, organisation);
+    vAdminCreds = await StandardCredentials.create(knex, volAdmin, organisation);
+    adminCreds = await StandardCredentials.create(knex, cbAdmin, organisation);
   });
 
   afterAll(async () => {

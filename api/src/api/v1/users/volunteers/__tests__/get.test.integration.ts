@@ -36,10 +36,10 @@ describe('GET /v1/users/volunteers/:id', () => {
     orgAdmin = await CbAdmins.getOne(server.app.knex, { where: { name: 'Gordon' } });
     wrongOrgAdmin = await Volunteers.getOne(server.app.knex, { where: { name: 'Turret' } });
 
-    volunteerCreds = await StandardCredentials.get(server.app.knex, volunteerAdmin, organisation);
-    adminCreds = await StandardCredentials.get(server.app.knex, orgAdmin, organisation);
+    volunteerCreds = await StandardCredentials.create(server.app.knex, volunteerAdmin, organisation);
+    adminCreds = await StandardCredentials.create(server.app.knex, orgAdmin, organisation);
     wrongAdminCreds =
-      await StandardCredentials.get(server.app.knex, wrongOrgAdmin, wrongOrganisation);
+      await StandardCredentials.create(server.app.knex, wrongOrgAdmin, wrongOrganisation);
   });
 
   afterAll(async () => {

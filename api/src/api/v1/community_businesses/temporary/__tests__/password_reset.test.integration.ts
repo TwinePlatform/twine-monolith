@@ -25,7 +25,7 @@ describe('GET /community-businesses/temporary/:id/password/reset', () => {
 
     twAdmin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
     const aperture = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
-    twAdminCreds = await StandardCredentials.get(knex, twAdmin, aperture);
+    twAdminCreds = await StandardCredentials.create(knex, twAdmin, aperture);
   });
 
   beforeEach(async () => {

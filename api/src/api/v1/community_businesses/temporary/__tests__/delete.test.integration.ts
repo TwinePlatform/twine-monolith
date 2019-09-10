@@ -29,7 +29,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
 
     twAdmin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
     const aperture = await Organisations.getOne(knex, { where: { name: 'Aperture Science' } });
-    twAdminCreds = await StandardCredentials.get(knex, twAdmin, aperture);
+    twAdminCreds = await StandardCredentials.create(knex, twAdmin, aperture);
   });
 
   beforeEach(async () => {
@@ -83,7 +83,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
 
     // credentials for future requests
     const tempCredentials: Hapi.AuthCredentials =
-      await StandardCredentials.get(trx, tempCbAdmin, tempCb);
+      await StandardCredentials.create(trx, tempCbAdmin, tempCb);
 
     // create visitor
     const resAddVisitor = await server.inject(injectCfg({

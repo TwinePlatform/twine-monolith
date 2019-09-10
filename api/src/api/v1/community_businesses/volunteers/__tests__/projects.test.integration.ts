@@ -24,8 +24,8 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     vol = await Volunteers.getOne(knex, { where: { name: 'Emma Emmerich' } });
     volAdmin = await Volunteers.getOne(knex, { where: { name: 'Raiden' } });
 
-    volCreds = await StandardCredentials.get(knex, vol, organisation);
-    adminCreds = await StandardCredentials.get(knex, volAdmin, organisation);
+    volCreds = await StandardCredentials.create(knex, vol, organisation);
+    adminCreds = await StandardCredentials.create(knex, volAdmin, organisation);
   });
 
   afterAll(async () => {

@@ -26,7 +26,7 @@ const validate: ValidateFunction = async (req) => {
     throw Boom.unauthorized('Unrecognised user or organisation');
   }
 
-  const credentials = await Credentials.get(knex, user, organisation, session);
+  const credentials = await Credentials.create(knex, user, organisation, session);
 
   return { credentials };
 };

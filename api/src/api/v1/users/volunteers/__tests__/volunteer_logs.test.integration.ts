@@ -31,9 +31,9 @@ describe('API /users/me/volunteer-logs', () => {
     volAdmin = await Users.getOne(knex, { where: { name: 'Raiden' } });
     nonVolunteer = await Users.getOne(knex, { where: { name: 'Gordon' } });
     organisation = await Organisations.getOne(knex, { where: { name: 'Black Mesa Research' } });
-    credentials = await StandardCredentials.get(knex, user, organisation);
-    volAdminCreds = await StandardCredentials.get(knex, volAdmin, organisation);
-    nonVolCreds = await StandardCredentials.get(knex, nonVolunteer, organisation);
+    credentials = await StandardCredentials.create(knex, user, organisation);
+    volAdminCreds = await StandardCredentials.create(knex, volAdmin, organisation);
+    nonVolCreds = await StandardCredentials.create(knex, nonVolunteer, organisation);
   });
 
   afterAll(async () => {

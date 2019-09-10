@@ -32,9 +32,9 @@ describe('/community-business/{id}/feedback', () => {
       { where: { name: 'Black Mesa Research' } }
     );
 
-    creds.gordon = await StandardCredentials.get(knex, users.gordon, orgs.blackMesa);
-    creds.glados = await StandardCredentials.get(knex, users.glados, orgs.aperture);
-    creds.bigboss = await StandardCredentials.get(knex, users.bigboss, orgs.aperture);
+    creds.gordon = await StandardCredentials.create(knex, users.gordon, orgs.blackMesa);
+    creds.glados = await StandardCredentials.create(knex, users.glados, orgs.aperture);
+    creds.bigboss = await StandardCredentials.create(knex, users.bigboss, orgs.aperture);
     creds.ext = await ExternalCredentials.get(knex, 'aperture-token');
   });
 
