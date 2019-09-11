@@ -2,10 +2,11 @@
 
 ## Contents
 1. [Data model](#data-model)
-2. [Migrations](#migrations)
-3. [Seeds](#seeds)
-4. [Backups](#backups)
-5. [Data Sets](#data-sets)
+1. [Design decisions](#design-decisions)
+1. [Migrations](#migrations)
+1. [Seeds](#seeds)
+1. [Backups](#backups)
+1. [Data Sets](#data-sets)
 
 ## Data Model
 
@@ -15,6 +16,13 @@ Note: the data types in the diagram are for illustration purposes only. For the 
 
 This diagram was generated using [DB designer](https://dbdesigner.net). Ask for login details to edit the diagram.
 
+## Design Decisions
+### Why separate `organisation` and `community_business` tables?
+Originally, the platform was designed to support multiple types of organisation, in particular, community businesses and sector organisations. These would have some aspects in common, represented by the columns in the `organisation` table, but would then ultimately be described by their own linked table.
+
+This strand of functionality was never developed any further, however, this structure remains so that other kinds of organisation can be supported in the future.
+
+Note that foreign keys from many tables, (for example, the `visit_log` table) reference the `organisation` table, despite those concepts not being relevant for non-community-businesses. This could be changed in future.
 
 ## Migrations
 All migrations are held in the `/database/migrations` directory. Run migrations using the `knex` CLI or run the latest migration with
