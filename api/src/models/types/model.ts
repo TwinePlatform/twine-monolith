@@ -3,10 +3,6 @@ import { Require, Dictionary } from '../../types/internal'
 import { CommonTimestamps, GenderEnum, DisabilityEnum, EthnicityEnum, RegionEnum, SectorEnum, Coordinates } from './constants'
 import { Duration } from 'twine-util';
 
-export type HasOne<T, U> = T & { has: U };
-export type HasMany<T, U> = T & { has: Dictionary<U> };
-export type BelongsTo<T, U> = T & { belongs: U };
-
 
 /**
  * Users
@@ -107,7 +103,31 @@ export interface VisitActivity extends Readonly<CommonTimestamps> {
 
 export interface VisitLog extends Readonly<CommonTimestamps> {
   readonly id: _.visit_logFields.visit_log_id;
-  readonly userId: _.visit_logFields.user_account_id;
   readonly user: Visitor;
   readonly activty: VisitActivity;
+}
+
+/**
+ * Tokens
+ */
+export interface SingleUseToken extends Readonly<CommonTimestamps> {
+  readonly id: _.single_use_tokenFields.single_use_token_id;
+  readonly token: _.single_use_tokenFields.token;
+  readonly expiresAt: _.single_use_tokenFields.expires_at;
+  readonly usedAt?: _.single_use_tokenFields.used_at;
+}
+
+export interface PasswordResetToken extends SingleUseToken {
+  readonly user: User;
+}
+
+export interface AddRoleToken extends SingleUseToken {
+  readonly user: User;
+}
+
+export interface ApiToken extends Readonly<CommonTimestamps> {
+  readonly id: _.api_tokenFields.api_token_id;
+  readonly name: _.api_tokenFields.api_token_name;
+  readonly access: _.api_tokenFields.api_token_access;
+  readonly token: _.api_tokenFields.api_token;
 }

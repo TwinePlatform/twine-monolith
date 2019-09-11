@@ -13,6 +13,9 @@ import {
   VolunteerLog,
   VisitActivity,
   VisitLog,
+  SingleUseToken,
+  PasswordResetToken,
+  AddRoleToken,
 } from './model';
 import * as _ from '../../../database/types';
 import { GenderEnum } from './constants';
@@ -59,7 +62,7 @@ export interface Collection<TModel, TRecord> {
  */
 
 interface UserCollection extends Collection<User, _.user_account> {
-  isMemberOf (k: Knex, u: User, cb: any): Promise<boolean>;
+  isMemberOf (k: Knex, u: User, cb: CommunityBusiness): Promise<boolean>;
 
   add (k: Knex, u: Partial<Visitor>, cb: CommunityBusiness): Promise<Visitor>;
   add (k: Knex, u: Partial<Volunteer>, cb: CommunityBusiness, c?: string): Promise<Volunteer>;
@@ -68,7 +71,7 @@ interface UserCollection extends Collection<User, _.user_account> {
   fromCommunityBusiness (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Visitor>): Promise<Visitor[]>;
   fromCommunityBusiness (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Volunteer>): Promise<Volunteer[]>;
   fromCommunityBusiness (k: Knex, cb: CommunityBusiness, q?: ModelQuery<CbAdmin>): Promise<CbAdmin>;
-};
+}
 
 interface VolunteerCollection extends UserCollection {
   verifyAdminCode (k: Knex, cb: CommunityBusiness, c: string): Promise<boolean>;
@@ -79,7 +82,7 @@ interface CbAdminCollection extends UserCollection {
 }
 
 interface VisitorCollection extends UserCollection {
-  getWithVisits (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Visitor>, activity?: string): Promise<null>
+  getWithVisits (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Visitor>, activity?: string): Promise<null>;
 
   addAnonymous (k: Knex, u: Partial<Visitor>, cb: CommunityBusiness): Promise<Visitor>;
 }
@@ -88,7 +91,7 @@ interface VisitorCollection extends UserCollection {
  * Organisation Collections
  */
 interface OrganisationCollection extends Collection<Organisation, _.organisation> {
-  fromUser (k: Knex, u: ModelQuery<User>): Promise<Maybe<Organisation>>
+  fromUser (k: Knex, u: ModelQuery<User>): Promise<Maybe<Organisation>>;
 }
 
 interface CommunityBusinessCollection extends Collection<CommunityBusiness, _.community_business> {
@@ -102,7 +105,7 @@ interface TempCommunityBusinessCollection extends Collection<CommunityBusiness, 
 /**
  * Volunteer Log Collections
  */
-type VolunteerLogSyncStats = { ignored: number, synced: number };
+type VolunteerLogSyncStats = { ignored: number; synced: number };
 
 interface VolunteerActivityCollection extends Collection<VolunteerActivity, _.volunteer_activity> {}
 
@@ -120,17 +123,36 @@ interface VolunteerLogCollection extends Collection<VolunteerLog, _.volunteer_ho
  * Visitor Log Collections
  */
 type AgeGroup = [number, number];
-type AgeAggregates = { ageGroup: AgeGroup, aggregate: number }[];
-type GenderAggregates = { gender: GenderEnum, aggregate: number }[];
-type ActivityAggregates = { activty: string, aggregate: number }[];
-type TimeAggregates = { date: Date, aggregate: number }[];
+type AgeAggregates = { ageGroup: AgeGroup; aggregate: number }[];
+type GenderAggregates = { gender: GenderEnum; aggregate: number }[];
+type ActivityAggregates = { activty: string; aggregate: number }[];
+type TimeAggregates = { date: Date; aggregate: number }[];
 
 interface VisitActivityCollection extends Collection<VisitActivity, _.visit_activity> {}
 
 interface VisitLogCollection extends Collection<VisitLog, _.visit_log> {
-  getWithUsers (k: Knex, c: CommunityBusiness, q?: ModelQuery<VisitLog>): Promise<>
+  getWithUsers (k: Knex, c: CommunityBusiness, q?: ModelQuery<VisitLog>): Promise<VisitLog>;
   aggregateByAge (k: Knex, c: CommunityBusiness, g?: AgeGroup[]): Promise<AgeAggregates>;
   aggregateByGender (k: Knex, c: CommunityBusiness): Promise<GenderAggregates>;
   aggregateByActivity (k: Knex, c: CommunityBusiness): Promise<ActivityAggregates>;
   aggregateByTime (k: Knex, c: CommunityBusiness, since?: Date, until?: Date): Promise<TimeAggregates>;
+}
+
+
+/**
+ * Token Collections
+ */
+interface SingleUseTokenCollection extends Collection<SingleUseToken, _.single_use_token> {
+  create (k: Knex, u: User, t: string, exp: Date): Promise<SingleUseToken>;
+  use (k: Knex, u: User, t: string): Promise<SingleUseToken>;
+}
+
+interface PasswordResetTokenCollection extends Collection<PasswordResetToken, _.user_secret_reset> {
+  create (k: Knex, u: User): Promise<PasswordResetToken>;
+  use (k: Knex, u: User): Promise<PasswordResetToken>;
+}
+
+interface AddRoleTokenCollection extends Collection<AddRoleToken, _.confirm_add_role> {
+  create (k: Knex, u: User): Promise<AddRoleToken>;
+  use (k: Knex, u: User): Promise<AddRoleToken>;
 }
