@@ -1,8 +1,21 @@
 import * as Knex from 'knex';
 import { Maybe, Dictionary } from '../../types/internal';
 import { ModelQueryValues, ModelQuery, ModelQueryPartial, SimpleModelQuery } from './query';
-import { User, Visitor, CommunityBusiness, Volunteer, CbAdmin, Organisation, VolunteerActivity, VolunteerProject, VolunteerLog } from './model';
+import {
+  User,
+  Visitor,
+  CommunityBusiness,
+  Volunteer,
+  CbAdmin,
+  Organisation,
+  VolunteerActivity,
+  VolunteerProject,
+  VolunteerLog,
+  VisitActivity,
+  VisitLog,
+} from './model';
 import * as _ from '../../../database/types';
+import { GenderEnum } from './constants';
 
 
 /**
@@ -84,20 +97,40 @@ interface CommunityBusinessCollection extends Collection<CommunityBusiness, _.co
   fromCbAdmin (k: Knex, u: ModelQuery<CbAdmin>): Promise<Maybe<CommunityBusiness>>;
 }
 
+interface TempCommunityBusinessCollection extends Collection<CommunityBusiness, _.community_business> {}
+
 /**
  * Volunteer Log Collections
  */
+type VolunteerLogSyncStats = { ignored: number, synced: number };
+
 interface VolunteerActivityCollection extends Collection<VolunteerActivity, _.volunteer_activity> {}
+
+interface VolunteerProjectCollection extends Collection<VolunteerProject, _.volunteer_project> {}
 
 interface VolunteerLogCollection extends Collection<VolunteerLog, _.volunteer_hours_log> {
   recordInvalidLog (k: Knex, u: Volunteer, cb: CommunityBusiness, payload: object): Promise<void>;
   fromUser (k: Knex, u: Volunteer, cb?: CommunityBusiness): Promise<VolunteerLog[]>;
   fromCommunityBusiness (k: Knex, cb: CommunityBusiness): Promise<VolunteerLog[]>;
+  syncLogs (k: Knex, cb: CommunityBusiness, u: Volunteer | CbAdmin, ls: Partial<VolunteerLog>[]): Promise<VolunteerLogSyncStats>;
 }
-
-interface VolunteerProjectCollection extends Collection<VolunteerLog, _.volunteer_project> {}
 
 
 /**
  * Visitor Log Collections
  */
+type AgeGroup = [number, number];
+type AgeAggregates = { ageGroup: AgeGroup, aggregate: number }[];
+type GenderAggregates = { gender: GenderEnum, aggregate: number }[];
+type ActivityAggregates = { activty: string, aggregate: number }[];
+type TimeAggregates = { date: Date, aggregate: number }[];
+
+interface VisitActivityCollection extends Collection<VisitActivity, _.visit_activity> {}
+
+interface VisitLogCollection extends Collection<VisitLog, _.visit_log> {
+  getWithUsers (k: Knex, c: CommunityBusiness, q?: ModelQuery<VisitLog>): Promise<>
+  aggregateByAge (k: Knex, c: CommunityBusiness, g?: AgeGroup[]): Promise<AgeAggregates>;
+  aggregateByGender (k: Knex, c: CommunityBusiness): Promise<GenderAggregates>;
+  aggregateByActivity (k: Knex, c: CommunityBusiness): Promise<ActivityAggregates>;
+  aggregateByTime (k: Knex, c: CommunityBusiness, since?: Date, until?: Date): Promise<TimeAggregates>;
+}

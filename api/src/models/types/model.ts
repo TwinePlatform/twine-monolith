@@ -48,16 +48,14 @@ export interface Organisation extends Readonly<CommonTimestamps> {
 export interface CommunityBusiness extends Organisation {
   readonly region: RegionEnum;
   readonly sector: SectorEnum;
-  readonly logoUrl: _.community_businessFields.logo_url;
-  readonly address1: _.community_businessFields.address_1;
-  readonly address2: _.community_businessFields.address_2;
-  readonly townCity: _.community_businessFields.town_city;
-  readonly postCode: _.community_businessFields.post_code;
-  readonly coordinates: Coordinates;
-  readonly turnoverBand: _.community_businessFields.turnover_band;
+  readonly logoUrl?: _.community_businessFields.logo_url;
+  readonly address1?: _.community_businessFields.address_1;
+  readonly address2?: _.community_businessFields.address_2;
+  readonly townCity?: _.community_businessFields.town_city;
+  readonly postCode?: _.community_businessFields.post_code;
+  readonly coordinates?: Coordinates;
+  readonly turnoverBand?: _.community_businessFields.turnover_band;
   readonly adminCode?: _.volunteer_admin_codeFields.code;
-  readonly frontlineWorkspaceId?: _.frontline_accountFields.frontline_workspace_id;
-  readonly frontlineApiKey?: _.frontline_accountFields.frontline_api_key;
 };
 
 /**
@@ -71,18 +69,16 @@ export interface VolunteerActivity extends Readonly<CommonTimestamps> {
 export interface VolunteerProject extends Readonly<CommonTimestamps> {
   readonly id: _.volunteer_projectFields.volunteer_project_id;
   readonly name: _.volunteer_projectFields.volunteer_project_name;
-  readonly organisationId: _.volunteer_projectFields.organisation_id;
+  readonly organisation: Organisation;
 }
 
 export interface VolunteerLog extends Readonly<CommonTimestamps> {
   readonly id: _.volunteer_hours_logFields.volunteer_hours_log_id;
-  readonly userId: _.volunteer_hours_logFields.user_account_id;
-  readonly createdBy?: _.volunteer_hours_logFields.created_by;
-  readonly userName?: User['name'];
-  readonly organisationId: _.volunteer_hours_logFields.organisation_id;
-  readonly organisationName?: Organisation['name'];
-  readonly activity: VolunteerActivity['name'];
-  readonly project?: VolunteerProject['name'];
+  readonly user: Volunteer;
+  readonly createdBy?: Volunteer | CbAdmin;
+  readonly organisation: Organisation;
+  readonly activity: VolunteerActivity;
+  readonly project?: VolunteerProject;
   readonly duration: Duration.Duration;
   readonly startedAt: Date;
 }
@@ -98,9 +94,8 @@ export interface VisitCategory extends Readonly<CommonTimestamps> {
 export interface VisitActivity extends Readonly<CommonTimestamps> {
   readonly id: _.visit_activityFields.visit_activity_id;
   readonly name: _.visit_activityFields.visit_activity_name;
-  readonly categoryName?: VisitCategory['name'];
-  readonly categoryId?: VisitCategory['id'];
-  readonly organisationId: Organisation['id'];
+  readonly category?: VisitCategory;
+  readonly organisation: Organisation;
   readonly monday: _.visit_activityFields.monday;
   readonly tuesday: _.visit_activityFields.tuesday;
   readonly wednesday: _.visit_activityFields.wednesday;
@@ -113,6 +108,6 @@ export interface VisitActivity extends Readonly<CommonTimestamps> {
 export interface VisitLog extends Readonly<CommonTimestamps> {
   readonly id: _.visit_logFields.visit_log_id;
   readonly userId: _.visit_logFields.user_account_id;
-  readonly activityId: VisitActivity['id'];
-  readonly activityName: VisitActivity['name'];
+  readonly user: Visitor;
+  readonly activty: VisitActivity;
 }
