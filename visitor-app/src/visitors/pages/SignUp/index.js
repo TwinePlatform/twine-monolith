@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import SignupForm from './signup_form';
+import SignupForm from './SignUpForm';
 import NotFound from '../../../shared/components/NotFound';
 import { CommunityBusiness, Visitors, ErrorUtils } from '../../../api';
 import { Heading, Paragraph, Link } from '../../../shared/components/text/base';
