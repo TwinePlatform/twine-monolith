@@ -6,12 +6,7 @@ import styled from 'styled-components';
 
 import { colors } from '../shared/style_guide';
 import { Roles } from '../api';
-
-const status = {
-  PENDING: 'PENDING',
-  SUCCESS: 'SUCCESS',
-  FAILURE: 'FAILURE',
-};
+import { status } from '../util';
 
 const BeatLoader = styled(Bl)`
   width: 60px;

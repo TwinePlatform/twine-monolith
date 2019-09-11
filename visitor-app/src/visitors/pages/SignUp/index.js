@@ -2,16 +2,15 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import SignupForm from './signup_form';
+import SignupForm from './SignUpForm';
 import NotFound from '../../../shared/components/NotFound';
 import { CommunityBusiness, Visitors, ErrorUtils } from '../../../api';
 import { Heading, Paragraph, Link } from '../../../shared/components/text/base';
 import { PrimaryButton } from '../../../shared/components/form/base';
 import { FlexContainerCol, FlexContainerRow } from '../../../shared/components/layout/base';
-import { renameKeys, redirectOnError } from '../../../util';
+import { renameKeys, redirectOnError, status } from '../../../util';
 import { BirthYear } from '../../../shared/constants';
 import PrintableQrCode from '../../../shared/components/PrintableQrCode';
-
 
 const ButtonsFlexContainerCol = styled(FlexContainerCol)`
   padding-top: 10%;
@@ -79,6 +78,7 @@ export default class Main extends Component {
       // form validation for age
       hasGivenAge: true, // defaults to true to avoid showing age checkbox on load
       ageCheck: false,
+      signUpStatus: null,
     };
   }
 
@@ -139,6 +139,8 @@ export default class Main extends Component {
       return this.setState({ errors: { ageCheck: 'You must be over 13 to register' } });
     }
 
+    this.setState({ signUpStatus: status.PENDING });
+
     return Visitors.create({
       name: this.state.fullname,
       gender: this.state.gender,
@@ -156,9 +158,13 @@ export default class Main extends Component {
       })
       .catch((err) => {
         if (ErrorUtils.errorStatusEquals(err, 400)) {
-          this.setState({ errors: ErrorUtils.getValidationErrors(err) });
+          this.setState({
+            signUpStatus: status.FAILURE,
+            errors: ErrorUtils.getValidationErrors(err),
+          });
         } else if (ErrorUtils.errorStatusEquals(err, 409)) {
           this.setState({
+            signUpStatus: status.FAILURE,
             errors: { email: ErrorUtils.getErrorMessage(err) },
           });
         } else {
@@ -208,6 +214,7 @@ export default class Main extends Component {
               uuid={formAutocompleteUUID}
               genders={genders}
               hasGivenAge={this.state.hasGivenAge}
+              status={this.state.signUpStatus}
             />
           </Route>
 

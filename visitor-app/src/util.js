@@ -131,3 +131,11 @@ export const reduceVisitorsToFields =
     combineValues, // concat all values for given keys
     map(pick(['name', 'email', 'postCode', 'phoneNumber', 'birthYear'])), // pick relevant keys
   );
+
+
+export const status = {
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  FAILURE: 'FAILURE',
+};
+

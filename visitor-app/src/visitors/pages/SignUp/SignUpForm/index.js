@@ -11,39 +11,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Grid, Row } from 'react-flexbox-grid';
-import { Form as FM, FormSection, PrimaryButton } from '../../../shared/components/form/base';
-import { Paragraph } from '../../../shared/components/text/base';
-import LabelledInput from '../../../shared/components/form/LabelledInput';
-import StyledLabelledCheckbox from '../../../shared/components/form/StyledLabelledCheckbox';
-import LabelledSelect from '../../../shared/components/form/LabelledSelect';
-import { FlexContainerRow } from '../../../shared/components/layout/base';
-import NavHeader from '../../../shared/components/NavHeader';
-import { colors, fonts } from '../../../shared/style_guide';
-import { VISITOR_NAME_INVALID } from '../../../cb_admin/constants/error_text';
+import { Form as FM, FormSection } from '../../../../shared/components/form/base';
+import { Paragraph } from '../../../../shared/components/text/base';
+import LabelledInput from '../../../../shared/components/form/LabelledInput';
+import StyledLabelledCheckbox from '../../../../shared/components/form/StyledLabelledCheckbox';
+import LabelledSelect from '../../../../shared/components/form/LabelledSelect';
+import { FlexContainerRow } from '../../../../shared/components/layout/base';
+import NavHeader from '../../../../shared/components/NavHeader';
+import { colors } from '../../../../shared/style_guide';
+import { VISITOR_NAME_INVALID } from '../../../../cb_admin/constants/error_text';
+import { status } from '../../../../util';
+import { SubmitButton, DisabledButton } from './buttons';
+import SideCopy from './SideCopy';
 
+/*
+ * Styles
+ */
 
 const Form = styled(FM)`
   align-items: baseline;
-`;
-
-const SubmitButton = styled(PrimaryButton)`
-  height: 4em;
-  width: 100%;
-`;
-
-const PrivacyLink = styled.a`
-  font-weight: ${fonts.weight.medium};
-  color: ${colors.dark};
-`;
-
-const CenteredParagraph = styled(Paragraph)`
-  line-height: 1.5em;
-`;
-
-const TitleParagraph = styled(Paragraph)`
-  font-weight: medium;
-  width: 100%;
-  font-size: 19px;
 `;
 
 const LeftPadParagraph = styled(Paragraph)`
@@ -55,7 +41,7 @@ color: ${colors.error};
 display: ${props => (props.show ? 'inline' : 'none')};
 `;
 
-const signupForm = (props) => {
+const SignupForm = (props) => {
   const ageCheckCheckbox = (<FlexContainerRow>
     <StyledLabelledCheckbox name="ageCheck" id="ageCheck" data-testid="ageCheck" />
     <LeftPadParagraph>I am older than 13</LeftPadParagraph>
@@ -122,31 +108,11 @@ const signupForm = (props) => {
 
               <ErrorText show={props.errors.ageCheck}>{props.errors.ageCheck}</ErrorText>
             </div>
-            <SubmitButton type="submit">CONTINUE</SubmitButton>
+            {props.status === status.PENDING
+              ? <DisabledButton />
+              : <SubmitButton />}
           </FormSection>
-          <FormSection flexOrder={2}>
-            <TitleParagraph>Why are we collecting this information?</TitleParagraph>
-            <CenteredParagraph>
-            Here at {props.cbOrgName}, we take your privacy seriously: we will only use your
-            personal information to administer your account to provide the products and services
-            you have requested from us, and improve how we deliver those.
-            </CenteredParagraph>
-            <CenteredParagraph>
-            However, from time to time we would like to contact you with details of other offers we
-            provide. We would also like to send you surveys via SMS in order to improve our work.
-            </CenteredParagraph>
-            <CenteredParagraph>
-            If you consent to us contacting you by email, please tick to agree:
-            </CenteredParagraph>
-            <StyledLabelledCheckbox name="emailContact" id="emailCheckboxInput" data-testid="emailConsent" />
-            <CenteredParagraph>
-            If you consent to us contacting you by SMS, please tick to agree:
-            </CenteredParagraph>
-            <StyledLabelledCheckbox name="smsContact" id="smsCheckboxInput" />
-            <PrivacyLink href="http://www.twine-together.com/privacy-policy/">
-            Data Protection Policy
-            </PrivacyLink>
-          </FormSection>
+          <SideCopy cbOrgName={props.cbOrgName} />
         </Form>
       </Row>
     </Grid>
@@ -154,7 +120,7 @@ const signupForm = (props) => {
   ;
 };
 
-signupForm.propTypes = {
+SignupForm.propTypes = {
   createVisitor: PropTypes.func.isRequired,
   years: PropTypes.arrayOf(PropTypes.object).isRequired,
   errors: PropTypes.object.isRequired, // eslint-disable-line
@@ -163,6 +129,7 @@ signupForm.propTypes = {
   uuid: PropTypes.string.isRequired, // See header comment
   genders: PropTypes.arrayOf(PropTypes.object).isRequired,
   hasGivenAge: PropTypes.bool.isRequired,
+  status: PropTypes.arrayOf(Object.values(status).concat(null)).isRequired,
 };
 
-export default signupForm;
+export default SignupForm;
