@@ -22,7 +22,7 @@ import { colors } from '../../../../shared/style_guide';
 import { VISITOR_NAME_INVALID } from '../../../../cb_admin/constants/error_text';
 import { status } from '../../../../util';
 import { SubmitButton, DisabledButton } from './buttons';
-import SideCopy from './sideCopy';
+import SideCopy from './SideCopy';
 
 /*
  * Styles
@@ -41,7 +41,7 @@ color: ${colors.error};
 display: ${props => (props.show ? 'inline' : 'none')};
 `;
 
-const signupForm = (props) => {
+const SignupForm = (props) => {
   const ageCheckCheckbox = (<FlexContainerRow>
     <StyledLabelledCheckbox name="ageCheck" id="ageCheck" data-testid="ageCheck" />
     <LeftPadParagraph>I am older than 13</LeftPadParagraph>
@@ -120,7 +120,7 @@ const signupForm = (props) => {
   ;
 };
 
-signupForm.propTypes = {
+SignupForm.propTypes = {
   createVisitor: PropTypes.func.isRequired,
   years: PropTypes.arrayOf(PropTypes.object).isRequired,
   errors: PropTypes.object.isRequired, // eslint-disable-line
@@ -132,4 +132,4 @@ signupForm.propTypes = {
   status: PropTypes.arrayOf(Object.values(status).concat(null)).isRequired,
 };
 
-export default signupForm;
+export default SignupForm;
