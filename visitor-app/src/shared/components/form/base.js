@@ -73,7 +73,6 @@ export const Button = styled.button`
   font-size: ${fonts.size.base};
   color: ${colors.black};
   letter-spacing: 0.2em;
-  border-radius: 0;
 `;
 
 const standardPrimaryButtonStyling = `
@@ -119,6 +118,7 @@ export const SecondaryButton = styled(Button)`
     ${rgba(colors.highlight_secondary, 0.75)} 0%,
     ${colors.highlight_secondary} 100%
   );
+  border-radius: 0;
 `;
 
 export const PrimaryButtonNoFill = styled(PrimaryButton)`
@@ -127,6 +127,7 @@ export const PrimaryButtonNoFill = styled(PrimaryButton)`
   &:hover {
     background: transparent;
   }
+  border-radius: 0;
 `;
 
 export const SecondaryButtonNoFill = styled(SecondaryButton)`
