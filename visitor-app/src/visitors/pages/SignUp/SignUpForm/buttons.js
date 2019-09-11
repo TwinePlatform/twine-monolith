@@ -21,7 +21,7 @@ const Span = styled.span`
 
 export const SubmitButton = () =>
   (<Button type="submit">
-    <Span>CONTINUE</Span>
+    CONTINUE
   </Button>);
 
 
