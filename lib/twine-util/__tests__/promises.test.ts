@@ -125,9 +125,9 @@ describe('Utilities :: Promises', () => {
 
       expect(results).toHaveLength(ps.length);
       expect(results[0]).toEqual(1);
-      expect(results[1].message).toEqual('nope');
+      expect((results[1] as Error).message).toEqual('nope');
       expect(results[2]).toEqual(3);
-      expect(results[3].message).toEqual('nope');
+      expect((results[3] as Error).message).toEqual('nope');
     });
 
     test('All promises reject', async () => {

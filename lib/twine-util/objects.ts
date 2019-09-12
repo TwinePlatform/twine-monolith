@@ -1,7 +1,7 @@
 /*
  * Utilities for objects
  */
-import { curry, assoc, pick, Dictionary } from 'ramda';
+import { has, assoc, pick, Dictionary } from 'ramda';
 
 
 export const reduceKeys =
@@ -28,7 +28,7 @@ export const evolveKeys = <T>(map: Dictionary<((a: string) => string)>, o: Dicti
   Object.keys(o)
     .reduce((acc, k) =>
       assoc(
-        map.hasOwnProperty(k) ? map[k](k) : k,
+        has(k, map) ? map[k](k) : k,
         o[k],
         acc
       ),

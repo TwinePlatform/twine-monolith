@@ -1,7 +1,7 @@
 /*
  * Utilities for promises
  */
-import * as stream from 'stream';
+import { Readable } from 'stream';
 
 
 export const series = <T>(ps: PromiseLike<T>[]): Promise<T[]> =>
@@ -10,7 +10,7 @@ export const series = <T>(ps: PromiseLike<T>[]): Promise<T[]> =>
     Promise.resolve([])
   );
 
-export const fromStream = (stream: stream.Readable): Promise<Buffer[]> =>
+export const fromStream = (stream: Readable): Promise<Buffer[]> =>
   new Promise((resolve, reject) => {
     const data: Buffer[] = [];
 
@@ -31,7 +31,7 @@ export const find = async <T>(fn: (a: T) => Promise<boolean>, xs: T[]): Promise<
 };
 
 export const some = async <T>(ps: Promise<T>[]) => {
-  return Promise.all(ps.map((p) => p.catch((error) => error)));
+  return Promise.all(ps.map((p) => p.catch((error: Error) => error)));
 };
 
 export const silent = <T>(p: Promise<T>): void => {

@@ -5,7 +5,6 @@ export let __mockResponse = {
   Message: 'msg',
 };
 
-// tslint:disable-next-line: max-line-length
 export const __setMockResponse = (res: any) => {
   __mockResponse = { ...__mockResponse, ...res };
 };

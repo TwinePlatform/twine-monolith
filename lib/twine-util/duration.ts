@@ -9,34 +9,34 @@ const SEC_PER_HR = SEC_PER_MIN * MIN_PER_HR;
 const SEC_PER_DAY = SEC_PER_HR * HRS_PER_DAY;
 
 export type Duration = Partial<{
-  seconds: number
-  minutes: number
-  hours: number
-  days: number
+  seconds: number;
+  minutes: number;
+  hours: number;
+  days: number;
 }>;
+
+export const toSeconds = (d: Duration) => {
+  return Object.entries(d).reduce((acc, [k, v = 0]) => {
+    switch (k) {
+    case 'days':
+      return acc + v * SEC_PER_DAY;
+    case 'hours':
+      return acc + v * SEC_PER_HR;
+    case 'minutes':
+      return acc + v * SEC_PER_MIN;
+    case 'seconds':
+      return acc + v;
+    default:
+      return acc;
+    }
+  }, 0);
+};
 
 export const toWorkingDays = (d: Duration) =>
   toSeconds(d) / (SEC_PER_HR * HRS_PER_WORKING_DAY);
 
 export const toHours = (d: Duration) =>
   toSeconds(d) / SEC_PER_HR;
-
-export const toSeconds = (d: Duration) => {
-  return Object.entries(d).reduce((acc, [k, v = 0]) => {
-    switch (k) {
-      case 'days':
-        return acc + v * SEC_PER_DAY;
-      case 'hours':
-        return acc + v * SEC_PER_HR;
-      case 'minutes':
-        return acc + v * SEC_PER_MIN;
-      case 'seconds':
-        return acc + v;
-      default:
-        return acc;
-    }
-  }, 0);
-};
 
 export const fromSeconds = (s: number) => {
   if (s < 0) {

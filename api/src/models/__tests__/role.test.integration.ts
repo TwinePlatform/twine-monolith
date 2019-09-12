@@ -79,9 +79,7 @@ describe('Roles Model', () => {
         await Roles.add(trx, { role: RoleEnum.VISITOR, userId: 45, organisationId: 1 });
       } catch (error) {
         expect(error.message).toEqual(
-          /* tslint:disable */
           `Foreign key does not exist: Key (user_account_id)=(45) is not present in table \"user_account\".`
-          /* tslint:enable */
         );
       }
     });

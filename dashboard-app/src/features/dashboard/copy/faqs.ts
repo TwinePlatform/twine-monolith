@@ -1,5 +1,3 @@
-// tslint:disable: max-line-length
-
 export default [
   {
     heading: 'What is the dashboard?',
