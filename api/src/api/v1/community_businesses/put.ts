@@ -3,7 +3,7 @@ import * as Boom from '@hapi/boom';
 import { has, flip } from 'ramda';
 import { CommunityBusinesses, CommunityBusiness } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
-import { PutCommunityBusinesssRequest } from '../types/requests';
+import { PutCommunityBusinesssRequest } from '../types/api';
 import { id, response, cbPayload } from './schema';
 
 

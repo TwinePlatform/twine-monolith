@@ -19,7 +19,7 @@
  */
 import * as Hapi from '@hapi/hapi';
 import { Organisation, CommunityBusiness } from '../../../models';
-import { GetCommunityBusinessRequest } from '../types/requests';
+import { GetCommunityBusinessRequest } from '../types/api';
 import getOrganisation from './get_organisation';
 import Roles from '../../../models/role';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';

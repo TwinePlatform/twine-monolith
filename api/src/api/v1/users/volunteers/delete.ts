@@ -4,7 +4,7 @@ import { Volunteers } from '../../../../models';
 import { response } from '../schema';
 import { id } from '../../schema/request';
 import { requireSiblingUser } from '../../prerequisites';
-import { DeleteUserRequest } from '../../types/requests';
+import { DeleteUserRequest } from '../../types/api';
 
 
 const routes: Hapi.ServerRoute[] = [

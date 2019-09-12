@@ -11,7 +11,7 @@
  *
  */
 import * as Hapi from '@hapi/hapi';
-import { GetCommunityBusinessRequest } from '../types/requests';
+import { GetCommunityBusinessRequest } from '../types/api';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
 

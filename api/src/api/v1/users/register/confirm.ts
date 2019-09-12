@@ -15,7 +15,7 @@ import {
 } from '../../../../models';
 import * as QRCode from '../../../../services/qrcode';
 import * as PdfService from '../../../../services/pdf';
-import { RegisterConfirm } from '../../types/requests';
+import { RegisterConfirm } from '../../types/api';
 import { RoleEnum } from '../../../../models/types';
 import Roles from '../../../../models/role';
 import { Tokens } from '../../../../models/token';

@@ -5,7 +5,7 @@ import { User, ModelQuery, Volunteers } from '../../../../models';
 import { query, response } from '../../users/schema';
 import { meOrId } from '../schema';
 import { getCommunityBusiness, isChildOrganisation } from '../../prerequisites';
-import { GetAllVolunteersRequest } from '../../types/requests';
+import { GetAllVolunteersRequest } from '../../types/api';
 import { requestQueryToModelQuery } from '../../utils';
 
 

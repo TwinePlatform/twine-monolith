@@ -3,7 +3,7 @@ import * as Boom from '@hapi/boom';
 
 import { CommunityBusinesses, CbAdmins } from '../../../../models';
 import { isChildOrganisation } from '../../prerequisites';
-import { RegisterCommunityBusinessesRequest } from '../../types/requests';
+import { RegisterCommunityBusinessesRequest } from '../../types/api';
 import { response, cbPayload } from '../schema';
 
 export default [

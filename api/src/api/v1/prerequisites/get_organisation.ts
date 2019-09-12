@@ -9,7 +9,7 @@
 import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { Organisations } from '../../../models';
-import { GetCommunityBusinessRequest } from '../types/requests';
+import { GetCommunityBusinessRequest } from '../types/api';
 import { getCredentialsFromRequest } from '../auth';
 
 

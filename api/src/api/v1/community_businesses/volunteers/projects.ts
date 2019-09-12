@@ -8,7 +8,7 @@ import {
   GetMyVolunteerProjectRequest,
   PostMyVolunteerProjectRequest,
   PutMyVolunteerProjectRequest,
-} from '../../types/requests';
+} from '../../types/api';
 
 
 const routes: Hapi.ServerRoute[] = [

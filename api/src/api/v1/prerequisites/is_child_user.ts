@@ -14,7 +14,7 @@
  *       VISITOR or VOLUNTEER users at child community-businesses for GDPR reasons
  */
 import * as Hapi from '@hapi/hapi';
-import { PutUserRequest } from '../types/requests';
+import { PutUserRequest } from '../types/api';
 import Roles from '../../../models/role';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
