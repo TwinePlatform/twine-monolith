@@ -2,8 +2,9 @@ import * as Hapi from '@hapi/hapi';
 import { Dictionary } from 'ramda';
 import { ApiRequestQuery } from '../schema/request';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../../models';
-import { RegionEnum, SectorEnum, RoleEnum, Organisation } from '../../../models/types';
+import { RegionEnum, SectorEnum, RoleEnum, Organisation, CbAdminCollection } from '../../../models/types';
 import { HttpMethodEnum } from './general';
+import { Unpack } from '../../../types/internal';
 
 export type ServerResponse<T> = {
   result: T
@@ -17,20 +18,20 @@ type Record = {
 
 export namespace Api {
 /*
- * CommunityBusinesses types
+ * CommunityBusinesses route types
  */
  export namespace CommunityBusinesses {
   export namespace CbAdmins {
     export type getRequest = Hapi.Request;
-    export type getResponse = ServerResponse<Partial<Organisation>[]>;
+    export type getResponse = ServerResponse<Unpack<ReturnType<CbAdminCollection['fromOrganisation']>>>;
   }
-  // export namespace Temporary {
-  //   export type deleteRequest = Hapi.Request;
-  //   export type deleteResponse = null;
+  export namespace Temporary {
+    export type deleteRequest = Hapi.Request;
+    export type deleteResponse = null;
 
-  //   export type getRequest = Hapi.Request;
-  //   export type getResponse = null;
-  // }
+    export type getRequest = Hapi.Request;
+    // export type getResponse = ;
+  }
 }
 
 /*
