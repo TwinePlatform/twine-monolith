@@ -15,7 +15,7 @@ interface Months {
 
 
 const months: Months = {
-  list: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], // tslint:disable:max-line-length
+  list: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
   format: MonthsFormatEnum,
   range: (from, to, format) => {
     const length = months.diff(from, to) + 1;

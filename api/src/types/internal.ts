@@ -16,9 +16,7 @@ export type Unpack<T> =
  */
 export type DeepPartial<T> = {
   [P in keyof T]?:
-    // tslint:disable-next-line:prefer-array-literal
     T[P] extends Array<infer U>
-      // tslint:disable-next-line:prefer-array-literal
       ? Array<DeepPartial<U>>
       : T[P] extends ReadonlyArray<infer U>
         ? ReadonlyArray<DeepPartial<U>>

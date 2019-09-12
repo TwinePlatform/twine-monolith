@@ -1,4 +1,3 @@
-// tslint:disable:max-line-length
 import { logsToAggregatedData } from '../logsToAggregatedData';
 import { tableType } from '../tableType';
 

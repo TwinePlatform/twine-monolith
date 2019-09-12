@@ -1,4 +1,3 @@
-// tslint:disable:max-line-length
 /*
  * Users intended as visitors to demonstrate various conflicts in the "Sign in with name" feature
  */

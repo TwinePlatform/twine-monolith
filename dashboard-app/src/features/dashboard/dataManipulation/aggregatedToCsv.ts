@@ -15,7 +15,6 @@ import { Orderable } from '../hooks/useOrderable';
 
 const getStringContainingTotal = (xs: string[]) => xs.find((x) => x.includes('Total'));
 
-// tslint:disable-next-line: max-line-length
 export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEnum, orderable: Orderable): Promise<string> =>
   new Promise((resolve, reject) => {
     const { rows } = pipe(

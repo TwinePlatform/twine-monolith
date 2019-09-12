@@ -1,4 +1,3 @@
-// tslint:disable:max-line-length
 import * as Knex from 'knex';
 
 exports.seed = (knex: Knex) =>

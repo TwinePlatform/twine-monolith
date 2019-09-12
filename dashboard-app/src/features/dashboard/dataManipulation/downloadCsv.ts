@@ -16,7 +16,6 @@ interface Params {
   orderable: Orderable;
 }
 
-// tslint:disable-next-line: max-line-length
 export const downloadCsv = async ({ data: aggData, fromDate, toDate, fileName, unit, orderable }: Params) => {
   if (isDataEmpty(aggData)) {
     throw new Error('No data available to download');

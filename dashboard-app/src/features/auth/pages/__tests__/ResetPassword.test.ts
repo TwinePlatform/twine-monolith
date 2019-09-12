@@ -41,7 +41,6 @@ describe.skip('ResetPassword Page', () => {
       )
       .reply(200, {});
 
-    // tslint:disable-next-line:max-line-length
     const tools = renderWithHistory(ResetPassword, { route: `/password/reset/${token}?email=${email}` });
 
     const [pwdInput, pwdConfirmInput, submitBtn] = await waitForElement(async () => [
@@ -78,7 +77,6 @@ describe.skip('ResetPassword Page', () => {
     const token = 'goo';
     const email = 'fake@example.com';
 
-    // tslint:disable-next-line:max-line-length
     const tools = renderWithHistory(ResetPassword, { route: `/password/reset/${token}?email=${email}` });
 
     const [pwdInput, pwdConfirmInput, submitBtn] = await waitForElement(async () => [
@@ -112,7 +110,6 @@ describe.skip('ResetPassword Page', () => {
     const token = 'goo';
     const email = 'fake@example.com';
 
-    // tslint:disable-next-line:max-line-length
     const tools = renderWithHistory(ResetPassword, { route: `/password/reset/${token}?email=${email}` });
 
     const [pwdInput, pwdConfirmInput, submitBtn] = await waitForElement(async () => [
@@ -146,7 +143,6 @@ describe.skip('ResetPassword Page', () => {
     const token = 'goo';
     const email = 'fake@example.com';
 
-    // tslint:disable-next-line:max-line-length
     const tools = renderWithHistory(ResetPassword, { route: `/password/reset/${token}?email=${email}` });
 
     const [pwdInput, pwdConfirmInput, submitBtn] = await waitForElement(async () => [
