@@ -8,7 +8,7 @@
     "test": "jest",
     "cover": "jest --coverage",
     "build": "tsc",
-    "lint": "tslint --project tsconfig.json",
+    "lint": "eslint *.ts",
     "postinstall": "npm run build"
   },
   "contributors": [

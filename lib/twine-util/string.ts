@@ -10,7 +10,7 @@ export const capitalise =
 export const onlynl = (ss: TemplateStringsArray, ...placeholders: any[]) =>
   ss
     .reduce((acc, s, i) => `${acc}${placeholders[i - 1]}${s}`)
-    .replace(/[\ \t][\ \t]+/g, '');
+    .replace(/[ \t][ \t]+/g, '');
 
 
 export const listify = (xs: string[], opts: { and?: boolean } = { and: true }) => {
