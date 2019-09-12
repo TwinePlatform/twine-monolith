@@ -22,7 +22,7 @@ import {
   Users,
   CommunityBusinesses
 } from '../../../../models';
-import { VolunteerRegisterRequest } from '../../types/types';
+import { VolunteerRegisterRequest } from '../../types/requests';
 import { RoleEnum } from '../../../../models/types';
 import Roles from '../../../../models/role';
 import { Tokens } from '../../../../models/token';

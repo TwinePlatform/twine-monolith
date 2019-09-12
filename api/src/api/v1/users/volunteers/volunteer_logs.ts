@@ -10,7 +10,7 @@ import {
   GetVolunteerLogRequest,
   PutMyVolunteerLogRequest,
   GetMyVolunteerLogsAggregateRequest,
-} from '../../types/types';
+} from '../../types/requests';
 import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
 import {
   volunteerProject,

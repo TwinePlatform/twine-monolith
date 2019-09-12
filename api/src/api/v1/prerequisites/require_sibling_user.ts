@@ -27,7 +27,7 @@
 import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { Organisations } from '../../../models';
-import { RequireSiblingPreReq } from '../types/types';
+import { RequireSiblingPreReq } from '../types/prereqs';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
 

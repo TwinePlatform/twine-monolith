@@ -13,7 +13,7 @@ import {
   phoneNumber,
 } from '../../users/schema';
 import { meOrId, id } from '../schema';
-import { GetVisitorsRequest, GetVisitorRequest } from '../../types/types';
+import { GetVisitorsRequest, GetVisitorRequest } from '../../types/requests';
 import { getCommunityBusiness, isChildOrganisation, isChildUser } from '../../prerequisites';
 import { requestQueryToModelQuery } from '../../utils';
 

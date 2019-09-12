@@ -1,40 +1,9 @@
 import * as Hapi from '@hapi/hapi';
 import { Dictionary } from 'ramda';
-import { ApiRequestQuery, ApiRequestBody } from '../schema/request';
-import { ApiResponse } from '../schema/response';
+import { ApiRequestQuery } from '../schema/request';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../../models';
 import { RegionEnum, SectorEnum, RoleEnum } from '../../../models/types';
-
-
-/*
- * api.json related types
- */
-export enum HttpMethodEnum {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  DELETE = 'DELETE',
-}
-
-export type ApiRouteSpec = {
-  description: string,
-  isImplemented: boolean,
-  auth: boolean,
-  intendedFor: any,
-  scope: string[],
-  query: ApiRequestQuery,
-  body: ApiRequestBody,
-  response: ApiResponse,
-};
-
-/*
- * Prereq types
- */
-export interface RequireSiblingPreReq extends Hapi.Request {
-  params: {
-    userId: string
-  };
-}
+import { HttpMethodEnum } from './general';
 
 /*
  * Request types
