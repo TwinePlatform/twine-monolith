@@ -17,7 +17,9 @@
   * Business logic relating to DB entities
 * Services
   * E-mail
-  * Frontline
+  * Logger
+  * PDF generation
+  * ...
 * Scheduled Jobs
 
 ## Diagram
@@ -37,7 +39,6 @@
 |  |  |  |  |- ...
 |  |  |  |  |- index.js
 |  |  |  |- user
-|  |  |  |- outreach_campaign
 |  |  |  |- ...
 |  |  |  |- index.js
 |  |- auth

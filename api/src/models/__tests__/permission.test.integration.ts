@@ -30,7 +30,7 @@ describe('Permisions Module', () => {
           .select('')
           .count();
         const query = await Permissions.grantNew(trx, {
-          resource: ResourceEnum.ORG_OUTREACH,
+          resource: ResourceEnum.ORG_FEEDBACK,
           access: AccessEnum.WRITE,
           permissionLevel: PermissionLevelEnum.PARENT,
           role: RoleEnum.VOLUNTEER,
@@ -179,14 +179,14 @@ describe('Permisions Module', () => {
     test('SUCCESS - returns true for matching permissions & user', async () => {
       try {
         const query = await Permissions.roleHas(trx, {
-          resource: ResourceEnum.ORG_OUTREACH,
+          resource: ResourceEnum.ORG_DETAILS,
           access: AccessEnum.READ,
           permissionLevel: PermissionLevelEnum.PARENT,
           role: RoleEnum.VOLUNTEER_ADMIN,
         });
         expect(query).toBe(true);
       } catch (error) {
-        expect(error).toBeFalsy();
+        expect(error).toBe({});
       }
     });
   });
@@ -227,16 +227,11 @@ describe('Permisions Module', () => {
         { roles: [RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN] }
       );
 
-      expect(result).toHaveLength(15);
+      expect(result).toHaveLength(14);
       expect(result).toEqual(expect.arrayContaining([
         {
           access: AccessEnum.READ,
           resource: ResourceEnum.ORG_DETAILS,
-          permissionLevel: PermissionLevelEnum.PARENT,
-        },
-        {
-          access: AccessEnum.READ,
-          resource: ResourceEnum.ORG_OUTREACH,
           permissionLevel: PermissionLevelEnum.PARENT,
         },
         {
@@ -313,16 +308,11 @@ describe('Permisions Module', () => {
         { roles: [RoleEnum.VOLUNTEER, RoleEnum.VISITOR] }
       );
 
-      expect(result).toHaveLength(8);
+      expect(result).toHaveLength(7);
       expect(result).toEqual(expect.arrayContaining([
         {
           access: AccessEnum.READ,
           resource: ResourceEnum.ORG_DETAILS,
-          permissionLevel: PermissionLevelEnum.PARENT,
-        },
-        {
-          access: AccessEnum.READ,
-          resource: ResourceEnum.ORG_OUTREACH,
           permissionLevel: PermissionLevelEnum.PARENT,
         },
         {

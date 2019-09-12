@@ -24,8 +24,6 @@ describe('API Constants', () => {
     'genders',
     'disabilities',
     'ethnicities',
-    'outreach-campaigns/types',
-    'subscription-types',
     'visit-activity-categories',
     'volunteer-activities',
   ]

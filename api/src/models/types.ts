@@ -192,18 +192,9 @@ export type CommunityBusiness = Organisation & Readonly<{
   coordinates: Coordinates
   turnoverBand: string
   adminCode?: string
-  frontlineWorkspaceId?: string
-  frontlineApiKey?: string
 }>;
 
 export type FundingBody = Organisation;
-
-export type Subscription = Readonly<CommonTimestamps & {
-  id: Int
-  type: string
-  status: string
-  expiresAt: string
-}>;
 
 export type VisitActivity = Readonly<CommonTimestamps & {
   id: Int
@@ -235,21 +226,6 @@ export type Feedback = Readonly<CommonTimestamps & {
 
 export type LinkedFeedback = Feedback & Readonly<{
   organisationId: Int
-}>;
-
-export type OutreachMeeting = Readonly<CommonTimestamps & {
-  id: Int
-  partner: string
-  subject: string
-  scheduledAt: string
-}>;
-
-export type OutreachCampaign = Readonly<CommonTimestamps & {
-  id: Int
-  type: string
-  targets: string[]
-  startsAt: string
-  endsAt: string
 }>;
 
 export type SingleUseToken = Readonly<Omit<CommonTimestamps, 'modifiedAt'> & {
@@ -297,14 +273,11 @@ export type Model =
   | Organisation
   | CommunityBusiness
   | FundingBody
-  | Subscription
   | VisitActivity
   | VisitEvent
   | LinkedVisitEvent
   | Feedback
   | LinkedFeedback
-  | OutreachMeeting
-  | OutreachCampaign
   | SingleUseToken
   | VolunteerLog;
 

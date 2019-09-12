@@ -1,7 +1,7 @@
 import * as Knex from 'knex';
 import { getConfig } from '../../../config';
 import { getTrx } from '../../../tests/utils/database';
-import { ApiTokens } from '../apiToken';
+import { ApiTokens } from '../api_token';
 
 describe('API Tokens Model', () => {
   const config = getConfig(process.env.NODE_ENV);
@@ -26,7 +26,7 @@ describe('API Tokens Model', () => {
       expect(token).toEqual(expect.objectContaining({
         name: 'Aperture Science',
         access: 'api:visitor:read',
-        id: 3,
+        id: 1,
         modifiedAt: null,
         deletedAt: null,
       }));

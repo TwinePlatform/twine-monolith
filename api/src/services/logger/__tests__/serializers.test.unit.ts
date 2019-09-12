@@ -107,7 +107,7 @@ describe('Logger Service :: Serializers', () => {
     });
 
     test('request with authorization bearer token', () => {
-      // Bearer tokens are used for external app access (Frontline)
+      // Bearer tokens are used for external app access
       const token = 'anything';
 
       const result = serializers.req(<any> {

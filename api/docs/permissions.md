@@ -5,11 +5,7 @@
 | Resource | Owner | Description |
 |----------|-------|-------------|
 | `organisations_details` | 🏢 Organisation | Core organisation details |
-| `organisations_subscriptions` | 🏢 Organisation | Organisation subscriptions |
 | `organisations_feedback` | 🏢 Organisation | Visitor feedback data |
-| `organisations_training` | 🏢 Organisation | Twine training data |
-| `organisations_invitations` | 🏢 Organisation | TBD |
-| `organisations_outreach` | 🏢 Organisation | Outreach data |
 | `organisations_volunteers` | 🏢 Organisation | Miscellaneous volunteer related metadata (e.g. projects) |
 | `user_details` | 👩🏽 User | Core user details |
 | `visit_activities` | 🏢 Organisation | Visit activities offered/listed by organisation |

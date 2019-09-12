@@ -5,18 +5,16 @@ export { CbAdmins } from './cb_admin';
 export { Organisations } from './organisation';
 export { CommunityBusinesses } from './community_business';
 export { VolunteerLogs } from './volunteer_log';
-export { ApiTokens } from './apiToken';
+export { ApiTokens } from './api_token';
 
 export {
   User,
   Organisation,
   CommunityBusiness,
-  FundingBody,
   LinkedFeedback,
   VisitActivity,
   VisitEvent,
   LinkedVisitEvent,
-  Subscription,
   VolunteerLog,
   GenderEnum,
   DisabilityEnum,
