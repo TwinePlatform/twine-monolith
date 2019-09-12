@@ -5,13 +5,13 @@ import { ModelQuery } from './types';
 type DateLike = Date | number | undefined;
 
 export const Utils = {
-  limit: (n: number) => (q: Knex.QueryBuilder) => q.limit(n),
-  offset: (n: number) => (q: Knex.QueryBuilder) => q.offset(n),
-  order: (c: string, d: string) => (q: Knex.QueryBuilder) => q.orderBy(c, d),
-  where: (o: any) => (q: Knex.QueryBuilder) => q.where(o),
-  whereNot: (o: any) => (q: Knex.QueryBuilder) => q.whereNot(o),
-  whereBetween: (o: Dictionary<[DateLike, DateLike]>) =>
-    (q: Knex.QueryBuilder) =>
+  limit: <T, U>(n: number) => (q: Knex.QueryBuilder<T, U>) => q.limit(n),
+  offset: <T, U>(n: number) => (q: Knex.QueryBuilder<T, U>) => q.offset(n),
+  order: <T, U>(c: string, d: string) => (q: Knex.QueryBuilder<T, U>) => q.orderBy(c, d),
+  where: <T, U>(o: any) => (q: Knex.QueryBuilder<T, U>) => q.where(o),
+  whereNot: <T, U>(o: any) => (q: Knex.QueryBuilder<T, U>) => q.whereNot(o),
+  whereBetween: <T, U>(o: Dictionary<[DateLike, DateLike]>) =>
+    (q: Knex.QueryBuilder<T, U>) =>
       Object.keys(o)
         .reduce((queryChain, whereQuery, i) => {
           if (o[whereQuery].length !== 2) {
@@ -27,12 +27,12 @@ export const Utils = {
 };
 
 export const applyQueryModifiers =
-  <T>(p: Knex.QueryBuilder, opts: ModelQuery<T>): Knex.QueryBuilder => {
+  <T, U>(p: Knex.QueryBuilder<T, U>, opts: ModelQuery<U>): Knex.QueryBuilder<T, U> => {
 
     const modifiers = intersection(Object.keys(opts), Object.keys(Utils));
 
     const query = modifiers
-      .reduce((acc, k: keyof ModelQuery<T>) => {
+      .reduce((acc, k: keyof ModelQuery<U>) => {
         if (k === 'limit' && !isNil(opts.limit)) {
           return compose(Utils.limit(opts.limit), acc);
 

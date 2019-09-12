@@ -1,7 +1,15 @@
-import * as _ from '../../../database/types';
-import { Require, Dictionary } from '../../types/internal'
-import { CommonTimestamps, GenderEnum, DisabilityEnum, EthnicityEnum, RegionEnum, SectorEnum, Coordinates } from './constants'
 import { Duration } from 'twine-util';
+import * as _ from '../../../database/types';
+import { Require } from '../../types/internal'
+import {
+  CommonTimestamps,
+  GenderEnum,
+  DisabilityEnum,
+  EthnicityEnum,
+  RegionEnum,
+  SectorEnum,
+  Coordinates,
+} from './constants'
 
 
 /**
@@ -24,7 +32,7 @@ export interface User extends Readonly<CommonTimestamps> {
   readonly isEmailConsentGranted: _.user_accountFields.is_email_contact_consent_granted;
   readonly isSMSConsentGranted: _.user_accountFields.is_sms_contact_consent_granted;
   readonly isTemp: _.user_accountFields.is_temp;
-};
+}
 export type Visitor = Require<User, 'qrCode'>;
 export type Volunteer = Require<User, 'password' | 'phoneNumber' | 'postCode'>;
 export type CbAdmin = Require<User, 'password'>;
@@ -39,7 +47,7 @@ export interface Organisation extends Readonly<CommonTimestamps> {
   readonly name: _.organisationFields.organisation_name;
   readonly _360GivingId: _.organisationFields._360_giving_id;
   readonly isTemp?: _.organisationFields.is_temp;
-};
+}
 
 export interface CommunityBusiness extends Organisation {
   readonly region: RegionEnum;
@@ -52,7 +60,7 @@ export interface CommunityBusiness extends Organisation {
   readonly coordinates?: Coordinates;
   readonly turnoverBand?: _.community_businessFields.turnover_band;
   readonly adminCode?: _.volunteer_admin_codeFields.code;
-};
+}
 
 /**
  * Volunteer Logs

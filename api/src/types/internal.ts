@@ -25,18 +25,12 @@ export type DeepPartial<T> = {
 
 export type Require<T, U extends keyof T> = Required<Pick<T, U>> & Omit<T, U>;
 
-export type JsonPrimitives =
-  string
-  | number
-  | boolean
-  | null;
+export type JsonPrimitives = null | boolean | number | string;
+export interface JsonArray<T = JsonPrimitives> extends Array<Json<T>> {} // eslint-disable-line @typescript-eslint/no-empty-interface
+export interface JsonObject<T = JsonPrimitives> { [key: string]: Json<T> }
+export type Json<T = JsonPrimitives> = T | JsonArray<T> | JsonObject<T>;
+export type EnhancedJson = Json<Date | JsonPrimitives>;
 
-export type JsonTypes =
-  JsonPrimitives
-  | Dictionary<JsonPrimitives>
-  | JsonPrimitives[];
-
-export type Json = Dictionary<JsonTypes> | Dictionary<JsonTypes>[] | JsonTypes[];
 
 export enum AppEnum {
   TWINE_API = 'TWINE_API',
