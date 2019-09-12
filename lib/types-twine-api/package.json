@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "@types/hapi__hapi": "^18.2.5",
+    "hapi": "^18.1.0",
     "typescript": "^3.2.1"
   },
   "devDependencies": {
