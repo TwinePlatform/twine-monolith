@@ -17,7 +17,7 @@ import {
   } from '../schema';
 import { id } from '../../schema/request';
 import { requireSiblingUser } from '../../prerequisites';
-import { PutUserRequest } from '../../types';
+import { PutUserRequest } from '../../types/types';
 
 
 const routes: Hapi.ServerRoute[] = [

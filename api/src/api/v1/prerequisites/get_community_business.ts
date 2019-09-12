@@ -10,7 +10,7 @@ import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { isNil } from 'ramda';
 import { CommunityBusinesses } from '../../../models';
-import { GetCommunityBusinessRequest } from '../types';
+import { GetCommunityBusinessRequest } from '../types/types';
 import { getCredentialsFromRequest } from '../auth';
 
 

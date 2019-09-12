@@ -2,7 +2,7 @@ import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { CommunityBusinesses, CommunityBusiness } from '../../../models';
-import { GetFeedbackRequest, PostFeedbackRequest } from '../types';
+import { GetFeedbackRequest, PostFeedbackRequest } from '../types/types';
 import { query, response, since, until } from './schema';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';

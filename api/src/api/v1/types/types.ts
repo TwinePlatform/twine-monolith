@@ -1,9 +1,9 @@
 import * as Hapi from '@hapi/hapi';
 import { Dictionary } from 'ramda';
-import { ApiRequestQuery, ApiRequestBody } from './schema/request';
-import { ApiResponse } from './schema/response';
-import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../models';
-import { RegionEnum, SectorEnum, RoleEnum } from '../../models/types';
+import { ApiRequestQuery, ApiRequestBody } from '../schema/request';
+import { ApiResponse } from '../schema/response';
+import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../../models';
+import { RegionEnum, SectorEnum, RoleEnum } from '../../../models/types';
 
 
 /*

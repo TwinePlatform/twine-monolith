@@ -5,7 +5,7 @@ import { compare } from 'bcrypt';
 import { Users, Organisations } from '../../../models';
 import { email, DEPRECATED_password, response } from './schema';
 import { Sessions } from '../../../auth/strategies/standard';
-import { LoginRequest } from '../types';
+import { LoginRequest } from '../types/types';
 import Roles from '../../../models/role';
 import { RoleEnum } from '../../../models/types';
 

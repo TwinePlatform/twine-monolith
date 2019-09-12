@@ -25,7 +25,7 @@ import {
   GetVolunteerLogRequest,
   PutMyVolunteerLogRequest,
   GetVolunteerLogSummaryRequest,
-} from '../types';
+} from '../types/types';
 import { requestQueryToModelQuery } from '../utils';
 import { query } from '../users/schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';

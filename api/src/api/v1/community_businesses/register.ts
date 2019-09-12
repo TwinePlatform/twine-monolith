@@ -4,7 +4,7 @@ import { omit } from 'ramda';
 
 import { CommunityBusinesses, Users, CbAdmins } from '../../../models';
 import { isChildOrganisation } from '../prerequisites';
-import { RegisterCommunityBusinessesRequest } from '../types';
+import { RegisterCommunityBusinessesRequest } from '../types/types';
 import { response, cbPayload } from './schema';
 import {
   userName,

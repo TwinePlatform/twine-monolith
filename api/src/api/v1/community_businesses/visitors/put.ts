@@ -16,7 +16,7 @@ import {
   isSMSConsentGranted,
 } from '../../users/schema';
 import { meOrId } from '../schema';
-import { PutUserRequest } from '../../types';
+import { PutUserRequest } from '../../types/types';
 import { getCommunityBusiness, isChildUser } from '../../prerequisites';
 
 

@@ -16,7 +16,7 @@ import {
   ethnicity,
   response
 } from './schema';
-import { PutUserRequest } from '../types';
+import { PutUserRequest } from '../types/types';
 import { isChildUser } from '../prerequisites';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 
