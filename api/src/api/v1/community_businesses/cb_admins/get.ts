@@ -7,7 +7,7 @@ import { getCommunityBusiness, isChildOrganisation } from '../../prerequisites';
 import { Api } from '../../types/api';
 
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [Api.CommunityBusinesses.CbAdmins.GET] = [
   {
     method: 'GET',
     path: '/community-businesses/{organisationId}/cb-admins',
@@ -28,7 +28,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: isChildOrganisation, assign: 'isChild' },
       ],
     },
-    handler: async (request: Api.CommunityBusinesses.CbAdmins.getRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h: Hapi.ResponseToolkit) => {
       const { pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
 
       if (!isChild) {
@@ -40,7 +40,7 @@ const routes: Hapi.ServerRoute[] = [
       return {
         result: await Promise.all(admins.map(CbAdmins.serialise)),
         meta: { total: admins.length },
-      } as Api.CommunityBusinesses.CbAdmins.getResponse;
+      }
     },
   },
 ];

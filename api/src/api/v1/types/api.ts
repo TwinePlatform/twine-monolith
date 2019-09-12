@@ -6,10 +6,12 @@ import { RegionEnum, SectorEnum, RoleEnum, Organisation, CbAdminCollection } fro
 import { HttpMethodEnum } from './general';
 import { Unpack } from '../../../types/internal';
 
-export type ServerResponse<T> = {
-  result: T
-  meta: any
-};
+interface ServerRoute<
+  TRequest extends Hapi.Request, 
+  TResponse extends Hapi.Lifecycle.ReturnValue
+  > extends Hapi.ServerRoute {
+  handler: (req: TRequest, h: Hapi.ResponseToolkit, e?: Error) => TResponse
+}
 
 type Record = {
   id: number
@@ -22,9 +24,13 @@ export namespace Api {
  */
  export namespace CommunityBusinesses {
   export namespace CbAdmins {
-    export type getRequest = Hapi.Request;
-    export type getResponse = ServerResponse<Unpack<ReturnType<CbAdminCollection['fromOrganisation']>>>;
-  }
+    interface GetRequest extends Hapi.Request { payload: {} }
+    interface GetResponse extends Hapi.Lifecycle.ReturnValue {test: string}
+    // type GetResponse = ReturnType<CbAdminCollection['fromOrganisation']> & Hapi.Lifecycle.ReturnValue;
+
+    export type GET = ServerRoute<GetRequest, GetResponse>;
+  
+}
   export namespace Temporary {
     export type deleteRequest = Hapi.Request;
     export type deleteResponse = null;
