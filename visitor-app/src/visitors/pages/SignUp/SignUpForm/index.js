@@ -110,9 +110,11 @@ const SignupForm = props => (
             }
             <ErrorText show={props.errors.ageCheck}>{props.errors.ageCheck}</ErrorText>
           </div>
-          {props.status === status.PENDING
-            ? <DisabledButton />
-            : <SubmitButton />}
+          {
+            props.status === status.PENDING
+              ? <DisabledButton />
+              : <SubmitButton />
+          }
         </FormSection>
         <SideCopy cbOrgName={props.cbOrgName} />
       </Form>
