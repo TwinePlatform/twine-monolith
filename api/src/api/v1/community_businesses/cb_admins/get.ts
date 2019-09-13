@@ -44,6 +44,3 @@ const routes: [Api.CommunityBusinesses.CbAdmins.GET] = [
     },
   },
 ];
-
-
-export default routes;

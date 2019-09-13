@@ -1,4 +1,5 @@
 import * as Hapi from '@hapi/hapi';
+import * as Boom from '@hapi/boom';
 import { Dictionary } from 'ramda';
 import { ApiRequestQuery } from '../schema/request';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../../models';
@@ -7,36 +8,30 @@ import { HttpMethodEnum } from './general';
 import { Unpack } from '../../../types/internal';
 
 interface ServerRoute<
-  TRequest extends Hapi.Request, 
+  TRequest extends Hapi.Request,
   TResponse extends Hapi.Lifecycle.ReturnValue
   > extends Hapi.ServerRoute {
-  handler: (req: TRequest, h: Hapi.ResponseToolkit, e?: Error) => TResponse
+  handler: (req: TRequest, h: Hapi.ResponseToolkit, e?: Error) => Promise<Boom<null> | TResponse>;
 }
 
 type Record = {
-  id: number
-  name: string
+  id: number;
+  name: string;
 };
 
-export namespace Api {
+
+
+export namespace Api { // eslint-disable-line
+
+  type Response<T> = { meta: object; result: T } | T;
 /*
  * CommunityBusinesses route types
  */
- export namespace CommunityBusinesses {
-  export namespace CbAdmins {
+ export namespace CommunityBusinesses { // eslint-disable-line
+  export namespace CbAdmins { // eslint-disable-line
     interface GetRequest extends Hapi.Request { payload: {} }
-    interface GetResponse extends Hapi.Lifecycle.ReturnValue {test: string}
-    // type GetResponse = ReturnType<CbAdminCollection['fromOrganisation']> & Hapi.Lifecycle.ReturnValue;
-
+    export type GetResponse = Response<Unpack<ReturnType<CbAdminCollection['serialise']>>[]>;
     export type GET = ServerRoute<GetRequest, GetResponse>;
-  
-}
-  export namespace Temporary {
-    export type deleteRequest = Hapi.Request;
-    export type deleteResponse = null;
-
-    export type getRequest = Hapi.Request;
-    // export type getResponse = ;
   }
 }
 
