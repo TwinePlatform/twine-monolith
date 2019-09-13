@@ -1,9 +1,9 @@
 import * as Knex from 'knex';
-import { evolve, filter, pick, pickAll, omit } from 'ramda';
-import { Objects } from 'twine-util';
-import { UserCollection, User, ModelQuery, ModelQueryValues, ModelQueryPartial } from '../types/index';
+import { has, filter, pick, pickAll, omit } from 'ramda';
+import { UserCollection, User, ModelQuery, WhereBetweenQuery, ModelQueryPartial, WhereQuery } from '../types/index';
 import { applyQueryModifiers } from '../query_util';
-import { UserModelRecord, ModelValues } from '../types/collection';
+import { UserModelRecord } from '../types/collection';
+import { Objects } from 'twine-util';
 
 
 export const Users: UserCollection = {
@@ -51,8 +51,28 @@ export const Users: UserCollection = {
     disability: 'disability.disability_name',
   },
 
-  toColumnNames(a) {
-    return Objects.renameKeys(Users._modelToRecordMap)(a);
+  _toColumnNames(a: WhereQuery<User> | WhereBetweenQuery<User>) {
+    return filter((x) => !!x, {
+      'user_account.user_account_id': a.id,
+      'user_account.user_name': a.name,
+      'user_account.user_password': a.password,
+      'user_account.email': a.email,
+      'user_account.qr_code': a.qrCode,
+      'user_account.birth_year': a.birthYear,
+      'user_account.post_code': a.postCode,
+      'user_account.phone_number': a.phoneNumber,
+      'user_account.is_email_confirmed': a.isEmailConfirmed,
+      'user_account.is_phone_number_confirmed': a.isPhoneNumberConfirmed,
+      'user_account.is_email_contact_consent_granted': a.isEmailConsentGranted,
+      'user_account.is_sms_contact_consent_granted': a.isSMSConsentGranted,
+      'user_account.is_temp': a.isTemp,
+      'user_account.created_at': a.createdAt,
+      'user_account.modified_at': a.modifiedAt,
+      'user_account.deleted_at': a.deletedAt,
+      'gender.gender_name': a.gender,
+      'ethnicity.ethnicity_name': a.ethnicity,
+      'disability.disability_name': a.disability,
+    });
   },
 
   cast(a) {
@@ -66,14 +86,14 @@ export const Users: UserCollection = {
   async get(client: Knex, query: ModelQuery<User> | ModelQueryPartial<User>) {
     const _q = {
       order: [Users._modelToRecordMap[query.order[0]], query.order[1]] as [keyof UserModelRecord, 'asc' | 'desc'],
-      where: Users.toColumnNames<ModelValues>(query.where),
-      whereNot: Users.toColumnNames<ModelValues>(query.whereNot),
-      whereBetween: Users.toColumnNames(query.whereBetween),
-      whereNotBetween: Users.toColumnNames(query.whereNotBetween),
+      where: Users._toColumnNames(query.where),
+      whereNot: Users._toColumnNames(query.whereNot),
+      whereBetween: Users._toColumnNames(query.whereBetween),
+      whereNotBetween: Users._toColumnNames(query.whereNotBetween),
       limit: query.limit,
       offset: query.offset,
+      fields: 'fields' in query ? query.fields : undefined,
     };
-
 
     const q = applyQueryModifiers<UserModelRecord, User[], UserModelRecord>(
       client<UserModelRecord, User[]>('user_account')
@@ -83,10 +103,12 @@ export const Users: UserCollection = {
       _q
     );
 
-    if (query.fields) {
-      return q.select(Users._modelToRecordMap)
-    } else {
+    if ('fields' in query) {
       return q.select(pick(query.fields, Users._modelToRecordMap));
+
+    } else {
+      const x = await q.select<UserModelRecord, User[]>();
+      return x;
     }
   },
 };

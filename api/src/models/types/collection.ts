@@ -1,6 +1,6 @@
 import * as Knex from 'knex';
 import { Maybe, Dictionary, ValueOf, Json, EnhancedJson } from '../../types/internal';
-import { ModelQueryValues, ModelQuery, ModelQueryPartial, SimpleModelQuery } from './query';
+import { ModelQueryValues, ModelQuery, ModelQueryPartial, SimpleModelQuery, WhereQuery, WhereBetweenQuery } from './query';
 import {
   User,
   Visitor,
@@ -31,7 +31,8 @@ export interface Collection<TModel, TRecord> {
   _recordToModelMap: Record<keyof TRecord, keyof TModel>;
   _modelToRecordMap: Record<keyof TModel, keyof TRecord>;
 
-  toColumnNames <V extends ModelValues>(a: Partial<Record<keyof TModel, V>>): Partial<Record<keyof TRecord, V>>;
+  _toColumnNames (a: WhereQuery<TModel>): WhereQuery<TRecord>;
+  _toColumnNames (a: WhereBetweenQuery<TModel>): WhereBetweenQuery<TRecord>;
 
   cast (a: Dictionary<ValueOf<TModel>>): Partial<TModel>;
 
@@ -62,6 +63,7 @@ export interface Collection<TModel, TRecord> {
  * - Volunteer
  * - CB Admin
  */
+
 export type UserModelRecord =
   Omit<UserAccount, 'user_account.gender_id' | 'user_account.disability_id' | 'user_account.ethnicity_id'>
   & Pick<Gender, 'gender.gender_name'>
