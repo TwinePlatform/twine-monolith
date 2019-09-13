@@ -37,88 +37,90 @@ const LeftPadParagraph = styled(Paragraph)`
 `;
 
 const ErrorText = styled.span`
-color: ${colors.error};
-display: ${props => (props.show ? 'inline' : 'none')};
+  color: ${colors.error};
+  display: ${props => (props.show ? 'inline' : 'none')};
 `;
 
-const SignupForm = (props) => {
-  const ageCheckCheckbox = (<FlexContainerRow>
+const AgeConfirmationCheckbox = () => (
+  <FlexContainerRow>
     <StyledLabelledCheckbox name="ageCheck" id="ageCheck" data-testid="ageCheck" />
     <LeftPadParagraph>I am older than 13</LeftPadParagraph>
-  </FlexContainerRow>);
+  </FlexContainerRow>
+);
 
-  return (
-    <Grid>
-      <NavHeader
-        leftTo="/"
-        leftContent="Back to previous page"
-        centerContent="Please tell us about yourself"
-      />
-      <Row>
-        <Form onChange={props.handleChange} onSubmit={props.createVisitor}>
-          <FormSection flexOrder={1}>
-            <div>
-              <LabelledInput
-                id="visitor-signup-fullname"
-                label="Full Name"
-                name={`fullname$${props.uuid}`}
-                type="text"
-                error={props.errors.name && VISITOR_NAME_INVALID}
-                required
-              />
-              <LabelledInput
-                id="visitor-signup-email"
-                label="Email Address"
-                name={`email$${props.uuid}`}
-                type="email"
-                error={props.errors.email}
-              />
-              <LabelledInput
-                id="visitor-signup-phonenumber"
-                label="Phone Number"
-                name={`phoneNumber$${props.uuid}`}
-                type="text"
-                error={props.errors.phoneNumber}
-              />
-              <LabelledInput
-                id="visitor-signup-postcode"
-                label="Post Code"
-                name={`postCode$${props.uuid}`}
-                type="text"
-                error={props.errors.postCode}
-                required
-              />
-              <LabelledSelect
-                id="visitor-signup-gender"
-                label="Gender"
-                name="gender"
-                options={props.genders}
-                error={props.errors.gender}
-                required
-              />
-              <LabelledSelect
-                id="visitor-signup-birthyear"
-                label="Year of Birth"
-                name="year"
-                options={props.years}
-                error={props.errors.birthYear}
-                required
-              />
-              {!props.hasGivenAge && ageCheckCheckbox}
-
-              <ErrorText show={props.errors.ageCheck}>{props.errors.ageCheck}</ErrorText>
-            </div>
-            {props.status === status.PENDING
+const SignupForm = props => (
+  <Grid>
+    <NavHeader
+      leftTo="/"
+      leftContent="Back to previous page"
+      centerContent="Please tell us about yourself"
+    />
+    <Row>
+      <Form onChange={props.handleChange} onSubmit={props.createVisitor}>
+        <FormSection flexOrder={1}>
+          <div>
+            <LabelledInput
+              id="visitor-signup-fullname"
+              label="Full Name"
+              name={`fullname$${props.uuid}`}
+              type="text"
+              error={props.errors.name && VISITOR_NAME_INVALID}
+              required
+            />
+            <LabelledInput
+              id="visitor-signup-email"
+              label="Email Address"
+              name={`email$${props.uuid}`}
+              type="email"
+              error={props.errors.email}
+            />
+            <LabelledInput
+              id="visitor-signup-phonenumber"
+              label="Phone Number"
+              name={`phoneNumber$${props.uuid}`}
+              type="text"
+              error={props.errors.phoneNumber}
+            />
+            <LabelledInput
+              id="visitor-signup-postcode"
+              label="Post Code"
+              name={`postCode$${props.uuid}`}
+              type="text"
+              error={props.errors.postCode}
+              required
+            />
+            <LabelledSelect
+              id="visitor-signup-gender"
+              label="Gender"
+              name="gender"
+              options={props.genders}
+              error={props.errors.gender}
+              required
+            />
+            <LabelledSelect
+              id="visitor-signup-birthyear"
+              label="Year of Birth"
+              name="year"
+              options={props.years}
+              error={props.errors.birthYear}
+              required
+            />
+            {
+              !props.hasGivenAge && <AgeConfirmationCheckbox />
+            }
+            <ErrorText show={props.errors.ageCheck}>{props.errors.ageCheck}</ErrorText>
+          </div>
+          {
+            props.status === status.PENDING
               ? <DisabledButton />
-              : <SubmitButton />}
-          </FormSection>
-          <SideCopy cbOrgName={props.cbOrgName} />
-        </Form>
-      </Row>
-    </Grid>
-  )
-  ;
-};
+              : <SubmitButton />
+          }
+        </FormSection>
+        <SideCopy cbOrgName={props.cbOrgName} />
+      </Form>
+    </Row>
+  </Grid>
+);
 
 SignupForm.propTypes = {
   createVisitor: PropTypes.func.isRequired,
