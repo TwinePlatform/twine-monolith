@@ -1,4 +1,5 @@
 import _axios, { AxiosRequestConfig, Method } from 'axios';
+import { Api } from '../../../../api/src/api/v1/types/api';
 import qs from 'qs';
 
 const baseURL = process.env.REACT_APP_API_HOST_DOMAIN ?
@@ -17,6 +18,12 @@ export const Roles = {
 };
 
 export const CbAdmins = {
+  get: () => {
+    axios.get<Api.CommunityBusinesses.CbAdmins.Result>('/community-businesses/me/cb-admins')
+      .then((res) => {
+        const x = res.data
+      });
+  },
   login: ({ email, password }: { email: string, password: string }) =>
     axios.post(
       '/users/login',

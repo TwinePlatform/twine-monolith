@@ -3,7 +3,7 @@ import * as Boom from '@hapi/boom';
 import { Dictionary } from 'ramda';
 import { ApiRequestQuery } from '../schema/request';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../../models';
-import { RegionEnum, SectorEnum, RoleEnum, Organisation, CbAdminCollection } from '../../../models/types';
+import { RegionEnum, SectorEnum, RoleEnum, CbAdminCollection } from '../../../models/types';
 import { HttpMethodEnum } from './general';
 import { Unpack } from '../../../types/internal';
 
@@ -23,34 +23,35 @@ type Record = {
 
 export namespace Api { // eslint-disable-line
 
-  type Response<T> = { meta: object; result: T } | T;
-/*
- * CommunityBusinesses route types
- */
- export namespace CommunityBusinesses { // eslint-disable-line
-  export namespace CbAdmins { // eslint-disable-line
-    interface GetRequest extends Hapi.Request { payload: {} }
-    export type GetResponse = Response<Unpack<ReturnType<CbAdminCollection['serialise']>>[]>;
-    export type GET = ServerRoute<GetRequest, GetResponse>;
+  type Response<T> = { meta: object; result: Unpack<T> } | Unpack<T>;
+  /*
+   * CommunityBusinesses route types
+   */
+  export namespace CommunityBusinesses { // eslint-disable-line
+    export namespace CbAdmins { // eslint-disable-line
+      interface GetRequest extends Hapi.Request { payload: {} }
+      export type Result = Unpack<ReturnType<CbAdminCollection['serialise']>>[];
+      export type GetResponse = Response<Result>;
+      export type GET = ServerRoute<GetRequest, GetResponse>;
+    }
   }
-}
 
 /*
  * Constants types
  */
 
-// export namespace Constants {
-//   export type getRequest = Hapi.Request;
-//   export type getResponse = Record [];
-// }
-// export interface GetCommunityBusinessRequest extends Hapi.Request {
-//   params: {
-//     organisationId: string
-//   };
-//   query: ApiRequestQuery & {
-//     [k: string]: any
-//   };
-// }
+export namespace Constants { // eslint-disable-line
+  export type getRequest = Hapi.Request;
+  export type getResponse = Record [];
+}
+export interface GetCommunityBusinessRequest extends Hapi.Request {
+  params: {
+    organisationId: string;
+  };
+  query: ApiRequestQuery & {
+    [k: string]: any;
+  };
+}
 
 // export interface GetCommunityBusinessesRequest extends Hapi.Request {
 //   query: ApiRequestQuery & {
