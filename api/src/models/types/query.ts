@@ -1,3 +1,5 @@
+import { ValueOf } from "../../types/internal";
+
 export type DateLike = Date | number;
 
 export type WhereQuery<T> = Partial<T>;
@@ -18,6 +20,6 @@ export type _WhereQueries<T> = {
 }
 
 export type SimpleModelQuery<T> = Partial<_WhereQueries<T>>;
-export type ModelQuery<T> = Partial<_QueryInvariant<T> & _WhereQueries<T>>;
-export type ModelQueryPartial<T> = Partial<_QueryInvariant<T> & _WhereQueries<T> & { fields: FieldSpec<T> }>;
-export type ModelQueryValues<T> = WhereQuery<T> | WhereBetweenQuery<T>
+export type ModelQueryPartial<T> = Partial<_QueryInvariant<T> & _WhereQueries<T>> & { fields: FieldSpec<T> };
+export type ModelQuery<T> = Omit<ModelQueryPartial<T>, 'fields'>;
+export type ModelQueryValues<T> = ValueOf<WhereQuery<T> | WhereBetweenQuery<T>>;

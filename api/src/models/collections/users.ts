@@ -1,10 +1,9 @@
 import * as Knex from 'knex';
-import { filter, pick, pickAll, omit } from 'ramda';
+import { evolve, filter, pick, pickAll, omit } from 'ramda';
 import { Objects } from 'twine-util';
-import { UserCollection, User, ModelQueryValues, ModelQueryPartial } from '../types/index';
-import { applyQueryModifiers } from '../applyQueryModifiers';
-import { ModelQuery } from '../types';
-import { UserModelRecord } from '../types/collection';
+import { UserCollection, User, ModelQuery, ModelQueryValues, ModelQueryPartial } from '../types/index';
+import { applyQueryModifiers } from '../query_util';
+import { UserModelRecord, ModelValues } from '../types/collection';
 
 
 export const Users: UserCollection = {
@@ -65,12 +64,23 @@ export const Users: UserCollection = {
   },
 
   async get(client: Knex, query: ModelQuery<User> | ModelQueryPartial<User>) {
-    const q = applyQueryModifiers<UserModelRecord, User[]>(
+    const _q = {
+      order: [Users._modelToRecordMap[query.order[0]], query.order[1]] as [keyof UserModelRecord, 'asc' | 'desc'],
+      where: Users.toColumnNames<ModelValues>(query.where),
+      whereNot: Users.toColumnNames<ModelValues>(query.whereNot),
+      whereBetween: Users.toColumnNames(query.whereBetween),
+      whereNotBetween: Users.toColumnNames(query.whereNotBetween),
+      limit: query.limit,
+      offset: query.offset,
+    };
+
+
+    const q = applyQueryModifiers<UserModelRecord, User[], UserModelRecord>(
       client<UserModelRecord, User[]>('user_account')
         .leftOuterJoin('gender', 'gender.gender_id', 'user_account.gender_id')
         .leftOuterJoin('disability', 'disability.disability_id', 'user_account.gender_id')
         .leftOuterJoin('ethnicity', 'ethnicity.ethnicity_id', 'user_account.ethnicity_id'),
-      query
+      _q
     );
 
     if (query.fields) {

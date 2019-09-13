@@ -25,12 +25,13 @@ import * as _ from '../../../database/types';
 /**
  * Base definition
  */
+export type ModelValues = null | boolean | string | number | object | Date;
 
 export interface Collection<TModel, TRecord> {
   _recordToModelMap: Record<keyof TRecord, keyof TModel>;
   _modelToRecordMap: Record<keyof TModel, keyof TRecord>;
 
-  toColumnNames (a: Partial<Record<keyof TModel, ModelQueryValues<TModel>>>): Partial<TRecord>;
+  toColumnNames <V extends ModelValues>(a: Partial<Record<keyof TModel, V>>): Partial<Record<keyof TRecord, V>>;
 
   cast (a: Dictionary<ValueOf<TModel>>): Partial<TModel>;
 
