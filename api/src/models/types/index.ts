@@ -42,6 +42,8 @@ export {
 } from './model';
 
 export {
+  UserModelRecord,
+
   UserCollection,
   VisitorCollection,
   VolunteerCollection,

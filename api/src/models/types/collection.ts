@@ -28,8 +28,8 @@ import * as _ from '../../../database/types';
 export type ModelValues = null | boolean | string | number | object | Date;
 
 export interface Collection<TModel, TRecord> {
-  _recordToModelMap: Record<keyof TRecord, keyof TModel>;
-  _modelToRecordMap: Record<keyof TModel, keyof TRecord>;
+  // _recordToModelMap: Record<keyof TRecord, keyof TModel>;
+  // _modelToRecordMap: Record<keyof TModel, keyof TRecord>;
 
   _toColumnNames (a: WhereQuery<TModel>): WhereQuery<TRecord>;
   _toColumnNames (a: WhereBetweenQuery<TModel>): WhereBetweenQuery<TRecord>;
@@ -72,26 +72,30 @@ export type UserModelRecord =
 
 export interface UserCollection extends Collection<User, UserModelRecord> {
   isMemberOf (k: Knex, u: User, cb: CommunityBusiness): Promise<boolean>;
-
-  add (k: Knex, u: Partial<Visitor>, cb: CommunityBusiness): Promise<Visitor>;
-  add (k: Knex, u: Partial<Volunteer>, cb: CommunityBusiness, c?: string): Promise<Volunteer>;
-  add (k: Knex, u: Partial<CbAdmin>, cb: CommunityBusiness): Promise<CbAdmin>;
-
-  fromCommunityBusiness (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Visitor>): Promise<Visitor[]>;
-  fromCommunityBusiness (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Volunteer>): Promise<Volunteer[]>;
-  fromCommunityBusiness (k: Knex, cb: CommunityBusiness, q?: ModelQuery<CbAdmin>): Promise<CbAdmin>;
 }
 
 export interface VolunteerCollection extends UserCollection {
+  fromCommunityBusiness (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Volunteer>): Promise<Volunteer[]>;
+
+  add (k: Knex, u: Partial<Volunteer>, cb: CommunityBusiness, c?: string): Promise<Volunteer>;
+
   verifyAdminCode (k: Knex, cb: CommunityBusiness, c: string): Promise<boolean>;
 }
 
 export interface CbAdminCollection extends UserCollection {
+  fromCommunityBusiness (k: Knex, cb: CommunityBusiness, q?: ModelQuery<CbAdmin>): Promise<CbAdmin>;
+
+  add (k: Knex, u: Partial<CbAdmin>, cb: CommunityBusiness): Promise<CbAdmin>;
+
   addTemporary (k: Knex, u: Partial<CbAdmin>): Promise<CbAdmin>;
 }
 
 export interface VisitorCollection extends UserCollection {
   getWithVisits (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Visitor>, activity?: string): Promise<null>;
+
+  fromCommunityBusiness (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Visitor>): Promise<Visitor[]>;
+
+  add (k: Knex, u: Partial<Visitor>, cb: CommunityBusiness): Promise<Visitor>;
 
   addAnonymous (k: Knex, u: Partial<Visitor>, cb: CommunityBusiness): Promise<Visitor>;
 }

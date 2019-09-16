@@ -6,32 +6,33 @@ import { onlynl } from 'twine-util/string';
 const Roles: RolesCollection = {
   add: async (client, { role, userId, organisationId }) => {
     try {
-      const [result] = await client.insert({
-        user_account_id: userId,
-        organisation_id: organisationId,
-        access_role_id: client.select('access_role_id')
-          .table('access_role')
-          .where({ ['access_role_name']: role }),
-      })
-      .into('user_account_access_role')
-      .returning('*');
+      const [result] = await client
+        .insert({
+          user_account_id: userId,
+          organisation_id: organisationId,
+          access_role_id: client.select('access_role_id')
+            .table('access_role')
+            .where({ ['access_role_name']: role }),
+        })
+        .into('user_account_access_role')
+        .returning('*');
 
       return result;
 
     } catch (error) {
       switch (error.code) {
-        case '23505':
-          throw new Error(
-            onlynl`Constraint violation: ${error.constraint}
+      case '23505':
+        throw new Error(
+          onlynl`Constraint violation: ${error.constraint}
             Tried to associate User ${userId} with role ${role} at organistion ${organisationId}`
-          );
+        );
 
-        case '23503':
-          throw new Error(`Foreign key does not exist: ${error.detail}`);
+      case '23503':
+        throw new Error(`Foreign key does not exist: ${error.detail}`);
 
         /* istanbul ignore next */
-        default:
-          throw error;
+      default:
+        throw error;
       }
     }
   },
@@ -73,15 +74,15 @@ const Roles: RolesCollection = {
       );
     } catch (error) {
       switch (error.code) {
-        case '23505':
-          throw new Error(
-            `User ${userId} is already associated with ` +
+      case '23505':
+        throw new Error(
+          `User ${userId} is already associated with ` +
             `role ${from} at organistion ${organisationId}`
-          );
+        );
 
         /* istanbul ignore next */
-        default:
-          throw error;
+      default:
+        throw error;
       }
     }
   },

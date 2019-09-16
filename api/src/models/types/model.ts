@@ -10,28 +10,29 @@ import {
   SectorEnum,
   Coordinates,
 } from './constants'
+import { UserAccount } from './records'
 
 
 /**
  * Users
  */
 export interface User extends Readonly<CommonTimestamps> {
-  readonly id?: _.user_accountFields.user_account_id;
-  readonly name: _.user_accountFields.user_name;
-  readonly email: _.user_accountFields.email;
-  readonly phoneNumber?: _.user_accountFields.phone_number;
-  readonly password?: _.user_accountFields.user_password;
-  readonly qrCode?: _.user_accountFields.qr_code;
+  readonly id?: UserAccount['user_account.user_account_id'];
+  readonly name: UserAccount['user_account.user_name'];
+  readonly email: UserAccount['user_account.email'];
+  readonly phoneNumber?: UserAccount['user_account.phone_number'];
+  readonly password?: UserAccount['user_account.user_password'];
+  readonly qrCode?: UserAccount['user_account.qr_code'];
   readonly gender: GenderEnum;
   readonly disability: DisabilityEnum;
   readonly ethnicity: EthnicityEnum;
-  readonly birthYear?: _.user_accountFields.birth_year;
-  readonly postCode?: _.user_accountFields.post_code;
-  readonly isEmailConfirmed: _.user_accountFields.is_email_confirmed;
-  readonly isPhoneNumberConfirmed: _.user_accountFields.is_phone_number_confirmed;
-  readonly isEmailConsentGranted: _.user_accountFields.is_email_contact_consent_granted;
-  readonly isSMSConsentGranted: _.user_accountFields.is_sms_contact_consent_granted;
-  readonly isTemp: _.user_accountFields.is_temp;
+  readonly birthYear?: UserAccount['user_account.birth_year'];
+  readonly postCode?: UserAccount['user_account.post_code'];
+  readonly isEmailConfirmed: UserAccount['user_account.is_email_confirmed'];
+  readonly isPhoneNumberConfirmed: UserAccount['user_account.is_phone_number_confirmed'];
+  readonly isEmailConsentGranted: UserAccount['user_account.is_email_contact_consent_granted'];
+  readonly isSMSConsentGranted: UserAccount['user_account.is_sms_contact_consent_granted'];
+  readonly isTemp: UserAccount['user_account.is_temp'];
 }
 export type Visitor = Require<User, 'qrCode'>;
 export type Volunteer = Require<User, 'password' | 'phoneNumber' | 'postCode'>;

@@ -1,101 +1,146 @@
 import * as Knex from 'knex';
-import { has, filter, pick, pickAll, omit } from 'ramda';
-import { UserCollection, User, ModelQuery, WhereBetweenQuery, ModelQueryPartial, WhereQuery } from '../types/index';
-import { applyQueryModifiers } from '../query_util';
-import { UserModelRecord } from '../types/collection';
+import { evolve, pick, omit } from 'ramda';
 import { Objects } from 'twine-util';
+import { hash } from 'bcrypt';
+import { applyQueryModifiers } from '../query_util';
+import Roles from '../role';
+import {
+  GenderEnum,
+  UserModelRecord,
+  UserCollection,
+  User,
+  ModelQuery,
+  WhereBetweenQuery,
+  ModelQueryPartial,
+  WhereQuery,
+  EthnicityEnum,
+  DisabilityEnum
+} from '../types/index';
+
+
+const modelToRecordMap = {
+  id: 'user_account.user_account_id' as keyof UserModelRecord,
+  name: 'user_account.user_name' as keyof UserModelRecord,
+  password: 'user_account.user_password' as keyof UserModelRecord,
+  email: 'user_account.email' as keyof UserModelRecord,
+  qrCode: 'user_account.qr_code' as keyof UserModelRecord,
+  birthYear: 'user_account.birth_year' as keyof UserModelRecord,
+  postCode: 'user_account.post_code' as keyof UserModelRecord,
+  phoneNumber: 'user_account.phone_number' as keyof UserModelRecord,
+  isEmailConfirmed: 'user_account.is_email_confirmed' as keyof UserModelRecord,
+  isPhoneNumberConfirmed: 'user_account.is_phone_number_confirmed' as keyof UserModelRecord,
+  isEmailConsentGranted: 'user_account.is_email_contact_consent_granted' as keyof UserModelRecord,
+  isSMSConsentGranted: 'user_account.is_sms_contact_consent_granted' as keyof UserModelRecord,
+  isTemp: 'user_account.is_temp' as keyof UserModelRecord,
+  createdAt: 'user_account.created_at' as keyof UserModelRecord,
+  modifiedAt: 'user_account.modified_at' as keyof UserModelRecord,
+  deletedAt: 'user_account.deleted_at' as keyof UserModelRecord,
+  gender: 'gender.gender_name' as keyof UserModelRecord,
+  ethnicity: 'ethnicity.ethnicity_name' as keyof UserModelRecord,
+  disability: 'disability.disability_name' as keyof UserModelRecord,
+}
+
+function isWhereBetween <T>(a: WhereQuery<T> | WhereBetweenQuery<T>): a is WhereBetweenQuery<T> {
+  return Object.values(a).some((v) => Array.isArray(v));
+}
+
+/*
+ * Helpers for transforming query objects
+ */
+const applyDefaultConstants = (o: Partial<User>) => ({
+  ...o,
+  gender: o.gender || GenderEnum.PREFER_NOT_TO_SAY,
+  ethnicity: o.ethnicity || EthnicityEnum.PREFER_NOT_TO_SAY,
+  disability: o.disability || DisabilityEnum.PREFER_NOT_TO_SAY,
+});
+
+const replaceConstantsWithForeignKeys = Objects.renameKeys({
+  'gender.gender_name': 'gender_id',
+  'ethnicity.ethnicity_name': 'ethnicity_id',
+  'disability.disability_name': 'disability_id',
+});
+
+const transformForeignKeysToSubQueries = (client: Knex) => evolve({
+  gender_id: (v: string) =>
+    client('gender').select('gender_id').where({ gender_name: v, deleted_at: null }),
+  disability_id: (v: string) =>
+    client('disability').select('disability_id').where({ disability_name: v, deleted_at: null }),
+  ethnicity_id: (v: string) =>
+    client('ethnicity').select('ethnicity_id').where({ ethnicity_name: v, deleted_at: null }),
+});
+
+/**
+ * Pre-processing
+ */
+
+const preProcessUser = (client: Knex, user: Partial<User>) => {
+  const x = applyDefaultConstants(user);
+  const y = Users._toColumnNames(x); // eslint-disable-line @typescript-eslint/no-use-before-define
+  const z = replaceConstantsWithForeignKeys(y);
+  const a = transformForeignKeysToSubQueries(client)(z);
+  return Objects.mapKeys((k) => k.replace('user_account.', ''))(a);
+};
+
+const preProcessChangeSet = (client: Knex, user: Partial<User>) => {
+  const x = Users._toColumnNames(user); // eslint-disable-line @typescript-eslint/no-use-before-define
+  const y = replaceConstantsWithForeignKeys(x);
+  const z = transformForeignKeysToSubQueries(client)(y);
+  return Objects.mapKeys((k) => k.replace('user_account', ''))(z);
+};
 
 
 export const Users: UserCollection = {
-  _recordToModelMap: {
-    'user_account.user_account_id': 'id',
-    'user_account.user_name': 'name',
-    'user_account.user_password': 'password',
-    'user_account.email': 'email',
-    'user_account.qr_code': 'qrCode',
-    'user_account.birth_year': 'birthYear',
-    'user_account.post_code': 'postCode',
-    'user_account.phone_number': 'phoneNumber',
-    'user_account.is_email_confirmed': 'isEmailConfirmed',
-    'user_account.is_phone_number_confirmed': 'isPhoneNumberConfirmed',
-    'user_account.is_email_contact_consent_granted': 'isEmailConsentGranted',
-    'user_account.is_sms_contact_consent_granted': 'isSMSConsentGranted',
-    'user_account.is_temp': 'isTemp',
-    'user_account.created_at': 'createdAt',
-    'user_account.modified_at': 'modifiedAt',
-    'user_account.deleted_at': 'deletedAt',
-    'gender.gender_name': 'gender',
-    'ethnicity.ethnicity_name': 'ethnicity',
-    'disability.disability_name': 'disability',
-  },
-
-  _modelToRecordMap: {
-    id: 'user_account.user_account_id',
-    name: 'user_account.user_name',
-    password: 'user_account.user_password',
-    email: 'user_account.email',
-    qrCode: 'user_account.qr_code',
-    birthYear: 'user_account.birth_year',
-    postCode: 'user_account.post_code',
-    phoneNumber: 'user_account.phone_number',
-    isEmailConfirmed: 'user_account.is_email_confirmed',
-    isPhoneNumberConfirmed: 'user_account.is_phone_number_confirmed',
-    isEmailConsentGranted: 'user_account.is_email_contact_consent_granted',
-    isSMSConsentGranted: 'user_account.is_sms_contact_consent_granted',
-    isTemp: 'user_account.is_temp',
-    createdAt: 'user_account.created_at',
-    modifiedAt: 'user_account.modified_at',
-    deletedAt: 'user_account.deleted_at',
-    gender: 'gender.gender_name',
-    ethnicity: 'ethnicity.ethnicity_name',
-    disability: 'disability.disability_name',
-  },
-
-  _toColumnNames(a: WhereQuery<User> | WhereBetweenQuery<User>) {
-    return filter((x) => !!x, {
-      'user_account.user_account_id': a.id,
-      'user_account.user_name': a.name,
-      'user_account.user_password': a.password,
-      'user_account.email': a.email,
-      'user_account.qr_code': a.qrCode,
-      'user_account.birth_year': a.birthYear,
-      'user_account.post_code': a.postCode,
-      'user_account.phone_number': a.phoneNumber,
-      'user_account.is_email_confirmed': a.isEmailConfirmed,
-      'user_account.is_phone_number_confirmed': a.isPhoneNumberConfirmed,
-      'user_account.is_email_contact_consent_granted': a.isEmailConsentGranted,
-      'user_account.is_sms_contact_consent_granted': a.isSMSConsentGranted,
-      'user_account.is_temp': a.isTemp,
-      'user_account.created_at': a.createdAt,
-      'user_account.modified_at': a.modifiedAt,
-      'user_account.deleted_at': a.deletedAt,
-      'gender.gender_name': a.gender,
-      'ethnicity.ethnicity_name': a.ethnicity,
-      'disability.disability_name': a.disability,
-    });
+  _toColumnNames(a: WhereQuery<User> | WhereBetweenQuery<User>): any {
+    if (isWhereBetween(a)) {
+      return Objects.renameKeys(modelToRecordMap)(a) as WhereBetweenQuery<UserModelRecord>;
+    } else {
+      return Objects.renameKeys(modelToRecordMap)(a) as WhereQuery<UserModelRecord>;
+    }
   },
 
   cast(a) {
-    return filter((c) => !!c, pickAll<typeof a, Partial<User>>(Object.keys(Users._modelToRecordMap), a));
+    return {
+      id: a.id,
+      name: a.name,
+      email: a.email,
+      phoneNumber: a.phoneNumber,
+      password: a.password,
+      qrCode: a.qrCode,
+      gender: a.gender,
+      disability: a.disability,
+      ethnicity: a.ethnicity,
+      birthYear: a.birthYear,
+      postCode: a.postCode,
+      isEmailConfirmed: a.isEmailConfirmed,
+      isPhoneNumberConfirmed: a.isPhoneNumberConfirmed,
+      isEmailConsentGranted: a.isEmailConsentGranted,
+      isSMSConsentGranted: a.isSMSConsentGranted,
+      createdAt: a.createdAt,
+      modifiedAt: a.modifiedAt,
+      deletedAt: a.deletedAt,
+      isTemp: a.isTemp,
+    } as Partial<User>;
   },
 
-  async serialise(a) {
-    return omit(['password', 'qrCode'], a);
+  async serialise(user) {
+    return omit(['password', 'qrCode'], user);
   },
 
-  async get(client: Knex, query: ModelQuery<User> | ModelQueryPartial<User>) {
+  async exists (client, query) {
+    return null !== Users.getOne(client, { where: query });
+  },
+
+  async get (client: Knex, query: ModelQuery<User> | ModelQueryPartial<User>) {
     const _q = {
-      order: [Users._modelToRecordMap[query.order[0]], query.order[1]] as [keyof UserModelRecord, 'asc' | 'desc'],
       where: Users._toColumnNames(query.where),
       whereNot: Users._toColumnNames(query.whereNot),
       whereBetween: Users._toColumnNames(query.whereBetween),
       whereNotBetween: Users._toColumnNames(query.whereNotBetween),
       limit: query.limit,
       offset: query.offset,
-      fields: 'fields' in query ? query.fields : undefined,
     };
 
-    const q = applyQueryModifiers<UserModelRecord, User[], UserModelRecord>(
+    const x = applyQueryModifiers<UserModelRecord, User[], UserModelRecord>(
       client<UserModelRecord, User[]>('user_account')
         .leftOuterJoin('gender', 'gender.gender_id', 'user_account.gender_id')
         .leftOuterJoin('disability', 'disability.disability_id', 'user_account.gender_id')
@@ -104,11 +149,90 @@ export const Users: UserCollection = {
     );
 
     if ('fields' in query) {
-      return q.select(pick(query.fields, Users._modelToRecordMap));
-
+      return x.select(pick(query.fields, modelToRecordMap)) as Knex.QueryBuilder<UserModelRecord, Partial<User>[]>;
     } else {
-      const x = await q.select<UserModelRecord, User[]>();
-      return x;
+      return x.select(modelToRecordMap) as Knex.QueryBuilder<UserModelRecord, User[]>;
     }
+  },
+
+  async getOne (client: Knex, query: ModelQuery<User> | ModelQueryPartial<User>) {
+    const [res] = await Users.get(client, query);
+    return res || null;
+  },
+
+  async create(client, _user) {
+    const password = _user.password ? await hash(_user.password, 12) : undefined;
+    const user = Object.assign({}, _user, { password });
+
+    const [id] = await client<UserModelRecord, Pick<User, 'id'>>('user_account')
+      .insert(preProcessUser(client, user))
+      .returning('user_account_id');
+
+    return Users.getOne(client, { where: { id } });
+  },
+
+  async update(client, query, _changes) {
+    const _q = {
+      where: Users._toColumnNames(query.where),
+      whereNot: Users._toColumnNames(query.whereNot),
+      whereBetween: Users._toColumnNames(query.whereBetween),
+      whereNotBetween: Users._toColumnNames(query.whereNotBetween),
+    };
+
+    let changes;
+    if (_changes.password) {
+      const passwordHash = await hash(_changes.password, 12);
+      changes = Object.assign({}, _changes, { password: passwordHash });
+    } else {
+      changes = Object.assign({}, _changes);
+    }
+
+    const ids = await applyQueryModifiers(
+      client('user_account')
+        .update(preProcessChangeSet(client, changes))
+        .returning('user_account_id'),
+      _q
+    );
+
+    if (ids.length === 0) {
+      throw new Error('Unable to perform update');
+    }
+
+    return Promise.all(ids.map((id) => Users.getOne(client, { where: { id } })));
+  },
+
+  async delete(client, query) {
+    return Users.update(client, query, {
+      name: 'none',
+      email: null,
+      phoneNumber: null,
+      postCode: null,
+      qrCode: null,
+      isEmailConfirmed: false,
+      isPhoneNumberConfirmed: false,
+      isEmailConsentGranted: false,
+      isSMSConsentGranted: false,
+      deletedAt: new Date(),
+    });
+  },
+
+  async destroy(client, query) {
+    const ids = await applyQueryModifiers(
+      client('user_account')
+        .delete('user_account_id'),
+      query
+    )
+
+    if (ids.length === 0) {
+      throw new Error('Unable to perform delete');
+    }
+
+    return Promise.all(ids.map((id) => Users.getOne(client, { where: { id } })));
+  },
+
+  async isMemberOf(client, user, communityBusiness) {
+    const currentRoles = await Roles.fromUser(client, user);
+    // currently not supporting roles at different cbs
+    return currentRoles.every((x) => x.organisationId === communityBusiness.id);
   },
 };
