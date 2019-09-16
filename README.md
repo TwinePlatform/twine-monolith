@@ -16,3 +16,9 @@ Mono-repo home to all the applications comprising the [Twine platform](https://t
 
 ## Libraries
 - [Twine utility library](./lib/twine-util)
+
+Define:
+- Model
+  - Model props -> Record props
+  - Collection:
+    - `get` (model props)

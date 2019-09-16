@@ -1,6 +1,6 @@
 import * as Knex from 'knex';
-import { Maybe, Dictionary, ValueOf, Json, EnhancedJson } from '../../types/internal';
-import { ModelQueryValues, ModelQuery, ModelQueryPartial, SimpleModelQuery, WhereQuery, WhereBetweenQuery } from './query';
+import { Maybe, Dictionary, ValueOf, EnhancedJson } from '../../types/internal';
+import { ModelQuery, ModelQueryPartial, SimpleModelQuery, WhereQuery, WhereBetweenQuery } from './query';
 import {
   User,
   Visitor,
@@ -28,9 +28,6 @@ import * as _ from '../../../database/types';
 export type ModelValues = null | boolean | string | number | object | Date;
 
 export interface Collection<TModel, TRecord> {
-  // _recordToModelMap: Record<keyof TRecord, keyof TModel>;
-  // _modelToRecordMap: Record<keyof TModel, keyof TRecord>;
-
   _toColumnNames (a: WhereQuery<TModel>): WhereQuery<TRecord>;
   _toColumnNames (a: WhereBetweenQuery<TModel>): WhereBetweenQuery<TRecord>;
 
