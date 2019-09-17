@@ -18,21 +18,17 @@ services:
 
 install:
   - bash ./.travis/cc-download.sh
-  - npm install -g lerna
-  - lerna bootstrap
-  - for x in "api" "dashboard-app" "visitor-app" "lib/twine-util"; do cd $x; npm install; cd ..; done
+  - for x in  "lib/eslint-config-twine" "lib/twine-util"; do cd $x; npm install; cd ../..; done;
+  - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm install; cd ..; done;
 
-jobs:
-  include:
-    - stage: Build & Test
-      before_script:
-        - psql -U postgres -c 'create database twine_api_test'
-        - psql -U postgres -c 'create extension postgis'
-      script:
-        - lerna run lint
-        - lerna run build
-        - lerna run checks
-        - lerna run cover
+before_script:
+  - psql -U postgres -c 'create database twine_api_test'
+  - psql -U postgres -c 'create extension postgis'
+script:
+  - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm run lint; cd ..; done;
+  - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm run build; cd ..; done;
+  - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm run checks; cd ..; done;
+  - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm run cover; cd ..; done;
 
 after_success:
   - bash $TRAVIS_BUILD_DIR/.travis/cc-report.sh
