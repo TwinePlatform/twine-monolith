@@ -13,10 +13,15 @@ import {
 import { UserAccount } from './records'
 
 
+interface ModelBase<T> extends Readonly<CommonTimestamps> {
+  readonly __model: true;
+  readonly __tag: T;
+}
+
 /**
  * Users
  */
-export interface User extends Readonly<CommonTimestamps> {
+export interface User<T = 'User'> extends ModelBase<T> {
   readonly id?: UserAccount['user_account.user_account_id'];
   readonly name: UserAccount['user_account.user_name'];
   readonly email: UserAccount['user_account.email'];
@@ -34,23 +39,22 @@ export interface User extends Readonly<CommonTimestamps> {
   readonly isSMSConsentGranted: UserAccount['user_account.is_sms_contact_consent_granted'];
   readonly isTemp: UserAccount['user_account.is_temp'];
 }
-export type Visitor = Require<User, 'qrCode'>;
-export type Volunteer = Require<User, 'password' | 'phoneNumber' | 'postCode'>;
-export type CbAdmin = Require<User, 'password'>;
+export type Visitor = Require<User<'Visitor'>, 'qrCode'>;
+export type Volunteer = Require<User<'Volunteer'>, 'password' | 'phoneNumber' | 'postCode'>;
+export type CbAdmin = Require<User<'CbAdmin'>, 'password'>;
 export type UserClasses = User | Visitor | Volunteer | CbAdmin;
-
 
 /**
  * Organisations
  */
-export interface Organisation extends Readonly<CommonTimestamps> {
+export interface Organisation<T = 'Organisation'> extends ModelBase<T> {
   readonly id: _.organisationFields.organisation_id;
   readonly name: _.organisationFields.organisation_name;
   readonly _360GivingId: _.organisationFields._360_giving_id;
   readonly isTemp?: _.organisationFields.is_temp;
 }
 
-export interface CommunityBusiness extends Organisation {
+export interface CommunityBusiness extends Organisation<'CommunityBusiness'> {
   readonly region: RegionEnum;
   readonly sector: SectorEnum;
   readonly logoUrl?: _.community_businessFields.logo_url;
@@ -66,18 +70,18 @@ export interface CommunityBusiness extends Organisation {
 /**
  * Volunteer Logs
  */
-export interface VolunteerActivity extends Readonly<CommonTimestamps> {
+export interface VolunteerActivity extends ModelBase<'VolunteerActivity'> {
   readonly id: _.volunteer_activityFields.volunteer_activity_id;
   readonly name: _.volunteer_activityFields.volunteer_activity_name;
 }
 
-export interface VolunteerProject extends Readonly<CommonTimestamps> {
+export interface VolunteerProject extends ModelBase<'VolunteerProject'> {
   readonly id: _.volunteer_projectFields.volunteer_project_id;
   readonly name: _.volunteer_projectFields.volunteer_project_name;
   readonly organisation: Organisation;
 }
 
-export interface VolunteerLog extends Readonly<CommonTimestamps> {
+export interface VolunteerLog extends ModelBase<'VolunteerLog'> {
   readonly id: _.volunteer_hours_logFields.volunteer_hours_log_id;
   readonly user: Volunteer;
   readonly createdBy?: Volunteer | CbAdmin;
@@ -91,12 +95,12 @@ export interface VolunteerLog extends Readonly<CommonTimestamps> {
 /**
  * Visit Logs
  */
-export interface VisitCategory extends Readonly<CommonTimestamps> {
+export interface VisitCategory extends ModelBase<'VisitCategory'> {
   readonly id: _.visit_activity_categoryFields.visit_activity_category_id;
   readonly name: _.visit_activity_categoryFields.visit_activity_category_name;
 }
 
-export interface VisitActivity extends Readonly<CommonTimestamps> {
+export interface VisitActivity extends ModelBase<'VisitActivity'> {
   readonly id: _.visit_activityFields.visit_activity_id;
   readonly name: _.visit_activityFields.visit_activity_name;
   readonly category?: VisitCategory;
@@ -110,7 +114,7 @@ export interface VisitActivity extends Readonly<CommonTimestamps> {
   readonly sunday: _.visit_activityFields.sunday;
 }
 
-export interface VisitLog extends Readonly<CommonTimestamps> {
+export interface VisitLog extends ModelBase<'VisitLog'> {
   readonly id: _.visit_logFields.visit_log_id;
   readonly user: Visitor;
   readonly activty: VisitActivity;
@@ -119,22 +123,22 @@ export interface VisitLog extends Readonly<CommonTimestamps> {
 /**
  * Tokens
  */
-export interface SingleUseToken extends Readonly<CommonTimestamps> {
+export interface SingleUseToken<T = 'SingleUseToken'> extends ModelBase<T> {
   readonly id: _.single_use_tokenFields.single_use_token_id;
   readonly token: _.single_use_tokenFields.token;
   readonly expiresAt: _.single_use_tokenFields.expires_at;
   readonly usedAt?: _.single_use_tokenFields.used_at;
 }
 
-export interface PasswordResetToken extends SingleUseToken {
+export interface PasswordResetToken extends SingleUseToken<'PasswordResetToken'> {
   readonly user: User;
 }
 
-export interface AddRoleToken extends SingleUseToken {
+export interface AddRoleToken extends SingleUseToken<'AddRoleToken'> {
   readonly user: User;
 }
 
-export interface ApiToken extends Readonly<CommonTimestamps> {
+export interface ApiToken extends ModelBase<'ApiToken'> {
   readonly id: _.api_tokenFields.api_token_id;
   readonly name: _.api_tokenFields.api_token_name;
   readonly access: _.api_tokenFields.api_token_access;

@@ -100,6 +100,8 @@ export const Users: UserCollection = {
 
   cast(a) {
     return {
+      __model: true,
+      __tag: 'User',
       id: a.id,
       name: a.name,
       email: a.email,
