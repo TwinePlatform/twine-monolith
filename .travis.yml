@@ -25,10 +25,13 @@ before_script:
   - psql -U postgres -c 'create database twine_api_test'
   - psql -U postgres -c 'create extension postgis'
 script:
-  - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm run lint; cd ..; done;
+  - for x in "api" "dashboard-app" "visitor-app" "lib/twine-util"; do cd $x; npm run lint; cd ..; done;
+  # complile ts/react
   - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm run build; cd ..; done;
-  - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm run checks; cd ..; done;
-  - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm run cover; cd ..; done;
+  # run built server
+  - for x in "api"; do cd $x; npm run checks; cd ..; done;
+  # run tests and coverage
+  - for x in "api" "dashboard-app" "visitor-app" "lib/twine-util"; do cd $x; npm run cover; cd ..; done;
 
 after_success:
   - bash $TRAVIS_BUILD_DIR/.travis/cc-report.sh
