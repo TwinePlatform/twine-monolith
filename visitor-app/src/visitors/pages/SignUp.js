@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { Grid } from 'react-flexbox-grid';
 import { assocPath } from 'ramda';
-import { RegisterAdultVisitor } from '../../shared/components/RegisterVisitor';
+import RegisterVisitor from '../../shared/components/RegisterVisitor';
 import NavHeader from '../../shared/components/NavHeader';
 import NotFound from '../../shared/components/NotFound';
 import { CommunityBusiness, Visitors, ErrorUtils } from '../../api';
@@ -35,7 +35,6 @@ export default class Main extends Component {
       cbLogoUrl: '',
       // form validation for age
       hasGivenAge: true, // defaults to true to avoid showing age checkbox on load
-      ageCheck: false,
       signUpStatus: null,
     };
   }
@@ -140,7 +139,7 @@ export default class Main extends Component {
               leftContent="Back to previous page"
               centerContent="Please tell us about yourself"
             />
-            <RegisterAdultVisitor
+            <RegisterVisitor
               handleChange={this.onChange}
               onSubmit={this.onSubmit}
               cbName={cbOrgName}

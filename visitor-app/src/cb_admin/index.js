@@ -28,7 +28,7 @@ export default class CbAdminRoutes extends React.Component {
         <Route exact path="/admin/visits" component={VisitsData} />
         <Route exact path="/admin/visitors" component={VisitorDetails} />
         <Route exact path="/admin/visitors/anonymous" component={AnonUser} />
-        <Route exact path="/admin/visitors/u-13" component={RegisterU13} />
+        <Route path="/admin/visitors/u-13" component={RegisterU13} />
         <Route exact path="/admin/visitors/:id" component={Visitor} />
         <Route exact path="/admin/settings" component={Settings} />
         <Route exact path="/admin/feedback" component={Feedback} />
