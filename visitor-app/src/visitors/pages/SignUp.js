@@ -107,12 +107,13 @@ export default class Main extends Component {
   }
 
   validateForm = () => {
-    if (!this.state.phoneNumber && !this.state.email) {
+    if (!this.state.form.phoneNumber && !this.state.form.email) {
       return { errors: { email: 'You must supply a phone number or email address' } };
     }
 
-    if (!this.state.ageCheck) {
-      return { errors: { ageCheck: 'You must be over 13 to register' } };
+    const age = BirthYear.toAge(BirthYear.fromDisplay(this.state.form.year));
+    if (!this.state.form.ageCheck && age <= 13) {
+      return { errors: { ageCheck: 'Please confirm you are at least 13 years old' } };
     }
 
     return null;
@@ -141,7 +142,7 @@ export default class Main extends Component {
             />
             <RegisterAdultVisitor
               handleChange={this.onChange}
-              onSubmit={this.createVisitor}
+              onSubmit={this.onSubmit}
               cbName={cbOrgName}
               years={BirthYear.defaultOptionsList()}
               genders={genders}

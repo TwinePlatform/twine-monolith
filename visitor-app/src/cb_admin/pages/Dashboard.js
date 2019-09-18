@@ -85,8 +85,8 @@ export default class Dashboard extends React.Component {
               <Col xs={12} sm={6} md={4} key={title}>
                 <ButtonWrapperLink to={link}>
                   <TileButton idx={i}>
-                    {typeof title === 'function' ? title(this.state) : title}
-                    <Caption>{caption}</Caption>
+                    {title}
+                    <Caption>{typeof caption === 'function' ? caption(this.state) : caption}</Caption>
                   </TileButton>
                 </ButtonWrapperLink>
               </Col>

@@ -51,11 +51,11 @@ class SignupForm extends React.Component {
 
   render() {
     const { uuid } = this.state;
-    const { handleChange, onSubmit, cbName, hasGivenAge, errors, genders, years } = this.props;
+    const { onSubmit, cbName, hasGivenAge, errors, genders, years } = this.props;
 
     return (
       <Row>
-        <Form onChange={handleChange} onSubmit={onSubmit}>
+        <Form onChange={this.handleChange} onSubmit={onSubmit}>
           <FormSection flexOrder={1}>
             <div>
               <LabelledInput
@@ -136,7 +136,11 @@ SignupForm.propTypes = {
   handleChange: PropTypes.func.isRequired,
   genders: PropTypes.arrayOf(PropTypes.object).isRequired,
   hasGivenAge: PropTypes.bool.isRequired,
-  status: PropTypes.arrayOf(Object.values(status).concat(null)).isRequired,
+  status: PropTypes.oneOf(Object.values(status)),
+};
+
+SignupForm.defaultProps = {
+  status: null,
 };
 
 export default SignupForm;
