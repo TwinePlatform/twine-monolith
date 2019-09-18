@@ -9,17 +9,26 @@ import { Form, PrimaryButton } from '../../shared/components/form/base';
 import LabelledInput from '../../shared/components/form/LabelledInput';
 import LabelledSelect from '../../shared/components/form/LabelledSelect';
 import NavHeader from '../../shared/components/NavHeader';
-import Checkbox from '../components/Checkbox';
+import _Checkbox from '../../shared/components/form/StyledLabelledCheckbox';
 import { Activities, CommunityBusiness, ErrorUtils } from '../../api';
 import ActivityLabel from '../components/ActivityLabel';
 import { redirectOnError } from '../../util';
+import { colors } from '../../shared/style_guide';
 
+
+const Checkbox = styled(_Checkbox)`
+  margin: 0 auto;
+  width: 2rem;
+
+  & input + label::before {
+    border: 0.1rem solid ${colors.light}
+  }
+`;
 
 const SubmitButton = styled(PrimaryButton) `
   margin-left: 2em;
   height: 3em;
 `;
-
 
 const ActivitiesError = styled(ErrorParagraph) `
   opacity: ${props => (props.vis ? '1' : '0')};

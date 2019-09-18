@@ -2,21 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import moment from 'moment';
-import { assocPath, compose, filter, pick, prop, has } from 'ramda';
+import { assocPath, compose, filter, pick, prop, pathOr } from 'ramda';
 import { Grid as Gr, Row, Col } from 'react-flexbox-grid';
 import { Paragraph as P } from '../../shared/components/text/base';
 import { Form as Fm, PrimaryButton } from '../../shared/components/form/base';
 import LabelledInput from '../../shared/components/form/LabelledInput';
 import LabelledSelect from '../../shared/components/form/LabelledSelect';
-import Checkbox from '../../shared/components/form/Checkbox';
 import NavHeader from '../../shared/components/NavHeader';
 import DetailsTable from '../components/DetailsTable';
 import QrBox from '../components/QrBox';
 import { CommunityBusiness, Visitors, ErrorUtils } from '../../api';
 import { renameKeys, redirectOnError, status } from '../../util';
 import { BirthYear } from '../../shared/constants';
+import PrintableQrCode from '../../shared/components/DisplayQrCode/PrintableQrCode';
+import StyledLabelledCheckbox from '../../shared/components/form/StyledLabelledCheckbox';
 
-import PrintableQrCode from '../../shared/components/PrintableQrCode';
 
 const Grid = styled(Gr) `
   @media print {
@@ -44,7 +44,7 @@ const TopMarginContainer = styled.div`
 
 const payloadFromState = compose(
   filter(f => typeof f === 'boolean' ? true : Boolean(f)), // need to keep falsy boolean fields
-  pick(['name', 'gender', 'email', 'birthYear', 'phoneNumber', 'isSMSConsentGranted', 'isEmailConsentGranted']),
+  pick(['name', 'gender', 'email', 'birthYear', 'phoneNumber', 'isEmailConsentGranted']),
   prop('form'),
 );
 
@@ -63,7 +63,6 @@ export default class VisitorProfile extends React.Component {
       registeredAt: null,
       qrCodeUrl: '',
       isEmailConsentGranted: false,
-      isSMSConsentGranted: false,
       isPrinting: false,
       resendQrCodeState: null,
       cbOrgName: '',
@@ -112,7 +111,14 @@ export default class VisitorProfile extends React.Component {
       );
   };
 
-  onChange = e => this.setState(assocPath(['form', e.target.name], e.target.value));
+  onChange = (e) => {
+    switch (e.target.type) {
+      case 'checkbox':
+        return this.setState(assocPath(['form', e.target.name], e.target.checked));
+      default:
+        return this.setState(assocPath(['form', e.target.name], e.target.value));
+    }
+  };
 
   onSubmit = (e) => {
     e.preventDefault();
@@ -136,7 +142,6 @@ export default class VisitorProfile extends React.Component {
       email: data.email,
       phoneNumber: data.phoneNumber,
       isEmailConsentGranted: data.isEmailConsentGranted,
-      isSMSConsentGranted: data.isSMSConsentGranted,
       registeredAt: moment(data.createdAt).format('Do MMMM YYYY'),
       qrCodeUrl: data.qrCode,
       form: {},
@@ -232,18 +237,11 @@ export default class VisitorProfile extends React.Component {
                   onChange={this.onChange}
                 />
                 <TopMarginContainer>
-                  <Checkbox
+                  <StyledLabelledCheckbox
                     id="visitor-email-consent"
                     name="isEmailConsentGranted"
-                    label="E-mail consent"
-                    checked={has('isEmailConsentGranted', rest.form) ? rest.form.isEmailConsentGranted : rest.isEmailConsentGranted}
-                    onChange={this.onChange}
-                  />
-                  <Checkbox
-                    id="visitor-sms-consent"
-                    name="isSMSConsentGranted"
-                    label="SMS consent"
-                    checked={has('isSMSConsentGranted', rest.form) ? rest.form.isSMSConsentGranted : rest.isSMSConsentGranted}
+                    label="E-mail constent granted"
+                    checked={pathOr(rest.isEmailConsentGranted, ['form', 'isEmailConsentGranted'], rest)}
                     onChange={this.onChange}
                   />
                 </TopMarginContainer>

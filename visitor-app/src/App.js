@@ -26,7 +26,8 @@ const ProtectedRoutes = () => (
     <Route exact path="/error/404" component={NotFound} />
     <Route exact path="/error/:code" component={InternalServerError} />
     <Route component={NotFound} />
-  </Switch>);
+  </Switch>
+);
 
 const App = () => (
   <Dots>

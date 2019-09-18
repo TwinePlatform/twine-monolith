@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { Grid } from 'react-flexbox-grid';
 
 import { CommunityBusiness, Visitors, ErrorUtils } from '../../../api';
 import { redirectOnError, renameKeys } from '../../../util';
 import CreateAnonUserForm from './CreateAnonUserForm';
-import PrintOption from './PrintOption';
+import DisplayQrCode from '../../../shared/components/DisplayQrCode';
+import NavHeader from '../../../shared/components/NavHeader';
+import { Paragraph } from '../../../shared/components/text/base';
 
+
+const CenteredParagraph = styled(Paragraph)`
+  font-size: 1.1em;
+  text-align: center;
+`;
 
 const stage = {
   ONE: 'ONE',
@@ -15,20 +24,17 @@ const stage = {
 export default class AnonUser extends Component {
 
   state = {
-    name: 'Anonymous ',
+    name: 'Anonymous',
     genders: [],
     errors: {},
     stage: stage.ONE,
   };
 
   componentDidMount() {
-    CommunityBusiness.update() // used to check cookie permissions
-      .then(() => {
-        const getCb = CommunityBusiness.get({ fields: ['name', 'logoUrl', 'id'] });
-        const getGenders = Visitors.genders();
+    const getCb = CommunityBusiness.get({ fields: ['name', 'logoUrl', 'id'] });
+    const getGenders = Visitors.genders();
 
-        return Promise.all([getCb, getGenders]);
-      })
+    Promise.all([getCb, getGenders])
       .then(([{ data: { result: cbRes } }, { data: { result: gendersRes } }]) =>
         this.setState({
           cbOrgName: cbRes.name,
@@ -38,7 +44,6 @@ export default class AnonUser extends Component {
         }))
       .catch(error => redirectOnError(this.props.history.push, error, { 403: '/cb/confirm' }));
   }
-
 
   onSubmit = (e) => {
     e.preventDefault();
@@ -70,25 +75,46 @@ export default class AnonUser extends Component {
     this.setState({ [name]: e.target.value });
   }
 
-  render() { // eslint-disable-line consistent-return
+  render() {
     const { state } = this;
 
-    switch (state.stage) { // eslint-disable-line default-case
-      case stage.ONE:
-        return (<CreateAnonUserForm
-          name={state.name}
-          handleChange={this.handleChange}
-          onSubmit={this.onSubmit}
-          errors={this.state.errors}
-          genders={this.state.genders}
-        />);
-      case stage.TWO:
-        return (<PrintOption
-          onClickPrint={() => window.print()}
-          qrCode={state.qrCode}
-          cbLogoUrl={state.cbLogoUrl}
-        />);
-    }
+    return (
+      <Grid>
+        <NavHeader
+          leftTo="/admin"
+          leftContent="Back to dashboard"
+          centerContent="Create Anonymous User"
+        />
+        {
+          state.stage === stage.ONE && (
+            <>
+              <CenteredParagraph>
+                This allows you to track footfall for visitors who do not want to sign up for an
+                individual account. You can pick what demographic data you would like to be
+                associated to this account and name it to reflect this.
+              </CenteredParagraph>
+              <CreateAnonUserForm
+                name={state.name}
+                handleChange={this.handleChange}
+                onSubmit={this.onSubmit}
+                errors={this.state.errors}
+                genders={this.state.genders}
+              />
+            </>
+          )
+        }
+        {
+          state.stage === stage.TWO && (
+            <DisplayQrCode
+              onClickPrint={() => window.print()}
+              qrCode={state.qrCode}
+              cbLogoUrl={state.cbLogoUrl}
+              forAdmin
+            />
+          )
+        }
+      </Grid>
+    );
   }
 }
 
