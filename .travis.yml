@@ -18,6 +18,7 @@ services:
 
 install:
   - bash ./.travis/cc-download.sh
+  # install local dependency repos first
   - for x in  "lib/eslint-config-twine" "lib/twine-util"; do cd $x; npm install; cd ../..; done;
   - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm install; cd ..; done;
 
