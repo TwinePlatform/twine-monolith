@@ -14,7 +14,6 @@ export default styled.div`
     background-size: 2em 2em;
     background-position: center 0;
     width: 100%;
-    height: 100%;
     position: absolute;
   }
 
