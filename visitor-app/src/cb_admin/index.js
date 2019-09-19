@@ -8,9 +8,9 @@ import VisitorDetails from './pages/VisitorDetails';
 import VisitsData from './pages/VisitsData';
 import Settings from './pages/Settings';
 import Feedback from './pages/Feedback';
-import NotFound from '../shared/components/NotFound';
 import AnonUser from './pages/AnonUser';
 import RegisterU13 from './pages/RegisterU13';
+import ErrorPage from '../shared/pages/Error';
 
 
 export default class CbAdminRoutes extends React.Component {
@@ -33,9 +33,8 @@ export default class CbAdminRoutes extends React.Component {
         <Route exact path="/admin/settings" component={Settings} />
         <Route exact path="/admin/feedback" component={Feedback} />
         <Route exact path="/admin" component={Dashboard} />
-        <Route component={NotFound} />
+        <Route render={() => <ErrorPage code={404} />} />
       </Switch>)
       : <ConfirmPassword onLogin={this.onLogin} />;
   }
 }
-

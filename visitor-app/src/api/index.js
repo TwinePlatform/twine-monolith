@@ -2,7 +2,7 @@
  * Twine API interface
  */
 import _axios, { create } from 'axios';
-import { head, pathOr, equals, evolve, map, filter, compose } from 'ramda';
+import { head, pathOr, equals, evolve, map, filter } from 'ramda';
 import qs from 'qs';
 import { BirthYear } from '../shared/constants';
 
@@ -17,7 +17,7 @@ export const axios = create({
   transformRequest: [evolve({ birthYear: BirthYear.fromDisplay })]
     .concat(_axios.defaults.transformRequest),
   transformResponse: _axios.defaults.transformResponse.concat(data =>
-    data.result === null //eslint-disable-line
+    data.result === null // eslint-disable-line no-nested-ternary
       ? data
       : Array.isArray(data.result)
         ? evolve({ result: map(evolve({ birthYear: BirthYear.toDisplay })) }, data)
@@ -201,7 +201,7 @@ export const Cloudinary = {
 export const ErrorUtils = {
   getErrorStatus: pathOr(null, ['response', 'status']),
   getValidationErrors: pathOr({ general: ['Unknown error'] }, ['response', 'data', 'error', 'validation']),
-  getFirstValidationErrors: compose(map(head), ErrorUtils.getValidationErrors),
+  getFirstValidationErrors: err => map(head, ErrorUtils.getValidationErrors(err)),
   getErrorMessage: pathOr({ general: ['Unknown error'] }, ['response', 'data', 'error', 'message']),
   errorStatusEquals: (error, status) => equals(ErrorUtils.getErrorStatus(error), status),
 };

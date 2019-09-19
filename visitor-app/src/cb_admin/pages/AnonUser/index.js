@@ -7,9 +7,9 @@ import { Grid } from 'react-flexbox-grid';
 import { CommunityBusiness, Visitors } from '../../../api';
 import { redirectOnError, renameKeys } from '../../../util';
 import CreateAnonUserForm from './CreateAnonUserForm';
+import ErrorPage from '../../../shared/pages/Error';
 import DisplayQrCode from '../../../shared/components/DisplayQrCode';
 import NavHeader from '../../../shared/components/NavHeader';
-import NotFound from '../../../shared/components/NotFound';
 import { Paragraph } from '../../../shared/components/text/base';
 import withRegistration from '../../../shared/components/hoc/withRegistration';
 
@@ -82,7 +82,7 @@ class RegisterAnonymousVisitor extends Component {
           />
         </Route>
 
-        <Route exact path="/*" component={NotFound} />
+        <Route render={() => <ErrorPage code={404} />} />
       </Switch>
     );
   }

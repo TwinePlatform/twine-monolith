@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import { Grid } from 'react-flexbox-grid';
 import RegisterVisitor from '../../shared/components/RegisterVisitor';
 import NavHeader from '../../shared/components/NavHeader';
-import NotFound from '../../shared/components/NotFound';
+import ErrorPage from '../../shared/pages/Error';
 import { CommunityBusiness, Visitors } from '../../api';
 import { renameKeys, redirectOnError } from '../../util';
 import { BirthYear } from '../../shared/constants';
@@ -72,7 +72,7 @@ class RegisterU13 extends Component {
           />
         </Route>
 
-        <Route exact path="/*" component={NotFound} />
+        <Route render={() => <ErrorPage code={404} />} />
       </Switch>
     );
   }

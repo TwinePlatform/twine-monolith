@@ -6,8 +6,8 @@ import Thanks from './pages/thanks';
 import ThanksFeedback from './pages/thank_you_feedback';
 import QrError from './pages/qrerror';
 import SignIn from './pages/SignIn';
+import ErrorPage from '../shared/pages/Error';
 import redirectAfterTimeout from '../shared/components/hoc/redirect_after_timeout';
-import NotFound from '../shared/components/NotFound';
 
 
 export default () => (
@@ -18,6 +18,6 @@ export default () => (
     <Route exact path="/visitor/qrerror" component={QrError} />
     <Route exact path="/visitor/end" component={redirectAfterTimeout('/visitor/home', 5000)(Thanks)} />
     <Route exact path="/visitor/thankyou" component={redirectAfterTimeout('/visitor/home', 5000)(ThanksFeedback)} />
-    <Route component={NotFound} />
+    <Route render={() => <ErrorPage code={404} />} />
   </Switch>
 );
