@@ -1,0 +1,57 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { colors } from '../../style_guide';
+import StyledLabelledCheckbox from '../form/StyledLabelledCheckbox';
+import LinkToModal from '../LinkToModal';
+import Copy from './copy.json';
+
+
+const ErrorText = styled.span`
+  color: ${colors.error};
+  display: ${props => (props.show ? 'inline' : 'none')};
+`;
+
+const getLabel = (forMinor, cbName) =>
+  forMinor
+    ? Copy.forMinor.checkboxLabel.replace(/%cbName%/, cbName)
+    : Copy.forAdult.checkboxLabel;
+
+const AgeCheck = props => (
+  <>
+    {
+      (props.forMinor || !props.hasGivenAge) && (
+        <StyledLabelledCheckbox
+          id="ageCheck"
+          name="ageCheck"
+          label={getLabel(props.forMinor, props.cbName)}
+          data-testid="ageCheck"
+        />
+      )
+    }
+    {
+      props.forMinor && (
+        <LinkToModal
+          linkText={Copy.forMinor.linkText}
+          content={Copy.forMinor.explainerContent}
+          contentLabel="Consent explainer"
+        />
+      )
+    }
+    <ErrorText show={props.error}>{props.error}</ErrorText>
+  </>
+);
+
+AgeCheck.propTypes = {
+  forMinor: PropTypes.bool.isRequired,
+  hasGivenAge: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+  cbName: PropTypes.string,
+};
+
+AgeCheck.defaultProps = {
+  error: '',
+  cbName: '',
+};
+
+export default AgeCheck;

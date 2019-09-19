@@ -10,13 +10,13 @@ import { Row } from 'react-flexbox-grid';
 import { assocPath } from 'ramda';
 import { Form as FM, FormSection } from '../form/base';
 import LabelledInput from '../form/LabelledInput';
-import StyledLabelledCheckbox from '../form/StyledLabelledCheckbox';
 import LabelledSelect from '../form/LabelledSelect';
-import { colors } from '../../style_guide';
 import { VISITOR_NAME_INVALID } from '../../../cb_admin/constants/error_text';
 import { status } from '../../../util';
 import { SubmitButton, DisabledButton } from './buttons';
 import SideCopy from './SideCopy';
+import AgeCheck from './AgeCheck';
+
 
 /*
  * Styles
@@ -25,12 +25,6 @@ import SideCopy from './SideCopy';
 const Form = styled(FM)`
   align-items: baseline;
 `;
-
-const ErrorText = styled.span`
-  color: ${colors.error};
-  display: ${props => (props.show ? 'inline' : 'none')};
-`;
-
 
 class SignupForm extends React.Component {
 
@@ -52,10 +46,6 @@ class SignupForm extends React.Component {
   render() {
     const { uuid } = this.state;
     const { onSubmit, forMinor, cbName, hasGivenAge, errors, genders, years } = this.props;
-
-    const label = forMinor
-      ? `${cbName} has obtained consent from a parent/guardian for this data about this child to be processed by Twine.`
-      : 'I am at least 13 years old';
 
     return (
       <Row>
@@ -108,17 +98,12 @@ class SignupForm extends React.Component {
                 error={errors.year}
                 required
               />
-              {
-                (forMinor || !hasGivenAge) && (
-                  <StyledLabelledCheckbox
-                    id="ageCheck"
-                    name="ageCheck"
-                    label={label}
-                    data-testid="ageCheck"
-                  />
-                )
-              }
-              <ErrorText show={errors.ageCheck}>{errors.ageCheck}</ErrorText>
+              <AgeCheck
+                forMinor={forMinor}
+                hasGivenAge={hasGivenAge}
+                cbName={cbName}
+                error={errors.ageCheck}
+              />
             </div>
             {
               this.props.status === status.PENDING
