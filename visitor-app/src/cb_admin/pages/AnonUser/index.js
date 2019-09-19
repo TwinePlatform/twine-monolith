@@ -77,6 +77,7 @@ class RegisterAnonymousVisitor extends Component {
             onClickPrint={this.props.onClickPrint}
             qrCode={this.props.result}
             cbLogoUrl={this.state.cbLogoUrl}
+            nextURL="/admin"
             forAdmin
           />
         </Route>
