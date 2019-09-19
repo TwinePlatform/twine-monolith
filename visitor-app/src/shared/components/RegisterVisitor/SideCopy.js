@@ -28,7 +28,7 @@ const SideCopy = props => (
     </Text>
     <StyledLabelledCheckbox
       id="emailCheckboxInput"
-      name="emailContact"
+      name="isEmailConsentGranted"
       label="I consent to being contacted by email"
       data-testid="emailConsent"
     />
