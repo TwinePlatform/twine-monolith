@@ -1,0 +1,55 @@
+# Environment Configuration
+
+Environment configuration is managed using [Expo's release channels](https://docs.expo.io/versions/latest/distribution/release-channels/), with configuration stored in an ignored `enviroment.ts` file in the root directory. 
+
+
+## Config template 
+`environment.ts` to be created locally with the following format:
+
+```ts
+/*
+ * environment.ts
+ * path: '/environment.ts' (root of your project)
+ */
+
+import { Constants } from "expo";
+import { Platform } from "react-native";
+
+const localhost =
+ Platform.OS === "android" ? "10.0.2.2": "localhost";
+
+const ENV = {
+ dev: {
+   // if running on device replace this string with a hosted server
+   apiBaseUrl: `http://${localhost}:4000`,
+ },
+ staging: {
+   apiBaseUrl: "[your.staging.api.here]",
+   // Add other keys you want here
+ },
+ prod: {
+   apiBaseUrl: "[your.production.api.here]",
+   // Add other keys you want here
+ }
+};
+
+const getEnvVars = () => {
+ /* What is __DEV__ ?
+  * This variable is set to true when react-native is running in Dev mode.
+  * __DEV__ is true when run locally, but false when published.
+  */
+  if (__DEV__) {
+    return ENV.dev;
+  }
+
+  const env = Constants.manifest.releaseChannel
+  if (env === 'staging') {
+    return ENV.staging;
+  } else if (env === 'prod') {
+    return ENV.prod;
+  }
+};
+
+export default getEnvVars;
+```
+

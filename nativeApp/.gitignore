@@ -1,3 +1,4 @@
+# Expo files
 node_modules/**/*
 .expo/*
 npm-debug.*
@@ -9,3 +10,6 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
+
+# Environment Config - see docs for setup
+environment.*

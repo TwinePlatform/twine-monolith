@@ -8,6 +8,7 @@
   - Xcode
   - Android studio
   - installed expo app on ios/andriod device
+- setup configuration outlined in [config.md](./config.md)
 
 ## Install dependencies
 - `cd nativeApp`
@@ -24,3 +25,14 @@ To run the app with live reloading, choose one of:
   • Press e to send a link to your phone with email.
   • Press s to sign in and enable more options.
 ```
+
+## Troubleshooting
+> This version of the Expo app is out of date. Uninstall the app and run again to upgrade.
+
+The issue is to do with the app that is on the iOS simulator / device is out of date and is not compatible with the current version of Expo that you running.
+
+Delete the Expo app from the the iOS simulator and it should work, or install the latest update if you are on a device
+
+Click:
+
+Hardware > Erase all content and settings
