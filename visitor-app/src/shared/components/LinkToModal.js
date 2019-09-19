@@ -24,9 +24,6 @@ const Container = styled.div`
   margin-bottom: 1rem;
 `;
 
-Modal.setAppElement('#root');
-
-
 export default class LinkToModal extends React.Component {
   state = {
     open: false,
