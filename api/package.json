@@ -42,6 +42,7 @@
     "seed:run": "knex seed:run --knexfile knexfile.ts",
     "seed:run:test": "NODE_ENV=testing knex seed:run",
     "dev": "NODE_ENV=development nodemon",
+    "dev-native": "NODE_ENV=development HOST_ADDRESS=0.0.0.0 nodemon",
     "copy:assets": "cp -R ./assets ./build/assets",
     "copy:fonts": "cp -R ./src/services/pdf/fonts ./build/src/services/pdf/fonts",
     "copy": "npm run copy:assets && npm run copy:fonts",

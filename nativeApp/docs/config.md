@@ -15,8 +15,11 @@ Environment configuration is managed using [Expo's release channels](https://doc
 import { Constants } from "expo";
 import { Platform } from "react-native";
 
+// If running through handled device, set localhost to your local IP address
 const localhost =
- Platform.OS === "android" ? "10.0.2.2": "localhost";
+  "[your.local.IP.address]" // to run through expo app on device
+  // OR
+//  Platform.OS === "android" ? "10.0.2.2": "localhost"; //to run through emulator
 
 const ENV = {
  dev: {
