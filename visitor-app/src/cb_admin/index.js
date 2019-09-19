@@ -16,7 +16,7 @@ import RegisterU13 from './pages/RegisterU13';
 export default class CbAdminRoutes extends React.Component {
 
   state = {
-    auth: false,
+    auth: true,
   }
 
   onLogin = () => this.setState({ auth: true })
@@ -27,7 +27,7 @@ export default class CbAdminRoutes extends React.Component {
         <Route exact path="/admin/activities" component={Activities} />
         <Route exact path="/admin/visits" component={VisitsData} />
         <Route exact path="/admin/visitors" component={VisitorDetails} />
-        <Route exact path="/admin/visitors/anonymous" component={AnonUser} />
+        <Route path="/admin/visitors/anonymous" component={AnonUser} />
         <Route path="/admin/visitors/u-13" component={RegisterU13} />
         <Route exact path="/admin/visitors/:id" component={Visitor} />
         <Route exact path="/admin/settings" component={Settings} />

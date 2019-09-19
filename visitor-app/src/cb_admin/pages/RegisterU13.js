@@ -2,40 +2,21 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { Grid } from 'react-flexbox-grid';
-import { assocPath } from 'ramda';
 import RegisterVisitor from '../../shared/components/RegisterVisitor';
 import NavHeader from '../../shared/components/NavHeader';
 import NotFound from '../../shared/components/NotFound';
-import { CommunityBusiness, Visitors, ErrorUtils } from '../../api';
-import { renameKeys, redirectOnError, status } from '../../util';
+import { CommunityBusiness, Visitors } from '../../api';
+import { renameKeys, redirectOnError } from '../../util';
 import { BirthYear } from '../../shared/constants';
 import DisplayQrCode from '../../shared/components/DisplayQrCode';
+import withRegistration from '../../shared/components/hoc/withRegistration';
 
 
-const formStateToPayload = renameKeys({
-  fullname: 'name',
-  year: 'birthYear',
-  emailContact: 'emailConsent',
-});
-
-
-export default class Main extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      users: [],
-      genders: [],
-      qrCode: '',
-      errors: {},
-      form: {},
-      isPrinting: false,
-      cbOrgName: '',
-      organisationId: null,
-      cbLogoUrl: '',
-      // form validation for age
-      signUpStatus: null,
-    };
+class RegisterU13 extends Component {
+  state = {
+    genders: [],
+    cbOrgName: '',
+    cbLogoUrl: '',
   }
 
   componentDidMount() {
@@ -44,84 +25,20 @@ export default class Main extends Component {
     const getGenders = Visitors.genders();
 
     Promise.all([getCb, getGenders])
-      .then(([{ data: { result: cbRes } }, { data: { result: gendersRes } }]) =>
+      .then(([{ data: { result: cbRes } }, { data: { result: gendersRes } }]) => {
         this.setState({
           cbOrgName: cbRes.name,
           cbLogoUrl: cbRes.logoUrl,
-          organisationId: cbRes.id,
           genders: [{ key: 0, value: '' }].concat(gendersRes.map(renameKeys({ id: 'key', name: 'value' }))),
-        }))
+        });
+
+        this.props.hoist({ organisationId: cbRes.id });
+      })
       .catch(err => redirectOnError(this.props.history.push, err));
   }
 
-  onClickPrint = () => {
-    window.print();
-  }
-
-  handleChange = (e) => {
-    switch (e.target.type) {
-      case 'checkbox':
-        return this.setState(assocPath(['form', e.target.name], e.target.checked));
-      default:
-        return this.setState(assocPath(['form', e.target.name], e.target.value));
-    }
-  }
-
-  validateForm = () => {
-    if (!this.state.form.phoneNumber && !this.state.form.email) {
-      return { errors: { email: 'You must supply a phone number or email address' } };
-    }
-
-    if (!this.state.form.year) {
-      return { errors: { year: 'You must provide a year of birth' } };
-    }
-
-    if (!this.state.form.ageCheck) {
-      return { errors: { ageCheck: 'You must confirm parental consent as been given' } };
-    }
-
-    return null;
-  }
-
-  createVisitor = (e) => {
-    e.preventDefault();
-
-    const validationErrors = this.validateForm();
-    if (validationErrors) {
-      return this.setState(validationErrors);
-    }
-
-    this.setState({ signUpStatus: status.PENDING });
-
-    return Visitors.create({
-      ...formStateToPayload(this.state.form),
-      organisationId: this.state.organisationId,
-    })
-      .then((res) => {
-        this.setState(
-          { qrCode: res.data.result.qrCode },
-          () => this.props.history.push('/admin/visitors/u-13/thankyou'),
-        );
-      })
-      .catch((err) => {
-        if (ErrorUtils.errorStatusEquals(err, 400)) {
-          this.setState({
-            signUpStatus: status.FAILURE,
-            errors: ErrorUtils.getValidationErrors(err),
-          });
-        } else if (ErrorUtils.errorStatusEquals(err, 409)) {
-          this.setState({
-            signUpStatus: status.FAILURE,
-            errors: { email: ErrorUtils.getErrorMessage(err) },
-          });
-        } else {
-          redirectOnError(this.props.history.push, err);
-        }
-      });
-  };
-
   render() {
-    const { errors, cbOrgName, genders, cbLogoUrl, qrCode } = this.state;
+    const { cbOrgName, genders, cbLogoUrl } = this.state;
 
     return (
       <Switch>
@@ -133,13 +50,13 @@ export default class Main extends Component {
               centerContent="Sign Up Under 13's"
             />
             <RegisterVisitor
-              handleChange={this.handleChange}
-              onSubmit={this.createVisitor}
+              handleChange={this.props.onChange}
+              onSubmit={this.props.onSubmit}
               cbName={cbOrgName}
               years={BirthYear.u13OptionsList()}
               genders={genders}
-              errors={errors}
-              status={this.state.signUpStatus}
+              errors={this.props.errors}
+              status={this.props.status}
               forMinor
             />
           </Grid>
@@ -148,9 +65,9 @@ export default class Main extends Component {
         <Route path="/admin/visitors/u-13/thankyou">
           <DisplayQrCode
             cbLogoUrl={cbLogoUrl}
-            qrCode={qrCode}
+            qrCode={this.props.result}
             nextURL="/admin"
-            onClickPrint={this.onClickPrint}
+            onClickPrint={this.props.onClickPrint}
             forAdmin
           />
         </Route>
@@ -161,6 +78,48 @@ export default class Main extends Component {
   }
 }
 
-Main.propTypes = {
+RegisterU13.propTypes = {
   history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+  result: PropTypes.string,
+  onClickPrint: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  errors: PropTypes.func.isRequired,
+  status: PropTypes.string.isRequired,
+  hoist: PropTypes.func.isRequired,
 };
+
+RegisterU13.defaultProps = {
+  result: '',
+};
+
+
+const formStateToPayload = renameKeys({
+  fullname: 'name',
+  year: 'birthYear',
+});
+
+const registrationOpts = {
+  validateForm: (form) => {
+    if (!form.phoneNumber && !form.email) {
+      return { email: 'You must supply a phone number or email address' };
+    }
+
+    if (!form.year) {
+      return { year: 'You must provide a year of birth' };
+    }
+
+    if (!form.ageCheck) {
+      return { ageCheck: 'You must confirm parental consent as been given' };
+    }
+
+    return null;
+  },
+  onSubmit: (form, state) => Visitors.create({
+    ...formStateToPayload(form),
+    organisationId: state.organisationId,
+  }),
+  onSuccess: res => [res.data.result.qrCode, '/admin/visitors/u-13/thankyou'],
+};
+
+export default withRegistration(registrationOpts)(RegisterU13);
