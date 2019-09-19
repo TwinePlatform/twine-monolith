@@ -16,7 +16,7 @@ import RegisterU13 from './pages/RegisterU13';
 export default class CbAdminRoutes extends React.Component {
 
   state = {
-    auth: true,
+    auth: false,
   }
 
   onLogin = () => this.setState({ auth: true })
