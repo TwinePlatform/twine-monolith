@@ -1,16 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { assocPath } from 'ramda';
-import { redirectOnError, status } from '../../../util';
+import { redirectOnError, status, toCancellable } from '../../../util';
 import { ErrorUtils } from '../../../api';
 
 
 const withRegistration = opts => (Child) => {
-  class RegisterVisitor extends React.Component {
+  class RegistrationFormWrapper extends React.Component {
     state = {
       form: {},
       errors: {},
+      hoisted: null,
+      result: null,
       status: null,
+    }
+
+    submission = null // eslint-disable-line react/sort-comp
+
+    componentWillUnmount() {
+      if (this.submission) {
+        this.submission.cancel();
+        this.submission = null;
+      }
     }
 
     onClickPrint = () => window.print()
@@ -34,7 +45,9 @@ const withRegistration = opts => (Child) => {
 
       this.setState({ status: status.PENDING });
 
-      return opts.onSubmit(this.state.form, this.state.other)
+      this.submission = toCancellable(opts.onSubmit(this.state.form, this.state.hoisted));
+
+      return this.submission
         .then((res) => {
           const [result, url] = opts.onSuccess(res);
           this.setState({ result, status: status.SUCCESS }, () => this.props.history.push(url));
@@ -43,7 +56,7 @@ const withRegistration = opts => (Child) => {
           if (ErrorUtils.errorStatusEquals(err, 400)) {
             this.setState({
               status: status.FAILURE,
-              errors: ErrorUtils.getValidationErrors(err),
+              errors: ErrorUtils.getFirstValidationErrors(err),
             });
           } else if (ErrorUtils.errorStatusEquals(err, 409)) {
             this.setState({
@@ -56,6 +69,8 @@ const withRegistration = opts => (Child) => {
         });
     }
 
+    hoist = x => this.setState({ hoisted: x })
+
     render() {
       const props = {
         ...this.props,
@@ -63,18 +78,18 @@ const withRegistration = opts => (Child) => {
         onSubmit: this.onSubmit,
         onChange: this.onChange,
         onClickPrint: this.onClickPrint,
-        hoist: x => this.setState({ other: x }),
+        hoist: this.hoist,
       };
 
       return <Child {...props} />;
     }
   }
 
-  RegisterVisitor.propTypes = {
+  RegistrationFormWrapper.propTypes = {
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
   };
 
-  return RegisterVisitor;
+  return RegistrationFormWrapper;
 };
 
 export default withRegistration;
