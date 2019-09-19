@@ -40,7 +40,7 @@ class RegisterAnonymousVisitor extends Component {
         });
         this.props.hoist({ organisationId: cbRes.id });
       })
-      .catch(error => redirectOnError(this.props.history.push, error, { 403: '/cb/confirm' }));
+      .catch(error => redirectOnError(this.props.history.push, error));
   }
 
   handleChange = (e) => {
