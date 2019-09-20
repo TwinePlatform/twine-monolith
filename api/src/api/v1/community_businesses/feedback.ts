@@ -1,14 +1,19 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
-import { CommunityBusinesses, CommunityBusiness } from '../../../models';
-import { GetFeedbackRequest, PostFeedbackRequest } from '../types/api';
+import { CommunityBusinesses } from '../../../models';
+import { Api } from '../types/api';
 import { query, response, since, until } from './schema';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
+import { Feedback } from '../../../models/types';
 
 
-export default [
+const routes: [
+  Api.CommunityBusinesses.Me.Feedback.GET.Route,
+  Api.CommunityBusinesses.Id.Feedback.GET.Route,
+  Api.CommunityBusinesses.Me.Feedback.POST.Route,
+  Api.CommunityBusinesses.Me.Feedback.Aggregates.GET.Route
+] = [
   {
     method: 'GET',
     path: '/community-businesses/me/feedback',
@@ -28,7 +33,7 @@ export default [
         { method: getCommunityBusiness , assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetFeedbackRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const { pre: { communityBusiness }, query, server: { app: { knex } } } = request;
 
       const since = new Date(query.since);
@@ -36,7 +41,7 @@ export default [
 
       return CommunityBusinesses.getFeedback(
         knex,
-        <CommunityBusiness> communityBusiness,
+        communityBusiness,
         { since, until, limit: query.limit, offset: query.offset }
       );
     },
@@ -62,7 +67,7 @@ export default [
         { method: isChildOrganisation , assign: 'isChild' },
       ],
     },
-    handler: async (request: GetFeedbackRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const { pre: { communityBusiness, isChild }, query, server: { app: { knex } } } = request;
 
       if (!isChild) {
@@ -74,7 +79,7 @@ export default [
 
       return CommunityBusinesses.getFeedback(
         knex,
-        <CommunityBusiness> communityBusiness,
+        communityBusiness,
         { since, until, limit: query.limit, offset: query.offset }
       );
     },
@@ -98,10 +103,10 @@ export default [
       },
       response: { schema: response },
     },
-    handler: async (request: PostFeedbackRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const { knex } = request.server.app;
       const { feedbackScore } = request.payload;
-      const { id } = StandardCredentials.fromRequest(request).organisation;
+      const { organisation: { id } } = StandardCredentials.fromRequest(request);
 
       const communityBusiness = await CommunityBusinesses.getOne(knex, { where: { id } });
 
@@ -126,21 +131,21 @@ export default [
         { method: getCommunityBusiness , assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetFeedbackRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const { query, server: { app: { knex } } } = request;
-      const communityBusiness = <CommunityBusiness> request.pre.communityBusiness;
+      const { communityBusiness } = request.pre;
 
       const since = new Date(query.since);
       const until = new Date(query.until);
 
-      const res: { score: string, count: string }[] = await knex('visit_feedback')
+      const res: { score: Feedback['score']; count: string }[] = await knex('visit_feedback')
         .select('score', knex.raw('count (*)'))
         .where({ organisation_id: communityBusiness.id })
         .whereBetween('created_at', [since, until])
         .groupBy('score');
 
       return res
-        .reduce((acc: { [k: string]: number, totalFeedback: number }, row) => {
+        .reduce((acc: { '-1': number; '0': number; '1': number; totalFeedback: number }, row) => {
           acc[row.score] = Number(row.count);
           acc.totalFeedback = (acc.totalFeedback || 0) + Number(row.count);
           return acc;
@@ -148,4 +153,6 @@ export default [
     },
   },
 
-] as Hapi.ServerRoute[];
+];
+
+export default routes;

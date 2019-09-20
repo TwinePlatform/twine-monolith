@@ -3,7 +3,7 @@ import * as Boom from '@hapi/boom';
 import { Dictionary } from 'ramda';
 import { ApiRequestQuery } from '../schema/request';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../../models';
-import { RegionEnum, SectorEnum, RoleEnum, CbAdminCollection } from '../../../models/types';
+import { RegionEnum, SectorEnum, RoleEnum, CbAdminCollection, CommunityBusinessCollection } from '../../../models/types';
 import { HttpMethodEnum } from './general';
 import { Unpack } from '../../../types/internal';
 
@@ -23,35 +23,104 @@ type Record = {
 
 export namespace Api { // eslint-disable-line
 
-  type Response<T> = { meta: object; result: Unpack<T> } | Unpack<T>;
+  type ResponsePayload<T> = { meta: object; result: T } | T;
+
   /*
    * CommunityBusinesses route types
    */
+
   export namespace CommunityBusinesses { // eslint-disable-line
+    export namespace GET { // eslint-disable-line
+      export interface Request extends Hapi.Request { query: ApiRequestQuery & Dictionary<any> }
+      export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>[];
+      export type Response = ResponsePayload<Result>;
+      export type Route = ServerRoute<Request, Response>;
+    }
+
+    export namespace Me { // eslint-disable-line
+      export namespace GET { // eslint-disable-line
+        export interface Request extends Hapi.Request {
+          query: ApiRequestQuery & Dictionary<any>;
+          pre: { communityBusiness: CommunityBusiness };
+        }
+        export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
+        export type Response = ResponsePayload<Result>;
+        export type Route = ServerRoute<Request, Response>;
+      }
+
+      export namespace Feedback { // eslint-disable-line
+        export namespace GET { // eslint-disable-line
+          export interface Request extends Hapi.Request {
+            query: ApiRequestQuery & { since: string; until: string };
+            pre: { communityBusiness: CommunityBusiness };
+          }
+          export type Result = Unpack<ReturnType<CommunityBusinessCollection['getFeedback']>>;
+          export type Response = ResponsePayload<Result>;
+          export type Route = ServerRoute<Request, Response>;
+        }
+
+        export namespace POST { // eslint-disable-line
+          export interface Request extends Hapi.Request {
+            payload: { feedbackScore: number };
+          }
+          export type Result = Unpack<ReturnType<CommunityBusinessCollection['addFeedback']>>;
+          export type Response = ResponsePayload<Result>;
+          export type Route = ServerRoute<Request, Response>;
+        }
+
+        export namespace Aggregates { // eslint-disable-line
+          export namespace GET { // eslint-disable-line
+            export interface Request extends Hapi.Request {
+              query: { since: string; until: string };
+              pre: { communityBusiness: CommunityBusiness };
+            }
+            export type Result = { totalFeedback: number; '-1': number; 0: number; 1: number };
+            export type Response = ResponsePayload<Result>;
+            export type Route = ServerRoute<Request, Response>;
+          }
+        }
+      }
+    }
+
+    export namespace Id { // eslint-disable-line
+      export namespace GET { // eslint-disable-line
+        export interface Request extends Hapi.Request {
+          query: ApiRequestQuery & Dictionary<any>;
+          pre: {
+            communityBusiness: CommunityBusiness;
+            isChild: boolean;
+          };
+        }
+        export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
+        export type Response = ResponsePayload<Result>;
+        export type Route = ServerRoute<Request, Response>;
+      }
+
+      export namespace Feedback { // eslint-disable-line
+        export namespace GET { // eslint-disable-line
+          export interface Request extends Hapi.Request {
+            query: ApiRequestQuery & { since: string; until: string };
+            pre: {
+              communityBusiness: CommunityBusiness;
+              isChild: boolean;
+            };
+          }
+          export type Result = Unpack<ReturnType<CommunityBusinessCollection['getFeedback']>>;
+          export type Response = ResponsePayload<Result>;
+          export type Route = ServerRoute<Request, Response>;
+        }
+      }
+    }
+
     export namespace CbAdmins { // eslint-disable-line
-      interface GetRequest extends Hapi.Request { payload: {} }
-      export type Result = Unpack<ReturnType<CbAdminCollection['serialise']>>[];
-      export type GetResponse = Response<Result>;
-      export type GET = ServerRoute<GetRequest, GetResponse>;
+      export namespace GET { // eslint-disable-line
+        export interface Request extends Hapi.Request { payload: {} }
+        export type Result = Unpack<ReturnType<CbAdminCollection['serialise']>>[];
+        export type Response = ResponsePayload<Result>;
+        export type Route = ServerRoute<Request, Response>;
+      }
     }
   }
-
-/*
- * Constants types
- */
-
-export namespace Constants { // eslint-disable-line
-  export type getRequest = Hapi.Request;
-  export type getResponse = Record [];
-}
-export interface GetCommunityBusinessRequest extends Hapi.Request {
-  params: {
-    organisationId: string;
-  };
-  query: ApiRequestQuery & {
-    [k: string]: any;
-  };
-}
 
 // export interface GetCommunityBusinessesRequest extends Hapi.Request {
 //   query: ApiRequestQuery & {
@@ -81,19 +150,6 @@ export interface GetCommunityBusinessRequest extends Hapi.Request {
 //   pre: {
 //     communityBusiness: CommunityBusiness
 //     isChild?: boolean
-//   };
-// }
-
-// export interface GetFeedbackRequest extends Hapi.Request {
-//   query: ApiRequestQuery & {
-//     since: string
-//     until: string
-//   };
-// }
-
-// export interface PostFeedbackRequest extends Hapi.Request {
-//   payload: {
-//     feedbackScore: number
 //   };
 // }
 

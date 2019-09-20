@@ -7,7 +7,7 @@ import { getCommunityBusiness, isChildOrganisation } from '../../prerequisites';
 import { Api } from '../../types/api';
 
 
-const routes: [Api.CommunityBusinesses.CbAdmins.GET] = [
+const routes: [Api.CommunityBusinesses.CbAdmins.GET.Route] = [
   {
     method: 'GET',
     path: '/community-businesses/{organisationId}/cb-admins',
@@ -44,3 +44,5 @@ const routes: [Api.CommunityBusinesses.CbAdmins.GET] = [
     },
   },
 ];
+
+export default routes;

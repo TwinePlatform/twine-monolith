@@ -19,9 +19,9 @@ export const Roles = {
 
 export const CbAdmins = {
   get: () => {
-    axios.get<Api.CommunityBusinesses.CbAdmins.Result>('/community-businesses/me/cb-admins')
+    axios.get<Api.CommunityBusinesses.CbAdmins.GET.Result>('/community-businesses/me/cb-admins')
       .then((res) => {
-        const x = res.data
+        const x = res.data;
       });
   },
   login: ({ email, password }: { email: string, password: string }) =>
