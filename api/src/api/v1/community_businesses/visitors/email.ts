@@ -1,4 +1,3 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { response, id } from '../schema';
@@ -7,21 +6,12 @@ import { Visitors, CommunityBusinesses } from '../../../../models';
 import * as PdfService from '../../../../services/pdf';
 import * as QRCode from '../../../../services/qrcode';
 import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
+import { Api } from '../../types/api';
 
 
-interface UserEmailRequest extends Hapi.Request {
-  params: {
-    userId: string
-  };
-  payload: {
-    type: 'qrcode'
-  };
-  pre: {
-    isChild: boolean
-  };
-}
-
-const routes: Hapi.ServerRoute[] = [
+const routes: [
+  Api.CommunityBusinesses.Me.Visitors.Id.emails.POST.Route
+] = [
   {
     method: 'POST',
     path: '/community-businesses/me/visitors/{userId}/emails',
@@ -46,7 +36,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: isChildUser, assign: 'isChild' },
       ],
     },
-    handler: async (request: UserEmailRequest, h) => {
+    handler: async (request, h) => {
       const {
         pre: { isChild },
         params: { userId },
@@ -69,7 +59,7 @@ const routes: Hapi.ServerRoute[] = [
 
       if (!visitor.email
         || /anon_\d+_org_\d+/.test(visitor.email)
-        ) {
+      ) {
         return Boom.badRequest('User has not specified an email');
       }
 

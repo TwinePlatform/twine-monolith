@@ -16,12 +16,12 @@ import { Dictionary } from 'ramda';
 /*
  * Types
  */
-export type ApiRequestQuery = {
-  fields: string[]
-  sort: string
-  order: 'asc' | 'desc'
-  offset: number
-  limit: number
+export type ApiRequestQuery<T = string> = {
+  fields: (T extends string ? T : (keyof T))[];
+  sort: string;
+  order: 'asc' | 'desc';
+  offset: string;
+  limit: string;
 };
 
 export type ApiRequestBody = Dictionary<any>;

@@ -1,4 +1,3 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { has, mergeDeepRight, omit, keys, assoc } from 'ramda';
@@ -13,12 +12,15 @@ import {
   phoneNumber,
 } from '../../users/schema';
 import { meOrId, id } from '../schema';
-import { GetVisitorsRequest, GetVisitorRequest } from '../../types/api';
+import { Api } from '../../types/api';
 import { getCommunityBusiness, isChildOrganisation, isChildUser } from '../../prerequisites';
 import { requestQueryToModelQuery } from '../../utils';
 
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [
+  Api.CommunityBusinesses.Id.Visitors.GET.Route,
+  Api.CommunityBusinesses.Me.Visitors.Id.GET.Route,
+] = [
   {
     method: 'GET',
     path: '/community-businesses/{organisationId}/visitors',
@@ -52,7 +54,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: isChildOrganisation, assign: 'isChild' },
       ],
     },
-    handler: async (request: GetVisitorsRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const { query, pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
       const { visits, filter } = query;
 
@@ -78,20 +80,20 @@ const routes: Hapi.ServerRoute[] = [
 
       const visitors = await (visits
         ? Visitors.getWithVisits(
-            knex, communityBusiness, modelQuery, filter ? filter.visitActivity : undefined)
+          knex, communityBusiness, modelQuery, filter ? filter.visitActivity : undefined)
         : Visitors.fromCommunityBusiness(knex, communityBusiness, modelQuery));
 
       const count = has('limit', modelQuery) || has('offset', modelQuery)
         ? await Visitors.fromCommunityBusiness(
-            knex,
-            communityBusiness,
-            omit(['limit', 'offset'], modelQuery)
-          )
+          knex,
+          communityBusiness,
+          omit(['limit', 'offset'], modelQuery)
+        )
           .then((res) => res.length)
         : visitors.length;
 
       return {
-        result: await Promise.all((<User[]> visitors).map((v) => Visitors.serialise(v))),
+        result: await Promise.all((visitors as User[]).map((v) => Visitors.serialise(v))),
         meta: { total: count },
       };
     },
@@ -122,7 +124,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: isChildUser, assign: 'isChildUser' },
       ],
     },
-    handler: async (request: GetVisitorRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         query: { visits },
         params: { userId },

@@ -1,4 +1,3 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { Duration } from 'twine-util';
@@ -17,19 +16,16 @@ import {
 import Roles from '../../../models/role';
 import { VolunteerLogs, Volunteers, VolunteerLog } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
-import {
-  PostMyVolunteerLogsRequest,
-  SyncMyVolunteerLogsRequest,
-  SyncVolunteerLogPayloadItem,
-  GetMyVolunteerLogsRequest,
-  GetVolunteerLogRequest,
-  PutMyVolunteerLogRequest,
-  GetVolunteerLogSummaryRequest,
-} from '../types/api';
+import { Api } from '../types/api';
 import { requestQueryToModelQuery } from '../utils';
 import { query } from '../users/schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum, User } from '../../../models/types';
+import { Unpack } from '../../../types/internal';
+
+
+type SyncLogPayload = Api.CommunityBusinesses.Me.VolunteerLogs.sync.POST.Request['payload'];
+type SyncLogPayloadItem = Unpack<SyncLogPayload>;
 
 
 const logDatesSchema = Joi.object({
@@ -37,7 +33,7 @@ const logDatesSchema = Joi.object({
   deletedAt: Joi.alt().try(Joi.date().iso().max('now'), Joi.only(null)),
 });
 
-const ignoreInvalidLogs = (logs: SyncVolunteerLogPayloadItem[]) =>
+const ignoreInvalidLogs = (logs: SyncLogPayload) =>
   // Ignore invalid date strings for startedAt and deletedAt
   logs
     .reduce((acc, log) => {
@@ -51,20 +47,20 @@ const ignoreInvalidLogs = (logs: SyncVolunteerLogPayloadItem[]) =>
       return acc;
     }, { valid: [] as typeof logs, invalid: [] as typeof logs });
 
-const uniformLogs = (user: User) => (log: SyncVolunteerLogPayloadItem): Partial<VolunteerLog> =>
+const uniformLogs = (user: User) => (log: SyncLogPayloadItem): Partial<VolunteerLog> =>
   ({
     ...log,
     userId: log.userId === 'me' ? user.id : log.userId,
   });
 
 const routes: [
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any
+  Api.CommunityBusinesses.Me.VolunteerLogs.GET.Route,
+  Api.CommunityBusinesses.Me.VolunteerLogs.Id.GET.Route,
+  Api.CommunityBusinesses.Me.VolunteerLogs.Id.PUT.Route,
+  Api.CommunityBusinesses.Me.VolunteerLogs.Id.DELETE.Route,
+  Api.CommunityBusinesses.Me.VolunteerLogs.POST.Route,
+  Api.CommunityBusinesses.Me.VolunteerLogs.sync.POST.Route,
+  Api.CommunityBusinesses.Me.VolunteerLogs.summary.GET.Route,
 ] = [
 
   {
@@ -89,7 +85,7 @@ const routes: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetMyVolunteerLogsRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         query: _query,
@@ -128,7 +124,7 @@ const routes: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetVolunteerLogRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         params: { logId },
@@ -179,7 +175,7 @@ const routes: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: PutMyVolunteerLogRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         params: { logId },
@@ -221,7 +217,7 @@ const routes: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetVolunteerLogRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         params: { logId },
@@ -270,7 +266,7 @@ const routes: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: PostMyVolunteerLogsRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         pre: { communityBusiness },
@@ -369,7 +365,7 @@ const routes: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: SyncMyVolunteerLogsRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         pre: { communityBusiness },
@@ -436,7 +432,7 @@ const routes: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetVolunteerLogSummaryRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         pre: { communityBusiness },

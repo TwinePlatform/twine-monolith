@@ -1,12 +1,11 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
-
 import { CommunityBusinesses, CbAdmins } from '../../../../models';
 import { isChildOrganisation } from '../../prerequisites';
-import { RegisterCommunityBusinessesRequest } from '../../types/api';
+import { Api } from '../../types/api';
 import { response, cbPayload } from '../schema';
 
-export default [
+
+const routes: [Api.CommunityBusinesses.Register.Temporary.POST.Route] = [
   {
     method: 'POST',
     path: '/community-businesses/register/temporary',
@@ -28,7 +27,7 @@ export default [
       ],
       response: { schema: response },
     },
-    handler: async (request: RegisterCommunityBusinessesRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         pre: { isChild },
         server: { app: { knex } },
@@ -52,4 +51,6 @@ export default [
       };
     },
   },
-] as Hapi.ServerRoute[];
+];
+
+export default routes;

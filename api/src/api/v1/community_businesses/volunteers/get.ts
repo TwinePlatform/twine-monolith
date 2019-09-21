@@ -1,15 +1,14 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { has, omit } from 'ramda';
 import { User, ModelQuery, Volunteers } from '../../../../models';
 import { query, response } from '../../users/schema';
 import { meOrId } from '../schema';
 import { getCommunityBusiness, isChildOrganisation } from '../../prerequisites';
-import { GetAllVolunteersRequest } from '../../types/api';
+import { Api } from '../../types/api';
 import { requestQueryToModelQuery } from '../../utils';
 
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [Api.CommunityBusinesses.Id.Volunteers.GET.Route] = [
   {
     method: 'GET',
     path: '/community-businesses/{organisationId}/volunteers',
@@ -33,7 +32,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: isChildOrganisation, assign: 'isChild' },
       ],
     },
-    handler: async (request: GetAllVolunteersRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const { query, pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
 
       /*
@@ -49,17 +48,17 @@ const routes: Hapi.ServerRoute[] = [
         where: { deletedAt: null },
       };
 
-      // TODO: Need to actually filtering and field option
+      // TODO: Need to actually add filtering and field option
 
       const volunteers =
         await Volunteers.fromCommunityBusiness(knex, communityBusiness, modelQuery);
 
       const count = has('limit', modelQuery) || has('offset', modelQuery)
         ? await Volunteers.fromCommunityBusiness(
-            knex,
-            communityBusiness,
-            omit(['limit', 'offset'], modelQuery)
-          )
+          knex,
+          communityBusiness,
+          omit(['limit', 'offset'], modelQuery)
+        )
           .then((res) => res.length)
         : volunteers.length;
 

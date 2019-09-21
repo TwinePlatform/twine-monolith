@@ -1,4 +1,3 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { Visitors } from '../../../../models';
 import {
@@ -16,11 +15,13 @@ import {
   isSMSConsentGranted,
 } from '../../users/schema';
 import { meOrId } from '../schema';
-import { PutUserRequest } from '../../types/api';
+import { Api } from '../../types/api';
 import { getCommunityBusiness, isChildUser } from '../../prerequisites';
 
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [
+  Api.CommunityBusinesses.Id.Visitors.Id.PUT.Route,
+] = [
   {
     method: 'PUT',
     path: '/community-businesses/{organisationId}/visitors/{userId}',
@@ -52,17 +53,17 @@ const routes: Hapi.ServerRoute[] = [
       },
       response: { schema: response },
       pre: [
-      { method: getCommunityBusiness , assign: 'communityBusiness' },
-      { method: isChildUser, assign: 'isChild' },
+        { method: getCommunityBusiness , assign: 'communityBusiness' },
+        { method: isChildUser, assign: 'isChild' },
       ],
     },
-    handler: async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
-      server: { app: { knex } },
-      payload,
-      pre: { isChild, communityBusiness },
-      params: { userId },
-    } = request;
+        server: { app: { knex } },
+        payload,
+        pre: { isChild, communityBusiness },
+        params: { userId },
+      } = request;
 
       if (!isChild) {
         return Boom.forbidden('Insufficient permission to access this resource');
@@ -71,10 +72,10 @@ const routes: Hapi.ServerRoute[] = [
       const changeset = { ...payload };
 
       const [user] = await Visitors.fromCommunityBusiness(
-      knex,
-      communityBusiness,
-      { where: { id: Number(userId) } }
-    );
+        knex,
+        communityBusiness,
+        { where: { id: Number(userId) } }
+      );
 
       if (!user) {
         return Boom.notFound(`User with id ${userId} not found`);

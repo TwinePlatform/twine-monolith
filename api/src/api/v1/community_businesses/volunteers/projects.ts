@@ -1,18 +1,18 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { response, id, since, until, volunteerProject } from '../schema';
 import { VolunteerLogs } from '../../../../models';
 import { getCommunityBusiness } from '../../prerequisites';
-import {
-  GetMyVolunteerProjectRequest,
-  PostMyVolunteerProjectRequest,
-  PutMyVolunteerProjectRequest,
-} from '../../types/api';
+import { Api } from '../../types/api';
 
 
-const routes: Hapi.ServerRoute[] = [
-
+const routes: [
+  Api.CommunityBusinesses.Me.Volunteers.Projects.GET.Route,
+  Api.CommunityBusinesses.Me.Volunteers.Projects.POST.Route,
+  Api.CommunityBusinesses.Me.Volunteers.Projects.Id.GET.Route,
+  Api.CommunityBusinesses.Me.Volunteers.Projects.Id.PUT.Route,
+  Api.CommunityBusinesses.Me.Volunteers.Projects.Id.DELETE.Route,
+] = [
   {
     method: 'GET',
     path: '/community-businesses/me/volunteers/projects',
@@ -33,7 +33,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetMyVolunteerProjectRequest, h) => {
+    handler: async (request, h) => {
       const { server: { app: { knex } }, pre: { communityBusiness } } = request;
 
       return VolunteerLogs.getProjects(knex, communityBusiness);
@@ -64,7 +64,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: PostMyVolunteerProjectRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         payload: { name },
@@ -107,7 +107,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetMyVolunteerProjectRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         params: { projectId },
@@ -152,7 +152,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: PutMyVolunteerProjectRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         params: { projectId },
@@ -201,7 +201,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetMyVolunteerProjectRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         params: { projectId },
@@ -220,7 +220,6 @@ const routes: Hapi.ServerRoute[] = [
       return null;
     },
   },
-
 ];
 
 export default routes;
