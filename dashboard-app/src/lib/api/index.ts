@@ -49,9 +49,9 @@ export const CommunityBusinesses = {
   },
 
   get: (params?: Pick<AxiosRequestConfig, 'params'>) =>
-    axios({ ...CommunityBusinesses.configs.get, params }),
+    axios.request<Api.CommunityBusinesses.Me.GET.Result>({ ...CommunityBusinesses.configs.get, params }),
   getLogs: (params?: Pick<AxiosRequestConfig, 'params'>) =>
-    axios({ ...CommunityBusinesses.configs.getLogs, params }),
+    axios.request({ ...CommunityBusinesses.configs.getLogs, params }),
   getVolunteerActivities: () =>
     axios({ ...CommunityBusinesses.configs.getVolunteerActivities }),
   getVolunteers: () => // NB: fields not currently supported

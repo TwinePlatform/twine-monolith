@@ -3,8 +3,7 @@ import * as Boom from '@hapi/boom';
 import { Dictionary } from 'ramda';
 import { ApiRequestQuery } from '../schema/request';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../../models';
-import { RegionEnum, SectorEnum, RoleEnum, CbAdminCollection, CommunityBusinessCollection } from '../../../models/types';
-import { HttpMethodEnum } from './general';
+import { CbAdminCollection, CommunityBusinessCollection, Weekday, VisitActivity, VisitEvent } from '../../../models/types';
 import { Unpack } from '../../../types/internal';
 
 interface ServerRoute<
@@ -48,6 +47,19 @@ export namespace Api { // eslint-disable-line
         export type Route = ServerRoute<Request, Response>;
       }
 
+      export namespace PUT { // eslint-disable-line
+        export interface Request extends Hapi.Request {
+          payload:
+            Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>;
+          pre: {
+            communityBusiness: CommunityBusiness;
+          };
+        }
+        export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
+        export type Response = ResponsePayload<Result>;
+        export type Route = ServerRoute<Request, Response>;
+      }
+
       export namespace Feedback { // eslint-disable-line
         export namespace GET { // eslint-disable-line
           export interface Request extends Hapi.Request {
@@ -80,12 +92,111 @@ export namespace Api { // eslint-disable-line
           }
         }
       }
+
+      export namespace VisitActivities { // eslint-disable-line
+        export namespace GET { // eslint-disable-line
+          export interface Request extends Hapi.Request {
+            query: { day: Weekday | 'today' };
+            pre: { communityBusiness: CommunityBusiness };
+          }
+          export type Result = Unpack<ReturnType<CommunityBusinessCollection['getVisitActivities']>>;
+          export type Response = ResponsePayload<Result>;
+          export type Route = ServerRoute<Request, Response>;
+        }
+
+        export namespace POST { // eslint-disable-line
+          export interface Request extends Hapi.Request {
+            payload: Pick<VisitActivity, 'name' | 'category'>;
+            pre: { communityBusiness: CommunityBusiness };
+          }
+          export type Result = Unpack<ReturnType<CommunityBusinessCollection['addVisitActivity']>>;
+          export type Response = ResponsePayload<Result>;
+          export type Route = ServerRoute<Request, Response>;
+        }
+
+        export namespace PUT { // eslint-disable-line
+          export interface Request extends Hapi.Request {
+            params: { visitActivityId: string };
+            pre: { communityBusiness: CommunityBusiness };
+            payload: Omit<VisitActivity, 'id' | 'createdAt' | 'modifiedAt' | 'deletedAt'>;
+          }
+          export type Result = Unpack<ReturnType<CommunityBusinessCollection['updateVisitActivity']>>;
+          export type Response = ResponsePayload<Result>;
+          export type Route = ServerRoute<Request, Response>;
+        }
+
+        export namespace DELETE { // eslint-disable-line
+          export interface Request extends Hapi.Request {
+            params: { visitActivityId: string };
+            pre: { communityBusiness: CommunityBusiness };
+          }
+          export type Result = Unpack<ReturnType<CommunityBusinessCollection['deleteVisitActivity']>>;
+          export type Response = ResponsePayload<Result>;
+          export type Route = ServerRoute<Request, Response>;
+        }
+      }
+
+      export namespace VisitLogs { // eslint-disable-line
+        export namespace GET { // eslint-disable-line
+          export interface Request extends Hapi.Request {
+            pre: { communityBusiness: CommunityBusiness };
+            query: ApiRequestQuery & Dictionary<any> & {
+              filter?: {
+                age?: [number, number];
+                gender?: GenderEnum;
+                activity?: string;
+              };
+            };
+          }
+          export type Result = Unpack<ReturnType<CommunityBusinessCollection['getVisitLogsWithUsers']>>;
+          export type Response = ResponsePayload<Result>;
+          export type Route = ServerRoute<Request, Response>;
+        }
+
+        export namespace POST { // eslint-disable-line
+          export interface Request extends Hapi.Request {
+            pre: { communityBusiness: CommunityBusiness };
+            payload: Pick<VisitEvent, 'userId' | 'visitActivityId'> & {
+              signInType: 'sign_in_with_name' | 'qr_code';
+            };
+          }
+          export type Result = Unpack<ReturnType<CommunityBusinessCollection['addVisitLog']>>;
+          export type Response = ResponsePayload<Result>;
+          export type Route = ServerRoute<Request, Response>;
+        }
+
+        export namespace Aggregates { // eslint-disable-line
+          export namespace GET { // eslint-disable-line
+            export type Request = VisitLogs.GET.Request;
+            export type Result = Unpack<ReturnType<CommunityBusinessCollection['getVisitLogAggregates']>>;
+            export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+          }
+        }
+      }
+
+      export namespace VolunteerLogs { // eslint-disable-line
+        export namespace GET
+      }
     }
 
     export namespace Id { // eslint-disable-line
       export namespace GET { // eslint-disable-line
         export interface Request extends Hapi.Request {
           query: ApiRequestQuery & Dictionary<any>;
+          pre: {
+            communityBusiness: CommunityBusiness;
+            isChild: boolean;
+          };
+        }
+        export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
+        export type Response = ResponsePayload<Result>;
+        export type Route = ServerRoute<Request, Response>;
+      }
+
+      export namespace PUT { // eslint-disable-line
+        export interface Request extends Hapi.Request {
+          payload:
+          Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>;
           pre: {
             communityBusiness: CommunityBusiness;
             isChild: boolean;
@@ -110,6 +221,36 @@ export namespace Api { // eslint-disable-line
           export type Route = ServerRoute<Request, Response>;
         }
       }
+
+      export namespace VisitActivities { // eslint-disable-line
+        export namespace GET { // eslint-disable-line
+          export interface Request extends Hapi.Request {
+            query: { day: Weekday | 'today' };
+            pre: { communityBusiness: CommunityBusiness; isChild: boolean };
+            params: { organisationId: string };
+          }
+          export type Result = Unpack<ReturnType<CommunityBusinessCollection['getVisitActivities']>>;
+          export type Response = ResponsePayload<Result>;
+          export type Route = ServerRoute<Request, Response>;
+        }
+      }
+    }
+
+    export namespace Register { // eslint-disable-line
+      export namespace POST { // eslint-disable-line
+        export interface Request extends Hapi.Request {
+          payload:
+            Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id'>
+            & {
+              orgName: CommunityBusiness['name'];
+              adminName: string;
+              adminEmail: string;
+            };
+        }
+        export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
+        export type Response = ResponsePayload<Result>;
+        export type Route = ServerRoute<Request, Response>;
+      }
     }
 
     export namespace CbAdmins { // eslint-disable-line
@@ -121,37 +262,6 @@ export namespace Api { // eslint-disable-line
       }
     }
   }
-
-// export interface GetCommunityBusinessesRequest extends Hapi.Request {
-//   query: ApiRequestQuery & {
-//     [k: string]: any
-//   };
-// }
-
-// export interface RegisterCommunityBusinessesRequest extends Hapi.Request {
-//   payload: {
-//     orgName: string
-//     region: RegionEnum
-//     sector: SectorEnum
-//     address1: string
-//     address2: string
-//     townCity: string
-//     postCode: string
-//     turnoverBand: string
-//     _360GivingId: string
-//     adminName: string
-//     adminEmail: string
-//   };
-// }
-
-// export interface PutCommunityBusinesssRequest extends Hapi.Request {
-//   payload:
-//     Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>;
-//   pre: {
-//     communityBusiness: CommunityBusiness
-//     isChild?: boolean
-//   };
-// }
 
 // export interface LoginRequest extends Hapi.Request {
 //   payload: {

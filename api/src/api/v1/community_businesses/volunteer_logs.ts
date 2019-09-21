@@ -57,7 +57,15 @@ const uniformLogs = (user: User) => (log: SyncVolunteerLogPayloadItem): Partial<
     userId: log.userId === 'me' ? user.id : log.userId,
   });
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [
+  any,
+  any,
+  any,
+  any,
+  any,
+  any,
+  any
+] = [
 
   {
     method: 'GET',
@@ -389,18 +397,18 @@ const routes: Hapi.ServerRoute[] = [
 
       } catch (error) {
         switch (error.message) {
-          case 'Insufficient permissions to write other users logs':
-            return Boom.forbidden(error.message);
+        case 'Insufficient permissions to write other users logs':
+          return Boom.forbidden(error.message);
 
-          case 'Some users do not have permission to write volunteer logs':
-            return Boom.badRequest(error.message);
+        case 'Some users do not have permission to write volunteer logs':
+          return Boom.badRequest(error.message);
 
-          default:
-            console.log(error);
-            // We attempt not to respond with non-200 status code because of
-            // how offline mode is written in the legacy volunteer app.
-            // See https://github.com/TwinePlatform/twine-monolith/issues/246
-            return { ignored: invalid.length + valid.length, synced: 0 };
+        default:
+          console.log(error);
+          // We attempt not to respond with non-200 status code because of
+          // how offline mode is written in the legacy volunteer app.
+          // See https://github.com/TwinePlatform/twine-monolith/issues/246
+          return { ignored: invalid.length + valid.length, synced: 0 };
         }
       }
     },

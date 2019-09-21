@@ -1,41 +1,19 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { omit, filter, complement, isEmpty } from 'ramda';
 import { query, response, id } from './schema';
-import {
-  Visitors,
-  CommunityBusiness,
-  CommunityBusinesses,
-  GenderEnum } from '../../../models';
+import { Visitors, CommunityBusinesses } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import { filterQuery } from '../users/schema';
-import { ApiRequestQuery } from '../schema/request';
 import Roles from '../../../models/role';
 import { RoleEnum } from '../../../models/types';
+import { Api } from '../types/api'
 
-export type VisitSignInType = 'sign_in_with_name' | 'qr_code';
 
-interface PostVisitLogRequest extends Hapi.Request {
-  payload: {
-    userId: number
-    visitActivityId: number
-    signInType: VisitSignInType
-  };
-}
-
-export interface GetVisitLogsRequest extends Hapi.Request {
-  query: ApiRequestQuery & {
-    [k: string]: any
-    filter?: {
-      age?: [number, number]
-      gender?: GenderEnum
-      activity?: string
-    }
-  };
-}
-
-const routes: Hapi.ServerRoute[] = [
+const routes: [
+  Api.CommunityBusinesses.Me.VisitLogs.POST.Route,
+  Api.CommunityBusinesses.Me.VisitLogs.GET.Route,
+] = [
   {
     method: 'POST',
     path: '/community-businesses/me/visit-logs',
@@ -46,7 +24,6 @@ const routes: Hapi.ServerRoute[] = [
         scope: ['visit_logs-child:write'],
       },
       validate: {
-        query,
         payload: {
           userId: id.required(),
           visitActivityId: id.required(),
@@ -58,11 +35,11 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: PostVisitLogRequest, h) => {
+    handler: async (request, h) => {
       const {
+        pre: { communityBusiness },
         payload: { userId, visitActivityId, signInType },
         server: { app: { knex } } } = request;
-      const communityBusiness = <CommunityBusiness> request.pre.communityBusiness;
 
       const visitor = await Visitors.getOne(knex, { where: { id: userId } });
 
@@ -111,7 +88,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness , assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetVisitLogsRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         query: { limit, offset, filter: filterOptions = {} },
@@ -122,22 +99,22 @@ const routes: Hapi.ServerRoute[] = [
         limit,
         where: omit(['age'], filterOptions),
         whereBetween: filterOptions.age
-        ? { birthYear: filterOptions.age }
-        : {},
+          ? { birthYear: filterOptions.age }
+          : {},
       });
 
       const visits = await CommunityBusinesses.getVisitLogsWithUsers(
         knex,
         communityBusiness,
         query
-        );
+      );
 
       const count = (limit || offset)
         ? await CommunityBusinesses.getVisitLogsWithUsers(
           knex,
           communityBusiness,
           omit(['limit', 'offset'], query)
-          ).then((rows: object[]) => rows.length)
+        ).then((rows: object[]) => rows.length)
         : visits.length;
 
       return {
