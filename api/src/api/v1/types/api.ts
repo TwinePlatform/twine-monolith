@@ -3,8 +3,8 @@ import * as Boom from '@hapi/boom';
 import { Dictionary } from 'ramda';
 import { ApiRequestQuery } from '../schema/request';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../../models';
-import { CbAdminCollection, CommunityBusinessCollection, Weekday, VisitActivity, VisitEvent, VolunteerLogCollection, VisitorCollection, VolunteerCollection, UserCollection } from '../../../models/types';
-import { Unpack } from '../../../types/internal';
+import { CbAdminCollection, CommunityBusinessCollection, Weekday, VisitActivity, VisitEvent, VolunteerLogCollection, VisitorCollection, VolunteerCollection, UserCollection, RoleEnum } from '../../../models/types';
+import { Unpack, AppEnum, Maybe } from '../../../types/internal';
 import { Duration } from 'twine-util/duration';
 
 interface ServerRoute<
@@ -513,14 +513,209 @@ export namespace Api {
     }
   }
 
-// export interface LoginRequest extends Hapi.Request {
-//   payload: {
-//     restrict?: RoleEnum | RoleEnum[]
-//     type: 'cookie' | 'body'
-//     email: string
-//     password: string
-//   };
-// }
+  export namespace Users {
+    export namespace GET {
+      export type Request = Hapi.Request;
+      export type Result = Boom;
+      export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+    }
+
+    export namespace Login {
+      export namespace POST {
+        export interface Request extends Hapi.Request {
+          payload: {
+            restrict?: RoleEnum | RoleEnum[];
+            type?: 'cookie' | 'body';
+            email: string;
+            password: string;
+          };
+        }
+        export type Result = null | { token: string };
+        export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+      }
+    }
+
+    export namespace Logout {
+      export namespace GET {
+        export type Request = Hapi.Request;
+        export type Result = null;
+        export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+      }
+    }
+
+    export namespace Password {
+      export namespace Forgot {
+        export namespace POST {
+          export interface Request extends Hapi.Request {
+            payload: {
+              email: string;
+              redirect: AppEnum.ADMIN | AppEnum.VISITOR | AppEnum.DASHBOARD;
+            };
+          }
+          export type Result = null;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+      }
+
+      export namespace Reset {
+        export namespace POST {
+          interface Request extends Hapi.Request {
+            payload: {
+              email: string;
+              token: string;
+              password: string;
+              passwordConfirm: string;
+            };
+          }
+          export type Result = null;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+      }
+    }
+
+    export namespace Register {
+      export namespace Visitors {
+        export namespace POST {
+          export interface Request extends Hapi.Request {
+            payload: {
+              organisationId: number;
+              name: string;
+              gender: GenderEnum;
+              birthYear: Maybe<number>;
+              email?: string;
+              phoneNumber?: string;
+              postCode: string;
+              emailConsent: boolean;
+              smsConsent: boolean;
+              isAnonymous: boolean;
+            };
+            pre: { communityBusiness: CommunityBusiness };
+          }
+          export type Result = Unpack<ReturnType<VisitorCollection['serialise']>>;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+      }
+
+      export namespace Volunteers {
+        export namespace POST {
+          export interface Request extends Hapi.Request {
+            payload: {
+              organisationId: number;
+              name: string;
+              email: string;
+              password?: string;
+              gender: GenderEnum;
+              birthYear: Maybe<number>;
+              postCode?: string;
+              phoneNumber?: string;
+              emailConsent: boolean;
+              smsConsent: boolean;
+              isAnonymous: boolean;
+              adminCode?: string;
+              role: RoleEnum.VOLUNTEER | RoleEnum.VOLUNTEER_ADMIN;
+            };
+          }
+          export type Result = Unpack<ReturnType<VolunteerCollection['serialise']>>;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+      }
+
+      export namespace Confirm {
+        export namespace POST {
+          export interface Request extends Hapi.Request {
+            payload: {
+              organisationId: number;
+              userId: number;
+              token: string;
+              role: RoleEnum;
+            };
+          }
+          export type Result = Unpack<ReturnType<VolunteerCollection['serialise']>> & { token?: string }
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+      }
+    }
+
+    export namespace Visitors {
+      export namespace Search {
+        export namespace POST {
+          export interface Request extends Hapi.Request {
+            payload: { qrCode: string };
+            pre: { communityBusiness: CommunityBusiness };
+          }
+          export type Result = Maybe<Unpack<ReturnType<VisitorCollection['serialise']>>>;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+      }
+    }
+
+    export namespace Volunteers {
+      export namespace Id {
+        export namespace GET {
+          export interface Request extends Hapi.Request {
+            params: { userId: string };
+            pre: { requireSibling: boolean };
+          }
+          export type Result = Unpack<ReturnType<VolunteerCollection['serialise']>>;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+
+        export namespace PUT {
+          export interface Request extends Hapi.Request {
+            params: { userId: string };
+            payload: Partial<Omit<User, 'id' | 'createdAt' | 'modifiedAt' | 'deletedAt' | 'qrCode' | 'isTemp'>>;
+            pre: { isSibling: boolean };
+          }
+          export type Result = Unpack<ReturnType<VolunteerCollection['serialise']>>;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+
+        export namespace DELETE {
+          export interface Request extends Hapi.Request {
+            params: { userId: string };
+            pre: { requireSibling: boolean };
+          }
+          export type Result = null;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+      }
+    }
+
+    export namespace Me {
+      export namespace GET {
+        export interface Request extends Hapi.Request {
+          query: ApiRequestQuery<User>;
+        }
+        export type Result = Unpack<ReturnType<UserCollection['serialise']>>;
+        export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+      }
+      export namespace PUT {
+        export interface Request extends Hapi.Request {
+          payload: Partial<Omit<User, 'id' | keyof CommonTimestamps | 'qrCode'>>;
+        }
+        export type Result = Unpack<ReturnType<UserCollection['serialise']>>;
+        export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+      }
+      export namespace Roles {
+        export namespace GET {
+          export type Request = Hapi.Request;
+          export type Result = { organisationId: number; roles: RoleEnum[] };
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+      }
+    }
+
+    export namespace Id {
+      export namespace PUT {
+        export interface Request extends Hapi.Request {
+          payload: Partial<Omit<User, 'id' | keyof CommonTimestamps | 'qrCode'>>;
+          pre: { isChild: boolean };
+        }
+        export type Result = Unpack<ReturnType<UserCollection['serialise']>>;
+        export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+      }
+    }
+  }
 
 // export interface PutUserRequest extends Hapi.Request {
 //   payload: Partial<Omit<User, 'id' | keyof CommonTimestamps | 'qrCode'>>;
@@ -537,32 +732,6 @@ export namespace Api {
 // export interface DeleteUserRequest extends Hapi.Request {
 //   params: {
 //     userId: string
-//   };
-// }
-
-// export interface RegisterRequest extends Hapi.Request {
-//   payload: {
-//     organisationId: number
-//     name: string
-//     gender: GenderEnum
-//     birthYear: number
-//     email: string
-//     phoneNumber: string
-//     postCode: string
-//     emailConsent: boolean
-//     smsConsent: boolean
-//     isAnonymous?: boolean
-//   };
-//   pre: {
-//     communityBusiness: CommunityBusiness
-//   };
-// }
-// export interface RegisterConfirm extends Hapi.Request {
-//   payload: {
-//     organisationId: number
-//     userId: number
-//     token: string
-//     role: RoleEnum
 //   };
 // }
 

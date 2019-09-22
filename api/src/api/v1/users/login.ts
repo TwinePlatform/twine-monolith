@@ -1,16 +1,17 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { compare } from 'bcrypt';
 import { Users, Organisations } from '../../../models';
 import { email, DEPRECATED_password, response } from './schema';
 import { Sessions } from '../../../auth/strategies/standard';
-import { LoginRequest } from '../types/api';
 import Roles from '../../../models/role';
 import { RoleEnum } from '../../../models/types';
+import { Api } from '../types/api';
 
 
-const route: Hapi.ServerRoute[] = [
+const route: [
+  Api.Users.Login.POST.Route
+] = [
   {
     method: 'POST',
     path: '/users/login',
@@ -31,7 +32,7 @@ const route: Hapi.ServerRoute[] = [
       },
       response: { schema: response },
     },
-    handler: async (request: LoginRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const { server: { app: { knex } } } = request;
       const { email, password, restrict, type } = request.payload;
 
