@@ -14,18 +14,19 @@ function format_lcov () {
       FILENAME=$(echo "$f" | cut -c3- | sed s_\/_-_g | sed s/.info/.json/)
 
       echo "Formatting $f into coverage/coverage/${FILENAME}";
-      $DIR/cc-test-reporter format-coverage -t lcov -o coverage/coverage-${FILENAME} $1;
+      $DIR/cc-test-reporter format-coverage -t lcov -o coverage/coverage-${FILENAME} $f;
     fi
   done
 }
 
 files=$(find "$ROOT" -name 'lcov.info' -type f -not -path "*/node_modules/*")
+echo "$files"
 format_lcov ${files[@]}
 
 echo "Summing coverage reports"
-$DIR/cc-test-reporter sum-coverage -o coverage/coverage.total.json coverage/*coverage-*.json;
+$DIR/cc-test-reporter sum-coverage -o coverage/coverage.total.json -p 5 coverage/*coverage-*.json;
 
 echo "Overall Result: $(cat coverage/coverage.total.json | grep covered_percent | head -n 1)"
 
-echo "Uploading overall coverage report"
-$DIR/cc-test-reporter upload-coverage -i coverage/coverage.total.json;
+# echo "Uploading overall coverage report"
+# $DIR/cc-test-reporter upload-coverage -i coverage/coverage.total.json;
