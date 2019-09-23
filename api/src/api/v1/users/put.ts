@@ -16,7 +16,7 @@ import {
   response
 } from './schema';
 import { Api } from '../types/api';
-import { isChildUser } from '../prerequisites';
+import { requireChildUser } from '../prerequisites';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 
 
@@ -91,7 +91,7 @@ const routes: [
     path: '/users/{userId}',
     options: {
       description: `
-        Update child user\'s details;
+        Update child user's details;
         NOTE: "PUT /community-businesses/:id/visitors/:id" offers similar functionality
       `,
       auth: {
@@ -121,21 +121,14 @@ const routes: [
         },
       },
       response: { schema: response },
-      pre: [
-        { method: isChildUser, assign: 'isChild' },
-      ],
+      pre: [requireChildUser],
     },
     handler: async (request, h) => {
       const {
         server: { app: { knex } },
         payload,
-        pre: { isChild },
         params: { userId },
       } = request;
-
-      if (!isChild) {
-        return Boom.forbidden('Insufficient permission to access this resource');
-      }
 
       const changeset = { ...payload };
 

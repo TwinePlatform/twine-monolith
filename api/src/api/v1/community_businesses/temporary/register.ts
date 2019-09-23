@@ -1,6 +1,5 @@
-import * as Boom from '@hapi/boom';
 import { CommunityBusinesses, CbAdmins } from '../../../../models';
-import { isChildOrganisation } from '../../prerequisites';
+import { requireChildOrganisation } from '../../prerequisites';
 import { Api } from '../../types/api';
 import { response, cbPayload } from '../schema';
 
@@ -22,21 +21,14 @@ const routes: [Api.CommunityBusinesses.Register.Temporary.POST.Route] = [
           orgName: cbPayload.name.required(),
         },
       },
-      pre: [
-        { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
-      ],
+      pre: [requireChildOrganisation],
       response: { schema: response },
     },
     handler: async (request, h) => {
       const {
-        pre: { isChild },
         server: { app: { knex } },
         payload: { orgName },
       } = request;
-
-      if (!isChild) {
-        return Boom.forbidden('Insufficient permissions to create organisations');
-      }
 
       // Create accounts
       const { admin, cb } = await knex.transaction(async (trx) => {

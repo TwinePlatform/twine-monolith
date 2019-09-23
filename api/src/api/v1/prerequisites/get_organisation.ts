@@ -11,10 +11,13 @@ import * as Boom from '@hapi/boom';
 import { Organisations } from '../../../models';
 import { getCredentialsFromRequest } from '../auth';
 
+interface Request extends Hapi.Request {
+  params: { organisationId?: string };
+}
 
 const is360GivingId = (s: string) => isNaN(parseInt(s, 10));
 
-export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+export default async (request: Request, h: Hapi.ResponseToolkit) => {
   const { params: { organisationId: id }, server: { app: { knex } } } = request;
 
   const organisation =

@@ -1,9 +1,7 @@
-import * as Hapi from '@hapi/hapi';
-import * as Boom from '@hapi/boom';
 import { CbAdmins } from '../../../../models';
 import { response } from '../../users/schema';
 import { id } from '../schema';
-import { getCommunityBusiness, isChildOrganisation } from '../../prerequisites';
+import { getCommunityBusiness, requireChildOrganisation } from '../../prerequisites';
 import { Api } from '../../types/api';
 
 
@@ -25,15 +23,11 @@ const routes: [Api.CommunityBusinesses.CbAdmins.GET.Route] = [
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
-        { method: isChildOrganisation, assign: 'isChild' },
+        { method: requireChildOrganisation },
       ],
     },
-    handler: async (request, h: Hapi.ResponseToolkit) => {
-      const { pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
-
-      if (!isChild) {
-        return Boom.forbidden('Insufficient permissions to access this resource');
-      }
+    handler: async (request, h) => {
+      const { pre: { communityBusiness }, server: { app: { knex } } } = request;
 
       const admins = await CbAdmins.fromOrganisation(knex, communityBusiness);
 

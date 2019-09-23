@@ -1,7 +1,7 @@
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { response, id } from '../schema';
-import { isChildUser } from '../../prerequisites';
+import { requireChildUser } from '../../prerequisites';
 import { Visitors, CommunityBusinesses } from '../../../../models';
 import * as PdfService from '../../../../services/pdf';
 import * as QRCode from '../../../../services/qrcode';
@@ -32,22 +32,15 @@ const routes: [
         },
       },
       response: { schema: response },
-      pre: [
-        { method: isChildUser, assign: 'isChild' },
-      ],
+      pre: [requireChildUser],
     },
     handler: async (request, h) => {
       const {
-        pre: { isChild },
         params: { userId },
         server: { app: { knex, EmailService, config } },
       } = request;
 
       const { organisation } = StandardCredentials.fromRequest(request);
-
-      if (!isChild) {
-        return Boom.forbidden('Insufficient permissions to access this resource');
-      }
 
       const cb = await CommunityBusinesses.getOne(knex, { where: { id: organisation.id } });
 

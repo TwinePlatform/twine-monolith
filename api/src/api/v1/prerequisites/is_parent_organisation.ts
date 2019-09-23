@@ -25,7 +25,11 @@ import { Credentials as StandardCredentials } from '../../../auth/strategies/sta
 import { RoleEnum } from '../../../models/types';
 
 
-const getOrg = async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+interface Request extends Hapi.Request {
+  params: { organisationId?: string };
+}
+
+const getOrg = async (request: Request, h: Hapi.ResponseToolkit) => {
   const { pre } = request;
 
   if ('organisation' in pre) {
@@ -40,7 +44,7 @@ const getOrg = async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
   return getOrganisation(request, h);
 };
 
-export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+export default async (request: Request, h: Hapi.ResponseToolkit) => {
   const { server: { app: { knex } } } = request;
   const { user } = StandardCredentials.fromRequest(request);
 

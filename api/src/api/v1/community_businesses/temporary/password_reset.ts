@@ -1,6 +1,6 @@
 import * as Boom from '@hapi/boom';
 import { Random } from 'twine-util';
-import { isChildOrganisation, getCommunityBusiness } from '../../prerequisites';
+import { getCommunityBusiness, requireChildOrganisation } from '../../prerequisites';
 import { response, id } from '../schema';
 import { CbAdmins, Users } from '../../../../models';
 import { Api } from '../../types/api';
@@ -20,7 +20,7 @@ const routes: [Api.CommunityBusinesses.Temporary.Id.Password.Reset.GET.Route] = 
       },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
-        { method: isChildOrganisation, failAction: 'error' },
+        requireChildOrganisation,
       ],
       validate: {
         params: { organisationId: id },

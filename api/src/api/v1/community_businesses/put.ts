@@ -1,6 +1,6 @@
 import * as Boom from '@hapi/boom';
 import { CommunityBusinesses } from '../../../models';
-import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
+import { getCommunityBusiness, requireChildOrganisation } from '../prerequisites';
 import { Api } from '../types/api';
 import { id, response, cbPayload } from './schema';
 
@@ -77,15 +77,11 @@ const routes: [
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
-        { method: isChildOrganisation, assign: 'isChild' },
+        requireChildOrganisation,
       ],
     },
     handler: async (request, h) => {
-      const { payload: changeSet, pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
-
-      if (!isChild) {
-        return Boom.forbidden('Insufficient permissions to access this resource');
-      }
+      const { payload: changeSet, pre: { communityBusiness }, server: { app: { knex } } } = request;
 
       if (communityBusiness.isTemp) {
         return Boom.forbidden('Temporary organisation');

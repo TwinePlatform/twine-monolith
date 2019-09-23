@@ -48,9 +48,7 @@ const routes: [Api.Users.Volunteers.Id.PUT.Route] = [
         },
       },
       response: { schema: response },
-      pre: [
-        { method: requireSiblingUser, assign: 'isSibling' },
-      ],
+      pre: [requireSiblingUser],
     },
     handler: async (request, h) => {
       const { server: { app: { knex } }, params: { userId }, payload } = request;
