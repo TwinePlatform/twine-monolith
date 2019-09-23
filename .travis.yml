@@ -17,14 +17,17 @@ services:
   - redis-server
 
 install:
-  - bash ./.travis/cc-download.sh
   # install local dependency repos first
   - for x in  "lib/eslint-config-twine" "lib/twine-util"; do cd $x; npm install; cd ../..; done;
   - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm install; cd ..; done;
 
 before_script:
+  - bash ./.travis/cc-download.sh
+  - chmod -x ./.travis/cc-test-reporter
+  - .travis/cc-test-reporter before-build --prefix $(pwd)
   - psql -U postgres -c 'create database twine_api_test'
   - psql -U postgres -c 'create extension postgis'
+
 script:
   - for x in "api" "dashboard-app" "visitor-app" "lib/twine-util"; do cd $x; npm run lint; cd ..; done;
   # complile ts/react
@@ -35,7 +38,7 @@ script:
   - for x in "api" "dashboard-app" "visitor-app" "lib/twine-util"; do cd $x; npm run cover; cd ..; done;
 
 after_success:
-  - bash $TRAVIS_BUILD_DIR/.travis/cc-report.sh
+  - .travis/cc-test-reporter after-build --prefix $(pwd)
 
 notifications:
   email:
