@@ -14,7 +14,7 @@ function format_lcov () {
       FILENAME=$(echo "$f" | cut -c3- | sed s_\/_-_g | sed s/.info/.json/)
 
       echo "Formatting $f into coverage/coverage/${FILENAME}";
-      $DIR/cc-test-reporter format-coverage -t lcov -o coverage/coverage-${FILENAME} $f;
+      $DIR/cc-test-reporter format-coverage -t lcov -o coverage/coverage-${FILENAME} -p $(pwd) $f;
     fi
   done
 }
