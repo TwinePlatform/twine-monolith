@@ -2,6 +2,7 @@
 
 DIR=$(dirname $0)
 ROOT=$(dirname $DIR)
+PREFIX=$(pwd)
 
 if [ ! -f "$DIR/cc-test-reporter" ]; then
   echo "No test reporter found";
@@ -9,12 +10,13 @@ if [ ! -f "$DIR/cc-test-reporter" ]; then
 fi
 
 function format_lcov () {
+  echo "Using prefix $PREFIX"
   for f in $@; do
     if [ -f $f ]; then
       FILENAME=$(echo "$f" | cut -c3- | sed s_\/_-_g | sed s/.info/.json/)
 
       echo "Formatting $f into coverage/coverage/${FILENAME}";
-      $DIR/cc-test-reporter format-coverage -t lcov -o coverage/coverage-${FILENAME} -p $(pwd) $f;
+      $DIR/cc-test-reporter format-coverage -t lcov -o coverage/coverage-${FILENAME} -p $PREFIX $f;
     fi
   done
 }
