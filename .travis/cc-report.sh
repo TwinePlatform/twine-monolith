@@ -23,7 +23,7 @@ files=$(find "$ROOT" -name 'lcov.info' -type f -not -path "*/node_modules/*")
 format_lcov ${files[@]}
 
 echo "Summing coverage reports"
-$DIR/cc-test-reporter sum-coverage -o coverage/coverage.total.json coverage/coverage-*.json;
+$DIR/cc-test-reporter sum-coverage -o coverage/coverage.total.json coverage/*coverage-*.json;
 
 echo "Uploading overall coverage report"
 $DIR/cc-test-reporter upload-coverage -i coverage/coverage.total.json;
