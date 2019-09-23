@@ -10,6 +10,7 @@ import {
   email,
   postCode,
   phoneNumber,
+  filterQuery,
 } from '../../users/schema';
 import { meOrId, id } from '../schema';
 import { Api } from '../../types/api';
@@ -36,14 +37,10 @@ const routes: [
         params: { organisationId: meOrId.required() },
         query: {
           ...query,
-          filter: Joi.object({
-            age: Joi.array().length(2).items(Joi.number().integer().min(0)),
-            gender,
-            name: userName,
+          filter: filterQuery.filter.append({
             email,
             postCode,
             phoneNumber,
-            visitActivity: Joi.string(),
           }),
           visits: Joi.boolean().default(false),
         },

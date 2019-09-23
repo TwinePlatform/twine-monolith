@@ -34,10 +34,6 @@ type ResponsePayload<T, U = null> = U extends null
 
 export namespace Api {
 
-  /*
-   * CommunityBusinesses route types
-   */
-
   export namespace CommunityBusinesses {
     export namespace GET {
       export interface Request extends Hapi.Request { query: ApiRequestQuery & Dictionary<any> }
@@ -61,9 +57,7 @@ export namespace Api {
         export interface Request extends Hapi.Request {
           payload:
             Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
-          pre: {
-            communityBusiness: CommunityBusiness;
-          };
+          pre: { communityBusiness: CommunityBusiness };
         }
         export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
         export type Response = ResponsePayload<Result>;
