@@ -1,16 +1,10 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { Duration } from 'twine-util';
 import { response, since, until, query, id, startedAt } from '../schema';
 import { VolunteerLogs } from '../../../../models';
 import { getCommunityBusiness } from '../../prerequisites';
-import {
-  GetMyVolunteerLogsRequest,
-  GetVolunteerLogRequest,
-  PutMyVolunteerLogRequest,
-  GetMyVolunteerLogsAggregateRequest,
-} from '../../types/api';
+import { Api } from '../../types/api';
 import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
 import {
   volunteerProject,
@@ -19,7 +13,13 @@ import {
 } from '../../community_businesses/schema';
 
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [
+  Api.Users.Volunteers.Me.VolunteerLogs.GET.Route,
+  Api.Users.Volunteers.Me.VolunteerLogs.Id.GET.Route,
+  Api.Users.Volunteers.Me.VolunteerLogs.Id.PUT.Route,
+  Api.Users.Volunteers.Me.VolunteerLogs.Id.DELETE.Route,
+  Api.Users.Volunteers.Me.VolunteerLogs.Summary.GET.Route
+] = [
 
   {
     method: 'GET',
@@ -40,7 +40,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetMyVolunteerLogsRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         pre: { communityBusiness },
@@ -56,7 +56,7 @@ const routes: Hapi.ServerRoute[] = [
         knex,
         user,
         communityBusiness,
-        { since, until, limit: query.limit, offset: query.offset }
+        { since, until, limit: Number(query.limit), offset: Number(query.offset) }
       );
 
       return Promise.all(logs.map(VolunteerLogs.serialise));
@@ -83,7 +83,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetVolunteerLogRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         pre: { communityBusiness },
@@ -137,7 +137,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: PutMyVolunteerLogRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         payload,
@@ -183,7 +183,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: PutMyVolunteerLogRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         pre: { communityBusiness },
@@ -224,7 +224,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetMyVolunteerLogsAggregateRequest, h) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         pre: { communityBusiness },
@@ -239,7 +239,7 @@ const routes: Hapi.ServerRoute[] = [
         knex,
         user,
         communityBusiness,
-        { since, until, limit: query.limit, offset: query.offset }
+        { since, until }
       );
 
       const total = logs.reduce((acc, log) =>

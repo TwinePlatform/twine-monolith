@@ -42,7 +42,7 @@ const routes: [
       return CommunityBusinesses.getFeedback(
         knex,
         communityBusiness,
-        { since, until, limit: query.limit, offset: query.offset }
+        { since, until, limit: Number(query.limit), offset: Number(query.offset) }
       );
     },
   },
@@ -80,7 +80,7 @@ const routes: [
       return CommunityBusinesses.getFeedback(
         knex,
         communityBusiness,
-        { since, until, limit: query.limit, offset: query.offset }
+        { since, until, limit: Number(query.limit), offset: Number(query.offset) }
       );
     },
   },

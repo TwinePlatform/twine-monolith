@@ -14,14 +14,13 @@
  *       VISITOR or VOLUNTEER users at child community-businesses for GDPR reasons
  */
 import * as Hapi from '@hapi/hapi';
-import { PutUserRequest } from '../types/api';
 import Roles from '../../../models/role';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
 import { ExternalCredentials } from '../../../auth/strategies/external';
 
 
-export default async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
+export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
   const {
     server: { app: { knex } },
     params: { userId },

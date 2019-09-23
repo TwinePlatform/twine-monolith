@@ -11,12 +11,11 @@
  *
  */
 import * as Hapi from '@hapi/hapi';
-import { GetCommunityBusinessRequest } from '../types/api';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
 
 
-export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
+export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
   if (request.auth.strategy === 'external') {
     return false;
   }

@@ -1,18 +1,12 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
-import { since, until, ApiRequestQuery } from '../schema/request';
+import { since, until } from '../schema/request';
 import { response } from '../schema/response';
 import { isChildOrganisation } from '../prerequisites';
 import { VolunteerLogs } from '../../../models';
+import { Api } from '../types/api';
 
-export interface GetVolunteerLogsRequest extends Hapi.Request {
-  query: ApiRequestQuery & {
-    since: string
-    until: string
-  };
-}
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [Api.VolunteerLogs.GET.Route] = [
   {
     method: 'GET',
     path: '/volunteer-logs',
@@ -32,7 +26,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: isChildOrganisation , assign: 'isChild' },
       ],
     },
-    handler: async (request: GetVolunteerLogsRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         query: { since, until },
@@ -49,25 +43,23 @@ const routes: Hapi.ServerRoute[] = [
        * created to support temp-admin-dashboard
        */
 
-      const volunteerLogs = await VolunteerLogs.get(knex,
-        { fields: [
+      const volunteerLogs = await VolunteerLogs.get(knex, {
+        fields: [
           'userId',
           'userName',
           'organisationId',
           'organisationName',
           'activity',
           'duration',
-          'startedAt'],
-          whereBetween: {
-            startedAt: since || until
-              ? [
-                new Date(since),
-                new Date(until),
-              ]
-              : [null, null],
-          },
-          order: ['startedAt', 'asc'],
-        });
+          'startedAt'
+        ],
+        whereBetween: {
+          startedAt: since || until
+            ? [new Date(since), new Date(until)]
+            : [null, null],
+        },
+        order: ['startedAt', 'asc'],
+      });
 
       return Promise.all(volunteerLogs.map(VolunteerLogs.serialise));
     },

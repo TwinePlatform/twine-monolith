@@ -1,25 +1,38 @@
 import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { Dictionary } from 'ramda';
+import { Duration } from 'twine-util/duration';
 import { ApiRequestQuery } from '../schema/request';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../../models';
-import { CbAdminCollection, CommunityBusinessCollection, Weekday, VisitActivity, VisitEvent, VolunteerLogCollection, VisitorCollection, VolunteerCollection, UserCollection, RoleEnum } from '../../../models/types';
+import {
+  CbAdminCollection,
+  CommunityBusinessCollection,
+  Weekday,
+  VisitActivity,
+  VisitEvent,
+  VolunteerLogCollection,
+  VisitorCollection,
+  VolunteerCollection,
+  UserCollection,
+  RoleEnum,
+  LinkedVisitEvent,
+  Organisation
+} from '../../../models/types';
 import { Unpack, AppEnum, Maybe } from '../../../types/internal';
-import { Duration } from 'twine-util/duration';
+
 
 interface ServerRoute<
   TRequest extends Hapi.Request,
   TResponse extends Hapi.Lifecycle.ReturnValue
-  > extends Hapi.ServerRoute {
+> extends Hapi.ServerRoute {
   handler: (req: TRequest, h: Hapi.ResponseToolkit, e?: Error) => Promise<Boom<null> | TResponse>;
 }
 
+type ResponsePayload<T, U = null> = U extends null
+  ? ({ meta: object; result: T } | T)
+  : ({ meta: U; result: T } | T);
 
 export namespace Api {
-
-  type ResponsePayload<T, U = null> = U extends null
-    ? ({ meta: object; result: T } | T)
-    : ({ meta: U; result: T } | T);
 
   /*
    * CommunityBusinesses route types
@@ -679,6 +692,62 @@ export namespace Api {
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
       }
+
+      export namespace Me {
+        export namespace VolunteerLogs {
+          export namespace GET {
+            export interface Request extends Hapi.Request {
+              query: Pick<ApiRequestQuery, 'limit' | 'offset'> & {
+                since: string;
+                until: string;
+              };
+              pre: { communityBusiness: CommunityBusiness };
+            }
+            export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>[];
+            export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+          }
+
+          export namespace Id {
+            export namespace GET {
+              export interface Request extends Hapi.Request {
+                query: Pick<ApiRequestQuery<VolunteerLog>, 'fields'>;
+                params: { logId: string };
+              }
+              export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>;
+              export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+            }
+
+            export namespace PUT {
+              export interface Request extends Hapi.Request {
+                params: { logId: string };
+                payload: Partial<Pick<VolunteerLog, 'duration' | 'activity' | 'startedAt' | 'project'>>;
+                pre: { communityBusiness: CommunityBusiness };
+              }
+              export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>;
+              export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+            }
+
+            export namespace DELETE {
+              export interface Request extends Hapi.Request {
+                params: { logId: string };
+              }
+              export type Result = null;
+              export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+            }
+          }
+
+          export namespace Summary {
+            export namespace GET {
+              export interface Request extends Hapi.Request {
+                query: { since: string; until: string };
+                params: { logId: string };
+              }
+              export type Result = { total: Duration };
+              export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+            }
+          }
+        }
+      }
     }
 
     export namespace Me {
@@ -717,48 +786,29 @@ export namespace Api {
     }
   }
 
-// export interface PutUserRequest extends Hapi.Request {
-//   payload: Partial<Omit<User, 'id' | keyof CommonTimestamps | 'qrCode'>>;
-//   params: {
-//     userId: string
-//   };
-// }
-// export interface GetAllVolunteersRequest extends Hapi.Request {
-//   query: ApiRequestQuery & {
-//     [k: string]: string
-//   };
-// }
+  export namespace VisitLogs {
+    export namespace GET {
+      export interface Request extends Hapi.Request {
+        query: { since: string; until: string };
+        pre: { isChild: boolean };
+      }
+      export type Result =
+        Omit<LinkedVisitEvent, 'visitActivityId' | 'modifiedAt' | 'deletedAt'>
+        & Pick<VisitActivity, 'category' | 'name'>
+        & Pick<User, 'birthYear' | 'gender'>
+        & Pick<Organisation, 'id'>;
+      export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+    }
+  }
 
-// export interface DeleteUserRequest extends Hapi.Request {
-//   params: {
-//     userId: string
-//   };
-// }
-
-// export interface VolunteerRegisterRequest extends Hapi.Request {
-//   payload: RegisterRequest['payload'] & {
-//     password: string
-//     role: RoleEnum.VOLUNTEER | RoleEnum.VOLUNTEER_ADMIN
-//     adminCode?: string
-//   };
-// }
-
-// /*
-//  * Test related types
-//  */
-// export type RouteTestFixture = {
-//   name: string
-//   setup?: (server: Hapi.Server) => Promise<void>
-//   teardown?: (server: Hapi.Server) => Promise<void>
-//   inject: {
-//     url: string
-//     method: HttpMethodEnum
-//     credentials?: Hapi.AuthCredentials
-//     payload?: object
-//   }
-//   expect: {
-//     statusCode: number
-//     payload?: object | ((a: Dictionary<any>) => void),
-//   }
-// }
+  export namespace VolunteerLogs {
+    export namespace GET {
+      export interface Request extends Hapi.Request {
+        query: { since: string; until: string };
+        pre: { isChild: boolean };
+      }
+      export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>[];
+      export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+    }
+  }
 }

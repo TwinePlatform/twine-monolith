@@ -36,7 +36,7 @@ export const formatBoom = (error: BoomWithValidation): ApiResponse => {
 
   if (name === 'ValidationError') {
     const message = details[0].message;
-    const [, messageTopic, messageError] = message.match(/^\"([^"]+)\" (.*)/);
+    const [, messageTopic, messageError] = message.match(/^"([^"]+)" (.*)/);
     return {
       error: {
         statusCode: payload.statusCode,
@@ -73,7 +73,7 @@ export const formatResponse = (res: Hapi.ResponseObject): ApiResponse => {
     return { result: null } as ApiResponse;
   }
 
-  if (r.hasOwnProperty('result') && r.hasOwnProperty('meta')) {
+  if ('result' in r && 'meta' in r) {
     return { ...r } as ApiResponse;
   }
 
@@ -85,6 +85,8 @@ export const formatResponse = (res: Hapi.ResponseObject): ApiResponse => {
 export const requestQueryToModelQuery = <T>(requestQuery: ApiRequestQuery): ModelQuery<T> => {
   let modelQuery: ModelQuery<T> = {
     ...omit(['sort', 'order', 'fields'], requestQuery),
+    offset: 'offset' in requestQuery ? Number(requestQuery.offset) : undefined,
+    limit: 'limit' in requestQuery ? Number(requestQuery.limit) : undefined,
   };
 
   if (requestQuery.sort) {
@@ -97,7 +99,7 @@ export const requestQueryToModelQuery = <T>(requestQuery: ApiRequestQuery): Mode
   if (requestQuery.fields) {
     modelQuery = {
       ...modelQuery,
-      fields:  <(keyof T)[]> requestQuery.fields,
+      fields: requestQuery.fields as (keyof T)[],
     };
   }
 
