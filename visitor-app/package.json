@@ -31,7 +31,6 @@
     "react-dom": "^16.8.2",
     "react-dropzone": "^7.0.1",
     "react-flexbox-grid": "^2.1.2",
-    "react-modal": "^3.10.1",
     "react-paginate": "^5.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.5",

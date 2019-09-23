@@ -111,7 +111,7 @@ class SignupForm extends React.Component {
                 : <SubmitButton />
             }
           </FormSection>
-          <SideCopy cbName={cbName} />
+          <SideCopy cbName={cbName} forMinor={forMinor} />
         </Form>
       </Row>
     );

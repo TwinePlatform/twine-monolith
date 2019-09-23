@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Paragraph, Heading2, Link } from '../text/base';
 import { FormSection } from '../form/base';
 import StyledLabelledCheckbox from '../form/StyledLabelledCheckbox';
+import Copy from './copy.json';
 
 
 const Text = styled(Paragraph)`
@@ -11,20 +12,29 @@ const Text = styled(Paragraph)`
 `;
 
 
-const SideCopy = props => (
+const SideCopy = ({ cbName, forMinor }) => (
   <FormSection flexOrder={2}>
     <Heading2>Why are we collecting this information?</Heading2>
     <Text>
-      Here at {props.cbName}, we take your privacy seriously: we will only use your
-      personal information to administer your account to provide the products and services
-      you have requested from us, and improve how we deliver those.
+      {
+        forMinor
+          ? Copy.forMinor.explainerContent
+          : Copy.forAdult.explainerContent.replace('%cbName%', cbName)
+      }
     </Text>
     <Text>
-      However, from time to time we would like to contact you with details of other offers we
-      provide.
+      {
+        forMinor
+          ? Copy.forMinor.emailExplainer
+          : Copy.forAdult.emailExplainer
+      }
     </Text>
     <Text>
-      If you consent to us contacting you by email, please tick to agree:
+      {
+        forMinor
+          ? Copy.forMinor.emailPrompt
+          : Copy.forAdult.emailPrompt
+      }
     </Text>
     <StyledLabelledCheckbox
       id="emailCheckboxInput"
@@ -35,12 +45,16 @@ const SideCopy = props => (
     <Text>
       If you would like more information please see our <Link to="http://twine-together.com/privacy-policy/">Data Protection Policy</Link>
     </Text>
-
   </FormSection>
 );
 
 SideCopy.propTypes = {
   cbName: PropTypes.string.isRequired,
+  forMinor: PropTypes.bool,
+};
+
+SideCopy.defaultProps = {
+  forMinor: false,
 };
 
 export default SideCopy;

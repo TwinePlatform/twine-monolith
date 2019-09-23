@@ -1,10 +1,14 @@
 {
   "forMinor": {
     "checkboxLabel": "%cbName% has obtained consent from a parent/guardian for this data about this child to be processed by Twine.",
-    "linkText": "Why is this necessary?",
-    "explainerContent": "Children below the age of 13 cannot form legal contracts, and thus cannot consent to our privacy policy. A parent or guardian must give consent for you to store their data, and for us to process it on your behalf."
+    "explainerContent": "Children below the age of 13 cannot form legal contracts, and thus cannot consent to our privacy policy. A parent or guardian must give consent for you to store their data, and for us to process it on your behalf.",
+    "emailExplainer": "If an email address is provided for the parent/guardian, they can also consent to email contact.",
+    "emailPrompt": "If they have done so, please check the box below:"
   },
   "forAdult": {
-    "checkboxLabel": "I am at least 13 years old"
+    "checkboxLabel": "I am at least 13 years old",
+    "explainerContent": "Here at %cbName%, we take your privacy seriously: we will only use your personal information to administer your account to provide the products and services you have requested from us, and improve how we deliver those.",
+    "emailExplainer": "From time to time we would like to contact you with details of other offers we provide.",
+    "emailPrompt": "If you consent to us contacting you by email, please tick to agree:"
   }
 }

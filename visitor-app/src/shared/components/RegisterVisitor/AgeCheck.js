@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { colors } from '../../style_guide';
 import StyledLabelledCheckbox from '../form/StyledLabelledCheckbox';
-import LinkToModal from '../LinkToModal';
 import Copy from './copy.json';
 
 
@@ -26,15 +25,6 @@ const AgeCheck = props => (
           name="ageCheck"
           label={getLabel(props.forMinor, props.cbName)}
           data-testid="ageCheck"
-        />
-      )
-    }
-    {
-      props.forMinor && (
-        <LinkToModal
-          linkText={Copy.forMinor.linkText}
-          content={Copy.forMinor.explainerContent}
-          contentLabel="Consent explainer"
         />
       )
     }
