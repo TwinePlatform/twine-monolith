@@ -24,7 +24,7 @@ install:
 before_script:
   - bash .travis/cc-download.sh
   - chmod +x .travis/cc-test-reporter
-  - .travis/cc-test-reporter before-build --prefix $(pwd)
+  - .travis/cc-test-reporter before-build
   - psql -U postgres -c 'create database twine_api_test'
   - psql -U postgres -c 'create extension postgis'
 
