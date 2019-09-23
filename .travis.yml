@@ -22,8 +22,8 @@ install:
   - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm install; cd ..; done;
 
 before_script:
-  - bash ./.travis/cc-download.sh
-  - chmod -x ./.travis/cc-test-reporter
+  - bash .travis/cc-download.sh
+  - chmod +x .travis/cc-test-reporter
   - .travis/cc-test-reporter before-build --prefix $(pwd)
   - psql -U postgres -c 'create database twine_api_test'
   - psql -U postgres -c 'create extension postgis'
