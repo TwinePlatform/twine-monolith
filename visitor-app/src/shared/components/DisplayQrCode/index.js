@@ -77,7 +77,7 @@ const DisplayQrCode = props => (
         </CenteredParagraph>
         <FlexContainerRow>
           <QRContainer>
-            <QRimg src={props.qrCode} alt="This is your QRcode" />
+            <QRimg src={props.qrCode} alt="This is your QR code" />
           </QRContainer>
           <ButtonsFlexContainerCol>
             {
