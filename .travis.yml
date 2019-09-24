@@ -5,6 +5,11 @@ node_js:
 env:
   global:
     - NODE_ENV=testing
+  matrix:
+  - APP_DIR=lib/twine-util
+  - APP_DIR=api
+  - APP_DIR=dashboard-app
+  - APP_DIR=visitor-app
 
 addons:
   postgresql: "9.6"
@@ -18,8 +23,8 @@ services:
 
 install:
   # install local dependency repos first
-  - for x in  "lib/eslint-config-twine" "lib/twine-util"; do cd $x; npm install; cd ../..; done;
-  - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm install; cd ..; done;
+  - for f in lib/*; do cd $f; npm install; cd ../..; done;
+  - cd $APP_DIR && npm install
 
 before_script:
   - bash $TRAVIS_BUILD_DIR/.travis/cc-download.sh
@@ -27,13 +32,13 @@ before_script:
   - psql -U postgres -c 'create extension postgis'
 
 script:
-  - for x in "api" "dashboard-app" "visitor-app" "lib/twine-util"; do cd $x; npm run lint; cd ..; done;
+  - cd $APP_DIR && npm run lint --if-present
   # complile ts/react
-  - for x in "api" "dashboard-app" "visitor-app"; do cd $x; npm run build; cd ..; done;
+  - cd $APP_DIR && npm run build --if-present
   # run built server
-  - for x in "api"; do cd $x; npm run checks; cd ..; done;
+  - cd $APP_DIR && npm run checks --if-present
   # run tests and coverage
-  - for x in "api" "dashboard-app" "visitor-app" "lib/twine-util"; do cd $x; npm run cover; cd ..; done;
+  - cd $APP_DIR && npm run cover --if-present
 
 after_success:
   - bash $TRAVIS_BUILD_DIR/.travis/cc-report.sh
