@@ -24,7 +24,7 @@ services:
 install:
   # install local dependency repos first
   - for f in lib/*; do cd $f; npm install; cd ../..; done;
-  - cd $APP_DIR && npm install
+  - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm install
 
 before_script:
   - bash $TRAVIS_BUILD_DIR/.travis/cc-download.sh
@@ -32,13 +32,13 @@ before_script:
   - psql -U postgres -c 'create extension postgis'
 
 script:
-  - cd $APP_DIR && npm run lint --if-present
+  - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm run lint --if-present
   # complile ts/react
-  - cd $APP_DIR && npm run build --if-present
+  - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm run build --if-present
   # run built server
-  - cd $APP_DIR && npm run checks --if-present
+  - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm run checks --if-present
   # run tests and coverage
-  - cd $APP_DIR && npm run cover --if-present
+  - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm run cover --if-present
 
 after_success:
   - bash $TRAVIS_BUILD_DIR/.travis/cc-report.sh
