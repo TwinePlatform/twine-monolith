@@ -6,7 +6,6 @@ import { Maybe, Dictionary, Float, Int } from '../types/internal';
 import { PermissionLevelEnum } from '../auth';
 import { AccessEnum, ResourceEnum } from '../auth/types';
 import { Duration } from 'twine-util';
-import { VisitSignInType } from '../api/v1/community_businesses/visit_logs';
 
 /*
  * Common and utility types
@@ -351,7 +350,7 @@ export type CommunityBusinessCollection = Collection<CommunityBusiness> & {
     => Promise<Maybe<VisitActivity>>;
   updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>;
   deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>;
-  addVisitLog: (k: Knex, v: VisitActivity, u: Partial<User>, a: VisitSignInType) =>
+  addVisitLog: (k: Knex, v: VisitActivity, u: Partial<User>, a: 'sign_in_with_name' | 'qr_code') =>
     Promise<VisitEvent>;
   // TODO [getVisitLogsWithUsers]:
   // this is still wrong, we return "category", which is missing
