@@ -54,7 +54,7 @@ export default async (): Promise<void> => {
       userId: 'user_account.user_account_id',
       userName: 'user_account.user_name',
       organisationId: 'organisation.organisation_id',
-      organisationName: 'organisation_id',
+      organisationName: 'organisation_name',
       sessionStartedAt: 'user_session_record.created_at',
       sessionEndedAt: 'user_session_record.ended_at',
       headers: 'request_headers',
@@ -86,7 +86,7 @@ export default async (): Promise<void> => {
     'device',
     'app',
     'pages'
-  ], rows, 'user_sessions_raw.ts');
+  ], rows, 'user_sessions_raw.csv');
 
   return client.destroy();
 };
