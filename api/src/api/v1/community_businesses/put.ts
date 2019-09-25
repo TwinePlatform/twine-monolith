@@ -1,16 +1,14 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
-import { has, flip } from 'ramda';
-import { CommunityBusinesses, CommunityBusiness } from '../../../models';
+import { CommunityBusinesses } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
-import { PutCommunityBusinesssRequest } from '../types';
+import { Api } from '../types/api';
 import { id, response, cbPayload } from './schema';
 
 
-const hasAny = (props: string[], o: object) => props.map(flip(has)(o));
-
-
-export default [
+const routes: [
+  Api.CommunityBusinesses.Me.PUT.Route,
+  Api.CommunityBusinesses.Id.PUT.Route
+] = [
   {
     method: 'PUT',
     path: '/community-businesses/me',
@@ -30,17 +28,11 @@ export default [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: PutCommunityBusinesssRequest, h: Hapi.ResponseToolkit) => {
-      const { payload, pre: { communityBusiness }, server: { app: { knex } } } = request;
-      const changeSet = <CommunityBusiness> { ...payload };
+    handler: async (request, h) => {
+      const { payload: changeSet, pre: { communityBusiness }, server: { app: { knex } } } = request;
 
       if (communityBusiness.isTemp) {
         return Boom.forbidden('Temporary organisation');
-      }
-
-      if (hasAny(['address1', 'address2', 'townCity', 'postCode'], payload)) {
-        // TODO: recalculate coordinates
-        // See https://github.com/TwinePlatform/twine-api/issues/144
       }
 
       try {
@@ -88,8 +80,8 @@ export default [
         { method: isChildOrganisation, assign: 'isChild' },
       ],
     },
-    handler: async (request: PutCommunityBusinesssRequest, h: Hapi.ResponseToolkit) => {
-      const { payload, pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
+    handler: async (request, h) => {
+      const { payload: changeSet, pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
 
       if (!isChild) {
         return Boom.forbidden('Insufficient permissions to access this resource');
@@ -97,13 +89,6 @@ export default [
 
       if (communityBusiness.isTemp) {
         return Boom.forbidden('Temporary organisation');
-      }
-
-      const changeSet: Partial<CommunityBusiness> = { ...payload };
-
-      if (hasAny(['address1', 'address2', 'townCity', 'postCode'], payload)) {
-        // TODO: recalculate coordinates
-        // See https://github.com/TwinePlatform/twine-api/issues/144
       }
 
       try {
@@ -125,4 +110,6 @@ export default [
 
     },
   },
-] as Hapi.ServerRoute[];
+];
+
+export default routes;

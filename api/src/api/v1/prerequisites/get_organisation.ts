@@ -9,13 +9,12 @@
 import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { Organisations } from '../../../models';
-import { GetCommunityBusinessRequest } from '../types';
 import { getCredentialsFromRequest } from '../auth';
 
 
 const is360GivingId = (s: string) => isNaN(parseInt(s, 10));
 
-export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
+export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
   const { params: { organisationId: id }, server: { app: { knex } } } = request;
 
   const organisation =

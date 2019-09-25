@@ -1,9 +1,10 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { getCommunityBusiness, isChildOrganisation } from '../../prerequisites';
 import { id, response } from '../schema';
+import { Api } from '../../types/api';
 
-export default [
+
+const routes: [Api.CommunityBusinesses.Temporary.Id.DELETE.Route] = [
   {
     method: 'DELETE',
     path: '/community-businesses/temporary/{organisationId}',
@@ -24,7 +25,7 @@ export default [
         { method: isChildOrganisation, assign: 'isChild' },
       ],
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const { pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
 
       if (!isChild) {
@@ -50,4 +51,6 @@ export default [
       return null;
     },
   },
-] as Hapi.ServerRoute[];
+];
+
+export default routes;

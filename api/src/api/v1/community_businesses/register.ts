@@ -1,10 +1,9 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { omit } from 'ramda';
 
 import { CommunityBusinesses, Users, CbAdmins } from '../../../models';
 import { isChildOrganisation } from '../prerequisites';
-import { RegisterCommunityBusinessesRequest } from '../types';
+import { Api } from '../types/api';
 import { response, cbPayload } from './schema';
 import {
   userName,
@@ -12,7 +11,8 @@ import {
 } from '../users/schema';
 import { Tokens } from '../../../models/token';
 
-export default [
+
+const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
   {
     method: 'POST',
     path: '/community-businesses/register',
@@ -37,7 +37,7 @@ export default [
       ],
       response: { schema: response },
     },
-    handler: async (request: RegisterCommunityBusinessesRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         pre: { isChild },
         server: { app: { knex, EmailService, config } },
@@ -95,4 +95,6 @@ export default [
       return CommunityBusinesses.serialise(cb);
     },
   },
-] as Hapi.ServerRoute[];
+];
+
+export default routes;

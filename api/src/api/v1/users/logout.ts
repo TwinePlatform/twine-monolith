@@ -1,22 +1,23 @@
-import * as Hapi from '@hapi/hapi';
-import { query, response } from './schema';
+import { response } from './schema';
 import { Sessions } from '../../../auth/strategies/standard';
+import { Api } from '../types/api';
 
 
-export default [
+const routes: [
+  Api.Users.Logout.GET.Route
+] = [
   {
     method: 'GET',
     path: '/users/logout',
     options: {
       description: 'Logout users',
-      validate: {
-        query,
-      },
       response: { schema: response },
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       Sessions.destroy(request);
-      return {};
+      return null;
     },
   },
-] as Hapi.ServerRoute[];
+];
+
+export default routes;

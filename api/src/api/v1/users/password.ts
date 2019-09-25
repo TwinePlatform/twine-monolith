@@ -1,34 +1,17 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { Users } from '../../../models';
-import {
-  response,
-  email as emailSchema,
-  password as passwordSchema,
-} from './schema';
+import { response, email as emailSchema, password as passwordSchema } from './schema';
 import { BoomWithValidation } from '../utils';
 import { AppEnum } from '../../../types/internal';
 import { Tokens } from '../../../models/token';
+import { Api } from '../types/api';
 
 
-interface ForgotPasswordRequest extends Hapi.Request {
-  payload: {
-    email: string
-    redirect: AppEnum.ADMIN | AppEnum.VISITOR | AppEnum.DASHBOARD
-  };
-}
-
-interface ResetPasswordRequest extends Hapi.Request {
-  payload: {
-    email: string
-    token: string
-    password: string
-    passwordConfirm: string
-  };
-}
-
-const routes: Hapi.ServerRoute[] = [
+const routes: [
+  Api.Users.Password.Forgot.POST.Route,
+  Api.Users.Password.Reset.POST.Route,
+] = [
   {
     method: 'POST',
     path: '/users/password/forgot',
@@ -47,7 +30,7 @@ const routes: Hapi.ServerRoute[] = [
       },
       response: { schema: response },
     },
-    handler: async (request: ForgotPasswordRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex, EmailService, config } },
         payload: { email, redirect },
@@ -60,6 +43,7 @@ const routes: Hapi.ServerRoute[] = [
 
       try {
         await EmailService.resetPassword(config, redirect, user, token);
+        return null;
 
       } catch (error) {
         /*
@@ -69,7 +53,6 @@ const routes: Hapi.ServerRoute[] = [
          */
         return Boom.badGateway('E-mail service unavailable');
       }
-      return {};
     },
   },
 
@@ -91,7 +74,7 @@ const routes: Hapi.ServerRoute[] = [
             } } }),
         },
         failAction: (request, h, err) => {
-          if ((<BoomWithValidation> err).details[0].message
+          if ((err as BoomWithValidation).details[0].message
             === '"token" length must be 64 characters long') {
             return Boom.unauthorized('Invalid token. Request another reset e-mail.');
           }
@@ -100,15 +83,17 @@ const routes: Hapi.ServerRoute[] = [
       },
       response: { schema: response },
     },
-    handler: async (request: ResetPasswordRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         payload: { token, password, email },
       } = request;
+
       const user = await Users.getOne(knex, { where: { email } });
       if (!user) {
         return Boom.forbidden('User does not exist');
       }
+
       try {
         await Tokens.usePasswordResetToken(knex, user.email, token);
       } catch (error) {

@@ -1,10 +1,14 @@
-import * as Hapi from '@hapi/hapi';
+import * as Boom from '@hapi/boom';
 import { Users } from '../../../models';
 import { query, response } from './schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
+import { Api } from '../types/api';
 
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [
+  Api.Users.GET.Route,
+  Api.Users.Me.GET.Route
+] = [
   {
     method: 'GET',
     path: '/users',
@@ -19,12 +23,8 @@ const routes: Hapi.ServerRoute[] = [
       validate: { query },
       response: { schema: response },
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      const { server: { app: { knex } } } = request;
-
-      const users = await Users.get(knex, { where: { deletedAt: null } });
-
-      return Promise.all(users.map(Users.serialise));
+    handler: async () => {
+      return Boom.notImplemented();
     },
   },
 
@@ -44,7 +44,7 @@ const routes: Hapi.ServerRoute[] = [
       },
       response: { schema: response },
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const { user } = StandardCredentials.fromRequest(request);
 
       return Users.serialise(user);

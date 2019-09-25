@@ -1,17 +1,11 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
-import { since, until, ApiRequestQuery } from '../schema/request';
+import { since, until } from '../schema/request';
 import { response } from '../schema/response';
 import { isChildOrganisation } from '../prerequisites';
+import { Api } from '../types/api';
 
-export interface GetVisitLogsRequest extends Hapi.Request {
-  query: ApiRequestQuery & {
-    since: string
-    until: string
-  };
-}
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [Api.VisitLogs.GET.Route] = [
   {
     method: 'GET',
     path: '/visit-logs',
@@ -31,7 +25,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: isChildOrganisation , assign: 'isChild' },
       ],
     },
-    handler: async (request: GetVisitLogsRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         query: { since, until },

@@ -1,7 +1,6 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as moment from 'moment' ;
-import { CommunityBusinesses, CommunityBusiness } from '../../../models';
+import { CommunityBusinesses } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
 import {
   response,
@@ -9,22 +8,17 @@ import {
   visitActivitiesPutPayload,
   id,
   visitActivitiesGetQuery } from './schema';
-import { VisitActivity } from '../../../models/types';
-import { Day } from '../../../types/internal';
+import { Weekday } from '../../../models/types';
+import { Api } from '../types/api'
 
-interface GetRequest extends Hapi.Request {
-  query: {
-    day: Day | 'today'
-  };
-}
-interface PostRequest extends Hapi.Request {
-  payload: Pick<VisitActivity, 'name' | 'category'>;
-}
-interface PutRequest extends Hapi.Request {
-  payload: Partial<VisitActivity>;
-}
 
-export default [
+const routes: [
+  Api.CommunityBusinesses.Me.VisitActivities.GET.Route,
+  Api.CommunityBusinesses.Me.VisitActivities.POST.Route,
+  Api.CommunityBusinesses.Me.VisitActivities.PUT.Route,
+  Api.CommunityBusinesses.Me.VisitActivities.DELETE.Route,
+  Api.CommunityBusinesses.Id.VisitActivities.GET.Route,
+] = [
   {
     method: 'GET',
     path: '/community-businesses/me/visit-activities',
@@ -44,12 +38,15 @@ export default [
       },
       response: { schema: response },
     },
-    handler: async (request: GetRequest, h: Hapi.ResponseToolkit) => {
-      const { pre, query: { day: _day = null }, server: { app: { knex } } } = request;
-      const communityBusiness = <CommunityBusiness> pre.communityBusiness;
+    handler: async (request, h) => {
+      const {
+        pre: { communityBusiness },
+        query: { day: _day = null },
+        server: { app: { knex } }
+      } = request;
 
       const day = _day === 'today'
-        ? <Day> moment().format('dddd').toLowerCase()
+        ? moment().format('dddd').toLowerCase() as Weekday
         : _day;
 
       return CommunityBusinesses.getVisitActivities(knex, communityBusiness, day);
@@ -74,12 +71,13 @@ export default [
       },
       response: { schema: response },
     },
-    handler: async (request: PostRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         payload: visitActivity,
         pre: { communityBusiness },
         server: { app: { knex } },
       } = request;
+
       return CommunityBusinesses.addVisitActivity(knex, visitActivity, communityBusiness);
     },
   },
@@ -105,9 +103,13 @@ export default [
       },
       response: { schema: response },
     },
-    handler: async (request: PutRequest, h: Hapi.ResponseToolkit) => {
-      const { payload, pre, params: { visitActivityId }, server: { app: { knex } } } = request;
-      const communityBusiness = <CommunityBusiness> pre.communityBusiness;
+    handler: async (request, h) => {
+      const {
+        payload,
+        pre: { communityBusiness },
+        params: { visitActivityId },
+        server: { app: { knex } }
+      } = request;
 
       const visitActivity =
         await CommunityBusinesses.getVisitActivityById(knex, communityBusiness, +visitActivityId);
@@ -144,7 +146,7 @@ export default [
       },
       response: { schema: response },
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const { params: { visitActivityId }, server: { app: { knex } } } = request;
       return CommunityBusinesses.deleteVisitActivity(knex, Number(visitActivityId));
     },
@@ -170,19 +172,24 @@ export default [
       },
       response: { schema: response },
     },
-    handler: async (request: GetRequest, h: Hapi.ResponseToolkit) => {
-      const { pre, query: { day: _day = null }, server: { app: { knex } } } = request;
-      const communityBusiness = <CommunityBusiness> pre.communityBusiness;
+    handler: async (request, h) => {
+      const {
+        pre: { communityBusiness, isChild },
+        query: { day: _day = null },
+        server: { app: { knex } }
+      } = request;
 
-      if (!pre.isChild) {
+      if (!isChild) {
         return Boom.forbidden('Access to this resource is forbidden');
       }
 
       const day = _day === 'today'
-          ? <Day> moment().format('dddd').toLowerCase()
-          : _day;
+        ? moment().format('dddd').toLowerCase() as Weekday
+        : _day;
 
       return CommunityBusinesses.getVisitActivities(knex, communityBusiness, day);
     },
   },
-] as Hapi.ServerRoute[];
+];
+
+export default routes;

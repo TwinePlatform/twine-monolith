@@ -1,9 +1,9 @@
-import * as Hapi from '@hapi/hapi';
 import { response } from './schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
+import { Api } from '../types/api';
 
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [Api.Users.Me.Roles.GET.Route] = [
 
   {
     method: 'GET',
@@ -18,7 +18,7 @@ const routes: Hapi.ServerRoute[] = [
       },
       response: { schema: response },
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const { organisation, roles } = StandardCredentials.fromRequest(request);
 
       return {

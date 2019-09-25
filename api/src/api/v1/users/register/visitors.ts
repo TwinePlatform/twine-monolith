@@ -1,7 +1,6 @@
 /*
  * Registration endpoints for visitors
  */
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import {
@@ -24,14 +23,14 @@ import {
 } from '../../../../models';
 import * as QRCode from '../../../../services/qrcode';
 import * as PdfService from '../../../../services/pdf';
-import { RegisterRequest } from '../../types';
+import { Api } from '../../types/api';
 import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
 import { getCommunityBusiness } from '../../prerequisites';
 import Roles from '../../../../models/role';
 import { RoleEnum } from '../../../../models/types';
 import { Tokens } from '../../../../models/token';
 
-export default [
+const routes: [Api.Users.Register.Visitors.POST.Route] = [
   {
     method: 'POST',
     path: '/users/register/visitors',
@@ -59,12 +58,12 @@ export default [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: RegisterRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         payload,
         server: { app: { EmailService, knex, config } },
         pre: { communityBusiness },
-    } = request;
+      } = request;
 
       const { organisation } = StandardCredentials.fromRequest(request);
       /*
@@ -114,11 +113,11 @@ export default [
           throw Boom.conflict(
             'Email is associated to a volunteer, '
             + 'please see email confirmation to create visitor account'
-            );
+          );
         }
         if (payload.phoneNumber
           && await Users.exists(knex, { where: { phoneNumber: payload.phoneNumber } })
-          ) {
+        ) {
         // Registering second roles is not yet supported;
         // see https://github.com/TwinePlatform/twine-api/issues/247#issuecomment-443182884
           throw Boom.conflict('User with this phone number already registered');
@@ -152,8 +151,8 @@ export default [
 
       // Create the visitor
       const visitor = payload.isAnonymous
-          ? await Visitors.addAnonymousWithRole(knex, cb, Visitors.create(payload))
-          : await Visitors.addWithRole(knex, cb, Visitors.create(payload));
+        ? await Visitors.addAnonymousWithRole(knex, cb, Visitors.create(payload))
+        : await Visitors.addWithRole(knex, cb, Visitors.create(payload));
 
       // Send QR code to visitor
       // generate QR code data URL
@@ -179,4 +178,6 @@ export default [
       return Visitors.serialise(visitor);
     },
   },
-] as Hapi.ServerRoute[];
+];
+
+export default routes;

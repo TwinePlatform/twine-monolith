@@ -1,7 +1,6 @@
 /*
  * Registration endpoints for visitors
  */
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { id, response } from '../schema';
@@ -15,12 +14,13 @@ import {
 } from '../../../../models';
 import * as QRCode from '../../../../services/qrcode';
 import * as PdfService from '../../../../services/pdf';
-import { RegisterConfirm } from '../../types';
+import { Api } from '../../types/api';
 import { RoleEnum } from '../../../../models/types';
 import Roles from '../../../../models/role';
 import { Tokens } from '../../../../models/token';
 
-export default [
+
+const routes: [Api.Users.Register.Confirm.POST.Route] = [
   {
     method: 'POST',
     path: '/users/register/confirm',
@@ -37,7 +37,7 @@ export default [
       },
       response: { schema: response },
     },
-    handler: async (request: RegisterConfirm, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         payload: { role, userId, token, organisationId },
         server: { app: { EmailService, knex, config } },
@@ -73,42 +73,42 @@ export default [
       // Create the account
       try {
         switch (role) {
-          case RoleEnum.VISITOR:
-            let updatedVisitor: User;
-            let document: string;
+        case RoleEnum.VISITOR:
+          let updatedVisitor: User;
+          let document: string;
 
-            await knex.transaction(async (trx) => {
-              await Tokens.useConfirmAddRoleToken(trx, user.email, token);
-              await Roles.add(trx, { role, userId, organisationId });
-              updatedVisitor = await Users.getOne(trx, { where: { id: user.id } });
+          await knex.transaction(async (trx) => {
+            await Tokens.useConfirmAddRoleToken(trx, user.email, token);
+            await Roles.add(trx, { role, userId, organisationId });
+            updatedVisitor = await Users.getOne(trx, { where: { id: user.id } });
 
-              // generate & add QR CODE
-              const userWithQr = await Users.update(trx, user,
+            // generate & add QR CODE
+            const userWithQr = await Users.update(trx, user,
               { qrCode: Visitors.create(updatedVisitor).qrCode });
-              const qrCode = await QRCode.create(userWithQr.qrCode);
-              document = await PdfService.fromTemplate(
-                PdfService.PdfTemplateEnum.VISITOR_QR_CODE,
-                { qrCodeDataUrl: qrCode }
-              );
-              return;
-            });
-            await EmailService.newVisitor(config, updatedVisitor, admin, cb, document);
-            return Visitors.serialise(updatedVisitor);
+            const qrCode = await QRCode.create(userWithQr.qrCode);
+            document = await PdfService.fromTemplate(
+              PdfService.PdfTemplateEnum.VISITOR_QR_CODE,
+              { qrCodeDataUrl: qrCode }
+            );
+            return;
+          });
+          await EmailService.newVisitor(config, updatedVisitor, admin, cb, document);
+          return Visitors.serialise(updatedVisitor);
 
-          case RoleEnum.VOLUNTEER:
-            return knex.transaction(async (trx) => {
-              await Tokens.useConfirmAddRoleToken(trx, user.email, token);
-              await Roles.add(trx, { role, userId, organisationId });
-              const updatedVolunteer = await Users.getOne(trx, { where: { id: user.id } });
+        case RoleEnum.VOLUNTEER:
+          return knex.transaction(async (trx) => {
+            await Tokens.useConfirmAddRoleToken(trx, user.email, token);
+            await Roles.add(trx, { role, userId, organisationId });
+            const updatedVolunteer = await Users.getOne(trx, { where: { id: user.id } });
 
-              // create password reset token & send with response
-              const { token: newToken } = await Tokens
-                .createPasswordResetToken(trx, updatedVolunteer);
-              return { ...await Volunteers.serialise(updatedVolunteer), token: newToken };
-            });
+            // create password reset token & send with response
+            const { token: newToken } = await Tokens
+              .createPasswordResetToken(trx, updatedVolunteer);
+            return { ...await Volunteers.serialise(updatedVolunteer), token: newToken };
+          });
 
-          default:
-            throw Boom.internal('Could not create role');
+        default:
+          return Boom.notImplemented(`Not implemented for role $`);
         }
       } catch (error) {
         request.log('warning', error);
@@ -116,4 +116,6 @@ export default [
       }
     },
   },
-] as Hapi.ServerRoute[];
+];
+
+export default routes;

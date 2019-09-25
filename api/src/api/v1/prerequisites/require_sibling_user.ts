@@ -27,10 +27,15 @@
 import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { Organisations } from '../../../models';
-import { RequireSiblingPreReq } from '../types';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
 
+
+export interface RequireSiblingPreReq extends Hapi.Request {
+  params: {
+    userId: string;
+  };
+}
 
 export default async (request: RequireSiblingPreReq, h: Hapi.ResponseToolkit) => {
   const {

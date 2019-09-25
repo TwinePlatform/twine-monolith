@@ -1,19 +1,11 @@
-import * as Hapi from '@hapi/hapi';
 import * as Joi from '@hapi/joi';
-import { query, response } from '../schema';
-import { Visitors, CommunityBusiness } from '../../../../models';
+import { response } from '../schema';
+import { Visitors } from '../../../../models';
 import { getCommunityBusiness } from '../../prerequisites';
+import { Api } from '../../types/api';
 
-interface VisitorSearchRequest extends Hapi.Request {
-  payload: {
-    qrCode: string
-  };
-  pre: {
-    communityBusiness: CommunityBusiness
-  };
-}
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [Api.Users.Visitors.Search.POST.Route] = [
   {
     method: 'POST',
     path: '/users/visitors/search',
@@ -24,7 +16,6 @@ const routes: Hapi.ServerRoute[] = [
         scope: ['user_details-child:read'],
       },
       validate: {
-        query,
         payload: {
           qrCode: Joi.string().required(),
         },
@@ -34,7 +25,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: VisitorSearchRequest, h) => {
+    handler: async (request, h) => {
       const {
         payload: { qrCode },
         server: { app: { knex } },

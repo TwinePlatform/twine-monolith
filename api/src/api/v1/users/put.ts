@@ -1,4 +1,3 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { Users } from '../../../models';
 import {
@@ -16,12 +15,15 @@ import {
   ethnicity,
   response
 } from './schema';
-import { PutUserRequest } from '../types';
+import { Api } from '../types/api';
 import { isChildUser } from '../prerequisites';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [
+  Api.Users.Me.PUT.Route,
+  Api.Users.Id.PUT.Route,
+] = [
 
   {
     method: 'PUT',
@@ -53,7 +55,7 @@ const routes: Hapi.ServerRoute[] = [
       },
       response: { schema: response },
     },
-    handler: async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         payload,
@@ -123,7 +125,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: isChildUser, assign: 'isChild' },
       ],
     },
-    handler: async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex } },
         payload,

@@ -1,13 +1,12 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { Volunteers } from '../../../../models';
 import { response } from '../schema';
 import { id } from '../../schema/request';
 import { requireSiblingUser } from '../../prerequisites';
-import { DeleteUserRequest } from '../../types';
+import { Api } from '../../types/api';
 
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [Api.Users.Volunteers.Id.DELETE.Route] = [
   {
     method: 'DELETE',
     path: '/users/volunteers/{userId}',
@@ -27,7 +26,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: requireSiblingUser, assign: 'requireSibling' },
       ],
     },
-    handler: async (request: DeleteUserRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const { server: { app: { knex } }, params: { userId } } = request;
       const volunteer = await Volunteers.getOne(knex, { where: { id: Number(userId) } });
       // return error if user is not a volunteer

@@ -1,13 +1,17 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { pick } from 'ramda';
-import { CommunityBusinesses, CommunityBusiness } from '../../../models';
+import { CommunityBusinesses } from '../../../models';
 import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
-import { GetCommunityBusinessRequest, GetCommunityBusinessesRequest } from '../types';
+import { Api } from '../types/api';
 import { query, response } from './schema';
 import { is360GivingId } from '../prerequisites/get_community_business';
 
-export default [
+
+const routes: [
+  Api.CommunityBusinesses.GET.Route,
+  Api.CommunityBusinesses.Me.GET.Route,
+  Api.CommunityBusinesses.Id.GET.Route
+] = [
   {
     method: 'GET',
     path: '/community-businesses',
@@ -27,7 +31,7 @@ export default [
       ],
       response: { schema: response },
     },
-    handler: async (request: GetCommunityBusinessesRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         pre: { isChild },
         server: { app: { knex } },
@@ -38,7 +42,8 @@ export default [
         return Boom.forbidden('Insufficient permissions to access this organisations');
       }
 
-      return CommunityBusinesses.get(knex, query);
+      const cbs = await CommunityBusinesses.get(knex, query);
+      return Promise.all(cbs.map(CommunityBusinesses.serialise));
     },
   },
 
@@ -65,10 +70,8 @@ export default [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-      const { communityBusiness } = request.pre;
-
-      return CommunityBusinesses.serialise(<CommunityBusiness> communityBusiness);
+    handler: async (request, h) => {
+      return CommunityBusinesses.serialise(request.pre.communityBusiness);
     },
   },
 
@@ -91,7 +94,7 @@ export default [
         { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
       ],
     },
-    handler: async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         pre: { isChild },
         params: { organisationId },
@@ -112,7 +115,14 @@ export default [
       };
 
       const communityBusiness = await CommunityBusinesses.getOne(knex, query);
-      return CommunityBusinesses.serialise(<CommunityBusiness> communityBusiness);
+
+      if (!communityBusiness) {
+        return Boom.notFound(`No community business with the id: ${organisationId}`);
+      }
+
+      return CommunityBusinesses.serialise(communityBusiness);
     },
   },
-] as Hapi.ServerRoute[];
+];
+
+export default routes;

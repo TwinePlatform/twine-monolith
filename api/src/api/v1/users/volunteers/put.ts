@@ -1,26 +1,25 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { Volunteers } from '../../../../models';
 import {
   response,
-   userName,
-   password,
-   gender,
-   birthYear,
-   email,
-   phoneNumber,
-   postCode,
-   isEmailConsentGranted,
-   isSMSConsentGranted,
-   disability,
-   ethnicity
-  } from '../schema';
+  userName,
+  password,
+  gender,
+  birthYear,
+  email,
+  phoneNumber,
+  postCode,
+  isEmailConsentGranted,
+  isSMSConsentGranted,
+  disability,
+  ethnicity
+} from '../schema';
 import { id } from '../../schema/request';
 import { requireSiblingUser } from '../../prerequisites';
-import { PutUserRequest } from '../../types';
+import { Api } from '../../types/api';
 
 
-const routes: Hapi.ServerRoute[] = [
+const routes: [Api.Users.Volunteers.Id.PUT.Route] = [
   {
     method: 'PUT',
     path: '/users/volunteers/{userId}',
@@ -53,7 +52,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: requireSiblingUser, assign: 'isSibling' },
       ],
     },
-    handler: async (request: PutUserRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const { server: { app: { knex } }, params: { userId }, payload } = request;
 
       const volunteer = await Volunteers.getOne(knex, { where: { id: Number(userId) } });

@@ -1,7 +1,6 @@
 /*
  * Registration endpoints for volunteers
  */
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import {
@@ -17,17 +16,14 @@ import {
   gender,
   response
 } from '../schema';
-import {
-  Volunteers,
-  Users,
-  CommunityBusinesses
-} from '../../../../models';
-import { VolunteerRegisterRequest } from '../../types';
+import { Volunteers, Users, CommunityBusinesses } from '../../../../models';
+import { Api } from '../../types/api';
 import { RoleEnum } from '../../../../models/types';
 import Roles from '../../../../models/role';
 import { Tokens } from '../../../../models/token';
 
-export default [
+
+const routes: [Api.Users.Register.Volunteers.POST.Route] = [
   {
     method: 'POST',
     path: '/users/register/volunteers',
@@ -52,7 +48,7 @@ export default [
       },
       response: { schema: response },
     },
-    handler: async (request: VolunteerRegisterRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
       const {
         server: { app: { knex, EmailService, config } },
         payload,
@@ -95,7 +91,7 @@ export default [
           await EmailService.addRole(config, user, communityBusiness, RoleEnum.VOLUNTEER, token);
 
         } catch (error) {
-              /*
+          /*
                * we should do something meaningful here!
                * such as retry with backoff and log/email
                * dev team if unsuccessful
@@ -105,7 +101,7 @@ export default [
         throw Boom.conflict(
           'Email is associated to a visitor, '
           + 'please see email confirmation to create volunteer account'
-          );
+        );
       }
 
       /*
@@ -130,4 +126,6 @@ export default [
       }
     },
   },
-] as Hapi.ServerRoute[];
+];
+
+export default routes;

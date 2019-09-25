@@ -36,15 +36,6 @@ export type JsonTypes =
 
 export type Json = Dictionary<JsonTypes> | Dictionary<JsonTypes>[] | JsonTypes[];
 
-export type Day =
-  'monday'
-  | 'tuesday'
-  | 'wednesday'
-  | 'thursday'
-  | 'friday'
-  | 'saturday'
-  | 'sunday';
-
 export enum AppEnum {
   TWINE_API = 'TWINE_API',
   VISITOR = 'VISITOR_APP',

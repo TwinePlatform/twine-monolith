@@ -1,9 +1,10 @@
-import * as Hapi from '@hapi/hapi';
 import { isChildOrganisation } from '../../prerequisites';
 import { response } from '../schema';
 import { CommunityBusinesses } from '../../../../models';
+import { Api } from '../../types/api';
 
-export default [
+
+const routes: [Api.CommunityBusinesses.Temporary.GET.Route] = [
   {
     method: 'GET',
     path: '/community-businesses/temporary',
@@ -20,14 +21,12 @@ export default [
       ],
       response: { schema: response },
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-
-      const {
-        server: { app: { knex } },
-      } = request;
+    handler: async (request, h) => {
+      const { server: { app: { knex } } } = request;
 
       return CommunityBusinesses.getTemporary(knex);
     },
   },
+];
 
-] as Hapi.ServerRoute[];
+export default routes;

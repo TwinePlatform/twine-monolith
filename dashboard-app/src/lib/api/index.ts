@@ -1,4 +1,5 @@
 import _axios, { AxiosRequestConfig, Method } from 'axios';
+import { Api } from '../../../../api/src/api/v1/types/api';
 import qs from 'qs';
 
 const baseURL = process.env.REACT_APP_API_HOST_DOMAIN ?
@@ -17,6 +18,12 @@ export const Roles = {
 };
 
 export const CbAdmins = {
+  get: () => {
+    axios.get<Api.CommunityBusinesses.CbAdmins.GET.Result>('/community-businesses/me/cb-admins')
+      .then((res) => {
+        const x = res.data;
+      });
+  },
   login: ({ email, password }: { email: string, password: string }) =>
     axios.post(
       '/users/login',
@@ -42,9 +49,9 @@ export const CommunityBusinesses = {
   },
 
   get: (params?: Pick<AxiosRequestConfig, 'params'>) =>
-    axios({ ...CommunityBusinesses.configs.get, params }),
+    axios.request<Api.CommunityBusinesses.Me.GET.Result>({ ...CommunityBusinesses.configs.get, params }),
   getLogs: (params?: Pick<AxiosRequestConfig, 'params'>) =>
-    axios({ ...CommunityBusinesses.configs.getLogs, params }),
+    axios.request({ ...CommunityBusinesses.configs.getLogs, params }),
   getVolunteerActivities: () =>
     axios({ ...CommunityBusinesses.configs.getVolunteerActivities }),
   getVolunteers: () => // NB: fields not currently supported

@@ -5,9 +5,10 @@ import { query, response } from './schema';
 import { CommunityBusinesses } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import { filterQuery } from '../users/schema';
-import { GetVisitLogsRequest } from './visit_logs';
+import { Api } from '../types/api';
 
-const routes: Hapi.ServerRoute[] = [
+
+const routes: [Api.CommunityBusinesses.Me.VisitLogs.Aggregates.GET.Route] = [
   {
     method: 'GET',
     path: '/community-businesses/me/visit-logs/aggregates',
@@ -30,7 +31,7 @@ const routes: Hapi.ServerRoute[] = [
         { method: getCommunityBusiness , assign: 'communityBusiness' },
       ],
     },
-    handler: async (request: GetVisitLogsRequest, h: Hapi.ResponseToolkit) => {
+    handler: async (request, h) => {
 
       const {
         server: { app: { knex } },
@@ -38,7 +39,7 @@ const routes: Hapi.ServerRoute[] = [
         pre: { communityBusiness } } = request;
       /*
        * fields define what aggregates are returned.
-       * If not fields are requested the respomse is empty.
+       * If no fields are requested the response is empty.
        */
       if (!fields) return {};
 

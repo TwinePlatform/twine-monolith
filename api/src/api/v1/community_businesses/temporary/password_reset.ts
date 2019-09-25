@@ -1,11 +1,12 @@
-import * as Hapi from '@hapi/hapi';
 import * as Boom from '@hapi/boom';
 import { Random } from 'twine-util';
 import { isChildOrganisation, getCommunityBusiness } from '../../prerequisites';
 import { response, id } from '../schema';
 import { CbAdmins, Users } from '../../../../models';
+import { Api } from '../../types/api';
 
-export default [
+
+const routes: [Api.CommunityBusinesses.Temporary.Id.Password.Reset.GET.Route] = [
   {
     method: 'GET',
     path: '/community-businesses/temporary/{organisationId}/password/reset',
@@ -26,8 +27,7 @@ export default [
       },
       response: { schema: response },
     },
-    handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-
+    handler: async (request, h) => {
       const {
         pre: { communityBusiness },
         server: { app: { knex } },
@@ -44,4 +44,6 @@ export default [
       return { ...updatedAdmin, password };
     },
   },
-] as Hapi.ServerRoute[];
+];
+
+export default routes;

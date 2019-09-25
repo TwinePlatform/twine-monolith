@@ -19,25 +19,28 @@
  */
 import * as Hapi from '@hapi/hapi';
 import { Organisation, CommunityBusiness } from '../../../models';
-import { GetCommunityBusinessRequest } from '../types';
 import getOrganisation from './get_organisation';
 import Roles from '../../../models/role';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum } from '../../../models/types';
 
 
-const getOrg = async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
+const getOrg = async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
   const { pre } = request;
 
-  if (pre.hasOwnProperty('organisation') || pre.hasOwnProperty('communityBusiness')) {
-    return <Organisation> pre.organisation || <CommunityBusiness> pre.communityBusiness;
+  if ('organisation' in pre) {
+    return pre.organisation as Organisation;
+  }
+
+  if ('communityBusiness' in pre) {
+    return pre.communityBusiness as CommunityBusiness;
   }
 
   // Fallback case: manually fetch organisation if not already cached.
   return getOrganisation(request, h);
 };
 
-export default async (request: GetCommunityBusinessRequest, h: Hapi.ResponseToolkit) => {
+export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
   const { server: { app: { knex } } } = request;
   const { user } = StandardCredentials.fromRequest(request);
 
