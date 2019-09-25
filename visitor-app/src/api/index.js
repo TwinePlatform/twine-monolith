@@ -198,10 +198,12 @@ export const Cloudinary = {
   },
 };
 
+const headOrId = xs => Array.isArray(xs) ? head(xs) : xs;
+
 export const ErrorUtils = {
   getErrorStatus: pathOr(null, ['response', 'status']),
   getValidationErrors: pathOr({ general: ['Unknown error'] }, ['response', 'data', 'error', 'validation']),
-  getFirstValidationErrors: err => map(head, ErrorUtils.getValidationErrors(err)),
+  getFirstValidationErrors: err => headOrId(ErrorUtils.getValidationErrors(err)),
   getErrorMessage: pathOr({ general: ['Unknown error'] }, ['response', 'data', 'error', 'message']),
   errorStatusEquals: (error, status) => equals(ErrorUtils.getErrorStatus(error), status),
 };
