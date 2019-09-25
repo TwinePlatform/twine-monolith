@@ -7,6 +7,8 @@ Environment configuration is managed using [Expo's release channels](https://doc
 `environment.ts` to be created locally with the following format:
 
 ```ts
+ /* global __DEV__ */
+
 /*
  * environment.ts
  * path: '/environment.ts' (root of your project)
@@ -23,16 +25,13 @@ const localhost =
 
 const ENV = {
  dev: {
-   // if running on device replace this string with a hosted server
    apiBaseUrl: `http://${localhost}:4000`,
  },
  staging: {
    apiBaseUrl: "[your.staging.api.here]",
-   // Add other keys you want here
  },
  prod: {
    apiBaseUrl: "[your.production.api.here]",
-   // Add other keys you want here
  }
 };
 

@@ -1,36 +1,24 @@
-import React, { useState, useEffect} from 'react';
-import styled from 'styled-components/native'
+import React, { Component } from 'react';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import Login from './src/shared_views/screens/Login'
+import Register from './src/shared_views/screens/Register'
 
-import { CommunityBusinesses } from './src/lib/api';
 
-const View = styled.View`
-  alignItems: center;
-  justifyContent: center;
-  flex: 1;
-`;
+const RootStack = createStackNavigator(
+  {
+    Login: Login,
+    Register: Register,
+  },
+  {
+    initialRouteName: 'Login',
+  }
+);
 
-const Text = styled.Text`
-  font-size: 15;
-`;
+const AppContainer = createAppContainer(RootStack);
 
-export default function App() {
-  const [data, setData] = useState();
-  const [error, setError] = useState();
-  useEffect(() => {(
-    async function(){
-      try {
-        const {data} = await CommunityBusinesses.getVolunteerActivities();
-        setData(data.result);
-      } catch (error) {
-        setError(error)
-      }
-    }()
-    )},[]);
-    
-  return (
-    <View>
-      {data && data.map(x => <Text key={x.id}>{x.name}</Text>)}
-      {error && <Text>{JSON.stringify(error)}</Text>}
-    </View>
-  );
+export default class App extends Component {
+  render() {
+    return <AppContainer />;
+  }
 }

@@ -13,9 +13,9 @@ This documents the desired architecture for this project.
 |  |- assets          Contains static assets like images, SVGs
 |  |- components      Common components used throughout the app
 |  |- styles          Stylesheets for external components or other things not compatible with Styled Components
-|  |- <admin | volunteer>_view
+|  |- <admin | volunteer>_views | shared_views
 |  |  |- components   Feature-specific components
-|  |  |- pages        Feature-specific routes/pages
+|  |  |- screens        Feature-specific routes/pages
 |  |  |- index.ts     Defines public interface of <FEATURE> module
 |  |- lib             
 |  |  |- api          Interface with the Twine HTTP API
