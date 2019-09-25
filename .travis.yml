@@ -2,46 +2,64 @@ language: node_js
 node_js:
   - '10'
 
-env:
-  global:
-    - NODE_ENV=testing
-  matrix:
-  - APP_DIR=lib/twine-util
-  - APP_DIR=api
-  - APP_DIR=dashboard-app
-  - APP_DIR=visitor-app
+jobs:
+  include:
+    - stage: Setup Workspaces
+      workspaces:
+        create:
+          name: coverage-reports
 
-addons:
-  postgresql: "9.6"
-  apt:
-    packages:
-      - postgresql-9.6-postgis-2.4
+    - stage: Build & Test
+      workspaces:
+        use:
+          - coverage-reports
+      env:
+        global:
+          - NODE_ENV=testing
+        matrix:
+        - APP_DIR=lib/twine-util
+        - APP_DIR=api
+        - APP_DIR=dashboard-app
+        - APP_DIR=visitor-app
 
-services:
-  - postgresql
-  - redis-server
+      addons:
+        postgresql: "9.6"
+        apt:
+          packages:
+            - postgresql-9.6-postgis-2.4
 
-install:
-  # install local dependency repos first
-  - for f in lib/*; do cd $f; npm install; cd ../..; done;
-  - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm install
+      services:
+        - postgresql
+        - redis-server
 
-before_script:
-  - bash $TRAVIS_BUILD_DIR/.travis/cc-download.sh
-  - psql -U postgres -c 'create database twine_api_test'
-  - psql -U postgres -c 'create extension postgis'
+      install:
+        # install local dependency repos first
+        - for f in lib/*; do cd $f; npm install; cd ../..; done;
+        - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm install
 
-script:
-  - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm run lint --if-present
-  # complile ts/react
-  - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm run build --if-present
-  # run built server
-  - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm run checks --if-present
-  # run tests and coverage
-  - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm run cover --if-present
+      before_script:
+        - bash $TRAVIS_BUILD_DIR/.travis/cc-download.sh
+        - psql -U postgres -c 'create database twine_api_test'
+        - psql -U postgres -c 'create extension postgis'
 
-after_success:
-  - bash $TRAVIS_BUILD_DIR/.travis/cc-report.sh
+      script:
+        - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm run lint --if-present
+        # complile ts/react
+        - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm run build --if-present
+        # run built server
+        - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm run checks --if-present
+        # run tests and coverage
+        - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm run cover --if-present
+
+      after_success:
+        - bash $TRAVIS_BUILD_DIR/.travis/cc-report.sh
+
+    - stage: Upload Coverage
+      workspaces:
+          use:
+            - coverage-reports
+      after_success:
+        - bash $TRAVIS_BUILD_DIR/.travis/cc-upload.sh
 
 notifications:
   email:
