@@ -1,8 +1,8 @@
 import * as Url from 'url';
 import * as Knex from 'knex';
 import { UAParser } from 'ua-parser-js';
-import { omit, pathOr } from 'ramda';
-import { getConfig } from '../../../config';
+import { evolve, isNil, omit, pathOr, uniq } from 'ramda';
+import { getConfig, Config } from '../../../config';
 import { csv } from '../../writers';
 import { Dictionary } from '../../../src/types/internal';
 
@@ -29,7 +29,20 @@ const processHeaders = (headers: Dictionary<string>) => {
   return { agent: t, url: urlObj };
 };
 
-const main = async (client: Knex) => {
+const mapHostToApp = (host: string) => {
+  switch (host) {
+  case 'visitor.twine-together.com':
+    return 'visitor-app';
+  case 'data.twine-together.com':
+    return 'dashboard-app';
+  case undefined:
+    return 'volunteer-app';
+  default:
+    return host;
+  }
+}
+
+const main = async (config: Config, client: Knex) => {
   const res: Row[] = await client('user_session_record')
     .innerJoin(
       'user_account',
@@ -56,21 +69,32 @@ const main = async (client: Knex) => {
       headers: 'request_headers',
       sessionEndType: 'session_end_type'
     })
-    .whereNotIn('organisation.organisation_id', [1, 2]);
+    .whereNotIn('organisation.organisation_id', [1, 2])
+    .orderBy('user_session_record.created_at', 'asc');
 
-  const rows = res.map((row, i) => {
+  const rows = res.map((row) => {
     const headers = row.headers.map(processHeaders);
-    const app = pathOr('volunteer-app', ['url', 'host'], headers[0]);
-    const device = headers[0].agent.device;
-    const pages = headers
+    const app = mapHostToApp(pathOr(undefined, ['url', 'host'], headers[0]));
+    const deviceType = headers[0].agent.device.type;
+    const OS = headers[0].agent.os.name;
+    const browser = headers[0].agent.browser.name + '::' + headers[0].agent.browser.version;
+    const pages = uniq(headers
       .map((header) => pathOr(null, ['url', 'path'], header))
-      .filter(Boolean);
+      .filter(Boolean));
+
+    const processedRow = evolve({
+      sessionStartedAt: (d: Date) => d.toISOString(),
+      sessionEndedAt: (d?: Date) => (isNil(d) ? new Date(row.sessionStartedAt.valueOf() + config.auth.schema.session_cookie.options.cache.expiresIn) : d).toISOString(),
+      sessionEndType: (s?: string) => isNil(s) ? 'expired' : s,
+    }, row);
 
     return {
-      ...omit(['headers'], row),
+      ...omit(['headers'], processedRow),
       app,
       pages,
-      device,
+      deviceType,
+      OS,
+      browser,
     };
   });
 
@@ -82,7 +106,9 @@ const main = async (client: Knex) => {
     'sessionStartedAt',
     'sessionEndedAt',
     'sessionEndType',
-    'device',
+    'deviceType',
+    'OS',
+    'browser',
     'app',
     'pages'
   ], rows, 'user_sessions_raw.csv');
@@ -93,7 +119,7 @@ export default async (): Promise<void> => {
   const client = Knex(config.knex);
 
   try {
-    await main(client);
+    await main(config, client);
   } finally {
     client.destroy();
   }
