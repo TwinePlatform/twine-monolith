@@ -12,6 +12,9 @@ const capitaliseFirstWord = s => s.replace(/^\w/, str => str.toUpperCase());
 
 export const BirthYear = {
   NULL_VALUE: 'Prefer not to say',
+  MINOR_AGE: 13,
+
+  getBoundaryYear: () => new Date().getFullYear() - BirthYear.MINOR_AGE,
 
   // list :: (Number, Number, ['desc' | 'asc']) -> [Number]
   list: (start, end, order = 'desc') =>
@@ -30,7 +33,7 @@ export const BirthYear = {
   // defaultOptionsList :: () -> [{ key: string, value: string }]
   defaultOptionsList: () =>
     BirthYear.listToOptions(
-      BirthYear.list(new Date().getFullYear() - 113, new Date().getFullYear() - 13),
+      BirthYear.list(BirthYear.getBoundaryYear() - 100, BirthYear.getBoundaryYear()),
     ),
 
   u13OptionsList: () =>

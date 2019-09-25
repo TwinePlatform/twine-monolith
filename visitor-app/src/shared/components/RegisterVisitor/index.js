@@ -45,7 +45,7 @@ class SignupForm extends React.Component {
 
   render() {
     const { uuid } = this.state;
-    const { onSubmit, forMinor, cbName, hasGivenAge, errors, genders, years } = this.props;
+    const { onSubmit, forMinor, cbName, confirmAge, errors, genders, years } = this.props;
 
     return (
       <Row>
@@ -100,7 +100,7 @@ class SignupForm extends React.Component {
               />
               <AgeCheck
                 forMinor={forMinor}
-                hasGivenAge={hasGivenAge}
+                confirmAge={confirmAge}
                 cbName={cbName}
                 error={errors.ageCheck}
               />
@@ -125,7 +125,7 @@ SignupForm.propTypes = {
   cbName: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   genders: PropTypes.arrayOf(PropTypes.object).isRequired,
-  hasGivenAge: PropTypes.bool.isRequired,
+  confirmAge: PropTypes.bool.isRequired,
   status: PropTypes.oneOf(Object.values(status)),
   forMinor: PropTypes.bool,
 };

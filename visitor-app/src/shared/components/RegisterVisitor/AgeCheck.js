@@ -19,7 +19,7 @@ const getLabel = (forMinor, cbName) =>
 const AgeCheck = props => (
   <>
     {
-      (props.forMinor || !props.hasGivenAge) && (
+      (props.forMinor || !props.confirmAge) && (
         <StyledLabelledCheckbox
           id="ageCheck"
           name="ageCheck"
@@ -34,7 +34,7 @@ const AgeCheck = props => (
 
 AgeCheck.propTypes = {
   forMinor: PropTypes.bool.isRequired,
-  hasGivenAge: PropTypes.bool.isRequired,
+  confirmAge: PropTypes.bool.isRequired,
   error: PropTypes.string,
   cbName: PropTypes.string,
 };

@@ -39,6 +39,8 @@ class Main extends Component {
 
   render() {
     const { cbOrgName, genders, cbLogoUrl } = this.state;
+    const { form: { year } } = this.props;
+    const confirmAge = year !== BirthYear.NULL_VALUE || year === BirthYear.getBoundaryYear();
 
     return (
       <Switch>
@@ -56,7 +58,7 @@ class Main extends Component {
               years={BirthYear.defaultOptionsList()}
               genders={genders}
               errors={this.props.errors}
-              hasGivenAge={this.props.form.year !== BirthYear.NULL_VALUE}
+              confirmAge={confirmAge}
               status={this.props.status}
             />
           </Grid>
