@@ -18,7 +18,7 @@ import {
 } from '../types/index';
 
 
-const modelToRecordMap = {
+export const modelToRecordMap = {
   id: 'user_account.user_account_id' as keyof UserModelRecord,
   name: 'user_account.user_name' as keyof UserModelRecord,
   password: 'user_account.user_password' as keyof UserModelRecord,
@@ -98,10 +98,10 @@ export const Users: UserCollection = {
     }
   },
 
-  cast(a) {
+  cast(a, tag = 'User') {
     return {
       __model: true,
-      __tag: 'User',
+      __tag: tag,
       id: a.id,
       name: a.name,
       email: a.email,

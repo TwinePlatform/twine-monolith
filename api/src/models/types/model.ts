@@ -21,7 +21,7 @@ interface ModelBase<T> extends Readonly<CommonTimestamps> {
 /**
  * Users
  */
-export interface User<T = 'User'> extends ModelBase<T> {
+export interface User<T = 'User' | 'Visitor' | 'Volunteer' | 'CbAdmin'> extends ModelBase<T> {
   readonly id?: UserAccount['user_account.user_account_id'];
   readonly name: UserAccount['user_account.user_name'];
   readonly email: UserAccount['user_account.email'];
@@ -144,3 +144,23 @@ export interface ApiToken extends ModelBase<'ApiToken'> {
   readonly access: _.api_tokenFields.api_token_access;
   readonly token: _.api_tokenFields.api_token;
 }
+
+
+export type Model =
+  User
+  | Visitor
+  | Volunteer
+  | CbAdmin
+  | Organisation
+  | CommunityBusiness
+  | VolunteerActivity
+  | VolunteerProject
+  | VolunteerLog
+  | VisitCategory
+  | VisitActivity
+  | VisitLog
+  | SingleUseToken
+  | PasswordResetToken
+  | AddRoleToken
+  | ApiToken
+;

@@ -1,6 +1,6 @@
 import * as Knex from 'knex';
 import { pick } from 'ramda'
-import { Users } from './users';
+import { Users, modelToRecordMap } from './users';
 import { VisitorCollection, RoleEnum, User, ModelQuery, ModelQueryPartial, UserModelRecord } from '../types/index';
 import { applyQueryModifiers } from '../query_util';
 
@@ -18,7 +18,7 @@ const additionalColumnMap: Record<any, string> = {
 
 export const Visitors: VisitorCollection = {
   _toColumnNames: Users._toColumnNames,
-  cast: Users.cast,
+  cast: (a) => Users.cast(a, 'Visitor'),
   serialise: Users.serialise,
   exists: Users.exists,
 
@@ -28,7 +28,7 @@ export const Visitors: VisitorCollection = {
   delete: Users.delete,
   destroy: Users.destroy,
 
-  async get (client: Knex, query: ModelQuery<User> | ModelQueryPartial<User>) {
+  async get (client: Knex, query: ModelQuery<Visitor> | ModelQueryPartial<Visitor>) {
     const _q = {
       where: Users._toColumnNames(query.where),
       whereNot: Users._toColumnNames(query.whereNot),
@@ -63,6 +63,6 @@ export const Visitors: VisitorCollection = {
   },
 
   async getWithVisits(client, communityBusiness, query, activity) {
-
+    Visitors.get(client, query)
   },
 };

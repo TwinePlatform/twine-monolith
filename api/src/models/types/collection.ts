@@ -16,6 +16,8 @@ import {
   SingleUseToken,
   PasswordResetToken,
   AddRoleToken,
+  Model,
+  UserClasses,
 } from './model';
 import { GenderEnum } from './constants';
 import { UserAccount, Gender, Disability, Ethnicity } from './records';
@@ -27,11 +29,11 @@ import * as _ from '../../../database/types';
  */
 export type ModelValues = null | boolean | string | number | object | Date;
 
-export interface Collection<TModel, TRecord> {
+export interface Collection<TModel extends Model, TRecord> {
   _toColumnNames (a: WhereQuery<TModel>): WhereQuery<TRecord>;
   _toColumnNames (a: WhereBetweenQuery<TModel>): WhereBetweenQuery<TRecord>;
 
-  cast (a: Dictionary<ValueOf<TModel>>): Partial<TModel>;
+  cast (a: Dictionary<ValueOf<TModel>>, tag?: TModel['__tag']): Partial<TModel>;
 
   serialise (a: Partial<TModel>): Promise<EnhancedJson>;
 
@@ -53,6 +55,20 @@ export interface Collection<TModel, TRecord> {
 }
 
 /**
+ * Custom record types
+ */
+export type UserModelRecord =
+  Omit<UserAccount, 'user_account.gender_id' | 'user_account.disability_id' | 'user_account.ethnicity_id'>
+  & Pick<Gender, 'gender.gender_name'>
+  & Pick<Disability, 'disability.disability_name'>
+  & Pick<Ethnicity, 'ethnicity.ethnicity_name'>;
+
+/**
+ * Type aliases
+ */
+type VisitorWithVisits = Visitor & { visits: Omit<VisitLog, 'user'> };
+
+/**
  * User Collections
  * Includes:
  * - User
@@ -61,17 +77,11 @@ export interface Collection<TModel, TRecord> {
  * - CB Admin
  */
 
-export type UserModelRecord =
-  Omit<UserAccount, 'user_account.gender_id' | 'user_account.disability_id' | 'user_account.ethnicity_id'>
-  & Pick<Gender, 'gender.gender_name'>
-  & Pick<Disability, 'disability.disability_name'>
-  & Pick<Ethnicity, 'ethnicity.ethnicity_name'>;
-
-export interface UserCollection extends Collection<User, UserModelRecord> {
+export interface UserCollection<U extends User = User> extends Collection<U, UserModelRecord> {
   isMemberOf (k: Knex, u: User, cb: CommunityBusiness): Promise<boolean>;
 }
 
-export interface VolunteerCollection extends UserCollection {
+export interface VolunteerCollection extends UserCollection<Volunteer> {
   fromCommunityBusiness (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Volunteer>): Promise<Volunteer[]>;
 
   add (k: Knex, u: Partial<Volunteer>, cb: CommunityBusiness, c?: string): Promise<Volunteer>;
@@ -79,7 +89,7 @@ export interface VolunteerCollection extends UserCollection {
   verifyAdminCode (k: Knex, cb: CommunityBusiness, c: string): Promise<boolean>;
 }
 
-export interface CbAdminCollection extends UserCollection {
+export interface CbAdminCollection extends UserCollection<CbAdmin> {
   fromCommunityBusiness (k: Knex, cb: CommunityBusiness, q?: ModelQuery<CbAdmin>): Promise<CbAdmin>;
 
   add (k: Knex, u: Partial<CbAdmin>, cb: CommunityBusiness): Promise<CbAdmin>;
@@ -87,8 +97,8 @@ export interface CbAdminCollection extends UserCollection {
   addTemporary (k: Knex, u: Partial<CbAdmin>): Promise<CbAdmin>;
 }
 
-export interface VisitorCollection extends UserCollection {
-  getWithVisits (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Visitor>, activity?: string): Promise<null>;
+export interface VisitorCollection extends UserCollection<Visitor> {
+  getWithVisits (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Visitor>, activity?: string): Promise<VisitorWithVisits>;
 
   fromCommunityBusiness (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Visitor>): Promise<Visitor[]>;
 
