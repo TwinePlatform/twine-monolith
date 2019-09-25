@@ -23,7 +23,6 @@ const CreateAnonUserForm = props => (
         name={'name'}
         type="text"
         autofocus="true"
-        placeholder="Anonymous"
         error={props.errors.name}
         required
       />
