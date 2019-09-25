@@ -1,7 +1,7 @@
 import * as Url from 'url';
 import * as Knex from 'knex';
 import { UAParser } from 'ua-parser-js';
-import { omit } from 'ramda';
+import { omit, pathOr } from 'ramda';
 import { getConfig } from '../../../config';
 import { csv } from '../../writers';
 import { Dictionary } from '../../../src/types/internal';
@@ -29,11 +29,7 @@ const processHeaders = (headers: Dictionary<string>) => {
   return { agent: t, url: urlObj };
 };
 
-
-export default async (): Promise<void> => {
-  const config = getConfig(process.env.NODE_ENV);
-  const client = Knex(config.knex);
-
+const main = async (client: Knex) => {
   const res: Row[] = await client('user_session_record')
     .innerJoin(
       'user_account',
@@ -59,13 +55,16 @@ export default async (): Promise<void> => {
       sessionEndedAt: 'user_session_record.ended_at',
       headers: 'request_headers',
       sessionEndType: 'session_end_type'
-    });
+    })
+    .whereNotIn('organisation.organisation_id', [1, 2]);
 
-  const rows = res.map((row) => {
+  const rows = res.map((row, i) => {
     const headers = row.headers.map(processHeaders);
-    const app = headers[0].url.host;
+    const app = pathOr('volunteer-app', ['url', 'host'], headers[0]);
     const device = headers[0].agent.device;
-    const pages = headers.map((header) => header.url.path);
+    const pages = headers
+      .map((header) => pathOr(null, ['url', 'path'], header))
+      .filter(Boolean);
 
     return {
       ...omit(['headers'], row),
@@ -87,6 +86,15 @@ export default async (): Promise<void> => {
     'app',
     'pages'
   ], rows, 'user_sessions_raw.csv');
+}
 
-  return client.destroy();
+export default async (): Promise<void> => {
+  const config = getConfig(process.env.NODE_ENV);
+  const client = Knex(config.knex);
+
+  try {
+    await main(client);
+  } finally {
+    client.destroy();
+  }
 };
