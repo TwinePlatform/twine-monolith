@@ -40,7 +40,7 @@ class Main extends Component {
   render() {
     const { cbOrgName, genders, cbLogoUrl } = this.state;
     const { form: { year } } = this.props;
-    const confirmAge = year !== BirthYear.NULL_VALUE || year === BirthYear.getBoundaryYear();
+    const confirmAge = year === BirthYear.NULL_VALUE || year >= BirthYear.getBoundaryYear();
 
     return (
       <Switch>
