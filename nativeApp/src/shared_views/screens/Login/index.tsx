@@ -1,7 +1,8 @@
 import React from 'react';
-import styled from 'styled-components/native'
+import styled from 'styled-components/native';
 
-import { Heading } from '../../../lib/ui/typography';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import Input from '../../../lib/ui/forms/input';
 
 const View = styled.View`
@@ -9,21 +10,25 @@ const View = styled.View`
 `;
 
 const LoginContainer = styled.View`
-  paddingTop: 100
+  paddingTop: 200
+  paddingBottom: 100
 `;
 
 const Button = styled.Button`
-  paddingTop: 100
+  paddingTop: 100;
 `;
 
 const Login = (props) => {
 
   return (
     <View>
-      <Heading>Login</Heading>
       <LoginContainer>
-        <Input name={"email"}/>
-        <Input name={"password"}/>
+        <Input name={"Email"}>
+          <MaterialCommunityIcons name="email-outline" outline size={30} color="grey"/>
+        </Input>
+        <Input name={"Password"}>
+          <MaterialCommunityIcons name="lock-outline" size={30} color="grey"/>
+        </Input>
       </LoginContainer>
 
       <Button
@@ -32,7 +37,7 @@ const Login = (props) => {
       />
 
       <Button
-        title="VolunteerRouter"
+        title="Volunteer View"
         onPress={() => props.navigation.navigate('VolunteerRouter')}
       />
     </View>
