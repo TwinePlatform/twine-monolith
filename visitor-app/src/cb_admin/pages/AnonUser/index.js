@@ -43,11 +43,6 @@ class RegisterAnonymousVisitor extends Component {
       .catch(error => redirectOnError(this.props.history.push, error));
   }
 
-  handleChange = (e) => {
-    const name = e.target.name;
-    this.setState({ [name]: e.target.value });
-  }
-
   render() {
     return (
       <Switch>

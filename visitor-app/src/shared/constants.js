@@ -38,7 +38,12 @@ export const BirthYear = {
 
   u13OptionsList: () =>
     BirthYear.listToOptions(
-      BirthYear.list(new Date().getFullYear() - 13, new Date().getFullYear()),
+      BirthYear.list(BirthYear.getBoundaryYear(), new Date().getFullYear()),
+    ),
+
+  fullOptionsList: () =>
+    BirthYear.listToOptions(
+      BirthYear.list(BirthYear.getBoundaryYear() - 100, new Date().getFullYear()),
     ),
 
   // toAge :: Number | null -> Number | null

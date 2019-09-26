@@ -38,7 +38,7 @@ const CreateAnonUserForm = props => (
         id="visitor-signup-birthyear"
         label="Year of Birth"
         name="year"
-        options={BirthYear.defaultOptionsList()}
+        options={BirthYear.fullOptionsList()}
         error={props.errors.year}
         required
       />
