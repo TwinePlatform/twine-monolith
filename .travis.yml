@@ -64,8 +64,12 @@ jobs:
       workspaces:
           use:
             - coverage-reports
+      install: skip
+      before_script:
+        - bash $TRAVIS_BUILD_DIR/.travis/cc-download.sh
       script:
         - bash $TRAVIS_BUILD_DIR/.travis/cc-upload.sh
+      after_success: skip
 
 notifications:
   email:
