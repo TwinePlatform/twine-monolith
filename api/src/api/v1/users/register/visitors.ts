@@ -42,7 +42,11 @@ const routes: [Api.Users.Register.Visitors.POST.Route] = [
           birthYear: birthYear.default(null),
           email,
           phoneNumber,
-          postCode: postCode.required(),
+          postCode: postCode.when('isAnonymous', {
+            is: Joi.boolean().valid(false),
+            then: Joi.required(),
+            otherwise: Joi.optional(),
+          }),
           isEmailConsentGranted: isEmailConsentGranted.default(false),
           isSMSConsentGranted: isSMSConsentGranted.default(false),
           isAnonymous: Joi.boolean().default(false) ,
