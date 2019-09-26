@@ -4,6 +4,7 @@
 import * as path from 'path';
 import { mergeDeepRight } from 'ramda';
 import { Url } from 'twine-util';
+import { PageOrientation, PageSize } from 'pdfmake/build/pdfmake'
 import { getConfig } from '../../../../config';
 import { PdfTemplateDefinition } from '../types';
 
@@ -26,9 +27,9 @@ const baseDocumentDefinition = {
     author: 'Twine',
   },
 
-  pageSize: 'C8',
-  pageOrientation: 'landscape',
-  pageMargins: [5, 5, 5, 5],
+  pageSize: 'C8' as PageSize.C8,
+  pageOrientation: 'landscape' as PageOrientation.LANDSCAPE,
+  pageMargins: 5,
 };
 
 
