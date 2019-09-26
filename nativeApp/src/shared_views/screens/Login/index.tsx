@@ -16,7 +16,7 @@ const Button = styled.Button`
   paddingTop: 100
 `;
 
-export default function Login(props) {
+const Login = (props) => {
 
   return (
     <View>
@@ -30,6 +30,17 @@ export default function Login(props) {
         title="Register new user"
         onPress={() => props.navigation.navigate('Register')}
       />
+
+      <Button
+        title="VolunteerRouter"
+        onPress={() => props.navigation.navigate('VolunteerRouter')}
+      />
     </View>
   );
 }
+
+Login.navigationOptions = {
+  
+};
+
+export default Login;
