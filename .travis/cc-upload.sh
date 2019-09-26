@@ -1,7 +1,7 @@
 DIR=$(dirname $0)
 
 echo "Found coverage reports:"
-for f in coverage/* do; echo $f; done
+for f in coverage/*; do echo $f; done
 
 echo "Summing coverage reports"
 $DIR/cc-test-reporter sum-coverage -o ./coverage.total.json coverage/*;
