@@ -1,3 +1,4 @@
+DIR=$(dirname $0)
 
 echo "Summing coverage reports"
 $DIR/cc-test-reporter sum-coverage -o coverage/coverage.total.json coverage/*coverage-*.json;
