@@ -44,11 +44,16 @@ const getEnvVars = () => {
     return ENV.dev;
   }
 
-  const env = Constants.manifest.releaseChannel
-  if (env === 'staging') {
+  try {
+    const env = Constants.manifest.releaseChannel
+    if (env === 'staging') {
+      return ENV.staging;
+    } else if (env === 'prod') {
+      return ENV.prod;
+    }
+  } catch(e) {
+    // fallback if no release channel is set
     return ENV.staging;
-  } else if (env === 'prod') {
-    return ENV.prod;
   }
 };
 
