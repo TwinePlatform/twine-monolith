@@ -64,7 +64,7 @@ jobs:
         use:
           - coverage-reports
 
-    - stage: Upload Coverage
+    - stage: upload
       workspaces:
           use:
             - coverage-reports
