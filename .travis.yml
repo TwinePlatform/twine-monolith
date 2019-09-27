@@ -54,6 +54,10 @@ jobs:
       workspaces:
         create:
           name: coverage-reports
+      install: skip
+      before_script: skip
+      script: skip
+      after_success: skip
 
     - stage: test
       workspaces:
