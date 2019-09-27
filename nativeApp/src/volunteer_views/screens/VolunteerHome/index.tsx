@@ -1,10 +1,28 @@
 import React from 'react';
 import styled from 'styled-components/native'
 
-import { Heading } from '../../../lib/ui/typography';
+import { Heading as H } from '../../../lib/ui/typography';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { ColoursEnum } from '../../../lib/ui/colours';
+import Stat from './Stat'
 
 const View = styled.View`
+  flexDirection: column;
   alignItems: center;
+  paddingTop: 20;
+  paddingBottom: 20;
+  paddingLeft: 40;
+  paddingRight: 40;
+`;
+
+const Heading = styled(H)`
+  
+`;
+
+const Container = styled.View`
+  width: 100%;
+  height: 95%;
+  justifyContent: space-around;
 `;
 
 export default function VolunteerHome(props) {
@@ -12,6 +30,31 @@ export default function VolunteerHome(props) {
   return (
     <View>
       <Heading>Your Time</Heading>
+      <Container>
+
+        <Stat 
+          heading="TOTAL TIME GIVEN"
+          value="109"
+          unit="hours"
+        >
+          <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard}/>
+        </Stat>
+        <Stat 
+          heading="SESSIONS GIVEN"
+          value="42"
+          unit="sessions"
+        >
+          <MaterialCommunityIcons name="calendar-blank" outline size={35} color={ColoursEnum.mustard}/>
+        </Stat>
+        <Stat 
+          heading="AVERAGE DURATION"
+          value="120"
+          unit="minutes"
+        >
+          <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard}/>
+        </Stat>
+      </Container>
+      
     </View>
   );
 }

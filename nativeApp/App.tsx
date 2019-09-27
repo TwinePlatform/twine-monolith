@@ -6,8 +6,8 @@ import { setCustomText } from 'react-native-global-props';
 
 import * as Font from 'expo-font';
 
-import Login from './src/shared_views/screens/Login'
-import Register from './src/shared_views/screens/Register'
+import Login from './src/open_views/screens/Login'
+import Register from './src/open_views/screens/Register'
 
 import VolunteerRouter from './src/volunteer_views/VolunteerRouter'
 import { Fonts } from './src/lib/ui/typography';
