@@ -71,8 +71,8 @@ const DisplayQrCode = props => (
         <CenteredParagraph>
           {
             props.forAdmin
-              ? 'If you loose this QR code it can be re-printed from the Visitor page'
-              : 'If you loose this QR code ask a staff member to re-print it for you'
+              ? 'If you lose this QR code it can be re-printed from the Visitor page'
+              : 'If you lose this QR code ask a staff member to re-print it for you'
           }
         </CenteredParagraph>
         <FlexContainerRow>
