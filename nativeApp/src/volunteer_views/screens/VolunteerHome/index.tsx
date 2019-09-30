@@ -25,6 +25,13 @@ const Container = styled.View`
   justifyContent: space-around;
 `;
 
+const Line = styled.View`
+  alignSelf: center;
+  width: 85%;
+  borderBottomWidth: 1;
+  borderColor: ${ColoursEnum.grey};
+`;
+
 export default function VolunteerHome(props) {
 
   return (
@@ -39,13 +46,15 @@ export default function VolunteerHome(props) {
         >
           <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard}/>
         </Stat>
+        <Line/>
         <Stat 
-          heading="SESSIONS GIVEN"
+          heading="TIMES VOLUNTEERED"
           value="42"
-          unit="sessions"
+          unit="visits"
         >
           <MaterialCommunityIcons name="calendar-blank" outline size={35} color={ColoursEnum.mustard}/>
         </Stat>
+        <Line/>
         <Stat 
           heading="AVERAGE DURATION"
           value="120"
