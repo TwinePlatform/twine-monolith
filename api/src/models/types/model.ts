@@ -21,7 +21,7 @@ interface ModelBase<T> extends Readonly<CommonTimestamps> {
 /**
  * Users
  */
-export interface User<T = 'User' | 'Visitor' | 'Volunteer' | 'CbAdmin'> extends ModelBase<T> {
+export interface User<T extends string = 'Visitor' | 'Volunteer' | 'CbAdmin'> extends ModelBase<T> {
   readonly id?: UserAccount['user_account.user_account_id'];
   readonly name: UserAccount['user_account.user_name'];
   readonly email: UserAccount['user_account.email'];
@@ -42,7 +42,7 @@ export interface User<T = 'User' | 'Visitor' | 'Volunteer' | 'CbAdmin'> extends 
 export type Visitor = Require<User<'Visitor'>, 'qrCode'>;
 export type Volunteer = Require<User<'Volunteer'>, 'password' | 'phoneNumber' | 'postCode'>;
 export type CbAdmin = Require<User<'CbAdmin'>, 'password'>;
-export type UserClasses = User | Visitor | Volunteer | CbAdmin;
+export type UserClasses = Visitor | Volunteer | CbAdmin;
 
 /**
  * Organisations

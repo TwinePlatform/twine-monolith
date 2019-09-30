@@ -16,6 +16,7 @@ import {
   EthnicityEnum,
   DisabilityEnum
 } from '../types/index';
+import { isWhereBetween } from '../util';
 
 
 export const modelToRecordMap = {
@@ -40,9 +41,6 @@ export const modelToRecordMap = {
   disability: 'disability.disability_name' as keyof UserModelRecord,
 }
 
-function isWhereBetween <T>(a: WhereQuery<T> | WhereBetweenQuery<T>): a is WhereBetweenQuery<T> {
-  return Object.values(a).some((v) => Array.isArray(v));
-}
 
 /*
  * Helpers for transforming query objects
@@ -98,7 +96,7 @@ export const Users: UserCollection = {
     }
   },
 
-  cast(a, tag = 'User') {
+  cast(a, tag) {
     return {
       __model: true,
       __tag: tag,

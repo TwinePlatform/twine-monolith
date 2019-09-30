@@ -17,7 +17,6 @@ import {
   PasswordResetToken,
   AddRoleToken,
   Model,
-  UserClasses,
 } from './model';
 import { GenderEnum } from './constants';
 import { UserAccount, Gender, Disability, Ethnicity } from './records';
@@ -63,6 +62,8 @@ export type UserModelRecord =
   & Pick<Disability, 'disability.disability_name'>
   & Pick<Ethnicity, 'ethnicity.ethnicity_name'>;
 
+// export type VisitCategoryRecord =
+
 /**
  * Type aliases
  */
@@ -78,7 +79,7 @@ type VisitorWithVisits = Visitor & { visits: Omit<VisitLog, 'user'> };
  */
 
 export interface UserCollection<U extends User = User> extends Collection<U, UserModelRecord> {
-  isMemberOf (k: Knex, u: User, cb: CommunityBusiness): Promise<boolean>;
+  isMemberOf (k: Knex, u: U, cb: CommunityBusiness): Promise<boolean>;
 }
 
 export interface VolunteerCollection extends UserCollection<Volunteer> {
