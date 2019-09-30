@@ -56,12 +56,12 @@ describe('RegisterU13 Component', () => {
     await waitForElement(() => tools.getByText('Frog Finders', { exact: false }));
 
     const inputs = await waitForElement(() => ({
-      fullName: tools.getByLabelText('Full Name'),
-      email: tools.getByLabelText('Email Address'),
-      phoneNumber: tools.getByLabelText('Phone Number'),
+      fullName: tools.getByLabelText('Child\'s Full Name'),
+      email: tools.getByLabelText('Parent/Guardian\'s Email Address'),
+      phoneNumber: tools.getByLabelText('Parent/Guardian\'s Phone Number'),
       postCode: tools.getByLabelText('Post Code'),
-      gender: tools.getByLabelText('Gender'),
-      birthYear: tools.getByLabelText('Year of Birth'),
+      gender: tools.getByLabelText('Child\'s Gender'),
+      birthYear: tools.getByLabelText('Child\'s Year of Birth'),
       ageCheck: tools.getByTestId('ageCheck'),
       submit: tools.getByText('CONTINUE'),
     }));
@@ -99,12 +99,12 @@ describe('RegisterU13 Component', () => {
     await waitForElement(() => tools.getByText('Frog Finders', { exact: false }));
 
     const inputs = await waitForElement(() => ({
-      fullName: tools.getByLabelText('Full Name'),
-      email: tools.getByLabelText('Email Address'),
-      phoneNumber: tools.getByLabelText('Phone Number'),
+      fullName: tools.getByLabelText('Child\'s Full Name'),
+      email: tools.getByLabelText('Parent/Guardian\'s Email Address'),
+      phoneNumber: tools.getByLabelText('Parent/Guardian\'s Phone Number'),
       postCode: tools.getByLabelText('Post Code'),
-      gender: tools.getByLabelText('Gender'),
-      birthYear: tools.getByLabelText('Year of Birth'),
+      gender: tools.getByLabelText('Child\'s Gender'),
+      birthYear: tools.getByLabelText('Child\'s Year of Birth'),
       ageCheck: tools.getByTestId('ageCheck'),
       submit: tools.getByText('CONTINUE'),
     }));
@@ -135,10 +135,10 @@ describe('RegisterU13 Component', () => {
     await waitForElement(() => tools.getByText('Frog Finders', { exact: false }));
 
     const inputs = await waitForElement(() => ({
-      fullName: tools.getByLabelText('Full Name'),
+      fullName: tools.getByLabelText('Child\'s Full Name'),
       postCode: tools.getByLabelText('Post Code'),
-      gender: tools.getByLabelText('Gender'),
-      birthYear: tools.getByLabelText('Year of Birth'),
+      gender: tools.getByLabelText('Child\'s Gender'),
+      birthYear: tools.getByLabelText('Child\'s Year of Birth'),
       ageCheck: tools.getByTestId('ageCheck'),
       submit: tools.getByText('CONTINUE'),
     }));

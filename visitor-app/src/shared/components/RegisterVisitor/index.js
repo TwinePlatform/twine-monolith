@@ -54,7 +54,7 @@ class SignupForm extends React.Component {
             <div>
               <LabelledInput
                 id="visitor-signup-fullname"
-                label="Full Name"
+                label={`${forMinor ? 'Child\'s ' : ''}Full Name`}
                 name={`fullname$${uuid}`}
                 type="text"
                 error={errors.name && VISITOR_NAME_INVALID}
@@ -62,14 +62,14 @@ class SignupForm extends React.Component {
               />
               <LabelledInput
                 id="visitor-signup-email"
-                label="Email Address"
+                label={`${forMinor ? 'Parent/Guardian\'s ' : ''}Email Address`}
                 name={`email$${uuid}`}
                 type="email"
                 error={errors.email}
               />
               <LabelledInput
                 id="visitor-signup-phonenumber"
-                label="Phone Number"
+                label={`${forMinor ? 'Parent/Guardian\'s ' : ''}Phone Number`}
                 name={`phoneNumber$${uuid}`}
                 type="text"
                 error={errors.phoneNumber}
@@ -84,7 +84,7 @@ class SignupForm extends React.Component {
               />
               <LabelledSelect
                 id="visitor-signup-gender"
-                label="Gender"
+                label={`${forMinor ? 'Child\'s ' : ''}Gender`}
                 name="gender"
                 options={genders}
                 error={errors.gender}
@@ -92,7 +92,7 @@ class SignupForm extends React.Component {
               />
               <LabelledSelect
                 id="visitor-signup-birthyear"
-                label="Year of Birth"
+                label={`${forMinor ? 'Child\'s ' : ''}Year of Birth`}
                 name="year"
                 options={years}
                 error={errors.year}
