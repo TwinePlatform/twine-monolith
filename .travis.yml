@@ -47,19 +47,23 @@ script:
 
 after_success:
   - bash $TRAVIS_BUILD_DIR/.travis/cc-report.sh
-  - aws s3 cp coverage s3://twine-ci/$TRAVIS_BUILD_NUMBER/ --recursive
+  - aws s3 cp coverage/fmt-coverage-* s3://twine-ci/$TRAVIS_BUILD_NUMBER/ --recursive
 
 jobs:
   include:
     - stage: upload
+      addons: skip
+      services: skip
       install:
-        - pip install awscli
+        - pip install --user awscli
       before_script:
         - bash $TRAVIS_BUILD_DIR/.travis/cc-download.sh
       script:
         - aws s3 cp s3://twine-ci/$TRAVIS_BUILD_NUMBER/ ./coverage --recursive
         - bash $TRAVIS_BUILD_DIR/.travis/cc-upload.sh
       after_success:
+        - aws s3 rm s3://twine-ci/$TRAVIS_BUILD_NUMBER --recursive
+      after_failure:
         - aws s3 rm s3://twine-ci/$TRAVIS_BUILD_NUMBER --recursive
 
 notifications:
