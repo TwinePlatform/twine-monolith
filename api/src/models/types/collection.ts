@@ -19,7 +19,7 @@ import {
   Model,
 } from './model';
 import { GenderEnum } from './constants';
-import { UserAccount, Gender, Disability, Ethnicity } from './records';
+import { UserAccount, Gender, Disability, Ethnicity, VisitActivityCategory } from './records';
 import * as _ from '../../../database/types';
 
 
@@ -62,7 +62,9 @@ export type UserModelRecord =
   & Pick<Disability, 'disability.disability_name'>
   & Pick<Ethnicity, 'ethnicity.ethnicity_name'>;
 
-// export type VisitCategoryRecord =
+export type VisitActivityRecord =
+  VisitActivity
+  & Pick<VisitActivityCategory, 'visit_activity_category.visit_activity_category_name'>;
 
 /**
  * Type aliases

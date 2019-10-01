@@ -1,6 +1,16 @@
-import { VisitActivityCollection, VisitActivity, WhereBetweenQuery, WhereQuery } from '../types/index';
+import * as Knex from 'knex';
 import { Objects } from 'twine-util';
 import { isWhereBetween } from '../util';
+import { VisitActivityRecord } from '../types/collection';
+import {
+  VisitActivityCollection,
+  VisitActivity,
+  WhereBetweenQuery,
+  WhereQuery,
+  ModelQuery,
+  ModelQueryPartial
+} from '../types/index';
+import { applyQueryModifiers } from '../query_util';
 
 // interface Collection<TModel extends Model, TRecord> {
 //   _toColumnNames (a: WhereQuery<TModel>): WhereQuery<TRecord>;
@@ -28,28 +38,52 @@ import { isWhereBetween } from '../util';
 // }
 
 export const modelToRecordMap = {
-  id: 'visit_activity.visit_activity_id' as keyof UserModelRecord,
-  name: 'visit_activity.visit_activity_name' as keyof UserModelRecord,
-  monday: 'visit_activity.monday',
-  tuesday: 'visit_activity.tuesday',
-  wednesday: 'visit_activity.wednesday',
-  thursday: 'visit_activity.thursday',
-  friday: 'visit_activity.friday',
-  saturday: 'visit_activity.saturday',
-  sunday: 'visit_activity.sunday',
-  createdAt: 'visit_activity.created_at' as keyof UserModelRecord,
-  modifiedAt: 'visit_activity.modified_at' as keyof UserModelRecord,
-  deletedAt: 'visit_activity.deleted_at' as keyof UserModelRecord,
-  category: '',
-  organisation: '',
+  id: 'visit_activity.visit_activity_id' as keyof VisitActivityRecord,
+  name: 'visit_activity.visit_activity_name' as keyof VisitActivityRecord,
+  monday: 'visit_activity.monday' as keyof VisitActivityRecord,
+  tuesday: 'visit_activity.tuesday' as keyof VisitActivityRecord,
+  wednesday: 'visit_activity.wednesday' as keyof VisitActivityRecord,
+  thursday: 'visit_activity.thursday' as keyof VisitActivityRecord,
+  friday: 'visit_activity.friday' as keyof VisitActivityRecord,
+  saturday: 'visit_activity.saturday' as keyof VisitActivityRecord,
+  sunday: 'visit_activity.sunday' as keyof VisitActivityRecord,
+  createdAt: 'visit_activity.created_at' as keyof VisitActivityRecord,
+  modifiedAt: 'visit_activity.modified_at' as keyof VisitActivityRecord,
+  deletedAt: 'visit_activity.deleted_at' as keyof VisitActivityRecord,
 }
 
 export const VisitActivities: VisitActivityCollection = {
   _toColumnNames(a: WhereQuery<VisitActivity> | WhereBetweenQuery<VisitActivity>): any {
     if (isWhereBetween(a)) {
-      return Objects.renameKeys(modelToRecordMap)(a) as WhereBetweenQuery<UserModelRecord>;
+      return Objects.renameKeys(modelToRecordMap)(a) as WhereBetweenQuery<VisitActivityRecord>;
     } else {
-      return Objects.renameKeys(modelToRecordMap)(a) as WhereQuery<UserModelRecord>;
+      return Objects.renameKeys(modelToRecordMap)(a) as WhereQuery<VisitActivityRecord>;
     }
   },
+
+  async get (client: Knex, query: ModelQuery<VisitActivity> | ModelQueryPartial<VisitActivity>) {
+    const _q = {
+      where: VisitActivities._toColumnNames(query.where),
+      whereNot: VisitActivities._toColumnNames(query.whereNot),
+      whereBetween: VisitActivities._toColumnNames(query.whereBetween),
+      whereNotBetween: VisitActivities._toColumnNames(query.whereNotBetween),
+      limit: query.limit,
+      offset: query.offset,
+    };
+
+    const x = applyQueryModifiers<VisitActivityRecord, VisitActivity[], VisitActivityRecord>(
+      client<VisitActivityRecord, VisitActivity[]>('visit_activity')
+        .leftOuterJoin(
+          'visit_activity_category',
+          'visit_activity_category.visit_activity_category_id',
+          'visit_activity.visit_activity_category_id'),
+      _q
+    );
+
+    if ('fields' in query) {
+      return x.select(pick(query.fields, modelToRecordMap)) as Knex.QueryBuilder<UserModelRecord, Partial<Visitor>[]>;
+    } else {
+      return x.select(modelToRecordMap) as Knex.QueryBuilder<UserModelRecord, Visitor[]>;
+    }
+  }
 }
