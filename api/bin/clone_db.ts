@@ -47,7 +47,7 @@ if (!dbName) {
       await exec(`heroku pg:backups:download -a ${app}`);
     }
 
-    await exec(`pg_restore --clean --no-acl --no-owner -h localhost -d ${dbName} latest.dump`);
+    await exec(`pg_restore --clean --if-exists --no-acl --no-owner -h localhost -d ${dbName} latest.dump`);
   } catch (error) {
     console.log(error);
   }
