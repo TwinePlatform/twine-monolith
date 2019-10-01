@@ -5,8 +5,6 @@
  * which is actually a "child" entity.
  *
  * Conditions under which this is true for organisation X:
- * - User is an admin for a funding body which owns at least
- *   one funding programme of which X is a member
  * - User is a Twine admin
  *
  */
