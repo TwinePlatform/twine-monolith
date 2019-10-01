@@ -22,9 +22,7 @@ const routes: [Api.Users.Volunteers.Id.GET.Route] = [
         params: { userId: id },
       },
       response: { schema: response },
-      pre: [
-        { method: requireSiblingUser, assign: 'requireSibling' },
-      ],
+      pre: [requireSiblingUser],
     },
     handler: async (request, h) => {
       const { server: { app: { knex } }, params: { userId } } = request;

@@ -1,5 +1,5 @@
 import * as Boom from '@hapi/boom';
-import { getCommunityBusiness, isChildOrganisation } from '../../prerequisites';
+import { getCommunityBusiness, requireChildOrganisation } from '../../prerequisites';
 import { id, response } from '../schema';
 import { Api } from '../../types/api';
 
@@ -22,15 +22,11 @@ const routes: [Api.CommunityBusinesses.Temporary.Id.DELETE.Route] = [
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
-        { method: isChildOrganisation, assign: 'isChild' },
+        requireChildOrganisation,
       ],
     },
     handler: async (request, h) => {
-      const { pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
-
-      if (!isChild) {
-        return Boom.forbidden('Insufficient permissions to access this resource');
-      }
+      const { pre: { communityBusiness }, server: { app: { knex } } } = request;
 
       if (!communityBusiness.isTemp) {
         return Boom.forbidden('Not a temporary organisation');

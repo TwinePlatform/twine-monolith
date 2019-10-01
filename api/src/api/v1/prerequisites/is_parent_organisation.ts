@@ -7,15 +7,12 @@
  * Conditions under which this is true for organisation X:
  * - User is a visitor for X
  * - User is a volunteer for X
- * - User is a admin for a community business which is owned by organisation
- *   (funding-body) X
  *
  * Assumptions:
  * - This route pre-requisite is run _AFTER_ the organisation in question
  *   is fetched and placed in the `pre` object under one of the following keys:
  *   > organisation
  *   > communityBusiness
- *   > fundingBody
  */
 import * as Hapi from '@hapi/hapi';
 import { Organisation, CommunityBusiness } from '../../../models';
@@ -25,7 +22,11 @@ import { Credentials as StandardCredentials } from '../../../auth/strategies/sta
 import { RoleEnum } from '../../../models/types';
 
 
-const getOrg = async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+interface Request extends Hapi.Request {
+  params: { organisationId?: string };
+}
+
+const getOrg = async (request: Request, h: Hapi.ResponseToolkit) => {
   const { pre } = request;
 
   if ('organisation' in pre) {
@@ -40,7 +41,7 @@ const getOrg = async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
   return getOrganisation(request, h);
 };
 
-export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+export default async (request: Request, h: Hapi.ResponseToolkit) => {
   const { server: { app: { knex } } } = request;
   const { user } = StandardCredentials.fromRequest(request);
 

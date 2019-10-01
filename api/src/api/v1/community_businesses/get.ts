@@ -1,7 +1,7 @@
 import * as Boom from '@hapi/boom';
 import { pick } from 'ramda';
 import { CommunityBusinesses } from '../../../models';
-import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
+import { getCommunityBusiness, requireChildOrganisation } from '../prerequisites';
 import { Api } from '../types/api';
 import { query, response } from './schema';
 import { is360GivingId } from '../prerequisites/get_community_business';
@@ -26,21 +26,11 @@ const routes: [
       validate: {
         query,
       },
-      pre: [
-        { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
-      ],
+      pre: [requireChildOrganisation],
       response: { schema: response },
     },
     handler: async (request, h) => {
-      const {
-        pre: { isChild },
-        server: { app: { knex } },
-        query,
-      } = request;
-
-      if (!isChild) {
-        return Boom.forbidden('Insufficient permissions to access this organisations');
-      }
+      const { server: { app: { knex } }, query } = request;
 
       const cbs = await CommunityBusinesses.get(knex, query);
       return Promise.all(cbs.map(CommunityBusinesses.serialise));
@@ -90,20 +80,13 @@ const routes: [
         query,
       },
       response: { schema: response },
-      pre: [
-        { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
-      ],
+      pre: [requireChildOrganisation],
     },
     handler: async (request, h) => {
       const {
-        pre: { isChild },
         params: { organisationId },
         query: _query,
         server: { app: { knex } } } = request;
-
-      if (!isChild) {
-        return Boom.forbidden('Insufficient permissions to access this organisation');
-      }
 
       const idQuery = (is360GivingId(organisationId))
         ? { _360GivingId: organisationId }

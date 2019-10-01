@@ -4,8 +4,6 @@ import { has, mergeDeepRight, omit, keys, assoc } from 'ramda';
 import { Visitors, User, ModelQuery } from '../../../../models';
 import {
   query,
-  userName,
-  gender,
   response,
   email,
   postCode,
@@ -14,7 +12,7 @@ import {
 } from '../../users/schema';
 import { meOrId, id } from '../schema';
 import { Api } from '../../types/api';
-import { getCommunityBusiness, isChildOrganisation, isChildUser } from '../../prerequisites';
+import { getCommunityBusiness, isChildOrganisation, requireChildUser } from '../../prerequisites';
 import { requestQueryToModelQuery } from '../../utils';
 
 
@@ -118,20 +116,16 @@ const routes: [
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
-        { method: isChildUser, assign: 'isChildUser' },
+        requireChildUser,
       ],
     },
     handler: async (request, h) => {
       const {
         query: { visits },
         params: { userId },
-        pre: { isChildUser, communityBusiness: cb },
+        pre: { communityBusiness: cb },
         server: { app: { knex } },
       } = request;
-
-      if (!isChildUser) {
-        return Boom.forbidden('Insufficient permissions to access this resource');
-      }
 
       const [visitor] = await (visits
         ? Visitors.getWithVisits(knex, cb, { where: { id: Number(userId) } })
@@ -139,7 +133,7 @@ const routes: [
 
       /* istanbul ignore next */
       if (!visitor) {
-        // This _should_ be impossible because of the `isChildUser` pre-requisite
+        // This _should_ be impossible because of the `requireChildUser` pre-requisite
         return Boom.notFound('No visitor with this id');
       }
 

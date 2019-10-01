@@ -1,4 +1,4 @@
-import { isChildOrganisation } from '../../prerequisites';
+import { requireChildOrganisation } from '../../prerequisites';
 import { response } from '../schema';
 import { CommunityBusinesses } from '../../../../models';
 import { Api } from '../../types/api';
@@ -16,9 +16,7 @@ const routes: [Api.CommunityBusinesses.Temporary.GET.Route] = [
           scope: ['organisations_details-child:read'],
         },
       },
-      pre: [
-        { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
-      ],
+      pre: [requireChildOrganisation],
       response: { schema: response },
     },
     handler: async (request, h) => {

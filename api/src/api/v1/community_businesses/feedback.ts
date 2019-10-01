@@ -1,9 +1,8 @@
-import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { CommunityBusinesses } from '../../../models';
 import { Api } from '../types/api';
 import { query, response, since, until } from './schema';
-import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
+import { getCommunityBusiness, requireChildOrganisation } from '../prerequisites';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { Feedback } from '../../../models/types';
 
@@ -64,15 +63,11 @@ const routes: [
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness , assign: 'communityBusiness' },
-        { method: isChildOrganisation , assign: 'isChild' },
+        requireChildOrganisation
       ],
     },
     handler: async (request, h) => {
-      const { pre: { communityBusiness, isChild }, query, server: { app: { knex } } } = request;
-
-      if (!isChild) {
-        return Boom.forbidden('Cannot access this organisation');
-      }
+      const { pre: { communityBusiness }, query, server: { app: { knex } } } = request;
 
       const since = new Date(query.since);
       const until = new Date(query.until);

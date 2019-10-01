@@ -1,7 +1,7 @@
 import * as Boom from '@hapi/boom';
 import * as moment from 'moment' ;
 import { CommunityBusinesses } from '../../../models';
-import { getCommunityBusiness, isChildOrganisation } from '../prerequisites';
+import { getCommunityBusiness, requireChildOrganisation } from '../prerequisites';
 import {
   response,
   visitActivitiesPostPayload,
@@ -164,7 +164,7 @@ const routes: [
       },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
-        { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
+        requireChildOrganisation,
       ],
       validate: {
         query: visitActivitiesGetQuery,
@@ -174,14 +174,10 @@ const routes: [
     },
     handler: async (request, h) => {
       const {
-        pre: { communityBusiness, isChild },
+        pre: { communityBusiness },
         query: { day: _day = null },
         server: { app: { knex } }
       } = request;
-
-      if (!isChild) {
-        return Boom.forbidden('Access to this resource is forbidden');
-      }
 
       const day = _day === 'today'
         ? moment().format('dddd').toLowerCase() as Weekday

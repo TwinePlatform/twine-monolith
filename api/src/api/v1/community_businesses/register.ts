@@ -2,13 +2,10 @@ import * as Boom from '@hapi/boom';
 import { omit } from 'ramda';
 
 import { CommunityBusinesses, Users, CbAdmins } from '../../../models';
-import { isChildOrganisation } from '../prerequisites';
+import { requireChildOrganisation } from '../prerequisites';
 import { Api } from '../types/api';
 import { response, cbPayload } from './schema';
-import {
-  userName,
-  email,
-} from '../users/schema';
+import { userName, email } from '../users/schema';
 import { Tokens } from '../../../models/token';
 
 
@@ -32,9 +29,7 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
           adminEmail: email.required(),
         },
       },
-      pre: [
-        { method: isChildOrganisation, assign: 'isChild', failAction: 'error' },
-      ],
+      pre: [requireChildOrganisation],
       response: { schema: response },
     },
     handler: async (request, h) => {

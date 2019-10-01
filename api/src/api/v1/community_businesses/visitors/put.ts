@@ -16,7 +16,7 @@ import {
 } from '../../users/schema';
 import { meOrId } from '../schema';
 import { Api } from '../../types/api';
-import { getCommunityBusiness, isChildUser } from '../../prerequisites';
+import { getCommunityBusiness, requireChildUser } from '../../prerequisites';
 
 
 const routes: [
@@ -54,20 +54,16 @@ const routes: [
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness , assign: 'communityBusiness' },
-        { method: isChildUser, assign: 'isChild' },
+        requireChildUser,
       ],
     },
     handler: async (request, h) => {
       const {
         server: { app: { knex } },
         payload,
-        pre: { isChild, communityBusiness },
+        pre: { communityBusiness },
         params: { userId },
       } = request;
-
-      if (!isChild) {
-        return Boom.forbidden('Insufficient permission to access this resource');
-      }
 
       const changeset = { ...payload };
 
