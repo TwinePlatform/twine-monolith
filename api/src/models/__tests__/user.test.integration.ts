@@ -133,6 +133,15 @@ describe('User Model', () => {
       expect(await compare(changes.password, updatedUser.password)).toBe(true);
     });
 
+    test('update :: empty update does not throw', async () => {
+      const user = await Users.getOne(trx, { where: { id: 1 } });
+      const changes = {};
+
+      const updatedUser = await Users.update(trx, user, changes);
+
+      expect(updatedUser).toEqual(user);
+    });
+
     test('add :: create a new record using minimal information', async () => {
       const changeset = await factory.build('user');
 
