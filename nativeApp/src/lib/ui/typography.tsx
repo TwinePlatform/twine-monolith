@@ -12,7 +12,7 @@ export const Heading3 = styled.Text`
   font-size: 20;
 `;
 
-export enum Fonts {
+export enum FontsEnum {
   light = 'roboto-light',
   regular = 'roboto-regular',
   medium = 'roboto-medium',

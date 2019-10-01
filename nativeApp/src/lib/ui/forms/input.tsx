@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native'
-import { Fonts } from '../typography';
+import { FontsEnum } from '../typography';
 import { ColoursEnum } from '../colours';
 
 const InputContainer = styled.View`
@@ -17,7 +17,7 @@ const ChildBox = styled.View`
 `;
 
 const InputText = styled.TextInput`
-  fontFamily: ${Fonts.regular};
+  fontFamily: ${FontsEnum.regular};
   marginLeft: 10;
   width: 250;
   fontSize: 20;

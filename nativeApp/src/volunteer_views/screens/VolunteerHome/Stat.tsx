@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native'
-import { Fonts } from '../../../lib/ui/typography';
+import { FontsEnum } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
 
 
@@ -34,7 +34,7 @@ const ValueContainer = styled.View`
 const Value = styled.Text`
   color: ${ColoursEnum.darkGrey};
   fontSize: 50;
-  font-family: ${Fonts.medium}
+  font-family: ${FontsEnum.medium}
   paddingLeft:2;
 `;
 

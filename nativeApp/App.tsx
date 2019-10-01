@@ -10,7 +10,8 @@ import Login from './src/open_views/screens/Login'
 import Register from './src/open_views/screens/Register'
 
 import VolunteerRouter from './src/volunteer_views/VolunteerRouter'
-import { Fonts } from './src/lib/ui/typography';
+import { FontsEnum } from './src/lib/ui/typography';
+import { ColoursEnum } from './src/lib/ui/colours';
 
 
 const RootStack = createStackNavigator(
@@ -29,14 +30,15 @@ const RootStack = createStackNavigator(
     initialRouteName: 'Login',
     defaultNavigationOptions: {
       headerBackTitle: 'Back',
-      title: 'T W I N E',
+      title: 'TWINE',
       headerStyle: {
-        backgroundColor: '#8000FF',
+        backgroundColor: ColoursEnum.purple,
       },
       headerTintColor: '#fff',
       headerTitleStyle: {
+        letterSpacing: 8,
         fontWeight: '300',
-        fontFamily: 'roboto-light'
+        fontFamily: FontsEnum.light
       },
     },
   }
@@ -64,7 +66,7 @@ export default class App extends Component {
   defaultFonts(){
     const customTextProps = {
       style: {
-        fontFamily: Fonts.light
+        fontFamily: FontsEnum.light
       }
     }
     setCustomText(customTextProps)
