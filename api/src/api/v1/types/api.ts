@@ -16,7 +16,8 @@ import {
   UserCollection,
   RoleEnum,
   LinkedVisitEvent,
-  Organisation
+  Organisation,
+  VisitSignInType
 } from '../../../models/types';
 import { Unpack, AppEnum, Maybe } from '../../../types/internal';
 
@@ -161,7 +162,7 @@ export namespace Api {
           export interface Request extends Hapi.Request {
             pre: { communityBusiness: CommunityBusiness };
             payload: Pick<VisitEvent, 'userId' | 'visitActivityId'> & {
-              signInType: 'sign_in_with_name' | 'qr_code';
+              signInType: VisitSignInType;
             };
           }
           export type Result = Unpack<ReturnType<CommunityBusinessCollection['addVisitLog']>>;

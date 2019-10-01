@@ -6,7 +6,6 @@ import { Maybe, Dictionary, Float, Int } from '../types/internal';
 import { PermissionLevelEnum } from '../auth';
 import { AccessEnum, ResourceEnum } from '../auth/types';
 import { Duration } from 'twine-util';
-import { VisitSignInType } from '../api/v1/community_businesses/visit_logs';
 
 /*
  * Common and utility types
@@ -19,6 +18,8 @@ export type Weekday =
   | 'friday'
   | 'saturday'
   | 'sunday';
+
+export type VisitSignInType = 'sign_in_with_name' | 'qr_code';
 
 export type Coordinates = {
   lat: Float
