@@ -1,15 +1,15 @@
 import styled from 'styled-components/native'
 
 export const Heading = styled.Text`
-  font-size: 30;
+  fontSize: 30;
 `;
 
 export const Heading2 = styled.Text`
-  font-size: 25;
+  fontSize: 25;
 `;
 
 export const Heading3 = styled.Text`
-  font-size: 20;
+  fontSize: 20;
 `;
 
 export enum FontsEnum {
