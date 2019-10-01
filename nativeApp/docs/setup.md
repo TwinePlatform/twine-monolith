@@ -3,7 +3,7 @@
 ## Prerequisits
 
 - global install of expo-cli (setup with `v3.0.10`)
-- node > `v12`
+- node >= `v12`
 - Optional ways to emulate app
   - Xcode
   - Android studio
@@ -42,9 +42,6 @@ This app relies on the `twine-api` to work. You have two options for running loc
 ```
   • Scan the QR code above with the Expo app (Android) or the Camera app (iOS).
 ```
-
-
-#
 
 ## Troubleshooting
 > This version of the Expo app is out of date. Uninstall the app and run again to upgrade.
