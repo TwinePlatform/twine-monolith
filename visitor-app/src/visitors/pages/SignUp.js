@@ -47,7 +47,7 @@ class Main extends Component {
         <Route exact path="/visitor/signup">
           <Grid>
             <NavHeader
-              leftTo="/"
+              leftTo="/visitor/home"
               leftContent="Back to previous page"
               centerContent="Please tell us about yourself"
             />
