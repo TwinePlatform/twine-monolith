@@ -1,0 +1,15 @@
+{
+  "plugins": [
+    "react",
+    "react-native"
+  ],
+  "extends": [
+    "plugin:react-native/all",
+    "plugin:react/recommended",
+    "eslint-config-twine"
+  ],
+  "rules": {
+    "react-native/no-color-literals": 0,
+    "@typescript-eslint/explicit-function-return-type": 0
+  }
+}
