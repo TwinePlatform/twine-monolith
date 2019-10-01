@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Heading as H } from '../../../lib/ui/typography';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import Stat from './Stat'
 
