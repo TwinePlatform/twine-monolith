@@ -6,8 +6,8 @@
  *
  * Conditions under which this is true for user X attemptying to access:
  * user Y
- * - User X is an admin for a community business for which user Y is a VISITOR
- * - User X is an admin for a community business for which user Y is a VOLUNTEER
+ * - User X is a CB_ADMIN for a community business for which user Y is a VISITOR
+ * - User X is a CB_ADMIN for a community business for which user Y is a VOLUNTEER
  * - User X is a Twine admin
  *
  */
