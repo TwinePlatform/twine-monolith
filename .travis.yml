@@ -3,7 +3,6 @@ node_js:
   - '10'
 
 stages:
-  - setup
   - test
   - upload
 
@@ -28,6 +27,7 @@ services:
 
 install:
   # install local dependency repos first
+  - pip install --user awscli
   - for f in lib/*; do cd $f; npm install; cd ../..; done;
   - cd $TRAVIS_BUILD_DIR/$APP_DIR && npm install
 
@@ -47,33 +47,20 @@ script:
 
 after_success:
   - bash $TRAVIS_BUILD_DIR/.travis/cc-report.sh
+  - aws s3 cp coverage s3://twine-ci/$TRAVIS_BUILD_NUMBER/ --recursive
 
 jobs:
   include:
-    - stage: setup
-      workspaces:
-        create:
-          name: coverage-reports
-      install: skip
-      before_script: skip
-      script: skip
-      after_success: skip
-
-    - stage: test
-      workspaces:
-        use:
-          - coverage-reports
-
     - stage: upload
-      workspaces:
-          use:
-            - coverage-reports
-      install: skip
+      install:
+        - pip install awscli
       before_script:
         - bash $TRAVIS_BUILD_DIR/.travis/cc-download.sh
       script:
+        - aws s3 cp s3://twine-ci/$TRAVIS_BUILD_NUMBER/ ./coverage --recursive
         - bash $TRAVIS_BUILD_DIR/.travis/cc-upload.sh
-      after_success: skip
+      after_success:
+        - aws s3 rm s3://twine-ci/$TRAVIS_BUILD_NUMBER --recursive
 
 notifications:
   email:

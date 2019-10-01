@@ -3,6 +3,10 @@
 DIR=$(dirname $0)
 ROOT=$(dirname $DIR)
 
+if [ ! -z $1 ]; then
+  ROOT=$1
+fi
+
 if [ ! -f "$DIR/cc-test-reporter" ]; then
   echo "No test reporter found";
   exit 1;
