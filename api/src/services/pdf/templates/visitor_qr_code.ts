@@ -6,6 +6,7 @@ import { mergeDeepRight } from 'ramda';
 import { Url } from 'twine-util';
 import { getConfig } from '../../../../config';
 import { PdfTemplateDefinition } from '../types';
+import { PageSize, PageOrientation } from 'pdfmake/build/pdfmake';
 
 const { root: ROOT } = getConfig(process.env.NODE_ENV);
 
@@ -26,9 +27,9 @@ const baseDocumentDefinition = {
     author: 'Twine',
   },
 
-  pageSize: 'C8',
-  pageOrientation: 'landscape',
-  pageMargins: [5, 5, 5, 5],
+  pageSize: 'C8' as PageSize.C8,
+  pageOrientation: 'landscape' as PageOrientation.LANDSCAPE,
+  pageMargins: [5, 5, 5, 5] as [number, number, number, number],
 };
 
 
@@ -88,7 +89,7 @@ const createDefaultLogoTemplate = (qrCodeDataUrl: string) =>
   });
 
 const createTemplate = async (
-  { qrCodeDataUrl, logoUrl }: { qrCodeDataUrl: string, logoUrl?: string }
+  { qrCodeDataUrl, logoUrl }: { qrCodeDataUrl: string; logoUrl?: string }
 ) => {
   if (logoUrl) {
     if (Url.isDataUrl(logoUrl)) {
