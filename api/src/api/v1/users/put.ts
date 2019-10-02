@@ -18,6 +18,7 @@ import {
 import { Api } from '../types/api';
 import { requireChildUser } from '../prerequisites';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
+import { Serialisers } from '../serialisers';
 
 
 const routes: [
@@ -67,7 +68,7 @@ const routes: [
       try {
         const updatedUser = await Users.update(knex, user, changeset);
 
-        return Users.serialise(updatedUser);
+        return Serialisers.user(updatedUser);
 
       } catch (error) {
         // Intercept subset of class 23 postgres error codes thrown by `knex`
@@ -141,7 +142,7 @@ const routes: [
       try {
         const updatedUser = await Users.update(knex, user, changeset);
 
-        return Users.serialise(updatedUser);
+        return Serialisers.user(updatedUser);
 
       } catch (error) {
         // Intercept subset of class 23 postgres error codes thrown by `knex`

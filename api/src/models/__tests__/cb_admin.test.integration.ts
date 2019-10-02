@@ -144,9 +144,9 @@ describe('CbAdmin model', () => {
       const emailCheck = /welcome-\d*@twine-together.com/.test(admin.email);
       const passwordCheck =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!#$£€%&()*+,\-./\\:;<=>@[\]^_{|}~? ])(?=.{8,})/
-        .test(admin.password);
+          .test(admin.password);
       const rolesCheck = await Roles
-       .userHasAtCb(trx, { role: RoleEnum.CB_ADMIN, userId: admin.id, organisationId: cb.id });
+        .userHasAtCb(trx, { role: RoleEnum.CB_ADMIN, userId: admin.id, organisationId: cb.id });
       expect(emailCheck).toBeTruthy();
       expect(passwordCheck).toBeTruthy();
       expect(rolesCheck).toBeTruthy();
@@ -178,16 +178,6 @@ describe('CbAdmin model', () => {
         .where({ user_account_id: newCbAdmin2.id });
       const newCbAdmin3 = await CbAdmins.addTemporaryWithRole(trx, cb);
       expect(newCbAdmin3.email).toBe('welcome-2@twine-together.com');
-    });
-  });
-
-  describe('Serialisation', () => {
-    test('serialise :: returns model object without secrets', async () => {
-      const admin = await CbAdmins.getOne(knex);
-
-      const serialised = await CbAdmins.serialise(admin);
-
-      expect(serialised).toEqual(omit(['password', 'qrCode'], admin));
     });
   });
 });

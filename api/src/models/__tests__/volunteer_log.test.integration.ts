@@ -375,14 +375,6 @@ describe('VolunteerLog model', () => {
     });
   });
 
-  describe('Serialisation', () => {
-    test('serialise :: returns model object without secrets', async () => {
-      const log = await VolunteerLogs.getOne(trx, { where: { activity: 'Office suport' } });
-      const slog = await VolunteerLogs.serialise(log);
-      expect(log).toEqual(slog);
-    });
-  });
-
   describe('Projects', () => {
     describe('Read', () => {
       test('getProjects :: ', async () => {

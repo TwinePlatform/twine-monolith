@@ -1,7 +1,7 @@
 /*
  * Community Business Admin Model
  */
-import { omit, pick, evolve } from 'ramda';
+import { pick, evolve } from 'ramda';
 import { CbAdminCollection, RoleEnum } from './types';
 import { Users, ModelToColumn } from './user';
 import { Random } from 'twine-util';
@@ -99,25 +99,21 @@ export const CbAdmins: CbAdminCollection = {
 
   async fromOrganisation (client, organisation) {
     return client
-        .select(ModelToColumn)
-        .from('user_account')
-        .leftOuterJoin('gender', 'user_account.gender_id', 'gender.gender_id')
-        .leftOuterJoin('ethnicity', 'user_account.ethnicity_id', 'ethnicity.ethnicity_id')
-        .leftOuterJoin('disability', 'user_account.disability_id', 'disability.disability_id')
-        .leftOuterJoin(
-          'user_account_access_role',
-          'user_account.user_account_id',
-          'user_account_access_role.user_account_id')
-        .where({
-          'user_account.deleted_at': null,
-          ['user_account_access_role.access_role_id']: client('access_role')
-            .select('access_role_id')
-            .where({ access_role_name: RoleEnum.CB_ADMIN }),
-          ['user_account_access_role.organisation_id']: organisation.id,
-        });
-  },
-
-  async serialise (user) {
-    return omit(['password', 'qrCode'], user);
+      .select(ModelToColumn)
+      .from('user_account')
+      .leftOuterJoin('gender', 'user_account.gender_id', 'gender.gender_id')
+      .leftOuterJoin('ethnicity', 'user_account.ethnicity_id', 'ethnicity.ethnicity_id')
+      .leftOuterJoin('disability', 'user_account.disability_id', 'disability.disability_id')
+      .leftOuterJoin(
+        'user_account_access_role',
+        'user_account.user_account_id',
+        'user_account_access_role.user_account_id')
+      .where({
+        'user_account.deleted_at': null,
+        ['user_account_access_role.access_role_id']: client('access_role')
+          .select('access_role_id')
+          .where({ access_role_name: RoleEnum.CB_ADMIN }),
+        ['user_account_access_role.organisation_id']: organisation.id,
+      });
   },
 };

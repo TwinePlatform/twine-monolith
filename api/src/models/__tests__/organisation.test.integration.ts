@@ -120,14 +120,4 @@ describe('Organisation Model', () => {
       expect(deletedOrgs[0].deletedAt).not.toEqual(null);
     });
   });
-
-  describe('Serialisation', () => {
-    test('serialise :: return full model', async () => {
-      const org = await Organisations.getOne(trx);
-
-      const orgJson = await Organisations.serialise(org);
-
-      expect(orgJson).toEqual(org);
-    });
-  });
 });

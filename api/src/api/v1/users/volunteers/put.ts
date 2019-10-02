@@ -17,6 +17,7 @@ import {
 import { id } from '../../schema/request';
 import { requireSiblingUser } from '../../prerequisites';
 import { Api } from '../../types/api';
+import { Serialisers } from '../../serialisers';
 
 
 const routes: [Api.Users.Volunteers.Id.PUT.Route] = [
@@ -58,7 +59,7 @@ const routes: [Api.Users.Volunteers.Id.PUT.Route] = [
       if (!volunteer) return Boom.notFound('User is not a volunteer');
 
       const updatedVolunteer = await Volunteers.update(knex, volunteer, payload);
-      return Volunteers.serialise(updatedVolunteer);
+      return Serialisers.volunteer(updatedVolunteer);
     },
   },
 ];

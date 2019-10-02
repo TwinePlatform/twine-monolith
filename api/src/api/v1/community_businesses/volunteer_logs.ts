@@ -22,6 +22,7 @@ import { query } from '../users/schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { RoleEnum, User } from '../../../models/types';
 import { Unpack } from '../../../types/internal';
+import { Serialisers } from '../serialisers';
 
 
 type SyncLogPayload = Api.CommunityBusinesses.Me.VolunteerLogs.sync.POST.Request['payload'];
@@ -146,7 +147,7 @@ const routes: [
         return Boom.notFound(`No log with ID: ${logId} found`);
       }
 
-      return VolunteerLogs.serialise(log);
+      return Serialisers.volunteerLog(log);
     },
   },
 
@@ -194,7 +195,7 @@ const routes: [
 
       const updatedLog = await VolunteerLogs.update(knex, log, payload);
 
-      return VolunteerLogs.serialise(updatedLog);
+      return Serialisers.volunteerLog(updatedLog);
     },
   },
 
@@ -315,7 +316,7 @@ const routes: [
           organisationId: communityBusiness.id,
         });
 
-        return VolunteerLogs.serialise(log);
+        return Serialisers.volunteerLog(log);
 
       } catch (error) {
         if (error.code === '23502') { // Violation of null constraint implies invalid activity

@@ -1,7 +1,7 @@
 /*
  * Volunteer Model
  */
-import { omit, pick, evolve } from 'ramda';
+import { pick, evolve } from 'ramda';
 import { VolunteerCollection, RoleEnum } from './types';
 import { Users, ModelToColumn } from './user';
 import { applyQueryModifiers } from './applyQueryModifiers';
@@ -63,26 +63,24 @@ export const Volunteers: VolunteerCollection = {
 
     switch (volunteerType) {
 
-      case RoleEnum.VOLUNTEER:
-        return client.transaction(async (trx) => {
-          const newUser = await Users.add(trx, user);
-          await Roles.add(trx, { role: volunteerType, userId: newUser.id, organisationId: cb.id });
-          return newUser;
-        });
+    case RoleEnum.VOLUNTEER:
+      return client.transaction(async (trx) => {
+        const newUser = await Users.add(trx, user);
+        await Roles.add(trx, { role: volunteerType, userId: newUser.id, organisationId: cb.id });
+        return newUser;
+      });
 
-      case RoleEnum.VOLUNTEER_ADMIN:
+    case RoleEnum.VOLUNTEER_ADMIN:
+      if (! await Volunteers.adminCodeIsValid(client, cb, code)) {
+        throw new Error('Invalid volunteer admin code');
+      }
 
-        const codeIsValid = await Volunteers.adminCodeIsValid(client, cb, code);
-        if (!codeIsValid) {
-          throw new Error('Invalid volunteer admin code');
-        }
+      return client.transaction(async (trx) => {
+        const newUser = await Users.add(trx, user);
 
-        return client.transaction(async (trx) => {
-          const newUser = await Users.add(trx, user);
-
-          await Roles.add(trx, { role: volunteerType, userId: newUser.id, organisationId: cb.id });
-          return newUser;
-        });
+        await Roles.add(trx, { role: volunteerType, userId: newUser.id, organisationId: cb.id });
+        return newUser;
+      });
     }
   },
 
@@ -126,10 +124,6 @@ export const Volunteers: VolunteerCollection = {
         ),
       query
     );
-  },
-
-  async serialise (user) {
-    return omit(['password', 'qrCode'], user);
   },
 
   async adminCodeIsValid (client, cb, code) {

@@ -153,7 +153,7 @@ describe('Community Business Model', () => {
       const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Black Mesa Research' } });
       const visitor = await CbAdmins.addWithRole(trx, cb, changeset);
       const rolesCheck = await Roles
-       .userHasAtCb(trx, { role: RoleEnum.CB_ADMIN, userId: visitor.id, organisationId: cb.id });
+        .userHasAtCb(trx, { role: RoleEnum.CB_ADMIN, userId: visitor.id, organisationId: cb.id });
       expect(visitor).toEqual(expect.objectContaining(omit(['password'], changeset)));
       expect(rolesCheck).toBeTruthy();
       expect(await compare(changeset.password, visitor.password)).toBeTruthy();
@@ -242,16 +242,6 @@ describe('Community Business Model', () => {
           visit_log_id: 13,
         }));
       });
-    });
-  });
-
-  describe('Serialisation', () => {
-    test('serialise :: return full model', async () => {
-      const org = await CommunityBusinesses.getOne(knex);
-
-      const orgJson = await CommunityBusinesses.serialise(org);
-
-      expect(orgJson).toEqual(org);
     });
   });
 
@@ -418,7 +408,7 @@ describe('Community Business Model', () => {
         cb,
         ['gender', 'visitActivity', 'age'],
         { where: { visitActivity: 'Wear Pink' } }
-        );
+      );
 
       expect(logs).toEqual({
         visitActivity: { 'Wear Pink': 4 },
@@ -433,7 +423,7 @@ describe('Community Business Model', () => {
         trx,
         cb,
         ['lastWeek']
-        );
+      );
 
       const count = Object.values(lastWeek).reduce((a, b) => a + b);
       expect(count).toEqual(9);
@@ -446,7 +436,7 @@ describe('Community Business Model', () => {
         cb,
         ['lastWeek'],
         { where: { visitActivity: 'Wear Pink' } }
-        );
+      );
 
       const count = Object.values(lastWeek).reduce((a, b) => a + b);
       expect(count).toEqual(2);
@@ -460,7 +450,7 @@ describe('Community Business Model', () => {
           trx,
           cb,
           ['gender', 'visitActivity', 'age', 'funkability']
-          );
+        );
       } catch (error) {
         expect(error).toBeTruthy();
       }

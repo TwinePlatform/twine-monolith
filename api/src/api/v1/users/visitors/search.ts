@@ -3,6 +3,7 @@ import { response } from '../schema';
 import { Visitors } from '../../../../models';
 import { getCommunityBusiness } from '../../prerequisites';
 import { Api } from '../../types/api';
+import { Serialisers } from '../../serialisers';
 
 
 const routes: [Api.Users.Visitors.Search.POST.Route] = [
@@ -33,7 +34,7 @@ const routes: [Api.Users.Visitors.Search.POST.Route] = [
 
       const visitor = await Visitors.getOne(knex, { where: { qrCode } });
 
-      return visitor ? Visitors.serialise(visitor) : null;
+      return visitor ? Serialisers.visitor(visitor) : null;
     },
   },
 ];

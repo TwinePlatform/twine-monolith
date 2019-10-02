@@ -249,16 +249,6 @@ describe('User Model', () => {
     });
   });
 
-  describe('Serialisation', () => {
-    test('serialise :: returns model object without secrets', async () => {
-      const user = await Users.getOne(knex);
-
-      const serialised = await Users.serialise(user);
-
-      expect(serialised).toEqual(omit(['password', 'qrCode'], user));
-    });
-  });
-
   describe('isMemberOf', () => {
     test('::SUCCESS - returns true if user has a role at cb', async () => {
       const user = await Users.getOne(trx, { where: { name: 'Glados' } });

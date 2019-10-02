@@ -3,6 +3,7 @@ import { Users } from '../../../models';
 import { query, response } from './schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { Api } from '../types/api';
+import { Serialisers } from '../serialisers';
 
 
 const routes: [
@@ -47,7 +48,7 @@ const routes: [
     handler: async (request, h) => {
       const { user } = StandardCredentials.fromRequest(request);
 
-      return Users.serialise(user);
+      return Serialisers.user(user);
     },
   },
 ];

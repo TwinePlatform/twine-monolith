@@ -24,6 +24,7 @@ import { getCommunityBusiness } from '../../prerequisites';
 import Roles from '../../../../models/role';
 import { RoleEnum } from '../../../../models/types';
 import { Tokens } from '../../../../models/token';
+import { Serialisers } from '../../serialisers';
 
 const routes: [Api.Users.Register.Visitors.POST.Route] = [
   {
@@ -174,7 +175,7 @@ const routes: [Api.Users.Register.Visitors.POST.Route] = [
       /*
        * Response payload
        */
-      return Visitors.serialise(visitor);
+      return Serialisers.visitor(visitor);
     },
   },
 ];

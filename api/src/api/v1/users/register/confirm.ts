@@ -18,6 +18,7 @@ import { Api } from '../../types/api';
 import { RoleEnum } from '../../../../models/types';
 import Roles from '../../../../models/role';
 import { Tokens } from '../../../../models/token';
+import { Serialisers } from '../../serialisers';
 
 
 const routes: [Api.Users.Register.Confirm.POST.Route] = [
@@ -93,7 +94,7 @@ const routes: [Api.Users.Register.Confirm.POST.Route] = [
             return;
           });
           await EmailService.newVisitor(config, updatedVisitor, admin, cb, document);
-          return Visitors.serialise(updatedVisitor);
+          return Serialisers.visitor(updatedVisitor);
 
         case RoleEnum.VOLUNTEER:
           return knex.transaction(async (trx) => {
@@ -104,7 +105,7 @@ const routes: [Api.Users.Register.Confirm.POST.Route] = [
             // create password reset token & send with response
             const { token: newToken } = await Tokens
               .createPasswordResetToken(trx, updatedVolunteer);
-            return { ...await Volunteers.serialise(updatedVolunteer), token: newToken };
+            return { ...await Serialisers.volunteer(updatedVolunteer), token: newToken };
           });
 
         default:

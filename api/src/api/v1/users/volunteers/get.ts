@@ -4,6 +4,7 @@ import { response } from '../schema';
 import { id } from '../../schema/request';
 import { requireSiblingUser } from '../../prerequisites';
 import { Api } from '../../types/api';
+import { Serialisers } from '../../serialisers';
 
 
 const routes: [Api.Users.Volunteers.Id.GET.Route] = [
@@ -33,7 +34,7 @@ const routes: [Api.Users.Volunteers.Id.GET.Route] = [
       } });
 
       return volunteer
-        ? Volunteers.serialise(volunteer)
+        ? Serialisers.volunteer(volunteer)
         : Boom.notFound('No volunteer found under this id');
     },
   },

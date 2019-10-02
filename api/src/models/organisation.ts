@@ -154,8 +154,4 @@ export const Organisations: OrganisationCollection = {
       .update({ deleted_at: new Date() })
       .where(preProcessOrg(organisation));
   },
-
-  async serialise (org: Organisation) {
-    return org;
-  },
 };

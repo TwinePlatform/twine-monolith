@@ -3,6 +3,7 @@ import { CommunityBusinesses } from '../../../models';
 import { getCommunityBusiness, requireChildOrganisation } from '../prerequisites';
 import { Api } from '../types/api';
 import { id, response, cbPayload } from './schema';
+import { Serialisers } from '../serialisers';
 
 
 const routes: [
@@ -37,8 +38,8 @@ const routes: [
 
       try {
         const cb = await CommunityBusinesses.update(knex, communityBusiness, changeSet);
+        return Serialisers.communityBusiness(cb);
 
-        return CommunityBusinesses.serialise(cb);
       } catch (error) {
         // Intercept subset of class 23 postgres error codes thrown by `knex`
         // Class 23 corresponds to integrity constrain violation
@@ -89,8 +90,8 @@ const routes: [
 
       try {
         const cb = await CommunityBusinesses.update(knex, communityBusiness, changeSet);
+        return Serialisers.communityBusiness(cb);
 
-        return CommunityBusinesses.serialise(cb);
       } catch (error) {
         // Intercept subset of class 23 postgres error codes thrown by `knex`
         // Class 23 corresponds to integrity constrain violation
