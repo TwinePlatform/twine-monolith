@@ -16,7 +16,6 @@ import DottedButton from './DottedButton';
 import LabelledInput from './LabelledInput';
 import LabelledSelect from './LabelledSelect';
 import StyledLabelledCheckbox from './StyledLabelledCheckbox';
-import withValidation from './withValidation';
 
 
 export {
@@ -36,5 +35,4 @@ export {
   LabelledInput,
   LabelledSelect,
   StyledLabelledCheckbox,
-  withValidation,
 };

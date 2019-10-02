@@ -592,7 +592,7 @@ export namespace Api {
               birthYear: Maybe<number>;
               email?: string;
               phoneNumber?: string;
-              postCode: string;
+              postCode?: string;
               emailConsent: boolean;
               smsConsent: boolean;
               isAnonymous: boolean;

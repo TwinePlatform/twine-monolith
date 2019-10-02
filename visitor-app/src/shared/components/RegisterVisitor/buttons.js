@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BounceLoader } from 'react-spinners';
-import { PrimaryButton } from '../../../../shared/components/form/base';
-import { colors } from '../../../../shared/style_guide';
+import { PrimaryButton } from '../form/base';
+import { colors } from '../../style_guide';
+
+
 /*
  * Styles
  */

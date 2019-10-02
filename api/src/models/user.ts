@@ -178,6 +178,10 @@ export const Users: UserCollection = {
   },
 
   async update (client: Knex, user, _changes) {
+    if (Object.keys(_changes).length === 0) {
+      return Users.getOne(client, { where: { id: user.id } });
+    }
+
     let changes;
     if (_changes.password) {
       const passwordHash = await hash(_changes.password, 12);

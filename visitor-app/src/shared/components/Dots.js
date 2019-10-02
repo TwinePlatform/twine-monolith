@@ -6,7 +6,7 @@ export default styled.div`
   left: 50%;
   top: 0;
   transform: translate3d(-50%, 0, 0);
-  overflow: hidden;
+  overflow-x: hidden;
 
   &, &::before, &::after {
     background-color: #FFF;
@@ -14,7 +14,6 @@ export default styled.div`
     background-size: 2em 2em;
     background-position: center 0;
     width: 100%;
-    height: 100%;
     position: absolute;
   }
 

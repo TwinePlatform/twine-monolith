@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import p2cLogo from '../../shared/assets/images/qrcodelogo.png';
-import { Paragraph } from '../../shared/components/text/base';
-import { FlexContainerRow } from '../../shared/components/layout/base';
+import p2cLogo from '../../../shared/assets/images/qrcodelogo.png';
+import { Paragraph } from '../text/base';
+import { FlexContainerRow } from '../layout/base';
 
 const PrintContainer = styled.div`
   display: none;
@@ -30,16 +30,18 @@ const PrintHeaderRow = styled(FlexContainerRow)`
   align-items: center;
 `;
 
-const PrintableQrCode = props => (<PrintContainer>
-  <PrintHeaderRow>
-    {props.cbLogoUrl
-      ? <CbLogo src={props.cbLogoUrl} alt="Business logo" />
-      : <CbLogo src={p2cLogo} alt="Power to change logo" />}
-  </PrintHeaderRow>
-  <QrCodePrint src={props.qrCode} alt="QR code" />
-  <Paragraph>Please bring this QR code with you next time</Paragraph>
-</PrintContainer>)
-;
+const PrintableQrCode = ({ cbLogoUrl, qrCode }) => (
+  <PrintContainer>
+    <PrintHeaderRow>
+      <CbLogo
+        src={cbLogoUrl || p2cLogo}
+        alt={cbLogoUrl ? 'Community Business logo' : 'Power to Change logo'}
+      />
+    </PrintHeaderRow>
+    <QrCodePrint src={qrCode} alt="QR code" />
+    <Paragraph>Please bring this QR code with you next time</Paragraph>
+  </PrintContainer>
+);
 
 
 PrintableQrCode.propTypes = {

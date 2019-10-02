@@ -8,10 +8,13 @@ import './styles/ReactPagination.css';
 import App from './App';
 import { unregister } from './registerServiceWorker';
 
+const appRoot = document.getElementById('root');
+
+
 ReactDOM.render(
   <BrowserRouter>
     <App />
   </BrowserRouter>,
-  document.getElementById('root'),
+  appRoot,
 );
 unregister();

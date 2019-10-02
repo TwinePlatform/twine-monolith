@@ -14,7 +14,7 @@ import { ErrorUtils } from './api';
  * @param   {Object} obj    Object with keys to map
  * @returns {Object}        Object with keys you want
  */
-export const renameKeys = curry((keyMap, obj) => // eslint-disable-line import/prefer-default-export
+export const renameKeys = curry((keyMap, obj) =>
   Object
     .keys(obj)
     .reduce((acc, key) => {

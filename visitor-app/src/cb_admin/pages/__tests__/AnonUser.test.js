@@ -18,10 +18,6 @@ describe('AnonUser Component', () => {
   test(':: successful anon user creation', async () => {
     expect.assertions(1);
 
-    mock.onPut('/community-businesses/me')
-      .reply(200, { result: null });
-
-
     mock.onGet('/genders')
       .reply(200, { result: [{ id: 1, name: 'male' }, { id: 2, name: 'female' }, { id: 3, name: 'prefer not to say' }] });
 
@@ -50,7 +46,7 @@ describe('AnonUser Component', () => {
           qrCode: 'data:image/png;base64,QRHASH' } });
 
 
-    const { getByText, getByLabelText } = renderWithRouter()(AnonUser);
+    const { getByText, getByLabelText } = renderWithRouter({ route: '/admin/visitors/anonymous' })(AnonUser);
 
     // wait page to be ready by waiting for gender list to be populated
     await waitForElement(() => getByText('female', { exact: false }));

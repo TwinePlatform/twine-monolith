@@ -74,8 +74,7 @@ describe('API v1 - register new users', () => {
         .toBe('Visitor with this e-mail already registered');
     });
 
-    test('FAIL :: cannot create visitor if phone number is associated to another user',
-    async () => {
+    test('FAIL :: cannot create visitor if phone number is associated to another user', async () => {
       await server.inject(injectCfg({
         method: 'POST',
         url: '/v1/users/register/visitors',
@@ -170,25 +169,25 @@ describe('API v1 - register new users', () => {
     });
 
     test('FAIL :: cannot register as a visitor if user is registered under a different cb',
-    async () => {
-      const res = await server.inject(injectCfg({
-        method: 'POST',
-        url: '/v1/users/register/visitors',
-        payload: {
-          organisationId: 1,
-          name: 'Emma Emmerich',
-          gender: 'female',
-          birthYear: 1900,
-          email: 'emma@sol.com',
-          postCode: 'ST10 4DB',
-        },
-        credentials,
-      }));
+      async () => {
+        const res = await server.inject(injectCfg({
+          method: 'POST',
+          url: '/v1/users/register/visitors',
+          payload: {
+            organisationId: 1,
+            name: 'Emma Emmerich',
+            gender: 'female',
+            birthYear: 1900,
+            email: 'emma@sol.com',
+            postCode: 'ST10 4DB',
+          },
+          credentials,
+        }));
 
-      expect(res.statusCode).toBe(409);
-      expect((<any> res.result).error.message)
-        .toBe('User with this e-mail already registered at another Community Business');
-    });
+        expect(res.statusCode).toBe(409);
+        expect((<any> res.result).error.message)
+          .toBe('User with this e-mail already registered at another Community Business');
+      });
 
     test('SUCCESS :: conf email sent to add visitor if user already exists at cb', async () => {
       mockAddRole.mockReturnValueOnce(Promise.resolve());
@@ -239,6 +238,29 @@ describe('API v1 - register new users', () => {
 
       expect(res.statusCode).toBe(400);
       expect((<any> res.result).error.message).toBe('Please supply either email or phone number');
+    });
+
+    test('SUCCESS :: postCode is not required for anonymous visitor', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'POST',
+        url: '/v1/users/register/visitors',
+        payload: {
+          organisationId: 1,
+          name: 'foo',
+          gender: 'female',
+          birthYear: 1988,
+          isAnonymous: true,
+        },
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toEqual(expect.objectContaining({
+        name: 'foo',
+        gender: 'female',
+        birthYear: 1988,
+        email: 'anon_0_org_1',
+      }));
     });
 
     test('SUCCESS :: happy path for standard visitor', async () => {

@@ -36,10 +36,33 @@ const Caption = styled.p`
   font-style: italic;
 `;
 
+const TileButton = props => (
+  props.idx % 2 === 0
+    ? <ButtonOne>{props.children}</ButtonOne>
+    : <ButtonTwo>{props.children}</ButtonTwo>
+);
+
+TileButton.propTypes = {
+  idx: PropTypes.number.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.arrayOf(PropTypes.element),
+  ]).isRequired,
+};
+
+const tilesCopy = [
+  { title: 'Activities', caption: state => `Edit what is happening at ${state.orgName}`, link: '/admin/activities' },
+  { title: 'Visits', caption: 'See who signed in', link: '/admin/visits' },
+  { title: 'Visitors', caption: 'View and edit your visitors\' details', link: '/admin/visitors' },
+  { title: 'Account Settings', caption: 'View and edit your business\' details', link: '/admin/settings' },
+  { title: 'Feedback', caption: 'See how your visitors feel about your business', link: '/admin/feedback' },
+  { title: 'Create Anon Visitor', caption: 'Create a new anonymous account', link: '/admin/visitors/anonymous' },
+  { title: 'Under 13 Sign Up', caption: 'For visitors who are under 13 years of age', link: '/admin/visitors/u-13' },
+];
 
 export default class Dashboard extends React.Component {
   state = {
-    orgName: '',
+    orgName: 'your community business',
   }
 
   componentDidMount() {
@@ -57,54 +80,18 @@ export default class Dashboard extends React.Component {
           centerContent="Welcome admin! Where do you want to go?"
         />
         <Row style={{ maxWidth: '768px', margin: '0 auto' }}>
-          <Col xs={12} sm={6} md={4}>
-            <ButtonWrapperLink to="/admin/activities">
-              <ButtonOne>
-                Activities
-                <Caption>Edit what is happening at {this.state.orgName || 'your community business'}</Caption>
-              </ButtonOne>
-            </ButtonWrapperLink>
-          </Col>
-          <Col xs={12} sm={6} md={4}>
-            <ButtonWrapperLink to="/admin/visits">
-              <ButtonTwo>
-                Visits
-                <Caption>See who signed in</Caption>
-              </ButtonTwo>
-            </ButtonWrapperLink>
-          </Col>
-          <Col xs={12} sm={6} md={4}>
-            <ButtonWrapperLink to="/admin/visitors">
-              <ButtonOne>
-                Visitors
-                <Caption>View and edit your visitors&#39; details</Caption>
-              </ButtonOne>
-            </ButtonWrapperLink>
-          </Col>
-          <Col xs={12} sm={6} md={4}>
-            <ButtonWrapperLink to="/admin/settings">
-              <ButtonTwo>
-                Account Settings
-                <Caption>View and edit your business&#39; details</Caption>
-              </ButtonTwo>
-            </ButtonWrapperLink>
-          </Col>
-          <Col xs={12} sm={6} md={4}>
-            <ButtonWrapperLink to="/admin/feedback">
-              <ButtonOne>
-                Feedback
-                <Caption>See how your visitors feel about your business</Caption>
-              </ButtonOne>
-            </ButtonWrapperLink>
-          </Col>
-          <Col xs={12} sm={6} md={4}>
-            <ButtonWrapperLink to="/admin/anonymous-user">
-              <ButtonTwo>
-              Create Anon User
-                <Caption>Create a new anonymous user</Caption>
-              </ButtonTwo>
-            </ButtonWrapperLink>
-          </Col>
+          {
+            tilesCopy.map(({ title, link, caption }, i) => (
+              <Col xs={12} sm={6} md={4} key={title}>
+                <ButtonWrapperLink to={link}>
+                  <TileButton idx={i}>
+                    {title}
+                    <Caption>{typeof caption === 'function' ? caption(this.state) : caption}</Caption>
+                  </TileButton>
+                </ButtonWrapperLink>
+              </Col>
+            ))
+          }
         </Row>
       </Grid>
     );

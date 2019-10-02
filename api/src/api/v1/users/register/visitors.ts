@@ -15,12 +15,7 @@ import {
   gender,
   response
 } from '../schema';
-import {
-  Visitors,
-  CommunityBusinesses,
-  CbAdmins,
-  Users,
-} from '../../../../models';
+import { Visitors, CommunityBusinesses, CbAdmins, Users, } from '../../../../models';
 import * as QRCode from '../../../../services/qrcode';
 import * as PdfService from '../../../../services/pdf';
 import { Api } from '../../types/api';
@@ -47,9 +42,13 @@ const routes: [Api.Users.Register.Visitors.POST.Route] = [
           birthYear: birthYear.default(null),
           email,
           phoneNumber,
-          postCode: postCode.required(),
-          emailConsent: isEmailConsentGranted.default(false),
-          smsConsent: isSMSConsentGranted.default(false),
+          postCode: postCode.when('isAnonymous', {
+            is: Joi.boolean().valid(false),
+            then: Joi.required(),
+            otherwise: Joi.optional(),
+          }),
+          isEmailConsentGranted: isEmailConsentGranted.default(false),
+          isSMSConsentGranted: isSMSConsentGranted.default(false),
           isAnonymous: Joi.boolean().default(false) ,
         },
       },

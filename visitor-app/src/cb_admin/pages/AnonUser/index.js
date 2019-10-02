@@ -1,97 +1,114 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { Switch, Route } from 'react-router-dom';
+import { Grid } from 'react-flexbox-grid';
 
-import { CommunityBusiness, Visitors, ErrorUtils } from '../../../api';
+import { CommunityBusiness, Visitors } from '../../../api';
 import { redirectOnError, renameKeys } from '../../../util';
 import CreateAnonUserForm from './CreateAnonUserForm';
-import PrintOption from './PrintOption';
+import ErrorPage from '../../../shared/pages/Error';
+import DisplayQrCode from '../../../shared/components/DisplayQrCode';
+import NavHeader from '../../../shared/components/NavHeader';
+import { Paragraph } from '../../../shared/components/text/base';
+import withRegistration from '../../../shared/components/hoc/withRegistration';
 
 
-const stage = {
-  ONE: 'ONE',
-  TWO: 'TWO',
-};
+const CenteredParagraph = styled(Paragraph)`
+  font-size: 1.1em;
+  text-align: center;
+`;
 
-export default class AnonUser extends Component {
+class RegisterAnonymousVisitor extends Component {
 
   state = {
-    name: 'Anonymous ',
     genders: [],
-    errors: {},
-    stage: stage.ONE,
+    cbOrgName: '',
+    cbLogoUrl: '',
   };
 
   componentDidMount() {
-    CommunityBusiness.update() // used to check cookie permissions
-      .then(() => {
-        const getCb = CommunityBusiness.get({ fields: ['name', 'logoUrl', 'id'] });
-        const getGenders = Visitors.genders();
+    const getCb = CommunityBusiness.get({ fields: ['name', 'logoUrl', 'id'] });
+    const getGenders = Visitors.genders();
 
-        return Promise.all([getCb, getGenders]);
-      })
-      .then(([{ data: { result: cbRes } }, { data: { result: gendersRes } }]) =>
+    Promise.all([getCb, getGenders])
+      .then(([{ data: { result: cbRes } }, { data: { result: gendersRes } }]) => {
         this.setState({
           cbOrgName: cbRes.name,
           cbLogoUrl: cbRes.logoUrl,
-          organisationId: cbRes.id,
           genders: [{ key: 0, value: '' }].concat(gendersRes.map(renameKeys({ id: 'key', name: 'value' }))),
-        }))
-      .catch(error => redirectOnError(this.props.history.push, error, { 403: '/cb/confirm' }));
-  }
-
-
-  onSubmit = (e) => {
-    e.preventDefault();
-
-    Visitors.create({
-      name: this.state.name,
-      gender: this.state.gender,
-      birthYear: this.state.year,
-      organisationId: this.state.organisationId,
-      isAnonymous: true,
-    })
-      .then((res) => {
-        this.setState({
-          stage: stage.TWO,
-          qrCode: res.data.result.qrCode,
         });
+        this.props.hoist({ organisationId: cbRes.id });
       })
-      .catch((err) => {
-        if (ErrorUtils.errorStatusEquals(err, 400)) {
-          this.setState({ errors: ErrorUtils.getValidationErrors(err) });
-        } else {
-          redirectOnError(this.props.history.push, err);
-        }
-      });
+      .catch(error => redirectOnError(this.props.history.push, error));
   }
 
-  handleChange = (e) => {
-    const name = e.target.name;
-    this.setState({ [name]: e.target.value });
-  }
+  render() {
+    return (
+      <Switch>
+        <Route exact path="/admin/visitors/anonymous">
+          <Grid>
+            <NavHeader
+              leftTo="/admin"
+              leftContent="Back to dashboard"
+              centerContent="Create Anonymous Visitor"
+            />
+            <CenteredParagraph>
+              This allows you to track footfall for visitors who do not want to sign up for an
+              individual account. You can pick what demographic data you would like to be
+              associated to this account and name it to reflect this.
+            </CenteredParagraph>
+            <CreateAnonUserForm
+              handleChange={this.props.onChange}
+              onSubmit={this.props.onSubmit}
+              errors={this.props.errors}
+              genders={this.state.genders}
+            />
+          </Grid>
+        </Route>
 
-  render() { // eslint-disable-line consistent-return
-    const { state } = this;
+        <Route exact path="/admin/visitors/anonymous/thankyou">
+          <DisplayQrCode
+            onClickPrint={this.props.onClickPrint}
+            qrCode={this.props.result}
+            cbLogoUrl={this.state.cbLogoUrl}
+            nextURL="/admin"
+            forAdmin
+          />
+        </Route>
 
-    switch (state.stage) { // eslint-disable-line default-case
-      case stage.ONE:
-        return (<CreateAnonUserForm
-          name={state.name}
-          handleChange={this.handleChange}
-          onSubmit={this.onSubmit}
-          errors={this.state.errors}
-          genders={this.state.genders}
-        />);
-      case stage.TWO:
-        return (<PrintOption
-          onClickPrint={() => window.print()}
-          qrCode={state.qrCode}
-          cbLogoUrl={state.cbLogoUrl}
-        />);
-    }
+        <Route render={() => <ErrorPage code={404} />} />
+      </Switch>
+    );
   }
 }
 
-AnonUser.propTypes = {
+RegisterAnonymousVisitor.propTypes = {
   history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+  result: PropTypes.string,
+  onClickPrint: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  errors: PropTypes.func.isRequired,
+  hoist: PropTypes.func.isRequired,
 };
+
+RegisterAnonymousVisitor.defaultProps = {
+  result: '',
+};
+
+const formStateToPayload = renameKeys({ year: 'birthYear' });
+
+const registrationOpts = {
+  validateForm: () => null,
+
+  onSubmit: (form, state) => Visitors.create({
+    ...formStateToPayload(form),
+    organisationId: state.organisationId,
+    isAnonymous: true,
+  }),
+
+  onSuccess: res => [res.data.result.qrCode, '/admin/visitors/anonymous/thankyou'],
+};
+
+export default withRegistration(registrationOpts)(RegisterAnonymousVisitor);
