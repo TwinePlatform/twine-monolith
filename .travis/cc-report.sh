@@ -12,12 +12,13 @@ function format_lcov () {
   for f in $@; do
     if [ -f $f ]; then
       FILENAME=$(echo "$f" | cut -c3- | sed s_\/_-_g | sed s/.info/.json/)
+      DESTINATION="$ROOT/coverage-$FILENAME"
 
-      echo "Formatting $f into coverage/coverage-${FILENAME}";
-      $DIR/cc-test-reporter format-coverage -t lcov -o $ROOT/coverage/fmt-coverage-${FILENAME} $f;
+      echo "Formatting $f into $DESTINATION";
+      $DIR/cc-test-reporter format-coverage -t lcov -o $DESTINATION $f;
 
       echo "Contents:"
-      echo $(cat $ROOT/coverage/fmt-coverage-${FILENAME} | head -n 100)
+      echo $(cat $DESTINATION | head -n 100)
     fi
   done
 }

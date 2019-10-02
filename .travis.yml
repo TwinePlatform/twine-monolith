@@ -47,7 +47,7 @@ script:
 
 after_success:
   - bash $TRAVIS_BUILD_DIR/.travis/cc-report.sh
-  - aws s3 cp coverage s3://twine-ci/$TRAVIS_BUILD_NUMBER/ --recursive
+  - aws s3 cp $TRAVIS_BUILD_DIR/coverage-* s3://twine-ci/$TRAVIS_BUILD_NUMBER/
 
 jobs:
   include:
