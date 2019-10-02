@@ -129,7 +129,11 @@ export default class VisitorProfile extends React.Component {
         this.updateStateFromApi(res.data.result);
       })
       .catch((error) => {
-        this.setState({ errors: { ...this.state.errors, ...error.response.data.error } });
+        if (ErrorUtils.errorStatusEquals(error, 400)) {
+          this.setState({ errors: { ...this.state.errors, ...error.response.data.error } });
+        } else {
+          redirectOnError(this.props.history.push, error);
+        }
       });
   };
 
