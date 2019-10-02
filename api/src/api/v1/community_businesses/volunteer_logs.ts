@@ -104,7 +104,7 @@ const routes: [
       const logs =
         await VolunteerLogs.fromCommunityBusiness(knex, communityBusiness, query);
 
-      return Promise.all(logs.map(VolunteerLogs.serialise));
+      return Promise.all(logs.map(Serialisers.volunteerLog));
     },
   },
 

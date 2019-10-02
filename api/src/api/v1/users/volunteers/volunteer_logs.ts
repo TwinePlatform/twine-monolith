@@ -60,7 +60,7 @@ const routes: [
         { since, until, limit: Number(query.limit), offset: Number(query.offset) }
       );
 
-      return Promise.all(logs.map(VolunteerLogs.serialise));
+      return Promise.all(logs.map(Serialisers.volunteerLog));
     },
   },
 

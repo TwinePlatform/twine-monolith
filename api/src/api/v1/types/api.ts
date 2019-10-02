@@ -17,6 +17,7 @@ import {
   VisitSignInType
 } from '../../../models/types';
 import { Unpack, AppEnum, Maybe } from '../../../types/internal';
+import { Serialisers } from '../serialisers';
 
 
 interface ServerRoute<
@@ -269,7 +270,7 @@ export namespace Api {
               query: { visits?: string };
               pre: { communityBusiness: CommunityBusiness };
             }
-            export type Result = User;
+            export type Result = Unpack<ReturnType<typeof Serialisers.visitor>>;
             export type Route = ServerRoute<Request, ResponsePayload<Result>>;
           }
 
@@ -425,7 +426,7 @@ export namespace Api {
             query: ApiRequestQuery;
             pre: { communityBusiness: CommunityBusiness; isChild: boolean };
           }
-          export type Result = User[];
+          export type Result = Unpack<ReturnType<typeof Serialisers.volunteer>>[];
           export type Meta = { total: number };
           export type Route = ServerRoute<Request, ResponsePayload<Result, Meta>>;
         }

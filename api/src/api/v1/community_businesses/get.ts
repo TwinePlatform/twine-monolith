@@ -34,7 +34,7 @@ const routes: [
       const { server: { app: { knex } }, query } = request;
 
       const cbs = await CommunityBusinesses.get(knex, query);
-      return Promise.all(cbs.map(CommunityBusinesses.serialise));
+      return Promise.all(cbs.map(Serialisers.communityBusiness));
     },
   },
 
