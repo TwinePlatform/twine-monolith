@@ -20,6 +20,7 @@ function format_lcov () {
 
       echo "Formatting $f into $DESTINATION";
       if [ "$CI" = "true" ]; then
+        echo "Adding prefix: $PREFIX"
         $DIR/cc-test-reporter format-coverage -t lcov -o $DESTINATION --add-prefix $PREFIX $f;
       else
         $DIR/cc-test-reporter format-coverage -t lcov -o $DESTINATION $f;
