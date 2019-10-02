@@ -105,7 +105,7 @@ const routes: [Api.Users.Register.Confirm.POST.Route] = [
             // create password reset token & send with response
             const { token: newToken } = await Tokens
               .createPasswordResetToken(trx, updatedVolunteer);
-            return { ...await Serialisers.volunteer(updatedVolunteer), token: newToken };
+            return { ...Serialisers.volunteer(updatedVolunteer), token: newToken };
           });
 
         default:
