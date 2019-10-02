@@ -8,6 +8,10 @@ if [ ! -f "$DIR/cc-test-reporter" ]; then
   exit 1;
 fi
 
+if [ "$CI" = "true" ]; then
+  PREFIX="$TRAVIS_BUILD_DIR/$APP_DIR"
+fi
+
 function format_lcov () {
   for f in $@; do
     if [ -f $f ]; then
@@ -15,7 +19,11 @@ function format_lcov () {
       DESTINATION="$ROOT/coverage-$FILENAME"
 
       echo "Formatting $f into $DESTINATION";
-      $DIR/cc-test-reporter format-coverage -t lcov -o $DESTINATION $f;
+      if [ "$CI" = "true" ]; then
+        $DIR/cc-test-reporter format-coverage -t lcov -o $DESTINATION --add-prefix $PREFIX $f;
+      else
+        $DIR/cc-test-reporter format-coverage -t lcov -o $DESTINATION $f;
+      fi
 
       echo "Contents:"
       echo $(cat $DESTINATION | head -n 100)
