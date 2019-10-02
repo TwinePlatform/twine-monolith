@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components/native'
 
 import { Heading } from '../../../lib/ui/typography';
+
 /*
  * Types
  */
@@ -20,14 +21,13 @@ const View = styled.View`
 /*
  * Component
  */
-const Settings: FC<Props> = () => {
+const ForgotPassword: FC<Props> = () => {
 
   return (
     <View>
-      <Heading>Settings</Heading>
-      
+      <Heading>Forgot Password</Heading>
     </View>
   );
 }
 
-export default Settings;
+export default ForgotPassword;

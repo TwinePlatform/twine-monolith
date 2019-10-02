@@ -10,7 +10,7 @@ const InputContainer = styled.View`
   marginBottom: 20;
   paddingBottom: 10;
   borderBottomWidth: 1;
-  borderColor: ${ColoursEnum.darkGrey}}
+  borderColor: ${ColoursEnum.darkGrey}
 `;
 
 const ChildBox = styled.View`

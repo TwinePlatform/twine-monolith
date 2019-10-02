@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components/native';
+import { NavigationScreenProp, NavigationState } from 'react-navigation';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Button as B } from 'react-native-elements';
@@ -7,6 +8,16 @@ import { Button as B } from 'react-native-elements';
 import Input from '../../../lib/ui/forms/input';
 import { ColoursEnum } from '../../../lib/ui/colours';
 
+/*
+ * Types
+ */
+type Props = {
+  navigation: NavigationScreenProp<NavigationState, {}>;
+};
+
+/*
+ * Styles
+ */
 const Page = styled.View`
   flex: 1;
   justifyContent: space-around;
@@ -48,7 +59,10 @@ const Submit = styled(B).attrs({
   }
 })``;
 
-const Login = (props) => {
+/*
+ * Component
+ */
+const Login: FC<Props> = (props) => {
 
   return (
     <Page>
@@ -85,10 +99,6 @@ const Login = (props) => {
 
     </Page>
   );
-}
-
-Login.navigationOptions = {
-  
 };
 
 export default Login;

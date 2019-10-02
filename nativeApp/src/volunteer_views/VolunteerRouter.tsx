@@ -16,7 +16,7 @@ const TabNavigator = createBottomTabNavigator({
 },
 {
   defaultNavigationOptions: ({ navigation }) => ({
-    tabBarIcon: ({tintColor }) => {
+    tabBarIcon: ({tintColor }) => { //eslint-disable-line
       const { routeName } = navigation.state;
       const IconComponent = MaterialCommunityIcons;
       let iconName;

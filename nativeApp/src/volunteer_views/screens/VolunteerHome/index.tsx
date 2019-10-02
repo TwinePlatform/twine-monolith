@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components/native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -6,6 +6,15 @@ import { Heading as H } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import Stat from './Stat'
 
+/*
+ * Types
+ */
+type Props = {
+}
+
+/*
+ * Styles
+ */
 const View = styled.View`
   flexDirection: column;
   alignItems: center;
@@ -32,7 +41,10 @@ const Line = styled.View`
   borderColor: ${ColoursEnum.grey};
 `;
 
-export default function VolunteerHome(props) {
+/*
+ * Component
+ */
+const VolunteerHome: FC<Props> = () => {
 
   return (
     <View>
@@ -67,3 +79,5 @@ export default function VolunteerHome(props) {
     </View>
   );
 }
+
+export default VolunteerHome;

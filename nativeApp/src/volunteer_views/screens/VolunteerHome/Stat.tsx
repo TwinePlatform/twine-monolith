@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components/native'
 import { FontsEnum } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
 
 
+/*
+ * Types
+ */
+type Props = {
+  heading: string;
+  value: string; 
+  unit: string;
+}
+
+/*
+ * Styles
+ */
 const StatContainer = styled.View`
   width: 100%;
   marginTop: 10;
   marginBottom: 10;
-
 `;
 
 const SubheadingContainer = styled.View`
@@ -46,7 +57,10 @@ const Unit = styled.Text`
   paddingBottom: 10;
 `;
 
-const Stat = (props) =>{
+/*
+ * Component
+ */
+const Stat: FC<Props> = (props) =>{
   const {heading, children:icon, value, unit} = props;
   return (
     <StatContainer>
