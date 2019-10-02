@@ -1,7 +1,7 @@
 import * as Boom from '@hapi/boom';
 import { since, until } from '../schema/request';
 import { response } from '../schema/response';
-import { isChildOrganisation } from '../prerequisites';
+import { isChildOrganisation, requireChildOrganisation } from '../prerequisites';
 import { Api } from '../types/api';
 
 
@@ -21,19 +21,11 @@ const routes: [Api.VisitLogs.GET.Route] = [
         query: { since, until },
       },
       response: { schema: response },
-      pre: [
-        { method: isChildOrganisation , assign: 'isChild' },
-      ],
+      pre: [requireChildOrganisation],
     },
     handler: async (request, h) => {
-      const {
-        server: { app: { knex } },
-        query: { since, until },
-        pre: { isChild } } = request;
+      const { server: { app: { knex } }, query: { since, until } } = request;
 
-      if (!isChild) {
-        return Boom.forbidden('Not Implemented for non Twine Admin');
-      }
       /*
        * TODO:
        * - implement full query handling
