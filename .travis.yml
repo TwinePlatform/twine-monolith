@@ -62,10 +62,10 @@ jobs:
         - aws s3 cp s3://twine-ci/$TRAVIS_BUILD_NUMBER/ ./coverage --recursive
         - ls -al ./coverage
         - bash $TRAVIS_BUILD_DIR/.travis/cc_upload.sh
-      # after_success:
-      #   - aws s3 rm s3://twine-ci/$TRAVIS_BUILD_NUMBER --recursive
-      # after_failure:
-      #   - aws s3 rm s3://twine-ci/$TRAVIS_BUILD_NUMBER --recursive
+      after_success:
+        - aws s3 rm s3://twine-ci/$TRAVIS_BUILD_NUMBER --recursive
+      after_failure:
+        - aws s3 rm s3://twine-ci/$TRAVIS_BUILD_NUMBER --recursive
 
 notifications:
   email:
