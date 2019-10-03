@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 DIR=$(dirname $0)
-ROOT=$(dirname $DIR)
-PREFIX="$TRAVIS_BUILD_DIR/$APP_DIR"
+TEMP=$(dirname $DIR)
+ROOT=$(cd $TEMP 2> /dev/null && pwd -P)
 
 if [ ! -f "$DIR/cc-test-reporter" ]; then
   echo "No test reporter found";
@@ -16,8 +16,11 @@ function format_lcov () {
       FILENAME=$(echo "$f" | cut -c3- | sed s_\/_-_g | sed s/.info/.json/)
       DESTINATION="$ROOT/coverage-$FILENAME"
 
-      echo "Formatting $f into $DESTINATION";
-      $DIR/cc-test-reporter format-coverage -t lcov -o $DESTINATION --add-prefix $PREFIX $f;
+      echo "Formatting $f into $DESTINATION"
+      $DIR/cc-test-reporter format-coverage -t lcov -o $DESTINATION $f
+
+      echo "Normalising file paths"
+      node $DIR/normalise_paths.js $DESTINATION
 
       echo "Contents:"
       echo $(cat $DESTINATION | head -n 100)
