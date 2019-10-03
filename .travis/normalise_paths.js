@@ -7,8 +7,7 @@ const normaliseFilePath = (fpath) => {
 }
 
 const APP_DIR = process.env.APP_DIR;
-const [SCRIPT_PATH, ARG] = process.argv.slice(1);
-const ROOT = path.resolve(SCRIPT_PATH, '..');
+const [ARG] = process.argv.slice(2);
 
 const json = require(ARG);
 

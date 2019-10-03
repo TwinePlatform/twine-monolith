@@ -21,9 +21,6 @@ function format_lcov () {
 
       echo "Normalising file paths"
       node $DIR/normalise_paths.js $DESTINATION
-
-      echo "Contents:"
-      echo $(cat $DESTINATION | head -n 100)
     fi
   done
 }
