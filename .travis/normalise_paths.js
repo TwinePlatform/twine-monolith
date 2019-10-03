@@ -3,25 +3,12 @@ const path = require('path');
 
 
 const normaliseFilePath = (fpath) => {
-  if (fpath.startsWith(ROOT)) {
-    return fpath;
-  }
-
-  if (fpath.startsWith(APP_DIR)) {
-    return path.join(ROOT, fpath);
-  }
-
-  if (fpath.startsWith('src')) {
-    return path.join(ROOT, APP_DIR, fpath);
-  }
-
-  return fpath;
+  return path.join(APP_DIR, fpath);
 }
 
 const APP_DIR = process.env.APP_DIR;
 const [SCRIPT_PATH, ARG] = process.argv.slice(1);
-const ROOT = path.resolve('..', SCRIPT_PATH);
-console.log(ARG);
+const ROOT = path.resolve(SCRIPT_PATH, '..');
 
 const json = require(ARG);
 
