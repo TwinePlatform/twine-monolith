@@ -48,6 +48,7 @@ const HideableTextOverlay = styled.div<{ isVisible: boolean }>`
   height: 100%;
   width: 100%;
   padding: 10rem 0;
+  z-index: ${(props) => props.isVisible ? 1 : -1};
 
   ${MediaQueriesEnum.landscapeTablet} {
     padding: 8rem 0;
