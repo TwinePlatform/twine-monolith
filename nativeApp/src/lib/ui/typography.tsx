@@ -2,6 +2,7 @@ import styled from 'styled-components/native'
 
 export const Heading = styled.Text`
   fontSize: 30;
+  marginBottom: 20;
 `;
 
 export const Heading2 = styled.Text`
