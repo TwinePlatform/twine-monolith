@@ -22,16 +22,17 @@ const View = styled.View`
   paddingBottom: 20;
   paddingLeft: 40;
   paddingRight: 40;
+  flex: 1;
 `;
 
 const Heading = styled(H)`
-  
+  flexGrow: 0;
 `;
 
 const Container = styled.View`
   width: 100%;
-  height: 95%;
-  justifyContent: space-around;
+  flexGrow: 1;
+  justifyContent: space-between;
 `;
 
 const Line = styled.View`
@@ -48,7 +49,7 @@ const VolunteerHome: FC<Props> = () => {
 
   return (
     <View>
-      <Heading>Your Time</Heading>
+      <Heading>My Stats</Heading>
       <Container>
 
         <Stat 
