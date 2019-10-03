@@ -2,15 +2,13 @@
 
 DIR=$(dirname $0)
 ROOT=$(dirname $DIR)
+PREFIX="$TRAVIS_BUILD_DIR/$APP_DIR"
 
 if [ ! -f "$DIR/cc-test-reporter" ]; then
   echo "No test reporter found";
   exit 1;
 fi
 
-if [ "$CI" = "true" ]; then
-  PREFIX="$TRAVIS_BUILD_DIR/$APP_DIR"
-fi
 
 function format_lcov () {
   for f in $@; do
