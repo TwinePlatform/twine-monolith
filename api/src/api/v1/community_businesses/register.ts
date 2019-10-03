@@ -34,7 +34,6 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
     },
     handler: async (request, h) => {
       const {
-        pre: { isChild },
         server: { app: { knex, EmailService, config } },
         payload: {
           orgName,
@@ -50,10 +49,6 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
           adminEmail,
         },
       } = request;
-
-      if (!isChild) {
-        return Boom.forbidden('Insufficient permissions to create organisations');
-      }
 
       // Initial checks
       if (await CommunityBusinesses.exists(knex, { where: { _360GivingId } })) {

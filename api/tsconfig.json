@@ -11,6 +11,10 @@
     "lib": [
       "es2017"
     ],
+    "baseUrl": "./",
+    "paths": {
+      "*": ["node_modules/@types/*", "*"]
+    }
   },
   "exclude": [
     "docs",

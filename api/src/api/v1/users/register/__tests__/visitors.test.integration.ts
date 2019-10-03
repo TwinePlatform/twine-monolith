@@ -168,26 +168,25 @@ describe('API v1 - register new users', () => {
         .toBe('User with this e-mail already registered');
     });
 
-    test('FAIL :: cannot register as a visitor if user is registered under a different cb',
-      async () => {
-        const res = await server.inject(injectCfg({
-          method: 'POST',
-          url: '/v1/users/register/visitors',
-          payload: {
-            organisationId: 1,
-            name: 'Emma Emmerich',
-            gender: 'female',
-            birthYear: 1900,
-            email: 'emma@sol.com',
-            postCode: 'ST10 4DB',
-          },
-          credentials,
-        }));
+    test('FAIL :: cannot register as a visitor if user is registered under a different cb', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'POST',
+        url: '/v1/users/register/visitors',
+        payload: {
+          organisationId: 1,
+          name: 'Emma Emmerich',
+          gender: 'female',
+          birthYear: 1900,
+          email: 'emma@sol.com',
+          postCode: 'ST10 4DB',
+        },
+        credentials,
+      }));
 
-        expect(res.statusCode).toBe(409);
-        expect((<any> res.result).error.message)
-          .toBe('User with this e-mail already registered at another Community Business');
-      });
+      expect(res.statusCode).toBe(409);
+      expect((<any> res.result).error.message)
+        .toBe('User with this e-mail already registered at another Community Business');
+    });
 
     test('SUCCESS :: conf email sent to add visitor if user already exists at cb', async () => {
       mockAddRole.mockReturnValueOnce(Promise.resolve());

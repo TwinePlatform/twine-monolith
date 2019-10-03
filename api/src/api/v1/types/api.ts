@@ -270,7 +270,7 @@ export namespace Api {
             export interface Request extends Hapi.Request {
               params: { userId: string };
               query: { visits?: string };
-              pre: { communityBusiness: CommunityBusiness; isChildUser: boolean };
+              pre: { communityBusiness: CommunityBusiness };
             }
             export type Result = Unpack<ReturnType<VisitorCollection['serialise']>>;
             export type Route = ServerRoute<Request, ResponsePayload<Result>>;
@@ -281,7 +281,6 @@ export namespace Api {
               export interface Request extends Hapi.Request {
                 params: { userId: string };
                 payload: { type: 'qrcode' };
-                pre: { isChild: boolean };
               }
               export type Result = null;
               export type Route = ServerRoute<Request, ResponsePayload<Result>>;
@@ -347,42 +346,30 @@ export namespace Api {
       export namespace GET {
         export interface Request extends Hapi.Request {
           query: ApiRequestQuery & Dictionary<any>;
-          pre: {
-            communityBusiness: CommunityBusiness;
-            isChild: boolean;
-          };
+          pre: { communityBusiness: CommunityBusiness };
         }
         export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
-        export type Response = ResponsePayload<Result>;
-        export type Route = ServerRoute<Request, Response>;
+        export type Route = ServerRoute<Request, ResponsePayload<Result>>;
       }
 
       export namespace PUT {
         export interface Request extends Hapi.Request {
           payload:
             Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
-          pre: {
-            communityBusiness: CommunityBusiness;
-            isChild: boolean;
-          };
+          pre: { communityBusiness: CommunityBusiness };
         }
         export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
-        export type Response = ResponsePayload<Result>;
-        export type Route = ServerRoute<Request, Response>;
+        export type Route = ServerRoute<Request, ResponsePayload<Result>>;
       }
 
       export namespace Feedback {
         export namespace GET {
           export interface Request extends Hapi.Request {
             query: ApiRequestQuery & { since: string; until: string };
-            pre: {
-              communityBusiness: CommunityBusiness;
-              isChild: boolean;
-            };
+            pre: { communityBusiness: CommunityBusiness };
           }
           export type Result = Unpack<ReturnType<CommunityBusinessCollection['getFeedback']>>;
-          export type Response = ResponsePayload<Result>;
-          export type Route = ServerRoute<Request, Response>;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
       }
 
@@ -390,12 +377,11 @@ export namespace Api {
         export namespace GET {
           export interface Request extends Hapi.Request {
             query: { day: Weekday | 'today' };
-            pre: { communityBusiness: CommunityBusiness; isChild: boolean };
+            pre: { communityBusiness: CommunityBusiness };
             params: { organisationId: string };
           }
           export type Result = Unpack<ReturnType<CommunityBusinessCollection['getVisitActivities']>>;
-          export type Response = ResponsePayload<Result>;
-          export type Route = ServerRoute<Request, Response>;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
       }
 
@@ -427,7 +413,7 @@ export namespace Api {
             export interface Request extends Hapi.Request {
               params: { organisationId: string | 'me'; userId: string };
               payload: Partial<Omit<User, 'id' | keyof CommonTimestamps | 'qrCode'>>;
-              pre: { communityBusiness: CommunityBusiness; isChild: boolean };
+              pre: { communityBusiness: CommunityBusiness };
             }
             export type Result = Unpack<ReturnType<VisitorCollection['serialise']>>;
             export type Route = ServerRoute<Request, ResponsePayload<Result>>;
@@ -469,7 +455,6 @@ export namespace Api {
         export namespace POST {
           export interface Request extends Hapi.Request {
             payload: { orgName: string };
-            pre: { isChild: boolean };
           }
           export type Result = { communityBusiness: CommunityBusiness; cbAdmin: User };
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
@@ -488,9 +473,7 @@ export namespace Api {
 
     export namespace Temporary {
       export namespace GET {
-        export interface Request extends Hapi.Request {
-          pre: { isChild: boolean };
-        }
+        export type Request = Hapi.Request;
         export type Result = Unpack<ReturnType<CommunityBusinessCollection['getTemporary']>>;
         export type Route = ServerRoute<Request, ResponsePayload<Result>>;
       }
@@ -499,7 +482,7 @@ export namespace Api {
         export namespace DELETE {
           export interface Request extends Hapi.Request {
             params: { organisationId: string };
-            pre: { communityBusiness: CommunityBusiness; isChild: boolean };
+            pre: { communityBusiness: CommunityBusiness };
           }
           export type Result = null;
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
@@ -510,7 +493,7 @@ export namespace Api {
             export namespace GET { // eslint-disable-line
               export interface Request extends Hapi.Request {
                 params: { organisationId: string };
-                pre: { communityBusiness: CommunityBusiness; isChild: boolean };
+                pre: { communityBusiness: CommunityBusiness };
               }
               export type Result = Unpack<ReturnType<UserCollection['update']>>;
               export type Route = ServerRoute<Request, ResponsePayload<Result>>;
@@ -773,7 +756,6 @@ export namespace Api {
       export namespace PUT {
         export interface Request extends Hapi.Request {
           payload: Partial<Omit<User, 'id' | keyof CommonTimestamps | 'qrCode'>>;
-          pre: { isChild: boolean };
         }
         export type Result = Unpack<ReturnType<UserCollection['serialise']>>;
         export type Route = ServerRoute<Request, ResponsePayload<Result>>;
@@ -785,7 +767,6 @@ export namespace Api {
     export namespace GET {
       export interface Request extends Hapi.Request {
         query: { since: string; until: string };
-        pre: { isChild: boolean };
       }
       export type Result =
         Omit<LinkedVisitEvent, 'visitActivityId' | 'modifiedAt' | 'deletedAt'>
@@ -800,7 +781,6 @@ export namespace Api {
     export namespace GET {
       export interface Request extends Hapi.Request {
         query: { since: string; until: string };
-        pre: { isChild: boolean };
       }
       export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>[];
       export type Route = ServerRoute<Request, ResponsePayload<Result>>;
