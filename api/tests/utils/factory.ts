@@ -19,7 +19,7 @@ factory.extend('user', 'cbAdmin', {
   password: factory.chance('string'),
 });
 
-factory.define('visitor', Object, {
+factory.extend('user', 'visitor', {
   qrCode: factory.chance('string'),
 });
 
