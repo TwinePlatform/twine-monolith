@@ -3,6 +3,7 @@ import { pick } from 'ramda'
 import { Users, modelToRecordMap } from './users';
 import { VisitorCollection, RoleEnum, User, ModelQuery, ModelQueryPartial, UserModelRecord, Visitor } from '../types/index';
 import { applyQueryModifiers } from '../query_util';
+import { Dictionary } from 'src/types/internal';
 
 
 const additionalColumnMap: Record<any, string> = {
@@ -101,3 +102,37 @@ export const Visitors: VisitorCollection = {
     const visitors = await Visitors.fromCommunityBusiness(client, communityBusiness, query);
   },
 };
+
+
+VolunteerLogs
+  .bind(client)
+  .get()
+  .join((trx, l) => ({ organisation: Organisation.get(trx, { where: { id: l.id } }) }))
+  .where()
+  .limit(1)
+  .map((l) => l.duration)
+
+VolunteerLogs
+  .bind(client)
+  .add({ name: 'foo', email: 'eee@eee.com' })
+
+Visitors(client)
+  .get()
+  .join((trx, u) => [
+    'visits',
+    VisitLogs(trx)
+      .fromUser(u)
+      .join((trx2, vl) => [
+        'activity',
+        VisitActivities(trx2)
+          .fromVisit(vl)
+          .join((trx3, va) => ['category', VisitCategories(trx3).fromActivity(va)])
+      ])
+  ])
+  .whereBetween({ birthYear: [0, 10] })
+  .map(Serialisers.visitorsWithVisits)
+
+
+interface ModelObservable<T extends Model> extends Knex.QueryBuilder {
+  join (cb: <K extends string, U>(trx: Knex.QueryBuilder, u: T) => [K, ModelObservable<U>]): ModelObservable<T & { [K]: ModelObservable<U> }>;
+}

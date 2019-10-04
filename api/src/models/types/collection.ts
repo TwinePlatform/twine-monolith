@@ -121,6 +121,8 @@ export interface CommunityBusinessCollection extends Collection<CommunityBusines
   fromVisitor (k: Knex, u: ModelQuery<Visitor>): Promise<Maybe<CommunityBusiness>>;
   fromVolunteer (k: Knex, u: ModelQuery<Volunteer>): Promise<Maybe<CommunityBusiness>>;
   fromCbAdmin (k: Knex, u: ModelQuery<CbAdmin>): Promise<Maybe<CommunityBusiness>>;
+  fromVolunteerProject (k: Knex, p: ModelQuery<VolunteerProject>): Promise<CommunityBusiness>;
+  fromVisitActivity (k: Knex, a: ModelQuery<VisitActivity>): Promise<CommunityBusiness>;
 }
 
 export type TempCommunityBusinessCollection = Collection<CommunityBusiness, _.community_business>;
@@ -132,7 +134,9 @@ type VolunteerLogSyncStats = { ignored: number; synced: number };
 
 export type VolunteerActivityCollection = Collection<VolunteerActivity, _.volunteer_activity>;
 
-export type VolunteerProjectCollection = Collection<VolunteerProject, _.volunteer_project>;
+export interface VolunteerProjectCollection extends Collection<VolunteerProject, _.volunteer_project> {
+  fromCommunityBusiness (k: Knex, c: CommunityBusiness): Promise<VolunteerProject[]>;
+}
 
 export interface VolunteerLogCollection extends Collection<VolunteerLog, _.volunteer_hours_log> {
   recordInvalidLog (k: Knex, u: Volunteer, cb: CommunityBusiness, payload: object): Promise<void>;
@@ -140,6 +144,8 @@ export interface VolunteerLogCollection extends Collection<VolunteerLog, _.volun
   fromCommunityBusiness (k: Knex, cb: CommunityBusiness): Promise<VolunteerLog[]>;
   syncLogs (k: Knex, cb: CommunityBusiness, u: Volunteer | CbAdmin, ls: Partial<VolunteerLog>[]): Promise<VolunteerLogSyncStats>;
 }
+
+
 
 
 /**
