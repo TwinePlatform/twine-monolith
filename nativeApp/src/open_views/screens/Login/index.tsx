@@ -51,11 +51,11 @@ const Image = styled.Image`
 `;
 
 const Form = styled(F)`
-  width: 80%;
+  width: 75%;
 `;
 
 const Submit = styled(B)`
-  width: 80%;
+  width: 75%;
   backgroundColor: ${ColoursEnum.purple};
   alignItems: center;
   justifyContent: center;
