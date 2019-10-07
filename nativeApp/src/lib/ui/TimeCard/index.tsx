@@ -2,7 +2,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Card as C } from 'native-base';
+import { Card as C, Button as B } from 'native-base';
 
 import { ColoursEnum } from '../colours';
 import { FontsEnum } from '../typography';
@@ -85,59 +85,67 @@ const Label = styled.Text`
 
 const ButtonContainer = styled.View`
   flexDirection: row;
-  marginTop: 10;
-  marginBottom: 10;
 `;
-const Button = styled.View<{first?: boolean}>`
-  ${(props) => props.first && `
-    borderRightWidth: 1;
-    borderColor: ${ColoursEnum.grey}
-  `}
+const Button = styled(B)`
+  borderRadius: 0;
   flex: 1;
   flexDirection: row;
   alignItems: center;
   justifyContent: center;
 `;
-const Link = styled.Text`
+const LinkText = styled.Text`
   marginLeft: 2;
   textAlign: center;
   color: ${ColoursEnum.purple};
   fontSize: 15;
 `;
 
+const BorderRight = styled.View`
+  flex: 1;
+  borderRightWidth: 1;
+  flexDirection: row;
+  justifyContent: center;
+  alignItems: center;
+  borderColor: ${ColoursEnum.grey};
+`;
 /*
  * Component
  */
-const TimeCard: FC<Props> = (props) => (
-  <Card style={{ width: '85%' }}>
-    <TopContainer>
-      <ValueContainer>
-        <Value>{props.timeValues[0]}</Value>
-        <Unit>hours</Unit>
-        <Value>{props.timeValues[1]}</Value>
-        <Unit>minutes</Unit>
-      </ValueContainer>
-      <DetailsContainer>
-        <Date>{props.date}</Date>
-        <LabelContainer>
-          <Label>{props.labels[0]}</Label>
-          <Label>{props.labels[1]}</Label>
-        </LabelContainer>
-      </DetailsContainer>
-    </TopContainer>
+const TimeCard: FC<Props> = (props) => {
+  const { timeValues, date, labels } = props;
+  return (
+    <Card>
+      <TopContainer>
+        <ValueContainer>
+          <Value>{timeValues[0]}</Value>
+          <Unit>hours</Unit>
+          <Value>{timeValues[1]}</Value>
+          <Unit>minutes</Unit>
+        </ValueContainer>
+        <DetailsContainer>
+          <Date>{date}</Date>
+          <LabelContainer>
+            <Label>{labels[0]}</Label>
+            <Label>{labels[1]}</Label>
+          </LabelContainer>
+        </DetailsContainer>
+      </TopContainer>
 
-    <ButtonContainer>
-      <Button first>
-        <MaterialCommunityIcons name="square-edit-outline" outline size={20} color={ColoursEnum.purple} />
-        <Link>Edit</Link>
-      </Button>
-      <Button>
-        <MaterialCommunityIcons name="trash-can-outline" outline size={20} color={ColoursEnum.purple} />
-        <Link>Delete</Link>
-      </Button>
-    </ButtonContainer>
-  </Card>
+      <ButtonContainer>
+        <Button transparent>
+          <BorderRight>
+            <MaterialCommunityIcons name="square-edit-outline" outline size={20} color={ColoursEnum.purple} />
+            <LinkText>Edit</LinkText>
+          </BorderRight>
+        </Button>
+        <Button transparent>
+          <MaterialCommunityIcons name="trash-can-outline" outline size={20} color={ColoursEnum.purple} />
+          <LinkText>Delete</LinkText>
+        </Button>
+      </ButtonContainer>
+    </Card>
 
-);
+  );
+};
 
 export default TimeCard;

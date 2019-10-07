@@ -8,10 +8,10 @@ const useRequest = (axiosRequest: (x) => Promise<AxiosResponse>, payload?) => {
     (
       async function () {
         try {
-          const { data } = await axiosRequest(payload);
-          setData(data.result);
-        } catch (error) {
-          setError(error);
+          const { data: res } = await axiosRequest(payload);
+          setData(res.result);
+        } catch (err) {
+          setError(err);
         }
       }()
     );

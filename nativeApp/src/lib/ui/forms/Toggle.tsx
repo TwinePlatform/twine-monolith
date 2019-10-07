@@ -1,9 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import { Switch, SwitchProps } from 'react-native';
-import { Item as I, Input as _Input, Label as L } from 'native-base';
-import { Forms } from './enums';
-
+import { Item as I, Label as L } from 'native-base';
 
 /*
  * Types

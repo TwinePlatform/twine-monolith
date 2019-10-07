@@ -1,4 +1,4 @@
-export enum ColoursEnum {
+export enum ColoursEnum { //eslint-disable-line
   black = '#333333',
   white = '#FFFFFF',
   transparentWhite = 'rgb(255, 255, 255, 0.9)',

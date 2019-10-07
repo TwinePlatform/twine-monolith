@@ -8,6 +8,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Input from '../../../lib/ui/forms/InputWithIcon';
 import { ColoursEnum } from '../../../lib/ui/colours';
 
+const logo = require('../../../../assets/images/logo_image.png');
+
 /*
  * Types
  */
@@ -38,7 +40,7 @@ const BottomContainer = styled(Container)`
   paddingBottom: 20;
 `;
 
-const Link = styled.Text`
+const LinkText = styled.Text`
   textAlign: center;
   color: ${ColoursEnum.blue};
   fontSize: 17;
@@ -75,7 +77,7 @@ const Login: FC<Props> = (props) => (
   <Page>
 
     <Container>
-      <Image source={require('../../../../assets/images/logo_image.png')} />
+      <Image source={logo} />
     </Container>
 
     <Container>
@@ -93,19 +95,19 @@ const Login: FC<Props> = (props) => (
       >
         <SubmitText>LOG IN</SubmitText>
       </Submit>
-      <Link
+      <LinkText
         onPress={() => props.navigation.navigate('Register')}
       >
           Forgot password
-      </Link>
+      </LinkText>
     </Container>
 
     <BottomContainer>
-      <Link
+      <LinkText
         onPress={() => props.navigation.navigate('Register')}
       >
           Create a new account
-      </Link>
+      </LinkText>
     </BottomContainer>
 
   </Page>
