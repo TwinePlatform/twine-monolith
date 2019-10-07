@@ -51,6 +51,7 @@ export default class App extends Component {
     fontLoaded: false,
   };
 
+/* eslint-disable */
   async componentDidMount() {
     await Font.loadAsync({
       'roboto-light': require('./assets/fonts/Roboto-Light.ttf'),
@@ -71,9 +72,11 @@ export default class App extends Component {
     };
     setCustomText(customTextProps);
   }
+  /* eslint-enable */
 
   render() {
-    return this.state.fontLoaded
+    const { fontLoaded } = this.state;
+    return fontLoaded
       ? <AppContainer />
       : <Text>Loading...</Text>;
   }
