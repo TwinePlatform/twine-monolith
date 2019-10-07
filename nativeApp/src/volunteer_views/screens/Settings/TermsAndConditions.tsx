@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import styled from 'styled-components/native'
-import { Item as I, Input as _Input, Label as L, Button as B} from 'native-base';
+import styled from 'styled-components/native';
+import { Item as I, Label as L, Button as B } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ColoursEnum } from '../../../lib/ui/colours';
 
@@ -32,15 +32,13 @@ const Button = styled(B)`
 /*
  * Component
  */
-const Toggle: FC<Props> = () => {
-  return (
-    <Item inlineLabel>
-      <Button transparent>
-        <Label>Terms and Conditions</Label>
-        <MaterialIcons name="keyboard-arrow-right" size={30} color={ColoursEnum.darkGrey}/>
-      </Button>
-    </Item>
-  )
-}
+const Toggle: FC<Props> = () => (
+  <Item inlineLabel>
+    <Button transparent>
+      <Label>Terms and Conditions</Label>
+      <MaterialIcons name="keyboard-arrow-right" size={30} color={ColoursEnum.darkGrey}/>
+    </Button>
+  </Item>
+);
 
 export default Toggle;
