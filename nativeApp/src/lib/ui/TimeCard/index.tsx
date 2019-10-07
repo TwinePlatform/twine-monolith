@@ -2,6 +2,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Card as C } from 'native-base'
 
 import { ColoursEnum } from '../colours';
 import { FontsEnum } from '../typography';
@@ -19,16 +20,10 @@ type Props = {
 /*
  * Styles
  */
-const View = styled.View`
-  width: 86%;
+const Card = styled(C)`
+  width: 85%;
   marginBottom: 10;
-  borderWidth: 2;
-  borderRadius: 3;
-  borderColor: ${ColoursEnum.grey};
-  shadowColor: 'rgba(0,0,0, .2)',
-  shadowOffset: { height: 0, width: 0 },
-  shadowOpacity: 1,
-  shadowRadius: 1,
+
 `;
 
 const TopContainer = styled.View`
@@ -115,7 +110,7 @@ const Link = styled.Text`
  */
 const TimeCard: FC<Props> = (props) => {
   return (
-    <View>
+    <Card style={{width: '85%'}}>
       <TopContainer>
         <ValueContainer>
           <Value>{props.timeValues[0]}</Value>
@@ -142,8 +137,8 @@ const TimeCard: FC<Props> = (props) => {
           <Link>Delete</Link>
         </Button>
       </ButtonContainer>
+    </Card>
 
-    </View>
   );
 };
 
