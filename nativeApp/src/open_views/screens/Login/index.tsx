@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
 
+import { Form as F, Button as B } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Button as B } from 'react-native-elements';
 
-import Input from '../../../lib/ui/forms/input';
+import Input from '../../../lib/ui/forms/Input';
 import { ColoursEnum } from '../../../lib/ui/colours';
 
 /*
@@ -28,6 +28,8 @@ const Page = styled.View`
 const Container = styled.View`
   flex: 2;
   justifyContent: center;
+  width: 100%;
+  alignItems: center;
 `;
 
 const BottomContainer = styled(Container)`
@@ -38,7 +40,7 @@ const BottomContainer = styled(Container)`
 
 const Link = styled.Text`
   textAlign: center;
-  color: #007bff;
+  color: ${ColoursEnum.blue};
   fontSize: 17;
 `;
 
@@ -48,17 +50,24 @@ const Image = styled.Image`
   height: 100;
 `;
 
-const Submit = styled(B).attrs({
-  buttonStyle: {
-    backgroundColor: ColoursEnum.purple,
-    padding: 15,
-  },
-  containerStyle:{
-    width: 290,
-    paddingBottom: 10,
-  }
-})``;
+const Form = styled(F)`
+  width: 80%;
+`;
 
+const Submit = styled(B)`
+  width: 80%;
+  backgroundColor: ${ColoursEnum.purple};
+  alignItems: center;
+  justifyContent: center;
+  marginTop: 20;
+  marginBottom: 40;
+`
+
+const SubmitText = styled.Text`
+  color: ${ColoursEnum.white};
+  fontSize: 15;
+
+`;
 /*
  * Component
  */
@@ -72,16 +81,20 @@ const Login: FC<Props> = (props) => {
       </Container>
 
       <Container>
-        <Input name={"Email"}  autoCompleteType="email">
-          <MaterialCommunityIcons name="email-outline" outline size={27} color={ColoursEnum.grey}/>
-        </Input>
-        <Input name={"Password"} autoCompleteType="password" secureTextEntry={true}>
-          <MaterialCommunityIcons name="lock-outline" size={27} color={ColoursEnum.grey}/>
-        </Input>
+        <Form>
+          <Input name="Email" autoCompleteType="email">
+            <MaterialCommunityIcons name="email-outline" outline size={27} color={ColoursEnum.grey}/>
+          </Input>
+          <Input name="Password" autoCompleteType="password" secureTextEntry={true}>
+            <MaterialCommunityIcons name="lock-outline" size={27} color={ColoursEnum.grey}/>
+          </Input>
+        </Form>
+
         <Submit
-          title="LOG IN"
           onPress={() => props.navigation.navigate('VolunteerRouter')}
-        />
+        >
+          <SubmitText>LOG IN</SubmitText>
+        </Submit>
         <Link
           onPress={() => props.navigation.navigate('Register')}
         >

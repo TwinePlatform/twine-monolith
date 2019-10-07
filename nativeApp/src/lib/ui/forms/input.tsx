@@ -1,37 +1,33 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components/native'
-import { FontsEnum } from '../typography';
+import { Item as I, Input as _Input } from 'native-base';
+import { TextInputProps } from 'react-native';
+
 import { ColoursEnum } from '../colours';
 
-const InputContainer = styled.View`
-  flexDirection: row;
+/*
+ * Types
+ */
+type Props = {
+  name: string;
+  value?: string;
+} & TextInputProps
+
+/*
+ * Styles
+ */
+const Item = styled(I)`
   alignItems: center;
-  marginTop: 20;
-  marginBottom: 20;
-  paddingBottom: 10;
-  borderBottomWidth: 1;
-  borderColor: ${ColoursEnum.darkGrey}
+  marginLeft: 0;
 `;
 
-const ChildBox = styled.View`
-`;
-
-const InputText = styled.TextInput`
-  fontFamily: ${FontsEnum.regular};
-  marginLeft: 10;
-  width: 250;
-  fontSize: 20;
-`;
-
-const Input = (props) => {
-  const { children: icon, name, ...rest} = props;
+const Input: FC<Props> = (props) => {
+  const { children: icon, name, value, ...rest} = props;
   return (
-    <InputContainer>
-      <ChildBox>
-        {icon}
-      </ChildBox>
-      <InputText placeholder={props.name} {...rest}></InputText>
-    </InputContainer>
+    <Item>
+      {icon}
+      <_Input placeholder={name} placeholderTextColor={ColoursEnum.grey}  {...rest}>{value}</_Input>
+    </Item>
   )
 }
 
