@@ -9,7 +9,7 @@
     "eject": "expo eject",
     "lint": "eslint .  --ext .ts,.tsx",
     "test": "jest",
-    "cover": "jest -- --coverage",
+    "cover": "npm test -- --coverage",
     "touch:tsx": "ts-node ./bin/touch_tsx/index.ts"
   },
   "dependencies": {
