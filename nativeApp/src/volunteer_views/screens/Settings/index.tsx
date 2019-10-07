@@ -6,6 +6,8 @@ import Input from '../../../lib/ui/forms/InputWithInlineLabel'
 import Button from '../../../lib/ui/forms/ButtonWithInlineLabel'
 import Dropdown from '../../../lib/ui/forms/Dropdown'
 import { Heading } from '../../../lib/ui/typography';
+import Toggle from '../../../lib/ui/forms/Toggle';
+import TermsAndConditons from './TermsAndConditions'
 /*
  * Types
  */
@@ -46,7 +48,8 @@ const Settings: FC<Props> = () => {
         <Dropdown label='Gender' options={genders}/>
         <Dropdown label='Year of birth' options={genders}/>
         <Input label='Post code'/>
-
+        <Toggle label="Locations reminders"></Toggle>
+        <TermsAndConditons></TermsAndConditons>
       </Form>
     </View>
   );

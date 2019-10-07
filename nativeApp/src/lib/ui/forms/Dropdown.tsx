@@ -23,7 +23,8 @@ type Props = {
 const Item = styled(I)`
   alignItems: center;
   marginLeft: 0;
-  width:100%
+  width:100%;
+  justifyContent: space-between;
 `;
 
 const Label = styled(L)`

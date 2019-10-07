@@ -19,11 +19,13 @@ type Props = {
 const Item = styled(I)`
   alignItems: center;
   marginLeft: 0;
-  width:100%
+  width:100%;
+  paddingTop: 12;
+  paddingBottom: 12;
+  justifyContent: space-between;
 `;
 
 const Label = styled(L)`
- width: ${Forms.labelWidth};
 `;
 
 /*
