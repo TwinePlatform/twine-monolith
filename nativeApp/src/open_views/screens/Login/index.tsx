@@ -5,7 +5,7 @@ import { NavigationScreenProp, NavigationState } from 'react-navigation';
 import { Form as F, Button as B } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import Input from '../../../lib/ui/forms/Input';
+import Input from '../../../lib/ui/forms/InputWithIcon';
 import { ColoursEnum } from '../../../lib/ui/colours';
 
 /*

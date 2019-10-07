@@ -10,4 +10,5 @@ export enum ColoursEnum {
   darkPurple = '#46008c',
   red = '#F44336',
   mustard = '#FFBF00',
+  blue = '#007bff'
 }

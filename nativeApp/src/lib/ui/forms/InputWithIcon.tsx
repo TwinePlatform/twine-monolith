@@ -21,6 +21,9 @@ const Item = styled(I)`
   marginLeft: 0;
 `;
 
+/*
+ * Component
+ */
 const Input: FC<Props> = (props) => {
   const { children: icon, name, value, ...rest} = props;
   return (
