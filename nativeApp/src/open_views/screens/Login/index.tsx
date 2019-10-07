@@ -61,7 +61,7 @@ const Submit = styled(B)`
   justifyContent: center;
   marginTop: 20;
   marginBottom: 40;
-`
+`;
 
 const SubmitText = styled.Text`
   color: ${ColoursEnum.white};
@@ -71,47 +71,44 @@ const SubmitText = styled.Text`
 /*
  * Component
  */
-const Login: FC<Props> = (props) => {
+const Login: FC<Props> = (props) => (
+  <Page>
 
-  return (
-    <Page>
+    <Container>
+      <Image source={require('../../../../assets/images/logo_image.png')} />
+    </Container>
 
-      <Container>
-        <Image source={require('../../../../assets/images/logo_image.png')}/>
-      </Container>
+    <Container>
+      <Form>
+        <Input name="Email" autoCompleteType="email">
+          <MaterialCommunityIcons name="email-outline" outline size={27} color={ColoursEnum.grey} />
+        </Input>
+        <Input name="Password" autoCompleteType="password" secureTextEntry>
+          <MaterialCommunityIcons name="lock-outline" size={27} color={ColoursEnum.grey} />
+        </Input>
+      </Form>
 
-      <Container>
-        <Form>
-          <Input name="Email" autoCompleteType="email">
-            <MaterialCommunityIcons name="email-outline" outline size={27} color={ColoursEnum.grey}/>
-          </Input>
-          <Input name="Password" autoCompleteType="password" secureTextEntry={true}>
-            <MaterialCommunityIcons name="lock-outline" size={27} color={ColoursEnum.grey}/>
-          </Input>
-        </Form>
-
-        <Submit
-          onPress={() => props.navigation.navigate('VolunteerRouter')}
-        >
-          <SubmitText>LOG IN</SubmitText>
-        </Submit>
-        <Link
-          onPress={() => props.navigation.navigate('Register')}
-        >
+      <Submit
+        onPress={() => props.navigation.navigate('VolunteerRouter')}
+      >
+        <SubmitText>LOG IN</SubmitText>
+      </Submit>
+      <Link
+        onPress={() => props.navigation.navigate('Register')}
+      >
           Forgot password
-        </Link>
-      </Container>
+      </Link>
+    </Container>
 
-      <BottomContainer>
-        <Link
-          onPress={() => props.navigation.navigate('Register')}
-        >
+    <BottomContainer>
+      <Link
+        onPress={() => props.navigation.navigate('Register')}
+      >
           Create a new account
-        </Link>
-      </BottomContainer>
+      </Link>
+    </BottomContainer>
 
-    </Page>
-  );
-};
+  </Page>
+);
 
 export default Login;

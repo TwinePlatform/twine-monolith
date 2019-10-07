@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import styled from 'styled-components/native'
+import styled from 'styled-components/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Heading as H } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
-import Stat from './Stat'
+import Stat from './Stat';
 
 /*
  * Types
@@ -45,40 +45,37 @@ const Line = styled.View`
 /*
  * Component
  */
-const VolunteerHome: FC<Props> = () => {
+const VolunteerHome: FC<Props> = () => (
+  <View>
+    <Heading>My Stats</Heading>
+    <Container>
 
-  return (
-    <View>
-      <Heading>My Stats</Heading>
-      <Container>
+      <Stat
+        heading="TOTAL TIME GIVEN"
+        value="109"
+        unit="hours"
+      >
+        <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard} />
+      </Stat>
+      <Line />
+      <Stat
+        heading="TIMES VOLUNTEERED"
+        value="42"
+        unit="visits"
+      >
+        <MaterialCommunityIcons name="calendar-blank" outline size={35} color={ColoursEnum.mustard} />
+      </Stat>
+      <Line />
+      <Stat
+        heading="AVERAGE DURATION"
+        value="120"
+        unit="minutes"
+      >
+        <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
+      </Stat>
+    </Container>
 
-        <Stat 
-          heading="TOTAL TIME GIVEN"
-          value="109"
-          unit="hours"
-        >
-          <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard}/>
-        </Stat>
-        <Line/>
-        <Stat 
-          heading="TIMES VOLUNTEERED"
-          value="42"
-          unit="visits"
-        >
-          <MaterialCommunityIcons name="calendar-blank" outline size={35} color={ColoursEnum.mustard}/>
-        </Stat>
-        <Line/>
-        <Stat 
-          heading="AVERAGE DURATION"
-          value="120"
-          unit="minutes"
-        >
-          <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard}/>
-        </Stat>
-      </Container>
-      
-    </View>
-  );
-}
+  </View>
+);
 
 export default VolunteerHome;

@@ -1,5 +1,4 @@
-export default (fileName) => {
-  return `
+export default (fileName) => `
 import React, { FC } from 'react';
 import styled from 'styled-components/native'
 
@@ -27,5 +26,4 @@ const ${fileName}: FC<Props> = (props) => {
 
 export default ${fileName};
 
-`
-}
+`;

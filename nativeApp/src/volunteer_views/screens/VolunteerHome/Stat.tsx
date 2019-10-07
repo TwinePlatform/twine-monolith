@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import styled from 'styled-components/native'
+import styled from 'styled-components/native';
 import { FontsEnum } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
 
@@ -9,7 +9,7 @@ import { ColoursEnum } from '../../../lib/ui/colours';
  */
 type Props = {
   heading: string;
-  value: string; 
+  value: string;
   unit: string;
 }
 
@@ -60,8 +60,10 @@ const Unit = styled.Text`
 /*
  * Component
  */
-const Stat: FC<Props> = (props) =>{
-  const {heading, children:icon, value, unit} = props;
+const Stat: FC<Props> = (props) => {
+  const {
+    heading, children: icon, value, unit,
+  } = props;
   return (
     <StatContainer>
       <SubheadingContainer>
@@ -73,6 +75,7 @@ const Stat: FC<Props> = (props) =>{
         <Unit>{unit}</Unit>
       </ValueContainer>
     </StatContainer>
-  )}
+  );
+};
 
 export default Stat;

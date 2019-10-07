@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import styled from 'styled-components/native'
+import styled from 'styled-components/native';
 import { Item as I, Picker, Label as L } from 'native-base';
 import { TextInputProps } from 'react-native';
-import { Forms } from './enums';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Forms } from './enums';
 import { ColoursEnum } from '../colours';
 
 
@@ -35,7 +35,9 @@ const Label = styled(L)`
  * Component
  */
 const Dropdown: FC<Props> = (props) => {
-  const { label, options, selectedValue, onValueChange, ...rest} = props;
+  const {
+    label, options, selectedValue, onValueChange, ...rest
+  } = props;
   return (
     <Item picker inlineLabel>
       <Label>{label}</Label>
@@ -47,15 +49,15 @@ const Dropdown: FC<Props> = (props) => {
         placeholderStyle={{ color: ColoursEnum.grey }}
         placeholderIconColor="#007aff"
         selectedValue={selectedValue}
-        onValueChange={()=>{}}
+        onValueChange={() => {}}
       >
-        {options.map(({id, name}) => (
-          <Picker.Item label={name} value={id} key={id}/>
+        {options.map(({ id, name }) => (
+          <Picker.Item label={name} value={id} key={id} />
         ))}
 
       </Picker>
     </Item>
-  )
-}
+  );
+};
 
 export default Dropdown;

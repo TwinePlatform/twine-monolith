@@ -11,8 +11,8 @@ import { ColoursEnum } from '../lib/ui/colours';
 
 const TabNavigator = createBottomTabNavigator({
   Home: VolunteerHome,
-  Time: Time,
-  Settings: Settings,
+  Time,
+  Settings,
 },
 {
   defaultNavigationOptions: ({ navigation }) => ({
@@ -21,11 +21,11 @@ const TabNavigator = createBottomTabNavigator({
       const IconComponent = MaterialCommunityIcons;
       let iconName;
       if (routeName === 'Home') {
-        iconName = "home-outline";
+        iconName = 'home-outline';
       } else if (routeName === 'Time') {
-        iconName = `clock-fast`;
+        iconName = 'clock-fast';
       } else if (routeName === 'Settings') {
-        iconName = `settings-outline`;
+        iconName = 'settings-outline';
       }
 
       // You can return any component that you like here!

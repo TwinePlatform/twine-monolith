@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import styled from 'styled-components/native'
-import { Switch, SwitchProps } from 'react-native'
+import styled from 'styled-components/native';
+import { Switch, SwitchProps } from 'react-native';
 import { Item as I, Input as _Input, Label as L } from 'native-base';
 import { Forms } from './enums';
 
@@ -32,13 +32,13 @@ const Label = styled(L)`
  * Component
  */
 const Toggle: FC<Props> = (props) => {
-  const { label, ...rest} = props;
+  const { label, ...rest } = props;
   return (
     <Item inlineLabel>
       <Label>{label}</Label>
-      <Switch {...rest}/>
+      <Switch {...rest} />
     </Item>
-  )
-}
+  );
+};
 
 export default Toggle;

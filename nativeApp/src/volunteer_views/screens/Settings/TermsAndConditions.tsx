@@ -36,7 +36,7 @@ const Toggle: FC<Props> = () => (
   <Item inlineLabel>
     <Button transparent>
       <Label>Terms and Conditions</Label>
-      <MaterialIcons name="keyboard-arrow-right" size={30} color={ColoursEnum.darkGrey}/>
+      <MaterialIcons name="keyboard-arrow-right" size={30} color={ColoursEnum.darkGrey} />
     </Button>
   </Item>
 );

@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from 'styled-components/native'
+import styled from 'styled-components/native';
 import { Picker } from 'react-native';
 
-import { CommunityBusinesses } from '../../../lib/api'
+import { CommunityBusinesses } from '../../../lib/api';
 import useRequest from '../../../lib/hooks/requestHook';
 import { Heading } from '../../../lib/ui/typography';
 
@@ -39,9 +39,8 @@ export default function Register() {
   return (
     <View>
       <Heading>Register</Heading>
-      <StyledPicker
-      >
-        {data && data.map(x => <Picker.Item key={x.id} label={x.name} value={x.name}/>)}
+      <StyledPicker>
+        {data && data.map((x) => <Picker.Item key={x.id} label={x.name} value={x.name} />)}
       </StyledPicker>
       {error && <Text>{JSON.stringify(error)}</Text>}
     </View>

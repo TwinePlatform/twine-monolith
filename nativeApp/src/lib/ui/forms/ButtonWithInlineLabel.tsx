@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import styled from 'styled-components/native'
+import styled from 'styled-components/native';
 import { Item as I, Label as L, Button as B } from 'native-base';
 import { ColoursEnum } from '../colours';
 import { Forms } from './enums';
@@ -37,7 +37,7 @@ const Label = styled(L)`
  * Component
  */
 const LabeledButton: FC<Props> = (props) => {
-  const { label, text, onPress} = props;
+  const { label, text, onPress } = props;
   return (
     <Item inlineLabel>
       <Label>{label}</Label>
@@ -47,7 +47,7 @@ const LabeledButton: FC<Props> = (props) => {
         </Text>
       </Button>
     </Item>
-  )
-}
+  );
+};
 
 export default LabeledButton;

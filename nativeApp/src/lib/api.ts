@@ -15,6 +15,5 @@ export const axios = _axios.create({
 
 export const CommunityBusinesses = {
 
-  getVolunteerActivities: () =>
-    axios.get('/volunteer-activities'),
+  getVolunteerActivities: () => axios.get('/volunteer-activities'),
 };

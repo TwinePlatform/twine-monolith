@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import styled from 'styled-components/native'
+import styled from 'styled-components/native';
 import { Item as I, Input as _Input, Label as L } from 'native-base';
 import { TextInputProps } from 'react-native';
 import { Forms } from './enums';
@@ -30,13 +30,13 @@ const Label = styled(L)`
  * Component
  */
 const Input: FC<Props> = (props) => {
-  const { label, value, ...rest} = props;
+  const { label, value, ...rest } = props;
   return (
     <Item inlineLabel>
       <Label>{label}</Label>
       <_Input {...rest}>{value}</_Input>
     </Item>
-  )
-}
+  );
+};
 
 export default Input;
