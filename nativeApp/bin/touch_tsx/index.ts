@@ -23,19 +23,15 @@ import getTemplate from './template';
 
 const capitaliseFirst = (string) => string.charAt(0).toUpperCase() + string.substring(1);
 
-(() => {
-  process.on('unhandledRejection', (err) => { throw err; });
+const [path, file] = process.argv.slice(2);
+if (file) {
+  const fileName = capitaliseFirst(file);
+  writeFileSync(`${path}/${fileName}.tsx`, getTemplate(fileName), { flag: 'wx' });
+} else {
+  const fileName = capitaliseFirst(path.split('/').slice(-1)[0]);
 
-  const [path, file] = process.argv.slice(2);
-  if (file) {
-    const fileName = capitaliseFirst(file);
-    writeFileSync(`${path}/${fileName}.tsx`, getTemplate(fileName), { flag: 'wx' });
-  } else {
-    const fileName = capitaliseFirst(path.split('/').slice(-1)[0]);
+  !existsSync(path) && mkdirSync(`${path}`); //eslint-disable-line
+  writeFileSync(`${path}/index.tsx`, getTemplate(fileName), { flag: 'wx' });
+}
 
-    !existsSync(path) && mkdirSync(`${path}`);
-    writeFileSync(`${path}/index.tsx`, getTemplate(fileName), { flag: 'wx' });
-  }
-
-  console.log('🎉 File has been created');
-})();
+console.log('🎉 File has been created');

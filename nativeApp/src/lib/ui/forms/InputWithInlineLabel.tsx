@@ -8,10 +8,10 @@ import { Forms } from './enums';
 /*
  * Types
  */
-type Props = {
+interface Props extends TextInputProps {
   label: string;
   value?: string;
-} & TextInputProps
+}
 
 /*
  * Styles

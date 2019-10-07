@@ -6,10 +6,9 @@ import { Item as I, Label as L } from 'native-base';
 /*
  * Types
  */
-type Props = {
+interface Props extends SwitchProps {
   label: string;
-  value?: string;
-} & SwitchProps
+}
 
 /*
  * Styles

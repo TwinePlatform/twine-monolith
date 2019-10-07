@@ -8,10 +8,10 @@ import { ColoursEnum } from '../colours';
 /*
  * Types
  */
-type Props = {
+interface Props extends TextInputProps {
   name: string;
   value?: string;
-} & TextInputProps
+}
 
 /*
  * Styles

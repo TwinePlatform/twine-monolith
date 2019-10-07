@@ -1,5 +1,4 @@
-export default (fileName) => `
-import React, { FC } from 'react';
+export default (fileName) => `import React, { FC } from 'react';
 import styled from 'styled-components/native'
 
 /*
@@ -12,7 +11,7 @@ type Props = {
  * Styles
  */
 const View = styled.View\`
-  \`;
+\`;
 
 /*
  * Component
