@@ -15,6 +15,7 @@ type Props = {
  */
 const Page = styled.ScrollView`
 `;
+
 const View = styled.View`
   alignItems: center;
   paddingTop: 20;
