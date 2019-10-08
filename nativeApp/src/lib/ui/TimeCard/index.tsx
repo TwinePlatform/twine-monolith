@@ -11,6 +11,7 @@ import { FontsEnum } from '../typography';
  */
 type Props = {
   id: number;
+  volunteer?: string;
   timeValues: [number, number];
   date: string;
   labels: [string, string];
@@ -22,7 +23,6 @@ type Props = {
 const Card = styled(C)`
   width: 85%;
   marginBottom: 10;
-
 `;
 
 const TopContainer = styled.View`
@@ -38,6 +38,7 @@ const ValueContainer = styled.View`
   width: 100%;
   flexDirection: row;
   alignItems: flex-end;
+  marginBottom: 5;
 `;
 
 const Value = styled.Text`
@@ -65,18 +66,10 @@ const LabelContainer = styled.View`
   flex: 1;
 `;
 
-const Date = styled.Text`
-  flex: 1;
+const Label = styled.Text<{bold?: boolean; textAlign: string}>`
+  textAlign: ${(props) => props.textAlign};
   color: ${ColoursEnum.darkGrey};
-  fontSize: 15;
-  letterSpacing: 1.2;
-  paddingBottom: 6;
-`;
-
-const Label = styled.Text`
-  textAlign: right;
-  color: ${ColoursEnum.darkGrey};
-  fontFamily: ${FontsEnum.medium}
+  fontFamily: ${(props) => (props.bold ? FontsEnum.medium : FontsEnum.light)}
   fontSize: 15;
   letterSpacing: 1.2;
   paddingBottom: 6;
@@ -111,7 +104,9 @@ const BorderRight = styled.View`
  * Component
  */
 const TimeCard: FC<Props> = (props) => {
-  const { timeValues, date, labels } = props;
+  const {
+    timeValues, date, labels, volunteer,
+  } = props;
   return (
     <Card>
       <TopContainer>
@@ -122,10 +117,13 @@ const TimeCard: FC<Props> = (props) => {
           <Unit>minutes</Unit>
         </ValueContainer>
         <DetailsContainer>
-          <Date>{date}</Date>
           <LabelContainer>
-            <Label>{labels[0]}</Label>
-            <Label>{labels[1]}</Label>
+            <Label textAlign="left">{date}</Label>
+            {volunteer && <Label textAlign="left" bold>{volunteer}</Label>}
+          </LabelContainer>
+          <LabelContainer>
+            <Label textAlign="right" bold>{labels[0]}</Label>
+            <Label textAlign="right" bold>{labels[1]}</Label>
           </LabelContainer>
         </DetailsContainer>
       </TopContainer>

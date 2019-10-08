@@ -9,6 +9,7 @@ import AdminHome from './AdminHome';
 import Projects from './Projects';
 import Settings from './Settings';
 import Volunteers from './Volunteers';
+import AdminTime from './AdminTime';
 
 const getIconName = (name: string) => {
   switch (name) {
@@ -16,6 +17,8 @@ const getIconName = (name: string) => {
       return [MaterialIcons, 'person-outline'];
     case 'Projects':
       return [MaterialIcons, 'assignment'];
+    case 'Time':
+      return [MaterialCommunityIcons, 'clock-fast'];
     case 'Settings':
       return [MaterialCommunityIcons, 'settings-outline'];
     case 'Home':
@@ -27,6 +30,7 @@ const getIconName = (name: string) => {
 const TabNavigator = createBottomTabNavigator({
   Home: AdminHome,
   Volunteers,
+  Time: AdminTime,
   Projects,
   Settings,
 },
