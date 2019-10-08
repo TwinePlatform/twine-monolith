@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Heading as H } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
-import Stat from './Stat';
+import Stat from '../../../lib/ui/Stat';
 
 /*
  * Types
