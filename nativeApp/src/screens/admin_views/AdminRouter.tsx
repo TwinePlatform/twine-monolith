@@ -6,6 +6,9 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 import { ColoursEnum } from '../../lib/ui/colours';
 import AdminHome from './AdminHome';
+import Projects from './Projects';
+import Settings from './Settings';
+import Volunteers from './Volunteers';
 
 const getIconName = (name: string) => {
   switch (name) {
@@ -23,6 +26,9 @@ const getIconName = (name: string) => {
 
 const TabNavigator = createBottomTabNavigator({
   Home: AdminHome,
+  Volunteers,
+  Projects,
+  Settings,
 },
 {
   defaultNavigationOptions: ({ navigation }) => ({
