@@ -6,12 +6,13 @@ import { setCustomText } from 'react-native-global-props';
 
 import * as Font from 'expo-font';
 
-import Login from './src/open_views/screens/Login';
-import Register from './src/open_views/screens/Register';
+import Login from './src/screens/open_views/Login';
+import Register from './src/screens/open_views/Register';
 
-import VolunteerRouter from './src/volunteer_views/VolunteerRouter';
+import VolunteerRouter from './src/screens/volunteer_views/VolunteerRouter';
 import { FontsEnum } from './src/lib/ui/typography';
 import { ColoursEnum } from './src/lib/ui/colours';
+import AdminRouter from './src/screens/admin_views/AdminRouter';
 
 
 const RootStack = createStackNavigator(
@@ -24,6 +25,9 @@ const RootStack = createStackNavigator(
     },
     VolunteerRouter: {
       screen: VolunteerRouter,
+    },
+    AdminRouter: {
+      screen: AdminRouter,
     },
   },
   {

@@ -95,6 +95,11 @@ const Login: FC<Props> = (props) => (
       >
         <SubmitText>LOG IN</SubmitText>
       </Submit>
+      <Submit
+        onPress={() => props.navigation.navigate('AdminRouter')}
+      >
+        <SubmitText>LOG IN AS ADMIN</SubmitText>
+      </Submit>
       <LinkText
         onPress={() => props.navigation.navigate('Register')}
       >
