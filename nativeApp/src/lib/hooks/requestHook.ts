@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 
-const useRequest = (axiosRequest: (x) => Promise<{result: any}>, payload?) => {
+interface Res { result: any }
+
+const useRequest = <T extends Res, U>(axiosRequest: (q?: U) => Promise<T>, payload?: U) => {
   const [data, setData] = useState();
   const [error, setError] = useState();
   useEffect(() => () => {
