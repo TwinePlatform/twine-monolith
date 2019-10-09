@@ -253,10 +253,6 @@ export const VolunteerLogs: VolunteerLogCollection = {
       });
   },
 
-  async serialise (log) {
-    return log;
-  },
-
   async getProjects (client, cb) {
     return client('volunteer_project')
       .select({

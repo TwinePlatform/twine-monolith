@@ -192,14 +192,14 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   async getTemporary (client) {
     return client('organisation')
-    .select({
-      id: 'organisation.organisation_id',
-      name: 'organisation.organisation_name',
-      createdAt: 'organisation.created_at',
-      modifiedAt: 'organisation.modified_at',
-      deletedAt: 'organisation.deleted_at',
-    })
-    .where({ is_temp: true });
+      .select({
+        id: 'organisation.organisation_id',
+        name: 'organisation.organisation_name',
+        createdAt: 'organisation.created_at',
+        modifiedAt: 'organisation.modified_at',
+        deletedAt: 'organisation.deleted_at',
+      })
+      .where({ is_temp: true });
   },
 
   async exists (client, query) {
@@ -227,9 +227,9 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         .returning('*');
 
       await trx
-      .insert({ code, organisation_id: newOrg.organisation_id, })
-      .into('volunteer_admin_code')
-      .returning('*');
+        .insert({ code, organisation_id: newOrg.organisation_id, })
+        .into('volunteer_admin_code')
+        .returning('*');
 
       return trx
         .insert({
@@ -292,10 +292,6 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       .where(preProcessCb(client)(cb));
   },
 
-  async serialise (cb) {
-    return cb;
-  },
-
   async addFeedback (client, cb, score) {
     const [res] = await client('visit_feedback')
       .insert({ score, organisation_id: cb.id })
@@ -327,8 +323,8 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     );
 
     const query = bw
-        ? baseQuery.whereBetween('created_at', [bw.since, bw.until])
-        : baseQuery;
+      ? baseQuery.whereBetween('created_at', [bw.since, bw.until])
+      : baseQuery;
 
     return query;
   },
@@ -364,29 +360,29 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   async getVisitActivityById (client, cb, id) {
     const [visitActivity] = await client('visit_activity')
-        .leftOuterJoin(
-          'visit_activity_category',
-          'visit_activity_category.visit_activity_category_id',
-          'visit_activity.visit_activity_category_id')
-        .select({
-          id: 'visit_activity_id',
-          name: 'visit_activity_name',
-          category: 'visit_activity_category.visit_activity_category_name',
-          monday: 'monday',
-          tuesday: 'tuesday',
-          wednesday: 'wednesday',
-          thursday: 'thursday',
-          friday: 'friday',
-          saturday: 'saturday',
-          sunday: 'sunday',
-          createdAt: 'visit_activity.created_at',
-          modifiedAt: 'visit_activity.modified_at',
-        })
-        .where({
-          visit_activity_id: id,
-          'visit_activity.deleted_at': null,
-          organisation_id: cb.id,
-        });
+      .leftOuterJoin(
+        'visit_activity_category',
+        'visit_activity_category.visit_activity_category_id',
+        'visit_activity.visit_activity_category_id')
+      .select({
+        id: 'visit_activity_id',
+        name: 'visit_activity_name',
+        category: 'visit_activity_category.visit_activity_category_name',
+        monday: 'monday',
+        tuesday: 'tuesday',
+        wednesday: 'wednesday',
+        thursday: 'thursday',
+        friday: 'friday',
+        saturday: 'saturday',
+        sunday: 'sunday',
+        createdAt: 'visit_activity.created_at',
+        modifiedAt: 'visit_activity.modified_at',
+      })
+      .where({
+        visit_activity_id: id,
+        'visit_activity.deleted_at': null,
+        organisation_id: cb.id,
+      });
 
     return visitActivity || null;
   },
@@ -495,7 +491,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       return log;
     });
 
-    return <VisitEvent> res;
+    return res as VisitEvent;
 
   },
 
@@ -537,7 +533,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         'visit_activity.visit_activity_category_id')
       .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
       .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id'),
-      query);
+    query);
   },
 
   async getVisitLogAggregates (client, cb, aggs, query) {
@@ -555,7 +551,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       whereBetween: pipe(
         evolve({ birthYear: AgeList.toBirthYear }),
         Objects.renameKeys({ birthYear: 'user_account.birth_year' })
-        ),
+      ),
     });
 
     const modifyColumnNamesForAge = evolve({
@@ -566,7 +562,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       whereBetween: pipe(
         evolve({ birthYear: AgeList.toBirthYear }),
         Objects.renameKeys({ birthYear: 'age_group_table.birth_year' })
-        ),
+      ),
     });
 
     const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);
@@ -587,10 +583,10 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
         .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
         .groupBy('gender.gender_name')
-        , queryMatchOnColumnNames)
+      , queryMatchOnColumnNames)
         .then((rows) => {
           const gender: Dictionary<number> = rows
-            .reduce((acc: Dictionary<number>, row: {gender: string, count: number}) => {
+            .reduce((acc: Dictionary<number>, row: {gender: string; count: number}) => {
               acc[row.gender] = Number(row.count);
               return acc;
             } , {});
@@ -611,7 +607,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         .groupBy('visit_activity.visit_activity_name'), queryMatchOnColumnNames)
         .then((rows) => {
           const visitActivity = rows
-            .reduce((acc: Dictionary<number>, row: {activity: string, count: number}) => {
+            .reduce((acc: Dictionary<number>, row: {activity: string; count: number}) => {
               acc[row.activity] = Number(row.count);
               return acc;
             } , {});
@@ -630,20 +626,20 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
             'END AS age_group ' +
             'FROM visit_log ' +
             'INNER JOIN user_account ON user_account.user_account_id = visit_log.user_account_id')
-          )
-          // TODO: generate case statements based on supplied query
-          .innerJoin(
-            'visit_activity',
-            'visit_activity.visit_activity_id',
-            'age_group_table.visit_activity_id')
-          .innerJoin('gender', 'gender.gender_id', 'age_group_table.gender_id')
-          .count('age_group')
-          .select({ ageGroup: 'age_group' })
-          .groupBy('age_group')
-          .from('age_group_table'), ageQuery)
+      )
+      // TODO: generate case statements based on supplied query
+        .innerJoin(
+          'visit_activity',
+          'visit_activity.visit_activity_id',
+          'age_group_table.visit_activity_id')
+        .innerJoin('gender', 'gender.gender_id', 'age_group_table.gender_id')
+        .count('age_group')
+        .select({ ageGroup: 'age_group' })
+        .groupBy('age_group')
+        .from('age_group_table'), ageQuery)
         .then((rows) => {
           const age = rows
-            .reduce((acc: Dictionary<number>, row: {ageGroup: string, count: number}) => {
+            .reduce((acc: Dictionary<number>, row: {ageGroup: string; count: number}) => {
               acc[row.ageGroup] = Number(row.count);
               return acc;
             } , {});

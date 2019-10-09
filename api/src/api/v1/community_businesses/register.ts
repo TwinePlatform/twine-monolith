@@ -7,6 +7,7 @@ import { Api } from '../types/api';
 import { response, cbPayload } from './schema';
 import { userName, email } from '../users/schema';
 import { Tokens } from '../../../models/token';
+import { Serialisers } from '../serialisers';
 
 
 const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
@@ -82,7 +83,7 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
 
       await EmailService.newCbAdmin(config, user, cb, token);
 
-      return CommunityBusinesses.serialise(cb);
+      return Serialisers.communityBusinesses.identity(cb);
     },
   },
 ];

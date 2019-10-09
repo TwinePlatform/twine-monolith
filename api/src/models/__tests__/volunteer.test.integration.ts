@@ -220,13 +220,4 @@ describe('Volunteer model', () => {
       }
     });
   });
-
-  describe('Serialisation', () => {
-    test('serialise :: returns model object without secrets', async () => {
-      const volunteer = await Volunteers.getOne(knex);
-      const serialised = await Volunteers.serialise(volunteer);
-
-      expect(serialised).toEqual(omit(['password', 'qrCode'], volunteer));
-    });
-  });
 });

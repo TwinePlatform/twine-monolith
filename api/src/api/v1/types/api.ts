@@ -5,14 +5,11 @@ import { Duration } from 'twine-util/duration';
 import { ApiRequestQuery } from '../schema/request';
 import { GenderEnum, CommunityBusiness, User, CommonTimestamps, VolunteerLog } from '../../../models';
 import {
-  CbAdminCollection,
   CommunityBusinessCollection,
   Weekday,
   VisitActivity,
   VisitEvent,
   VolunteerLogCollection,
-  VisitorCollection,
-  VolunteerCollection,
   UserCollection,
   RoleEnum,
   LinkedVisitEvent,
@@ -20,6 +17,7 @@ import {
   VisitSignInType
 } from '../../../models/types';
 import { Unpack, AppEnum, Maybe } from '../../../types/internal';
+import { Serialisers } from '../serialisers';
 
 
 interface ServerRoute<
@@ -38,7 +36,7 @@ export namespace Api {
   export namespace CommunityBusinesses {
     export namespace GET {
       export interface Request extends Hapi.Request { query: ApiRequestQuery & Dictionary<any> }
-      export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>[];
+      export type Result = CommunityBusiness[];
       export type Response = ResponsePayload<Result>;
       export type Route = ServerRoute<Request, Response>;
     }
@@ -49,7 +47,7 @@ export namespace Api {
           query: ApiRequestQuery & Dictionary<any>;
           pre: { communityBusiness: CommunityBusiness };
         }
-        export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
+        export type Result = CommunityBusiness;
         export type Response = ResponsePayload<Result>;
         export type Route = ServerRoute<Request, Response>;
       }
@@ -60,7 +58,7 @@ export namespace Api {
             Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
           pre: { communityBusiness: CommunityBusiness };
         }
-        export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
+        export type Result = CommunityBusiness;
         export type Response = ResponsePayload<Result>;
         export type Route = ServerRoute<Request, Response>;
       }
@@ -187,7 +185,7 @@ export namespace Api {
               communityBusiness: CommunityBusiness;
             };
           }
-          export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>[];
+          export type Result = VolunteerLog[];
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
 
@@ -198,7 +196,7 @@ export namespace Api {
             };
             pre: { communityBusiness: CommunityBusiness };
           }
-          export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>;
+          export type Result = VolunteerLog;
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
 
@@ -237,7 +235,7 @@ export namespace Api {
                 communityBusiness: CommunityBusiness;
               };
             }
-            export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>;
+            export type Result = VolunteerLog;
             export type Route = ServerRoute<Request, ResponsePayload<Result>>;
           }
 
@@ -249,7 +247,7 @@ export namespace Api {
                 communityBusiness: CommunityBusiness;
               };
             }
-            export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>;
+            export type Result = VolunteerLog;
             export type Route = ServerRoute<Request, ResponsePayload<Result>>;
           }
 
@@ -272,7 +270,7 @@ export namespace Api {
               query: { visits?: string };
               pre: { communityBusiness: CommunityBusiness };
             }
-            export type Result = Unpack<ReturnType<VisitorCollection['serialise']>>;
+            export type Result = Unpack<ReturnType<typeof Serialisers.visitors.noSecrets>>;
             export type Route = ServerRoute<Request, ResponsePayload<Result>>;
           }
 
@@ -348,7 +346,7 @@ export namespace Api {
           query: ApiRequestQuery & Dictionary<any>;
           pre: { communityBusiness: CommunityBusiness };
         }
-        export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
+        export type Result = CommunityBusiness;
         export type Route = ServerRoute<Request, ResponsePayload<Result>>;
       }
 
@@ -358,7 +356,7 @@ export namespace Api {
             Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
           pre: { communityBusiness: CommunityBusiness };
         }
-        export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
+        export type Result = CommunityBusiness;
         export type Route = ServerRoute<Request, ResponsePayload<Result>>;
       }
 
@@ -403,7 +401,7 @@ export namespace Api {
             };
             pre: { communityBusiness: CommunityBusiness; isChild: boolean };
           }
-          export type Result = Unpack<ReturnType<VisitorCollection['serialise']>>[];
+          export type Result = User[];
           export type Meta = { total: number }
           export type Route = ServerRoute<Request, ResponsePayload<Result, Meta>>;
         }
@@ -415,7 +413,7 @@ export namespace Api {
               payload: Partial<Omit<User, 'id' | keyof CommonTimestamps | 'qrCode'>>;
               pre: { communityBusiness: CommunityBusiness };
             }
-            export type Result = Unpack<ReturnType<VisitorCollection['serialise']>>;
+            export type Result = User;
             export type Route = ServerRoute<Request, ResponsePayload<Result>>;
           }
         }
@@ -428,7 +426,7 @@ export namespace Api {
             query: ApiRequestQuery;
             pre: { communityBusiness: CommunityBusiness; isChild: boolean };
           }
-          export type Result = Unpack<ReturnType<VolunteerCollection['serialise']>>[];
+          export type Result = Unpack<ReturnType<typeof Serialisers.volunteers.noSecrets>>[];
           export type Meta = { total: number };
           export type Route = ServerRoute<Request, ResponsePayload<Result, Meta>>;
         }
@@ -446,7 +444,7 @@ export namespace Api {
               adminEmail: string;
             };
         }
-        export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
+        export type Result = CommunityBusiness;
         export type Response = ResponsePayload<Result>;
         export type Route = ServerRoute<Request, Response>;
       }
@@ -465,7 +463,7 @@ export namespace Api {
     export namespace CbAdmins {
       export namespace GET {
         export interface Request extends Hapi.Request { payload: {} }
-        export type Result = Unpack<ReturnType<CbAdminCollection['serialise']>>[];
+        export type Result = User[];
         export type Response = ResponsePayload<Result>;
         export type Route = ServerRoute<Request, Response>;
       }
@@ -582,7 +580,7 @@ export namespace Api {
             };
             pre: { communityBusiness: CommunityBusiness };
           }
-          export type Result = Unpack<ReturnType<VisitorCollection['serialise']>>;
+          export type Result = User;
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
       }
@@ -606,7 +604,7 @@ export namespace Api {
               role: RoleEnum.VOLUNTEER | RoleEnum.VOLUNTEER_ADMIN;
             };
           }
-          export type Result = Unpack<ReturnType<VolunteerCollection['serialise']>>;
+          export type Result = User;
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
       }
@@ -621,7 +619,7 @@ export namespace Api {
               role: RoleEnum;
             };
           }
-          export type Result = Unpack<ReturnType<VolunteerCollection['serialise']>> & { token?: string }
+          export type Result = User & { token?: string }
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
       }
@@ -634,7 +632,7 @@ export namespace Api {
             payload: { qrCode: string };
             pre: { communityBusiness: CommunityBusiness };
           }
-          export type Result = Maybe<Unpack<ReturnType<VisitorCollection['serialise']>>>;
+          export type Result = Maybe<User>;
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
       }
@@ -647,7 +645,7 @@ export namespace Api {
             params: { userId: string };
             pre: { requireSibling: boolean };
           }
-          export type Result = Unpack<ReturnType<VolunteerCollection['serialise']>>;
+          export type Result = User;
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
 
@@ -657,7 +655,7 @@ export namespace Api {
             payload: Partial<Omit<User, 'id' | 'createdAt' | 'modifiedAt' | 'deletedAt' | 'qrCode' | 'isTemp'>>;
             pre: { isSibling: boolean };
           }
-          export type Result = Unpack<ReturnType<VolunteerCollection['serialise']>>;
+          export type Result = User;
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
 
@@ -681,7 +679,7 @@ export namespace Api {
               };
               pre: { communityBusiness: CommunityBusiness };
             }
-            export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>[];
+            export type Result = VolunteerLog[];
             export type Route = ServerRoute<Request, ResponsePayload<Result>>;
           }
 
@@ -691,7 +689,7 @@ export namespace Api {
                 query: Pick<ApiRequestQuery<VolunteerLog>, 'fields'>;
                 params: { logId: string };
               }
-              export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>;
+              export type Result = VolunteerLog;
               export type Route = ServerRoute<Request, ResponsePayload<Result>>;
             }
 
@@ -701,7 +699,7 @@ export namespace Api {
                 payload: Partial<Pick<VolunteerLog, 'duration' | 'activity' | 'startedAt' | 'project'>>;
                 pre: { communityBusiness: CommunityBusiness };
               }
-              export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>;
+              export type Result = VolunteerLog;
               export type Route = ServerRoute<Request, ResponsePayload<Result>>;
             }
 
@@ -733,14 +731,14 @@ export namespace Api {
         export interface Request extends Hapi.Request {
           query: ApiRequestQuery<User>;
         }
-        export type Result = Unpack<ReturnType<UserCollection['serialise']>>;
+        export type Result = User;
         export type Route = ServerRoute<Request, ResponsePayload<Result>>;
       }
       export namespace PUT {
         export interface Request extends Hapi.Request {
           payload: Partial<Omit<User, 'id' | keyof CommonTimestamps | 'qrCode'>>;
         }
-        export type Result = Unpack<ReturnType<UserCollection['serialise']>>;
+        export type Result = User;
         export type Route = ServerRoute<Request, ResponsePayload<Result>>;
       }
       export namespace Roles {
@@ -757,7 +755,7 @@ export namespace Api {
         export interface Request extends Hapi.Request {
           payload: Partial<Omit<User, 'id' | keyof CommonTimestamps | 'qrCode'>>;
         }
-        export type Result = Unpack<ReturnType<UserCollection['serialise']>>;
+        export type Result = User;
         export type Route = ServerRoute<Request, ResponsePayload<Result>>;
       }
     }
@@ -782,7 +780,7 @@ export namespace Api {
       export interface Request extends Hapi.Request {
         query: { since: string; until: string };
       }
-      export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>[];
+      export type Result = VolunteerLog[];
       export type Route = ServerRoute<Request, ResponsePayload<Result>>;
     }
   }

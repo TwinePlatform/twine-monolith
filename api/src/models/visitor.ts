@@ -2,14 +2,13 @@
  * Visitor Model
  */
 import { createHmac, randomBytes } from 'crypto';
-import { assoc, omit, pick, evolve, compose, pipe, filter } from 'ramda';
+import { pick, evolve, compose, pipe, filter } from 'ramda';
 import { Objects, Promises } from 'twine-util';
 import { User, VisitorCollection, LinkedVisitEvent, RoleEnum } from './types';
 import { Users, ModelToColumn } from './user';
 import { AgeList } from './age';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { getConfig } from '../../config';
-import * as QRCode from '../services/qrcode';
 import Roles from './role';
 
 
@@ -127,15 +126,6 @@ export const Visitors: VisitorCollection = {
         }),
       query
     );
-  },
-
-  async serialise (user) {
-    const strippedUser = omit(['password', 'qrCode'], user);
-    const serialisedUser = user.qrCode
-      ? assoc('qrCode', await QRCode.create(user.qrCode), strippedUser)
-      : strippedUser;
-
-    return serialisedUser;
   },
 
   async getWithVisits (client, cb, q = {}, activity) {

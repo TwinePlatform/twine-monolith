@@ -21,6 +21,7 @@ import { Api } from '../../types/api';
 import { RoleEnum } from '../../../../models/types';
 import Roles from '../../../../models/role';
 import { Tokens } from '../../../../models/token';
+import { Serialisers } from '../../serialisers';
 
 
 const routes: [Api.Users.Register.Volunteers.POST.Route] = [
@@ -116,7 +117,7 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
         const volunteer =
           await Volunteers.addWithRole(knex, payload, role, communityBusiness, adminCode);
 
-        return Volunteers.serialise(volunteer);
+        return Serialisers.volunteers.noSecrets(volunteer);
 
       } catch (error) {
         if (error.message === 'Invalid volunteer admin code') {

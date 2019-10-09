@@ -143,17 +143,13 @@ describe('User Model', () => {
     });
 
     test('add :: create a new record using minimal information', async () => {
-      const changeset = await factory.build('user');
+      const changeset = await factory.build('volunteer');
+      const omitter = omit(['password']);
 
       const user = await Users.add(trx, changeset);
       const passwordCheck = await compare(changeset.password, user.password);
 
-      expect(user).toEqual(expect.objectContaining({
-        ...omit(['password'], changeset),
-        gender: 'prefer not to say',
-        ethnicity: 'prefer not to say',
-        disability: 'prefer not to say',
-      }));
+      expect(omitter(user)).toEqual(expect.objectContaining(omitter(changeset)));
       expect(passwordCheck).toBeTruthy();
     });
 
@@ -246,16 +242,6 @@ describe('User Model', () => {
       ]));
       expect(deletedUser.modifiedAt).not.toEqual(users[0].modifiedAt);
       expect(deletedUser.deletedAt).not.toEqual(null);
-    });
-  });
-
-  describe('Serialisation', () => {
-    test('serialise :: returns model object without secrets', async () => {
-      const user = await Users.getOne(knex);
-
-      const serialised = await Users.serialise(user);
-
-      expect(serialised).toEqual(omit(['password', 'qrCode'], user));
     });
   });
 

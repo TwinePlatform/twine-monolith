@@ -238,10 +238,6 @@ export const Users: UserCollection = {
       });
   },
 
-  async serialise (user: User) {
-    return omit(['password', 'qrCode'], user);
-  },
-
   async isMemberOf (client, user, cb) {
     const currentRoles = await Roles.fromUser(client, user);
     // currently not supporting roles at different cbs

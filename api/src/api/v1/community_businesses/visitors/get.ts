@@ -14,6 +14,7 @@ import { meOrId, id } from '../schema';
 import { Api } from '../../types/api';
 import { getCommunityBusiness, isChildOrganisation, requireChildUser } from '../../prerequisites';
 import { requestQueryToModelQuery } from '../../utils';
+import { Serialisers } from '../../serialisers';
 
 
 const routes: [
@@ -88,7 +89,7 @@ const routes: [
         : visitors.length;
 
       return {
-        result: await Promise.all((visitors as User[]).map((v) => Visitors.serialise(v))),
+        result: await Promise.all((visitors as User[]).map((v) => Serialisers.visitors.noSecrets(v))),
         meta: { total: count },
       };
     },
@@ -137,7 +138,7 @@ const routes: [
         return Boom.notFound('No visitor with this id');
       }
 
-      return Visitors.serialise(visitor);
+      return Serialisers.visitors.noSecrets(visitor);
     },
   },
 ];

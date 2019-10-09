@@ -4,6 +4,7 @@ import { response } from '../schema/response';
 import { requireChildOrganisation } from '../prerequisites';
 import { VolunteerLogs } from '../../../models';
 import { Api } from '../types/api';
+import { Serialisers } from '../serialisers';
 
 
 const routes: [Api.VolunteerLogs.GET.Route] = [
@@ -53,7 +54,7 @@ const routes: [Api.VolunteerLogs.GET.Route] = [
         order: ['startedAt', 'asc'],
       });
 
-      return Promise.all(volunteerLogs.map(VolunteerLogs.serialise));
+      return Promise.all(volunteerLogs.map(Serialisers.volunteerLogs.identity));
     },
   },
 ];

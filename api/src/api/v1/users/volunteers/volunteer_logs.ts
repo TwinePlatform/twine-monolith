@@ -11,6 +11,7 @@ import {
   volunteerLogActivity,
   volunteerLogDuration
 } from '../../community_businesses/schema';
+import { Serialisers } from '../../serialisers';
 
 
 const routes: [
@@ -59,7 +60,7 @@ const routes: [
         { since, until, limit: Number(query.limit), offset: Number(query.offset) }
       );
 
-      return Promise.all(logs.map(VolunteerLogs.serialise));
+      return Promise.all(logs.map(Serialisers.volunteerLogs.identity));
     },
   },
 
@@ -108,7 +109,7 @@ const routes: [
 
       return !log
         ? Boom.notFound('No log with this id found under this account')
-        : VolunteerLogs.serialise(log);
+        : Serialisers.volunteerLogs.identity(log);
     },
   },
 
@@ -160,7 +161,7 @@ const routes: [
 
       const updatedLog = await VolunteerLogs.update(knex, log, { ...payload });
 
-      return VolunteerLogs.serialise(updatedLog);
+      return Serialisers.volunteerLogs.identity(updatedLog);
     },
   },
 

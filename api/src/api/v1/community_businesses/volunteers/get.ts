@@ -6,6 +6,7 @@ import { meOrId } from '../schema';
 import { getCommunityBusiness, isChildOrganisation } from '../../prerequisites';
 import { Api } from '../../types/api';
 import { requestQueryToModelQuery } from '../../utils';
+import { Serialisers } from '../../serialisers';
 
 
 const routes: [Api.CommunityBusinesses.Id.Volunteers.GET.Route] = [
@@ -63,7 +64,7 @@ const routes: [Api.CommunityBusinesses.Id.Volunteers.GET.Route] = [
         : volunteers.length;
 
       return {
-        result: await Promise.all(volunteers.map(Volunteers.serialise)),
+        result: await Promise.all(volunteers.map(Serialisers.volunteers.noSecrets)),
         meta: { total: count },
       };
     },

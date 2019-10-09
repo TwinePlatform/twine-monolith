@@ -3,6 +3,7 @@ import { response } from '../../users/schema';
 import { id } from '../schema';
 import { getCommunityBusiness, requireChildOrganisation } from '../../prerequisites';
 import { Api } from '../../types/api';
+import { Serialisers } from '../../serialisers';
 
 
 const routes: [Api.CommunityBusinesses.CbAdmins.GET.Route] = [
@@ -32,7 +33,7 @@ const routes: [Api.CommunityBusinesses.CbAdmins.GET.Route] = [
       const admins = await CbAdmins.fromOrganisation(knex, communityBusiness);
 
       return {
-        result: await Promise.all(admins.map(CbAdmins.serialise)),
+        result: await Promise.all(admins.map(Serialisers.users.noSecrets)),
         meta: { total: admins.length },
       }
     },
