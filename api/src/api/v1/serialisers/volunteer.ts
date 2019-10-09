@@ -1,3 +1,1 @@
-import userSerialiser from './user';
-
-export default userSerialiser;
+export { noSecrets } from './user';

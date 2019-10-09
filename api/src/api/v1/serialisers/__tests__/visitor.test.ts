@@ -1,5 +1,5 @@
 import { omit } from 'ramda';
-import visitorSerialiser from '../visitor';
+import * as Visitors from '../visitor';
 import factory from '../../../../../tests/utils/factory';
 
 describe('Serialisers :: User', () => {
@@ -7,7 +7,7 @@ describe('Serialisers :: User', () => {
     const visitor = await factory.build('visitor');
     const omitter = omit(['password', 'qrCode']);
 
-    const result = await visitorSerialiser(visitor);
+    const result = await Visitors.noSecrets(visitor);
 
     expect(omitter(result)).toEqual(omitter(visitor));
     expect(result.qrCode).toEqual(expect.stringContaining('data:'));

@@ -68,7 +68,7 @@ const routes: [
       try {
         const updatedUser = await Users.update(knex, user, changeset);
 
-        return Serialisers.user(updatedUser);
+        return Serialisers.users.noSecrets(updatedUser);
 
       } catch (error) {
         // Intercept subset of class 23 postgres error codes thrown by `knex`
@@ -142,7 +142,7 @@ const routes: [
       try {
         const updatedUser = await Users.update(knex, user, changeset);
 
-        return Serialisers.user(updatedUser);
+        return Serialisers.users.noSecrets(updatedUser);
 
       } catch (error) {
         // Intercept subset of class 23 postgres error codes thrown by `knex`

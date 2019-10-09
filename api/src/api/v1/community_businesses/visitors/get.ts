@@ -89,7 +89,7 @@ const routes: [
         : visitors.length;
 
       return {
-        result: await Promise.all((visitors as User[]).map((v) => Serialisers.visitor(v))),
+        result: await Promise.all((visitors as User[]).map((v) => Serialisers.visitors.noSecrets(v))),
         meta: { total: count },
       };
     },
@@ -138,7 +138,7 @@ const routes: [
         return Boom.notFound('No visitor with this id');
       }
 
-      return Serialisers.visitor(visitor);
+      return Serialisers.visitors.noSecrets(visitor);
     },
   },
 ];

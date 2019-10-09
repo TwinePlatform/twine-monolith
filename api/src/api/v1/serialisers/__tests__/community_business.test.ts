@@ -1,7 +1,7 @@
-import cbSerialiser from '../community_business';
+import * as Cbs from '../community_business';
 
 describe('Serialisers :: Community Business', () => {
   test('identity', () => {
-    expect(cbSerialiser(1)).toBe(1);
+    expect(Cbs.identity(1)).toBe(1);
   });
 });

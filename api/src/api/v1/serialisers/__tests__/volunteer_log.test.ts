@@ -1,7 +1,7 @@
-import logSerialiser from '../volunteer_log';
+import * as Logs from '../volunteer_log';
 
 describe('Serialisers :: Volunteer Log', () => {
   test('identity', () => {
-    expect(logSerialiser(1)).toBe(1);
+    expect(Logs.identity(1)).toBe(1);
   });
 });

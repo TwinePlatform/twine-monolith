@@ -104,7 +104,7 @@ const routes: [
       const logs =
         await VolunteerLogs.fromCommunityBusiness(knex, communityBusiness, query);
 
-      return Promise.all(logs.map(Serialisers.volunteerLog));
+      return Promise.all(logs.map(Serialisers.volunteerLogs.identity));
     },
   },
 
@@ -147,7 +147,7 @@ const routes: [
         return Boom.notFound(`No log with ID: ${logId} found`);
       }
 
-      return Serialisers.volunteerLog(log);
+      return Serialisers.volunteerLogs.identity(log);
     },
   },
 
@@ -195,7 +195,7 @@ const routes: [
 
       const updatedLog = await VolunteerLogs.update(knex, log, payload);
 
-      return Serialisers.volunteerLog(updatedLog);
+      return Serialisers.volunteerLogs.identity(updatedLog);
     },
   },
 
@@ -316,7 +316,7 @@ const routes: [
           organisationId: communityBusiness.id,
         });
 
-        return Serialisers.volunteerLog(log);
+        return Serialisers.volunteerLogs.identity(log);
 
       } catch (error) {
         if (error.code === '23502') { // Violation of null constraint implies invalid activity

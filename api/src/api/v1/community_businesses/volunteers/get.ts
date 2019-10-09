@@ -64,7 +64,7 @@ const routes: [Api.CommunityBusinesses.Id.Volunteers.GET.Route] = [
         : volunteers.length;
 
       return {
-        result: await Promise.all(volunteers.map(Serialisers.volunteer)),
+        result: await Promise.all(volunteers.map(Serialisers.volunteers.noSecrets)),
         meta: { total: count },
       };
     },

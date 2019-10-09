@@ -83,7 +83,7 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
 
       await EmailService.newCbAdmin(config, user, cb, token);
 
-      return Serialisers.communityBusiness(cb);
+      return Serialisers.communityBusinesses.identity(cb);
     },
   },
 ];

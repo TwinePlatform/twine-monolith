@@ -34,7 +34,7 @@ const routes: [
       const { server: { app: { knex } }, query } = request;
 
       const cbs = await CommunityBusinesses.get(knex, query);
-      return Promise.all(cbs.map(Serialisers.communityBusiness));
+      return Promise.all(cbs.map(Serialisers.communityBusinesses.identity));
     },
   },
 
@@ -62,7 +62,7 @@ const routes: [
       ],
     },
     handler: async (request, h) => {
-      return Serialisers.communityBusiness(request.pre.communityBusiness);
+      return Serialisers.communityBusinesses.identity(request.pre.communityBusiness);
     },
   },
 
@@ -104,7 +104,7 @@ const routes: [
         return Boom.notFound(`No community business with the id: ${organisationId}`);
       }
 
-      return Serialisers.communityBusiness(communityBusiness);
+      return Serialisers.communityBusinesses.identity(communityBusiness);
     },
   },
 ];

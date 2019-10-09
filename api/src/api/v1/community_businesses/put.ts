@@ -38,7 +38,7 @@ const routes: [
 
       try {
         const cb = await CommunityBusinesses.update(knex, communityBusiness, changeSet);
-        return Serialisers.communityBusiness(cb);
+        return Serialisers.communityBusinesses.identity(cb);
 
       } catch (error) {
         // Intercept subset of class 23 postgres error codes thrown by `knex`
@@ -90,7 +90,7 @@ const routes: [
 
       try {
         const cb = await CommunityBusinesses.update(knex, communityBusiness, changeSet);
-        return Serialisers.communityBusiness(cb);
+        return Serialisers.communityBusinesses.identity(cb);
 
       } catch (error) {
         // Intercept subset of class 23 postgres error codes thrown by `knex`

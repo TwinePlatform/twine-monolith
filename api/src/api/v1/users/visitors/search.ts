@@ -34,7 +34,7 @@ const routes: [Api.Users.Visitors.Search.POST.Route] = [
 
       const visitor = await Visitors.getOne(knex, { where: { qrCode } });
 
-      return visitor ? Serialisers.visitor(visitor) : null;
+      return visitor ? Serialisers.visitors.noSecrets(visitor) : null;
     },
   },
 ];

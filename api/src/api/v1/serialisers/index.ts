@@ -1,13 +1,13 @@
-import user from './user';
-import visitor from './visitor';
-import volunteer from './volunteer';
-import volunteerLog from './volunteer_log';
-import communityBusiness from './community_business';
+import * as users from './user';
+import * as visitors from './visitor';
+import * as volunteers from './volunteer';
+import * as volunteerLogs from './volunteer_log';
+import * as communityBusinesses from './community_business';
 
 export const Serialisers = {
-  user,
-  visitor,
-  volunteer,
-  volunteerLog,
-  communityBusiness,
+  users,
+  visitors,
+  volunteers,
+  volunteerLogs,
+  communityBusinesses,
 };

@@ -48,7 +48,7 @@ const routes: [
     handler: async (request, h) => {
       const { user } = StandardCredentials.fromRequest(request);
 
-      return Serialisers.user(user);
+      return Serialisers.users.noSecrets(user);
     },
   },
 ];

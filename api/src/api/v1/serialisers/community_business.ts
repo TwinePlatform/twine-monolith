@@ -1,3 +1,1 @@
-import { identity } from 'ramda';
-
-export default identity;
+export { identity } from 'ramda';

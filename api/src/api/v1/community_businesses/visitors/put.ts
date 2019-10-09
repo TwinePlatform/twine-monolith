@@ -81,7 +81,7 @@ const routes: [
       try {
         const updatedUser = await Visitors.update(knex, user, changeset);
 
-        return Serialisers.visitor(updatedUser);
+        return Serialisers.visitors.noSecrets(updatedUser);
 
       } catch (error) {
       // Intercept subset of class 23 postgres error codes thrown by `knex`

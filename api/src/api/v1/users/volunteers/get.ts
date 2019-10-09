@@ -34,7 +34,7 @@ const routes: [Api.Users.Volunteers.Id.GET.Route] = [
       } });
 
       return volunteer
-        ? Serialisers.volunteer(volunteer)
+        ? Serialisers.volunteers.noSecrets(volunteer)
         : Boom.notFound('No volunteer found under this id');
     },
   },

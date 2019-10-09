@@ -175,7 +175,7 @@ const routes: [Api.Users.Register.Visitors.POST.Route] = [
       /*
        * Response payload
        */
-      return Serialisers.visitor(visitor);
+      return Serialisers.visitors.noSecrets(visitor);
     },
   },
 ];

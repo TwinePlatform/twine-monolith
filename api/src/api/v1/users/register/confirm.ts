@@ -94,7 +94,7 @@ const routes: [Api.Users.Register.Confirm.POST.Route] = [
             return;
           });
           await EmailService.newVisitor(config, updatedVisitor, admin, cb, document);
-          return Serialisers.visitor(updatedVisitor);
+          return Serialisers.visitors.noSecrets(updatedVisitor);
 
         case RoleEnum.VOLUNTEER:
           return knex.transaction(async (trx) => {
@@ -105,7 +105,7 @@ const routes: [Api.Users.Register.Confirm.POST.Route] = [
             // create password reset token & send with response
             const { token: newToken } = await Tokens
               .createPasswordResetToken(trx, updatedVolunteer);
-            return { ...Serialisers.volunteer(updatedVolunteer), token: newToken };
+            return { ...Serialisers.volunteers.noSecrets(updatedVolunteer), token: newToken };
           });
 
         default:

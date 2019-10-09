@@ -1,10 +1,10 @@
 import { assoc } from 'ramda';
 import { User } from '../../../models';
 import * as QRCode from '../../../services/qrcode';
-import userSerialiser from './user';
+import { noSecrets as noUserSecrets } from './user';
 
-export default async <T extends Partial<User>>(v: T) => {
-  const strippedUser = userSerialiser(v);
+export const noSecrets = async <T extends Partial<User>>(v: T) => {
+  const strippedUser = noUserSecrets(v);
 
   return v.qrCode
     ? assoc('qrCode', await QRCode.create(v.qrCode), strippedUser)

@@ -33,7 +33,7 @@ const routes: [Api.CommunityBusinesses.CbAdmins.GET.Route] = [
       const admins = await CbAdmins.fromOrganisation(knex, communityBusiness);
 
       return {
-        result: await Promise.all(admins.map(Serialisers.user)),
+        result: await Promise.all(admins.map(Serialisers.users.noSecrets)),
         meta: { total: admins.length },
       }
     },

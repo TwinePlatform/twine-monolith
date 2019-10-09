@@ -59,7 +59,7 @@ const routes: [Api.Users.Volunteers.Id.PUT.Route] = [
       if (!volunteer) return Boom.notFound('User is not a volunteer');
 
       const updatedVolunteer = await Volunteers.update(knex, volunteer, payload);
-      return Serialisers.volunteer(updatedVolunteer);
+      return Serialisers.volunteers.noSecrets(updatedVolunteer);
     },
   },
 ];

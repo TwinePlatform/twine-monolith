@@ -54,7 +54,7 @@ const routes: [Api.VolunteerLogs.GET.Route] = [
         order: ['startedAt', 'asc'],
       });
 
-      return Promise.all(volunteerLogs.map(Serialisers.volunteerLog));
+      return Promise.all(volunteerLogs.map(Serialisers.volunteerLogs.identity));
     },
   },
 ];
