@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
 import { Form as F } from 'native-base';
 
@@ -39,23 +39,29 @@ const genders = [
   { id: 2, name: 'male' },
   { id: 3, name: 'other' },
 ];
-const Settings: FC<Props> = () => (
-  <Page>
-    <View>
-      <Heading>Settings</Heading>
-      <Form>
-        <Input label="Full name" />
-        <Input label="Email" editable />
-        <Button label="Password" text="Send password reset email" />
-        <Input label="Number" />
-        <Dropdown label="Gender" options={genders} />
-        <Dropdown label="Year of birth" options={genders} />
-        <Input label="Post code" />
-        <Toggle label="Locations reminders" />
-        <TermsAndConditons />
-      </Form>
-    </View>
-  </Page>
-);
+
+const years = [...Array(130).keys()].map((_, i) => ({ id: i, name: `${2019 - i}` }));
+const Settings: FC<Props> = () => {
+  const [gender, setGender] = useState('');
+  const [year, setYear] = useState('');
+  return (
+    <Page>
+      <View>
+        <Heading>Settings</Heading>
+        <Form>
+          <Input label="Full name" />
+          <Input label="Email" editable />
+          <Button label="Password" text="Send password reset email" />
+          <Input label="Number" />
+          <Dropdown label="Gender" options={genders} onValueChange={setGender} selectedValue={gender} />
+          <Dropdown label="Year of birth" options={years} onValueChange={setYear} selectedValue={year} />
+          <Input label="Post code" />
+          <Toggle label="Locations reminders" />
+          <TermsAndConditons />
+        </Form>
+      </View>
+    </Page>
+  );
+};
 
 export default Settings;
