@@ -1,7 +1,7 @@
 import _axios from 'axios';
 import qs from 'qs';
-import getEnvVars from '../../environment';
-
+import getEnvVars from '../../environment'; // eslint-disable-line
+// NB pevious file local only
 
 // TODO: change version to v1.1 when server changes have been updated
 const baseURL = `${getEnvVars().apiBaseUrl}/v1`;
@@ -15,6 +15,5 @@ export const axios = _axios.create({
 
 export const CommunityBusinesses = {
 
-  getVolunteerActivities: () =>
-    axios.get('/volunteer-activities'),
+  getVolunteerActivities: () => axios.get('/volunteer-activities'),
 };

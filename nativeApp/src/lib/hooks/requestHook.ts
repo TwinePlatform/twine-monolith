@@ -1,21 +1,17 @@
 import { useState, useEffect } from 'react';
-import { AxiosResponse } from 'axios';
 
-const useRequest = (axiosRequest: (x) => Promise<AxiosResponse>, payload?) => {
+interface Res { result: any }
+
+const useRequest = <T extends Res, U>(axiosRequest: (q?: U) => Promise<T>, payload?: U) => {
   const [data, setData] = useState();
   const [error, setError] = useState();
-  useEffect(() => {(
-    async function(){
-      try {
-        const { data } = await axiosRequest(payload) 
-        setData(data.result);
-      } catch (error) {
-        setError(error)
-      }
-    }()
-  )},[]);
+  useEffect(() => () => {
+    axiosRequest(payload)
+      .then((res) => setData(res.result))
+      .catch(setError);
+  }, []);
 
-  return [data,error]
+  return [data, error];
 };
 
 export default useRequest;

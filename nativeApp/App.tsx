@@ -6,10 +6,10 @@ import { setCustomText } from 'react-native-global-props';
 
 import * as Font from 'expo-font';
 
-import Login from './src/open_views/screens/Login'
-import Register from './src/open_views/screens/Register'
+import Login from './src/open_views/screens/Login';
+import Register from './src/open_views/screens/Register';
 
-import VolunteerRouter from './src/volunteer_views/VolunteerRouter'
+import VolunteerRouter from './src/volunteer_views/VolunteerRouter';
 import { FontsEnum } from './src/lib/ui/typography';
 import { ColoursEnum } from './src/lib/ui/colours';
 
@@ -19,7 +19,7 @@ const RootStack = createStackNavigator(
     Login: {
       screen: Login,
     },
-    Register:  {
+    Register: {
       screen: Register,
     },
     VolunteerRouter: {
@@ -38,10 +38,10 @@ const RootStack = createStackNavigator(
       headerTitleStyle: {
         letterSpacing: 8,
         fontWeight: '300',
-        fontFamily: FontsEnum.light
+        fontFamily: FontsEnum.light,
       },
     },
-  }
+  },
 );
 
 const AppContainer = createAppContainer(RootStack);
@@ -51,6 +51,7 @@ export default class App extends Component {
     fontLoaded: false,
   };
 
+/* eslint-disable */
   async componentDidMount() {
     await Font.loadAsync({
       'roboto-light': require('./assets/fonts/Roboto-Light.ttf'),
@@ -63,19 +64,20 @@ export default class App extends Component {
     this.defaultFonts();
   }
 
-  defaultFonts(){
+  defaultFonts() {
     const customTextProps = {
       style: {
-        fontFamily: FontsEnum.light
-      }
-    }
-    setCustomText(customTextProps)
+        fontFamily: FontsEnum.light,
+      },
+    };
+    setCustomText(customTextProps);
   }
+  /* eslint-enable */
 
   render() {
-    return this.state.fontLoaded
+    const { fontLoaded } = this.state;
+    return fontLoaded
       ? <AppContainer />
-      : <Text>Loading...</Text>
+      : <Text>Loading...</Text>;
   }
 }
- 
