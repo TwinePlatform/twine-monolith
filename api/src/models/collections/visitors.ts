@@ -3,7 +3,7 @@ import { pick } from 'ramda'
 import { Users, modelToRecordMap } from './users';
 import { VisitorCollection, RoleEnum, User, ModelQuery, ModelQueryPartial, UserModelRecord, Visitor } from '../types/index';
 import { applyQueryModifiers } from '../query_util';
-import { Dictionary } from 'src/types/internal';
+import { VisitLogs } from './visit_log'
 
 
 const additionalColumnMap: Record<any, string> = {
@@ -20,26 +20,20 @@ const additionalColumnMap: Record<any, string> = {
 export const Visitors: VisitorCollection = {
   _toColumnNames: Users._toColumnNames,
   cast: (a) => Users.cast(a, 'Visitor') as Partial<Visitor>,
-  serialise: Users.serialise,
   exists: Users.exists,
 
-  create: Users.create,
-  update: Users.update,
-  delete: Users.delete,
-  destroy: Users.destroy,
-
-  async get (client: Knex, query: ModelQuery<Visitor> | ModelQueryPartial<Visitor>) {
+  get (client: Knex, query: ModelQuery<Visitor> | ModelQueryPartial<Visitor>) {
     const _q = {
-      where: Users._toColumnNames(query.where),
-      whereNot: Users._toColumnNames(query.whereNot),
-      whereBetween: Users._toColumnNames(query.whereBetween),
-      whereNotBetween: Users._toColumnNames(query.whereNotBetween),
+      where: Visitors._toColumnNames(query.where),
+      whereNot: Visitors._toColumnNames(query.whereNot),
+      whereBetween: Visitors._toColumnNames(query.whereBetween),
+      whereNotBetween: Visitors._toColumnNames(query.whereNotBetween),
       limit: query.limit,
       offset: query.offset,
     };
 
-    const x = applyQueryModifiers<UserModelRecord, User[], UserModelRecord>(
-      client<UserModelRecord, User[]>('user_account')
+    const x = applyQueryModifiers<UserModelRecord, Visitor[], UserModelRecord>(
+      client<UserModelRecord, Visitor[]>('user_account')
         .leftOuterJoin('gender', 'gender.gender_id', 'user_account.gender_id')
         .leftOuterJoin('disability', 'disability.disability_id', 'user_account.gender_id')
         .leftOuterJoin('ethnicity', 'ethnicity.ethnicity_id', 'user_account.ethnicity_id')
@@ -69,10 +63,10 @@ export const Visitors: VisitorCollection = {
 
   async fromCommunityBusiness (client, communityBusiness, query) {
     const _q = {
-      where: Users._toColumnNames(query.where),
-      whereNot: Users._toColumnNames(query.whereNot),
-      whereBetween: Users._toColumnNames(query.whereBetween),
-      whereNotBetween: Users._toColumnNames(query.whereNotBetween),
+      where: Visitors._toColumnNames(query.where),
+      whereNot: Visitors._toColumnNames(query.whereNot),
+      whereBetween: Visitors._toColumnNames(query.whereBetween),
+      whereNotBetween: Visitors._toColumnNames(query.whereNotBetween),
       limit: query.limit,
       offset: query.offset,
     };
@@ -100,39 +94,20 @@ export const Visitors: VisitorCollection = {
 
   async getWithVisits(client, communityBusiness, query, activity) {
     const visitors = await Visitors.fromCommunityBusiness(client, communityBusiness, query);
+    return Promise.all(visitors.map(async (visitor) => {
+      const logs = await VisitLogs.get(client, { where: { userId: visitor.id, activityId: activity.id } });
+      return {
+        ...visitor,
+        visits: logs,
+      }
+    }));
+  },
+
+  async create(client, user) {
+
+  }
+
+  async add(client, user, communityBusiness) {
+
   },
 };
-
-
-VolunteerLogs
-  .bind(client)
-  .get()
-  .join((trx, l) => ({ organisation: Organisation.get(trx, { where: { id: l.id } }) }))
-  .where()
-  .limit(1)
-  .map((l) => l.duration)
-
-VolunteerLogs
-  .bind(client)
-  .add({ name: 'foo', email: 'eee@eee.com' })
-
-Visitors(client)
-  .get()
-  .join((trx, u) => [
-    'visits',
-    VisitLogs(trx)
-      .fromUser(u)
-      .join((trx2, vl) => [
-        'activity',
-        VisitActivities(trx2)
-          .fromVisit(vl)
-          .join((trx3, va) => ['category', VisitCategories(trx3).fromActivity(va)])
-      ])
-  ])
-  .whereBetween({ birthYear: [0, 10] })
-  .map(Serialisers.visitorsWithVisits)
-
-
-interface ModelObservable<T extends Model> extends Knex.QueryBuilder {
-  join (cb: <K extends string, U>(trx: Knex.QueryBuilder, u: T) => [K, ModelObservable<U>]): ModelObservable<T & { [K]: ModelObservable<U> }>;
-}

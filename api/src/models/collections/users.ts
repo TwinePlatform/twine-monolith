@@ -122,10 +122,6 @@ export const Users: UserCollection = {
     } as Partial<User>;
   },
 
-  async serialise(user) {
-    return omit(['password', 'qrCode'], user);
-  },
-
   async exists (client, query) {
     return null !== Users.getOne(client, { where: query });
   },
@@ -156,7 +152,7 @@ export const Users: UserCollection = {
   },
 
   async getOne (client: Knex, query: ModelQuery<User> | ModelQueryPartial<User>) {
-    const [res] = await Users.get(client, query);
+    const [res] = await Users.get(client, Object.assign(query, { limit: 1 }));
     return res || null;
   },
 
@@ -179,13 +175,9 @@ export const Users: UserCollection = {
       whereNotBetween: Users._toColumnNames(query.whereNotBetween),
     };
 
-    let changes;
-    if (_changes.password) {
-      const passwordHash = await hash(_changes.password, 12);
-      changes = Object.assign({}, _changes, { password: passwordHash });
-    } else {
-      changes = Object.assign({}, _changes);
-    }
+    const changes = 'password' in _changes
+      ? Object.assign({}, _changes, { password: await hash(_changes.password, 12) })
+      : Object.assign({}, _changes);
 
     const ids = await applyQueryModifiers(
       client('user_account')

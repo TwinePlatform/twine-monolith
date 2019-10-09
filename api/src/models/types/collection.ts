@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { Maybe, Dictionary, ValueOf, EnhancedJson } from '../../types/internal';
+import { Maybe, Dictionary, ValueOf } from '../../types/internal';
 import { ModelQuery, ModelQueryPartial, SimpleModelQuery, WhereQuery, WhereBetweenQuery } from './query';
 import {
   User,
@@ -12,6 +12,7 @@ import {
   VolunteerProject,
   VolunteerLog,
   VisitActivity,
+  VisitCategory,
   VisitLog,
   SingleUseToken,
   PasswordResetToken,
@@ -19,8 +20,7 @@ import {
   Model,
 } from './model';
 import { GenderEnum } from './constants';
-import { UserAccount, Gender, Disability, Ethnicity, VisitActivityCategory } from './records';
-import * as _ from '../../../database/types';
+import * as R from './records';
 
 
 /**
@@ -33,8 +33,6 @@ export interface Collection<TModel extends Model, TRecord> {
   _toColumnNames (a: WhereBetweenQuery<TModel>): WhereBetweenQuery<TRecord>;
 
   cast (a: Dictionary<ValueOf<TModel>>, tag?: TModel['__tag']): Partial<TModel>;
-
-  serialise (a: Partial<TModel>): Promise<EnhancedJson>;
 
   exists (k: Knex, a: Partial<TModel>): Promise<boolean>;
 
@@ -57,19 +55,19 @@ export interface Collection<TModel extends Model, TRecord> {
  * Custom record types
  */
 export type UserModelRecord =
-  Omit<UserAccount, 'user_account.gender_id' | 'user_account.disability_id' | 'user_account.ethnicity_id'>
-  & Pick<Gender, 'gender.gender_name'>
-  & Pick<Disability, 'disability.disability_name'>
-  & Pick<Ethnicity, 'ethnicity.ethnicity_name'>;
+  Omit<R.UserAccount, 'user_account.gender_id' | 'user_account.disability_id' | 'user_account.ethnicity_id'>
+  & Pick<R.Gender, 'gender.gender_name'>
+  & Pick<R.Disability, 'disability.disability_name'>
+  & Pick<R.Ethnicity, 'ethnicity.ethnicity_name'>;
 
 export type VisitActivityRecord =
-  VisitActivity
-  & Pick<VisitActivityCategory, 'visit_activity_category.visit_activity_category_name'>;
+  R.VisitActivity
+  & Pick<R.VisitActivityCategory, 'visit_activity_category.visit_activity_category_id'>;
 
 /**
  * Type aliases
  */
-type VisitorWithVisits = Visitor & { visits: Omit<VisitLog, 'user'> };
+type VisitorWithVisits = Visitor & { visits: VisitLog[] };
 
 /**
  * User Collections
@@ -101,7 +99,7 @@ export interface CbAdminCollection extends UserCollection<CbAdmin> {
 }
 
 export interface VisitorCollection extends UserCollection<Visitor> {
-  getWithVisits (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Visitor>, activity?: string): Promise<VisitorWithVisits>;
+  getWithVisits (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Visitor>, activity?: VisitActivity): Promise<VisitorWithVisits[]>;
 
   fromCommunityBusiness (k: Knex, cb: CommunityBusiness, q?: ModelQuery<Visitor>): Promise<Visitor[]>;
 
@@ -113,11 +111,11 @@ export interface VisitorCollection extends UserCollection<Visitor> {
 /**
  * Organisation Collections
  */
-export interface OrganisationCollection extends Collection<Organisation, _.organisation> {
+export interface OrganisationCollection extends Collection<Organisation, R.Organisation> {
   fromUser (k: Knex, u: ModelQuery<User>): Promise<Maybe<Organisation>>;
 }
 
-export interface CommunityBusinessCollection extends Collection<CommunityBusiness, _.community_business> {
+export interface CommunityBusinessCollection extends Collection<CommunityBusiness, R.CommunityBusiness> {
   fromVisitor (k: Knex, u: ModelQuery<Visitor>): Promise<Maybe<CommunityBusiness>>;
   fromVolunteer (k: Knex, u: ModelQuery<Volunteer>): Promise<Maybe<CommunityBusiness>>;
   fromCbAdmin (k: Knex, u: ModelQuery<CbAdmin>): Promise<Maybe<CommunityBusiness>>;
@@ -125,20 +123,20 @@ export interface CommunityBusinessCollection extends Collection<CommunityBusines
   fromVisitActivity (k: Knex, a: ModelQuery<VisitActivity>): Promise<CommunityBusiness>;
 }
 
-export type TempCommunityBusinessCollection = Collection<CommunityBusiness, _.community_business>;
+export type TempCommunityBusinessCollection = Collection<CommunityBusiness, R.CommunityBusiness>;
 
 /**
  * Volunteer Log Collections
  */
 type VolunteerLogSyncStats = { ignored: number; synced: number };
 
-export type VolunteerActivityCollection = Collection<VolunteerActivity, _.volunteer_activity>;
+export type VolunteerActivityCollection = Collection<VolunteerActivity, R.VolunteerActivity>;
 
-export interface VolunteerProjectCollection extends Collection<VolunteerProject, _.volunteer_project> {
+export interface VolunteerProjectCollection extends Collection<VolunteerProject, R.VolunteerProject> {
   fromCommunityBusiness (k: Knex, c: CommunityBusiness): Promise<VolunteerProject[]>;
 }
 
-export interface VolunteerLogCollection extends Collection<VolunteerLog, _.volunteer_hours_log> {
+export interface VolunteerLogCollection extends Collection<VolunteerLog, R.VolunteerHoursLog> {
   recordInvalidLog (k: Knex, u: Volunteer, cb: CommunityBusiness, payload: object): Promise<void>;
   fromUser (k: Knex, u: Volunteer, cb?: CommunityBusiness): Promise<VolunteerLog[]>;
   fromCommunityBusiness (k: Knex, cb: CommunityBusiness): Promise<VolunteerLog[]>;
@@ -154,13 +152,20 @@ export interface VolunteerLogCollection extends Collection<VolunteerLog, _.volun
 type AgeGroup = [number, number];
 type AgeAggregates = { ageGroup: AgeGroup; aggregate: number }[];
 type GenderAggregates = { gender: GenderEnum; aggregate: number }[];
-type ActivityAggregates = { activty: string; aggregate: number }[];
-type TimeAggregates = { date: Date; aggregate: number }[];
+type ActivityAggregates = { activity: string; aggregate: number }[];
+type TimeAggregates = { date: string; aggregate: number }[];
+type ActivityDays = Pick<VisitActivity, 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday'>;
 
-export type VisitActivityCollection = Collection<VisitActivity, _.visit_activity>;
+export interface VisitActivityCollection extends Collection<VisitActivity, VisitActivityRecord> {
+  add (k: Knex, c: CommunityBusiness, ct: VisitCategory, name: string, days: ActivityDays): Promise<VisitActivity>;
+  fromCommunityBusiness (k: Knex, c: CommunityBusiness): Promise<VisitActivity[]>;
+  fromCategory (k: Knex, c: CommunityBusiness, ct: VisitCategory): Promise<VisitActivity[]>;
+}
 
-export interface VisitLogCollection extends Collection<VisitLog, _.visit_log> {
-  getWithUsers (k: Knex, c: CommunityBusiness, q?: ModelQuery<VisitLog>): Promise<VisitLog>;
+export interface VisitLogCollection extends Collection<VisitLog, R.VisitLog> {
+  add (k: Knex, act: VisitActivity, user: Visitor): Promise<VisitLog>;
+  fromCommunityBusiness (k: Knex, c: CommunityBusiness, q?: ModelQuery<VisitLog>): Promise<VisitLog[]>;
+  fromActivity (k: Knex, a: VisitActivity, q?: ModelQuery<VisitLog>): Promise<VisitLog[]>;
   aggregateByAge (k: Knex, c: CommunityBusiness, g?: AgeGroup[]): Promise<AgeAggregates>;
   aggregateByGender (k: Knex, c: CommunityBusiness): Promise<GenderAggregates>;
   aggregateByActivity (k: Knex, c: CommunityBusiness): Promise<ActivityAggregates>;
@@ -171,16 +176,16 @@ export interface VisitLogCollection extends Collection<VisitLog, _.visit_log> {
 /**
  * Token Collections
  */
-export interface SingleUseTokenCollection extends Collection<SingleUseToken, _.single_use_token> {
+export interface SingleUseTokenCollection extends Collection<SingleUseToken, R.SingleUseToken> {
   use (k: Knex, u: User, t: string): Promise<SingleUseToken>;
 }
 
-export interface PasswordResetTokenCollection extends Collection<PasswordResetToken, _.user_secret_reset> {
+export interface PasswordResetTokenCollection extends Collection<PasswordResetToken, R.UserSecretResetToken> {
   create (k: Knex, u: User): Promise<PasswordResetToken>;
   use (k: Knex, u: User): Promise<PasswordResetToken>;
 }
 
-export interface AddRoleTokenCollection extends Collection<AddRoleToken, _.confirm_add_role> {
+export interface AddRoleTokenCollection extends Collection<AddRoleToken, R.ConfirmRoleToken> {
   create (k: Knex, u: User): Promise<AddRoleToken>;
   use (k: Knex, u: User): Promise<AddRoleToken>;
 }
