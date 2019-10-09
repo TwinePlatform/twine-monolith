@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
-import { ColoursEnum } from '../../../lib/ui/colours';
-import { FontsEnum, Heading2 } from '../../../lib/ui/typography';
-import CardWithButtons, { RemoveType } from '../../../lib/ui/CardWithButtons';
+import { ColoursEnum } from './colours';
+import { FontsEnum, Heading2 } from './typography';
+import CardWithButtons, { RemoveType } from './CardWithButtons';
 
 
 /*
@@ -10,7 +10,8 @@ import CardWithButtons, { RemoveType } from '../../../lib/ui/CardWithButtons';
  */
 type Props = {
   id: number;
-  project: string;
+  title: string;
+  datePrefix: 'Joined' | 'Created';
   date: string;
   removeType: RemoveType;
 }
@@ -45,23 +46,26 @@ const Label = styled.Text<{bold?: boolean; textAlign: string}>`
   paddingBottom: 6;
 `;
 
+
 /*
  * Component
  */
-const ProjectCard: FC<Props> = (props) => {
-  const { project, date, removeType } = props;
+const CardWithTitleAndDate: FC<Props> = (props) => {
+  const {
+    title, datePrefix, date, removeType,
+  } = props;
   return (
     <CardWithButtons removeType={removeType}>
       <ValueContainer>
-        <Heading2>{project}</Heading2>
+        <Heading2>{title}</Heading2>
       </ValueContainer>
       <DetailsContainer>
         <LabelContainer>
-          <Label textAlign="left">{`Created: ${date}`}</Label>
+          <Label textAlign="left">{`${datePrefix}: ${date}`}</Label>
         </LabelContainer>
       </DetailsContainer>
     </CardWithButtons>
   );
 };
 
-export default ProjectCard;
+export default CardWithTitleAndDate;

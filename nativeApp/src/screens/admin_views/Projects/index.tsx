@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import { Heading } from '../../../lib/ui/typography';
 import Tabs from '../../../lib/ui/Tabs';
-import ProjectCard from './ProjectCard';
+import Card from '../../../lib/ui/CardWithTitleAndDate';
 
 /*
  * Types
@@ -24,13 +24,13 @@ const View = styled.View`
 
 const TabOne: FC<{}> = () => (
   <View>
-    <ProjectCard id={1} project="Summer Fair" date="30/12/18" removeType="archive" />
+    <Card id={1} title="Summer Fair" datePrefix="Created" date="30/12/18" removeType="archive" />
   </View>
 );
 
 const TabTwo: FC<{}> = () => (
   <View>
-    <ProjectCard id={1} project="Christmas Fair" date="11/11/18" removeType="undo" />
+    <Card id={1} title="Christmas Fair" datePrefix="Created" date="11/11/18" removeType="undo" />
   </View>
 );
 

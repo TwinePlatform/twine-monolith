@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import { ColoursEnum } from './colours';
 
 export const Heading = styled.Text`
   fontSize: 30;
@@ -7,6 +8,7 @@ export const Heading = styled.Text`
 
 export const Heading2 = styled.Text`
   fontSize: 25;
+  color: ${ColoursEnum.darkPurple}
 `;
 
 export const Heading3 = styled.Text`
