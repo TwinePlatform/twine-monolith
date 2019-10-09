@@ -57,7 +57,7 @@ const ProjectCard: FC<Props> = (props) => {
       </ValueContainer>
       <DetailsContainer>
         <LabelContainer>
-          <Label textAlign="left">{date}</Label>
+          <Label textAlign="left">{`Created: ${date}`}</Label>
         </LabelContainer>
       </DetailsContainer>
     </CardWithButtons>
