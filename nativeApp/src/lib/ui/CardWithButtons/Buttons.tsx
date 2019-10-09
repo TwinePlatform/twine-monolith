@@ -74,12 +74,12 @@ export const DeleteButton: FC = () => (
   </ButtonContainer>
 );
 
-export const UndoButton: FC = () => (
+export const RestoreButton: FC = () => (
   <ButtonContainer>
     <Button transparent />
     <Button transparent>
       <MaterialCommunityIcons name="undo" outline size={20} color={ColoursEnum.purple} />
-      <LinkText>Unarchive</LinkText>
+      <LinkText>Restore</LinkText>
     </Button>
   </ButtonContainer>
 );

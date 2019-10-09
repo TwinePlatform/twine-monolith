@@ -3,13 +3,13 @@ import styled from 'styled-components/native';
 import { Card as C } from 'native-base';
 
 import { ColoursEnum } from '../colours';
-import { ArchiveButton, DeleteButton, UndoButton } from './Buttons';
+import { ArchiveButton, DeleteButton, RestoreButton } from './Buttons';
 
 /*
  * Types
  */
 
-export type RemoveType = 'archive' | 'delete' | 'undo';
+export type RemoveType = 'archive' | 'delete' | 'restore';
 type Props = {
   removeType: RemoveType;
 }
@@ -43,7 +43,7 @@ const CardWithButtons: FC<Props> = (props) => {
       </TopContainer>
       {removeType === 'archive' && <ArchiveButton />}
       {removeType === 'delete' && <DeleteButton />}
-      {removeType === 'undo' && <UndoButton />}
+      {removeType === 'restore' && <RestoreButton />}
     </Card>
 
   );
