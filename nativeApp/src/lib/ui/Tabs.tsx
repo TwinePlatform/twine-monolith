@@ -27,18 +27,24 @@ const Tabs: FC<Props> = (props) => {
     tabTwo: [headingTwo, ComponentTwo],
   } = props;
   return (
-    <_Tabs tabBarUnderlineStyle={{ backgroundColor: ColoursEnum.purple }}>
+    <_Tabs
+      tabBarUnderlineStyle={{ backgroundColor: ColoursEnum.purple }}
+    >
       <Tab
-        activeTextStyle={{ color: ColoursEnum.purple }}
         heading={headingOne}
-        activeTabStyle={{ borderColor: ColoursEnum.purple }}
+        tabStyle={{ backgroundColor: ColoursEnum.white }}
+        textStyle={{ color: ColoursEnum.darkGrey }}
+        activeTextStyle={{ color: ColoursEnum.purple }}
+        activeTabStyle={{ borderColor: ColoursEnum.purple, backgroundColor: ColoursEnum.white }}
       >
         <ComponentOne />
       </Tab>
       <Tab
-        activeTextStyle={{ color: ColoursEnum.purple }}
         heading={headingTwo}
-        activeTabStyle={{ borderColor: ColoursEnum.purple }}
+        textStyle={{ color: ColoursEnum.darkGrey }}
+        tabStyle={{ backgroundColor: ColoursEnum.white }}
+        activeTextStyle={{ color: ColoursEnum.purple }}
+        activeTabStyle={{ borderColor: ColoursEnum.purple, backgroundColor: ColoursEnum.white }}
       >
         <ComponentTwo />
       </Tab>

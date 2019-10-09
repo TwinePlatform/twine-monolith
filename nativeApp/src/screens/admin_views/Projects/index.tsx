@@ -30,7 +30,7 @@ const TabOne: FC<{}> = () => (
 
 const TabTwo: FC<{}> = () => (
   <View>
-    <Card id={1} title="Christmas Fair" datePrefix="Created" date="11/11/18" removeType="undo" />
+    <Card id={1} title="Christmas Fair" datePrefix="Created" date="11/11/18" removeType="restore" />
   </View>
 );
 
