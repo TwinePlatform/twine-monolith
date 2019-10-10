@@ -23,7 +23,7 @@ type Props = {
 const ProjectCard: FC<Props> = (props) => {
   const iconColour = props.removalType === 'archive' //eslint-disable-line
     ? ColoursEnum.mustard
-    : ColoursEnum.orange;
+    : ColoursEnum.darkGrey;
   return (
     <CardWithTitleAndDate {...props} datePrefix="Created">
       <MaterialIcons name="assignment" outline size={35} color={iconColour} />
