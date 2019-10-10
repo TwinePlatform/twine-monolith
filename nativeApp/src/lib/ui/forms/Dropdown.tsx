@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components/native';
 import { Item as I, Picker, Label as L } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -12,8 +12,8 @@ import { ColoursEnum } from '../colours';
 type Props = {
   label: string;
   options: {id: number; name: string}[];
-  selectedValue?: string;
-  onValueChange?: () => void;
+  selectedValue: string;
+  onValueChange: Dispatch<SetStateAction<string>>;
 }
 
 /*
