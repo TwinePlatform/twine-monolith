@@ -8,31 +8,32 @@ import VolunteerHome from './VolunteerHome';
 import Time from './Time';
 import Settings from './Settings';
 import { ColoursEnum } from '../../lib/ui/colours';
+import AddTime from './AddTime';
 
 const getIconName = (name: string) => {
   switch (name) {
     case 'Time':
-      return 'clock-fast';
-    case 'Settings':
-      return 'settings-outline';
+      return { name: 'clock-fast', size: 25 };
+    case 'AddTime':
+      return { name: 'plus-box-outline', size: 35 };
     case 'Home':
     default:
-      return 'home-outline';
+      return { name: 'home-outline', size: 25 };
   }
 };
 
 const TabNavigator = createBottomTabNavigator({
   Home: VolunteerHome,
+  AddTime,
   Time,
-  Settings,
 },
 {
   defaultNavigationOptions: ({ navigation }) => ({
     tabBarIcon: ({ tintColor }) => {
       const { routeName } = navigation.state;
-      const iconName = getIconName(routeName);
+      const iconProps = getIconName(routeName);
 
-      return <MaterialCommunityIcons name={iconName} size={30} color={tintColor} />;
+      return <MaterialCommunityIcons {...iconProps} color={tintColor} />;
     },
   }),
   tabBarOptions: {

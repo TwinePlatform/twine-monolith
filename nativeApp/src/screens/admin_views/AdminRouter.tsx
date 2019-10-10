@@ -10,37 +10,38 @@ import Projects from './Projects';
 import Settings from './Settings';
 import Volunteers from './Volunteers';
 import AdminTime from './AdminTime';
+import AddTime from './AddTime';
 
 const getIconName = (name: string) => {
   switch (name) {
     case 'Volunteers':
-      return [MaterialIcons, 'person-outline'];
+      return [MaterialIcons, { name: 'person-outline', size: 25 }];
     case 'Projects':
-      return [MaterialIcons, 'assignment'];
+      return [MaterialIcons, { name: 'assignment', size: 25 }];
+    case 'AddTime':
+      return [MaterialCommunityIcons, { name: 'plus-box-outline', size: 35 }];
     case 'Time':
-      return [MaterialCommunityIcons, 'clock-fast'];
-    case 'Settings':
-      return [MaterialCommunityIcons, 'settings-outline'];
+      return [MaterialCommunityIcons, { name: 'clock-fast', size: 25 }];
     case 'Home':
     default:
-      return [MaterialCommunityIcons, 'home-outline'];
+      return [MaterialCommunityIcons, { name: 'home-outline', size: 25 }];
   }
 };
 
 const TabNavigator = createBottomTabNavigator({
   Home: AdminHome,
   Volunteers,
+  AddTime,
   Time: AdminTime,
   Projects,
-  Settings,
 },
 {
   defaultNavigationOptions: ({ navigation }) => ({
     tabBarIcon: ({ tintColor }) => {
       const { routeName } = navigation.state;
-      const [Icon, iconName] = getIconName(routeName);
+      const [Icon, iconProps] = getIconName(routeName);
 
-      return <Icon name={iconName} size={30} color={tintColor} />;
+      return <Icon {...iconProps} color={tintColor} />;
     },
   }),
   tabBarOptions: {
