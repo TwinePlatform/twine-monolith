@@ -9,9 +9,9 @@ import { ArchiveButton, DeleteButton, RestoreButton } from './Buttons';
  * Types
  */
 
-export type RemoveType = 'archive' | 'delete' | 'restore';
+export type RemovalType = 'archive' | 'delete' | 'restore';
 type Props = {
-  removeType: RemoveType;
+  removalType: RemovalType;
 }
 
 /*
@@ -35,15 +35,15 @@ const TopContainer = styled.View`
  * Component
  */
 const CardWithButtons: FC<Props> = (props) => {
-  const { children, removeType } = props;
+  const { children, removalType } = props;
   return (
     <Card>
       <TopContainer>
         {children}
       </TopContainer>
-      {removeType === 'archive' && <ArchiveButton />}
-      {removeType === 'delete' && <DeleteButton />}
-      {removeType === 'restore' && <RestoreButton />}
+      {removalType === 'archive' && <ArchiveButton />}
+      {removalType === 'delete' && <DeleteButton />}
+      {removalType === 'restore' && <RestoreButton />}
     </Card>
 
   );

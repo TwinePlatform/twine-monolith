@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import { Heading } from '../../../lib/ui/typography';
-import Card from '../../../lib/ui/CardWithTitleAndDate';
+import VolunteerCard from './VolunteerCard';
 
 /*
  * Types
@@ -24,15 +24,17 @@ const View = styled.View`
 /*
 * Component
 */
+
+
 const Volunteers: FC<Props> = () => (
   <Page>
     <View>
       <Heading>Volunteers</Heading>
-      <Card id={1} title="Kara Thrace" datePrefix="Joined" date="11/11/18" removeType="delete" />
-      <Card id={1} title="Lee Adama" datePrefix="Joined" date="11/11/18" removeType="delete" />
-      <Card id={1} title="Hera Agathon" datePrefix="Joined" date="11/11/18" removeType="delete" />
-      <Card id={1} title="Tory Foster" datePrefix="Joined" date="11/11/18" removeType="delete" />
-      <Card id={1} title="Ellen Tigh" datePrefix="Joined" date="11/11/18" removeType="delete" />
+      <VolunteerCard id={1} title="Kara Thrace" date="11/11/18" />
+      <VolunteerCard id={1} title="Lee Adama" date="11/11/18" />
+      <VolunteerCard id={1} title="Hera Agathon" date="11/11/18" />
+      <VolunteerCard id={1} title="Tory Foster" date="11/11/18" />
+      <VolunteerCard id={1} title="Ellen Tigh" date="11/11/18" />
     </View>
   </Page>
 );

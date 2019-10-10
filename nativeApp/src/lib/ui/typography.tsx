@@ -8,7 +8,7 @@ export const Heading = styled.Text`
 
 export const Heading2 = styled.Text`
   fontSize: 25;
-  color: ${ColoursEnum.darkPurple}
+  color: ${ColoursEnum.darkGrey}
 `;
 
 export const Heading3 = styled.Text`

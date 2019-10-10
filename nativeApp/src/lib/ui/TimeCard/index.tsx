@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CardWithButtons from '../CardWithButtons';
 
 import { ColoursEnum } from '../colours';
@@ -28,15 +29,16 @@ const ValueContainer = styled.View`
 `;
 
 const Value = styled.Text`
-  color: ${ColoursEnum.darkPurple};
+  marginLeft: 5;
+  color: ${ColoursEnum.darkGrey};
   fontSize: 35;
   font-family: ${FontsEnum.medium}
 `;
 
 const Unit = styled.Text`
   marginLeft: 5;
-  marginRight: 10;
-  color: ${ColoursEnum.darkPurple};
+  // marginRight: 10;
+  color: ${ColoursEnum.darkGrey};
   fontSize: 18;
   letterSpacing: 1.2;
   paddingBottom: 6;
@@ -69,8 +71,9 @@ const TimeCard: FC<Props> = (props) => {
     timeValues, date, labels, volunteer,
   } = props;
   return (
-    <CardWithButtons removeType="delete">
+    <CardWithButtons removalType="delete">
       <ValueContainer>
+        <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard} />
         <Value>{timeValues[0]}</Value>
         <Unit>hours</Unit>
         <Value>{timeValues[1]}</Value>
