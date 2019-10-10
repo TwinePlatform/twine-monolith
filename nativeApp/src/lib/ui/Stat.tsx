@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
-import { FontsEnum } from '../../../lib/ui/typography';
-import { ColoursEnum } from '../../../lib/ui/colours';
+import { FontsEnum } from './typography';
+import { ColoursEnum } from './colours';
 
 
 /*
