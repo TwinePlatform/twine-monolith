@@ -1,0 +1,285 @@
+import * as Hapi from '@hapi/hapi';
+import * as Knex from 'knex';
+import { init } from '../../../../../../tests/utils/server';
+import { getConfig } from '../../../../../../config';
+import { User, Users, Organisation, Organisations } from '../../../../../models';
+import { Credentials as StandardCredentials } from '../../../../../auth/strategies/standard';
+import { ExternalCredentials, name as ExtName } from '../../../../../auth/strategies/external';
+import { injectCfg } from '../../../../../../tests/utils/inject';
+
+
+describe('API', () => {
+  let server: Hapi.Server;
+  let knex: Knex;
+  let user: User;
+  let admin: User;
+  let organisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
+  let adminCreds: Hapi.AuthCredentials;
+  let extCreds: Hapi.AuthCredentials;
+  const config = getConfig(process.env.NODE_ENV);
+
+  beforeAll(async () => {
+    server = await init(config);
+    knex = server.app.knex;
+
+    user = await Users.getOne(knex, { where: { name: 'GlaDos' } });
+    admin = await Users.getOne(knex, { where: { name: 'Big Boss' } });
+    organisation = await Organisations.getOne(knex, { where: { id: 1 } });
+    credentials = await StandardCredentials.create(knex, user, organisation);
+    adminCreds = await StandardCredentials.create(knex, admin, organisation);
+    extCreds = await ExternalCredentials.get(knex, 'aperture-token');
+  });
+
+  afterAll(async () => {
+    await server.shutdown(true);
+  });
+
+  describe('GET /community-businesses/{id}/visitors', () => {
+    test('non-filtered query', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors',
+        credentials,
+      }));
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toHaveLength(3);
+      expect((<any> res.result).result.visits).not.toBeDefined();
+      expect((<any> res.result).result[0]).toEqual(expect.objectContaining({
+        name: 'Chell',
+        deletedAt: null,
+      }));
+      expect((<any> res.result).meta).toEqual({ total: 3 });
+    });
+
+    test('filtered query', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors?fields[]=name&filter[gender]=male',
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: [{ name: 'Turret' }], meta: { total: 1 } });
+    });
+
+    test('filtered query with visits', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors?'
+          + 'fields[]=name'
+          + '&filter[age][]=17'
+          + '&filter[age][]=60'
+          + '&visits=true',
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.arrayContaining([{
+          name: 'Chell',
+          visits: expect.arrayContaining([
+            expect.objectContaining({
+              id: 1,
+              visitActivity: 'Free Running',
+            }),
+          ]),
+        }]),
+        meta: { total: 2 },
+      });
+      expect((<any> res.result).result).toHaveLength(2);
+      expect((<any> res.result).result[0].visits).toHaveLength(10);
+    });
+
+    test('filtered query without visits', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors?'
+          + 'fields[]=name'
+          + '&filter[age][]=0'
+          + '&filter[age][]=20',
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.arrayContaining([{ name: 'Turret' }]),
+        meta: { total: 1 },
+      });
+      expect((<any> res.result).result).toHaveLength(1);
+    });
+
+    test('filtered query on activities', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors?'
+          + 'fields[]=name'
+          + '&filter[age][]=17'
+          + '&filter[age][]=60'
+          + '&filter[visitActivity]=Free Running'
+          + '&visits=true',
+        credentials,
+      }));
+
+      const result = (<any> res.result).result;
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.arrayContaining([{
+          name: 'Chell',
+          visits: expect.arrayContaining([
+            expect.objectContaining({
+              id: 1,
+              visitActivity: 'Free Running',
+            }),
+          ]),
+        }]),
+        meta: { total: 2 },
+      });
+      expect(result).toHaveLength(2);
+      expect(result[0].visits).toHaveLength(7);
+      expect(result[1].visits).toHaveLength(0);
+      expect(result[0].visits.every((v: any) => v.name === 'Free Running'));
+      expect(result[1].visits.every((v: any) => v.name === 'Free Running'));
+    });
+
+    test('filtered query using email', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors?'
+          + 'fields[]=name'
+          + '&filter[email]=1498@aperturescience.com',
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: [{ name: 'Chell' }],
+        meta: { total: 1 },
+      });
+      expect((<any> res.result).result).toHaveLength(1);
+    });
+
+    test('query child organisation as TWINE_ADMIN', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/1/visitors',
+        credentials: adminCreds,
+      }));
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toHaveLength(3);
+      expect((<any> res.result).result.visits).not.toBeDefined();
+      expect((<any> res.result).result[0]).toEqual(expect.objectContaining({
+        name: 'Chell',
+        deletedAt: null,
+      }));
+      expect((<any> res.result).meta).toEqual({ total: 3 });
+    });
+
+    test('can filter users by name', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors?fields[]=name&filter[name]=Chell',
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: [{ name: 'Chell' }], meta: { total: 1 } });
+    });
+
+    test('can access own visitors using external strategy', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors',
+        credentials: extCreds,
+        strategy: ExtName,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toHaveLength(3);
+      expect((<any> res.result).result.visits).not.toBeDefined();
+      expect((<any> res.result).result[0]).toEqual(expect.objectContaining({
+        name: 'Chell',
+        deletedAt: null,
+      }));
+      expect((<any> res.result).meta).toEqual({ total: 3 });
+    });
+
+    test('cannot access other CBs visitors using external strategy', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/2/visitors',
+        credentials: extCreds,
+        strategy: ExtName,
+      }));
+
+      expect(res.statusCode).toBe(403);
+    });
+  });
+
+  describe('GET /community-businesses/me/visitors/{userId}', () => {
+    test('get specific visitor details of own cb w/o visits', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors/1?visits=false',
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          name: 'Chell',
+        }),
+      });
+      expect((<any> res.result).visits).not.toBeDefined();
+    });
+
+    test('get specific visitor details of own cb w/ visits', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors/1?visits=true',
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          name: 'Chell',
+          visits: expect.arrayContaining([
+            expect.objectContaining({
+              visitActivity: 'Free Running',
+            }),
+          ]),
+        }),
+      });
+      expect((<any> res.result).result.visits).toHaveLength(10);
+    });
+
+    test('get 403 when trying to get non-child visitor', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors/4',
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(403);
+    });
+
+    test('can get own visitor details using external strategy', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visitors/1?visits=false',
+        credentials: extCreds,
+        strategy: ExtName,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          name: 'Chell',
+        }),
+      });
+      expect((<any> res.result).visits).not.toBeDefined();
+    });
+  });
+});
