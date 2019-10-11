@@ -10,6 +10,7 @@ import { ColoursEnum } from '../colours';
  * Types
  */
 type Props = {
+  inline: boolean;
   label: string;
   options: {id: number; name: string}[];
   selectedValue: string;
@@ -19,15 +20,17 @@ type Props = {
 /*
  * Styles
  */
-const Item = styled(I)`
-  alignItems: center;
+const Item = styled(I)<{inline: boolean}>`
+  alignItems: ${({ inline }) => (inline ? 'center' : 'flex-start')};
   marginLeft: 0;
+  marginTop:  ${({ inline }) => (inline ? '0' : '5')}
   width:100%;
   justifyContent: space-between;
+  flexDirection: ${({ inline }) => (inline ? 'row' : 'column')};
 `;
 
-const Label = styled(L)`
- width: ${Forms.labelWidth};
+const Label = styled(L) < { inline: boolean }>`
+ ${({ inline }) => (inline && `width: ${Forms.labelWidth}`)};
 `;
 
 /*
@@ -35,11 +38,11 @@ const Label = styled(L)`
  */
 const Dropdown: FC<Props> = (props) => {
   const {
-    label, options, selectedValue, onValueChange,
+    label, options, selectedValue, onValueChange, inline,
   } = props;
   return (
-    <Item picker inlineLabel>
-      <Label>{label}</Label>
+    <Item picker inline={inline}>
+      <Label inline={inline}>{label}</Label>
       <Picker
         mode="dropdown"
         iosIcon={<MaterialIcons name="keyboard-arrow-down" />}

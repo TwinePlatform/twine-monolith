@@ -8,6 +8,7 @@ import Dropdown from '../../../lib/ui/forms/Dropdown';
 import { Heading } from '../../../lib/ui/typography';
 import Toggle from '../../../lib/ui/forms/Toggle';
 import TermsAndConditons from './TermsAndConditions';
+import { Forms } from '../../../lib/ui/forms/enums';
 /*
  * Types
  */
@@ -28,7 +29,7 @@ const View = styled.View`
 `;
 
 const Form = styled(F)`
-  width: 80%
+  width: ${Forms.formWidth}
 `;
 /*
  * Component
@@ -53,8 +54,8 @@ const Settings: FC<Props> = () => {
           <Input label="Email" editable />
           <Button label="Password" text="Send password reset email" />
           <Input label="Number" />
-          <Dropdown label="Gender" options={genders} onValueChange={setGender} selectedValue={gender} />
-          <Dropdown label="Year of birth" options={years} onValueChange={setYear} selectedValue={year} />
+          <Dropdown inline label="Gender" options={genders} onValueChange={setGender} selectedValue={gender} />
+          <Dropdown inline label="Year of birth" options={years} onValueChange={setYear} selectedValue={year} />
           <Input label="Post code" />
           <Toggle label="Locations reminders" />
           <TermsAndConditons />
