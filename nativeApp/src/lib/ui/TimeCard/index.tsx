@@ -37,7 +37,6 @@ const Value = styled.Text`
 
 const Unit = styled.Text`
   marginLeft: 5;
-  // marginRight: 10;
   color: ${ColoursEnum.darkGrey};
   fontSize: 18;
   letterSpacing: 1.2;
