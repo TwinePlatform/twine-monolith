@@ -21,7 +21,6 @@
     "node_modules",
     "build",
     "__mocks__",
-    "tests",
-    "**/*.test.*"
+    "tests"
   ]
 }
