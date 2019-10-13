@@ -54,7 +54,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can get own logs', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs',
+        url: '/v1.1/users/volunteers/me/volunteer-logs',
         credentials,
       }));
 
@@ -77,7 +77,7 @@ describe('API /users/me/volunteer-logs', () => {
 
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: `/v1/users/volunteers/me/volunteer-logs?since=${since}&until=${until}`,
+        url: `/v1.1/users/volunteers/me/volunteer-logs?since=${since}&until=${until}`,
         credentials,
       }));
 
@@ -98,7 +98,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can get no logs for non-volunteer', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs',
+        url: '/v1.1/users/volunteers/me/volunteer-logs',
         credentials: nonVolCreds,
       }));
 
@@ -108,7 +108,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can get all logs in future by default', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs',
+        url: '/v1.1/users/volunteers/me/volunteer-logs',
         credentials: volAdminCreds,
       }));
 
@@ -139,7 +139,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can get own volunteer log', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs/1',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/1',
         credentials,
       }));
 
@@ -158,7 +158,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can filter fields of own volunteer log', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs/1?fields[]=activity',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/1?fields[]=activity',
         credentials,
       }));
 
@@ -171,7 +171,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('cannot get other users volunteer log', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs/9',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/9',
         credentials,
       }));
 
@@ -183,7 +183,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can partial update own log', async () => {
       const resPre = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs/1',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/1',
         credentials,
       }));
 
@@ -191,7 +191,7 @@ describe('API /users/me/volunteer-logs', () => {
 
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/users/volunteers/me/volunteer-logs/1',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/1',
         credentials,
         payload: {
           activity: 'Committee work, AGM',
@@ -211,7 +211,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can full update own log', async () => {
       const resPre = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs/1',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/1',
         credentials,
       }));
 
@@ -220,7 +220,7 @@ describe('API /users/me/volunteer-logs', () => {
       const then = moment();
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/users/volunteers/me/volunteer-logs/1',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/1',
         credentials,
         payload: {
           activity: 'Committee work, AGM',
@@ -254,7 +254,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can unassign project from log', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/users/volunteers/me/volunteer-logs/1',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/1',
         credentials,
         payload: {
           project: null,
@@ -265,7 +265,7 @@ describe('API /users/me/volunteer-logs', () => {
       expect(res.result).toEqual({
         result: expect.objectContaining({
           id: 1,
-          project: null,
+          project: 'General',
         }),
       });
     });
@@ -273,7 +273,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('cannot re-assign log to another user', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/users/volunteers/me/volunteer-logs/1',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/1',
         credentials,
         payload: {
           userId: 2,
@@ -286,7 +286,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('cannot re-assign log to another organisation', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/users/volunteers/me/volunteer-logs/1',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/1',
         credentials,
         payload: {
           organisationId: 1,
@@ -299,7 +299,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('cannot update other user\'s log', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/users/volunteers/me/volunteer-logs/9',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/9',
         credentials,
         payload: {
           activity: 'Committee work, AGM',
@@ -314,7 +314,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can mark own volunteer log as deleted', async () => {
       const res = await server.inject(injectCfg({
         method: 'DELETE',
-        url: '/v1/users/volunteers/me/volunteer-logs/1',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/1',
         credentials,
       }));
 
@@ -323,7 +323,7 @@ describe('API /users/me/volunteer-logs', () => {
 
       const res2 = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs/1',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/1',
         credentials,
       }));
 
@@ -331,7 +331,7 @@ describe('API /users/me/volunteer-logs', () => {
 
       const res3 = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs',
+        url: '/v1.1/users/volunteers/me/volunteer-logs',
         credentials,
       }));
 
@@ -343,7 +343,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('cannot mark other user\'s volunteer log as deleted', async () => {
       const res = await server.inject(injectCfg({
         method: 'DELETE',
-        url: '/v1/users/volunteers/me/volunteer-logs/9',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/9',
         credentials,
       }));
 
@@ -355,7 +355,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('can get own summary', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/users/volunteers/me/volunteer-logs/summary',
+        url: '/v1.1/users/volunteers/me/volunteer-logs/summary',
         credentials,
       }));
 
@@ -377,7 +377,7 @@ describe('API /users/me/volunteer-logs', () => {
 
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: `/v1/users/volunteers/me/volunteer-logs/summary?since=${then}&until=${now}`,
+        url: `/v1.1/users/volunteers/me/volunteer-logs/summary?since=${then}&until=${now}`,
         credentials,
       }));
 
@@ -396,7 +396,7 @@ describe('API /users/me/volunteer-logs', () => {
     test('cannot get other users summary', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/users/4/volunteer-logs/summary',
+        url: '/v1.1/users/4/volunteer-logs/summary',
         credentials,
       }));
 

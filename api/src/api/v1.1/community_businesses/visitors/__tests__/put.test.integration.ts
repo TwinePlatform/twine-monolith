@@ -45,7 +45,7 @@ describe('API PUT /community-businesses/me/visitors/{id}', () => {
   test('can perform partial update of user model', async () => {
     const res = await server.inject(injectCfg({
       method: 'PUT',
-      url: `/v1/community-businesses/me/visitors/${visitor.id}`,
+      url: `/v1.1/community-businesses/me/visitors/${visitor.id}`,
       payload: {
         name: 'Tubby',
       },
@@ -65,7 +65,7 @@ describe('API PUT /community-businesses/me/visitors/{id}', () => {
   test('can perform full update of user model', async () => {
     const res = await server.inject(injectCfg({
       method: 'PUT',
-      url: `/v1/community-businesses/me/visitors/${visitor.id}`,
+      url: `/v1.1/community-businesses/me/visitors/${visitor.id}`,
       payload: {
         name: 'Tubby',
         gender: 'male',
@@ -104,7 +104,7 @@ describe('API PUT /community-businesses/me/visitors/{id}', () => {
   test('bad update data returns 400', async () => {
     const res = await server.inject(injectCfg({
       method: 'PUT',
-      url: `/v1/community-businesses/me/visitors/${visitor.id}`,
+      url: `/v1.1/community-businesses/me/visitors/${visitor.id}`,
       payload: {
         name: 'Wheatley',
         ethnicity: 'thisisprobablynotaethnicity',
@@ -118,7 +118,7 @@ describe('API PUT /community-businesses/me/visitors/{id}', () => {
   test('idempotency', async () => {
     const res1 = await server.inject(injectCfg({
       method: 'PUT',
-      url: `/v1/community-businesses/me/visitors/${visitor.id}`,
+      url: `/v1.1/community-businesses/me/visitors/${visitor.id}`,
       payload: {
         name: 'Tubby',
       },
@@ -127,7 +127,7 @@ describe('API PUT /community-businesses/me/visitors/{id}', () => {
 
     const res2 = await server.inject(injectCfg({
       method: 'PUT',
-      url: `/v1/community-businesses/me/visitors/${visitor.id}`,
+      url: `/v1.1/community-businesses/me/visitors/${visitor.id}`,
       payload: {
         name: 'Tubby',
       },

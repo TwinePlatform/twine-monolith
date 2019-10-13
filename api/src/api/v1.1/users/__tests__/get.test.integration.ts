@@ -33,7 +33,7 @@ describe('API /users', () => {
     test('501', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/users',
+        url: '/v1.1/users',
         credentials,
       }));
 

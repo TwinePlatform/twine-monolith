@@ -56,7 +56,7 @@ describe('/community-business/{id}/feedback', () => {
     test('Get empty feedback for own org as CB_ADMIN when no data', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/feedback',
+        url: '/v1.1/community-businesses/me/feedback',
         credentials: creds.gordon,
       }));
 
@@ -67,7 +67,7 @@ describe('/community-business/{id}/feedback', () => {
     test('Get all feedback for own org as CB_ADMIN', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/feedback',
+        url: '/v1.1/community-businesses/me/feedback',
         credentials: creds.glados,
       }));
 
@@ -85,7 +85,7 @@ describe('/community-business/{id}/feedback', () => {
 
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: `/v1/community-businesses/me/feedback?since=${since}&until=${until}`,
+        url: `/v1.1/community-businesses/me/feedback?since=${since}&until=${until}`,
         credentials: creds.glados,
       }));
 
@@ -103,7 +103,7 @@ describe('/community-business/{id}/feedback', () => {
 
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: `/v1/community-businesses/me/feedback?since=${since}&until=${until}`,
+        url: `/v1.1/community-businesses/me/feedback?since=${since}&until=${until}`,
         credentials: creds.glados,
       }));
       expect(res.statusCode).toBe(400);
@@ -112,7 +112,7 @@ describe('/community-business/{id}/feedback', () => {
     test('Get empty feedback for child org as TWINE_ADMIN when no data', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/2/feedback',
+        url: '/v1.1/community-businesses/2/feedback',
         credentials: creds.bigboss,
       }));
 
@@ -123,7 +123,7 @@ describe('/community-business/{id}/feedback', () => {
     test('Get all feedback for child org as TWINE_ADMIN', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/1/feedback',
+        url: '/v1.1/community-businesses/1/feedback',
         credentials: creds.bigboss,
       }));
 
@@ -141,7 +141,7 @@ describe('/community-business/{id}/feedback', () => {
 
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: `/v1/community-businesses/1/feedback?since=${since}&until=${until}`,
+        url: `/v1.1/community-businesses/1/feedback?since=${since}&until=${until}`,
         credentials: creds.bigboss,
       }));
 
@@ -159,7 +159,7 @@ describe('/community-business/{id}/feedback', () => {
 
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: `/v1/community-businesses/1/feedback?since=${since}&until=${until}`,
+        url: `/v1.1/community-businesses/1/feedback?since=${since}&until=${until}`,
         credentials: creds.bigboss,
       }));
 
@@ -169,7 +169,7 @@ describe('/community-business/{id}/feedback', () => {
     test('Get 403 when organisation is not a "child" of user', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/1/feedback',
+        url: '/v1.1/community-businesses/1/feedback',
         credentials: creds.glados,
       }));
 
@@ -179,7 +179,7 @@ describe('/community-business/{id}/feedback', () => {
     test('can access feedback for own org via external strategy', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/feedback',
+        url: '/v1.1/community-businesses/me/feedback',
         credentials: creds.ext,
         strategy: ExtName,
       }));
@@ -197,7 +197,7 @@ describe('/community-business/{id}/feedback', () => {
     test('Get zeros for own organisation when has no feedback', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/feedback/aggregates',
+        url: '/v1.1/community-businesses/me/feedback/aggregates',
         credentials: creds.gordon,
       }));
 
@@ -213,7 +213,7 @@ describe('/community-business/{id}/feedback', () => {
     test('Get summary results for own organisation', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/feedback/aggregates',
+        url: '/v1.1/community-businesses/me/feedback/aggregates',
         credentials: creds.glados,
       }));
 
@@ -232,7 +232,7 @@ describe('/community-business/{id}/feedback', () => {
 
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: `/v1/community-businesses/me/feedback/aggregates?since=${since}&until=${until}`,
+        url: `/v1.1/community-businesses/me/feedback/aggregates?since=${since}&until=${until}`,
         credentials: creds.glados,
       }));
 
@@ -248,7 +248,7 @@ describe('/community-business/{id}/feedback', () => {
     test('Get 400 for invalid date limits', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/feedback/aggregates?since=nope&until=never',
+        url: '/v1.1/community-businesses/me/feedback/aggregates?since=nope&until=never',
         credentials: creds.glados,
       }));
 
@@ -258,7 +258,7 @@ describe('/community-business/{id}/feedback', () => {
     test('can access feedback aggregates for own org w/ external strategy', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/feedback/aggregates',
+        url: '/v1.1/community-businesses/me/feedback/aggregates',
         credentials: creds.ext,
         strategy: ExtName,
       }));
@@ -277,7 +277,7 @@ describe('/community-business/{id}/feedback', () => {
     test('Leave feedback on own org as CB_ADMIN', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/community-businesses/me/feedback',
+        url: '/v1.1/community-businesses/me/feedback',
         payload: { feedbackScore: 1 },
         credentials: creds.gordon,
       }));

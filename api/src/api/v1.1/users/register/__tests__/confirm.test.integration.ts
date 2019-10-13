@@ -45,7 +45,7 @@ describe('API v1 - confirm adding a new role', () => {
 
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/confirm',
+        url: '/v1.1/users/register/confirm',
         payload: {
           organisationId: 1,
           userId: 1,
@@ -65,7 +65,7 @@ describe('API v1 - confirm adding a new role', () => {
 
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/confirm',
+        url: '/v1.1/users/register/confirm',
         payload: {
           organisationId: 1,
           userId: 6,
@@ -89,7 +89,7 @@ describe('API v1 - confirm adding a new role', () => {
 
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/confirm',
+        url: '/v1.1/users/register/confirm',
         payload: {
           organisationId: cb.id,
           userId: visitor.id,
@@ -118,7 +118,7 @@ describe('API v1 - confirm adding a new role', () => {
 
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/confirm',
+        url: '/v1.1/users/register/confirm',
         payload: {
           organisationId: cb.id,
           userId: volunteer.id,

@@ -48,7 +48,7 @@ describe('PUT /users', () => {
     test('can perform partial update of user model', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/users/me',
+        url: '/v1.1/users/me',
         payload: {
           name: 'Wheatley',
         },
@@ -68,7 +68,7 @@ describe('PUT /users', () => {
     test('can perform full update of user model', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/users/me',
+        url: '/v1.1/users/me',
         payload: {
           name: 'Wheatley',
           gender: 'male',
@@ -107,7 +107,7 @@ describe('PUT /users', () => {
     test('can change casing on case-insensitive fields of user model', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/users/me',
+        url: '/v1.1/users/me',
         payload: {
           name: 'glados',
           email: '1@APERTUREscience.com',
@@ -131,7 +131,7 @@ describe('PUT /users', () => {
     test('bad update data returns 400', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/users/me',
+        url: '/v1.1/users/me',
         payload: {
           name: 'Wheatley',
           ethnicity: 'thisisprobablynotaethnicity',
@@ -145,7 +145,7 @@ describe('PUT /users', () => {
     test('idempotency', async () => {
       const res1 = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/users/me',
+        url: '/v1.1/users/me',
         payload: {
           name: 'Wheatley',
         },
@@ -154,7 +154,7 @@ describe('PUT /users', () => {
 
       const res2 = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/users/me',
+        url: '/v1.1/users/me',
         payload: {
           name: 'Wheatley',
         },
@@ -171,7 +171,7 @@ describe('PUT /users', () => {
     test('can perform partial update of user model', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: `/v1/users/${visitor.id}`,
+        url: `/v1.1/users/${visitor.id}`,
         payload: {
           name: 'Tubby',
         },
@@ -191,7 +191,7 @@ describe('PUT /users', () => {
     test('can perform full update of user model', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: `/v1/users/${visitor.id}`,
+        url: `/v1.1/users/${visitor.id}`,
         payload: {
           name: 'Tubby',
           gender: 'male',
@@ -230,7 +230,7 @@ describe('PUT /users', () => {
     test('can change casing on case-insensitive fields of user model', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: `/v1/users/${visitor.id}`,
+        url: `/v1.1/users/${visitor.id}`,
         payload: {
           name: 'chell',
           email: '1498@apertureSCIENCE.com',
@@ -254,7 +254,7 @@ describe('PUT /users', () => {
     test('bad update data returns 400', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: `/v1/users/${visitor.id}`,
+        url: `/v1.1/users/${visitor.id}`,
         payload: {
           name: 'Wheatley',
           ethnicity: 'thisisprobablynotaethnicity',
@@ -268,7 +268,7 @@ describe('PUT /users', () => {
     test('idempotency', async () => {
       const res1 = await server.inject(injectCfg({
         method: 'PUT',
-        url: `/v1/users/${visitor.id}`,
+        url: `/v1.1/users/${visitor.id}`,
         payload: {
           name: 'Tubby',
         },
@@ -277,7 +277,7 @@ describe('PUT /users', () => {
 
       const res2 = await server.inject(injectCfg({
         method: 'PUT',
-        url: `/v1/users/${visitor.id}`,
+        url: `/v1.1/users/${visitor.id}`,
         payload: {
           name: 'Tubby',
         },

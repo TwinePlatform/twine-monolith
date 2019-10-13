@@ -39,7 +39,7 @@ describe('API /users', () => {
     test(':: success - returns list of all cbs in region', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/regions/3/community-businesses',
+        url: '/v1.1/regions/3/community-businesses',
       });
 
       expect(res.statusCode).toBe(200);
@@ -50,7 +50,7 @@ describe('API /users', () => {
     test(':: success - returns empty list of unpopulated region', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/regions/1/community-businesses',
+        url: '/v1.1/regions/1/community-businesses',
       });
 
       expect(res.statusCode).toBe(200);
@@ -60,7 +60,7 @@ describe('API /users', () => {
     test(':: fail - returns 404 for nonexisting region', async () => {
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/regions/100/community-businesses',
+        url: '/v1.1/regions/100/community-businesses',
       });
 
       expect(res.statusCode).toBe(404);
@@ -80,7 +80,7 @@ describe('API /users', () => {
 
       const res = await server.inject({
         method: 'GET',
-        url: '/v1/regions/3/community-businesses',
+        url: '/v1.1/regions/3/community-businesses',
       });
 
       expect(res.statusCode).toBe(200);

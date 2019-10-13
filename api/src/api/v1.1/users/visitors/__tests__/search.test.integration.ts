@@ -30,7 +30,7 @@ describe('POST /v1/visitor/search', () => {
   test('Find visitor using valid QR code hash', async () => {
     const res = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/users/visitors/search',
+      url: '/v1.1/users/visitors/search',
       payload: {
         qrCode: 'chellsqrcode',
       },
@@ -44,7 +44,7 @@ describe('POST /v1/visitor/search', () => {
   test('Fail to find visitor using invalid QR code hash', async () => {
     const res = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/users/visitors/search',
+      url: '/v1.1/users/visitors/search',
       payload: {
         qrCode: 'definitely invalid qrCode',
       },

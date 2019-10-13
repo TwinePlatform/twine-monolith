@@ -35,7 +35,7 @@ describe('GET /community-businesses/{id}/cb-admins', () => {
   test('query child organisation as TWINE_ADMIN', async () => {
     const res = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/community-businesses/1/cb-admins',
+      url: '/v1.1/community-businesses/1/cb-admins',
       credentials: adminCreds,
     }));
     expect(res.statusCode).toBe(200);
@@ -50,7 +50,7 @@ describe('GET /community-businesses/{id}/cb-admins', () => {
   test('403 if not TWINE_ADMIN', async () => {
     const res = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/community-businesses/1/cb-admins',
+      url: '/v1.1/community-businesses/1/cb-admins',
       credentials: userCreds,
     }));
     expect(res.statusCode).toBe(403);

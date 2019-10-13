@@ -50,7 +50,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
     // create temp cb
     const res = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/register/temporary',
+      url: '/v1.1/community-businesses/register/temporary',
       credentials: twAdminCreds,
       payload: { orgName: 'Shinra Electric Power Company' },
     }));
@@ -60,7 +60,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
     // delete account
     const res2 = await server.inject(injectCfg({
       method: 'DELETE',
-      url: `/v1/community-businesses/temporary/${tempCb.id}`,
+      url: `/v1.1/community-businesses/temporary/${tempCb.id}`,
       credentials: twAdminCreds,
     }));
     expect(res2.statusCode).toBe(200);
@@ -74,7 +74,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
     // create temp cb
     const resCreate = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/register/temporary',
+      url: '/v1.1/community-businesses/register/temporary',
       credentials: twAdminCreds,
       payload: { orgName: 'Shinra Electric Power Company' },
     }));
@@ -88,7 +88,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
     // create visitor
     const resAddVisitor = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/users/register/visitors',
+      url: '/v1.1/users/register/visitors',
       payload: {
         organisationId: tempCb.id,
         name: 'Cloud Strife',
@@ -105,7 +105,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
     // add visit activty
     const resAddVisitActivity = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/me/visit-activities',
+      url: '/v1.1/community-businesses/me/visit-activities',
       payload: {
         name: 'Hair Styling',
         category: 'Adult skills building',
@@ -118,7 +118,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
     // add visitor log
     const resAddLog = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/me/visit-logs',
+      url: '/v1.1/community-businesses/me/visit-logs',
       payload: {
         userId: visitor.id,
         visitActivityId: visitActity.id,
@@ -132,7 +132,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
     // add volunteer
     const resAddVolunteer = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/users/register/volunteers',
+      url: '/v1.1/users/register/volunteers',
       payload: {
         organisationId: tempCb.id,
         name: 'Yuffie Kisaragi',
@@ -151,7 +151,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
     // add volunteer log
     const resAddVolunteerLog = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/me/volunteer-logs',
+      url: '/v1.1/community-businesses/me/volunteer-logs',
       payload: {
         activity: 'Committee work, AGM',
         userId: volunteer.id,
@@ -169,7 +169,7 @@ describe('DELETE /community-businesses/temporary/:id', () => {
     // delete account
     const resDelete = await server.inject(injectCfg({
       method: 'DELETE',
-      url: `/v1/community-businesses/temporary/${tempCb.id}`,
+      url: `/v1.1/community-businesses/temporary/${tempCb.id}`,
       credentials: twAdminCreds,
     }));
     expect(resDelete.statusCode).toBe(200);

@@ -45,7 +45,7 @@ describe('GET /community-businesses/temporary', () => {
       // no test data for temp cbs
     const res = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/community-businesses/temporary',
+      url: '/v1.1/community-businesses/temporary',
       credentials: twAdminCreds,
     }));
 
@@ -55,7 +55,7 @@ describe('GET /community-businesses/temporary', () => {
       // create temp cb
     await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/register/temporary',
+      url: '/v1.1/community-businesses/register/temporary',
       credentials: twAdminCreds,
       payload: { orgName: 'Shinra Electric Power Company' },
     }));
@@ -63,7 +63,7 @@ describe('GET /community-businesses/temporary', () => {
       // check route returns new list of temp accounts
     const res2 = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/community-businesses/temporary',
+      url: '/v1.1/community-businesses/temporary',
       credentials: twAdminCreds,
     }));
 

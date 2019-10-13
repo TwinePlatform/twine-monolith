@@ -39,7 +39,7 @@ describe('Authentication integration', () => {
       // 0. Try to access resource X -> 401
       const resPreAccess = await server.inject({
         method: 'GET',
-        url: '/v1/users/me',
+        url: '/v1.1/users/me',
       });
       await delay(10); // waiting for user session record to be updated
 
@@ -52,7 +52,7 @@ describe('Authentication integration', () => {
       // 1. Login -> 200
       const resLogin = await server.inject({
         method: 'POST',
-        url: '/v1/users/login',
+        url: '/v1.1/users/login',
         headers: {
           origin: 'https://data.twine-together.com',
           referer: 'https://data.twine-together.com/login',
@@ -74,7 +74,7 @@ describe('Authentication integration', () => {
       // 2. Try to access resource X -> 200
       const resAccess = await server.inject({
         method: 'GET',
-        url: '/v1/users/me',
+        url: '/v1.1/users/me',
         headers: {
           referer: 'https://data.twine-together.com/',
           cookie: `${cookieName}=${token}`,
@@ -94,7 +94,7 @@ describe('Authentication integration', () => {
       // 3. Logout
       const resLogout = await server.inject({
         method: 'GET',
-        url: '/v1/users/logout',
+        url: '/v1.1/users/logout',
         headers: { cookie: `${cookieName}=${token}` },
       });
       await delay(10); // waiting for user session record to be updated
@@ -114,7 +114,7 @@ describe('Authentication integration', () => {
       // 4. Try to access resource X -> 401
       const resPostAccess = await server.inject({
         method: 'GET',
-        url: '/v1/users/me',
+        url: '/v1.1/users/me',
         headers: { referer: 'https://data.twine-together.com/time' },
       });
       await delay(10); // waiting for user session record to be updated
@@ -141,7 +141,7 @@ describe('Authentication integration', () => {
       // 1. Login -> 200
       const resLogin = await server.inject({
         method: 'POST',
-        url: '/v1/users/login',
+        url: '/v1.1/users/login',
         headers: { referer: 'https://data.twine-together.com/login' },
         payload: {
           type: 'body',
@@ -156,7 +156,7 @@ describe('Authentication integration', () => {
       // 2. Try to access resource X -> 200
       const resAccess = await server.inject({
         method: 'GET',
-        url: '/v1/users/me',
+        url: '/v1.1/users/me',
         headers: {
           Authorization: token,
           referer: 'https://data.twine-together.com/',

@@ -47,7 +47,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
     test(':: no fields returns empty response', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visit-logs/aggregates',
+        url: '/v1.1/community-businesses/me/visit-logs/aggregates',
         credentials,
       }));
 
@@ -58,7 +58,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
     test(':: get aggregated visit logs with one field', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visit-logs/aggregates?'
+        url: '/v1.1/community-businesses/me/visit-logs/aggregates?'
           + 'fields[0]=visitActivity',
         credentials,
       }));
@@ -72,7 +72,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
     test(':: get aggregated visit logs with all fields', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visit-logs/aggregates?'
+        url: '/v1.1/community-businesses/me/visit-logs/aggregates?'
           + 'fields[0]=visitActivity&'
           + 'fields[1]=age&'
           + 'fields[2]=gender',
@@ -90,7 +90,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
     test(':: unsupported field returns error', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visit-logs/aggregates?'
+        url: '/v1.1/community-businesses/me/visit-logs/aggregates?'
           + 'fields[0]=lightspeed',
         credentials,
       }));
@@ -103,7 +103,7 @@ describe('API v1 :: Community Businesses :: Visit Log Aggregates', () => {
     test(':: accessible via external strategy', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visit-logs/aggregates?'
+        url: '/v1.1/community-businesses/me/visit-logs/aggregates?'
           + 'fields[0]=visitActivity',
         credentials: extCreds,
         strategy: ExtName,

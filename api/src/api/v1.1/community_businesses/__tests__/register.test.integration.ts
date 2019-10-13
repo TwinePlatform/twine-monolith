@@ -47,7 +47,7 @@ describe('PUT /community-businesses', () => {
     test('SUCCESS - create CB and admin user with successful payload', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/community-businesses/register',
+        url: '/v1.1/community-businesses/register',
         payload: {
           orgName: 'Stick House',
           region: RegionEnum.NORTH_EAST,
@@ -82,7 +82,7 @@ describe('PUT /community-businesses', () => {
     test('FAILURE - return error for duplicate 360 giving id', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/community-businesses/register',
+        url: '/v1.1/community-businesses/register',
         payload: {
           orgName: 'Stick House',
           region: RegionEnum.NORTH_EAST,
@@ -102,7 +102,7 @@ describe('PUT /community-businesses', () => {
     test('FAILURE - return error for duplicate email', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/community-businesses/register',
+        url: '/v1.1/community-businesses/register',
         payload: {
           orgName: 'Stick House',
           region: RegionEnum.NORTH_EAST,
@@ -124,7 +124,7 @@ describe('PUT /community-businesses', () => {
     test('SUCCESS - create a temporary marked CB and admin user', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/community-businesses/register/temporary',
+        url: '/v1.1/community-businesses/register/temporary',
         payload: {
           orgName: 'Stick House',
         },

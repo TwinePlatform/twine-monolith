@@ -57,7 +57,7 @@ describe('API v1 - register new users', () => {
     test('FAIL :: cannot create visitor if email is associated to another vistor', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 1,
           name: 'Chell',
@@ -77,7 +77,7 @@ describe('API v1 - register new users', () => {
     test('FAIL :: cannot create visitor if phone number is associated to another user', async () => {
       await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 1,
           name: 'Ratman',
@@ -91,7 +91,7 @@ describe('API v1 - register new users', () => {
 
       const res2 = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 1,
           name: 'Ratman',
@@ -111,7 +111,7 @@ describe('API v1 - register new users', () => {
     test('FAIL :: non-existent community business', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 9352,
           name: 'foo',
@@ -131,7 +131,7 @@ describe('API v1 - register new users', () => {
     test('FAIL :: cannot register against a different community business', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 2,
           name: 'foo',
@@ -151,7 +151,7 @@ describe('API v1 - register new users', () => {
     test('FAIL :: cannot register additonal role against VOLUNTEER_ADMIN', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 2,
           name: 'foo',
@@ -171,7 +171,7 @@ describe('API v1 - register new users', () => {
     test('FAIL :: cannot register as a visitor if user is registered under a different cb', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 1,
           name: 'Emma Emmerich',
@@ -193,7 +193,7 @@ describe('API v1 - register new users', () => {
 
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 2,
           name: 'Emma Emmerich',
@@ -224,7 +224,7 @@ describe('API v1 - register new users', () => {
     test('FAIL :: cannot register visitor without email & phone number', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 1,
           name: 'Ratman',
@@ -242,7 +242,7 @@ describe('API v1 - register new users', () => {
     test('SUCCESS :: postCode is not required for anonymous visitor', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 1,
           name: 'foo',
@@ -265,7 +265,7 @@ describe('API v1 - register new users', () => {
     test('SUCCESS :: happy path for standard visitor', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 1,
           name: 'foo',
@@ -289,7 +289,7 @@ describe('API v1 - register new users', () => {
     test('SUCCESS :: happy path for anonymous visitor', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 1,
           name: 'foo',
@@ -311,7 +311,7 @@ describe('API v1 - register new users', () => {
 
       const res2 = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 1,
           name: 'boo',
@@ -335,7 +335,7 @@ describe('API v1 - register new users', () => {
     test('SUCCESS :: register visitor with null birthYear', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 1,
           name: 'Ratman',
@@ -354,7 +354,7 @@ describe('API v1 - register new users', () => {
     test('SUCCESS :: register visitor with only phone number', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/visitors',
+        url: '/v1.1/users/register/visitors',
         payload: {
           organisationId: 1,
           name: 'Ratman',

@@ -39,7 +39,7 @@ describe('API', () => {
     test('non-filtered query', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visitors',
+        url: '/v1.1/community-businesses/me/visitors',
         credentials,
       }));
       expect(res.statusCode).toBe(200);
@@ -55,7 +55,7 @@ describe('API', () => {
     test('filtered query', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visitors?fields[]=name&filter[gender]=male',
+        url: '/v1.1/community-businesses/me/visitors?fields[]=name&filter[gender]=male',
         credentials,
       }));
 
@@ -66,7 +66,7 @@ describe('API', () => {
     test('filtered query with visits', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visitors?'
+        url: '/v1.1/community-businesses/me/visitors?'
           + 'fields[]=name'
           + '&filter[age][]=17'
           + '&filter[age][]=60'
@@ -94,7 +94,7 @@ describe('API', () => {
     test('filtered query without visits', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visitors?'
+        url: '/v1.1/community-businesses/me/visitors?'
           + 'fields[]=name'
           + '&filter[age][]=0'
           + '&filter[age][]=20',
@@ -112,7 +112,7 @@ describe('API', () => {
     test('filtered query on activities', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visitors?'
+        url: '/v1.1/community-businesses/me/visitors?'
           + 'fields[]=name'
           + '&filter[age][]=17'
           + '&filter[age][]=60'
@@ -146,7 +146,7 @@ describe('API', () => {
     test('filtered query using email', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visitors?'
+        url: '/v1.1/community-businesses/me/visitors?'
           + 'fields[]=name'
           + '&filter[email]=1498@aperturescience.com',
         credentials,
@@ -163,7 +163,7 @@ describe('API', () => {
     test('query child organisation as TWINE_ADMIN', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/1/visitors',
+        url: '/v1.1/community-businesses/1/visitors',
         credentials: adminCreds,
       }));
       expect(res.statusCode).toBe(200);
@@ -179,7 +179,7 @@ describe('API', () => {
     test('can filter users by name', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visitors?fields[]=name&filter[name]=Chell',
+        url: '/v1.1/community-businesses/me/visitors?fields[]=name&filter[name]=Chell',
         credentials,
       }));
 
@@ -190,7 +190,7 @@ describe('API', () => {
     test('can access own visitors using external strategy', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visitors',
+        url: '/v1.1/community-businesses/me/visitors',
         credentials: extCreds,
         strategy: ExtName,
       }));
@@ -208,7 +208,7 @@ describe('API', () => {
     test('cannot access other CBs visitors using external strategy', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/2/visitors',
+        url: '/v1.1/community-businesses/2/visitors',
         credentials: extCreds,
         strategy: ExtName,
       }));
@@ -221,7 +221,7 @@ describe('API', () => {
     test('get specific visitor details of own cb w/o visits', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visitors/1?visits=false',
+        url: '/v1.1/community-businesses/me/visitors/1?visits=false',
         credentials,
       }));
 
@@ -237,7 +237,7 @@ describe('API', () => {
     test('get specific visitor details of own cb w/ visits', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visitors/1?visits=true',
+        url: '/v1.1/community-businesses/me/visitors/1?visits=true',
         credentials,
       }));
 
@@ -258,7 +258,7 @@ describe('API', () => {
     test('get 403 when trying to get non-child visitor', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visitors/4',
+        url: '/v1.1/community-businesses/me/visitors/4',
         credentials,
       }));
 
@@ -268,7 +268,7 @@ describe('API', () => {
     test('can get own visitor details using external strategy', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visitors/1?visits=false',
+        url: '/v1.1/community-businesses/me/visitors/1?visits=false',
         credentials: extCreds,
         strategy: ExtName,
       }));

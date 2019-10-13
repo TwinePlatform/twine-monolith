@@ -40,7 +40,7 @@ describe('API /community-businesses/{id}/visitors', () => {
 
     const res = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/me/visitors/1/emails',
+      url: '/v1.1/community-businesses/me/visitors/1/emails',
       payload: {
         type: 'qrcode',
       },
@@ -57,7 +57,7 @@ describe('API /community-businesses/{id}/visitors', () => {
 
     const res = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/me/visitors/1/emails',
+      url: '/v1.1/community-businesses/me/visitors/1/emails',
       payload: {
         type: 'qrcode',
       },
@@ -71,7 +71,7 @@ describe('API /community-businesses/{id}/visitors', () => {
   test('return 403 for non-child visitor', async () => {
     const res = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/me/visitors/4/emails',
+      url: '/v1.1/community-businesses/me/visitors/4/emails',
       payload: {
         type: 'qrcode',
       },
@@ -84,7 +84,7 @@ describe('API /community-businesses/{id}/visitors', () => {
   test('return 400 for unsupported email type', async () => {
     const res = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/me/visitors/1/emails',
+      url: '/v1.1/community-businesses/me/visitors/1/emails',
       payload: {
         type: 'unknownemailtype',
       },
@@ -97,7 +97,7 @@ describe('API /community-businesses/{id}/visitors', () => {
   test('return 400 for user with no email', async () => {
     const res = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/me/visitors/9/emails',
+      url: '/v1.1/community-businesses/me/visitors/9/emails',
       payload: {
         type: 'qrcode',
       },
@@ -112,7 +112,7 @@ describe('API /community-businesses/{id}/visitors', () => {
     await Users.update(knex, { name: 'Companion Cube' }, { email: 'anon_01_org_01' });
     const res = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/me/visitors/9/emails',
+      url: '/v1.1/community-businesses/me/visitors/9/emails',
       payload: {
         type: 'qrcode',
       },

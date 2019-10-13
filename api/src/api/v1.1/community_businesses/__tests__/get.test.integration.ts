@@ -47,7 +47,7 @@ describe('GET /community-businesses', () => {
     test('success:: user TWINE_ADMIN return list of all cbs', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses',
+        url: '/v1.1/community-businesses',
         credentials: twAdminCreds,
       }));
 
@@ -58,7 +58,7 @@ describe('GET /community-businesses', () => {
     test('success: admin code fields query returns subset of cbs', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses?fields[]=adminCode&fields[]=name',
+        url: '/v1.1/community-businesses?fields[]=adminCode&fields[]=name',
         credentials: twAdminCreds,
       }));
 
@@ -72,7 +72,7 @@ describe('GET /community-businesses', () => {
     test('Fetching collection returns only list that user is authorised for', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses',
+        url: '/v1.1/community-businesses',
         credentials: cbAdminCreds,
       }));
 
@@ -84,7 +84,7 @@ describe('GET /community-businesses', () => {
     test('Returns CB that CB_ADMIN is authenticated against', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me',
+        url: '/v1.1/community-businesses/me',
         credentials: cbAdminCreds,
       }));
 
@@ -98,7 +98,7 @@ describe('GET /community-businesses', () => {
     test('Returns CB that VOLUNTEER is authenticated against', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me',
+        url: '/v1.1/community-businesses/me',
         credentials: volunteerCreds,
       }));
 
@@ -112,7 +112,7 @@ describe('GET /community-businesses', () => {
     test('can get own CB when using external strategy', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me',
+        url: '/v1.1/community-businesses/me',
         credentials: extCreds,
         strategy: ExtName,
       }));
@@ -129,7 +129,7 @@ describe('GET /community-businesses', () => {
     test('Returns requested CB if user is authorised', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/2',
+        url: '/v1.1/community-businesses/2',
         credentials: twAdminCreds,
       }));
 
@@ -143,7 +143,7 @@ describe('GET /community-businesses', () => {
     test('Returns 403 if user is not authorised', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/1',
+        url: '/v1.1/community-businesses/1',
         credentials: cbAdminCreds,
       }));
 

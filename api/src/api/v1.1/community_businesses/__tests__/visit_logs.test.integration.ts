@@ -47,7 +47,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
     test(':: successfully add new visit log', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/community-businesses/me/visit-logs',
+        url: '/v1.1/community-businesses/me/visit-logs',
         payload: {
           userId: 1,
           visitActivityId: 2,
@@ -65,7 +65,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
     test(':: user from another cb returns error', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/community-businesses/me/visit-logs',
+        url: '/v1.1/community-businesses/me/visit-logs',
         payload: {
           userId: 2,
           visitActivityId: 2,
@@ -82,7 +82,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
     test(':: incorrect activity id returns error', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/community-businesses/me/visit-logs',
+        url: '/v1.1/community-businesses/me/visit-logs',
         payload: {
           userId: 1,
           visitActivityId: 200,
@@ -101,7 +101,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
     test(':: get all visit logs for a cb', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visit-logs',
+        url: '/v1.1/community-businesses/me/visit-logs',
         credentials,
       }));
 
@@ -122,7 +122,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
     test(':: filtered visit logs with query', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visit-logs?'
+        url: '/v1.1/community-businesses/me/visit-logs?'
         + '&filter[visitActivity]=Wear%20Pink',
         credentials,
       }));
@@ -141,7 +141,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
     test(':: accessible via external strategy', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visit-logs',
+        url: '/v1.1/community-businesses/me/visit-logs',
         credentials: extCreds,
         strategy: 'external',
       }));

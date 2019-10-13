@@ -49,7 +49,7 @@ describe('GET /v1/users/volunteers/:id', () => {
   test(':: success - volunteer admin can access volunteer from same org', async () => {
     const res = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/users/volunteers/6',
+      url: '/v1.1/users/volunteers/6',
       credentials: volunteerCreds,
     }));
 
@@ -62,7 +62,7 @@ describe('GET /v1/users/volunteers/:id', () => {
   test(':: success - org admin can access volunteer from same org', async () => {
     const res = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/users/volunteers/6',
+      url: '/v1.1/users/volunteers/6',
       credentials: adminCreds,
     }));
 
@@ -75,7 +75,7 @@ describe('GET /v1/users/volunteers/:id', () => {
   test(':: fail - non volunteer user returns a 404', async () => {
     const res = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/users/volunteers/1',
+      url: '/v1.1/users/volunteers/1',
       credentials: wrongAdminCreds,
     }));
 
@@ -85,7 +85,7 @@ describe('GET /v1/users/volunteers/:id', () => {
   test(':: fail - volunteer admin from a different org cannot access user details', async () => {
     const res = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/users/volunteers/6',
+      url: '/v1.1/users/volunteers/6',
       credentials: wrongAdminCreds,
     }));
 

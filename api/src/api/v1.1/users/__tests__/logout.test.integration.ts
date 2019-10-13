@@ -34,7 +34,7 @@ describe('GET /users/logout', () => {
   test(':: successful logout', async () => {
     const res = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/users/logout',
+      url: '/v1.1/users/logout',
       credentials: {},
     }));
 

@@ -37,7 +37,7 @@ describe('API /community-businesses/{id}/volunteers', () => {
     test(':: success - Volunteer Admin can access volunteer details for their org', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/volunteers',
+        url: '/v1.1/community-businesses/me/volunteers',
         credentials: vCreds,
       }));
       expect(res.statusCode).toBe(200);
@@ -52,7 +52,7 @@ describe('API /community-businesses/{id}/volunteers', () => {
     test(':: success with offset', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/volunteers?offset=1',
+        url: '/v1.1/community-businesses/me/volunteers?offset=1',
         credentials: vCreds,
       }));
       expect(res.statusCode).toBe(200);
@@ -63,7 +63,7 @@ describe('API /community-businesses/{id}/volunteers', () => {
     test(':: success - Org Admin can access volunteer details for their org', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/volunteers',
+        url: '/v1.1/community-businesses/me/volunteers',
         credentials: aCreds,
       }));
       expect(res.statusCode).toBe(200);
@@ -78,7 +78,7 @@ describe('API /community-businesses/{id}/volunteers', () => {
     test(':: fail - Volunteer Admin cannot access volunteer details for another org', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/1/volunteers',
+        url: '/v1.1/community-businesses/1/volunteers',
         credentials: vCreds,
       }));
       expect(res.statusCode).toBe(403);
@@ -87,7 +87,7 @@ describe('API /community-businesses/{id}/volunteers', () => {
     test(':: fail - Org Admin cannot access volunteer details for another org', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/1/volunteers',
+        url: '/v1.1/community-businesses/1/volunteers',
         credentials: aCreds,
       }));
       expect(res.statusCode).toBe(403);
@@ -96,7 +96,7 @@ describe('API /community-businesses/{id}/volunteers', () => {
     test(':: success - TWINE_ADMIN can access child organisation', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/2/volunteers',
+        url: '/v1.1/community-businesses/2/volunteers',
         credentials: {
           scope: ['user_details-child:read'],
           user: {

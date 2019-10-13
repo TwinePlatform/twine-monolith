@@ -57,7 +57,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: successfully gets all activities for own cb', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visit-activities',
+        url: '/v1.1/community-businesses/me/visit-activities',
         credentials,
       }));
 
@@ -95,7 +95,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: get activities for child cb', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/2/visit-activities',
+        url: '/v1.1/community-businesses/2/visit-activities',
         credentials: twAdminCreds,
       }));
 
@@ -106,7 +106,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: try to get activities for non-child cb', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/1/visit-activities',
+        url: '/v1.1/community-businesses/1/visit-activities',
         credentials: otherCreds,
       }));
 
@@ -116,7 +116,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: can access activities using external strategy', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visit-activities',
+        url: '/v1.1/community-businesses/me/visit-activities',
         credentials: extCreds,
         strategy: ExtName,
       }));
@@ -157,7 +157,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: successfully updates a visit activity', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/me/visit-activities/2',
+        url: '/v1.1/community-businesses/me/visit-activities/2',
         payload: { monday: true, category: 'Sports' },
         credentials,
       }));
@@ -182,7 +182,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: successfully change casing on a visit activity', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/me/visit-activities/2',
+        url: '/v1.1/community-businesses/me/visit-activities/2',
         payload: { name: 'wear pink', category: 'Sports' },
         credentials,
       }));
@@ -207,7 +207,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: cannot update activity owned by different CB', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/me/visit-activities/2',
+        url: '/v1.1/community-businesses/me/visit-activities/2',
         payload: { monday: true },
         credentials: otherCreds,
       }));
@@ -220,7 +220,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: successfully add a new activity', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/community-businesses/me/visit-activities',
+        url: '/v1.1/community-businesses/me/visit-activities',
         payload: {
           name: 'Base Jumping',
           category: 'Adult skills building',
@@ -250,7 +250,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: successfully deletes an activity', async () => {
       const res = await server.inject(injectCfg({
         method: 'DELETE',
-        url: '/v1/community-businesses/me/visit-activities/1',
+        url: '/v1.1/community-businesses/me/visit-activities/1',
         credentials,
       }));
 
@@ -259,7 +259,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
 
       const check = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visit-activities',
+        url: '/v1.1/community-businesses/me/visit-activities',
         credentials,
       }));
 
@@ -273,7 +273,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
     test(':: any payload and/or querystring is ignored', async () => {
       const res = await server.inject(injectCfg({
         method: 'DELETE',
-        url: '/v1/community-businesses/me/visit-activities/1?foo=bar',
+        url: '/v1.1/community-businesses/me/visit-activities/1?foo=bar',
         credentials,
         payload: { activity: 2 },
       }));
@@ -283,7 +283,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
 
       const check = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/visit-activities',
+        url: '/v1.1/community-businesses/me/visit-activities',
         credentials,
       }));
 

@@ -48,7 +48,7 @@ describe('PUT /community-businesses', () => {
     test('can update own community business', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/me',
+        url: '/v1.1/community-businesses/me',
         payload: {
           name: 'CRAPerture Sciences',
           sector: 'Housing',
@@ -68,7 +68,7 @@ describe('PUT /community-businesses', () => {
     test('cannot update own community business w/ unrecognised region', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/me',
+        url: '/v1.1/community-businesses/me',
         payload: {
           region: 'Narnia',
         },
@@ -81,7 +81,7 @@ describe('PUT /community-businesses', () => {
     test('cannot update own community business w/ unrecognised sector', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/me',
+        url: '/v1.1/community-businesses/me',
         payload: {
           sector: 'Hedge Fund',
         },
@@ -99,7 +99,7 @@ describe('PUT /community-businesses', () => {
     test('can update child community business', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/1',
+        url: '/v1.1/community-businesses/1',
         payload: {
           name: 'CRAPerture Sciences',
           sector: 'Housing',
@@ -119,7 +119,7 @@ describe('PUT /community-businesses', () => {
     test('can update casing of child community business name', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/1',
+        url: '/v1.1/community-businesses/1',
         payload: {
           name: 'aperture sciences',
           sector: 'Housing',
@@ -139,7 +139,7 @@ describe('PUT /community-businesses', () => {
     test('cannot update non-child community business', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/1',
+        url: '/v1.1/community-businesses/1',
         payload: {
           sector: 'Hedge Fund',
         },
@@ -152,7 +152,7 @@ describe('PUT /community-businesses', () => {
     test('cannot update own community business w/ unrecognised region', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/1',
+        url: '/v1.1/community-businesses/1',
         payload: {
           region: 'Narnia',
         },
@@ -165,7 +165,7 @@ describe('PUT /community-businesses', () => {
     test('cannot update own community business w/ unrecognised sector', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/1',
+        url: '/v1.1/community-businesses/1',
         payload: {
           sector: 'Hedge Fund',
         },
@@ -179,7 +179,7 @@ describe('PUT /community-businesses', () => {
 
       const resCreate = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/community-businesses/register/temporary',
+        url: '/v1.1/community-businesses/register/temporary',
         credentials: adminCreds,
         payload: { orgName: 'Shinra Electric Power Company' },
       }));
@@ -187,7 +187,7 @@ describe('PUT /community-businesses', () => {
       const { communityBusiness: tempCb } = (<any> resCreate.result).result;
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: `/v1/community-businesses/${tempCb.id}`,
+        url: `/v1.1/community-businesses/${tempCb.id}`,
         payload: {
           name: 'Not Temp',
         },

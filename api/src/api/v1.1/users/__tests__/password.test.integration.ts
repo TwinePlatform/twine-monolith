@@ -47,7 +47,7 @@ describe('POST /users/password', () => {
        */
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/password/forgot',
+        url: '/v1.1/users/password/forgot',
         payload: { email: '1@aperturescience.com' },
       });
 
@@ -63,7 +63,7 @@ describe('POST /users/password', () => {
        */
       const res2 = await server.inject({
         method: 'POST',
-        url: '/v1/users/password/reset',
+        url: '/v1.1/users/password/reset',
         payload: {
           token,
           email: '1@aperturescience.com',
@@ -83,7 +83,7 @@ describe('POST /users/password', () => {
        */
       const res3 = await server.inject({
         method: 'POST',
-        url: '/v1/users/password/reset',
+        url: '/v1.1/users/password/reset',
         payload: {
           token,
           email: '1@aperturescience.com',
@@ -102,7 +102,7 @@ describe('POST /users/password', () => {
     test('::ERROR non existent email', async () => {
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/password/forgot',
+        url: '/v1.1/users/password/forgot',
         payload: { email: '1999@aperturescience.com' },
       });
 
@@ -116,7 +116,7 @@ describe('POST /users/password', () => {
     test('::ERROR mismatching passwords', async () => {
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/password/reset',
+        url: '/v1.1/users/password/reset',
         payload: {
           token: fakeToken,
           email: 'lost@burmuda.is',
@@ -133,7 +133,7 @@ describe('POST /users/password', () => {
     test('::ERROR password too weak', async () => {
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/password/reset',
+        url: '/v1.1/users/password/reset',
         payload: {
           token: fakeToken,
           email: 'lost@burmuda.is',
@@ -150,7 +150,7 @@ describe('POST /users/password', () => {
     test('::ERROR token length not 64', async () => {
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/password/reset',
+        url: '/v1.1/users/password/reset',
         payload: { token: 'fakeToken', password: 'Password111!', passwordConfirm: 'Password111!' },
       });
 
@@ -165,7 +165,7 @@ describe('POST /users/password', () => {
 
       await server.inject({
         method: 'POST',
-        url: '/v1/users/password/forgot',
+        url: '/v1.1/users/password/forgot',
         payload: { email: userOne.email },
       });
 
@@ -173,7 +173,7 @@ describe('POST /users/password', () => {
 
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/password/reset',
+        url: '/v1.1/users/password/reset',
         payload: {
           token,
           email: userOne.email,
@@ -192,7 +192,7 @@ describe('POST /users/password', () => {
 
       await server.inject({
         method: 'POST',
-        url: '/v1/users/password/forgot',
+        url: '/v1.1/users/password/forgot',
         payload: { email: userOne.email },
       });
 
@@ -200,7 +200,7 @@ describe('POST /users/password', () => {
 
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/password/reset',
+        url: '/v1.1/users/password/reset',
         payload: {
           token,
           email: 'userOne@email.com',

@@ -36,7 +36,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('can fetch own projects', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/volunteers/projects',
+        url: '/v1.1/community-businesses/me/volunteers/projects',
         credentials: volCreds,
       }));
 
@@ -52,7 +52,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('cannot fetch other orgs projects', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/2/volunteers/projects',
+        url: '/v1.1/community-businesses/2/volunteers/projects',
         credentials: volCreds,
       }));
 
@@ -64,7 +64,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('can create new project for own org', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/community-businesses/me/volunteers/projects',
+        url: '/v1.1/community-businesses/me/volunteers/projects',
         credentials: adminCreds,
         payload: {
           name: 'new project',
@@ -81,7 +81,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
 
       const res2 = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/volunteers/projects',
+        url: '/v1.1/community-businesses/me/volunteers/projects',
         credentials: adminCreds,
       }));
 
@@ -92,7 +92,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('cannot create project with a duplicate name', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/community-businesses/me/volunteers/projects',
+        url: '/v1.1/community-businesses/me/volunteers/projects',
         credentials: adminCreds,
         payload: { name: 'Party' },
       }));
@@ -106,7 +106,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test.skip('cannot create new project for other org', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/community-businesses/2/volunteers/projects',
+        url: '/v1.1/community-businesses/2/volunteers/projects',
         credentials: adminCreds,
       }));
 
@@ -118,7 +118,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('can get single project', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/volunteers/projects/1',
+        url: '/v1.1/community-businesses/me/volunteers/projects/1',
         credentials: volCreds,
       }));
 
@@ -135,7 +135,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('cannot get non-existent project', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/volunteers/projects/99999',
+        url: '/v1.1/community-businesses/me/volunteers/projects/99999',
         credentials: volCreds,
       }));
 
@@ -145,7 +145,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('cannot get project belonging to other CB', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1/community-businesses/me/volunteers/projects/2',
+        url: '/v1.1/community-businesses/me/volunteers/projects/2',
         credentials: volCreds,
       }));
 
@@ -157,7 +157,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('can update project name', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/me/volunteers/projects/1',
+        url: '/v1.1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
           name: 'Foo',
@@ -177,7 +177,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('can update casing on project name', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/me/volunteers/projects/1',
+        url: '/v1.1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
           name: 'party',
@@ -197,7 +197,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('cannot update organisationId', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/me/volunteers/projects/1',
+        url: '/v1.1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
           organisationId: 3,
@@ -210,7 +210,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('cannot update name to already existing name', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/me/volunteers/projects/1',
+        url: '/v1.1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
           name: 'Take over the world',
@@ -226,7 +226,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test.skip('cannot update other organisations projects', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1/community-businesses/2/volunteers/projects/1',
+        url: '/v1.1/community-businesses/2/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
           name: 'Foo',
@@ -241,7 +241,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('can mark own project deleted', async () => {
       const res = await server.inject(injectCfg({
         method: 'DELETE',
-        url: '/v1/community-businesses/me/volunteers/projects/1',
+        url: '/v1.1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
       }));
 
@@ -252,7 +252,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('cannot mark non-existent project as deleted', async () => {
       const res = await server.inject(injectCfg({
         method: 'DELETE',
-        url: '/v1/community-businesses/me/volunteers/projects/999',
+        url: '/v1.1/community-businesses/me/volunteers/projects/999',
         credentials: adminCreds,
       }));
 
@@ -263,7 +263,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test.skip('cannot delete other organisations project', async () => {
       const res = await server.inject(injectCfg({
         method: 'DELETE',
-        url: '/v1/community-businesses/2/volunteers/projects/2',
+        url: '/v1.1/community-businesses/2/volunteers/projects/2',
         credentials: adminCreds,
       }));
 

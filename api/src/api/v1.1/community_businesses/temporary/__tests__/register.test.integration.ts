@@ -44,7 +44,7 @@ describe('POST /community-businesses/register/temporary', () => {
   test('SUCCESS - create a temporary marked CB and admin user', async () => {
     const res = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/register/temporary',
+      url: '/v1.1/community-businesses/register/temporary',
       payload: {
         orgName: 'Shinra Electric Power Company',
       },
@@ -68,7 +68,7 @@ describe('POST /community-businesses/register/temporary', () => {
   test('SUCCESS - FLOW TEST - create account & login', async () => {
     const resRegister = await server.inject(injectCfg({
       method: 'POST',
-      url: '/v1/community-businesses/register/temporary',
+      url: '/v1.1/community-businesses/register/temporary',
       payload: {
         orgName: 'Shinra Electric Power Company',
       },
@@ -80,7 +80,7 @@ describe('POST /community-businesses/register/temporary', () => {
 
     const resLogin = await server.inject({
       method: 'POST',
-      url: '/v1/users/login',
+      url: '/v1.1/users/login',
       payload: {
         email,
         password,

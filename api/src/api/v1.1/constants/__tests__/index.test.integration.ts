@@ -31,7 +31,7 @@ describe('API Constants', () => {
       test(`GET ${constant}`, async () => {
         const res = await server.inject({
           method: 'GET',
-          url: `/v1/${constant}`,
+          url: `/v1.1/${constant}`,
         });
 
         expect(res.statusCode).toBe(200);
@@ -44,7 +44,7 @@ describe('API Constants', () => {
   test('GET /sectors does not include TEMPORARY DATA value', async () => {
     const res = await server.inject({
       method: 'GET',
-      url: '/v1/sectors',
+      url: '/v1.1/sectors',
     });
 
     expect(res.statusCode).toBe(200);
@@ -60,7 +60,7 @@ describe('API Constants', () => {
   test('GET /regions does not include TEMPORARY DATA value', async () => {
     const res = await server.inject({
       method: 'GET',
-      url: '/v1/regions',
+      url: '/v1.1/regions',
     });
 
     expect(res.statusCode).toBe(200);

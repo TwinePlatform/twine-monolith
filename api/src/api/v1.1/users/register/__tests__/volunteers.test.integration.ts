@@ -51,7 +51,7 @@ describe('API v1 - register new users', () => {
     test(':: success - create VOLUNTEER', async () => {
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/volunteers',
+        url: '/v1.1/users/register/volunteers',
         payload: {
           organisationId: 1,
           name: 'foo',
@@ -75,7 +75,7 @@ describe('API v1 - register new users', () => {
     test(':: success - create VOLUNTEER_ADMIN', async () => {
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/volunteers',
+        url: '/v1.1/users/register/volunteers',
         payload: {
           organisationId: 1,
           name: 'foo',
@@ -104,7 +104,7 @@ describe('API v1 - register new users', () => {
 
       const res = await server.inject(injectCfg({
         method: 'POST',
-        url: '/v1/users/register/volunteers',
+        url: '/v1.1/users/register/volunteers',
         payload: {
           organisationId: 1,
           name: 'Chell',
@@ -132,7 +132,7 @@ describe('API v1 - register new users', () => {
     test(':: success - add volunteer with null birthYear', async () => {
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/volunteers',
+        url: '/v1.1/users/register/volunteers',
         payload: {
           organisationId: 1,
           name: 'Ratman',
@@ -151,7 +151,7 @@ describe('API v1 - register new users', () => {
      async () => {
        const res = await server.inject(injectCfg({
          method: 'POST',
-         url: '/v1/users/register/volunteers',
+         url: '/v1.1/users/register/volunteers',
          payload: {
            organisationId: 1,
            name: 'Chell',
@@ -172,7 +172,7 @@ describe('API v1 - register new users', () => {
      async () => {
        const res = await server.inject(injectCfg({
          method: 'POST',
-         url: '/v1/users/register/volunteers',
+         url: '/v1.1/users/register/volunteers',
          payload: {
            organisationId: 1,
            name: 'Emma Emmerich',
@@ -194,7 +194,7 @@ describe('API v1 - register new users', () => {
      async () => {
        const res = await server.inject(injectCfg({
          method: 'POST',
-         url: '/v1/users/register/volunteers',
+         url: '/v1.1/users/register/volunteers',
          payload: {
            organisationId: 2,
            name: 'Chell',
@@ -215,7 +215,7 @@ describe('API v1 - register new users', () => {
     test(':: fail - non-existent community business', async () => {
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/volunteers',
+        url: '/v1.1/users/register/volunteers',
         payload: {
           organisationId: 9352,
           name: 'foo',
@@ -234,7 +234,7 @@ describe('API v1 - register new users', () => {
     test(':: fail - invalid admin code for VOLUNTEER_ADMIN', async () => {
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/volunteers',
+        url: '/v1.1/users/register/volunteers',
         payload: {
           organisationId: 1,
           name: 'foo',
@@ -254,7 +254,7 @@ describe('API v1 - register new users', () => {
     test(':: fail - missing admin code for VOLUNTEER_ADMIN', async () => {
       const res = await server.inject({
         method: 'POST',
-        url: '/v1/users/register/volunteers',
+        url: '/v1.1/users/register/volunteers',
         payload: {
           organisationId: 1,
           name: 'foo',

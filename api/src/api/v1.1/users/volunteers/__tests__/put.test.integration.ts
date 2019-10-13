@@ -42,7 +42,7 @@ describe('PUT /v1/users/volunteers/:id', () => {
   test(':: success - volunteers details updated', async () => {
     const res = await server.inject(injectCfg({
       method: 'PUT',
-      url: '/v1/users/volunteers/6',
+      url: '/v1.1/users/volunteers/6',
       payload: {
         name: 'Snake',
         email: 'box@shadowmoses.com',
@@ -63,7 +63,7 @@ describe('PUT /v1/users/volunteers/:id', () => {
   test(':: idempotency', async () => {
     const res1 = await server.inject(injectCfg({
       method: 'PUT',
-      url: '/v1/users/volunteers/6',
+      url: '/v1.1/users/volunteers/6',
       payload: {
         name: 'Snake',
       },
@@ -72,7 +72,7 @@ describe('PUT /v1/users/volunteers/:id', () => {
 
     const res2 = await server.inject(injectCfg({
       method: 'PUT',
-      url: '/v1/users/volunteers/6',
+      url: '/v1.1/users/volunteers/6',
       payload: {
         name: 'Snake',
       },
@@ -87,7 +87,7 @@ describe('PUT /v1/users/volunteers/:id', () => {
   test(':: fail - unsupported payload returns 400', async () => {
     const res = await server.inject(injectCfg({
       method: 'PUT',
-      url: '/v1/users/volunteers/6',
+      url: '/v1.1/users/volunteers/6',
       payload: {
         favouritePet: 'Snake',
       },
@@ -100,7 +100,7 @@ describe('PUT /v1/users/volunteers/:id', () => {
   test(':: fail - non volunteer cannot be updated', async () => {
     const res = await server.inject(injectCfg({
       method: 'PUT',
-      url: '/v1/users/volunteers/3',
+      url: '/v1.1/users/volunteers/3',
       payload: {
         name: 'Snake',
       },

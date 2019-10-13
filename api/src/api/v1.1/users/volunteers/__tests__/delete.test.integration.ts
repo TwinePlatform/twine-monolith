@@ -56,19 +56,19 @@ describe('DELETE /v1/users/volunteers/:id', () => {
   test(':: success - volunteer deleted', async () => {
     const getRes = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/users/volunteers/6',
+      url: '/v1.1/users/volunteers/6',
       credentials,
     }));
 
     const res = await server.inject(injectCfg({
       method: 'DELETE',
-      url: '/v1/users/volunteers/6',
+      url: '/v1.1/users/volunteers/6',
       credentials,
     }));
 
     const getRes2 = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/users/volunteers/6',
+      url: '/v1.1/users/volunteers/6',
       credentials,
     }));
 
@@ -84,7 +84,7 @@ describe('DELETE /v1/users/volunteers/:id', () => {
   test(':: fail - user that is not a volunteer returns 404', async () => {
     const res = await server.inject(injectCfg({
       method: 'DELETE',
-      url: '/v1/users/volunteers/3',
+      url: '/v1.1/users/volunteers/3',
       credentials,
     }));
 
@@ -94,7 +94,7 @@ describe('DELETE /v1/users/volunteers/:id', () => {
   test(':: success - twine admin can delete any volunteer', async () => {
     const res = await server.inject(injectCfg({
       method: 'DELETE',
-      url: '/v1/users/volunteers/7',
+      url: '/v1.1/users/volunteers/7',
       credentials: twAdminCreds,
     }));
     expect(res.statusCode).toBe(200);
@@ -103,7 +103,7 @@ describe('DELETE /v1/users/volunteers/:id', () => {
   test(':: fail - org admin from another cb cannot delete volunteer', async () => {
     const res = await server.inject(injectCfg({
       method: 'DELETE',
-      url: '/v1/users/volunteers/7',
+      url: '/v1.1/users/volunteers/7',
       credentials: otherCredentials,
     }));
     expect(res.statusCode).toBe(403);

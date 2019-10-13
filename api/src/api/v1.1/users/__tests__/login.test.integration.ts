@@ -33,7 +33,7 @@ describe('POST /users/login', () => {
   test(':: successful login | default type (cookie) | unrestricted', async () => {
     const res = await server.inject({
       method: 'POST',
-      url: '/v1/users/login',
+      url: '/v1.1/users/login',
       payload: {
         email: '1@aperturescience.com',
         password: 'CakeisaLi3!',
@@ -47,7 +47,7 @@ describe('POST /users/login', () => {
   test(':: successful login | type body | unrestricted', async () => {
     const res = await server.inject({
       method: 'POST',
-      url: '/v1/users/login',
+      url: '/v1.1/users/login',
       payload: {
         type: 'body',
         email: '1@aperturescience.com',
@@ -63,7 +63,7 @@ describe('POST /users/login', () => {
   test(':: successful login | type cookie | restricted to single role', async () => {
     const res = await server.inject({
       method: 'POST',
-      url: '/v1/users/login',
+      url: '/v1.1/users/login',
       payload: {
         type: 'cookie',
         restrict: 'CB_ADMIN',
@@ -79,7 +79,7 @@ describe('POST /users/login', () => {
   test(':: unsuccessful login | type cookie | restricted to single role', async () => {
     const res = await server.inject({
       method: 'POST',
-      url: '/v1/users/login',
+      url: '/v1.1/users/login',
       payload: {
         type: 'cookie',
         restrict: 'VOLUNTEER',
@@ -95,7 +95,7 @@ describe('POST /users/login', () => {
   test(':: successful login | type body | restricted to multiple roles', async () => {
     const res = await server.inject({
       method: 'POST',
-      url: '/v1/users/login',
+      url: '/v1.1/users/login',
       payload: {
         type: 'body',
         restrict: ['TWINE_ADMIN', 'CB_ADMIN'],
@@ -111,7 +111,7 @@ describe('POST /users/login', () => {
   test(':: unsuccessful login | type body | restricted to multiple roles', async () => {
     const res = await server.inject({
       method: 'POST',
-      url: '/v1/users/login',
+      url: '/v1.1/users/login',
       payload: {
         type: 'body',
         restrict: ['VOLUNTEER', 'VOLUNTEER_ADMIN'],
@@ -127,7 +127,7 @@ describe('POST /users/login', () => {
   test(':: unsuccessful login | type body | invalid role', async () => {
     const res = await server.inject({
       method: 'POST',
-      url: '/v1/users/login',
+      url: '/v1.1/users/login',
       payload: {
         restrict: ['VOLUNTEER', 'LOL'],
         email: '1@aperturescience.com',
@@ -142,7 +142,7 @@ describe('POST /users/login', () => {
   test(':: unsuccessful login | type body | mismatched role', async () => {
     const res = await server.inject({
       method: 'POST',
-      url: '/v1/users/login',
+      url: '/v1.1/users/login',
       payload: {
         restrict: ['VOLUNTEER'],
         email: '1498@aperturescience.com', // This is VISITOR!

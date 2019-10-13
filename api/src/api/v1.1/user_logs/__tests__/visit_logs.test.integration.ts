@@ -35,7 +35,7 @@ describe('GET /visit-logs', () => {
   test('success :: returns all logs', async () => {
     const res = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/visit-logs',
+      url: '/v1.1/visit-logs',
       credentials,
     }));
 
@@ -61,7 +61,7 @@ describe('GET /visit-logs', () => {
     const since = today.clone().subtract(1, 'day').format('YYYY-MM-DD');
     const res = await server.inject(injectCfg({
       method: 'GET',
-      url: `/v1/visit-logs?since=${since}&until=${until}`,
+      url: `/v1.1/visit-logs?since=${since}&until=${until}`,
       credentials,
     }));
 
@@ -92,7 +92,7 @@ describe('GET /visit-logs', () => {
   test('failure :: funding body cannot access as not implemented', async () => {
     const res = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/visit-logs',
+      url: '/v1.1/visit-logs',
       credentials: assocPath(['user', 'roles'], [RoleEnum.FUNDING_BODY], credentials),
     }));
 

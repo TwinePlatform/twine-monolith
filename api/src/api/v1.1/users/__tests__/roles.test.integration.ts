@@ -35,7 +35,7 @@ describe('GET /users/me/roles', () => {
   test('can get own roles', async () => {
     const res = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/users/me/roles',
+      url: '/v1.1/users/me/roles',
       credentials,
     }));
 
@@ -48,7 +48,7 @@ describe('GET /users/me/roles', () => {
   test('can get own roles if have multiple', async () => {
     const res = await server.inject(injectCfg({
       method: 'GET',
-      url: '/v1/users/me/roles',
+      url: '/v1.1/users/me/roles',
       credentials: multiCredentials,
     }));
 
