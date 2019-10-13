@@ -11,10 +11,10 @@ import setup from './setup';
 import { Config } from '../config/types';
 import Logger from './services/logger';
 import Caches from './cache';
+import { plugin as AuthPlugin } from './auth';
 
 
 const queryParser = (raw: Dictionary<string>) => qs.parse(qs.stringify(raw));
-
 
 const init = async (config: Config): Promise<Hapi.Server> => {
 
@@ -28,22 +28,25 @@ const init = async (config: Config): Promise<Hapi.Server> => {
 
   await server.register([
     {
+      plugin: AuthPlugin,
+    },
+    {
       plugin: Logger,
       options: { env: config.env },
-    },
-    {
-      plugin: v1,
-      routes: { prefix: '/v1' },
-    },
-    {
-      plugin: v1_1,
-      routes: { prefix: '/v1.1' },
     },
     {
       plugin: webhooks,
       routes: { prefix: '/webhooks/v1' },
     },
   ]);
+
+  if (config.platform.versions[1]) {
+    await server.register({ plugin: v1, routes: { prefix: config.platform.versions[1].prefix } });
+  }
+
+  if (config.platform.versions['1.1']) {
+    await server.register({ plugin: v1_1, routes: { prefix: config.platform.versions['1.1'].prefix } });
+  }
 
   return server;
 };

@@ -34,6 +34,10 @@ const config: DeepPartial<Config> = {
     },
   },
   platform: {
+    versions: {
+      1: Boolean(envOr('ENABLE_API_V1', '')) && { prefix: envOr('PREFIX_API_V1', '/v1') },
+      1.1: Boolean(envOr('ENABLE_API_V1_1', '')) && { prefix: envOr('PREFIX_API_V1.1', '/v1.1') },
+    },
     domains: {
       [AppEnum.ADMIN]: envOr('ADMIN_APP_DOMAIN', 'localhost:3200'),
       [AppEnum.DASHBOARD]: envOr('DASHBOARD_APP_DOMAIN', 'localhost:3100'),
