@@ -60,7 +60,7 @@ const routes: [
         { since, until, limit: Number(query.limit), offset: Number(query.offset) }
       );
 
-      return Promise.all(logs.map(Serialisers.volunteerLogs.identity));
+      return Promise.all(logs.map(Serialisers.volunteerLogs.defaultProjects));
     },
   },
 
@@ -109,7 +109,7 @@ const routes: [
 
       return !log
         ? Boom.notFound('No log with this id found under this account')
-        : Serialisers.volunteerLogs.identity(log);
+        : Serialisers.volunteerLogs.defaultProjects(log);
     },
   },
 
@@ -161,7 +161,7 @@ const routes: [
 
       const updatedLog = await VolunteerLogs.update(knex, log, { ...payload });
 
-      return Serialisers.volunteerLogs.identity(updatedLog);
+      return Serialisers.volunteerLogs.defaultProjects(updatedLog);
     },
   },
 

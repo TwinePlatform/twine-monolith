@@ -11,7 +11,6 @@
  * See also: https://hapijs.com/api#request-lifecycle
  */
 import * as Hapi from '@hapi/hapi';
-import * as Boom from '@hapi/boom';
 import { formatBoom, BoomWithValidation } from '../utils';
 import { Environment } from '../../../../config';
 
@@ -19,8 +18,8 @@ import { Environment } from '../../../../config';
 export default async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
   const { config: { env } } = request.server.app;
 
-  if ((<Boom<any>> request.response).isBoom) {
-    const err = <BoomWithValidation> request.response;
+  if ('isBoom' in request.response) {
+    const err = request.response as BoomWithValidation;
     if (env !== Environment.TESTING) console.log(err);
     return h.response(formatBoom(err)).code(err.output.statusCode);
   } else {

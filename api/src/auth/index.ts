@@ -36,9 +36,7 @@ const plugin = {
    * Heroku Webhook strategy
    */
 
-    server.auth.strategy('herokuWebhook', 'bearer-access-token', {
-      validate: HerokuWebHooks,
-    });
+    server.auth.strategy('herokuWebhook', 'bearer-access-token', { validate: HerokuWebHooks.validate });
 
     /*
    * Set default
