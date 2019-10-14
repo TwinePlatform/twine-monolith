@@ -28,8 +28,8 @@ type Props = {
 
 const Value = styled(Text)`
   fontColor: ${ColoursEnum.darkGrey};
-  paddingTop: 10;
-  paddingBottom: 10;
+  paddingTop: 15;
+  paddingBottom: 15;
 `;
 
 const Item = styled(I)`
@@ -41,8 +41,8 @@ const Label = styled(L)`
 `;
 
 const PlaceHolder = styled(Text)`
-  paddingTop: 10;
-  paddingBottom: 10;
+  paddingTop: 15;
+  paddingBottom: 15;
   color: ${ColoursEnum.grey};
 `;
 

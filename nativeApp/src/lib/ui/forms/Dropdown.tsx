@@ -51,7 +51,7 @@ const Dropdown: FC<Props> = (props) => {
         onValueChange={onValueChange}
       >
         {options.map(({ id, name }) => (
-          <Picker.Item label={name} value={id} key={id} />
+          <Picker.Item label={name} value={name} key={id} />
         ))}
 
       </Picker>
