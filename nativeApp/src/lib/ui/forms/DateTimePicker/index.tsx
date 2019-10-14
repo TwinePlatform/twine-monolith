@@ -17,6 +17,8 @@ type Props = {
   label: string;
   mode: 'date' | 'time';
   value: Date;
+  minDate?: Date;
+  maxDate?: Date;
   onConfirm: (d: Date) => void;
 }
 
@@ -64,7 +66,7 @@ const displayValue = (mode, value: Date) => {
  */
 const DateTimePicker: FC<Props> = (props) => {
   const {
-    onConfirm, value, mode, label,
+    onConfirm, value, mode, label, minDate, maxDate,
   } = props;
   const [isVisible, setIsVisible] = useState(false);
 
@@ -75,20 +77,21 @@ const DateTimePicker: FC<Props> = (props) => {
     flipVisibility();
   };
 
-
   return (
-
     <Item>
       <Label>{label}</Label>
       {value
         ? <Value onPress={flipVisibility}>{displayValue(mode, value)}</Value>
         : <PlaceHolder onPress={flipVisibility}>{`Select ${mode}`}</PlaceHolder>}
       <_DateTimePicker
+        minimumDate={minDate}
+        maximumDate={maxDate}
         date={value}
         isVisible={isVisible}
         mode={mode}
         onConfirm={onConfirmAndHide}
         onCancel={flipVisibility}
+        titleIOS={`Pick a ${mode}`}
       />
     </Item>
 

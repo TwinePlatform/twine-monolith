@@ -10,6 +10,8 @@ import { ColoursEnum } from '../../../lib/ui/colours';
 import HoursAndMinutesText from '../../../lib/ui/HoursAndMinutesText';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 
+import { getTimeDiff } from '../../../lib/utils/time';
+
 /*
  * Types
  */
@@ -48,6 +50,7 @@ const activities = [
   { id: 1, name: 'Support' },
 ];
 
+
 /*
  * Component
  */
@@ -58,6 +61,8 @@ const AddTime: FC<Props> = () => {
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
 
+  const diff = getTimeDiff(startTime, endTime);
+
   return (
     <View>
       <Heading>Add Time</Heading>
@@ -66,12 +71,29 @@ const AddTime: FC<Props> = () => {
         <Dropdown label="Project" options={projects} selectedValue={project} onValueChange={setProject} />
         <Label>What activity are you doing?</Label>
         <Dropdown label="Activity" options={activities} selectedValue={activity} onValueChange={setActivity} />
-        <DateTimePicker label="Date" value={date} onConfirm={setDate} mode="date" />
-        <DateTimePicker label="Start Time" value={startTime} onConfirm={setStartTime} mode="time" />
-        <DateTimePicker label="End Time" value={endTime} onConfirm={setEndTime} mode="time" />
-        <Label>You have volunteered for</Label>
+        <DateTimePicker
+          label="Date"
+          value={date}
+          onConfirm={setDate}
+          mode="date"
+          maxDate={new Date()} // ios only
+        />
+        <DateTimePicker
+          label="Start Time"
+          value={startTime}
+          onConfirm={setStartTime}
+          mode="time"
+        />
+        <DateTimePicker
+          label="End Time"
+          value={endTime}
+          onConfirm={setEndTime}
+          mode="time"
+          minDate={startTime} // ios only
+        />
+        <Label>You volunteered for</Label>
         <TimeContainer>
-          <HoursAndMinutesText align="center" timeValues={[6, 13]} />
+          <HoursAndMinutesText align="center" timeValues={diff} />
         </TimeContainer>
         <SubmitButton text="ADD TIME" onPress={() => {}} />
       </Form>
