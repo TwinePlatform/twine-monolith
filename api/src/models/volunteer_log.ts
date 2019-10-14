@@ -306,7 +306,8 @@ export const VolunteerLogs: VolunteerLogCollection = {
             organisation_id: project.organisationId,
             deleted_at: null,
             volunteer_project_name: changeset.name,
-          }),
+          })
+          .whereNot({ volunteer_project_id: project.id }),
       ]);
 
       if (exists) {

@@ -5,11 +5,13 @@ import { getConfig } from '../../../../../../config';
 import { CommunityBusinesses, Organisation, User, Volunteers } from '../../../../../models';
 import { Credentials as StandardCredentials } from '../../../../../auth/strategies/standard';
 import { injectCfg } from '../../../../../../tests/utils/inject';
+import { getTrx } from '../../../../../../tests/utils/database';
 
 
 describe('API /community-businesses/me/volunteers/projects', () => {
   let server: Hapi.Server;
   let knex: Knex;
+  let trx: Knex.Transaction;
   let organisation: Organisation;
   let vol: User;
   let volAdmin: User;
@@ -30,6 +32,16 @@ describe('API /community-businesses/me/volunteers/projects', () => {
 
   afterAll(async () => {
     await server.shutdown(true);
+  });
+
+  beforeEach(async () => {
+    trx = await getTrx(knex);
+    server.app.knex = trx;
+  });
+
+  afterEach(async () => {
+    await trx.rollback();
+    server.app.knex = knex;
   });
 
   describe('GET /community-businesses/me/volunteers/projects', () => {
