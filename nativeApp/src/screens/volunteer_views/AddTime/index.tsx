@@ -1,17 +1,11 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
-import {
-  Form as F, Item as I, Label as L, Text,
-} from 'native-base';
+import { Form as F } from 'native-base';
 
-import DateTimePicker from 'react-native-modal-datetime-picker';
-import { Heading, FontsEnum } from '../../../lib/ui/typography';
-import Input from '../../../lib/ui/forms/InputWithIcon';
+import { Heading } from '../../../lib/ui/typography';
 import Dropdown from '../../../lib/ui/forms/Dropdown';
 import { Forms } from '../../../lib/ui/forms/enums';
-import { ColoursEnum } from '../../../lib/ui/colours';
-import DatePicker from '../../../lib/ui/forms/DatePicker';
-import TimePicker from '../../../lib/ui/forms/TimePicker';
+import DateTimePicker from '../../../lib/ui/forms/DateTimePicker';
 
 /*
  * Types
@@ -50,18 +44,17 @@ const AddTime: FC<Props> = () => {
   const [activity, setActivity] = useState('');
   const [date, setDate] = useState();
   const [startTime, setStartTime] = useState();
+  const [endTime, setEndTime] = useState();
 
-  const onConfirmStartTime = (d: Date) => {
-    setStartTime(d.getTime().toString());
-  };
   return (
     <View>
       <Heading>Add Time</Heading>
       <Form>
         <Dropdown inline={false} label="What project are you volunteering on?" options={projects} selectedValue={project} onValueChange={setProject} />
         <Dropdown inline={false} label="What activity are you doing?" options={activities} selectedValue={activity} onValueChange={setActivity} />
-        <DatePicker onDateChange={setDate} />
-        <TimePicker value={startTime} onConfirm={onConfirmStartTime} />
+        <DateTimePicker label="Date" value={date} onConfirm={setDate} mode="date" />
+        <DateTimePicker label="Start Time" value={startTime} onConfirm={setStartTime} mode="time" />
+        <DateTimePicker label="End Time" value={endTime} onConfirm={setEndTime} mode="time" />
       </Form>
     </View>
   );
