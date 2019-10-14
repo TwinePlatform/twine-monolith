@@ -184,7 +184,7 @@ describe('Community Business Model', () => {
     test('update :: invalid foreign value', async () => {
       expect.assertions(1);
 
-      const changeset = <any> { region: 'Narnia' };
+      const changeset = { region: 'Narnia' } as any;
       const org = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
 
       try {

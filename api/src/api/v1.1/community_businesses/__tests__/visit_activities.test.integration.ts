@@ -232,7 +232,6 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       expect(res.result).toEqual(
         { result: expect.objectContaining(
           {
-            id: 5,
             name: 'Base Jumping',
             monday: false,
             tuesday: false,
