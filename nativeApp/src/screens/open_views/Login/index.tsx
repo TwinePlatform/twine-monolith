@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Input from '../../../lib/ui/forms/InputWithIcon';
 import { ColoursEnum } from '../../../lib/ui/colours';
+import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 
 const logo = require('../../../../assets/images/logo_image.png');
 
@@ -68,8 +69,8 @@ const Submit = styled(B)`
 const SubmitText = styled.Text`
   color: ${ColoursEnum.white};
   fontSize: 15;
-
 `;
+
 /*
  * Component
  */
@@ -88,29 +89,16 @@ const Login: FC<Props> = (props) => (
         <Input name="Password" autoCompleteType="password" secureTextEntry>
           <MaterialCommunityIcons name="lock-outline" size={27} color={ColoursEnum.grey} />
         </Input>
+        <SubmitButton text="LOG IN" onPress={() => props.navigation.navigate('VolunteerRouter')} />
+        <SubmitButton text="LOG IN AS ADMIN" onPress={() => props.navigation.navigate('AdminRouter')} />
       </Form>
-
-      <Submit
-        onPress={() => props.navigation.navigate('VolunteerRouter')}
-      >
-        <SubmitText>LOG IN</SubmitText>
-      </Submit>
-      <Submit
-        onPress={() => props.navigation.navigate('AdminRouter')}
-      >
-        <SubmitText>LOG IN AS ADMIN</SubmitText>
-      </Submit>
-      <LinkText
-        onPress={() => props.navigation.navigate('Register')}
-      >
+      <LinkText onPress={() => props.navigation.navigate('Register')}>
           Forgot password
       </LinkText>
     </Container>
 
     <BottomContainer>
-      <LinkText
-        onPress={() => props.navigation.navigate('Register')}
-      >
+      <LinkText onPress={() => props.navigation.navigate('Register')}>
           Create a new account
       </LinkText>
     </BottomContainer>

@@ -8,6 +8,7 @@ import { Forms } from '../../../lib/ui/forms/enums';
 import DateTimePicker from '../../../lib/ui/forms/DateTimePicker';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import HoursAndMinutesText from '../../../lib/ui/HoursAndMinutesText';
+import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 
 /*
  * Types
@@ -72,6 +73,7 @@ const AddTime: FC<Props> = () => {
         <TimeContainer>
           <HoursAndMinutesText align="center" timeValues={[6, 13]} />
         </TimeContainer>
+        <SubmitButton text="ADD TIME" onPress={() => {}} />
       </Form>
     </View>
   );
