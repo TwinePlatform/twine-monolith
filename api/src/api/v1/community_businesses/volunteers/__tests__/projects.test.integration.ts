@@ -186,7 +186,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       });
     });
 
-    test.only('can update casing on project name', async () => {
+    test('can update casing on project name', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteers/projects/1',
