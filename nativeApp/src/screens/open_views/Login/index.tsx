@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
 
-import { Form as F, Button as B } from 'native-base';
+import { Form as F } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Input from '../../../lib/ui/forms/InputWithIcon';
@@ -55,20 +55,6 @@ const Image = styled.Image`
 
 const Form = styled(F)`
   width: 75%;
-`;
-
-const Submit = styled(B)`
-  width: 75%;
-  backgroundColor: ${ColoursEnum.purple};
-  alignItems: center;
-  justifyContent: center;
-  marginTop: 20;
-  marginBottom: 40;
-`;
-
-const SubmitText = styled.Text`
-  color: ${ColoursEnum.white};
-  fontSize: 15;
 `;
 
 /*

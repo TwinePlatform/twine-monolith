@@ -7,7 +7,6 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { ColoursEnum } from '../../lib/ui/colours';
 import AdminHome from './AdminHome';
 import Projects from './Projects';
-import Settings from './Settings';
 import Volunteers from './Volunteers';
 import AdminTime from './AdminTime';
 import AddTime from './AddTime';
