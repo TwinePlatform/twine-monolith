@@ -14,7 +14,7 @@ import { FontsEnum } from './src/lib/ui/typography';
 import { ColoursEnum } from './src/lib/ui/colours';
 import AdminRouter from './src/screens/admin_views/AdminRouter';
 import SettingsButton from './src/lib/ui/SettingsButton';
-import Settings from './src/screens/admin_views/Settings';
+import Settings from './src/screens/volunteer_views/Settings';
 
 
 const getSettingsButton = (navigation) => {
@@ -24,7 +24,6 @@ const getSettingsButton = (navigation) => {
   }
   return <SettingsButton />;
 };
-// };
 
 const RootStack = createStackNavigator(
   {
