@@ -1,11 +1,13 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
-import { Form as F } from 'native-base';
+import { Form as F, Text } from 'native-base';
 
 import { Heading } from '../../../lib/ui/typography';
 import Dropdown from '../../../lib/ui/forms/Dropdown';
 import { Forms } from '../../../lib/ui/forms/enums';
 import DateTimePicker from '../../../lib/ui/forms/DateTimePicker';
+import { ColoursEnum } from '../../../lib/ui/colours';
+import HoursAndMinutesText from '../../../lib/ui/HoursAndMinutesText';
 
 /*
  * Types
@@ -24,6 +26,15 @@ const View = styled.View`
 
 const Form = styled(F)`
   width: ${Forms.formWidth}
+`;
+
+const Label = styled(Text)`
+  color: ${ColoursEnum.darkGrey};
+  marginTop: 10;
+`;
+
+const TimeContainer = styled.View`
+  marginTop: 10;
 `;
 
 const projects = [
@@ -50,11 +61,17 @@ const AddTime: FC<Props> = () => {
     <View>
       <Heading>Add Time</Heading>
       <Form>
-        <Dropdown inline={false} label="What project are you volunteering on?" options={projects} selectedValue={project} onValueChange={setProject} />
-        <Dropdown inline={false} label="What activity are you doing?" options={activities} selectedValue={activity} onValueChange={setActivity} />
+        <Label>What project are you volunteering on?</Label>
+        <Dropdown label="Project" options={projects} selectedValue={project} onValueChange={setProject} />
+        <Label>What activity are you doing?</Label>
+        <Dropdown label="Activity" options={activities} selectedValue={activity} onValueChange={setActivity} />
         <DateTimePicker label="Date" value={date} onConfirm={setDate} mode="date" />
         <DateTimePicker label="Start Time" value={startTime} onConfirm={setStartTime} mode="time" />
         <DateTimePicker label="End Time" value={endTime} onConfirm={setEndTime} mode="time" />
+        <Label>You have volunteered for</Label>
+        <TimeContainer>
+          <HoursAndMinutesText align="center" timeValues={[6, 13]} />
+        </TimeContainer>
       </Form>
     </View>
   );

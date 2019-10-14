@@ -5,6 +5,7 @@ import CardWithButtons from '../CardWithButtons';
 
 import { ColoursEnum } from '../colours';
 import { FontsEnum } from '../typography';
+import HoursAnMinutesText from '../HoursAndMinutesText';
 
 /*
  * Types
@@ -20,29 +21,6 @@ type Props = {
 /*
  * Styles
  */
-
-const ValueContainer = styled.View`
-  width: 100%;
-  flexDirection: row;
-  alignItems: flex-end;
-  marginBottom: 5;
-`;
-
-const Value = styled.Text`
-  marginLeft: 5;
-  color: ${ColoursEnum.darkGrey};
-  fontSize: 35;
-  font-family: ${FontsEnum.medium}
-`;
-
-const Unit = styled.Text`
-  marginLeft: 5;
-  color: ${ColoursEnum.darkGrey};
-  fontSize: 18;
-  letterSpacing: 1.2;
-  paddingBottom: 6;
-`;
-
 const DetailsContainer = styled.View`
   flexDirection: row;
   alignItems: flex-end;
@@ -71,13 +49,9 @@ const TimeCard: FC<Props> = (props) => {
   } = props;
   return (
     <CardWithButtons removalType="delete">
-      <ValueContainer>
+      <HoursAnMinutesText align="left" timeValues={timeValues}>
         <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard} />
-        <Value>{timeValues[0]}</Value>
-        <Unit>hours</Unit>
-        <Value>{timeValues[1]}</Value>
-        <Unit>minutes</Unit>
-      </ValueContainer>
+      </HoursAnMinutesText>
       <DetailsContainer>
         <LabelContainer>
           <Label textAlign="left">{date}</Label>
