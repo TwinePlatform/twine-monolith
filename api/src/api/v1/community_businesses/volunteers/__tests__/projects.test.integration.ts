@@ -98,7 +98,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       }));
 
       expect(res2.statusCode).toBe(200);
-      expect((<any> res2.result).result).toHaveLength(3);
+      expect((res2.result as any).result).toHaveLength(3);
     });
 
     test('cannot create project with a duplicate name', async () => {
@@ -186,7 +186,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       });
     });
 
-    test('can update casing on project name', async () => {
+    test.only('can update casing on project name', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
         url: '/v1/community-businesses/me/volunteers/projects/1',

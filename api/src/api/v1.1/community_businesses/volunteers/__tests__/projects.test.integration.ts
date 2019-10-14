@@ -5,11 +5,13 @@ import { getConfig } from '../../../../../../config';
 import { CommunityBusinesses, Organisation, User, Volunteers } from '../../../../../models';
 import { Credentials as StandardCredentials } from '../../../../../auth/strategies/standard';
 import { injectCfg } from '../../../../../../tests/utils/inject';
+import { getTrx } from '../../../../../../tests/utils/database';
 
 
 describe('API /community-businesses/me/volunteers/projects', () => {
   let server: Hapi.Server;
   let knex: Knex;
+  let trx: Knex.Transaction;
   let organisation: Organisation;
   let vol: User;
   let volAdmin: User;
@@ -30,6 +32,16 @@ describe('API /community-businesses/me/volunteers/projects', () => {
 
   afterAll(async () => {
     await server.shutdown(true);
+  });
+
+  beforeEach(async () => {
+    trx = await getTrx(knex);
+    server.app.knex = trx;
+  });
+
+  afterEach(async () => {
+    await trx.rollback();
+    server.app.knex = knex;
   });
 
   describe('GET /community-businesses/me/volunteers/projects', () => {
@@ -67,7 +79,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         url: '/v1.1/community-businesses/me/volunteers/projects',
         credentials: adminCreds,
         payload: {
-          name: 'new project',
+          name: 'foo project',
         },
       }));
 
@@ -75,7 +87,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       expect(res.result).toEqual({
         result: expect.objectContaining({
           organisationId: organisation.id,
-          name: 'new project',
+          name: 'foo project',
         }),
       });
 
@@ -86,7 +98,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       }));
 
       expect(res2.statusCode).toBe(200);
-      expect((<any> res2.result).result).toHaveLength(3);
+      expect((res2.result as any).result).toHaveLength(3);
     });
 
     test('cannot create project with a duplicate name', async () => {
@@ -118,16 +130,16 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('can get single project', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1.1/community-businesses/me/volunteers/projects/1',
+        url: '/v1.1/community-businesses/me/volunteers/projects/4',
         credentials: volCreds,
       }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
         result: expect.objectContaining({
-          id: 1,
+          id: 4,
           organisationId: organisation.id,
-          name: 'Party',
+          name: 'Take over the world',
         }),
       });
     });
@@ -157,7 +169,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('can update project name', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1.1/community-businesses/me/volunteers/projects/1',
+        url: '/v1.1/community-businesses/me/volunteers/projects/4',
         credentials: adminCreds,
         payload: {
           name: 'Foo',
@@ -167,7 +179,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
         result: expect.objectContaining({
-          id: 1,
+          id: 4,
           name: 'Foo',
           organisationId: organisation.id,
         }),
@@ -177,18 +189,18 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('can update casing on project name', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1.1/community-businesses/me/volunteers/projects/1',
+        url: '/v1.1/community-businesses/me/volunteers/projects/4',
         credentials: adminCreds,
         payload: {
-          name: 'party',
+          name: 'tAkE oVer the World',
         },
       }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
         result: expect.objectContaining({
-          id: 1,
-          name: 'party',
+          id: 4,
+          name: 'tAkE oVer the World',
           organisationId: organisation.id,
         }),
       });
@@ -197,7 +209,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('cannot update organisationId', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1.1/community-businesses/me/volunteers/projects/1',
+        url: '/v1.1/community-businesses/me/volunteers/projects/4',
         credentials: adminCreds,
         payload: {
           organisationId: 3,
@@ -210,10 +222,10 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('cannot update name to already existing name', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1.1/community-businesses/me/volunteers/projects/1',
+        url: '/v1.1/community-businesses/me/volunteers/projects/4',
         credentials: adminCreds,
         payload: {
-          name: 'Take over the world',
+          name: 'Party',
         },
       }));
 
@@ -226,7 +238,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test.skip('cannot update other organisations projects', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1.1/community-businesses/2/volunteers/projects/1',
+        url: '/v1.1/community-businesses/2/volunteers/projects/4',
         credentials: adminCreds,
         payload: {
           name: 'Foo',
@@ -241,7 +253,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('can mark own project deleted', async () => {
       const res = await server.inject(injectCfg({
         method: 'DELETE',
-        url: '/v1.1/community-businesses/me/volunteers/projects/1',
+        url: '/v1.1/community-businesses/me/volunteers/projects/4',
         credentials: adminCreds,
       }));
 
