@@ -9,6 +9,7 @@ import { Heading } from '../../../lib/ui/typography';
 import Toggle from '../../../lib/ui/forms/Toggle';
 import TermsAndConditons from './TermsAndConditions';
 import { Forms } from '../../../lib/ui/forms/enums';
+import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 /*
  * Types
  */
@@ -54,11 +55,12 @@ const Settings: FC<Props> = () => {
           <Input label="Email" editable />
           <Button label="Password" text="Send password reset email" />
           <Input label="Number" />
-          <Dropdown inline label="Gender" options={genders} onValueChange={setGender} selectedValue={gender} />
-          <Dropdown inline label="Year of birth" options={years} onValueChange={setYear} selectedValue={year} />
+          <Dropdown label="Gender" options={genders} onValueChange={setGender} selectedValue={gender} />
+          <Dropdown label="Year of birth" options={years} onValueChange={setYear} selectedValue={year} />
           <Input label="Post code" />
           <Toggle label="Locations reminders" />
           <TermsAndConditons />
+          <SubmitButton text="SAVE" onPress={() => {}} />
         </Form>
       </View>
     </Page>
