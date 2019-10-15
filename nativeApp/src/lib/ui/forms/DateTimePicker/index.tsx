@@ -9,6 +9,7 @@ import _DateTimePicker from 'react-native-modal-datetime-picker';
 
 import { Forms } from '../enums';
 import { ColoursEnum } from '../../colours';
+import useVisibility from '../../../hooks/useVisibility';
 
 /*
  * Types
@@ -68,9 +69,7 @@ const DateTimePicker: FC<Props> = (props) => {
   const {
     onConfirm, value, mode, label, minDate, maxDate,
   } = props;
-  const [isVisible, setIsVisible] = useState(false);
-
-  const flipVisibility = () => setIsVisible(!isVisible);
+  const { isVisible, flipVisibility } = useVisibility(false);
 
   const onConfirmAndHide = (date: Date) => {
     onConfirm(date);
