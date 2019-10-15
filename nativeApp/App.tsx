@@ -15,6 +15,10 @@ import { ColoursEnum } from './src/lib/ui/colours';
 import AdminRouter from './src/screens/admin_views/AdminRouter';
 import SettingsButton from './src/lib/ui/SettingsButton';
 import Settings from './src/screens/volunteer_views/Settings';
+import AdminAddProject from './src/screens/admin_views/AddProject';
+import AdminEditProject from './src/screens/admin_views/EditProject';
+import AdminEditTime from './src/screens/admin_views/EditTime';
+import AdminEditVolunteer from './src/screens/admin_views/EditVolunteer';
 
 
 const getSettingsButton = (navigation) => {
@@ -23,6 +27,13 @@ const getSettingsButton = (navigation) => {
     return <></>;
   }
   return <SettingsButton />;
+};
+
+const additionalAdminPages = {
+  AdminAddProject,
+  AdminEditProject,
+  AdminEditTime,
+  AdminEditVolunteer,
 };
 
 const RootStack = createStackNavigator(
@@ -42,10 +53,11 @@ const RootStack = createStackNavigator(
     Settings: {
       screen: Settings,
     },
+    ...additionalAdminPages,
   },
   {
 
-    initialRouteName: 'Login',
+    initialRouteName: 'AdminAddProject',
     defaultNavigationOptions: ({ navigation }) => ({
       headerRight: getSettingsButton(navigation),
       headerBackTitle: 'Back',
