@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 // import styled from 'styled-components/native';
-import { Heading } from '../../../lib/ui/typography';
+import { Heading } from '../../../../lib/ui/typography';
 import VolunteerCard from './VolunteerCard';
-import Page from '../../../lib/ui/Page';
+import Page from '../../../../lib/ui/Page';
 
 /*
  * Types

@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 
 import { MaterialIcons } from '@expo/vector-icons';
-import CardWithTitleAndDate from '../../../lib/ui/CardWithTitleAndDate';
-import { ColoursEnum } from '../../../lib/ui/colours';
+import CardWithTitleAndDate from '../../../../lib/ui/CardWithTitleAndDate';
+import { ColoursEnum } from '../../../../lib/ui/colours';
 /*
  * Types
  */
