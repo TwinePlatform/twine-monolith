@@ -60,7 +60,7 @@ describe('Util Months', () => {
     });
   });
 
-  describe.only(':: sortFormatted', () => {
+  describe(':: sortFormatted', () => {
     test('Already sorted array is unchanged', () => {
       const input = ['May 2017', 'June 2017', 'August 2018'];
       expect(Months.sortFormatted(input)).toEqual(input);
