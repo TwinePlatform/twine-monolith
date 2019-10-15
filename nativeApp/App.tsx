@@ -14,7 +14,7 @@ import { FontsEnum } from './src/lib/ui/typography';
 import { ColoursEnum } from './src/lib/ui/colours';
 import AdminRouter from './src/screens/admin_views/AdminRouter';
 import SettingsButton from './src/lib/ui/SettingsButton';
-import Settings from './src/screens/volunteer_views/Settings';
+import Settings from './src/screens/shared_views/Settings';
 import AdminAddProject from './src/screens/admin_views/Projects/AddProject';
 import AdminEditProject from './src/screens/admin_views/Projects/EditProject';
 import AdminEditTime from './src/screens/admin_views/AdminTime/EditTime';
