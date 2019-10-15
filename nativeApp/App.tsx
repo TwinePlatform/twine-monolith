@@ -19,6 +19,7 @@ import AdminAddProject from './src/screens/admin_views/Projects/AddProject';
 import AdminEditProject from './src/screens/admin_views/Projects/EditProject';
 import AdminEditTime from './src/screens/admin_views/AdminTime/EditTime';
 import AdminEditVolunteer from './src/screens/admin_views/Volunteers/EditVolunteer';
+import AdminAddVolunteer from './src/screens/admin_views/Volunteers/AddVolunteer';
 
 
 const getSettingsButton = (navigation) => {
@@ -34,6 +35,7 @@ const additionalAdminPages = {
   AdminEditProject,
   AdminEditTime,
   AdminEditVolunteer,
+  AdminAddVolunteer,
 };
 
 const RootStack = createStackNavigator(
