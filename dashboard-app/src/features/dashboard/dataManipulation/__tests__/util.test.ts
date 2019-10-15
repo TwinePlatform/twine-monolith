@@ -20,7 +20,7 @@ describe('Data manipulation utilities', () => {
 
   describe(':: abbreviateDateString helper', () => {
     test('SUCCESS - returns abbreviated month in date string', () => {
-      const expected = abbreviateDateString(Months.format.abreviated, 'January 2019');
+      const expected = abbreviateDateString(Months.format.abbreviated, 'January 2019');
       expect(expected).toBe('Jan 2019');
     });
   });

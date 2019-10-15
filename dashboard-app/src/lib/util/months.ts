@@ -2,7 +2,7 @@ import moment from 'moment';
 
 export enum MonthsFormatEnum {
   verbose = 'MMMM YYYY',
-  abreviated = 'MMM YYYY',
+  abbreviated = 'MMM YYYY',
   filename = 'MM_YY',
 }
 
