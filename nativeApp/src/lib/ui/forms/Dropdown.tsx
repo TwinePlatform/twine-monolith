@@ -14,6 +14,7 @@ type Props = {
   options: {id: number; name: string}[];
   selectedValue: string;
   onValueChange: Dispatch<SetStateAction<string>>;
+  defaultValue?: string;
 }
 
 /*
@@ -36,7 +37,7 @@ const Label = styled(L)`
  */
 const Dropdown: FC<Props> = (props) => {
   const {
-    label, options, selectedValue, onValueChange,
+    label, options, selectedValue, onValueChange, defaultValue,
   } = props;
   return (
     <Item picker>
@@ -47,7 +48,7 @@ const Dropdown: FC<Props> = (props) => {
         placeholder="Select"
         placeholderStyle={{ color: ColoursEnum.grey }}
         placeholderIconColor={ColoursEnum.grey}
-        selectedValue={selectedValue}
+        selectedValue={selectedValue || defaultValue}
         onValueChange={onValueChange}
       >
         {options.map(({ id, name }) => (
