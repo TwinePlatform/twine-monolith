@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
-import styled from 'styled-components/native';
+// import styled from 'styled-components/native';
 
 import { Heading } from '../../../lib/ui/typography';
+import Page from '../../../lib/ui/Page';
 
 /*
  * Types
@@ -12,19 +13,14 @@ type Props = {
 /*
  * Styles
  */
-const View = styled.View`
-  alignItems: center;
-  paddingTop: 20;
-  paddingBottom: 20;
-`;
 
 /*
  * Component
  */
 const ForgotPassword: FC<Props> = () => (
-  <View>
+  <Page>
     <Heading>Forgot Password</Heading>
-  </View>
+  </Page>
 );
 
 export default ForgotPassword;

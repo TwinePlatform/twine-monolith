@@ -9,6 +9,7 @@ import DateTimePicker from '../../../lib/ui/forms/DateTimePicker';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import HoursAndMinutesText from '../../../lib/ui/HoursAndMinutesText';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
+import Page from '../../../lib/ui/Page';
 
 import { getTimeDiff } from '../../../lib/utils/time';
 
@@ -21,12 +22,6 @@ type Props = {
 /*
  * Styles
  */
-const View = styled.View`
-  alignItems: center;
-  paddingTop: 20;
-  paddingBottom: 20;
-`;
-
 const Form = styled(F)`
   width: ${Forms.formWidth}
 `;
@@ -70,7 +65,7 @@ const AddTime: FC<Props> = () => {
   const diff = getTimeDiff(startTime, endTime);
 
   return (
-    <View>
+    <Page>
       <Heading>Add Time</Heading>
       <Form>
         <Dropdown label="Volunteer" options={volunteers} selectedValue={volunteer} onValueChange={setVolunteer} />
@@ -102,7 +97,7 @@ const AddTime: FC<Props> = () => {
         </TimeContainer>
         <SubmitButton text="ADD TIME" onPress={() => {}} />
       </Form>
-    </View>
+    </Page>
   );
 };
 

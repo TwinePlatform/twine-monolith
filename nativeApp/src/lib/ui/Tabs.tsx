@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-// import styled from 'styled-components/native';
+import styled from 'styled-components/native';
 import {
-  Tabs as _Tabs, Tab,
+  Tabs as _Tabs, Tab as T,
 } from 'native-base';
 import { ColoursEnum } from './colours';
 
@@ -17,6 +17,9 @@ type Props = {
 /*
  * Styles
  */
+const Tab = styled(T)`
+  marginTop: 10;
+`;
 
 /*
  * Component

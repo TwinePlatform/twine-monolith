@@ -73,7 +73,6 @@ const AdminHome: FC<Props> = () => (
         <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
       </Stat>
     </Container>
-
   </View>
 );
 
