@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
+import { Heading } from './typography';
 
 /*
  * Types
  */
 type Props = {
+  heading: string;
 }
 
 /*
@@ -22,9 +24,10 @@ const View = styled.View`
 /*
  * Component
  */
-const Page: FC<Props> = ({ children }) => (
+const Page: FC<Props> = ({ heading, children }) => (
   <Scrollable>
     <View>
+      <Heading>{heading}</Heading>
       {children}
     </View>
   </Scrollable>

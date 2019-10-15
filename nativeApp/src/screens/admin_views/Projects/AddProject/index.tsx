@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 // import styled from 'styled-components/native';
 import Page from '../../../../lib/ui/Page';
-import { Heading } from '../../../../lib/ui/typography';
 import Input from '../../../../lib/ui/forms/InputWithInlineLabel';
 import SubmitButton from '../../../../lib/ui/forms/SubmitButton';
 
@@ -19,8 +18,7 @@ type Props = {
  * Component
  */
 const AddProject: FC<Props> = () => (
-  <Page>
-    <Heading>Add Project</Heading>
+  <Page heading="Add Project">
     <Input label="Name" />
     <SubmitButton text="Add Project" onPress={() => {}} />
   </Page>

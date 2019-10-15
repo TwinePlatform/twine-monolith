@@ -5,9 +5,8 @@ import { Form as F } from 'native-base';
 import Input from '../../../lib/ui/forms/InputWithInlineLabel';
 import Button from '../../../lib/ui/forms/ButtonWithInlineLabel';
 import Dropdown from '../../../lib/ui/forms/Dropdown';
-import { Heading } from '../../../lib/ui/typography';
 import Toggle from '../../../lib/ui/forms/Toggle';
-import TermsAndConditons from './TermsAndConditions';
+import TermsAndConditonsButton from './TermsAndConditionsButton';
 import { Forms } from '../../../lib/ui/forms/enums';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 import Page from '../../../lib/ui/Page';
@@ -39,8 +38,7 @@ const Settings: FC<Props> = () => {
   const [gender, setGender] = useState('');
   const [year, setYear] = useState('');
   return (
-    <Page>
-      <Heading>Settings</Heading>
+    <Page heading="Settings">
       <Form>
         <Input label="Full name" />
         <Input label="Email" editable />
@@ -50,7 +48,7 @@ const Settings: FC<Props> = () => {
         <Dropdown label="Year of birth" options={years} onValueChange={setYear} selectedValue={year} />
         <Input label="Post code" />
         <Toggle label="Locations reminders" />
-        <TermsAndConditons />
+        <TermsAndConditonsButton />
         <SubmitButton text="SAVE" onPress={() => {}} />
       </Form>
     </Page>

@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 // import styled from 'styled-components/native';
 
-import { Heading } from '../../../lib/ui/typography';
 import TimeCard from '../../../lib/ui/TimeCard';
 import Page from '../../../lib/ui/Page';
 
@@ -19,8 +18,7 @@ type Props = {
  * Component
  */
 const Time: FC<Props> = () => (
-  <Page>
-    <Heading>Volunteer Time</Heading>
+  <Page heading="Volunteer Time">
     <TimeCard id={1} timeValues={[2, 9]} labels={['General', 'Office Work']} date="30/04/19" />
     <TimeCard id={1} timeValues={[7, 19]} labels={['General', 'Office Work']} date="03/06/19" />
     <TimeCard id={1} timeValues={[0, 49]} labels={['General', 'Office Work']} date="15/07/19" />

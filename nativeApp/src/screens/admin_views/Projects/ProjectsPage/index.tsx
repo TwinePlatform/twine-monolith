@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
-import { Heading } from '../../../../lib/ui/typography';
 import Tabs from '../../../../lib/ui/Tabs';
 import ProjectCard from './ProjectCard';
 import Page from '../../../../lib/ui/Page';
@@ -34,8 +33,7 @@ const TabTwo: FC<{}> = () => (
  * Component
  */
 const Projects: FC<Props> = () => (
-  <Page>
-    <Heading>Projects</Heading>
+  <Page heading="Projects">
     <Tabs
       tabOne={['Active', TabOne]}
       tabTwo={['Archived', TabTwo]}

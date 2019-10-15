@@ -32,7 +32,7 @@ const Button = styled(B)`
 /*
  * Component
  */
-const Toggle: FC<Props> = () => (
+const TermsAndConditonsButton: FC<Props> = () => (
   <Item inlineLabel>
     <Button transparent>
       <Label>Terms and Conditions</Label>
@@ -41,4 +41,4 @@ const Toggle: FC<Props> = () => (
   </Item>
 );
 
-export default Toggle;
+export default TermsAndConditonsButton;

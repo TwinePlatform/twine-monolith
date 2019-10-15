@@ -17,7 +17,7 @@ type Props = {
  * Component
  */
 const EditProject: FC<Props> = () => (
-  <Page>
+  <Page heading="Edit Project">
     {}
   </Page>
 );

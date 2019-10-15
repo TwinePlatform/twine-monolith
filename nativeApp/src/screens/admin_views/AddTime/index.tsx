@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
 import { Form as F, Text } from 'native-base';
 
-import { Heading } from '../../../lib/ui/typography';
 import Dropdown from '../../../lib/ui/forms/Dropdown';
 import { Forms } from '../../../lib/ui/forms/enums';
 import DateTimePicker from '../../../lib/ui/forms/DateTimePicker';
@@ -65,8 +64,7 @@ const AddTime: FC<Props> = () => {
   const diff = getTimeDiff(startTime, endTime);
 
   return (
-    <Page>
-      <Heading>Add Time</Heading>
+    <Page heading="Add Time">
       <Form>
         <Dropdown label="Volunteer" options={volunteers} selectedValue={volunteer} onValueChange={setVolunteer} />
         <Dropdown label="Project" options={projects} selectedValue={project} onValueChange={setProject} />

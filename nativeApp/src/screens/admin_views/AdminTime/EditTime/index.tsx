@@ -16,7 +16,7 @@ type Props = {
  * Component
  */
 const EditTime: FC<Props> = () => (
-  <Page>
+  <Page heading="Edit Time">
     {}
   </Page>
 );
