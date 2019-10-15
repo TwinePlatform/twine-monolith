@@ -79,7 +79,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
         url: '/v1.1/community-businesses/me/volunteers/projects',
         credentials: adminCreds,
         payload: {
-          name: 'foo project',
+          name: 'new project',
         },
       }));
 
@@ -87,7 +87,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       expect(res.result).toEqual({
         result: expect.objectContaining({
           organisationId: organisation.id,
-          name: 'foo project',
+          name: 'new project',
         }),
       });
 
@@ -130,16 +130,16 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('can get single project', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
-        url: '/v1.1/community-businesses/me/volunteers/projects/4',
+        url: '/v1.1/community-businesses/me/volunteers/projects/1',
         credentials: volCreds,
       }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
         result: expect.objectContaining({
-          id: 4,
+          id: 1,
           organisationId: organisation.id,
-          name: 'Take over the world',
+          name: 'Party',
         }),
       });
     });
@@ -169,7 +169,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('can update project name', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1.1/community-businesses/me/volunteers/projects/4',
+        url: '/v1.1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
           name: 'Foo',
@@ -179,7 +179,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
         result: expect.objectContaining({
-          id: 4,
+          id: 1,
           name: 'Foo',
           organisationId: organisation.id,
         }),
@@ -189,18 +189,18 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('can update casing on project name', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1.1/community-businesses/me/volunteers/projects/4',
+        url: '/v1.1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
-          name: 'tAkE oVer the World',
+          name: 'party',
         },
       }));
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
         result: expect.objectContaining({
-          id: 4,
-          name: 'tAkE oVer the World',
+          id: 1,
+          name: 'party',
           organisationId: organisation.id,
         }),
       });
@@ -209,7 +209,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('cannot update organisationId', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1.1/community-businesses/me/volunteers/projects/4',
+        url: '/v1.1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
           organisationId: 3,
@@ -222,10 +222,10 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test('cannot update name to already existing name', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1.1/community-businesses/me/volunteers/projects/4',
+        url: '/v1.1/community-businesses/me/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
-          name: 'Party',
+          name: 'Take over the world',
         },
       }));
 
@@ -238,7 +238,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
     test.skip('cannot update other organisations projects', async () => {
       const res = await server.inject(injectCfg({
         method: 'PUT',
-        url: '/v1.1/community-businesses/2/volunteers/projects/4',
+        url: '/v1.1/community-businesses/2/volunteers/projects/1',
         credentials: adminCreds,
         payload: {
           name: 'Foo',
