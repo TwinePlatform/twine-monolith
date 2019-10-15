@@ -63,9 +63,9 @@ const AddTime: FC<Props> = () => {
   const [project, setProject] = useState('');
   const [activity, setActivity] = useState('');
   const [volunteer, setVolunteer] = useState('');
-  const [date, setDate] = useState();
-  const [startTime, setStartTime] = useState();
-  const [endTime, setEndTime] = useState();
+  const [date, setDate] = useState<Date>();
+  const [startTime, setStartTime] = useState<Date>();
+  const [endTime, setEndTime] = useState<Date>();
 
   const diff = getTimeDiff(startTime, endTime);
 
