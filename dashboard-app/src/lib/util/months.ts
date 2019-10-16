@@ -45,7 +45,7 @@ const months: Months = {
         const bd = months.formattedToDate(b);
         return ad < bd ? -1 : ad > bd ? 1 : 0;
       } catch (error) {
-        return 0;
+        return -1;
       }
     })
   },

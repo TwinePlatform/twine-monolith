@@ -83,14 +83,14 @@ describe('Util Months', () => {
       ]);
     });
 
-    test('Invalid date strings remain in place', () => {
+    test('Invalid date strings sorted to the beginning of array', () => {
       const input = ['May 2017', 'August 2018', 'June 2017', 'Not a date', 'October 2019', 'September 2017'];
       expect(Months.sortFormatted(input)).toEqual([
+        'Not a date',
         'May 2017',
         'June 2017',
         'September 2017',
         'August 2018',
-        'Not a date',
         'October 2019',
       ]);
     })
