@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import { ColoursEnum } from './colours';
-import { FontsEnum, Heading2 } from './typography';
-import CardWithButtons, { RemoveType } from './CardWithButtons';
+import { FontsEnum, Heading2 as H2 } from './typography';
+import CardWithButtons, { RemovalType } from './CardWithButtons';
 
 
 /*
@@ -13,12 +13,16 @@ type Props = {
   title: string;
   datePrefix: 'Joined' | 'Created';
   date: string;
-  removeType: RemoveType;
+  removalType: RemovalType;
 }
 
 /*
  * Styles
  */
+
+const Heading2 = styled(H2)`
+  marginLeft: 5;
+`;
 
 const ValueContainer = styled.View`
   width: 100%;
@@ -52,11 +56,13 @@ const Label = styled.Text<{bold?: boolean; textAlign: string}>`
  */
 const CardWithTitleAndDate: FC<Props> = (props) => {
   const {
-    title, datePrefix, date, removeType,
+    title, datePrefix, date, removalType,
+    children: icon,
   } = props;
   return (
-    <CardWithButtons removeType={removeType}>
+    <CardWithButtons removalType={removalType}>
       <ValueContainer>
+        {icon}
         <Heading2>{title}</Heading2>
       </ValueContainer>
       <DetailsContainer>

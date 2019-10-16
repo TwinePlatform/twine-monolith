@@ -24,10 +24,11 @@ const Item = styled(I)`
   marginLeft: 0;
   width:100%;
   justifyContent: space-between;
+  flexDirection: row;
 `;
 
 const Label = styled(L)`
- width: ${Forms.labelWidth};
+  width: ${Forms.labelWidth};
 `;
 
 /*
@@ -38,7 +39,7 @@ const Dropdown: FC<Props> = (props) => {
     label, options, selectedValue, onValueChange,
   } = props;
   return (
-    <Item picker inlineLabel>
+    <Item picker>
       <Label>{label}</Label>
       <Picker
         mode="dropdown"
@@ -50,7 +51,7 @@ const Dropdown: FC<Props> = (props) => {
         onValueChange={onValueChange}
       >
         {options.map(({ id, name }) => (
-          <Picker.Item label={name} value={id} key={id} />
+          <Picker.Item label={name} value={name} key={id} />
         ))}
 
       </Picker>

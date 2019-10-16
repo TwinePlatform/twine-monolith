@@ -13,7 +13,17 @@ import VolunteerRouter from './src/screens/volunteer_views/VolunteerRouter';
 import { FontsEnum } from './src/lib/ui/typography';
 import { ColoursEnum } from './src/lib/ui/colours';
 import AdminRouter from './src/screens/admin_views/AdminRouter';
+import SettingsButton from './src/lib/ui/SettingsButton';
+import Settings from './src/screens/volunteer_views/Settings';
 
+
+const getSettingsButton = (navigation) => {
+  const { routeName } = navigation.state;
+  if (['Login', 'Register', 'ForgotPassword'].includes(routeName)) {
+    return <></>;
+  }
+  return <SettingsButton />;
+};
 
 const RootStack = createStackNavigator(
   {
@@ -29,10 +39,15 @@ const RootStack = createStackNavigator(
     AdminRouter: {
       screen: AdminRouter,
     },
+    Settings: {
+      screen: Settings,
+    },
   },
   {
+
     initialRouteName: 'Login',
-    defaultNavigationOptions: {
+    defaultNavigationOptions: ({ navigation }) => ({
+      headerRight: getSettingsButton(navigation),
       headerBackTitle: 'Back',
       title: 'TWINE',
       headerStyle: {
@@ -44,7 +59,7 @@ const RootStack = createStackNavigator(
         fontWeight: '300',
         fontFamily: FontsEnum.light,
       },
-    },
+    }),
   },
 );
 

@@ -1,9 +1,11 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CardWithButtons from '../CardWithButtons';
 
 import { ColoursEnum } from '../colours';
 import { FontsEnum } from '../typography';
+import HoursAnMinutesText from '../HoursAndMinutesText';
 
 /*
  * Types
@@ -19,29 +21,6 @@ type Props = {
 /*
  * Styles
  */
-
-const ValueContainer = styled.View`
-  width: 100%;
-  flexDirection: row;
-  alignItems: flex-end;
-  marginBottom: 5;
-`;
-
-const Value = styled.Text`
-  color: ${ColoursEnum.darkPurple};
-  fontSize: 35;
-  font-family: ${FontsEnum.medium}
-`;
-
-const Unit = styled.Text`
-  marginLeft: 5;
-  marginRight: 10;
-  color: ${ColoursEnum.darkPurple};
-  fontSize: 18;
-  letterSpacing: 1.2;
-  paddingBottom: 6;
-`;
-
 const DetailsContainer = styled.View`
   flexDirection: row;
   alignItems: flex-end;
@@ -69,13 +48,10 @@ const TimeCard: FC<Props> = (props) => {
     timeValues, date, labels, volunteer,
   } = props;
   return (
-    <CardWithButtons removeType="delete">
-      <ValueContainer>
-        <Value>{timeValues[0]}</Value>
-        <Unit>hours</Unit>
-        <Value>{timeValues[1]}</Value>
-        <Unit>minutes</Unit>
-      </ValueContainer>
+    <CardWithButtons removalType="delete">
+      <HoursAnMinutesText align="left" timeValues={timeValues}>
+        <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard} />
+      </HoursAnMinutesText>
       <DetailsContainer>
         <LabelContainer>
           <Label textAlign="left">{date}</Label>
