@@ -10,6 +10,8 @@ import { ColoursEnum } from '../colours';
  */
 
 type Props = {
+  onPressOne: () => void;
+  onPressTwo: () => void;
 }
 
 /*
@@ -44,40 +46,40 @@ const BorderRight = styled.View`
 /*
  * Components
  */
-export const ArchiveButton: FC = () => (
+export const ArchiveButton: FC<Props> = ({ onPressOne, onPressTwo }) => (
   <ButtonContainer>
-    <Button transparent>
+    <Button transparent onPress={onPressOne}>
       <BorderRight>
         <MaterialCommunityIcons name="square-edit-outline" outline size={20} color={ColoursEnum.purple} />
         <LinkText>Edit</LinkText>
       </BorderRight>
     </Button>
-    <Button transparent>
+    <Button transparent onPress={onPressTwo}>
       <MaterialIcons name="archive" outline size={20} color={ColoursEnum.purple} />
       <LinkText>Archive</LinkText>
     </Button>
   </ButtonContainer>
 );
 
-export const DeleteButton: FC = () => (
+export const DeleteButton: FC<Props> = ({ onPressOne, onPressTwo }) => (
   <ButtonContainer>
-    <Button transparent>
+    <Button transparent onPress={onPressOne}>
       <BorderRight>
         <MaterialCommunityIcons name="square-edit-outline" outline size={20} color={ColoursEnum.purple} />
         <LinkText>Edit</LinkText>
       </BorderRight>
     </Button>
-    <Button transparent>
+    <Button transparent onPress={onPressTwo}>
       <MaterialCommunityIcons name="trash-can-outline" outline size={20} color={ColoursEnum.purple} />
       <LinkText>Delete</LinkText>
     </Button>
   </ButtonContainer>
 );
 
-export const RestoreButton: FC = () => (
+export const RestoreButton: FC<Pick<Props, 'onPressOne'>> = ({ onPressOne }) => (
   <ButtonContainer>
     <Button transparent />
-    <Button transparent>
+    <Button transparent onPress={onPressOne}>
       <MaterialCommunityIcons name="undo" outline size={20} color={ColoursEnum.purple} />
       <LinkText>Restore</LinkText>
     </Button>

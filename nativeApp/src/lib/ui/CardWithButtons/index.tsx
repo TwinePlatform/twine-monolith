@@ -12,6 +12,8 @@ import { ArchiveButton, DeleteButton, RestoreButton } from './Buttons';
 export type RemovalType = 'archive' | 'delete' | 'restore';
 type Props = {
   removalType: RemovalType;
+  onPressOne: () => void;
+  onPressTwo: () => void;
 }
 
 /*
@@ -35,15 +37,17 @@ const TopContainer = styled.View`
  * Component
  */
 const CardWithButtons: FC<Props> = (props) => {
-  const { children, removalType } = props;
+  const {
+    children, removalType, onPressOne, onPressTwo,
+  } = props;
   return (
     <Card>
       <TopContainer>
         {children}
       </TopContainer>
-      {removalType === 'archive' && <ArchiveButton />}
-      {removalType === 'delete' && <DeleteButton />}
-      {removalType === 'restore' && <RestoreButton />}
+      {removalType === 'archive' && <ArchiveButton onPressOne={onPressOne} onPressTwo={onPressTwo} />}
+      {removalType === 'delete' && <DeleteButton onPressOne={onPressOne} onPressTwo={onPressTwo} />}
+      {removalType === 'restore' && <RestoreButton onPressOne={onPressOne} />}
     </Card>
 
   );

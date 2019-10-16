@@ -14,6 +14,8 @@ type Props = {
   datePrefix: 'Joined' | 'Created';
   date: string;
   removalType: RemovalType;
+  onPressOne: () => void;
+  onPressTwo: () => void;
 }
 
 /*
@@ -56,11 +58,11 @@ const Label = styled.Text<{bold?: boolean; textAlign: string}>`
  */
 const CardWithTitleAndDate: FC<Props> = (props) => {
   const {
-    title, datePrefix, date, removalType,
+    title, datePrefix, date, removalType, onPressOne, onPressTwo,
     children: icon,
   } = props;
   return (
-    <CardWithButtons removalType={removalType}>
+    <CardWithButtons onPressOne={onPressOne} onPressTwo={onPressTwo} removalType={removalType}>
       <ValueContainer>
         {icon}
         <Heading2>{title}</Heading2>
