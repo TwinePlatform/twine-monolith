@@ -39,7 +39,7 @@ const months: Months = {
     return d;
   },
   sortFormatted: (mthStrs) => {
-    return mthStrs.sort((a, b) => {
+    return [...mthStrs].sort((a, b) => {
       try {
         const ad = months.formattedToDate(a)
         const bd = months.formattedToDate(b);
