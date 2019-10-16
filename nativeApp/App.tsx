@@ -59,7 +59,7 @@ const RootStack = createStackNavigator(
   },
   {
 
-    initialRouteName: 'AdminAddProject',
+    initialRouteName: 'Login',
     defaultNavigationOptions: ({ navigation }) => ({
       headerRight: getSettingsButton(navigation),
       headerBackTitle: 'Back',

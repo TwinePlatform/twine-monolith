@@ -36,7 +36,7 @@ const TimeContainer = styled.View`
 
 const projects = [
   { id: 0, name: 'General' },
-  { id: 1, name: 'Spring' },
+  { id: 1, name: 'Community Food Project' },
 ];
 
 const activities = [
