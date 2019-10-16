@@ -105,6 +105,10 @@ describe('Config', () => {
         },
       },
       platform: {
+        versions: {
+          1: { prefix: '/foo' },
+          1.1: false,
+        },
         domains: {
           [AppEnum.ADMIN]: 'localhost:5000',
           [AppEnum.DASHBOARD]: 'localhost:3000',
@@ -185,6 +189,10 @@ describe('Config', () => {
         },
       },
       platform: {
+        versions: {
+          1: false,
+          1.1: { prefix: '/foo' }
+        },
         domains: {
           [AppEnum.ADMIN]: 'localhost:5000',
           [AppEnum.DASHBOARD]: 'localhost:3000',

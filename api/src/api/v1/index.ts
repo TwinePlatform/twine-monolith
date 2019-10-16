@@ -17,7 +17,6 @@ import regions from './regions';
 import communityBusinesses from './community_businesses';
 import logs from './user_logs';
 import addLifecycleHooks from './hooks';
-import setupAuthentication from './auth';
 
 
 /*
@@ -35,10 +34,6 @@ const addFailActionTo: (f: 'validate' | 'response') => (r: Hapi.ServerRoute) => 
 export default {
   name: 'Twine API v1',
   register: async (server: Hapi.Server) => {
-    /*
-     * Authentication Strategies
-     */
-    await setupAuthentication(server);
 
     /*
      * Server request lifecycle hooks

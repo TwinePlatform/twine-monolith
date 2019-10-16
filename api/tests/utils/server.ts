@@ -6,16 +6,16 @@
  */
 import * as Knex from 'knex';
 import * as Hapi from '@hapi/hapi';
-import * as Shot from 'shot';
+import * as Shot from '@hapi/shot';
 import { Config } from '../../config';
 import { init as initServer } from '../../src/server';
 
 
 type Options = {
-  routes?: Hapi.ServerRoute[]
-  plugins?: Hapi.Plugin<any>[]
-  knex?: Knex,
-  hooks?: ((s: Hapi.Server) => void)[]
+  routes?: Hapi.ServerRoute[];
+  plugins?: Hapi.Plugin<any>[];
+  knex?: Knex;
+  hooks?: ((s: Hapi.Server) => void)[];
 };
 
 export const initBlank = async (config: Config, options: Options = {}): Promise<Hapi.Server> => {

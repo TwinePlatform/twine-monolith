@@ -98,7 +98,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       }));
 
       expect(res2.statusCode).toBe(200);
-      expect((<any> res2.result).result).toHaveLength(3);
+      expect((res2.result as any).result).toHaveLength(3);
     });
 
     test('cannot create project with a duplicate name', async () => {
