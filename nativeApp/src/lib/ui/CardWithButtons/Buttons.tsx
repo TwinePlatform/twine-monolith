@@ -85,3 +85,13 @@ export const RestoreButton: FC<Pick<Props, 'onPressOne'>> = ({ onPressOne }) => 
     </Button>
   </ButtonContainer>
 );
+
+export const SaveButton: FC<Pick<Props, 'onPressOne'>> = ({ onPressOne }) => (
+  <ButtonContainer>
+    <Button transparent />
+    <Button transparent onPress={onPressOne}>
+      <MaterialCommunityIcons name="content-save-outline" outline size={20} color={ColoursEnum.darkPurple} />
+      <LinkText>Save</LinkText>
+    </Button>
+  </ButtonContainer>
+);

@@ -44,7 +44,7 @@ const VolunteerCard: FC<NavigationInjectedProps & Props> = ({ navigation, date, 
   <CardWithButtons
     onPressOne={() => navigation.navigate('AdminEditVolunteer')}
     onPressTwo={() => {}}
-    removalType="delete"
+    buttonType="delete"
   >
     <HeadingContainer>
       <MaterialIcons name="person-outline" outline size={35} color={ColoursEnum.mustard} />

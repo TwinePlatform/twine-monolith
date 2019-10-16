@@ -19,13 +19,13 @@ const View = styled.View`
 
 const TabOne: FC<{}> = () => (
   <View>
-    <ProjectCard id={1} title="Summer Fair" date="30/12/18" removalType="archive" />
+    <ProjectCard id={1} title="Summer Fair" date="30/12/18" buttonType="archive" />
   </View>
 );
 
 const TabTwo: FC<{}> = () => (
   <View>
-    <ProjectCard id={1} title="Christmas Fair" date="11/11/18" removalType="restore" />
+    <ProjectCard id={1} title="Christmas Fair" date="11/11/18" buttonType="restore" />
   </View>
 );
 

@@ -3,15 +3,17 @@ import styled from 'styled-components/native';
 import { Card as C } from 'native-base';
 
 import { ColoursEnum } from '../colours';
-import { ArchiveButton, DeleteButton, RestoreButton } from './Buttons';
+import {
+  ArchiveButton, DeleteButton, RestoreButton, SaveButton,
+} from './Buttons';
 
 /*
  * Types
  */
 
-export type RemovalType = 'archive' | 'delete' | 'restore';
+export type ButtonType = 'archive' | 'delete' | 'restore' | 'save';
 type Props = {
-  removalType: RemovalType;
+  buttonType: ButtonType;
   onPressOne: () => void;
   onPressTwo: () => void;
 }
@@ -38,16 +40,17 @@ const TopContainer = styled.View`
  */
 const CardWithButtons: FC<Props> = (props) => {
   const {
-    children, removalType, onPressOne, onPressTwo,
+    children, buttonType, onPressOne, onPressTwo,
   } = props;
   return (
     <Card>
       <TopContainer>
         {children}
       </TopContainer>
-      {removalType === 'archive' && <ArchiveButton onPressOne={onPressOne} onPressTwo={onPressTwo} />}
-      {removalType === 'delete' && <DeleteButton onPressOne={onPressOne} onPressTwo={onPressTwo} />}
-      {removalType === 'restore' && <RestoreButton onPressOne={onPressOne} />}
+      {buttonType === 'archive' && <ArchiveButton onPressOne={onPressOne} onPressTwo={onPressTwo} />}
+      {buttonType === 'delete' && <DeleteButton onPressOne={onPressOne} onPressTwo={onPressTwo} />}
+      {buttonType === 'restore' && <RestoreButton onPressOne={onPressOne} />}
+      {buttonType === 'save' && <SaveButton onPressOne={onPressOne} />}
     </Card>
 
   );

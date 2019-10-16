@@ -47,7 +47,7 @@ const TimeCard: FC<Props> = (props) => {
     timeValues, date, labels, volunteer,
   } = props;
   return (
-    <CardWithButtons removalType="delete">
+    <CardWithButtons buttonType="delete" onPressOne={() => {}} onPressTwo={() => {}}>
       <HoursAnMinutesText align="left" timeValues={timeValues}>
         <MaterialCommunityIcons name="clock-outline" outline size={30} color={ColoursEnum.mustard} />
       </HoursAnMinutesText>
