@@ -1,20 +1,16 @@
 import { omit } from 'ramda';
 import { Objects } from 'twine-util';
 import { AggregatedData } from './logsToAggregatedData';
-import { toUnitDuration, abbreviateDateString, isDateString } from './util';
+import { toUnitDuration, abbreviateChartLabels } from './util';
 import { DurationUnitEnum } from '../../../types';
 import Months from '../../../lib/util/months';
 import { getColourByIndex } from '../util';
-import { truncate } from 'twine-util/string';
 
 export const aggregatedToStackedGraph = (data: AggregatedData, unit: DurationUnitEnum) => {
   const labels = Months.sortFormatted(Object.keys(omit(['id', 'name'], data.rows[0])));
 
   return {
-    labels: labels.map((x) =>
-      isDateString(x)
-        ? abbreviateDateString(Months.format.abbreviated, x).split(' ')
-        : truncate(x, 10)),
+    labels: abbreviateChartLabels(labels),
     datasets: data.rows
       .map((row, i) => {
         const label = row.name;
