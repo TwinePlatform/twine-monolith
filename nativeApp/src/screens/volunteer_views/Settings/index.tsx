@@ -8,6 +8,8 @@ import Dropdown from '../../../lib/ui/forms/Dropdown';
 import { Heading } from '../../../lib/ui/typography';
 import Toggle from '../../../lib/ui/forms/Toggle';
 import TermsAndConditons from './TermsAndConditions';
+import { Forms } from '../../../lib/ui/forms/enums';
+import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 /*
  * Types
  */
@@ -28,7 +30,7 @@ const View = styled.View`
 `;
 
 const Form = styled(F)`
-  width: 80%
+  width: ${Forms.formWidth}
 `;
 /*
  * Component
@@ -58,6 +60,7 @@ const Settings: FC<Props> = () => {
           <Input label="Post code" />
           <Toggle label="Locations reminders" />
           <TermsAndConditons />
+          <SubmitButton text="SAVE" onPress={() => {}} />
         </Form>
       </View>
     </Page>
