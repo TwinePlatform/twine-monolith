@@ -36,6 +36,10 @@ export default Joi.object({
     }).required(),
   }).required(),
   platform: Joi.object({
+    versions: {
+      1: Joi.alt(Joi.boolean().only(false), Joi.object({ prefix: Joi.string() })).required(),
+      1.1: Joi.alt(Joi.boolean().only(false), Joi.object({ prefix: Joi.string() })).required(),
+    },
     domains: Joi.object({
       [AppEnum.ADMIN]: Joi.string().min(5).required(),
       [AppEnum.DASHBOARD]: Joi.string().min(5).required(),

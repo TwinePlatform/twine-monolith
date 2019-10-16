@@ -1,0 +1,654 @@
+{
+  "/sectors/": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": false
+    }
+  },
+  "/sectors/:id/organisations": {
+    "GET": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "organisations_details-child:read",
+        "FUNDING_BODY": "organisations_details-child:read"
+      }
+    }
+  },
+  "/regions/": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": false
+    }
+  },
+  "/regions/:id/organisations": {
+    "GET": {
+      "permissions": {
+        "TWINE_ADMIN": "organisations_details-child:read",
+        "FUNDING_BODY": "organisations_details-child:read"
+      }
+    }
+  },
+  "/community-businesses/": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "organisations_details-child:read",
+        "FUNDING_BODY": "organisations_details-child:read"
+      }
+    },
+    "POST": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "organisations_details-child:write",
+        "FUNDING_BODY": "organisations_details-child:write"
+      }
+    }
+  },
+  "/community-businesses/me": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN": "organisations_details-own:read"
+      }
+    },
+    "PUT": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN": "organisations_details-own:write"
+      }
+    },
+    "DELETE": {
+      "isImplemented": false,
+      "permissions": {
+        "CB_ADMIN": "organisations_details-own:delete"
+      }
+    }
+  },
+  "/community-businesses/:id": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "organisations_details-child:read",
+        "FUNDING_BODY": "organisations_details-child:read"
+      }
+    },
+    "PUT": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "organisations_details-child:write",
+        "FUNDING_BODY": "organisations_details-child:write"
+      }
+    },
+    "DELETE": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "organisations_details-child:delete",
+        "FUNDING_BODY": "organisations_details-child:delete"
+      }
+    }
+  },
+  "/community-businesses/me/training-sessions": {
+    "GET": {
+      "isImplemented": false,
+      "permissions": {
+        "CB_ADMIN": "organisations_training-own:read"
+      }
+    },
+    "POST": {
+      "isImplemented": false,
+      "permissions": {
+        "CB_ADMIN": "organisations_training-own:write"
+      }
+    }
+  },
+  "/community-businesses/:id/training-sessions": {
+    "GET": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "organisations_training-child:read",
+        "FUNDING_BODY": "organisations_training-child:read"
+      }
+    },
+    "POST": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "organisations_training-child:write",
+        "FUNDING_BODY": "organisations_training-child:write"
+      }
+    }
+  },
+  "/community-businesses/me/training-sessions/:id": {
+    "PUT": {
+      "isImplemented": false,
+      "permissions": {
+        "CB_ADMIN": "organisations_training-own:read"
+      }
+    },
+    "DELETE": {
+      "isImplemented": false,
+      "permissions": {
+        "CB_ADMIN": "organisations_training-own:delete"
+      }
+    }
+  },
+  "/community-businesses/:id/training-sessions/:id": {
+    "PUT": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "organisations_training-child:write",
+        "FUNDING_BODY": "organisations_training-child:write"
+      }
+    },
+    "DELETE": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "organisations_training-child:delete",
+        "FUNDING_BODY": "organisations_training-child:delete"
+      }
+    }
+  },
+  "/community-businesses/me/feedback": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN":"organisations_feedback-own:read"
+      }
+    },
+    "POST": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN":"organisations_feedback-own:write"
+      }
+    }
+  },
+  "/community-businesses/:id/feedback": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "organisations_feedback-child:read",
+        "FUNDING_BODY": "organisations_feedback-child:read"
+      }
+    }
+  },
+  "/community-businesses/me/feedback/aggregates": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN": "organisations_feedback-own:read"
+      }
+    }
+  },
+  "/community-businesses/:id/feedback/aggregates": {
+    "GET": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "organisations_feedback-child:read",
+        "FUNDING_BODY": "organisations_feedback-child:read"
+      }
+    }
+  },
+  "/community-businesses/:id/users/aggregates": {
+    "GET": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "user_details-child:read",
+        "CB_ADMIN": "user_details-child:read"
+      }
+    }
+  },
+  "/community-businesses/:id/admins": {
+    "GET": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "user_details-child:read",
+        "CB_ADMIN": "user_details-child:read"
+      }
+    }
+  },
+  "/community-businesses/:id/visitors": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "user_details-child:read",
+        "CB_ADMIN": "user_details-child:read"
+      }
+    }
+  },
+  "/community-businesses/me/visitors/:id/emails": {
+    "POST": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN": "user_details-child:write"
+      }
+    }
+  },
+  "/community-businesses/me/visit-activities": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN": "visit_activities-own:read"
+      }
+    },
+    "POST": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN": "visit_activities-own:write"
+      }
+    }
+  },
+  "/community-businesses/me/visit-activities/:id": {
+    "GET": {
+      "isImplemented": false,
+      "permissions": {
+        "CB_ADMIN": "visit_activities-own:read"
+      }
+    },
+    "PUT": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN": "visit_activities-own:write"
+      }
+    },
+    "DELETE": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN": "visit_activities-own:delete"
+      }
+    }
+  },
+  "/community-businesses/:id/visit-activities": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "visit_activities-child:read",
+        "CB_ADMIN": "visit_activities-child:read"
+      }
+    }
+  },
+  "/community-businesses/:id/visit-activities/:id": {
+    "GET": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "visit_activities-child:read",
+        "CB_ADMIN": "visit_activities-child:read"
+      }
+    }
+  },
+  "/community-businesses/me/visit-logs": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN": "visit_logs-child:read"
+      }
+    },
+    "POST": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN": "visit_logs-child:write"
+      }
+    }
+  },
+  "/community-businesses/me/visit-logs/aggregates": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN": "visit_logs-child:read"
+      }
+    }
+  },
+  "/community-businesses/:id/visit-logs/aggregates": {
+    "GET": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "visit_logs-child:read",
+        "CB_ADMIN": "visit_logs-child:read"
+      }
+    }
+  },
+  "/community-businesses/:id/volunteers": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "user_details-child:read",
+        "CB_ADMIN": "user_details-child:read"
+      }
+    }
+  },
+  "/community-businesses/me/volunteers/projects": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER": "organisations_volunteers-parent:read",
+        "VOLUNTEER_ADMIN": "organisations_volunteers-parent:read",
+        "CB_ADMIN": "organisations_volunteers-own:read"
+      }
+    },
+    "POST": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER_ADMIN": "organisations_volunteers-parent:write",
+        "CB_ADMIN": "organisations_volunteers-own:write"
+      }
+    }
+  },
+  "/community-businesses/me/volunteers/projects/:id": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER": "organisations_volunteers-parent:read",
+        "VOLUNTEER_ADMIN": "organisations_volunteers-parent:read",
+        "CB_ADMIN": "organisations_volunteers-own:read"
+      }
+    },
+    "PUT": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER_ADMIN": "organisations_volunteers-parent:write",
+        "CB_ADMIN": "organisations_volunteers-own:write"
+      }
+    },
+    "DELETE": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER_ADMIN": "organisations_volunteers-parent:delete",
+        "CB_ADMIN": "organisations_volunteers-own:delete"
+      }
+    }
+  },
+  "/community-businesses/me/volunteer-logs": {
+    "GET": {
+      "isImplemented": false,
+      "permissions": {
+        "CB_ADMIN": "volunteer_logs-child:read",
+        "VOLUNTEER_ADMIN": "volunteer_logs-sibling:read"
+      }
+    },
+    "POST": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER": "volunteer_logs-own:write",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"],
+        "CB_ADMIN": "volunteer_logs-child:write"
+      }
+    }
+  },
+  "/community-businesses/me/volunteer-logs/sync": {
+    "POST": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER": "volunteer_logs-own:write",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"],
+        "CB_ADMIN": "volunteer_logs-child:write"
+      }
+    }
+  },
+  "/community-businesses/:id/volunteer-logs": {
+    "GET": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "volunteer_logs-child:read",
+        "FUNDING_BODY_ADMIN": "volunteer_logs-child:read"
+      }
+    }
+  },
+  "/community-businesses/me/volunteer-logs/:id": {
+    "PUT": {
+      "isImplemented": false,
+      "permissions": {
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write"],
+        "CB_ADMIN": "volunteer_logs-child:write"
+      }
+    },
+    "DELETE": {
+      "isImplemented": false,
+      "permissions": {
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:delete"],
+        "CB_ADMIN": "volunteer_logs-child:delete"
+      }
+    }
+  },
+  "/community-businesses/register": {
+    "POST": {
+      "isImplemented": false,
+      "permissions": false
+    }
+  },
+  "/community-businesses/:id/questions/:question_id/cls": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": "frontline"
+    }
+  },
+  "/users/register/volunteers": {
+    "POST": {
+      "isImplemented": true,
+      "permissions": false
+    }
+  },
+  "/users/register/visitors": {
+    "POST": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN": "user_details-child:write"
+      }
+    }
+  },
+  "/users/register/admin": {
+    "POST": {
+      "isImplemented": false,
+      "permissions": false
+    }
+  },
+  "/users/login/visitor": {
+    "POST": {
+      "isImplemented": false,
+      "permissions": false
+    }
+  },
+  "/users/login": {
+    "POST": {
+      "isImplemented": false,
+      "permissions": false
+    }
+  },
+  "/users/logout": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": false
+    }
+  },
+  "/users/login/escalate": {
+    "POST": {
+      "isImplemented": true,
+      "permissions": false
+    }
+  },
+  "/users/login/de-escalate": {
+    "POST": {
+      "isImplemented": true,
+      "permissions": false
+    }
+  },
+  "/users/:id": {
+    "GET": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "user_details-child:read",
+        "CB_ADMIN": "user_details-child:read"
+      }
+    },
+    "PUT": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "user_details-child:write",
+        "CB_ADMIN": "user_details-child:write"
+      }
+    },
+    "DELETE": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "user_details-child:delete",
+        "CB_ADMIN": "user_details-child:delete"
+      }
+    }
+  },
+  "/users/password/forgot": {
+    "POST": {
+      "isImplemented": true,
+      "permissions": false
+    }
+  },
+  "/users/password/reset": {
+    "POST": {
+      "isImplemented": true,
+      "permissions": false
+    }
+  },
+  "/users/me": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "user_details-own:read",
+        "FUNDING_BODY": "user_details-own:read",
+        "CB_ADMIN": "user_details-own:read",
+        "VOLUNTEER": "user_details-own:read",
+        "VOLUNTEER_ADMIN": "user_details-own:read"
+      }
+    },
+    "PUT": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "user_details-own:write",
+        "FUNDING_BODY": "user_details-own:write",
+        "CB_ADMIN": "user_details-own:write",
+        "VOLUNTEER": "user_details-own:write",
+        "VOLUNTEER_ADMIN": "user_details-own:write"
+      }
+    },
+    "DELETE": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "user_details-own:delete",
+        "FUNDING_BODY": "user_details-own:delete",
+        "CB_ADMIN": "user_details-own:delete"
+      }
+    }
+  },
+  "/users/me/roles": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "user_details-own:read",
+        "FUNDING_BODY": "user_details-own:read",
+        "CB_ADMIN": "user_details-own:read",
+        "VOLUNTEER": "user_details-own:read",
+        "VOLUNTEER_ADMIN": "user_details-own:read"
+      }
+    }
+  },
+  "/users/volunteers/me/volunteer-logs": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER": "volunteer_logs-own:read",
+        "VOLUNTEER_ADMIN": "volunteer_logs-own:read"
+      }
+    }
+  },
+  "/users/volunteers/me/volunteer-logs/:id": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER": "volunteer_logs-own:read",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:read", "volunteer_logs-own:read"]
+      }
+    },
+    "PUT": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER": "volunteer_logs-own:write",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:write", "volunteer_logs-own:write"]
+      }
+    },
+    "DELETE": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER": "volunteer_logs-own:delete",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:delete", "volunteer_logs-own:delete"]
+      }
+    }
+  },
+  "/users/volunteers/me/volunteer-logs/aggregates": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "VOLUNTEER": "volunteer_logs-own:read",
+        "VOLUNTEER_ADMIN": ["volunteer_logs-sibling:read", "volunteer_logs-own:read"]
+      }
+    }
+  },
+  "/users/volunteers/:id/volunteer-logs": {
+    "GET": {
+      "isImplemented": false,
+      "permissions": {
+        "TWINE_ADMIN": "volunteer_logs-child:read",
+        "CB_ADMIN": "volunteer_logs-child:read",
+        "VOLUNTEER_ADMIN": "volunteer_logs-sibling:read"
+      }
+    }
+  },
+  "/users/visitors/search": {
+    "POST": {
+      "isImplemented": true,
+      "permissions": {
+        "CB_ADMIN": "user_details-child:read"
+      }
+    }
+  },
+  "/visit-logs": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "visit_logs-child:read"
+      }
+    }
+  },
+  "/volunteer-logs": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": {
+        "TWINE_ADMIN": "volunteer_logs-child:read"
+      }
+    }
+  },
+  "/genders/": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": false
+    }
+  },
+  "/ethnicities/": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": false
+    }
+  },
+  "/disabilities/": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": false
+    }
+  },
+  "/visit-activity-categories/": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": false
+    }
+  },
+  "/volunteer-activities/": {
+    "GET": {
+      "isImplemented": true,
+      "permissions": false
+    }
+  }
+}

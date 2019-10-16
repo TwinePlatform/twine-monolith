@@ -1,0 +1,296 @@
+import * as Hapi from '@hapi/hapi';
+import * as Knex from 'knex';
+import { init } from '../../../../../tests/utils/server';
+import { getConfig } from '../../../../../config';
+import { User, Users, Organisation, Organisations } from '../../../../models';
+import { getTrx } from '../../../../../tests/utils/database';
+import { Credentials as StandardCredentials } from '../../../../auth/strategies/standard';
+import { ExternalCredentials, name as ExtName } from '../../../../auth/strategies/external';
+import { injectCfg } from '../../../../../tests/utils/inject';
+
+
+describe('API v1 :: Community Businesses :: Visit Activities', () => {
+  let server: Hapi.Server;
+  let knex: Knex;
+  let trx: Knex.Transaction;
+  let user: User;
+  let wrongUser: User;
+  let twAdmin: User;
+  let organisation: Organisation;
+  let otherOrganisation: Organisation;
+  let credentials: Hapi.AuthCredentials;
+  let twAdminCreds: Hapi.AuthCredentials;
+  let otherCreds: Hapi.AuthCredentials;
+  let extCreds: Hapi.AuthCredentials;
+  const config = getConfig(process.env.NODE_ENV);
+
+  beforeAll(async () => {
+    server = await init(config);
+    knex = server.app.knex;
+
+    user = await Users.getOne(server.app.knex, { where: { name: 'GlaDos' } });
+    wrongUser = await Users.getOne(server.app.knex, { where: { name: 'Gordon' } });
+    twAdmin = await Users.getOne(server.app.knex, { where: { name: 'Big Boss' } });
+    organisation = await Organisations.getOne(server.app.knex, { where: { id: 1 } });
+    otherOrganisation = await Organisations.getOne(server.app.knex, { where: { id: 2 } });
+    credentials = await StandardCredentials.create(server.app.knex, user, organisation);
+    otherCreds = await StandardCredentials.create(server.app.knex, wrongUser, otherOrganisation);
+    twAdminCreds = await StandardCredentials.create(server.app.knex, twAdmin, organisation);
+    extCreds = await ExternalCredentials.get(knex, 'aperture-token');
+  });
+
+  afterAll(async () => {
+    await server.shutdown(true);
+  });
+
+  beforeEach(async () => {
+    trx = await getTrx(knex);
+    server.app.knex = trx;
+  });
+
+  afterEach(async () => {
+    await trx.rollback();
+    server.app.knex = knex;
+  });
+
+  describe('GET', () => {
+    test(':: successfully gets all activities for own cb', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1.1/community-businesses/me/visit-activities',
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: expect.arrayContaining(
+        [
+          expect.objectContaining({
+            category: 'Socialising',
+            id: 2,
+            name: 'Wear Pink',
+            monday: false,
+            tuesday: false,
+            wednesday: true,
+            thursday: false,
+            friday: false,
+            saturday: false,
+            sunday: false,
+          }),
+          expect.objectContaining({
+            id: 3,
+            name: 'Free Running',
+            category: 'Sports',
+            monday: false,
+            tuesday: true,
+            wednesday: true,
+            thursday: false,
+            friday: true,
+            saturday: true,
+            sunday: true,
+          }),
+        ]),
+      });
+    });
+
+    test(':: get activities for child cb', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1.1/community-businesses/2/visit-activities',
+        credentials: twAdminCreds,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: [] });
+    });
+
+    test(':: try to get activities for non-child cb', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1.1/community-businesses/1/visit-activities',
+        credentials: otherCreds,
+      }));
+
+      expect(res.statusCode).toBe(403);
+    });
+
+    test(':: can access activities using external strategy', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1.1/community-businesses/me/visit-activities',
+        credentials: extCreds,
+        strategy: ExtName,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({ result: expect.arrayContaining(
+        [
+          expect.objectContaining({
+            category: 'Socialising',
+            id: 2,
+            name: 'Wear Pink',
+            monday: false,
+            tuesday: false,
+            wednesday: true,
+            thursday: false,
+            friday: false,
+            saturday: false,
+            sunday: false,
+          }),
+          expect.objectContaining({
+            id: 3,
+            name: 'Free Running',
+            category: 'Sports',
+            monday: false,
+            tuesday: true,
+            wednesday: true,
+            thursday: false,
+            friday: true,
+            saturday: true,
+            sunday: true,
+          }),
+        ]),
+      });
+    });
+  });
+
+  describe('PUT', () => {
+    test(':: successfully updates a visit activity', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'PUT',
+        url: '/v1.1/community-businesses/me/visit-activities/2',
+        payload: { monday: true, category: 'Sports' },
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          id: 2,
+          category: 'Sports',
+          name: 'Wear Pink',
+          monday: true,
+          tuesday: false,
+          wednesday: true,
+          thursday: false,
+          friday: false,
+          saturday: false,
+          sunday: false,
+        }),
+      });
+    });
+
+    test(':: successfully change casing on a visit activity', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'PUT',
+        url: '/v1.1/community-businesses/me/visit-activities/2',
+        payload: { name: 'wear pink', category: 'Sports' },
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual({
+        result: expect.objectContaining({
+          id: 2,
+          category: 'Sports',
+          name: 'wear pink',
+          monday: false,
+          tuesday: false,
+          wednesday: true,
+          thursday: false,
+          friday: false,
+          saturday: false,
+          sunday: false,
+        }),
+      });
+    });
+
+    test(':: cannot update activity owned by different CB', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'PUT',
+        url: '/v1.1/community-businesses/me/visit-activities/2',
+        payload: { monday: true },
+        credentials: otherCreds,
+      }));
+
+      expect(res.statusCode).toBe(403);
+    });
+  });
+
+  describe('POST', () => {
+    test(':: successfully add a new activity', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'POST',
+        url: '/v1.1/community-businesses/me/visit-activities',
+        payload: {
+          name: 'Base Jumping',
+          category: 'Adult skills building',
+        },
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect(res.result).toEqual(
+        { result: expect.objectContaining(
+          {
+            name: 'Base Jumping',
+            monday: false,
+            tuesday: false,
+            wednesday: false,
+            thursday: false,
+            friday: false,
+            saturday: false,
+            sunday: false,
+          }),
+        });
+    });
+  });
+
+  describe('DELETE', () => {
+    test(':: successfully deletes an activity', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'DELETE',
+        url: '/v1.1/community-businesses/me/visit-activities/1',
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result.deletedAt).toBeTruthy();
+
+      const check = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1.1/community-businesses/me/visit-activities',
+        credentials,
+      }));
+
+      expect(
+        (<any> check.result).result
+          .map((a: any) => a.name)
+          .includes('Absailing')
+      ).toBeFalsy();
+    });
+
+    test(':: any payload and/or querystring is ignored', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'DELETE',
+        url: '/v1.1/community-businesses/me/visit-activities/1?foo=bar',
+        credentials,
+        payload: { activity: 2 },
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result.deletedAt).toBeTruthy();
+
+      const check = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1.1/community-businesses/me/visit-activities',
+        credentials,
+      }));
+
+      expect(
+        (<any> check.result).result
+          .map((a: any) => a.name)
+          .includes('Absailing')
+      ).toBeFalsy();
+    });
+  });
+});
