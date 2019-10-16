@@ -5,7 +5,6 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import DatePickerConstraints from './datePickerConstraints';
 import UtilityBar from '../components/UtilityBar';
-import ProjectActivityToggle from '../components/ProjectActivityToggle';
 import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
 import { H1 } from '../../../lib/ui/components/Headings';
 import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
@@ -101,7 +100,6 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
             onDownloadClick={downloadAsCsv}
-            customToggle={<ProjectActivityToggle active="project" onChange={() => {}} />}
           />
         </Col>
       </Row>
