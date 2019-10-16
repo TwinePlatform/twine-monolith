@@ -36,7 +36,6 @@ const Label = styled.Text<{bold?: boolean; textAlign: string}>`
   color: ${ColoursEnum.darkGrey};
   fontFamily: ${(props) => (props.bold ? FontsEnum.medium : FontsEnum.light)}
   fontSize: 15;
-  letterSpacing: 1.2;
   paddingBottom: 6;
 `;
 
