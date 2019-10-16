@@ -30,7 +30,7 @@ const Button = styled(B)`
 const LinkText = styled.Text`
   marginLeft: 2;
   textAlign: center;
-  color: ${ColoursEnum.purple};
+  color: ${ColoursEnum.darkPurple};
   fontSize: 15;
 `;
 
@@ -50,12 +50,12 @@ export const ArchiveButton: FC<Props> = ({ onPressOne, onPressTwo }) => (
   <ButtonContainer>
     <Button transparent onPress={onPressOne}>
       <BorderRight>
-        <MaterialCommunityIcons name="square-edit-outline" outline size={20} color={ColoursEnum.purple} />
+        <MaterialCommunityIcons name="square-edit-outline" outline size={20} color={ColoursEnum.darkPurple} />
         <LinkText>Edit</LinkText>
       </BorderRight>
     </Button>
     <Button transparent onPress={onPressTwo}>
-      <MaterialIcons name="archive" outline size={20} color={ColoursEnum.purple} />
+      <MaterialIcons name="archive" outline size={20} color={ColoursEnum.darkPurple} />
       <LinkText>Archive</LinkText>
     </Button>
   </ButtonContainer>
@@ -65,12 +65,12 @@ export const DeleteButton: FC<Props> = ({ onPressOne, onPressTwo }) => (
   <ButtonContainer>
     <Button transparent onPress={onPressOne}>
       <BorderRight>
-        <MaterialCommunityIcons name="square-edit-outline" outline size={20} color={ColoursEnum.purple} />
+        <MaterialCommunityIcons name="square-edit-outline" outline size={20} color={ColoursEnum.darkPurple} />
         <LinkText>Edit</LinkText>
       </BorderRight>
     </Button>
     <Button transparent onPress={onPressTwo}>
-      <MaterialCommunityIcons name="trash-can-outline" outline size={20} color={ColoursEnum.purple} />
+      <MaterialCommunityIcons name="trash-can-outline" outline size={20} color={ColoursEnum.darkPurple} />
       <LinkText>Delete</LinkText>
     </Button>
   </ButtonContainer>
@@ -80,7 +80,7 @@ export const RestoreButton: FC<Pick<Props, 'onPressOne'>> = ({ onPressOne }) => 
   <ButtonContainer>
     <Button transparent />
     <Button transparent onPress={onPressOne}>
-      <MaterialCommunityIcons name="undo" outline size={20} color={ColoursEnum.purple} />
+      <MaterialCommunityIcons name="undo" outline size={20} color={ColoursEnum.darkPurple} />
       <LinkText>Restore</LinkText>
     </Button>
   </ButtonContainer>

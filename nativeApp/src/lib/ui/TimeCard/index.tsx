@@ -50,7 +50,7 @@ const TimeCard: FC<Props> = (props) => {
   return (
     <CardWithButtons removalType="delete">
       <HoursAnMinutesText align="left" timeValues={timeValues}>
-        <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard} />
+        <MaterialCommunityIcons name="clock-outline" outline size={30} color={ColoursEnum.mustard} />
       </HoursAnMinutesText>
       <DetailsContainer>
         <LabelContainer>
