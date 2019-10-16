@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
 
 import { MaterialIcons } from '@expo/vector-icons';
@@ -85,8 +85,9 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({ date, title, buttonT
     >
       <HeadingContainer>
         <MaterialIcons name="assignment" outline size={35} color={iconColour} />
-        {active && <InputHeading selectTextOnFocus autoFocus onChangeText={setValue} value={value} />}
-        {!active && <Heading2>{value}</Heading2>}
+        {active
+          ? <InputHeading selectTextOnFocus autoFocus onChangeText={setValue} value={value} />
+          : <Heading2>{value}</Heading2>}
       </HeadingContainer>
       <Description>{`Created: ${date}`}</Description>
     </CardWithButtons>
