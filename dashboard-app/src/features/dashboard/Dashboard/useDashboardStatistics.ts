@@ -66,7 +66,7 @@ export default () => {
     // most active months (12 months)
     setTimeStats(
       findMostActive(
-        collectBy((log) => moment(log.startedAt).format(Months.format.abreviated), fullLogs)
+        collectBy((log) => moment(log.startedAt).format(Months.format.abbreviated), fullLogs)
       )
     );
 
@@ -109,7 +109,7 @@ export default () => {
   }
 };
 
-const getCurrentMonth = () => moment().format(Months.format.abreviated);
+const getCurrentMonth = () => moment().format(Months.format.abbreviated);
 
 export const activityStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
   if (!pts) {
