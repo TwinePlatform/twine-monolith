@@ -1,31 +1,12 @@
 # Developer Setup Guide
 
 ## Contents
-1. [Pre-requisites](#prerequisites)
 1. [Getting started](#getting-started)
 1. [Configuration](#configuration)
 1. [Commands](#commands)
 
-## Pre-requisites
-* `node` (v10.2.0+) and `npm` (v6.7.0+)
-
 ## Getting Started
-Clone the repo with `https` or `ssh`:
-
-```sh
-# https
-git clone https://github.com/TwinePlatform/volunteer-dashboard.git
-```
-
-```sh
-# ssh
-git clone git@github.com:TwinePlatform/volunteer-dashboard.git
-```
-
-After cloning, `cd` into the repo and install dependencies:
-```sh
-npm i
-```
+Instructions for setting up the monorepo [can be found here](../../docs).
 
 ## Configuration
 To configure the application see the [configuration guide](./config_guide.md).
