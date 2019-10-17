@@ -3,6 +3,9 @@
   "name": "twine-util",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": "12.x"
+  },
   "main": "index.js",
   "scripts": {
     "test": "jest",
