@@ -384,20 +384,6 @@ export type VolunteerLogCollection = Collection<VolunteerLog> & {
     u: User,
     c: CommunityBusiness,
     payload: object) => Promise<void>
-  getProjects: (
-    k: Knex,
-    c: CommunityBusiness) => Promise<VolunteerProject[]>
-  addProject: (
-    k: Knex,
-    c: CommunityBusiness,
-    name: string) => Promise<VolunteerProject>
-  updateProject: (
-    k: Knex,
-    p: VolunteerProject,
-    c: Partial<VolunteerProject>) => Promise<VolunteerProject[]>
-  deleteProject: (
-    k: Knex,
-    p: VolunteerProject) => Promise<Int>
   syncLogs: (
     k: Knex,
     c: CommunityBusiness,
@@ -405,6 +391,13 @@ export type VolunteerLogCollection = Collection<VolunteerLog> & {
     ls: Partial<VolunteerLog>[]) => Promise<{ synced: Int, ignored: Int }>
 };
 
+export type VolunteerProjectCollection = {
+  getDefault: (c: CommunityBusiness) => VolunteerProject;
+  fromCommunityBusiness: (k: Knex, c: CommunityBusiness) => Promise<VolunteerProject[]>;
+  add: (k: Knex, cb: CommunityBusiness, name: string) => Promise<VolunteerProject>;
+  update: (k: Knex, p: VolunteerProject, ch: Partial<VolunteerProject>) => Promise<VolunteerProject[]>;
+  delete: (k: Knex, p: VolunteerProject) => Promise<number>;
+};
 
 /*
  * Input query types

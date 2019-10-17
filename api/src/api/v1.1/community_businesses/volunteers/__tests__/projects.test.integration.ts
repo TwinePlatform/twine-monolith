@@ -55,6 +55,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual({
         result: [
+          { name: 'General', organisationId: organisation.id },
           { name: 'Party', organisationId: organisation.id },
           { name: 'Take over the world', organisationId: organisation.id },
         ].map(expect.objectContaining),
@@ -98,7 +99,7 @@ describe('API /community-businesses/me/volunteers/projects', () => {
       }));
 
       expect(res2.statusCode).toBe(200);
-      expect((res2.result as any).result).toHaveLength(3);
+      expect((res2.result as any).result).toHaveLength(4);
     });
 
     test('cannot create project with a duplicate name', async () => {
