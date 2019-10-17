@@ -6,8 +6,8 @@ import { Order } from 'twine-util/arrays';
 import { GraphColourList } from '../../lib/ui/design_system';
 
 export const getTitleForMonthPicker = (title: string, from: Date, to: Date): TitleString => {
-  const dateRangeString = `${moment(from).format(Months.format.abreviated)} -\
-  ${moment(to).format(Months.format.abreviated)}`;
+  const dateRangeString = `${moment(from).format(Months.format.abbreviated)} -\
+  ${moment(to).format(Months.format.abbreviated)}`;
 
   return [
     title,

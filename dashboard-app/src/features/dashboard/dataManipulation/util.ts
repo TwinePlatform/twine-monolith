@@ -5,6 +5,7 @@ import { DurationUnitEnum } from '../../../types';
 import { AggregatedData } from './logsToAggregatedData';
 import Months, { MonthsFormatEnum } from '../../../lib/util/months';
 import { renameKeys } from 'twine-util/objects';
+import { truncate } from 'twine-util/string';
 
 
 export const isDateString = (x: any): boolean => {
@@ -68,3 +69,8 @@ export const abbreviateMonths = (format: MonthsFormatEnum) => evolve({
   rows: (rows: Dictionary<string | number>[]) => rows
     .map((row) => Objects.mapKeys((k) => abbreviateIfDateString(format, k))(row)),
 }); // TODO: add test
+
+export const abbreviateChartLabels = (labels: string[]) =>
+  labels.map((l) => isDateString(l)
+    ? abbreviateDateString(Months.format.abbreviated, l).split(' ')
+    : truncate(l, 10));
