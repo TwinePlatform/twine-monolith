@@ -2,6 +2,9 @@
   "name": "twine-visitor-app",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "12.x"
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "chart.js": "^2.7.2",
