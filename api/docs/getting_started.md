@@ -1,7 +1,6 @@
 # Developer Setup Guide
 
 ## Contents
-
 1.  [Getting started](#getting-started)
 1.  [Running the server](#running-the-server)
 1.  [Database](#database)
