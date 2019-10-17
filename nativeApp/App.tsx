@@ -15,7 +15,6 @@ import { ColoursEnum } from './src/lib/ui/colours';
 import AdminRouter from './src/screens/admin_views/AdminRouter';
 import SettingsButton from './src/lib/ui/SettingsButton';
 import Settings from './src/screens/shared_views/Settings';
-import AdminAddProject from './src/screens/admin_views/Projects/AddProject';
 import AdminEditTime from './src/screens/admin_views/AdminTime/EditTime';
 import AdminEditVolunteer from './src/screens/admin_views/Volunteers/EditVolunteer';
 import AdminAddVolunteer from './src/screens/admin_views/Volunteers/AddVolunteer';
@@ -30,7 +29,6 @@ const getSettingsButton = (navigation) => {
 };
 
 const additionalAdminPages = {
-  AdminAddProject,
   AdminEditTime,
   AdminEditVolunteer,
   AdminAddVolunteer,

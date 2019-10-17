@@ -3,10 +3,10 @@ import styled from 'styled-components/native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { withNavigation, NavigationInjectedProps } from 'react-navigation';
-import { ColoursEnum } from '../../../../lib/ui/colours';
-import CardWithButtons, { ButtonType } from '../../../../lib/ui/CardWithButtons';
-import { FontsEnum, Heading2 as H2 } from '../../../../lib/ui/typography';
-import useToggle from '../../../../lib/hooks/useToggle';
+import { ColoursEnum } from '../../../lib/ui/colours';
+import CardWithButtons, { ButtonType } from '../../../lib/ui/CardWithButtons';
+import { FontsEnum, Heading2 as H2 } from '../../../lib/ui/typography';
+import useToggle from '../../../lib/hooks/useToggle';
 
 /*
  * Types
