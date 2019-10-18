@@ -1,10 +1,12 @@
 import _axios from 'axios';
 import { RoleEnum } from './enums'
 
+const API_VERSION = 'v1.1';
+
 const baseURL =
   process.env && process.env.NODE_ENV === 'development'
-    ? 'http://localhost:4000/v1'
-    : 'https://api.twine-together.com/v1';
+    ? `http://localhost:4000/${API_VERSION}`
+    : `https://api.twine-together.com/${API_VERSION}`;
 
 const axios = _axios.create({
   baseURL,
