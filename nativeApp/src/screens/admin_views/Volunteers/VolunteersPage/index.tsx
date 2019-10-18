@@ -22,7 +22,7 @@ type Props = {
 
 
 const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) => (
-  <Page heading="Volunteers">
+  <Page heading="Volunteers" withAddBar>
     <AddBar title="Add Volunteer" onPress={() => navigation.navigate('AdminAddVolunteer')} />
     <VolunteerCard id={1} title="Kara Thrace" date="11/11/18" />
     <VolunteerCard id={1} title="Lee Adama" date="11/11/18" />

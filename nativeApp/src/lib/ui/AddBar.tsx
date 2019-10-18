@@ -21,9 +21,8 @@ const Container = styled.View`
 `;
 
 const Button = styled.TouchableOpacity`
-  paddingTop: 0;
+  paddingTop: 10;
   paddingBottom: 10;
-  // marginTop:0;
 `;
 
 const Text = styled.Text`

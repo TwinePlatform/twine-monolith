@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import Tabs from '../../../lib/ui/Tabs';
 import ProjectCard from './ProjectCard';
 import Page from '../../../lib/ui/Page';
+import AddBar from '../../../lib/ui/AddBar';
 
 /*
  * Types
@@ -33,7 +34,8 @@ const TabTwo: FC<{}> = () => (
  * Component
  */
 const Projects: FC<Props> = () => (
-  <Page heading="Projects">
+  <Page heading="Projects" withAddBar>
+    <AddBar onPress={() => {}} title="Add Project" />
     <Tabs
       tabOne={['Active', TabOne]}
       tabTwo={['Archived', TabTwo]}
