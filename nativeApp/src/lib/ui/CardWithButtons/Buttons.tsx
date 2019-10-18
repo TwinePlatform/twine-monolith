@@ -48,7 +48,7 @@ const BorderRight = styled.View`
 /*
  * Components
  */
-export const ArchiveButton: FC<Props<ArchiveButtonConfig>> = ({ buttonConfig: { onArchive, onEdit } }) => (
+export const ArchiveButton: FC<Props<ArchiveButtonConfig>> = ({ buttonConfig: { onArchive, onEdit } }) => ( //eslint-disable-line
   <ButtonContainer>
     <Button transparent onPress={onEdit}>
       <BorderRight>

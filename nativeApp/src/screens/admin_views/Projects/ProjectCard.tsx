@@ -48,7 +48,11 @@ const Description = styled.Text`
   marginLeft: 4;
 `;
 
-const getButtonConfig = (buttonType: ButtonType, active: boolean, buttonConfigs: ButtonConfig[]) => {
+const getButtonConfig = (
+  buttonType: ButtonType,
+  active: boolean,
+  buttonConfigs: ButtonConfig[],
+) => {
   switch (buttonType) {
     case 'restore':
       return buttonConfigs.find((x) => x.buttonType === 'restore');
