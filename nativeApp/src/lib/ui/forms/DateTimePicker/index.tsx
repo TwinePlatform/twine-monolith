@@ -9,7 +9,7 @@ import _DateTimePicker from 'react-native-modal-datetime-picker';
 
 import { Forms } from '../enums';
 import { ColoursEnum } from '../../colours';
-import useVisibility from '../../../hooks/useVisibility';
+import useToggle from '../../../hooks/useToggle';
 
 /*
  * Types
@@ -69,19 +69,19 @@ const DateTimePicker: FC<Props> = (props) => {
   const {
     onConfirm, value, mode, label, minDate, maxDate,
   } = props;
-  const { isVisible, flipVisibility } = useVisibility(false);
+  const [isVisible, toggleVisibility] = useToggle(false);
 
   const onConfirmAndHide = (date: Date) => {
     onConfirm(date);
-    flipVisibility();
+    toggleVisibility();
   };
 
   return (
     <Item>
       <Label>{label}</Label>
       {value
-        ? <Value onPress={flipVisibility}>{displayValue(mode, value)}</Value>
-        : <PlaceHolder onPress={flipVisibility}>{`Select ${mode}`}</PlaceHolder>}
+        ? <Value onPress={toggleVisibility}>{displayValue(mode, value)}</Value>
+        : <PlaceHolder onPress={toggleVisibility}>{`Select ${mode}`}</PlaceHolder>}
       <_DateTimePicker
         minimumDate={minDate}
         maximumDate={maxDate}
@@ -89,7 +89,7 @@ const DateTimePicker: FC<Props> = (props) => {
         isVisible={isVisible}
         mode={mode}
         onConfirm={onConfirmAndHide}
-        onCancel={flipVisibility}
+        onCancel={toggleVisibility}
         titleIOS={`Pick a ${mode}`}
       />
     </Item>

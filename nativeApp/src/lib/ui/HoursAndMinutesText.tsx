@@ -16,19 +16,25 @@ type Props = {
  * Styles
  */
 
-const ValueContainer = styled.View<Pick<Props, 'align'>>`
+const Container = styled.View<Pick<Props, 'align'>>`
   justifyContent: ${({ align }) => (align === 'center' ? 'center' : 'flex-start')};
   width: 100%;
   flexDirection: row;
-  alignItems: flex-end;
+  alignItems: center;
   marginBottom: 5;
+`;
+
+const ValuesContainer = styled.View`
+  flexDirection: row;
+  justifyContent: center;
+  alignItems: flex-end;
 `;
 
 const Value = styled.Text`
   marginLeft: 5;
   color: ${ColoursEnum.darkGrey};
-  fontSize: 35;
-  font-family: ${FontsEnum.medium}
+  fontSize: 30;
+  font-family: ${FontsEnum.medium};
 `;
 
 const Unit = styled.Text`
@@ -36,7 +42,7 @@ const Unit = styled.Text`
   color: ${ColoursEnum.darkGrey};
   fontSize: 18;
   letterSpacing: 1.2;
-  paddingBottom: 6;
+  paddingBottom: 3;
 `;
 
 /*
@@ -47,13 +53,15 @@ const HourAndMinutesText: FC<Props> = (props) => {
     timeValues, children: icon, align,
   } = props;
   return (
-    <ValueContainer align={align}>
-      {icon}
-      <Value>{timeValues[0]}</Value>
-      <Unit>hours</Unit>
-      <Value>{timeValues[1]}</Value>
-      <Unit>minutes</Unit>
-    </ValueContainer>
+    <Container align={align}>
+      <ValuesContainer>
+        {icon}
+        <Value>{timeValues[0]}</Value>
+        <Unit>hours</Unit>
+        <Value>{timeValues[1]}</Value>
+        <Unit>minutes</Unit>
+      </ValuesContainer>
+    </Container>
   );
 };
 

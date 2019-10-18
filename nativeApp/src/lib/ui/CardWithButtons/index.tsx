@@ -3,15 +3,16 @@ import styled from 'styled-components/native';
 import { Card as C } from 'native-base';
 
 import { ColoursEnum } from '../colours';
-import { ArchiveButton, DeleteButton, RestoreButton } from './Buttons';
+import {
+  ArchiveButton, DeleteButton, RestoreButton, SaveButton,
+} from './Buttons';
+import { ButtonConfig } from './types';
 
 /*
  * Types
  */
-
-export type RemovalType = 'archive' | 'delete' | 'restore';
 type Props = {
-  removalType: RemovalType;
+  buttonConfig: ButtonConfig;
 }
 
 /*
@@ -35,15 +36,18 @@ const TopContainer = styled.View`
  * Component
  */
 const CardWithButtons: FC<Props> = (props) => {
-  const { children, removalType } = props;
+  const {
+    children, buttonConfig,
+  } = props;
   return (
     <Card>
       <TopContainer>
         {children}
       </TopContainer>
-      {removalType === 'archive' && <ArchiveButton />}
-      {removalType === 'delete' && <DeleteButton />}
-      {removalType === 'restore' && <RestoreButton />}
+      {buttonConfig.buttonType === 'archive' && <ArchiveButton buttonConfig={buttonConfig} />}
+      {buttonConfig.buttonType === 'delete' && <DeleteButton buttonConfig={buttonConfig} />}
+      {buttonConfig.buttonType === 'restore' && <RestoreButton buttonConfig={buttonConfig} />}
+      {buttonConfig.buttonType === 'save' && <SaveButton buttonConfig={buttonConfig} />}
     </Card>
 
   );

@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 // import styled from 'styled-components/native';
-
-import Page from '../../../lib/ui/Page';
+import Page from '../../../../lib/ui/Page';
 
 /*
  * Types
@@ -16,10 +15,10 @@ type Props = {
 /*
  * Component
  */
-const ForgotPassword: FC<Props> = () => (
-  <Page heading="Forgot Password">
+const AddVolunteer: FC<Props> = () => (
+  <Page heading="Add Volunteer">
     {}
   </Page>
 );
 
-export default ForgotPassword;
+export default AddVolunteer;

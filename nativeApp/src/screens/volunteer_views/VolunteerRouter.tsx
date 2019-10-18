@@ -8,6 +8,7 @@ import VolunteerHome from './VolunteerHome';
 import Time from './Time';
 import { ColoursEnum } from '../../lib/ui/colours';
 import AddTime from './AddTime';
+import { FontsEnum } from '../../lib/ui/typography';
 
 const getIconName = (name: string) => {
   switch (name) {
@@ -38,6 +39,7 @@ const TabNavigator = createBottomTabNavigator({
   tabBarOptions: {
     activeTintColor: ColoursEnum.purple,
     inactiveTintColor: ColoursEnum.darkGrey,
+    labelStyle: { letterSpacing: 1.02, fontFamily: FontsEnum.regular },
   },
 });
 

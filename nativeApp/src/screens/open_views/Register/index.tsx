@@ -5,6 +5,7 @@ import { Picker } from 'react-native';
 import { CommunityBusinesses } from '../../../lib/api';
 import useRequest from '../../../lib/hooks/requestHook';
 import { Heading } from '../../../lib/ui/typography';
+import Page from '../../../lib/ui/Page';
 
 /*
  * Types
@@ -15,11 +16,6 @@ type Props = {
 /*
  * Styles
  */
-const View = styled.View`
-  alignItems: center;
-  justifyContent: center;
-  flex: 1;
-`;
 
 const StyledPicker = styled.Picker`
   width: 200;
@@ -37,12 +33,12 @@ export default function Register() {
   const [data, error] = useRequest(CommunityBusinesses.getVolunteerActivities);
 
   return (
-    <View>
+    <Page heading="Register">
       <Heading>Register</Heading>
       <StyledPicker>
         {data && data.map((x) => <Picker.Item key={x.id} label={x.name} value={x.name} />)}
       </StyledPicker>
       {error && <Text>{JSON.stringify(error)}</Text>}
-    </View>
+    </Page>
   );
 }

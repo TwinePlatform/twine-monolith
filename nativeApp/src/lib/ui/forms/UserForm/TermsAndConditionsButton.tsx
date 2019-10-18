@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import { Item as I, Label as L, Button as B } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
-import { ColoursEnum } from '../../../lib/ui/colours';
+import { ColoursEnum } from '../../colours';
 
 
 /*
@@ -17,7 +17,7 @@ type Props = {
 const Item = styled(I)`
   alignItems: center;
   marginLeft: 0;
-  width:100%;
+  width: 100%;
   justifyContent: space-between;
 `;
 
@@ -32,7 +32,7 @@ const Button = styled(B)`
 /*
  * Component
  */
-const Toggle: FC<Props> = () => (
+const TermsAndConditonsButton: FC<Props> = () => (
   <Item inlineLabel>
     <Button transparent>
       <Label>Terms and Conditions</Label>
@@ -41,4 +41,4 @@ const Toggle: FC<Props> = () => (
   </Item>
 );
 
-export default Toggle;
+export default TermsAndConditonsButton;

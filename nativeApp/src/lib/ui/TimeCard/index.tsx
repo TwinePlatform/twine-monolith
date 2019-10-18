@@ -1,11 +1,14 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { withNavigation, NavigationInjectedProps } from 'react-navigation';
 import CardWithButtons from '../CardWithButtons';
 
 import { ColoursEnum } from '../colours';
 import { FontsEnum } from '../typography';
 import HoursAnMinutesText from '../HoursAndMinutesText';
+import { DeleteButtonConfig } from '../CardWithButtons/types';
+
 
 /*
  * Types
@@ -43,14 +46,20 @@ const Label = styled.Text<{bold?: boolean; textAlign: string}>`
 /*
  * Component
  */
-const TimeCard: FC<Props> = (props) => {
+const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
   const {
-    timeValues, date, labels, volunteer,
+    timeValues, date, labels, volunteer, navigation,
   } = props;
+
+  const buttonConfig: DeleteButtonConfig = {
+    buttonType: 'delete',
+    onDelete: () => {},
+    onEdit: () => { navigation.navigate('AdminEditTime'); },
+  };
   return (
-    <CardWithButtons removalType="delete">
+    <CardWithButtons buttonConfig={buttonConfig}>
       <HoursAnMinutesText align="left" timeValues={timeValues}>
-        <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard} />
+        <MaterialCommunityIcons name="clock-outline" outline size={30} color={ColoursEnum.mustard} />
       </HoursAnMinutesText>
       <DetailsContainer>
         <LabelContainer>
@@ -66,4 +75,4 @@ const TimeCard: FC<Props> = (props) => {
   );
 };
 
-export default TimeCard;
+export default withNavigation(TimeCard);

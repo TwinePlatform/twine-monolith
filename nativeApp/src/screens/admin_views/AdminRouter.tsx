@@ -7,9 +7,10 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { ColoursEnum } from '../../lib/ui/colours';
 import AdminHome from './AdminHome';
 import Projects from './Projects';
-import Volunteers from './Volunteers';
-import AdminTime from './AdminTime';
+import Volunteers from './Volunteers/VolunteersPage';
+import AdminTime from './AdminTime/AdminTimePage';
 import AddTime from './AddTime';
+import { FontsEnum } from '../../lib/ui/typography';
 
 const getIconName = (name: string) => {
   switch (name) {
@@ -46,6 +47,7 @@ const TabNavigator = createBottomTabNavigator({
   tabBarOptions: {
     activeTintColor: ColoursEnum.purple,
     inactiveTintColor: ColoursEnum.darkGrey,
+    labelStyle: { letterSpacing: 1.02, fontFamily: FontsEnum.regular },
   },
 });
 

@@ -1,10 +1,7 @@
 import React, { FC } from 'react';
 // import styled from 'styled-components/native';
-
-import { NavigationInjectedProps } from 'react-navigation';
-import Page from '../../../lib/ui/Page';
-import TimeForm from '../../../lib/ui/forms/TimeForm';
-
+import Page from '../../../../lib/ui/Page';
+import TimeForm from '../../../../lib/ui/forms/TimeForm';
 
 /*
  * Types
@@ -15,7 +12,6 @@ type Props = {
 /*
  * Styles
  */
-
 const activities = [
   { id: 0, name: 'Office work' },
   { id: 1, name: 'Support' },
@@ -31,12 +27,11 @@ const projects = [
   { id: 0, name: 'General' },
   { id: 1, name: 'Community Food Project' },
 ];
-
 /*
  * Component
  */
-const AddTime: FC<NavigationInjectedProps & Props> = () => (
-  <Page heading="Add Time">
+const EditTime: FC<Props> = () => (
+  <Page heading="Edit Time">
     <TimeForm
       forUser="admin"
       projects={projects}
@@ -47,9 +42,4 @@ const AddTime: FC<NavigationInjectedProps & Props> = () => (
   </Page>
 );
 
-
-AddTime.navigationOptions = {
-  title: 'Add Time',
-};
-
-export default AddTime;
+export default EditTime;
