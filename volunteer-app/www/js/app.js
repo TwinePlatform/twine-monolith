@@ -35,10 +35,10 @@
 				debug: false,
 				environment: 'live',	// dev | stage | live
 				apiBaseUrl: {
-					local: 'http://localhost:4000/v1/',
-					dev:   'http://localhost:4000/v1/',
-					stage: 'https://twine-api-staging.herokuapp.com/v1/',
-					live:  'https://api.twine-together.com/v1/',
+					local: 'http://localhost:4000/v1.1/',
+					dev:   'http://localhost:4000/v1.1/',
+					stage: 'https://twine-api-staging.herokuapp.com/v1.1/',
+					live:  'https://api.twine-together.com/v1.1/',
 				},
 				adminBaseUrl: {
 					local: 'http://localhost:5000/',
