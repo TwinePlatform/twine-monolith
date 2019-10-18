@@ -69,7 +69,7 @@ const DateTimePicker: FC<Props> = (props) => {
   const {
     onConfirm, value, mode, label, minDate, maxDate,
   } = props;
-  const { active: isVisible, toggle: toggleVisibility } = useToggle(false);
+  const [isVisible, toggleVisibility] = useToggle(false);
 
   const onConfirmAndHide = (date: Date) => {
     onConfirm(date);

@@ -5,11 +5,7 @@ const useToggle = (initialValue = false) => {
 
   const toggle = () => setActive(!active);
 
-  return {
-    active,
-    setActive,
-    toggle,
-  };
+  return [active, toggle] as [boolean, () => boolean];
 };
 
 export default useToggle;

@@ -80,7 +80,7 @@ const getIconColor = (buttonType: ButtonType, active: boolean) => {
  */
 const ProjectCard: FC<NavigationInjectedProps & Props> = ({ date, title, buttonType }) => {
   const [value, setValue] = useState(title);
-  const { active, toggle } = useToggle(false);
+  const [active, toggle] = useToggle(false);
   const iconColour = getIconColor(buttonType, active);
   const buttonConfigs: ButtonConfig[] = [{
     buttonType: 'save',
