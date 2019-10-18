@@ -6,6 +6,7 @@ export { Organisations } from './organisation';
 export { CommunityBusinesses } from './community_business';
 export { VolunteerLogs } from './volunteer_log';
 export { ApiTokens } from './api_token';
+export { VolunteerProjects } from './volunteer_project'
 
 export {
   User,
@@ -16,6 +17,7 @@ export {
   VisitEvent,
   LinkedVisitEvent,
   VolunteerLog,
+  VolunteerProject,
   GenderEnum,
   DisabilityEnum,
   EthnicityEnum,

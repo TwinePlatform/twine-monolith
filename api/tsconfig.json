@@ -18,7 +18,6 @@
   },
   "exclude": [
     "docs",
-    "node_modules",
     "build",
     "__mocks__",
     "tests"

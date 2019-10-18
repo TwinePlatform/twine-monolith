@@ -9,12 +9,12 @@ import {
   Weekday,
   VisitActivity,
   VisitEvent,
-  VolunteerLogCollection,
   UserCollection,
   RoleEnum,
   LinkedVisitEvent,
   Organisation,
-  VisitSignInType
+  VisitSignInType,
+  VolunteerProject
 } from '../../../models/types';
 import { Unpack, AppEnum, Maybe } from '../../../types/internal';
 import { Serialisers } from '../serialisers';
@@ -294,7 +294,7 @@ export namespace Api {
               query: { since: string; until: string };
               pre: { communityBusiness: CommunityBusiness };
             }
-            export type Result = Unpack<ReturnType<VolunteerLogCollection['getProjects']>>;
+            export type Result = VolunteerProject[];
             export type Route = ServerRoute<Request, ResponsePayload<Result>>;
           }
 
@@ -303,7 +303,7 @@ export namespace Api {
               payload: { name: string };
               pre: { communityBusiness: CommunityBusiness };
             }
-            export type Result = Unpack<ReturnType<VolunteerLogCollection['addProject']>>;
+            export type Result = VolunteerProject;
             export type Route = ServerRoute<Request, ResponsePayload<Result>>;
           }
 
@@ -313,7 +313,7 @@ export namespace Api {
                 params: { projectId: string };
                 pre: { communityBusiness: CommunityBusiness };
               }
-              export type Result = Unpack<Unpack<ReturnType<VolunteerLogCollection['getProjects']>>>;
+              export type Result = VolunteerProject;
               export type Route = ServerRoute<Request, ResponsePayload<Result>>;
             }
 
@@ -323,7 +323,7 @@ export namespace Api {
                 payload: { name: string };
                 pre: { communityBusiness: CommunityBusiness };
               }
-              export type Result = Unpack<Unpack<ReturnType<VolunteerLogCollection['updateProject']>>>;
+              export type Result = VolunteerProject;
               export type Route = ServerRoute<Request, ResponsePayload<Result>>;
             }
 
