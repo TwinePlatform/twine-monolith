@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Form as F } from 'native-base';
 
@@ -54,18 +54,17 @@ const UserForm: FC<Props> = ({ onSubmit, initialValues = {} }) => {
   const [gender, setGender] = useState('');
   const [year, setYear] = useState('');
 
-  const useSubmit = () => {
-    useEffect(() => {
-      onSubmit({
-        name,
-        email,
-        number,
-        postcode,
-        gender,
-        year,
-      });
-    }, [name, email, number, postcode, gender, year]);
-  };
+  const useSubmit = useCallback(() => {
+    onSubmit({
+      name,
+      email,
+      number,
+      postcode,
+      gender,
+      year,
+    });
+  }, [name, email, number, postcode, gender, year]);
+
   return (
     <Form>
       <Input label="Full name" onChangeText={setName} value={name} defaultValue={initialValues.name} />
