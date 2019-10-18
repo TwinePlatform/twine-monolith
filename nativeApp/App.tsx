@@ -14,7 +14,10 @@ import { FontsEnum } from './src/lib/ui/typography';
 import { ColoursEnum } from './src/lib/ui/colours';
 import AdminRouter from './src/screens/admin_views/AdminRouter';
 import SettingsButton from './src/lib/ui/SettingsButton';
-import Settings from './src/screens/volunteer_views/Settings';
+import Settings from './src/screens/shared_views/Settings';
+import AdminEditTime from './src/screens/admin_views/AdminTime/EditTime';
+import AdminEditVolunteer from './src/screens/admin_views/Volunteers/EditVolunteer';
+import AdminAddVolunteer from './src/screens/admin_views/Volunteers/AddVolunteer';
 
 
 const getSettingsButton = (navigation) => {
@@ -23,6 +26,12 @@ const getSettingsButton = (navigation) => {
     return <></>;
   }
   return <SettingsButton />;
+};
+
+const additionalAdminPages = {
+  AdminEditTime,
+  AdminEditVolunteer,
+  AdminAddVolunteer,
 };
 
 const RootStack = createStackNavigator(
@@ -42,6 +51,7 @@ const RootStack = createStackNavigator(
     Settings: {
       screen: Settings,
     },
+    ...additionalAdminPages,
   },
   {
 
