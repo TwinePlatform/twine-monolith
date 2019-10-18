@@ -97,7 +97,6 @@ export default class App extends Component {
     const customTextProps = {
       style: {
         fontFamily: FontsEnum.light,
-        letterSpacing: 1.2,
       },
     };
     setCustomText(customTextProps);

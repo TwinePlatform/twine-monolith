@@ -53,6 +53,7 @@ const Unit = styled.Text`
   marginLeft: 15;
   color: ${ColoursEnum.darkGrey};
   fontSize: 20;
+  letterSpacing: 1.2;
   paddingBottom: 10;
 `;
 

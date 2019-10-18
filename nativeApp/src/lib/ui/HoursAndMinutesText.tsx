@@ -41,6 +41,7 @@ const Unit = styled.Text`
   marginLeft: 5;
   color: ${ColoursEnum.darkGrey};
   fontSize: 18;
+  letterSpacing: 1.2;
   paddingBottom: 3;
 `;
 
