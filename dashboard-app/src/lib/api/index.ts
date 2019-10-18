@@ -1,10 +1,12 @@
 import _axios, { AxiosRequestConfig, Method } from 'axios';
-import { Api } from '../../../../api/src/api/v1/types/api';
+import { Api } from '../../../../api/src/api/v1.1/types/api';
 import qs from 'qs';
 
+const API_VERSION = 'v1.1';
+
 const baseURL = process.env.REACT_APP_API_HOST_DOMAIN ?
-  `${process.env.REACT_APP_API_HOST_DOMAIN}/v1`
-  : '/v1';
+  `${process.env.REACT_APP_API_HOST_DOMAIN}/${API_VERSION}`
+  : `/${API_VERSION}`;
 
 export const axios = _axios.create({
   baseURL,
@@ -18,12 +20,6 @@ export const Roles = {
 };
 
 export const CbAdmins = {
-  get: () => {
-    axios.get<Api.CommunityBusinesses.CbAdmins.GET.Result>('/community-businesses/me/cb-admins')
-      .then((res) => {
-        const x = res.data;
-      });
-  },
   login: ({ email, password }: { email: string, password: string }) =>
     axios.post(
       '/users/login',
