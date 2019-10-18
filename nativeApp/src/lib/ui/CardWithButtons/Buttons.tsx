@@ -30,6 +30,7 @@ const Button = styled(B)`
   justifyContent: center;
 `;
 const LinkText = styled.Text`
+  letterSpacing: 1.2;
   marginLeft: 2;
   textAlign: center;
   color: ${ColoursEnum.darkPurple};
