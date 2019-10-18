@@ -1,7 +1,7 @@
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { response, id, since, until, volunteerProject } from '../schema';
-import { VolunteerLogs } from '../../../../models';
+import { VolunteerProjects } from '../../../../models';
 import { getCommunityBusiness } from '../../prerequisites';
 import { Api } from '../../types/api';
 
@@ -36,7 +36,7 @@ const routes: [
     handler: async (request, h) => {
       const { server: { app: { knex } }, pre: { communityBusiness } } = request;
 
-      return VolunteerLogs.getProjects(knex, communityBusiness);
+      return VolunteerProjects.fromCommunityBusiness(knex, communityBusiness);
     },
   },
 
@@ -73,7 +73,7 @@ const routes: [
 
       try {
         // Need to await to allow catching thrown exceptions
-        const project = await VolunteerLogs.addProject(knex, communityBusiness, name);
+        const project = await VolunteerProjects.add(knex, communityBusiness, name);
         return project;
       } catch (error) {
         if (error.message === 'Cannot add duplicate project') {
@@ -114,7 +114,7 @@ const routes: [
         pre: { communityBusiness },
       } = request;
 
-      const projects = await VolunteerLogs.getProjects(knex, communityBusiness);
+      const projects = await VolunteerProjects.fromCommunityBusiness(knex, communityBusiness);
       const project = projects.find((p) => p.id === Number(projectId));
 
       if (!project) {
@@ -160,7 +160,7 @@ const routes: [
         pre: { communityBusiness },
       } = request;
 
-      const projects = await VolunteerLogs.getProjects(knex, communityBusiness);
+      const projects = await VolunteerProjects.fromCommunityBusiness(knex, communityBusiness);
       const project = projects.find((p) => p.id === Number(projectId));
 
       if (!project) {
@@ -168,7 +168,7 @@ const routes: [
       }
 
       try {
-        const [log] = await VolunteerLogs.updateProject(knex, project, payload);
+        const [log] = await VolunteerProjects.update(knex, project, payload);
         return log;
       } catch (error) {
         if (error.message === 'Project name is a duplicate') {
@@ -208,14 +208,14 @@ const routes: [
         pre: { communityBusiness },
       } = request;
 
-      const projects = await VolunteerLogs.getProjects(knex, communityBusiness);
+      const projects = await VolunteerProjects.fromCommunityBusiness(knex, communityBusiness);
       const project = projects.find((p) => p.id === Number(projectId));
 
       if (!project) {
         return Boom.notFound('No project found with this ID under this organisation');
       }
 
-      await VolunteerLogs.deleteProject(knex, project);
+      await VolunteerProjects.delete(knex, project);
 
       return null;
     },

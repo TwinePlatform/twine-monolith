@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { omit } from 'ramda';
 import { getConfig } from '../../../config';
 import { getTrx } from '../../../tests/utils/database';
-import { VolunteerLogs, Users, CommunityBusinesses } from '..';
+import { VolunteerProjects, VolunteerLogs, Users, CommunityBusinesses } from '..';
 
 
 describe('VolunteerLog model', () => {
@@ -263,9 +263,9 @@ describe('VolunteerLog model', () => {
     test('add :: with duplicate deleted project', async () => {
       const now = new Date();
       const cb = await CommunityBusinesses.getOne(trx, { where: { id: 2 } });
-      const projects = await VolunteerLogs.getProjects(trx, cb);
-      await VolunteerLogs.deleteProject(trx, projects[0]);
-      const project = await VolunteerLogs.addProject(trx, cb, projects[0].name);
+      const projects = await VolunteerProjects.fromCommunityBusiness(trx, cb);
+      await VolunteerProjects.delete(trx, projects[0]);
+      const project = await VolunteerProjects.add(trx, cb, projects[0].name);
 
       const log = await VolunteerLogs.add(trx, {
         userId: 6,
@@ -372,117 +372,6 @@ describe('VolunteerLog model', () => {
 
       expect(reGetLog).toBeNull();
       expect(res).toBe(1);
-    });
-  });
-
-  describe('Projects', () => {
-    describe('Read', () => {
-      test('getProjects :: ', async () => {
-        const cb = await CommunityBusinesses.getOne(knex, { where: { id: 1 } });
-        const projects = await VolunteerLogs.getProjects(knex, cb);
-
-        expect(projects).toHaveLength(2);
-        expect(projects).toEqual([
-          { name: 'Party' },
-          { name: 'Community dinner' },
-        ].map(expect.objectContaining));
-      });
-    });
-
-    describe('Write', () => {
-      test('addProject :: happy path', async () => {
-        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
-        const project = await VolunteerLogs.addProject(trx, cb, 'foo');
-
-        expect(project).toEqual(expect.objectContaining({
-          name: 'foo',
-          organisationId: 1,
-        }));
-      });
-
-      test('addProject :: cannot add duplicates within CB', async () => {
-        expect.assertions(1);
-
-        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
-        await VolunteerLogs.addProject(trx, cb, 'foo');
-
-        try {
-          await VolunteerLogs.addProject(trx, cb, 'foo');
-        } catch (error) {
-          expect(error).toBeTruthy();
-        }
-      });
-
-      test('addProject :: can add duplicates across CBs', async () => {
-        const cbOne = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
-        const cbTwo = await CommunityBusinesses.getOne(trx, { where: { id: 2 } });
-        const p1 = await VolunteerLogs.addProject(trx, cbOne, 'foo');
-        const p2 = await VolunteerLogs.addProject(trx, cbTwo, 'foo');
-
-        expect(p1.organisationId).toBe(1);
-        expect(p2.organisationId).toBe(2);
-        expect(omit(['id', 'organisationId'], p1)).toEqual(omit(['id', 'organisationId'], p2));
-      });
-
-      test('updateProject :: happy path', async () => {
-        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
-        const [project] = await VolunteerLogs.getProjects(trx, cb);
-        const updated = await VolunteerLogs.updateProject(trx, project, { name: 'NEW NAME' });
-
-        expect(updated).toHaveLength(1);
-        expect(updated[0]).toEqual(expect.objectContaining({
-          ...omit(['modifiedAt'], project),
-          name: 'NEW NAME',
-        }));
-        expect(updated[0].modifiedAt).not.toEqual(project.modifiedAt);
-      });
-
-      test('updateProject :: cannot update to existing (non-deleted) name', async () => {
-        expect.assertions(1);
-
-        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
-        const projects = await VolunteerLogs.getProjects(trx, cb);
-
-        try {
-          await VolunteerLogs.updateProject(trx, projects[0], { name: projects[1].name });
-        } catch (error) {
-          expect(error).toBeTruthy();
-        }
-      });
-
-      test('updateProject :: can update to existing deleted name', async () => {
-        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
-        const projects = await VolunteerLogs.getProjects(trx, cb);
-        const num = await VolunteerLogs.deleteProject(trx, projects[1]);
-
-        expect(num).toBe(1);
-
-        const updated =
-          await VolunteerLogs.updateProject(trx, projects[0], { name: projects[1].name });
-
-        expect(updated).toHaveLength(1);
-        expect(updated[0]).toEqual(expect.objectContaining({
-          ...omit(['modifiedAt'], projects[0]),
-          name: projects[1].name,
-        }));
-        expect(updated[0].modifiedAt).not.toEqual(projects[0].modifiedAt);
-      });
-
-      test('deleteProject :: ', async () => {
-        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 2 } });
-        const p = await VolunteerLogs.getProjects(trx, cb);
-        const projBefore = p.sort((a, b) => a.id - b.id);
-        const logsBefore = await VolunteerLogs.get(trx, { where: { project: projBefore[0].name } });
-        const numDeleted = await VolunteerLogs.deleteProject(trx, projBefore[0]);
-        const projAfter = await VolunteerLogs.getProjects(trx, cb);
-        const logsAfter = await VolunteerLogs.get(trx, { where: { project: projBefore[0].name } });
-
-        expect(numDeleted).toBe(1);
-        expect(projAfter).toHaveLength(projBefore.length - 1);
-        expect(projAfter).toEqual(projBefore.slice(1));
-        expect(logsBefore.length).toBeGreaterThan(0);
-        expect(logsAfter.length).toBe(0);
-      });
     });
   });
 });
