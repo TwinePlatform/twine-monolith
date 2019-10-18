@@ -11,6 +11,7 @@ import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 import Page from '../../../lib/ui/Page';
 
 import { getTimeDiff } from '../../../lib/utils/time';
+import TimeForm from '../../../lib/ui/forms/TimeForm';
 
 /*
  * Types
@@ -59,37 +60,12 @@ const AddTime: FC<Props> = () => {
 
   return (
     <Page heading="Add Time">
-      <Form>
-        <Label>What project are you volunteering on?</Label>
-        <Dropdown label="Project" options={projects} selectedValue={project} onValueChange={setProject} />
-        <Label>What activity are you doing?</Label>
-        <Dropdown label="Activity" options={activities} selectedValue={activity} onValueChange={setActivity} />
-        <DateTimePicker
-          label="Date"
-          value={date}
-          onConfirm={setDate}
-          mode="date"
-          maxDate={new Date()} // ios only
-        />
-        <DateTimePicker
-          label="Start Time"
-          value={startTime}
-          onConfirm={setStartTime}
-          mode="time"
-        />
-        <DateTimePicker
-          label="End Time"
-          value={endTime}
-          onConfirm={setEndTime}
-          mode="time"
-          minDate={startTime} // ios only
-        />
-        <Label>You volunteered for</Label>
-        <TimeContainer>
-          <HoursAndMinutesText align="center" timeValues={diff} />
-        </TimeContainer>
-        <SubmitButton text="ADD TIME" onPress={() => {}} />
-      </Form>
+      <TimeForm
+        forUser="volunteer"
+        activities={activities}
+        projects={projects}
+        onSubmit={() => {}}
+      />
     </Page>
   );
 };
