@@ -6,16 +6,13 @@ import { ColoursEnum } from '../colours';
 import {
   ArchiveButton, DeleteButton, RestoreButton, SaveButton,
 } from './Buttons';
+import { ButtonConfig } from './types';
 
 /*
  * Types
  */
-
-export type ButtonType = 'archive' | 'delete' | 'restore' | 'save';
 type Props = {
-  buttonType: ButtonType;
-  onPressOne: () => void;
-  onPressTwo: () => void;
+  buttonConfig: ButtonConfig;
 }
 
 /*
@@ -40,17 +37,17 @@ const TopContainer = styled.View`
  */
 const CardWithButtons: FC<Props> = (props) => {
   const {
-    children, buttonType, onPressOne, onPressTwo,
+    children, buttonConfig,
   } = props;
   return (
     <Card>
       <TopContainer>
         {children}
       </TopContainer>
-      {buttonType === 'archive' && <ArchiveButton onPressOne={onPressOne} onPressTwo={onPressTwo} />}
-      {buttonType === 'delete' && <DeleteButton onPressOne={onPressOne} onPressTwo={onPressTwo} />}
-      {buttonType === 'restore' && <RestoreButton onPressOne={onPressOne} />}
-      {buttonType === 'save' && <SaveButton onPressOne={onPressOne} />}
+      {buttonConfig.buttonType === 'archive' && <ArchiveButton buttonConfig={buttonConfig} />}
+      {buttonConfig.buttonType === 'delete' && <DeleteButton buttonConfig={buttonConfig} />}
+      {buttonConfig.buttonType === 'restore' && <RestoreButton buttonConfig={buttonConfig} />}
+      {buttonConfig.buttonType === 'save' && <SaveButton buttonConfig={buttonConfig} />}
     </Card>
 
   );

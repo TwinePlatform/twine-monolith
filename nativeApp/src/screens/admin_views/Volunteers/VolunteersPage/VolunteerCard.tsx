@@ -6,6 +6,7 @@ import { withNavigation, NavigationInjectedProps } from 'react-navigation';
 import { ColoursEnum } from '../../../../lib/ui/colours';
 import CardWithButtons from '../../../../lib/ui/CardWithButtons';
 import { Heading2 as H2 } from '../../../../lib/ui/typography';
+import { DeleteButtonConfig } from '../../../../lib/ui/CardWithButtons/types';
 
 /*
  * Types
@@ -40,18 +41,21 @@ const Description = styled.Text`
 /*
  * Component
  */
-const VolunteerCard: FC<NavigationInjectedProps & Props> = ({ navigation, date, title }) => (
-  <CardWithButtons
-    onPressOne={() => navigation.navigate('AdminEditVolunteer')}
-    onPressTwo={() => {}}
-    buttonType="delete"
-  >
-    <HeadingContainer>
-      <MaterialIcons name="person-outline" outline size={35} color={ColoursEnum.mustard} />
-      <Heading2>{title}</Heading2>
-    </HeadingContainer>
-    <Description>{`Joined: ${date}`}</Description>
-  </CardWithButtons>
-);
+const VolunteerCard: FC<NavigationInjectedProps & Props> = ({ navigation, date, title }) => {
+  const buttonConfig: DeleteButtonConfig = {
+    buttonType: 'delete',
+    onEdit: () => navigation.navigate('AdminEditVolunteer'),
+    onDelete: () => {},
+  };
+  return (
+    <CardWithButtons buttonConfig={buttonConfig}>
+      <HeadingContainer>
+        <MaterialIcons name="person-outline" outline size={35} color={ColoursEnum.mustard} />
+        <Heading2>{title}</Heading2>
+      </HeadingContainer>
+      <Description>{`Joined: ${date}`}</Description>
+    </CardWithButtons>
+  );
+};
 
 export default withNavigation(VolunteerCard);

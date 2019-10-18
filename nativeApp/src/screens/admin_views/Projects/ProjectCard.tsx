@@ -4,9 +4,10 @@ import styled from 'styled-components/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { withNavigation, NavigationInjectedProps } from 'react-navigation';
 import { ColoursEnum } from '../../../lib/ui/colours';
-import CardWithButtons, { ButtonType } from '../../../lib/ui/CardWithButtons';
+import CardWithButtons from '../../../lib/ui/CardWithButtons';
 import { FontsEnum, Heading2 as H2 } from '../../../lib/ui/typography';
 import useToggle from '../../../lib/hooks/useToggle';
+import { ButtonConfig, ButtonType } from '../../../lib/ui/CardWithButtons/types';
 
 /*
  * Types
@@ -47,16 +48,17 @@ const Description = styled.Text`
   marginLeft: 4;
 `;
 
-const setToSaveIfActive = (buttonType: ButtonType, active: boolean) => {
+const getButtonConfig = (buttonType: ButtonType, active: boolean, buttonConfigs: ButtonConfig[]) => {
   switch (buttonType) {
     case 'restore':
-      return 'restore';
+      return buttonConfigs.find((x) => x.buttonType === 'restore');
     case 'archive':
     default:
-      return active ? 'save' : 'archive';
+      return active
+        ? buttonConfigs.find((x) => x.buttonType === 'save')
+        : buttonConfigs.find((x) => x.buttonType === 'archive');
   }
 };
-
 
 const getIconColor = (buttonType: ButtonType, active: boolean) => {
   switch (buttonType) {
@@ -76,13 +78,22 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({ date, title, buttonT
   const [value, setValue] = useState(title);
   const { active, toggle } = useToggle(false);
   const iconColour = getIconColor(buttonType, active);
+  const buttonConfigs: ButtonConfig[] = [{
+    buttonType: 'save',
+    onSave: toggle,
+  },
+  {
+    buttonType: 'archive',
+    onArchive: () => {},
+    onEdit: toggle,
+  },
+  {
+    buttonType: 'restore',
+    onRestore: () => {},
+  }];
 
   return (
-    <CardWithButtons
-      onPressOne={toggle}
-      onPressTwo={() => {}}
-      buttonType={setToSaveIfActive(buttonType, active)}
-    >
+    <CardWithButtons buttonConfig={getButtonConfig(buttonType, active, buttonConfigs)}>
       <HeadingContainer>
         <MaterialIcons name="assignment" outline size={35} color={iconColour} />
         {active

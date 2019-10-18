@@ -4,14 +4,16 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { Button as B } from 'native-base';
 
 import { ColoursEnum } from '../colours';
+import {
+  ButtonConfig, ArchiveButtonConfig, DeleteButtonConfig, RestoreButtonConfig, SaveButtonConfig,
+} from './types';
 
 /*
  * Types
  */
 
-type Props = {
-  onPressOne: () => void;
-  onPressTwo: () => void;
+type Props<T extends ButtonConfig> = {
+  buttonConfig: T;
 }
 
 /*
@@ -46,50 +48,50 @@ const BorderRight = styled.View`
 /*
  * Components
  */
-export const ArchiveButton: FC<Props> = ({ onPressOne, onPressTwo }) => (
+export const ArchiveButton: FC<Props<ArchiveButtonConfig>> = ({ buttonConfig: { onArchive, onEdit } }) => (
   <ButtonContainer>
-    <Button transparent onPress={onPressOne}>
+    <Button transparent onPress={onEdit}>
       <BorderRight>
         <MaterialCommunityIcons name="square-edit-outline" outline size={20} color={ColoursEnum.darkPurple} />
         <LinkText>Edit</LinkText>
       </BorderRight>
     </Button>
-    <Button transparent onPress={onPressTwo}>
+    <Button transparent onPress={onArchive}>
       <MaterialIcons name="archive" outline size={20} color={ColoursEnum.darkPurple} />
       <LinkText>Archive</LinkText>
     </Button>
   </ButtonContainer>
 );
 
-export const DeleteButton: FC<Props> = ({ onPressOne, onPressTwo }) => (
+export const DeleteButton: FC<Props<DeleteButtonConfig>> = ({ buttonConfig: { onDelete, onEdit } }) => ( //eslint-disable-line
   <ButtonContainer>
-    <Button transparent onPress={onPressOne}>
+    <Button transparent onPress={onEdit}>
       <BorderRight>
         <MaterialCommunityIcons name="square-edit-outline" outline size={20} color={ColoursEnum.darkPurple} />
         <LinkText>Edit</LinkText>
       </BorderRight>
     </Button>
-    <Button transparent onPress={onPressTwo}>
+    <Button transparent onPress={onDelete}>
       <MaterialCommunityIcons name="trash-can-outline" outline size={20} color={ColoursEnum.darkPurple} />
       <LinkText>Delete</LinkText>
     </Button>
   </ButtonContainer>
 );
 
-export const RestoreButton: FC<Pick<Props, 'onPressOne'>> = ({ onPressOne }) => (
+export const RestoreButton: FC<Props<RestoreButtonConfig>> = ({ buttonConfig: { onRestore } }) => (
   <ButtonContainer>
     <Button transparent />
-    <Button transparent onPress={onPressOne}>
+    <Button transparent onPress={onRestore}>
       <MaterialCommunityIcons name="undo" outline size={20} color={ColoursEnum.darkPurple} />
       <LinkText>Restore</LinkText>
     </Button>
   </ButtonContainer>
 );
 
-export const SaveButton: FC<Pick<Props, 'onPressOne'>> = ({ onPressOne }) => (
+export const SaveButton: FC<Props<SaveButtonConfig>> = ({ buttonConfig: { onSave } }) => (
   <ButtonContainer>
     <Button transparent />
-    <Button transparent onPress={onPressOne}>
+    <Button transparent onPress={onSave}>
       <MaterialCommunityIcons name="content-save-outline" outline size={20} color={ColoursEnum.darkPurple} />
       <LinkText>Save</LinkText>
     </Button>

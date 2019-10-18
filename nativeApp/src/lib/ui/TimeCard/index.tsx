@@ -6,6 +6,7 @@ import CardWithButtons from '../CardWithButtons';
 import { ColoursEnum } from '../colours';
 import { FontsEnum } from '../typography';
 import HoursAnMinutesText from '../HoursAndMinutesText';
+import { DeleteButtonConfig } from '../CardWithButtons/types';
 
 /*
  * Types
@@ -46,8 +47,10 @@ const TimeCard: FC<Props> = (props) => {
   const {
     timeValues, date, labels, volunteer,
   } = props;
+
+  const buttonConfig: DeleteButtonConfig = { buttonType: 'delete', onDelete: () => {}, onEdit: () => {} };
   return (
-    <CardWithButtons buttonType="delete" onPressOne={() => {}} onPressTwo={() => {}}>
+    <CardWithButtons buttonConfig={buttonConfig}>
       <HoursAnMinutesText align="left" timeValues={timeValues}>
         <MaterialCommunityIcons name="clock-outline" outline size={30} color={ColoursEnum.mustard} />
       </HoursAnMinutesText>
