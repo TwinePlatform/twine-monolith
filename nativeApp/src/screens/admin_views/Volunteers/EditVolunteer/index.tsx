@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 // import styled from 'styled-components/native';
 import { withNavigation, NavigationInjectedProps } from 'react-navigation';
 import Page from '../../../../lib/ui/Page';
-import EditableUser from '../../../../lib/ui/forms/EditableUser';
+import UserForm from '../../../../lib/ui/forms/UserForm';
 
 
 /*
@@ -20,7 +20,7 @@ type Props = {
  */
 const EditVolunteer: FC<NavigationInjectedProps & Props> = (props) => (
   <Page heading="Edit Volunteer">
-    <EditableUser onSubmit={() => props.navigation.navigate('Volunteers')} />
+    <UserForm onSubmit={() => props.navigation.navigate('Volunteers')} />
   </Page>
 );
 

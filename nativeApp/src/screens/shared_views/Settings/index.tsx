@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 import Page from '../../../lib/ui/Page';
-import EditableUser from '../../../lib/ui/forms/EditableUser';
+import UserForm from '../../../lib/ui/forms/UserForm';
 /*
  * Types
  */
@@ -18,7 +18,7 @@ type Props = {
 
 const Settings: FC<Props> = () => (
   <Page heading="Settings">
-    <EditableUser onSubmit={() => {}} />
+    <UserForm onSubmit={() => {}} />
   </Page>
 );
 

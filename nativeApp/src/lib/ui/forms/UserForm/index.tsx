@@ -45,7 +45,7 @@ const genders = [
 
 const years = [...Array(130).keys()].map((_, i) => ({ id: i, name: `${2019 - i}` }));
 
-const EditableUser: FC<Props> = ({ onSubmit, initialValues = {} }) => {
+const UserForm: FC<Props> = ({ onSubmit, initialValues = {} }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [number, setNumber] = useState('');
@@ -82,4 +82,4 @@ const EditableUser: FC<Props> = ({ onSubmit, initialValues = {} }) => {
   );
 };
 
-export default EditableUser;
+export default UserForm;
