@@ -26,8 +26,9 @@ const Heading2 = styled(H2)`
 `;
 
 const Card = styled(C)`
-  paddingVertical: 10;
-  paddingHorizontal: 10;
+  paddingHorizontal: 15;
+  paddingTop: 15;
+  paddingBottom: 10;
   borderRadius: 5;
 `;
 

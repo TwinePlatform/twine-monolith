@@ -15,6 +15,7 @@ type Props = {
   id: number;
   title: string;
   date: string;
+  onDelete: () => void;
 }
 
 /*
@@ -41,11 +42,13 @@ const Description = styled.Text`
 /*
  * Component
  */
-const VolunteerCard: FC<NavigationInjectedProps & Props> = ({ navigation, date, title }) => {
+const VolunteerCard: FC<NavigationInjectedProps & Props> = ({
+ navigation, date, title, onDelete 
+}) => {
   const buttonConfig: DeleteButtonConfig = {
     buttonType: 'delete',
     onEdit: () => navigation.navigate('AdminEditVolunteer'),
-    onDelete: () => {},
+    onDelete,
   };
   return (
     <CardWithButtons buttonConfig={buttonConfig}>
