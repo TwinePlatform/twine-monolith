@@ -43,7 +43,7 @@ const Description = styled.Text`
  * Component
  */
 const VolunteerCard: FC<NavigationInjectedProps & Props> = ({
- navigation, date, title, onDelete 
+  navigation, date, title, onDelete,
 }) => {
   const buttonConfig: DeleteButtonConfig = {
     buttonType: 'delete',
