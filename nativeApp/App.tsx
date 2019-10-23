@@ -1,77 +1,11 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
 import { setCustomText } from 'react-native-global-props';
-
 import * as Font from 'expo-font';
 
-import Login from './src/screens/open_views/Login';
-import Register from './src/screens/open_views/Register';
-
-import VolunteerRouter from './src/screens/volunteer_views/VolunteerRouter';
 import { FontsEnum } from './src/lib/ui/typography';
-import { ColoursEnum } from './src/lib/ui/colours';
-import AdminRouter from './src/screens/admin_views/AdminRouter';
-import SettingsButton from './src/lib/ui/SettingsButton';
-import Settings from './src/screens/shared_views/Settings';
-import AdminEditTime from './src/screens/admin_views/AdminTime/EditTime';
-import AdminEditVolunteer from './src/screens/admin_views/Volunteers/EditVolunteer';
-import AdminAddVolunteer from './src/screens/admin_views/Volunteers/AddVolunteer';
-
-
-const getSettingsButton = (navigation) => {
-  const { routeName } = navigation.state;
-  if (['Login', 'Register', 'ForgotPassword'].includes(routeName)) {
-    return <></>;
-  }
-  return <SettingsButton />;
-};
-
-const additionalAdminPages = {
-  AdminEditTime,
-  AdminEditVolunteer,
-  AdminAddVolunteer,
-};
-
-const RootStack = createStackNavigator(
-  {
-    Login: {
-      screen: Login,
-    },
-    Register: {
-      screen: Register,
-    },
-    VolunteerRouter: {
-      screen: VolunteerRouter,
-    },
-    AdminRouter: {
-      screen: AdminRouter,
-    },
-    Settings: {
-      screen: Settings,
-    },
-    ...additionalAdminPages,
-  },
-  {
-
-    initialRouteName: 'Login',
-    defaultNavigationOptions: ({ navigation }) => ({
-      headerRight: getSettingsButton(navigation),
-      headerBackTitle: 'Back',
-      title: 'TWINE',
-      headerStyle: {
-        backgroundColor: ColoursEnum.purple,
-      },
-      headerTintColor: '#fff',
-      headerTitleStyle: {
-        letterSpacing: 8,
-        fontWeight: '300',
-        fontFamily: FontsEnum.light,
-      },
-    }),
-  },
-);
+import RootStack from './src/Router';
 
 const AppContainer = createAppContainer(RootStack);
 
