@@ -1,18 +1,23 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
-import { Heading } from './typography';
+import { Heading as H } from './typography';
 
 /*
  * Types
  */
 type Props = {
   heading: string;
+  withAddBar?: boolean;
 }
 
 /*
  * Styles
  */
 const Scrollable = styled.ScrollView`
+`;
+
+const Heading = styled(H)<{withAddBar: boolean}>`
+  marginBottom: ${({ withAddBar }) => (withAddBar ? '10' : '20')}
 `;
 
 const View = styled.View`
@@ -24,10 +29,10 @@ const View = styled.View`
 /*
  * Component
  */
-const Page: FC<Props> = ({ heading, children }) => (
+const Page: FC<Props> = ({ heading, children, withAddBar }) => (
   <Scrollable>
     <View>
-      <Heading>{heading}</Heading>
+      <Heading withAddBar={withAddBar}>{heading}</Heading>
       {children}
     </View>
   </Scrollable>

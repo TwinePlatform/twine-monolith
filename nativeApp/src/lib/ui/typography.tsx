@@ -4,7 +4,6 @@ import { ColoursEnum } from './colours';
 export const Heading = styled.Text`
   letterSpacing: 1.2;
   fontSize: 30;
-  marginBottom: 20;
   `;
 
 export const Heading2 = styled.Text`
