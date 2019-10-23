@@ -31,6 +31,7 @@ const Tabs: FC<Props> = (props) => {
   } = props;
   return (
     <_Tabs
+      tabContainerStyle={{ height: 40 }} //eslint-disable-line
       tabBarUnderlineStyle={{ backgroundColor: ColoursEnum.purple }}
     >
       <Tab

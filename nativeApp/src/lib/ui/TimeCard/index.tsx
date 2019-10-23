@@ -19,6 +19,7 @@ type Props = {
   timeValues: [number, number];
   date: string;
   labels: [string, string];
+  onDelete: () => void;
 }
 
 /*
@@ -48,12 +49,12 @@ const Label = styled.Text<{bold?: boolean; textAlign: string}>`
  */
 const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
   const {
-    timeValues, date, labels, volunteer, navigation,
+    timeValues, date, labels, volunteer, navigation, onDelete,
   } = props;
 
   const buttonConfig: DeleteButtonConfig = {
     buttonType: 'delete',
-    onDelete: () => {},
+    onDelete,
     onEdit: () => { navigation.navigate('AdminEditTime'); },
   };
   return (
