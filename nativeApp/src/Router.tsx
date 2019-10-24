@@ -15,6 +15,7 @@ import Settings from './screens/shared_views/Settings';
 import AdminEditTime from './screens/admin_views/AdminTime/EditTime';
 import AdminEditVolunteer from './screens/admin_views/Volunteers/EditVolunteer';
 import AdminAddVolunteer from './screens/admin_views/Volunteers/AddVolunteer';
+import AuthenticationLoader from './authentication/AuthenticationLoader';
 
 const additionalAdminPages = {
   AdminEditTime,
@@ -51,10 +52,7 @@ const AuthStack = createStackNavigator(
   },
 );
 
-const AppStack = createStackNavigator({
-  VolunteerRouter: {
-    screen: VolunteerRouter,
-  },
+const AdminStack = createStackNavigator({
   AdminRouter: {
     screen: AdminRouter,
   },
@@ -70,15 +68,31 @@ const AppStack = createStackNavigator({
   },
 });
 
+const VolunteerStack = createStackNavigator({
+  VolunteerRouter: {
+    screen: VolunteerRouter,
+  },
+  Settings: {
+    screen: Settings,
+  },
+},
+{
+  defaultNavigationOptions: {
+    ...sharedNavigationsConfig,
+    headerRight: <SettingsButton />,
+  },
+});
+
 const RootStack = createSwitchNavigator(
   {
-    AuthLoading: Login,
-    App: AppStack,
-    Auth: AuthStack,
+    AuthStack,
+    AuthenticationLoader,
+    AdminStack,
+    VolunteerStack,
   },
   {
 
-    initialRouteName: 'AuthLoading',
+    initialRouteName: 'AuthenticationLoader',
   },
 );
 

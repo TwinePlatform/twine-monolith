@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
+import { AsyncStorage } from 'react-native';
 import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
 
@@ -8,6 +9,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Input from '../../../lib/ui/forms/InputWithIcon';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
+import useToggle from '../../../lib/hooks/useToggle';
+import { Authentication } from '../../../lib/api';
+import { StorageValuesEnum } from '../../../authentication/types';
 
 const logo = require('../../../../assets/images/logo_image.png');
 
@@ -60,36 +64,52 @@ const Form = styled(F)`
 /*
  * Component
  */
-const Login: FC<Props> = (props) => (
-  <Page>
+const Login: FC<Props> = (props) => {
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  // const [isLoading, toggleLoading] = useToggle();
 
-    <Container>
-      <Image source={logo} />
-    </Container>
 
-    <Container>
-      <Form>
-        <Input name="Email" autoCompleteType="email">
-          <MaterialCommunityIcons name="email-outline" outline size={27} color={ColoursEnum.grey} />
-        </Input>
-        <Input name="Password" autoCompleteType="password" secureTextEntry>
-          <MaterialCommunityIcons name="lock-outline" size={27} color={ColoursEnum.grey} />
-        </Input>
-        <SubmitButton text="LOG IN" onPress={() => props.navigation.navigate('VolunteerRouter')} />
-        <SubmitButton text="LOG IN AS ADMIN" onPress={() => props.navigation.navigate('AdminRouter')} />
-      </Form>
-      <LinkText onPress={() => props.navigation.navigate('Register')}>
+  const onSubmit = async () => {
+    try {
+      const { data } = await Authentication.login({ email, password });
+      await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.token);
+      props.navigation.navigate('AuthenticationLoader');
+    } catch (error) {
+      console.log(error);
+      // handle error response
+    }
+  };
+
+  return (
+    <Page>
+      <Container>
+        <Image source={logo} />
+      </Container>
+
+      <Container>
+        <Form>
+          <Input name="Email" autoCompleteType="email" value={email} onChangeText={setEmail}>
+            <MaterialCommunityIcons name="email-outline" outline size={27} color={ColoursEnum.grey} />
+          </Input>
+          <Input name="Password" autoCompleteType="password" secureTextEntry value={password} onChangeText={setPassword}>
+            <MaterialCommunityIcons name="lock-outline" size={27} color={ColoursEnum.grey} />
+          </Input>
+          <SubmitButton text="LOG IN" onPress={() => onSubmit()} />
+        </Form>
+        <LinkText onPress={() => props.navigation.navigate('Register')}>
           Forgot password
-      </LinkText>
-    </Container>
+        </LinkText>
+      </Container>
 
-    <BottomContainer>
-      <LinkText onPress={() => props.navigation.navigate('Register')}>
+      <BottomContainer>
+        <LinkText onPress={() => props.navigation.navigate('Register')}>
           Create a new account
-      </LinkText>
-    </BottomContainer>
+        </LinkText>
+      </BottomContainer>
 
-  </Page>
-);
+    </Page>
+  );
+};
 
 export default Login;
