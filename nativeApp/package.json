@@ -10,7 +10,8 @@
     "lint": "eslint .  --ext .ts,.tsx",
     "test": "jest",
     "cover": "npm test -- --coverage",
-    "touch:tsx": "ts-node ./bin/touch_tsx/index.ts"
+    "make:tsx": "ts-node ./bin/make_tsx/index.ts",
+    "make:test": "ts-node ./bin/make_test/index.ts"
   },
   "dependencies": {
     "@types/react-navigation": "^3.0.8",
