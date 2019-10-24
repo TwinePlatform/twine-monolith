@@ -33,9 +33,9 @@ const Settings: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
     <Page heading="Settings">
       <Form>
         <LinkItem title="Profile" onPress={() => navigation.navigate('Profile')} />
-        <LinkItem title="Help" />
+        <LinkItem title="Help" onPress={() => {}} />
         <Toggle label="Locations reminders" />
-        <LinkItem title="Terms and Conditions" />
+        <LinkItem title="Terms and Conditions" onPress={() => {}} />
 
         <LinkItem title="Log Out" onPress={() => logOut()} />
       </Form>

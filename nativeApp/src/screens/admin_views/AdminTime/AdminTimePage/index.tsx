@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 import TimeCard from '../../../../lib/ui/TimeCard';
 import Page from '../../../../lib/ui/Page';
 import useToggle from '../../../../lib/hooks/useToggle';
-import DeleteModal from '../../../../lib/ui/modals/ConfirmationModal';
+import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
 import CardSeparator from '../../../../lib/ui/CardSeparator';
 
 /*
@@ -21,11 +21,11 @@ type Props = {
  * Component
  */
 const AdminTime: FC<Props> = () => {
-  const [visibleDeleteModal, toggleDeleteVisibility] = useToggle(false);
+  const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
   return (
     <Page heading="Volunteers Time">
-      <DeleteModal
-        isVisible={visibleDeleteModal}
+      <ConfirmationModal
+        isVisible={visibleConfirmationModal}
         onCancel={toggleDeleteVisibility}
         onConfirm={toggleDeleteVisibility}
         title="Delete"
