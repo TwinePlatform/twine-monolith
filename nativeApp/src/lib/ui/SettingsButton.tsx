@@ -23,7 +23,7 @@ const Clickable = styled.TouchableOpacity`
  * Component
  */
 const SettingsButton: FC<NavigationInjectedProps<Props>> = (props) => (
-  <Clickable onPress={() => props.navigation.navigate('Settings')}>
+  <Clickable onPress={() => props.navigation.navigate('SettingsPage')}>
     <Feather name="settings" color={ColoursEnum.white} size={25} />
   </Clickable>
 );

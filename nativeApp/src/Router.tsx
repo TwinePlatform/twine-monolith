@@ -11,11 +11,12 @@ import Register from './screens/open_views/Register';
 import VolunteerRouter from './screens/volunteer_views/VolunteerRouter';
 import AdminRouter from './screens/admin_views/AdminRouter';
 import SettingsButton from './lib/ui/SettingsButton';
-import Settings from './screens/shared_views/Settings';
+import SettingsPage from './screens/settings_views/SettingsPage/index';
 import AdminEditTime from './screens/admin_views/AdminTime/EditTime';
 import AdminEditVolunteer from './screens/admin_views/Volunteers/EditVolunteer';
 import AdminAddVolunteer from './screens/admin_views/Volunteers/AddVolunteer';
 import AuthenticationLoader from './authentication/AuthenticationLoader';
+import Profile from './screens/settings_views/Profile';
 
 const additionalAdminPages = {
   AdminEditTime,
@@ -37,6 +38,10 @@ const sharedNavigationsConfig = {
   },
 };
 
+const Settings = {
+  SettingsPage,
+  Profile,
+};
 
 const AuthStack = createStackNavigator(
   {
@@ -56,9 +61,7 @@ const AdminStack = createStackNavigator({
   AdminRouter: {
     screen: AdminRouter,
   },
-  Settings: {
-    screen: Settings,
-  },
+  ...Settings,
   ...additionalAdminPages,
 },
 {
@@ -72,9 +75,7 @@ const VolunteerStack = createStackNavigator({
   VolunteerRouter: {
     screen: VolunteerRouter,
   },
-  Settings: {
-    screen: Settings,
-  },
+  ...Settings,
 },
 {
   defaultNavigationOptions: {

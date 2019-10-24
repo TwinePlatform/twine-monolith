@@ -5,8 +5,6 @@ import { Form as F } from 'native-base';
 import Input from '../InputWithInlineLabel';
 import Button from '../ButtonWithInlineLabel';
 import Dropdown from '../Dropdown';
-import Toggle from '../Toggle';
-import TermsAndConditonsButton from './TermsAndConditionsButton';
 import { Forms } from '../enums';
 import SubmitButton from '../SubmitButton';
 
@@ -74,8 +72,6 @@ const UserForm: FC<Props> = ({ onSubmit, initialValues = {} }) => {
       <Dropdown label="Gender" options={genders} onValueChange={setGender} selectedValue={gender} defaultValue={initialValues.gender} />
       <Dropdown label="Year of birth" options={years} onValueChange={setYear} selectedValue={year} defaultValue={initialValues.year} />
       <Input label="Post code" onChangeText={setPostcode} value={postcode} defaultValue={initialValues.postcode} />
-      <Toggle label="Locations reminders" />
-      <TermsAndConditonsButton />
       <SubmitButton text="SAVE" onPress={useSubmit} />
     </Form>
   );
