@@ -9,7 +9,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Input from '../../../lib/ui/forms/InputWithIcon';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
-import useToggle from '../../../lib/hooks/useToggle';
 import { Authentication } from '../../../lib/api';
 import { StorageValuesEnum } from '../../../authentication/types';
 

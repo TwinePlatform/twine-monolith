@@ -10,7 +10,7 @@ import { ColoursEnum } from '../colours';
  */
 type Props = {
   title: string;
-  onPress: () => {};
+  onPress: () => void;
 }
 
 /*

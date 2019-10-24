@@ -16,7 +16,7 @@ type Props = {
 /*
  * Component
  */
-const Profile: FC<Props> = (props) => (
+const Profile: FC<Props> = () => (
   <Page heading="Settings">
     <UserForm onSubmit={() => {}} />
   </Page>
