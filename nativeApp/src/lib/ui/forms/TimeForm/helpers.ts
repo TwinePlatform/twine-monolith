@@ -1,4 +1,4 @@
-export const getTimeLabel = (volunteer: string, forUser: 'admin' | 'volunteer') => {
+export const getTimeLabel = (forUser: 'admin' | 'volunteer', volunteer?: string) => {
   switch (forUser) {
     case 'volunteer':
       return 'You volunteered for';

@@ -95,7 +95,7 @@ const TimeForm: FC<Props> = (props) => {
         mode="time"
         minDate={startTime}
       />
-      <Label>{getTimeLabel(volunteer, forUser)}</Label>
+      <Label>{getTimeLabel(forUser, volunteer)}</Label>
       <TimeContainer>
         <HoursAndMinutesText align="center" timeValues={diff} />
       </TimeContainer>
