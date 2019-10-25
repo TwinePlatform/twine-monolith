@@ -262,6 +262,29 @@ describe('API v1 - register new users', () => {
       }));
     });
 
+    test('SUCCESS :: postCode is not required for normal user', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'POST',
+        url: '/v1/users/register/visitors',
+        payload: {
+          organisationId: 1,
+          name: 'cloud strife',
+          gender: 'male',
+          birthYear: 1988,
+          email: 'strife@shinra.jp'
+        },
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).result).toEqual(expect.objectContaining({
+        name: 'cloud strife',
+        gender: 'male',
+        birthYear: 1988,
+        email: 'strife@shinra.jp'
+      }));
+    });
+
     test('SUCCESS :: happy path for standard visitor', async () => {
       const res = await server.inject(injectCfg({
         method: 'POST',
