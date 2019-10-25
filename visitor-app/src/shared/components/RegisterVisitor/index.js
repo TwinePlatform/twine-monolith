@@ -80,7 +80,6 @@ class SignupForm extends React.Component {
                 name={`postCode$${uuid}`}
                 type="text"
                 error={errors.postCode}
-                required
               />
               <LabelledSelect
                 id="visitor-signup-gender"
