@@ -18,9 +18,11 @@ type Props = {
 /*
  * Component
  */
-const EditVolunteer: FC<NavigationInjectedProps & Props> = (props) => (
+
+// TODO add types
+const EditVolunteer: FC<NavigationInjectedProps<any> & Props> = ({ navigation }) => (
   <Page heading="Edit Volunteer">
-    <UserForm onSubmit={() => props.navigation.navigate('Volunteers')} />
+    <UserForm onSubmit={() => navigation.navigate('Volunteers')} initialValues={navigation.state.params} />
   </Page>
 );
 

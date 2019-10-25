@@ -14,10 +14,10 @@ import SubmitButton from '../SubmitButton';
 type UserValues = {
   name: string;
   email: string;
-  number: string;
+  phoneNumber: string;
   postcode: string;
   gender: string;
-  year: string;
+  birthYear: number;
 }
 
 type Props = {
@@ -38,39 +38,39 @@ const Form = styled(F)`
 const genders = [
   { id: 1, name: 'female' },
   { id: 2, name: 'male' },
-  { id: 3, name: 'other' },
+  { id: 3, name: 'prefer not to say' },
 ];
 
-const years = [...Array(130).keys()].map((_, i) => ({ id: i, name: `${2019 - i}` }));
+const birthYears = [...Array(130).keys()].map((_, i) => ({ id: i, name: 2019 - i }));
 
 const UserForm: FC<Props> = ({ onSubmit, initialValues = {} }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [number, setNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [postcode, setPostcode] = useState('');
 
   const [gender, setGender] = useState('');
-  const [year, setYear] = useState('');
+  const [birthYear, setYear] = useState<number>();
 
   const useSubmit = useCallback(() => {
     onSubmit({
       name,
       email,
-      number,
+      phoneNumber,
       postcode,
       gender,
-      year,
+      birthYear,
     });
-  }, [name, email, number, postcode, gender, year]);
+  }, [name, email, phoneNumber, postcode, gender, birthYear]);
 
   return (
     <Form>
       <Input label="Full name" onChangeText={setName} value={name} defaultValue={initialValues.name} />
       <Input label="Email" editable onChangeText={setEmail} value={email} defaultValue={initialValues.email} />
       <Button label="Password" text="Send password reset email" />
-      <Input label="Number" onChangeText={setNumber} value={number} defaultValue={initialValues.number} />
+      <Input label="Number" onChangeText={setPhoneNumber} value={phoneNumber} defaultValue={initialValues.phoneNumber} />
       <Dropdown label="Gender" options={genders} onValueChange={setGender} selectedValue={gender} defaultValue={initialValues.gender} />
-      <Dropdown label="Year of birth" options={years} onValueChange={setYear} selectedValue={year} defaultValue={initialValues.year} />
+      <Dropdown label="Year of birth" options={birthYears} onValueChange={setYear} selectedValue={birthYear} defaultValue={initialValues.birthYear} />
       <Input label="Post code" onChangeText={setPostcode} value={postcode} defaultValue={initialValues.postcode} />
       <SubmitButton text="SAVE" onPress={useSubmit} />
     </Form>

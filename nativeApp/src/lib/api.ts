@@ -36,6 +36,7 @@ const makeRequest = async ({ ...rest }: RequestConfig) => {
 
 export const CommunityBusinesses = {
   getVolunteerActivities: () => axios.get('/volunteer-activities'),
+  getVolunteers: () => makeRequest({ method: 'GET', url: '/community-businesses/me/volunteers' }),
 };
 
 export const Authentication = {
