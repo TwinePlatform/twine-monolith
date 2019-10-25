@@ -11,6 +11,7 @@ import { ColoursEnum } from '../colours';
 interface Props extends TextInputProps {
   name: string;
   value?: string;
+  error?: boolean;
 }
 
 /*
@@ -26,10 +27,10 @@ const Item = styled(I)`
  */
 const Input: FC<Props> = (props) => {
   const {
-    children: icon, name, value, ...rest
+    children: icon, name, value, error, ...rest
   } = props;
   return (
-    <Item>
+    <Item error={error}>
       {icon}
       <_Input placeholder={name} placeholderTextColor={ColoursEnum.grey} {...rest}>{value}</_Input>
     </Item>
