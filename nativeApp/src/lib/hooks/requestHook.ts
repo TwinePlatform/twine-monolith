@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
+import { AxiosResponse, AxiosError } from 'axios';
 
-interface Res { result: any }
 
-const useRequest = <T extends Res, U>(axiosRequest: (q?: U) => Promise<T>, payload?: U) => {
+const useRequest = <T extends AxiosResponse<T>, U>
+  (axiosRequest: (q?: U) => Promise<T>, payload?: U): [T, AxiosError] => {
   const [data, setData] = useState();
   const [error, setError] = useState();
-  useEffect(() => () => {
+
+  useEffect(() => {
     axiosRequest(payload)
-      .then((res) => setData(res.result))
+      .then((res) => setData(res.data))
       .catch(setError);
   }, []);
 
