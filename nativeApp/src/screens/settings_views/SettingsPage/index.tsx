@@ -8,6 +8,7 @@ import { Forms } from '../../../lib/ui/forms/enums';
 import LinkItem from '../../../lib/ui/forms/LinkItem';
 import Page from '../../../lib/ui/Page';
 import Toggle from '../../../lib/ui/forms/Toggle';
+import { Authentication } from '../../../lib/api';
 /*
  * Types
  */
@@ -26,6 +27,7 @@ const Form = styled(F)`
 
 const Settings: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
   const logOut = async () => {
+    Authentication.logOut().catch(() => {});
     await AsyncStorage.clear();
     navigation.navigate('AuthStack');
   };

@@ -46,6 +46,6 @@ export const Authentication = {
     restrict: ['VOLUNTEER', 'VOLUNTEER_ADMIN', 'CB_ADMIN'],
     type: 'body',
   }),
+  logOut: () => makeRequest({ method: 'GET', url: 'users/logouts' }),
   roles: () => makeRequest({ method: 'GET', url: '/users/me/roles' }),
-  // roles: () => axios.get('users/me/roles'),
 };
