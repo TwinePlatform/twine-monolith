@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import moment from 'moment';
+import uuid from 'uuid/v4';
 
 import { NavigationFocusInjectedProps } from 'react-navigation';
 import VolunteerCard from './VolunteerCard';
@@ -25,9 +26,24 @@ type Props = {
  */
 const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) => {
   const [deleteModalVisibility, toggleDeleteModalVisibility] = useToggle(false);
-  const { reload } = navigation.state.params || {};
+  const [activeCard, setActiveCard] = useState(null);
+  const [reload, setReload] = useState((navigation.state.params || {}).reload);
 
   const [volunteers] = useRequest(CommunityBusinesses.getVolunteers, {}, [reload]);
+
+  const onDelete = (id: number) => {
+    toggleDeleteModalVisibility();
+    setActiveCard(id);
+  };
+
+  const onConfirm = () => {
+    CommunityBusinesses.deleteVolunteer(activeCard)
+      .then(() => {
+        setReload(uuid());
+        toggleDeleteModalVisibility();
+      })
+      .catch(console.log); // TODO: error handling
+  };
 
   // TODO loading spinner
   // TODO error handling
@@ -39,7 +55,7 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
         title="Delete"
         text="Are you sure you want to delete this volunteer?"
         onCancel={toggleDeleteModalVisibility}
-        onConfirm={toggleDeleteModalVisibility}
+        onConfirm={onConfirm}
       />
       {volunteers && volunteers.map((volunteer) => (
         <VolunteerCard
@@ -47,7 +63,7 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
           id={volunteer.id}
           title={volunteer.name}
           date={moment(volunteer.createdAt).format('DD/MM/YY')}
-          onDelete={toggleDeleteModalVisibility}
+          onDelete={() => onDelete(volunteer.id)}
           volunteerData={volunteer}
         />
 
