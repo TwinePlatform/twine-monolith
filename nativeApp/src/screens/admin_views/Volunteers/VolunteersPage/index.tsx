@@ -25,8 +25,9 @@ type Props = {
  */
 const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) => {
   const [deleteModalVisibility, toggleDeleteModalVisibility] = useToggle(false);
+  const { reload } = navigation.state.params || {};
 
-  const [volunteers] = useRequest(CommunityBusinesses.getVolunteers);
+  const [volunteers] = useRequest(CommunityBusinesses.getVolunteers, {}, [reload]);
 
   // TODO loading spinner
   // TODO error handling

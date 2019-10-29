@@ -11,7 +11,8 @@ import SubmitButton from '../SubmitButton';
 /*
  * Types
  */
-type UserValues = {
+export type UserValues = {
+  id: number;
   name: string;
   email: string;
   phoneNumber: string;
@@ -52,8 +53,10 @@ const UserForm: FC<Props> = ({ onSubmit, initialValues = {} }) => {
   const [gender, setGender] = useState('');
   const [birthYear, setYear] = useState<number>();
 
+
   const useSubmit = useCallback(() => {
     onSubmit({
+      id: initialValues ? initialValues.id : null,
       name,
       email,
       phoneNumber,

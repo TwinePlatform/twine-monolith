@@ -34,10 +34,6 @@ const makeRequest = async ({ ...rest }: RequestConfig) => {
   return axios.request({ headers, ...rest });
 };
 
-export const CommunityBusinesses = {
-  getVolunteerActivities: () => axios.get('/volunteer-activities'),
-  getVolunteers: () => makeRequest({ method: 'GET', url: '/community-businesses/me/volunteers' }),
-};
 
 export const Authentication = {
   login: ({ email, password }) => axios.post('/users/login', {
@@ -48,4 +44,12 @@ export const Authentication = {
   }),
   logOut: () => makeRequest({ method: 'GET', url: 'users/logouts' }),
   roles: () => makeRequest({ method: 'GET', url: '/users/me/roles' }),
+};
+
+export const CommunityBusinesses = {
+  addVolunteer: () => {},
+  editVolunteer: ({ id, ...changeset }) => makeRequest({ method: 'PUT', url: `/users/volunteers/${id}`, data: changeset }),
+  deleteVolunteer: (id: number) => makeRequest({ method: 'DELETE', url: `/users/volunteers/${id}` }),
+  getVolunteerActivities: () => axios.get('/volunteer-activities'),
+  getVolunteers: () => makeRequest({ method: 'GET', url: '/community-businesses/me/volunteers' }),
 };
