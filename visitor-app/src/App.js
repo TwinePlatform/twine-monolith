@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Dots from './shared/components/Dots';
+import OuterContainer from './shared/components/OuterContainer';
 import Container from './shared/components/Container';
 import HomePage from './shared/pages/Home';
 import ErrorPage from './shared/pages/Error';
@@ -27,7 +27,7 @@ const ProtectedRoutes = () => (
 );
 
 const App = () => (
-  <Dots>
+  <OuterContainer>
     <Container>
       <Switch>
         <Route exact path="/login" component={Login} />
@@ -37,7 +37,7 @@ const App = () => (
         <PrivateRoute path="/*" component={ProtectedRoutes} />
       </Switch>
     </Container>
-  </Dots>
+  </OuterContainer>
 );
 
 export default App;
