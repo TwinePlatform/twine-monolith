@@ -1,7 +1,7 @@
 import * as Boom from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { omit, filter, complement, isEmpty } from 'ramda';
-import { query, response, id } from './schema';
+import { query, response, id, since, until } from './schema';
 import { Visitors, CommunityBusinesses } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import { filterQuery } from '../users/schema';
@@ -79,6 +79,8 @@ const routes: [
       },
       validate: {
         query: {
+          since,
+          until,
           ...query,
           ...filterQuery,
         },
@@ -91,16 +93,19 @@ const routes: [
     handler: async (request, h) => {
       const {
         server: { app: { knex } },
-        query: { limit, offset, filter: filterOptions = {} },
+        query: { limit, offset, filter: filterOptions = {}, since, until },
         pre: { communityBusiness } } = request;
+
+      const whereBetween = filter(Boolean, {
+        birthYear: filterOptions.age || undefined,
+        createdAt: [since, until],
+      });
 
       const query = filter(complement(isEmpty), {
         offset,
         limit,
         where: omit(['age'], filterOptions),
-        whereBetween: filterOptions.age
-          ? { birthYear: filterOptions.age }
-          : {},
+        whereBetween,
       });
 
       const visits = await CommunityBusinesses.getVisitLogsWithUsers(
