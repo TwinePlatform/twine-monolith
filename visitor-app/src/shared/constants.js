@@ -98,6 +98,19 @@ export const AgeRange = {
   },
 };
 
+export const createAgeGroups = (groups) => {
+  const ranges = groups.map(AgeRange.fromStr);
+
+  return {
+    fromBirthYear: (year) => {
+      const age = BirthYear.toAge(year);
+      const range = ranges.find(([min, max]) => min <= age && age <= max);
+      return AgeRange.toStr(range);
+    },
+    toSelectOptions: () => ['All'].concat(groups).map((value, key) => ({ key, value })),
+  };
+};
+
 export const Gender = {
   // toDisplay :: String -> String
   toDisplay: capitaliseFirstWord,
