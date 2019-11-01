@@ -94,7 +94,7 @@ describe('DateRange', () => {
 
     test(`${DateRangesEnum.LAST_12_MONTHS} :: range incrementing by month`, () => {
       const since = new Date('2018-10-01');
-      const until = new Date('2019-02-01');
+      const until = new Date('2019-01-31');
       expect(DateRanges.toArray(since, until, DateRangesEnum.LAST_12_MONTHS))
         .toEqual(['Oct 2018', 'Nov 2018', 'Dec 2018', 'Jan 2019']);
     });
@@ -103,7 +103,7 @@ describe('DateRange', () => {
   describe(':: zeroPadObject', () => {
     test(`${DateRangesEnum.LAST_12_MONTHS} :: empty object fully filled with zeros`, () => {
       const since = new Date('2018-10-01');
-      const until = new Date('2019-02-01');
+      const until = new Date('2019-01-31');
       expect(DateRanges.zeroPadObject(since, until, DateRangesEnum.LAST_12_MONTHS, {}))
         .toEqual({
           'Oct 2018': 0,
@@ -115,7 +115,7 @@ describe('DateRange', () => {
 
     test(`${DateRangesEnum.LAST_12_MONTHS} :: partial object filled with zeros, existing entries unchanged`, () => {
       const since = new Date('2018-10-01');
-      const until = new Date('2019-02-01');
+      const until = new Date('2019-01-31');
       const input = { 'Oct 2018': 1 };
       expect(DateRanges.zeroPadObject(since, until, DateRangesEnum.LAST_12_MONTHS, input))
         .toEqual({
