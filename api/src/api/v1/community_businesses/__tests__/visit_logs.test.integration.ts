@@ -1,5 +1,6 @@
 import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
+import * as moment from 'moment';
 import { init } from '../../../../../tests/utils/server';
 import { getConfig } from '../../../../../config';
 import { User, Users, Organisation, Organisations } from '../../../../models';
@@ -119,7 +120,7 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
         ]));
     });
 
-    test(':: filtered visit logs with query', async () => {
+    test(':: filtered visit logs by activity with query', async () => {
       const res = await server.inject(injectCfg({
         method: 'GET',
         url: '/v1/community-businesses/me/visit-logs?'
@@ -129,6 +130,52 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
 
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).meta).toEqual({ total: 4 });
+      expect((<any> res.result).result).toEqual(
+        expect.arrayContaining([
+          (<any> expect).not.objectContaining({
+            visitActivity: 'Free Running',
+            category: 'Sports',
+          }),
+        ]));
+    });
+
+    test(':: filtered visit logs by time with query', async () => {
+      const since = moment().subtract(7, 'days').endOf('day').toISOString();
+      const until = moment().toISOString();
+
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visit-logs?'
+        + `&since=${since}&until=${until}`,
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).meta).toEqual({ total: 8 });
+      expect((<any> res.result).result).toHaveLength(8);
+      expect((<any> res.result).result).toEqual(
+        expect.arrayContaining([
+          (<any> expect).not.objectContaining({
+            visitActivity: 'Free Running',
+            category: 'Sports',
+          }),
+        ]));
+    });
+
+    test(':: filtered visit logs by time and age with query', async () => {
+      const since = moment().subtract(7, 'days').endOf('day').toISOString();
+      const until = moment().toISOString();
+
+      const res = await server.inject(injectCfg({
+        method: 'GET',
+        url: '/v1/community-businesses/me/visit-logs?'
+        + `&since=${since}&until=${until}&filter[age][]=23&filter[age][]=48`,
+        credentials,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      expect((<any> res.result).meta).toEqual({ total: 7 });
+      expect((<any> res.result).result).toHaveLength(7);
       expect((<any> res.result).result).toEqual(
         expect.arrayContaining([
           (<any> expect).not.objectContaining({
