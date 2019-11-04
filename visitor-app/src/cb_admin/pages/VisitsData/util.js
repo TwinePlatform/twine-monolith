@@ -2,12 +2,18 @@
  * Utilities for data processing (see ./data.js)
  */
 import moment from 'moment';
-import { pick, zip, identity, toPairs, head, last, map, assoc, assocPath, mergeWith, add, uniq, fromPairs, mergeDeepWith } from 'ramda';
+import { curry, pick, zip, identity, toPairs, head, last, map, assoc, assocPath, mergeWith, add, uniq, fromPairs, mergeDeepWith, mergeRight } from 'ramda';
 import { collectBy, mapValues, ones, combineValues } from '../../../util';
 import { createAgeGroups } from '../../../shared/constants';
 import DateRanges, { DateRangesEnum } from './dateRange';
 
 export const AgeGroups = createAgeGroups(['0-17', '18-34', '35-50', '51-69', '70+']);
+
+// normaliseDate :: DateRangeEnum -> DateLike -> Moment
+const normaliseDate = curry((dateRange, d) =>
+  dateRange === DateRangesEnum.LAST_MONTH
+    ? moment(d).startOf('isoWeek')
+    : moment(d));
 
 // isAgeGiven :: Log -> Boolean
 const isAgeGiven = log => typeof log.birthYear === 'number';
@@ -37,22 +43,20 @@ export const VisitsStats = {
       collectBy(log => log.category, logs),
     ),
 
-  // calculateTimePeriodStatistics :: [Log] -> { k: Number }
-  calculateTimePeriodStatistics: (since, until, dateRange, logs) =>
-    DateRanges.zeroPadObject(
-      since,
-      until,
-      dateRange,
-      count(collectBy(
-        identity,
-        logs.map(log =>
-          (dateRange === DateRangesEnum.LAST_MONTH
-            ? moment(log.createdAt).startOf('isoWeek')
-            : moment(log.createdAt)
-          )
-            .format(DateRanges.toFormat(dateRange))),
-      )),
-    ),
+  // calculateTimePeriodStatistics :: (Date, Date, DateRangeEnum, [Log]) -> { k: Number }
+  calculateTimePeriodStatistics: (_since, _until, dateRange, logs) => {
+    const since = normaliseDate(dateRange, _since);
+    const until = normaliseDate(dateRange, _until);
+    const zeros = DateRanges.zeroPadObject(since, until, dateRange, {});
+
+    const stats = count(collectBy(
+      identity,
+      logs.map(log =>
+        normaliseDate(dateRange, log.createdAt).format(DateRanges.toFormat(dateRange))),
+    ));
+
+    return mergeRight(zeros, stats);
+  },
 };
 
 export const VisitorStats = {
@@ -91,19 +95,17 @@ export const VisitorStats = {
   },
 
   // calculateTimePeriodStatistics :: [VisitorWithVisitData] -> { k: Number }
-  calculateTimePeriodStatistics: (since, until, dateRange, visitors) => {
-    const empty = DateRanges.zeroPadObject(since, until, dateRange, {});
+  calculateTimePeriodStatistics: (_since, _until, dateRange, visitors) => {
+    const since = normaliseDate(dateRange, _since);
+    const until = normaliseDate(dateRange, _until);
+    const zeros = DateRanges.zeroPadObject(since, until, dateRange, {});
     const fmt = DateRanges.toFormat(dateRange);
     return visitors.reduce((acc, visitor) => {
       const visitorTotals = visitor.createdAt
-        .map(date =>
-          (dateRange === DateRangesEnum.LAST_MONTH
-            ? moment(date).startOf('isoWeek')
-            : moment(date)
-          ).format(fmt))
+        .map(date => normaliseDate(dateRange, date).format(fmt))
         .reduce((counts, date) => assoc(date, date in counts ? counts[date] : 1, counts), {});
       return mergeWith(add, acc, visitorTotals);
-    }, empty);
+    }, zeros);
   },
 };
 
