@@ -239,7 +239,7 @@ describe('Visits Data Utilities', () => {
     });
   });
 
-  describe.only('VisitorStats', () => {
+  describe('VisitorStats', () => {
     describe('calculateGenderStatistics', () => {
       test('empty list gives empty stats object', () => {
         expect(VisitorStats.calculateGenderStatistics([])).toEqual({});
