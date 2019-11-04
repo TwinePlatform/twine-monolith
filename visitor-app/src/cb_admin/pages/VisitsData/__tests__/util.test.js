@@ -1,5 +1,5 @@
 import Mockdate from 'mockdate';
-import { AgeGroups, Stats, calculateStepSize } from '../util';
+import { AgeGroups, VisitsStats, calculateStepSize } from '../util';
 import { DateRangesEnum } from '../dateRange';
 
 
@@ -49,10 +49,10 @@ describe('Visits Data Utilities', () => {
     });
   });
 
-  describe('Stats', () => {
+  describe('VisitsStats', () => {
     describe('calculateGenderStatistics', () => {
       test('empty list gives empty stats object', () => {
-        expect(Stats.calculateGenderStatistics([])).toEqual({});
+        expect(VisitsStats.calculateGenderStatistics([])).toEqual({});
       });
 
       test('basic sanity check', () => {
@@ -65,7 +65,7 @@ describe('Visits Data Utilities', () => {
           { gender: 'female' },
         ];
 
-        expect(Stats.calculateGenderStatistics(logs)).toEqual({
+        expect(VisitsStats.calculateGenderStatistics(logs)).toEqual({
           male: 2,
           female: 3,
           'prefer not to say': 1,
@@ -75,7 +75,7 @@ describe('Visits Data Utilities', () => {
 
     describe('calculateAgeGroupStatistics', () => {
       test('empty list gives empty stats object', () => {
-        expect(Stats.calculateAgeGroupStatistics([])).toEqual({});
+        expect(VisitsStats.calculateAgeGroupStatistics([])).toEqual({});
       });
 
       test('basic sanity check', () => {
@@ -88,7 +88,7 @@ describe('Visits Data Utilities', () => {
           { birthYear: 1988 },
         ];
 
-        expect(Stats.calculateAgeGroupStatistics(logs)).toEqual({
+        expect(VisitsStats.calculateAgeGroupStatistics(logs)).toEqual({
           '0-17': 1,
           '18-34': 2,
           '35-50': 2,
@@ -99,7 +99,7 @@ describe('Visits Data Utilities', () => {
 
     describe('calculateCategoryStatistics', () => {
       test('empty list gives empty stats object', () => {
-        expect(Stats.calculateCategoryStatistics([])).toEqual({});
+        expect(VisitsStats.calculateCategoryStatistics([])).toEqual({});
       });
 
       test('basic sanity check', () => {
@@ -112,7 +112,7 @@ describe('Visits Data Utilities', () => {
           { category: '---' },
         ];
 
-        expect(Stats.calculateCategoryStatistics(logs)).toEqual({
+        expect(VisitsStats.calculateCategoryStatistics(logs)).toEqual({
           foo: 3,
           bar: 2,
           '---': 1,
@@ -122,7 +122,7 @@ describe('Visits Data Utilities', () => {
 
     describe('calculateActivityStatistics', () => {
       test('empty list gives empty stats object', () => {
-        expect(Stats.calculateActivityStatistics([])).toEqual({});
+        expect(VisitsStats.calculateActivityStatistics([])).toEqual({});
       });
 
       test('basic sanity check', () => {
@@ -135,7 +135,7 @@ describe('Visits Data Utilities', () => {
           { category: '---', visitActivity: 'five' },
         ];
 
-        expect(Stats.calculateActivityStatistics(logs)).toEqual({
+        expect(VisitsStats.calculateActivityStatistics(logs)).toEqual({
           foo: { one: 2, four: 1 },
           bar: { two: 1, three: 1 },
           '---': { five: 1 },
@@ -149,7 +149,7 @@ describe('Visits Data Utilities', () => {
         const until = new Date('2019-10-31');
         const dateRange = DateRangesEnum.LAST_12_MONTHS;
 
-        expect(Stats.calculateTimePeriodStatistics(since, until, dateRange, [])).toEqual({
+        expect(VisitsStats.calculateTimePeriodStatistics(since, until, dateRange, [])).toEqual({
           'Dec 2018': 0,
           'Jan 2019': 0,
           'Feb 2019': 0,
@@ -164,7 +164,7 @@ describe('Visits Data Utilities', () => {
         });
       });
 
-      test('basic sanity check', () => {
+      test(`basic sanity check :: ${DateRangesEnum.LAST_12_MONTHS}`, () => {
         const since = new Date('2018-12-01');
         const until = new Date('2019-10-31');
         const dateRange = DateRangesEnum.LAST_12_MONTHS;
@@ -178,7 +178,7 @@ describe('Visits Data Utilities', () => {
           { createdAt: '2019-01-02' },
         ];
 
-        expect(Stats.calculateTimePeriodStatistics(since, until, dateRange, logs)).toEqual({
+        expect(VisitsStats.calculateTimePeriodStatistics(since, until, dateRange, logs)).toEqual({
           'Dec 2018': 1,
           'Jan 2019': 1,
           'Feb 2019': 0,
@@ -190,6 +190,50 @@ describe('Visits Data Utilities', () => {
           'Aug 2019': 1,
           'Sep 2019': 0,
           'Oct 2019': 2,
+        });
+      });
+
+      test(`basic sanity check :: ${DateRangesEnum.LAST_MONTH}`, () => {
+        const since = new Date('2019-10-01');
+        const until = new Date('2019-10-31');
+        const dateRange = DateRangesEnum.LAST_MONTH;
+
+        const logs = [
+          { createdAt: '2019-10-10' },
+          { createdAt: '2019-10-15' },
+          { createdAt: '2019-10-22' },
+          { createdAt: '2019-10-12' },
+        ];
+
+        expect(VisitsStats.calculateTimePeriodStatistics(since, until, dateRange, logs)).toEqual({
+          '30 Sep': 0,
+          '07 Oct': 2,
+          '14 Oct': 1,
+          '21 Oct': 1,
+          '28 Oct': 0,
+        });
+      });
+
+      test(`basic sanity check :: ${DateRangesEnum.LAST_WEEK}`, () => {
+        const since = new Date('2019-10-24');
+        const until = new Date('2019-10-31');
+        const dateRange = DateRangesEnum.LAST_WEEK;
+
+        const logs = [
+          { createdAt: '2019-10-24' },
+          { createdAt: '2019-10-25' },
+          { createdAt: '2019-10-28' },
+          { createdAt: '2019-10-30' },
+        ];
+
+        expect(VisitsStats.calculateTimePeriodStatistics(since, until, dateRange, logs)).toEqual({
+          '24 Oct': 1,
+          '25 Oct': 1,
+          '26 Oct': 0,
+          '27 Oct': 0,
+          '28 Oct': 1,
+          '29 Oct': 0,
+          '30 Oct': 1,
         });
       });
     });
