@@ -215,8 +215,8 @@ describe('Visits Data Utilities', () => {
       });
 
       test(`basic sanity check :: ${DateRangesEnum.LAST_WEEK}`, () => {
-        const since = new Date('2019-10-24');
-        const until = new Date('2019-10-31');
+        const since = '2019-10-24';
+        const until = '2019-10-31';
         const dateRange = DateRangesEnum.LAST_WEEK;
 
         const logs = [
@@ -234,6 +234,7 @@ describe('Visits Data Utilities', () => {
           '28 Oct': 1,
           '29 Oct': 0,
           '30 Oct': 1,
+          '31 Oct': 0,
         });
       });
     });
@@ -415,8 +416,8 @@ describe('Visits Data Utilities', () => {
       });
 
       test(`basic sanity check :: ${DateRangesEnum.LAST_WEEK}`, () => {
-        const since = new Date('2019-10-24');
-        const until = new Date('2019-10-31');
+        const since = '2019-10-24';
+        const until = '2019-10-31';
         const dateRange = DateRangesEnum.LAST_WEEK;
 
         const visitors = [
@@ -435,6 +436,7 @@ describe('Visits Data Utilities', () => {
             '28 Oct': 1,
             '29 Oct': 0,
             '30 Oct': 1,
+            '31 Oct': 0,
           });
       });
     });
