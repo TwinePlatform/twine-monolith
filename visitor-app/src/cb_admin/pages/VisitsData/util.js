@@ -1,6 +1,9 @@
+/*
+ * Utilities for data processing (see ./data.js)
+ */
 import moment from 'moment';
-import { zip, identity, toPairs, head, last, map, assoc, assocPath, mergeWith, add, uniq, fromPairs, mergeDeepWith } from 'ramda';
-import { collectBy, mapValues, ones } from '../../../util';
+import { pick, zip, identity, toPairs, head, last, map, assoc, assocPath, mergeWith, add, uniq, fromPairs, mergeDeepWith } from 'ramda';
+import { collectBy, mapValues, ones, combineValues } from '../../../util';
 import { createAgeGroups } from '../../../shared/constants';
 import DateRanges, { DateRangesEnum } from './dateRange';
 
@@ -12,7 +15,7 @@ const isAgeGiven = log => typeof log.birthYear === 'number';
 // count :: { k: [a] } -> { k: Number }
 const count = o => mapValues(xs => xs.length, o);
 
-export const Stats = {
+export const VisitsStats = {
   // calculateGenderStatistics :: [Log] -> { k: Number }
   calculateGenderStatistics: logs => count(collectBy(log => log.gender, logs)),
 
@@ -53,17 +56,17 @@ export const Stats = {
 };
 
 export const VisitorStats = {
-  // calculateGenderStatistics :: [Visitor] -> { k: Number }
+  // calculateGenderStatistics :: [VisitorWithVisitData] -> { k: Number }
   calculateGenderStatistics: visitors => count(collectBy(log => log.gender, visitors)),
 
-  // calculateAgeGroupStatistics :: [Visitor] -> { k: Number }
+  // calculateAgeGroupStatistics :: [VisitorWithVisitData] -> { k: Number }
   calculateAgeGroupStatistics: visitors =>
     count(collectBy(
       identity,
       visitors.filter(isAgeGiven).map(l => AgeGroups.fromBirthYear(l.birthYear)),
     )),
 
-  // calculateCategoryStatistics :: [Visitor] -> { k: Number }
+  // calculateCategoryStatistics :: [VisitorWithVisitData] -> { k: Number }
   calculateCategoryStatistics: visitors =>
     visitors.reduce((acc, visitor) => {
       const cats = uniq(visitor.category);
@@ -71,7 +74,7 @@ export const VisitorStats = {
       return mergeWith(add, acc, categoriesCount);
     }, {}),
 
-  // calculateActivityStatistics :: [Visitor] -> { category: { activity: Number } }
+  // calculateActivityStatistics :: [VisitorWithVisitData] -> { category: { activity: Number } }
   calculateActivityStatistics: (visitors, activities) => {
     const activityToCategoryMap = activities
       .reduce((acc, act) => assoc(act.name, act.category, acc), {});
@@ -87,7 +90,7 @@ export const VisitorStats = {
     }, {});
   },
 
-  // calculateTimePeriodStatistics :: [Visitor] -> { k: Number }
+  // calculateTimePeriodStatistics :: [VisitorWithVisitData] -> { k: Number }
   calculateTimePeriodStatistics: (since, until, dateRange, visitors) => {
     const empty = DateRanges.zeroPadObject(since, until, dateRange, {});
     const fmt = DateRanges.toFormat(dateRange);
@@ -122,3 +125,38 @@ export const formatChartData = (data, bgColor, label) => {
     ],
   };
 };
+
+
+/*
+ * Pre-processing of visitor/visits data in order to:
+ * - apply filters
+ * - make calculating statistics a little simpler
+ */
+// preProcessVisitors :: ([Visitor], Object, Date, Date) -> [VisitorWithVisitData]
+export const preProcessVisitors = (visitors, filters, since, until) => visitors
+  // Only keep those visitors whose visits fall within the date range
+  // and match the visit activity filter (if set)
+  .filter(visitor =>
+    visitor.visits.some(visit =>
+      new Date(visit.createdAt) >= since
+        && new Date(visit.createdAt) <= until
+        && (filters.activity ? visit.visitActivity === filters.activity : true),
+    ))
+  // Collect the values of the 'visitActivity', 'category' and 'createdAt' keys
+  // onto the visitor object to make the calculation of statistics more straightforward
+  .map(visitor => ({
+    ...visitor,
+    ...pick(
+      ['visitActivity', 'category', 'createdAt'],
+      combineValues(
+        visitor.visits
+          // Only keep those visits which fall within the date range
+          // and match the visit activity filter (if set)
+          .filter(visit =>
+            new Date(visit.createdAt) >= since
+              && new Date(visit.createdAt) <= until
+              && (filters.activity ? visit.visitActivity === filters.activity : true),
+          ),
+      ),
+    ),
+  }));

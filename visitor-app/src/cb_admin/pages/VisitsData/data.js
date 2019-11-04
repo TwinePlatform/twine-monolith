@@ -1,16 +1,43 @@
-import { filter, flatten, pick } from 'ramda';
+/*
+ * Data processing functions
+ *
+ * Transformation of API responses into visit and vistior statistics,
+ * formatted to be compatible with Chart.js
+ */
+import { filter } from 'ramda';
 import { CommunityBusiness, Visitors, Activities } from '../../../api';
-import { mapValues, combineValues } from '../../../util';
+import { mapValues } from '../../../util';
 import DateRanges from './dateRange';
-import { Stats, calculateStepSize, formatChartData, VisitorStats } from './util';
+import { VisitsStats, calculateStepSize, formatChartData, VisitorStats, preProcessVisitors } from './util';
 import { colors } from '../../../shared/style_guide';
 
+
+/*
+ * Chart colour spec
+ *
+ * - Doughnut chart cycles through 3 colours, since it displays either age groups or gender
+ * - Bar charts use a single colour (purple) to reduce unnecessary visual noise
+ */
 const Colours = {
   DOUGHNUT: [colors.highlight_primary, colors.highlight_secondary, colors.light],
   BAR: colors.highlight_secondary,
 };
 
 
+/*
+ * getVisitsData
+ *
+ * `filters` - an object of filters (directly from component state)
+ * `chartOptions` - chart display options (directly from component state)
+ *
+ * Queries API and processes response into relevant statistics, then formats
+ * this data into the shape expected by Chart.js
+ *
+ * NOTE:
+ * The expection is `data.activity` which is a nested object { category: { activity: ChartData } }
+ * in order to make data selection for chart drill down simpler.
+ */
+// ({ k: String }, { k: a }) -> { charts: a, data: { k: ChartData } }
 export const getVisitsData = (filters, chartsOptions) => {
   const { since, until } = DateRanges.toDates(filters.time);
 
@@ -24,11 +51,11 @@ export const getVisitsData = (filters, chartsOptions) => {
     .then((res) => {
       const logs = res.data.result;
 
-      const genderStats = Stats.calculateGenderStatistics(logs);
-      const ageGroupsStats = Stats.calculateAgeGroupStatistics(logs);
-      const timeStats = Stats.calculateTimePeriodStatistics(since, until, filters.time, logs);
-      const categoriesStats = Stats.calculateCategoryStatistics(logs);
-      const activitiesStats = Stats.calculateActivityStatistics(logs);
+      const genderStats = VisitsStats.calculateGenderStatistics(logs);
+      const ageGroupsStats = VisitsStats.calculateAgeGroupStatistics(logs);
+      const timeStats = VisitsStats.calculateTimePeriodStatistics(since, until, filters.time, logs);
+      const categoriesStats = VisitsStats.calculateCategoryStatistics(logs);
+      const activitiesStats = VisitsStats.calculateActivityStatistics(logs);
 
       return {
         charts: {
@@ -47,6 +74,20 @@ export const getVisitsData = (filters, chartsOptions) => {
     });
 };
 
+/*
+ * getVisitorData
+ *
+ * `filters` - an object of filters (directly from component state)
+ * `chartOptions` - chart display options (directly from component state)
+ *
+ * Queries API and processes response into relevant statistics, then formats
+ * this data into the shape expected by Chart.js
+ *
+ * NOTE:
+ * The expection is `data.activity` which is a nested object { category: { activity: ChartData } }
+ * in order to make data selection for chart drill down simpler.
+ */
+// ({ k: String }, { k: a }) -> { charts: a, data: { k: ChartData } }
 export const getVisitorData = (filters, chartsOptions) => {
   const { since, until } = DateRanges.toDates(filters.time);
 
@@ -60,37 +101,24 @@ export const getVisitorData = (filters, chartsOptions) => {
 
   return Promise.all([pVisitors, pActivities])
     .then(([res, rActivities]) => {
-      const { result } = res.data;
+      const visitors = res.data.result;
       const activities = rActivities.data.result;
 
-      const visitors = flatten(
-        result
-          .filter(visitor =>
-            visitor.visits.some(visit =>
-              new Date(visit.createdAt) >= since
-                && new Date(visit.createdAt) <= until
-                && (filters.activity ? visit.visitActivity === filters.activity : true),
-            ))
-          .map(visitor => ({
-            ...visitor,
-            ...pick(
-              ['visitActivity', 'category', 'createdAt'],
-              combineValues(
-                visitor.visits
-                  .filter(visit =>
-                    new Date(visit.createdAt) >= since
-                      && new Date(visit.createdAt) <= until
-                      && (filters.activity ? visit.visitActivity === filters.activity : true),
-                  ),
-              ),
-            ),
-          })));
+      const visitorsWithVisitData = preProcessVisitors(visitors, filters, since, until);
 
-      const genderStats = VisitorStats.calculateGenderStatistics(visitors);
-      const ageGroupsStats = VisitorStats.calculateAgeGroupStatistics(visitors);
-      const activitiesStats = VisitorStats.calculateActivityStatistics(visitors, activities);
-      const categoriesStats = VisitorStats.calculateCategoryStatistics(visitors);
-      const timeStats = VisitorStats.calculateTimePeriodStatistics(since, until, filters.time, visitors);
+      const genderStats = VisitorStats.calculateGenderStatistics(visitorsWithVisitData);
+      const ageGroupsStats = VisitorStats.calculateAgeGroupStatistics(visitorsWithVisitData);
+      const categoriesStats = VisitorStats.calculateCategoryStatistics(visitorsWithVisitData);
+      const activitiesStats = VisitorStats.calculateActivityStatistics(
+        visitorsWithVisitData,
+        activities,
+      );
+      const timeStats = VisitorStats.calculateTimePeriodStatistics(
+        since,
+        until,
+        filters.time,
+        visitorsWithVisitData,
+      );
 
       return {
         charts: {
