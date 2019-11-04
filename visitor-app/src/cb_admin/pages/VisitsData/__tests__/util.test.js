@@ -331,7 +331,7 @@ describe('Visits Data Utilities', () => {
           { name: 'three', category: 'bar' },
           { name: 'four', category: 'foo' },
           { name: 'five', category: '---' },
-        ]
+        ];
 
         expect(VisitorStats.calculateActivityStatistics(visitors, activities)).toEqual({
           foo: { one: 2, four: 1 },
@@ -376,19 +376,20 @@ describe('Visits Data Utilities', () => {
           { createdAt: ['2019-01-02'] },
         ];
 
-        expect(VisitorStats.calculateTimePeriodStatistics(since, until, dateRange, visitors)).toEqual({
-          'Dec 2018': 1,
-          'Jan 2019': 1,
-          'Feb 2019': 0,
-          'Mar 2019': 0,
-          'Apr 2019': 0,
-          'May 2019': 0,
-          'Jun 2019': 1,
-          'Jul 2019': 0,
-          'Aug 2019': 1,
-          'Sep 2019': 0,
-          'Oct 2019': 2,
-        });
+        expect(VisitorStats.calculateTimePeriodStatistics(since, until, dateRange, visitors))
+          .toEqual({
+            'Dec 2018': 1,
+            'Jan 2019': 1,
+            'Feb 2019': 0,
+            'Mar 2019': 0,
+            'Apr 2019': 0,
+            'May 2019': 0,
+            'Jun 2019': 1,
+            'Jul 2019': 0,
+            'Aug 2019': 1,
+            'Sep 2019': 0,
+            'Oct 2019': 2,
+          });
       });
 
       test(`basic sanity check :: ${DateRangesEnum.LAST_MONTH}`, () => {
