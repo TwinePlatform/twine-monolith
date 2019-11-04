@@ -4,8 +4,8 @@ import qs from 'qs';
 
 const API_VERSION = 'v1.1';
 
-const baseURL = process.env.REACT_APP_API_HOST_DOMAIN ?
-  `${process.env.REACT_APP_API_HOST_DOMAIN}/${API_VERSION}`
+const baseURL = process.env.REACT_APP_API_HOST_DOMAIN
+  ? `${process.env.REACT_APP_API_HOST_DOMAIN}/${API_VERSION}`
   : `/${API_VERSION}`;
 
 export const axios = _axios.create({
