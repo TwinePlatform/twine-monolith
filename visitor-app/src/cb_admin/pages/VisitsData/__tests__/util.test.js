@@ -384,7 +384,7 @@ describe('Visits Data Utilities', () => {
             'Mar 2019': 0,
             'Apr 2019': 0,
             'May 2019': 0,
-            'Jun 2019': 1,
+            'Jun 2019': 2,
             'Jul 2019': 0,
             'Aug 2019': 1,
             'Sep 2019': 0,
@@ -397,20 +397,21 @@ describe('Visits Data Utilities', () => {
         const until = new Date('2019-10-31');
         const dateRange = DateRangesEnum.LAST_MONTH;
 
-        const logs = [
-          { createdAt: '2019-10-10' },
-          { createdAt: '2019-10-15' },
-          { createdAt: '2019-10-22' },
-          { createdAt: '2019-10-12' },
+        const visitors = [
+          { createdAt: ['2019-10-10'] },
+          { createdAt: ['2019-10-15', '2019-10-02'] },
+          { createdAt: ['2019-10-22'] },
+          { createdAt: ['2019-10-12', '2019-10-05'] },
         ];
 
-        expect(VisitorStats.calculateTimePeriodStatistics(since, until, dateRange, logs)).toEqual({
-          '30 Sep': 0,
-          '07 Oct': 2,
-          '14 Oct': 1,
-          '21 Oct': 1,
-          '28 Oct': 0,
-        });
+        expect(VisitorStats.calculateTimePeriodStatistics(since, until, dateRange, visitors))
+          .toEqual({
+            '30 Sep': 2,
+            '07 Oct': 2,
+            '14 Oct': 1,
+            '21 Oct': 1,
+            '28 Oct': 0,
+          });
       });
 
       test(`basic sanity check :: ${DateRangesEnum.LAST_WEEK}`, () => {
@@ -418,22 +419,23 @@ describe('Visits Data Utilities', () => {
         const until = new Date('2019-10-31');
         const dateRange = DateRangesEnum.LAST_WEEK;
 
-        const logs = [
-          { createdAt: '2019-10-24' },
-          { createdAt: '2019-10-25' },
-          { createdAt: '2019-10-28' },
-          { createdAt: '2019-10-30' },
+        const visitors = [
+          { createdAt: ['2019-10-24'] },
+          { createdAt: ['2019-10-25'] },
+          { createdAt: ['2019-10-28'] },
+          { createdAt: ['2019-10-30', '2019-10-30'] },
         ];
 
-        expect(VisitorStats.calculateTimePeriodStatistics(since, until, dateRange, logs)).toEqual({
-          '24 Oct': 1,
-          '25 Oct': 1,
-          '26 Oct': 0,
-          '27 Oct': 0,
-          '28 Oct': 1,
-          '29 Oct': 0,
-          '30 Oct': 1,
-        });
+        expect(VisitorStats.calculateTimePeriodStatistics(since, until, dateRange, visitors))
+          .toEqual({
+            '24 Oct': 1,
+            '25 Oct': 1,
+            '26 Oct': 0,
+            '27 Oct': 0,
+            '28 Oct': 1,
+            '29 Oct': 0,
+            '30 Oct': 1,
+          });
       });
     });
   });

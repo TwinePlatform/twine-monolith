@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import MockDate from 'mockdate';
 import { axios } from '../../../../api';
 import { DateRangesEnum } from '../dateRange';
 import { getVisitorData } from '../data';
@@ -7,10 +8,15 @@ import { getVisitorData } from '../data';
 describe('Visits Dashboard Data Processing', () => {
   const mock = new MockAdapter(axios);
 
-  afterAll(() => mock.restore());
+  afterAll(() => {
+    MockDate.reset();
+    mock.restore();
+  });
 
   describe('getVisitorData', () => {
     test(`Time: ${DateRangesEnum.LAST_12_MONTHS}, Age: All, Gender: All, Activity: All`, async () => {
+      MockDate.set('2019-10-31T23:59:59.999Z');
+
       mock.onGet('/community-businesses/me/visitors')
         .reply(200, {
           result: [
