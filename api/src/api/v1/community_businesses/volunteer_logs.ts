@@ -119,7 +119,7 @@ const routes: [
           scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read'],
         },
       },
-      validate: { query: { since, until } },
+      validate: { params: { logId: id } },
       response: { schema: response },
       pre: [
         { method: getCommunityBusiness, assign: 'communityBusiness' },
