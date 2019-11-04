@@ -143,6 +143,7 @@ export const Visitors: VisitorCollection = {
       userId: 'visit_log.user_account_id',
       visitActivityId: 'visit_activity.visit_activity_id',
       visitActivity: 'visit_activity.visit_activity_name',
+      category: 'visit_activity_category.visit_activity_category_name',
     };
 
     const rows: Partial<User>[] = await applyQueryModifiers(
@@ -178,6 +179,10 @@ export const Visitors: VisitorCollection = {
           'visit_activity',
           'visit_activity.visit_activity_id',
           'visit_log.visit_activity_id')
+        .leftOuterJoin(
+          'visit_activity_category',
+          'visit_activity_category.visit_activity_category_id',
+          'visit_activity.visit_activity_category_id')
         .where(filter(Boolean, {
           user_account_id: user.id,
           'visit_activity.visit_activity_name': activity,
