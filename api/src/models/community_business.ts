@@ -503,7 +503,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       }),
       whereBetween: pipe(
         evolve({ birthYear: AgeList.toBirthYear }),
-        Objects.renameKeys({ birthYear: 'user_account.birth_year' })
+        Objects.renameKeys({ birthYear: 'user_account.birth_year', createdAt: 'visit_log.created_at' })
       ),
     });
     const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);
