@@ -1,5 +1,7 @@
 import { Duration } from 'twine-util';
-import { mergeAll, Dictionary } from 'ramda';
+import { collectBy } from 'twine-util/arrays';
+import { mapValues } from 'twine-util/objects';
+import { Dictionary } from 'ramda';
 import { TableTypeItem } from './tableType';
 
 
@@ -24,66 +26,53 @@ export interface AggregatedData {
 
 export const isDataEmpty = (d: AggregatedData) => d.rows.length === 0;
 
-const getIdAndName = (xData: Params['xData'], tableType: TableTypeItem, log: Params['logs']) => {
-  switch (tableType.xIdFromLogs){
-    case('userId'):
-      const user = xData.find((x) => x.id === log.userId);
-      return { id: log.userId, name: user ? user.name : 'Deleted User' };
+const getIdAndName = (type: string, xData: Params['xData'], value: string | number) => {
+  switch (type) {
+    case 'userId':
+      const user = xData.find((x) => x.id === Number(value));
+      return { id: user ? user.id : Number(value), name: user ? user.name : 'Deleted User' };
 
-    case('activity'):
+    case 'project':
+      const project = xData.find((x) => x.name === value);
+      return { id: project ? project.id : -1, name: project ? project.name : 'General' };
+
+    case 'activity':
     default:
-      const activity = xData.find((x) => x.name === log.activity);
-      return { id: activity ? activity.id : NaN, name: log.activity };
+      const activity = xData.find((x) => x.name === value);
+      return { id: activity ? activity.id : -1, name: activity ? activity.name : 'Unknown Activity' };
   }
 };
-
-const checkIfRowExists = (row: Row, tableType: TableTypeItem, log: Params['logs']) => {
-  switch (tableType.xIdFromLogs){
-    case('userId'):
-      return row.id === log.userId;
-
-    case('activity'):
-    default:
-      return row.name === log.activity;
-  }
-};
-
-const checkIfRowExistsInList = (acc: Row[], tableType: TableTypeItem, log: Params['logs']) => {
-  switch (tableType.xIdFromLogs){
-    case('userId'):
-      return acc.some((row) => row.id === log.userId);
-
-    case('activity'):
-    default:
-      return acc.some((row) => row.name === log.activity);
-  }
-};
-
 
 export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params): AggregatedData => {
   const { groupByX, groupByY } = tableType;
-  const rows: Row[] = logs.reduce((rowsAcc: Dictionary<any>[], log: any) => {
-    const activeColumn = tableType.getYIdFromLogs(log);
 
-    const exists = checkIfRowExistsInList(rowsAcc, tableType, log);
-    if (exists) {
-      return rowsAcc.map((row) => {
-        if (checkIfRowExists(row, tableType, log)) {
-          row[activeColumn] = Duration.sum(row[activeColumn] || {}, log.duration);
-        }
-        return row;
-      });
-    }
-    const emptyDurationElements = yData.map((a) => ({ [a.name]: Duration.fromSeconds(0) }));
-    const idAndName = getIdAndName(xData, tableType, log);
+  // Collect logs into buckets by X-data
+  // Log[] -> { [X]: Log[] }
+  const w = collectBy((log: any) => log[tableType.xIdFromLogs], logs);
 
-    const newRow = {
-      ...mergeAll(emptyDurationElements) as Dictionary<string>,
-      [activeColumn]: log.duration,
-      ...idAndName,
-    };
-    return rowsAcc.concat(newRow);
-  }, []);
+  // Collect each bucket into sub-buckets by Y-data
+  // { [X]: Log[] } -> { [X]: { [Y]: Log[] } }
+  const x = mapValues((logs) => collectBy(tableType.getYIdFromLogs, logs), w);
+
+  // Sum all log durations within buckets
+  // { [X]: { [Y]: Log[] } } -> { [X]: { [Y]: Duration } }
+  const y = mapValues((ys) => mapValues((_logs) => Duration.accumulate(_logs.map((l) => l.duration)), ys), x);
+
+  // Interpolate Y-data (necessary when Y-data is month based)
+  // { [X]: { [Y]: Duration } } -> { [X]: { [Y]: Duration } }
+  const z = mapValues((ys) =>
+    yData.reduce((acc, yDataPt) =>
+      ys.hasOwnProperty(yDataPt.name)
+        ? acc
+        : { ...acc, [yDataPt.name]: Duration.fromSeconds(0) },
+      ys),
+    y);
+
+  // Transform into row
+  // { [X]: { [Y]: Duration } } -> ({ [Y]: Duration } & { name: [X], id: number })[]
+  const rows = Object.entries(z)
+    .reduce((acc, [X, Ys]) =>
+      acc.concat(Object.assign({}, Ys, getIdAndName(tableType.xIdFromLogs, xData, X))), [] as Row[]);
 
   return {
     groupByX,
