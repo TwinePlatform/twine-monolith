@@ -1,6 +1,8 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import moment from 'moment';
 import uuid from 'uuid/v4';
+
+import { ColorDotsLoader } from 'react-native-indicator';
 
 import { NavigationFocusInjectedProps } from 'react-navigation';
 import VolunteerCard from './VolunteerCard';
@@ -10,6 +12,8 @@ import useToggle from '../../../../lib/hooks/useToggle';
 import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
 import useRequest from '../../../../lib/hooks/requestHook';
 import { CommunityBusinesses } from '../../../../lib/api';
+import { ColoursEnum } from '../../../../lib/ui/colours';
+import { Status } from '../../../types';
 
 /*
  * Types
@@ -25,11 +29,19 @@ type Props = {
  * Component
  */
 const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) => {
+  const [status, setStatus] = useState(Status.loading);
   const [deleteModalVisibility, toggleDeleteModalVisibility] = useToggle(false);
   const [activeCard, setActiveCard] = useState(null);
   const [reload, setReload] = useState((navigation.state.params || {}).reload);
 
-  const [volunteers] = useRequest(CommunityBusinesses.getVolunteers, {}, [reload]);
+  const [volunteers] = useRequest({
+    request: CommunityBusinesses.getVolunteers,
+    updateOn: [reload],
+    setStatus,
+  });
+
+  useEffect(() => {
+  }, [volunteers]);
 
   const onDelete = (id: number) => {
     toggleDeleteModalVisibility();
@@ -37,12 +49,16 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
   };
 
   const onConfirm = () => {
+    setStatus(Status.loading);
     CommunityBusinesses.deleteVolunteer(activeCard)
       .then(() => {
         setReload(uuid());
         toggleDeleteModalVisibility();
       })
-      .catch(console.log); // TODO: error handling
+      .catch((e) => {
+        setStatus(Status.failed);
+        console.log(e);
+      }); // TODO: error handling
   };
 
   // TODO loading spinner
@@ -57,7 +73,16 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
         onCancel={toggleDeleteModalVisibility}
         onConfirm={onConfirm}
       />
-      {volunteers && volunteers.map((volunteer) => (
+
+      {status === Status.loading && (
+      <ColorDotsLoader
+        color1={ColoursEnum.purple}
+        color2={ColoursEnum.mustard}
+        color3={ColoursEnum.grey}
+        size={20}
+      />
+      )}
+      {status !== Status.loading && volunteers && volunteers.map((volunteer) => (
         <VolunteerCard
           key={volunteer.id}
           id={volunteer.id}
