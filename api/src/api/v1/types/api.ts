@@ -25,13 +25,11 @@ import { Unpack, AppEnum, Maybe } from '../../../types/internal';
 interface ServerRoute<
   TRequest extends Hapi.Request,
   TResponse extends Hapi.Lifecycle.ReturnValue
-> extends Hapi.ServerRoute {
+  > extends Hapi.ServerRoute {
   handler: (req: TRequest, h: Hapi.ResponseToolkit, e?: Error) => Promise<Boom<null> | TResponse>;
 }
 
-type ResponsePayload<T, U = null> = U extends null
-  ? ({ meta: object; result: T } | T)
-  : ({ meta: U; result: T } | T);
+type ResponsePayload<T, U = object> = ({ meta: U; result: T } | T);
 
 export namespace Api {
 
@@ -57,7 +55,7 @@ export namespace Api {
       export namespace PUT {
         export interface Request extends Hapi.Request {
           payload:
-            Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
+          Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
           pre: { communityBusiness: CommunityBusiness };
         }
         export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
@@ -188,7 +186,8 @@ export namespace Api {
             };
           }
           export type Result = Unpack<ReturnType<VolunteerLogCollection['serialise']>>[];
-          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+          export type Response = ResponsePayload<Result>;
+          export type Route = ServerRoute<Request, Response>;
         }
 
         export namespace POST {
@@ -355,7 +354,7 @@ export namespace Api {
       export namespace PUT {
         export interface Request extends Hapi.Request {
           payload:
-            Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
+          Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
           pre: { communityBusiness: CommunityBusiness };
         }
         export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
@@ -439,12 +438,12 @@ export namespace Api {
       export namespace POST {
         export interface Request extends Hapi.Request {
           payload:
-            Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id'>
-            & {
-              orgName: CommunityBusiness['name'];
-              adminName: string;
-              adminEmail: string;
-            };
+          Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id'>
+          & {
+            orgName: CommunityBusiness['name'];
+            adminName: string;
+            adminEmail: string;
+          };
         }
         export type Result = Unpack<ReturnType<CommunityBusinessCollection['serialise']>>;
         export type Response = ResponsePayload<Result>;

@@ -17,9 +17,15 @@ This documents the desired architecture for this project.
 |  |  |- components   Feature-specific components
 |  |  |- screens        Feature-specific routes/pages
 |  |  |- index.ts     Defines public interface of <FEATURE> module
-|  |- lib             
+|  |- lib
 |  |  |- api          Interface with the Twine HTTP API
 |  |  |- utils        App specific helper functions
+|  |- redux
+|  |  |- <entity / feature / grouping>  Any coherent grouping or feature set (e.g. "logs")
+|  |  |  |- index.ts    Either all actions/action-creators/reducers/selectors in this file, OR...
+|  |  |  |- reducer.ts  ...separate out each of the above into their own file.
+|  |  |  |- ...
+|  |  |- rootReducer.ts
 |  |- App.tsx
 |  |- index.tsx
 |- ...dot/json files

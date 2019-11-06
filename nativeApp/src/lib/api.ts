@@ -1,8 +1,9 @@
-import _axios from 'axios';
+import _axios, { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
 import { AsyncStorage } from 'react-native';
 import getEnvVars from '../../environment'; // eslint-disable-line
 import { StorageValuesEnum } from '../authentication/types';
+import { Api } from '../../../api/src/api/v1/types/api';
 // NB pevious file local only
 
 // TODO: change version to v1.1 when server changes have been updated
@@ -18,12 +19,7 @@ export const axios = _axios.create({
   },
 });
 
-type RequestConfig = {
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-  url: string;
-  data?: any;
-}
-const makeRequest = async ({ ...rest }: RequestConfig) => {
+const makeRequest = async <T = any> ({ ...rest }: AxiosRequestConfig) => {
   let headers;
   try {
     const token = await AsyncStorage.getItem(StorageValuesEnum.USER_TOKEN);
@@ -31,7 +27,7 @@ const makeRequest = async ({ ...rest }: RequestConfig) => {
   } catch (error) {
     headers = {};
   }
-  return axios.request({ headers, ...rest });
+  return axios.request<T>({ headers, ...rest });
 };
 
 
@@ -47,9 +43,17 @@ export const Authentication = {
 };
 
 export const CommunityBusinesses = {
-  addVolunteer: () => {},
+  addVolunteer: () => { },
   editVolunteer: ({ id, ...changeset }) => makeRequest({ method: 'PUT', url: `/users/volunteers/${id}`, data: changeset }),
   deleteVolunteer: (id: number) => makeRequest({ method: 'DELETE', url: `/users/volunteers/${id}` }),
   getVolunteerActivities: () => axios.get('/volunteer-activities'),
   getVolunteers: () => makeRequest({ method: 'GET', url: '/community-businesses/me/volunteers' }),
+};
+
+export const VolunteerLogs = {
+  get: (since?: Date, until?: Date) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.GET.Result>({
+    method: 'GET',
+    url: '/community-businesses/me/volunteer-logs',
+    params: { since, until },
+  }),
 };
