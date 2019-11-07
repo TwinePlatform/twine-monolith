@@ -7,7 +7,7 @@ import UnitToggle from './UnitToggle';
 import { DurationUnitEnum } from '../../../types';
 import { DownloadButton } from '../../../lib/ui/components/Buttons';
 import { DateRangePickerConstraint } from './DatePicker/types';
-import { DashboardContext } from '../../../App';
+import { DashboardContext } from '../context';
 
 
 /**
@@ -18,6 +18,7 @@ type DateFilterType = 'day' | 'month';
 type UtilityBarProps = {
   dateFilter: DateFilterType
   datePickerConstraint: DateRangePickerConstraint
+  customToggle?: React.ReactElement
   onFromDateChange?: (d: Date) => void
   onToDateChange?: (d: Date) => void
   onUnitChange?: (u: DurationUnitEnum) => void
@@ -43,6 +44,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
     onToDateChange = () => { },
     onUnitChange = () => { },
     onDownloadClick = () => { },
+    customToggle = null,
     ...rest
   } = props;
 
@@ -95,6 +97,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
       </Col>
       <Col xs={6}>
         <Row end="xs">
+          {customToggle}
           <UnitToggle onChange={onDisplayUnitChange} />
           <DownloadButton onClick={onDownloadClick}>Download</DownloadButton>
         </Row>

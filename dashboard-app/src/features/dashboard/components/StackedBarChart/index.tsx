@@ -15,7 +15,7 @@ import Legend from './Legend/index';
 import Chart from './Chart';
 import { LegendData } from './types';
 import { TitleString } from '../Title';
-import { DashboardContext } from '../../../../App';
+import { DashboardContext } from '../../context';
 
 
 /*
