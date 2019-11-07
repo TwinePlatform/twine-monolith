@@ -4,7 +4,7 @@ import Months from '../../../lib/util/months';
 export interface TableTypeItem {
   groupByX: string;
   groupByY: string;
-  xIdFromLogs: string;
+  xIdFromLogs: 'userId' | 'activity' | 'project';
   getYIdFromLogs: (x: any) => string;
 }
 interface TableType {
