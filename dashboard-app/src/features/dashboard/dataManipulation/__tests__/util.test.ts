@@ -1,9 +1,9 @@
-import { isDateString, abbreviateDateString, abbreviateChartLabels } from '../util';
+import { isDateString, formatDateString, abbreviateChartLabels } from '../util';
 import Months from '../../../../lib/util/months';
 
 
 describe('Data manipulation utilities', () => {
-  describe(':: isDateString helper', () => {
+  describe(':: isDateString', () => {
     test('SUCCESS - returns true if given date string', () => {
       const expected = isDateString('January 2019');
       expect(expected).toBe(true);
@@ -18,9 +18,9 @@ describe('Data manipulation utilities', () => {
     });
   });
 
-  describe(':: abbreviateDateString helper', () => {
-    test('SUCCESS - returns abbreviated month in date string', () => {
-      const expected = abbreviateDateString(Months.format.abbreviated, 'January 2019');
+  describe(':: formatDateString', () => {
+    test('SUCCESS - returns formatted month in date string', () => {
+      const expected = formatDateString(Months.format.abbreviated, 'January 2019');
       expect(expected).toBe('Jan 2019');
     });
   });

@@ -18,7 +18,7 @@ interface Params {
 }
 export type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
 
-export const createHeaders = (yData: {name: string}[]) => (data: AggregatedData) => {
+export const createHeaders = (yData: { name: string }[]) => (data: AggregatedData) => {
   const headers = [data.groupByX, ...yData.map((x) => x.name)];
   return { ...data, headers };
 }; // TODO: add test

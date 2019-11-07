@@ -16,7 +16,7 @@ export const isDateString = (x: any): boolean => {
   return Months.list.includes(words[0]);
 };
 
-export const abbreviateDateString = curry((format: MonthsFormatEnum, x: string): string => {
+export const formatDateString = curry((format: MonthsFormatEnum, x: string): string => {
   const [month, year] = x.split(' ');
   const numericalMonth = Months.list.indexOf(month) + 1;
   const doubleDigitNumericalMonth = numericalMonth > 9
@@ -26,15 +26,15 @@ export const abbreviateDateString = curry((format: MonthsFormatEnum, x: string):
   return moment(isoDate).format(format);
 });
 
-export const abbreviateIfDateString = curry((format: MonthsFormatEnum, x: any): string =>
-  isDateString(x) ? abbreviateDateString(format, x) : x);
+export const formatIfDateString = curry((format: MonthsFormatEnum, x: any): string =>
+  isDateString(x) ? formatDateString(format, x) : x);
 
 export const round = MathUtil.roundTo(2);
 
 export const add = (a: number, b: any) => a + (isNaN(b) ? 0 : Number(b));
 
 export const toUnitDuration = (unit: DurationUnitEnum, duration: Duration.Duration) => {
-  switch (unit){
+  switch (unit) {
     case DurationUnitEnum.DAYS:
       return round(Duration.toWorkingDays(duration));
 
@@ -65,12 +65,12 @@ export const removeIdInRows = (data: AggregatedData) => {
 }; // TODO: add test
 
 export const abbreviateMonths = (format: MonthsFormatEnum) => evolve({
-  headers: (headers: string[]) => headers.map((x) => abbreviateIfDateString(format, x)),
+  headers: (headers: string[]) => headers.map((x) => formatIfDateString(format, x)),
   rows: (rows: Dictionary<string | number>[]) => rows
-    .map((row) => Objects.mapKeys((k) => abbreviateIfDateString(format, k))(row)),
+    .map((row) => Objects.mapKeys((k) => formatIfDateString(format, k))(row)),
 }); // TODO: add test
 
 export const abbreviateChartLabels = (labels: string[]) =>
   labels.map((l) => isDateString(l)
-    ? abbreviateDateString(Months.format.abbreviated, l).split(' ')
+    ? formatDateString(Months.format.abbreviated, l).split(' ')
     : truncate(l, 10));
