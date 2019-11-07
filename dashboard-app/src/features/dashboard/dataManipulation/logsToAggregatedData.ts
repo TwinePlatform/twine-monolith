@@ -26,20 +26,26 @@ export interface AggregatedData {
 
 export const isDataEmpty = (d: AggregatedData) => d.rows.length === 0;
 
-const getIdAndName = (type: string, xData: Params['xData'], value: string | number) => {
+const getIdAndName = (type: TableTypeItem['xIdFromLogs'], xData: Params['xData'], value: string | number) => {
   switch (type) {
     case 'userId':
       const user = xData.find((x) => x.id === Number(value));
-      return { id: user ? user.id : Number(value), name: user ? user.name : 'Deleted User' };
+      return user
+        ? { id: user.id, name: user.name }
+        : { id: Number(value), name: 'Deleted User' };
 
     case 'project':
       const project = xData.find((x) => x.name === value);
-      return { id: project ? project.id : -1, name: project ? project.name : 'General' };
+      return project
+        ? { id: project.id, name: project.name }
+        : { id: -1, name: 'General' };
 
     case 'activity':
     default:
       const activity = xData.find((x) => x.name === value);
-      return { id: activity ? activity.id : -1, name: activity ? activity.name : 'Unknown Activity' };
+      return activity
+        ? { id: activity.id, name: activity.name }
+        : { id: -1, name: 'Unknown Activity' };
   }
 };
 
