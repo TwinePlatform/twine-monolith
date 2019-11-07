@@ -54,7 +54,7 @@ if (!password) {
 
         const email = isAdmin
           ? `admin@${org.name.toLowerCase().replace(/ /g, '').replace('é', 'e').replace(/[:&'-_]/g, '')}.com`
-          : `${name}@example.com`;
+          : `${name.toLowerCase().replace(/ /g, '')}@example.com`;
 
         const anon = Object.assign({}, user, { name, email, password, phoneNumber: null });
 
