@@ -113,9 +113,9 @@ export const VisitorStats = {
 export const calculateStepSize = stats =>
   Math.max(1, Math.floor(Math.max(...Object.values(stats)) / 5));
 
-// formatChartData :: ({ k: v }, [string], string?) -> { k: v }
-export const formatChartData = (data, bgColor, label) => {
-  const pairedData = toPairs(data);
+// formatChartData :: ({ k: v }, [string], { label?: string, sorter: (l, r) -> number }) -> { k: v }
+export const formatChartData = (data, bgColor, { label, sorter } = {}) => {
+  const pairedData = sorter ? toPairs(data).sort(sorter) : toPairs(data);
   return {
     labels: map(head, pairedData),
     datasets: [

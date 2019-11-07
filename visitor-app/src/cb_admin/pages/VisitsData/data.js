@@ -6,10 +6,11 @@
  */
 import { filter } from 'ramda';
 import { CommunityBusiness, Visitors, Activities } from '../../../api';
-import { mapValues } from '../../../util';
+import { mapValues, repeat } from '../../../util';
 import DateRanges from './dateRange';
 import { VisitsStats, calculateStepSize, formatChartData, VisitorStats, preProcessVisitors } from './util';
 import { colors } from '../../../shared/style_guide';
+import { AgeRange } from '../../../shared/constants';
 
 
 /*
@@ -19,10 +20,12 @@ import { colors } from '../../../shared/style_guide';
  * - Bar charts use a single colour (purple) to reduce unnecessary visual noise
  */
 const Colours = {
-  DOUGHNUT: [colors.highlight_primary, colors.highlight_secondary, colors.light],
+  DOUGHNUT: [colors.highlight_primary, colors.highlight_secondary, colors.dark],
   BAR: colors.highlight_secondary,
 };
 
+// sorter :: ([string, number], [string, number]) -> number
+const sorter = (l, r) => AgeRange.fromStr(l[0])[0] - AgeRange.fromStr(r[0])[0];
 
 /*
  * getVisitsData
@@ -68,7 +71,7 @@ export const getVisitsData = (filters, chartsOptions) => {
           gender: formatChartData(genderStats, Colours.DOUGHNUT),
           category: formatChartData(categoriesStats, Colours.BAR),
           activity: mapValues(x => formatChartData(x, Colours.BAR), activitiesStats),
-          age: formatChartData(ageGroupsStats, Colours.DOUGHNUT),
+          age: formatChartData(ageGroupsStats, repeat(Colours.DOUGHNUT, Object.keys(ageGroupsStats).length), { sorter }),
         },
       };
     });
@@ -131,7 +134,7 @@ export const getVisitorData = (filters, chartsOptions) => {
           gender: formatChartData(genderStats, Colours.DOUGHNUT),
           category: formatChartData(categoriesStats, Colours.BAR),
           activity: mapValues(x => formatChartData(x, Colours.BAR), activitiesStats),
-          age: formatChartData(ageGroupsStats, Colours.DOUGHNUT),
+          age: formatChartData(ageGroupsStats, repeat(Colours.DOUGHNUT, Object.keys(ageGroupsStats).length), { sorter }),
         },
       };
     });
