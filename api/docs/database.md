@@ -68,13 +68,13 @@ Backups are scheduled to run everyday at 3am, and are retained for 7 days.
 
 Current status of backups
 ```
-heroku pg:backups --app [app-name]
+$ heroku pg:backups --app [app-name]
 ```
 ❗️ If at any point heroku is upgraded from hobby to production tier, backups will need to be rescheduled.
 
 Change backup schedule
 ```
-heroku pg:backups:schedule DATABASE_URL --at '[time] [TZ format]' --app [app-name]
+$ heroku pg:backups:schedule DATABASE_URL --at '[time] [TZ format]' --app [app-name]
 ```
 
 ### Local Test Restore
@@ -87,6 +87,17 @@ $ npm run exec ./bin/clone_db.ts -- <DB_NAME>
 See documentation in the script file for more information.
 
 You can now connect your local app to the restored database.
+
+### Updating Anonymised Data Set
+Use the heroku CLI to restore a backup of a production app to the anonymised app:
+```
+$ heroku pg:backups:restore <SOURCE_APP>::<BACKUP_NAME> DATABASE_URL -a <TARGET_APP>
+```
+Then run the anonymisation script:
+```
+$ NODE_ENV=ENV npm run exec bin/anonymise_data.ts
+```
+Where `ENV` is the node environment whose `DATABASE_URL` environment variable corresponds to the target database.
 
 ### Resources
 - [Heroku PostgreSQL backups](https://devcenter.heroku.com/articles/heroku-postgres-backups)
