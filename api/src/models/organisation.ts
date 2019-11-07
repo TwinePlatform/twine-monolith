@@ -89,7 +89,7 @@ export const Organisations: OrganisationCollection = {
       whereNot: Users.toColumnNames,
     }, q);
 
-    const [user] = await applyQueryModifiers(
+    const [organisation] = await applyQueryModifiers(
       client('organisation')
         .innerJoin(
           'user_account_access_role',
@@ -114,7 +114,7 @@ export const Organisations: OrganisationCollection = {
         .select(ModelToColumn),
       query);
 
-    return user || null;
+    return organisation || null;
   },
 
   async exists (client, query) {
