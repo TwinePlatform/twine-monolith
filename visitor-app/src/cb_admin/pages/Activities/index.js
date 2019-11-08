@@ -52,10 +52,11 @@ const TableBody = styled.tbody``;
 const TableRow = styled.tr`
   height: 3em;
 `;
-const TableCell = styled.td.attrs(props => ({ colspan: props.wide ? 4 : 1 }))`
+const TableCell = styled.td.attrs(props => ({ colSpan: props.wide ? 5 : 1 }))`
   text-align: ${props => (props.center ? 'center' : 'left')};
+  vertical-align: middle;
 `;
-const TableHeader = styled.th.attrs(props => ({ colspan: props.wide ? 4 : 1 }))``;
+const TableHeader = styled.th.attrs(props => ({ colSpan: props.wide ? 5 : 1 }))``;
 
 
 const keyMap = {
