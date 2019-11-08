@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { colors } from '../../shared/style_guide';
+import { colors } from '../../../shared/style_guide';
 
 const Svg = styled.svg`
   width: 1em;
@@ -9,9 +9,7 @@ const Svg = styled.svg`
   margin-right: 1em;
 `;
 
-const Container = styled.div`
-  width: 20em;
-`;
+const Container = styled.div``;
 
 const DeleteSvg = ({ onClick, title }) => (
   <Svg onClick={onClick} data-testid={title} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 186 186">
