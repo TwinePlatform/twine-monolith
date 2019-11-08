@@ -80,19 +80,15 @@ const doesActivityAlreadyExist = (newActivityName, activitiesObject) =>
 
 
 export default class ActivitiesPage extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      categories: [],
-      activities: {
-        items: {},
-        order: [],
-      },
-      form: {},
-      errors: { view: false },
-    };
-  }
+  state = {
+    categories: [],
+    activities: {
+      items: {},
+      order: [],
+    },
+    form: {},
+    errors: { view: false },
+  };
 
   componentDidMount() {
     Promise.all([Activities.get(), CommunityBusiness.getActivities()])
