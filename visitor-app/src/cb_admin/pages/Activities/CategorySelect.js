@@ -34,4 +34,15 @@ const CategorySelector = ({ id, options, ...rest }) => (
   </SelectWrapper>
 );
 
+CategorySelector.propTypes = {
+  id: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      value: PropTypes.string.isRequired,
+      content: PropTypes.string,
+    }),
+  ).isRequired,
+};
+
 export default CategorySelector;
