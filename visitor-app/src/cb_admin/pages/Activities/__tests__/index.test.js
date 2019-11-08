@@ -44,6 +44,7 @@ describe('Activities Component', () => {
           {
             id: 8,
             name: 'French Lessons',
+            category: 'Education support',
             monday: false,
             tuesday: true,
             wednesday: true,
@@ -55,6 +56,7 @@ describe('Activities Component', () => {
           {
             id: 7,
             name: 'Yoga',
+            category: 'Sports',
             monday: false,
             tuesday: false,
             wednesday: true,
@@ -66,6 +68,7 @@ describe('Activities Component', () => {
           {
             id: 13,
             name: 'Skating',
+            category: 'Sports',
             monday: false,
             tuesday: false,
             wednesday: false,
@@ -81,6 +84,7 @@ describe('Activities Component', () => {
         result: {
           id: 14,
           name: 'Cycling',
+          category: 'Sports',
           deleted: false,
           monday: false,
           tuesday: false,
@@ -99,6 +103,7 @@ describe('Activities Component', () => {
           result: {
             id: 8,
             name: 'French Lessons',
+            category: 'Education support',
             deleted: false,
             monday: true,
             tuesday: true,
@@ -159,6 +164,32 @@ describe('Activities Component', () => {
       const updatedCheck = getByAltText('French Lessons monday update button');
       expect(updatedCheck.checked).toBeTruthy();
     });
+  });
+
+  test('update :: change category on activity', async () => {
+    mock.onPut('/community-businesses/me/visit-activities/8')
+      .reply(200, {
+        result: {
+          id: 8,
+          name: 'French Lessons',
+          category: 'Food',
+          monday: false,
+          tuesday: true,
+          wednesday: true,
+          thursday: true,
+          friday: true,
+          saturday: false,
+          sunday: false,
+        },
+      });
+
+    const tools = renderWithRouter()(Activities);
+
+    const select = await waitForElement(() => tools.getByValue('Education support'));
+    fireEvent.change(select, { target: { value: 'Food' } });
+
+    const newCategory = await waitForElement(() => tools.getByValue('Food'));
+    expect(newCategory).toBeTruthy();
   });
 
   test('delete :: correct response deletes specified row', async () => {
