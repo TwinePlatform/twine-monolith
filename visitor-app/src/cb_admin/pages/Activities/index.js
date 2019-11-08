@@ -258,7 +258,7 @@ export default class ActivitiesPage extends React.Component {
                         .slice(2)
                         .map(k => colToState[k])
                         .map(k => (
-                          <TableCell key={`${activity[k]}-${k}`} center={k !== 'name'}>
+                          <TableCell key={`${activity[k]}-${k}`} center>
                             <Checkbox
                               id={`${activity.id}-${k}`}
                               name={`${activity.id}-${k}`}
