@@ -388,27 +388,62 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
   },
 
   async addVisitActivity (client, visitActivity, cb) {
-    const [res] = await client('visit_activity')
-      .insert({
-        visit_activity_name: visitActivity.name,
-        visit_activity_category_id: client('visit_activity_category')
-          .select('visit_activity_category_id')
-          .where({ visit_activity_category_name: visitActivity.category }),
-        organisation_id: cb.id,
-      })
-      .returning([
-        'visit_activity_id AS id',
-        'visit_activity_name AS name',
-        'monday',
-        'tuesday',
-        'wednesday',
-        'thursday',
-        'friday',
-        'saturday',
-        'sunday',
-        'created_at AS createdAt',
-        'modified_at as modifiedAt',
-      ]);
+    // with X as (INSERT INTO visit_activity ... RETURNING ...)
+    //   select X.*, cat from X inner join
+    const [res] = await client.with('returned_activity', (qb) =>
+      qb.table('visit_activity')
+        .insert({
+          visit_activity_name: visitActivity.name,
+          visit_activity_category_id: qb.from('visit_activity_category')
+            .select('visit_activity_category_id')
+            .where({ visit_activity_category_name: visitActivity.category }),
+          organisation_id: cb.id,
+        })
+        .returning('*')
+    )
+      .select([
+        'returned_activity.visit_activity_id AS id',
+        'returned_activity.visit_activity_name AS name',
+        'returned_activity.monday',
+        'returned_activity.tuesday',
+        'returned_activity.wednesday',
+        'returned_activity.thursday',
+        'returned_activity.friday',
+        'returned_activity.saturday',
+        'returned_activity.sunday',
+        'returned_activity.created_at AS createdAt',
+        'returned_activity.modified_at AS modifiedAt',
+        'returned_activity.deleted_at AS deletedAt',
+        'visit_activity_category_name AS category',
+      ])
+      .from('returned_activity')
+      .innerJoin('visit_activity_category', 'visit_activity_category_id', 'returned_activity.visit_activity_category_id');
+
+    console.log(res);
+
+
+    // const [res] = await client('visit_activity')
+    //   .insert({
+    //     visit_activity_name: visitActivity.name,
+    //     visit_activity_category_id: client('visit_activity_category')
+    //       .select('visit_activity_category_id')
+    //       .where({ visit_activity_category_name: visitActivity.category }),
+    //     organisation_id: cb.id,
+    //   })
+    //   .returning([
+    //     'visit_activity_id AS id',
+    //     'visit_activity_name AS name',
+    //     'monday',
+    //     'tuesday',
+    //     'wednesday',
+    //     'thursday',
+    //     'friday',
+    //     'saturday',
+    //     'sunday',
+    //     'created_at AS createdAt',
+    //     'modified_at as modifiedAt',
+    //   ]);
+
     return res;
   },
 
@@ -430,6 +465,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       .returning([
         'visit_activity_id AS id',
         'visit_activity_name AS name',
+        'visit_activity_category_id AS cat_id',
         'monday',
         'tuesday',
         'wednesday',
@@ -441,7 +477,17 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         'modified_at AS modifiedAt',
       ]);
 
-    return res ? { ...res, category: visitActivity.category } : null;
+    if (!res) {
+      return null;
+    }
+
+    const [category]: string[] = await client('visit_activity_category')
+      .select('visit_activity_category_name AS category')
+      .where({ visit_activity_category_id: res.cat_id });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { cat_id, ...activity } = res;
+    return { ...activity, category };
   },
 
   async deleteVisitActivity (client, id) {
@@ -586,10 +632,10 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       , queryMatchOnColumnNames)
         .then((rows) => {
           const gender: Dictionary<number> = rows
-            .reduce((acc: Dictionary<number>, row: {gender: string; count: number}) => {
+            .reduce((acc: Dictionary<number>, row: { gender: string; count: number }) => {
               acc[row.gender] = Number(row.count);
               return acc;
-            } , {});
+            }, {});
           return { gender };
         }),
 
@@ -607,10 +653,10 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         .groupBy('visit_activity.visit_activity_name'), queryMatchOnColumnNames)
         .then((rows) => {
           const visitActivity = rows
-            .reduce((acc: Dictionary<number>, row: {activity: string; count: number}) => {
+            .reduce((acc: Dictionary<number>, row: { activity: string; count: number }) => {
               acc[row.activity] = Number(row.count);
               return acc;
-            } , {});
+            }, {});
           return { visitActivity };
         }),
 
@@ -627,7 +673,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
             'FROM visit_log ' +
             'INNER JOIN user_account ON user_account.user_account_id = visit_log.user_account_id')
       )
-      // TODO: generate case statements based on supplied query
+        // TODO: generate case statements based on supplied query
         .innerJoin(
           'visit_activity',
           'visit_activity.visit_activity_id',
@@ -639,10 +685,10 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         .from('age_group_table'), ageQuery)
         .then((rows) => {
           const age = rows
-            .reduce((acc: Dictionary<number>, row: {ageGroup: string; count: number}) => {
+            .reduce((acc: Dictionary<number>, row: { ageGroup: string; count: number }) => {
               acc[row.ageGroup] = Number(row.count);
               return acc;
-            } , {});
+            }, {});
           return { age };
         }),
       lastWeek: applyQueryModifiers(client('visit_log')
