@@ -7,7 +7,7 @@ import Page from '../../../../lib/ui/Page';
 import useToggle from '../../../../lib/hooks/useToggle';
 import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
 import CardSeparator from '../../../../lib/ui/CardSeparator';
-import { loadLogs, selectLogsList } from '../../../../redux/logs';
+import { loadLogs, selectOrderedLogs } from '../../../../redux/logs';
 
 /*
  * Types
@@ -24,7 +24,7 @@ type Props = {
  */
 const AdminTime: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
-  const logs = useSelector(selectLogsList, shallowEqual);
+  const logs = useSelector(selectOrderedLogs, shallowEqual);
   const dispatch = useDispatch();
 
   useEffect(() => {
