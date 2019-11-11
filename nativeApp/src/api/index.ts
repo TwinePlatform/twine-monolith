@@ -44,16 +44,24 @@ export const Authentication = {
 
 export const CommunityBusinesses = {
   addVolunteer: () => { },
-  editVolunteer: ({ id, ...changeset }) => makeRequest({ method: 'PUT', url: `/users/volunteers/${id}`, data: changeset }),
-  deleteVolunteer: (id: number) => makeRequest({ method: 'DELETE', url: `/users/volunteers/${id}` }),
+  editVolunteer: ({ id, ...changeset }) => makeRequest(
+    { method: 'PUT', url: `/users/volunteers/${id}`, data: changeset },
+  ),
+  deleteVolunteer: (id: number) => makeRequest(
+    { method: 'DELETE', url: `/users/volunteers/${id}` },
+  ),
   getVolunteerActivities: () => axios.get('/volunteer-activities'),
-  getVolunteers: () => makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>({ method: 'GET', url: '/community-businesses/me/volunteers' }),
+  getVolunteers: () => makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>(
+    { method: 'GET', url: '/community-businesses/me/volunteers' },
+  ),
 };
 
 export const VolunteerLogs = {
-  get: (since?: Date, until?: Date) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.GET.Result>({
-    method: 'GET',
-    url: '/community-businesses/me/volunteer-logs',
-    params: { since, until },
-  }),
+  get: (since?: Date, until?: Date) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.GET.Result>(
+    {
+      method: 'GET',
+      url: '/community-businesses/me/volunteer-logs',
+      params: { since, until },
+    },
+  ),
 };

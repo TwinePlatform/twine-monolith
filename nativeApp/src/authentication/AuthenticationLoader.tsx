@@ -5,7 +5,7 @@ import {
   View,
 } from 'react-native';
 import { NavigationInjectedProps } from 'react-navigation';
-import { Authentication } from '../lib/api';
+import { Authentication } from '../api';
 
 const AuthenticationLoader: FC<NavigationInjectedProps> = (props) => {
   useEffect(() => {

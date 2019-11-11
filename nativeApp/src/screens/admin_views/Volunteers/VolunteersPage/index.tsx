@@ -11,7 +11,7 @@ import AddBar from '../../../../lib/ui/AddBar';
 import useToggle from '../../../../lib/hooks/useToggle';
 import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
 import useRequest from '../../../../lib/hooks/requestHook';
-import { CommunityBusinesses } from '../../../../lib/api';
+import { CommunityBusinesses } from '../../../../api';
 import { ColoursEnum } from '../../../../lib/ui/colours';
 import { Status } from '../../../types';
 import { loadVolunteers, selectOrderedVolunteers, selectVolunteersStatus } from '../../../../redux/volunteers';

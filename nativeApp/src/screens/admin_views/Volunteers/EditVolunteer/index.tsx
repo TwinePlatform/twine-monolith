@@ -5,7 +5,7 @@ import { withNavigation, NavigationInjectedProps } from 'react-navigation';
 import { filter } from 'ramda';
 import Page from '../../../../lib/ui/Page';
 import UserForm from '../../../../lib/ui/forms/UserForm';
-import { CommunityBusinesses } from '../../../../lib/api';
+import { CommunityBusinesses } from '../../../../api';
 
 
 /*

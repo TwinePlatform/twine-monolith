@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { Picker } from 'react-native';
 
-import { CommunityBusinesses } from '../../../lib/api';
+import { CommunityBusinesses } from '../../../api';
 import useRequest from '../../../lib/hooks/requestHook';
 import { Heading } from '../../../lib/ui/typography';
 import Page from '../../../lib/ui/Page';

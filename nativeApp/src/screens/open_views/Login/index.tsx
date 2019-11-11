@@ -9,7 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Input from '../../../lib/ui/forms/InputWithIcon';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
-import { Authentication } from '../../../lib/api';
+import { Authentication } from '../../../api';
 import { StorageValuesEnum } from '../../../authentication/types';
 
 const logo = require('../../../../assets/images/logo_image.png');

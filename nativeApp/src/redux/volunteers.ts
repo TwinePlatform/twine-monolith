@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 import { createAction } from 'redux-actions';
 import { User } from '../../../api/src/models/types';
-import { CommunityBusinesses } from '../lib/api';
+import { CommunityBusinesses } from '../api';
 import { State, VolunteersState } from './types';
 
 /*

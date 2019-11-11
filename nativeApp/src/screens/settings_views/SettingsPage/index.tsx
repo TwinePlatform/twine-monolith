@@ -8,7 +8,7 @@ import { Forms } from '../../../lib/ui/forms/enums';
 import LinkItem from '../../../lib/ui/forms/LinkItem';
 import Page from '../../../lib/ui/Page';
 import Toggle from '../../../lib/ui/forms/Toggle';
-import { Authentication } from '../../../lib/api';
+import { Authentication } from '../../../api';
 /*
  * Types
  */
