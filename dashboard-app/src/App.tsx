@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, SetStateAction, Dispatch } from 'react';
 import styled from 'styled-components';
 import { Route, Switch, BrowserRouter, withRouter } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import HoldingPage from './features/HoldingPage';
 import ByActivity from './features/dashboard/ByActivity/index';
 import ByTime from './features/dashboard/ByTime/index';
 import ByVolunteer from './features/dashboard/ByVolunteer/index';
+import ByProject from './features/dashboard/ByProject';
 import Dashboard from './features/dashboard/Dashboard';
 import Login from './features/auth/pages/Login';
 import ResetPassword from './features/auth/pages/ResetPassword';
@@ -37,7 +38,11 @@ const Content = styled.div`
 /*
  * Context
  */
-export const DashboardContext = createContext<any>({ unit: DurationUnitEnum.HOURS });
+type Context = {
+  unit: DurationUnitEnum;
+  setUnit: Dispatch<SetStateAction<DurationUnitEnum>>;
+};
+export const DashboardContext = createContext<Context>({ unit: DurationUnitEnum.HOURS, setUnit: () => {} });
 
 /*
  * Helpers
@@ -53,6 +58,7 @@ const DashboardRoutes = () => {
         <Route exact path="/activities" component={ByActivity} />
         <Route exact path="/time" component={ByTime} />
         <Route exact path="/volunteers" component={ByVolunteer} />
+        <Route exact path="/projects" component={ByProject} />
         <Route exact path="/faqs" component={FAQPage} />
       </Switch>
     </DashboardContext.Provider>
