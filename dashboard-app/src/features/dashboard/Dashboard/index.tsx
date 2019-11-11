@@ -96,9 +96,9 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                 <Polaroid
                   title={TitlesCopy.Projects.title}
                   caption={TitlesCopy.Projects.subtitle}
-                  callToAction="Coming soon"
+                  callToAction="View data"
                   placeHolder="P"
-                  disabled
+                  onClick={() => Pages.navigateTo('Projects', props.history.push)}
                 />
               </Col>
             </Row>
