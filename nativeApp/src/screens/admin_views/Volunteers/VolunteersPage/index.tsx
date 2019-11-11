@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import moment from 'moment';
-
 import { ColorDotsLoader } from 'react-native-indicator';
 
 import { NavigationFocusInjectedProps } from 'react-navigation';
@@ -10,11 +9,12 @@ import Page from '../../../../lib/ui/Page';
 import AddBar from '../../../../lib/ui/AddBar';
 import useToggle from '../../../../lib/hooks/useToggle';
 import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
-import useRequest from '../../../../lib/hooks/requestHook';
-import { CommunityBusinesses } from '../../../../api';
 import { ColoursEnum } from '../../../../lib/ui/colours';
-import { Status } from '../../../types';
-import { loadVolunteers, selectOrderedVolunteers, selectVolunteersStatus } from '../../../../redux/volunteers';
+import {
+  loadVolunteers,
+  selectOrderedVolunteers,
+  selectVolunteersStatus,
+} from '../../../../redux/volunteers';
 
 /*
  * Types
@@ -57,6 +57,7 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
     * - hide modal
     * - display some type of loader whilst waiting
     */
+    console.log(activeCard);
   };
 
   // TODO: error handling

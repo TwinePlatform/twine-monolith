@@ -91,7 +91,13 @@ const Login: FC<Props> = (props) => {
           <Input name="Email" autoCompleteType="email" value={email} onChangeText={setEmail}>
             <MaterialCommunityIcons name="email-outline" outline size={27} color={ColoursEnum.grey} />
           </Input>
-          <Input name="Password" autoCompleteType="password" secureTextEntry value={password} onChangeText={setPassword}>
+          <Input
+            name="Password"
+            autoCompleteType="password"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          >
             <MaterialCommunityIcons name="lock-outline" size={27} color={ColoursEnum.grey} />
           </Input>
           <SubmitButton text="LOG IN" onPress={() => onSubmit()} />

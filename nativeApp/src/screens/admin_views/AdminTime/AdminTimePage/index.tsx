@@ -40,6 +40,8 @@ const AdminTime: FC<Props> = () => {
         title="Delete"
         text="Are you sure you want to delete this time?"
       />
+
+      <CardSeparator title="Today" />
       {
         logs.map((log) => (
           <TimeCard
@@ -52,8 +54,7 @@ const AdminTime: FC<Props> = () => {
           />
         ))
       }
-      {/* <CardSeparator title="Today" />
-      <TimeCard id={1} volunteer="Kara Thrace" timeValues={[2, 9]} labels={['General', 'Office Work']} date="30/04/19" onDelete={toggleDeleteVisibility} />
+      {/* <TimeCard id={1} volunteer="Kara Thrace" timeValues={[2, 9]} labels={['General', 'Office Work']} date="30/04/19" onDelete={toggleDeleteVisibility} />
       <TimeCard id={1} volunteer="Lee Adama" timeValues={[7, 19]} labels={['General', 'Office Work']} date="03/06/19" onDelete={toggleDeleteVisibility} />
       <CardSeparator title="Yesterday" />
       <TimeCard id={1} volunteer="Kara Thrace" timeValues={[0, 49]} labels={['General', 'Office Work']} date="15/07/19" onDelete={toggleDeleteVisibility} />
