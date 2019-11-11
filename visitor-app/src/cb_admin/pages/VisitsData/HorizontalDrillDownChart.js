@@ -1,46 +1,38 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { HorizontalBar } from 'react-chartjs-2';
 
 
-const HorizontalDrillDownChart = (props) => {
-  const [drillDown, setDrillDown] = useState(false);
-  const [selected, setSelected] = useState('');
-
-  const onClick = useCallback(([element]) => {
-    if (!element) return;
-    setSelected(drillDown ? '' : element._model.label); // eslint-disable-line no-underscore-dangle
-    setDrillDown(!drillDown);
-  });
-
-  return (
-    <HorizontalBar
-      data={drillDown ? props.levelTwoData[selected] || {} : props.levelOneData}
-      options={{
-        legend: { display: false },
-        scales: {
-          xAxes: [{
-            gridLines: { display: false },
-            ticks: {
-              beginAtZero: true,
-              padding: 5,
-              stepSize: props.options.stepSize,
-            },
-          }],
-          yAxes: [{
-            gridLines: { display: false },
-          }],
-        },
-      }}
-      getElementAtEvent={onClick}
-    />
-  );
-};
+const HorizontalDrillDownChart = props => (
+  <HorizontalBar
+    data={props.drillDown ? props.levelTwoData[props.selected] || {} : props.levelOneData}
+    options={{
+      legend: { display: false },
+      scales: {
+        xAxes: [{
+          gridLines: { display: false },
+          ticks: {
+            beginAtZero: true,
+            padding: 5,
+            stepSize: props.options.stepSize,
+          },
+        }],
+        yAxes: [{
+          gridLines: { display: false },
+        }],
+      },
+    }}
+    getElementAtEvent={props.onClick}
+  />
+);
 
 HorizontalDrillDownChart.propTypes = {
+  drillDown: PropTypes.bool.isRequired,
+  selected: PropTypes.string.isRequired,
   levelOneData: PropTypes.shape({}).isRequired,
   levelTwoData: PropTypes.shape({}).isRequired,
   options: PropTypes.shape({ stepSize: PropTypes.number }),
+  onClick: PropTypes.func.isRequired,
 };
 
 HorizontalDrillDownChart.defaultProps = {

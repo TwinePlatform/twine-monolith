@@ -6,13 +6,13 @@ import { assocPath, compose } from 'ramda';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import LabelledSelect from '../../../shared/components/form/LabelledSelect';
 import { Form as F } from '../../../shared/components/form/base';
-import { Paragraph, Heading3 } from '../../../shared/components/text/base';
+import { Heading3 } from '../../../shared/components/text/base';
 import NavHeader from '../../../shared/components/NavHeader';
 import { TabGroup } from '../../components/Tabs';
 import TimePeriodChart from './TimePeriodChart';
 import GenderChart from './GenderChart';
 import AgeGroupChart from './AgeGroupChart';
-import HorizontalDrillDownChart from './HorizontalDrillDownChart';
+import CategoriesChart from './CategoriesChart';
 import Toggle from './Toggle';
 import CsvExportButton from './CsvExportButton';
 import DateRanges from './dateRange';
@@ -195,16 +195,10 @@ export default class VisitsDataPage extends React.Component {
             <Row center="xs">
               <Col xs={8}>
                 <Heading3>Reason for visiting</Heading3>
-                <Paragraph>
-                  Click the bars to reveal which activities make up each category.
-                </Paragraph>
-                <Paragraph>
-                  Click any bar again to return to the original view.
-                </Paragraph>
-                <HorizontalDrillDownChart
-                  levelOneData={this.state.data.category}
-                  levelTwoData={this.state.data.activity}
-                  options={this.state.charts.category}
+                <CategoriesChart
+                  categoryData={this.state.data.category}
+                  activityData={this.state.data.activity}
+                  chartOptions={this.state.charts.category}
                 />
               </Col>
             </Row>
