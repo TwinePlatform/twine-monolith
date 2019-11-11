@@ -45,7 +45,7 @@ const AdminTime: FC<Props> = () => {
           <TimeCard
             key={log.id}
             id={log.id}
-            timeValues={[log.duration.hours, log.duration.minutes]}
+            timeValues={[log.duration.hours || 0, log.duration.minutes || 0]}
             labels={[log.project, log.activity]}
             date={moment(log.startedAt).format('DD/MM/YY')}
             onDelete={toggleDeleteVisibility}
