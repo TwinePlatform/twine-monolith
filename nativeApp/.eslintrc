@@ -34,12 +34,7 @@
     "react/jsx-props-no-spreading": 0,
     "react/state-in-constructor": 0,
     "import/prefer-default-export": 0,
-    "max-len": [
-      "error",
-      {
-        "code": 110
-      }
-    ]
+    "@typescript-eslint/no-var-requires": 0
   },
   "settings": {
     "import/extensions": [

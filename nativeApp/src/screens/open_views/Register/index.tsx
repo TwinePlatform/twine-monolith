@@ -1,9 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Picker } from 'react-native';
+// import { Picker } from 'react-native';
 
-import { CommunityBusinesses } from '../../../api';
-import useRequest from '../../../lib/hooks/requestHook';
 import { Heading } from '../../../lib/ui/typography';
 import Page from '../../../lib/ui/Page';
 
@@ -22,23 +20,22 @@ const StyledPicker = styled.Picker`
   height: 40;
 `;
 
-const Text = styled.Text`
-  font-size: 15;
-`;
+// const Text = styled.Text`
+//   font-size: 15;
+// `;
 
 /*
  * Component
  */
 export default function Register() {
-  const [data, error] = useRequest(CommunityBusinesses.getVolunteerActivities);
-
+// TODO make request through redux
   return (
     <Page heading="Register">
       <Heading>Register</Heading>
       <StyledPicker>
-        {data && data.map((x) => <Picker.Item key={x.id} label={x.name} value={x.name} />)}
+        {/* {data && data.map((x) => <Picker.Item key={x.id} label={x.name} value={x.name} />)} */}
       </StyledPicker>
-      {error && <Text>{JSON.stringify(error)}</Text>}
+      {/* {error && <Text>{JSON.stringify(error)}</Text>} */}
     </Page>
   );
 }

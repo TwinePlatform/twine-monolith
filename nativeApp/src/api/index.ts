@@ -57,7 +57,7 @@ export const CommunityBusinesses = {
 };
 
 export const VolunteerLogs = {
-  get: (since?: Date, until?: Date) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.GET.Result>(
+  get: (since?: Date, until?: Date) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.GET.Result>( //eslint-disable-line
     {
       method: 'GET',
       url: '/community-businesses/me/volunteer-logs',
