@@ -11,6 +11,9 @@
     "airbnb"
   ],
   "parser": "@typescript-eslint/parser",
+  "env": {
+    "jest": true
+  },
   "rules": {
     "react-native/no-color-literals": 0,
     "@typescript-eslint/explicit-function-return-type": 0,

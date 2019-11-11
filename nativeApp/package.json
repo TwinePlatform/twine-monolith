@@ -14,6 +14,10 @@
     "make:test": "ts-node ./bin/make_test/index.ts"
   },
   "dependencies": {
+    "@types/expo": "^32.0.13",
+    "@types/jest": "^24.0.18",
+    "@types/react": "^16.8.23",
+    "@types/react-native": "^0.57.65",
     "@types/ramda": "^0.26.33",
     "@types/react-navigation": "^3.0.8",
     "@types/react-redux": "^7.1.5",
@@ -49,10 +53,6 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@types/expo": "^32.0.13",
-    "@types/jest": "^24.0.18",
-    "@types/react": "^16.8.23",
-    "@types/react-native": "^0.57.65",
     "@typescript-eslint/eslint-plugin": "^2.6.1",
     "@typescript-eslint/parser": "^2.6.1",
     "babel-preset-expo": "^6.0.0",
