@@ -1,13 +1,16 @@
 {
   "plugins": [
     "react",
-    "react-native"
+    "react-native",
+    "@typescript-eslint/eslint-plugin"
   ],
   "extends": [
     "plugin:react-native/all",
     "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
     "airbnb"
   ],
+  "parser": "@typescript-eslint/parser",
   "rules": {
     "react-native/no-color-literals": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
