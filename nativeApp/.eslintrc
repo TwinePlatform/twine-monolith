@@ -6,7 +6,6 @@
   "extends": [
     "plugin:react-native/all",
     "plugin:react/recommended",
-    "eslint-config-twine",
     "airbnb"
   ],
   "rules": {

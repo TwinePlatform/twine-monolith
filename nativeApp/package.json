@@ -2,7 +2,7 @@
   "name": "twine-native-app",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start --dev --no-minify",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -46,7 +46,6 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.3.2",
-    "twine-util": "file:../lib/twine-util",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
@@ -59,7 +58,6 @@
     "babel-preset-expo": "^7.0.0",
     "eslint": "^6.4.0",
     "eslint-config-airbnb": "^18.0.1",
-    "eslint-config-twine": "file:../lib/eslint-config-twine",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.16.0",
