@@ -30,7 +30,13 @@
     "react/jsx-pascal-case": 0,
     "react/jsx-props-no-spreading": 0,
     "react/state-in-constructor": 0,
-    "import/prefer-default-export": 0
+    "import/prefer-default-export": 0,
+    "max-len": [
+      "error",
+      {
+        "code": 110
+      }
+    ]
   },
   "settings": {
     "import/extensions": [
