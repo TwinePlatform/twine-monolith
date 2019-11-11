@@ -3,6 +3,7 @@ import { createAction } from 'redux-actions';
 import { assoc } from 'ramda';
 import { VolunteerLog } from '../../../api/src/models/types';
 import { VolunteerLogs } from '../lib/api';
+import { State, LogsState } from './types';
 
 
 /*
@@ -12,17 +13,10 @@ const LOAD_LOGS_REQUEST = 'logs/LOAD_REQUEST';
 const LOAD_LOGS_ERROR = 'logs/LOAD_ERROR';
 const LOAD_LOGS_SUCCESS = 'logs/LOAD_SUCCESS';
 
+
 /*
  * Types
  */
-type State = {
-  fetchError: null | Error;
-  isFetching: boolean;
-  lastUpdated: null | Date;
-  items: Record<number, VolunteerLog>;
-  order: number[];
-};
-
 type LoadLogsRequest = {
   type: typeof LOAD_LOGS_REQUEST;
 };
@@ -43,7 +37,7 @@ type Actions = LoadLogsRequest | LoadLogsSuccess | LoadLogsError;
 /*
  * Initial State
  */
-const entityInitialState: State = {
+const entityInitialState: LogsState = {
   fetchError: null,
   isFetching: false,
   lastUpdated: null,
@@ -74,7 +68,7 @@ export const loadLogs = (since?: Date, until?: Date) => (dispatch) => {
 /*
  * Reducer
  */
-const reducer: Reducer<State, Actions> = (state, action) => {
+const reducer: Reducer<LogsState, Actions> = (state, action) => {
   switch (action.type) {
     case LOAD_LOGS_REQUEST:
       return {
@@ -108,9 +102,9 @@ const reducer: Reducer<State, Actions> = (state, action) => {
 /*
  * Selectors
  */
-export const selectLogs = (state: any) => state.entities.logs.items;
-export const selectLogsOrder = (state: any) => state.entities.logs.order;
-export const selectLogsList = (state: any) => state.entities.logs.order
+export const selectLogs = (state: State) => state.entities.logs.items;
+export const selectLogsOrder = (state: State) => state.entities.logs.order;
+export const selectOrderedLogs = (state: State) => state.entities.logs.order
   .map((id) => state.entities.logs.items[id]);
 
 

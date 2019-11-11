@@ -47,7 +47,7 @@ export const CommunityBusinesses = {
   editVolunteer: ({ id, ...changeset }) => makeRequest({ method: 'PUT', url: `/users/volunteers/${id}`, data: changeset }),
   deleteVolunteer: (id: number) => makeRequest({ method: 'DELETE', url: `/users/volunteers/${id}` }),
   getVolunteerActivities: () => axios.get('/volunteer-activities'),
-  getVolunteers: () => makeRequest({ method: 'GET', url: '/community-businesses/me/volunteers' }),
+  getVolunteers: () => makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>({ method: 'GET', url: '/community-businesses/me/volunteers' }),
 };
 
 export const VolunteerLogs = {
