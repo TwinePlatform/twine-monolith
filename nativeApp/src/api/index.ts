@@ -47,7 +47,7 @@ const Volunteers = {
     { method: 'GET', url: '/community-businesses/me/volunteers' },
   ),
   add: () => { },
-  edit: ({ id, ...changeset }) => makeRequest(
+  update: ({ id, ...changeset }) => makeRequest(
     { method: 'PUT', url: `/users/volunteers/${id}`, data: changeset },
   ),
   delete: (id: number) => makeRequest(
