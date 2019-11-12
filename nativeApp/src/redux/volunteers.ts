@@ -8,7 +8,6 @@ import { State, VolunteersState } from './types';
  * Actions
  */
 enum ActionsType {
-
   LOAD_VOLUNTEERS_REQUEST = 'volunteers/LOAD_REQUEST',
   LOAD_VOLUNTEERS_ERROR = 'volunteers/LOAD_ERROR',
   LOAD_VOLUNTEERS_SUCCESS = 'volunteers/LOAD_SUCCESS',

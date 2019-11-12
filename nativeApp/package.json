@@ -11,7 +11,8 @@
     "test": "jest",
     "cover": "npm test -- --coverage",
     "make:tsx": "ts-node ./bin/make_tsx/index.ts",
-    "make:test": "ts-node ./bin/make_test/index.ts"
+    "make:test": "ts-node ./bin/make_test/index.ts",
+    "make:redux-req": "ts-node ./bin/make_redux_req/index.ts"
   },
   "dependencies": {
     "@types/expo": "^32.0.13",

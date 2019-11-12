@@ -20,8 +20,7 @@
  */
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import getTemplate from './template';
-
-const capitaliseFirst = (string) => string.charAt(0).toUpperCase() + string.substring(1);
+import { capitaliseFirst } from '../utils';
 
 const [path, file] = process.argv.slice(2);
 if (file) {
