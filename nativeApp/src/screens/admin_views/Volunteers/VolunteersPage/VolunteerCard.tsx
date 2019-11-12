@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components/native';
 
 import { MaterialIcons } from '@expo/vector-icons';
-import { withNavigation, NavigationInjectedProps } from 'react-navigation';
+import { withNavigation } from 'react-navigation';
 import { ColoursEnum } from '../../../../lib/ui/colours';
 import CardWithButtons from '../../../../lib/ui/CardWithButtons';
 import { Heading2 as H2 } from '../../../../lib/ui/typography';
@@ -15,8 +15,8 @@ type Props = {
   id: number;
   title: string;
   date: string;
+  onEdit: () => void;
   onDelete: () => void;
-  volunteerData: any; // add type
 }
 
 /*
@@ -43,12 +43,12 @@ const Description = styled.Text`
 /*
  * Component
  */
-const VolunteerCard: FC<NavigationInjectedProps & Props> = ({
-  navigation, date, title, onDelete, volunteerData,
+const VolunteerCard: FC<Props> = ({
+  date, title, onEdit, onDelete,
 }) => {
   const buttonConfig: DeleteButtonConfig = {
     buttonType: 'delete',
-    onEdit: () => navigation.navigate('AdminEditVolunteer', volunteerData),
+    onEdit,
     onDelete,
   };
   return (
