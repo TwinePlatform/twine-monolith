@@ -9,6 +9,7 @@ import {
   selectVolunteersStatus,
 } from '../../../../redux/entities/volunteers';
 import useToggle from '../../../../lib/hooks/useToggle';
+import { User } from '../../../../../../api/src/models';
 
 import VolunteerCard from './VolunteerCard';
 import Page from '../../../../lib/ui/Page';
@@ -45,6 +46,10 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
   const [activeCard, setActiveCard] = useState(null);
 
   // Handlers
+  const onEdit = (volunteer: User) => {
+    navigation.navigate('AdminEditVolunteer', volunteer);
+  };
+
   const onDelete = (id: number) => {
     toggleDeleteModalVisibility();
     setActiveCard(id);
@@ -84,7 +89,7 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
             title={volunteer.name}
             date={moment(volunteer.createdAt).format('DD/MM/YY')}
             onDelete={() => onDelete(volunteer.id)}
-            volunteerData={volunteer}
+            onEdit={() => onEdit(volunteer)}
           />
         ))}
     </Page>
