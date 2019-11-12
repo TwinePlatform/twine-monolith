@@ -107,5 +107,9 @@ export const selectLogsOrder = (state: State) => state.entities.logs.order;
 export const selectOrderedLogs = (state: State) => state.entities.logs.order
   .map((id) => state.entities.logs.items[id]);
 
+export const selectLogsStatus = ({ entities: { logs } }: State) => (
+  { isFetching: logs.isFetching, error: logs.fetchError }
+);
+
 
 export default reducer;

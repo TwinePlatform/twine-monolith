@@ -1,20 +1,20 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import moment from 'moment';
-import { ColorDotsLoader } from 'react-native-indicator';
-
 import { NavigationFocusInjectedProps } from 'react-navigation';
-import VolunteerCard from './VolunteerCard';
-import Page from '../../../../lib/ui/Page';
-import AddBar from '../../../../lib/ui/AddBar';
-import useToggle from '../../../../lib/hooks/useToggle';
-import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
-import { ColoursEnum } from '../../../../lib/ui/colours';
+import moment from 'moment';
+
 import {
   loadVolunteers,
   selectOrderedVolunteers,
   selectVolunteersStatus,
 } from '../../../../redux/entities/volunteers';
+import useToggle from '../../../../lib/hooks/useToggle';
+
+import VolunteerCard from './VolunteerCard';
+import Page from '../../../../lib/ui/Page';
+import AddBar from '../../../../lib/ui/AddBar';
+import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
+import Loader from '../../../../lib/ui/Loader';
 
 /*
  * Types
@@ -73,14 +73,7 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
         onConfirm={onConfirm}
       />
 
-      {volunteersRequestStatus.isFetching && (
-      <ColorDotsLoader
-        color1={ColoursEnum.purple}
-        color2={ColoursEnum.mustard}
-        color3={ColoursEnum.grey}
-        size={20}
-      />
-      )}
+      <Loader isVisible={volunteersRequestStatus.isFetching} />
       {/* TODO: create function for loading logic */}
       { !volunteersRequestStatus.isFetching
         && !volunteersRequestStatus.error
