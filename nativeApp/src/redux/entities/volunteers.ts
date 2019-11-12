@@ -2,7 +2,9 @@ import { Reducer } from 'redux';
 import { createAction } from 'redux-actions';
 import { User } from '../../../../api/src/models/types';
 import API from '../../api';
-import { State, VolunteersState } from '../types';
+import {
+  State, VolunteersState, RequestAction, SuccessAction, ErrorAction,
+} from '../types';
 
 /*
  * Actions
@@ -11,24 +13,18 @@ enum ActionsType {
   LOAD_VOLUNTEERS_REQUEST = 'volunteers/LOAD_REQUEST',
   LOAD_VOLUNTEERS_ERROR = 'volunteers/LOAD_ERROR',
   LOAD_VOLUNTEERS_SUCCESS = 'volunteers/LOAD_SUCCESS',
+
+  UPDATE_VOLUNTEER_REQUEST = 'volunteer/UPDATE_REQUEST',
+  UPDATE_VOLUNTEER_ERROR = 'volunteer/UPDATE_ERROR',
+  UPDATE_VOLUNTEER_SUCCESS = 'volunteer/UPDATE_SUCCESS',
 }
 
 /*
  * Types
  */
-type LoadVolunteersRequest = {
-  type: ActionsType.LOAD_VOLUNTEERS_REQUEST;
-};
-
-type LoadVolunteersSuccess = {
-  type: ActionsType.LOAD_VOLUNTEERS_SUCCESS;
-  payload: User[];
-};
-
-type LoadVolunteersError = {
-  type: ActionsType.LOAD_VOLUNTEERS_ERROR;
-  payload: Error;
-};
+type LoadVolunteersRequest = RequestAction<ActionsType.LOAD_VOLUNTEERS_REQUEST>
+type LoadVolunteersSuccess = SuccessAction<ActionsType.LOAD_VOLUNTEERS_REQUEST, User[]>
+type LoadVolunteersError = ErrorAction<ActionsType.LOAD_VOLUNTEERS_ERROR>
 
 type Actions = LoadVolunteersRequest | LoadVolunteersError | LoadVolunteersSuccess
 
@@ -43,14 +39,12 @@ const initialState: VolunteersState = {
   order: [],
 };
 
-
 /*
  * Action creators
  */
 const loadVolunteersRequest = createAction(ActionsType.LOAD_VOLUNTEERS_REQUEST);
 const loadVolunteersError = createAction<Error>(ActionsType.LOAD_VOLUNTEERS_ERROR);
 const loadVolunteersSuccess = createAction<Partial <User> []>(ActionsType.LOAD_VOLUNTEERS_SUCCESS);
-
 
 /*
  * Thunk creators
