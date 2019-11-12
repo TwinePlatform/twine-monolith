@@ -12,7 +12,7 @@ import VolunteerRouter from './screens/volunteer_views/VolunteerRouter';
 import AdminRouter from './screens/admin_views/AdminRouter';
 import SettingsButton from './lib/ui/SettingsButton';
 import SettingsPage from './screens/settings_views/SettingsPage/index';
-import AdminEditTime from './screens/admin_views/AdminTime/EditTime';
+import AdminEditTime from './screens/admin_views/Time/EditTime';
 import AdminEditVolunteer from './screens/admin_views/Volunteers/EditVolunteer';
 import AdminAddVolunteer from './screens/admin_views/Volunteers/AddVolunteer';
 import AuthenticationLoader from './authentication/AuthenticationLoader';
