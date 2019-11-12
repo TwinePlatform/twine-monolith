@@ -3,33 +3,27 @@ import { createAction } from 'redux-actions';
 import { assoc } from 'ramda';
 import { VolunteerLog } from '../../../../api/src/models/types';
 import API from '../../api';
-import { State, LogsState } from '../types';
+import {
+  State, LogsState, RequestAction, SuccessAction, ErrorAction,
+} from '../types';
 
 
 /*
  * Actions
  */
-const LOAD_LOGS_REQUEST = 'logs/LOAD_REQUEST';
-const LOAD_LOGS_ERROR = 'logs/LOAD_ERROR';
-const LOAD_LOGS_SUCCESS = 'logs/LOAD_SUCCESS';
-
+enum ActionsType {
+  LOAD_LOGS_REQUEST = 'logs/LOAD_REQUEST',
+  LOAD_LOGS_ERROR = 'logs/LOAD_ERROR',
+  LOAD_LOGS_SUCCESS = 'logs/LOAD_SUCCESS',
+}
 
 /*
  * Types
  */
-type LoadLogsRequest = {
-  type: typeof LOAD_LOGS_REQUEST;
-};
 
-type LoadLogsSuccess = {
-  type: typeof LOAD_LOGS_SUCCESS;
-  payload: VolunteerLog[];
-};
-
-type LoadLogsError = {
-  type: typeof LOAD_LOGS_ERROR;
-  payload: Error;
-};
+type LoadLogsRequest = RequestAction<ActionsType.LOAD_LOGS_REQUEST>
+type LoadLogsSuccess = SuccessAction<ActionsType.LOAD_LOGS_SUCCESS, VolunteerLog[]>
+type LoadLogsError = ErrorAction<ActionsType.LOAD_LOGS_ERROR>
 
 type Actions = LoadLogsRequest | LoadLogsSuccess | LoadLogsError;
 
@@ -49,9 +43,9 @@ const initialState: LogsState = {
 /*
  * Action creators
  */
-const loadLogsRequest = createAction(LOAD_LOGS_REQUEST);
-const loadLogsError = createAction<Error>(LOAD_LOGS_ERROR);
-const loadLogsSuccess = createAction<Partial<VolunteerLog>[]>(LOAD_LOGS_SUCCESS);
+const loadLogsRequest = createAction(ActionsType.LOAD_LOGS_REQUEST);
+const loadLogsError = createAction<Error>(ActionsType.LOAD_LOGS_ERROR);
+const loadLogsSuccess = createAction<Partial<VolunteerLog>[]>(ActionsType.LOAD_LOGS_SUCCESS);
 
 
 /*
@@ -70,20 +64,20 @@ export const loadLogs = (since?: Date, until?: Date) => (dispatch) => {
  */
 const reducer: Reducer<LogsState, Actions> = (state = initialState, action) => {
   switch (action.type) {
-    case LOAD_LOGS_REQUEST:
+    case ActionsType.LOAD_LOGS_REQUEST:
       return {
         ...state,
         isFetching: true,
       };
 
-    case LOAD_LOGS_ERROR:
+    case ActionsType.LOAD_LOGS_ERROR:
       return {
         ...state,
         isFetching: false,
         fetchError: action.payload,
       };
 
-    case LOAD_LOGS_SUCCESS:
+    case ActionsType.LOAD_LOGS_SUCCESS:
       return {
         ...state,
         isFetching: false,
