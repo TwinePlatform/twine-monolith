@@ -17,6 +17,10 @@ enum ActionsType {
   UPDATE_VOLUNTEER_REQUEST = 'volunteer/UPDATE_REQUEST',
   UPDATE_VOLUNTEER_ERROR = 'volunteer/UPDATE_ERROR',
   UPDATE_VOLUNTEER_SUCCESS = 'volunteer/UPDATE_SUCCESS',
+
+  DELETE_VOLUNTEER_REQUEST = 'volunteer/DELETE_REQUEST',
+  DELETE_VOLUNTEER_ERROR = 'volunteer/DELETE_ERROR',
+  DELETE_VOLUNTEER_SUCCESS = 'volunteer/DELETE_SUCCESS',
 }
 
 /*
@@ -30,9 +34,14 @@ type UpdateVolunteerRequest = RequestAction<ActionsType.UPDATE_VOLUNTEER_REQUEST
 type UpdateVolunteerSuccess = SuccessAction<ActionsType.UPDATE_VOLUNTEER_SUCCESS, User[]>
 type UpdateVolunteerError = ErrorAction<ActionsType.UPDATE_VOLUNTEER_ERROR>
 
+type DeleteVolunteerRequest = RequestAction<ActionsType.DELETE_VOLUNTEER_REQUEST>
+type DeleteVolunteerSuccess = SuccessAction<ActionsType.DELETE_VOLUNTEER_SUCCESS, User[]>
+type DeleteVolunteerError = ErrorAction<ActionsType.DELETE_VOLUNTEER_ERROR>
+
 type Actions
   = LoadVolunteersRequest | LoadVolunteersSuccess | LoadVolunteersError
   | UpdateVolunteerRequest | UpdateVolunteerSuccess | UpdateVolunteerError
+  | DeleteVolunteerRequest | DeleteVolunteerSuccess | DeleteVolunteerError
 
 /*
  * Initial State
@@ -45,6 +54,8 @@ const initialState: VolunteersState = {
   order: [],
   updateIsFetching: false,
   updateError: null,
+  deleteIsFetching: false,
+  deleteError: null,
 };
 
 /*
@@ -57,6 +68,10 @@ const loadVolunteersError = createAction<Error>(ActionsType.LOAD_VOLUNTEERS_ERRO
 const updateVolunteerRequest = createAction(ActionsType.UPDATE_VOLUNTEER_REQUEST);
 const updateVolunteerSuccess = createAction(ActionsType.UPDATE_VOLUNTEER_SUCCESS);
 const updateVolunteerError = createAction<Error>(ActionsType.UPDATE_VOLUNTEER_ERROR);
+
+const deleteVolunteerRequest = createAction(ActionsType.DELETE_VOLUNTEER_REQUEST);
+const deleteVolunteerSuccess = createAction(ActionsType.DELETE_VOLUNTEER_SUCCESS);
+const deleteVolunteerError = createAction<Error>(ActionsType.DELETE_VOLUNTEER_ERROR);
 
 /*
  * Thunk creators
@@ -80,11 +95,23 @@ export const updateVolunteer = (changeset) => (dispatch) => {
     .catch((error) => dispatch(updateVolunteerError(error)));
 };
 
+export const deleteVolunteer = (id: number) => (dispatch) => {
+  dispatch(deleteVolunteerRequest());
+
+  return API.Volunteers.delete(id)
+    .then(() => {
+      dispatch(deleteVolunteerSuccess());
+      dispatch(loadVolunteers());
+    })
+    .catch((error) => dispatch(deleteVolunteerError(error)));
+};
+
 /*
  * Reducer
  */
 const volunteersReducer: Reducer<VolunteersState, Actions> = (state = initialState, action) => {
   switch (action.type) {
+    // LOAD
     case ActionsType.LOAD_VOLUNTEERS_REQUEST:
       return {
         ...state,
@@ -111,6 +138,7 @@ const volunteersReducer: Reducer<VolunteersState, Actions> = (state = initialSta
         ),
       };
 
+    // UPDATE
     case ActionsType.UPDATE_VOLUNTEER_REQUEST:
       return {
         ...state,
@@ -121,7 +149,7 @@ const volunteersReducer: Reducer<VolunteersState, Actions> = (state = initialSta
       return {
         ...state,
         updateIsFetching: false,
-        updateFetchError: action.payload,
+        updateError: action.payload,
       };
 
     case ActionsType.UPDATE_VOLUNTEER_SUCCESS:
@@ -129,6 +157,27 @@ const volunteersReducer: Reducer<VolunteersState, Actions> = (state = initialSta
         ...state,
         updateIsFetching: false,
         updateError: null,
+      };
+
+    // DELETE
+    case ActionsType.DELETE_VOLUNTEER_REQUEST:
+      return {
+        ...state,
+        deleteIsFetching: true,
+      };
+
+    case ActionsType.DELETE_VOLUNTEER_ERROR:
+      return {
+        ...state,
+        deleteIsFetching: false,
+        deleteError: action.payload,
+      };
+
+    case ActionsType.DELETE_VOLUNTEER_SUCCESS:
+      return {
+        ...state,
+        deleteIsFetching: false,
+        deleteError: null,
       };
 
     default:
