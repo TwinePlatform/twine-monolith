@@ -39,7 +39,7 @@ type Actions = Load${capitaliseFirst(entity)}Request | Load${capitaliseFirst(ent
 /*
 * Initial State
 */
-const entityInitialState: ${capitaliseFirst(entity)}State = {
+const initialState: ${capitaliseFirst(entity)}State = {
  fetchError: null,
  isFetching: false,
  lastUpdated: null,
@@ -70,7 +70,7 @@ export const load${capitaliseFirst(entity)} = () => (dispatch) => {
 /*
  * Reducer
  */
-const ${entity}Reducer: Reducer<${capitaliseFirst(entity)}State, Actions> = (state, action) => {
+const ${entity}Reducer: Reducer<${capitaliseFirst(entity)}State, Actions> = (state = initialState, action) => {
  switch (action.type) {
    case ActionsType.LOAD_${capitalise(entity)}_REQUEST:
      return {
@@ -96,7 +96,7 @@ const ${entity}Reducer: Reducer<${capitaliseFirst(entity)}State, Actions> = (sta
      };
 
    default:
-     return { ...entityInitialState };
+     return state;
  }
 };
 

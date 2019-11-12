@@ -35,7 +35,7 @@ type Actions = LoadVolunteersRequest | LoadVolunteersError | LoadVolunteersSucce
 /*
  * Initial State
  */
-const entityInitialState: VolunteersState = {
+const initialState: VolunteersState = {
   fetchError: null,
   isFetching: false,
   lastUpdated: null,
@@ -66,7 +66,7 @@ export const loadVolunteers = () => (dispatch) => {
 /*
  * Reducer
  */
-const volunteersReducer: Reducer<VolunteersState, Actions> = (state, action) => {
+const volunteersReducer: Reducer<VolunteersState, Actions> = (state = initialState, action) => {
   switch (action.type) {
     case ActionsType.LOAD_VOLUNTEERS_REQUEST:
       return {
@@ -95,7 +95,7 @@ const volunteersReducer: Reducer<VolunteersState, Actions> = (state, action) => 
       };
 
     default:
-      return { ...entityInitialState };
+      return state;
   }
 };
 

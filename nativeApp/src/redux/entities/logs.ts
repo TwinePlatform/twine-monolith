@@ -37,7 +37,7 @@ type Actions = LoadLogsRequest | LoadLogsSuccess | LoadLogsError;
 /*
  * Initial State
  */
-const entityInitialState: LogsState = {
+const initialState: LogsState = {
   fetchError: null,
   isFetching: false,
   lastUpdated: null,
@@ -68,7 +68,7 @@ export const loadLogs = (since?: Date, until?: Date) => (dispatch) => {
 /*
  * Reducer
  */
-const reducer: Reducer<LogsState, Actions> = (state, action) => {
+const reducer: Reducer<LogsState, Actions> = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_LOGS_REQUEST:
       return {
@@ -94,7 +94,7 @@ const reducer: Reducer<LogsState, Actions> = (state, action) => {
       };
 
     default:
-      return { ...entityInitialState };
+      return state;
   }
 };
 
