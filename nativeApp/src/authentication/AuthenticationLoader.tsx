@@ -5,13 +5,13 @@ import {
   View,
 } from 'react-native';
 import { NavigationInjectedProps } from 'react-navigation';
-import { Authentication } from '../api';
+import API from '../api';
 
 const AuthenticationLoader: FC<NavigationInjectedProps> = (props) => {
   useEffect(() => {
     (async () => {
       try {
-        const { data: { roles } } = await Authentication.roles();
+        const { data: { roles } } = await API.Authentication.roles();
         // TODO get role types from api
         if (roles.includes('CB_ADMIN') || roles.includes('VOLUNTEER_ADMIN')) {
           props.navigation.navigate('AdminStack');

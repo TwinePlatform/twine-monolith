@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 import { createAction } from 'redux-actions';
 import { User } from '../../../../api/src/models/types';
-import { CommunityBusinesses } from '../../api';
+import API from '../../api';
 import { State, VolunteersState } from '../types';
 
 /*
@@ -58,7 +58,7 @@ const loadVolunteersSuccess = createAction<Partial <User> []>(ActionsType.LOAD_V
 export const loadVolunteers = () => (dispatch) => {
   dispatch(loadVolunteersRequest());
 
-  return CommunityBusinesses.getVolunteers()
+  return API.Volunteers.get()
     .then((res) => dispatch(loadVolunteersSuccess(res.data)))
     .catch((error) => dispatch(loadVolunteersError(error)));
 };

@@ -2,7 +2,7 @@ import { Reducer } from 'redux';
 import { createAction } from 'redux-actions';
 import { assoc } from 'ramda';
 import { VolunteerLog } from '../../../../api/src/models/types';
-import { VolunteerLogs } from '../../api';
+import API from '../../api';
 import { State, LogsState } from '../types';
 
 
@@ -60,7 +60,7 @@ const loadLogsSuccess = createAction<Partial<VolunteerLog>[]>(LOAD_LOGS_SUCCESS)
 export const loadLogs = (since?: Date, until?: Date) => (dispatch) => {
   dispatch(loadLogsRequest());
 
-  return VolunteerLogs.get(since, until)
+  return API.VolunteerLogs.get(since, until)
     .then((res) => dispatch(loadLogsSuccess(res.data)))
     .catch((error) => dispatch(loadLogsError(error)));
 };

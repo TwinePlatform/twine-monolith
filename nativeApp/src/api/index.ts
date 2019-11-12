@@ -10,7 +10,7 @@ import { Api } from '../../../api/src/api/v1/types/api';
 const baseURL = `${getEnvVars().apiBaseUrl}/v1`;
 
 
-export const axios = _axios.create({
+const axios = _axios.create({
   baseURL,
   paramsSerializer: (params) => qs.stringify(params, { encode: false }),
   transformResponse: (r) => {
@@ -31,7 +31,7 @@ const makeRequest = async <T = any> ({ ...rest }: AxiosRequestConfig) => {
 };
 
 
-export const Authentication = {
+const Authentication = {
   login: ({ email, password }) => axios.post('/users/login', {
     email,
     password,
@@ -42,21 +42,20 @@ export const Authentication = {
   roles: () => makeRequest({ method: 'GET', url: '/users/me/roles' }),
 };
 
-export const CommunityBusinesses = {
-  addVolunteer: () => { },
-  editVolunteer: ({ id, ...changeset }) => makeRequest(
+const Volunteers = {
+  get: () => makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>(
+    { method: 'GET', url: '/community-businesses/me/volunteers' },
+  ),
+  add: () => { },
+  edit: ({ id, ...changeset }) => makeRequest(
     { method: 'PUT', url: `/users/volunteers/${id}`, data: changeset },
   ),
-  deleteVolunteer: (id: number) => makeRequest(
+  delete: (id: number) => makeRequest(
     { method: 'DELETE', url: `/users/volunteers/${id}` },
-  ),
-  getVolunteerActivities: () => axios.get('/volunteer-activities'),
-  getVolunteers: () => makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>(
-    { method: 'GET', url: '/community-businesses/me/volunteers' },
   ),
 };
 
-export const VolunteerLogs = {
+const VolunteerLogs = {
   get: (since?: Date, until?: Date) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.GET.Result>( //eslint-disable-line
     {
       method: 'GET',
@@ -64,4 +63,14 @@ export const VolunteerLogs = {
       params: { since, until },
     },
   ),
+  getVolunteerActivities: () => axios.get('/volunteer-activities'),
+
 };
+
+const API = {
+  Authentication,
+  Volunteers,
+  VolunteerLogs,
+};
+
+export default API;
