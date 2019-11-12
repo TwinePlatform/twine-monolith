@@ -15,12 +15,11 @@ const AuthenticationLoader: FC<NavigationInjectedProps> = (props) => {
         // TODO get role types from api
         if (roles.includes('CB_ADMIN') || roles.includes('VOLUNTEER_ADMIN')) {
           props.navigation.navigate('AdminStack');
-          return;
-        } if (roles.includes('VOLUNTEER')) {
+        } else if (roles.includes('VOLUNTEER')) {
           props.navigation.navigate('VolunteerStack');
-          return;
+        } else {
+          throw new Error('unsupported role');
         }
-        throw new Error('unsupported role');
       } catch (error) {
         console.log({ error });
         props.navigation.navigate('AuthStack');

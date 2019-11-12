@@ -9,7 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Input from '../../../lib/ui/forms/InputWithIcon';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
-import { Authentication } from '../../../api';
+import API from '../../../api';
 import { StorageValuesEnum } from '../../../authentication/types';
 
 const logo = require('../../../../assets/images/logo_image.png');
@@ -71,7 +71,7 @@ const Login: FC<Props> = (props) => {
 
   const onSubmit = async () => {
     try {
-      const { data } = await Authentication.login({ email, password });
+      const { data } = await API.Authentication.login({ email, password });
       await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.token);
       props.navigation.navigate('AuthenticationLoader');
     } catch (error) {
