@@ -1,21 +1,16 @@
 import { VolunteerLog, User } from '../../../api/src/models/types';
 
 
-export type LogsState = {
+export type RequestState<T> = {
   fetchError: null | Error;
   isFetching: boolean;
   lastUpdated: null | Date;
-  items: Record<number, VolunteerLog>;
+  items: Record<number, T>;
   order: number[];
 };
 
-export type VolunteersState = {
-  fetchError: null | Error;
-  isFetching: boolean;
-  lastUpdated: null | Date;
-  items: Record<number, User>;
-  order: number[];
-};
+export type LogsState = RequestState<VolunteerLog>
+export type VolunteersState = RequestState<User>
 
 export type State = {
   entities: {
