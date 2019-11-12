@@ -10,22 +10,21 @@ This documents the desired architecture for this project.
 |- docs         Documentation
 |- assets       Public assets
 |- src          native app
-|  |- assets          Contains static assets like images, SVGs
-|  |- components      Common components used throughout the app
-|  |- styles          Stylesheets for external components or other things not compatible with Styled Components
-|  |- <admin | volunteer>_views | shared_views
-|  |  |- components   Feature-specific components
-|  |  |- screens        Feature-specific routes/pages
-|  |  |- index.ts     Defines public interface of <FEATURE> module
+|  |- authentication  Auth related code
+|  |- api          Interface with the Twine HTTP API
 |  |- lib
-|  |  |- api          Interface with the Twine HTTP API
-|  |  |- utils        App specific helper functions
+|  |  |- ui           Styles & common components used throughout the app
+|  |  |- utils        Generalised helper functions
 |  |- redux
 |  |  |- <entity / feature / grouping>  Any coherent grouping or feature set (e.g. "logs")
 |  |  |  |- index.ts    Either all actions/action-creators/reducers/selectors in this file, OR...
 |  |  |  |- reducer.ts  ...separate out each of the above into their own file.
 |  |  |  |- ...
 |  |  |- rootReducer.ts
+|  |- screens        Feature-specific routes/pages
+|  |  |- [AUTH SPECIFIC]_views
+|  |  |  |- components   Feature-specific components
+|  |  |  |- index.ts     Defines public interface of <FEATURE> module
 |  |- App.tsx
 |  |- index.tsx
 |- ...dot/json files
