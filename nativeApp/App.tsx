@@ -4,7 +4,7 @@ import { createAppContainer } from 'react-navigation';
 import { setCustomText } from 'react-native-global-props';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import logger from 'redux-logger';
+// import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import * as Font from 'expo-font';
 
@@ -13,7 +13,7 @@ import RootStack from './src/Router';
 import reducer from './src/redux/rootReducer';
 
 const AppContainer = createAppContainer(RootStack);
-const store = createStore(reducer, applyMiddleware(logger, thunk));
+const store = createStore(reducer, applyMiddleware(thunk));
 
 export default class App extends Component {
   state = {
