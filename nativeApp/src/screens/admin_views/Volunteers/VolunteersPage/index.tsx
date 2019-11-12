@@ -7,6 +7,7 @@ import {
   loadVolunteers,
   selectOrderedVolunteers,
   selectVolunteersStatus,
+  deleteVolunteer,
 } from '../../../../redux/entities/volunteers';
 import useToggle from '../../../../lib/hooks/useToggle';
 import { User } from '../../../../../../api/src/models';
@@ -56,13 +57,9 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
   };
 
   const onConfirm = () => {
-    /*
-    * TODO:
-    * - dispatch redux action deleteVolunteerAndUpdate(activeCard.id)
-    * - hide modal
-    * - display some type of loader whilst waiting
-    */
-    console.log(activeCard);
+    dispatch(deleteVolunteer(activeCard));
+    toggleDeleteModalVisibility();
+    // TODO: display error feedback
   };
 
   // TODO: error handling
