@@ -103,6 +103,9 @@ const volunteersReducer: Reducer<VolunteersState, Actions> = (state = initialSta
 /*
  * Selectors
  */
+
+export const selectVolunteers = (state: State) => state.entities.volunteers.items;
+
 export const selectOrderedVolunteers = (state: State) => state.entities.volunteers.order
   .map((id) => state.entities.volunteers.items[id]);
 
