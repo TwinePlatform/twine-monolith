@@ -1,9 +1,9 @@
 import { Reducer } from 'redux';
 import { createAction } from 'redux-actions';
 import { assoc } from 'ramda';
-import { VolunteerLog } from '../../../api/src/models/types';
-import { VolunteerLogs } from '../api';
-import { State, LogsState } from './types';
+import { VolunteerLog } from '../../../../api/src/models/types';
+import { VolunteerLogs } from '../../api';
+import { State, LogsState } from '../types';
 
 
 /*

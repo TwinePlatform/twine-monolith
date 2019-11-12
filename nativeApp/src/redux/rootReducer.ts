@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import logsReducer from './logs';
-import volunteersReducer from './volunteers';
+import logsReducer from './entities/logs';
+import volunteersReducer from './entities/volunteers';
 
 // General idea is to keep state in a "normalised" structure
 // (see https://redux.js.org/recipes/structuring-reducers/normalizing-state-shape)

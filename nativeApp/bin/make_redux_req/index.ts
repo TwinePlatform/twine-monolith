@@ -17,7 +17,7 @@ const [entity] = process.argv.slice(2);
 if (!entity) {
   console.log('⚠️ Please supply an entity');
 } else {
-  const fileName = `./src/redux/${entity}.ts`;
+  const fileName = `./src/redux/entities/${entity}.ts`;
 
   writeFileSync(fileName, getTemplate(entity), { flag: 'wx' });
 

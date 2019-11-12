@@ -14,7 +14,7 @@ import {
   loadVolunteers,
   selectOrderedVolunteers,
   selectVolunteersStatus,
-} from '../../../../redux/volunteers';
+} from '../../../../redux/entities/volunteers';
 
 /*
  * Types

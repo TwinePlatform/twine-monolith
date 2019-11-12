@@ -7,7 +7,7 @@ import Page from '../../../lib/ui/Page';
 import CardSeparator from '../../../lib/ui/CardSeparator';
 import ConfirmationModal from '../../../lib/ui/modals/ConfirmationModal';
 import useToggle from '../../../lib/hooks/useToggle';
-import { selectOrderedLogs } from '../../../redux/logs';
+import { selectOrderedLogs } from '../../../redux/entities/logs';
 
 /*
  * Types
