@@ -23,10 +23,16 @@ enum ActionsType {
  * Types
  */
 type LoadVolunteersRequest = RequestAction<ActionsType.LOAD_VOLUNTEERS_REQUEST>
-type LoadVolunteersSuccess = SuccessAction<ActionsType.LOAD_VOLUNTEERS_REQUEST, User[]>
+type LoadVolunteersSuccess = SuccessAction<ActionsType.LOAD_VOLUNTEERS_SUCCESS, User[]>
 type LoadVolunteersError = ErrorAction<ActionsType.LOAD_VOLUNTEERS_ERROR>
 
-type Actions = LoadVolunteersRequest | LoadVolunteersError | LoadVolunteersSuccess
+type UpdateVolunteerRequest = RequestAction<ActionsType.UPDATE_VOLUNTEER_REQUEST>
+type UpdateVolunteerSuccess = SuccessAction<ActionsType.UPDATE_VOLUNTEER_SUCCESS, User[]>
+type UpdateVolunteerError = ErrorAction<ActionsType.UPDATE_VOLUNTEER_ERROR>
+
+type Actions
+  = LoadVolunteersRequest | LoadVolunteersSuccess | LoadVolunteersError
+  | UpdateVolunteerRequest | UpdateVolunteerSuccess | UpdateVolunteerError
 
 /*
  * Initial State
@@ -37,14 +43,20 @@ const initialState: VolunteersState = {
   lastUpdated: null,
   items: {},
   order: [],
+  updateIsFetching: false,
+  updateError: null,
 };
 
 /*
  * Action creators
  */
 const loadVolunteersRequest = createAction(ActionsType.LOAD_VOLUNTEERS_REQUEST);
-const loadVolunteersError = createAction<Error>(ActionsType.LOAD_VOLUNTEERS_ERROR);
 const loadVolunteersSuccess = createAction<Partial <User> []>(ActionsType.LOAD_VOLUNTEERS_SUCCESS);
+const loadVolunteersError = createAction<Error>(ActionsType.LOAD_VOLUNTEERS_ERROR);
+
+const updateVolunteerRequest = createAction(ActionsType.UPDATE_VOLUNTEER_REQUEST);
+const updateVolunteerSuccess = createAction(ActionsType.UPDATE_VOLUNTEER_SUCCESS);
+const updateVolunteerError = createAction<Error>(ActionsType.UPDATE_VOLUNTEER_ERROR);
 
 /*
  * Thunk creators
@@ -55,6 +67,17 @@ export const loadVolunteers = () => (dispatch) => {
   return API.Volunteers.get()
     .then((res) => dispatch(loadVolunteersSuccess(res.data)))
     .catch((error) => dispatch(loadVolunteersError(error)));
+};
+
+export const updateVolunteer = (changeset) => (dispatch) => {
+  dispatch(updateVolunteerRequest());
+
+  return API.Volunteers.update(changeset)
+    .then(() => {
+      dispatch(updateVolunteerSuccess());
+      dispatch(loadVolunteers());
+    })
+    .catch((error) => dispatch(updateVolunteerError(error)));
 };
 
 /*
@@ -86,6 +109,26 @@ const volunteersReducer: Reducer<VolunteersState, Actions> = (state = initialSta
           (acc, volunteer) => ({ ...acc, [volunteer.id]: volunteer }),
           {},
         ),
+      };
+
+    case ActionsType.UPDATE_VOLUNTEER_REQUEST:
+      return {
+        ...state,
+        updateIsFetching: true,
+      };
+
+    case ActionsType.UPDATE_VOLUNTEER_ERROR:
+      return {
+        ...state,
+        updateIsFetching: false,
+        updateFetchError: action.payload,
+      };
+
+    case ActionsType.UPDATE_VOLUNTEER_SUCCESS:
+      return {
+        ...state,
+        updateIsFetching: false,
+        updateError: null,
       };
 
     default:

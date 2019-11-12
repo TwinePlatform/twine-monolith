@@ -7,23 +7,14 @@ import Button from '../ButtonWithInlineLabel';
 import Dropdown from '../Dropdown';
 import { Forms } from '../enums';
 import SubmitButton from '../SubmitButton';
+import { User } from '../../../../../../api/src/models';
 
 /*
  * Types
  */
-export type UserValues = {
-  id: number;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  postcode: string;
-  gender: string;
-  birthYear: number;
-}
-
 type Props = {
-  onSubmit: (v: UserValues) => void;
-  initialValues?: UserValues;
+  onSubmit: (v: User) => void;
+  initialValues?: Partial<User>;
 }
 
 /*

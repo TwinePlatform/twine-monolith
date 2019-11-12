@@ -25,7 +25,9 @@ export type RequestState<T> = {
 };
 
 export type LogsState = RequestState<VolunteerLog>
-export type VolunteersState = RequestState<User>
+export type VolunteersState = RequestState<User> & {
+  updateIsFetching: boolean;
+  updateError: Error; }
 
 export type State = {
   entities: {
