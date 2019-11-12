@@ -51,7 +51,7 @@ const AdminTime: FC<Props> = () => {
             key={log.id}
             id={log.id}
             timeValues={[log.duration.hours || 0, log.duration.minutes || 0]}
-            labels={[log.project, log.activity]}
+            labels={[log.project || 'General', log.activity]}
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
             onDelete={toggleDeleteVisibility}
