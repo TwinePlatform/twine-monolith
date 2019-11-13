@@ -34,7 +34,11 @@ export default ({ from, to, updateOn = [], independentVar }: UseAggregatedDataPa
       },
       {
         ...CommunityBusinesses.configs.getVolunteerProjects,
-        transformResponse: [(res: any) => res.result.map(({ id, name }: IdAndName) => ({ id, name }))],
+        transformResponse: [
+          (res: any) => res.result
+            .map(({ id, name }: IdAndName) => ({ id, name }))
+            .concat({ id: -1, name: 'General' })
+        ],
       },
       {
         ...CommunityBusinesses.configs.getVolunteerActivities,
@@ -50,12 +54,12 @@ export default ({ from, to, updateOn = [], independentVar }: UseAggregatedDataPa
     }
 
     const _yData = independentVar === 'Activities'
-      ? projectsData.data.concat({ id: -1, name: 'null' })
+      ? projectsData.data
       : activitiesData.data
 
     const opts = independentVar === 'Activities'
       ? { tableType: tableType.ProjectByActivity, xData: activitiesData.data, yData: _yData }
-      : { tableType: tableType.ActivityByProject, xData: projectsData.data.concat({ id: -1, name: 'null' }), yData: _yData }
+      : { tableType: tableType.ActivityByProject, xData: projectsData.data, yData: _yData }
 
     const data = logsToAggregatedData({ logs: logsData.data, ...opts });
 
