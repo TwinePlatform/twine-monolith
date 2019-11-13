@@ -1,5 +1,5 @@
 import { Duration } from 'twine-util';
-import { collectBy } from 'twine-util/arrays';
+import { collectBy, interpolateObjFrom } from 'twine-util/arrays';
 import { mapValues } from 'twine-util/objects';
 import { Dictionary } from 'ramda';
 import { TableTypeItem } from './tableType';
@@ -64,19 +64,15 @@ export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params):
   // { [X]: { [Y]: Log[] } } -> { [X]: { [Y]: Duration } }
   const y = mapValues((ys) => mapValues((_logs) => Duration.accumulate(_logs.map((l) => l.duration)), ys), x);
 
-  // Interpolate Y-data (necessary when Y-data is month based)
+  // Interpolate null values in both dimensions (X-data and Y-data)
+  // (necessary when values exist in X- and Y-data that aren't present in the logs)
   // { [X]: { [Y]: Duration } } -> { [X]: { [Y]: Duration } }
-  const z = mapValues((ys) =>
-    yData.reduce((acc, yDataPt) =>
-      ys.hasOwnProperty(yDataPt.name)
-        ? acc
-        : { ...acc, [yDataPt.name]: Duration.fromSeconds(0) },
-      ys),
-    y);
+  const z = interpolateObjFrom(xData.map((x) => x.name), Duration.fromSeconds(0), y);
+  const q = mapValues((zs) => interpolateObjFrom(yData.map((y) => y.name), Duration.fromSeconds(0), zs), z)
 
   // Transform into row
   // { [X]: { [Y]: Duration } } -> ({ [Y]: Duration } & { name: [X], id: number })[]
-  const rows = Object.entries(z)
+  const rows = Object.entries(q)
     .reduce((acc, [X, Ys]) =>
       acc.concat(Object.assign({}, Ys, getIdAndName(tableType.xIdFromLogs, xData, X))), [] as Row[]);
 
