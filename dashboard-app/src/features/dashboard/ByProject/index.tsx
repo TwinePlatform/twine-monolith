@@ -101,7 +101,7 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
       <Row center="xs">
         <Col xs={12}>
           <UtilityBar
-            dateFilter="month"
+            dateFilter="day"
             datePickerConstraint={DatePickerConstraints}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}

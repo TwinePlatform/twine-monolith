@@ -6,43 +6,35 @@ import { DateRangePickerConstraint, MIN_DATE } from '../components/DatePicker/ty
 // - min from: 01 Jan 2017
 // - max from: now
 //
-// - default from: 11 months ago
+// - default from: 30 days ago
 // - default to: now
 //
 // - validate:
 //   - from:
 //     - (from < to) || from
-//     - (to - from <= 11 months) || from
 //   - to:
 //     - (from < to) || from
-//     - (to - from <= 11 months) || from + 11 months
 
 
 const TimeConstraints: DateRangePickerConstraint = {
   from: {
     min: () => MIN_DATE.toDate(),
-    max: () => moment().startOf('month').toDate(),
-    default: () => moment().subtract(11, 'months').startOf('month').toDate(),
-    validate: (_from, _to) => moment(_from).startOf('month').toDate(),
+    max: () => moment().endOf('day').toDate(),
+    default: () => moment().subtract(30, 'days').startOf('day').toDate(),
+    validate: (_from, _to) => moment(_from).startOf('day').toDate(),
   },
 
   to: {
-    min: (from, to) => moment.max(MIN_DATE, moment(from)).endOf('month').toDate(),
-    max: (from, to) => moment.min(moment(), moment(from).add(11, 'months').endOf('month')).toDate(),
-    default: () => moment().endOf('month').toDate(),
+    min: (from, to) => moment.max(MIN_DATE, moment(from)).startOf('day').toDate(),
+    max: () => moment().endOf('day').toDate(),
+    default: () => moment().endOf('day').toDate(),
     validate: (_from, _to) => {
-      const from = moment(_from).startOf('month');
-      const to = moment(_to).endOf('month');
+      const from = moment(_from).startOf('day');
+      const to = moment(_to).endOf('day');
 
-      if (from.isAfter(to)) {
-        return from.endOf('month').toDate();
-      }
-
-      if (to.diff(from, 'months') > 11) {
-        return from.add(11, 'months').endOf('month').toDate();
-      }
-
-      return to.toDate();
+      return from.isAfter(to)
+        ? from.endOf('day').toDate()
+        : to.toDate();
     },
   },
 };
