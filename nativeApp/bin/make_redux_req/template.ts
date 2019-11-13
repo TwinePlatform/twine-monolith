@@ -3,9 +3,9 @@ import { capitaliseFirst, capitalise } from '../utils';
 
 export default (entity: string) => `import { Reducer } from 'redux';
 import { createAction } from 'redux-actions';
-import {  } from '../../../api/src/models/types'; //TODO 
-import {  } from '../api'; //TODO
-import { State, ${capitaliseFirst(entity)}State } from './types'; //TODO
+import {  } from '../../../../api/src/models/types'; //TODO 
+import {  } from '../../api'; //TODO
+import { State, ${capitaliseFirst(entity)}State } from '../types'; //TODO
 
 
 /*
