@@ -13,6 +13,6 @@ export const TitlesCopy = {
   },
   Projects: {
     title: 'Projects',
-    subtitle: 'See what projects volunteers spend their time doing',
+    subtitle: 'See what projects & activities volunteers spend their time doing',
   },
 };

@@ -23,6 +23,7 @@ interface Props {
   title: TitleString;
   legendData: LegendData;
   setLegendData: React.Dispatch<React.SetStateAction<LegendData>>;
+  activeData: string;
 }
 
 
@@ -38,6 +39,7 @@ const ProjectTabs: FunctionComponent<Props> = (props) => {
     legendData,
     setLegendData,
     orderable,
+    activeData,
   } = props;
 
   const { unit } = useContext(DashboardContext);
@@ -52,7 +54,7 @@ const ProjectTabs: FunctionComponent<Props> = (props) => {
                 setLegendData={setLegendData}
                 title={title}
                 data={data}
-                xAxisTitle={'Months'}
+                xAxisTitle={activeData}
                 yAxisTitle={`Volunteer ${unit}`}
                 defaultSelection={true}
               />
