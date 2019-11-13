@@ -44,6 +44,5 @@ export const activities = [
 ];
 
 export const projects = [
-  { id: 1, name: 'General' },
   { id: 2, name: 'Project 1' },
 ];

@@ -105,8 +105,8 @@ describe('By Project Page', () => {
       const rows = await waitForElement(() => tools.getAllByTestId('data-table-row'));
 
       expect(firstHeader).toHaveTextContent('↑ Activity');
-      expect(rows[0]).toHaveTextContent('Cafe5.662.333.330');
-      expect(rows[1]).toHaveTextContent('Running away1.3301.330');
+      expect(rows[0]).toHaveTextContent('Cafe5.663.332.33');
+      expect(rows[1]).toHaveTextContent('Running away1.331.330');
     });
   });
 
