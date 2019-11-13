@@ -119,21 +119,8 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
             onDownloadClick={downloadAsCsv}
+            customToggle={<Toggle active={activeData} onChange={setActiveData} />}
           />
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={12}>
-          <Card>
-            <WrapperOne>
-              <Toggle active={activeData} onChange={setActiveData} />
-            </WrapperOne>
-            <WrapperTwo>
-              <Span>
-                Select whether time should be aggregated against projects or activities
-              </Span>
-            </WrapperTwo>
-          </Card>
         </Col>
       </Row>
       <Errors errors={errors} />
