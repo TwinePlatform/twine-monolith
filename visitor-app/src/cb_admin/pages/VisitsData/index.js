@@ -31,6 +31,10 @@ const Spacer = styled.p`
   margin: 0.4em;
 `;
 
+const H3 = styled(Heading3)`
+  font-weight: bold;
+`;
+
 const ageOptions = AgeGroups.toSelectOptions();
 const timeOptions = DateRanges.toSelectOptions();
 
@@ -186,7 +190,7 @@ export default class VisitsDataPage extends React.Component {
         <Row>
           <Col>
             <Heading3>
-              Dates: {moment(since).format('DD MMM YYYY')} - {moment(until).format('DD MMM YYYY')}
+              {moment(since).format('DD MMM YYYY')} - {moment(until).format('DD MMM YYYY')}
             </Heading3>
           </Col>
         </Row>
@@ -194,7 +198,7 @@ export default class VisitsDataPage extends React.Component {
           <Grid>
             <Row center="xs">
               <Col xs={8}>
-                <Heading3>Reason for visiting</Heading3>
+                <H3>Reason for visiting</H3>
                 <CategoriesChart
                   categoryData={this.state.data.category}
                   activityData={this.state.data.activity}
@@ -204,7 +208,7 @@ export default class VisitsDataPage extends React.Component {
             </Row>
             <Row center="xs">
               <Col xs={8}>
-                <Heading3>{this.state.basis} over {this.state.filters.time.toLowerCase()}</Heading3>
+                <H3>{this.state.basis} over {this.state.filters.time.toLowerCase()}</H3>
                 <TimePeriodChart data={this.state.data.time} options={this.state.charts.time} />
               </Col>
             </Row>
@@ -212,11 +216,13 @@ export default class VisitsDataPage extends React.Component {
           <Grid>
             <Row center="xs">
               <Col xs={6}>
-                <Heading3>Visits by gender</Heading3>
+                <H3>Visits by gender</H3>
                 <GenderChart data={this.state.data.gender} />
               </Col>
+            </Row>
+            <Row center="xs">
               <Col xs={6}>
-                <Heading3>Visits by age</Heading3>
+                <H3>Visits by age</H3>
                 <AgeGroupChart data={this.state.data.age} />
               </Col>
             </Row>
