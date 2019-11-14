@@ -46,11 +46,17 @@ const Volunteers = {
   get: () => makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>(
     { method: 'GET', url: '/community-businesses/me/volunteers' },
   ),
-  add: () => { },
-  update: ({ id, ...changeset }) => makeRequest(
+  add: (volunteer) => makeRequest<Api.Users.Register.Volunteers.POST.Result>(
+    {
+      method: 'POST',
+      url: '/users/register/volunteers',
+      data: { ...volunteer },
+    },
+  ),
+  update: ({ id, ...changeset }) => makeRequest<Api.Users.Volunteers.Id.PUT.Result>(
     { method: 'PUT', url: `/users/volunteers/${id}`, data: changeset },
   ),
-  delete: (id: number) => makeRequest(
+  delete: (id: number) => makeRequest<Api.Users.Volunteers.Id.DELETE.Result>(
     { method: 'DELETE', url: `/users/volunteers/${id}` },
   ),
 };

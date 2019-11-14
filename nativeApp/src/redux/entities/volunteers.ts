@@ -5,6 +5,7 @@ import API from '../../api';
 import {
   State, VolunteersState, RequestAction, SuccessAction, ErrorAction,
 } from '../types';
+import { NewVolunteer } from '../../api/types';
 
 /*
  * Actions
@@ -13,6 +14,10 @@ enum ActionsType {
   LOAD_VOLUNTEERS_REQUEST = 'volunteers/LOAD_REQUEST',
   LOAD_VOLUNTEERS_ERROR = 'volunteers/LOAD_ERROR',
   LOAD_VOLUNTEERS_SUCCESS = 'volunteers/LOAD_SUCCESS',
+
+  CREATE_VOLUNTEER_REQUEST = 'volunteer/CREATE_REQUEST',
+  CREATE_VOLUNTEER_ERROR = 'volunteer/CREATE_ERROR',
+  CREATE_VOLUNTEER_SUCCESS = 'volunteer/CREATE_SUCCESS',
 
   UPDATE_VOLUNTEER_REQUEST = 'volunteer/UPDATE_REQUEST',
   UPDATE_VOLUNTEER_ERROR = 'volunteer/UPDATE_ERROR',
@@ -30,6 +35,10 @@ type LoadVolunteersRequest = RequestAction<ActionsType.LOAD_VOLUNTEERS_REQUEST>
 type LoadVolunteersSuccess = SuccessAction<ActionsType.LOAD_VOLUNTEERS_SUCCESS, User[]>
 type LoadVolunteersError = ErrorAction<ActionsType.LOAD_VOLUNTEERS_ERROR>
 
+type CreateVolunteerRequest = RequestAction<ActionsType.CREATE_VOLUNTEER_REQUEST>
+type CreateVolunteerSuccess = SuccessAction<ActionsType.CREATE_VOLUNTEER_SUCCESS, User[]>
+type CreateVolunteerError = ErrorAction<ActionsType.CREATE_VOLUNTEER_ERROR>
+
 type UpdateVolunteerRequest = RequestAction<ActionsType.UPDATE_VOLUNTEER_REQUEST>
 type UpdateVolunteerSuccess = SuccessAction<ActionsType.UPDATE_VOLUNTEER_SUCCESS, User[]>
 type UpdateVolunteerError = ErrorAction<ActionsType.UPDATE_VOLUNTEER_ERROR>
@@ -40,6 +49,7 @@ type DeleteVolunteerError = ErrorAction<ActionsType.DELETE_VOLUNTEER_ERROR>
 
 type Actions
   = LoadVolunteersRequest | LoadVolunteersSuccess | LoadVolunteersError
+  | CreateVolunteerRequest | CreateVolunteerSuccess | CreateVolunteerError
   | UpdateVolunteerRequest | UpdateVolunteerSuccess | UpdateVolunteerError
   | DeleteVolunteerRequest | DeleteVolunteerSuccess | DeleteVolunteerError
 
@@ -52,6 +62,8 @@ const initialState: VolunteersState = {
   lastUpdated: null,
   items: {},
   order: [],
+  createIsFetching: false,
+  createError: null,
   updateIsFetching: false,
   updateError: null,
   deleteIsFetching: false,
@@ -64,6 +76,10 @@ const initialState: VolunteersState = {
 const loadVolunteersRequest = createAction(ActionsType.LOAD_VOLUNTEERS_REQUEST);
 const loadVolunteersSuccess = createAction<Partial <User> []>(ActionsType.LOAD_VOLUNTEERS_SUCCESS);
 const loadVolunteersError = createAction<Error>(ActionsType.LOAD_VOLUNTEERS_ERROR);
+
+const createVolunteerRequest = createAction(ActionsType.CREATE_VOLUNTEER_REQUEST);
+const createVolunteerSuccess = createAction(ActionsType.CREATE_VOLUNTEER_SUCCESS);
+const createVolunteerError = createAction<Error>(ActionsType.CREATE_VOLUNTEER_ERROR);
 
 const updateVolunteerRequest = createAction(ActionsType.UPDATE_VOLUNTEER_REQUEST);
 const updateVolunteerSuccess = createAction(ActionsType.UPDATE_VOLUNTEER_SUCCESS);
@@ -82,6 +98,23 @@ export const loadVolunteers = () => (dispatch) => {
   return API.Volunteers.get()
     .then((res) => dispatch(loadVolunteersSuccess(res.data)))
     .catch((error) => dispatch(loadVolunteersError(error)));
+};
+
+export const createVolunteer = (user: Partial<NewVolunteer>) => (dispatch, getState) => {
+  dispatch(createVolunteerRequest());
+  const state = getState();
+  const volunteer = {
+    organisationId: state.currentUser.data.organisationId,
+    ...user,
+  };
+
+  console.log({ volunteer });
+  return API.Volunteers.add(volunteer)
+    .then(() => {
+      dispatch(createVolunteerSuccess());
+      dispatch(loadVolunteers());
+    })
+    .catch((error) => dispatch(createVolunteerError(error)));
 };
 
 export const updateVolunteer = (changeset) => (dispatch) => {
@@ -136,6 +169,27 @@ const volunteersReducer: Reducer<VolunteersState, Actions> = (state = initialSta
           (acc, volunteer) => ({ ...acc, [volunteer.id]: volunteer }),
           {},
         ),
+      };
+
+    // CREATE
+    case ActionsType.CREATE_VOLUNTEER_REQUEST:
+      return {
+        ...state,
+        createIsFetching: true,
+      };
+
+    case ActionsType.CREATE_VOLUNTEER_ERROR:
+      return {
+        ...state,
+        createIsFetching: false,
+        createError: action.payload,
+      };
+
+    case ActionsType.CREATE_VOLUNTEER_SUCCESS:
+      return {
+        ...state,
+        createIsFetching: false,
+        createError: null,
       };
 
     // UPDATE
