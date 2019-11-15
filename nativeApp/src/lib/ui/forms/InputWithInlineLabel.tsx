@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
-import { Item as I, Input as _Input, Label as L } from 'native-base';
+import {
+  Item as I, Input as _Input, Label as L, Icon,
+} from 'native-base';
 import { TextInputProps } from 'react-native';
 import { Forms } from './enums';
 
@@ -9,8 +11,10 @@ import { Forms } from './enums';
  * Types
  */
 interface Props extends TextInputProps {
+  ref: any;
   label: string;
   value?: string;
+  error?: boolean;
 }
 
 /*
@@ -30,11 +34,14 @@ const Label = styled(L)`
  * Component
  */
 const Input: FC<Props> = (props) => {
-  const { label, value, ...rest } = props;
+  const {
+    error, label, value, ...rest
+  } = props;
   return (
-    <Item inlineLabel>
+    <Item inlineLabel error={error}>
       <Label>{label}</Label>
       <_Input {...rest}>{value}</_Input>
+      {error && <Icon name="close-circle" />}
     </Item>
   );
 };
