@@ -31,7 +31,7 @@ const UnitToggle: React.FunctionComponent<UnitToggleProps> = (props) => {
   return (
     <>
       <Span>Unit:</Span>
-      <Info title="Eight (8) hours are counted as one (1) day" />
+      <Info title="Display time in units of hours or days (Eight (8) hours are counted as one (1) day)" />
       <Toggle
         left="Hours"
         right="Days"
