@@ -1,4 +1,4 @@
-import React, { createContext, useState, SetStateAction, Dispatch } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Route, Switch, BrowserRouter, withRouter } from 'react-router-dom';
 
@@ -18,6 +18,8 @@ import Navbar from './features/navigation/Navbar';
 import Footer from './lib/ui/components/Footer';
 import { ColoursEnum, Fonts } from './lib/ui/design_system';
 import { DurationUnitEnum } from './types';
+import { DashboardContext } from './features/dashboard/context';
+
 
 /*
  * Styles
@@ -36,18 +38,8 @@ const Content = styled.div`
 
 
 /*
- * Context
- */
-type Context = {
-  unit: DurationUnitEnum;
-  setUnit: Dispatch<SetStateAction<DurationUnitEnum>>;
-};
-export const DashboardContext = createContext<Context>({ unit: DurationUnitEnum.HOURS, setUnit: () => {} });
-
-/*
  * Helpers
  */
-
 
 const DashboardRoutes = () => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
