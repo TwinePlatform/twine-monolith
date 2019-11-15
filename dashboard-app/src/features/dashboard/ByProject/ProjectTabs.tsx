@@ -9,7 +9,7 @@ import StackedBarChart from '../components/StackedBarChart/index';
 import { LegendData } from '../components/StackedBarChart/types';
 import { TitleString } from '../components/Title';
 import { Orderable } from '../hooks/useOrderable';
-import { DashboardContext } from '../../../App';
+import { DashboardContext } from '../context';
 
 
 /*
@@ -23,6 +23,7 @@ interface Props {
   title: TitleString;
   legendData: LegendData;
   setLegendData: React.Dispatch<React.SetStateAction<LegendData>>;
+  activeData: string;
 }
 
 
@@ -38,6 +39,7 @@ const ProjectTabs: FunctionComponent<Props> = (props) => {
     legendData,
     setLegendData,
     orderable,
+    activeData,
   } = props;
 
   const { unit } = useContext(DashboardContext);
@@ -52,7 +54,7 @@ const ProjectTabs: FunctionComponent<Props> = (props) => {
                 setLegendData={setLegendData}
                 title={title}
                 data={data}
-                xAxisTitle={'Months'}
+                xAxisTitle={activeData}
                 yAxisTitle={`Volunteer ${unit}`}
                 defaultSelection={true}
               />

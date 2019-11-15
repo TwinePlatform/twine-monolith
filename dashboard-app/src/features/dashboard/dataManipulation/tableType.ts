@@ -12,6 +12,7 @@ interface TableType {
   MonthByActivity: TableTypeItem;
   MonthByName: TableTypeItem;
   ActivityByProject: TableTypeItem;
+  ProjectByActivity: TableTypeItem;
 }
 
 // TODO : get log type from api
@@ -45,5 +46,11 @@ export const tableType: TableType = {
     groupByY: 'Activity',
     xIdFromLogs: 'project',
     getYIdFromLogs: (x: any) => x.activity,
-  }
+  },
+  ProjectByActivity: {
+    groupByX: 'Activity',
+    groupByY: 'Project',
+    xIdFromLogs: 'activity',
+    getYIdFromLogs: (x: any) => x.project,
+  },
 };

@@ -1,4 +1,4 @@
-import { sort, headOrId, innerJoin, collectBy, truncate, Order } from '../arrays';
+import { sort, headOrId, innerJoin, collectBy, truncate, Order, interpolateObjFrom } from '../arrays';
 
 
 describe('Arrays', () => {
@@ -149,7 +149,7 @@ describe('Arrays', () => {
     test('should merge objects when predicate == TRUE, ignore otherwise', () => {
       const left = [{ id: 1, name: 'foo' }, { id: 2, name: 'bar' }, { id: 3, name: 'baz' }];
       const right = [{ id: 1, pw: 'woo' }, { id: 2, pw: 'war' }];
-      const pred = (a: { id: number, name: string}, b: { id: number, pw: string }) => a.id === b.id;
+      const pred = (a: { id: number; name: string }, b: { id: number; pw: string }) => a.id === b.id;
       expect(innerJoin(left, right, pred)).toEqual([
         { id: 1, name: 'foo', pw: 'woo' },
         { id: 2, name: 'bar', pw: 'war' }
@@ -159,19 +159,19 @@ describe('Arrays', () => {
     test('should only shallow merge', () => {
       // This isn't a strict requirement, but if it changes we should be notified about
       // it via a failing test
-      type Data = { x: number, y: number };
+      type Data = { x: number; y: number };
       const data1 = { x: 1, y: 2 };
       const data2 = { x: 1, y: 2 };
       const left = [{ id: 1, name: 'foo', data: data1 }, { id: 2, name: 'bar', data: data2 }, { id: 3, name: 'baz', data: data1 }];
       const right = [{ id: 1, pw: 'woo' }, { id: 2, pw: 'war' }];
-      const pred = (a: { id: number, name: string, data: Data }, b: { id: number, pw: string }) => a.id === b.id;
+      const pred = (a: { id: number; name: string; data: Data }, b: { id: number; pw: string }) => a.id === b.id;
       const res = innerJoin(left, right, pred)
       expect(res).toEqual([
         { id: 1, name: 'foo', pw: 'woo', data: data1 },
         { id: 2, name: 'bar', pw: 'war', data: data2 },
       ]);
-      expect((<any> res[0]).data).toBe(data1);
-      expect((<any> res[1]).data).toBe(data2);
+      expect((res[0] as any).data).toBe(data1);
+      expect((res[1] as any).data).toBe(data2);
     });
   });
 
@@ -181,11 +181,11 @@ describe('Arrays', () => {
     });
 
     test('constant key function collects all elements into the same key', () => {
-      expect(collectBy(() => 'foo', [1, 2, 3, 4])).toEqual({ foo: [1, 2, 3, 4]});
+      expect(collectBy(() => 'foo', [1, 2, 3, 4])).toEqual({ foo: [1, 2, 3, 4] });
     });
 
     test('values are collected into buckets defined by key function', () => {
-      expect(collectBy((a) => a % 2 === 1 ? 'odd': 'even', [1, 2, 3, 4]))
+      expect(collectBy((a) => a % 2 === 1 ? 'odd' : 'even', [1, 2, 3, 4]))
         .toEqual({
           odd: [1, 3],
           even: [2, 4],
@@ -217,6 +217,57 @@ describe('Arrays', () => {
       expect(headOrId('foo')).toBe('foo');
       expect(headOrId(null)).toBe(null);
       expect(headOrId({ b: 1 })).toEqual({ b: 1 });
+    });
+  });
+
+  describe('interpolateObjFrom', () => {
+    test('empty array returns empty object', () => {
+      expect(interpolateObjFrom([], 0, {})).toEqual({});
+    });
+
+    test('N-element array x empty object returns N-key object', () => {
+      expect(interpolateObjFrom(['a', 'b', 'c', 'd'], 1, {})).toEqual({
+        a: 1,
+        b: 1,
+        c: 1,
+        d: 1,
+      });
+
+      expect(interpolateObjFrom(['a', 'b', 'c'], 1, {})).toEqual({
+        a: 1,
+        b: 1,
+        c: 1,
+      });
+
+      expect(interpolateObjFrom(['a'], 1, {})).toEqual({ a: 1 });
+    });
+
+    test('N-element array x M-key object returns N-key object, N > M', () => {
+      expect(interpolateObjFrom(['a', 'b', 'c'], 'foo', { a: 2 })).toEqual({
+        a: 2,
+        b: 'foo',
+        c: 'foo',
+      });
+
+      expect(interpolateObjFrom(['a', 'b', 'c', 'd'], 100, { a: 2, d: -1 })).toEqual({
+        a: 2,
+        b: 100,
+        c: 100,
+        d: -1,
+      });
+    });
+
+    test('N-element array x M-key object returns M-key object, N < M', () => {
+      expect(interpolateObjFrom(['a'], 1, { a: 2, b: 2 })).toEqual({
+        a: 2,
+        b: 2,
+      });
+
+      expect(interpolateObjFrom(['a', 'b'], 'foo', { a: 2, b: 1, c: -1 })).toEqual({
+        a: 2,
+        b: 1,
+        c: -1,
+      });
     });
   });
 });
