@@ -1,6 +1,8 @@
 import React, { FunctionComponent, useState, useEffect, useCallback, useContext } from 'react';
 import { Row, Col } from 'react-flexbox-grid';
 import { equals } from 'ramda';
+import { reduceValues } from 'twine-util/objects';
+import { Duration } from 'twine-util';
 
 import {
   flipActiveOfAll,
@@ -15,7 +17,7 @@ import Legend from './Legend/index';
 import Chart from './Chart';
 import { LegendData } from './types';
 import { TitleString } from '../Title';
-import { DashboardContext } from '../../../../App';
+import { DashboardContext } from '../../context';
 
 
 /*
@@ -36,15 +38,18 @@ interface Props {
 /*
  * Helpers
  */
+const isCellDurationZero = (content: string | Duration.Duration) =>
+  typeof content === 'object' ? Duration.equals(content, {}) : true;
 
 const getOverlayText = (data: AggregatedData, legendItemsActive: boolean): [boolean, string] => {
   const noActiveLegendText = data.groupByX === 'Activity'
     ? 'Select an activity to show data'
     : 'Select volunteers to show their hours';
 
-  const dataExists = data.rows.length > 0;
+  const noData = data.rows.length === 0 || data.rows
+    .every((row) => reduceValues((acc, content) => acc && isCellDurationZero(content), true, row))
 
-  if (!dataExists) {
+  if (noData) {
     return [true, 'No data for this range']
   } else if (!legendItemsActive) {
     return [true, noActiveLegendText];

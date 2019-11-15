@@ -1,4 +1,5 @@
 import { DependencyList, useEffect, useState } from 'react';
+import { assoc } from 'ramda';
 import { useBatchRequest } from '../../../lib/hooks';
 import { CommunityBusinesses } from '../../../lib/api';
 import {
@@ -12,11 +13,13 @@ import { tableType } from '../dataManipulation/tableType';
 interface UseAggregatedDataParams {
   from: Date;
   to: Date;
+  independentVar: 'Projects' | 'Activities';
   updateOn?: DependencyList;
 }
 
-export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
+export default ({ from, to, updateOn = [], independentVar }: UseAggregatedDataParams) => {
   const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
+  const [yData, setYData] = useState();
 
   const {
     loading,
@@ -27,11 +30,15 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       {
         ...CommunityBusinesses.configs.getLogs,
         params: { since: from, until: to },
-        transformResponse: [(res: any) => res.result],
+        transformResponse: [(res: any) => res.result.map((log: any) => assoc('project', log.project || 'General', log))],
       },
       {
         ...CommunityBusinesses.configs.getVolunteerProjects,
-        transformResponse: [(res: any) => res.result.map(({ id, name }: IdAndName) => ({ id, name }))],
+        transformResponse: [
+          (res: any) => res.result
+            .map(({ id, name }: IdAndName) => ({ id, name }))
+            .concat({ id: -1, name: 'General' })
+        ],
       },
       {
         ...CommunityBusinesses.configs.getVolunteerActivities,
@@ -46,15 +53,19 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       return;
     }
 
-    const data = logsToAggregatedData({
-      logs: logsData.data,
-      tableType: tableType.ActivityByProject,
-      xData: projectsData.data,
-      yData: activitiesData.data,
-    });
+    const _yData = independentVar === 'Activities'
+      ? projectsData.data
+      : activitiesData.data
 
+    const opts = independentVar === 'Activities'
+      ? { tableType: tableType.ProjectByActivity, xData: activitiesData.data, yData: _yData }
+      : { tableType: tableType.ActivityByProject, xData: projectsData.data, yData: _yData }
+
+    const data = logsToAggregatedData({ logs: logsData.data, ...opts });
+
+    setYData(_yData);
     setAggregatedData(data);
-  }, [logsData, activitiesData, error, loading, projectsData]);
+  }, [logsData, activitiesData, error, loading, projectsData, independentVar]);
 
 
   if (loading) {
@@ -67,7 +78,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
 
   } else {
 
-    return { loading, data: aggregatedData, error, activities: activitiesData.data };
+    return { loading, data: aggregatedData, error, yData };
 
   }
 };
