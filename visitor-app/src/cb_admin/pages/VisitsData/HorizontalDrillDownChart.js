@@ -1,29 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { HorizontalBar } from 'react-chartjs-2';
+import Overlay from './Overlay';
+import { isChartJsDataEmpty } from './util';
 
 
 const HorizontalDrillDownChart = props => (
-  <HorizontalBar
-    data={props.drillDown ? props.levelTwoData[props.selected] || {} : props.levelOneData}
-    options={{
-      legend: { display: false },
-      scales: {
-        xAxes: [{
-          gridLines: { display: false },
-          ticks: {
-            beginAtZero: true,
-            padding: 5,
-            stepSize: props.options.stepSize,
-          },
-        }],
-        yAxes: [{
-          gridLines: { display: false },
-        }],
-      },
-    }}
-    getElementAtEvent={props.onClick}
-  />
+  <Overlay content="No data available" isVisible={isChartJsDataEmpty(props.levelOneData)}>
+    <HorizontalBar
+      data={props.drillDown ? props.levelTwoData[props.selected] || {} : props.levelOneData}
+      options={{
+        legend: { display: false },
+        scales: {
+          xAxes: [{
+            gridLines: { display: false },
+            ticks: {
+              beginAtZero: true,
+              padding: 5,
+              stepSize: props.options.stepSize,
+            },
+          }],
+          yAxes: [{
+            gridLines: { display: false },
+          }],
+        },
+      }}
+      getElementAtEvent={props.onClick}
+    />
+  </Overlay>
 );
 
 HorizontalDrillDownChart.propTypes = {
