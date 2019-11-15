@@ -10,7 +10,7 @@
   "scripts": {
     "test": "jest",
     "cover": "jest --coverage",
-    "build": "tsc",
+    "build": "tsc --build tsconfig.production.json",
     "lint": "eslint *.ts",
     "postinstall": "npm run build"
   },
