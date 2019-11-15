@@ -7,7 +7,6 @@ import DatePickerConstraints from './datePickerConstraints';
 import UtilityBar from '../components/UtilityBar';
 import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
 import { H1 } from '../../../lib/ui/components/Headings';
-import { Span } from '../../../lib/ui/components/Typography';
 import ProjectActivityToggle from '../components/ProjectActivityToggle';
 import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
@@ -21,7 +20,6 @@ import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
 import { DashboardContext } from '../context';
-import _Card from '../../../lib/ui/components/Card';
 
 
 /**
@@ -29,21 +27,6 @@ import _Card from '../../../lib/ui/components/Card';
  */
 const Container = styled(Grid)``;
 
-const Toggle = styled(ProjectActivityToggle)`
-  margin-right: 1rem;
-`;
-
-const Card = styled(_Card)`
-  background-color: ${ColoursEnum.white};
-`;
-
-const WrapperOne = styled.div`
-  display: inline-block;
-  margin: 1rem;
-`;
-const WrapperTwo = styled.div`
-  display: inline-block;
-`;
 
 /**
  * Helpers
@@ -119,7 +102,7 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
             onDownloadClick={downloadAsCsv}
-            customToggle={<Toggle active={activeData} onChange={setActiveData} />}
+            customToggle={<ProjectActivityToggle active={activeData} onChange={setActiveData} />}
           />
         </Col>
       </Row>

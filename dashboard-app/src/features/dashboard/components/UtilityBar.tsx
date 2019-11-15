@@ -8,7 +8,6 @@ import { DurationUnitEnum } from '../../../types';
 import { DownloadButton } from '../../../lib/ui/components/Buttons';
 import { DateRangePickerConstraint } from './DatePicker/types';
 import { DashboardContext } from '../context';
-import { Span as _Span } from '../../../lib/ui/components/Typography';
 
 
 /**
@@ -32,10 +31,6 @@ type UtilityBarProps = {
  */
 const MainRow = styled(Row)`
   margin-bottom: 2rem;
-`;
-
-const Span = styled(_Span)`
-  margin-right: 1rem;
 `;
 
 /**
@@ -82,7 +77,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
 
   return (
     <MainRow middle="xs" start="xs" {...rest}>
-      <Col xs={6}>
+      <Col xs={5}>
         <DatePicker
           type={dateFilter}
           label="From"
@@ -100,11 +95,9 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
           maxDate={constraint.to.max(fromDate, toDate)}
         />
       </Col>
-      <Col xs={6}>
+      <Col xs={7}>
         <Row end="xs" middle="xs">
-          <Span>Group by:</Span>
           {customToggle}
-          <Span role="img" aria-label="sheep">ⓘ</Span>
           <UnitToggle onChange={onDisplayUnitChange} />
           <DownloadButton onClick={onDownloadClick}>Download</DownloadButton>
         </Row>
