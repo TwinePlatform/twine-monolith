@@ -388,63 +388,34 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
   },
 
   async addVisitActivity (client, visitActivity, cb) {
-    // with X as (INSERT INTO visit_activity ... RETURNING ...)
-    //   select X.*, cat from X inner join
-    const [res] = await client.with('returned_activity', (qb) =>
-      qb.table('visit_activity')
-        .insert({
-          visit_activity_name: visitActivity.name,
-          visit_activity_category_id: qb.from('visit_activity_category')
-            .select('visit_activity_category_id')
-            .where({ visit_activity_category_name: visitActivity.category }),
-          organisation_id: cb.id,
-        })
-        .returning('*')
-    )
-      .select([
-        'returned_activity.visit_activity_id AS id',
-        'returned_activity.visit_activity_name AS name',
-        'returned_activity.monday',
-        'returned_activity.tuesday',
-        'returned_activity.wednesday',
-        'returned_activity.thursday',
-        'returned_activity.friday',
-        'returned_activity.saturday',
-        'returned_activity.sunday',
-        'returned_activity.created_at AS createdAt',
-        'returned_activity.modified_at AS modifiedAt',
-        'returned_activity.deleted_at AS deletedAt',
-        'visit_activity_category_name AS category',
-      ])
-      .from('returned_activity')
-      .innerJoin('visit_activity_category', 'visit_activity_category_id', 'returned_activity.visit_activity_category_id');
+    const [res] = await client('visit_activity')
+      .insert({
+        visit_activity_name: visitActivity.name,
+        visit_activity_category_id: client('visit_activity_category')
+          .select('visit_activity_category_id')
+          .where({ visit_activity_category_name: visitActivity.category }),
+        organisation_id: cb.id,
+      })
+      .returning([
+        'visit_activity_id AS id',
+        'visit_activity_name AS name',
+        'visit_activity_category_id AS category_id',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday',
+        'created_at AS createdAt',
+        'modified_at as modifiedAt',
+      ]);
 
-    console.log(res);
+    const [{ category }]: { category: string }[] = await client('visit_activity_category')
+      .select('visit_activity_category_name AS category')
+      .where({ visit_activity_category_id: res.category_id })
 
-
-    // const [res] = await client('visit_activity')
-    //   .insert({
-    //     visit_activity_name: visitActivity.name,
-    //     visit_activity_category_id: client('visit_activity_category')
-    //       .select('visit_activity_category_id')
-    //       .where({ visit_activity_category_name: visitActivity.category }),
-    //     organisation_id: cb.id,
-    //   })
-    //   .returning([
-    //     'visit_activity_id AS id',
-    //     'visit_activity_name AS name',
-    //     'monday',
-    //     'tuesday',
-    //     'wednesday',
-    //     'thursday',
-    //     'friday',
-    //     'saturday',
-    //     'sunday',
-    //     'created_at AS createdAt',
-    //     'modified_at as modifiedAt',
-    //   ]);
-
-    return res;
+    return { ...omit(['category_id'], res) as Omit<VisitActivity, 'category'>, category };
   },
 
   async updateVisitActivity (client, visitActivity) {
@@ -481,7 +452,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       return null;
     }
 
-    const [category]: string[] = await client('visit_activity_category')
+    const [{ category }]: { category: string }[] = await client('visit_activity_category')
       .select('visit_activity_category_name AS category')
       .where({ visit_activity_category_id: res.cat_id });
 
