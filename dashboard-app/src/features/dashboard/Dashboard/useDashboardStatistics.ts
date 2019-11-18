@@ -21,6 +21,7 @@ export default () => {
   const [timeStats, setTimeStats] = useState<EqualDataPoints>({ labels: [], value: 0 });
   const [volunteerStats, setVolunteerStats] = useState<EqualDataPoints>({ labels: [], value: 0 });
   const [activityStats, setActivityStats] = useState<EqualDataPoints>({ labels: [], value: 0 });
+  const [projectStats, setProjectStats] = useState<EqualDataPoints>({ labels: [], value: 0 });
 
   const {
     loading,
@@ -77,6 +78,13 @@ export default () => {
       )
     );
 
+    // most active projects (current month)
+    setProjectStats(
+      findMostActive(
+        collectBy((log) => log.project || 'General', monthLogs)
+      )
+    );
+
     // most active volunteers (current month)
     setVolunteerStats(
       findMostActive(
@@ -103,6 +111,7 @@ export default () => {
         timeStats,
         activityStats,
         volunteerStats,
+        projectStats,
       },
     };
 
@@ -213,6 +222,45 @@ export const timeStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
       label: leftLabel,
       data: pts.labels,
       limit: 3,
+      truncationString: '...',
+    },
+    right: {
+      label: rightLabel,
+      data: pts.value,
+    },
+  };
+};
+
+export const projectStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
+  if (!pts) {
+    return {
+      topText: ['During ', getCurrentMonth()],
+      left: {
+        label: 'No data available',
+        data: [],
+      },
+      right: {
+        label: 'hours',
+        data: 0,
+      },
+    };
+  }
+
+
+  const leftLabel = pts.labels.length > 1
+    ? 'Most popular projects were'
+    : pts.labels.length === 1
+      ? 'Most popular project was'
+      : 'No data available';
+
+  const rightLabel = `hours${pts.labels.length > 1 ? ' each' : ''}`;
+
+  return {
+    topText: ['During ', getCurrentMonth()],
+    left: {
+      label: leftLabel,
+      data: pts.labels,
+      limit: 2,
       truncationString: '...',
     },
     right: {

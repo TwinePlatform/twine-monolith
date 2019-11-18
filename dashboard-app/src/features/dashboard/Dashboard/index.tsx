@@ -11,6 +11,7 @@ import useDashboardStatistics, {
   activityStatsToProps,
   timeStatsToProps,
   volunteerStatsToProps,
+  projectStatsToProps,
 } from './useDashboardStatistics';
 import {
   RedirectHttpErrorBoundary,
@@ -37,6 +38,10 @@ const TimeTile: React.FC<{ stats: any }> = ({ stats }) => (
 
 const ActivityTile: React.FC<{ stats: any }> = ({ stats }) => (
   stats && <NumberDataCard {...activityStatsToProps(stats)} />
+);
+
+const ProjectTile: React.FC<{ stats: any }> = ({ stats }) => (
+  stats && <NumberDataCard {...projectStatsToProps(stats)} />
 );
 
 const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
@@ -99,7 +104,11 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
                   callToAction="View data"
                   placeHolder="P"
                   onClick={() => Pages.navigateTo('Projects', props.history.push)}
-                />
+                >
+                  <RenderErrorBoundary>
+                    <ProjectTile stats={data && data.projectStats} />
+                  </RenderErrorBoundary>
+                </Polaroid>
               </Col>
             </Row>
           </Col>
