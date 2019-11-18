@@ -20,6 +20,16 @@ type Props = {
   initialValues?: Partial<User>;
 }
 
+type FormData = {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  gender: GenderEnum;
+  yearOfBirth: string;
+  postCode: string;
+}
+
+
 /*
  * Styles
  */
@@ -35,6 +45,7 @@ const Text = styled(T)`
  * Helpers
  */
 
+// NB: yup has an error with matches. Waiting for fix to be merged & released
 const validationSchema = yup.object().shape({
   name: yup
     .string()
@@ -53,7 +64,7 @@ const validationSchema = yup.object().shape({
     .string()
     .min(4, 'Post code must be at least 4 letters')
     .max(10, 'Post code cannot be longer than 10 letters'),
-  // .matches({ regex: /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i, message: 'Post code must be valid' }),
+  // .matches({ regex: /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i, message: 'Post code must be valid' })
 });
 
 // TODO: get from api
@@ -71,7 +82,7 @@ const birthYears = [...Array(130).keys()].map((_, i) => ({ id: i, name: '2019 - 
 const UserForm: FC<Props> = ({ action, onSubmit, initialValues = {} }) => {
   const {
     register, setValue, handleSubmit, errors, triggerValidation,
-  } = useForm({ validationSchema });
+  } = useForm<FormData>({ validationSchema });
 
   // const [gender, setGender] = useState<GenderEnum>();
   const [birthYear, setYear] = useState<number>();
@@ -107,7 +118,7 @@ const UserForm: FC<Props> = ({ action, onSubmit, initialValues = {} }) => {
         error={Boolean(errors.phoneNumber)}
       />
       <Dropdown
-        // ref={register({ name: 'gender' })}
+        ref={register({ name: 'gender' })}
         label="Gender"
         options={genders}
         onValueChange={(text) => setValue('gender', text)}
