@@ -37,7 +37,7 @@ const Label = styled(L)`
  */
 const Dropdown: FC<Props> = (props) => {
   const {
-    label, options, selectedValue, onValueChange, defaultValue,
+    label, options, selectedValue, onValueChange, defaultValue, ...rest
   } = props;
   return (
     <Item picker>
@@ -48,8 +48,9 @@ const Dropdown: FC<Props> = (props) => {
         placeholder="Select"
         placeholderStyle={{ color: ColoursEnum.grey }}
         placeholderIconColor={ColoursEnum.grey}
-        selectedValue={selectedValue || defaultValue}
+        // selectedValue={selectedValue || defaultValue}
         onValueChange={onValueChange}
+        {...rest}
       >
         {options.map(({ id, name }) => (
           <Picker.Item label={name} value={name} key={id} />
