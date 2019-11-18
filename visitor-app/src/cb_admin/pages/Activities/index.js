@@ -176,7 +176,7 @@ export default class ActivitiesPage extends React.Component {
           activities={this.state.activities}
           categories={this.state.categories}
           onDelete={this.deleteActivity}
-          onChangeCategory={this.onChange}
+          onChangeCategory={this.updateCategory}
           onToggleActivity={this.toggleCheckbox}
         />
       </FlexContainerCol>
