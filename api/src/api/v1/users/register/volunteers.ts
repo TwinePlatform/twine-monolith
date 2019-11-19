@@ -29,7 +29,13 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
     path: '/users/register/volunteers',
     options: {
       description: 'Retreive list of all users',
-      auth: false,
+      auth: {
+        mode: 'try',
+        strategy: 'standard',
+        access: {
+          scope: ['user_details-child:write'],
+        }
+      },
       validate: {
         payload: {
           organisationId: id.required(),
@@ -41,7 +47,7 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
           email: email.required(),
           phoneNumber: phoneNumber.allow(''),
           postCode: postCode.allow(''),
-          password: password.required(),
+          password: password,
           emailConsent: isEmailConsentGranted.default(false),
           smsConsent: isSMSConsentGranted.default(false),
         },
@@ -52,11 +58,20 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
       const {
         server: { app: { knex, EmailService, config } },
         payload,
+        auth
       } = request;
       const { email, role, organisationId, adminCode } = payload;
+
       /*
        * Preliminaries
        */
+
+      // Authenticated requests do not need to supply a password https://github.com/TwinePlatform/twine-monolith/issues/401
+      if(!auth.isAuthenticated && !payload.password){
+        return Boom.badRequest('password is required', { 
+          validation: { name: 'is required'}
+        })
+      }
 
       const communityBusiness = await CommunityBusinesses
         .getOne(knex, { where: { id: organisationId, deletedAt: null } });
@@ -123,6 +138,14 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
           return Boom.unauthorized(error.message);
         }
         return error;
+      }
+
+      /*
+       * Auxillary
+       */
+
+      if(auth.isAuthenticated){
+        //TODO: send email if authenticated
       }
     },
   },

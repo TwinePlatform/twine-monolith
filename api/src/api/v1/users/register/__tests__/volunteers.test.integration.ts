@@ -119,7 +119,7 @@ describe('API v1 - register new users', () => {
 
       expect(res.statusCode).toBe(409);
       expect((<any> res.result).error.message).toBe(
-      'Email is associated to a visitor, '
+        'Email is associated to a visitor, '
         + 'please see email confirmation to create volunteer account'
       );
 
@@ -148,69 +148,69 @@ describe('API v1 - register new users', () => {
     });
 
     test(':: fail - user already exists - cannot create second role for VOLUNTEER_ADMIN',
-     async () => {
-       const res = await server.inject(injectCfg({
-         method: 'POST',
-         url: '/v1/users/register/volunteers',
-         payload: {
-           organisationId: 1,
-           name: 'Chell',
-           gender: 'female',
-           birthYear: 1988,
-           email: '1498@aperturescience.com',
-           password: 'c<3mpanionCube',
-           role: RoleEnum.VOLUNTEER_ADMIN,
-         },
-         credentials,
-       }));
+      async () => {
+        const res = await server.inject(injectCfg({
+          method: 'POST',
+          url: '/v1/users/register/volunteers',
+          payload: {
+            organisationId: 1,
+            name: 'Chell',
+            gender: 'female',
+            birthYear: 1988,
+            email: '1498@aperturescience.com',
+            password: 'c<3mpanionCube',
+            role: RoleEnum.VOLUNTEER_ADMIN,
+          },
+          credentials,
+        }));
 
-       expect(res.statusCode).toBe(409);
-       expect((<any> res.result).error.message).toBe('User with this e-mail already registered');
-     });
+        expect(res.statusCode).toBe(409);
+        expect((<any> res.result).error.message).toBe('User with this e-mail already registered');
+      });
 
     test(':: fail - user already exists - cannot create second role if user is already a VOLUNTEER',
-     async () => {
-       const res = await server.inject(injectCfg({
-         method: 'POST',
-         url: '/v1/users/register/volunteers',
-         payload: {
-           organisationId: 1,
-           name: 'Emma Emmerich',
-           gender: 'female',
-           birthYear: 1988,
-           email: 'emma@sol.com',
-           password: 'c<3mpanionCube',
-           role: RoleEnum.VOLUNTEER,
-         },
-         credentials: credentialsBlackMesa,
-       }));
+      async () => {
+        const res = await server.inject(injectCfg({
+          method: 'POST',
+          url: '/v1/users/register/volunteers',
+          payload: {
+            organisationId: 1,
+            name: 'Emma Emmerich',
+            gender: 'female',
+            birthYear: 1988,
+            email: 'emma@sol.com',
+            password: 'c<3mpanionCube',
+            role: RoleEnum.VOLUNTEER,
+          },
+          credentials: credentialsBlackMesa,
+        }));
 
-       expect(res.statusCode).toBe(409);
-       expect((<any> res.result).error.message)
-        .toBe('volunteer with this e-mail already registered');
-     });
+        expect(res.statusCode).toBe(409);
+        expect((<any> res.result).error.message)
+          .toBe('volunteer with this e-mail already registered');
+      });
 
     test(':: fail - user already exists - cannot create second role if user signed upto another CB',
-     async () => {
-       const res = await server.inject(injectCfg({
-         method: 'POST',
-         url: '/v1/users/register/volunteers',
-         payload: {
-           organisationId: 2,
-           name: 'Chell',
-           gender: 'female',
-           birthYear: 1988,
-           email: '1498@aperturescience.com',
-           password: 'c<3mpanionCube',
-           role: RoleEnum.VOLUNTEER,
-         },
-         credentials: credentialsBlackMesa,
-       }));
+      async () => {
+        const res = await server.inject(injectCfg({
+          method: 'POST',
+          url: '/v1/users/register/volunteers',
+          payload: {
+            organisationId: 2,
+            name: 'Chell',
+            gender: 'female',
+            birthYear: 1988,
+            email: '1498@aperturescience.com',
+            password: 'c<3mpanionCube',
+            role: RoleEnum.VOLUNTEER,
+          },
+          credentials: credentialsBlackMesa,
+        }));
 
-       expect(res.statusCode).toBe(409);
-       expect((<any> res.result).error.message)
-        .toBe('User with this e-mail already registered at another Community Business');
-     });
+        expect(res.statusCode).toBe(409);
+        expect((<any> res.result).error.message)
+          .toBe('User with this e-mail already registered at another Community Business');
+      });
 
     test(':: fail - non-existent community business', async () => {
       const res = await server.inject({
@@ -268,6 +268,42 @@ describe('API v1 - register new users', () => {
 
       expect(res.statusCode).toBe(400);
       expect((<any> res.result).error.message).toEqual('Missing volunteer admin code');
+    });
+
+    test(':: fail - unauthenticated request fails without a password', async () => {
+      const res = await server.inject({
+        method: 'POST',
+        url: '/v1/users/register/volunteers',
+        payload: {
+          organisationId: 1,
+          name: 'foo',
+          gender: 'female',
+          birthYear: 1988,
+          email: '13542@google.com',
+          role: RoleEnum.VOLUNTEER,
+        },
+      });
+
+      expect(res.statusCode).toBe(400);
+      expect((<any> res.result).error.message).toEqual('password is required');
+    });
+
+    test(':: success - authenticated request does not need password', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'POST',
+        url: '/v1/users/register/volunteers',
+        payload: {
+          organisationId: 1,
+          name: 'foo',
+          gender: 'female',
+          birthYear: 1988,
+          email: '13542@google.com',
+          role: RoleEnum.VOLUNTEER,
+        },
+        credentials: credentialsBlackMesa,
+      }));
+
+      expect(res.statusCode).toBe(200);
     });
   });
 });
