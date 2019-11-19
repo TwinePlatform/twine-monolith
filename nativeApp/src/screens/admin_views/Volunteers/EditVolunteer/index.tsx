@@ -35,7 +35,11 @@ const EditVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
 
   return (
     <Page heading="Edit Volunteer">
-      <UserForm onSubmit={onSubmit} initialValues={navigation.state.params} />
+      <UserForm
+        onSubmit={onSubmit}
+        defaultValues={filter(Boolean, navigation.state.params)}
+        action="update"
+      />
     </Page>
   );
 };

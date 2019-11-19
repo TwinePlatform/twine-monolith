@@ -40,7 +40,7 @@ const Input: FC<Props> = (props) => {
   return (
     <Item inlineLabel error={error}>
       <Label>{label}</Label>
-      <_Input {...rest}>{value}</_Input>
+      <_Input {...rest} value={value}>{value}</_Input>
       {error && <Icon name="close-circle" />}
     </Item>
   );

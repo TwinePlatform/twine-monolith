@@ -28,7 +28,7 @@ export type TimeValues = {
 }
 type Props = {
   onSubmit: (v: TimeValues) => void;
-  initialValues?: TimeValues;
+  defaultValues?: TimeValues;
   activities: IdAndName[];
   projects: IdAndName[];
   volunteers?: IdAndName[];
