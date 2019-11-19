@@ -17,7 +17,7 @@ import { User, GenderEnum } from '../../../../../../api/src/models';
 type Props = {
   action: 'create' | 'update';
   onSubmit: (v: Partial<User>) => void;
-  initialValues?: Partial<User>;
+  defaultValues?: Partial<User>;
 }
 
 type FormData = {
@@ -74,20 +74,17 @@ const genders = [
   { id: 3, name: 'prefer not to say' },
 ];
 
-const birthYears = [...Array(130).keys()].map((_, i) => ({ id: i, name: '2019 - i' }));
+const birthYears = [...Array(130).keys()].map((_, i) => ({ id: i, name: `${2019 - i}` }));
 
 /*
  * Component
  */
-const UserForm: FC<Props> = ({ action, onSubmit, initialValues = {} }) => {
+const UserForm: FC<Props> = ({ action, onSubmit, defaultValues = {} }) => {
   const {
-    register, setValue, handleSubmit, errors, triggerValidation,
-  } = useForm<FormData>({ validationSchema });
+    register, setValue, handleSubmit, errors, triggerValidation, getValues,
+  } = useForm<FormData>({ defaultValues, validationSchema });
 
-  // const [gender, setGender] = useState<GenderEnum>();
-  const [birthYear, setYear] = useState<number>();
-
-  console.log({ errors });
+  console.log({ values: getValues() });
 
   return (
     <Form>
@@ -95,7 +92,7 @@ const UserForm: FC<Props> = ({ action, onSubmit, initialValues = {} }) => {
         ref={register({ name: 'name' })}
         label="Full name"
         onChangeText={(text) => setValue('name', text)}
-        defaultValue={initialValues.name}
+        defaultValue={defaultValues.name}
         onBlur={async () => triggerValidation()}
         error={Boolean(errors.name)}
       />
@@ -103,7 +100,7 @@ const UserForm: FC<Props> = ({ action, onSubmit, initialValues = {} }) => {
         ref={register({ name: 'email' })}
         label="Email"
         onChangeText={(text) => setValue('email', text)}
-        defaultValue={initialValues.email}
+        defaultValue={defaultValues.email}
         onBlur={async () => triggerValidation()}
         error={Boolean(errors.email)}
       />
@@ -113,7 +110,7 @@ const UserForm: FC<Props> = ({ action, onSubmit, initialValues = {} }) => {
         ref={register({ name: 'phoneNumber' })}
         label="Number"
         onChangeText={(text) => setValue('phoneNumber', text)}
-        defaultValue={initialValues.phoneNumber}
+        defaultValue={defaultValues.phoneNumber}
         onBlur={async () => triggerValidation()}
         error={Boolean(errors.phoneNumber)}
       />
@@ -122,15 +119,20 @@ const UserForm: FC<Props> = ({ action, onSubmit, initialValues = {} }) => {
         label="Gender"
         options={genders}
         onValueChange={(text) => setValue('gender', text)}
-        // selectedValue={gender}
-        defaultValue={initialValues.gender}
+        defaultValue={defaultValues.gender}
       />
-      <Dropdown label="Year of birth" options={birthYears} onValueChange={setYear} selectedValue={birthYear} defaultValue={initialValues.birthYear} />
+      <Dropdown
+        ref={register({ name: 'birthYear' })}
+        label="Year of birth"
+        options={birthYears}
+        onValueChange={(text) => setValue('birthYear', text)}
+        defaultValue={defaultValues.birthYear}
+      />
       <Input
         ref={register({ name: 'postCode' })}
         label="Post code"
         onChangeText={(text) => setValue('postCode', text)}
-        defaultValue={initialValues.postCode}
+        defaultValue={defaultValues.postCode}
         onBlur={async () => triggerValidation()}
         error={Boolean(errors.postCode)}
       />
