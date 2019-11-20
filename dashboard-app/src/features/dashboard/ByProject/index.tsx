@@ -84,7 +84,7 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
     legendData,
     setLegendData,
     orderable,
-    activeData: activeData === 'Activities' ? 'Projects' : 'Activities',
+    xAxisLabel: activeData === 'Activities' ? 'Projects' : 'Activities',
   };
 
   return (
