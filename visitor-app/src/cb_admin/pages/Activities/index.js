@@ -3,15 +3,17 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { assocPath, dissoc } from 'ramda';
 import { Grid, Row, Col } from 'react-flexbox-grid';
+import { BeatLoader } from 'react-spinners';
 import { FlexContainerCol } from '../../../shared/components/layout/base';
 import { Paragraph, ErrorParagraph } from '../../../shared/components/text/base';
 import { Form, PrimaryButton } from '../../../shared/components/form/base';
 import LabelledInput from '../../../shared/components/form/LabelledInput';
 import LabelledSelect from '../../../shared/components/form/LabelledSelect';
 import NavHeader from '../../../shared/components/NavHeader';
+import ActivityTable from './ActivityTable';
 import { Activities, CommunityBusiness, ErrorUtils } from '../../../api';
 import { redirectOnError } from '../../../util';
-import ActivityTable from './ActivityTable';
+import { colors } from '../../../shared/style_guide';
 
 
 const SubmitButton = styled(PrimaryButton)`
@@ -19,12 +21,14 @@ const SubmitButton = styled(PrimaryButton)`
   height: 3em;
 `;
 
+const HideableContainer = styled.div`
+  opacity: ${props => props.visible ? 1 : 0};
+  transition: opacity 0.4s ease;
+`;
+
 const ActivitiesError = styled(ErrorParagraph)`
-  opacity: ${props => (props.visible ? '1' : '0')};
   height: 1rem;
-  text-align: center;
   margin:0;
-  transition: opacity 0.7s ease;
 `;
 
 
@@ -41,13 +45,13 @@ export default class ActivitiesPage extends React.Component {
       order: [],
     },
     form: {},
-    errors: { view: false },
+    errors: {},
+    isSaving: false,
   };
 
   componentDidMount() {
     Promise.all([Activities.get(), CommunityBusiness.getActivities()])
       .then(([{ data: { result: activities } }, { data: { result: categories } }]) => {
-
         const order = activities.map(activity => activity.id).sort((l, r) => l.id - r.id);
         const items = activities.reduce((acc, activity) => {
           acc[activity.id] = activity;
@@ -68,10 +72,12 @@ export default class ActivitiesPage extends React.Component {
   toggleCheckbox = (id, day) => {
     const current = this.state.activities.items[id][day];
 
+    this.setState({ isSaving: true, errors: {} });
+
     Activities.update({ id, [day]: !current })
       .then((res) => {
         this.setState(assocPath(['activities', 'items', id], res.data.result));
-        this.setState(assocPath(['errors', 'view'], false));
+        this.setState({ isSaving: false });
       })
       .catch(error => redirectOnError(this.props.history.push, error, { 403: '/admin/confirm' }));
   }
@@ -80,8 +86,11 @@ export default class ActivitiesPage extends React.Component {
     e.preventDefault();
 
     if (doesActivityAlreadyExist(this.state.form.name, this.state.activities.items)) {
-      return this.setState({ errors: { general: 'Activity already exists', view: true } });
+      return this.setState({ errors: { general: 'Activity already exists' } });
     }
+
+    this.setState({ isSaving: true, errors: {} });
+
     return Activities.create(this.state.form)
       .then((res) => {
         this.setState((state) => {
@@ -89,6 +98,7 @@ export default class ActivitiesPage extends React.Component {
           const order = state.activities.order.concat(item.id);
           return {
             ...state,
+            isSaving: false,
             form: { name: '', category: '' },
             activities: {
               items: { ...state.activities.items, [item.id]: item },
@@ -96,23 +106,22 @@ export default class ActivitiesPage extends React.Component {
             },
           };
         });
-        this.setState(assocPath(['errors', 'view'], false));
       })
       .catch(error =>
         ErrorUtils.errorStatusEquals(error, 409)
-          ? this.setState({ errors: { general: 'Activity already exists', view: true } })
+          ? this.setState({ errors: { general: 'Activity already exists' } })
           : redirectOnError(this.props.history.push, error, { 403: '/admin/confirm' }),
       );
   }
 
   deleteActivity = (id) => {
+    this.setState({ isSaving: true, errors: {} });
     Activities.delete({ id })
       .then(() => {
-        this.setState(assocPath(['errors', 'view'], false));
         this.setState((state) => {
           const order = state.activities.order.filter(i => i !== id);
           const items = dissoc(id, state.activities.items);
-          return { ...state, activities: { order, items } };
+          return { ...state, isSaving: false, activities: { order, items } };
         });
       })
       .catch(error => redirectOnError(this.props.history.push, error, { 403: '/admin/confirm' }));
@@ -120,8 +129,13 @@ export default class ActivitiesPage extends React.Component {
 
   updateCategory = (id, e) => {
     const category = e.target.value;
+
+    this.setState({ isSaving: true, errors: {} });
     Activities.update({ id, category })
-      .then(() => this.setState(assocPath(['activities', 'items', id, 'category'], category)))
+      .then(() => {
+        this.setState(assocPath(['activities', 'items', id, 'category'], category));
+        this.setState({ isSaving: false });
+      })
       .catch(error => redirectOnError(this.props.history.push, error, { 403: '/admin/confirm' }));
   }
 
@@ -171,9 +185,17 @@ export default class ActivitiesPage extends React.Component {
             </Row>
           </Form>
         </Grid>
-        <ActivitiesError visible={errors.view}>
-          {errors.general}
-        </ActivitiesError>
+        <Row center="xs">
+          <HideableContainer visible={this.state.isSaving}>
+            <BeatLoader color={colors.highlight_primary} />
+            <span>Saving changes...</span>
+          </HideableContainer>
+        </Row>
+        <Row center="xs">
+          <HideableContainer visible={errors.general}>
+            <ActivitiesError>{errors.general}</ActivitiesError>
+          </HideableContainer>
+        </Row>
         <ActivityTable
           activities={this.state.activities}
           categories={this.state.categories}
@@ -181,7 +203,7 @@ export default class ActivitiesPage extends React.Component {
           onChangeCategory={this.updateCategory}
           onToggleActivity={this.toggleCheckbox}
         />
-      </FlexContainerCol>
+      </FlexContainerCol >
     );
   }
 }
