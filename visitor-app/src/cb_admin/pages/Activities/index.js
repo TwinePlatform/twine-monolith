@@ -29,9 +29,8 @@ const ActivitiesError = styled(ErrorParagraph)`
 
 
 const doesActivityAlreadyExist = (newActivityName, activitiesObject) =>
-  Object.values(activitiesObject).some(({ name }) =>
-    name === newActivityName,
-  );
+  Object.values(activitiesObject)
+    .some(({ name }) => name === newActivityName);
 
 
 export default class ActivitiesPage extends React.Component {
@@ -90,6 +89,7 @@ export default class ActivitiesPage extends React.Component {
           const order = state.activities.order.concat(item.id);
           return {
             ...state,
+            form: { name: '', category: '' },
             activities: {
               items: { ...state.activities.items, [item.id]: item },
               order,
@@ -149,6 +149,7 @@ export default class ActivitiesPage extends React.Component {
                   label="Add an activity"
                   name="name"
                   type="text"
+                  value={this.state.form.name}
                   error={errors.activity}
                   required
                 />
@@ -159,6 +160,7 @@ export default class ActivitiesPage extends React.Component {
                   label="Category"
                   name="category"
                   options={this.state.categories}
+                  value={this.state.form.category}
                   error={errors.activity}
                   required
                 />
