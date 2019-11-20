@@ -13,7 +13,7 @@ import TimePeriodChart from './TimePeriodChart';
 import GenderChart from './GenderChart';
 import AgeGroupChart from './AgeGroupChart';
 import CategoriesChart from './CategoriesChart';
-import Toggle from './Toggle';
+import LabelledToggle from './LabelledToggle';
 import CsvExportButton from './CsvExportButton';
 import DateRanges from './dateRange';
 import { ErrorUtils, Visitors, Activities } from '../../../api';
@@ -141,8 +141,9 @@ export default class VisitsDataPage extends React.Component {
               />
             </Col>
             <Col xs={2}>
-              <Spacer />
-              <Toggle
+              <LabelledToggle
+                id="visits-data-toggle"
+                label="Data points"
                 active={this.state.basis}
                 left="Visits"
                 right="Visitors"
