@@ -42,7 +42,8 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
-  const [legendData, setLegendData] = useState<LegendData>([]);
+  const [activitiesLegendData, setActivityLegendData] = useState<LegendData>([]);
+  const [projectsLegendData, setProjectsLegendData] = useState<LegendData>([]);
   const { data, loading, error, yData } =
     useAggregateDataByProject({ from: fromDate, to: toDate, independentVar: activeData });
 
@@ -81,8 +82,8 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
     tableData,
     onChangeSortBy,
     title: getTitleForMonthPicker(TitlesCopy.Projects.subtitle, fromDate, toDate),
-    legendData,
-    setLegendData,
+    legendData: activeData === 'Activities' ? activitiesLegendData : projectsLegendData,
+    setLegendData: activeData === 'Activities' ? setActivityLegendData : setProjectsLegendData,
     orderable,
     xAxisLabel: activeData === 'Activities' ? 'Projects' : 'Activities',
   };
