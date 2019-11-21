@@ -29,4 +29,4 @@ export const getTitleForDayPicker = (title: string, from: Date, to: Date): Title
 
 export const toggleOrder = toggle<Order>('asc', 'desc');
 
-export const getColourByIndex = (i: number) => GraphColourList[i % GraphColourList.length];
+export const getColourByIndex = (i: number, colours = GraphColourList) => colours[i % colours.length];
