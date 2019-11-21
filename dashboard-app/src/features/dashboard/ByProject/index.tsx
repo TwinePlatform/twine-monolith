@@ -23,12 +23,6 @@ import { DashboardContext } from '../context';
 
 
 /**
- * Styles
- */
-const Container = styled(Grid)``;
-
-
-/**
  * Helpers
  */
 const initTableData = { headers: [], rows: [] };
@@ -44,6 +38,7 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [activitiesLegendData, setActivityLegendData] = useState<LegendData>([]);
   const [projectsLegendData, setProjectsLegendData] = useState<LegendData>([]);
+  const [legendData, setLegendData] = useState<LegendData>([]);
   const { data, loading, error, yData } =
     useAggregateDataByProject({ from: fromDate, to: toDate, independentVar: activeData });
 
@@ -77,19 +72,35 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
     }
   }, [data, fromDate, toDate, orderable, loading, unit, setErrors]);
 
+  const setLegendDataCallback = useCallback((ld: LegendData | ((l: LegendData) => LegendData)) => {
+    if (activeData === 'Activities') {
+      setActivityLegendData(ld);
+    } else {
+      setProjectsLegendData(ld);
+    }
+  }, [activeData]);
+
+  useEffect(() => {
+    if (activeData === 'Activities') {
+      setLegendData(activitiesLegendData);
+    } else {
+      setLegendData(projectsLegendData);
+    }
+  }, [activeData, activitiesLegendData, projectsLegendData]);
+
   const tabProps = {
     data,
     tableData,
     onChangeSortBy,
     title: getTitleForMonthPicker(TitlesCopy.Projects.subtitle, fromDate, toDate),
-    legendData: activeData === 'Activities' ? activitiesLegendData : projectsLegendData,
-    setLegendData: activeData === 'Activities' ? setActivityLegendData : setProjectsLegendData,
+    legendData,
+    setLegendData: setLegendDataCallback,
     orderable,
     xAxisLabel: activeData === 'Activities' ? 'Projects' : 'Activities',
   };
 
   return (
-    <Container>
+    <Grid>
       <Row center="xs">
         <Col>
           <H1>{TitlesCopy.Projects.title}</H1>
@@ -113,7 +124,7 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
           ? <FullScreenBeatLoader color={ColoursEnum.purple} />
           : <ProjectTabs {...tabProps} />
       }
-    </Container>
+    </Grid>
   );
 };
 
