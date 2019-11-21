@@ -1,25 +1,26 @@
 import React, { useEffect, useState, useCallback, FunctionComponent, useContext } from 'react';
-import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
-import DatePickerConstraints from './datePickerConstraints';
-import UtilityBar from '../components/UtilityBar';
-import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
 import { H1 } from '../../../lib/ui/components/Headings';
+import { useErrors } from '../../../lib/hooks/useErrors';
+import { LoadingBoundary } from '../../../lib/ui/components/Boundaries';
+import DataTable from '../components/DataTable';
+import { TabGroup } from '../components/Tabs';
+import StackedBarChart from '../components/StackedBarChart';
+import { LegendData } from '../components/StackedBarChart/types';
+import UtilityBar from '../components/UtilityBar';
 import ProjectActivityToggle from '../components/ProjectActivityToggle';
+import Errors from '../components/Errors';
 import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
-import { ColoursEnum } from '../../../lib/ui/design_system';
-import ProjectTabs from './ProjectTabs';
-import Errors from '../components/Errors';
 import useAggregateDataByProject from './useAggregateDataByProject';
+import DatePickerConstraints from './datePickerConstraints';
 import { getTitleForMonthPicker } from '../util';
-import { LegendData } from '../components/StackedBarChart/types';
-import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
 import { DashboardContext } from '../context';
+import { GraphColourList, GraphColoursEnum } from '../../../lib/ui/design_system';
 
 
 /**
@@ -39,6 +40,7 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
   const [activitiesLegendData, setActivityLegendData] = useState<LegendData>([]);
   const [projectsLegendData, setProjectsLegendData] = useState<LegendData>([]);
   const [legendData, setLegendData] = useState<LegendData>([]);
+  const [colours, setColours] = useState<GraphColoursEnum[]>([]);
   const { data, loading, error, yData } =
     useAggregateDataByProject({ from: fromDate, to: toDate, independentVar: activeData });
 
@@ -88,16 +90,13 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
     }
   }, [activeData, activitiesLegendData, projectsLegendData]);
 
-  const tabProps = {
-    data,
-    tableData,
-    onChangeSortBy,
-    title: getTitleForMonthPicker(TitlesCopy.Projects.subtitle, fromDate, toDate),
-    legendData,
-    setLegendData: setLegendDataCallback,
-    orderable,
-    xAxisLabel: activeData === 'Activities' ? 'Projects' : 'Activities',
-  };
+  useEffect(() => {
+    if (activeData === 'Activities') {
+      setColours([...GraphColourList].reverse());
+    } else {
+      setColours([...GraphColourList]);
+    }
+  }, [activeData])
 
   return (
     <Grid>
@@ -119,11 +118,40 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
         </Col>
       </Row>
       <Errors errors={errors} />
-      {
-        loading
-          ? <FullScreenBeatLoader color={ColoursEnum.purple} />
-          : <ProjectTabs {...tabProps} />
-      }
+      <LoadingBoundary isLoading={loading} fullscreen>
+        <Row center="xs">
+          <Col xs={12}>
+            <TabGroup titles={['Chart', 'Table']}>
+              {
+                data && (
+                  <StackedBarChart
+                    title={getTitleForMonthPicker(TitlesCopy.Projects.subtitle, fromDate, toDate)}
+                    data={data}
+                    xAxisTitle={activeData === 'Activities' ? 'Projects' : 'Activities'}
+                    yAxisTitle={`Volunteer ${unit}`}
+                    colours={colours}
+                    legendData={legendData}
+                    setLegendData={setLegendDataCallback}
+                    defaultSelection={true}
+                  />
+                )
+              }
+              {
+                tableData && (
+                  <DataTable
+                    {...tableData}
+                    title={getTitleForMonthPicker(TitlesCopy.Projects.subtitle, fromDate, toDate)}
+                    order={orderable.order}
+                    sortBy={tableData.headers[orderable.sortByIndex]}
+                    onChangeSortBy={onChangeSortBy}
+                    showTotals
+                  />
+                )
+              }
+            </TabGroup>
+          </Col>
+        </Row>
+      </LoadingBoundary>
     </Grid>
   );
 };
