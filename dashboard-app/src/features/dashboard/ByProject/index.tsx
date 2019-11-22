@@ -21,6 +21,7 @@ import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
 import { DashboardContext } from '../context';
 import { GraphColourList, GraphColoursEnum } from '../../../lib/ui/design_system';
+import useToggleActiveData from './useToggleActiveData';
 
 
 /**
@@ -33,16 +34,23 @@ const initTableData = { headers: [], rows: [] };
  */
 const ByProjects: FunctionComponent<RouteComponentProps> = () => {
   const { unit } = useContext(DashboardContext);
-  const [activeData, setActiveData] = useState<'Projects' | 'Activities'>('Projects');
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
-  const [activitiesLegendData, setActivityLegendData] = useState<LegendData>([]);
-  const [projectsLegendData, setProjectsLegendData] = useState<LegendData>([]);
-  const [legendData, setLegendData] = useState<LegendData>([]);
   const [colours, setColours] = useState<GraphColoursEnum[]>([]);
+  const {
+    active,
+    setActive,
+    actual: legendData,
+    setActual: setLegendData,
+  } = useToggleActiveData<LegendData, 'Projects' | 'Activities'>({
+    left: 'Projects',
+    right: 'Activities',
+    initSide: 'Projects',
+    initState: [],
+  });
   const { data, loading, error, yData } =
-    useAggregateDataByProject({ from: fromDate, to: toDate, independentVar: activeData });
+    useAggregateDataByProject({ from: fromDate, to: toDate, independentVar: active });
 
   // set and clear errors on response
   const [errors, setErrors] = useErrors(error, data);
@@ -74,29 +82,13 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
     }
   }, [data, fromDate, toDate, orderable, loading, unit, setErrors]);
 
-  const setLegendDataCallback = useCallback((ld: LegendData | ((l: LegendData) => LegendData)) => {
-    if (activeData === 'Activities') {
-      setActivityLegendData(ld);
-    } else {
-      setProjectsLegendData(ld);
-    }
-  }, [activeData]);
-
   useEffect(() => {
-    if (activeData === 'Activities') {
-      setLegendData(activitiesLegendData);
-    } else {
-      setLegendData(projectsLegendData);
-    }
-  }, [activeData, activitiesLegendData, projectsLegendData]);
-
-  useEffect(() => {
-    if (activeData === 'Activities') {
+    if (active === 'Activities') {
       setColours([...GraphColourList].reverse());
     } else {
       setColours([...GraphColourList]);
     }
-  }, [activeData])
+  }, [active])
 
   return (
     <Grid>
@@ -113,7 +105,7 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
             onDownloadClick={downloadAsCsv}
-            customToggle={<ProjectActivityToggle active={activeData} onChange={setActiveData} />}
+            customToggle={<ProjectActivityToggle active={active} onChange={setActive} />}
           />
         </Col>
       </Row>
@@ -127,11 +119,11 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
                   <StackedBarChart
                     title={getTitleForMonthPicker(TitlesCopy.Projects.subtitle, fromDate, toDate)}
                     data={data}
-                    xAxisTitle={activeData === 'Activities' ? 'Projects' : 'Activities'}
+                    xAxisTitle={active === 'Activities' ? 'Projects' : 'Activities'}
                     yAxisTitle={`Volunteer ${unit}`}
                     colours={colours}
                     legendData={legendData}
-                    setLegendData={setLegendDataCallback}
+                    setLegendData={setLegendData}
                     defaultSelection={true}
                   />
                 )
