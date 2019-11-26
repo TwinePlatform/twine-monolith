@@ -46,7 +46,10 @@ export default class ActivitiesPage extends React.Component {
     },
     form: {},
     errors: {},
-    isSaving: false,
+    isSaving: {
+      value: false,
+      set: 0,
+    },
   };
 
   componentDidMount() {
@@ -69,15 +72,24 @@ export default class ActivitiesPage extends React.Component {
   onChange = e =>
     this.setState(assocPath(['form', e.target.name], e.target.value))
 
+  showLoader = () => {
+    this.setState({ isSaving: { value: true, set: Date.now() }, errors: {} });
+  }
+
+  hideLoader = (timeout = 2000) => {
+    const remaining = timeout - (Date.now() - (this.state.isSaving.set || Date.now()));
+    setTimeout(() => this.setState({ isSaving: { value: false, set: Date.now() } }), remaining);
+  }
+
   toggleCheckbox = (id, day) => {
     const current = this.state.activities.items[id][day];
 
-    this.setState({ isSaving: true, errors: {} });
+    this.showLoader();
 
     Activities.update({ id, [day]: !current })
       .then((res) => {
         this.setState(assocPath(['activities', 'items', id], res.data.result));
-        this.setState({ isSaving: false });
+        this.hideLoader();
       })
       .catch(error => redirectOnError(this.props.history.push, error, { 403: '/admin/confirm' }));
   }
@@ -89,7 +101,7 @@ export default class ActivitiesPage extends React.Component {
       return this.setState({ errors: { general: 'Activity already exists' } });
     }
 
-    this.setState({ isSaving: true, errors: {} });
+    this.showLoader();
 
     return Activities.create(this.state.form)
       .then((res) => {
@@ -98,14 +110,13 @@ export default class ActivitiesPage extends React.Component {
           const order = state.activities.order.concat(item.id);
           return {
             ...state,
-            isSaving: false,
             form: { name: '', category: '' },
             activities: {
               items: { ...state.activities.items, [item.id]: item },
               order,
             },
           };
-        });
+        }, () => this.hideLoader());
       })
       .catch(error =>
         ErrorUtils.errorStatusEquals(error, 409)
@@ -115,14 +126,14 @@ export default class ActivitiesPage extends React.Component {
   }
 
   deleteActivity = (id) => {
-    this.setState({ isSaving: true, errors: {} });
+    this.showLoader();
     Activities.delete({ id })
       .then(() => {
         this.setState((state) => {
           const order = state.activities.order.filter(i => i !== id);
           const items = dissoc(id, state.activities.items);
-          return { ...state, isSaving: false, activities: { order, items } };
-        });
+          return { ...state, activities: { order, items } };
+        }, () => this.hideLoader());
       })
       .catch(error => redirectOnError(this.props.history.push, error, { 403: '/admin/confirm' }));
   }
@@ -130,11 +141,11 @@ export default class ActivitiesPage extends React.Component {
   updateCategory = (id, e) => {
     const category = e.target.value;
 
-    this.setState({ isSaving: true, errors: {} });
+    this.showLoader();
     Activities.update({ id, category })
       .then(() => {
         this.setState(assocPath(['activities', 'items', id, 'category'], category));
-        this.setState({ isSaving: false });
+        this.hideLoader();
       })
       .catch(error => redirectOnError(this.props.history.push, error, { 403: '/admin/confirm' }));
   }
@@ -186,7 +197,7 @@ export default class ActivitiesPage extends React.Component {
           </Form>
         </Grid>
         <Row center="xs">
-          <HideableContainer visible={this.state.isSaving}>
+          <HideableContainer visible={this.state.isSaving.value}>
             <BeatLoader color={colors.highlight_primary} />
             <span>Saving changes...</span>
           </HideableContainer>
