@@ -13,7 +13,6 @@ import TimePeriodChart from './TimePeriodChart';
 import GenderChart from './GenderChart';
 import AgeGroupChart from './AgeGroupChart';
 import CategoriesChart from './CategoriesChart';
-import LabelledToggle from './LabelledToggle';
 import CsvExportButton from './CsvExportButton';
 import DateRanges from './dateRange';
 import { ErrorUtils, Visitors, Activities } from '../../../api';
@@ -84,7 +83,9 @@ export default class VisitsDataPage extends React.Component {
   }
 
   onChange = (e) => {
-    const path = e.target.name.split('.');
+    const path = e.target.name === 'basis'
+      ? [e.target.name]
+      : e.target.name.split('.');
 
     if (e.target.value === 'All') {
       return this.setState(assocPath(path, undefined), this.getData);
@@ -95,10 +96,6 @@ export default class VisitsDataPage extends React.Component {
       : e.target.value;
 
     return this.setState(assocPath(path, value), this.getData);
-  };
-
-  onToggleVisitsVisitors = (value) => {
-    this.setState({ basis: value }, this.getData);
   };
 
   onExportError = (error) => {
@@ -141,13 +138,12 @@ export default class VisitsDataPage extends React.Component {
               />
             </Col>
             <Col xs={2}>
-              <LabelledToggle
-                id="visits-data-toggle"
+              <LabelledSelect
+                id="visits-data-data-points"
+                name="basis"
                 label="Data points"
-                active={this.state.basis}
-                left="Visits"
-                right="Visitors"
-                onChange={this.onToggleVisitsVisitors}
+                value={this.state.basis}
+                options={[{ key: '0', value: 'Visits' }, { key: '1', value: 'Visitors' }]}
               />
             </Col>
             <Col xs={2}>
