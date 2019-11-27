@@ -35,7 +35,7 @@ export const colourPalette = {
   vibrant: {
     red: '#D32F2F',
     pink: '#C2185B',
-    voilet: '#512DA8',
+    violet: '#512DA8',
     purple: '#651FFF',
     blue: '#1565C0',
     emerald: '#00695C',

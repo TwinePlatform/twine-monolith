@@ -4,7 +4,7 @@
 import moment from 'moment';
 import { curry, pick, zip, identity, toPairs, head, last, map, assoc, assocPath, mergeWith, add, uniq, fromPairs, mergeDeepWith, mergeRight } from 'ramda';
 import { collectBy, mapValues, ones, combineValues } from '../../../util';
-import { createAgeGroups } from '../../../shared/constants';
+import { createAgeGroups, Gender } from '../../../shared/constants';
 import DateRanges, { DateRangesEnum } from './dateRange';
 
 export const AgeGroups = createAgeGroups(['0-17', '18-34', '35-50', '51-69', '70+']);
@@ -23,7 +23,7 @@ const count = o => mapValues(xs => xs.length, o);
 
 export const VisitsStats = {
   // calculateGenderStatistics :: [Log] -> { k: Number }
-  calculateGenderStatistics: logs => count(collectBy(log => log.gender, logs)),
+  calculateGenderStatistics: logs => count(collectBy(log => Gender.toDisplay(log.gender), logs)),
 
   // calculateAgeGroupStatistics :: [Log] -> { k: Number }
   calculateAgeGroupStatistics: logs =>
@@ -61,7 +61,8 @@ export const VisitsStats = {
 
 export const VisitorStats = {
   // calculateGenderStatistics :: [VisitorWithVisitData] -> { k: Number }
-  calculateGenderStatistics: visitors => count(collectBy(log => log.gender, visitors)),
+  calculateGenderStatistics: visitors =>
+    count(collectBy(log => Gender.toDisplay(log.gender), visitors)),
 
   // calculateAgeGroupStatistics :: [VisitorWithVisitData] -> { k: Number }
   calculateAgeGroupStatistics: visitors =>
@@ -116,13 +117,20 @@ export const calculateStepSize = stats =>
 // formatChartData :: ({ k: v }, [string], { label?: string, sorter: (l, r) -> number }) -> { k: v }
 export const formatChartData = (data, bgColor, { label, sorter } = {}) => {
   const pairedData = sorter ? toPairs(data).sort(sorter) : toPairs(data);
+
+  const labels = map(head, pairedData);
+
+  const backgroundColor = !Array.isArray(bgColor) && typeof bgColor === 'object'
+    ? labels.map(l => bgColor[l])
+    : bgColor;
+
   return {
-    labels: map(head, pairedData),
+    labels,
     datasets: [
       {
         label,
         data: map(last, pairedData),
-        backgroundColor: bgColor,
+        backgroundColor,
       },
     ],
   };

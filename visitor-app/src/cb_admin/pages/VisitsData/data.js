@@ -1,27 +1,42 @@
 /*
  * Data processing functions
  *
- * Transformation of API responses into visit and vistior statistics,
+ * Transformation of API responses into visit and visitor statistics,
  * formatted to be compatible with Chart.js
  */
 import { filter } from 'ramda';
 import { CommunityBusiness, Visitors, Activities } from '../../../api';
-import { mapValues, repeat } from '../../../util';
+import { mapValues } from '../../../util';
 import DateRanges from './dateRange';
 import { VisitsStats, calculateStepSize, formatChartData, VisitorStats, preProcessVisitors } from './util';
-import { colors } from '../../../shared/style_guide';
+import { colors, colourPalette } from '../../../shared/style_guide';
 import { AgeRange } from '../../../shared/constants';
 
 
 /*
  * Chart colour spec
  *
- * - Doughnut chart cycles through 3 colours, since it displays either age groups or gender
  * - Bar charts use a single colour (purple) to reduce unnecessary visual noise
+ * - Gender and age-group charts use fixed colours to represent each category to
+ *   prevent changing colours when applying filters
  */
 const Colours = {
-  DOUGHNUT: [colors.highlight_primary, colors.highlight_secondary, colors.dark],
   BAR: colors.highlight_secondary,
+  GENDER: {
+    'Prefer not to say': colourPalette.muted.violet,
+    Female: colourPalette.muted.purple,
+    Male: colourPalette.muted.blue,
+    Intersex: colourPalette.muted.emerald,
+    'Non-binary': colourPalette.muted.green,
+    Other: colourPalette.muted.lime,
+  },
+  AGE_GROUP: {
+    '0-17': colourPalette.muted.violet,
+    '18-34': colourPalette.muted.purple,
+    '35-50': colourPalette.muted.blue,
+    '51-69': colourPalette.muted.emerald,
+    '70+': colourPalette.muted.green,
+  },
 };
 
 // sorter :: ([string, number], [string, number]) -> number
@@ -68,10 +83,10 @@ export const getVisitsData = (filters, chartsOptions) => {
         },
         data: {
           time: formatChartData(timeStats, Colours.BAR),
-          gender: formatChartData(genderStats, Colours.DOUGHNUT),
+          gender: formatChartData(genderStats, Colours.GENDER),
           category: formatChartData(categoriesStats, Colours.BAR),
           activity: mapValues(x => formatChartData(x, Colours.BAR), activitiesStats),
-          age: formatChartData(ageGroupsStats, repeat(Colours.DOUGHNUT, Object.keys(ageGroupsStats).length), { sorter }),
+          age: formatChartData(ageGroupsStats, Colours.AGE_GROUP, { sorter }),
         },
       };
     });
@@ -131,10 +146,10 @@ export const getVisitorData = (filters, chartsOptions) => {
         },
         data: {
           time: formatChartData(timeStats, Colours.BAR),
-          gender: formatChartData(genderStats, Colours.DOUGHNUT),
+          gender: formatChartData(genderStats, Colours.GENDER),
           category: formatChartData(categoriesStats, Colours.BAR),
           activity: mapValues(x => formatChartData(x, Colours.BAR), activitiesStats),
-          age: formatChartData(ageGroupsStats, repeat(Colours.DOUGHNUT, Object.keys(ageGroupsStats).length), { sorter }),
+          age: formatChartData(ageGroupsStats, Colours.AGE_GROUP, { sorter }),
         },
       };
     });
