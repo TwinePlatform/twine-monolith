@@ -74,7 +74,7 @@ describe('Visits Dashboard Data Processing', () => {
         },
         data: {
           age: {
-            datasets: [{ data: [1, 1], backgroundColor: ['#FDBD2D', '#833FF7', '#DBDBDB'], label: undefined }],
+            datasets: [{ data: [1, 1], backgroundColor: ['#6370BC', '#379A90'], label: undefined }],
             labels: ['18-34', '51-69'],
           },
           activity: {
@@ -88,8 +88,8 @@ describe('Visits Dashboard Data Processing', () => {
             },
           },
           gender: {
-            datasets: [{ data: [1, 1], backgroundColor: ['#FDBD2D', '#833FF7', '#DBDBDB'], label: undefined }],
-            labels: ['male', 'female'],
+            datasets: [{ data: [1, 1], backgroundColor: ['#47ABFA', '#6370BC'], label: undefined }],
+            labels: ['Male', 'Female'],
           },
           time: {
             datasets: [{ data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2], backgroundColor: '#833FF7', label: undefined }],
