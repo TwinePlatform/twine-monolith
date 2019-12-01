@@ -48,7 +48,7 @@ const errorTextOptions: { [k: string]: ErrorText } = {
 };
 
 const getErrorText = (code: string): ErrorText => {
-  switch (code){
+  switch (code) {
     case '404':
       return errorTextOptions[404];
 
@@ -84,17 +84,17 @@ const Error: React.FunctionComponent<Props> = (props) => {
   const { title, subtitle, error } = getErrorText(code);
 
   return (
-  <Grid>
+    <Grid>
       <H1>{title}</H1>
       <H3Padded>{subtitle}</H3Padded>
       <H3>{error}</H3>
-    <Row center={'xs'}>
-      <Link to="/"><PrimaryButton>Go to Dashboard</PrimaryButton></Link>
-    </Row>
-    <Row center={'xs'}>
-      <a href="mailto:powertochangetwine@gmail.com">Or report a problem</a>
-    </Row>
-  </Grid>
+      <Row center={'xs'}>
+        <Link to="/"><PrimaryButton>Go to Dashboard</PrimaryButton></Link>
+      </Row>
+      <Row center={'xs'}>
+        <a href="mailto:powertochangetwine@gmail.com">Or report a problem</a>
+      </Row>
+    </Grid>
   );
 };
 

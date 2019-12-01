@@ -1,3 +1,6 @@
+/*
+ * Error boundary that redirects when an error occurs
+ */
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { Dictionary } from 'ramda';
@@ -16,7 +19,7 @@ class RedirectErrorBoundary extends BaseErrorBoundary<RedirProps> {
     const url = getUrlFromStatusCode(this.state.statusCode, redirects);
 
     return (
-      <Redirect to={url}/>
+      <Redirect to={url} />
     );
   }
 }

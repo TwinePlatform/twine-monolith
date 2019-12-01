@@ -1,3 +1,6 @@
+/*
+ * Dummy data used for testing
+ */
 export const logs = [
   {
     id: 1,

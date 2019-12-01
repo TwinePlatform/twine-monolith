@@ -1,7 +1,8 @@
 import * as Joi from '@hapi/joi';
-import { Dictionary } from 'ramda';
+import { assoc, Dictionary } from 'ramda';
 
-export const validateForm = <T>(schema: Joi.Schema) => (values: T): Partial<T> => {
+
+export const validateForm = <T extends Dictionary<string>> (schema: Joi.Schema) => (values: T): Partial<T> => {
   const result = schema.validate(values, { abortEarly: false });
 
   if (!result.error) {
@@ -10,11 +11,10 @@ export const validateForm = <T>(schema: Joi.Schema) => (values: T): Partial<T> =
 
   return result.error
     .details
-    .reduce((acc: Dictionary<string>, item) => {
+    .reduce((acc, item) => {
       const x = (item.context || {}).key;
-      if (x) {
-        acc[x] = item.message;
-      }
-      return acc;
-    }, {});
+      return x
+        ? assoc(x, item.message, acc)
+        : acc;
+    }, {} as Partial<T>);
 };

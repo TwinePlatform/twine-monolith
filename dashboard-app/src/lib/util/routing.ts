@@ -44,7 +44,7 @@ export const redirectOnError = (
 };
 
 
-export const getQueryObjectFromProps = <T extends RouteComponentProps>(props: T) =>
+export const getQueryObjectFromProps = <T extends RouteComponentProps> (props: T) =>
   qs.parse(props.location.search.replace('?', ''));
 
 export const withParams = (path: string, params: Dictionary<string>) =>

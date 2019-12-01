@@ -1,3 +1,6 @@
+/*
+ * Error boundary that renders an error message when an error occurs
+ */
 import React from 'react';
 import BaseErrorBoundary from './BaseErrorBoundary';
 

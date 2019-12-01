@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Route, Switch, BrowserRouter, withRouter } from 'react-router-dom';
 
 import PrivateRoute from './features/auth/components/PrivateRoute';
-import HoldingPage from './features/HoldingPage';
 import ByActivity from './features/dashboard/ByActivity/index';
 import ByTime from './features/dashboard/ByTime/index';
 import ByVolunteer from './features/dashboard/ByVolunteer/index';
@@ -43,7 +42,7 @@ const Content = styled.div`
 
 const DashboardRoutes = () => {
   const [unit, setUnit] = useState(DurationUnitEnum.HOURS);
-  return(
+  return (
     <DashboardContext.Provider value={{ unit, setUnit }}>
       <Switch>
         <Route exact path="/" component={Dashboard} />
@@ -60,19 +59,19 @@ const DashboardRoutes = () => {
 
 const AppRouter =
   withRouter((props) => (
-      <>
-        <Navbar pathname={props.location.pathname}/>
-        <Content>
-          <Switch>
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/password/reset/:token" component={ResetPassword} />
-            <Route exact path="/password/forgot" component={ForgotPassword} />
-            <Route exact path="/error/:code" component={ErrorPage} />
-            <PrivateRoute path="/*" component={DashboardRoutes} />
-          </Switch>
-        </Content>
-        <Footer />
-      </>)
+    <>
+      <Navbar pathname={props.location.pathname} />
+      <Content>
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/password/reset/:token" component={ResetPassword} />
+          <Route exact path="/password/forgot" component={ForgotPassword} />
+          <Route exact path="/error/:code" component={ErrorPage} />
+          <PrivateRoute path="/*" component={DashboardRoutes} />
+        </Switch>
+      </Content>
+      <Footer />
+    </>)
   );
 
 
@@ -81,11 +80,9 @@ const AppRouter =
  */
 const App = () => (
   <AppContainer>
-    {
-      process.env.REACT_APP_HOLDING_PAGE
-        ? <HoldingPage />
-        : (<BrowserRouter><AppRouter /></BrowserRouter>)
-    }
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
   </AppContainer>
 );
 

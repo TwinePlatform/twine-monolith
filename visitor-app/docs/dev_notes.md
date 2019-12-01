@@ -28,7 +28,7 @@ See:
 * https://caniuse.com/#search=autocomplete
 
 ## Deprecated api used by instascan
-The release version of instascan relies on URL.createObjectURL which is has been deprecated. Although there is no official release, this has been fixed in the master branch of the repo. Steps to rebuild `public/instacam.min.js`:
+The release version of instascan relies on URL.createObjectURL which is has been deprecated. Although there is no official release, this has been fixed in the master branch of the repo. Steps to rebuild `public/instascan.min.js`:
 - clone `https://github.com/schmich/instascan`
 - install gulp-cli
 - run `gulp release`

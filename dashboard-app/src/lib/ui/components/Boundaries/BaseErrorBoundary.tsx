@@ -1,3 +1,20 @@
+/*
+ * Class Component providing common behaviour for error boundaries
+ * https://reactjs.org/docs/error-boundaries.html
+ *
+ * Needs to be a class component because hooks cannot yet replicate
+ * the "getDerivedStateFromError" and "componentDidCatch" methods
+ *
+ * Each child class MUST implement the `renderError` method which
+ * returns the components which will be rendered in the case of an error
+ *
+ * Usage:
+ *   class NewErrorBoundary<Props> extends BaseErrorBoundary<Props> {
+ *     renderError() {
+ *       return (...);
+ *     }
+ *   }
+ */
 import React from 'react';
 import { AxiosError } from 'axios';
 import { propOr, pathOr } from 'ramda';
@@ -17,14 +34,11 @@ const isHttpError = (error: Error) =>
 
 
 class BaseErrorBoundary<T extends {}> extends React.Component<T, ErrorBoundaryState> {
-  constructor (props: Readonly<T>) {
-    super(props);
-    this.state = {
-      hasError: false,
-      isHttpError: false,
-      statusCode: 0,
-      message: '',
-    };
+  state = {
+    hasError: false,
+    isHttpError: false,
+    statusCode: 0,
+    message: '',
   }
 
   static getDerivedStateFromError (error: Error | AxiosError) {

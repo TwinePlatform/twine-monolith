@@ -1,3 +1,6 @@
+/*
+ * Hides children behind loading spinner when "loading" prop is set
+ */
 import React from 'react';
 import { BeatLoader } from 'react-spinners';
 import { FullScreenBeatLoader } from '../Loaders';

@@ -35,9 +35,6 @@ const DataTable = styled(_DataTable)`
   margin-top: 4rem;
 `;
 
-const Container = styled(Grid)`
-`;
-
 
 /**
  * Helpers
@@ -87,7 +84,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
   }, [loading, data, fromDate, toDate, unit, orderable, setErrors]);
 
   return (
-    <Container>
+    <Grid>
       <Row center="xs">
         <Col>
           <H1>{TitlesCopy.Activities.title}</H1>
@@ -129,7 +126,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
             </Row>
           )
       }
-    </Container>
+    </Grid>
   );
 };
 

@@ -10,7 +10,7 @@ const FooterContainer = styled(Grid)`
 `;
 
 const Row = styled(_Row)`
-  height: 33%
+  height: 33%;
 `;
 
 const Logo = styled(_Logo)`
@@ -19,9 +19,9 @@ const Logo = styled(_Logo)`
 
 const Footer: React.FunctionComponent<{}> = () => (
   <FooterContainer>
-    <Row/>
+    <Row />
     <Row center="xs">
-      <Logo/>
+      <Logo />
     </Row>
     <Row center="xs">
       <Col xs={4}>
