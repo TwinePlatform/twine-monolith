@@ -1,3 +1,11 @@
+/*
+ * LogsToAggregatedData
+ *
+ * Exports function to transform array of volunteer log objects (from API)
+ * into an intermediate data type (AggregatedData) that can be used to
+ * determine display data used for the tables, charts and CSV exports on
+ * all pages.
+ */
 import { Duration } from 'twine-util';
 import { collectBy, interpolateObjFrom } from 'twine-util/arrays';
 import { mapValues } from 'twine-util/objects';
@@ -26,6 +34,10 @@ export interface AggregatedData {
 
 export const isDataEmpty = (d: AggregatedData) => d.rows.length === 0;
 
+// getIdAndName
+// Return a row ID and row label (here called "name") given the table type
+// "name" value is the value of the "groupByX" label
+// i.e. if `groupByX === 'Activity'` then "name" is the log activity
 const getIdAndName = (type: TableTypeItem['xIdFromLogs'], xData: Params['xData'], value: string | number) => {
   switch (type) {
     case 'userId':
@@ -49,6 +61,7 @@ const getIdAndName = (type: TableTypeItem['xIdFromLogs'], xData: Params['xData']
   }
 };
 
+// Transform array of volunteer log objects into an intermediate data type
 export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params): AggregatedData => {
   const { groupByX, groupByY } = tableType;
 
@@ -64,8 +77,9 @@ export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params):
   // { [X]: { [Y]: Log[] } } -> { [X]: { [Y]: Duration } }
   const y = mapValues((ys) => mapValues((_logs) => Duration.accumulate(_logs.map((l) => l.duration)), ys), x);
 
-  // Interpolate null values in both dimensions (X-data and Y-data)
-  // (necessary when values exist in X- and Y-data that aren't present in the logs)
+  // Interpolate null values in Y-dimension (using Y-data).
+  // Necessary when values exist in Y-data that aren't present in the logs
+  // e.g. if there are no logs in "Jul 2018", but "Jul 2018" _is_ in `yData`
   // { [X]: { [Y]: Duration } } -> { [X]: { [Y]: Duration } }
   const z = mapValues((ys) => interpolateObjFrom(yData.map((y) => y.name), Duration.fromSeconds(0), ys), y);
 

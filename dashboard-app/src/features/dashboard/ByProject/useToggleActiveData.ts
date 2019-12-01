@@ -1,3 +1,16 @@
+/*
+ * This hook is used to contain the complexity of maintaining
+ * two data-sets in memory in order to switch between them.
+ *
+ * This functionality was originally attempted with a simple
+ * ternary statement, but this caused a render loop and
+ * inconsistent states (for reasons that are not totally
+ * understood).
+ *
+ * Instead, both data sets (left / right) are kept in separate
+ * state fragments, as is the "actual" (i.e. currently selected)
+ * data-set.
+ */
 import { useState, useCallback, useEffect } from 'react';
 
 type Arguments<T, U> = {

@@ -82,6 +82,10 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
     }
   }, [data, fromDate, toDate, orderable, loading, unit, setErrors]);
 
+  // Setting the colours directly using a ternary in the tab props
+  // leads to a render loop, for reasons that are not yet well understood
+  // So instead, we keep track of the _in use_ colour set in its own state
+  // fragment
   useEffect(() => {
     if (active === 'Activities') {
       setColours([...GraphColourList].reverse());

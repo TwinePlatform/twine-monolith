@@ -1,3 +1,6 @@
+/*
+ * Transform aggregated data into DataTable compatible data-structure
+ */
 import { evolve, map, pipe } from 'ramda';
 import { DataTableProps } from '../components/DataTable/types';
 import { AggregatedData, IdAndName } from './logsToAggregatedData';
@@ -18,7 +21,7 @@ interface Params {
 }
 export type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
 
-export const createHeaders = (yData: { name: string }[]) => (data: AggregatedData) => {
+export const createHeaders = (yData: IdAndName[]) => (data: AggregatedData) => {
   const headers = [data.groupByX, ...yData.map((x) => x.name)];
   return { ...data, headers };
 }; // TODO: add test

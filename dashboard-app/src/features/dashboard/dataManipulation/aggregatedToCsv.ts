@@ -1,3 +1,6 @@
+/*
+ * Transform aggregated data into CSV compatible data-structure
+ */
 import csv from 'fast-csv';
 import { pathOr, pipe } from 'ramda';
 import { Arrays } from 'twine-util';
@@ -23,6 +26,7 @@ export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEn
       calculateTotalsUsing(unit),
       abbreviateMonths(Months.format.verbose)
     )(data);
+
     const groupBy = data.groupByX;
     const rowKeys = Months.sortFormatted(Object.keys(rows[0]));
     const totalHeader = getStringContainingTotal(rowKeys);
@@ -31,6 +35,7 @@ export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEn
       ? [groupBy, totalHeader, ...monthHeaders]
       : [groupBy, ...monthHeaders];
 
+    // Ensure same row sort order as in table view
     const sortedRows = Arrays.sort([
       { accessor: pathOr('', [headers[orderable.sortByIndex]]), order: orderable.order },
       { accessor: pathOr('', [groupBy]), order: 'asc' },

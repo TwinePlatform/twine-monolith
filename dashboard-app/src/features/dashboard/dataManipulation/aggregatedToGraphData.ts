@@ -1,3 +1,6 @@
+/*
+ * Transform aggregated data into chart.js compatible data-structure
+ */
 import { omit } from 'ramda';
 import { Objects } from 'twine-util';
 import { AggregatedData } from './logsToAggregatedData';
@@ -9,6 +12,7 @@ import { GraphColourList } from '../../../lib/ui/design_system';
 
 
 export const aggregatedToStackedGraph = (data: AggregatedData, unit: DurationUnitEnum, colours = GraphColourList) => {
+  // Sort labels chronologically
   const labels = Months.sortFormatted(Object.keys(omit(['id', 'name'], data.rows[0])));
 
   return {

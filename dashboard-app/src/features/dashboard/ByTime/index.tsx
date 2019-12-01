@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback, FunctionComponent, useContext } from 'react';
-import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
@@ -19,13 +18,6 @@ import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
 import { DashboardContext } from '../context';
-
-
-/**
- * Styles
- */
-const Container = styled(Grid)`
-`;
 
 
 /**
@@ -86,7 +78,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
   };
 
   return (
-    <Container>
+    <Grid>
       <Row center="xs">
         <Col>
           <H1>{TitlesCopy.Time.title}</H1>
@@ -109,7 +101,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
           ? <FullScreenBeatLoader color={ColoursEnum.purple} />
           : <TimeTabs {...tabProps} />
       }
-    </Container>
+    </Grid>
   );
 };
 

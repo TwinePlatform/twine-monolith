@@ -8,10 +8,8 @@ import _DataTable from '../components/DataTable';
 import UtilityBar from '../components/UtilityBar';
 import { H1 } from '../../../lib/ui/components/Headings';
 import { DataTableProps } from '../components/DataTable/types';
-import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
 import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
-import { ColoursEnum } from '../../../lib/ui/design_system';
 import Errors from '../components/Errors';
 import useAggregateDataByActivity from './useAggregateDataByActivity';
 import { TabGroup } from '../components/Tabs';
@@ -20,6 +18,7 @@ import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
 import { DashboardContext } from '../context';
+import { LoadingBoundary } from '../../../lib/ui/components/Boundaries';
 
 
 /**
@@ -101,31 +100,27 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
           />
         </Col>
       </Row>
-      {
-        loading
-          ? (<FullScreenBeatLoader color={ColoursEnum.purple} />)
-          : (
-            <Row center="xs">
-              <Col xs={12}>
-                <Errors errors={errors} />
-                <TabGroup titles={['Table']}>
-                  {
-                    tableData && (
-                      <DataTable
-                        {...tableData}
-                        title={getTitleForDayPicker(TitlesCopy.Activities.subtitle, fromDate, toDate)}
-                        sortBy={tableData.headers[orderable.sortByIndex]}
-                        order={orderable.order}
-                        onChangeSortBy={onChangeSortBy}
-                        showTotals
-                      />
-                    )
-                  }
-                </TabGroup>
-              </Col>
-            </Row>
-          )
-      }
+      <LoadingBoundary isLoading={loading} fullscreen>
+        <Row center="xs">
+          <Col xs={12}>
+            <Errors errors={errors} />
+            <TabGroup titles={['Table']}>
+              {
+                tableData && (
+                  <DataTable
+                    {...tableData}
+                    title={getTitleForDayPicker(TitlesCopy.Activities.subtitle, fromDate, toDate)}
+                    sortBy={tableData.headers[orderable.sortByIndex]}
+                    order={orderable.order}
+                    onChangeSortBy={onChangeSortBy}
+                    showTotals
+                  />
+                )
+              }
+            </TabGroup>
+          </Col>
+        </Row>
+      </LoadingBoundary>
     </Grid>
   );
 };
