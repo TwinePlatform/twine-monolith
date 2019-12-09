@@ -15,7 +15,7 @@ The endpoints of the API that are made public are documented below.
   - [GET /v1/community-businesses/me/visit-activities](#get-v1community-businessesmevisit-activities)
   - [GET /v1/community-businesses/me/visit-logs](#get-v1community-businessesmevisit-logs)
   - [GET /v1/community-businesses/me/visit-logs/aggregates](#get-v1community-businessesmevisit-logsaggregates)
-
+  - [POST /v1/users/visitors/search](#post-v1usersvisitorssearch)
 
 ## Common query parameters
 The API supports objects and arrays in query strings, encoded and parsed by the [qs](https://npmjs.com/package/qs) module (e.g. `?array[0]=foo&array[1]=bar` is parsed to `array=['foo', 'bar']`). See the qs module's documentation for more examples.
@@ -127,3 +127,9 @@ Query parameters:
   - `age`: [integer, integer] -- age limits, min to max
   - `visitActivity`: string -- filter on visit activity name
   - `gender`: male | female | prefer not to say
+
+### POST /v1/users/visitors/search
+Query parameters: **None**
+
+Payload parameters:
+- `qrCode`: Hash string encoded in scanned QR Code

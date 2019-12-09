@@ -13,8 +13,10 @@ const routes: [Api.Users.Visitors.Search.POST.Route] = [
     options: {
       description: 'Search for visitors using their QR code',
       auth: {
-        strategy: 'standard',
-        scope: ['user_details-child:read'],
+        strategies: ['standard', 'external'],
+        access: {
+          scope: ['user_details-child:read', 'api:visitor:read'],
+        },
       },
       validate: {
         payload: {
