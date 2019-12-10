@@ -17,7 +17,8 @@
  */
 import { useCallback, useState } from 'react';
 import { Order } from 'twine-util/arrays';
-import { toggleOrder } from '../util';
+import { toggle } from 'twine-util/misc';
+
 
 export type Orderable = {
   sortByIndex: number
@@ -33,6 +34,8 @@ type InitialValues = {
   initialOrderable: Orderable
   updateOn?: any[]
 };
+
+export const toggleOrder = toggle<Order>('asc', 'desc');
 
 export const useOrderable = ({ initialOrderable, updateOn = [] }: InitialValues): Output => {
   const [sortByIndex, setSortByIndex] = useState<number>(initialOrderable.sortByIndex);
