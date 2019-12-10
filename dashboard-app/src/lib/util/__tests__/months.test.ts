@@ -1,5 +1,5 @@
 import moment from 'moment';
-import Months, { MonthsFormatEnum } from '../months';
+import Months from '../months';
 
 describe('Util Months', () => {
   describe(':: range', () => {

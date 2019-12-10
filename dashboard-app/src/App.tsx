@@ -24,14 +24,18 @@ import { DashboardContext } from './features/dashboard/context';
  * Styles
  */
 const AppContainer = styled.div`
+  /* Always expand the app content to fill the whole screen height */
   min-height: 100vh;
+  /* Always expand the app content to fill the whole screen width... */
   min-width: 100vw;
+  /* ...up to a fixed resolution */
   max-width: 1280px;
   background: ${ColoursEnum.lightGrey};
   font-family: ${Fonts.family.main};
 `;
 
 const Content = styled.div`
+  /* Content height = screen heigh - navbar height - navbar margin - footer height */
   min-height: calc(100vh - 4.8125rem - 6rem - 13rem);
 `;
 

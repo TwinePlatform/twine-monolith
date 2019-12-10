@@ -1,3 +1,20 @@
+/*
+ * useOrderable Hook
+ *
+ * Handles state for modeling orderable tables, storing
+ * both the selected order and the "column" that is to
+ * be sorted by.
+ *
+ * Models the following behaviour:
+ * 1. Uses input values to set initial state
+ * 2. Toggles sort order if "column" value equals existing
+ * 3. Sets sort order to "asc" for the "first" column (i.e. index 0)
+ * 4. Otherwise sets sort order to "desc"
+ *
+ * This behaviour is specific to the requirements on the data tables.
+ * If more generic behaviour is desired, some of this could be made
+ * configurable.
+ */
 import { useCallback, useState } from 'react';
 import { Order } from 'twine-util/arrays';
 import { toggleOrder } from '../util';
