@@ -2,15 +2,15 @@
  * Community Business Admin Model
  */
 import { pick, evolve } from 'ramda';
+import { Random } from 'twine-util';
 import { CbAdminCollection, RoleEnum } from './types';
 import { Users, ModelToColumn } from './user';
-import { Random } from 'twine-util';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import Roles from './role';
 
 
 /*
- * Implementation of the UserCollection type for CbAdmin
+ * Implementation of the CbAdminCollection type
  */
 export const CbAdmins: CbAdminCollection = {
   create (a) {

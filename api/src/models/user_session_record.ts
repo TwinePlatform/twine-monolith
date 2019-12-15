@@ -24,7 +24,7 @@ interface UserSessionRecordCollection {
 
 const filterHeaders = pick([
   'user-agent',
-  'referer',
+  'referer', // do not fix typo -- this is how the header is spelled
 ]);
 
 

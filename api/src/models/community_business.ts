@@ -228,8 +228,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
       await trx
         .insert({ code, organisation_id: newOrg.organisation_id, })
-        .into('volunteer_admin_code')
-        .returning('*');
+        .into('volunteer_admin_code');
 
       return trx
         .insert({

@@ -1,3 +1,10 @@
+/*
+ * applyQueryModifiers
+ *
+ * Models specify SQL query modifiers (WHERE, LIMIT, etc)
+ * statically in objects. Knex requires method invocations.
+ * This function transforms the former into the latter.
+ */
 import * as Knex from 'knex';
 import { intersection, compose, isNil, Dictionary } from 'ramda';
 import { ModelQuery } from './types';
