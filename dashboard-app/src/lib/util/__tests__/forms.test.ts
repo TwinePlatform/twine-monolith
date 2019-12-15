@@ -16,7 +16,7 @@ describe('Utils :: forms', () => {
         b: Joi.number().integer().positive(),
       });
       const values = { a: 'fo', b: 10 };
-      const errors = validateForm<{a: string, b: number}>(schema)(values);
+      const errors = validateForm<{ a: string, b: number }>(schema)(values);
 
       expect(Object.keys(errors)).toHaveLength(1);
       expect(errors.a).toBe('"a" length must be at least 3 characters long');
@@ -28,7 +28,7 @@ describe('Utils :: forms', () => {
         b: Joi.number().integer().positive(),
       });
       const values = { a: 'fo', b: -1 };
-      const errors = validateForm<{a: string, b: number}>(schema)(values);
+      const errors = validateForm<{ a: string, b: number }>(schema)(values);
 
       expect(Object.keys(errors)).toHaveLength(2);
       expect(errors.a).toBe('"a" length must be at least 3 characters long');

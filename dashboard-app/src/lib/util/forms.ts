@@ -2,7 +2,7 @@ import * as Joi from '@hapi/joi';
 import { assoc, Dictionary } from 'ramda';
 
 
-export const validateForm = <T extends Dictionary<string>> (schema: Joi.Schema) => (values: T): Partial<T> => {
+export const validateForm = <T extends Dictionary<string | number>> (schema: Joi.Schema) => (values: T): Partial<T> => {
   const result = schema.validate(values, { abortEarly: false });
 
   if (!result.error) {
