@@ -10,7 +10,10 @@ import {
 describe('timeStatsToProps', () => {
   test('no arguments', () => {
     expect(timeStatsToProps()).toEqual({
-      topText: ['Over the past ', '12 months'],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: { label: 'No data available', data: [] },
       right: { label: 'hours', data: 0 },
     });
@@ -18,15 +21,21 @@ describe('timeStatsToProps', () => {
 
   test('zero data points', () => {
     expect(timeStatsToProps({ labels: [], value: 0 })).toEqual({
-      topText: ['Over the past ', '12 months'],
-      left: { label: 'No data available', data: [], limit: 3, truncationString: '...' },
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
+      left: { label: 'No data available', data: [] },
       right: { label: 'hours', data: 0 },
     });
   });
 
   test('one data point', () => {
     expect(timeStatsToProps({ labels: ['foo'], value: 10 })).toEqual({
-      topText: ['Over the past ', '12 months'],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Most volunteer days were in',
         data: ['foo'],
@@ -39,7 +48,10 @@ describe('timeStatsToProps', () => {
 
   test('two data points', () => {
     expect(timeStatsToProps({ labels: ['foo', 'bar'], value: 10 })).toEqual({
-      topText: ['Over the past ', '12 months'],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Most volunteer days were in',
         data: ['foo', 'bar'],
@@ -52,7 +64,10 @@ describe('timeStatsToProps', () => {
 
   test('three data points', () => {
     expect(timeStatsToProps({ labels: ['foo', 'bar', 'woo'], value: 10 })).toEqual({
-      topText: ['Over the past ', '12 months'],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Most volunteer days were in',
         data: ['foo', 'bar', 'woo'],
@@ -65,7 +80,10 @@ describe('timeStatsToProps', () => {
 
   test('four data points', () => {
     expect(timeStatsToProps({ labels: ['foo', 'bar', 'woo', 'war'], value: 10 })).toEqual({
-      topText: ['Over the past ', '12 months'],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Most volunteer days were in',
         data: ['foo', 'bar', 'woo', 'war'],
@@ -80,7 +98,10 @@ describe('timeStatsToProps', () => {
 describe('volunteerStatsToProps', () => {
   test('no arguments', () => {
     expect(volunteerStatsToProps()).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: { label: 'No data available', data: [] },
       right: { label: '0 hours', data: [] },
     });
@@ -88,15 +109,21 @@ describe('volunteerStatsToProps', () => {
 
   test('zero data points', () => {
     expect(volunteerStatsToProps({ labels: [], value: 0 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: { label: 'No data available', data: [] },
-      right: { label: '0 hours', data: [], limit: 3, truncationString: '...' },
+      right: { label: '0 hours', data: [] },
     });
   });
 
   test('one data point', () => {
     expect(volunteerStatsToProps({ labels: ['foo'], value: 10 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: { label: 'Top volunteer', data: [] },
       right: { label: '10 hours', data: ['foo'], limit: 3, truncationString: '...' },
     });
@@ -104,7 +131,10 @@ describe('volunteerStatsToProps', () => {
 
   test('two data points', () => {
     expect(volunteerStatsToProps({ labels: ['foo', 'bar'], value: 10 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Top volunteers',
         data: [],
@@ -120,7 +150,10 @@ describe('volunteerStatsToProps', () => {
 
   test('three data points', () => {
     expect(volunteerStatsToProps({ labels: ['foo', 'bar', 'woo'], value: 10 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Top volunteers',
         data: [],
@@ -136,7 +169,10 @@ describe('volunteerStatsToProps', () => {
 
   test('four data points', () => {
     expect(volunteerStatsToProps({ labels: ['foo', 'bar', 'woo', 'war'], value: 10 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Top volunteers',
         data: [],
@@ -154,7 +190,10 @@ describe('volunteerStatsToProps', () => {
 describe('activityStatsToProps', () => {
   test('no arguments', () => {
     expect(activityStatsToProps()).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: { label: 'No data available', data: [] },
       right: { label: 'hours', data: 0 },
     });
@@ -162,15 +201,21 @@ describe('activityStatsToProps', () => {
 
   test('zero data points', () => {
     expect(activityStatsToProps({ labels: [], value: 0 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
-      left: { label: 'No data available', data: [], limit: 2, truncationString: '...' },
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
+      left: { label: 'No data available', data: [] },
       right: { label: 'hours', data: 0 },
     });
   });
 
   test('one data point', () => {
     expect(activityStatsToProps({ labels: ['foo'], value: 10 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Most popular activity was',
         data: ['foo'],
@@ -183,7 +228,10 @@ describe('activityStatsToProps', () => {
 
   test('two data points', () => {
     expect(activityStatsToProps({ labels: ['foo', 'bar'], value: 10 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Most popular activities were',
         data: ['foo', 'bar'],
@@ -199,7 +247,10 @@ describe('activityStatsToProps', () => {
 
   test('three data points', () => {
     expect(activityStatsToProps({ labels: ['foo', 'bar', 'woo'], value: 10 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Most popular activities were',
         data: ['foo', 'bar', 'woo'],
@@ -215,7 +266,10 @@ describe('activityStatsToProps', () => {
 
   test('four data points', () => {
     expect(activityStatsToProps({ labels: ['foo', 'bar', 'woo', 'war'], value: 10 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Most popular activities were',
         data: ['foo', 'bar', 'woo', 'war'],
@@ -233,7 +287,10 @@ describe('activityStatsToProps', () => {
 describe('projectStatsToProps', () => {
   test('no arguments', () => {
     expect(projectStatsToProps()).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: { label: 'No data available', data: [] },
       right: { label: 'hours', data: 0 },
     });
@@ -241,15 +298,21 @@ describe('projectStatsToProps', () => {
 
   test('zero data points', () => {
     expect(projectStatsToProps({ labels: [], value: 0 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
-      left: { label: 'No data available', data: [], limit: 2, truncationString: '...' },
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
+      left: { label: 'No data available', data: [] },
       right: { label: 'hours', data: 0 },
     });
   });
 
   test('one data point', () => {
     expect(projectStatsToProps({ labels: ['foo'], value: 10 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Most popular project was',
         data: ['foo'],
@@ -262,7 +325,10 @@ describe('projectStatsToProps', () => {
 
   test('two data points', () => {
     expect(projectStatsToProps({ labels: ['foo', 'bar'], value: 10 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Most popular projects were',
         data: ['foo', 'bar'],
@@ -278,7 +344,10 @@ describe('projectStatsToProps', () => {
 
   test('three data points', () => {
     expect(projectStatsToProps({ labels: ['foo', 'bar', 'woo'], value: 10 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Most popular projects were',
         data: ['foo', 'bar', 'woo'],
@@ -294,7 +363,10 @@ describe('projectStatsToProps', () => {
 
   test('four data points', () => {
     expect(projectStatsToProps({ labels: ['foo', 'bar', 'woo', 'war'], value: 10 })).toEqual({
-      topText: ['During ', moment().format('MMM YYYY')],
+      topText: [
+        'Between ',
+        `${moment().subtract(3, 'months').format('DD MMM YYYY')} - ${moment().format('DD MMM YYYY')}`
+      ],
       left: {
         label: 'Most popular projects were',
         data: ['foo', 'bar', 'woo', 'war'],
