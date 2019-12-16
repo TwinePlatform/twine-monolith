@@ -14,9 +14,19 @@ export type EqualDataPoints = {
 };
 
 
+const getDateLimits = () => [
+  moment().subtract(3, 'months'),
+  moment(),
+];
+
+const getFormattedDateLimits = () =>
+  getDateLimits()
+    .map((d) => d.format('DD MMM YYYY'))
+    .join(' - ');
+
+
 export default () => {
-  const threeMonthsAgo = moment().subtract(3, 'months').toDate();
-  const now = moment().toDate();
+  const [threeMonthsAgo, now] = getDateLimits().map((d) => d.toDate());
 
   const [timeStats, setTimeStats] = useState<EqualDataPoints>({ labels: [], value: 0 });
   const [volunteerStats, setVolunteerStats] = useState<EqualDataPoints>({ labels: [], value: 0 });
@@ -113,18 +123,11 @@ export default () => {
   }
 };
 
-const getCurrentMonth = () =>
-  [
-    moment().subtract(3, 'months'),
-    moment(),
-  ]
-    .map((d) => d.format('DD MMM YYYY'))
-    .join(' - ');
 
 export const activityStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
   if (!pts || pts.value === 0) {
     return {
-      topText: ['Between ', getCurrentMonth()],
+      topText: ['Between ', getFormattedDateLimits()],
       left: {
         label: 'No data available',
         data: [],
@@ -144,7 +147,7 @@ export const activityStatsToProps = (pts?: EqualDataPoints): NumberTileProps => 
   const rightLabel = `hours${pts.labels.length > 1 ? ' each' : ''}`;
 
   return {
-    topText: ['Between ', getCurrentMonth()],
+    topText: ['Between ', getFormattedDateLimits()],
     left: {
       label: leftLabel,
       data: pts.labels,
@@ -162,7 +165,7 @@ export const activityStatsToProps = (pts?: EqualDataPoints): NumberTileProps => 
 export const volunteerStatsToProps = (pts?: EqualDataPoints): TextTileProps => {
   if (!pts || pts.value === 0) {
     return {
-      topText: ['Between ', getCurrentMonth()],
+      topText: ['Between ', getFormattedDateLimits()],
       left: {
         label: 'No data available',
         data: [],
@@ -182,7 +185,7 @@ export const volunteerStatsToProps = (pts?: EqualDataPoints): TextTileProps => {
   const rightLabel = `${pts.value} hours${pts.labels.length > 1 ? ' each' : ''}`;
 
   return {
-    topText: ['Between ', getCurrentMonth()],
+    topText: ['Between ', getFormattedDateLimits()],
     left: {
       label: leftLabel,
       data: [],
@@ -200,7 +203,7 @@ export const volunteerStatsToProps = (pts?: EqualDataPoints): TextTileProps => {
 export const timeStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
   if (!pts || pts.value === 0) {
     return {
-      topText: ['Between ', getCurrentMonth()],
+      topText: ['Between ', getFormattedDateLimits()],
       left: {
         label: 'No data available',
         data: [],
@@ -218,7 +221,7 @@ export const timeStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
   const rightLabel = `hours${pts.labels.length > 1 ? ' each' : ''}`;
 
   return {
-    topText: ['Between ', getCurrentMonth()],
+    topText: ['Between ', getFormattedDateLimits()],
     left: {
       label: leftLabel,
       data: pts.labels,
@@ -235,7 +238,7 @@ export const timeStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
 export const projectStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
   if (!pts || pts.value === 0) {
     return {
-      topText: ['Between ', getCurrentMonth()],
+      topText: ['Between ', getFormattedDateLimits()],
       left: {
         label: 'No data available',
         data: [],
@@ -257,7 +260,7 @@ export const projectStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
   const rightLabel = `hours${pts.labels.length > 1 ? ' each' : ''}`;
 
   return {
-    topText: ['Between ', getCurrentMonth()],
+    topText: ['Between ', getFormattedDateLimits()],
     left: {
       label: leftLabel,
       data: pts.labels,
