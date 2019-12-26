@@ -76,6 +76,7 @@ export default class ActivitiesPage extends React.Component {
     this.setState({ isSaving: { value: true, set: Date.now() }, errors: {} });
   }
 
+  // https://github.com/TwinePlatform/twine-monolith/pull/396#issuecomment-558632359
   hideLoader = (timeout = 2000) => {
     const remaining = timeout - (Date.now() - (this.state.isSaving.set || Date.now()));
     setTimeout(() => this.setState({ isSaving: { value: false, set: Date.now() } }), remaining);

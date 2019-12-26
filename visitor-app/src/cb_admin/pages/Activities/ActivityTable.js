@@ -49,6 +49,12 @@ const keyMap = {
 const colToState = invertObj(keyMap);
 const columns = Object.values(keyMap);
 
+// This component is memoized using React.memo to avoid expensive re-renders
+// caused by the `activities` prop (which is an object, so changes by reference
+// but not by value).
+//
+// This caused a very noticable performance improvement, in particular it reduced
+// the percieved lag between keystrokes when entering a new activity
 const ActivityTable = React.memo(({
   activities,
   categories,
