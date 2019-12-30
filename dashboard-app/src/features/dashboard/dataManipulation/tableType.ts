@@ -2,8 +2,8 @@ import moment from 'moment';
 import Months from '../../../lib/util/months';
 
 export interface TableTypeItem {
-  groupByX: string;
-  groupByY: string;
+  groupByX: 'Volunteer Name' | 'Activity' | 'Project';
+  groupByY: 'Activity' | 'Month' | 'Project';
   xIdFromLogs: 'userId' | 'activity' | 'project';
   getYIdFromLogs: (x: any) => string;
 }
