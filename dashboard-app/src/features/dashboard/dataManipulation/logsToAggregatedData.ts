@@ -19,8 +19,8 @@ interface Params {
 
 export type Row = Dictionary<string | Duration.Duration>;
 export interface AggregatedData {
-  groupByX: string;
-  groupByY: string;
+  groupByX: TableTypeItem['groupByX'];
+  groupByY: TableTypeItem['groupByY'];
   rows: Row[];
 }
 

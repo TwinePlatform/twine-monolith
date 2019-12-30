@@ -18,6 +18,7 @@ import Chart from './Chart';
 import { LegendData } from './types';
 import { TitleString } from '../Title';
 import { DashboardContext } from '../../context';
+import { TableTypeItem } from '../../dataManipulation/tableType';
 
 
 /*
@@ -41,10 +42,24 @@ interface Props {
 const isCellDurationZero = (content: string | Duration.Duration) =>
   typeof content === 'object' ? Duration.equals(content, {}) : true;
 
+const getNoActiveLegendText = (s: TableTypeItem['groupByX']) => {
+  switch (s) {
+    case 'Activity':
+      return 'Select an activity to show data';
+
+    case 'Volunteer Name':
+      return 'Select volunteers to show their hours';
+
+    case 'Project':
+      return 'Select projects to show data';
+
+    default:
+      return 'Select legend items to show data';
+  }
+}
+
 const getOverlayText = (data: AggregatedData, legendItemsActive: boolean): [boolean, string] => {
-  const noActiveLegendText = data.groupByX === 'Activity'
-    ? 'Select an activity to show data'
-    : 'Select volunteers to show their hours';
+  const noActiveLegendText = getNoActiveLegendText(data.groupByX);
 
   const noData = data.rows.length === 0 || data.rows
     .every((row) => reduceValues((acc, content) => acc && isCellDurationZero(content), true, row))
