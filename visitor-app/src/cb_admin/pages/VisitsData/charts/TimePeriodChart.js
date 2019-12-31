@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Bar } from 'react-chartjs-2';
-import Overlay from './Overlay';
-import { isChartJsDataEmpty } from './util';
+import Overlay from '../Overlay';
+import { isChartJsDataEmpty } from '../util';
 
 
 const TimePeriodChart = props => (
