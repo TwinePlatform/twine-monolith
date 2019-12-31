@@ -219,13 +219,13 @@ export default class VisitsDataPage extends React.Component {
           <Grid>
             <Row center="xs">
               <Col xs={6}>
-                <H3>Visits by gender</H3>
+                <H3>{state.basis} by gender</H3>
                 <GenderChart data={state.data.gender} />
               </Col>
             </Row>
             <Row center="xs">
               <Col xs={6}>
-                <H3>Visits by age</H3>
+                <H3>{state.basis} by age</H3>
                 <AgeGroupChart data={state.data.age} />
               </Col>
             </Row>
