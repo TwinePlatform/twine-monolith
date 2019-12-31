@@ -92,9 +92,8 @@ describe('Visits Dashboard Data Processing', () => {
             labels: ['Male', 'Female'],
           },
           time: {
-            datasets: [{ data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2], backgroundColor: '#833FF7', label: undefined }],
+            datasets: [{ data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2], backgroundColor: '#833FF7', label: undefined }],
             labels: [
-              'Oct 2018',
               'Nov 2018',
               'Dec 2018',
               'Jan 2019',
