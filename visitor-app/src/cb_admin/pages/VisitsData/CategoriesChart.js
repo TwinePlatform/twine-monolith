@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Paragraph } from '../../../shared/components/text/base';
-import HorizontalDrillDownChart from './HorizontalDrillDownChart';
+import HorizontalDrillDownChart from './charts/HorizontalDrillDownChart';
 
 
 const CategoriesChart = ({ categoryData, activityData, chartOptions, basis }) => {
