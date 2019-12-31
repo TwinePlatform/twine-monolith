@@ -141,8 +141,8 @@ export const preProcessVisitors = (visitors, filters, since, until) => visitors
   .filter(visitor =>
     visitor.visits.some(visit =>
       new Date(visit.createdAt) >= since
-        && new Date(visit.createdAt) <= until
-        && (filters.activity ? visit.visitActivity === filters.activity : true),
+      && new Date(visit.createdAt) <= until
+      && (filters.activity ? visit.visitActivity === filters.activity : true),
     ))
   // Collect the values of the 'visitActivity', 'category' and 'createdAt' keys
   // onto the visitor object to make the calculation of statistics more straightforward
@@ -156,9 +156,31 @@ export const preProcessVisitors = (visitors, filters, since, until) => visitors
           // and match the visit activity filter (if set)
           .filter(visit =>
             new Date(visit.createdAt) >= since
-              && new Date(visit.createdAt) <= until
-              && (filters.activity ? visit.visitActivity === filters.activity : true),
+            && new Date(visit.createdAt) <= until
+            && (filters.activity ? visit.visitActivity === filters.activity : true),
           ),
       ),
     ),
   }));
+
+
+// isChartJsDataEmpty :: { k: v } -> bool
+export const isChartJsDataEmpty = (data) => {
+  if (!('datasets' in data)) {
+    return true;
+  }
+
+  if (data.datasets.length === 0) {
+    return true;
+  }
+
+  if (data.datasets.every(dataset => dataset.data.length === 0)) {
+    return true;
+  }
+
+  if (data.datasets.every(dataset => dataset.data.every(datapoint => datapoint === 0))) {
+    return true;
+  }
+
+  return false;
+};

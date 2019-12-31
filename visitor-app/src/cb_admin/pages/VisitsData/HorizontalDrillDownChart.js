@@ -1,21 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { HorizontalBar } from 'react-chartjs-2';
+import Overlay from './Overlay';
+import { isChartJsDataEmpty } from './util';
 
 
-const HorizontalDrillDownChart = (props) => {
-  const [drillDown, setDrillDown] = useState(false);
-  const [selected, setSelected] = useState('');
-
-  const onClick = useCallback(([element]) => {
-    if (!element) return;
-    setSelected(drillDown ? '' : element._model.label); // eslint-disable-line no-underscore-dangle
-    setDrillDown(!drillDown);
-  });
-
-  return (
+const HorizontalDrillDownChart = props => (
+  <Overlay content="No data available" isVisible={isChartJsDataEmpty(props.levelOneData)}>
     <HorizontalBar
-      data={drillDown ? props.levelTwoData[selected] || {} : props.levelOneData}
+      data={props.drillDown ? props.levelTwoData[props.selected] || {} : props.levelOneData}
       options={{
         legend: { display: false },
         scales: {
@@ -26,21 +19,29 @@ const HorizontalDrillDownChart = (props) => {
               padding: 5,
               stepSize: props.options.stepSize,
             },
+            scaleLabel: {
+              labelString: `Number of ${props.basis}`,
+              display: true,
+            },
           }],
           yAxes: [{
             gridLines: { display: false },
           }],
         },
       }}
-      getElementAtEvent={onClick}
+      getElementAtEvent={props.onClick}
     />
-  );
-};
+  </Overlay>
+);
 
 HorizontalDrillDownChart.propTypes = {
+  drillDown: PropTypes.bool.isRequired,
+  selected: PropTypes.string.isRequired,
   levelOneData: PropTypes.shape({}).isRequired,
   levelTwoData: PropTypes.shape({}).isRequired,
   options: PropTypes.shape({ stepSize: PropTypes.number }),
+  onClick: PropTypes.func.isRequired,
+  basis: PropTypes.string.isRequired,
 };
 
 HorizontalDrillDownChart.defaultProps = {
