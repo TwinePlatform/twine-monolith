@@ -26,14 +26,16 @@ const DateRanges = {
     switch (dateRange) {
       case DateRangesEnum.LAST_12_MONTHS:
         return {
-          since: moment().subtract(12, 'months').toDate(),
-          until: new Date(),
+          since: moment().subtract(12, 'months').add(1, 'day').startOf('day')
+            .toDate(),
+          until: moment().endOf('day').toDate(),
         };
 
       case DateRangesEnum.LAST_MONTH:
         return {
-          since: moment().subtract(1, 'month').toDate(),
-          until: new Date(),
+          since: moment().subtract(1, 'month').add(1, 'day').startOf('day')
+            .toDate(),
+          until: moment().endOf('day').toDate(),
         };
 
       case DateRangesEnum.LAST_WEEK:
@@ -45,7 +47,7 @@ const DateRanges = {
       case DateRangesEnum.THIS_WEEK:
         return {
           since: moment().startOf('isoWeek').toDate(),
-          until: new Date(),
+          until: moment().endOf('isoWeek').endOf('day').toDate(),
         };
 
       default:

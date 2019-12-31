@@ -17,7 +17,7 @@ import CsvExportButton from './CsvExportButton';
 import DateRanges from './dateRange';
 import { ErrorUtils, Visitors, Activities } from '../../../api';
 import { renameKeys, redirectOnError } from '../../../util';
-import { AgeRange } from '../../../shared/constants';
+import { AgeRange, Gender } from '../../../shared/constants';
 import { AgeGroups } from './util';
 import { getVisitorData, getVisitsData } from './data';
 
@@ -30,13 +30,16 @@ const Spacer = styled.p`
   margin: 0.4em;
 `;
 
+const BottomSpacer = styled.div`
+  height: 6rem;
+`;
+
 const H3 = styled(Heading3)`
   font-weight: bold;
 `;
 
 const BottomChartRow = styled(Row)`
   margin-top: 2em;
-  margin-bottom: 4em;
 `;
 
 const ageOptions = AgeGroups.toSelectOptions();
@@ -82,10 +85,17 @@ export default class VisitsDataPage extends React.Component {
       this.getData(),
     ])
       .then(([genderRes, activityRes]) => {
+        const genderOpts = genderRes.data.result
+          .map(({ name, ...rest }) => ({ ...rest, name: Gender.toDisplay(name) }))
+          .map(renameKeys({ id: 'key', name: 'value' }));
+
+        const activityOpts = activityRes.data.result
+          .map(renameKeys({ id: 'key', name: 'value' }));
+
         this.setState(
           compose(
-            assocPath(['options', 'genders'], [{ key: 0, value: 'All' }].concat(genderRes.data.result.map(renameKeys({ id: 'key', name: 'value' })))),
-            assocPath(['options', 'activities'], [{ key: 0, value: 'All' }].concat(activityRes.data.result.map(renameKeys({ id: 'key', name: 'value' })))),
+            assocPath(['options', 'genders'], [{ key: 0, value: 'All' }].concat(genderOpts)),
+            assocPath(['options', 'activities'], [{ key: 0, value: 'All' }].concat(activityOpts)),
           ),
         );
       })
@@ -101,9 +111,7 @@ export default class VisitsDataPage extends React.Component {
       return this.setState(assocPath(path, undefined), this.getData);
     }
 
-    const value = e.target.name === 'filters.age'
-      ? e.target.value && AgeRange.fromStr(e.target.value)
-      : e.target.value;
+    const value = this.normaliseFormValues(e.target.name, e.target.value);
 
     return this.setState(assocPath(path, value), this.getData);
   };
@@ -124,6 +132,20 @@ export default class VisitsDataPage extends React.Component {
       : getVisitorData(this.state.filters, this.state.charts)
     )
       .then(data => this.setState(data))
+      .catch(err => redirectOnError(this.props.history.push, err))
+
+  normaliseFormValues = (name, value) => {
+    switch (name) {
+      case 'filters.age':
+        return value && AgeRange.fromStr(value);
+
+      case 'filters.gender':
+        return Gender.fromDisplay(value);
+
+      default:
+        return value;
+    }
+  }
 
   render() {
     const { state } = this;
@@ -206,6 +228,12 @@ export default class VisitsDataPage extends React.Component {
           <Grid>
             <Row center="xs">
               <Col xs={8}>
+                <H3>{this.state.basis} over {this.state.filters.time.toLowerCase()}</H3>
+                <TimePeriodChart data={this.state.data.time} options={this.state.charts.time} />
+              </Col>
+            </Row>
+            <BottomChartRow center="xs">
+              <Col xs={8}>
                 <H3>Reason for visiting</H3>
                 <CategoriesChart
                   categoryData={state.data.category}
@@ -213,12 +241,6 @@ export default class VisitsDataPage extends React.Component {
                   chartOptions={state.charts.category}
                   basis={state.basis}
                 />
-              </Col>
-            </Row>
-            <BottomChartRow center="xs">
-              <Col xs={8}>
-                <H3>{state.basis} over {state.filters.time.toLowerCase()}</H3>
-                <TimePeriodChart data={state.data.time} options={state.charts.time} />
               </Col>
             </BottomChartRow>
           </Grid>
@@ -237,6 +259,9 @@ export default class VisitsDataPage extends React.Component {
             </BottomChartRow>
           </Grid>
         </TabGroup>
+        <Row>
+          <BottomSpacer />
+        </Row>
       </Grid>
     );
   }
