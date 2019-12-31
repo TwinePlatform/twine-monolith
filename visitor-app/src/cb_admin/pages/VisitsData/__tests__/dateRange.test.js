@@ -26,7 +26,7 @@ describe('DateRange', () => {
     test(`${DateRangesEnum.THIS_WEEK} :: Date range over the current calendar week only`, () => {
       expect(DateRanges.toDates(DateRangesEnum.THIS_WEEK)).toEqual({
         since: new Date('2019-10-14'),
-        until: new Date(),
+        until: new Date('2019-10-20T23:59:59.999Z'),
       });
     });
 
@@ -39,15 +39,15 @@ describe('DateRange', () => {
 
     test(`${DateRangesEnum.LAST_MONTH} :: Date range over the last 30 day period`, () => {
       expect(DateRanges.toDates(DateRangesEnum.LAST_MONTH)).toEqual({
-        since: new Date('2019-09-19'),
-        until: new Date(),
+        since: new Date('2019-09-20'),
+        until: new Date('2019-10-19T23:59:59.999Z'),
       });
     });
 
     test(`${DateRangesEnum.LAST_12_MONTHS} :: Date range over the last 12 months`, () => {
       expect(DateRanges.toDates(DateRangesEnum.LAST_12_MONTHS)).toEqual({
-        since: new Date('2018-10-19'),
-        until: new Date(),
+        since: new Date('2018-10-20'),
+        until: new Date('2019-10-19T23:59:59.999Z'),
       });
     });
   });

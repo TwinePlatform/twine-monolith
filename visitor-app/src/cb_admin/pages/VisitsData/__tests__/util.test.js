@@ -66,9 +66,9 @@ describe('Visits Data Utilities', () => {
         ];
 
         expect(VisitsStats.calculateGenderStatistics(logs)).toEqual({
-          male: 2,
-          female: 3,
-          'prefer not to say': 1,
+          Male: 2,
+          Female: 3,
+          'Prefer not to say': 1,
         });
       });
     });
@@ -257,9 +257,9 @@ describe('Visits Data Utilities', () => {
         ];
 
         expect(VisitorStats.calculateGenderStatistics(visitors)).toEqual({
-          male: 2,
-          female: 3,
-          'prefer not to say': 1,
+          Male: 2,
+          Female: 3,
+          'Prefer not to say': 1,
         });
       });
     });
