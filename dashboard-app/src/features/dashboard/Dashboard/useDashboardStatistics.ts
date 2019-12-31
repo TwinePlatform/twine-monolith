@@ -9,14 +9,24 @@ import Months from '../../../lib/util/months';
 
 
 export type EqualDataPoints = {
-  labels: string[]
-  value: number
+  labels: string[];
+  value: number;
 };
 
 
+const getDateLimits = () => [
+  moment().subtract(3, 'months'),
+  moment(),
+];
+
+const getFormattedDateLimits = () =>
+  getDateLimits()
+    .map((d) => d.format('DD MMM YYYY'))
+    .join(' - ');
+
+
 export default () => {
-  const oneYearAgo = moment().subtract(1, 'year').toDate();
-  const now = moment().toDate();
+  const [threeMonthsAgo, now] = getDateLimits().map((d) => d.toDate());
 
   const [timeStats, setTimeStats] = useState<EqualDataPoints>({ labels: [], value: 0 });
   const [volunteerStats, setVolunteerStats] = useState<EqualDataPoints>({ labels: [], value: 0 });
@@ -31,7 +41,7 @@ export default () => {
     requests: [
       {
         ...CommunityBusinesses.configs.getLogs,
-        params: { since: oneYearAgo, until: now },
+        params: { since: threeMonthsAgo, until: now },
         transformResponse: [(res: any) => res.result],
       },
       {
@@ -49,9 +59,6 @@ export default () => {
       return;
     }
 
-    const startOfThisMonth = moment().startOf('month');
-    const endOfThisMonth = moment().endOf('month');
-
     // NOTE: Should use `VolunteerLog` types instead of `any`
     const logs: any[] = logsData.data;
     const volunteers: any[] = volunteersData.data;
@@ -61,34 +68,32 @@ export default () => {
       volunteers,
       (log, volunteer) => log.userId === volunteer.id
     );
-    const monthLogs = fullLogs.filter((log) =>
-      moment(log.startedAt).isBetween(startOfThisMonth, endOfThisMonth));
 
-    // most active months (12 months)
+    // most active months (3 months)
     setTimeStats(
       findMostActive(
         collectBy((log) => moment(log.startedAt).format(Months.format.abbreviated), fullLogs)
       )
     );
 
-    // most active activities (current month)
+    // most active activities (3 months)
     setActivityStats(
       findMostActive(
-        collectBy((log) => log.activity, monthLogs)
+        collectBy((log) => log.activity, fullLogs)
       )
     );
 
-    // most active projects (current month)
+    // most active projects (3 months)
     setProjectStats(
       findMostActive(
-        collectBy((log) => log.project || 'General', monthLogs)
+        collectBy((log) => log.project || 'General', fullLogs)
       )
     );
 
-    // most active volunteers (current month)
+    // most active volunteers (3 months)
     setVolunteerStats(
       findMostActive(
-        collectBy((log) => log.name, monthLogs)
+        collectBy((log) => log.name, fullLogs)
       )
     );
   }, [error, loading, logsData, volunteersData]);
@@ -118,12 +123,11 @@ export default () => {
   }
 };
 
-const getCurrentMonth = () => moment().format(Months.format.abbreviated);
 
 export const activityStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
-  if (!pts) {
+  if (!pts || pts.value === 0) {
     return {
-      topText: ['During ', getCurrentMonth()],
+      topText: ['Between ', getFormattedDateLimits()],
       left: {
         label: 'No data available',
         data: [],
@@ -143,7 +147,7 @@ export const activityStatsToProps = (pts?: EqualDataPoints): NumberTileProps => 
   const rightLabel = `hours${pts.labels.length > 1 ? ' each' : ''}`;
 
   return {
-    topText: ['During ', getCurrentMonth()],
+    topText: ['Between ', getFormattedDateLimits()],
     left: {
       label: leftLabel,
       data: pts.labels,
@@ -159,9 +163,9 @@ export const activityStatsToProps = (pts?: EqualDataPoints): NumberTileProps => 
 
 
 export const volunteerStatsToProps = (pts?: EqualDataPoints): TextTileProps => {
-  if (!pts) {
+  if (!pts || pts.value === 0) {
     return {
-      topText: ['During ', getCurrentMonth()],
+      topText: ['Between ', getFormattedDateLimits()],
       left: {
         label: 'No data available',
         data: [],
@@ -181,7 +185,7 @@ export const volunteerStatsToProps = (pts?: EqualDataPoints): TextTileProps => {
   const rightLabel = `${pts.value} hours${pts.labels.length > 1 ? ' each' : ''}`;
 
   return {
-    topText: ['During ', getCurrentMonth()],
+    topText: ['Between ', getFormattedDateLimits()],
     left: {
       label: leftLabel,
       data: [],
@@ -197,9 +201,9 @@ export const volunteerStatsToProps = (pts?: EqualDataPoints): TextTileProps => {
 
 
 export const timeStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
-  if (!pts) {
+  if (!pts || pts.value === 0) {
     return {
-      topText: ['Over the past ', '12 months'],
+      topText: ['Between ', getFormattedDateLimits()],
       left: {
         label: 'No data available',
         data: [],
@@ -217,7 +221,7 @@ export const timeStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
   const rightLabel = `hours${pts.labels.length > 1 ? ' each' : ''}`;
 
   return {
-    topText: ['Over the past ', '12 months'],
+    topText: ['Between ', getFormattedDateLimits()],
     left: {
       label: leftLabel,
       data: pts.labels,
@@ -232,9 +236,9 @@ export const timeStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
 };
 
 export const projectStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
-  if (!pts) {
+  if (!pts || pts.value === 0) {
     return {
-      topText: ['During ', getCurrentMonth()],
+      topText: ['Between ', getFormattedDateLimits()],
       left: {
         label: 'No data available',
         data: [],
@@ -256,7 +260,7 @@ export const projectStatsToProps = (pts?: EqualDataPoints): NumberTileProps => {
   const rightLabel = `hours${pts.labels.length > 1 ? ' each' : ''}`;
 
   return {
-    topText: ['During ', getCurrentMonth()],
+    topText: ['Between ', getFormattedDateLimits()],
     left: {
       label: leftLabel,
       data: pts.labels,
