@@ -1,5 +1,5 @@
 import Mockdate from 'mockdate';
-import { AgeGroups, VisitsStats, VisitorStats, calculateStepSize } from '../util';
+import { AgeGroups, VisitsStats, VisitorStats, calculateStepSize, isChartJsDataEmpty } from '../util';
 import { DateRangesEnum } from '../dateRange';
 
 
@@ -452,6 +452,64 @@ describe('Visits Data Utilities', () => {
       expect(calculateStepSize({ foo: 10, bar: 1 })).toBe(2);
       expect(calculateStepSize({ foo: 10, bar: 100 })).toBe(20);
       expect(calculateStepSize({ foo: 22, bar: 12 })).toBe(4);
+    });
+  });
+
+  describe('isChartJsDataEmpty', () => {
+    describe('::single dataset', () => {
+
+      test('empty object returns true', () => {
+        expect(isChartJsDataEmpty({})).toBe(true);
+      });
+
+      test('empty datasets array returns true', () => {
+        expect(isChartJsDataEmpty({ datasets: [] })).toBe(true);
+      });
+
+      test('empty data array in datatsets returns true', () => {
+        expect(isChartJsDataEmpty({ datasets: [{
+          data: [],
+        }] })).toBe(true);
+      });
+
+      test('every datapoint is 0 returns true', () => {
+        expect(isChartJsDataEmpty({ datasets: [{
+          data: [0, 0, 0],
+        }] })).toBe(true);
+      });
+
+      test('one > 0 datapoint returns false', () => {
+        expect(isChartJsDataEmpty({ datasets: [{
+          data: [0, 0, 1],
+        }] })).toBe(false);
+      });
+    });
+    describe('::multiple datasets', () => {
+      test('empty data array in datatsets returns true', () => {
+        expect(isChartJsDataEmpty({ datasets: [
+          { data: [] },
+          { data: [] },
+          { data: [] },
+          { data: [] },
+        ] })).toBe(true);
+      });
+
+      test('every datapoint is 0 returns true', () => {
+        expect(isChartJsDataEmpty({ datasets: [
+          { data: [0, 0, 0] },
+          { data: [0, 0, 0] },
+          { data: [0, 0, 0] },
+        ] })).toBe(true);
+      });
+
+      test('one > 0 datapoint returns false', () => {
+        expect(isChartJsDataEmpty({ datasets: [
+          { data: [0, 0, 0] },
+          { data: [0, 0, 0] },
+          { data: [0, 0, 0] },
+          { data: [0, 0, 1] },
+        ] })).toBe(false);
+      });
     });
   });
 });

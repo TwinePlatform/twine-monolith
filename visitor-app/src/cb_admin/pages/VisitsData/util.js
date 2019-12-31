@@ -174,19 +174,10 @@ export const preProcessVisitors = (visitors, filters, since, until) => visitors
 
 // isChartJsDataEmpty :: { k: v } -> bool
 export const isChartJsDataEmpty = (data) => {
-  if (!('datasets' in data)) {
-    return true;
-  }
-
-  if (data.datasets.length === 0) {
-    return true;
-  }
-
-  if (data.datasets.every(dataset => dataset.data.length === 0)) {
-    return true;
-  }
-
-  if (data.datasets.every(dataset => dataset.data.every(datapoint => datapoint === 0))) {
+  if (!('datasets' in data)
+    || data.datasets.length === 0
+    || data.datasets.every(dataset => dataset.data.length === 0)
+    || data.datasets.every(dataset => dataset.data.every(datapoint => datapoint === 0))) {
     return true;
   }
 
