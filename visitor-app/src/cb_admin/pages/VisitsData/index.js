@@ -34,6 +34,11 @@ const H3 = styled(Heading3)`
   font-weight: bold;
 `;
 
+const BottomChartRow = styled(Row)`
+  margin-top: 2em;
+  margin-bottom: 4em;
+`;
+
 const ageOptions = AgeGroups.toSelectOptions();
 const timeOptions = DateRanges.toSelectOptions();
 
@@ -210,12 +215,12 @@ export default class VisitsDataPage extends React.Component {
                 />
               </Col>
             </Row>
-            <Row center="xs">
+            <BottomChartRow center="xs">
               <Col xs={8}>
                 <H3>{state.basis} over {state.filters.time.toLowerCase()}</H3>
                 <TimePeriodChart data={state.data.time} options={state.charts.time} />
               </Col>
-            </Row>
+            </BottomChartRow>
           </Grid>
           <Grid>
             <Row center="xs">
@@ -224,17 +229,14 @@ export default class VisitsDataPage extends React.Component {
                 <GenderChart data={state.data.gender} />
               </Col>
             </Row>
-            <Row center="xs">
+            <BottomChartRow center="xs">
               <Col xs={6}>
                 <H3>{state.basis} by age</H3>
                 <AgeGroupChart data={state.data.age} />
               </Col>
-            </Row>
+            </BottomChartRow>
           </Grid>
         </TabGroup>
-        <Row>
-          <Spacer />
-        </Row>
       </Grid>
     );
   }
