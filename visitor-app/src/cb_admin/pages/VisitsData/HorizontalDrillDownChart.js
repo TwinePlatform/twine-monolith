@@ -19,6 +19,10 @@ const HorizontalDrillDownChart = props => (
               padding: 5,
               stepSize: props.options.stepSize,
             },
+            scaleLabel: {
+              labelString: `Number of ${props.basis}`,
+              display: true,
+            },
           }],
           yAxes: [{
             gridLines: { display: false },
@@ -37,6 +41,7 @@ HorizontalDrillDownChart.propTypes = {
   levelTwoData: PropTypes.shape({}).isRequired,
   options: PropTypes.shape({ stepSize: PropTypes.number }),
   onClick: PropTypes.func.isRequired,
+  basis: PropTypes.string.isRequired,
 };
 
 HorizontalDrillDownChart.defaultProps = {

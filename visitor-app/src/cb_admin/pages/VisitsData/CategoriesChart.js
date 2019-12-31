@@ -4,7 +4,7 @@ import { Paragraph } from '../../../shared/components/text/base';
 import HorizontalDrillDownChart from './HorizontalDrillDownChart';
 
 
-const CategoriesChart = ({ categoryData, activityData, chartOptions }) => {
+const CategoriesChart = ({ categoryData, activityData, chartOptions, basis }) => {
   const [drillDown, setDrillDown] = useState(false);
   const [selected, setSelected] = useState('');
 
@@ -43,6 +43,8 @@ const CategoriesChart = ({ categoryData, activityData, chartOptions }) => {
         levelTwoData={activityData}
         options={chartOptions}
         onClick={onClick}
+        basis={basis}
+
       />
     </>
   );
@@ -52,6 +54,7 @@ CategoriesChart.propTypes = {
   categoryData: PropTypes.shape({}).isRequired,
   activityData: PropTypes.shape({}).isRequired,
   chartOptions: PropTypes.shape({}).isRequired,
+  basis: PropTypes.string.isRequired,
 };
 
 export default CategoriesChart;

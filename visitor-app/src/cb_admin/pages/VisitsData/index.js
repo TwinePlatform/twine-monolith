@@ -206,6 +206,7 @@ export default class VisitsDataPage extends React.Component {
                   categoryData={state.data.category}
                   activityData={state.data.activity}
                   chartOptions={state.charts.category}
+                  basis={state.basis}
                 />
               </Col>
             </Row>
