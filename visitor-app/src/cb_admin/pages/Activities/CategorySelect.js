@@ -16,6 +16,7 @@ const SelectArrow = styled.div`
 
 const SelectWrapper = styled(_SelectWrapper)`
   margin-bottom: 0;
+  width: 95%;
 `;
 
 
