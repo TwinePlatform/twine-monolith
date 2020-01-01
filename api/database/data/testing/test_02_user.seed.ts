@@ -1,5 +1,10 @@
 import * as Knex from 'knex';
+import * as moment from 'moment';
 import { hashSync } from 'bcrypt';
+
+const makeYearStringFromAge = (age: number) => {
+  return (Number(moment().format('YYYY')) - age).toString()
+}
 
 const gladosPassword = hashSync('CakeisaLi3!', 12);
 const gordonPassword = hashSync('i<3Hawkin', 12);
@@ -17,7 +22,7 @@ exports.seed = async (knex: Knex) => {
       email: '1498@aperturescience.com',
       phone_number: '+1 425-450-4464',
       post_code: '49829',
-      birth_year: '1988',
+      birth_year: makeYearStringFromAge(31), //age 31
       is_email_confirmed: false,
       is_phone_number_confirmed: false,
       is_email_contact_consent_granted: false,
@@ -44,7 +49,7 @@ exports.seed = async (knex: Knex) => {
       email: '1@aperturescience.com',
       phone_number: '+1 425-450-4464',
       post_code: '49829',
-      birth_year: '1900',
+      birth_year: makeYearStringFromAge(83), //age 83
       is_email_confirmed: false,
       is_phone_number_confirmed: false,
       is_email_contact_consent_granted: false,
@@ -71,7 +76,7 @@ exports.seed = async (knex: Knex) => {
       email: '1998@blackmesaresearch.com',
       phone_number: '+1 555-555-3141',
       post_code: '82394',
-      birth_year: 1974,
+      birth_year: makeYearStringFromAge(45), //age 45
       is_email_confirmed: false,
       is_phone_number_confirmed: false,
       is_email_contact_consent_granted: false,
@@ -99,7 +104,7 @@ exports.seed = async (knex: Knex) => {
       email: '2305@blackmesaresearch.com',
       phone_number: '+1 555-555-3141',
       post_code: '82394',
-      birth_year: 1974,
+      birth_year: makeYearStringFromAge(45), //age 45
       is_email_confirmed: false,
       is_phone_number_confirmed: false,
       is_email_contact_consent_granted: false,
@@ -140,7 +145,7 @@ exports.seed = async (knex: Knex) => {
       email: 'emma@sol.com',
       phone_number: '+1 555-555-3141',
       post_code: '82394',
-      birth_year: 1996,
+      birth_year: makeYearStringFromAge(23), //age 23
       is_email_confirmed: true,
       is_phone_number_confirmed: false,
       is_email_contact_consent_granted: false,
@@ -167,7 +172,7 @@ exports.seed = async (knex: Knex) => {
       email: 'raiden@aotd.com',
       phone_number: '+1 555-555-3141',
       post_code: '82394',
-      birth_year: 1996,
+      birth_year: makeYearStringFromAge(23), //age 23
       is_email_confirmed: true,
       is_phone_number_confirmed: false,
       is_email_contact_consent_granted: false,
@@ -195,7 +200,7 @@ exports.seed = async (knex: Knex) => {
       email: '1010@aperturescience.com',
       phone_number: '+1 555-555-3141',
       post_code: '82394',
-      birth_year: 1999,
+      birth_year: makeYearStringFromAge(20), //age 20
       is_email_confirmed: true,
       is_phone_number_confirmed: false,
       is_email_contact_consent_granted: false,
@@ -229,7 +234,7 @@ exports.seed = async (knex: Knex) => {
       email: '',
       phone_number: '+1 425-450-4464',
       post_code: '49829',
-      birth_year: null,
+      birth_year: null, // Prefer not to say
       is_email_confirmed: false,
       is_phone_number_confirmed: false,
       is_email_contact_consent_granted: false,

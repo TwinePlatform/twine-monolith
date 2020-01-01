@@ -303,7 +303,6 @@ describe('Community Business Model', () => {
       expect(logs).toEqual(expect.arrayContaining([
         expect.objectContaining({
           visitActivity: 'Free Running',
-          birthYear: 1988,
           category: 'Sports',
           gender: 'female',
           id: 1,

@@ -62,7 +62,6 @@ describe('API v1 - register new users', () => {
           organisationId: 1,
           name: 'Chell',
           gender: 'female',
-          birthYear: 1988,
           email: '1498@aperturescience.com',
           postCode: 'ST10 4DB',
         },
@@ -116,7 +115,6 @@ describe('API v1 - register new users', () => {
           organisationId: 9352,
           name: 'foo',
           gender: 'female',
-          birthYear: 1988,
           email: '13542@google.com',
           postCode: 'ST10 4DB',
         },
@@ -136,7 +134,6 @@ describe('API v1 - register new users', () => {
           organisationId: 2,
           name: 'foo',
           gender: 'female',
-          birthYear: 1988,
           email: '13542@google.com',
           postCode: 'ST10 4DB',
         },
@@ -156,7 +153,6 @@ describe('API v1 - register new users', () => {
           organisationId: 2,
           name: 'foo',
           gender: 'female',
-          birthYear: 1988,
           email: 'raiden@aotd.com', // email of VOLUNTEER_ADMIN
           postCode: 'ST10 4DB',
         },
@@ -176,7 +172,6 @@ describe('API v1 - register new users', () => {
           organisationId: 1,
           name: 'Emma Emmerich',
           gender: 'female',
-          birthYear: 1900,
           email: 'emma@sol.com',
           postCode: 'ST10 4DB',
         },
@@ -198,7 +193,6 @@ describe('API v1 - register new users', () => {
           organisationId: 2,
           name: 'Emma Emmerich',
           gender: 'female',
-          birthYear: 1900,
           email: 'emma@sol.com',
           postCode: 'ST10 4DB',
         },
@@ -247,7 +241,6 @@ describe('API v1 - register new users', () => {
           organisationId: 1,
           name: 'foo',
           gender: 'female',
-          birthYear: 1988,
           isAnonymous: true,
         },
         credentials,
@@ -257,7 +250,6 @@ describe('API v1 - register new users', () => {
       expect((<any> res.result).result).toEqual(expect.objectContaining({
         name: 'foo',
         gender: 'female',
-        birthYear: 1988,
         email: 'anon_0_org_1',
       }));
     });
@@ -270,7 +262,6 @@ describe('API v1 - register new users', () => {
           organisationId: 1,
           name: 'cloud strife',
           gender: 'male',
-          birthYear: 1988,
           email: 'strife@shinra.jp'
         },
         credentials,
@@ -280,7 +271,6 @@ describe('API v1 - register new users', () => {
       expect((<any> res.result).result).toEqual(expect.objectContaining({
         name: 'cloud strife',
         gender: 'male',
-        birthYear: 1988,
         email: 'strife@shinra.jp'
       }));
     });
@@ -293,7 +283,6 @@ describe('API v1 - register new users', () => {
           organisationId: 1,
           name: 'foo',
           gender: 'female',
-          birthYear: 1988,
           email: '13542@google.com',
           postCode: 'ST10 4DB',
         },
@@ -304,7 +293,6 @@ describe('API v1 - register new users', () => {
       expect((<any> res.result).result).toEqual(expect.objectContaining({
         name: 'foo',
         gender: 'female',
-        birthYear: 1988,
         email: '13542@google.com',
       }));
     });
@@ -317,7 +305,6 @@ describe('API v1 - register new users', () => {
           organisationId: 1,
           name: 'foo',
           gender: 'female',
-          birthYear: 1988,
           isAnonymous: true,
           postCode: 'ST10 4DB',
         },
@@ -328,7 +315,6 @@ describe('API v1 - register new users', () => {
       expect((<any> res.result).result).toEqual(expect.objectContaining({
         name: 'foo',
         gender: 'female',
-        birthYear: 1988,
         email: 'anon_0_org_1',
       }));
 
@@ -339,7 +325,6 @@ describe('API v1 - register new users', () => {
           organisationId: 1,
           name: 'boo',
           gender: 'female',
-          birthYear: 1988,
           isAnonymous: true,
           postCode: 'ST10 4DB',
         },
@@ -350,7 +335,6 @@ describe('API v1 - register new users', () => {
       expect((<any> res2.result).result).toEqual(expect.objectContaining({
         name: 'boo',
         gender: 'female',
-        birthYear: 1988,
         email: 'anon_1_org_1',
       }));
     });
