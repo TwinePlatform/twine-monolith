@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import MockDate from 'mockdate';
-import { axios } from '../../../../api';
+import { axios } from '../../../../../api';
 import { DateRangesEnum } from '../dateRange';
 import { getVisitorData } from '../data';
 

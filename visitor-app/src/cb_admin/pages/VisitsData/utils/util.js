@@ -3,8 +3,8 @@
  */
 import moment from 'moment';
 import { curry, pick, zip, identity, toPairs, head, last, map, assoc, assocPath, mergeWith, add, uniq, fromPairs, mergeDeepWith, mergeRight } from 'ramda';
-import { collectBy, mapValues, ones, combineValues } from '../../../util';
-import { createAgeGroups, Gender } from '../../../shared/constants';
+import { collectBy, mapValues, ones, combineValues } from '../../../../util';
+import { createAgeGroups, Gender } from '../../../../shared/constants';
 import DateRanges, { DateRangesEnum } from './dateRange';
 
 export const AgeGroups = createAgeGroups(['0-17', '18-34', '35-50', '51-69', '70+']);

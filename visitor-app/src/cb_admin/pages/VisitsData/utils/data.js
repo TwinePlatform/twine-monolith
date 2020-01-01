@@ -5,12 +5,12 @@
  * formatted to be compatible with Chart.js
  */
 import { filter } from 'ramda';
-import { CommunityBusiness, Visitors, Activities } from '../../../api';
-import { mapValues } from '../../../util';
+import { CommunityBusiness, Visitors, Activities } from '../../../../api';
+import { mapValues } from '../../../../util';
 import DateRanges from './dateRange';
 import { VisitsStats, calculateStepSize, formatChartData, VisitorStats, preProcessVisitors } from './util';
-import { colors, colourPalette } from '../../../shared/style_guide';
-import { AgeRange } from '../../../shared/constants';
+import { colors, colourPalette } from '../../../../shared/style_guide';
+import { AgeRange } from '../../../../shared/constants';
 
 
 /*
