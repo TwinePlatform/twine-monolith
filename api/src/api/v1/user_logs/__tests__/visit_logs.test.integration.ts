@@ -68,7 +68,6 @@ describe('GET /visit-logs', () => {
     expect(res.statusCode).toBe(200);
     expect((<any> res.result).result).toEqual(expect.arrayContaining([
       {
-        birthYear: 1988,
         category: 'Socialising',
         gender: 'female',
         id: 8,
@@ -77,7 +76,6 @@ describe('GET /visit-logs', () => {
         visitActivity: 'Wear Pink',
       },
       {
-        birthYear: 1988,
         category: 'Sports',
         gender: 'female',
         id: 7,

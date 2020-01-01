@@ -72,7 +72,6 @@ describe('PUT /users', () => {
         payload: {
           name: 'Wheatley',
           gender: 'male',
-          birthYear: 1983,
           email: 'wheatus@aperture.com',
           phoneNumber: '02076542783',
           postCode: 'SW1 4FG',
@@ -90,7 +89,6 @@ describe('PUT /users', () => {
           id: 2,
           name: 'Wheatley',
           gender: 'male',
-          birthYear: 1983,
           email: 'wheatus@aperture.com',
           phoneNumber: '02076542783',
           postCode: 'SW1 4FG',
@@ -195,7 +193,6 @@ describe('PUT /users', () => {
         payload: {
           name: 'Tubby',
           gender: 'male',
-          birthYear: 1972,
           email: 'tubbs@aperture.com',
           phoneNumber: '07892374881',
           postCode: 'N4 9HH',
@@ -213,7 +210,6 @@ describe('PUT /users', () => {
           id: 1,
           name: 'Tubby',
           gender: 'male',
-          birthYear: 1972,
           email: 'tubbs@aperture.com',
           phoneNumber: '07892374881',
           postCode: 'N4 9HH',

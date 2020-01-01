@@ -195,7 +195,6 @@ describe('Volunteer model', () => {
       expect(deletedRows).toBe(1);
       expect(userCheck).toBe(null);
       expect(userCheck2).toEqual(expect.objectContaining({
-        birthYear: 1996,
         disability: 'yes',
         email: null,
         ethnicity: 'prefer not to say',

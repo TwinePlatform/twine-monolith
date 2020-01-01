@@ -69,7 +69,6 @@ describe('API PUT /community-businesses/me/visitors/{id}', () => {
       payload: {
         name: 'Tubby',
         gender: 'male',
-        birthYear: 1972,
         email: 'tubbs@aperture.com',
         phoneNumber: '07892374881',
         postCode: 'H3 3LP',
@@ -87,7 +86,6 @@ describe('API PUT /community-businesses/me/visitors/{id}', () => {
         id: 1,
         name: 'Tubby',
         gender: 'male',
-        birthYear: 1972,
         email: 'tubbs@aperture.com',
         phoneNumber: '07892374881',
         postCode: 'H3 3LP',

@@ -111,7 +111,6 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
         expect.arrayContaining([
           expect.objectContaining({
             visitActivity: 'Free Running',
-            birthYear: 1988,
             category: 'Sports',
             gender: 'female',
             id: 1,
@@ -152,7 +151,6 @@ describe('API v1 :: Community Businesses :: Visit Logs', () => {
         expect.arrayContaining([
           expect.objectContaining({
             visitActivity: 'Free Running',
-            birthYear: 1988,
             category: 'Sports',
             gender: 'female',
             id: 1,
