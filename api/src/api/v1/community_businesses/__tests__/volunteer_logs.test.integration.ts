@@ -113,9 +113,9 @@ describe('API /community-businesses/me/volunteer-logs', () => {
       expect(res.statusCode).toBe(200);
       expect((<any> res.result).result).toHaveLength(6);
       expect((<any> res.result).result
-          .map((l: VolunteerLog) => l.startedAt)
-          .every((d: Date) => d <= until.toDate()))
-      .toBe(true);
+        .map((l: VolunteerLog) => l.startedAt)
+        .every((d: Date) => d <= until.toDate()))
+        .toBe(true);
     });
 
     test('SUCCESS - can get select fields for own organisations logs', async () => {
@@ -1015,19 +1015,19 @@ describe('API /community-businesses/me/volunteer-logs', () => {
     });
 
     test('HACK - allows invalid logs through but ignores them', async () => {
-      const month = moment().format('MM');
-      const prev = moment().subtract(1, 'month').format('MM');
+      const todaysDate = moment().format('YYYY-MM-DD');
+      const lastMonth = moment().subtract(1, 'month').format('YYYY-MM-DD');
 
       const logs = [
         // valid
-        { activity: 'Other', duration: { minutes: 10 }, startedAt: `2019-${month}-05 13:03:22` },
+        { activity: 'Other', duration: { minutes: 10 }, startedAt: `${todaysDate} 13:03:22` },
         // invalid "startedAt"
         { activity: 'Office support', duration: { minutes: 20 }, startedAt: 'undefined 13:03:22' },
         // invalid "deletedAt"
-        { activity: 'Other', duration: { hours: 1 }, startedAt: `2019-${month}-01 03:13:02`,
+        { activity: 'Other', duration: { hours: 1 }, startedAt: `${todaysDate} 03:13:02`,
           deletedAt: 'foo' },
         // "startedAt" from previous month
-        { activity: 'Other', duration: { hours: 1 }, startedAt: `2019-${prev}-01 03:13:02` },
+        { activity: 'Other', duration: { hours: 1 }, startedAt: `${lastMonth} 03:13:02` },
       ];
 
       const res = await server.inject(injectCfg({
@@ -1051,9 +1051,9 @@ describe('API /community-businesses/me/volunteer-logs', () => {
 
       expect(dbLogs).toHaveLength(8);
       expect(dbLogs.some((log) =>
-        log.started_at.toISOString().startsWith(`2019-${prev}-01`))).toBe(false);
+        log.started_at.toISOString().startsWith(lastMonth))).toBe(false);
       expect(dbLogs.some((log) =>
-        log.started_at.toISOString().startsWith(`2019-${month}-05`))).toBe(true);
+        log.started_at.toISOString().startsWith(todaysDate))).toBe(true);
 
       expect(monitoring).toHaveLength(1);
       expect(monitoring[0].payload).toEqual(logs.slice(1).map((log) => ({ ...log, userId: 'me' })));
