@@ -56,7 +56,6 @@ describe('API v1 - register new users', () => {
           organisationId: 1,
           name: 'foo',
           gender: 'female',
-          birthYear: 1988,
           email: '13542@google.com',
           password: 'fighteS1994!',
           role: RoleEnum.VOLUNTEER,
@@ -67,7 +66,6 @@ describe('API v1 - register new users', () => {
       expect((<any> res.result).result).toEqual(expect.objectContaining({
         name: 'foo',
         gender: 'female',
-        birthYear: 1988,
         email: '13542@google.com',
       }));
     });
@@ -80,7 +78,6 @@ describe('API v1 - register new users', () => {
           organisationId: 1,
           name: 'foo',
           gender: 'female',
-          birthYear: 1988,
           email: '13542@google.com',
           password: 'fighteS1994!',
           role: RoleEnum.VOLUNTEER_ADMIN,
@@ -92,7 +89,6 @@ describe('API v1 - register new users', () => {
       expect((<any> res.result).result).toEqual(expect.objectContaining({
         name: 'foo',
         gender: 'female',
-        birthYear: 1988,
         email: '13542@google.com',
       }));
     });
@@ -109,7 +105,6 @@ describe('API v1 - register new users', () => {
           organisationId: 1,
           name: 'Chell',
           gender: 'female',
-          birthYear: 1988,
           email: '1498@aperturescience.com',
           password: 'c<3mpanionCube',
           role: RoleEnum.VOLUNTEER,
@@ -156,7 +151,6 @@ describe('API v1 - register new users', () => {
            organisationId: 1,
            name: 'Chell',
            gender: 'female',
-           birthYear: 1988,
            email: '1498@aperturescience.com',
            password: 'c<3mpanionCube',
            role: RoleEnum.VOLUNTEER_ADMIN,
@@ -177,7 +171,6 @@ describe('API v1 - register new users', () => {
            organisationId: 1,
            name: 'Emma Emmerich',
            gender: 'female',
-           birthYear: 1988,
            email: 'emma@sol.com',
            password: 'c<3mpanionCube',
            role: RoleEnum.VOLUNTEER,
@@ -199,7 +192,6 @@ describe('API v1 - register new users', () => {
            organisationId: 2,
            name: 'Chell',
            gender: 'female',
-           birthYear: 1988,
            email: '1498@aperturescience.com',
            password: 'c<3mpanionCube',
            role: RoleEnum.VOLUNTEER,
@@ -220,7 +212,6 @@ describe('API v1 - register new users', () => {
           organisationId: 9352,
           name: 'foo',
           gender: 'female',
-          birthYear: 1988,
           email: '13542@google.com',
           password: 'fighteS1994!',
           role: RoleEnum.VOLUNTEER,
@@ -239,7 +230,6 @@ describe('API v1 - register new users', () => {
           organisationId: 1,
           name: 'foo',
           gender: 'female',
-          birthYear: 1988,
           email: '13542@google.com',
           password: 'fighteS1994!',
           role: RoleEnum.VOLUNTEER_ADMIN,
@@ -259,7 +249,6 @@ describe('API v1 - register new users', () => {
           organisationId: 1,
           name: 'foo',
           gender: 'female',
-          birthYear: 1988,
           email: '13542@google.com',
           password: 'fighteS1994!',
           role: RoleEnum.VOLUNTEER_ADMIN,

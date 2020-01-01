@@ -39,7 +39,6 @@ describe('User Model', () => {
           disability: 'no',
           ethnicity: 'prefer not to say',
           email: '1498@aperturescience.com',
-          birthYear: 1988,
           isEmailConfirmed: false,
         }),
       ]));
