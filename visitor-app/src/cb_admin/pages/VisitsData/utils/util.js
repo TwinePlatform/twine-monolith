@@ -4,7 +4,7 @@
 import moment from 'moment';
 import { curry, pick, zip, identity, toPairs, head, last, map, assoc, assocPath, mergeWith, add, uniq, fromPairs, mergeDeepWith, mergeRight } from 'ramda';
 import { collectBy, mapValues, ones, combineValues } from '../../../../util';
-import { createAgeGroups, Gender } from '../../../../shared/constants';
+import { createAgeGroups, Gender, BirthYear } from '../../../../shared/constants';
 import DateRanges, { DateRangesEnum } from './dateRange';
 
 export const AgeGroups = createAgeGroups(['0-17', '18-34', '35-50', '51-69', '70+']);
@@ -16,7 +16,7 @@ const normaliseDate = curry((dateRange, d) =>
     : moment(d));
 
 // isAgeGiven :: Log -> Boolean
-const isAgeGiven = log => typeof log.birthYear === 'number';
+// const isAgeGiven = log => typeof log.birthYear === 'number';
 
 // count :: { k: [a] } -> { k: Number }
 const count = o => mapValues(xs => xs.length, o);
@@ -29,7 +29,7 @@ export const VisitsStats = {
   calculateAgeGroupStatistics: logs =>
     count(collectBy(
       identity,
-      logs.filter(isAgeGiven).map(l => AgeGroups.fromBirthYear(l.birthYear)),
+      logs.map(l => AgeGroups.fromBirthYear(l.birthYear)),
     )),
 
   // calculateCategoryStatistics :: [Log] -> { k: Number }
@@ -68,7 +68,7 @@ export const VisitorStats = {
   calculateAgeGroupStatistics: visitors =>
     count(collectBy(
       identity,
-      visitors.filter(isAgeGiven).map(l => AgeGroups.fromBirthYear(l.birthYear)),
+      visitors.map(v => AgeGroups.fromBirthYear(v.birthYear)),
     )),
 
   // calculateCategoryStatistics :: [VisitorWithVisitData] -> { k: Number }
@@ -116,7 +116,12 @@ export const calculateStepSize = stats =>
 
 // formatChartData :: ({ k: v }, [string], { label?: string, sorter: (l, r) -> number }) -> { k: v }
 export const formatChartData = (data, bgColor, { label, sorter } = {}) => {
-  const pairedData = sorter ? toPairs(data).sort(sorter) : toPairs(data);
+  const pairedData = sorter
+    ? toPairs(data)
+      .filter(x => x[0] !== BirthYear.NULL_VALUE)
+      .sort(sorter)
+      .concat(toPairs(data).filter(x => x[0] === BirthYear.NULL_VALUE))
+    : toPairs(data);
 
   const labels = map(head, pairedData);
 
