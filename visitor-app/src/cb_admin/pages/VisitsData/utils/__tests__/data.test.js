@@ -40,6 +40,16 @@ describe('Visits Dashboard Data Processing', () => {
                 { id: 4, visitActivity: 'running', category: 'sport', createdAt: '2019-10-21T11:00:00.000Z' },
               ],
             },
+            {
+              id: 2,
+              name: 'Mom',
+              gender: 'female',
+              birthYear: null,
+              visits: [
+                { id: 5, visitActivity: 'yoga', category: 'sport', createdAt: '2019-10-09T11:00:00.000Z' },
+                { id: 6, visitActivity: 'running', category: 'sport', createdAt: '2019-10-21T11:00:00.000Z' },
+              ],
+            },
           ],
           meta: { count: 1 },
         });
@@ -74,12 +84,14 @@ describe('Visits Dashboard Data Processing', () => {
         },
         data: {
           age: {
-            datasets: [{ data: [1, 1], backgroundColor: ['#6370BC', '#379A90'], label: undefined }],
-            labels: ['18-34', '51-69'],
+            datasets: [{ data: [1, 1, 1],
+              backgroundColor: ['#6370BC', '#379A90', '#D7E360'],
+              label: undefined }],
+            labels: ['18-34', '51-69', 'Prefer not to say'],
           },
           activity: {
             sport: {
-              datasets: [{ data: [1, 2], backgroundColor: '#833FF7', label: undefined }],
+              datasets: [{ data: [2, 3], backgroundColor: '#833FF7', label: undefined }],
               labels: ['yoga', 'running'],
             },
             art: {
@@ -88,11 +100,11 @@ describe('Visits Dashboard Data Processing', () => {
             },
           },
           gender: {
-            datasets: [{ data: [1, 1], backgroundColor: ['#47ABFA', '#6370BC'], label: undefined }],
+            datasets: [{ data: [1, 2], backgroundColor: ['#47ABFA', '#6370BC'], label: undefined }],
             labels: ['Male', 'Female'],
           },
           time: {
-            datasets: [{ data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2], backgroundColor: '#833FF7', label: undefined }],
+            datasets: [{ data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3], backgroundColor: '#833FF7', label: undefined }],
             labels: [
               'Nov 2018',
               'Dec 2018',
@@ -109,7 +121,7 @@ describe('Visits Dashboard Data Processing', () => {
             ],
           },
           category: {
-            datasets: [{ data: [2, 1], backgroundColor: '#833FF7', label: undefined }],
+            datasets: [{ data: [3, 1], backgroundColor: '#833FF7', label: undefined }],
             labels: ['sport', 'art'],
           },
         },

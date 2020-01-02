@@ -80,6 +80,7 @@ describe('Visits Data Utilities', () => {
 
       test('basic sanity check', () => {
         const logs = [
+          { birthYear: null },
           { birthYear: 1999 },
           { birthYear: 2019 },
           { birthYear: 1980 },
@@ -93,6 +94,7 @@ describe('Visits Data Utilities', () => {
           '18-34': 2,
           '35-50': 2,
           '51-69': 1,
+          'Prefer not to say': 1,
         });
       });
     });
@@ -277,6 +279,8 @@ describe('Visits Data Utilities', () => {
           { birthYear: 1954 },
           { birthYear: 1971 },
           { birthYear: 1988 },
+          { birthYear: null },
+          { birthYear: null },
         ];
 
         expect(VisitorStats.calculateAgeGroupStatistics(visitors)).toEqual({
@@ -284,6 +288,7 @@ describe('Visits Data Utilities', () => {
           '18-34': 2,
           '35-50': 2,
           '51-69': 1,
+          'Prefer not to say': 2,
         });
       });
     });

@@ -10,7 +10,7 @@ import { mapValues } from '../../../../util';
 import DateRanges from './dateRange';
 import { VisitsStats, calculateStepSize, formatChartData, VisitorStats, preProcessVisitors } from './util';
 import { colors, colourPalette } from '../../../../shared/style_guide';
-import { AgeRange } from '../../../../shared/constants';
+import { AgeRange, BirthYear } from '../../../../shared/constants';
 
 
 /*
@@ -36,6 +36,7 @@ const Colours = {
     '35-50': colourPalette.muted.blue,
     '51-69': colourPalette.muted.emerald,
     '70+': colourPalette.muted.green,
+    [BirthYear.NULL_VALUE]: colourPalette.muted.lime,
   },
 };
 
