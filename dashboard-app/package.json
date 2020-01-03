@@ -65,7 +65,7 @@
     "rebound": "^0.1.0",
     "styled-components": "^4.3.2",
     "twine-util": "file:../lib/twine-util",
-    "typescript": "^3.5.2"
+    "typescript": "^3.7.4"
   },
   "scripts": {
     "start": "PORT=3100 react-scripts start",
