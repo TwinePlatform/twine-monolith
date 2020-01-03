@@ -16,8 +16,8 @@
     "Aisha Nasir <aisha@foundersandcoders.com>"
   ],
   "dependencies": {
-    "@types/node": "^11.13.2",
-    "@types/ramda": "^0.26.19",
+    "@types/node": "^11.15.3",
+    "@types/ramda": "^0.26.39",
     "axios": "^0.18.0",
     "moment": "^2.24.0",
     "ramda": "^0.26.1",
