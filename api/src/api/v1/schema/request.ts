@@ -87,7 +87,7 @@ export const query: Record<keyof ApiRequestQuery, Joi.Schema> = {
  * Commonly used payload schema
  */
 export const gender =
-  Joi.string().only(['male', 'female', 'prefer not to say']);
+  Joi.string().only(['male', 'female', 'prefer not to say', 'non-binary', 'intersex', 'other']);
 
 export const id =
   Joi.number().integer().positive();
