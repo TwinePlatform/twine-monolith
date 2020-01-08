@@ -84,8 +84,6 @@ const UserForm: FC<Props> = ({ action, onSubmit, defaultValues = {} }) => {
     register, setValue, handleSubmit, errors, triggerValidation, getValues,
   } = useForm<FormData>({ defaultValues, validationSchema });
 
-  console.log({ values: getValues() });
-
   return (
     <Form>
       <Input
@@ -126,7 +124,7 @@ const UserForm: FC<Props> = ({ action, onSubmit, defaultValues = {} }) => {
         label="Year of birth"
         options={birthYears}
         onValueChange={(text) => setValue('birthYear', text)}
-        defaultValue={defaultValues.birthYear}
+        defaultValue={defaultValues.birthYear && defaultValues.birthYear.toString()}
       />
       <Input
         ref={register({ name: 'postCode' })}

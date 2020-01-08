@@ -25,10 +25,12 @@ type Props = {
  */
 const EditVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
   const dispatch = useDispatch();
+  const volunteerDetails = navigation.state.params;
 
   const onSubmit = async (formState) => {
     const changeset = filter(Boolean, formState);
-    dispatch(updateVolunteer(changeset));
+    dispatch(updateVolunteer({ id: volunteerDetails.id, ...changeset }));
+
     // TODO: modal to show data has been saved
     navigation.navigate('Volunteers');
   };
@@ -37,7 +39,7 @@ const EditVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
     <Page heading="Edit Volunteer">
       <UserForm
         onSubmit={onSubmit}
-        defaultValues={filter(Boolean, navigation.state.params)}
+        defaultValues={filter(Boolean, volunteerDetails)}
         action="update"
       />
     </Page>
