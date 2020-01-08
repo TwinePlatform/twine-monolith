@@ -30,6 +30,7 @@ export type VolunteersState = RequestState<User> & {
   createIsFetching: boolean;
   createError: Error;
   updateIsFetching: boolean;
+  updateSuccess: boolean;
   updateError: Error;
   deleteIsFetching: boolean;
   deleteError: Error;

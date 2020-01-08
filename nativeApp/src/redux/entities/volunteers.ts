@@ -22,6 +22,7 @@ enum ActionsType {
   UPDATE_VOLUNTEER_REQUEST = 'volunteer/UPDATE_REQUEST',
   UPDATE_VOLUNTEER_ERROR = 'volunteer/UPDATE_ERROR',
   UPDATE_VOLUNTEER_SUCCESS = 'volunteer/UPDATE_SUCCESS',
+  UPDATE_VOLUNTEER_RESET = 'volunteer/UPDATE_RESET',
 
   DELETE_VOLUNTEER_REQUEST = 'volunteer/DELETE_REQUEST',
   DELETE_VOLUNTEER_ERROR = 'volunteer/DELETE_ERROR',
@@ -42,6 +43,7 @@ type CreateVolunteerError = ErrorAction<ActionsType.CREATE_VOLUNTEER_ERROR>
 type UpdateVolunteerRequest = RequestAction<ActionsType.UPDATE_VOLUNTEER_REQUEST>
 type UpdateVolunteerSuccess = SuccessAction<ActionsType.UPDATE_VOLUNTEER_SUCCESS, User[]>
 type UpdateVolunteerError = ErrorAction<ActionsType.UPDATE_VOLUNTEER_ERROR>
+type UpdateVolunteerReset = RequestAction<ActionsType.UPDATE_VOLUNTEER_RESET>
 
 type DeleteVolunteerRequest = RequestAction<ActionsType.DELETE_VOLUNTEER_REQUEST>
 type DeleteVolunteerSuccess = SuccessAction<ActionsType.DELETE_VOLUNTEER_SUCCESS, User[]>
@@ -50,7 +52,7 @@ type DeleteVolunteerError = ErrorAction<ActionsType.DELETE_VOLUNTEER_ERROR>
 type Actions
   = LoadVolunteersRequest | LoadVolunteersSuccess | LoadVolunteersError
   | CreateVolunteerRequest | CreateVolunteerSuccess | CreateVolunteerError
-  | UpdateVolunteerRequest | UpdateVolunteerSuccess | UpdateVolunteerError
+  | UpdateVolunteerRequest | UpdateVolunteerSuccess | UpdateVolunteerError | UpdateVolunteerReset
   | DeleteVolunteerRequest | DeleteVolunteerSuccess | DeleteVolunteerError
 
 /*
@@ -66,6 +68,7 @@ const initialState: VolunteersState = {
   createError: null,
   updateIsFetching: false,
   updateError: null,
+  updateSuccess: false,
   deleteIsFetching: false,
   deleteError: null,
 };
@@ -84,6 +87,7 @@ const createVolunteerError = createAction<Error>(ActionsType.CREATE_VOLUNTEER_ER
 const updateVolunteerRequest = createAction(ActionsType.UPDATE_VOLUNTEER_REQUEST);
 const updateVolunteerSuccess = createAction(ActionsType.UPDATE_VOLUNTEER_SUCCESS);
 const updateVolunteerError = createAction<Error>(ActionsType.UPDATE_VOLUNTEER_ERROR);
+export const updateVolunteerReset = createAction(ActionsType.UPDATE_VOLUNTEER_RESET);
 
 const deleteVolunteerRequest = createAction(ActionsType.DELETE_VOLUNTEER_REQUEST);
 const deleteVolunteerSuccess = createAction(ActionsType.DELETE_VOLUNTEER_SUCCESS);
@@ -108,7 +112,7 @@ export const createVolunteer = (user: Partial<NewVolunteer>) => (dispatch, getSt
     ...user,
   };
 
-  console.log({ volunteer });
+  // console.log({ volunteer });
   return API.Volunteers.add(volunteer)
     .then(() => {
       dispatch(createVolunteerSuccess());
@@ -197,6 +201,7 @@ const volunteersReducer: Reducer<VolunteersState, Actions> = (state = initialSta
       return {
         ...state,
         updateIsFetching: true,
+        updateSuccess: false,
       };
 
     case ActionsType.UPDATE_VOLUNTEER_ERROR:
@@ -204,6 +209,7 @@ const volunteersReducer: Reducer<VolunteersState, Actions> = (state = initialSta
         ...state,
         updateIsFetching: false,
         updateError: action.payload,
+        updateSuccess: false,
       };
 
     case ActionsType.UPDATE_VOLUNTEER_SUCCESS:
@@ -211,6 +217,15 @@ const volunteersReducer: Reducer<VolunteersState, Actions> = (state = initialSta
         ...state,
         updateIsFetching: false,
         updateError: null,
+        updateSuccess: true,
+      };
+
+    case ActionsType.UPDATE_VOLUNTEER_RESET:
+      return {
+        ...state,
+        updateIsFetching: false,
+        updateError: null,
+        updateSuccess: false,
       };
 
     // DELETE
@@ -252,5 +267,20 @@ export const selectOrderedVolunteers = (state: State) => state.entities.voluntee
 export const selectVolunteersStatus = ({ entities: { volunteers } }: State) => (
   { isFetching: volunteers.isFetching, error: volunteers.fetchError }
 );
+
+export const selectCreateVolunteerStatus = ({ entities: { volunteers } }: State) => (
+  { isFetching: volunteers.createIsFetching, error: volunteers.createError }
+);
+
+export const selectUpdateVolunteerStatus = ({ entities: { volunteers } }: State) => ({
+  isFetching: volunteers.updateIsFetching,
+  error: volunteers.updateError,
+  success: volunteers.updateSuccess,
+});
+
+export const selectDeleteVolunteerStatus = ({ entities: { volunteers } }: State) => (
+  { isFetching: volunteers.deleteIsFetching, error: volunteers.deleteError }
+);
+
 
 export default volunteersReducer;

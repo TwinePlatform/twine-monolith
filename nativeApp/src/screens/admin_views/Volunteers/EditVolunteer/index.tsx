@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { withNavigation, NavigationInjectedProps } from 'react-navigation';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { filter } from 'ramda';
 
-import { updateVolunteer } from '../../../../redux/entities/volunteers';
+import { updateVolunteer, selectUpdateVolunteerStatus, updateVolunteerReset } from '../../../../redux/entities/volunteers';
 
 import Page from '../../../../lib/ui/Page';
 import UserForm from '../../../../lib/ui/forms/UserForm';
@@ -24,16 +24,23 @@ type Props = {
  * Component
  */
 const EditVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
-  const dispatch = useDispatch();
   const volunteerDetails = navigation.state.params;
+  const dispatch = useDispatch();
+  const requestStatus = useSelector(selectUpdateVolunteerStatus, shallowEqual);
+
+  useEffect(() => {
+    if (requestStatus.success) {
+      dispatch(updateVolunteerReset());
+      navigation.navigate('Volunteers');
+    }
+  }, [requestStatus]);
 
   const onSubmit = async (formState) => {
     const changeset = filter(Boolean, formState);
     dispatch(updateVolunteer({ id: volunteerDetails.id, ...changeset }));
-
-    // TODO: modal to show data has been saved
-    navigation.navigate('Volunteers');
   };
+
+  // TODO: modal to show data has been saved
 
   return (
     <Page heading="Edit Volunteer">
@@ -41,6 +48,7 @@ const EditVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
         onSubmit={onSubmit}
         defaultValues={filter(Boolean, volunteerDetails)}
         action="update"
+        requestErrors={requestStatus.error}
       />
     </Page>
   );
