@@ -1,4 +1,4 @@
-import _axios, { AxiosRequestConfig } from 'axios';
+import _axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import qs from 'qs';
 import { AsyncStorage } from 'react-native';
 import getEnvVars from '../../environment'; // eslint-disable-line
@@ -15,11 +15,14 @@ const axios = _axios.create({
   paramsSerializer: (params) => qs.stringify(params, { encode: false }),
   transformResponse: (r) => {
     const res = JSON.parse(r);
-    return res.result;
+
+    return res.error
+      ? res
+      : res.result;
   },
 });
 
-const makeRequest = async <T = any> ({ ...rest }: AxiosRequestConfig) => {
+const makeRequest = async <T = any> (params: AxiosRequestConfig) => {
   let headers;
   try {
     const token = await AsyncStorage.getItem(StorageValuesEnum.USER_TOKEN);
@@ -27,7 +30,7 @@ const makeRequest = async <T = any> ({ ...rest }: AxiosRequestConfig) => {
   } catch (error) {
     headers = {};
   }
-  return axios.request<T>({ headers, ...rest });
+  return axios.request<T>({ headers, ...params });
 };
 
 
@@ -80,3 +83,12 @@ const API = {
 };
 
 export default API;
+
+export const getErrorResponse = (res: AxiosError) => {
+  try {
+    return res.response.data.error;
+  } catch (error) {
+    console.log(error);
+    return res;
+  }
+};

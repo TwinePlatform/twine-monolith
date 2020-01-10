@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 import { createAction } from 'redux-actions';
 import { User } from '../../../../api/src/models/types';
-import API from '../../api';
+import API, { getErrorResponse } from '../../api';
 import {
   State, VolunteersState, RequestAction, SuccessAction, ErrorAction,
 } from '../types';
@@ -112,7 +112,6 @@ export const createVolunteer = (user: Partial<NewVolunteer>) => (dispatch, getSt
     ...user,
   };
 
-  // console.log({ volunteer });
   return API.Volunteers.add(volunteer)
     .then(() => {
       dispatch(createVolunteerSuccess());
@@ -129,7 +128,10 @@ export const updateVolunteer = (changeset) => (dispatch) => {
       dispatch(updateVolunteerSuccess());
       dispatch(loadVolunteers());
     })
-    .catch((error) => dispatch(updateVolunteerError(error)));
+    .catch((error) => {
+      const errorResponse = getErrorResponse(error);
+      dispatch(updateVolunteerError(errorResponse));
+    });
 };
 
 export const deleteVolunteer = (id: number) => (dispatch) => {

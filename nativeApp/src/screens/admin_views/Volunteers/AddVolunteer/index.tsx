@@ -24,11 +24,11 @@ const AddVolunteer: FC<Props> = () => {
   const dispatch = useDispatch();
 
   const onSubmit = (data: Partial<NewVolunteer>) => {
-    console.log({ data });
-
     const volunteer = { ...data, role: 'VOLUNTEER' as RoleEnum.VOLUNTEER }; // NB: hack to appease ts & react
     dispatch(createVolunteer(volunteer));
   };
+
+  // TODO display request errors
   return (
     <Page heading="Add Volunteer">
       <UserForm action="create" onSubmit={onSubmit} />

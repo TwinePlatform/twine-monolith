@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Form as F, Text as T } from 'native-base';
 import useForm from 'react-hook-form';
@@ -10,6 +10,7 @@ import Dropdown from '../Dropdown';
 import { Forms } from '../enums';
 import SubmitButton from '../SubmitButton';
 import { User, GenderEnum } from '../../../../../../api/src/models';
+import { ColoursEnum } from '../../colours';
 
 /*
  * Types
@@ -18,6 +19,7 @@ type Props = {
   action: 'create' | 'update';
   onSubmit: (v: Partial<User>) => void;
   defaultValues?: Partial<User>;
+  requestErrors: any;
 }
 
 type FormData = {
@@ -39,6 +41,7 @@ const Form = styled(F)`
 
 const Text = styled(T)`
   marginBottom: 5;
+  color: ${ColoursEnum.red}
 `;
 
 /*
@@ -76,13 +79,34 @@ const genders = [
 
 const birthYears = [...Array(130).keys()].map((_, i) => ({ id: i, name: `${2019 - i}` }));
 
+const mergeErrorMessages = (validationErrors, requestErrors) => {
+  let errors = {};
+
+  if (validationErrors) {
+    const newValidationErrors = Object.keys(validationErrors)
+      .reduce((acc, entity) => ({ ...acc, [entity]: validationErrors[entity].message }), {});
+
+    errors = { ...errors, ...newValidationErrors };
+  }
+  if (requestErrors) errors = { ...errors, ...requestErrors.validation };
+
+  return errors;
+};
 /*
  * Component
  */
-const UserForm: FC<Props> = ({ action, onSubmit, defaultValues = {} }) => {
+const UserForm: FC<Props> = ({
+  action, onSubmit, defaultValues = {}, requestErrors = {},
+}) => {
   const {
-    register, setValue, handleSubmit, errors, triggerValidation, getValues,
+    register, setValue, handleSubmit, errors: validationErrors, triggerValidation,
   } = useForm<FormData>({ defaultValues, validationSchema });
+
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    setErrors(mergeErrorMessages(validationErrors, requestErrors));
+  }, [validationErrors, requestErrors]);
 
   return (
     <Form>
@@ -136,8 +160,8 @@ const UserForm: FC<Props> = ({ action, onSubmit, defaultValues = {} }) => {
       />
 
       <SubmitButton text="SAVE" onPress={handleSubmit(onSubmit)} />
-      {Object.keys(errors).length > 0 && Object.keys(errors).map((key) => (
-        <Text key={key}>{errors[key].message}</Text>))}
+      {Object.keys(errors).map((key) => (
+        <Text key={key}>{errors[key]}</Text>))}
     </Form>
   );
 };
