@@ -88,7 +88,13 @@ const mergeErrorMessages = (validationErrors, requestErrors) => {
 
     errors = { ...errors, ...newValidationErrors };
   }
-  if (requestErrors) errors = { ...errors, ...requestErrors.validation };
+  if (requestErrors) {
+    if (requestErrors.validation) {
+      errors = { ...errors, ...requestErrors.validation };
+    } else {
+      errors = { ...errors, message: requestErrors.message };
+    }
+  }
 
   return errors;
 };
@@ -96,7 +102,7 @@ const mergeErrorMessages = (validationErrors, requestErrors) => {
  * Component
  */
 const UserForm: FC<Props> = ({
-  action, onSubmit, defaultValues = {}, requestErrors = {},
+  action, onSubmit, defaultValues = {}, requestErrors,
 }) => {
   const {
     register, setValue, handleSubmit, errors: validationErrors, triggerValidation,
@@ -160,8 +166,7 @@ const UserForm: FC<Props> = ({
       />
 
       <SubmitButton text="SAVE" onPress={handleSubmit(onSubmit)} />
-      {Object.keys(errors).map((key) => (
-        <Text key={key}>{errors[key]}</Text>))}
+      {Object.keys(errors).map((key) => (<Text key={key}>{errors[key]}</Text>))}
     </Form>
   );
 };

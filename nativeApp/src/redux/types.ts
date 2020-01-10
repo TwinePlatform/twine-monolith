@@ -28,6 +28,7 @@ type RequestState<T> = {
 export type LogsState = RequestState<VolunteerLog>
 export type VolunteersState = RequestState<User> & {
   createIsFetching: boolean;
+  createSuccess: boolean;
   createError: Error;
   updateIsFetching: boolean;
   updateSuccess: boolean;
