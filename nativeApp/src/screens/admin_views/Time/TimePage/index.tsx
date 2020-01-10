@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import moment from 'moment';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 
@@ -32,10 +32,28 @@ const AdminTime: FC<Props> = () => {
   const volunteers = useSelector(selectVolunteers, shallowEqual);
   const dispatch = useDispatch();
 
+  const [dateSeparatedLogs, setDateSeparatedLogs] = useState({ thisWeek: [], lastWeek: [], rest: [] });
+
   useEffect(() => {
     dispatch(loadVolunteers());
     dispatch(loadLogs());
   }, []);
+
+  useEffect(() => {
+    const now = moment();
+    const lastWeek = now.subtract(1, 'week');
+    const twoWeeksAgo = now.subtract(2, 'weeks');
+    const groupedLogs = logs.reduce((acc, log) => {
+      if (moment(log.createdAt).isBetween(now, lastWeek)) {
+        return { ...acc, thisWeek: [...acc.thisWeek, log] };
+      } if (moment(log.createdAt).isBetween(lastWeek, twoWeeksAgo)) {
+        return { ...acc, lastWeek: [...acc.lastWeek, log] };
+      }
+      return { ...acc, rest: [...acc.rest, log] };
+    }, { thisWeek: [], lastWeek: [], rest: [] });
+
+    setDateSeparatedLogs(groupedLogs);
+  }, [logs]);
 
   return (
     <Page heading="Volunteers Time">
@@ -48,10 +66,37 @@ const AdminTime: FC<Props> = () => {
       />
       <Loader isVisible={logsRequestStatus.isFetching} />
 
-      {/* TODO - separate logs into separator headers */}
-      <CardSeparator title="Today" />
+      <CardSeparator title="This Week" />
       {
-        logs.map((log) => (
+        dateSeparatedLogs.thisWeek.map((log) => (
+          <TimeCard
+            key={log.id}
+            id={log.id}
+            timeValues={[log.duration.hours || 0, log.duration.minutes || 0]}
+            labels={[log.project || 'General', log.activity]}
+            volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
+            date={moment(log.startedAt).format('DD/MM/YY')}
+            onDelete={toggleDeleteVisibility}
+          />
+        ))
+      }
+      <CardSeparator title="Last Week" />
+      {
+        dateSeparatedLogs.lastWeek.map((log) => (
+          <TimeCard
+            key={log.id}
+            id={log.id}
+            timeValues={[log.duration.hours || 0, log.duration.minutes || 0]}
+            labels={[log.project || 'General', log.activity]}
+            volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
+            date={moment(log.startedAt).format('DD/MM/YY')}
+            onDelete={toggleDeleteVisibility}
+          />
+        ))
+      }
+      <CardSeparator title="Older Logs" />
+      {
+        dateSeparatedLogs.rest.map((log) => (
           <TimeCard
             key={log.id}
             id={log.id}
