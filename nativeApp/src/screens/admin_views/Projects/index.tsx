@@ -17,32 +17,46 @@ import {
 } from '../../../redux/entities/projects';
 import Loader from '../../../lib/ui/Loader';
 import { formatDate } from '../../../lib/utils/time';
+import { ButtonType } from '../../../lib/ui/CardWithButtons/types';
 
 /*
  * Types
  */
-type Props = {
+type PropsProjectTab = {
+  projects: any[];
+  onConfirmDispatch: (id: number) => (dispatch: any) => Promise<void>;
+  confirmationText: string;
+  buttonType: ButtonType;
 }
+
+type Props = {}
 
 /*
  * Styles
  */
 const View = styled.View`
-  alignItems: center;
+  alignItems: 
+center;
 `;
 
-const ActiveTab: FC<{}> = ({ projects }) => {
+/*
+ * Components
+ */
+const ProjectTab: FC<PropsProjectTab> = ({
+  projects, onConfirmDispatch, confirmationText, buttonType,
+}) => {
   const dispatch = useDispatch();
   const [archiveModalVisible, toggleArchiveModal] = useToggle(false);
 
   const [activeCardId, setActiveCardId] = useState();
 
-  const onArchive = (id: number) => {
+  const onPress = (id: number) => {
     setActiveCardId(id);
     toggleArchiveModal();
   };
+
   const onConfirm = () => {
-    dispatch(deleteProject(activeCardId));
+    dispatch(onConfirmDispatch(activeCardId));
     toggleArchiveModal();
   };
 
@@ -53,50 +67,7 @@ const ActiveTab: FC<{}> = ({ projects }) => {
         onCancel={toggleArchiveModal}
         onConfirm={onConfirm}
         title="Archive"
-        text="Are you sure you want to archive this project?"
-      />
-
-
-      { projects && projects.map((project) => (
-        <ProjectCard
-          key={project.id}
-          id={project.id}
-          title={project.name}
-          date={formatDate(project.createdAt)}
-          buttonType="archive"
-          onArchive={() => onArchive(project.id)}
-        />
-      ))}
-
-
-    </View>
-  );
-};
-// TODO: refactor tab componenents are the same
-const ArchivedTab: FC<{}> = ({ projects }) => {
-  const dispatch = useDispatch();
-  const [restoreModalVisible, toggleRestoreModal] = useToggle(false);
-
-  const [activeCardId, setActiveCardId] = useState();
-
-
-  const onRestore = (id: number) => {
-    setActiveCardId(id);
-    toggleRestoreModal();
-  };
-  const onConfirm = () => {
-    dispatch(restoreProject(activeCardId));
-    toggleRestoreModal();
-  };
-
-  return (
-    <View>
-      <ConfirmationModal
-        isVisible={restoreModalVisible}
-        onCancel={toggleRestoreModal}
-        onConfirm={onConfirm}
-        title="Restore"
-        text="Are you sure you want to restore this project?"
+        text={confirmationText}
       />
 
       { projects && projects.map((project) => (
@@ -105,18 +76,15 @@ const ArchivedTab: FC<{}> = ({ projects }) => {
           id={project.id}
           title={project.name}
           date={formatDate(project.createdAt)}
-          deletedDate={formatDate(project.deletedAt)}
-          buttonType="restore"
-          onRestore={() => onRestore(project.id)}
+          buttonType={buttonType}
+          onPress={() => onPress(project.id)}
         />
       ))}
     </View>
   );
 };
 
-/*
- * Component
- */
+
 const Projects: FC<Props> = () => {
   // Redux
   const dispatch = useDispatch();
@@ -134,8 +102,18 @@ const Projects: FC<Props> = () => {
       <Loader isVisible={projectsRequestStatus.isFetching} />
 
       <Tabs
-        tabOne={['Active', ActiveTab, { projects: projects.filter(({ deletedAt }) => !deletedAt) }]}
-        tabTwo={['Archived', ArchivedTab, { projects: projects.filter(({ deletedAt }) => deletedAt) }]}
+        tabOne={['Active', ProjectTab, {
+          projects: projects.filter(({ deletedAt }) => !deletedAt),
+          onConfirmDispatch: deleteProject,
+          confirmationText: 'Are you sure you want to archive this project?',
+          buttonType: 'archive',
+        }]}
+        tabTwo={['Archived', ProjectTab, {
+          projects: projects.filter(({ deletedAt }) => deletedAt),
+          onConfirmDispatch: restoreProject,
+          confirmationText: 'Are you sure you want to restore this project?',
+          buttonType: 'restore',
+        }]}
       />
     </Page>
   );

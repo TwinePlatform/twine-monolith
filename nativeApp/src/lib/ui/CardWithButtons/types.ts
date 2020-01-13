@@ -3,7 +3,7 @@ export type ButtonType = 'archive' | 'delete' | 'restore' | 'save';
 
 export type ArchiveButtonConfig = {
   buttonType: 'archive';
-  onArchive: () => void;
+  onPress: () => void;
   onEdit: () => void;
 }
 
@@ -15,7 +15,7 @@ export type DeleteButtonConfig = {
 
 export type RestoreButtonConfig = {
   buttonType: 'restore';
-  onRestore: () => void;
+  onPress: () => void;
 }
 
 export type SaveButtonConfig = {

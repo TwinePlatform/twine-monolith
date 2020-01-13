@@ -18,8 +18,7 @@ type Props = {
   date: string;
   deletedDate?: string;
   buttonType: ButtonType;
-  onArchive?: () => void;
-  onRestore?: () => void;
+  onPress: () => void;
 }
 
 /*
@@ -82,7 +81,7 @@ const getIconColor = (buttonType: ButtonType, active: boolean) => {
  * Component
  */
 const ProjectCard: FC<NavigationInjectedProps & Props> = ({
-  date, title, buttonType, onArchive, onRestore, deletedDate,
+  date, title, buttonType, onPress, deletedDate,
 }) => {
   const [value, setValue] = useState(title);
   const [active, toggle] = useToggle(false);
@@ -93,12 +92,12 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
   },
   {
     buttonType: 'archive',
-    onArchive,
+    onPress,
     onEdit: toggle,
   },
   {
     buttonType: 'restore',
-    onRestore,
+    onPress,
   }];
 
   return (
