@@ -470,23 +470,24 @@ describe('VolunteerLog model', () => {
 
       test('deleteProject :: ', async () => {
         const cb = await CommunityBusinesses.getOne(trx, { where: { id: 2 } });
-        const p = await VolunteerLogs.getProjects(trx, cb);
+        const p = await VolunteerLogs.getProjects(trx, cb, { where: { deletedAt: null } });
         const projBefore = p.sort((a, b) => a.id - b.id);
         const numDeleted = await VolunteerLogs.deleteProject(trx, projBefore[0]);
-        const projAfter = await VolunteerLogs.getProjects(trx, cb);
+        const projAfter = await VolunteerLogs.getProjects(trx, cb, { where: { deletedAt: null } });
 
         expect(numDeleted).toBe(1);
         expect(projAfter).toHaveLength(projBefore.length - 1);
         expect(projAfter).toEqual(projBefore.slice(1));
       });
+
       test('restoreProject :: ', async () => {
         const cb = await CommunityBusinesses.getOne(trx, { where: { id: 2 } });
-        const p = await VolunteerLogs.getProjects(trx, cb);
+        const p = await VolunteerLogs.getProjects(trx, cb, { where: { deletedAt: null } });
         const projBefore = p.sort((a, b) => a.id - b.id);
         const numDeleted = await VolunteerLogs.deleteProject(trx, projBefore[0]);
-        const projAfter = await VolunteerLogs.getProjects(trx, cb);
+        const projAfter = await VolunteerLogs.getProjects(trx, cb, { where: { deletedAt: null } });
         const numRestored = await VolunteerLogs.restoreProject(trx, projBefore[0]);
-        const projAfterRestore = await VolunteerLogs.getProjects(trx, cb);
+        const projAfterRestore = await VolunteerLogs.getProjects(trx, cb, { where: { deletedAt: null } });
 
         expect(numDeleted).toBe(1);
         expect(projAfter).toHaveLength(projBefore.length - 1);

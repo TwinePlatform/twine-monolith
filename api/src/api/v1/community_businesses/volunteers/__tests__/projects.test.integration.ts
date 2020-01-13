@@ -285,7 +285,14 @@ describe('API /community-businesses/me/volunteers/projects', () => {
 
   describe('PATCH /community-businesses/me/volunteers/projects/{id}/restore', () => {
     test('can restore own project', async () => {
-      //NB: project deleted in previous test
+      const res = await server.inject(injectCfg({
+        method: 'DELETE',
+        url: '/v1/community-businesses/me/volunteers/projects/1',
+        credentials: adminCreds,
+      }));
+
+      expect(res.statusCode).toBe(200);
+      
       const restoreRes = await server.inject(injectCfg({
         method: 'PATCH',
         url: '/v1/community-businesses/me/volunteers/projects/1/restore',
