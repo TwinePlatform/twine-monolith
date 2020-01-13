@@ -17,6 +17,7 @@ import Page from '../../../../lib/ui/Page';
 import AddBar from '../../../../lib/ui/AddBar';
 import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
 import Loader from '../../../../lib/ui/Loader';
+import { formatDate } from '../../../../lib/utils/time';
 
 /*
  * Types
@@ -84,7 +85,7 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
             key={volunteer.id}
             id={volunteer.id}
             title={volunteer.name}
-            date={moment(volunteer.createdAt).format('DD/MM/YY')}
+            date={formatDate(volunteer.createdAt)}
             onDelete={() => onDelete(volunteer.id)}
             onEdit={() => onEdit(volunteer)}
           />

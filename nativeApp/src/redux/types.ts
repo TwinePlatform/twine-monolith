@@ -1,4 +1,4 @@
-import { VolunteerLog, User } from '../../../api/src/models/types';
+import { VolunteerLog, User, VolunteerProject } from '../../../api/src/models/types';
 import { CurrentUser } from '../api/types';
 
 // Actions
@@ -37,6 +37,17 @@ export type VolunteersState = RequestState<User> & {
   deleteError: Error;
 }
 
+export type ProjectsState = RequestState<VolunteerProject> & {
+  createIsFetching: boolean;
+  createSuccess: boolean;
+  createError: Error;
+  updateIsFetching: boolean;
+  updateSuccess: boolean;
+  updateError: Error;
+  deleteIsFetching: boolean;
+  deleteError: Error;
+}
+
 export type CurrentUserState = { data: CurrentUser }
 
 export type State = {
@@ -45,5 +56,6 @@ export type State = {
     logs: LogsState;
     volunteers: VolunteersState;
     currentUser: CurrentUserState;
+    projects: ProjectsState;
   };
 }

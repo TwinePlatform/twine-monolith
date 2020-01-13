@@ -76,10 +76,26 @@ const VolunteerLogs = {
 
 };
 
+const Projects = {
+  get: () => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.GET.Result>( //eslint-disable-line
+    {
+      method: 'GET',
+      url: '/community-businesses/me/volunteers/projects',
+    },
+  ),
+  delete: (id: number) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.Id.DELETE.Result>( //eslint-disable-line
+    { method: 'DELETE', url: `/community-businesses/me/volunteers/projects/${id}` },
+  ),
+  restore: (id: number) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.Id.Restore.PATCH.Result>( //eslint-disable-line
+    { method: 'PATCH', url: `/community-businesses/me/volunteers/projects/${id}/restore` },
+  ),
+};
+
 const API = {
   Authentication,
   Volunteers,
   VolunteerLogs,
+  Projects,
 };
 
 export default API;

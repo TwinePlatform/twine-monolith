@@ -9,3 +9,5 @@ export const getTimeDiff = (start: Date, end: Date): [number, number] => { //esl
   const diffMins = Moment(end).startOf('minute').diff(Moment(start).startOf('minute'), 'minutes') % 60;
   return [diffHours, diffMins];
 };
+
+export const formatDate = (dateString: string) => Moment(dateString).format('DD/MM/YY');
