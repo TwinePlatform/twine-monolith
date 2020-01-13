@@ -368,9 +368,10 @@ export type CommunityBusinessCollection = Collection<CommunityBusiness> & {
 };
 
 export type VolunteerLogCollection = Collection<VolunteerLog> & {
+  projectToColumnNames: (a: Partial<Record<keyof VolunteerProject, any>>) => Dictionary<any>;
   fromUser: (
     k: Knex,
-    u: User,
+    u: User, 
     q?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>;
   fromCommunityBusiness: (
     k: Knex,
@@ -387,7 +388,8 @@ export type VolunteerLogCollection = Collection<VolunteerLog> & {
     payload: object) => Promise<void>;
   getProjects: (
     k: Knex,
-    c: CommunityBusiness) => Promise<VolunteerProject[]>;
+    c: CommunityBusiness,
+    q?: ModelQuery<VolunteerProject>) => Promise<VolunteerProject[]>;
   addProject: (
     k: Knex,
     c: CommunityBusiness,
@@ -397,6 +399,9 @@ export type VolunteerLogCollection = Collection<VolunteerLog> & {
     p: VolunteerProject,
     c: Partial<VolunteerProject>) => Promise<VolunteerProject[]>;
   deleteProject: (
+    k: Knex,
+    p: VolunteerProject) => Promise<Int>;
+  restoreProject: (
     k: Knex,
     p: VolunteerProject) => Promise<Int>;
   syncLogs: (

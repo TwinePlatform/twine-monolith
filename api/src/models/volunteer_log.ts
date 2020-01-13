@@ -1,7 +1,7 @@
 import * as Knex from 'knex';
 import { assoc, compose, evolve, has, filter, invertObj, omit, pick } from 'ramda';
 import { Objects, Duration, Promises } from 'twine-util';
-import { VolunteerLog, VolunteerLogCollection, RoleEnum, User } from './types';
+import { VolunteerLog, VolunteerLogCollection, RoleEnum, User, VolunteerProject } from './types';
 import { CommunityBusinesses } from './community_business';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { Dictionary } from '../types/internal';
@@ -30,6 +30,14 @@ export const ColumnToModel: Record<string, keyof VolunteerLog> = {
   'volunteer_hours_log.deleted_at': 'deletedAt',
   'volunteer_activity.volunteer_activity_name': 'activity',
   'volunteer_project.volunteer_project_name': 'project',
+};
+export const ProjectsColumnToModel: Record<string, keyof VolunteerProject> = {
+  'volunteer_project.volunteer_hours_log_id': 'id',
+  'volunteer_project.organisation_id': 'organisationId',
+  'volunteer_project.created_at': 'createdAt',
+  'volunteer_project.modified_at': 'modifiedAt',
+  'volunteer_project.deleted_at': 'deletedAt',
+  'volunteer_project.volunteer_project_name': 'name',
 };
 export const ModelToColumn = invertObj(ColumnToModel);
 
@@ -73,6 +81,14 @@ export const VolunteerLogs: VolunteerLogCollection = {
     return filter(
       (s) => typeof s !== 'undefined',
       Object.entries(ColumnToModel)
+        .reduce((acc, [k, v]) => has(v, o) ? assoc(k, o[v], acc) : acc, {})
+    );
+  },
+
+  projectToColumnNames (o = {}) {
+    return filter(
+      (s) => typeof s !== 'undefined',
+      Object.entries(ProjectsColumnToModel)
         .reduce((acc, [k, v]) => has(v, o) ? assoc(k, o[v], acc) : acc, {})
     );
   },
@@ -253,7 +269,17 @@ export const VolunteerLogs: VolunteerLogCollection = {
       });
   },
 
-  async getProjects (client, cb) {
+  async serialise (log) {
+    return log;
+  },
+
+  async getProjects (client, cb, q) {
+    const query = evolve({
+      where: VolunteerLogs.projectToColumnNames,
+      whereNot: VolunteerLogs.projectToColumnNames,
+      whereBetween: VolunteerLogs.projectToColumnNames,
+    }, q);
+
     return client('volunteer_project')
       .select({
         id: 'volunteer_project_id',
@@ -265,7 +291,8 @@ export const VolunteerLogs: VolunteerLogCollection = {
       })
       .where({
         organisation_id: cb.id,
-        deleted_at: null,
+        ...query.where
+
       });
   },
 
@@ -304,7 +331,6 @@ export const VolunteerLogs: VolunteerLogCollection = {
           .select()
           .where({
             organisation_id: project.organisationId,
-            deleted_at: null,
             volunteer_project_name: changeset.name,
           })
           .whereNot({ volunteer_project_id: project.id }),
@@ -325,7 +351,6 @@ export const VolunteerLogs: VolunteerLogCollection = {
         volunteer_project_id: project.id,
         volunteer_project_name: project.name,
         organisation_id: project.organisationId,
-        deleted_at: project.deletedAt,
       }))
       .returning([
         'volunteer_project_id AS id',
@@ -345,9 +370,17 @@ export const VolunteerLogs: VolunteerLogCollection = {
         { deletedAt: new Date().toISOString() }
       );
 
-      await trx('volunteer_hours_log')
-        .update({ volunteer_project_id: null })
-        .where({ volunteer_project_id: project.id });
+      return rows.length;
+    });
+  },
+
+  async restoreProject (client, project) {
+    return client.transaction(async (trx) => {
+      const rows = await VolunteerLogs.updateProject(
+        trx,
+        project,
+        { deletedAt: null }
+      );
 
       return rows.length;
     });

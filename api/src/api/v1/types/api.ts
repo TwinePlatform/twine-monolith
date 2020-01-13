@@ -335,6 +335,16 @@ export namespace Api {
               export type Result = null;
               export type Route = ServerRoute<Request, ResponsePayload<Result>>;
             }
+            export namespace Restore {
+              export namespace PATCH {
+                export interface Request extends Hapi.Request {
+                  params: { projectId: string };
+                  pre: { communityBusiness: CommunityBusiness };
+                }
+                export type Result = null;
+                export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+              }
+            }
           }
         }
       }

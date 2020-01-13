@@ -2,7 +2,7 @@ import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
 import { init } from '../../../../../../tests/utils/server';
 import { getConfig } from '../../../../../../config';
-import { CommunityBusinesses, Organisation, User, Volunteers } from '../../../../../models';
+import { CommunityBusinesses, Organisation, User, Volunteers, VolunteerLogs } from '../../../../../models';
 import { Credentials as StandardCredentials } from '../../../../../auth/strategies/standard';
 import { injectCfg } from '../../../../../../tests/utils/inject';
 import { getTrx } from '../../../../../../tests/utils/database';
@@ -273,6 +273,51 @@ describe('API /community-businesses/me/volunteers/projects', () => {
 
     // General {id} routes not implemented yet, remove the 'skip' when they are
     test.skip('cannot delete other organisations project', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'DELETE',
+        url: '/v1/community-businesses/2/volunteers/projects/2',
+        credentials: adminCreds,
+      }));
+
+      expect(res.statusCode).toBe(401);
+    });
+  });
+
+  describe('PATCH /community-businesses/me/volunteers/projects/{id}/restore', () => {
+    test('can restore own project', async () => {
+      //NB: project deleted in previous test
+      const restoreRes = await server.inject(injectCfg({
+        method: 'PATCH',
+        url: '/v1/community-businesses/me/volunteers/projects/1/restore',
+        credentials: adminCreds,
+      }));
+
+      expect(restoreRes.statusCode).toBe(200);
+      expect(restoreRes.result).toEqual({ result: null });
+    });
+
+    test('cannot mark restore live project', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'PATCH',
+        url: '/v1/community-businesses/me/volunteers/projects/1/restore',
+        credentials: adminCreds,
+      }));
+
+      expect(res.statusCode).toBe(404);
+    });
+
+    test('cannot mark restore non existent project', async () => {
+      const res = await server.inject(injectCfg({
+        method: 'PATCH',
+        url: '/v1/community-businesses/me/volunteers/projects/101/restore',
+        credentials: adminCreds,
+      }));
+
+      expect(res.statusCode).toBe(404);
+    });
+
+    // General {id} routes not implemented yet, remove the 'skip' when they are
+    test.skip('cannot restore other organisations project', async () => {
       const res = await server.inject(injectCfg({
         method: 'DELETE',
         url: '/v1/community-businesses/2/volunteers/projects/2',
