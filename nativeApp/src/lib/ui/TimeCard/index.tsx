@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { withNavigation, NavigationInjectedProps } from 'react-navigation';
 import CardWithButtons from '../CardWithButtons';
 
@@ -25,7 +24,8 @@ type Props = {
 /*
  * Styles
  */
-const DetailsContainer = styled.View`
+const DetailsContainer = styled.View<{topPadding: boolean}>`
+  ${({ topPadding }) => topPadding && 'marginTop: 5;'}
   flexDirection: row;
   alignItems: flex-end;
 `;
@@ -59,10 +59,8 @@ const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
   };
   return (
     <CardWithButtons buttonConfig={buttonConfig}>
-      <HoursAnMinutesText align="left" timeValues={timeValues}>
-        <MaterialCommunityIcons name="clock-outline" outline size={30} color={ColoursEnum.mustard} />
-      </HoursAnMinutesText>
-      <DetailsContainer>
+      <HoursAnMinutesText align="left" timeValues={timeValues} />
+      <DetailsContainer topPadding={Boolean(volunteer)}>
         <LabelContainer>
           <Label textAlign="left">{date}</Label>
           {volunteer && <Label textAlign="left" bold>{volunteer}</Label>}

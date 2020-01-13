@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Heading as H } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import Stat from '../../../lib/ui/Stat';
+import Line from '../../../lib/ui/Line';
 
 /*
  * Types
@@ -35,13 +36,6 @@ const Container = styled.View`
   justifyContent: space-between;
 `;
 
-const Line = styled.View`
-  alignSelf: center;
-  width: 85%;
-  borderBottomWidth: 1;
-  borderColor: ${ColoursEnum.grey};
-`;
-
 /*
  * Component
  */
@@ -49,7 +43,6 @@ const VolunteerHome: FC<Props> = () => (
   <View>
     <Heading>My Stats</Heading>
     <Container>
-
       <Stat
         heading="TOTAL TIME GIVEN"
         value="109"

@@ -10,6 +10,7 @@ import HoursAndMinutesText from '../../HoursAndMinutesText';
 import SubmitButton from '../SubmitButton';
 
 import { getTimeDiff } from '../../../utils/time';
+import { getTimeLabel } from './helpers';
 
 
 /*
@@ -31,7 +32,7 @@ type Props = {
   activities: IdAndName[];
   projects: IdAndName[];
   volunteers?: IdAndName[];
-  forUser: 'admin' | 'volunteer';
+  forUser: 'admin' | 'volunteer'; // TODO replace with role enum from api
 }
 
 /*
@@ -49,6 +50,7 @@ const Label = styled(Text)`
 const TimeContainer = styled.View`
   marginTop: 15;
 `;
+
 
 /*
  * Component
@@ -93,7 +95,7 @@ const TimeForm: FC<Props> = (props) => {
         mode="time"
         minDate={startTime}
       />
-      <Label>{`${volunteer || 'Member'} volunteered for`}</Label>
+      <Label>{getTimeLabel(forUser, volunteer)}</Label>
       <TimeContainer>
         <HoursAndMinutesText align="center" timeValues={diff} />
       </TimeContainer>

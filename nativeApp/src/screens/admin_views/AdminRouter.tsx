@@ -5,10 +5,10 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 import { ColoursEnum } from '../../lib/ui/colours';
-import AdminHome from './AdminHome';
+import AdminHome from './Home';
 import Projects from './Projects';
 import Volunteers from './Volunteers/VolunteersPage';
-import AdminTime from './AdminTime/AdminTimePage';
+import AdminTime from './Time/TimePage';
 import AddTime from './AddTime';
 import { FontsEnum } from '../../lib/ui/typography';
 

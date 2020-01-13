@@ -1,14 +1,19 @@
 {
   "plugins": [
     "react",
-    "react-native"
+    "react-native",
+    "@typescript-eslint/eslint-plugin"
   ],
   "extends": [
     "plugin:react-native/all",
     "plugin:react/recommended",
-    "eslint-config-twine",
+    "plugin:@typescript-eslint/recommended",
     "airbnb"
   ],
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "jest": true
+  },
   "rules": {
     "react-native/no-color-literals": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
@@ -27,7 +32,9 @@
     "import/no-extraneous-dependencies": 0,
     "react/jsx-pascal-case": 0,
     "react/jsx-props-no-spreading": 0,
-    "react/state-in-constructor": 0
+    "react/state-in-constructor": 0,
+    "import/prefer-default-export": 0,
+    "@typescript-eslint/no-var-requires": 0
   },
   "settings": {
     "import/extensions": [
