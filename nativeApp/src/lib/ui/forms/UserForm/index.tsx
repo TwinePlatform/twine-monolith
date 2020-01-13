@@ -54,7 +54,9 @@ const validationSchema = yup.object().shape({
     .string()
     .min(3, 'Name must be at least 3 lettters')
     .max(30, 'Name cannot be longer than 30 letters')
-    // .matches({ regex: /^[a-zA-Z]{2,}\s?[a-zA-z]*['-]?[a-zA-Z]*['\- ]?([a-zA-Z]{1,})?/, message: 'Name must not contain special characters' })
+    // .matches({
+  // regex: /^[a-zA-Z]{2,}\s?[a-zA-z]*['-]?[a-zA-Z]*['\- ]?([a-zA-Z]{1,})?/,
+  // message: 'Name must not contain special characters' })
     .required('Name is required'),
   email: yup.string()
     .email('Email must be valid')

@@ -32,7 +32,9 @@ const AdminTime: FC<Props> = () => {
   const volunteers = useSelector(selectVolunteers, shallowEqual);
   const dispatch = useDispatch();
 
-  const [dateSeparatedLogs, setDateSeparatedLogs] = useState({ thisWeek: [], lastWeek: [], rest: [] });
+  const [dateSeparatedLogs, setDateSeparatedLogs] = useState({
+    thisWeek: [], lastWeek: [], rest: [],
+  });
 
   useEffect(() => {
     dispatch(loadVolunteers());

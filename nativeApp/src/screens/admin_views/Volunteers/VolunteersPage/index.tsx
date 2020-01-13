@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { NavigationFocusInjectedProps } from 'react-navigation';
-import moment from 'moment';
 
 import {
   loadVolunteers,
