@@ -150,10 +150,10 @@ export const createProject = (newProject: Partial<VolunteerProject>) => (dispatc
 };
 
 
-export const updateProject = (changeset) => (dispatch) => {
+export const updateProject = (id: number, name: string) => (dispatch) => {
   dispatch(updateProjectRequest());
 
-  return API.Projects.update(changeset)
+  return API.Projects.update(id, name)
     .then(() => {
       dispatch(updateProjectSuccess());
       dispatch(loadProjects());

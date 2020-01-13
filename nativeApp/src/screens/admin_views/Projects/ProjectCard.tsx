@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
+import { useDispatch } from 'react-redux';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { withNavigation, NavigationInjectedProps } from 'react-navigation';
@@ -8,6 +9,7 @@ import CardWithButtons from '../../../lib/ui/CardWithButtons';
 import { FontsEnum, Heading2 as H2 } from '../../../lib/ui/typography';
 import useToggle from '../../../lib/hooks/useToggle';
 import { ButtonConfig, ButtonType } from '../../../lib/ui/CardWithButtons/types';
+import { updateProject } from '../../../redux/entities/projects';
 
 /*
  * Types
@@ -81,14 +83,22 @@ const getIconColor = (buttonType: ButtonType, active: boolean) => {
  * Component
  */
 const ProjectCard: FC<NavigationInjectedProps & Props> = ({
-  date, title, buttonType, onPress, deletedDate,
+  date, title, buttonType, onPress, deletedDate, id,
 }) => {
+  const dispatch = useDispatch();
   const [value, setValue] = useState(title);
   const [active, toggle] = useToggle(false);
   const iconColour = getIconColor(buttonType, active);
+
+  // TODO: error message on save/edit error
+  const onSave = () => {
+    dispatch(updateProject(id, value));
+    toggle();
+  };
+
   const buttonConfigs: ButtonConfig[] = [{
     buttonType: 'save',
-    onSave: toggle,
+    onSave,
   },
   {
     buttonType: 'archive',
