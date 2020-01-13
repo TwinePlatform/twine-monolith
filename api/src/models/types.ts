@@ -298,7 +298,6 @@ export type Collection<T extends Model> = {
   update: (c: Knex, a: Partial<T>, b: Partial<T>) => Promise<T>;
   add: (c: Knex, a: Partial<T>) => Promise<T>;
   destroy: (c: Knex, a: Partial<T>) => Promise<Int>;
-  serialise: (a: Partial<T>) => Promise<Partial<T>>;
 };
 
 type UsersBaseCollection = Collection<User>;

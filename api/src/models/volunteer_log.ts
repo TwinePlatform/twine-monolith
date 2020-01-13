@@ -268,11 +268,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
         organisation_id: organisation.id,
       });
   },
-
-  async serialise (log) {
-    return log;
-  },
-
+  
   async getProjects (client, cb, q) {
     const query = evolve({
       where: VolunteerLogs.projectToColumnNames,
