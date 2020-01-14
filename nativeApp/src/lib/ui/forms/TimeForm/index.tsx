@@ -9,7 +9,6 @@ import { ColoursEnum } from '../../colours';
 import HoursAndMinutesText from '../../HoursAndMinutesText';
 import SubmitButton from '../SubmitButton';
 
-import { getTimeDiff } from '../../../utils/time';
 import { getTimeLabel } from './helpers';
 
 
@@ -51,7 +50,8 @@ const TimeContainer = styled.View`
   marginTop: 15;
 `;
 
-
+const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${i}` }));
+const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${i}` }));
 /*
  * Component
  */
@@ -60,10 +60,8 @@ const TimeForm: FC<Props> = (props) => {
   const [activity, setActivity] = useState('');
   const [volunteer, setVolunteer] = useState('');
   const [date, setDate] = useState<Date>();
-  const [startTime, setStartTime] = useState<Date>();
-  const [endTime, setEndTime] = useState<Date>();
-
-  const diff = getTimeDiff(startTime, endTime);
+  const [hours, setHours] = useState<number>();
+  const [minutes, setMinutes] = useState<number>();
 
   const {
     forUser, activities, projects, volunteers,
@@ -82,22 +80,11 @@ const TimeForm: FC<Props> = (props) => {
         mode="date"
         maxDate={new Date()}
       />
-      <DateTimePicker
-        label="Start Time"
-        value={startTime}
-        onConfirm={setStartTime}
-        mode="time"
-      />
-      <DateTimePicker
-        label="End Time"
-        value={endTime}
-        onConfirm={setEndTime}
-        mode="time"
-        minDate={startTime}
-      />
+      <Dropdown label="Hours" options={zeroToNine} selectedValue={hours} onValueChange={setHours} />
+      <Dropdown label="Minutes" options={zeroToFiftyNine} selectedValue={minutes} onValueChange={setMinutes} />
       <Label>{getTimeLabel(forUser, volunteer)}</Label>
       <TimeContainer>
-        <HoursAndMinutesText align="center" timeValues={diff} />
+        <HoursAndMinutesText align="center" timeValues={[hours, minutes]} />
       </TimeContainer>
       <SubmitButton text="ADD TIME" onPress={() => {}} />
     </Form>

@@ -28,7 +28,7 @@ type Props = {
  */
 
 const Value = styled(Text)`
-  fontColor: ${ColoursEnum.darkGrey};
+  color: ${ColoursEnum.black};
   paddingTop: 15;
   paddingBottom: 15;
 `;
