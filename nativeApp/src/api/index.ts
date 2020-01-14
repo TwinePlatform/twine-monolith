@@ -89,10 +89,17 @@ const Projects = {
   restore: (id: number) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.Id.Restore.PATCH.Result>( //eslint-disable-line
     { method: 'PATCH', url: `/community-businesses/me/volunteers/projects/${id}/restore` },
   ),
-  update: (id: number, name: string ) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.POST.Result>( //eslint-disable-line
+  update: (id: number, name: string ) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.Id.PUT.Result>( //eslint-disable-line
     {
       method: 'PUT',
       url: `/community-businesses/me/volunteers/projects/${id}`,
+      data: { name },
+    },
+  ),
+  add: (name: string ) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.POST.Result>( //eslint-disable-line
+    {
+      method: 'POST',
+      url: '/community-businesses/me/volunteers/projects',
       data: { name },
     },
   ),

@@ -135,7 +135,7 @@ export const loadProjects = () => (dispatch) => {
     .catch((error) => dispatch(loadProjectsError(error)));
 };
 
-export const createProject = (newProject: Partial<VolunteerProject>) => (dispatch) => {
+export const createProject = (newProject: string) => (dispatch) => {
   dispatch(createProjectRequest());
 
   return API.Projects.add(newProject)

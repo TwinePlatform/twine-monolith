@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 
 import styled from 'styled-components/native';
+import { NavigationInjectedProps } from 'react-navigation';
 import Tabs from '../../../lib/ui/Tabs';
 import ProjectCard from './ProjectCard';
 import Page from '../../../lib/ui/Page';
@@ -85,7 +86,7 @@ const ProjectTab: FC<PropsProjectTab> = ({
 };
 
 
-const Projects: FC<Props> = () => {
+const Projects: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   // Redux
   const dispatch = useDispatch();
 
@@ -98,7 +99,7 @@ const Projects: FC<Props> = () => {
   const projectsRequestStatus = useSelector(selectProjectsStatus, shallowEqual);
   return (
     <Page heading="Projects" withAddBar>
-      <AddBar onPress={() => {}} title="Add Project" />
+      <AddBar onPress={() => navigation.navigate('AdminAddProject')} title="Add Project" />
       <Loader isVisible={projectsRequestStatus.isFetching} />
 
       <Tabs
