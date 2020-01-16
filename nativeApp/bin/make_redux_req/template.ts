@@ -5,7 +5,7 @@ export default (entity: string) => `import { Reducer } from 'redux';
 import { createAction } from 'redux-actions';
 import {  } from '../../../../api/src/models/types'; //TODO 
 import {  } from '../../api'; //TODO
-import { State, ${capitaliseFirst(entity)}State } from '../types'; //TODO
+import { State, ${capitaliseFirst(entity)}State, RequestAction, SuccessAction, ErrorAction  } from '../types'; //TODO
 
 
 /*
@@ -20,19 +20,10 @@ enum ActionsType {
 /*
  * Types
  */
-type Load${capitaliseFirst(entity)}Request = {
- type: ActionsType.LOAD_${capitalise(entity)}_REQUEST;
-};
 
-type Load${capitaliseFirst(entity)}Success = {
- type: ActionsType.LOAD_${capitalise(entity)}_SUCCESS;
- payload: []; //TODO
-};
-
-type Load${capitaliseFirst(entity)}Error = {
- type: ActionsType.LOAD_${capitalise(entity)}_ERROR;
- payload: Error;
-};
+type Load${capitaliseFirst(entity)}Request = RequestAction<ActionsType.LOAD_${capitalise(entity)}_REQUEST>
+type Load${capitaliseFirst(entity)}Success = SuccessAction<ActionsType.LOAD_${capitalise(entity)}_SUCCESS, TODO[]>
+type Load${capitaliseFirst(entity)}Error = ErrorAction<ActionsType.LOAD_${capitalise(entity)}_ERROR>
 
 type Actions = Load${capitaliseFirst(entity)}Request | Load${capitaliseFirst(entity)}Error | Load${capitaliseFirst(entity)}Success
 
@@ -53,7 +44,7 @@ const initialState: ${capitaliseFirst(entity)}State = {
  */
 const load${capitaliseFirst(entity)}Request = createAction(ActionsType.LOAD_${capitalise(entity)}_REQUEST);
 const load${capitaliseFirst(entity)}Error = createAction<Error>(ActionsType.LOAD_${capitalise(entity)}_ERROR);
-const load${capitaliseFirst(entity)}Success = createAction<Partial <User> []>(ActionsType.LOAD_${capitalise(entity)}_SUCCESS);
+const load${capitaliseFirst(entity)}Success = createAction<Partial <TODO> []>(ActionsType.LOAD_${capitalise(entity)}_SUCCESS);
 
 
 /*
