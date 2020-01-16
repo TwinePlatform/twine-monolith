@@ -1,4 +1,6 @@
-import { VolunteerLog, User, VolunteerProject } from '../../../api/src/models/types';
+import {
+  VolunteerLog, User, VolunteerProject, VolunteerActivity,
+} from '../../../api/src/models/types';
 import { CurrentUser } from '../api/types';
 
 // Actions
@@ -25,8 +27,7 @@ type RequestState<T> = {
   order: number[];
 };
 
-export type LogsState = RequestState<VolunteerLog>
-export type VolunteersState = RequestState<User> & {
+type ExtendedStateForEditableEntities = {
   createIsFetching: boolean;
   createSuccess: boolean;
   createError: Error;
@@ -36,6 +37,12 @@ export type VolunteersState = RequestState<User> & {
   deleteIsFetching: boolean;
   deleteError: Error;
 }
+
+export type ActivitiesState = RequestState<VolunteerActivity>
+
+export type LogsState = RequestState<VolunteerLog> & ExtendedStateForEditableEntities
+
+export type VolunteersState = RequestState<User> & ExtendedStateForEditableEntities
 
 export type ProjectsState = RequestState<VolunteerProject> & {
   createIsFetching: boolean;
@@ -57,5 +64,8 @@ export type State = {
     volunteers: VolunteersState;
     currentUser: CurrentUserState;
     projects: ProjectsState;
+  };
+  constants: {
+    activities: ActivitiesState;
   };
 }

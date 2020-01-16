@@ -4,8 +4,17 @@ import { AsyncStorage } from 'react-native';
 import getEnvVars from '../../environment'; // eslint-disable-line
 import { StorageValuesEnum } from '../authentication/types';
 import { Api } from '../../../api/src/api/v1/types/api';
-// NB pevious file local only
+import { VolunteerLog } from '../../../api/src/models';
 
+/*
+ * Types
+ */
+export type IdAndName = { id: number; name: string }
+
+
+/*
+ * Axios
+ */
 // TODO: change version to v1.1 when server changes have been updated
 const baseURL = `${getEnvVars().apiBaseUrl}/v1`;
 
@@ -33,7 +42,9 @@ const makeRequest = async <T = any> (params: AxiosRequestConfig) => {
   return axios.request<T>({ headers, ...params });
 };
 
-
+/*
+ * Requests
+ */
 const Authentication = {
   login: ({ email, password }) => axios.post('/users/login', {
     email,
@@ -73,6 +84,13 @@ const VolunteerLogs = {
     },
   ),
   getVolunteerActivities: () => axios.get('/volunteer-activities'),
+  add: (values: Partial<VolunteerLog> ) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>( //eslint-disable-line
+    {
+      method: 'POST',
+      url: '/community-businesses/me/volunteer-logs',
+      data: values,
+    },
+  ),
 
 };
 
@@ -105,11 +123,19 @@ const Projects = {
   ),
 };
 
+const Constants = {
+  activities: () => makeRequest<IdAndName>({
+    method: 'GET',
+    url: '/volunteer-activities',
+  }),
+};
+
 const API = {
   Authentication,
   Volunteers,
   VolunteerLogs,
   Projects,
+  Constants,
 };
 
 export default API;

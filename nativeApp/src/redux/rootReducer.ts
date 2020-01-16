@@ -3,6 +3,7 @@ import logsReducer from './entities/logs';
 import volunteersReducer from './entities/volunteers';
 import currentUserReducer from './currentUser';
 import projectsReducer from './entities/projects';
+import activitiesReducer from './constants/activities';
 
 // General idea is to keep state in a "normalised" structure
 // (see https://redux.js.org/recipes/structuring-reducers/normalizing-state-shape)
@@ -13,5 +14,8 @@ export default combineReducers({
     logs: logsReducer,
     volunteers: volunteersReducer,
     projects: projectsReducer,
+  }),
+  constants: combineReducers({
+    activities: activitiesReducer,
   }),
 });
