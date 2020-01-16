@@ -1,8 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Form as F, Text } from 'native-base';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import Dropdown from '../Dropdown';
 import { Forms } from '../enums';
 import DateTimePicker from '../DateTimePicker';
@@ -11,10 +12,11 @@ import HoursAndMinutesText from '../../HoursAndMinutesText';
 import SubmitButton from '../SubmitButton';
 
 import { getTimeLabel } from './helpers';
-import { createLog } from '../../../../redux/entities/logs';
+import { createLog, selectCreateLogStatus, createLogReset } from '../../../../redux/entities/logs';
 import { IdAndName } from '../../../../api';
 import { User } from '../../../../../../api/src/models';
-
+import SavedModal from '../../modals/SavedModal';
+import useToggle from '../../../hooks/useToggle';
 
 /*
  * Types
@@ -29,7 +31,6 @@ export type TimeValues = {
 
 }
 type Props = {
-  onSubmit: (v: TimeValues) => void;
   defaultValues?: TimeValues;
   activities: IdAndName[];
   projects: IdAndName[];
@@ -40,6 +41,7 @@ type Props = {
 /*
  * Styles
  */
+
 const Form = styled(F)`
   width: ${Forms.formWidth}
 `;
@@ -55,11 +57,22 @@ const TimeContainer = styled.View`
 
 const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${i}` }));
 const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${i}` }));
+
 /*
  * Component
  */
-const TimeForm: FC<Props> = (props) => {
+const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
+  const {
+    forUser, activities, projects, volunteers, navigation,
+  } = props;
+
+  // redux
   const dispatch = useDispatch();
+
+  const requestStatus = useSelector(selectCreateLogStatus);
+
+  // local state
+  const [responseModal, toggleResponseModal] = useToggle(false);
 
   const [project, setProject] = useState('');
   const [activity, setActivity] = useState('');
@@ -68,24 +81,47 @@ const TimeForm: FC<Props> = (props) => {
   const [hours, setHours] = useState<number>();
   const [minutes, setMinutes] = useState<number>();
 
+  const resetForm = () => {
+    setProject('');
+    setActivity('');
+    setVolunteer('');
+    setDate(undefined);
+    setHours(undefined);
+    setMinutes(undefined);
+  };
 
-  const {
-    forUser, activities, projects, volunteers,
-  } = props;
+  // hooks
+  useEffect(() => {
+    if (requestStatus.success) {
+      toggleResponseModal();
+    }
+  }, [requestStatus]);
 
+  // handlers
   const onSubmit = () => {
     const values = {
       project,
       activity,
-      startedAt: date.toDateString(),
+      startedAt: date as string,
       duration: { hours, minutes },
       userId: volunteers.find((x) => x.name === volunteer).id,
     };
     dispatch(createLog(values));
   };
 
+
+  const onContinue = () => {
+    resetForm();
+    dispatch(createLogReset());
+    navigation.navigate('Home');
+  };
+
   return (
     <Form>
+      <SavedModal
+        isVisible={responseModal}
+        onContinue={onContinue}
+      />
       {forUser === 'admin' && <Dropdown label="Volunteer" options={volunteers} selectedValue={volunteer} onValueChange={setVolunteer} />}
       {forUser === 'volunteer' && <Label>What project are you volunteering on?</Label>}
       <Dropdown label="Project" options={projects} selectedValue={project} onValueChange={setProject} />
@@ -119,4 +155,4 @@ const TimeForm: FC<Props> = (props) => {
   );
 };
 
-export default TimeForm;
+export default withNavigation(TimeForm);

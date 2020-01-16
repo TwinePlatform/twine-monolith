@@ -24,14 +24,15 @@ type Props = {
 /*
  * Component
  */
-const AddTime: FC<NavigationInjectedProps & Props> = () => {
+const AddTime: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
+  // redux
   const dispatch = useDispatch();
 
   const activities = useSelector(selectOrderedActivities);
   const volunteers = useSelector(selectOrderedVolunteers);
   const projects = useSelector(selectActiveOrderedProjects);
 
-
+  // hooks
   useEffect(() => {
     dispatch(loadActivities());
     dispatch(loadVolunteers());
@@ -45,7 +46,6 @@ const AddTime: FC<NavigationInjectedProps & Props> = () => {
         projects={projects}
         activities={activities}
         volunteers={volunteers}
-        onSubmit={() => {}}
       />
     </Page>
   );

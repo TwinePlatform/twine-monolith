@@ -289,4 +289,10 @@ export const selectLogsStatus = ({ entities: { logs } }: State) => (
 );
 
 
+export const selectCreateLogStatus = ({ entities: { logs } }: State) => ({
+  isFetching: logs.createIsFetching,
+  error: logs.createError,
+  success: logs.createSuccess,
+});
+
 export default reducer;
