@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
 import { Form as F, Text } from 'native-base';
 
+import { useDispatch } from 'react-redux';
 import Dropdown from '../Dropdown';
 import { Forms } from '../enums';
 import DateTimePicker from '../DateTimePicker';
@@ -10,12 +11,14 @@ import HoursAndMinutesText from '../../HoursAndMinutesText';
 import SubmitButton from '../SubmitButton';
 
 import { getTimeLabel } from './helpers';
+import { createLog } from '../../../../redux/entities/logs';
+import { IdAndName } from '../../../../api';
+import { User } from '../../../../../../api/src/models';
 
 
 /*
  * Types
  */
-export type IdAndName = { id: number; name: string }
 export type TimeValues = {
   project: string;
   activity: string;
@@ -30,7 +33,7 @@ type Props = {
   defaultValues?: TimeValues;
   activities: IdAndName[];
   projects: IdAndName[];
-  volunteers?: IdAndName[];
+  volunteers?: User[];
   forUser: 'admin' | 'volunteer'; // TODO replace with role enum from api
 }
 
@@ -56,6 +59,8 @@ const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${i
  * Component
  */
 const TimeForm: FC<Props> = (props) => {
+  const dispatch = useDispatch();
+
   const [project, setProject] = useState('');
   const [activity, setActivity] = useState('');
   const [volunteer, setVolunteer] = useState('');
@@ -63,9 +68,22 @@ const TimeForm: FC<Props> = (props) => {
   const [hours, setHours] = useState<number>();
   const [minutes, setMinutes] = useState<number>();
 
+
   const {
     forUser, activities, projects, volunteers,
   } = props;
+
+  const onSubmit = () => {
+    const values = {
+      project,
+      activity,
+      startedAt: date.toDateString(),
+      duration: { hours, minutes },
+      userId: volunteers.find((x) => x.name === volunteer).id,
+    };
+    dispatch(createLog(values));
+  };
+
   return (
     <Form>
       {forUser === 'admin' && <Dropdown label="Volunteer" options={volunteers} selectedValue={volunteer} onValueChange={setVolunteer} />}
@@ -80,13 +98,23 @@ const TimeForm: FC<Props> = (props) => {
         mode="date"
         maxDate={new Date()}
       />
-      <Dropdown label="Hours" options={zeroToNine} selectedValue={hours} onValueChange={setHours} />
-      <Dropdown label="Minutes" options={zeroToFiftyNine} selectedValue={minutes} onValueChange={setMinutes} />
+      <Dropdown
+        label="Hours"
+        options={zeroToNine}
+        selectedValue={hours}
+        onValueChange={setHours}
+      />
+      <Dropdown
+        label="Minutes"
+        options={zeroToFiftyNine}
+        selectedValue={minutes}
+        onValueChange={setMinutes}
+      />
       <Label>{getTimeLabel(forUser, volunteer)}</Label>
       <TimeContainer>
         <HoursAndMinutesText align="center" timeValues={[hours, minutes]} />
       </TimeContainer>
-      <SubmitButton text="ADD TIME" onPress={() => {}} />
+      <SubmitButton text="ADD TIME" onPress={onSubmit} />
     </Form>
   );
 };

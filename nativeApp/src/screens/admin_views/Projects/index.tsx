@@ -13,7 +13,7 @@ import {
   loadProjects,
   deleteProject,
   restoreProject,
-  selectOrderedProjects,
+  selectAllOrderedProjects,
   selectProjectsStatus,
 } from '../../../redux/entities/projects';
 import Loader from '../../../lib/ui/Loader';
@@ -95,7 +95,7 @@ const Projects: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   }, []);
 
 
-  const projects = useSelector(selectOrderedProjects, shallowEqual);
+  const projects = useSelector(selectAllOrderedProjects, shallowEqual);
   const projectsRequestStatus = useSelector(selectProjectsStatus, shallowEqual);
   return (
     <Page heading="Projects" withAddBar>

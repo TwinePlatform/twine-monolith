@@ -220,7 +220,7 @@ const projectsReducer: Reducer<ProjectsState, Actions> = (state = initialState, 
         items: action.payload.reduce((acc, x) => ({ ...acc, [x.id]: x }), {}),
       };
 
-      // CREATE
+    // CREATE
     case ActionsType.CREATE_PROJECT_REQUEST:
       return {
         ...state,
@@ -334,8 +334,12 @@ const projectsReducer: Reducer<ProjectsState, Actions> = (state = initialState, 
 /*
  * Selectors
  */
-export const selectOrderedProjects = (state: State) => state.entities.projects.order
+export const selectAllOrderedProjects = (state: State) => state.entities.projects.order
   .map((id) => state.entities.projects.items[id]);
+
+export const selectActiveOrderedProjects = (state: State) => state.entities.projects.order
+  .map((id) => state.entities.projects.items[id])
+  .filter((project) => project.deletedAt === null);
 
 export const selectProjectsStatus = ({ entities: { projects } }: State) => (
   { isFetching: projects.isFetching, error: projects.fetchError }
