@@ -34,9 +34,9 @@ const sharedNavigationsConfig = {
   },
   headerTintColor: '#fff',
   headerTitleStyle: {
-    letterSpacing: 8,
+    letterSpacing: 2,
     fontWeight: '300' as '300',
-    fontFamily: FontsEnum.light,
+    fontFamily: FontsEnum.medium,
   },
 };
 
