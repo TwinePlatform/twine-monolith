@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { Form as F, Text as T } from 'native-base';
+import { Form as F } from 'native-base';
 import useForm from 'react-hook-form';
 import * as yup from 'yup';
 

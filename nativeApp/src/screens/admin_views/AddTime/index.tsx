@@ -24,7 +24,7 @@ type Props = {
 /*
  * Component
  */
-const AddTime: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
+const AddTime: FC<NavigationInjectedProps & Props> = () => {
   // redux
   const dispatch = useDispatch();
 

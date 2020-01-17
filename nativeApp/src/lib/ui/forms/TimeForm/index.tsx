@@ -63,7 +63,7 @@ const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${i
  */
 const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const {
-    forUser, activities, projects, volunteers, navigation,
+    forUser, activities, projects, volunteers,
   } = props;
 
   // redux

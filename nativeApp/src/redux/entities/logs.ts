@@ -6,7 +6,6 @@ import API, { getErrorResponse } from '../../api';
 import {
   State, LogsState, RequestAction, SuccessAction, ErrorAction,
 } from '../types';
-import { ApiRequestQuery } from '../../../../api/src/api/v1/schema/request';
 
 
 /*
