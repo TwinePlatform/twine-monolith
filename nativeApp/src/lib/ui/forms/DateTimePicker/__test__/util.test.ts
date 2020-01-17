@@ -14,7 +14,7 @@ describe('Date Picker Utils', () => {
     test('takes a given date and adds current time to it', () => {
       const testDate = new Date('2019-10-10T00:00:00');
       const actual = getDateWithCurrentTime(testDate);
-      expect(actual).toEqual(new Date('2019-10-16T16:09:44.945Z'));
+      expect(actual).toEqual(new Date('2019-10-16T17:09:44.945Z'));
     });
   });
 });
