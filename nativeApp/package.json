@@ -65,6 +65,7 @@
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-native": "^3.7.0",
     "jest": "^24.9.0",
+    "mockdate": "^2.0.5",
     "ts-node": "^8.4.1",
     "typescript": "^3.4.5"
   },

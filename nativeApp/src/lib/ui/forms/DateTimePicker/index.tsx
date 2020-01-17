@@ -10,6 +10,7 @@ import _DateTimePicker from 'react-native-modal-datetime-picker';
 import { Forms } from '../enums';
 import { ColoursEnum } from '../../colours';
 import useToggle from '../../../hooks/useToggle';
+import { getDateWithCurrentTime } from './util';
 
 /*
  * Types
@@ -71,7 +72,10 @@ const DateTimePicker: FC<Props> = (props) => {
   } = props;
   const [isVisible, toggleVisibility] = useToggle(false);
 
-  const onConfirmAndHide = (date: Date) => {
+  const onConfirmAndHide = (_date: Date) => {
+    // NB: server rejects logs with identical times & users as they're
+    // believed to be an offline sync issue
+    const date = getDateWithCurrentTime(_date);
     onConfirm(date);
     toggleVisibility();
   };
