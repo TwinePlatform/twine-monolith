@@ -1,7 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Form as F, Text } from 'native-base';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import Dropdown from '../Dropdown';
 import { Forms } from '../enums';
 import DateTimePicker from '../DateTimePicker';
@@ -9,14 +11,16 @@ import { ColoursEnum } from '../../colours';
 import HoursAndMinutesText from '../../HoursAndMinutesText';
 import SubmitButton from '../SubmitButton';
 
-import { getTimeDiff } from '../../../utils/time';
 import { getTimeLabel } from './helpers';
-
+import { createLog, selectCreateLogStatus, createLogReset } from '../../../../redux/entities/logs';
+import { IdAndName } from '../../../../api';
+import { User } from '../../../../../../api/src/models';
+import SavedModal from '../../modals/SavedModal';
+import useToggle from '../../../hooks/useToggle';
 
 /*
  * Types
  */
-export type IdAndName = { id: number; name: string }
 export type TimeValues = {
   project: string;
   activity: string;
@@ -27,17 +31,17 @@ export type TimeValues = {
 
 }
 type Props = {
-  onSubmit: (v: TimeValues) => void;
-  initialValues?: TimeValues;
+  defaultValues?: TimeValues;
   activities: IdAndName[];
   projects: IdAndName[];
-  volunteers?: IdAndName[];
+  volunteers?: User[];
   forUser: 'admin' | 'volunteer'; // TODO replace with role enum from api
 }
 
 /*
  * Styles
  */
+
 const Form = styled(F)`
   width: ${Forms.formWidth}
 `;
@@ -51,25 +55,73 @@ const TimeContainer = styled.View`
   marginTop: 15;
 `;
 
+const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${i}` }));
+const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${i}` }));
 
 /*
  * Component
  */
-const TimeForm: FC<Props> = (props) => {
+const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
+  const {
+    forUser, activities, projects, volunteers,
+  } = props;
+
+  // redux
+  const dispatch = useDispatch();
+
+  const requestStatus = useSelector(selectCreateLogStatus);
+
+  // local state
+  const [responseModal, toggleResponseModal] = useToggle(false);
+
   const [project, setProject] = useState('');
   const [activity, setActivity] = useState('');
   const [volunteer, setVolunteer] = useState('');
   const [date, setDate] = useState<Date>();
-  const [startTime, setStartTime] = useState<Date>();
-  const [endTime, setEndTime] = useState<Date>();
+  const [hours, setHours] = useState<number>();
+  const [minutes, setMinutes] = useState<number>();
 
-  const diff = getTimeDiff(startTime, endTime);
+  const resetForm = () => {
+    setProject('');
+    setActivity('');
+    setVolunteer('');
+    setDate(undefined);
+    setHours(undefined);
+    setMinutes(undefined);
+  };
 
-  const {
-    forUser, activities, projects, volunteers,
-  } = props;
+  // hooks
+  useEffect(() => {
+    if (requestStatus.success) {
+      toggleResponseModal();
+    }
+  }, [requestStatus]);
+
+  // handlers
+  const onSubmit = () => {
+    const values = {
+      project,
+      activity,
+      startedAt: date as string,
+      duration: { hours, minutes },
+      userId: volunteers.find((x) => x.name === volunteer).id,
+    };
+    dispatch(createLog(values));
+  };
+
+
+  const onContinue = () => {
+    dispatch(createLogReset());
+    resetForm();
+    // toggleResponseModal(); ??
+  };
+
   return (
     <Form>
+      <SavedModal
+        isVisible={responseModal}
+        onContinue={onContinue}
+      />
       {forUser === 'admin' && <Dropdown label="Volunteer" options={volunteers} selectedValue={volunteer} onValueChange={setVolunteer} />}
       {forUser === 'volunteer' && <Label>What project are you volunteering on?</Label>}
       <Dropdown label="Project" options={projects} selectedValue={project} onValueChange={setProject} />
@@ -82,26 +134,25 @@ const TimeForm: FC<Props> = (props) => {
         mode="date"
         maxDate={new Date()}
       />
-      <DateTimePicker
-        label="Start Time"
-        value={startTime}
-        onConfirm={setStartTime}
-        mode="time"
+      <Dropdown
+        label="Hours"
+        options={zeroToNine}
+        selectedValue={hours}
+        onValueChange={setHours}
       />
-      <DateTimePicker
-        label="End Time"
-        value={endTime}
-        onConfirm={setEndTime}
-        mode="time"
-        minDate={startTime}
+      <Dropdown
+        label="Minutes"
+        options={zeroToFiftyNine}
+        selectedValue={minutes}
+        onValueChange={setMinutes}
       />
       <Label>{getTimeLabel(forUser, volunteer)}</Label>
       <TimeContainer>
-        <HoursAndMinutesText align="center" timeValues={diff} />
+        <HoursAndMinutesText align="center" timeValues={[hours, minutes]} />
       </TimeContainer>
-      <SubmitButton text="ADD TIME" onPress={() => {}} />
+      <SubmitButton text="ADD TIME" onPress={onSubmit} />
     </Form>
   );
 };
 
-export default TimeForm;
+export default withNavigation(TimeForm);

@@ -10,8 +10,8 @@ import { ColoursEnum } from './colours';
  * Types
  */
 type Props = {
-  tabOne: [string, FC<{}>];
-  tabTwo: [string, FC<{}>];
+  tabOne: [string, FC<{}>, {}];
+  tabTwo: [string, FC<{}>, {}];
 }
 
 /*
@@ -26,9 +26,10 @@ const Tab = styled(T)`
  */
 const Tabs: FC<Props> = (props) => {
   const {
-    tabOne: [headingOne, ComponentOne],
-    tabTwo: [headingTwo, ComponentTwo],
+    tabOne: [headingOne, ComponentOne, propsOne],
+    tabTwo: [headingTwo, ComponentTwo, propsTwo],
   } = props;
+
   return (
     <_Tabs
       tabContainerStyle={{ height: 40 }} //eslint-disable-line
@@ -41,7 +42,7 @@ const Tabs: FC<Props> = (props) => {
         activeTextStyle={{ color: ColoursEnum.purple }}
         activeTabStyle={{ borderColor: ColoursEnum.purple, backgroundColor: ColoursEnum.white }}
       >
-        <ComponentOne />
+        <ComponentOne {...propsOne} />
       </Tab>
       <Tab
         heading={headingTwo}
@@ -50,7 +51,7 @@ const Tabs: FC<Props> = (props) => {
         activeTextStyle={{ color: ColoursEnum.purple }}
         activeTabStyle={{ borderColor: ColoursEnum.purple, backgroundColor: ColoursEnum.white }}
       >
-        <ComponentTwo />
+        <ComponentTwo {...propsTwo} />
       </Tab>
     </_Tabs>
   );

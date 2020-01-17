@@ -15,6 +15,7 @@ import SettingsPage from './screens/settings_views/SettingsPage/index';
 import AdminEditTime from './screens/admin_views/Time/EditTime';
 import AdminEditVolunteer from './screens/admin_views/Volunteers/EditVolunteer';
 import AdminAddVolunteer from './screens/admin_views/Volunteers/AddVolunteer';
+import AdminAddProject from './screens/admin_views/Projects/AddProject';
 import AuthenticationLoader from './authentication/AuthenticationLoader';
 import Profile from './screens/settings_views/Profile';
 
@@ -22,6 +23,7 @@ const additionalAdminPages = {
   AdminEditTime,
   AdminEditVolunteer,
   AdminAddVolunteer,
+  AdminAddProject,
 };
 
 const sharedNavigationsConfig = {
@@ -32,9 +34,9 @@ const sharedNavigationsConfig = {
   },
   headerTintColor: '#fff',
   headerTitleStyle: {
-    letterSpacing: 8,
+    letterSpacing: 2,
     fontWeight: '300' as '300',
-    fontFamily: FontsEnum.light,
+    fontFamily: FontsEnum.medium,
   },
 };
 

@@ -49,7 +49,7 @@ const BorderRight = styled.View`
 /*
  * Components
  */
-export const ArchiveButton: FC<Props<ArchiveButtonConfig>> = ({ buttonConfig: { onArchive, onEdit } }) => ( //eslint-disable-line
+export const ArchiveButton: FC<Props<ArchiveButtonConfig>> = ({ buttonConfig: { onPress, onEdit } }) => ( //eslint-disable-line
   <ButtonContainer>
     <Button transparent onPress={onEdit}>
       <BorderRight>
@@ -57,7 +57,7 @@ export const ArchiveButton: FC<Props<ArchiveButtonConfig>> = ({ buttonConfig: { 
         <LinkText>Edit</LinkText>
       </BorderRight>
     </Button>
-    <Button transparent onPress={onArchive}>
+    <Button transparent onPress={onPress}>
       <MaterialIcons name="archive" outline size={20} color={ColoursEnum.darkPurple} />
       <LinkText>Archive</LinkText>
     </Button>
@@ -79,10 +79,10 @@ export const DeleteButton: FC<Props<DeleteButtonConfig>> = ({ buttonConfig: { on
   </ButtonContainer>
 );
 
-export const RestoreButton: FC<Props<RestoreButtonConfig>> = ({ buttonConfig: { onRestore } }) => (
+export const RestoreButton: FC<Props<RestoreButtonConfig>> = ({ buttonConfig: { onPress } }) => (
   <ButtonContainer>
     <Button transparent />
-    <Button transparent onPress={onRestore}>
+    <Button transparent onPress={onPress}>
       <MaterialCommunityIcons name="undo" outline size={20} color={ColoursEnum.darkPurple} />
       <LinkText>Restore</LinkText>
     </Button>

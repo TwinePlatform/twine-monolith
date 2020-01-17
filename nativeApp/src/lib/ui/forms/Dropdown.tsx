@@ -1,4 +1,4 @@
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
 import { Item as I, Picker, Label as L } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -10,11 +10,11 @@ import { ColoursEnum } from '../colours';
  * Types
  */
 type Props = {
+  ref: (ref: unknown) => void;
   label: string;
   options: {id: number; name: string}[];
-  selectedValue: string;
-  onValueChange: Dispatch<SetStateAction<string>>;
-  defaultValue?: string;
+  onValueChange: any;
+  defaultValue?: string | number;
 }
 
 /*
@@ -37,8 +37,9 @@ const Label = styled(L)`
  */
 const Dropdown: FC<Props> = (props) => {
   const {
-    label, options, selectedValue, onValueChange, defaultValue,
+    label, options, onValueChange, defaultValue, ...rest
   } = props;
+  const [value, setValue] = useState(defaultValue);
   return (
     <Item picker>
       <Label>{label}</Label>
@@ -48,8 +49,12 @@ const Dropdown: FC<Props> = (props) => {
         placeholder="Select"
         placeholderStyle={{ color: ColoursEnum.grey }}
         placeholderIconColor={ColoursEnum.grey}
-        selectedValue={selectedValue || defaultValue}
-        onValueChange={onValueChange}
+        selectedValue={value}
+        onValueChange={(val) => {
+          onValueChange(val);
+          setValue(val);
+        }}
+        {...rest}
       >
         {options.map(({ id, name }) => (
           <Picker.Item label={name} value={name} key={id} />

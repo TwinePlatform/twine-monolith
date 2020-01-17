@@ -1,20 +1,22 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import moment from 'moment';
-import { ColorDotsLoader } from 'react-native-indicator';
-
 import { NavigationFocusInjectedProps } from 'react-navigation';
-import VolunteerCard from './VolunteerCard';
-import Page from '../../../../lib/ui/Page';
-import AddBar from '../../../../lib/ui/AddBar';
-import useToggle from '../../../../lib/hooks/useToggle';
-import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
-import { ColoursEnum } from '../../../../lib/ui/colours';
+
 import {
   loadVolunteers,
   selectOrderedVolunteers,
   selectVolunteersStatus,
+  deleteVolunteer,
 } from '../../../../redux/entities/volunteers';
+import useToggle from '../../../../lib/hooks/useToggle';
+import { User } from '../../../../../../api/src/models';
+
+import VolunteerCard from './VolunteerCard';
+import Page from '../../../../lib/ui/Page';
+import AddBar from '../../../../lib/ui/AddBar';
+import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
+import Loader from '../../../../lib/ui/Loader';
+import { formatDate } from '../../../../lib/utils/time';
 
 /*
  * Types
@@ -45,19 +47,19 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
   const [activeCard, setActiveCard] = useState(null);
 
   // Handlers
+  const onEdit = (volunteer: User) => {
+    navigation.navigate('AdminEditVolunteer', volunteer);
+  };
+
   const onDelete = (id: number) => {
     toggleDeleteModalVisibility();
     setActiveCard(id);
   };
 
   const onConfirm = () => {
-    /*
-    * TODO:
-    * - dispatch redux action deleteVolunteerAndUpdate(activeCard.id)
-    * - hide modal
-    * - display some type of loader whilst waiting
-    */
-    console.log(activeCard);
+    dispatch(deleteVolunteer(activeCard));
+    toggleDeleteModalVisibility();
+    // TODO: display error feedback
   };
 
   // TODO: error handling
@@ -73,14 +75,7 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
         onConfirm={onConfirm}
       />
 
-      {volunteersRequestStatus.isFetching && (
-      <ColorDotsLoader
-        color1={ColoursEnum.purple}
-        color2={ColoursEnum.mustard}
-        color3={ColoursEnum.grey}
-        size={20}
-      />
-      )}
+      <Loader isVisible={volunteersRequestStatus.isFetching} />
       {/* TODO: create function for loading logic */}
       { !volunteersRequestStatus.isFetching
         && !volunteersRequestStatus.error
@@ -89,9 +84,9 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
             key={volunteer.id}
             id={volunteer.id}
             title={volunteer.name}
-            date={moment(volunteer.createdAt).format('DD/MM/YY')}
+            date={formatDate(volunteer.createdAt)}
             onDelete={() => onDelete(volunteer.id)}
-            volunteerData={volunteer}
+            onEdit={() => onEdit(volunteer)}
           />
         ))}
     </Page>

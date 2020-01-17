@@ -3,7 +3,7 @@
  * that handle requests
  *
  * Usage:
- *  npm run touch:tsx [entity]
+ *  npm run touch:redux [entity]
  *
  * args:
  *  ENTITY: the concept redux is managing to be inserted into variable names
