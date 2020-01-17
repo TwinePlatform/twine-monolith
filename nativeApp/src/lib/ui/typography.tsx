@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import { Text as T } from 'native-base';
 import { ColoursEnum } from './colours';
 
 export const Heading = styled.Text`
@@ -23,3 +24,8 @@ export enum FontsEnum {
   medium = 'roboto-medium',
   bold = 'roboto-bold',
 }
+
+export const ErrorText = styled(T)`
+  marginBottom: 5;
+  color: ${ColoursEnum.red}
+`;

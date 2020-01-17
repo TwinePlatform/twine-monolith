@@ -10,6 +10,7 @@ import { Forms } from '../../../../lib/ui/forms/enums';
 import SubmitButton from '../../../../lib/ui/forms/SubmitButton';
 import Page from '../../../../lib/ui/Page';
 import { createProject, selectCreateProjectStatus, createProjectReset } from '../../../../redux/entities/projects';
+import { ErrorText } from '../../../../lib/ui/typography';
 /*
  * Types
  */
@@ -69,7 +70,7 @@ const AddProject: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
         />
 
         <SubmitButton text="SAVE" onPress={handleSubmit(onSubmit)} />
-        {Object.keys(errors).map((key) => (<Text key={key}>{errors[key]}</Text>))}
+        {Object.keys(errors).map((key) => (<ErrorText key={key}>{errors[key]}</ErrorText>))}
       </Form>
     </Page>
   );

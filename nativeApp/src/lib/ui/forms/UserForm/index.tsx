@@ -10,7 +10,7 @@ import Dropdown from '../Dropdown';
 import { Forms } from '../enums';
 import SubmitButton from '../SubmitButton';
 import { User, GenderEnum } from '../../../../../../api/src/models';
-import { ColoursEnum } from '../../colours';
+import { ErrorText } from '../../typography';
 
 /*
  * Types
@@ -39,10 +39,6 @@ const Form = styled(F)`
   width: ${Forms.formWidth}
 `;
 
-const Text = styled(T)`
-  marginBottom: 5;
-  color: ${ColoursEnum.red}
-`;
 
 /*
  * Helpers
@@ -168,7 +164,7 @@ const UserForm: FC<Props> = ({
       />
 
       <SubmitButton text="SAVE" onPress={handleSubmit(onSubmit)} />
-      {Object.keys(errors).map((key) => (<Text key={key}>{errors[key]}</Text>))}
+      {Object.keys(errors).map((key) => (<ErrorText key={key}>{errors[key]}</ErrorText>))}
     </Form>
   );
 };
