@@ -52,7 +52,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.3.2",
-    "yup": "^0.27.0"
+    "yup": "^0.28.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.6.1",
