@@ -128,6 +128,10 @@ const Constants = {
     method: 'GET',
     url: '/volunteer-activities',
   }),
+  genders: () => makeRequest<IdAndName>({
+    method: 'GET',
+    url: '/genders',
+  }),
 };
 
 const API = {

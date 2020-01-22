@@ -2,6 +2,7 @@ import {
   VolunteerLog, User, VolunteerProject, VolunteerActivity,
 } from '../../../api/src/models/types';
 import { CurrentUser } from '../api/types';
+import { IdAndName } from '../api';
 
 // Actions
 export type RequestAction<T extends string> = {
@@ -40,6 +41,13 @@ type ExtendedStateForEditableEntities = {
 
 export type ActivitiesState = RequestState<VolunteerActivity>
 
+export type GendersState = RequestState<IdAndName>
+
+export type BirthYearsState = {
+  items: Record<number, IdAndName>;
+  order: number[];
+}
+
 export type LogsState = RequestState<VolunteerLog> & ExtendedStateForEditableEntities
 
 export type VolunteersState = RequestState<User> & ExtendedStateForEditableEntities
@@ -67,5 +75,7 @@ export type State = {
   };
   constants: {
     activities: ActivitiesState;
+    genders: GendersState;
+    birthYears: BirthYearsState;
   };
 }
