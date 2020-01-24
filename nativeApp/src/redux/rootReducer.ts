@@ -6,6 +6,8 @@ import projectsReducer from './entities/projects';
 import activitiesReducer from './constants/activities';
 import gendersReducer from './constants/genders';
 import birthYearsReducer from './constants/birthYears';
+import regionsReducer from './constants/regions';
+import organisationsReducer from './constants/organisations';
 
 // General idea is to keep state in a "normalised" structure
 // (see https://redux.js.org/recipes/structuring-reducers/normalizing-state-shape)
@@ -21,5 +23,7 @@ export default combineReducers({
     activities: activitiesReducer,
     genders: gendersReducer,
     birthYears: birthYearsReducer,
+    regions: regionsReducer,
+    organisations: organisationsReducer,
   }),
 });

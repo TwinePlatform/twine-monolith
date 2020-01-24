@@ -40,8 +40,9 @@ type ExtendedStateForEditableEntities = {
 }
 
 export type ActivitiesState = RequestState<VolunteerActivity>
-
 export type GendersState = RequestState<IdAndName>
+export type RegionsState = RequestState<IdAndName>
+export type OrganisationsState = RequestState<IdAndName>
 
 export type BirthYearsState = {
   items: Record<number, IdAndName>;
@@ -77,5 +78,7 @@ export type State = {
     activities: ActivitiesState;
     genders: GendersState;
     birthYears: BirthYearsState;
+    regions: RegionsState;
+    organisations: OrganisationsState;
   };
 }

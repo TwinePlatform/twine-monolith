@@ -132,6 +132,14 @@ const Constants = {
     method: 'GET',
     url: '/genders',
   }),
+  regions: () => makeRequest<IdAndName>({
+    method: 'GET',
+    url: '/regions',
+  }),
+  organisations: (regionId) => makeRequest<IdAndName>({
+    method: 'GET',
+    url: `/regions/${regionId}/community-businesses`,
+  }),
 };
 
 const API = {
