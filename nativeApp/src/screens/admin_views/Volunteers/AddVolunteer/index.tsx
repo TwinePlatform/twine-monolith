@@ -7,6 +7,8 @@ import UserForm from '../../../../lib/ui/forms/UserForm';
 import { createVolunteer, selectCreateVolunteerStatus, createVolunteerReset } from '../../../../redux/entities/volunteers';
 import { NewVolunteer } from '../../../../api/types';
 import { RoleEnum } from '../../../../../../api/src/models/types';
+import { selectOrderedGenders, loadGenders } from '../../../../redux/constants/genders';
+import { selectOrderedBirthYears } from '../../../../redux/constants/birthYears';
 
 /*
  * Types
@@ -24,6 +26,14 @@ type Props = {
 const AddVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
   const dispatch = useDispatch();
   const requestStatus = useSelector(selectCreateVolunteerStatus, shallowEqual);
+  const genders = useSelector(selectOrderedGenders, shallowEqual);
+  const birthYears = useSelector(selectOrderedBirthYears, shallowEqual);
+
+  useEffect(() => {
+    if (!genders) {
+      dispatch(loadGenders());
+    }
+  });
 
   // TODO modal to confirm save
   useEffect(() => {
@@ -45,6 +55,8 @@ const AddVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
         action="create"
         onSubmit={onSubmit}
         requestErrors={requestStatus.error}
+        birthYears={birthYears}
+        genders={genders}
       />
     </Page>
   );

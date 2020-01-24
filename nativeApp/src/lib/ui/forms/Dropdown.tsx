@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
 import { Item as I, Picker, Label as L } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
+import { PickerProperties } from 'react-native';
 import { Forms } from './enums';
 import { ColoursEnum } from '../colours';
 
@@ -35,7 +36,7 @@ const Label = styled(L)`
 /*
  * Component
  */
-const Dropdown: FC<Props> = (props) => {
+const Dropdown: FC<Props & PickerProperties> = (props) => {
   const {
     label, options, onValueChange, defaultValue, ...rest
   } = props;

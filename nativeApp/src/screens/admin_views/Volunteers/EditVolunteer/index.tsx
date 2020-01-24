@@ -7,6 +7,8 @@ import { updateVolunteer, selectUpdateVolunteerStatus, updateVolunteerReset } fr
 
 import Page from '../../../../lib/ui/Page';
 import UserForm from '../../../../lib/ui/forms/UserForm';
+import { selectOrderedGenders, loadGenders } from '../../../../redux/constants/genders';
+import { selectOrderedBirthYears } from '../../../../redux/constants/birthYears';
 
 
 /*
@@ -27,6 +29,14 @@ const EditVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
   const volunteerDetails = navigation.state.params;
   const dispatch = useDispatch();
   const requestStatus = useSelector(selectUpdateVolunteerStatus, shallowEqual);
+  const genders = useSelector(selectOrderedGenders, shallowEqual);
+  const birthYears = useSelector(selectOrderedBirthYears, shallowEqual);
+
+  useEffect(() => {
+    if (!genders) {
+      dispatch(loadGenders());
+    }
+  });
 
   useEffect(() => {
     if (requestStatus.success) {
@@ -49,6 +59,8 @@ const EditVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
         defaultValues={filter(Boolean, volunteerDetails)}
         action="update"
         requestErrors={requestStatus.error}
+        genders={genders}
+        birthYears={birthYears}
       />
     </Page>
   );

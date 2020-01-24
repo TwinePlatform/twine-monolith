@@ -11,6 +11,8 @@ import { Forms } from '../enums';
 import SubmitButton from '../SubmitButton';
 import { User, GenderEnum } from '../../../../../../api/src/models';
 import { ErrorText } from '../../typography';
+import { mergeErrorMessages } from '../../../utils/errors';
+import { IdAndName } from '../../../../api';
 
 /*
  * Types
@@ -20,6 +22,8 @@ type Props = {
   onSubmit: (v: Partial<User>) => void;
   defaultValues?: Partial<User>;
   requestErrors: any;
+  genders: IdAndName[];
+  birthYears: IdAndName[];
 }
 
 type FormData = {
@@ -51,8 +55,9 @@ const validationSchema = yup.object().shape({
     .min(3, 'Name must be at least 3 lettters')
     .max(30, 'Name cannot be longer than 30 letters')
     // .matches({
-  // regex: /^[a-zA-Z]{2,}\s?[a-zA-z]*['-]?[a-zA-Z]*['\- ]?([a-zA-Z]{1,})?/,
-  // message: 'Name must not contain special characters' })
+    //   regex: /^[a-zA-Z]{2,}\s?[a-zA-z]*['-]?[a-zA-Z]*['\- ]?([a-zA-Z]{1,})?/,
+    //   message: 'Name must not contain special characters',
+    // })
     .required('Name is required'),
   email: yup.string()
     .email('Email must be valid')
@@ -65,42 +70,15 @@ const validationSchema = yup.object().shape({
     .string()
     .min(4, 'Post code must be at least 4 letters')
     .max(10, 'Post code cannot be longer than 10 letters'),
-  // .matches({ regex: /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i, message: 'Post code must be valid' })
+  // .matches({ regex: /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i, message: 'Post code must be valid' }),
 });
 
-// TODO: get from api
-const genders = [
-  { id: 1, name: 'female' },
-  { id: 2, name: 'male' },
-  { id: 3, name: 'prefer not to say' },
-];
 
-const birthYears = [...Array(130).keys()].map((_, i) => ({ id: i, name: `${2019 - i}` }));
-
-const mergeErrorMessages = (validationErrors, requestErrors) => {
-  let errors = {};
-
-  if (validationErrors) {
-    const newValidationErrors = Object.keys(validationErrors)
-      .reduce((acc, entity) => ({ ...acc, [entity]: validationErrors[entity].message }), {});
-
-    errors = { ...errors, ...newValidationErrors };
-  }
-  if (requestErrors) {
-    if (requestErrors.validation) {
-      errors = { ...errors, ...requestErrors.validation };
-    } else {
-      errors = { ...errors, message: requestErrors.message };
-    }
-  }
-
-  return errors;
-};
 /*
  * Component
  */
 const UserForm: FC<Props> = ({
-  action, onSubmit, defaultValues = {}, requestErrors,
+  action, onSubmit, defaultValues = {}, requestErrors, genders, birthYears,
 }) => {
   const {
     register, setValue, handleSubmit, errors: validationErrors, triggerValidation,
