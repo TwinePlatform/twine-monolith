@@ -4,9 +4,10 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { withNavigation, NavigationInjectedProps } from 'react-navigation';
 import Page from '../../../../lib/ui/Page';
 import UserForm from '../../../../lib/ui/forms/UserForm';
-import { createVolunteer, selectCreateVolunteerStatus, createVolunteerReset } from '../../../../redux/entities/volunteers';
+import {
+  createVolunteer, selectCreateVolunteerStatus, createVolunteerReset, loadVolunteers,
+} from '../../../../redux/entities/volunteers';
 import { NewVolunteer } from '../../../../api/types';
-import { RoleEnum } from '../../../../../../api/src/models/types';
 import { selectOrderedGenders, loadGenders } from '../../../../redux/constants/genders';
 import { selectOrderedBirthYears } from '../../../../redux/constants/birthYears';
 
@@ -39,12 +40,13 @@ const AddVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
   useEffect(() => {
     if (requestStatus.success) {
       dispatch(createVolunteerReset());
+      dispatch(loadVolunteers());
       navigation.navigate('Volunteers');
     }
   }, [requestStatus]);
 
   const onSubmit = (data: Partial<NewVolunteer>) => {
-    const volunteer = { ...data, role: 'VOLUNTEER' as RoleEnum.VOLUNTEER }; // NB: hack to appease ts & react
+    const volunteer = { ...data };
     dispatch(createVolunteer(volunteer));
   };
 

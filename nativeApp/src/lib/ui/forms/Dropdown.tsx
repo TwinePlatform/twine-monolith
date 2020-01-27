@@ -16,6 +16,7 @@ type Props = {
   options: {id: number; name: string}[];
   onValueChange: any;
   defaultValue?: string | number;
+  error?: boolean;
 }
 
 /*
@@ -38,11 +39,11 @@ const Label = styled(L)`
  */
 const Dropdown: FC<Props & PickerProperties> = (props) => {
   const {
-    label, options, onValueChange, defaultValue, ...rest
+    label, options, onValueChange, defaultValue, error, ...rest
   } = props;
   const [value, setValue] = useState(defaultValue);
   return (
-    <Item picker>
+    <Item picker error={error}>
       <Label>{label}</Label>
       <Picker
         mode="dropdown"

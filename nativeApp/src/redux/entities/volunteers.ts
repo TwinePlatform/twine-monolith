@@ -111,15 +111,21 @@ export const loadVolunteers = () => (dispatch) => {
 export const createVolunteer = (user: Partial<NewVolunteer>) => (dispatch, getState) => {
   dispatch(createVolunteerRequest());
   const state = getState();
+  const role = user.adminCode
+    ? 'VOLUNTEER_ADMIN'
+    : 'VOLUNTEER';
+
+
+  const { region, organisationId, ...rest } = user;
   const volunteer = {
-    organisationId: state.currentUser.data.organisationId,
-    ...user,
+    organisationId: organisationId || state.currentUser.data.organisationId,
+    role,
+    ...rest,
   };
 
   return API.Volunteers.add(volunteer)
     .then(() => {
       dispatch(createVolunteerSuccess());
-      dispatch(loadVolunteers());
     })
     .catch((error) => {
       const errorResponse = getErrorResponse(error);

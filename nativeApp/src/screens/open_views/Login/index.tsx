@@ -41,7 +41,7 @@ const Container = styled.View`
 const BottomContainer = styled(Container)`
   flex: 1;
   justifyContent: flex-end;
-  paddingBottom: 20;
+  paddingBottom: 30;
 `;
 
 const LinkText = styled.Text`

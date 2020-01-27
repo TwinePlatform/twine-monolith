@@ -73,7 +73,7 @@ const validationSchema = yup.object().shape({
   // .matches({ regex: /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i, message: 'Post code must be valid' }),
   region: yup.string()
     .required('Region is required'),
-  organisation: yup.string()
+  organisationId: yup.string()
     .required('Organisation is required'),
 });
 
@@ -84,7 +84,7 @@ const RegistrationForm: FC<Props> = ({
   onSubmit, requestErrors, genders, birthYears, regions, organisations, getOrganisations,
 }) => {
   const {
-    register, setValue, handleSubmit, errors: validationErrors, triggerValidation,
+    register, setValue, handleSubmit, errors: validationErrors,
   } = useForm<FormData>({ validationSchema });
 
   const [errors, setErrors] = useState({});
@@ -99,29 +99,25 @@ const RegistrationForm: FC<Props> = ({
         ref={register({ name: 'name' })}
         label="Full name"
         onChangeText={(text) => setValue('name', text)}
-        onBlur={async () => triggerValidation()}
         error={Boolean(errors.name)}
       />
       <Input
         ref={register({ name: 'email' })}
         label="Email"
         onChangeText={(text) => setValue('email', text)}
-        onBlur={async () => triggerValidation()}
         error={Boolean(errors.email)}
       />
       <Input
         ref={register({ name: 'password' })}
         label="Password"
         secureTextEntry
-        onChangeText={(text) => setValue('email', text)}
-        onBlur={async () => triggerValidation()}
-        error={Boolean(errors.email)}
+        onChangeText={(text) => setValue('password', text)}
+        error={Boolean(errors.password)}
       />
       <Input
         ref={register({ name: 'phoneNumber' })}
         label="Number"
         onChangeText={(text) => setValue('phoneNumber', text)}
-        onBlur={async () => triggerValidation()}
         error={Boolean(errors.phoneNumber)}
       />
       <Dropdown
@@ -140,7 +136,6 @@ const RegistrationForm: FC<Props> = ({
         ref={register({ name: 'postCode' })}
         label="Post code"
         onChangeText={(text) => setValue('postCode', text)}
-        onBlur={async () => triggerValidation()}
         error={Boolean(errors.postCode)}
       />
 
@@ -153,19 +148,23 @@ const RegistrationForm: FC<Props> = ({
           getOrganisations(id);
           setValue('region', text);
         }}
+        error={Boolean(errors.region)}
       />
       <Dropdown
-        ref={register({ name: 'organisation' })}
+        ref={register({ name: 'organisationId' })}
         label="Organisation"
         enabled={Boolean(organisations)}
         options={organisations}
-        onValueChange={(text) => setValue('organisation', text)}
+        onValueChange={(text) => {
+          const { id } = organisations.find((organisation) => organisation.name === text);
+          setValue('organisationId', id);
+        }}
+        error={Boolean(errors.organisationId)}
       />
       <Input
         ref={register({ name: 'adminCode' })}
         label="Admin code (optional)"
         onChangeText={(text) => setValue('adminCode', text)}
-        onBlur={async () => triggerValidation()}
         error={Boolean(errors.adminCode)}
       />
 

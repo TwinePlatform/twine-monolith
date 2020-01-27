@@ -14,8 +14,8 @@ import { State, BirthYearsState } from '../types';
 /*
  * Initial State
  */
-
-const birthYears = [...Array(100).keys()].map((_, i) => ({ id: i, name: `${2019 - i + 14}` }));
+const minimumAge = 14;
+const birthYears = [...Array(100).keys()].map((_, i) => ({ id: i, name: `${2019 - (i + minimumAge)}` }));
 
 const initialState: BirthYearsState = {
   items: birthYears.reduce((acc, x) => ({ ...acc, [x.id]: x }), {}),

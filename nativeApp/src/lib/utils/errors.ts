@@ -7,11 +7,12 @@ export const mergeErrorMessages = (validationErrors, requestErrors) => {
 
     errors = { ...errors, ...newValidationErrors };
   }
+
   if (requestErrors) {
     if (requestErrors.validation) {
       errors = { ...errors, ...requestErrors.validation };
-    } else {
-      errors = { ...errors, message: requestErrors.message };
+    } else if (requestErrors.error) {
+      errors = { ...errors, message: requestErrors.error.message };
     }
   }
 

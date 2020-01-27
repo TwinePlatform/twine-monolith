@@ -15,7 +15,7 @@ import { getTimeLabel } from './helpers';
 import { createLog, selectCreateLogStatus, createLogReset } from '../../../../redux/entities/logs';
 import { IdAndName } from '../../../../api';
 import { User } from '../../../../../../api/src/models';
-import SavedModal from '../../modals/SavedModal';
+import ContinueModal from '../../modals/ContinueModal';
 import useToggle from '../../../hooks/useToggle';
 
 /*
@@ -118,9 +118,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   return (
     <Form>
-      <SavedModal
+      <ContinueModal
         isVisible={responseModal}
         onContinue={onContinue}
+        text="Saved"
       />
       {forUser === 'admin' && <Dropdown label="Volunteer" options={volunteers} selectedValue={volunteer} onValueChange={setVolunteer} />}
       {forUser === 'volunteer' && <Label>What project are you volunteering on?</Label>}

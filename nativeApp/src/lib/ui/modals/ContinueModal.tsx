@@ -12,7 +12,7 @@ import { ColoursEnum } from '../colours';
 type Props = {
   isVisible: boolean;
   onContinue: () => void;
-
+  text: string;
 }
 
 /*
@@ -58,10 +58,10 @@ const Button = ({ onPress }) => (
 /*
  * Component
  */
-const SavedModal: FC<Props> = ({ isVisible, onContinue }) => (
+const ContinueModal: FC<Props> = ({ isVisible, onContinue, text }) => (
   <Modal isVisible={isVisible}>
     <Card>
-      <Heading2>Saved</Heading2>
+      <Heading2>{text}</Heading2>
       <ButtonContainer>
         <Button onPress={onContinue} />
       </ButtonContainer>
@@ -69,4 +69,4 @@ const SavedModal: FC<Props> = ({ isVisible, onContinue }) => (
   </Modal>
 );
 
-export default SavedModal;
+export default ContinueModal;
