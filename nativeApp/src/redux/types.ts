@@ -64,14 +64,15 @@ export type ProjectsState = RequestState<VolunteerProject> & {
   deleteError: Error;
 }
 
-export type CurrentUserState = {
-  rolesFetchError: null | Error;
-  rolesIsFetching: boolean;
-  rolesSuccess: boolean;
-  roles: Pick <Roles, 'roles'>;
-  organisationId: Pick <Roles, 'organisationId'>;
+export type CurrentUserData = {
   currentUser: CurrentUser;
-}
+} & Roles
+
+export type CurrentUserState = {
+  currentUserFetchError: null | Error;
+  currentUserIsFetching: boolean;
+  currentUserSuccess: boolean;
+} & CurrentUserData
 
 export type State = {
   currentUser: CurrentUserState;

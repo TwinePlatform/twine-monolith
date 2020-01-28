@@ -15,7 +15,7 @@ const AuthenticationLoader: FC<NavigationInjectedProps> = (props) => {
     (async () => {
       try {
         const { data } = await API.Authentication.roles();
-        dispatch(loadCurrentUser());
+        dispatch(loadCurrentUser(data));
         // TODO get role types from api
         if (data.roles.includes('CB_ADMIN') || data.roles.includes('VOLUNTEER_ADMIN')) {
           props.navigation.navigate('AdminStack');
