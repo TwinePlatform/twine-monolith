@@ -7,7 +7,7 @@ import {
 import { NavigationInjectedProps } from 'react-navigation';
 import { useDispatch } from 'react-redux';
 import API from '../api';
-import { updateCurrentUser } from '../redux/currentUser';
+import { loadCurrentUser } from '../redux/currentUser';
 
 const AuthenticationLoader: FC<NavigationInjectedProps> = (props) => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const AuthenticationLoader: FC<NavigationInjectedProps> = (props) => {
     (async () => {
       try {
         const { data } = await API.Authentication.roles();
-        dispatch(updateCurrentUser(data));
+        dispatch(loadCurrentUser());
         // TODO get role types from api
         if (data.roles.includes('CB_ADMIN') || data.roles.includes('VOLUNTEER_ADMIN')) {
           props.navigation.navigate('AdminStack');

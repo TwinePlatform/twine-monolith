@@ -1,7 +1,7 @@
 import {
   VolunteerLog, User, VolunteerProject, VolunteerActivity,
 } from '../../../api/src/models/types';
-import { CurrentUser } from '../api/types';
+import { CurrentUser, Roles } from '../api/types';
 import { IdAndName } from '../api';
 
 // Actions
@@ -64,7 +64,14 @@ export type ProjectsState = RequestState<VolunteerProject> & {
   deleteError: Error;
 }
 
-export type CurrentUserState = { data: CurrentUser }
+export type CurrentUserState = {
+  rolesFetchError: null | Error;
+  rolesIsFetching: boolean;
+  rolesSuccess: boolean;
+  roles: Pick <Roles, 'roles'>;
+  organisationId: Pick <Roles, 'organisationId'>;
+  currentUser: CurrentUser;
+}
 
 export type State = {
   currentUser: CurrentUserState;

@@ -54,6 +54,7 @@ const Authentication = {
   }),
   logOut: () => makeRequest({ method: 'GET', url: 'users/logouts' }),
   roles: () => makeRequest({ method: 'GET', url: '/users/me/roles' }),
+  me: () => makeRequest({ method: 'GET', url: '/users/me' }),
 };
 
 const Volunteers = {

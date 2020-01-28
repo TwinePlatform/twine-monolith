@@ -105,7 +105,10 @@ export const loadVolunteers = () => (dispatch) => {
 
   return API.Volunteers.get()
     .then((res) => dispatch(loadVolunteersSuccess(res.data)))
-    .catch((error) => dispatch(loadVolunteersError(error)));
+    .catch((error) => {
+      const errorResponse = getErrorResponse(error);
+      dispatch(loadVolunteersError(errorResponse));
+    });
 };
 
 export const createVolunteer = (user: Partial<NewVolunteer>) => (dispatch, getState) => {

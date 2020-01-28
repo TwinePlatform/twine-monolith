@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Form as F, Text } from 'native-base';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import Dropdown from '../Dropdown';
 import { Forms } from '../enums';
@@ -17,6 +17,7 @@ import { IdAndName } from '../../../../api';
 import { User } from '../../../../../../api/src/models';
 import ContinueModal from '../../modals/ContinueModal';
 import useToggle from '../../../hooks/useToggle';
+import { selectCurrentUser } from '../../../../redux/currentUser';
 
 /*
  * Types
@@ -69,7 +70,9 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   // redux
   const dispatch = useDispatch();
 
-  const requestStatus = useSelector(selectCreateLogStatus);
+  const requestStatus = useSelector(selectCreateLogStatus, shallowEqual);
+
+  const currentUser = useSelector(selectCurrentUser, shallowEqual);
 
   // local state
   const [responseModal, toggleResponseModal] = useToggle(false);
@@ -104,7 +107,9 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       activity,
       startedAt: date as string,
       duration: { hours, minutes },
-      userId: volunteers.find((x) => x.name === volunteer).id,
+      userId: forUser === 'admin'
+        ? volunteers.find((x) => x.name === volunteer).id
+        : currentUser.id,
     };
     dispatch(createLog(values));
   };
