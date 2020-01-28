@@ -98,3 +98,11 @@ export const SaveButton: FC<Props<SaveButtonConfig>> = ({ buttonConfig: { onSave
     </Button>
   </ButtonContainer>
 );
+
+
+export const EmptyButton = () => (
+  <ButtonContainer>
+    <Button transparent />
+    <Button transparent />
+  </ButtonContainer>
+);

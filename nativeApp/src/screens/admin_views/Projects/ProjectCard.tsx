@@ -10,6 +10,7 @@ import { FontsEnum, Heading2 as H2 } from '../../../lib/ui/typography';
 import useToggle from '../../../lib/hooks/useToggle';
 import { ButtonConfig, ButtonType } from '../../../lib/ui/CardWithButtons/types';
 import { updateProject } from '../../../redux/entities/projects';
+import copy from '../../../copy';
 
 /*
  * Types
@@ -21,6 +22,7 @@ type Props = {
   deletedDate?: string;
   buttonType: ButtonType;
   onPress: () => void;
+  isGeneral?: boolean;
 }
 
 /*
@@ -58,6 +60,8 @@ const getButtonConfig = (
   buttonConfigs: ButtonConfig[],
 ) => {
   switch (buttonType) {
+    case 'empty':
+      return buttonConfigs.find((x) => x.buttonType === 'empty');
     case 'restore':
       return buttonConfigs.find((x) => x.buttonType === 'restore');
     case 'archive':
@@ -83,7 +87,7 @@ const getIconColor = (buttonType: ButtonType, active: boolean) => {
  * Component
  */
 const ProjectCard: FC<NavigationInjectedProps & Props> = ({
-  date, title, buttonType, onPress, deletedDate, id,
+  date, title, buttonType, onPress, deletedDate, id, isGeneral,
 }) => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(title);
@@ -108,8 +112,14 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
   {
     buttonType: 'restore',
     onPress,
-  }];
+  },
+  {
+    buttonType: 'empty',
+  },
+  ];
 
+  const descriptionText = isGeneral ? copy.generalProjectCard : `Created: ${date}`;
+  // TODO replace General card with own version to remove empty space where buttons live
   return (
     <CardWithButtons buttonConfig={getButtonConfig(buttonType, active, buttonConfigs)}>
       <HeadingContainer>
@@ -118,7 +128,7 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
           ? <InputHeading selectTextOnFocus autoFocus onChangeText={setValue} value={value} />
           : <Heading2>{value}</Heading2>}
       </HeadingContainer>
-      <Description>{`Created: ${date}`}</Description>
+      <Description>{descriptionText}</Description>
       {deletedDate && <Description>{`Deleted: ${deletedDate}`}</Description>}
     </CardWithButtons>
   );

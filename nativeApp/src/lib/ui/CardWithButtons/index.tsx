@@ -4,7 +4,7 @@ import { Card as C } from 'native-base';
 
 import { ColoursEnum } from '../colours';
 import {
-  ArchiveButton, DeleteButton, RestoreButton, SaveButton,
+  ArchiveButton, DeleteButton, RestoreButton, SaveButton, EmptyButton,
 } from './Buttons';
 import { ButtonConfig } from './types';
 
@@ -44,6 +44,7 @@ const CardWithButtons: FC<Props> = (props) => {
       <TopContainer>
         {children}
       </TopContainer>
+      {buttonConfig.buttonType === 'empty' && <EmptyButton />}
       {buttonConfig.buttonType === 'archive' && <ArchiveButton buttonConfig={buttonConfig} />}
       {buttonConfig.buttonType === 'delete' && <DeleteButton buttonConfig={buttonConfig} />}
       {buttonConfig.buttonType === 'restore' && <RestoreButton buttonConfig={buttonConfig} />}
@@ -52,5 +53,6 @@ const CardWithButtons: FC<Props> = (props) => {
 
   );
 };
+
 
 export default CardWithButtons;

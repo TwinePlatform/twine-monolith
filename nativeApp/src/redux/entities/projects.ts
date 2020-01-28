@@ -130,7 +130,7 @@ const restoreProjectError = createAction<Error>(ActionsType.RESTORE_PROJECT_ERRO
 export const loadProjects = () => (dispatch) => {
   dispatch(loadProjectsRequest());
 
-  return API.Projects.get() // TODO
+  return API.Projects.get()
     .then((res) => dispatch(loadProjectsSuccess(res.data)))
     .catch((error) => dispatch(loadProjectsError(error)));
 };
@@ -211,13 +211,16 @@ const projectsReducer: Reducer<ProjectsState, Actions> = (state = initialState, 
       };
 
     case ActionsType.LOAD_PROJECTS_SUCCESS:
+      // Add general project
+      const projects = [{ id: 0, name: 'General', deletedAt: null }].concat(action.payload); //eslint-disable-line
+
       return {
         ...state,
         isFetching: false,
         fetchError: null,
         lastUpdated: new Date(),
-        order: action.payload.map((log) => log.id),
-        items: action.payload.reduce((acc, x) => ({ ...acc, [x.id]: x }), {}),
+        order: projects.map((log) => log.id),
+        items: projects.reduce((acc, x) => ({ ...acc, [x.id]: x }), {}),
       };
 
     // CREATE

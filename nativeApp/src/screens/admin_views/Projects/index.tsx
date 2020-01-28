@@ -71,16 +71,21 @@ const ProjectTab: FC<PropsProjectTab> = ({
         text={confirmationText}
       />
 
-      { projects && projects.map((project) => (
-        <ProjectCard
-          key={project.id}
-          id={project.id}
-          title={project.name}
-          date={formatDate(project.createdAt)}
-          buttonType={buttonType}
-          onPress={() => onPress(project.id)}
-        />
-      ))}
+      { projects && projects.map((project) => {
+        const isGeneral = project.id === 0;
+
+        return (
+          <ProjectCard
+            key={project.id}
+            id={project.id}
+            title={project.name}
+            date={formatDate(project.createdAt)}
+            buttonType={isGeneral ? 'empty' : buttonType}
+            onPress={() => onPress(project.id)}
+            isGeneral={isGeneral}
+          />
+        );
+      })}
     </View>
   );
 };

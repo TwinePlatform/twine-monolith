@@ -1,4 +1,4 @@
-export type ButtonType = 'archive' | 'delete' | 'restore' | 'save';
+export type ButtonType = 'archive' | 'delete' | 'restore' | 'save' | 'empty';
 
 
 export type ArchiveButtonConfig = {
@@ -23,8 +23,13 @@ export type SaveButtonConfig = {
   onSave: () => void;
 }
 
+export type EmptyButtonConfig = {
+  buttonType: 'empty';
+}
+
 export type ButtonConfig =
   ArchiveButtonConfig
   | DeleteButtonConfig
   | RestoreButtonConfig
   | SaveButtonConfig
+  | EmptyButtonConfig
