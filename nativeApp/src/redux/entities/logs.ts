@@ -1,6 +1,5 @@
 import { Reducer } from 'redux';
 import { createAction } from 'redux-actions';
-import { assoc } from 'ramda';
 import { VolunteerLog } from '../../../../api/src/models/types';
 import API, { getErrorResponse } from '../../api';
 import {
@@ -181,8 +180,10 @@ const reducer: Reducer<LogsState, Actions> = (state = initialState, action) => {
         isFetching: false,
         fetchError: null,
         lastUpdated: new Date(),
-        order: action.payload.map((log) => log.id),
-        items: action.payload.reduce((acc, log) => assoc(String(log.id), log, acc), {}),
+        order: action.payload
+          .sort((a, b) => new Date(b.startedAt) - new Date(a.startedAt))
+          .map((log) => log.id),
+        items: action.payload.reduce((acc, log) => ({ ...acc, [log.id]: log }), {}),
       };
 
     // CREATE

@@ -118,7 +118,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const onContinue = () => {
     dispatch(createLogReset());
     resetForm();
-    // toggleResponseModal(); ??
+    toggleResponseModal();
   };
 
   return (
