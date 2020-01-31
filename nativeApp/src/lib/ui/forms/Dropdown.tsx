@@ -11,7 +11,6 @@ import { ColoursEnum } from '../colours';
  * Types
  */
 type Props = {
-  ref: (ref: unknown) => void;
   label: string;
   options: {id: number; name: string}[];
   onValueChange: any;

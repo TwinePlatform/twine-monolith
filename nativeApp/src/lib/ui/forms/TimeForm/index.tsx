@@ -12,7 +12,9 @@ import HoursAndMinutesText from '../../HoursAndMinutesText';
 import SubmitButton from '../SubmitButton';
 
 import { getTimeLabel } from './helpers';
-import { createLog, selectCreateLogStatus, createLogReset } from '../../../../redux/entities/logs';
+import {
+  createLog, selectCreateLogStatus, createLogReset, loadLogs,
+} from '../../../../redux/entities/logs';
 import { IdAndName } from '../../../../api';
 import { User } from '../../../../../../api/src/models';
 import ContinueModal from '../../modals/ContinueModal';
@@ -85,7 +87,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [minutes, setMinutes] = useState<number>();
 
   const resetForm = () => {
-    setProject('');
+    setProject('General');
     setActivity('');
     setVolunteer('');
     setDate(undefined);
@@ -118,6 +120,8 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const onContinue = () => {
     dispatch(createLogReset());
     resetForm();
+
+    if (forUser === 'admin') dispatch(loadLogs());
     toggleResponseModal();
   };
 
@@ -130,7 +134,13 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       />
       {forUser === 'admin' && <Dropdown label="Volunteer" options={volunteers} selectedValue={volunteer} onValueChange={setVolunteer} />}
       {forUser === 'volunteer' && <Label>What project are you volunteering on?</Label>}
-      <Dropdown label="Project" options={projects} selectedValue={project} onValueChange={setProject} />
+      <Dropdown
+        label="Project"
+        options={projects}
+        selectedValue={project}
+        onValueChange={setProject}
+        defaultValue="General"
+      />
       {forUser === 'volunteer' && <Label>What activity are you doing?</Label>}
       <Dropdown label="Activity" options={activities} selectedValue={activity} onValueChange={setActivity} />
       <DateTimePicker
