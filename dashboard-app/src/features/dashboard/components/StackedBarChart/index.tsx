@@ -19,6 +19,7 @@ import { LegendData } from './types';
 import { TitleString } from '../Title';
 import { DashboardContext } from '../../context';
 import { TableTypeItem } from '../../dataManipulation/tableType';
+import { GraphColoursEnum } from '../../../../lib/ui/design_system';
 
 
 /*
@@ -32,6 +33,7 @@ interface Props {
   title: TitleString;
   legendData: LegendData;
   setLegendData: React.Dispatch<React.SetStateAction<LegendData>>;
+  colours?: GraphColoursEnum[];
   defaultSelection: boolean;
 }
 
@@ -78,8 +80,8 @@ const getOverlayText = (data: AggregatedData, legendItemsActive: boolean): [bool
  * Components
  */
 const StackedBarChart: FunctionComponent<Props> = (props) => {
-  const { data, xAxisTitle, yAxisTitle, title, legendData, setLegendData, defaultSelection } = props;
-  const { unit } = useContext(DashboardContext)
+  const { data, xAxisTitle, yAxisTitle, title, legendData, setLegendData, defaultSelection, colours } = props;
+  const { unit } = useContext(DashboardContext);
   const [chartData, setChartData] = useState();
   const [tooltipUnit, setTooltipUnit] = useState('');
 
@@ -101,13 +103,13 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
     if (!equals(legendData, newLegendData)) {
       setLegendData(newLegendData);
     }
-    setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
-  }, [data, setLegendData, setChartData, unit, defaultSelection, legendData]);
+    setChartData(aggregatedToStackedGraph(zeroedOutData, unit, colours));
+  }, [data, setLegendData, setChartData, unit, defaultSelection, legendData, colours]);
 
   useEffect(() => {
     const zeroedOutData = sortAndZeroOutInactiveData(data, legendData);
-    setChartData(aggregatedToStackedGraph(zeroedOutData, unit));
-  }, [data, legendData, unit]);
+    setChartData(aggregatedToStackedGraph(zeroedOutData, unit, colours));
+  }, [colours, data, legendData, unit]);
 
   useEffect(() => {
     setTooltipUnit(unit === DurationUnitEnum.DAYS ? 'days' : 'hrs');
@@ -130,7 +132,8 @@ const StackedBarChart: FunctionComponent<Props> = (props) => {
     setLegendActivityOfAll,
     setLegendActivityOnUpdate,
     title: data.groupByX,
-    defaultSelection
+    defaultSelection,
+    colours,
   };
 
   return (

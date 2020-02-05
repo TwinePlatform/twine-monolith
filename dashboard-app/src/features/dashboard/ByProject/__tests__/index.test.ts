@@ -108,6 +108,32 @@ describe('By Project Page', () => {
       expect(rows[0]).toHaveTextContent('Cafe5.663.332.33');
       expect(rows[1]).toHaveTextContent('Running away1.331.330');
     });
+
+    test('Sort on first column is ascending (A-Z) by default', async () => {
+      expect.assertions(4);
+
+      mock.onGet('/community-businesses/me/volunteer-logs').reply(200, { result: logs });
+      mock.onGet('/volunteer-activities').reply(200, { result: activities });
+      mock.onGet('/community-businesses/me/volunteers/projects').reply(200, { result: projects });
+
+      const tools = renderWithHistory(ByProject);
+      const tableTab = await waitForElement(() => tools.getByText('Table', { exact: true }));
+      fireEvent.click(tableTab);
+
+      const header = await waitForElement(() => tools.getByText('Project', { exact: false }));
+
+      fireEvent.click(header);
+
+      const [sortedHeader, rows] = await waitForElement(() => [
+        tools.getByText('↑ Project', { exact: true }),
+        tools.getAllByTestId('data-table-row'),
+      ]);
+
+      expect(sortedHeader).toHaveTextContent('↑ Project');
+      expect(rows).toHaveLength(2);
+      expect(rows[0]).toHaveTextContent('General2.332.330');
+      expect(rows[1]).toHaveTextContent('Project 14.663.331.33');
+    });
   });
 
 });
