@@ -75,7 +75,7 @@ const UtilBar = ({ onChange, errors, basis, options, filters, onExportError }) =
           filters={filters}
           onError={onExportError}
         >
-        Export
+        DOWNLOAD
         </CsvExportButton>
       </Col>
     </Form>
