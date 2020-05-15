@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
+import { View, StyleSheet, Alert } from "react-native";
 import styled from "styled-components/native";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
@@ -16,7 +17,7 @@ import {
 } from "../../../lib/ui/CardWithButtons/types";
 import { updateProject } from "../../../redux/entities/projects";
 import {
-  loadVolunteers,
+  pushVolunteers,
   selectOrderedVolunteers,
 } from '../../../redux/entities/volunteers';
 
@@ -134,11 +135,24 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
     },
   ];
 
+
+
   const [checked, setChecked] = useState(false);
+
+
+
 
   const onSubmit = async () => {
     console.log("I clicked the send button!");
     console.log(volunteers);
+    Alert.alert(
+      "Push Notification",
+      "Push Notification Sent.",
+      [
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ],
+      { cancelable: false }
+    );
     // ToDo: use api to get all volunteers
     // get api endpoints
     // Knex: Select user_account_id from volunteer_hours_log WHERE volunteer_project_id = project_id;
@@ -168,7 +182,7 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
         checked={checked}
         onPress={() => setChecked(currentBool => !currentBool)}
       />
-      <SubmitButton text="Send" onPress={() => onSubmit()} />
+      <SubmitButton text="Send" onPress={(createTwoButtonAlert) => onSubmit()} />
 
 
       {deletedDate && <Description>{`Deleted: ${deletedDate}`}</Description>}
