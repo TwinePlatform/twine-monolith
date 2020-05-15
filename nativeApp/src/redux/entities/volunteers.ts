@@ -80,7 +80,7 @@ const initialState: VolunteersState = {
  * Action creators
  */
 const loadVolunteersRequest = createAction(ActionsType.LOAD_VOLUNTEERS_REQUEST);
-const loadVolunteersSuccess = createAction<Partial <User> []>(ActionsType.LOAD_VOLUNTEERS_SUCCESS);
+const loadVolunteersSuccess = createAction<Partial<User>[]>(ActionsType.LOAD_VOLUNTEERS_SUCCESS);
 const loadVolunteersError = createAction<Error>(ActionsType.LOAD_VOLUNTEERS_ERROR);
 
 const createVolunteerRequest = createAction(ActionsType.CREATE_VOLUNTEER_REQUEST);
@@ -150,6 +150,14 @@ export const deleteVolunteer = (id: number) => (dispatch) => {
       dispatch(loadVolunteers());
     })
     .catch((error) => dispatch(deleteVolunteerError(error)));
+};
+
+export const pushVolunteers = () => (dispatch) => {
+  dispatch(loadVolunteersRequest());
+
+  return API.Volunteers.getPush()
+    .then((res) => dispatch(loadVolunteersSuccess(res.data)))
+    .catch((error) => dispatch(loadVolunteersError(error)));
 };
 
 /*

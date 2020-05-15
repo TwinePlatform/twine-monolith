@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import styled from "styled-components/native";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
@@ -14,7 +14,11 @@ import {
   ButtonConfig,
   ButtonType,
 } from "../../../lib/ui/CardWithButtons/types";
-import { updateProject, selectAllOrderedProjects } from "../../../redux/entities/projects";
+import { updateProject } from "../../../redux/entities/projects";
+import {
+  loadVolunteers,
+  selectOrderedVolunteers,
+} from '../../../redux/entities/volunteers';
 
 /*
  * Types
@@ -105,7 +109,13 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
     toggle();
   };
 
-  const projects = useSelector(selectAllOrderedProjects, shallowEqual);
+  // const projects = useSelector(selectAllOrderedProjects, shallowEqual);
+
+  useEffect(() => {
+    dispatch(pushVolunteers());
+  }, []);
+
+  const volunteers = useSelector(selectOrderedVolunteers, shallowEqual);
 
 
   const buttonConfigs: ButtonConfig[] = [
@@ -128,7 +138,7 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
 
   const onSubmit = async () => {
     console.log("I clicked the send button!");
-    console.log(projects);
+    console.log(volunteers);
     // ToDo: use api to get all volunteers
     // get api endpoints
     // Knex: Select user_account_id from volunteer_hours_log WHERE volunteer_project_id = project_id;
