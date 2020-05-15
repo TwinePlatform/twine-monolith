@@ -31,7 +31,7 @@ const axios = _axios.create({
   },
 });
 
-const makeRequest = async <T = any> (params: AxiosRequestConfig) => {
+const makeRequest = async <T = any>(params: AxiosRequestConfig) => {
   let headers;
   try {
     const token = await AsyncStorage.getItem(StorageValuesEnum.USER_TOKEN);
@@ -73,6 +73,9 @@ const Volunteers = {
   delete: (id: number) => makeRequest<Api.Users.Volunteers.Id.DELETE.Result>(
     { method: 'DELETE', url: `/users/volunteers/${id}` },
   ),
+  getPush: () => makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>(
+    { method: 'GET', url: '/community-businesses/me/push' },
+  ),
 };
 
 const VolunteerLogs = {
@@ -84,7 +87,7 @@ const VolunteerLogs = {
     },
   ),
   getVolunteerActivities: () => axios.get('/volunteer-activities'),
-  add: (values: Partial<VolunteerLog> ) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>( //eslint-disable-line
+  add: (values: Partial<VolunteerLog>) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>( //eslint-disable-line
     {
       method: 'POST',
       url: '/community-businesses/me/volunteer-logs',
@@ -107,14 +110,14 @@ const Projects = {
   restore: (id: number) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.Id.Restore.PATCH.Result>( //eslint-disable-line
     { method: 'PATCH', url: `/community-businesses/me/volunteers/projects/${id}/restore` },
   ),
-  update: (id: number, name: string ) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.Id.PUT.Result>( //eslint-disable-line
+  update: (id: number, name: string) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.Id.PUT.Result>( //eslint-disable-line
     {
       method: 'PUT',
       url: `/community-businesses/me/volunteers/projects/${id}`,
       data: { name },
     },
   ),
-  add: (name: string ) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.POST.Result>( //eslint-disable-line
+  add: (name: string) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.POST.Result>( //eslint-disable-line
     {
       method: 'POST',
       url: '/community-businesses/me/volunteers/projects',
