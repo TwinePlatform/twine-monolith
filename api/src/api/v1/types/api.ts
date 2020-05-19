@@ -23,7 +23,7 @@ import { Serialisers } from '../serialisers';
 interface ServerRoute<
   TRequest extends Hapi.Request,
   TResponse extends Hapi.Lifecycle.ReturnValue
-> extends Hapi.ServerRoute {
+  > extends Hapi.ServerRoute {
   handler: (req: TRequest, h: Hapi.ResponseToolkit, e?: Error) => Promise<Boom<null> | TResponse>;
 }
 
@@ -67,7 +67,7 @@ export namespace Api {
       export namespace PUT {
         export interface Request extends Hapi.Request {
           payload:
-            Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
+          Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
           pre: { communityBusiness: CommunityBusiness };
         }
         export type Result = CommunityBusiness;
@@ -375,7 +375,7 @@ export namespace Api {
       export namespace PUT {
         export interface Request extends Hapi.Request {
           payload:
-            Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
+          Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
           pre: { communityBusiness: CommunityBusiness };
         }
         export type Result = CommunityBusiness;
@@ -453,18 +453,31 @@ export namespace Api {
           export type Route = ServerRoute<Request, ResponsePayload<Result, Meta>>;
         }
       }
+
+      export namespace PushNotification {
+        export namespace GET {
+          export interface Request extends Hapi.Request {
+            params: { organisationId: string | 'me' };
+            query: ApiRequestQuery;
+            pre: { communityBusiness: CommunityBusiness; isChild: boolean };
+          }
+          export type Result = Unpack<ReturnType<typeof Serialisers.volunteers.noSecrets>>[];
+          export type Meta = { total: number };
+          export type Route = ServerRoute<Request, ResponsePayload<Result, Meta>>;
+        }
+      }
     }
 
     export namespace Register {
       export namespace POST {
         export interface Request extends Hapi.Request {
           payload:
-            Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id'>
-            & {
-              orgName: CommunityBusiness['name'];
-              adminName: string;
-              adminEmail: string;
-            };
+          Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id'>
+          & {
+            orgName: CommunityBusiness['name'];
+            adminName: string;
+            adminEmail: string;
+          };
         }
         export type Result = CommunityBusiness;
         export type Response = ResponsePayload<Result>;

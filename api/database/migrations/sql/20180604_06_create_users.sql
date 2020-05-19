@@ -37,6 +37,7 @@ CREATE TABLE user_account (
   user_account_id                  SERIAL NOT NULL UNIQUE,
   user_name                        CITEXT NOT NULL,
   user_password                    VARCHAR(64),
+  push_token                       VARCHAR(64),
   qr_code                          VARCHAR UNIQUE,
   gender_id                        INT NOT NULL,
   disability_id                    INT NOT NULL,

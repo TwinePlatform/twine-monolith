@@ -9,67 +9,129 @@ import { requestQueryToModelQuery } from '../../utils';
 import { Serialisers } from '../../serialisers';
 
 
-const routes: [Api.CommunityBusinesses.Id.Volunteers.GET.Route] = [
-  {
-    method: 'GET',
-    path: '/community-businesses/{organisationId}/volunteers',
-    options: {
-      description: 'Retreive list of all volunteers from an organisation',
-      auth: {
-        strategy: 'standard',
-        access: {
-          scope: ['user_details-child:read', 'user_details-sibling:read'],
+const routes: [
+  Api.CommunityBusinesses.Id.Volunteers.GET.Route,
+  Api.CommunityBusinesses.Id.PushNotification.GET.Route,
+] = [
+    {
+      method: 'GET',
+      path: '/community-businesses/{organisationId}/volunteers',
+      options: {
+        description: 'Retreive list of all volunteers from an organisation',
+        auth: {
+          strategy: 'standard',
+          access: {
+            scope: ['user_details-child:read', 'user_details-sibling:read'],
+          },
         },
-      },
-      validate: {
-        params: { organisationId: meOrId.required() },
-        query: {
-          ...query,
+        validate: {
+          params: { organisationId: meOrId.required() },
+          query: {
+            ...query,
+          },
         },
+        response: { schema: response },
+        pre: [
+          { method: getCommunityBusiness, assign: 'communityBusiness' },
+          { method: isChildOrganisation, assign: 'isChild' },
+        ],
       },
-      response: { schema: response },
-      pre: [
-        { method: getCommunityBusiness, assign: 'communityBusiness' },
-        { method: isChildOrganisation, assign: 'isChild' },
-      ],
+      handler: async (request, h) => {
+        const { query, pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
+
+        /*
+         * if id !== 'me' checks if user is a parent to accessed org
+         * this only grants access to TWINE_ADMIN & FUNDING_BODY users
+         */
+        if (request.params.organisationId !== 'me' && !isChild) {
+          return Boom.forbidden('Insufficient permissions to access this resource');
+        }
+
+        const modelQuery: ModelQuery<User> = {
+          ...requestQueryToModelQuery<User>(query),
+          where: { deletedAt: null },
+        };
+
+        // TODO: Need to actually add filtering and field option
+
+        const volunteers =
+          await Volunteers.fromCommunityBusiness(knex, communityBusiness, modelQuery);
+
+        const count = has('limit', modelQuery) || has('offset', modelQuery)
+          ? await Volunteers.fromCommunityBusiness(
+            knex,
+            communityBusiness,
+            omit(['limit', 'offset'], modelQuery)
+          )
+            .then((res) => res.length)
+          : volunteers.length;
+
+        return {
+          result: await Promise.all(volunteers.map(Serialisers.volunteers.noSecrets)),
+          meta: { total: count },
+        };
+      },
     },
-    handler: async (request, h) => {
-      const { query, pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
+    {
+      method: 'GET',
+      path: '/community-businesses/{organisationId}/push',
+      options: {
+        description: 'Retreive list of all volunteers from an organisation',
+        auth: {
+          strategy: 'standard',
+          access: {
+            scope: ['user_details-child:read', 'user_details-sibling:read'],
+          },
+        },
+        validate: {
+          params: { organisationId: meOrId.required() },
+          query: {
+            ...query,
+          },
+        },
+        response: { schema: response },
+        pre: [
+          { method: getCommunityBusiness, assign: 'communityBusiness' },
+          { method: isChildOrganisation, assign: 'isChild' },
+        ],
+      },
+      handler: async (request, h) => {
+        const { query, pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
 
-      /*
-       * if id !== 'me' checks if user is a parent to accessed org
-       * this only grants access to TWINE_ADMIN & FUNDING_BODY users
-       */
-      if (request.params.organisationId !== 'me' && !isChild) {
-        return Boom.forbidden('Insufficient permissions to access this resource');
-      }
+        /*
+         * if id !== 'me' checks if user is a parent to accessed org
+         * this only grants access to TWINE_ADMIN & FUNDING_BODY users
+         */
+        if (request.params.organisationId !== 'me' && !isChild) {
+          return Boom.forbidden('Insufficient permissions to access this resource');
+        }
 
-      const modelQuery: ModelQuery<User> = {
-        ...requestQueryToModelQuery<User>(query),
-        where: { deletedAt: null },
-      };
+        const modelQuery: ModelQuery<User> = {
+          ...requestQueryToModelQuery<User>(query),
+          where: { deletedAt: null },
+        };
 
-      // TODO: Need to actually add filtering and field option
+        // TODO: Need to actually add filtering and field option
 
-      const volunteers =
-        await Volunteers.fromCommunityBusiness(knex, communityBusiness, modelQuery);
+        const volunteers =
+          await Volunteers.fromCommunityBusiness(knex, communityBusiness, modelQuery);
 
-      const count = has('limit', modelQuery) || has('offset', modelQuery)
-        ? await Volunteers.fromCommunityBusiness(
-          knex,
-          communityBusiness,
-          omit(['limit', 'offset'], modelQuery)
-        )
-          .then((res) => res.length)
-        : volunteers.length;
+        const count = has('limit', modelQuery) || has('offset', modelQuery)
+          ? await Volunteers.fromCommunityBusiness(
+            knex,
+            communityBusiness,
+            omit(['limit', 'offset'], modelQuery)
+          )
+            .then((res) => res.length)
+          : volunteers.length;
 
-      return {
-        result: await Promise.all(volunteers.map(Serialisers.volunteers.noSecrets)),
-        meta: { total: count },
-      };
+        return {
+          result: await Promise.all(volunteers.map(Serialisers.volunteers.noSecrets)),
+          meta: { total: count },
+        };
+      },
     },
-  },
-];
+  ];
 
 
 export default routes;

@@ -63,18 +63,17 @@ const Volunteers = {
       method: "POST",
       url: "/users/register/volunteers",
       data: { ...volunteer },
-    }),
-  update: ({ id, ...changeset }) =>
-    makeRequest<Api.Users.Volunteers.Id.PUT.Result>({
-      method: "PUT",
-      url: `/users/volunteers/${id}`,
-      data: changeset,
-    }),
-  delete: (id: number) =>
-    makeRequest<Api.Users.Volunteers.Id.DELETE.Result>({
-      method: "DELETE",
-      url: `/users/volunteers/${id}`,
-    }),
+    },
+  ),
+  update: ({ id, ...changeset }) => makeRequest<Api.Users.Volunteers.Id.PUT.Result>(
+    { method: 'PUT', url: `/users/volunteers/${id}`, data: changeset },
+  ),
+  delete: (id: number) => makeRequest<Api.Users.Volunteers.Id.DELETE.Result>(
+    { method: 'DELETE', url: `/users/volunteers/${id}` },
+  ),
+  getPush: () => makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>(
+    { method: 'GET', url: '/community-businesses/me/push' },
+  ),
 };
 
 const VolunteerLogs = {
@@ -84,52 +83,43 @@ const VolunteerLogs = {
       method: "GET",
       url: "/community-businesses/me/volunteer-logs",
       params: { since, until },
-    }),
-  getVolunteerActivities: () => axios.get("/volunteer-activities"),
-  add: (values: Partial<VolunteerLog>) =>
-    makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>({
-      //eslint-disable-line
-      method: "POST",
-      url: "/community-businesses/me/volunteer-logs",
+
+    },
+  ),
+  getVolunteerActivities: () => axios.get('/volunteer-activities'),
+  add: (values: Partial<VolunteerLog>) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>( //eslint-disable-line
+    {
+      method: 'POST',
+      url: '/community-businesses/me/volunteer-logs',
       data: values,
     }),
 };
 
 const Projects = {
-  get: () =>
-    makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.GET.Result>({
-      //eslint-disable-line
-      method: "GET",
-      url: "/community-businesses/me/volunteers/projects",
-    }),
-  delete: (id: number) =>
-    makeRequest<
-      Api.CommunityBusinesses.Me.Volunteers.Projects.Id.DELETE.Result
-    >({
-      //eslint-disable-line
-      method: "DELETE",
-      url: `/community-businesses/me/volunteers/projects/${id}`,
-    }),
-  restore: (id: number) =>
-    makeRequest<
-      Api.CommunityBusinesses.Me.Volunteers.Projects.Id.Restore.PATCH.Result
-    >({
-      //eslint-disable-line
-      method: "PATCH",
-      url: `/community-businesses/me/volunteers/projects/${id}/restore`,
-    }),
-  update: (id: number, name: string) =>
-    makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.Id.PUT.Result>({
-      //eslint-disable-line
-      method: "PUT",
+
+  get: () => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.GET.Result>( //eslint-disable-line
+    {
+      method: 'GET',
+      url: '/community-businesses/me/volunteers/projects',
+    },
+  ),
+  delete: (id: number) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.Id.DELETE.Result>( //eslint-disable-line
+    { method: 'DELETE', url: `/community-businesses/me/volunteers/projects/${id}` },
+  ),
+  restore: (id: number) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.Id.Restore.PATCH.Result>( //eslint-disable-line
+    { method: 'PATCH', url: `/community-businesses/me/volunteers/projects/${id}/restore` },
+  ),
+  update: (id: number, name: string) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.Id.PUT.Result>( //eslint-disable-line
+    {
+      method: 'PUT',
       url: `/community-businesses/me/volunteers/projects/${id}`,
       data: { name },
-    }),
-  add: (name: string) =>
-    makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.POST.Result>({
-      //eslint-disable-line
-      method: "POST",
-      url: "/community-businesses/me/volunteers/projects",
+    },
+  ),
+  add: (name: string) => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.POST.Result>( //eslint-disable-line
+    {
+      method: 'POST',
+      url: '/community-businesses/me/volunteers/projects',
       data: { name },
     }),
 };
