@@ -24,6 +24,7 @@ const AuthenticationLoader: FC<NavigationInjectedProps> = (props) => {
           throw new Error("unsupported role");
         }
       } catch (error) {
+        console.log("authloader");
         console.log({ error });
         props.navigation.navigate("AuthStack");
       }
