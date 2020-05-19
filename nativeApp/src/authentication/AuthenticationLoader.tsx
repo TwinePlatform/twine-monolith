@@ -27,6 +27,7 @@ const AuthenticationLoader: FC<NavigationInjectedProps> = (props) => {
       } catch (error) {
         console.log({ error });
         props.navigation.navigate('AuthStack');
+        //props.navigation.navigate('AdminStack');
       }
     })();
   });

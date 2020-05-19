@@ -7,7 +7,8 @@ import { DeepPartial } from '../src/types/internal';
 const config: DeepPartial<Config> = {
   env: Environment.DEVELOPMENT,
   web: {
-    address: envOr('HOST_ADDRESS', 'localhost'),
+    //address: envOr('HOST_ADDRESS', 'localhost'),
+    address: envOr('HOST_ADDRESS', '192.168.1.20'),
     port: 4000,
     routes: {
       cors: { // Local dev servers for:

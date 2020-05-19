@@ -19,6 +19,11 @@
   },
   "homepage": "https://github.com/TwinePlatform/twine-api#readme",
   "scripts": {
+    "migrate:latest:test-windows": "knex migrate:latest --knexfile knexfile.ts NODE_ENV=testing",
+    "migrate:teardown:test-windows": "ts-node ./bin/db.ts migrate:teardown NODE_ENV=testing",
+    "db:reset:test-windows": "npm run migrate:teardown:test-windows && npm run migrate:latest:test-windows",
+    "seed:run:test-windows": "knex seed:run NODE_ENV=testing --knexfile knexfile.ts",
+    "dev-windows": "nodemon NODE_ENV=development",
     "test:unit": "NODE_ENV=testing jest --config=jest.unit.config.js",
     "test:integration": "NODE_ENV=testing jest --config=jest.integration.config.js",
     "test": "npm run test:unit && npm run test:integration",
