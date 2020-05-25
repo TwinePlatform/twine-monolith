@@ -5,6 +5,7 @@ import { Form as F, Text } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import Dropdown from '../Dropdown';
+import FuzzySearchBox from '../FuzzySearchBox';
 import { Forms } from '../enums';
 import DateTimePicker from '../DateTimePicker';
 import { ColoursEnum } from '../../colours';
@@ -65,7 +66,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const {
     forUser, activities, projects, volunteers,
   } = props;
-
+  
   // redux
   const dispatch = useDispatch();
 
@@ -122,7 +123,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
         isVisible={responseModal}
         onContinue={onContinue}
       />
-      {forUser === 'admin' && <Dropdown label="Volunteer" options={volunteers} selectedValue={volunteer} onValueChange={setVolunteer} />}
+      {forUser === 'admin' && <FuzzySearchBox label="Volunteer" options={volunteers} selectedValue={volunteer} onValueChange={setVolunteer} />}
       {forUser === 'volunteer' && <Label>What project are you volunteering on?</Label>}
       <Dropdown label="Project" options={projects} selectedValue={project} onValueChange={setProject} />
       {forUser === 'volunteer' && <Label>What activity are you doing?</Label>}

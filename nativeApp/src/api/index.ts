@@ -126,7 +126,6 @@ const Projects = {
 
 const Invite = {
   byEmail: (email) =>{
-    console.log(email);
     makeRequest({
       method: "POST",
       url: "/invite/email",

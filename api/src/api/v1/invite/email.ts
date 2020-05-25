@@ -7,7 +7,6 @@ import { Serialisers } from '../serialisers';
 
 
 const routes: [Api.Invite.Email.POST.Route]
-//const route
  = [
   {
     method: 'POST',
@@ -27,9 +26,15 @@ const routes: [Api.Invite.Email.POST.Route]
     },
     handler: async (request, h) => {
       const { user } = StandardCredentials.fromRequest(request);
-        console.log(request.payload);
-        //add the postmark integration
-        return Serialisers.invite.identity("email sent");
+      const {
+        payload,
+        server: { app: { EmailService, knex, config } },
+        pre: { communityBusiness },
+      } = request;
+
+      console.log(payload);
+      //const result =  await EmailService.inviteVolunteer(config, payload.email.address,payload.email.subject, payload.email.body, "12134")
+      return {result: ["email sent"]};
     },
   },
 ]
