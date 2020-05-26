@@ -113,7 +113,7 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
   // const projects = useSelector(selectAllOrderedProjects, shallowEqual);
 
   useEffect(() => {
-    dispatch(pushVolunteers());
+    dispatch(pushVolunteers(id));
   }, []);
 
   const volunteers = useSelector(selectOrderedVolunteers, shallowEqual);
@@ -135,16 +135,33 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
     },
   ];
 
-
-
   const [checked, setChecked] = useState(false);
 
-
-
+  // push notification function to send push notification
+  const sendPushNotification = async () => {
+    const message = {
+      to: 'ExponentPushToken[oHNi1tEeopXcwUFnrh0vx9]',
+      sound: 'default',
+      title: 'Reminder',
+      body: 'Remember to log your hours!',
+      data: { data: 'goes here' },
+      _displayInForeground: true,
+    };
+    const response = await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
+  };
 
   const onSubmit = async () => {
     console.log("I clicked the send button!");
     console.log(volunteers);
+    sendPushNotification();
     Alert.alert(
       "Push Notification",
       "Push Notification Sent.",
