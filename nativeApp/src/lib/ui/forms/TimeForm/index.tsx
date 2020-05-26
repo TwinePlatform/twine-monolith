@@ -66,7 +66,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const {
     forUser, activities, projects, volunteers,
   } = props;
-  
+
   // redux
   const dispatch = useDispatch();
 
@@ -78,7 +78,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [project, setProject] = useState('');
   const [activity, setActivity] = useState('');
   const [volunteer, setVolunteer] = useState('');
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date>(new Date);
   const [hours, setHours] = useState<number>();
   const [minutes, setMinutes] = useState<number>();
 
@@ -130,7 +130,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       <Dropdown label="Activity" options={activities} selectedValue={activity} onValueChange={setActivity} />
       <DateTimePicker
         label="Date"
-        value={date}
+        value={date}//today's date
         onConfirm={setDate}
         mode="date"
         maxDate={new Date()}
