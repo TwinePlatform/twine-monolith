@@ -9,6 +9,7 @@ import useToggle from '../../../../lib/hooks/useToggle';
 import TimeCard from '../../../../lib/ui/TimeCard';
 import Page from '../../../../lib/ui/Page';
 import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
+import ViewNoteModal from '../../../../lib/ui/modals/ViewNoteModal';
 import CardSeparator from '../../../../lib/ui/CardSeparator';
 import Loader from '../../../../lib/ui/Loader';
 
@@ -27,6 +28,8 @@ type Props = {
  */
 const AdminTime: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
+  const [visibleNoteModal, toggleVisibilityNoteModal] = useToggle(false);
+  const [note, setNote] = useState('');
   const logs = useSelector(selectOrderedLogs, shallowEqual);
   const logsRequestStatus = useSelector(selectLogsStatus, shallowEqual);
   const volunteers = useSelector(selectVolunteers, shallowEqual);
@@ -66,6 +69,11 @@ const AdminTime: FC<Props> = () => {
         title="Delete"
         text="Are you sure you want to delete this time?"
       />
+      <ViewNoteModal
+        isVisible={visibleNoteModal}
+        onClose={toggleVisibilityNoteModal}
+        note={note}
+      />
       <Loader isVisible={logsRequestStatus.isFetching} />
 
       <CardSeparator title="This Week" />
@@ -79,6 +87,8 @@ const AdminTime: FC<Props> = () => {
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
             onDelete={toggleDeleteVisibility}
+            toggleVisibilityNoteModal={toggleVisibilityNoteModal}
+            setNote={setNote}
           />
         ))
       }
@@ -93,6 +103,8 @@ const AdminTime: FC<Props> = () => {
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
             onDelete={toggleDeleteVisibility}
+            toggleVisibilityNoteModal={toggleVisibilityNoteModal}
+            setNote={setNote}
           />
         ))
       }
@@ -107,6 +119,8 @@ const AdminTime: FC<Props> = () => {
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
             onDelete={toggleDeleteVisibility}
+            toggleVisibilityNoteModal={toggleVisibilityNoteModal}
+            setNote={setNote}
           />
         ))
       }

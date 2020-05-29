@@ -53,7 +53,7 @@ const filterData = (data,filter) => {
   const fuse = new Fuse(data, options);
   let output = [];
   fuse.search(filter).map(item => output.push(item.item));
-  return output;
+  return output.length < 5 ? output : output.slice(0,5);
 }
 
 /*

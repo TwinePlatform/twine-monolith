@@ -11,12 +11,14 @@ import DateTimePicker from '../DateTimePicker';
 import { ColoursEnum } from '../../colours';
 import HoursAndMinutesText from '../../HoursAndMinutesText';
 import SubmitButton from '../SubmitButton';
+import NoteButton from '../../NoteButton';
 
 import { getTimeLabel } from './helpers';
 import { createLog, selectCreateLogStatus, createLogReset } from '../../../../redux/entities/logs';
 import { IdAndName } from '../../../../api';
 import { User } from '../../../../../../api/src/models';
 import SavedModal from '../../modals/SavedModal';
+import NoteModal from '../../modals/NoteModal';
 import useToggle from '../../../hooks/useToggle';
 
 /*
@@ -56,6 +58,11 @@ const TimeContainer = styled.View`
   marginTop: 15;
 `;
 
+const NoteContainer = styled.View`
+  justifyContent: space-between;
+  flexDirection: row;
+`;
+
 const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${i}` }));
 const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${i}` }));
 
@@ -74,6 +81,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   // local state
   const [responseModal, toggleResponseModal] = useToggle(false);
+  const [noteModalVisible, toggleNoteInvisibility] = useToggle(false);
 
   const [project, setProject] = useState('');
   const [activity, setActivity] = useState('');
@@ -81,14 +89,13 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [date, setDate] = useState<Date>(new Date);
   const [hours, setHours] = useState<number>();
   const [minutes, setMinutes] = useState<number>();
+  const [note, setNote] = useState('');
 
   const resetForm = () => {
-    setProject('');
-    setActivity('');
-    setVolunteer('');
-    setDate(undefined);
+    setDate(new Date);
     setHours(undefined);
     setMinutes(undefined);
+    setNote('');
   };
 
   // hooks
@@ -106,6 +113,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       startedAt: date as string,
       duration: { hours, minutes },
       userId: volunteers.find((x) => x.name === volunteer).id,
+      note
     };
     dispatch(createLog(values));
   };
@@ -123,6 +131,11 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
         isVisible={responseModal}
         onContinue={onContinue}
       />
+      <NoteModal
+        isVisible={noteModalVisible}
+        addNote={setNote}
+        onClose={toggleNoteInvisibility}
+      />
       {forUser === 'admin' && <FuzzySearchBox label="Volunteer" options={volunteers} selectedValue={volunteer} onValueChange={setVolunteer} />}
       {forUser === 'volunteer' && <Label>What project are you volunteering on?</Label>}
       <Dropdown label="Project" options={projects} selectedValue={project} onValueChange={setProject} />
@@ -130,7 +143,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       <Dropdown label="Activity" options={activities} selectedValue={activity} onValueChange={setActivity} />
       <DateTimePicker
         label="Date"
-        value={date}//today's date
+        value={date}
         onConfirm={setDate}
         mode="date"
         maxDate={new Date()}
@@ -147,7 +160,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
         selectedValue={minutes}
         onValueChange={setMinutes}
       />
-      <Label>{getTimeLabel(forUser, volunteer)}</Label>
+      <NoteContainer>
+        <Label>{getTimeLabel(forUser, volunteer)}</Label>
+        <NoteButton label={"Add note"} onPress={toggleNoteInvisibility}/>
+      </NoteContainer>
       <TimeContainer>
         <HoursAndMinutesText align="center" timeValues={[hours, minutes]} />
       </TimeContainer>
