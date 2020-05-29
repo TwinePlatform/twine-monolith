@@ -457,7 +457,10 @@ export namespace Api {
       export namespace PushNotification {
         export namespace GET {
           export interface Request extends Hapi.Request {
-            params: { organisationId: string | 'me' };
+            params: {
+              organisationId: string | 'me',
+              projectId: string
+            };
             query: ApiRequestQuery;
             pre: { communityBusiness: CommunityBusiness; isChild: boolean };
           }
