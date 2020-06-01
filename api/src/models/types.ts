@@ -297,6 +297,7 @@ export type Collection<T extends Model> = {
   get: (c: Knex, a?: ModelQuery<T>) => Promise<T[]>;
   getOne: (c: Knex, a?: ModelQuery<T>) => Promise<Maybe<T>>;
   update: (c: Knex, a: Partial<T>, b: Partial<T>) => Promise<T>;
+  // updateToken: (c: Knex, a: Partial<T>, b: any) => Promise<T>;
   add: (c: Knex, a: Partial<T>) => Promise<T>;
   destroy: (c: Knex, a: Partial<T>) => Promise<Int>;
 };

@@ -85,7 +85,7 @@ const dropUnwhereableUserFields = omit([
  * Implementation of the UserCollection type
  */
 export const Users: UserCollection = {
-  create (a) {
+  create(a) {
     return {
       id: a.id,
       name: a.name,
@@ -109,7 +109,7 @@ export const Users: UserCollection = {
     };
   },
 
-  toColumnNames (o) {
+  toColumnNames(o) {
     return filter((a) => typeof a !== 'undefined', {
       'user_account.user_account_id': o.id,
       'user_account.user_name': o.name,
@@ -132,7 +132,7 @@ export const Users: UserCollection = {
     });
   },
 
-  async get (client, q = {}) {
+  async get(client, q = {}) {
     const query = evolve({
       where: Users.toColumnNames,
       whereNot: Users.toColumnNames,
@@ -149,16 +149,16 @@ export const Users: UserCollection = {
     );
   },
 
-  async getOne (client, query = {}) {
+  async getOne(client, query = {}) {
     const [res] = await Users.get(client, { ...query, limit: 1 });
     return res || null;
   },
 
-  async exists (client, query) {
+  async exists(client, query) {
     return null !== await Users.getOne(client, query);
   },
 
-  async add (client, _user) {
+  async add(client, _user) {
     const password = _user.password ? await hash(_user.password, 12) : undefined;
     const user = { ..._user, password };
 
@@ -177,7 +177,7 @@ export const Users: UserCollection = {
     return Users.getOne(client, { where: { id } });
   },
 
-  async update (client: Knex, user, _changes) {
+  async update(client: Knex, user, _changes) {
     if (Object.keys(_changes).length === 0) {
       return Users.getOne(client, { where: { id: user.id } });
     }
@@ -214,7 +214,26 @@ export const Users: UserCollection = {
     return Users.getOne(client, { where: { id } });
   },
 
-  async destroy (client, user) {
+  // update user_account set push_token = 'push_token123' where user_account_id = 2;
+  // async updateToken(client: Knex, user, token) {
+
+  //   // console.log(changes)
+  //   var token: any
+  //   var volunteer_hours_log_id: any
+  //   // var id: number
+  //   // id = parseInt(user.id, 10);
+
+  //   const res = await client('user_account')
+  //     .update('push_token', token)
+  //     .where('user_account_id', user.id);
+
+  //   // console.log(res);
+  //   // return VolunteerLogs.getOne(client, { where: { id } });
+
+  //   //return null;
+  // },
+
+  async destroy(client, user) {
     const preProcessUser = compose(
       transformForeignKeysToSubQueries(client),
       (a: Dictionary<any>) => replaceConstantsWithForeignKeys<any>(a),
@@ -238,7 +257,7 @@ export const Users: UserCollection = {
       });
   },
 
-  async isMemberOf (client, user, cb) {
+  async isMemberOf(client, user, cb) {
     const currentRoles = await Roles.fromUser(client, user);
     // currently not supporting roles at different cbs
     return currentRoles.every((x) => x.organisationId === cb.id);
