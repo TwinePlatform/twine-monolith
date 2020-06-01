@@ -36,6 +36,7 @@ const EditVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
   }, [requestStatus]);
 
   const onSubmit = async (formState) => {
+    console.log(formState);
     const changeset = filter(Boolean, formState);
     dispatch(updateVolunteer({ id: volunteerDetails.id, ...changeset }));
   };

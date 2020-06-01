@@ -73,8 +73,12 @@ const Volunteers = {
   delete: (id: number) => makeRequest<Api.Users.Volunteers.Id.DELETE.Result>(
     { method: 'DELETE', url: `/users/volunteers/${id}` },
   ),
-  getPush: () => makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>(
-    { method: 'GET', url: '/community-businesses/me/push' },
+  // TODO: Enable request for "no notification" when user change the settings
+  // updatePush: ({ id, ...changeset }) => makeRequest<Api.Users.Volunteers.Id.PUT.Result>(
+  //   { method: 'PUT', url: `/users/volunteers/${id}`, data: changeset },
+  // ),
+  getPush: (id: number) => makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>(
+    { method: 'GET', url: `/community-businesses/me/push/${id}` },
   ),
 };
 

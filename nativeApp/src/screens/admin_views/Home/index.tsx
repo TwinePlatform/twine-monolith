@@ -36,10 +36,10 @@ const Container = styled.View`
   justifyContent: space-between;
 `;
 
-
 /*
  * Component
  */
+
 const AdminHome: FC<Props> = () => (
   <View>
     <Heading>Week Stats</Heading>
