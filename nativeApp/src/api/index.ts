@@ -1,16 +1,15 @@
-import _axios, { AxiosRequestConfig, AxiosError } from 'axios';
-import qs from 'qs';
-import { AsyncStorage } from 'react-native';
-import getEnvVars from '../../environment'; // eslint-disable-line
-import { StorageValuesEnum } from '../authentication/types';
-import { Api } from '../../../api/src/api/v1/types/api';
-import { VolunteerLog } from '../../../api/src/models';
+import _axios, { AxiosRequestConfig, AxiosError } from "axios";
+import qs from "qs";
+import { AsyncStorage } from "react-native";
+import getEnvVars from "../../environment"; // eslint-disable-line
+import { StorageValuesEnum } from "../authentication/types";
+import { Api } from "../../../api/src/api/v1/types/api";
+import { VolunteerLog } from "../../../api/src/models";
 
 /*
  * Types
  */
-export type IdAndName = { id: number; name: string }
-
+export type IdAndName = { id: number; name: string };
 
 /*
  * Axios
@@ -18,16 +17,13 @@ export type IdAndName = { id: number; name: string }
 // TODO: change version to v1.1 when server changes have been updated
 const baseURL = `${getEnvVars().apiBaseUrl}/v1`;
 
-
 const axios = _axios.create({
   baseURL,
   paramsSerializer: (params) => qs.stringify(params, { encode: false }),
   transformResponse: (r) => {
     const res = JSON.parse(r);
 
-    return res.error
-      ? res
-      : res.result;
+    return res.error ? res : res.result;
   },
 });
 
@@ -46,24 +42,26 @@ const makeRequest = async <T = any>(params: AxiosRequestConfig) => {
  * Requests
  */
 const Authentication = {
-  login: ({ email, password }) => axios.post('/users/login', {
+  login: async ({ email, password }):Promise<any> =>(axios.post("/users/login", {
     email,
     password,
     restrict: ['VOLUNTEER', 'VOLUNTEER_ADMIN', 'CB_ADMIN'],
-    type: 'body',
-  }),
-  logOut: () => makeRequest({ method: 'GET', url: 'users/logouts' }),
-  roles: () => makeRequest({ method: 'GET', url: '/users/me/roles' }),
+    type: "body",
+  })),    
+  logOut: () => makeRequest({ method: "GET", url: "users/logouts" }),
+  roles: () => makeRequest({ method: "GET", url: "/users/me/roles" }),
 };
 
 const Volunteers = {
-  get: () => makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>(
-    { method: 'GET', url: '/community-businesses/me/volunteers' },
-  ),
-  add: (volunteer) => makeRequest<Api.Users.Register.Volunteers.POST.Result>(
-    {
-      method: 'POST',
-      url: '/users/register/volunteers',
+  get: () =>
+    makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>({
+      method: "GET",
+      url: "/community-businesses/me/volunteers",
+    }),
+  add: (volunteer) =>
+    makeRequest<Api.Users.Register.Volunteers.POST.Result>({
+      method: "POST",
+      url: "/users/register/volunteers",
       data: { ...volunteer },
     },
   ),
@@ -79,11 +77,13 @@ const Volunteers = {
 };
 
 const VolunteerLogs = {
-  get: (since?: Date, until?: Date) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.GET.Result>( //eslint-disable-line
-    {
-      method: 'GET',
-      url: '/community-businesses/me/volunteer-logs',
+  get: (since?: Date, until?: Date) =>
+    makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.GET.Result>({
+      //eslint-disable-line
+      method: "GET",
+      url: "/community-businesses/me/volunteer-logs",
       params: { since, until },
+
     },
   ),
   getVolunteerActivities: () => axios.get('/volunteer-activities'),
@@ -92,12 +92,11 @@ const VolunteerLogs = {
       method: 'POST',
       url: '/community-businesses/me/volunteer-logs',
       data: values,
-    },
-  ),
-
+    }),
 };
 
 const Projects = {
+
   get: () => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.GET.Result>( //eslint-disable-line
     {
       method: 'GET',
@@ -122,15 +121,25 @@ const Projects = {
       method: 'POST',
       url: '/community-businesses/me/volunteers/projects',
       data: { name },
-    },
-  ),
+    }),
 };
 
+const Invite = {
+  byEmail: (email) =>{
+    makeRequest({
+      method: "POST",
+      url: "/invite/email",
+      data: {email}
+    })
+  }
+}
+
 const Constants = {
-  activities: () => makeRequest<IdAndName>({
-    method: 'GET',
-    url: '/volunteer-activities',
-  }),
+  activities: () =>
+    makeRequest<IdAndName>({
+      method: "GET",
+      url: "/volunteer-activities",
+    }),
 };
 
 const API = {
@@ -139,6 +148,7 @@ const API = {
   VolunteerLogs,
   Projects,
   Constants,
+  Invite,
 };
 
 export default API;

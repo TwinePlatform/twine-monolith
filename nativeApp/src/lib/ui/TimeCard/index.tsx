@@ -7,7 +7,7 @@ import { ColoursEnum } from '../colours';
 import { FontsEnum } from '../typography';
 import HoursAnMinutesText from '../HoursAndMinutesText';
 import { DeleteButtonConfig } from '../CardWithButtons/types';
-
+import NoteButton from '../NoteButton';
 
 /*
  * Types
@@ -19,6 +19,8 @@ type Props = {
   date: string;
   labels: [string, string];
   onDelete: () => void;
+  setNote: any,
+  toggleVisibilityNoteModal: any
 }
 
 /*
@@ -28,6 +30,11 @@ const DetailsContainer = styled.View<{topPadding: boolean}>`
   ${({ topPadding }) => topPadding && 'marginTop: 5;'}
   flexDirection: row;
   alignItems: flex-end;
+`;
+
+const NoteContainer = styled.View`
+  flexDirection: row;
+  justifyContent: flex-end;
 `;
 
 const LabelContainer = styled.View`
@@ -44,12 +51,19 @@ const Label = styled.Text<{bold?: boolean; textAlign: string}>`
   paddingBottom: 6;
 `;
 
+//temporary call, needs to be API
+const getNote = (id) => {
+  if(id%2==0)
+    return "this is a note";
+  else
+    return null;
+}
 /*
  * Component
  */
 const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
   const {
-    timeValues, date, labels, volunteer, navigation, onDelete,
+    id, timeValues, date, labels, volunteer, navigation, onDelete, setNote,toggleVisibilityNoteModal
   } = props;
 
   const buttonConfig: DeleteButtonConfig = {
@@ -70,6 +84,9 @@ const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
           <Label textAlign="right" bold>{labels[1]}</Label>
         </LabelContainer>
       </DetailsContainer>
+      {getNote(id) && <NoteContainer>
+          <NoteButton label={"View note"} onPress={()=>{setNote(getNote(id)); toggleVisibilityNoteModal();}}/>
+      </NoteContainer>}
     </CardWithButtons>
   );
 };

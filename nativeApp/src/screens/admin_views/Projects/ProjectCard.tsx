@@ -136,6 +136,8 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
   ];
 
   const [checked, setChecked] = useState(false);
+  const [checkedExclusion, setCheckedExclusion] = useState(true);
+
 
   // push notification function to send push notification
   const sendPushNotification = async () => {
@@ -198,6 +200,11 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
         title='Send Reminder to Log Hours.'
         checked={checked}
         onPress={() => setChecked(currentBool => !currentBool)}
+      />
+      <CheckBox
+        title='Exclude volunteers who logged hours in the past week.'
+        checked={checkedExclusion}
+        onPress={() => setCheckedExclusion(currentBool => !currentBool)}
       />
       <SubmitButton text="Send" onPress={(createTwoButtonAlert) => onSubmit()} />
 
