@@ -1,4 +1,4 @@
-export type ButtonType = 'archive' | 'delete' | 'restore' | 'save';
+export type ButtonType = 'archive' | 'delete' | 'restore' | 'save'| 'invite';
 
 
 export type ArchiveButtonConfig = {
