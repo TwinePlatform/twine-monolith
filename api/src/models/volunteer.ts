@@ -126,6 +126,12 @@ export const Volunteers: VolunteerCollection = {
     );
   },
 
+  async fromProjectWithToken (client, c, vp) {
+    const [row] = await client()
+
+    return row;
+  },
+
   async adminCodeIsValid (client, cb, code) {
     const [row] = await client('volunteer_admin_code')
       .where({

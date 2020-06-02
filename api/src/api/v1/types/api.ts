@@ -272,6 +272,19 @@ export namespace Api {
             export type Route = ServerRoute<Request, ResponsePayload<Result>>;
           }
         }
+
+          export namespace Note{
+            export namespace GET {
+              export interface Request extends Hapi.Request {
+                query: ApiRequestQuery<VolunteerLog> & { since: string; until: string };
+                pre: {
+                  communityBusiness: CommunityBusiness;
+                };
+              }
+            export type Result = any;
+            export type Route = ServerRoute<Request, ResponsePayload<Result>>
+          }
+        }
       }
 
       export namespace Visitors {

@@ -118,9 +118,11 @@ export const createLog = (values: Partial<VolunteerLog>) => (dispatch) => {
   dispatch(createLogRequest());
 
   return API.VolunteerLogs.add(values)
-    .then(() => {
+    .then((result) => {
       dispatch(createLogSuccess());
       dispatch(loadLogs());
+      if(values.note != "")
+        API.Notes.set(values.note, result.data.id, values.activity, values.project, values.startedAt) 
     })
     .catch((error) => {
       const errorResponse = getErrorResponse(error);

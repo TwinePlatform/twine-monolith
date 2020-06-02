@@ -259,7 +259,7 @@ export type VolunteerLog = Readonly<CommonTimestamps & {
   project?: string;
   duration: Duration.Duration;
   startedAt: string;
-  notes?: string;
+  note?: string;
 }>;
 
 export type ApiToken = Readonly<CommonTimestamps & {

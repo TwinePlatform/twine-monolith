@@ -134,6 +134,26 @@ const Invite = {
   }
 }
 
+const Notes = {
+  set:(note, logID, activity, project, startedAt)=>{
+    console.log("api call: " + note)
+    makeRequest({
+      method: "PUT",
+      url: "community-businesses/me/volunteer-logs-notes/" + logID,
+      data: {activity: activity,
+            startedAt: startedAt,
+            notes: note,
+            project: project}
+    })
+  },
+  get:(logID)=> 
+    makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.Note.GET.Result>({
+      method: "GET",
+      url:"community-businesses/me/get-volunteer-logs/" + logID
+    })
+    .then(res => {return res.data})
+}
+
 const Constants = {
   activities: () =>
     makeRequest<IdAndName>({
@@ -149,6 +169,7 @@ const API = {
   Projects,
   Constants,
   Invite,
+  Notes
 };
 
 export default API;
