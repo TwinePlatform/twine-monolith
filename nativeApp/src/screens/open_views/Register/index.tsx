@@ -27,7 +27,7 @@ const StyledPicker = styled.Picker`
 /*
  * Component
  */
-export default function Register() {
+const Register = () => {
 // TODO make request through redux
   return (
     <Page heading="Register">
@@ -72,3 +72,5 @@ export default function Register() {
     </Page>
   );
 }
+
+export default Register;

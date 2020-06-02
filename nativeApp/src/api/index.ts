@@ -136,7 +136,6 @@ const Invite = {
 
 const Notes = {
   set:(note, logID, activity, project, startedAt)=>{
-    console.log("api call: " + note)
     makeRequest({
       method: "PUT",
       url: "community-businesses/me/volunteer-logs-notes/" + logID,
