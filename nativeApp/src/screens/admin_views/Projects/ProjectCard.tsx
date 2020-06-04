@@ -145,15 +145,6 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
   // push notification function to send push notification
   const sendPushNotification = async (MsgArr) => {
 
-
-    // const message = {
-    //   to: token,
-    //   sound: 'default',
-    //   title: 'Reminder',
-    //   body: 'Remember to log your hours!',
-    //   data: { data: 'goes here' },
-    //   _displayInForeground: true,
-    // };
     const response = await fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
       headers: {
@@ -173,16 +164,28 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
     const token = await API.Users.getPush(2, 1)
 
     if (!Array.isArray(token.data) || !token.data.length) {
-      // array does not exist, is not an array, or is empty
-      // ⇒ do not attempt to process array
-      console.log('array is empty');
-
+      Alert.alert(
+        "Push Notification",
+        "No volunteers assigned to this project yet!",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      );
     }
-    else {
+    else if (token.status == 200) {
+      Alert.alert(
+        "Push Notification",
+        "Push Notification Sent.",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      );
+
       console.log(token.data[0]);
       var MsgArr = [];
       for (var i = 0; i < token.data.length; i++) {
-        console.log('this is what is received in the loop');
         console.log(token.data[i].push_token);
         MsgArr.push(
           {
@@ -199,16 +202,16 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
       console.log(MsgArr);
       sendPushNotification(MsgArr);
     }
-
-
-    // Alert.alert(
-    //   "Push Notification",
-    //   "Push Notification Sent.",
-    //   [
-    //     { text: "OK", onPress: () => console.log("OK Pressed") }
-    //   ],
-    //   { cancelable: false }
-    // );
+    else {
+      Alert.alert(
+        "Push Notification",
+        "Opps! Something went wrong, please resend.",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      );
+    }
   };
 
   return (
