@@ -20,15 +20,15 @@ type Props = {
  * Styles
  */
 
- /*
+/*
 const View = styled.ScrollView`
-  flexDirection: column;
-  alignItems: center;
-  paddingTop: 20;
-  paddingBottom: 20;
-  paddingLeft: 40;
-  paddingRight: 40;
-  flex: 1;
+ flexDirection: column;
+ alignItems: center;
+ paddingTop: 20;
+ paddingBottom: 20;
+ paddingLeft: 40;
+ paddingRight: 40;
+ flex: 1;
 `;
 */
 const View = styled.ScrollView.attrs(() => ({
@@ -51,46 +51,9 @@ const Heading = styled(H)`
 const Container = styled.View`
   width: 100%;
   flexGrow: 1;
-  justifyContent: space-between;
-`;
+  justifyContent: space-between;`;
 
-<<<<<<< HEAD
-/*
- * Component
- */
-
-const AdminHome: FC<Props> = () => (
-  <View>
-    <Heading>Week Stats</Heading>
-    <Container>
-      <Stat
-        heading="NUMBER OF VOLUNTEERS"
-        value="6"
-        unit="people"
-      >
-        <MaterialIcons name="person-outline" outline size={35} color={ColoursEnum.mustard} />
-      </Stat>
-      <Line />
-      <Stat
-        heading="TOTAL TIME GIVEN"
-        value="109"
-        unit="hours"
-      >
-        <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard} />
-      </Stat>
-      <Line />
-      <Stat
-        heading="AVERAGE DURATION"
-        value="120"
-        unit="minutes"
-      >
-        <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
-      </Stat>
-    </Container>
-  </View>
-);
-=======
-const onInvite = () =>{
+const onInvite = () => {
   console.log("invite pressed");
   return <Heading>invite</Heading>
 }
@@ -101,14 +64,14 @@ const AdminHome: FC<Props> = () => {
   const [visibleConfirmationModal, toggleInviteVisibility] = useToggle(false);
 
   return (
-  
+
     <View>
       <InvitationModal
-          isVisible={visibleConfirmationModal}
-          onCancel={toggleInviteVisibility}
-          onSendClose={toggleInviteVisibility}
-          title="Invite Volunteers By Email"
-        />
+        isVisible={visibleConfirmationModal}
+        onCancel={toggleInviteVisibility}
+        onSendClose={toggleInviteVisibility}
+        title="Invite Volunteers By Email"
+      />
       <Heading>Week Stats</Heading>
       <Container>
         <Stat
@@ -135,11 +98,9 @@ const AdminHome: FC<Props> = () => {
           <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
         </Stat>
       </Container>
-        <Invite onPress={toggleInviteVisibility} organisation={"aperture science"}/>
+      <Invite onPress={toggleInviteVisibility} organisation={"aperture science"} />
     </View>
   );
 }
-
->>>>>>> c69552246a22c3de7ccb9633801811da481a6349
 
 export default AdminHome;
