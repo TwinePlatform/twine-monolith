@@ -12,58 +12,61 @@ import { Api } from '../types/api';
 const route: [
   Api.Users.Login.POST.Route
 ] = [
-  {
-    method: 'POST',
-    path: '/users/login',
-    options: {
-      description: 'Login all accounts apart from visitor',
-      auth: false,
-      validate: {
-        payload: {
-          restrict: Joi.alt()
-            .try(
-              Joi.string().only(Object.values(RoleEnum)),
-              Joi.array().items(Joi.string().only(Object.values(RoleEnum)))
-            ),
-          type: Joi.string().only('cookie', 'body').default('cookie'),
-          email: email.required(),
-          password: DEPRECATED_password.required(),
+    {
+      method: 'POST',
+      path: '/users/login',
+      options: {
+        description: 'Login all accounts apart from visitor',
+        auth: false,
+        validate: {
+          payload: {
+            restrict: Joi.alt()
+              .try(
+                Joi.string().only(Object.values(RoleEnum)),
+                Joi.array().items(Joi.string().only(Object.values(RoleEnum)))
+              ),
+            type: Joi.string().only('cookie', 'body').default('cookie'),
+            email: email.required(),
+            password: DEPRECATED_password.required(),
+          },
         },
+        response: { schema: response },
       },
-      response: { schema: response },
-    },
-    handler: async (request, h) => {
-      const { server: { app: { knex } } } = request;
-      const { email, password, restrict, type } = request.payload;
+      handler: async (request, h) => {
+        const { server: { app: { knex } } } = request;
+        const { email, password, restrict, type } = request.payload;
 
-      const user = await Users.getOne(knex, { where: { email } });
-      if (! user) return Boom.unauthorized('Unknown account');
+        const user = await Users.getOne(knex, { where: { email } });
+        if (!user) return Boom.unauthorized('Unknown account');
 
-      const organisation = await Organisations.fromUser(knex, { where: { email } });
-      if (!organisation) return Boom.unauthorized('User has no associated organisation');
+        const organisation = await Organisations.fromUser(knex, { where: { email } });
+        if (!organisation) return Boom.unauthorized('User has no associated organisation');
 
-      if (restrict) {
-        const hasRole = await Roles.userHasAtCb(knex, {
-          userId: user.id,
-          organisationId: organisation.id,
-          role: restrict,
-        });
+        if (restrict) {
+          const hasRole = await Roles.userHasAtCb(knex, {
+            userId: user.id,
+            organisationId: organisation.id,
+            role: restrict,
+          });
 
-        if (!hasRole) {
-          return Boom.forbidden('User does not have required role');
+          if (!hasRole) {
+            return Boom.forbidden('User does not have required role');
+          }
         }
-      }
 
-      const isPwdValid = await compare(password, user.password);
-      if (!isPwdValid) return Boom.unauthorized('Incorrect password');
+        const isPwdValid = await compare(password, user.password);
+        if (!isPwdValid) return Boom.unauthorized('Incorrect password');
 
-      Sessions.authenticate(request, user, organisation);
+        Sessions.authenticate(request, user, organisation);
 
-      return type === 'body'
-        ? { token: request.yar.id }
-        : null;
+        return type === 'body'
+          ? {
+            token: request.yar.id,
+            userId: user.id
+          }
+          : null;
+      },
     },
-  },
-];
+  ];
 
 export default route;
