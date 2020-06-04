@@ -24,7 +24,7 @@ import { Serialisers } from '../serialisers';
 
 const routes: [
   Api.Users.Me.PUT.Route,
-  // Api.Users.Me.PUT.Route,
+  Api.Users.Id.PUT_simple.Route,
   Api.Users.Id.PUT.Route,
 ] = [
 
@@ -89,54 +89,59 @@ const routes: [
       },
     },
 
-    // {
-    //   method: 'PUT',
-    //   path: '/users/me',
-    //   options: {
-    //     description: 'Update push token',
-    //     auth: {
-    //       strategy: 'standard',
-    //       access: {
-    //         scope: ['user_details-own:write'],
-    //       },
-    //     },
-    //     validate: {
-    //       payload: {
-    //         pushtoken,
-    //       },
-    //     },
-    //     response: { schema: response },
-    //   },
-    //   handler: async (request, h) => {
-    //     const {
-    //       server: { app: { knex } },
-    //       payload,
-    //     } = request;
+    {
+      method: 'PUT',
+      path: '/users/insertpushtoken/{userId}',
+      options: {
+        description: 'Update push token',
+        auth: {
+          strategy: 'standard',
+          access: {
+            scope: ['user_details-own:write'],
+          },
+        },
+        validate: {
+          params: { userId: id },
+          payload: {
+            pushtoken: pushtoken,
+          },
+        },
+        response: { schema: response },
+      },
+      handler: async (request, h) => {
+        const {
+          server: { app: { knex } },
+          params: { userId },
+          payload,
+        } = request;
 
-    //     const { user } = StandardCredentials.fromRequest(request);
-    //     // const changeset = { ...payload };
+        // const payload = request.payload
+        // const knex = request.server.app.knex
 
-    //     // try {
-    //     const updatedToken = await Users.updateToken(knex, user, payload);
+        // const { userId } = StandardCredentials.fromRequest(request);
+        // const changeset = { ...payload };
 
-    //     return Serialisers.users.noSecrets(updatedToken);
+        // try {
+        const updatedToken = await Users.updateToken(knex, userId, payload);
 
-    //     // } catch (error) {
-    //     //   // Intercept subset of class 23 postgres error codes thrown by `knex`
-    //     //   // Class 23 corresponds to integrity constrain violation
-    //     //   // See https://www.postgresql.org/docs/10/static/errcodes-appendix.html
-    //     //   // Happens, for e.g., if try to set a sector or region that doesn't exist
-    //     //   // TODO:
-    //     //   // Handle this better, preferably without having to perform additional check
-    //     //   // queries. See https://github.com/TwinePlatform/twine-api/issues/147
-    //     //   if (error.code === '23502') {
-    //     //     return Boom.badRequest();
-    //     //   } else {
-    //     //     throw error;
-    //     //   }
-    //     // }
-    //   },
-    // },
+        return Serialisers.users.noSecrets(updatedToken);
+
+        // } catch (error) {
+        //   // Intercept subset of class 23 postgres error codes thrown by `knex`
+        //   // Class 23 corresponds to integrity constrain violation
+        //   // See https://www.postgresql.org/docs/10/static/errcodes-appendix.html
+        //   // Happens, for e.g., if try to set a sector or region that doesn't exist
+        //   // TODO:
+        //   // Handle this better, preferably without having to perform additional check
+        //   // queries. See https://github.com/TwinePlatform/twine-api/issues/147
+        //   if (error.code === '23502') {
+        //     return Boom.badRequest();
+        //   } else {
+        //     throw error;
+        //   }
+        // }
+      },
+    },
 
     {
       method: 'PUT',

@@ -215,23 +215,23 @@ export const Users: UserCollection = {
   },
 
   // update user_account set push_token = 'push_token123' where user_account_id = 2;
-  // async updateToken(client: Knex, user, token) {
+  async updateToken(client: Knex, user, token) {
 
-  //   // console.log(changes)
-  //   var token: any
-  //   var volunteer_hours_log_id: any
-  //   // var id: number
-  //   // id = parseInt(user.id, 10);
+    // console.log(changes)
+    var token: any
+    var volunteer_hours_log_id: any
+    // var id: number
+    // id = parseInt(user.id, 10);
 
-  //   const res = await client('user_account')
-  //     .update('push_token', token)
-  //     .where('user_account_id', user.id);
+    const res = await client('user_account')
+      .update('push_token', token.pushtoken)
+      .where('user_account_id', user);
 
-  //   // console.log(res);
-  //   // return VolunteerLogs.getOne(client, { where: { id } });
+    // console.log(res);
+    // return VolunteerLogs.getOne(client, { where: { id } });
 
-  //   //return null;
-  // },
+    //return null;
+  },
 
   async destroy(client, user) {
     const preProcessUser = compose(

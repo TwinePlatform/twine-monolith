@@ -107,43 +107,10 @@ const routes: [
           params: { projectId },
         } = request;
 
-        // const projects = await VolunteerLogs.getProjects(knex, communityBusiness);
-        // const project = projects.find((p) => p.id === Number(projectId));
-
-        /*
-         * if id !== 'me' checks if user is a parent to accessed org
-         * this only grants access to TWINE_ADMIN & FUNDING_BODY users
-         */
-        // if (request.params.organisationId !== 'me' && !isChild) {
-        //   return Boom.forbidden('Insufficient permissions to access this resource');
-        // }
-
-        // check if project exist
-        // if (!project) {
-        //   return Boom.notFound('No project found with this ID under this organisation');
-        // }
-
-        // const modelQuery: ModelQuery<User> = {
-        //   ...requestQueryToModelQuery<User>(query),
-        //   where: { deletedAt: null },
-        // };
-
-        // TODO: Need to actually add filtering and field option
-
         const volunteers = await Volunteers.fromProjectWithToken(knex, communityBusiness, projectId);
-
-        // const count = has('limit', modelQuery) || has('offset', modelQuery)
-        //   ? await Volunteers.fromCommunityBusiness(
-        //     knex,
-        //     communityBusiness,
-        //     omit(['limit', 'offset'], modelQuery)
-        //   )
-        //     .then((res) => res.length)
-        //   : volunteers.length;
 
         return {
           result: await Promise.all(volunteers.map(Serialisers.volunteers.noSecrets)),
-          // meta: { total: count },
           meta: { total: 0 },
         };
       },
