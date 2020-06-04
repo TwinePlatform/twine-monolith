@@ -12,6 +12,10 @@ import { Vibration, Platform } from 'react-native';
 import { Notifications } from 'expo';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import API, { getErrorResponse } from '../../../api';
+
+import { AsyncStorage } from 'react-native';
+import { StorageValuesEnum } from '../../../authentication/types';
 
 /*
  * Types
@@ -46,67 +50,59 @@ const Container = styled.View`
  * Component
  */
 
-// ToDo: get volunteer id from redux store/api 
+const VolunteerHome: FC<Props> = () => {
 
+  const registerForPushNotificationsAsync = async () => {
 
-// const _handleNotification = { notification } => {
-//   Vibration.vibrate();
-//   setnotification({ notification: { notification } });
-// };
+    // const [expoPushToken, setexpoPushToken] = useState('');
+    // const [notification, setnotification] = useState<any>();
+    const userId = await AsyncStorage.getItem(StorageValuesEnum.USER_ID);
 
-const registerForPushNotificationsAsync = async () => {
+    // const _handleNotification = (notification) => {
+    //   Vibration.vibrate();
+    //   setnotification({ notification: { notification } });
+    // };
 
-  const [expoPushToken, setexpoPushToken] = useState('');
-  const [notification, setnotification] = useState<any>();
+    // useEffect(() => {
+    //   registerForPushNotificationsAsync();
 
-  const _handleNotification = (notification) => {
-    Vibration.vibrate();
-    setnotification({ notification: { notification } });
+    //   // Handle notifications that are received or selected while the app
+    //   // is open. If the app was closed and then opened by tapping the
+    //   // notification (rather than just tapping the app icon to open it),
+    //   // this function will fire on the next tick after the app starts
+    //   // with the notification data.
+    //   _notificationSubscription = Notifications.addListener(_handleNotification);
+    // }, []);
+
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      const pushtoken = await Notifications.getExpoPushTokenAsync();
+      // setexpoPushToken(pushtoken);
+      API.Users.pushtoken(parseInt(userId), pushtoken);
+
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+
+    if (Platform.OS === 'android') {
+      Notifications.createChannelAndroidAsync('default', {
+        name: 'default',
+        sound: true,
+        priority: 'max',
+        vibrate: [0, 250, 250, 250],
+      });
+    }
   };
 
-  useEffect(() => {
-    registerForPushNotificationsAsync();
-
-    // Handle notifications that are received or selected while the app
-    // is open. If the app was closed and then opened by tapping the
-    // notification (rather than just tapping the app icon to open it),
-    // this function will fire on the next tick after the app starts
-    // with the notification data.
-    _notificationSubscription = Notifications.addListener(_handleNotification);
-  }, []);
-
-  if (Constants.isDevice) {
-    const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-    let finalStatus = existingStatus;
-    console.log(finalStatus);
-    if (existingStatus !== 'granted') {
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      finalStatus = status;
-    }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
-      return;
-    }
-    const token = await Notifications.getExpoPushTokenAsync();
-    console.log(token);
-    setexpoPushToken(token);
-    console.log('got the token in volunteer!');
-    // ToDo: Send api to edit the token with (volunteer.id, token)
-  } else {
-    alert('Must use physical device for Push Notifications');
-  }
-
-  if (Platform.OS === 'android') {
-    Notifications.createChannelAndroidAsync('default', {
-      name: 'default',
-      sound: true,
-      priority: 'max',
-      vibrate: [0, 250, 250, 250],
-    });
-  }
-};
-
-const VolunteerHome: FC<Props> = () => {
   registerForPushNotificationsAsync();
 
   return (
