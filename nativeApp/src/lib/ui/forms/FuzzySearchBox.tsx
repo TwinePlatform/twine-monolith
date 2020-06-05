@@ -14,6 +14,7 @@ import Fuse from 'fuse.js';
 type Props = {
   ref: (ref: unknown) => void;
   label: string;
+  placeholder: string;
   options: {id: number; name: string}[];
   onValueChange: any;
   defaultValue?: string | number;
@@ -61,7 +62,7 @@ const filterData = (data,filter) => {
  */
 const FuzzySearchBox: FC<Props> = (props) => {
   const {
-    label, options, onValueChange, defaultValue, ...rest
+    label, placeholder, options, onValueChange, defaultValue, ...rest
   } = props;
   const [text, setText] = useState("");
   const [textInputFocus, setTextInputFocus] = useState(false);
@@ -87,8 +88,8 @@ const FuzzySearchBox: FC<Props> = (props) => {
   return (
     <React.Fragment>
       <Item picker>
-      <Label>{label}</Label>
-        <Input placeholder="Search volunteers"
+      {label.length > 0 &&<Label>{label}</Label>}
+        <Input placeholder={placeholder}
               placeholderTextColor={ ColoursEnum.grey}
               onChangeText={text=>changeText(text)}
               onFocus={() => setTextInputFocus(true)}

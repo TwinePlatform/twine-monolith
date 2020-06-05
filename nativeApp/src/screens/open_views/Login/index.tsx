@@ -109,7 +109,7 @@ const Login: FC<Props> = (props) => {
 
       <BottomContainer>
         <LinkText onPress={() => props.navigation.navigate('Register')}>
-          Create a new account
+          Register here
         </LinkText>
       </BottomContainer>
 

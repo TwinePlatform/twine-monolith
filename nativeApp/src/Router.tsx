@@ -55,6 +55,7 @@ const AuthStack = createStackNavigator(
     Register: {
       screen: Register,
     },
+    TnC
   },
   {
     defaultNavigationOptions: sharedNavigationsConfig,
