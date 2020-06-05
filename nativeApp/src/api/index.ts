@@ -95,6 +95,11 @@ const VolunteerLogs = {
     }),
 };
 
+const CommunityBusiness = {
+  get: async ():Promise<any> => axios.get('/community-businesses'),
+  register: (data)=>{console.log(data)}
+}
+
 const Projects = {
 
   get: () => makeRequest<Api.CommunityBusinesses.Me.Volunteers.Projects.GET.Result>( //eslint-disable-line
@@ -136,7 +141,6 @@ const Invite = {
 
 const Notes = {
   set:(note, logID, activity, project, startedAt)=>{
-    console.log("api call: " + note)
     makeRequest({
       method: "PUT",
       url: "community-businesses/me/volunteer-logs-notes/" + logID,
@@ -166,6 +170,7 @@ const API = {
   Authentication,
   Volunteers,
   VolunteerLogs,
+  CommunityBusiness,
   Projects,
   Constants,
   Invite,

@@ -136,7 +136,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
         addNote={setNote}
         onClose={toggleNoteInvisibility}
       />
-      {forUser === 'admin' && <FuzzySearchBox label="Volunteer" options={volunteers} selectedValue={volunteer} onValueChange={setVolunteer} />}
+      {forUser === 'admin' && <FuzzySearchBox label="Volunteer" placeholder={"Search volunteers"} options={volunteers} selectedValue={volunteer} onValueChange={setVolunteer} />}
       {forUser === 'volunteer' && <Label>What project are you volunteering on?</Label>}
       <Dropdown label="Project" options={projects} selectedValue={project} onValueChange={setProject} />
       {forUser === 'volunteer' && <Label>What activity are you doing?</Label>}
