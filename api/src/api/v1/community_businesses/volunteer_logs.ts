@@ -241,7 +241,7 @@ const routes: [
       method: 'PUT',
       path: '/community-businesses/me/volunteer-logs-notes/{logId}',
       options: {
-        description: 'Update volunteer logs for own community business',
+        description: 'Update volunteer log notes for own community business',
         auth: {
           strategy: 'standard',
           access: {
@@ -253,7 +253,7 @@ const routes: [
           payload: {
             activity: volunteerLogActivity,
             startedAt: Joi.date().iso().min(new Date(0)),
-            notes: notes,
+            notes: Joi.string().allow(""),
             project: volunteerProject.allow(null),
           },
         },
@@ -338,6 +338,7 @@ const routes: [
             duration: volunteerLogDuration.required(),
             startedAt: Joi.date().iso().min(new Date(0)).default(() => new Date(), 'now'),
             project: volunteerProject.allow(null),
+            note: Joi.string().allow("")
           },
         },
         response: { schema: response },

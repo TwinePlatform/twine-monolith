@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { withNavigation, NavigationInjectedProps } from 'react-navigation';
 import CardWithButtons from '../CardWithButtons';
+import API from '../../../api';
 
 import { ColoursEnum } from '../colours';
 import { FontsEnum } from '../typography';
@@ -19,7 +20,7 @@ type Props = {
   date: string;
   labels: [string, string];
   onDelete: () => void;
-  setNote: any,
+  setNoteDisplay: any,
   toggleVisibilityNoteModal: any
 }
 
@@ -51,26 +52,42 @@ const Label = styled.Text<{bold?: boolean; textAlign: string}>`
   paddingBottom: 6;
 `;
 
-//temporary call, needs to be API
-const getNote = (id) => {
-  if(id%2==0)
-    return "this is a note";
+const getNote = async (id) => {
+  let potentialNoteData = await API.Notes.get(id);
+  
+  if(potentialNoteData[0].notes != null)
+    return potentialNoteData[0].notes;  
   else
-    return null;
-}
+    return "";
+} 
 /*
  * Component
  */
 const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
   const {
-    id, timeValues, date, labels, volunteer, navigation, onDelete, setNote,toggleVisibilityNoteModal
+    id, timeValues, date, labels, volunteer, navigation, onDelete, setNoteDisplay, toggleVisibilityNoteModal
   } = props;
+  const [ifNoteExists, setNoteExist] = useState(false);
+  const [initialised, setInitialsed] = useState(false);
+
+  useEffect(()=>{
+    if(!initialised)
+      getNote(id)
+      .then(note => {
+        if(note.length>0){
+          setNoteDisplay(note);
+          setNoteExist(true);
+      }
+      setInitialsed(true);
+    })
+  });
 
   const buttonConfig: DeleteButtonConfig = {
     buttonType: 'delete',
     onDelete,
     onEdit: () => { navigation.navigate('AdminEditTime'); },
   };
+
   return (
     <CardWithButtons buttonConfig={buttonConfig}>
       <HoursAnMinutesText align="left" timeValues={timeValues} />
@@ -84,8 +101,8 @@ const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
           <Label textAlign="right" bold>{labels[1]}</Label>
         </LabelContainer>
       </DetailsContainer>
-      {getNote(id) && <NoteContainer>
-          <NoteButton label={"View note"} onPress={()=>{setNote(getNote(id)); toggleVisibilityNoteModal();}}/>
+      {ifNoteExists && <NoteContainer>
+          <NoteButton label={"View note"} onPress={()=>{toggleVisibilityNoteModal();}}/>
       </NoteContainer>}
     </CardWithButtons>
   );

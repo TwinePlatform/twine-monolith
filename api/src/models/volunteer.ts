@@ -126,18 +126,8 @@ export const Volunteers: VolunteerCollection = {
     );
   },
 
-  // async fromProjectWithToken(client, cb, vp, q = {}) {
   async fromProjectWithToken(client, cb, vp) {
-    // const query = evolve({
-    //   where: Volunteers.toColumnNames,
-    //   whereNot: Volunteers.toColumnNames,
-    //   whereBetween: Volunteers.toColumnNames,
-    // }, q);
-
-    console.log(cb.id);
-    console.log(vp);
-    //select ModelToColumn from user_account WhereIn ()
-    //select user_account_id from volunteer_hours_log where org_id =  cd.id AND vol_proj_id = proj_id
+  
     // sql: select distinct user_account.push_token from user_account inner join volunteer_hours_log 
     //ON user_account.user_account_id = volunteer_hours_log.user_account_id where volunteer_hours_log.organisation_id = 2
     //AND volunteer_hours_log.volunteer_project_id = 1;
@@ -152,8 +142,6 @@ export const Volunteers: VolunteerCollection = {
       });
 
     return res;
-
-
   },
 
 

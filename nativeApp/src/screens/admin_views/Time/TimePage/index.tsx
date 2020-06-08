@@ -29,7 +29,7 @@ type Props = {
 const AdminTime: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
   const [visibleNoteModal, toggleVisibilityNoteModal] = useToggle(false);
-  const [note, setNote] = useState('');
+  const [noteDisplay, setNoteDisplay] = useState('');
   const logs = useSelector(selectOrderedLogs, shallowEqual);
   const logsRequestStatus = useSelector(selectLogsStatus, shallowEqual);
   const volunteers = useSelector(selectVolunteers, shallowEqual);
@@ -72,7 +72,7 @@ const AdminTime: FC<Props> = () => {
       <ViewNoteModal
         isVisible={visibleNoteModal}
         onClose={toggleVisibilityNoteModal}
-        note={note}
+        note={noteDisplay}
       />
       <Loader isVisible={logsRequestStatus.isFetching} />
 
@@ -88,7 +88,7 @@ const AdminTime: FC<Props> = () => {
             date={moment(log.startedAt).format('DD/MM/YY')}
             onDelete={toggleDeleteVisibility}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
-            setNote={setNote}
+            setNoteDisplay={setNoteDisplay}
           />
         ))
       }
@@ -104,7 +104,7 @@ const AdminTime: FC<Props> = () => {
             date={moment(log.startedAt).format('DD/MM/YY')}
             onDelete={toggleDeleteVisibility}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
-            setNote={setNote}
+            setNoteDisplay={setNoteDisplay}
           />
         ))
       }
@@ -120,7 +120,7 @@ const AdminTime: FC<Props> = () => {
             date={moment(log.startedAt).format('DD/MM/YY')}
             onDelete={toggleDeleteVisibility}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
-            setNote={setNote}
+            setNoteDisplay={setNoteDisplay}
           />
         ))
       }
