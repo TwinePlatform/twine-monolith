@@ -35,9 +35,9 @@ export namespace Api {
 
   export namespace Invite {
     export namespace Email {
-      export namespace POST{
+      export namespace POST {
         export interface Request extends Hapi.Request {
-          payload: { email: any };
+          payload: any;
         }
         export type Response = any;
         export type Route = ServerRoute<Request, Response>;
@@ -273,14 +273,14 @@ export namespace Api {
           }
         }
 
-          export namespace Note{
-            export namespace GET {
-              export interface Request extends Hapi.Request {
-                query: ApiRequestQuery<VolunteerLog> & { since: string; until: string };
-                pre: {
-                  communityBusiness: CommunityBusiness;
-                };
-              }
+        export namespace Note {
+          export namespace GET {
+            export interface Request extends Hapi.Request {
+              query: ApiRequestQuery<VolunteerLog> & { since: string; until: string };
+              pre: {
+                communityBusiness: CommunityBusiness;
+              };
+            }
             export type Result = any;
             export type Route = ServerRoute<Request, ResponsePayload<Result>>
           }
