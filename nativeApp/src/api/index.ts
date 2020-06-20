@@ -42,12 +42,12 @@ const makeRequest = async <T = any>(params: AxiosRequestConfig) => {
  * Requests
  */
 const Authentication = {
-  login: async ({ email, password }):Promise<any> =>(axios.post("/users/login", {
+  login: async ({ email, password }): Promise<any> => (axios.post("/users/login", {
     email,
     password,
     restrict: ['VOLUNTEER', 'VOLUNTEER_ADMIN', 'CB_ADMIN'],
     type: "body",
-  })),    
+  })),
   logOut: () => makeRequest({ method: "GET", url: "users/logouts" }),
   roles: () => makeRequest({ method: "GET", url: "/users/me/roles" }),
 };
@@ -64,7 +64,7 @@ const Volunteers = {
       url: "/users/register/volunteers",
       data: { ...volunteer },
     },
-  ),
+    ),
   update: ({ id, ...changeset }) => makeRequest<Api.Users.Volunteers.Id.PUT.Result>(
     { method: 'PUT', url: `/users/volunteers/${id}`, data: changeset },
   ),
@@ -85,7 +85,7 @@ const VolunteerLogs = {
       params: { since, until },
 
     },
-  ),
+    ),
   getVolunteerActivities: () => axios.get('/volunteer-activities'),
   add: (values: Partial<VolunteerLog>) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>( //eslint-disable-line
     {
@@ -96,8 +96,8 @@ const VolunteerLogs = {
 };
 
 const CommunityBusiness = {
-  get: async ():Promise<any> => axios.get('/community-businesses'),
-  register: (data)=>{console.log(data)}
+  get: async (): Promise<any> => axios.get('/community-businesses'),
+  register: (data) => { console.log(data) }
 }
 
 const Projects = {
@@ -130,32 +130,34 @@ const Projects = {
 };
 
 const Invite = {
-  byEmail: (email) =>{
+  byEmail: (email) => {
     makeRequest({
       method: "POST",
       url: "/invite/email",
-      data: {email}
+      data: { email }
     })
   }
 }
 
 const Notes = {
-  set:(note, logID, activity, project, startedAt)=>{
+  set: (note, logID, activity, project, startedAt) => {
     makeRequest({
       method: "PUT",
       url: "community-businesses/me/volunteer-logs-notes/" + logID,
-      data: {activity: activity,
-            startedAt: startedAt,
-            notes: note,
-            project: project}
+      data: {
+        activity: activity,
+        startedAt: startedAt,
+        notes: note,
+        project: project
+      }
     })
   },
-  get:(logID)=> 
+  get: (logID) =>
     makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.Note.GET.Result>({
       method: "GET",
-      url:"community-businesses/me/get-volunteer-logs/" + logID
+      url: "community-businesses/me/get-volunteer-logs/" + logID
     })
-    .then(res => {return res.data})
+      .then(res => { return res.data })
 }
 
 const Constants = {

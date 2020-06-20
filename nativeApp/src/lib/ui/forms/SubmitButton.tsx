@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
-import { Button as B } from 'native-base';
+// import { Button as B } from 'native-base';
+import { TouchableOpacity } from 'react-native';
 
 import { ColoursEnum } from '../colours';
 
@@ -16,13 +17,19 @@ type Props = {
 /*
  * Styles
  */
-const Submit = styled(B)`
+const Submit = styled.View`
   width: 100%;
+  height: 48px;
   backgroundColor: ${ColoursEnum.purple};
   alignItems: center;
   justifyContent: center;
   marginTop: 20;
-  marginBottom: 40;
+  marginBottom: ${props => props.marginBottom || 40};
+  border-radius: 5px;
+  box-shadow: 0px 2px 3px #33333333;
+  shadow-radius: 3;
+  elevation: 1;
+  shadow-opacity: 1;
 `;
 
 const SubmitText = styled.Text`
@@ -35,13 +42,15 @@ const SubmitText = styled.Text`
  * Component
  */
 const SubmitButton: FC<Props> = (props) => {
-  const { onPress, text } = props;
+  const { onPress, marginBottom, text } = props;
   return (
-    <Submit
-      onPress={onPress}
+    <TouchableOpacity
+      onPress={() => { onPress() }}
     >
-      <SubmitText>{text}</SubmitText>
-    </Submit>
+      <Submit marginBottom={marginBottom}>
+        <SubmitText >{text}</SubmitText>
+      </Submit>
+    </TouchableOpacity>
   );
 };
 
