@@ -260,12 +260,14 @@ export default class VisitsDataPage extends React.Component {
     };
 
     const getVisits = CommunityBusiness.getVisits(
-      { limit: 10,
+      {
+        limit: 10,
         offset,
         filter: filter(identity, queryFilter),
       });
     const getAggregates = CommunityBusiness.getVisitAggregates(
-      { fields: ['gender', 'age', 'visitActivity', 'lastWeek'],
+      {
+        fields: ['gender', 'age', 'visitActivity', 'lastWeek'],
         filter: filter(identity, queryFilter),
       });
 
@@ -346,7 +348,8 @@ export default class VisitsDataPage extends React.Component {
                        */
                     },
                   }],
-                } }
+                }
+              }
               }
             />
           </FlexItem>
@@ -370,7 +373,8 @@ export default class VisitsDataPage extends React.Component {
           >
             <TranslucentTable
               exportComponent={
-                <ExportButton onClick={this.getDataForCsv}>EXPORT AS CSV</ExportButton>
+                // <ExportButton onClick={this.getDataForCsv}>EXPORT AS CSV</ExportButton>
+                <ExportButton onClick={}>EXPORT AS CSV</ExportButton>
               }
               headAlign="left"
               columns={columns}

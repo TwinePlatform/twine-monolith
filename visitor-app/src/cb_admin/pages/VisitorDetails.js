@@ -44,7 +44,7 @@ const ExportButton = styled(PrimaryButton)`
   padding: 0.3rem 1rem;
 `;
 
-const ErrorText = styled(Paragraph) `
+const ErrorText = styled(Paragraph)`
   color: red;
 `;
 
@@ -248,7 +248,7 @@ export default class VisitorDetailsPage extends React.Component {
           </Form>
         </Row>
         <Row>
-          { errors.general && <ErrorText>{errors.general}</ErrorText> }
+          {errors.general && <ErrorText>{errors.general}</ErrorText>}
         </Row>
         <FlexContainerRow>
           <PaginatedTableWrapper
@@ -257,7 +257,8 @@ export default class VisitorDetailsPage extends React.Component {
           >
             <TranslucentTable
               exportComponent={
-                <ExportButton onClick={this.getDataForCsv}>EXPORT AS CSV</ExportButton>
+                // <ExportButton onClick={this.getDataForCsv}>EXPORT AS CSV</ExportButton>
+                <ExportButton onClick={}>EXPORT AS CSV</ExportButton>
               }
               headAlign="left"
               columns={columns}
