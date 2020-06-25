@@ -374,7 +374,7 @@ export default class VisitsDataPage extends React.Component {
             <TranslucentTable
               exportComponent={
                 // <ExportButton onClick={this.getDataForCsv}>EXPORT AS CSV</ExportButton>
-                <ExportButton onClick={}>EXPORT AS CSV</ExportButton>
+                <ExportButton onClick={alert('coming soon!')}>EXPORT AS CSV</ExportButton>
               }
               headAlign="left"
               columns={columns}
@@ -390,7 +390,7 @@ export default class VisitsDataPage extends React.Component {
             />
           </PaginatedTableWrapper>
         </Row>
-      </FlexContainerCol>
+      </FlexContainerCol >
     );
   }
 }
