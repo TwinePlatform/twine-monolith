@@ -258,7 +258,7 @@ export default class VisitorDetailsPage extends React.Component {
             <TranslucentTable
               exportComponent={
                 // <ExportButton onClick={this.getDataForCsv}>EXPORT AS CSV</ExportButton>
-                <ExportButton onClick={alert('coming soon!')}>EXPORT AS CSV</ExportButton>
+                <ExportButton onClick={() => alert('coming soon!')}>EXPORT AS CSV</ExportButton>
               }
               headAlign="left"
               columns={columns}
