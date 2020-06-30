@@ -1,7 +1,7 @@
 import EmailDispatcher, { Email } from './dispatcher';
 import { EmailTemplate, Templates, WebhookEmailTemplates } from './templates';
 import { Config } from '../../../config';
-import { User, CommunityBusiness } from '../../models';
+import { User, CommunityBusiness} from '../../models';
 import { RoleEnum } from '../../models/types';
 import { AppEnum } from '../../types/internal';
 
@@ -25,6 +25,9 @@ export type EmailService = {
   resetPassword:
     (c: Config, ap: AppEnum, a: User, t: string) => Promise<void>
 
+  inviteVolunteer:
+    (c: Config, i: string, s:string, b:string, t: string) => Promise<void>
+  
   webhooks: {
     onHerokuStagingRelease: (c: Config, appName: string) => Promise<void>
   }
@@ -147,6 +150,29 @@ const Service: EmailService = {
       },
     });
   },
+
+  async inviteVolunteer (cfg, inviteEmail, subject, body, token){
+    await EmailDispatcher.send(cfg,{
+      from: cfg.email.fromAddress,
+      to: inviteEmail,/* Waiting to get the template added on postmark
+      templateId: EmailTemplate.INVITE_VOLUNTEER,
+      templateModel: {
+        domain: cfg.platform.domains[AppEnum.VOLUNTEER],
+        email: inviteEmail,
+        token,
+        body 
+      },*/
+      templateId: EmailTemplate.WELCOME_CB_ADMIN,
+      templateModel: {
+        domain: cfg.platform.domains[AppEnum.VISITOR], // TODO: Maybe change to different app?
+        name: inviteEmail,
+        email: inviteEmail,
+        organisation: inviteEmail,
+        token,
+      },
+    })
+  }
+  ,
   webhooks,
 };
 
