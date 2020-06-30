@@ -21,6 +21,8 @@
   "scripts": {
     "test:unit": "NODE_ENV=testing jest --config=jest.unit.config.js",
     "test:integration": "NODE_ENV=testing jest --config=jest.integration.config.js",
+    "test:codeOp": "NODE_ENV=testing jest  --config=jest.integration.config.js src/api/v1/community_businesses/__tests__/get.test.integration.ts -t 'success:: definate pass'",
+    "test:codeOpCider": "NODE_ENV=testing jest --config=jest.integration.config.js",
     "test": "npm run test:unit && npm run test:integration",
     "cover:unit": "npm run test:unit -- --coverage",
     "cover:integration": "npm run test:integration -- --coverage",

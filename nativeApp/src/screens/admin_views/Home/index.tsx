@@ -20,15 +20,15 @@ type Props = {
  * Styles
  */
 
- /*
+/*
 const View = styled.ScrollView`
-  flexDirection: column;
-  alignItems: center;
-  paddingTop: 20;
-  paddingBottom: 20;
-  paddingLeft: 40;
-  paddingRight: 40;
-  flex: 1;
+ flexDirection: column;
+ alignItems: center;
+ paddingTop: 20;
+ paddingBottom: 20;
+ paddingLeft: 40;
+ paddingRight: 40;
+ flex: 1;
 `;
 */
 const View = styled.ScrollView.attrs(() => ({
@@ -51,10 +51,9 @@ const Heading = styled(H)`
 const Container = styled.View`
   width: 100%;
   flexGrow: 1;
-  justifyContent: space-between;
-`;
+  justifyContent: space-between;`;
 
-const onInvite = () =>{
+const onInvite = () => {
   console.log("invite pressed");
   return <Heading>invite</Heading>
 }
@@ -65,14 +64,14 @@ const AdminHome: FC<Props> = () => {
   const [visibleConfirmationModal, toggleInviteVisibility] = useToggle(false);
 
   return (
-  
+
     <View>
       <InvitationModal
-          isVisible={visibleConfirmationModal}
-          onCancel={toggleInviteVisibility}
-          onSendClose={toggleInviteVisibility}
-          title="Invite Volunteers By Email"
-        />
+        isVisible={visibleConfirmationModal}
+        onCancel={toggleInviteVisibility}
+        onSendClose={toggleInviteVisibility}
+        title="Invite Volunteers By Email"
+      />
       <Heading>Week Stats</Heading>
       <Container>
         <Stat
@@ -99,10 +98,9 @@ const AdminHome: FC<Props> = () => {
           <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
         </Stat>
       </Container>
-        <Invite onPress={toggleInviteVisibility} organisation={"aperture science"}/>
+      <Invite onPress={toggleInviteVisibility} organisation={"aperture science"} />
     </View>
   );
 }
-
 
 export default AdminHome;

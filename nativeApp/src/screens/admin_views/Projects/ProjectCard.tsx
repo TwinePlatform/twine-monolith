@@ -16,10 +16,13 @@ import {
   ButtonType,
 } from "../../../lib/ui/CardWithButtons/types";
 import { updateProject } from "../../../redux/entities/projects";
-import {
-  pushVolunteers,
-  selectOrderedVolunteers,
-} from '../../../redux/entities/volunteers';
+// import {
+//   pushVolunteers,
+//   selectOrderedVolunteers,
+// } from '../../../redux/entities/volunteers';
+
+import API, { getErrorResponse } from '../../../api';
+import { selectCurrentUser } from '../../../redux/currentUser';
 
 /*
  * Types
@@ -103,6 +106,7 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
   const [value, setValue] = useState(title);
   const [active, toggle] = useToggle(false);
   const iconColour = getIconColor(buttonType, active);
+  const orgIdArr = useSelector(selectCurrentUser);
 
   // TODO: error message on save/edit error
   const onSave = () => {
@@ -112,11 +116,11 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
 
   // const projects = useSelector(selectAllOrderedProjects, shallowEqual);
 
-  useEffect(() => {
-    dispatch(pushVolunteers());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(pushVolunteers(id));
+  // }, []);
 
-  const volunteers = useSelector(selectOrderedVolunteers, shallowEqual);
+  // const volunteers = useSelector(selectOrderedVolunteers, shallowEqual);
 
 
   const buttonConfigs: ButtonConfig[] = [
@@ -135,28 +139,79 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
     },
   ];
 
-
-
   const [checked, setChecked] = useState(false);
   const [checkedExclusion, setCheckedExclusion] = useState(true);
+
+  // push notification function to send push notification
+  const sendPushNotification = async (MsgArr) => {
+
+    const response = await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(MsgArr),
+    });
+  };
 
 
 
   const onSubmit = async () => {
-    console.log("I clicked the send button!");
-    console.log(volunteers);
-    Alert.alert(
-      "Push Notification",
-      "Push Notification Sent.",
-      [
-        { text: "OK", onPress: () => console.log("OK Pressed") }
-      ],
-      { cancelable: false }
-    );
-    // ToDo: use api to get all volunteers
-    // get api endpoints
-    // Knex: Select user_account_id from volunteer_hours_log WHERE volunteer_project_id = project_id;
-    // ToDo: use api to get all volunteers in project 
+
+    // const token = await API.Users.getPush(orgIdArr.organisationId, parseInt(`${id}`))
+    const token = await API.Users.getPush(2, 1)
+
+    if (!Array.isArray(token.data) || !token.data.length) {
+      Alert.alert(
+        "Push Notification",
+        "No volunteers assigned to this project yet!",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      );
+    }
+    else if (token.status == 200) {
+      Alert.alert(
+        "Push Notification",
+        "Push Notification Sent.",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      );
+
+      console.log(token.data[0]);
+      var MsgArr = [];
+      for (var i = 0; i < token.data.length; i++) {
+        console.log(token.data[i].push_token);
+        MsgArr.push(
+          {
+            to: token.data[i].push_token,
+            sound: 'default',
+            title: 'Reminder',
+            body: 'Remember to log your hours!',
+            data: { data: 'goes here' },
+            _displayInForeground: true,
+          }
+        )
+      }
+
+      console.log(MsgArr);
+      sendPushNotification(MsgArr);
+    }
+    else {
+      Alert.alert(
+        "Push Notification",
+        "Opps! Something went wrong, please resend.",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      );
+    }
   };
 
   return (
