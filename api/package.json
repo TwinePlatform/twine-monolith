@@ -42,6 +42,7 @@
     "db:reset": "npm run migrate:teardown && npm run migrate:latest",
     "db:reset:prod": "npm run migrate:teardown:prod && npm run migrate:latest:prod",
     "db:reset:test": "npm run migrate:teardown:test && npm run migrate:latest:test",
+    "db:update": "node ./database/update.js",
     "db:reset:test-windows": "npm run migrate:teardown:test-windows && npm run migrate:latest:test-windows",
     "seed:make": "knex seed:make --knexfile knexfile.ts",
     "seed:run": "knex seed:run --knexfile knexfile.ts",
