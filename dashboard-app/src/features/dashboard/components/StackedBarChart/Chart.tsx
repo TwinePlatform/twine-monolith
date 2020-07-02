@@ -33,6 +33,7 @@ interface Props {
 const Card = styled(_Card)`
   background: ${ColoursEnum.white};
   height: 100%;
+  padding: 1em;
 `;
 
 const GraphContentContainer = styled.div`

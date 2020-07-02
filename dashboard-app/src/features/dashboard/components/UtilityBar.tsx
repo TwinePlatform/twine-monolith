@@ -7,7 +7,7 @@ import UnitToggle from './UnitToggle';
 import { DurationUnitEnum } from '../../../types';
 import { DownloadButton } from '../../../lib/ui/components/Buttons';
 import { DateRangePickerConstraint } from './DatePicker/types';
-import { DashboardContext } from '../../../App';
+import { DashboardContext } from '../context';
 
 
 /**
@@ -18,6 +18,7 @@ type DateFilterType = 'day' | 'month';
 type UtilityBarProps = {
   dateFilter: DateFilterType
   datePickerConstraint: DateRangePickerConstraint
+  customToggle?: React.ReactElement
   onFromDateChange?: (d: Date) => void
   onToDateChange?: (d: Date) => void
   onUnitChange?: (u: DurationUnitEnum) => void
@@ -43,6 +44,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
     onToDateChange = () => { },
     onUnitChange = () => { },
     onDownloadClick = () => { },
+    customToggle = null,
     ...rest
   } = props;
 
@@ -75,7 +77,7 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
 
   return (
     <MainRow middle="xs" start="xs" {...rest}>
-      <Col xs={6}>
+      <Col xs={5}>
         <DatePicker
           type={dateFilter}
           label="From"
@@ -93,8 +95,9 @@ const UtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
           maxDate={constraint.to.max(fromDate, toDate)}
         />
       </Col>
-      <Col xs={6}>
-        <Row end="xs">
+      <Col xs={7}>
+        <Row end="xs" middle="xs">
+          {customToggle}
           <UnitToggle onChange={onDisplayUnitChange} />
           <DownloadButton onClick={onDownloadClick}>Download</DownloadButton>
         </Row>

@@ -2,7 +2,7 @@ import { cleanup, waitForElement, fireEvent, wait } from 'react-testing-library'
 import MockAdapter from 'axios-mock-adapter';
 import { axios } from '../../../api';
 import { renderWithRouter } from '../../../tests';
-import homeVisitor from '../homeVisitor';
+import HomeVisitor from '../HomeVisitor';
 
 
 describe('Visitor Home Page', () => {
@@ -21,7 +21,7 @@ describe('Visitor Home Page', () => {
       .onPost('/community-businesses/me/feedback')
       .reply(200, { data: null });
 
-    const tools = renderWithRouter({ route: '/visitor/signup' })(homeVisitor);
+    const tools = renderWithRouter({ route: '/visitor/signup' })(HomeVisitor);
 
     const posBtn = await waitForElement(() => tools.getByTestId('positive-feedback-btn'));
 
@@ -39,7 +39,7 @@ describe('Visitor Home Page', () => {
       .onPost('/community-businesses/me/feedback')
       .reply(200, { data: null });
 
-    const tools = renderWithRouter({ route: '/visitor/signup' })(homeVisitor);
+    const tools = renderWithRouter({ route: '/visitor/signup' })(HomeVisitor);
 
     const neuBtn = await waitForElement(() => tools.getByTestId('neutral-feedback-btn'));
 
@@ -57,7 +57,7 @@ describe('Visitor Home Page', () => {
       .onPost('/community-businesses/me/feedback')
       .reply(200, { data: null });
 
-    const tools = renderWithRouter({ route: '/visitor/signup' })(homeVisitor);
+    const tools = renderWithRouter({ route: '/visitor/signup' })(HomeVisitor);
 
     const negBtn = await waitForElement(() => tools.getByTestId('negative-feedback-btn'));
 
@@ -76,7 +76,7 @@ describe('Visitor Home Page', () => {
       .reply(500, { error: { statusCode: 500, type: 'Internal Server Error', message: 'Oops' } });
 
 
-    const tools = renderWithRouter({ route: '/visitor/signup' })(homeVisitor);
+    const tools = renderWithRouter({ route: '/visitor/signup' })(HomeVisitor);
     const neuBtn = await waitForElement(() => tools.getByTestId('neutral-feedback-btn'));
 
     fireEvent.click(neuBtn);

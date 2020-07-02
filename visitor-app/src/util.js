@@ -1,4 +1,4 @@
-import { curry, mergeDeepRight, pick, map, compose, filter, uniq, keys } from 'ramda';
+import { assoc, has, curry, mergeDeepRight, pick, map, compose, filter, uniq, keys } from 'ramda';
 import { ErrorUtils } from './api';
 
 
@@ -21,6 +21,11 @@ export const renameKeys = curry((keyMap, obj) =>
       acc[keyMap[key] || key] = obj[key];
       return acc;
     }, {}));
+
+// mapValues :: (a -> b) -> { k: a } -> { k: b }
+export const mapValues = curry((fn, obj) =>
+  Object.entries(obj)
+    .reduce((acc, [key, value]) => assoc(key, fn(value), acc), {}));
 
 
 /**
@@ -113,7 +118,7 @@ export const pairs = xs =>
   , []);
 
 // combineValues :: [{ k: v }] -> { k: [v] }
-const combineValues = os =>
+export const combineValues = os =>
   os.reduce((acc, v) => {
     Object.keys(v)
       .forEach((k) => {
@@ -132,6 +137,16 @@ export const reduceVisitorsToFields =
     map(pick(['name', 'email', 'postCode', 'phoneNumber', 'birthYear'])), // pick relevant keys
   );
 
+// repeat :: [a] -> Number -> [a]
+export const repeat = (xs, n) => (xs.length >= n ? xs.slice(0, n) : repeat(xs.concat(xs), n));
+
+// collectBy :: (a -> String) -> [a] -> { k: [a] }
+export const collectBy = (fn, xs) =>
+  xs.reduce((acc, x) =>
+    assoc(fn(x), has(fn(x), acc) ? acc[fn(x)].concat(x) : [x], acc), {});
+
+// ones :: number -> [1]
+export const ones = n => repeat([1], n);
 
 export const status = {
   PENDING: 'PENDING',
