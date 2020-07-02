@@ -8,7 +8,7 @@ const config: DeepPartial<Config> = {
   env: Environment.DEVELOPMENT,
   web: {
     //address: envOr('HOST_ADDRESS', 'localhost','192.168.0.10'),
-    address: envOr('HOST_ADDRESS','192.168.0.10'),
+    address: envOr('HOST_ADDRESS', '192.168.1.91'),
 
     port: 4000,
     routes: {

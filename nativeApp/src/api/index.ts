@@ -42,12 +42,12 @@ const makeRequest = async <T = any>(params: AxiosRequestConfig) => {
  * Requests
  */
 const Authentication = {
-  login: async ({ email, password }):Promise<any> =>(axios.post("/users/login", {
+  login: async ({ email, password }): Promise<any> => (axios.post("/users/login", {
     email,
     password,
     restrict: ['VOLUNTEER', 'VOLUNTEER_ADMIN', 'CB_ADMIN'],
     type: "body",
-  })),    
+  })),
   logOut: () => makeRequest({ method: "GET", url: "users/logouts" }),
   roles: () => makeRequest({ method: "GET", url: "/users/me/roles" }),
 };
@@ -64,15 +64,12 @@ const Volunteers = {
       url: "/users/register/volunteers",
       data: { ...volunteer },
     },
-  ),
+    ),
   update: ({ id, ...changeset }) => makeRequest<Api.Users.Volunteers.Id.PUT.Result>(
     { method: 'PUT', url: `/users/volunteers/${id}`, data: changeset },
   ),
   delete: (id: number) => makeRequest<Api.Users.Volunteers.Id.DELETE.Result>(
     { method: 'DELETE', url: `/users/volunteers/${id}` },
-  ),
-  getPush: () => makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>(
-    { method: 'GET', url: '/community-businesses/me/push' },
   ),
 };
 
@@ -85,7 +82,7 @@ const VolunteerLogs = {
       params: { since, until },
 
     },
-  ),
+    ),
   getVolunteerActivities: () => axios.get('/volunteer-activities'),
   add: (values: Partial<VolunteerLog>) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>( //eslint-disable-line
     {
@@ -130,11 +127,28 @@ const Projects = {
 };
 
 const Invite = {
-  byEmail: (email) =>{
+  byEmail: (email) => {
     makeRequest({
       method: "POST",
       url: "/invite/email",
-      data: {email}
+      data: { email }
+    })
+  }
+}
+
+const Users = {
+  getPush: (orgId: number, ProjectId: number) =>
+    makeRequest({
+      method: 'GET',
+      url: `/community-businesses/${orgId}/push/${ProjectId}`
+    })
+  ,
+  pushtoken: (id: number, token: string) => {
+    console.log('updating push token....');
+    makeRequest({
+      method: "PUT",
+      url: `/users/insertpushtoken/${id}`,
+      data: { "pushtoken": token }
     })
   }
 }
@@ -174,6 +188,7 @@ const API = {
   Projects,
   Constants,
   Invite,
+  Users,
   Notes
 };
 
