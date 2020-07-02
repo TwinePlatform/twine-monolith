@@ -62,33 +62,34 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: expect.arrayContaining(
-        [
-          expect.objectContaining({
-            category: 'Socialising',
-            id: 2,
-            name: 'Wear Pink',
-            monday: false,
-            tuesday: false,
-            wednesday: true,
-            thursday: false,
-            friday: false,
-            saturday: false,
-            sunday: false,
-          }),
-          expect.objectContaining({
-            id: 3,
-            name: 'Free Running',
-            category: 'Sports',
-            monday: false,
-            tuesday: true,
-            wednesday: true,
-            thursday: false,
-            friday: true,
-            saturday: true,
-            sunday: true,
-          }),
-        ]),
+      expect(res.result).toEqual({
+        result: expect.arrayContaining(
+          [
+            expect.objectContaining({
+              category: 'Socialising',
+              id: 2,
+              name: 'Wear Pink',
+              monday: false,
+              tuesday: false,
+              wednesday: true,
+              thursday: false,
+              friday: false,
+              saturday: false,
+              sunday: false,
+            }),
+            expect.objectContaining({
+              id: 3,
+              name: 'Free Running',
+              category: 'Sports',
+              monday: false,
+              tuesday: true,
+              wednesday: true,
+              thursday: false,
+              friday: true,
+              saturday: true,
+              sunday: true,
+            }),
+          ]),
       });
     });
 
@@ -122,33 +123,34 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect(res.result).toEqual({ result: expect.arrayContaining(
-        [
-          expect.objectContaining({
-            category: 'Socialising',
-            id: 2,
-            name: 'Wear Pink',
-            monday: false,
-            tuesday: false,
-            wednesday: true,
-            thursday: false,
-            friday: false,
-            saturday: false,
-            sunday: false,
-          }),
-          expect.objectContaining({
-            id: 3,
-            name: 'Free Running',
-            category: 'Sports',
-            monday: false,
-            tuesday: true,
-            wednesday: true,
-            thursday: false,
-            friday: true,
-            saturday: true,
-            sunday: true,
-          }),
-        ]),
+      expect(res.result).toEqual({
+        result: expect.arrayContaining(
+          [
+            expect.objectContaining({
+              category: 'Socialising',
+              id: 2,
+              name: 'Wear Pink',
+              monday: false,
+              tuesday: false,
+              wednesday: true,
+              thursday: false,
+              friday: false,
+              saturday: false,
+              sunday: false,
+            }),
+            expect.objectContaining({
+              id: 3,
+              name: 'Free Running',
+              category: 'Sports',
+              monday: false,
+              tuesday: true,
+              wednesday: true,
+              thursday: false,
+              friday: true,
+              saturday: true,
+              sunday: true,
+            }),
+          ]),
       });
     });
   });
@@ -230,18 +232,19 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.result).toEqual(
-        { result: expect.objectContaining(
-          {
-            id: 5,
-            name: 'Base Jumping',
-            monday: false,
-            tuesday: false,
-            wednesday: false,
-            thursday: false,
-            friday: false,
-            saturday: false,
-            sunday: false,
-          }),
+        {
+          result: expect.objectContaining(
+            {
+              id: expect.any(Number),
+              name: 'Base Jumping',
+              monday: false,
+              tuesday: false,
+              wednesday: false,
+              thursday: false,
+              friday: false,
+              saturday: false,
+              sunday: false,
+            }),
         });
     });
   });
@@ -255,7 +258,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result.deletedAt).toBeTruthy();
+      expect((res.result as any).result.deletedAt).toBeTruthy();
 
       const check = await server.inject(injectCfg({
         method: 'GET',
@@ -264,7 +267,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       }));
 
       expect(
-        (<any> check.result).result
+        (check.result as any).result
           .map((a: any) => a.name)
           .includes('Absailing')
       ).toBeFalsy();
@@ -279,7 +282,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       }));
 
       expect(res.statusCode).toBe(200);
-      expect((<any> res.result).result.deletedAt).toBeTruthy();
+      expect((res.result as any).result.deletedAt).toBeTruthy();
 
       const check = await server.inject(injectCfg({
         method: 'GET',
@@ -288,7 +291,7 @@ describe('API v1 :: Community Businesses :: Visit Activities', () => {
       }));
 
       expect(
-        (<any> check.result).result
+        (check.result as any).result
           .map((a: any) => a.name)
           .includes('Absailing')
       ).toBeFalsy();
