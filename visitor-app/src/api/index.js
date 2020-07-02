@@ -32,8 +32,9 @@ export const Activities = {
   create: ({ name, category } = {}) =>
     axios.post('/community-businesses/me/visit-activities', { name, category }),
 
-  update: ({ id, monday, tuesday, wednesday, thursday, friday, saturday, sunday } = {}) =>
+  update: ({ id, category, monday, tuesday, wednesday, thursday, friday, saturday, sunday } = {}) =>
     axios.put(`/community-businesses/me/visit-activities/${id}`, {
+      category,
       monday,
       tuesday,
       wednesday,

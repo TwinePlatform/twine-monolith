@@ -4,7 +4,7 @@ import { Row, Col, Grid } from 'react-flexbox-grid';
 
 import _Card from '../../../../../lib/ui/components/Card';
 import { H4 } from '../../../../../lib/ui/components/Headings';
-import { ColoursEnum } from '../../../../../lib/ui/design_system';
+import { ColoursEnum, GraphColoursEnum } from '../../../../../lib/ui/design_system';
 import LegendItem from './LegendItem';
 import { isEveryDatumActive } from '../utils/util';
 import { LegendData } from '../types';
@@ -18,6 +18,7 @@ import { getColourByIndex } from '../../../util';
 interface Props {
   title: string;
   legendData: LegendData;
+  colours?: GraphColoursEnum[];
   setLegendActivityOfAll: () => void;
   setLegendActivityOnUpdate: (id: number) => void;
 }
@@ -49,7 +50,7 @@ const TitleRow = styled(Row)`
  */
 
 const Legend: FunctionComponent<Props> = (props) => {
-  const { legendData, setLegendActivityOfAll, setLegendActivityOnUpdate, title } = props;
+  const { legendData, setLegendActivityOfAll, setLegendActivityOnUpdate, title, colours } = props;
 
   return (
     <Card>
@@ -73,7 +74,7 @@ const Legend: FunctionComponent<Props> = (props) => {
             <LegendItem
               key={x.id}
               onClick={setLegendActivityOnUpdate(x.id)}
-              colour={getColourByIndex(i)}
+              colour={getColourByIndex(i, colours)}
               title={x.name}
               active={x.active}
             />
