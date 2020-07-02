@@ -1,4 +1,4 @@
-import { BirthYear, AgeRange, Gender } from '../constants';
+import { BirthYear, AgeRange, Gender, createAgeGroups } from '../constants';
 
 
 describe('Constants', () => {
@@ -152,6 +152,39 @@ describe('Constants', () => {
       expect(Gender.fromDisplay('Male')).toBe('male');
       expect(Gender.fromDisplay('Female')).toBe('female');
       expect(Gender.fromDisplay('Prefer not to say')).toBe('prefer not to say');
+    });
+  });
+
+  describe('AgeGroups', () => {
+    const AgeGroups = createAgeGroups(['0-17', '18-34', '35-50', '51-69', '70+']);
+
+    describe('toSelectOptions', () => {
+      test('returns options', () => {
+        expect(AgeGroups.toSelectOptions()).toEqual([
+          { key: 0, value: 'All' },
+          { key: 1, value: '0-17' },
+          { key: 2, value: '18-34' },
+          { key: 3, value: '35-50' },
+          { key: 4, value: '51-69' },
+          { key: 5, value: '70+' },
+        ]);
+      });
+    });
+
+    describe('fromBirthYear', () => {
+      [
+        { year: 1899, group: '70+' },
+        { year: 2001, group: '18-34' },
+        { year: 2019, group: '0-17' },
+        { year: 1973, group: '35-50' },
+        { year: 1982, group: '35-50' },
+        { year: 1962, group: '51-69' },
+      ]
+        .forEach(({ year, group }) => {
+          test(`Expect year ${year} to give group ${group}`, () => {
+            expect(AgeGroups.fromBirthYear(year)).toBe(group);
+          });
+        });
     });
   });
 });

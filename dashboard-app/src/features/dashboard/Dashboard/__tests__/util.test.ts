@@ -28,17 +28,17 @@ describe('Dashboard statistics utilities', () => {
     });
 
     test('single entry is returned as only max', () => {
-      expect(findMostActive({ ['Jun 2018']: [{ duration: { minutes: 125 } }] }))
+      expect(findMostActive({ 'Jun 2018': [{ duration: { minutes: 125 } }] }))
         .toEqual({ labels: ['Jun 2018'], value: 2 }); // rounded
     });
 
     test('multiple equal entries are all returned', () => {
       const logs = {
-        ['Sept 2018']: [
+        'Sept 2018': [
           { duration: { hours: 1, minutes: 50 } },
           { duration: { hours: 1 } },
         ],
-        ['Jun 2018']: [
+        'Jun 2018': [
           { duration: { hours: 2, minutes: 20 } },
           { duration: { minutes: 30 } },
         ],
@@ -52,15 +52,15 @@ describe('Dashboard statistics utilities', () => {
 
     test('multiple different entries -- only max is returned', () => {
       const logs = {
-        ['Sept 2018']: [
+        'Sept 2018': [
           { duration: { hours: 0.5, minutes: 50 } },
           { duration: { hours: 1 } },
         ],
-        ['Jun 2018']: [
+        'Jun 2018': [
           { duration: { hours: 2, minutes: 20 } },
           { duration: { minutes: 30 } },
         ],
-        ['Jan 2019']: [
+        'Jan 2019': [
           { duration: { hours: 1 } },
           { duration: { minutes: 10 } },
         ],
@@ -74,15 +74,15 @@ describe('Dashboard statistics utilities', () => {
 
     test('mix of equal and non-equal entries -- only max are returned', () => {
       const logs = {
-        ['Sept 2018']: [
+        'Sept 2018': [
           { duration: { hours: 1, minutes: 50 } },
           { duration: { hours: 1 } },
         ],
-        ['Jun 2018']: [
+        'Jun 2018': [
           { duration: { hours: 2, minutes: 20 } },
           { duration: { minutes: 30 } },
         ],
-        ['Jan 2019']: [
+        'Jan 2019': [
           { duration: { hours: 1 } },
           { duration: { minutes: 10 } },
         ],
@@ -96,15 +96,15 @@ describe('Dashboard statistics utilities', () => {
 
     test('non-date labels are sorted alphabetically', () => {
       const logs = {
-        ['Toad']: [
+        'Toad': [
           { duration: { hours: 1, minutes: 50 } },
           { duration: { hours: 1 } },
         ],
-        ['Badger']: [
+        'Badger': [
           { duration: { hours: 2, minutes: 20 } },
           { duration: { minutes: 30 } },
         ],
-        ['Mole']: [
+        'Mole': [
           { duration: { hours: 1 } },
           { duration: { minutes: 10 } },
         ],
