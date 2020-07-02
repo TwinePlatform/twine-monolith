@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import { ChartType } from 'chart.js';
 import ChartComponent, { ChartComponentProps } from 'react-chartjs-2';
@@ -10,10 +11,14 @@ import augmentChartJsTooltip from './tooltipCenter';
 augmentChartJs();
 augmentChartJsTooltip();
 
+const Chart = styled(ChartComponent)`
+  padding: 0.5em;
+`;
+
 class RoundedBar extends React.Component<ChartComponentProps> {
   render () {
     return (
-      <ChartComponent
+      <Chart
         {...this.props}
         type={'roundedBar' as ChartType}
       />

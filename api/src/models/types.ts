@@ -217,7 +217,10 @@ export type VisitEvent = Readonly<CommonTimestamps & {
 }>;
 
 export type LinkedVisitEvent = VisitEvent & Readonly<{
-  visitActivity: string;
+
+  visitActivity: string
+  category: string
+
 }>;
 
 export type Feedback = Readonly<CommonTimestamps & {
