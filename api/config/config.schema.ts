@@ -12,6 +12,7 @@ export default Joi.object({
   root: Joi.string().min(1).required(),
   env: Joi.string().only(Object.values(Environment)),
   web: Joi.object({
+    address: Joi.string(),
     host: Joi.string().min(1),
     port: Joi.number().min(0).max(65535).required(),
     router: Joi.object({

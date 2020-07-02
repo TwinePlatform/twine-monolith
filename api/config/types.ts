@@ -12,6 +12,7 @@ export enum Environment {
 }
 
 type WebConfig = {
+  address?: string
   host: string
   port: number | string
   router: { stripTrailingSlash: boolean }

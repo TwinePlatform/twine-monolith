@@ -57,6 +57,8 @@ export const meOrId = id.allow('me');
 
 export const volunteerLogActivity = Joi.string().trim();
 
+export const notes = Joi.string().trim();
+
 export const volunteerLogDuration = Joi.object({
   hours: Joi.number().integer().min(0),
   minutes: Joi.number().integer().min(0),

@@ -79,6 +79,8 @@ export const disability =
 export const ethnicity =
   Joi.string();
 
+export const pushtoken = Joi.string();
+
 /*
  *
  */
