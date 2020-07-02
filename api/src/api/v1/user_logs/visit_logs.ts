@@ -1,7 +1,6 @@
-import * as Boom from '@hapi/boom';
 import { since, until } from '../schema/request';
 import { response } from '../schema/response';
-import { isChildOrganisation, requireChildOrganisation } from '../prerequisites';
+import { requireChildOrganisation } from '../prerequisites';
 import { Api } from '../types/api';
 
 

@@ -1,4 +1,4 @@
-import { capitalise, onlynl, listify, readableListify } from '../string';
+import { capitalise, onlynl, listify, readableListify, truncate } from '../string';
 
 describe('String', () => {
   describe('capitalise', () => {
@@ -78,4 +78,22 @@ describe('String', () => {
       expect(readableSentence).toBe('chocolate, bananas, peanut butter and ice cream');
     });
   });
+
+  describe('truncate', () => {
+    test('limit < length, default placeholder', () => {
+      expect(truncate('fooooo', 3)).toBe('foo...');
+    })
+
+    test('limit > length, default placeholder', () => {
+      expect(truncate('fo', 3)).toBe('fo');
+    })
+
+    test('limit === length, default placeholder', () => {
+      expect(truncate('foooo', 5)).toBe('foooo');
+    })
+
+    test('limit < length, custom placeholder', () => {
+      expect(truncate('fooooo', 3, 'xxx')).toBe('fooxxx');
+    });
+  })
 });

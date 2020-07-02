@@ -1,4 +1,3 @@
-import * as Boom from '@hapi/boom';
 import { since, until } from '../schema/request';
 import { response } from '../schema/response';
 import { requireChildOrganisation } from '../prerequisites';
