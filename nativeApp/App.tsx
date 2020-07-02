@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, NavigationInjectedProps } from 'react-navigation';
 import { setCustomText } from 'react-native-global-props';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
@@ -15,7 +15,7 @@ import reducer from './src/redux/rootReducer';
 const AppContainer = createAppContainer(RootStack);
 const store = createStore(reducer, applyMiddleware(thunk));
 
-export default class App extends Component {
+export default class App extends Component<NavigationInjectedProp>{
   state = {
     fontLoaded: false,
   };
