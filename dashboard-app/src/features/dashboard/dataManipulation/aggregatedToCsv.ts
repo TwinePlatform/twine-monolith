@@ -24,7 +24,7 @@ export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEn
       abbreviateMonths(Months.format.verbose)
     )(data);
     const groupBy = data.groupByX;
-    const rowKeys = Object.keys(rows[0]);
+    const rowKeys = Months.sortFormatted(Object.keys(rows[0]));
     const totalHeader = getStringContainingTotal(rowKeys);
     const monthHeaders = rowKeys.filter((x) => x !== groupBy && x !== totalHeader);
     const headers = totalHeader

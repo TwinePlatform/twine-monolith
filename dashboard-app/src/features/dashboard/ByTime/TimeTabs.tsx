@@ -9,7 +9,7 @@ import StackedBarChart from '../components/StackedBarChart/index';
 import { LegendData } from '../components/StackedBarChart/types';
 import { TitleString } from '../components/Title';
 import { Orderable } from '../hooks/useOrderable';
-import { DashboardContext } from '../../../App';
+import { DashboardContext } from '../context';
 
 
 /*

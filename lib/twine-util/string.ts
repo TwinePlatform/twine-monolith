@@ -2,6 +2,7 @@
  * String utilities
  */
 import { intersperse } from 'ramda';
+import { truncate as truncateArray } from './arrays';
 
 export const capitalise =
   (s: string) => s.slice(0, 1).toUpperCase() + s.slice(1);
@@ -35,3 +36,6 @@ export const listify = (xs: string[], opts: { and?: boolean } = { and: true }) =
 
 export const readableListify = (xs: string[], opts?: { and: boolean }) =>
   listify(xs, opts).join('');
+
+export const truncate = (s: string, limit: number, placeholder = '...') =>
+  truncateArray(s.split(''), limit, placeholder).join('');

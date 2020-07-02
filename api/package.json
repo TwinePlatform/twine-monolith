@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "description": "",
   "engines": {
-    "node": "10.x"
+    "node": "12.x",
+    "npm": "6.13.7"
   },
   "repository": {
     "type": "git",
@@ -93,7 +94,7 @@
     "csv": "^5.1.1",
     "dotenv": "^6.2.0",
     "hapi-auth-bearer-token": "^6.2.1",
-    "hapi-pino": "^5.4.1",
+    "hapi-pino": "^8.0.1",
     "ioredis": "^4.14.0",
     "knex": "^0.16.5",
     "moment": "^2.24.0",

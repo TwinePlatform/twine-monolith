@@ -89,4 +89,17 @@ describe('Dashboard Page', () => {
 
     await wait(() => expect(tools.history.location.pathname).toBe('/volunteers'));
   });
+
+  test('Clicking project goes to /projects', async () => {
+    expect.assertions(1);
+
+    mock.onGet('/community-businesses/me/volunteer-logs').reply(200, { result: [] });
+    mock.onGet('/community-businesses/me/volunteers').reply(200, { result: [] });
+
+    const tools = renderWithHistory(Dashboard);
+    const buttons = await waitForElement(() => tools.getAllByText('View data'));
+    fireEvent.click(buttons[3]);
+
+    await wait(() => expect(tools.history.location.pathname).toBe('/projects'));
+  });
 });

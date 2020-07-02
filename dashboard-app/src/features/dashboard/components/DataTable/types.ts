@@ -32,9 +32,7 @@ export type DataTableCell = {
 
 export type DataTableRow = {
   rowLink?: string
-  columns: {
-    [k in string]: DataTableCell
-  }
+  columns: Dictionary<DataTableCell>
 };
 
 
