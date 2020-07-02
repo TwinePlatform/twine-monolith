@@ -6,6 +6,7 @@ describe('Config', () => {
     const config = getConfig(Environment.DEVELOPMENT);
 
     expect(config.web).toEqual({
+      address: "localhost",
       host: 'localhost',
       port: 4000,
       router: { stripTrailingSlash: true },
