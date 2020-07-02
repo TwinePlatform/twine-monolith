@@ -14,6 +14,7 @@ env:
   - APP_DIR=api
   - APP_DIR=dashboard-app
   - APP_DIR=visitor-app
+  - APP_DIR=nativeApp
 
 addons:
   postgresql: "9.6"
