@@ -73,6 +73,7 @@ const Login: FC<Props> = (props) => {
     try {
       const { data } = await API.Authentication.login({ email, password });
       await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.token);
+      await AsyncStorage.setItem(StorageValuesEnum.USER_ID, data.userId.toString());
       props.navigation.navigate('AuthenticationLoader');
     } catch (error) {
       console.log(error);
@@ -109,7 +110,7 @@ const Login: FC<Props> = (props) => {
 
       <BottomContainer>
         <LinkText onPress={() => props.navigation.navigate('Register')}>
-          Create a new account
+          Register here
         </LinkText>
       </BottomContainer>
 

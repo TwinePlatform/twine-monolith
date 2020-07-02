@@ -80,7 +80,7 @@ const initialState: VolunteersState = {
  * Action creators
  */
 const loadVolunteersRequest = createAction(ActionsType.LOAD_VOLUNTEERS_REQUEST);
-const loadVolunteersSuccess = createAction<Partial <User> []>(ActionsType.LOAD_VOLUNTEERS_SUCCESS);
+const loadVolunteersSuccess = createAction<Partial<User>[]>(ActionsType.LOAD_VOLUNTEERS_SUCCESS);
 const loadVolunteersError = createAction<Error>(ActionsType.LOAD_VOLUNTEERS_ERROR);
 
 const createVolunteerRequest = createAction(ActionsType.CREATE_VOLUNTEER_REQUEST);
