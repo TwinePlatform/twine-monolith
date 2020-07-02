@@ -260,6 +260,7 @@ export type VolunteerLog = Readonly<CommonTimestamps & {
   project?: string;
   duration: Duration.Duration;
   startedAt: string;
+  notes?: string;
 }>;
 
 export type ApiToken = Readonly<CommonTimestamps & {
@@ -305,6 +306,7 @@ type UsersBaseCollection = Collection<User>;
 
 export type UserCollection = UsersBaseCollection & {
   isMemberOf: (k: Knex, u: User, cb: CommunityBusiness) => Promise<boolean>;
+  updateToken: (c: Knex, a: any, b: any) => Promise<any>;
 };
 
 export type VisitorCollection = UsersBaseCollection & {
@@ -319,13 +321,16 @@ export type VisitorCollection = UsersBaseCollection & {
 export type VolunteerCollection = UsersBaseCollection & {
   fromCommunityBusiness: (client: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
     Promise<Partial<User>[]>;
+  fromProjectWithToken: (client: Knex, c: CommunityBusiness, vp: string) =>
+    // fromProjectWithToken: (client: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
+    Promise<Partial<User>[]>;
   addWithRole: (
     k: Knex,
     u: Partial<User>,
     vt: RoleEnum.VOLUNTEER | RoleEnum.VOLUNTEER_ADMIN,
     cb: CommunityBusiness,
     c?: string
-    ) => Promise<User>;
+  ) => Promise<User>;
   adminCodeIsValid: (k: Knex, c: CommunityBusiness, code: string) => Promise<boolean>;
 };
 
@@ -368,10 +373,12 @@ export type CommunityBusinessCollection = Collection<CommunityBusiness> & {
 };
 
 export type VolunteerLogCollection = Collection<VolunteerLog> & {
+  getSimple: (c: Knex, a: string) => Promise<VolunteerLog>;
+  updateNotes: (c: Knex, a: string, b: any) => Promise<VolunteerLog>;
   projectToColumnNames: (a: Partial<Record<keyof VolunteerProject, any>>) => Dictionary<any>;
   fromUser: (
     k: Knex,
-    u: User, 
+    u: User,
     q?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>;
   fromCommunityBusiness: (
     k: Knex,
@@ -447,7 +454,7 @@ export type RolesCollection = {
 
   userHasAtCb: (k: Knex, a: RolesQuery) => Promise<boolean>;
 
-  fromUser: (k: Knex, a: User) => Promise<{organisationId: Int; role: RoleEnum}[]>;
+  fromUser: (k: Knex, a: User) => Promise<{ organisationId: Int; role: RoleEnum }[]>;
 
   fromUserWithOrg: (k: Knex, a: UserRoleQuery) => Promise<RoleEnum[]>;
 

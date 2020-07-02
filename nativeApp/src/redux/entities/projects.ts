@@ -15,44 +15,44 @@ import {
  * Actions
  */
 enum ActionsType {
- LOAD_PROJECTS_REQUEST = 'projects/LOAD_REQUEST',
- LOAD_PROJECTS_ERROR = 'projects/LOAD_ERROR',
- LOAD_PROJECTS_SUCCESS = 'projects/LOAD_SUCCESS',
+  LOAD_PROJECTS_REQUEST = 'projects/LOAD_REQUEST',
+  LOAD_PROJECTS_ERROR = 'projects/LOAD_ERROR',
+  LOAD_PROJECTS_SUCCESS = 'projects/LOAD_SUCCESS',
 
- CREATE_PROJECT_REQUEST = 'project/CREATE_REQUEST',
- CREATE_PROJECT_ERROR = 'project/CREATE_ERROR',
- CREATE_PROJECT_SUCCESS = 'project/CREATE_SUCCESS',
- CREATE_PROJECT_RESET = 'project/CREATE_RESET',
+  CREATE_PROJECT_REQUEST = 'project/CREATE_REQUEST',
+  CREATE_PROJECT_ERROR = 'project/CREATE_ERROR',
+  CREATE_PROJECT_SUCCESS = 'project/CREATE_SUCCESS',
+  CREATE_PROJECT_RESET = 'project/CREATE_RESET',
 
- UPDATE_PROJECT_REQUEST = 'project/UPDATE_REQUEST',
- UPDATE_PROJECT_ERROR = 'project/UPDATE_ERROR',
- UPDATE_PROJECT_SUCCESS = 'project/UPDATE_SUCCESS',
- UPDATE_PROJECT_RESET = 'project/UPDATE_RESET',
+  UPDATE_PROJECT_REQUEST = 'project/UPDATE_REQUEST',
+  UPDATE_PROJECT_ERROR = 'project/UPDATE_ERROR',
+  UPDATE_PROJECT_SUCCESS = 'project/UPDATE_SUCCESS',
+  UPDATE_PROJECT_RESET = 'project/UPDATE_RESET',
 
- DELETE_PROJECT_REQUEST = 'project/DELETE_REQUEST',
- DELETE_PROJECT_ERROR = 'project/DELETE_ERROR',
- DELETE_PROJECT_SUCCESS = 'project/DELETE_SUCCESS',
+  DELETE_PROJECT_REQUEST = 'project/DELETE_REQUEST',
+  DELETE_PROJECT_ERROR = 'project/DELETE_ERROR',
+  DELETE_PROJECT_SUCCESS = 'project/DELETE_SUCCESS',
 
- RESTORE_PROJECT_REQUEST = 'project/RESTORE_REQUEST',
- RESTORE_PROJECT_ERROR = 'project/RESTORE_ERROR',
- RESTORE_PROJECT_SUCCESS = 'project/RESTORE_SUCCESS',
+  RESTORE_PROJECT_REQUEST = 'project/RESTORE_REQUEST',
+  RESTORE_PROJECT_ERROR = 'project/RESTORE_ERROR',
+  RESTORE_PROJECT_SUCCESS = 'project/RESTORE_SUCCESS',
 }
 
 /*
  * Types
  */
 type LoadProjectsRequest = {
- type: ActionsType.LOAD_PROJECTS_REQUEST;
+  type: ActionsType.LOAD_PROJECTS_REQUEST;
 };
 
 type LoadProjectsSuccess = {
- type: ActionsType.LOAD_PROJECTS_SUCCESS;
- payload: VolunteerProject []; // TODO
+  type: ActionsType.LOAD_PROJECTS_SUCCESS;
+  payload: VolunteerProject[]; // TODO
 };
 
 type LoadProjectsError = {
- type: ActionsType.LOAD_PROJECTS_ERROR;
- payload: Error;
+  type: ActionsType.LOAD_PROJECTS_ERROR;
+  payload: Error;
 };
 
 type CreateProjectRequest = RequestAction<ActionsType.CREATE_PROJECT_REQUEST>
@@ -104,7 +104,7 @@ const initialState: ProjectsState = {
  */
 const loadProjectsRequest = createAction(ActionsType.LOAD_PROJECTS_REQUEST);
 const loadProjectsError = createAction<Error>(ActionsType.LOAD_PROJECTS_ERROR);
-const loadProjectsSuccess = createAction<Partial <VolunteerProject> []>(ActionsType.LOAD_PROJECTS_SUCCESS); // eslint-disable-line
+const loadProjectsSuccess = createAction<Partial<VolunteerProject>[]>(ActionsType.LOAD_PROJECTS_SUCCESS); // eslint-disable-line
 
 const createProjectRequest = createAction(ActionsType.CREATE_PROJECT_REQUEST);
 const createProjectSuccess = createAction(ActionsType.CREATE_PROJECT_SUCCESS);
