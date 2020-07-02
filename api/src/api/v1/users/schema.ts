@@ -16,7 +16,7 @@ export const userName =
   Joi.string()
     .min(3)
     .max(100)
-    .regex(/^[a-zA-Z]{2,}\s?[a-zA-z]*['\-]?[a-zA-Z]*['\- ]?([a-zA-Z]{1,})?/, { name: 'alpha' })
+    .regex(/^[a-zA-Z]{2,}\s?[a-zA-z]*['-]?[a-zA-Z]*['\- ]?([a-zA-Z]{1,})?/, { name: 'alpha' })
     .trim()
     .options({ language: { string: { regex: { name: 'can only contain letters' } } } });
 

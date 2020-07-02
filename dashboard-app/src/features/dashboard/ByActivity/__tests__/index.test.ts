@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { renderWithHistory } from '../../../../lib/util/tests';
 import { axios } from '../../../../lib/api';
 import { logs, users, activities } from '../../__data__/api_data';
-import ByActivity from '../../ByActivity';
+import ByActivity from '..';
 import 'jest-dom/extend-expect';
 
 
