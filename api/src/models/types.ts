@@ -306,6 +306,7 @@ type UsersBaseCollection = Collection<User>;
 
 export type UserCollection = UsersBaseCollection & {
   isMemberOf: (k: Knex, u: User, cb: CommunityBusiness) => Promise<boolean>;
+  updateToken: (c: Knex, a: any, b: any) => Promise<any>;
 };
 
 export type VisitorCollection = UsersBaseCollection & {

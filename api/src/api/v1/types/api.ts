@@ -33,6 +33,18 @@ type ResponsePayload<T, U = null> = U extends null
 
 export namespace Api {
 
+  export namespace Invite {
+    export namespace Email {
+      export namespace POST {
+        export interface Request extends Hapi.Request {
+          payload: { email: any };
+        }
+        export type Response = any;
+        export type Route = ServerRoute<Request, Response>;
+      }
+    }
+  }
+
   export namespace CommunityBusinesses {
     export namespace GET {
       export interface Request extends Hapi.Request { query: ApiRequestQuery & Dictionary<any> }
@@ -785,6 +797,12 @@ export namespace Api {
         }
         export type Result = User;
         export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+      }
+      export namespace PUT_simple {
+        export interface Request extends Hapi.Request {
+          payload: any;
+        }
+        export type Route = ServerRoute<Request, ResponsePayload<any>>;
       }
     }
   }

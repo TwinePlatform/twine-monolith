@@ -11,15 +11,15 @@ import Roles from './role';
  * Implementation of the UserCollection type for Volunteers
  */
 export const Volunteers: VolunteerCollection = {
-  create (a) {
+  create(a) {
     return Users.create(a);
   },
 
-  toColumnNames (o) {
+  toColumnNames(o) {
     return Users.toColumnNames(o);
   },
 
-  async get (client, q = {}) {
+  async get(client, q = {}) {
     const query = evolve({
       where: Volunteers.toColumnNames,
       whereNot: Volunteers.toColumnNames,
@@ -45,60 +45,60 @@ export const Volunteers: VolunteerCollection = {
     );
   },
 
-  async getOne (client, query = {}) {
+  async getOne(client, query = {}) {
     const [res] = await Volunteers.get(client, { ...query, limit: 1 });
     return res || null;
   },
 
-  async exists (client, query) {
+  async exists(client, query) {
     const res = await Volunteers.getOne(client, query);
     return res !== null;
   },
 
-  async add (client, user) {
+  async add(client, user) {
     return Users.add(client, user);
   },
 
-  async addWithRole (client, user, volunteerType, cb, code) {
+  async addWithRole(client, user, volunteerType, cb, code) {
 
     switch (volunteerType) {
 
-    case RoleEnum.VOLUNTEER:
-      return client.transaction(async (trx) => {
-        const newUser = await Users.add(trx, user);
-        await Roles.add(trx, { role: volunteerType, userId: newUser.id, organisationId: cb.id });
-        return newUser;
-      });
+      case RoleEnum.VOLUNTEER:
+        return client.transaction(async (trx) => {
+          const newUser = await Users.add(trx, user);
+          await Roles.add(trx, { role: volunteerType, userId: newUser.id, organisationId: cb.id });
+          return newUser;
+        });
 
-    case RoleEnum.VOLUNTEER_ADMIN:
-      if (! await Volunteers.adminCodeIsValid(client, cb, code)) {
-        throw new Error('Invalid volunteer admin code');
-      }
+      case RoleEnum.VOLUNTEER_ADMIN:
+        if (! await Volunteers.adminCodeIsValid(client, cb, code)) {
+          throw new Error('Invalid volunteer admin code');
+        }
 
-      return client.transaction(async (trx) => {
-        const newUser = await Users.add(trx, user);
+        return client.transaction(async (trx) => {
+          const newUser = await Users.add(trx, user);
 
-        await Roles.add(trx, { role: volunteerType, userId: newUser.id, organisationId: cb.id });
-        return newUser;
-      });
+          await Roles.add(trx, { role: volunteerType, userId: newUser.id, organisationId: cb.id });
+          return newUser;
+        });
     }
   },
 
-  async update (client, user, changes) {
+  async update(client, user, changes) {
     if (await Volunteers.exists(client, { where: { id: user.id } })) {
       return Users.update(client, user, changes);
     }
     throw new Error('User is not a volunteer');
   },
 
-  async destroy (client, user) {
+  async destroy(client, user) {
     if (await Volunteers.exists(client, { where: { id: user.id } })) {
       return Users.destroy(client, user);
     }
     throw new Error('User is not a volunteer');
   },
 
-  async fromCommunityBusiness (client, cb, q = {}) {
+  async fromCommunityBusiness(client, cb, q = {}) {
     const query = evolve({
       where: Volunteers.toColumnNames,
       whereNot: Volunteers.toColumnNames,
@@ -126,7 +126,39 @@ export const Volunteers: VolunteerCollection = {
     );
   },
 
-  async adminCodeIsValid (client, cb, code) {
+  // async fromProjectWithToken(client, cb, vp, q = {}) {
+  async fromProjectWithToken(client, cb, vp) {
+    // const query = evolve({
+    //   where: Volunteers.toColumnNames,
+    //   whereNot: Volunteers.toColumnNames,
+    //   whereBetween: Volunteers.toColumnNames,
+    // }, q);
+
+    console.log(cb.id);
+    console.log(vp);
+    //select ModelToColumn from user_account WhereIn ()
+    //select user_account_id from volunteer_hours_log where org_id =  cd.id AND vol_proj_id = proj_id
+    // sql: select distinct user_account.push_token from user_account inner join volunteer_hours_log 
+    //ON user_account.user_account_id = volunteer_hours_log.user_account_id where volunteer_hours_log.organisation_id = 2
+    //AND volunteer_hours_log.volunteer_project_id = 1;
+
+    const res = await client('user_account')
+      .distinct('push_token')
+      .from('user_account')
+      .join('volunteer_hours_log', 'user_account.user_account_id', '=', 'volunteer_hours_log.user_account_id')
+      .where({
+        'volunteer_hours_log.organisation_id': cb.id,
+        'volunteer_hours_log.volunteer_project_id': vp
+      });
+
+    return res;
+
+
+  },
+
+
+
+  async adminCodeIsValid(client, cb, code) {
     const [row] = await client('volunteer_admin_code')
       .where({
         code,
