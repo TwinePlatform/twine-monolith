@@ -114,12 +114,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const cache = async (values) => {
 
     var cachevalue = await AsyncStorage.getItem('log cache');
-    console.log(cachevalue);
     cachevalue = cachevalue == null ? [] : JSON.parse(cachevalue);
-    console.log(cachevalue);
-    console.log('the type is');
-    console.log(typeof cachevalue);
-
     cachevalue.push(values);
     await AsyncStorage.setItem(
       'log cache',
