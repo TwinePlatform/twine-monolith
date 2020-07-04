@@ -1,4 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { AsyncStorage } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
@@ -10,6 +12,8 @@ import Stat from '../../../lib/ui/Stat';
 import Line from '../../../lib/ui/Line';
 import Invite from '../../../lib/ui/Invite';
 
+import { createLog, createLogReset } from '../../../redux/entities/logs';
+
 /*
  * Types
  */
@@ -20,15 +24,15 @@ type Props = {
  * Styles
  */
 
- /*
+/*
 const View = styled.ScrollView`
-  flexDirection: column;
-  alignItems: center;
-  paddingTop: 20;
-  paddingBottom: 20;
-  paddingLeft: 40;
-  paddingRight: 40;
-  flex: 1;
+ flexDirection: column;
+ alignItems: center;
+ paddingTop: 20;
+ paddingBottom: 20;
+ paddingLeft: 40;
+ paddingRight: 40;
+ flex: 1;
 `;
 */
 const View = styled.ScrollView.attrs(() => ({
@@ -54,7 +58,7 @@ const Container = styled.View`
   justifyContent: space-between;
 `;
 
-const onInvite = () =>{
+const onInvite = () => {
   console.log("invite pressed");
   return <Heading>invite</Heading>
 }
@@ -64,15 +68,63 @@ const onInvite = () =>{
 const AdminHome: FC<Props> = () => {
   const [visibleConfirmationModal, toggleInviteVisibility] = useToggle(false);
 
+  const dispatch = useDispatch();
+  const [logged, setLogged] = useState(false);
+
+  //access fail to send log and try logging them again
+  const checkStorage = async () => {
+    var logStore = await AsyncStorage.getItem('log cache');
+    logStore = logStore == null ? [] : JSON.parse(logStore);
+    var arr = Object.values(logStore);
+    var newArray = [];
+
+    //return array of promise, assign a value null if succeed
+    newArray = await Promise.all(arr.map(item => {
+      const res = createLog(item)(dispatch).then((result) => {
+        if (result.status == 200) {
+          return null;
+        } else {
+          return result;
+        };
+      });
+      return res;
+
+    }));
+
+    console.log(newArray);
+
+    const correctedArray = newArray.filter(obj => {
+      console.log(obj);
+      console.log(obj != null);
+      return obj != null;
+    });
+
+    console.log(correctedArray);
+
+
+    AsyncStorage.setItem(
+      'log cache',
+      JSON.stringify(correctedArray)
+    );
+
+
+  }
+
+  useEffect(() => {
+    checkStorage();
+  }, []);
+
+
+
   return (
-  
+
     <View>
       <InvitationModal
-          isVisible={visibleConfirmationModal}
-          onCancel={toggleInviteVisibility}
-          onSendClose={toggleInviteVisibility}
-          title="Invite Volunteers By Email"
-        />
+        isVisible={visibleConfirmationModal}
+        onCancel={toggleInviteVisibility}
+        onSendClose={toggleInviteVisibility}
+        title="Invite Volunteers By Email"
+      />
       <Heading>Week Stats</Heading>
       <Container>
         <Stat
@@ -99,7 +151,7 @@ const AdminHome: FC<Props> = () => {
           <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
         </Stat>
       </Container>
-        <Invite onPress={toggleInviteVisibility} organisation={"aperture science"}/>
+      <Invite onPress={toggleInviteVisibility} organisation={"aperture science"} />
     </View>
   );
 }

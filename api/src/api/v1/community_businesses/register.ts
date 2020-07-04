@@ -16,12 +16,12 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
     path: '/community-businesses/register',
     options: {
       description: 'Register a new community businesses and invite admin user',
-      auth: {
-        strategy: 'standard',
-        access: {
-          scope: ['organisations_details-child:write'],
-        },
-      },
+      // auth: {
+      //   strategy: 'standard',
+      //   access: {
+      //     scope: ['organisations_details-child:write'],
+      //   },
+      // },
       validate: {
         payload: {
           ...omit(['name'], cbPayload),
@@ -30,7 +30,7 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
           adminEmail: email.required(),
         },
       },
-      pre: [requireChildOrganisation],
+      // pre: [requireChildOrganisation],
       response: { schema: response },
     },
     handler: async (request, h) => {

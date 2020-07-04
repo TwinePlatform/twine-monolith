@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Form as F, Text } from 'native-base';
+import { NetInfo, Platform, AsyncStorage } from "react-native";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
@@ -98,6 +99,30 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
     setNote('');
   };
 
+  const CheckConnectivity = async (logData) => {
+    await NetInfo.isConnected.fetch()
+      .then(isConnected => {
+        if (isConnected) {
+          console.log('connected to internet');
+        } else {
+          cache(logData);
+        }
+        return isConnected;
+      })
+  };
+
+  const cache = async (values) => {
+
+    var cachevalue = await AsyncStorage.getItem('log cache');
+    cachevalue = cachevalue == null ? [] : JSON.parse(cachevalue);
+    cachevalue.push(values);
+    await AsyncStorage.setItem(
+      'log cache',
+      JSON.stringify(cachevalue)
+    );
+
+  }
+
   // hooks
   useEffect(() => {
     if (requestStatus.success) {
@@ -106,7 +131,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   }, [requestStatus]);
 
   // handlers
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const values = {
       project,
       activity,
@@ -115,7 +140,19 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       userId: volunteers.find((x) => x.name === volunteer).id,
       note
     };
-    dispatch(createLog(values));
+    CheckConnectivity(values);
+    try { //error trapping and cache log when network error
+      const res = await dispatch(createLog(values));
+      if (res.error.statusCode == 500) {
+        cache(values);
+      }
+      if (res.error.statusCode == 400) {
+        console.log(res.error.message);
+        //ToDo: error trapping here 
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
 
@@ -162,7 +199,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       />
       <NoteContainer>
         <Label>{getTimeLabel(forUser, volunteer)}</Label>
-        <NoteButton label={"Add note"} onPress={toggleNoteInvisibility}/>
+        <NoteButton label={"Add note"} onPress={toggleNoteInvisibility} />
       </NoteContainer>
       <TimeContainer>
         <HoursAndMinutesText align="center" timeValues={[hours, minutes]} />

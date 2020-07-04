@@ -121,12 +121,15 @@ export const createLog = (values: Partial<VolunteerLog>) => (dispatch) => {
     .then((result) => {
       dispatch(createLogSuccess());
       dispatch(loadLogs());
-      if(values.note != "")
-        API.Notes.set(values.note, result.data.id, values.activity, values.project, values.startedAt) 
+      if (values.note != "") {
+        API.Notes.set(values.note, result.data.id, values.activity, values.project, values.startedAt)
+      }
+      return result;
     })
     .catch((error) => {
       const errorResponse = getErrorResponse(error);
       dispatch(createLogError(errorResponse));
+      return error.response.data;
     });
 };
 
