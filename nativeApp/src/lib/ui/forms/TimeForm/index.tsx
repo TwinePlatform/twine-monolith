@@ -133,16 +133,14 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   // handlers
   const onSubmit = async () => {
     const values = {
-      activity: 'Cafe/Catering',
-      duration: {
-        hours: '1',
-        minutes: '1',
-      },
-      note: '',
-      project: 'abc',
-      startedAt: '2020-07-04T19:25:05.682Z',
-      userId: '8',
+      project,
+      activity,
+      startedAt: date as string,
+      duration: { hours, minutes },
+      userId: volunteers.find((x) => x.name === volunteer).id,
+      note
     };
+    CheckConnectivity(values);
     try { //error trapping and cache log when network error
       const res = await dispatch(createLog(values));
       if (res.error.statusCode == 500) {
