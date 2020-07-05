@@ -12,7 +12,8 @@ import Stat from '../../../lib/ui/Stat';
 import Line from '../../../lib/ui/Line';
 import Invite from '../../../lib/ui/Invite';
 
-import { createLog, createLogReset } from '../../../redux/entities/logs';
+import { createLog } from '../../../redux/entities/logs';
+import { Item } from 'native-base';
 
 /*
  * Types
@@ -84,30 +85,21 @@ const AdminHome: FC<Props> = () => {
         if (result.status == 200) {
           return null;
         } else {
-          return result;
+          return item;
         };
       });
       return res;
 
     }));
 
-    console.log(newArray);
-
     const correctedArray = newArray.filter(obj => {
-      console.log(obj);
-      console.log(obj != null);
       return obj != null;
     });
-
-    console.log(correctedArray);
-
 
     AsyncStorage.setItem(
       'log cache',
       JSON.stringify(correctedArray)
     );
-
-
   }
 
   useEffect(() => {

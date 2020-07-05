@@ -111,6 +111,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       })
   };
 
+  //function to cache value in asynchstorage
   const cache = async (values) => {
 
     var cachevalue = await AsyncStorage.getItem('log cache');
@@ -132,14 +133,27 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   // handlers
   const onSubmit = async () => {
-    const values = {
-      project,
-      activity,
-      startedAt: date as string,
-      duration: { hours, minutes },
-      userId: volunteers.find((x) => x.name === volunteer).id,
-      note
-    };
+
+    const values = (() => {
+      if (forUser === 'admin')
+        return {
+          project,
+          activity,
+          startedAt: date as string,
+          duration: { hours, minutes },
+          userId: volunteers.find((x) => x.name === volunteer).id,
+          note
+        }
+      else
+        return {
+          project,
+          activity,
+          startedAt: date as string,
+          duration: { hours, minutes },
+          note
+        }
+    })();
+
     CheckConnectivity(values);
     try { //error trapping and cache log when network error
       const res = await dispatch(createLog(values));
@@ -150,6 +164,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
         console.log(res.error.message);
         //ToDo: error trapping here 
       }
+      console.log(res);
     } catch (error) {
       console.log(error);
     }
