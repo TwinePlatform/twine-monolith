@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Form as F, Text } from 'native-base';
-import { NetInfo, Platform, AsyncStorage } from "react-native";
+import { NetInfo, Platform, AsyncStorage, TextInput } from "react-native";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
@@ -21,6 +21,9 @@ import { User } from '../../../../../../api/src/models';
 import SavedModal from '../../modals/SavedModal';
 import NoteModal from '../../modals/NoteModal';
 import useToggle from '../../../hooks/useToggle';
+
+import * as yup from 'yup';
+import { Formik } from 'formik';
 
 /*
  * Types
@@ -84,20 +87,17 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [responseModal, toggleResponseModal] = useToggle(false);
   const [noteModalVisible, toggleNoteInvisibility] = useToggle(false);
 
-  const [project, setProject] = useState('');
-  const [activity, setActivity] = useState('');
-  const [volunteer, setVolunteer] = useState('');
   const [date, setDate] = useState<Date>(new Date);
-  const [hours, setHours] = useState<number>();
-  const [minutes, setMinutes] = useState<number>();
-  const [note, setNote] = useState('');
+  // const [hours, setHours] = useState<number>();
+  // const [minutes, setMinutes] = useState<number>();
+  // const [note, setNote] = useState('');
 
-  const resetForm = () => {
-    setDate(new Date);
-    setHours(undefined);
-    setMinutes(undefined);
-    setNote('');
-  };
+  // const resetForm = () => {
+  //   setDate(new Date);
+  //   setHours(undefined);
+  //   setMinutes(undefined);
+  //   setNote('');
+  // };
 
   const CheckConnectivity = async (logData) => {
     await NetInfo.isConnected.fetch()
@@ -132,16 +132,16 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   }, [requestStatus]);
 
   // handlers
-  const onSubmit = async () => {
+  const onSubmit = async (volunteer, project, activity, date, hours, minutes, note) => {
 
-    const values = (() => {
+    const values = ((volunteer, project, activity, date, hours, minutes, note) => {
       if (forUser === 'admin')
         return {
           project,
           activity,
           startedAt: date as string,
           duration: { hours, minutes },
-          userId: volunteers.find((x) => x.name === volunteer).id,
+          // userId: volunteers.find((x) => x.name === volunteer).id,
           note
         }
       else
@@ -173,54 +173,130 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   const onContinue = () => {
     dispatch(createLogReset());
-    resetForm();
+    // resetForm();
     // toggleResponseModal(); ??
   };
 
+  const validationSchema = yup.object().shape({
+    // yup.object().shape({
+    project: yup
+      .string()
+      .min(3, 'error')
+      .required('enter a project'),
+    activity: yup
+      .string()
+      .min(3, 'error')
+      .required('enter an activity'),
+    volunteer: yup
+      .string()
+      .required('enter a volunteer'),
+    hours: yup
+      .number()
+      .required(),
+    minutes: yup
+      .number()
+      .required(),
+    note: yup
+      .string()
+  });
+
   return (
-    <Form>
-      <SavedModal
-        isVisible={responseModal}
-        onContinue={onContinue}
-      />
-      <NoteModal
-        isVisible={noteModalVisible}
-        addNote={setNote}
-        onClose={toggleNoteInvisibility}
-      />
-      {forUser === 'admin' && <FuzzySearchBox label="Volunteer" placeholder={"Search volunteers"} options={volunteers} selectedValue={volunteer} onValueChange={setVolunteer} />}
-      {forUser === 'volunteer' && <Label>What project are you volunteering on?</Label>}
-      <Dropdown label="Project" options={projects} selectedValue={project} onValueChange={setProject} />
-      {forUser === 'volunteer' && <Label>What activity are you doing?</Label>}
-      <Dropdown label="Activity" options={activities} selectedValue={activity} onValueChange={setActivity} />
-      <DateTimePicker
-        label="Date"
-        value={date}
-        onConfirm={setDate}
-        mode="date"
-        maxDate={new Date()}
-      />
-      <Dropdown
-        label="Hours"
-        options={zeroToNine}
-        selectedValue={hours}
-        onValueChange={setHours}
-      />
-      <Dropdown
-        label="Minutes"
-        options={zeroToFiftyNine}
-        selectedValue={minutes}
-        onValueChange={setMinutes}
-      />
-      <NoteContainer>
-        <Label>{getTimeLabel(forUser, volunteer)}</Label>
-        <NoteButton label={"Add note"} onPress={toggleNoteInvisibility} />
-      </NoteContainer>
-      <TimeContainer>
-        <HoursAndMinutesText align="center" timeValues={[hours, minutes]} />
-      </TimeContainer>
-      <SubmitButton text="ADD TIME" onPress={onSubmit} />
-    </Form>
+
+    <Formik
+      initialValues={{ volunteer: 'vol', project: '', activity: '', date: '', hours: '', minutes: '', note: '' }}
+      validationSchema={validationSchema}
+      onSubmit={(values) => {
+        onSubmit(values.volunteer, values.project, values.activity, values.date, values.hours, values.minutes, values.note);
+      }}>
+
+      {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+
+        <Form>
+          <SavedModal
+            isVisible={responseModal}
+            onContinue={onContinue}
+          />
+          <NoteModal
+            isVisible={noteModalVisible}
+            // addNote={setNote}
+            addNote={values.note}
+            onClose={toggleNoteInvisibility}
+          />
+          {forUser === 'admin' &&
+            <FuzzySearchBox
+              label="Volunteer"
+              placeholder={"Search volunteers"}
+              options={volunteers}
+              selectedValue={values.volunteer}
+              onValueChange={handleChange('volunteer')}
+              onBlur={handleBlur('volunteer')}
+              value={values.volunteer}
+            />
+          }
+
+          {forUser === 'volunteer' && <Label>What project are you volunteering on?</Label>}
+
+          <Dropdown
+            label="Project"
+            options={projects}
+            selectedValue={values.project}
+            onValueChange={handleChange('project')}
+            onBlur={handleBlur('project')}
+            value={values.project}
+          />
+          {errors.project &&
+            <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.project}</TextInput>
+          }
+
+          {forUser === 'volunteer' && <Label>What activity are you doing?</Label>}
+
+          <Dropdown label="Activity"
+            options={activities}
+            selectedValue={values.activity}
+            onValueChange={handleChange('activity')}
+            value={values.activity}
+          />
+          {errors.activity &&
+            <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.activity}</TextInput>
+          }
+
+          <DateTimePicker
+            label="Date"
+            value={date}
+            onConfirm={date}
+            mode="date"
+            maxDate={new Date()}
+          />
+
+          <Dropdown
+            label="Hours"
+            options={zeroToNine}
+            selectedValue={values.hours}
+            onValueChange={handleChange('hours')}
+            value={values.project}
+          />
+
+          <Dropdown
+            label="Minutes"
+            options={zeroToFiftyNine}
+            selectedValue={values.minutes}
+            onValueChange={handleChange('minutes')}
+            value={values.minutes}
+          />
+
+          <NoteContainer>
+            <Label>{getTimeLabel(forUser, values.volunteer)}</Label>
+            <NoteButton label={"Add note"} onPress={toggleNoteInvisibility} />
+          </NoteContainer>
+          <TimeContainer>
+            <HoursAndMinutesText align="center" timeValues={[values.hours, values.minutes]} />
+          </TimeContainer>
+          <SubmitButton text="ADD TIME" onPress={handleSubmit} />
+
+        </Form>
+
+      )}
+    </Formik>
   );
 };
 
