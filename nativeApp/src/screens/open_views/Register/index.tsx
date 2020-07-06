@@ -57,18 +57,9 @@ const Register: FC<Props> = (props) => {
   const [initialised, setInitialised] = useState(false);
   const [organisationOptions, setOrganisationOptions] = useState([{ id: 1, name: "loading organisations" }])
 
-  // const [organisationName, setOrganisationName] = useState("");
-  // const [organisationEmail, setOrganisationEmail] = useState("");
-
-  // const [userName, setUserName] = useState("");
-  // const [userEmail, setUserEmail] = useState("");
-  // const [userPassword, setUserPassword] = useState("");
-  // const [userPostCode, setUserPostCode] = useState("");
-  // const [userPhoneNumber, setUserPhoneNumber] = useState("");
   const [userYearOfBirth, setUserYearOfBirth] = useState("");
   const [userGender, setUserGender] = useState("");
   const [userOrganisation, setUserOrganisation] = useState("");
-  // const [userAdminCode, setUserAdminCode] = useState("");
 
   const [serverError, setError] = useState("");
 
