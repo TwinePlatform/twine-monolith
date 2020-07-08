@@ -67,9 +67,6 @@ const NoteContainer = styled.View`
   flexDirection: row;
 `;
 
-// const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${i}` }));
-// const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${i}` }));
-
 /*
  * Component
  */
@@ -87,7 +84,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [responseModal, toggleResponseModal] = useToggle(false);
   const [noteModalVisible, toggleNoteInvisibility] = useToggle(false);
 
-  const [date, setDate] = useState<Date>(new Date);
+  // const [date, setDate] = useState<Date>(new Date);
   const [startTime, setStartTime] = useState<Date>(new Date);
   const [endTime, setEndTime] = useState<Date>(new Date);
   // const [hours, setHours] = useState<number>();
@@ -134,44 +131,44 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   }, [requestStatus]);
 
   // handlers
-  const onSubmit = async (volunteer, project, activity, date, hours, minutes, note) => {
+  const onSubmit = async (volunteer, project, activity, startTime, endTime, note) => {
+    const hours = Math.floor((endTime - startTime) / (1000 * 60 * 60));
+    const minutes = Math.floor((endTime - startTime) / (1000 * 60) - hours * 60);
+    const values = (() => {
+      if (forUser === 'admin')
+        return {
+          project,
+          activity,
+          startedAt: startTime as string,
+          duration: { hours, minutes },
+          userId: volunteers.find((x) => x.name === volunteer).id,
+          note
+        }
+      else
+        return {
+          project,
+          activity,
+          startedAt: startTime as string,
+          duration: { hours, minutes },
+          note
+        }
+    })();
 
-    console.log('clicked submit');
-    console.log(date);
-    // const values = ((volunteer, project, activity, date, hours, minutes, note) => {
-    //   if (forUser === 'admin')
-    //     return {
-    //       project,
-    //       activity,
-    //       startedAt: date as string,
-    //       duration: { hours, minutes },
-    //       // userId: volunteers.find((x) => x.name === volunteer).id,
-    //       note
-    //     }
-    //   else
-    //     return {
-    //       project,
-    //       activity,
-    //       startedAt: date as string,
-    //       duration: { hours, minutes },
-    //       note
-    //     }
-    // })();
-
-    // CheckConnectivity(values);
-    // try { //error trapping and cache log when network error
-    //   const res = await dispatch(createLog(values));
-    //   if (res.error.statusCode == 500) {
-    //     cache(values);
-    //   }
-    //   if (res.error.statusCode == 400) {
-    //     console.log(res.error.message);
-    //     //ToDo: error trapping here 
-    //   }
-    //   console.log(res);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    console.log(values);
+    CheckConnectivity(values);
+    try { //error trapping and cache log when network error
+      const res = await dispatch(createLog(values));
+      if (res.error.statusCode == 500) {
+        cache(values);
+      }
+      if (res.error.statusCode == 400) {
+        console.log(res.error.message);
+        //ToDo: error trapping here 
+      }
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
 
@@ -191,26 +188,16 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       .string()
       .min(3, 'error')
       .required('enter an activity'),
-    volunteer: yup
-      .string()
-      .required('enter a volunteer'),
-    hours: yup
-      .number()
-      .required(),
-    minutes: yup
-      .number()
-      .required(),
-    note: yup
-      .string()
   });
 
   return (
 
     <Formik
-      initialValues={{ volunteer: 'vol', project: '', activity: '', hours: '', minutes: '', note: '' }}
-      // validationSchema={validationSchema}
+      initialValues={{ volunteer: '', project: '', activity: '', note: '' }}
+      validationSchema={validationSchema}
       onSubmit={(values, date) => {
-        onSubmit(values.volunteer, values.project, values.activity, date, values.hours, values.minutes, values.note);
+        // console.log(values);
+        onSubmit(values.volunteer, values.project, values.activity, startTime, endTime, values.note);
       }}>
 
       {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
@@ -264,17 +251,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.activity}</TextInput>
           }
 
-          {/* <DateTimePicker
-            label="Date"
-            value={date}
-            // onConfirm={(values) => setDate(values)}
-            onConfirm={(newDate) => setDate(newDate)}
-            mode="date"
-            maxDate={new Date()}
-          />
-          <TextInput style={{ fontSize: 10, color: 'red' }}>{date.toString()}</TextInput> */}
-
-
           <DateTimePicker
             label="Start Time"
             value={startTime}
@@ -290,22 +266,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             mode="datetime"
             maxDate={new Date()}
           />
-
-          {/* <Dropdown
-            label="Hours"
-            options={zeroToNine}
-            selectedValue={values.hours}
-            onValueChange={handleChange('hours')}
-            value={values.project}
-          />
-
-          <Dropdown
-            label="Minutes"
-            options={zeroToFiftyNine}
-            selectedValue={values.minutes}
-            onValueChange={handleChange('minutes')}
-            value={values.minutes}
-          /> */}
 
           <NoteContainer>
             <Label>{getTimeLabel(forUser, values.volunteer)}</Label>
