@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { NavigationInjectedProps } from 'react-navigation';
 
 import { Heading as H } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
@@ -102,14 +103,14 @@ const BadgeTab: FC<Props> = (props) => {
 
 // const Badges = [FirstLogCard, InviteMedalCard];
 
-const VolunteerHome: FC<Props> = () => {
+const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   const [stats, setBadge] = useToggle(false);
 
 
 
   return (
     <Page heading="Home" withAddBar>
-      <AddBar onPress={() => navigation.navigate('AdminAddProject')} title="Volunteer's Badges" />
+      <AddBar onPress={() => navigation.navigate('VolunteersBadges')} title="Volunteer's Badges" />
 
       <Tabs
         tabOne={['Stats', Stats, {
