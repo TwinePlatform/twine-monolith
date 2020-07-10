@@ -6,8 +6,13 @@ import TimeCard from '../../../lib/ui/TimeCard';
 import Page from '../../../lib/ui/Page';
 import CardSeparator from '../../../lib/ui/CardSeparator';
 import ConfirmationModal from '../../../lib/ui/modals/ConfirmationModal';
+import BadgeModal from '../../../lib/ui/modals/BadgeModel';
 import useToggle from '../../../lib/hooks/useToggle';
 import { selectOrderedLogs } from '../../../redux/entities/logs';
+
+import { TouchableHighlight, Alert } from "react-native";
+import styled from 'styled-components/native';
+import { BadgeObj } from './../VolunteerHome/BadgeObject';
 
 /*
  * Types
@@ -18,16 +23,43 @@ type Props = {
 /*
  * Styles
  */
+const Text = styled.Text`
+  marginTop: 10;
+`;
 
 /*
  * Component
  */
 const Time: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
+  const [visibleBadgeModal, toggleVisibility] = useToggle(false);
   const logs = useSelector(selectOrderedLogs, shallowEqual);
+
+  const SeeModel = () => {
+    toggleVisibility();
+    setTimeout(() => {
+      toggleVisibility();
+    }, 3000);
+  }
+
+  const badge = BadgeObj.FirstLogBadge;
 
   return (
     <Page heading="My Time">
+
+      <TouchableHighlight
+        onPress={() => {
+          SeeModel();
+        }}
+      >
+        <Text>Pop up</Text>
+      </TouchableHighlight>
+
+      <BadgeModal
+        isVisible={visibleBadgeModal}
+        badge={badge}
+      />
+
       <ConfirmationModal
         isVisible={visibleConfirmationModal}
         onCancel={toggleDeleteVisibility}
@@ -35,6 +67,7 @@ const Time: FC<Props> = () => {
         title="Delete"
         text="Are you sure you want to delete this time?"
       />
+
       {/* TODO separate logs into time bands */}
       <CardSeparator title="Yesterday" />
       {
