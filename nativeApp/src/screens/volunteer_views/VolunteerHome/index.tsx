@@ -15,7 +15,7 @@ import AddBar from '../../../lib/ui/AddBar';
 import { BadgeCard } from '../../../lib/ui/Badges/BadgesCard';
 import useToggle from '../../../lib/hooks/useToggle';
 
-import { badgearray } from './BadgeObject';
+import { BadgeObj } from './BadgeObject';
 
 /*
  * Types
@@ -87,6 +87,8 @@ const Stats: FC<Props> = () => {
     </View>
   );
 };
+
+const badgearray = [BadgeObj.FirstLogBadge, BadgeObj.ThridMonthBadge];
 
 const BadgeTab: FC<Props> = (props) => {
 
