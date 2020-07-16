@@ -54,6 +54,16 @@ const routes: [
       const { query, pre: { communityBusiness, isChild }, server: { app: { knex } } } = request;
       const { visits, filter } = query;
 
+     /* filter?: Partial<{
+        age: [number, number];
+        gender: GenderEnum;
+        name: string;
+        email: string;
+        postCode: string;
+        phoneNumber: string;
+        visitActivity: string;
+      }>*/
+
       if (request.params.organisationId !== 'me' && !isChild) {
         return Boom.forbidden('Insufficient permissions to access this resource');
       }
