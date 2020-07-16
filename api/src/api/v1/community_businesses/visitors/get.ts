@@ -81,7 +81,7 @@ const routes: [
       modelQuery.where = mergeDeepRight(
         modelQuery.where,
         keys(omit(['age', 'visitActivity'], filter))
-          .reduce((acc, k) => assoc(k, filter[k], acc), {})
+          .reduce((acc, k: any) => assoc(k, filter[k], acc), {})
       );
 
       const visitors = await (visits
