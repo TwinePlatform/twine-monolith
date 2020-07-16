@@ -423,6 +423,7 @@ export namespace Api {
           export interface Request extends Hapi.Request {
             params: { organisationId: string | 'me' };
             query: ApiRequestQuery & Dictionary<any>;
+            pre: { communityBusiness: CommunityBusiness; isChild: boolean };
           }
           export type Result = User[];
           export type Meta = { total: number }
