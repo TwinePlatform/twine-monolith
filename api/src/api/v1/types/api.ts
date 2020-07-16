@@ -422,18 +422,7 @@ export namespace Api {
         export namespace GET {
           export interface Request extends Hapi.Request {
             params: { organisationId: string | 'me' };
-            query: ApiRequestQuery & {
-              filter?: Partial<{
-                age: [number, number];
-                gender: GenderEnum;
-                name: string;
-                email: string;
-                postCode: string;
-                phoneNumber: string;
-                visitActivity: string;
-              }>;
-              visits?: boolean;
-            };
+            query: ApiRequestQuery & Dictionary <any>;
             pre: { communityBusiness: CommunityBusiness; isChild: boolean };
           }
           export type Result = User[];
