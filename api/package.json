@@ -105,6 +105,7 @@
     "ramda": "^0.27.0",
     "twine-util": "file:../lib/twine-util",
     "typescript": "^3.8.3",
+    "ts-node": "^8.10.2",
     "ua-parser-js": "^0.7.20"
   },
   "devDependencies": {
