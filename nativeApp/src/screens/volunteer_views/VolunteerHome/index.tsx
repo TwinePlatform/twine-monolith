@@ -1,4 +1,5 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { AsyncStorage } from 'react-native';
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationInjectedProps } from 'react-navigation';
@@ -19,6 +20,9 @@ import { BadgeObj } from './BadgeObject';
 
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { loadLogs, selectOrderedLogs, selectLogsStatus } from '../../../redux/entities/logs';
+
+import { StorageValuesEnum } from '../../../authentication/types';
+import { allowAsync } from 'expo/build/ScreenOrientation/ScreenOrientation';
 
 /*
  * Types
@@ -61,12 +65,36 @@ const Container = styled.View`
 
 const Stats: FC<Props> = () => {
   // setBadge(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadLogs());
+  }, []);
+
+  const logs = useSelector(selectOrderedLogs, shallowEqual);
+  let hours = 0;
+  let minutes = 0;
+  Object.keys(logs).forEach(object => {
+    for (let key in logs[object].duration) {
+      if (key == 'hours') {
+        hours += logs[object].duration[key];
+      }
+      if (key == 'minutes') {
+        minutes += logs[object].duration[key];
+      }
+    }
+  });
+
+  hours = hours + minutes / 60;
+
+  const avgDur = ~~(hours * 60 / logs.length);
+
   return (
     <View>
       <Container>
         <Stat
           heading="TOTAL TIME GIVEN"
-          value="109"
+          value={hours.toString()}
           unit="hours"
         >
           <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard} />
@@ -74,7 +102,7 @@ const Stats: FC<Props> = () => {
         <Line />
         <Stat
           heading="TIMES VOLUNTEERED"
-          value="42"
+          value={logs.length}
           unit="visits"
         >
           <MaterialCommunityIcons name="calendar-blank" outline size={35} color={ColoursEnum.mustard} />
@@ -82,7 +110,7 @@ const Stats: FC<Props> = () => {
         <Line />
         <Stat
           heading="AVERAGE DURATION"
-          value="120"
+          value={avgDur.toString()}
           unit="minutes"
         >
           <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
@@ -112,6 +140,9 @@ const BadgeTab: FC<Props> = (props) => {
 const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   const [stats, setBadge] = useToggle(false);
   const dispatch = useDispatch();
+  const [userID, setUserID] = useState('');
+
+  AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(userID))
 
   useEffect(() => {
     dispatch(loadLogs());
@@ -120,7 +151,6 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   const logs = useSelector(selectOrderedLogs, shallowEqual);
   let hours = 0;
   let minutes = 0;
-  console.log(logs);
   // Object.keys(logs).forEach(object => {
   //   // console.log(logs[object].duration);
   //   for (let key in logs[object].duration) {
@@ -133,7 +163,7 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   //   }
   // });
 
-  console.log(logs);
+  // console.log(logs);
 
   return (
     <Page heading="Home" withAddBar>

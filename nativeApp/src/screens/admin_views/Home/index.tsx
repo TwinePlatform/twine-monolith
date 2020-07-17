@@ -76,7 +76,6 @@ const AdminHome: FC<Props> = () => {
   let hours = 0;
   let minutes = 0;
   Object.keys(logs).forEach(object => {
-    // console.log(logs[object].duration);
     for (let key in logs[object].duration) {
       if (key == 'hours') {
         hours += logs[object].duration[key];
@@ -87,13 +86,15 @@ const AdminHome: FC<Props> = () => {
     }
   });
 
+  hours = hours + minutes / 60;
+
+  const avgDur = ~~(hours * 60 / logs.length);
+
   var volunteerNumberArray = new Set();
   Object.keys(logs).forEach(objectnum => {
-    // console.log(logs[objectnum].userId);
     volunteerNumberArray.add(logs[objectnum].userId);
   })
 
-  console.log(volunteerNumberArray.size);
   return (
 
     <View>
@@ -123,7 +124,7 @@ const AdminHome: FC<Props> = () => {
         <Line />
         <Stat
           heading="AVERAGE DURATION"
-          value={minutes.toString()}
+          value={avgDur.toString()}
           unit="minutes"
         >
           <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
