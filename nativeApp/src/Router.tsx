@@ -13,6 +13,7 @@ import AdminRouter from "./screens/admin_views/AdminRouter";
 import SettingsButton from "./lib/ui/SettingsButton";
 import SettingsPage from "./screens/settings_views/SettingsPage/index";
 import AdminEditTime from "./screens/admin_views/Time/EditTime";
+import VolunteerEditTime from "./screens/volunteer_views/Time/EditTime";
 import AdminEditVolunteer from "./screens/admin_views/Volunteers/EditVolunteer";
 import AdminAddVolunteer from "./screens/admin_views/Volunteers/AddVolunteer";
 import AdminAddProject from "./screens/admin_views/Projects/AddProject";
@@ -30,6 +31,7 @@ const additionalAdminPages = {
 
 const additionalVolunteerPages = {
   VolunteersBadges,
+  VolunteerEditTime,
 };
 
 const sharedNavigationsConfig = {

@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import moment from 'moment';
-import { useSelector, shallowEqual } from 'react-redux';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
 import TimeCard from '../../../lib/ui/TimeCard';
 import Page from '../../../lib/ui/Page';
@@ -8,7 +8,7 @@ import CardSeparator from '../../../lib/ui/CardSeparator';
 import ConfirmationModal from '../../../lib/ui/modals/ConfirmationModal';
 import BadgeModal from '../../../lib/ui/modals/BadgeModel';
 import useToggle from '../../../lib/hooks/useToggle';
-import { selectOrderedLogs } from '../../../redux/entities/logs';
+import { loadLogs, selectOrderedLogs, selectLogsStatus } from '../../../redux/entities/logs';
 
 import { TouchableHighlight, Alert } from "react-native";
 import styled from 'styled-components/native';
@@ -34,20 +34,28 @@ const Time: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
   const [visibleBadgeModal, toggleVisibility] = useToggle(false);
   const logs = useSelector(selectOrderedLogs, shallowEqual);
+  const dispatch = useDispatch();
 
-  const SeeModel = () => {
-    toggleVisibility();
-    setTimeout(() => {
-      toggleVisibility();
-    }, 3000);
-  }
+  useEffect(() => {
+    dispatch(loadLogs());
+  }, []);
 
-  const badge = BadgeObj.FirstLogBadge;
+  console.log('here are the logs we got...');
+  console.log(logs);
+
+  // const SeeModel = () => {
+  //   toggleVisibility();
+  //   setTimeout(() => {
+  //     toggleVisibility();
+  //   }, 3000);
+  // }
+
+  // const badge = BadgeObj.FirstLogBadge;
 
   return (
     <Page heading="My Time">
 
-      <TouchableHighlight
+      {/* <TouchableHighlight
         onPress={() => {
           SeeModel();
         }}
@@ -58,7 +66,7 @@ const Time: FC<Props> = () => {
       <BadgeModal
         isVisible={visibleBadgeModal}
         badge={badge}
-      />
+      /> */}
 
       <ConfirmationModal
         isVisible={visibleConfirmationModal}
@@ -79,6 +87,7 @@ const Time: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             date={moment(log.startedAt).format('DD/MM/YY')}
             onDelete={toggleDeleteVisibility}
+            navigationPage='VolunteerEditTime'
           />
         ))
       }
