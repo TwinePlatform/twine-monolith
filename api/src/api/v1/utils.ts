@@ -87,6 +87,7 @@ export const requestQueryToModelQuery = <T>(requestQuery: ApiRequestQuery): Mode
     ...omit(['sort', 'order', 'fields'], requestQuery),
     offset: 'offset' in requestQuery ? Number(requestQuery.offset) : undefined,
     limit: 'limit' in requestQuery ? Number(requestQuery.limit) : undefined,
+    userId: 'userId' in requestQuery ? Number(requestQuery.limit) : undefined,
   };
 
   if (requestQuery.sort) {
