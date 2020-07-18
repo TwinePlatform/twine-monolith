@@ -1,4 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
+import { AsyncStorage } from 'react-native';
+import { StorageValuesEnum } from '../../../../authentication/types';
 import styled from 'styled-components/native';
 import { Form as F, Text } from 'native-base';
 
@@ -39,6 +41,10 @@ type Props = {
   projects: IdAndName[];
   volunteers?: User[];
   forUser: 'admin' | 'volunteer'; // TODO replace with role enum from api
+  selectedProject: string;
+  selectedActivity: string;
+  timeValues: number[];
+
 }
 
 /*
@@ -63,15 +69,15 @@ const NoteContainer = styled.View`
   flexDirection: row;
 `;
 
-const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${i}` }));
-const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${i}` }));
+const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
+const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
 
 /*
  * Component
  */
 const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const {
-    forUser, activities, projects, volunteers,
+    forUser, activities, projects, volunteers, selectedProject, selectedActivity, timeValues
   } = props;
 
   // redux
@@ -83,13 +89,14 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [responseModal, toggleResponseModal] = useToggle(false);
   const [noteModalVisible, toggleNoteInvisibility] = useToggle(false);
 
-  const [project, setProject] = useState('');
-  const [activity, setActivity] = useState('');
+  const [project, setProject] = useState(selectedProject);
+  const [activity, setActivity] = useState(selectedActivity);
   const [volunteer, setVolunteer] = useState('');
   const [date, setDate] = useState<Date>(new Date);
-  const [hours, setHours] = useState<number>();
-  const [minutes, setMinutes] = useState<number>();
+  const [hours, setHours] = useState<number>(timeValues[0].toString());
+  const [minutes, setMinutes] = useState<number>(timeValues[1].toString());
   const [note, setNote] = useState('');
+  const [userId, setUserID] = useState<number>();
 
   const resetForm = () => {
     setDate(new Date);
@@ -107,12 +114,18 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   // handlers
   const onSubmit = () => {
+    if (forUser == 'admin') {
+      setUserID(volunteers.find((x) => x.name === volunteer).id);
+    }
+    if (forUser == 'volunteer') {
+      AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(parseInt(userID)))
+    }
     const values = {
       project,
       activity,
       startedAt: date as string,
       duration: { hours, minutes },
-      userId: volunteers.find((x) => x.name === volunteer).id,
+      userId: userId,
       note
     };
     dispatch(createLog(values));
@@ -162,7 +175,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       />
       <NoteContainer>
         <Label>{getTimeLabel(forUser, volunteer)}</Label>
-        <NoteButton label={"Add note"} onPress={toggleNoteInvisibility}/>
+        <NoteButton label={"Add note"} onPress={toggleNoteInvisibility} />
       </NoteContainer>
       <TimeContainer>
         <HoursAndMinutesText align="center" timeValues={[hours, minutes]} />

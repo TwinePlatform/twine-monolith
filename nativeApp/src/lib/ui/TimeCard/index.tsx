@@ -86,7 +86,12 @@ const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
   const buttonConfig: DeleteButtonConfig = {
     buttonType: 'delete',
     onDelete,
-    onEdit: () => { navigation.navigate(navigationPage); },
+    onEdit: () => {
+      navigation.navigate(navigationPage, {
+        labels: labels,
+        timeValues: timeValues,
+      });
+    },
   };
 
   return (
