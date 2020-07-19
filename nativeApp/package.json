@@ -15,6 +15,7 @@
     "make:redux-req": "ts-node ./bin/make_redux_req/index.ts"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "^2.5.0",
     "@types/expo": "^32.0.13",
     "@types/jest": "^24.0.18",
     "@types/ramda": "^0.26.33",
@@ -27,6 +28,7 @@
     "@types/styled-components": "^4.1.19",
     "axios": "^0.19.0",
     "expo": "^35.0.0",
+    "formik": "^2.1.4",
     "fuse.js": "^6.0.0",
     "moment": "^2.24.0",
     "native-base": "^2.13.8",
@@ -41,7 +43,7 @@
     "react-native-global-props": "^1.1.5",
     "react-native-indicator": "^1.0.0",
     "react-native-modal": "^11.4.0",
-    "react-native-modal-datetime-picker": "^7.6.0",
+    "react-native-modal-datetime-picker": "^7.6.1",
     "react-native-reanimated": "~1.2.0",
     "react-native-screens": "~1.0.0-alpha.23",
     "react-native-web": "^0.11.7",

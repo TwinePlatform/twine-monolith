@@ -20,6 +20,7 @@ import AdminAddProject from "./screens/admin_views/Projects/AddProject";
 import AuthenticationLoader from "./authentication/AuthenticationLoader";
 import Profile from "./screens/settings_views/Profile";
 import TnC from "./screens/settings_views/TnC";
+import Error from "./screens/open_views/Error/index";
 import VolunteersBadges from "./screens/volunteer_views/VolunteerHome/VolunteersBadges";
 
 const additionalAdminPages = {
@@ -74,6 +75,9 @@ const AdminStack = createStackNavigator(
     AdminRouter: {
       screen: AdminRouter,
     },
+    Error: {
+      screen: Error,
+    },
     ...Settings,
     ...additionalAdminPages,
   },
@@ -89,6 +93,9 @@ const VolunteerStack = createStackNavigator(
   {
     VolunteerRouter: {
       screen: VolunteerRouter,
+    },
+    Error: {
+      screen: Error,
     },
     ...additionalVolunteerPages,
     ...Settings,

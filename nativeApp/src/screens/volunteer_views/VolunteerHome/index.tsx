@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { AsyncStorage } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationInjectedProps } from 'react-navigation';
@@ -9,6 +10,8 @@ import { ColoursEnum } from '../../../lib/ui/colours';
 import Stat from '../../../lib/ui/Stat';
 import Line from '../../../lib/ui/Line';
 
+
+import { createLog } from '../../../redux/entities/logs';
 import Tabs from '../../../lib/ui/Tabs';
 import Page from '../../../lib/ui/Page';
 import AddBar from '../../../lib/ui/AddBar';
@@ -62,7 +65,6 @@ const Container = styled.View`
 /*
  * Component
  */
-
 const Stats: FC<Props> = () => {
   // setBadge(false);
   const dispatch = useDispatch();
@@ -141,12 +143,44 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   const [stats, setBadge] = useToggle(false);
   const dispatch = useDispatch();
   const [userID, setUserID] = useState('');
+  const [logged, setLogged] = useState(false);
+  
+  //access fail to send log and try logging them again
+  const checkStorage = async () => {
+    var logStore = await AsyncStorage.getItem('log cache');
+    logStore = logStore == null ? [] : JSON.parse(logStore);
+    const arr = Object.values(logStore);
 
+    //return array of promise, assign a value null if succeed
+    const newArray = await Promise.all(arr.map(item => {
+      const res = createLog(item)(dispatch).then((result) => {
+        if (result.status == 200) {
+          return null;
+        } else {
+          return item;
+        };
+      });
+      return res;
+
+    }));
+
+    const correctedArray = newArray.filter(obj => {
+      return obj != null;
+    });
+    
+    //updating the log (without successful logs)
+    AsyncStorage.setItem(
+      'log cache',
+      JSON.stringify(correctedArray)
+    );
+
+    useEffect(() => {
+      checkStorage();
+      dispatch(loadLogs());
+    }, []);
+  }
+  
   AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(userID))
-
-  useEffect(() => {
-    dispatch(loadLogs());
-  }, []);
 
   const logs = useSelector(selectOrderedLogs, shallowEqual);
   let hours = 0;
@@ -182,5 +216,4 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
     </Page>
   );
 }
-
 export default VolunteerHome;

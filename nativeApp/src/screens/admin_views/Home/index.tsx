@@ -1,4 +1,7 @@
-import React, { FC, useEffect } from 'react';
+
+import React, { FC, useEffect, useState } from 'react';
+import { AsyncStorage } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
@@ -10,6 +13,9 @@ import Stat from '../../../lib/ui/Stat';
 import Line from '../../../lib/ui/Line';
 import Invite from '../../../lib/ui/Invite';
 
+
+import { createLog } from '../../../redux/entities/logs';
+import { Item } from 'native-base';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { loadLogs, selectOrderedLogs } from '../../../redux/entities/logs';
 
@@ -94,6 +100,45 @@ const AdminHome: FC<Props> = () => {
   Object.keys(logs).forEach(objectnum => {
     volunteerNumberArray.add(logs[objectnum].userId);
   })
+
+  const dispatch = useDispatch();
+  const [logged, setLogged] = useState(false);
+
+  //access fail to send log and try logging them again
+  const checkStorage = async () => {
+    var logStore = await AsyncStorage.getItem('log cache');
+    logStore = logStore == null ? [] : JSON.parse(logStore);
+    var arr = Object.values(logStore);
+    var newArray = [];
+
+    //return array of promise, assign a value null if succeed
+    newArray = await Promise.all(arr.map(item => {
+      const res = createLog(item)(dispatch).then((result) => {
+        if (result.status == 200) {
+          return null;
+        } else {
+          return item;
+        };
+      });
+      return res;
+
+    }));
+
+    const correctedArray = newArray.filter(obj => {
+      return obj != null;
+    });
+
+    AsyncStorage.setItem(
+      'log cache',
+      JSON.stringify(correctedArray)
+    );
+  }
+
+  useEffect(() => {
+    checkStorage();
+  }, []);
+
+
 
   return (
 
