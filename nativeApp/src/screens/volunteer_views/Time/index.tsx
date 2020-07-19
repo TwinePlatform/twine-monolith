@@ -8,7 +8,7 @@ import CardSeparator from '../../../lib/ui/CardSeparator';
 import ConfirmationModal from '../../../lib/ui/modals/ConfirmationModal';
 import BadgeModal from '../../../lib/ui/modals/BadgeModel';
 import useToggle from '../../../lib/hooks/useToggle';
-import { loadLogs, selectOrderedLogs, selectLogsStatus } from '../../../redux/entities/logs';
+import { loadLogs, selectOrderedLogs, selectLogsStatus, deleteLog } from '../../../redux/entities/logs';
 
 import { TouchableHighlight, Alert } from "react-native";
 import styled from 'styled-components/native';
@@ -49,6 +49,12 @@ const Time: FC<Props> = () => {
 
   // const badge = BadgeObj.FirstLogBadge;
 
+  const onDelete = (id) => {
+    console.log('delete');
+    toggleDeleteVisibility;
+    dispatch(deleteLog(id));
+  }
+
   return (
     <Page heading="My Time">
 
@@ -83,7 +89,7 @@ const Time: FC<Props> = () => {
             timeValues={[log.duration.hours || 0, log.duration.minutes || 0]}
             labels={[log.project || 'General', log.activity]}
             date={moment(log.startedAt).format('DD/MM/YY')}
-            onDelete={toggleDeleteVisibility}
+            onDelete={() => { onDelete(log.id) }}
             navigationPage='VolunteerEditTime'
           />
         ))

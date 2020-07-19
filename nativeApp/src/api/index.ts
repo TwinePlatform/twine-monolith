@@ -98,6 +98,11 @@ const VolunteerLogs = {
     url: `/community-businesses/me/volunteer-logs/${id}/${LogId}`,
     data: values,
   }),
+
+  delete: (LogId) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.DELETE.Result>({ //eslint-disable-line
+    method: "DELETE",
+    url: `/community-businesses/me/volunteer-logs/${LogId}`,
+  }),
 };
 
 const CommunityBusiness = {
