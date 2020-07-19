@@ -83,16 +83,21 @@ const VolunteerLogs = {
       method: "GET",
       url: "/community-businesses/me/volunteer-logs",
       params: { since, until },
-
     },
     ),
   getVolunteerActivities: () => axios.get('/volunteer-activities'),
   add: (values: Partial<VolunteerLog>) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>( //eslint-disable-line
     {
       method: 'POST',
-      url: '/community-businesses/me/volunteer-logs',
+      url: `/community-businesses/me/volunteer-logs`,
       data: values,
     }),
+
+  update: (id, LogId, values: Partial<VolunteerLog>) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>({ //eslint-disable-line
+    method: "PUT",
+    url: `/community-businesses/me/volunteer-logs/${id}/${LogId}`,
+    data: values,
+  }),
 };
 
 const CommunityBusiness = {

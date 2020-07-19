@@ -16,7 +16,7 @@ import SubmitButton from '../SubmitButton';
 import NoteButton from '../../NoteButton';
 
 import { getTimeLabel } from './helpers';
-import { createLog, selectCreateLogStatus, createLogReset } from '../../../../redux/entities/logs';
+import { createLog, selectCreateLogStatus, createLogReset, updateLog } from '../../../../redux/entities/logs';
 import { IdAndName } from '../../../../api';
 import { User } from '../../../../../../api/src/models';
 import SavedModal from '../../modals/SavedModal';
@@ -44,8 +44,10 @@ type Props = {
   projects: IdAndName[];
   volunteers?: User[];
   forUser: 'admin' | 'volunteer'; // TODO replace with role enum from api
+  logId: string;
   selectedProject?: string;
   selectedActivity?: string;
+  origin: string;
 
 }
 
@@ -79,7 +81,7 @@ const NoteContainer = styled.View`
  */
 const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const {
-    forUser, activities, projects, volunteers, selectedProject, selectedActivity //, timeValues
+    forUser, logId, origin, activities, projects, volunteers, selectedProject, selectedActivity //, timeValues
   } = props;
 
   // redux
@@ -93,14 +95,18 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   const [startTime, setStartTime] = useState<Date>(new Date);
   const [endTime, setEndTime] = useState<Date>(new Date);
-  // const [project, setProject] = useState(selectedProject);
-  // const [activity, setActivity] = useState(selectedActivity);
-  // const [volunteer, setVolunteer] = useState('');
   const [date, setDate] = useState<Date>(new Date);
   const [hours, setHours] = useState<number>();
   const [minutes, setMinutes] = useState<number>();
   const [note, setNote] = useState('');
   const [userId, setUserID] = useState<number>();
+
+  if (forUser == 'admin') {
+    setUserID(volunteers.find((x) => x.name === volunteer).id);
+  }
+  if (forUser == 'volunteer') {
+    AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(parseInt(userID)))
+  }
 
   const CheckConnectivity = async (logData) => {
     await NetInfo.isConnected.fetch()
@@ -143,14 +149,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   // handlers
   const onSubmit = async (volunteer, project, activity, startTime, endTime, note) => {
-    if (forUser == 'admin') {
-      setUserID(volunteers.find((x) => x.name === volunteer).id);
-    }
-    if (forUser == 'volunteer') {
-      AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(parseInt(userID)))
-    }
+
     const hours = Math.floor((endTime - startTime) / (1000 * 60 * 60));
     const minutes = Math.floor((endTime - startTime) / (1000 * 60) - hours * 60);
+
     const values = {
       project,
       activity,
@@ -160,20 +162,47 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       note
     };
 
-    console.log(values);
     CheckConnectivity(values);
-    try { //error trapping and cache log when network error
-      const res = await dispatch(createLog(values));
-      if (res.error.statusCode == 500) {
-        cache(values);
+
+    //if timeform is called from add time view 
+    if (origin == "addTime") {
+      try { //error trapping and cache log when network error
+        const res = await dispatch(createLog(values));
+        if (res.error.statusCode == 500) {
+          cache(values);
+        }
+        if (res.error.statusCode == 400) {
+          console.log(res.error.message);
+          //ToDo: error trapping here 
+        }
+        console.log(res);
+      } catch (error) {
+        console.log(error);
       }
-      if (res.error.statusCode == 400) {
-        console.log(res.error.message);
-        //ToDo: error trapping here 
+    }
+
+    //if timeform is called from edit time view 
+    if (origin == "editTime") {
+      const valuesEdit = {
+        project,
+        activity,
+        startedAt: date as string,
+        duration: { hours, minutes },
+      };
+      try { //error trapping and cache log when network error
+        const res = await dispatch(updateLog(userId, logId, valuesEdit));
+        if (res.error.statusCode == 500) {
+          // cache(valuesEdit);
+          //ToDo: cache for edit 
+        }
+        if (res.error.statusCode == 400) {
+          console.log(res.error.message);
+          //ToDo: error trapping here 
+        }
+        console.log(res);
+      } catch (error) {
+        console.log(error);
       }
-      console.log(res);
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -202,7 +231,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       initialValues={{ volunteer: '', project: selectedProject, activity: selectedActivity, note: '' }}
       validationSchema={validationSchema}
       onSubmit={(values, date) => {
-        // console.log(values);
         onSubmit(values.volunteer, values.project, values.activity, startTime, endTime, values.note);
       }}>
 

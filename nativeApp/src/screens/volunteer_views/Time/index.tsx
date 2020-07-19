@@ -40,9 +40,6 @@ const Time: FC<Props> = () => {
     dispatch(loadLogs());
   }, []);
 
-  console.log('here are the logs we got...');
-  console.log(logs);
-
   // const SeeModel = () => {
   //   toggleVisibility();
   //   setTimeout(() => {

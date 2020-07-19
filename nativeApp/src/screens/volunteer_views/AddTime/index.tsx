@@ -45,6 +45,7 @@ const AddTime: FC<NavigationInjectedProps & Props> = () => {
         projects={projects}
         activities={activities}
         volunteers={volunteers}
+        origin='addTime'
       />
     </Page>
   );

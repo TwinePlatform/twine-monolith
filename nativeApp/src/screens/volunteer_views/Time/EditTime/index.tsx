@@ -20,7 +20,8 @@ type Props = {
 const activities = [
     { id: 0, name: 'edit work' },
     { id: 1, name: 'Support' },
-    { id: 1, name: 'Committee work, AGM' },
+    { id: 2, name: 'Committee work, AGM' },
+    { id: 3, name: 'Office support' },
 ];
 
 const volunteers = [
@@ -32,14 +33,13 @@ const volunteers = [
 const projects = [
     { id: 0, name: 'General' },
     { id: 1, name: 'Community Food Project' },
+    { id: 2, name: 'Party' },
 ];
 /*
  * Component
  */
 const EditTime: FC<Props> = (navigation) => {
-    const { labels, timeValues } = navigation.navigation.state.params;
-
-    console.log(timeValues);
+    const { labels, logId, timeValues } = navigation.navigation.state.params;
 
     return (
         //ToDo: Prefield with passed data
@@ -47,12 +47,14 @@ const EditTime: FC<Props> = (navigation) => {
         <Page heading="Volunteer Edit Time">
             <TimeForm
                 forUser="volunteer"
+                logId={logId}
                 projects={projects}
                 activities={activities}
                 volunteers={volunteers}
                 selectedProject={labels[0]}
                 selectedActivity={labels[1]}
                 timeValues={timeValues}
+                origin='editTime'
                 onSubmit={() => { }}
             />
         </Page>

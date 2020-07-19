@@ -83,14 +83,12 @@ const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
   //       })
   // });
 
-  console.log('this is in the timecard');
-  console.log(timeValues);
-
   const buttonConfig: DeleteButtonConfig = {
     buttonType: 'delete',
     onDelete,
     onEdit: () => {
       navigation.navigate(navigationPage, {
+        logId: id,
         labels: labels,
       });
     },

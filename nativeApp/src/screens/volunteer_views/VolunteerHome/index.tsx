@@ -85,6 +85,7 @@ const Stats: FC<Props> = () => {
   });
 
   hours = ~~(hours + minutes / 60);
+
   const avgDur = ~~(hours * 60 / logs.length);
 
   return (

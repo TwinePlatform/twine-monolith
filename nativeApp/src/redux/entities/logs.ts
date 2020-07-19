@@ -140,11 +140,10 @@ export const createLog = (values: Partial<VolunteerLog>) => (dispatch) => {
 };
 
 
-export const updateLog = (id: number, name: string) => (dispatch) => {
+export const updateLog = (id: number, LogId: number, values: Partial<VolunteerLog>) => (dispatch) => {
   dispatch(updateLogRequest());
-
-  return API.VolunteerLogs.update(id, name)
-    .then(() => {
+  return API.VolunteerLogs.update(id, LogId, values)
+    .then((res) => {
       dispatch(updateLogSuccess());
       dispatch(loadLogs());
     })
