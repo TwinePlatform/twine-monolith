@@ -1,5 +1,4 @@
 import React, { FC, useState, useEffect } from 'react';
-import { AsyncStorage } from 'react-native';
 import { StorageValuesEnum } from '../../../../authentication/types';
 import styled from 'styled-components/native';
 import { Form as F, Text } from 'native-base';
@@ -12,7 +11,7 @@ import FuzzySearchBox from '../FuzzySearchBox';
 import { Forms } from '../enums';
 import DateTimePicker from '../DateTimePicker';
 import { ColoursEnum } from '../../colours';
-import HoursAndMinutesText from '../../HoursAndMinutesText';
+import { TimeDiff } from '../../HoursAndMinutesText';
 import SubmitButton from '../SubmitButton';
 import NoteButton from '../../NoteButton';
 
@@ -45,9 +44,8 @@ type Props = {
   projects: IdAndName[];
   volunteers?: User[];
   forUser: 'admin' | 'volunteer'; // TODO replace with role enum from api
-  selectedProject: string;
-  selectedActivity: string;
-  timeValues: number[];
+  selectedProject?: string;
+  selectedActivity?: string;
 
 }
 
@@ -73,9 +71,9 @@ const NoteContainer = styled.View`
   flexDirection: row;
 `;
 
-const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
-const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
-  
+// const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
+// const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
+
 /*
  * Component
  */
@@ -95,12 +93,12 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   const [startTime, setStartTime] = useState<Date>(new Date);
   const [endTime, setEndTime] = useState<Date>(new Date);
-  const [project, setProject] = useState(selectedProject);
-  const [activity, setActivity] = useState(selectedActivity);
-  const [volunteer, setVolunteer] = useState('');
+  // const [project, setProject] = useState(selectedProject);
+  // const [activity, setActivity] = useState(selectedActivity);
+  // const [volunteer, setVolunteer] = useState('');
   const [date, setDate] = useState<Date>(new Date);
-  const [hours, setHours] = useState<number>(timeValues[0].toString());
-  const [minutes, setMinutes] = useState<number>(timeValues[1].toString());
+  const [hours, setHours] = useState<number>();
+  const [minutes, setMinutes] = useState<number>();
   const [note, setNote] = useState('');
   const [userId, setUserID] = useState<number>();
 
@@ -114,7 +112,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
         }
         return isConnected;
       })
-
+  }
 
   const resetForm = () => {
     setDate(new Date);
@@ -221,7 +219,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             addNote={values.note}
             onClose={toggleNoteInvisibility}
           />
-          
+
           {forUser === 'admin' &&
             <FuzzySearchBox
               label="Volunteer"
@@ -244,7 +242,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             onBlur={handleBlur('project')}
             value={values.project}
           />
-          
+
           {errors.project &&
             <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.project}</TextInput>
           }
@@ -282,7 +280,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             <NoteButton label={"Add note"} onPress={toggleNoteInvisibility} />
           </NoteContainer>
           <TimeContainer>
-            <HoursAndMinutesText align="center" timeValues={[startTime.getTime(), endTime.getTime()]} />
+            <TimeDiff align="center" timeValues={[startTime.getTime(), endTime.getTime()]} />
           </TimeContainer>
           <SubmitButton text="ADD TIME" onPress={handleSubmit} />
 

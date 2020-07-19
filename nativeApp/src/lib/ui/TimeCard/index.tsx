@@ -6,7 +6,7 @@ import API from '../../../api';
 
 import { ColoursEnum } from '../colours';
 import { FontsEnum } from '../typography';
-import HoursAnMinutesText from '../HoursAndMinutesText';
+import { HourAndMinutesText } from '../HoursAndMinutesText';
 import { DeleteButtonConfig } from '../CardWithButtons/types';
 import NoteButton from '../NoteButton';
 
@@ -83,20 +83,22 @@ const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
   //       })
   // });
 
+  console.log('this is in the timecard');
+  console.log(timeValues);
+
   const buttonConfig: DeleteButtonConfig = {
     buttonType: 'delete',
     onDelete,
     onEdit: () => {
       navigation.navigate(navigationPage, {
         labels: labels,
-        timeValues: timeValues,
       });
     },
   };
 
   return (
     <CardWithButtons buttonConfig={buttonConfig}>
-      <HoursAnMinutesText align="left" timeValues={timeValues} />
+      <HourAndMinutesText align="left" timeValues={timeValues} />
       <DetailsContainer topPadding={Boolean(volunteer)}>
         <LabelContainer>
           <Label textAlign="left">{date}</Label>

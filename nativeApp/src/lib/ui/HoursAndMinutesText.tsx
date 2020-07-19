@@ -49,7 +49,27 @@ const Spacer = styled.View`
 // const minutes(startTime, endTime) = (endTime.getTime() - startTime.getTime()) / (1000 * 60);
 // const hours(startTime, endTime) = (endTime.getTime() - startTime.getTime()) / (1000 * 60));
 
-const HourAndMinutesText: FC<Props> = (props) => {
+export const HourAndMinutesText: FC<Props> = (props) => {
+
+  const {
+    timeValues, align,
+  } = props;
+  return (
+    <Container align={align}>
+      <Value>{timeValues[0]}</Value>
+      <Spacer />
+      <Unit>hours</Unit>
+      <Spacer />
+      <Value>{timeValues[1]}</Value>
+      <Spacer />
+      <Unit>minutes</Unit>
+    </Container>
+  );
+};
+
+// export default HourAndMinutesText;
+
+export const TimeDiff: FC<Props> = (props) => {
 
   const {
     timeValues, align,
@@ -77,5 +97,3 @@ const HourAndMinutesText: FC<Props> = (props) => {
 
   );
 };
-
-export default HourAndMinutesText;
