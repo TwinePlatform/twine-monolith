@@ -391,7 +391,8 @@ const routes: [
 
           const hasPermission =
             scope.includes('volunteer_logs-child:write') ||
-            scope.includes('volunteer_logs-sibling:write');
+            scope.includes('volunteer_logs-sibling:write') ||
+            scope.includes('volunteer_logs-own:write');  //for volunteer to write their own, ToDo: need to make sure dont't write for others!!!!
 
           // To continue, userId must correspond to VOLUNTEER/VOLUNTEER_ADMIN
           if (!isTargetVolunteer) {
