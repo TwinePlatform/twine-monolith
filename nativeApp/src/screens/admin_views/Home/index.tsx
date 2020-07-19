@@ -1,7 +1,7 @@
 
 import React, { FC, useEffect, useState } from 'react';
 import { AsyncStorage } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
@@ -14,10 +14,8 @@ import Line from '../../../lib/ui/Line';
 import Invite from '../../../lib/ui/Invite';
 
 
-import { createLog } from '../../../redux/entities/logs';
+import { createLog, loadLogs, selectOrderedLogs } from '../../../redux/entities/logs';
 import { Item } from 'native-base';
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import { loadLogs, selectOrderedLogs } from '../../../redux/entities/logs';
 
 /*
  * Types
@@ -73,6 +71,7 @@ const onInvite = () => {
 const AdminHome: FC<Props> = () => {
   const [visibleConfirmationModal, toggleInviteVisibility] = useToggle(false);
   const dispatch = useDispatch();
+  const [logged, setLogged] = useState(false);
 
   useEffect(() => {
     dispatch(loadLogs());
@@ -92,7 +91,7 @@ const AdminHome: FC<Props> = () => {
     }
   });
 
-  hours = hours + minutes / 60;
+  hours = ~~(hours + minutes / 60);
 
   const avgDur = ~~(hours * 60 / logs.length);
 
@@ -100,9 +99,6 @@ const AdminHome: FC<Props> = () => {
   Object.keys(logs).forEach(objectnum => {
     volunteerNumberArray.add(logs[objectnum].userId);
   })
-
-  const dispatch = useDispatch();
-  const [logged, setLogged] = useState(false);
 
   //access fail to send log and try logging them again
   const checkStorage = async () => {
@@ -137,8 +133,6 @@ const AdminHome: FC<Props> = () => {
   useEffect(() => {
     checkStorage();
   }, []);
-
-
 
   return (
 

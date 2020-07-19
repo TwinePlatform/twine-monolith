@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { AsyncStorage } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationInjectedProps } from 'react-navigation';
@@ -11,7 +11,7 @@ import Stat from '../../../lib/ui/Stat';
 import Line from '../../../lib/ui/Line';
 
 
-import { createLog } from '../../../redux/entities/logs';
+import { createLog, loadLogs, selectOrderedLogs, selectLogsStatus } from '../../../redux/entities/logs';
 import Tabs from '../../../lib/ui/Tabs';
 import Page from '../../../lib/ui/Page';
 import AddBar from '../../../lib/ui/AddBar';
@@ -20,9 +20,6 @@ import { BadgeCard } from '../../../lib/ui/Badges/BadgesCard';
 import useToggle from '../../../lib/hooks/useToggle';
 
 import { BadgeObj } from './BadgeObject';
-
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import { loadLogs, selectOrderedLogs, selectLogsStatus } from '../../../redux/entities/logs';
 
 import { StorageValuesEnum } from '../../../authentication/types';
 import { allowAsync } from 'expo/build/ScreenOrientation/ScreenOrientation';
@@ -87,8 +84,7 @@ const Stats: FC<Props> = () => {
     }
   });
 
-  hours = hours + minutes / 60;
-
+  hours = ~~(hours + minutes / 60);
   const avgDur = ~~(hours * 60 / logs.length);
 
   return (
@@ -144,7 +140,7 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const [userID, setUserID] = useState('');
   const [logged, setLogged] = useState(false);
-  
+
   //access fail to send log and try logging them again
   const checkStorage = async () => {
     var logStore = await AsyncStorage.getItem('log cache');
@@ -167,7 +163,7 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
     const correctedArray = newArray.filter(obj => {
       return obj != null;
     });
-    
+
     //updating the log (without successful logs)
     AsyncStorage.setItem(
       'log cache',
@@ -179,7 +175,7 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
       dispatch(loadLogs());
     }, []);
   }
-  
+
   AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(userID))
 
   const logs = useSelector(selectOrderedLogs, shallowEqual);
