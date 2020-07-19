@@ -22,6 +22,7 @@ export type ApiRequestQuery<T = string> = {
   order: 'asc' | 'desc';
   offset: string;
   limit: string;
+  userId: string;
 };
 
 export type ApiRequestBody = Dictionary<any>;
@@ -41,7 +42,7 @@ export const DateJoi = Joi.extend((joi: any) => ({
     {
       name: 'max',
       params: { q: joi.func() },
-      validate (params: any, value: any, state: any, options: any) {
+      validate(params: any, value: any, state: any, options: any) {
         const createError = (v: string, q: string) =>
           this.createError('dynamicdate.max', { v, q }, state, options);
         const now = moment(params.q());
@@ -56,7 +57,7 @@ export const DateJoi = Joi.extend((joi: any) => ({
     {
       name: 'min',
       params: { q: joi.func() },
-      validate (params: any, value: any, state: any, options: any) {
+      validate(params: any, value: any, state: any, options: any) {
         const createError = (v: string, q: string) =>
           this.createError('dynamicdate.min', { v, q }, state, options);
         const now = moment(params.q());
@@ -80,6 +81,7 @@ export const query: Record<keyof ApiRequestQuery, Joi.Schema> = {
   order: Joi.string().only('asc', 'desc'),
   offset: Joi.number().integer().min(0),
   limit: Joi.number().integer().min(1).max(100),
+  userId: Joi.number(),
 };
 
 

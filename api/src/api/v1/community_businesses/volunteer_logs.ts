@@ -15,7 +15,8 @@ import {
   volunteerProject
 } from './schema';
 import Roles from '../../../models/role';
-import { VolunteerLogs, Volunteers, VolunteerLog } from '../../../models';
+import { VolunteerLogs, Volunteers, VolunteerLog, VolunteerLogPermissions } from '../../../models';
+import { userCredentials } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import { Api } from '../types/api';
 import { requestQueryToModelQuery } from '../utils';
@@ -75,7 +76,7 @@ const routes: [
         auth: {
           strategy: 'standard',
           access: {
-            scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read'],
+            scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read', 'volunteer_logs-own:read'],
           },
         },
         validate: {
@@ -104,8 +105,32 @@ const routes: [
           ...{ since, until },
         };
 
-        const logs =
-          await VolunteerLogs.fromCommunityBusiness(knex, communityBusiness, query);
+        const token = request.yar.id;
+        //get UserId
+        const credentials = await userCredentials.get(knex, token);
+        const userId = credentials[0].user_account_id;
+
+        const queryown = {
+          ...requestQueryToModelQuery<VolunteerLog>(_query),
+          ...{ userId },
+        }
+
+        // use permission to check for only own 
+        const canReadOthers = await VolunteerLogPermissions.canReadOthers(knex, userId);
+        console.log(canReadOthers);
+
+        var logs;
+        // if have permission to get others then continue, 
+        if (canReadOthers == true) {
+          console.log('canReadOthers');
+          logs = await VolunteerLogs.fromCommunityBusiness(knex, communityBusiness, query);
+        }
+        //else execute the call for just the userId 
+        else {
+          console.log('reading own...');
+          logs = await VolunteerLogs.getOwn(knex, communityBusiness, queryown);
+        }
+        //if userId != call userId boom 
 
         return Promise.all(logs.map(Serialisers.volunteerLogs.identity));
       },
@@ -119,7 +144,7 @@ const routes: [
         auth: {
           strategy: 'standard',
           access: {
-            scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read'],
+            scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read', 'volunteer_logs-own:read'],
           },
         },
         validate: { query: { since, until } },
@@ -197,7 +222,7 @@ const routes: [
         auth: {
           strategy: 'standard',
           access: {
-            scope: ['volunteer_logs-sibling:write', 'volunteer_logs-child:write'],
+            scope: ['volunteer_logs-sibling:write', 'volunteer_logs-child:write', 'volunteer_logs-own:read'],
           },
         },
         validate: {
@@ -285,7 +310,7 @@ const routes: [
         auth: {
           strategy: 'standard',
           access: {
-            scope: ['volunteer_logs-sibling:delete', 'volunteer_logs-child:delete'],
+            scope: ['volunteer_logs-sibling:delete', 'volunteer_logs-child:delete', 'volunteer_logs-own:read'],
           },
         },
         validate: {

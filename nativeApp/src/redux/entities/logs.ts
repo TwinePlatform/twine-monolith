@@ -110,8 +110,14 @@ export const loadLogs = (since?: Date, until?: Date) => (dispatch) => {
   dispatch(loadLogsRequest());
 
   return API.VolunteerLogs.get(since, until)
-    .then((res) => dispatch(loadLogsSuccess(res.data)))
-    .catch((error) => dispatch(loadLogsError(error)));
+    .then((res) => {
+      dispatch(loadLogsSuccess(res.data));
+      return res.data;
+    })
+    .catch((error) => {
+      dispatch(loadLogsError(error));
+      return error;
+    });
 };
 
 export const createLog = (values: Partial<VolunteerLog>) => (dispatch) => {

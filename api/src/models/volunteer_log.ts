@@ -144,6 +144,19 @@ export const VolunteerLogs: VolunteerLogCollection = {
     );
   },
 
+  async getOwn(client, cb, q = {}) {
+    return VolunteerLogs.get(client, {
+      ...q,
+      where: {
+        organisationId: cb.id,
+        userId: q.userId,
+        deletedAt: null,
+      },
+      whereBetween: q.since || q.until
+        ? { startedAt: [q.since, q.until] }
+        : undefined,
+    });
+  },
   async getOne(client, q = {}) {
     const [res] = await VolunteerLogs.get(client, { ...q, limit: 1 });
     return res || null;
@@ -279,6 +292,8 @@ export const VolunteerLogs: VolunteerLogCollection = {
   },
 
   async fromCommunityBusiness(client, cb, q = {}) {
+
+
     return VolunteerLogs.get(client, {
       ...q,
       where: {
@@ -428,9 +443,9 @@ export const VolunteerLogs: VolunteerLogCollection = {
 
   async syncLogs(client, communityBusiness, user, logs) {
     // can user write logs for others?
-    const doAnyLogsTargetOtherUsers = logs.some((log) => log.userId !== user.id);
-    const canUserWriteOthersLogs = await VolunteerLogPermissions.canWriteOthers(client, user);
-    if (doAnyLogsTargetOtherUsers && !canUserWriteOthersLogs) {
+    const doAnyLogsTargetOtherUsers = logs.some((log) => log.userId !== user.id); //check if log userId is not the same
+    const canUserWriteOthersLogs = await VolunteerLogPermissions.canWriteOthers(client, user); //check permission
+    if (doAnyLogsTargetOtherUsers && !canUserWriteOthersLogs) { //if not the same and do not have permission
       throw new Error('Insufficient permissions to write other users logs');
     }
 
@@ -442,6 +457,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
     if (!targetUsersCheck.every((a) => a)) {
       throw new Error('Some users do not have permission to write volunteer logs');
     }
+
 
     const results = await Promises.some(logs.map(async (log) => {
       const existsInDB = log.hasOwnProperty('id');
@@ -498,7 +514,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
 };
 
 
-const VolunteerLogPermissions = {
+export const VolunteerLogPermissions = {
   async canWriteOwn(client: Knex, user: User | number) {
     return Permissions.userHas(client, {
       resource: ResourceEnum.VOLUNTEER_LOGS,
@@ -522,4 +538,22 @@ const VolunteerLogPermissions = {
 
     return canWrite.some((a) => a);
   },
+
+  async canReadOthers(client: Knex, user: any) {
+    const canWrite = await Promise.all(
+      [PermissionLevelEnum.SIBLING, PermissionLevelEnum.CHILD]
+        .map((permissionLevel) => ({
+          permissionLevel,
+          resource: ResourceEnum.VOLUNTEER_LOGS,
+          access: AccessEnum.READ,
+          userId: user,
+        }))
+        .map((args) => Permissions.userHas(client, args))
+    );
+
+    console.log(canWrite);
+    return canWrite.some((a) => a);
+  }
 };
+
+

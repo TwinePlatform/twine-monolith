@@ -72,8 +72,13 @@ const Login: FC<Props> = (props) => {
 
   const onSubmit = async () => {
     try {
-      const data = await API.Authentication.login({ email, password });
-      await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.data.token);
+
+//       const data = await API.Authentication.login({ email, password });
+//       await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.data.token);
+
+      const { data } = await API.Authentication.login({ email, password });
+      await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.token);
+      await AsyncStorage.setItem(StorageValuesEnum.USER_ID, data.userId.toString());
       props.navigation.navigate('AuthenticationLoader');
     } catch (error) {
       setError(error.response.data.error.message);

@@ -89,6 +89,7 @@ const AdminTime: FC<Props> = () => {
             onDelete={toggleDeleteVisibility}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
+            navigationPage='AdminEditTime'
           />
         ))
       }
@@ -105,6 +106,7 @@ const AdminTime: FC<Props> = () => {
             onDelete={toggleDeleteVisibility}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
+            navigationPage='AdminEditTime'
           />
         ))
       }
@@ -121,6 +123,7 @@ const AdminTime: FC<Props> = () => {
             onDelete={toggleDeleteVisibility}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
+            navigationPage='AdminEditTime'
           />
         ))
       }

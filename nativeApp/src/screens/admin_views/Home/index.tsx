@@ -1,3 +1,4 @@
+
 import React, { FC, useEffect, useState } from 'react';
 import { AsyncStorage } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,8 +13,11 @@ import Stat from '../../../lib/ui/Stat';
 import Line from '../../../lib/ui/Line';
 import Invite from '../../../lib/ui/Invite';
 
+
 import { createLog } from '../../../redux/entities/logs';
 import { Item } from 'native-base';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { loadLogs, selectOrderedLogs } from '../../../redux/entities/logs';
 
 /*
  * Types
@@ -68,6 +72,34 @@ const onInvite = () => {
  */
 const AdminHome: FC<Props> = () => {
   const [visibleConfirmationModal, toggleInviteVisibility] = useToggle(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadLogs());
+  }, []);
+
+  const logs = useSelector(selectOrderedLogs, shallowEqual);
+  let hours = 0;
+  let minutes = 0;
+  Object.keys(logs).forEach(object => {
+    for (let key in logs[object].duration) {
+      if (key == 'hours') {
+        hours += logs[object].duration[key];
+      }
+      if (key == 'minutes') {
+        minutes += logs[object].duration[key];
+      }
+    }
+  });
+
+  hours = hours + minutes / 60;
+
+  const avgDur = ~~(hours * 60 / logs.length);
+
+  var volunteerNumberArray = new Set();
+  Object.keys(logs).forEach(objectnum => {
+    volunteerNumberArray.add(logs[objectnum].userId);
+  })
 
   const dispatch = useDispatch();
   const [logged, setLogged] = useState(false);
@@ -121,7 +153,7 @@ const AdminHome: FC<Props> = () => {
       <Container>
         <Stat
           heading="NUMBER OF VOLUNTEERS"
-          value="6"
+          value={volunteerNumberArray.size}
           unit="people"
         >
           <MaterialIcons name="person-outline" outline size={35} color={ColoursEnum.mustard} />
@@ -129,7 +161,7 @@ const AdminHome: FC<Props> = () => {
         <Line />
         <Stat
           heading="TOTAL TIME GIVEN"
-          value="109"
+          value={hours.toString()}
           unit="hours"
         >
           <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard} />
@@ -137,7 +169,7 @@ const AdminHome: FC<Props> = () => {
         <Line />
         <Stat
           heading="AVERAGE DURATION"
-          value="120"
+          value={avgDur.toString()}
           unit="minutes"
         >
           <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
