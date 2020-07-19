@@ -253,7 +253,7 @@ export namespace Api {
 
           export namespace PUT {
             export interface Request extends Hapi.Request {
-              params: { logId: string };
+              params: { userId: string, logId: string };
               payload: Partial<Pick<VolunteerLog, 'activity' | 'duration' | 'project' | 'startedAt'>>;
               pre: {
                 communityBusiness: CommunityBusiness;

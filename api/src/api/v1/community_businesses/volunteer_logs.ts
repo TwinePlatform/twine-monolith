@@ -5,6 +5,7 @@ import { silent } from 'twine-util/promises';
 import {
   response,
   id,
+  userId,
   meOrId,
   since,
   until,
@@ -216,7 +217,7 @@ const routes: [
 
     {
       method: 'PUT',
-      path: '/community-businesses/me/volunteer-logs/{logId}',
+      path: '/community-businesses/me/volunteer-logs/{userId}/{logId}',
       options: {
         description: 'Update volunteer logs noted of specific log id',
         auth: {
@@ -226,7 +227,7 @@ const routes: [
           },
         },
         validate: {
-          params: { logId: id },
+          params: { userId: userId, logId: id },
           payload: {
             activity: volunteerLogActivity,
             duration: volunteerLogDuration,
@@ -242,14 +243,14 @@ const routes: [
       handler: async (request, h) => {
         const {
           server: { app: { knex } },
-          params: { logId },
+          params: { userId, logId },
           payload,
           pre: { communityBusiness },
         } = request;
 
         const log = await VolunteerLogs.getOne(
           knex,
-          { where: { id: Number(logId), organisationId: communityBusiness.id } }
+          { where: { id: Number(logId), userId: Number(userId), organisationId: communityBusiness.id } }
         );
 
         if (!log) {

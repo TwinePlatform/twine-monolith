@@ -3,10 +3,10 @@
  */
 import * as Joi from '@hapi/joi';
 import { query } from '../users/schema';
-import { id } from '../schema/request';
+import { id, userId } from '../schema/request';
 
 
-export { query, id, gender, since, until, startedAt } from '../schema/request';
+export { query, id, userId, gender, since, until, startedAt } from '../schema/request';
 export { response } from '../schema/response';
 
 export const visitActivitiesGetQuery = {
