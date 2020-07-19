@@ -212,6 +212,15 @@ export namespace Api {
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
 
+        export namespace DELETE {
+          export interface Request extends Hapi.Request {
+            params: { logId: string };
+            pre: { communityBusiness: CommunityBusiness };
+          }
+          export type Result = VolunteerLog;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+
         export namespace sync {
           export namespace POST {
             export interface Request extends Hapi.Request {
