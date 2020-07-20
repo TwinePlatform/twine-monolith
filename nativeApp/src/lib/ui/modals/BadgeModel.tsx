@@ -40,10 +40,8 @@ const Card = styled(C)`
 `;
 
 const BadgeIcon = styled.View`
-  width: 89px;
   flexDirection: row;
 	alignItems: center;
-	marginLeft: 11px;
 	marginTop: 28px;
 	marginBottom: 21px
 `;
@@ -64,7 +62,6 @@ const BadgeTitle = styled.Text`
   fontSize: 26;
   fontWeight: bold;
   paddingBottom: 5;
-  marginLeft: 4;
 `;
 
 const BadgeText = styled.Text`
@@ -73,7 +70,6 @@ const BadgeText = styled.Text`
 	textAlign: center;
   fontSize: 16;
   paddingBottom: 5;
-  marginLeft: 4;
 `;
 
 const styles = StyleSheet.create({

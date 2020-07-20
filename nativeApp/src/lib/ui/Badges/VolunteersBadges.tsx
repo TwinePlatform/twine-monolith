@@ -52,13 +52,13 @@ const Image = styled.Image`
 const BadgeImages = {
 	FirstLog: require('../../../../assets/Badges/small/Medal1.png'),
 	ThridMonth: require('../../../../assets/Badges/small/3MonthMedal.png'),
-	// FifthLog: require('../../../../assets/Badges/small/5thLogMedal.png'),
-	// SixthMonth: require('../../../../assets/Badges/small/6MonthMedal.png'),
-	// TenthHour: require('../../../../assets/Badges/small/10hoursMedal.png'),
-	// twentiethHour: require('../../../../assets/Badges/small/20hoursmedal.png'),
-	// fiftiethHour: require('../../../../assets/Badges/small/50hoursmedal.png'),
-	// AnnMedal: require('../../../../assets/Badges/small/AnnMedal.png'),
-	// InviteMedal: require('../../../../assets/Badges/small/EmailInviteMedal.png'),
+	FifthLog: require('../../../../assets/Badges/small/5thLogMedal.png'),
+	SixthMonth: require('../../../../assets/Badges/small/6MonthMedal.png'),
+	TenthHour: require('../../../../assets/Badges/small/10hoursMedal.png'),
+	twentiethHour: require('../../../../assets/Badges/small/20hoursmedal.png'),
+	fiftiethHour: require('../../../../assets/Badges/small/50hoursmedal.png'),
+	AnnMedal: require('../../../../assets/Badges/small/AnnMedal.png'),
+	InviteMedal: require('../../../../assets/Badges/small/EmailInviteMedal.png'),
 };
 
 const VolunteersBadgesCard: FC<Props> = (props) => {

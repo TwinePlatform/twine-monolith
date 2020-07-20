@@ -32,11 +32,11 @@ const Heading = styled(H)`
 const VBObj = [
 	{
 		name: 'Kara Thrace',
-		badges: ['FirstLog', 'ThridMonth'],
+		badges: ['FirstLog', 'ThridMonth', 'FifthLog'],
 	},
 	{
 		name: 'Dr. Lee',
-		badges: ['ThridMonth'],
+		badges: ['ThridMonth', 'AnnMedal', 'SixthMonth', 'TenthHour', 'twentiethHour', 'fiftiethHour', 'InviteMedal'],
 	}
 ]
 
