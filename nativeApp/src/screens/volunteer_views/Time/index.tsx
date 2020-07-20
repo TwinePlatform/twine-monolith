@@ -40,14 +40,14 @@ const Time: FC<Props> = () => {
     dispatch(loadLogs());
   }, []);
 
-  const SeeModel = () => {
-    toggleVisibility();
-    setTimeout(() => {
-      toggleVisibility();
-    }, 3000);
-  }
+  // const SeeModel = () => {
+  //   toggleVisibility();
+  //   setTimeout(() => {
+  //     toggleVisibility();
+  //   }, 3000);
+  // }
 
-  const badge = BadgeObj.FirstLogBadge;
+  // const badge = BadgeObj.FirstLogBadge;
 
   const onDelete = (id) => {
     toggleDeleteVisibility;
@@ -57,7 +57,7 @@ const Time: FC<Props> = () => {
   return (
     <Page heading="My Time">
 
-      <TouchableHighlight
+      {/* <TouchableHighlight
         onPress={() => {
           SeeModel();
         }}
@@ -68,7 +68,7 @@ const Time: FC<Props> = () => {
       <BadgeModal
         isVisible={visibleBadgeModal}
         badge={badge}
-      />
+      /> */}
 
       <ConfirmationModal
         isVisible={visibleConfirmationModal}
