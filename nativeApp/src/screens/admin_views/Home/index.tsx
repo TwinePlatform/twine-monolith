@@ -73,10 +73,6 @@ const AdminHome: FC<Props> = () => {
   const dispatch = useDispatch();
   const [logged, setLogged] = useState(false);
 
-  useEffect(() => {
-    dispatch(loadLogs());
-  }, []);
-
   const logs = useSelector(selectOrderedLogs, shallowEqual);
   let hours = 0;
   let minutes = 0;
@@ -107,6 +103,10 @@ const AdminHome: FC<Props> = () => {
     var arr = Object.values(logStore);
     var newArray = [];
 
+    var editlogStore = await AsyncStorage.getItem('edit log cache');
+    editlogStore = editlogStore == null ? [] : JSON.parse(editlogStore);
+    const editArr = Object.values(editlogStore);
+
     //return array of promise, assign a value null if succeed
     newArray = await Promise.all(arr.map(item => {
       const res = createLog(item)(dispatch).then((result) => {
@@ -117,10 +117,27 @@ const AdminHome: FC<Props> = () => {
         };
       });
       return res;
+    }));
 
+    const newArrayEdit = await Promise.all(editArr.map(item => {
+      const { userId, logId } = item;
+      delete item.userId;
+      delete item.logId;
+      const res = updateLog(userId, logId, item)(dispatch).then((result) => {
+        if (result.status == 200) {
+          return null;
+        } else {
+          return item;
+        };
+      });
+      return res;
     }));
 
     const correctedArray = newArray.filter(obj => {
+      return obj != null;
+    });
+
+    const correctedArrayEdit = newArrayEdit.filter(obj => {
       return obj != null;
     });
 
@@ -128,10 +145,16 @@ const AdminHome: FC<Props> = () => {
       'log cache',
       JSON.stringify(correctedArray)
     );
+
+    AsyncStorage.setItem(
+      'edit log cache',
+      JSON.stringify(correctedArrayEdit)
+    );
   }
 
   useEffect(() => {
     checkStorage();
+    dispatch(loadLogs());
   }, []);
 
   return (

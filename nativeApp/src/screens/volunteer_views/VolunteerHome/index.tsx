@@ -11,7 +11,7 @@ import Stat from '../../../lib/ui/Stat';
 import Line from '../../../lib/ui/Line';
 
 
-import { createLog, loadLogs, selectOrderedLogs, selectLogsStatus } from '../../../redux/entities/logs';
+import { createLog, loadLogs, selectOrderedLogs, selectLogsStatus, updateLog } from '../../../redux/entities/logs';
 import Tabs from '../../../lib/ui/Tabs';
 import Page from '../../../lib/ui/Page';
 import AddBar from '../../../lib/ui/AddBar';
@@ -148,6 +148,10 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
     logStore = logStore == null ? [] : JSON.parse(logStore);
     const arr = Object.values(logStore);
 
+    var editlogStore = await AsyncStorage.getItem('edit log cache');
+    editlogStore = editlogStore == null ? [] : JSON.parse(editlogStore);
+    const editArr = Object.values(editlogStore);
+
     //return array of promise, assign a value null if succeed
     const newArray = await Promise.all(arr.map(item => {
       const res = createLog(item)(dispatch).then((result) => {
@@ -161,7 +165,25 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
 
     }));
 
+    const newArrayEdit = await Promise.all(editArr.map(item => {
+      const { userId, logId } = item;
+      delete item.userId;
+      delete item.logId;
+      const res = updateLog(userId, logId, item)(dispatch).then((result) => {
+        if (result.status == 200) {
+          return null;
+        } else {
+          return item;
+        };
+      });
+      return res;
+    }));
+
     const correctedArray = newArray.filter(obj => {
+      return obj != null;
+    });
+
+    const correctedArrayEdit = newArrayEdit.filter(obj => {
       return obj != null;
     });
 
@@ -171,42 +193,25 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
       JSON.stringify(correctedArray)
     );
 
-    useEffect(() => {
-      checkStorage();
-      dispatch(loadLogs());
-    }, []);
+    AsyncStorage.setItem(
+      'edit log cache',
+      JSON.stringify(correctedArrayEdit)
+    );
   }
 
+  useEffect(() => {
+    checkStorage();
+    dispatch(loadLogs());
+  }, []);
+
   AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(userID))
-
-  const logs = useSelector(selectOrderedLogs, shallowEqual);
-  let hours = 0;
-  let minutes = 0;
-  // Object.keys(logs).forEach(object => {
-  //   // console.log(logs[object].duration);
-  //   for (let key in logs[object].duration) {
-  //     if (key == 'hours') {
-  //       hours += logs[object].duration[key];
-  //     }
-  //     if (key == 'minutes') {
-  //       minutes += logs[object].duration[key];
-  //     }
-  //   }
-  // });
-
-  // console.log(logs);
 
   return (
     <Page heading="Home" withAddBar>
       <AddBar onPress={() => navigation.navigate('VolunteersBadges')} title="Volunteer's Badges" />
 
       <Tabs
-        tabOne={['Stats', Stats, {
-          // projects: projects.filter(({ deletedAt }) => !deletedAt),
-          // onConfirmDispatch: deleteProject,
-          // confirmationText: 'Are you sure you want to archive this project?',
-          // buttonType: 'archive',
-        }]}
+        tabOne={['Stats', Stats, {}]}
         tabTwo={['Badges', BadgeTab, { badge: badgearray }]}
       />
 

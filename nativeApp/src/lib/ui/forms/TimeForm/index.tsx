@@ -140,6 +140,18 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   }
 
+  const cacheforEdit = async (values) => {
+
+    var cachevalue = await AsyncStorage.getItem('edit log cache');
+    cachevalue = cachevalue == null ? [] : JSON.parse(cachevalue);
+    cachevalue.push(values);
+    await AsyncStorage.setItem(
+      'edit log cache',
+      JSON.stringify(cachevalue)
+    );
+
+  }
+
   // hooks
   useEffect(() => {
     if (requestStatus.success) {
@@ -183,17 +195,20 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
     //if timeform is called from edit time view 
     if (origin == "editTime") {
-      const valuesEdit = {
+      const valuesEdit: any = {
         project,
         activity,
         startedAt: date as string,
         duration: { hours, minutes },
       };
+
+
       try { //error trapping and cache log when network error
         const res = await dispatch(updateLog(userId, logId, valuesEdit));
         if (res.error.statusCode == 500) {
-          // cache(valuesEdit);
-          //ToDo: cache for edit 
+          valuesEdit.userId = userId;
+          valuesEdit.logId = logId;
+          cacheforEdit(valuesEdit);
         }
         if (res.error.statusCode == 400) {
           console.log(res.error.message);

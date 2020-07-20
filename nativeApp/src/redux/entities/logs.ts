@@ -143,13 +143,15 @@ export const createLog = (values: Partial<VolunteerLog>) => (dispatch) => {
 export const updateLog = (id: number, LogId: number, values: Partial<VolunteerLog>) => (dispatch) => {
   dispatch(updateLogRequest());
   return API.VolunteerLogs.update(id, LogId, values)
-    .then(() => {
+    .then((result) => {
       dispatch(updateLogSuccess());
       dispatch(loadLogs());
+      return result;
     })
     .catch((error) => {
       const errorResponse = getErrorResponse(error);
       dispatch(updateLogError(errorResponse));
+      return error;
     });
 };
 
