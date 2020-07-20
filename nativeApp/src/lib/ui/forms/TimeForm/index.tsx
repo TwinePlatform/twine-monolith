@@ -310,8 +310,8 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           <TimeContainer>
             <TimeDiff align="center" timeValues={[startTime.getTime(), endTime.getTime()]} />
           </TimeContainer>
-          <SubmitButton text="ADD TIME" onPress={handleSubmit} />
-
+          {origin === "addTime" && <SubmitButton text="ADD TIME" onPress={handleSubmit} />}
+          {origin === "editTime" && <SubmitButton text="EDIT TIME" onPress={handleSubmit} />}
         </Form>
 
       )}

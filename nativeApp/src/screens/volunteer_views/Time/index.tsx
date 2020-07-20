@@ -50,7 +50,6 @@ const Time: FC<Props> = () => {
   // const badge = BadgeObj.FirstLogBadge;
 
   const onDelete = (id) => {
-    console.log('delete');
     toggleDeleteVisibility;
     dispatch(deleteLog(id));
   }
