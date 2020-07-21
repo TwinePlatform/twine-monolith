@@ -22,6 +22,25 @@ type Props = {
 /*
  * Styles
  */
+const getTruncatedLogs = () => {
+  const thirtyDaysAgo = moment().subtract(30, 'days');
+  let slicePoint = 10;
+
+  let logArray = useSelector(selectOrderedLogs, shallowEqual);
+
+  /*
+
+  for(let i = 0;i<50 || i<logArray.length;i++){
+    console.log(i)
+    if(moment(logArray[i].createdAt).isBefore(thirtyDaysAgo)){
+      slicePoint = i;
+      break;
+    }
+  }*/
+
+  return logArray.slice(0,slicePoint);
+};
+
 
 /*
  * Component
@@ -29,8 +48,9 @@ type Props = {
 const AdminTime: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
   const [visibleNoteModal, toggleVisibilityNoteModal] = useToggle(false);
+  const [displayedLogs, setDisplayedLogs] = useState(false);
+  const logs = getTruncatedLogs();
   const [noteDisplay, setNoteDisplay] = useState('');
-  const logs = useSelector(selectOrderedLogs, shallowEqual);
   const logsRequestStatus = useSelector(selectLogsStatus, shallowEqual);
   const volunteers = useSelector(selectVolunteers, shallowEqual);
   const dispatch = useDispatch();
@@ -42,23 +62,26 @@ const AdminTime: FC<Props> = () => {
   useEffect(() => {
     dispatch(loadVolunteers());
     dispatch(loadLogs());
-  }, []);
+  },[]);
 
   useEffect(() => {
-    const now = moment();
-    const lastWeek = now.subtract(1, 'week');
-    const twoWeeksAgo = now.subtract(2, 'weeks');
-    const groupedLogs = logs.reduce((acc, log) => {
-      if (moment(log.createdAt).isBetween(now, lastWeek)) {
-        return { ...acc, thisWeek: [...acc.thisWeek, log] };
-      } if (moment(log.createdAt).isBetween(lastWeek, twoWeeksAgo)) {
-        return { ...acc, lastWeek: [...acc.lastWeek, log] };
-      }
-      return { ...acc, rest: [...acc.rest, log] };
-    }, { thisWeek: [], lastWeek: [], rest: [] });
+    if(!displayedLogs && logs[0]){
+      const now = moment();
+      const lastWeek = moment().subtract(1, 'week');
+      const twoWeeksAgo = moment().subtract(2, 'weeks');
+      const groupedLogs = logs.reduce((acc, log) => {
+        if (moment(log.createdAt).isBetween(lastWeek, now)) {
+          return { ...acc, thisWeek: [...acc.thisWeek, log] };
+        } if (moment(log.createdAt).isBetween(twoWeeksAgo, lastWeek)) {
+          return { ...acc, lastWeek: [...acc.lastWeek, log] };
+        }
+        return { ...acc, rest: [...acc.rest, log] };
+      }, { thisWeek: [], lastWeek: [], rest: [] });
 
-    setDateSeparatedLogs(groupedLogs);
-  }, [logs]);
+      setDateSeparatedLogs(groupedLogs);
+      setDisplayedLogs(true);
+    }    
+  });
 
   return (
     <Page heading="Volunteers Time">

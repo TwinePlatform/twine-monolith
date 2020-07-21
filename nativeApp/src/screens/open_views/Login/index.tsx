@@ -50,7 +50,6 @@ const LinkText = styled.Text`
   fontSize: 17;
 `;
 
-
 const Image = styled.Image`
   width: 100;
   height: 100;
