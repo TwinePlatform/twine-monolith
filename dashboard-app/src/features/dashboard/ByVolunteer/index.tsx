@@ -11,6 +11,7 @@ import { aggregatedToTableData, TableData } from '../dataManipulation/aggregated
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../../lib/ui/design_system';
 import { PrimaryButton} from '../../../lib/ui/components/Buttons';
+import InviteModal from '../../../lib/ui/components/InviteModal';
 import VolunteerTabs from './VolunteerTabs';
 import Errors from '../components/Errors';
 import useAggregateDataByVolunteer from './useAggregateDataByVolunteer';
@@ -91,6 +92,10 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
 
   return (
     <Container>
+      <InviteModal
+        visible={inviteModalVisible}
+        closeFunction={()=>setInviteModalVisible(false)}
+      />
       <Row center="xs">
         <Col>
           <H1>{TitlesCopy.Volunteers.title}</H1>
@@ -116,7 +121,11 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
       }
       <PrimaryButton 
         onClick={()=>setInviteModalVisible(!inviteModalVisible)} 
-        style={{position: 'absolute', bottom: 20, right: 30}}
+        style={{
+          position: 'absolute', 
+          bottom: 20, 
+          right: 30
+        }}
       >
         + Invite
       </PrimaryButton>
