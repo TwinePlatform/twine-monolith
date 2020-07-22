@@ -46,7 +46,7 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
     <Grid>
       <Row center="xs">
         <Col xs={6}>
-          <H1>The Twine Volunteer Dashboard shows how your volunteers help your organisation</H1>
+          <H1>The Twine Volunteer Dashboard shows how volunteers help your organisation</H1>
         </Col>
       </Row>
       <Row center="xs">
