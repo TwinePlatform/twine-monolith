@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
-import { Item as I, Picker, } from 'native-base';
+import { Item as I, Picker } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Forms } from './enums';
 import { ColoursEnum } from '../colours';
@@ -11,7 +11,7 @@ import { ColoursEnum } from '../colours';
  */
 type Props = {
   ref: (ref: unknown) => void;
-  options: {id: number; name: string}[];
+  options: { id: number; name: string }[];
   onValueChange: any;
   defaultValue?: string | number;
 }
@@ -21,7 +21,7 @@ type Props = {
  */
 const Item = styled(I)`
   alignItems: center;
-  width:100%;
+  width:30%;
   justifyContent: space-between;
   flexDirection: row;
 `;
@@ -32,13 +32,14 @@ const Item = styled(I)`
 const DropdownNoLabel: FC<Props> = (props) => {
   const { options, onValueChange, defaultValue, ...rest
   } = props;
-  const [value, setValue] = useState(defaultValue);
+
+  const [value, setValue] = useState();
   return (
     <Item picker>
       <Picker
         mode="dropdown"
         iosIcon={<MaterialIcons name="keyboard-arrow-down" />}
-        placeholder="Select"
+        placeholder="ORGANISATION"
         placeholderStyle={{ color: ColoursEnum.grey }}
         placeholderIconColor={ColoursEnum.grey}
         selectedValue={value}

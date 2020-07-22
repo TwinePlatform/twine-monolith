@@ -13,12 +13,17 @@ import { ColoursEnum } from '../colours';
 type Props = {
   isVisible: boolean;
   message: string;
-  onClose: ()=>void;
+  onClose: () => void;
 }
 
 /*
  * Styles
  */
+
+const Container = styled.View`
+  alignItems: center;
+`;
+
 const HeadingContainer = styled.View`
   backgroundColor: ${ColoursEnum.purple};
   borderTopLeftRadius: 10;
@@ -27,12 +32,13 @@ const HeadingContainer = styled.View`
 
 const Heading2 = styled(H2)`
   paddingHorizontal: 15;
-  paddingTop: 15;
-  marginBottom: 20;
+  paddingTop: 10;
+  marginBottom: 10;
   color: ${ColoursEnum.white};
 `;
 
 const Card = styled(C)`
+  width: 80%;
   paddingBottom: 10;
   borderRadius: 10;
 `;
@@ -57,18 +63,21 @@ const MessageModal: FC<Props> = ({
   isVisible, message, onClose
 }) => {
 
-return(
-  <Modal isVisible={isVisible}>
-    <Card>
-      <HeadingContainer>
-        <Heading2>TWINE</Heading2>
-      </HeadingContainer>
-        <Text>{message}</Text>
-      <ButtonContainer>
-        <NoteButton label={"Close"} onPress={onClose} />
-      </ButtonContainer>
-    </Card>
-  </Modal>
-)};
+  return (
+    <Modal isVisible={isVisible}>
+      <Container>
+        <Card>
+          <HeadingContainer>
+            <Heading2>TWINE</Heading2>
+          </HeadingContainer>
+          <Text>{message}</Text>
+          <ButtonContainer>
+            <NoteButton label={"Close"} onPress={onClose} />
+          </ButtonContainer>
+        </Card>
+      </Container>
+    </Modal>
+  )
+};
 
 export default MessageModal;
