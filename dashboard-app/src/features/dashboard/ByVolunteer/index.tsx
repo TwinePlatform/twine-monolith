@@ -13,6 +13,7 @@ import { ColoursEnum } from '../../../lib/ui/design_system';
 import { PrimaryButton, SecondaryButton} from '../../../lib/ui/components/Buttons';
 import InviteModal from '../../../lib/ui/components/InviteModal';
 import UploadModal from '../../../lib/ui/components/UploadModal';
+import DownloadModal from '../../../lib/ui/components/UploadModal';
 import VolunteerTabs from './VolunteerTabs';
 import Errors from '../components/Errors';
 import useAggregateDataByVolunteer from './useAggregateDataByVolunteer';
@@ -47,6 +48,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
   const [legendData, setLegendData] = useState<LegendData>([]);
   const [inviteModalVisible, setInviteModalVisible] = useState(false);
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
+  const [downloadModalVisible, setDownloadModalVisible] = useState(false);
   const [extraButtonsVisible, setExtraButtonsVisible] = useState(false);
   const { loading, data, error, months } =
     useAggregateDataByVolunteer({ from: fromDate, to: toDate });
@@ -102,6 +104,12 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
       <UploadModal
         visible={uploadModalVisible}
         closeFunction={()=>setUploadModalVisible(false)}
+        file={"volunteers"}
+      />
+      <DownloadModal
+        visible={downloadModalVisible}
+        closeFunction={()=>setDownloadModalVisible(false)}
+        file={"volunteer template"}
       />
       <Row center="xs">
         <Col>
@@ -140,7 +148,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
             Invite
           </SecondaryButton>
 	        <SecondaryButton
-            onClick={()=>console.log("downlading template")} 
+            onClick={()=>setDownloadModalVisible(!downloadModalVisible)} 
           >
             Volunteer Template
           </SecondaryButton>

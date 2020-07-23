@@ -93,6 +93,7 @@ const InviteModal:FC<Props> = (props) => {
                     right: "25%",
                     backgroundColor: "white",
                     borderRadius: "8px",
+                    zIndex: 3,
                 }}
             >
                 <Heading2>TWINE</Heading2>

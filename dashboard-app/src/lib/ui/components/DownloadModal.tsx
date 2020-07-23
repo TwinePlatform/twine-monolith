@@ -23,7 +23,7 @@ const Heading2 = styled(H2)`
 `;
 
 
-const UploadModal:FC<Props> = (props) => {
+const DownloadModal:FC<Props> = (props) => {
 
     const {visible, closeFunction, file} = props;
 
@@ -47,8 +47,8 @@ const UploadModal:FC<Props> = (props) => {
                 }}
             >
                 <Heading2>TWINE</Heading2>
-                <p>Enjoy uploading your files here</p>
-                <button onClick={()=>{closeFunction();console.log("uploading " + file)}}>upload file</button>
+                <p>Are you sure you would like to download?</p>
+                <button onClick={()=>{closeFunction();console.log("downloading " + file)}}>upload file</button>
             </div>
         );
     else
@@ -56,4 +56,4 @@ const UploadModal:FC<Props> = (props) => {
 
 };
 
-export default UploadModal;
+export default DownloadModal;

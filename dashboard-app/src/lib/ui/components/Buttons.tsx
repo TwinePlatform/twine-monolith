@@ -28,6 +28,7 @@ export const AccessibilityButton = styled.button`
 export const PrimaryButton = styled(Button)`
   background-color: ${ColoursEnum.purple};
   transition: background-color ease 0.3s;
+  font-size: ${Fonts.size.body};
 
   &:hover {
     background-color: ${rgba(ColoursEnum.purple, 0.8)};
@@ -41,6 +42,7 @@ export const PrimaryButton = styled(Button)`
 export const SecondaryButton = styled(Button)`
   background-color: ${ColoursEnum.darkGrey};
   transition: background-color ease 0.3s;
+  border-radius: 32px;
 
   &:hover {
     background-color: ${rgba(ColoursEnum.darkGrey, 0.8)};
