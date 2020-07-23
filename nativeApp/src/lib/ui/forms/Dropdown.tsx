@@ -10,11 +10,12 @@ import { ColoursEnum } from '../colours';
  * Types	
  */
 type Props = {
-    ref: (ref: unknown) => void;
+    ref?: (ref: unknown) => void;
     label: string;
     options: { id: number; name: string }[];
     onValueChange: any;
     defaultValue?: string | number;
+    name?: string;
 }
 
 /*	
@@ -37,7 +38,7 @@ const Label = styled(L)`
  */
 const Dropdown: FC<Props> = (props) => {
     const {
-        label, options, onValueChange, defaultValue, ...rest
+        label, options, onValueChange, defaultValue, name, ...rest
     } = props;
     const [value, setValue] = useState(defaultValue);
     return (
