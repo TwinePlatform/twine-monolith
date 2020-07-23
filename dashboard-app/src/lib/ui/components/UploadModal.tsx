@@ -62,7 +62,7 @@ const Button = ({ onPress, buttonType }) => (
  */
 
 
-const InviteModal:FC<Props> = (props) => {
+const UploadModal:FC<Props> = (props) => {
 
     const {visible, closeFunction} = props;
 
@@ -96,9 +96,7 @@ const InviteModal:FC<Props> = (props) => {
                 }}
             >
                 <Heading2>TWINE</Heading2>
-                <input type="text" placeholder="email address"></input>
-                <input type="text" placeholder="subject"></input>
-                <input type="text" placeholder="text box"></input>
+                <p>Enjoy uploading your files here</p>
                 <button onClick={()=>closeFunction()}>close</button>
             </div>
         );
@@ -128,4 +126,4 @@ return(
 
 };
 
-export default InviteModal;
+export default UploadModal;

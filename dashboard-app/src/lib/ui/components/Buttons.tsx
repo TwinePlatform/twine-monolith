@@ -38,6 +38,19 @@ export const PrimaryButton = styled(Button)`
   }
 `;
 
+export const SecondaryButton = styled(Button)`
+  background-color: ${ColoursEnum.darkGrey};
+  transition: background-color ease 0.3s;
+
+  &:hover {
+    background-color: ${rgba(ColoursEnum.darkGrey, 0.8)};
+  };
+
+  &:active {
+    background-color: ${rgba(ColoursEnum.darkGrey, 0.6)};
+  }
+`;
+
 export const SubmitButton = styled(PrimaryButton)`
   width: 50%;
 `;
