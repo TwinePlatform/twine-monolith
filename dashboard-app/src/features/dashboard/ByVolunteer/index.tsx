@@ -93,8 +93,6 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
     setLegendData,
   };
 
-  console.log(inviteModalVisible);
-
   return (
     <Container>
       <InviteModal
