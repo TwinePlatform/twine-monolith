@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
 import { Picker, TextInput, View, Text, StyleSheet } from 'react-native';
 import { Input as I } from 'native-base';
+import DropdownShort from '../../../lib/ui/forms/DropdownShort';
 import DropdownNoLabel from '../../../lib/ui/forms/DropdownNoLabel';
 import FuzzySearchBox from '../../../lib/ui/forms/FuzzySearchBox';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
@@ -27,14 +28,12 @@ type Props = {
  */
 const Registration = styled.View`
   alignItems: center;
-  textAlign: left;
-  width: 80%;
+  width: 30%;
+  textAlign: center;
 `;
 
 const Container = styled.View`
-  flex: 2;
-  justifyContent: space-between;
-  width: 300px;
+  width: 80%;
   alignItems: center;
 `;
 
@@ -53,6 +52,7 @@ const Input = styled.TextInput.attrs({
   borderBottomWidth: 1;
   borderBottomColor: ${ColoursEnum.grey};
   marginTop: 10px;
+  paddingLeft: 10px;
   `;
 
 const PrintText = styled.Text`
@@ -187,11 +187,11 @@ const Register: FC<Props> = (props) => {
                 message={thankYouMessage}
                 onClose={() => { setOrganisationModalVisible(false); setRegistrationType("User"); }} />
 
-              <View>
-                <DropdownNoLabel
+              <Registration>
+                <DropdownShort
                   options={formOptions} selectedValue={registrationType} onValueChange={setRegistrationType}
                 />
-              </View>
+              </Registration>
 
               <Input
                 onChangeText={handleChange('OrgName')}
@@ -221,20 +221,29 @@ const Register: FC<Props> = (props) => {
                 placeholder='360 Giving ID (Optional)'
               />
 
-              <SubmitButton onPress={handleSubmit} text="Complete" />
+              <DropdownNoLabel
+                options={genderOptions}
+                selectedValue={region}
+                onValueChange={setRegion}
+                placeholder='Region'
+              />
+
+              <Container>
+                <SubmitButton onPress={handleSubmit} text="Complete" />
+              </Container>
 
               <PrintText>
                 By doing this you are agreeing to our
-                <LinkText onPress={() => props.navigation.navigate('TnC')}>
+                  <LinkText onPress={() => props.navigation.navigate('TnC')}>
                   Terms and Conditions
-                </LinkText>
+                  </LinkText>
               </PrintText>
 
               <PrintText>
                 Already Registered? Log In
-                <LinkText onPress={() => props.navigation.navigate('Login')}>
+                  <LinkText onPress={() => props.navigation.navigate('Login')}>
                   Here
-                </LinkText>
+                  </LinkText>
               </PrintText>
 
             </Page>
@@ -269,11 +278,11 @@ const Register: FC<Props> = (props) => {
 
           <Page heading="Register">
 
-            <View>
-              <DropdownNoLabel
+            <Registration>
+              <DropdownShort
                 options={formOptions} selectedValue={registrationType} onValueChange={setRegistrationType}
               />
-            </View>
+            </Registration>
 
             <Input
               onChangeText={handleChange('Name')}
@@ -325,24 +334,22 @@ const Register: FC<Props> = (props) => {
               <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.Phone}</TextInput>
             }
 
-            <Registration>
-              <DropdownNoLabel
-                options={yearOptions}
-                selectedValue={userYearOfBirth}
-                onValueChange={setUserYearOfBirth}
-                placeholder='Year of Birth (Optional)'
-              />
+            <DropdownNoLabel
+              options={yearOptions}
+              selectedValue={userYearOfBirth}
+              onValueChange={setUserYearOfBirth}
+              placeholder='Year of Birth (Optional)'
+            />
 
-              <DropdownNoLabel
-                options={genderOptions}
-                selectedValue={region}
-                onValueChange={setRegion}
-                placeholder='Region'
-              />
+            <DropdownNoLabel
+              options={genderOptions}
+              selectedValue={region}
+              onValueChange={setRegion}
+              placeholder='Region'
+            />
 
 
-              <FuzzySearchBox label="" placeholder={"Find Organisation"} options={organisationOptions} selectedValue={userOrganisation} onValueChange={setUserOrganisation} />
-            </Registration>
+            <FuzzySearchBox label="" placeholder={"Find Organisation"} options={organisationOptions} selectedValue={userOrganisation} onValueChange={setUserOrganisation} />
 
             <Input
               onChangeText={handleChange('AdminCode')}
@@ -353,8 +360,10 @@ const Register: FC<Props> = (props) => {
             {errors.AdminCode &&
               <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.AdminCode}</TextInput>
             }
+            <Container>
+              <SubmitButton text="COMPLETE" onPress={handleSubmit} />
+            </Container>
 
-            <SubmitButton text="COMPLETE" onPress={handleSubmit} />
             <Text>{serverError.toString()}</Text>
 
             <PrintText>

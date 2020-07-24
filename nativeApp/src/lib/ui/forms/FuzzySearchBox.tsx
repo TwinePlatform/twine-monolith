@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
 import { Item as I, Picker, Label as L, Input } from 'native-base';
-import {FlatList as F, Text as T} from 'react-native';
+import { FlatList as F, Text as T } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Forms } from './enums';
 import { ColoursEnum } from '../colours';
@@ -15,7 +15,7 @@ type Props = {
   ref: (ref: unknown) => void;
   label: string;
   placeholder: string;
-  options: {id: number; name: string}[];
+  options: { id: number; name: string }[];
   onValueChange: any;
   defaultValue?: string | number;
 }
@@ -26,7 +26,7 @@ type Props = {
 const Item = styled(I)`
   alignItems: center;
   marginLeft: 0;
-  width:100%;
+  width:80%;
   justifyContent: space-between;
   flexDirection: row;
 `;
@@ -36,15 +36,15 @@ const Label = styled(L)`
 `;
 
 const Text = styled(T)`
-  fontSize: 17px;
+  fontSize: 15px;
 `;
 
 const FlatList = styled(F)`
   marginLeft: ${Forms.labelWidth};
 `;
 
-const filterData = (data,filter) => {
-  if(filter === "")
+const filterData = (data, filter) => {
+  if (filter === "")
     return data;
   const options = {
     keys: [
@@ -54,7 +54,7 @@ const filterData = (data,filter) => {
   const fuse = new Fuse(data, options);
   let output = [];
   fuse.search(filter).map(item => output.push(item.item));
-  return output.length < 5 ? output : output.slice(0,5);
+  return output.length < 5 ? output : output.slice(0, 5);
 }
 
 /*
@@ -68,44 +68,44 @@ const FuzzySearchBox: FC<Props> = (props) => {
   const [textInputFocus, setTextInputFocus] = useState(false);
   const [filteredData, setFilteredData] = useState(options);
 
-  const changeText = (text :string) => {
+  const changeText = (text: string) => {
     setText(text);
-    setFilteredData(filterData(options,text));
+    setFilteredData(filterData(options, text));
   }
 
   const renderRow = (item) => {
-    return  <TouchableNativeFeedback
-                onPress={() => {
-                  setText(item.name);
-                  onValueChange(item.name);
-                  }
-                }
-            >
-                <Text>{item.name}</Text>
-            </TouchableNativeFeedback>
+    return <TouchableNativeFeedback
+      onPress={() => {
+        setText(item.name);
+        onValueChange(item.name);
+      }
+      }
+    >
+      <Text>{item.name}</Text>
+    </TouchableNativeFeedback>
   }
 
   return (
     <React.Fragment>
       <Item picker>
-      {label.length > 0 &&<Label>{label}</Label>}
+        {label.length > 0 && <Label>{label}</Label>}
         <Input placeholder={placeholder}
-              placeholderTextColor={ ColoursEnum.grey}
-              onChangeText={text=>changeText(text)}
-              onFocus={() => setTextInputFocus(true)}
-              onBlur={() => setTextInputFocus(false)}
-              value={text}
+          placeholderTextColor={ColoursEnum.grey}
+          onChangeText={text => changeText(text)}
+          onFocus={() => setTextInputFocus(true)}
+          onBlur={() => setTextInputFocus(false)}
+          value={text}
         />
-    </Item>
-    {textInputFocus && 
-    <FlatList
+      </Item>
+      {textInputFocus &&
+        <FlatList
           data={filteredData}
-          renderItem={({item}) => renderRow(item)}
+          renderItem={({ item }) => renderRow(item)}
           keyExtractor={item => item.id.toString()}
         />
-    }    
+      }
     </React.Fragment>
-    
+
   );
 };
 
