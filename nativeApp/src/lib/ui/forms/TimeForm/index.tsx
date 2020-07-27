@@ -102,7 +102,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [userId, setUserID] = useState<number>();
 
   if (forUser == 'admin') {
-    setUserID(volunteers.find((x) => x.name === volunteer).id);
+    // setUserID(volunteers.find((x) => x.name === volunteer).id);
   }
   if (forUser == 'volunteer') {
     AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(parseInt(userID)))
