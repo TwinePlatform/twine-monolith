@@ -105,11 +105,29 @@ const Stats: FC<Props> = () => {
   return (
     <View>
       <Container>
-        <Stat
+      <Stat
           heading="TOTAL TIME GIVEN"
           value={hours.toString()}
           unit="hours"
-          />
+        >
+          <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard} />
+        </Stat>
+        <Line />
+        <Stat
+          heading="TIMES VOLUNTEERED"
+          value={logs.length}
+          unit="visits"
+        >
+          <MaterialCommunityIcons name="calendar-blank" outline size={35} color={ColoursEnum.mustard} />
+        </Stat>
+        <Line />
+        <Stat
+          heading="AVERAGE DURATION"
+          value={avgDur.toString()}
+          unit="minutes"
+        >
+          <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
+        </Stat>
         </Container>
       </View>
    )
