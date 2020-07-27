@@ -27,9 +27,9 @@ const DownloadModal:FC<Props> = (props) => {
 
     const {visible, closeFunction, file} = props;
 
-    const onSend = () => {
-        console.log("email");
-        //API.Invite.byEmail(email);
+    const onDownload = () => {
+        closeFunction();
+        console.log("downloading " + file)
     }
 
     if(visible)
@@ -44,11 +44,22 @@ const DownloadModal:FC<Props> = (props) => {
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
+                    justifyContent: 'center'
                 }}
             >
+                <div
+                    style={{
+                        backgroundColor: ColoursEnum.purple
+                    }}
+                >
                 <Heading2>TWINE</Heading2>
+                </div>
                 <p>Are you sure you would like to download?</p>
-                <button onClick={()=>{closeFunction();console.log("downloading " + file)}}>upload file</button>
+                <img
+                    onClick={onDownload}
+                    src={require('../../../assets/downloadbutton.png')}
+                />
+                <button onClick={onDownload}>upload file</button>
             </div>
         );
     else

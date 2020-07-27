@@ -13,7 +13,7 @@ import { ColoursEnum } from '../../../lib/ui/design_system';
 import { PrimaryButton, SecondaryButton} from '../../../lib/ui/components/Buttons';
 import InviteModal from '../../../lib/ui/components/InviteModal';
 import UploadModal from '../../../lib/ui/components/UploadModal';
-import DownloadModal from '../../../lib/ui/components/UploadModal';
+import DownloadModal from '../../../lib/ui/components/DownloadModal';
 import VolunteerTabs from './VolunteerTabs';
 import Errors from '../components/Errors';
 import useAggregateDataByVolunteer from './useAggregateDataByVolunteer';
