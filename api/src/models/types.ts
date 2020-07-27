@@ -259,7 +259,7 @@ export type VolunteerLog = Readonly<CommonTimestamps & {
   project?: string;
   duration: Duration.Duration;
   startedAt: string;
-  note?: string;
+  notes?: string;
 }>;
 
 export type ApiToken = Readonly<CommonTimestamps & {
@@ -305,6 +305,7 @@ type UsersBaseCollection = Collection<User>;
 
 export type UserCollection = UsersBaseCollection & {
   isMemberOf: (k: Knex, u: User, cb: CommunityBusiness) => Promise<boolean>;
+  updateToken: (c: Knex, a: any, b: any) => Promise<any>;
 };
 
 export type VisitorCollection = UsersBaseCollection & {

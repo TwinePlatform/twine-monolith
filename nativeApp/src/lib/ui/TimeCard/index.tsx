@@ -69,19 +69,20 @@ const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
     id, timeValues, date, labels, volunteer, navigation, onDelete, setNoteDisplay, toggleVisibilityNoteModal, navigationPage
   } = props;
   const [ifNoteExists, setNoteExist] = useState(false);
+  const [note, setNote] = useState("");
   const [initialised, setInitialsed] = useState(false);
 
-  // useEffect(() => {
-  //   if (!initialised)
-  //     getNote(id)
-  //       .then(note => {
-  //         if (note.length > 0) {
-  //           setNoteDisplay(note);
-  //           setNoteExist(true);
-  //         }
-  //         setInitialsed(true);
-  //       })
-  // });
+  useEffect(()=>{
+    if(!initialised)
+      getNote(id)
+      .then(returnedNote => {
+        if(returnedNote.length>0){
+          setNote(returnedNote);
+          setNoteExist(true);
+      }
+      setInitialsed(true);
+    })
+  });
 
   const buttonConfig: DeleteButtonConfig = {
     buttonType: 'delete',
@@ -108,7 +109,7 @@ const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
         </LabelContainer>
       </DetailsContainer>
       {ifNoteExists && <NoteContainer>
-        <NoteButton label={"View note"} onPress={() => { toggleVisibilityNoteModal(); }} />
+          <NoteButton label={"View note"} onPress={()=>{setNoteDisplay(note);toggleVisibilityNoteModal();}}/>
       </NoteContainer>}
     </CardWithButtons>
   );

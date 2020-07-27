@@ -12,10 +12,35 @@ export const axios = _axios.create({
   paramsSerializer: (params) => qs.stringify(params, { encode: false }),
 });
 
+const axios2 = _axios.create({
+  baseURL,
+  paramsSerializer: (params) => qs.stringify(params, { encode: false }),
+  transformResponse: (r) => {
+    const res = JSON.parse(r);
+
+    return res.error ? res : res.result;
+  },
+});
+
+const makeRequest = async <T = any>(params: AxiosRequestConfig) => {
+  let headers;
+  try {
+    const token = "0c0a32c9-5167-44a7-97a1-b56884f91c36";
+    headers = { Authorization: token };
+  } catch (error) {
+    headers = {};
+  }
+  return axios2.request<T>({ headers, ...params });
+};
 
 export const Roles = {
+  get: () => makeRequest({ method: "GET", url: "/users/me/roles" }),
+};
+
+/*export const Roles = {
   get: () => axios.get('/users/me/roles'),
 };
+*/
 
 export const CbAdmins = {
   get: () => {

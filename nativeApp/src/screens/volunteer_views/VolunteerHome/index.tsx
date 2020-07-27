@@ -1,6 +1,8 @@
+
 import React, { FC, useEffect, useState } from 'react';
 import { AsyncStorage } from 'react-native';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationInjectedProps } from 'react-navigation';
@@ -9,6 +11,7 @@ import { Heading as H } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import Stat from '../../../lib/ui/Stat';
 import Line from '../../../lib/ui/Line';
+
 
 
 import { createLog, loadLogs, selectOrderedLogs, selectLogsStatus, updateLog } from '../../../redux/entities/logs';
@@ -23,6 +26,16 @@ import { BadgeObj } from './BadgeObject';
 
 import { StorageValuesEnum } from '../../../authentication/types';
 import { allowAsync } from 'expo/build/ScreenOrientation/ScreenOrientation';
+
+//For Expo PushNotification
+import { Vibration, Platform } from 'react-native';
+import { Notifications } from 'expo';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
+import API, { getErrorResponse } from '../../../api';
+
+
+
 
 /*
  * Types
@@ -62,6 +75,7 @@ const Container = styled.View`
 /*
  * Component
  */
+
 const Stats: FC<Props> = () => {
   // setBadge(false);
   const dispatch = useDispatch();
@@ -94,35 +108,13 @@ const Stats: FC<Props> = () => {
         <Stat
           heading="TOTAL TIME GIVEN"
           value={hours.toString()}
-          unit="hours"
-        >
-          <MaterialCommunityIcons name="clock-outline" outline size={35} color={ColoursEnum.mustard} />
-        </Stat>
-        <Line />
-        <Stat
-          heading="TIMES VOLUNTEERED"
-          value={logs.length}
-          unit="visits"
-        >
-          <MaterialCommunityIcons name="calendar-blank" outline size={35} color={ColoursEnum.mustard} />
-        </Stat>
-        <Line />
-        <Stat
-          heading="AVERAGE DURATION"
-          value={avgDur.toString()}
-          unit="minutes"
-        >
-          <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
-        </Stat>
-      </Container>
-    </View>
-  );
+          </View>
+   )
 };
 
 const badgearray = [BadgeObj.FirstLogBadge, BadgeObj.ThridMonthBadge];
 
 const BadgeTab: FC<Props> = (props) => {
-
   return (
     <CardView>
       {
@@ -137,6 +129,59 @@ const BadgeTab: FC<Props> = (props) => {
 // const Badges = [FirstLogCard, InviteMedalCard];
 
 const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
+    const registerForPushNotificationsAsync = async () => {
+
+    // const [expoPushToken, setexpoPushToken] = useState('');
+    // const [notification, setnotification] = useState<any>();
+    const userId = await AsyncStorage.getItem(StorageValuesEnum.USER_ID);
+
+    // const _handleNotification = (notification) => {
+    //   Vibration.vibrate();
+    //   setnotification({ notification: { notification } });
+    // };
+
+    // useEffect(() => {
+    //   registerForPushNotificationsAsync();
+
+    //   // Handle notifications that are received or selected while the app
+    //   // is open. If the app was closed and then opened by tapping the
+    //   // notification (rather than just tapping the app icon to open it),
+    //   // this function will fire on the next tick after the app starts
+    //   // with the notification data.
+    //   _notificationSubscription = Notifications.addListener(_handleNotification);
+    // }, []);
+
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      const pushtoken = await Notifications.getExpoPushTokenAsync();
+      // setexpoPushToken(pushtoken);
+      API.Users.pushtoken(parseInt(userId), pushtoken);
+
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+
+    if (Platform.OS === 'android') {
+      Notifications.createChannelAndroidAsync('default', {
+        name: 'default',
+        sound: true,
+        priority: 'max',
+        vibrate: [0, 250, 250, 250],
+      });
+    }
+  };
+
+  registerForPushNotificationsAsync();       
+     
   const [stats, setBadge] = useToggle(false);
   const dispatch = useDispatch();
   const [userID, setUserID] = useState('');

@@ -71,9 +71,6 @@ const Volunteers = {
   delete: (id: number) => makeRequest<Api.Users.Volunteers.Id.DELETE.Result>(
     { method: 'DELETE', url: `/users/volunteers/${id}` },
   ),
-  getPush: () => makeRequest<Api.CommunityBusinesses.Id.Volunteers.GET.Result>(
-    { method: 'GET', url: '/community-businesses/me/push' },
-  ),
 };
 
 const VolunteerLogs = {
@@ -149,6 +146,23 @@ const Invite = {
   }
 }
 
+const Users = {
+  getPush: (orgId: number, ProjectId: number) =>
+    makeRequest({
+      method: 'GET',
+      url: `/community-businesses/${orgId}/push/${ProjectId}`
+    })
+  ,
+  pushtoken: (id: number, token: string) => {
+    console.log('updating push token....');
+    makeRequest({
+      method: "PUT",
+      url: `/users/insertpushtoken/${id}`,
+      data: { "pushtoken": token }
+    })
+  }
+}
+
 const Notes = {
   set: (note, logID, activity, project, startedAt) => {
     makeRequest({
@@ -186,6 +200,7 @@ const API = {
   Projects,
   Constants,
   Invite,
+  Users,
   Notes
 };
 

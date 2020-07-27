@@ -152,14 +152,6 @@ export const deleteVolunteer = (id: number) => (dispatch) => {
     .catch((error) => dispatch(deleteVolunteerError(error)));
 };
 
-export const pushVolunteers = () => (dispatch) => {
-  dispatch(loadVolunteersRequest());
-
-  return API.Volunteers.getPush()
-    .then((res) => dispatch(loadVolunteersSuccess(res.data)))
-    .catch((error) => dispatch(loadVolunteersError(error)));
-};
-
 /*
  * Reducer
  */

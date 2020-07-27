@@ -58,8 +58,7 @@ const Heading = styled(H)`
 const Container = styled.View`
   width: 100%;
   flexGrow: 1;
-  justifyContent: space-between;
-`;
+  justifyContent: space-between;`;
 
 const onInvite = () => {
   console.log("invite pressed");
@@ -196,6 +195,5 @@ const AdminHome: FC<Props> = () => {
     </View>
   );
 }
-
 
 export default AdminHome;

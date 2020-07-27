@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Volunteer App",
+    "name": "TWINE Volunteer App",
     "slug": "nativeApp",
     "privacy": "public",
     "sdkVersion": "35.0.0",
@@ -29,6 +29,7 @@
     "android": {
       "package": "com.powertochange.volunteerapp",
       "versionCode": 1
-    }
+    },
+    "description": "Early published version with production url in "
   }
 }
