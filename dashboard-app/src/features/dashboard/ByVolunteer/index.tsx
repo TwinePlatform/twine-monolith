@@ -107,7 +107,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
       <DownloadModal
         visible={downloadModalVisible}
         closeFunction={()=>setDownloadModalVisible(false)}
-        file={"volunteer template"}
+        filename={"volunteertemplate.csv"}
       />
       <Row center="xs">
         <Col>

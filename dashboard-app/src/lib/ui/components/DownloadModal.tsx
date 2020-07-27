@@ -9,7 +9,7 @@ import { ColoursEnum } from '../design_system';
 type Props = {
   visible: boolean;
   closeFunction: () => void;
-  file: string;
+  filename: string;
 }
 
 /*
@@ -19,17 +19,17 @@ type Props = {
 
 const Heading2 = styled(H2)`
   marginBottom: 20;
-  color: ${ColoursEnum.black};
+  color: ${ColoursEnum.white};
 `;
 
 
 const DownloadModal:FC<Props> = (props) => {
 
-    const {visible, closeFunction, file} = props;
+    const {visible, closeFunction, filename} = props;
 
     const onDownload = () => {
         closeFunction();
-        console.log("downloading " + file)
+        console.log("downloading " + filename)
     }
 
     if(visible)
@@ -44,22 +44,31 @@ const DownloadModal:FC<Props> = (props) => {
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
-                    justifyContent: 'center'
+                    boxShadow: '2px 3px 6px #00000029',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                 }}
             >
                 <div
                     style={{
-                        backgroundColor: ColoursEnum.purple
+                        backgroundColor: ColoursEnum.purple,
+                        borderRadius: "8px 8px 0px 0px",
                     }}
                 >
                 <Heading2>TWINE</Heading2>
                 </div>
-                <p>Are you sure you would like to download?</p>
+                <p
+                    style={{
+                        fontFamily: 'roboto',
+                        fontSize: '25px'
+                    }}
+                >Are you sure you would like to download?</p>
+                <a href={"../../../downloads/" + filename} download>
                 <img
                     onClick={onDownload}
                     src={require('../../../assets/downloadbutton.png')}
                 />
-                <button onClick={onDownload}>upload file</button>
+                </a>
             </div>
         );
     else
