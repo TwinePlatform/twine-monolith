@@ -63,7 +63,7 @@ const DownloadModal:FC<Props> = (props) => {
                         fontSize: '25px'
                     }}
                 >Are you sure you would like to download?</p>
-                <a href={"../../../downloads/" + filename} download>
+                <a href={"../../../downloads/" + filename} download={filename}>
                 <img
                     onClick={onDownload}
                     src={require('../../../assets/downloadbutton.png')}
