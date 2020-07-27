@@ -37,7 +37,7 @@ export namespace Api {
     export namespace Email {
       export namespace POST {
         export interface Request extends Hapi.Request {
-          payload: { email: any };
+          payload: any;
         }
         export type Response = any;
         export type Route = ServerRoute<Request, Response>;
@@ -212,6 +212,15 @@ export namespace Api {
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
 
+        export namespace DELETE {
+          export interface Request extends Hapi.Request {
+            params: { logId: string };
+            pre: { communityBusiness: CommunityBusiness };
+          }
+          export type Result = VolunteerLog;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+
         export namespace sync {
           export namespace POST {
             export interface Request extends Hapi.Request {
@@ -253,7 +262,7 @@ export namespace Api {
 
           export namespace PUT {
             export interface Request extends Hapi.Request {
-              params: { logId: string };
+              params: { userId: string, logId: string };
               payload: Partial<Pick<VolunteerLog, 'activity' | 'duration' | 'project' | 'startedAt'>>;
               pre: {
                 communityBusiness: CommunityBusiness;
@@ -273,14 +282,14 @@ export namespace Api {
           }
         }
 
-          export namespace Note{
-            export namespace GET {
-              export interface Request extends Hapi.Request {
-                query: ApiRequestQuery<VolunteerLog> & { since: string; until: string };
-                pre: {
-                  communityBusiness: CommunityBusiness;
-                };
-              }
+        export namespace Note {
+          export namespace GET {
+            export interface Request extends Hapi.Request {
+              query: ApiRequestQuery<VolunteerLog> & { since: string; until: string };
+              pre: {
+                communityBusiness: CommunityBusiness;
+              };
+            }
             export type Result = any;
             export type Route = ServerRoute<Request, ResponsePayload<Result>>
           }

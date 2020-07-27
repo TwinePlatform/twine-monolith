@@ -145,6 +145,7 @@ export const createProject = (newProject: string) => (dispatch) => {
     })
     .catch((error) => {
       const errorResponse = getErrorResponse(error);
+      console.log(errorResponse);
       dispatch(createProjectError(errorResponse));
     });
 };

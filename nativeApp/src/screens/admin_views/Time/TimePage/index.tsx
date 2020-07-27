@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import moment from 'moment';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 
-import { loadLogs, selectOrderedLogs, selectLogsStatus } from '../../../../redux/entities/logs';
+import { loadLogs, selectOrderedLogs, selectLogsStatus, deleteLog } from '../../../../redux/entities/logs';
 import { loadVolunteers, selectVolunteers } from '../../../../redux/entities/volunteers';
 import useToggle from '../../../../lib/hooks/useToggle';
 
@@ -83,6 +83,11 @@ const AdminTime: FC<Props> = () => {
     }    
   });
 
+  const onDelete = (id) => {
+    toggleDeleteVisibility;
+    dispatch(deleteLog(id));
+  }
+
   return (
     <Page heading="Volunteers Time">
       <ConfirmationModal
@@ -109,9 +114,10 @@ const AdminTime: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
-            onDelete={toggleDeleteVisibility}
+            onDelete={() => { onDelete(log.id) }}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
+            navigationPage='AdminEditTime'
           />
         ))
       }
@@ -128,6 +134,7 @@ const AdminTime: FC<Props> = () => {
             onDelete={toggleDeleteVisibility}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
+            navigationPage='AdminEditTime'
           />
         ))
       }
@@ -144,6 +151,7 @@ const AdminTime: FC<Props> = () => {
             onDelete={toggleDeleteVisibility}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
+            navigationPage='AdminEditTime'
           />
         ))
       }

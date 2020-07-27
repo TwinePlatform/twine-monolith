@@ -383,6 +383,9 @@ export type VolunteerLogCollection = Collection<VolunteerLog> & {
     k: Knex,
     c: CommunityBusiness,
     q?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>;
+  getOwn: (k: Knex,
+    c: CommunityBusiness,
+    q?: ModelQuery<VolunteerLog>) => Promise<VolunteerLog[]>;
   fromUserAtCommunityBusiness: (
     k: Knex,
     u: User, c: CommunityBusiness,
@@ -494,6 +497,7 @@ export type WhereBetweenQuery<T> = {
 export type DateTimeQuery = {
   since: Date;
   until: Date;
+  userId: number;
 };
 
 type ModelQueryInvariant = {

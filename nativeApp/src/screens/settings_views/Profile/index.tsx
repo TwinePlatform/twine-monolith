@@ -17,8 +17,8 @@ type Props = {
  * Component
  */
 const Profile: FC<Props> = () => (
-  <Page heading="Settings">
-    <UserForm onSubmit={() => {}} />
+  <Page heading="Profile">
+    <UserForm onSubmit={() => { }} />
   </Page>
 );
 

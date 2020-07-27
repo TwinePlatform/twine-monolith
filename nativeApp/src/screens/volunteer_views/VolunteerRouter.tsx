@@ -27,20 +27,20 @@ const TabNavigator = createBottomTabNavigator({
   AddTime,
   Time,
 },
-{
-  defaultNavigationOptions: ({ navigation }) => ({
-    tabBarIcon: ({ tintColor }) => {
-      const { routeName } = navigation.state;
-      const iconProps = getIconName(routeName);
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ tintColor }) => {
+        const { routeName } = navigation.state;
+        const iconProps = getIconName(routeName);
 
-      return <MaterialCommunityIcons {...iconProps} color={tintColor} />;
+        return <MaterialCommunityIcons {...iconProps} color={tintColor} />;
+      },
+    }),
+    tabBarOptions: {
+      activeTintColor: ColoursEnum.purple,
+      inactiveTintColor: ColoursEnum.darkGrey,
+      labelStyle: { letterSpacing: 1.02, fontFamily: FontsEnum.regular },
     },
-  }),
-  tabBarOptions: {
-    activeTintColor: ColoursEnum.purple,
-    inactiveTintColor: ColoursEnum.darkGrey,
-    labelStyle: { letterSpacing: 1.02, fontFamily: FontsEnum.regular },
-  },
-});
+  });
 
 export default createAppContainer(TabNavigator);

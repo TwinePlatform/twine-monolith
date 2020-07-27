@@ -214,6 +214,7 @@ export const Users: UserCollection = {
     return Users.getOne(client, { where: { id } });
   },
 
+
   // update user_account set push_token = 'push_token123' where user_account_id = 2;
   async updateToken(client: Knex, user, token) {
 
@@ -232,6 +233,7 @@ export const Users: UserCollection = {
 
     //return null;
   },
+
 
   async destroy(client, user) {
     const preProcessUser = compose(
@@ -263,3 +265,16 @@ export const Users: UserCollection = {
     return currentRoles.every((x) => x.organisationId === cb.id);
   },
 };
+
+
+/*
+ * Get data needed for validation
+ */
+export const userCredentials = {
+  async get(client: Knex, token: any) {
+    const res = await client('user_session_record')
+      .where('session_id', token);
+
+    return res;
+  },
+}

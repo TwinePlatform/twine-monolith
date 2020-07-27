@@ -5,6 +5,7 @@ import { silent } from 'twine-util/promises';
 import {
   response,
   id,
+  userId,
   meOrId,
   since,
   until,
@@ -15,7 +16,8 @@ import {
   volunteerProject
 } from './schema';
 import Roles from '../../../models/role';
-import { VolunteerLogs, Volunteers, VolunteerLog } from '../../../models';
+import { VolunteerLogs, Volunteers, VolunteerLog, VolunteerLogPermissions } from '../../../models';
+import { userCredentials } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import { Api } from '../types/api';
 import { requestQueryToModelQuery } from '../utils';
@@ -75,7 +77,7 @@ const routes: [
         auth: {
           strategy: 'standard',
           access: {
-            scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read'],
+            scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read', 'volunteer_logs-own:read'],
           },
         },
         validate: {
@@ -104,8 +106,32 @@ const routes: [
           ...{ since, until },
         };
 
-        const logs =
-          await VolunteerLogs.fromCommunityBusiness(knex, communityBusiness, query);
+        const token = request.yar.id;
+        //get UserId
+        const credentials = await userCredentials.get(knex, token);
+        const userId = credentials[0].user_account_id;
+
+        const queryown = {
+          ...requestQueryToModelQuery<VolunteerLog>(_query),
+          ...{ userId },
+        }
+
+        // use permission to check for only own 
+        const canReadOthers = await VolunteerLogPermissions.canReadOthers(knex, userId);
+        console.log(canReadOthers);
+
+        var logs;
+        // if have permission to get others then continue, 
+        if (canReadOthers == true) {
+          console.log('canReadOthers');
+          logs = await VolunteerLogs.fromCommunityBusiness(knex, communityBusiness, query);
+        }
+        //else execute the call for just the userId 
+        else {
+          console.log('reading own...');
+          logs = await VolunteerLogs.getOwn(knex, communityBusiness, queryown);
+        }
+        //if userId != call userId boom 
 
         return Promise.all(logs.map(Serialisers.volunteerLogs.identity));
       },
@@ -119,7 +145,7 @@ const routes: [
         auth: {
           strategy: 'standard',
           access: {
-            scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read'],
+            scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read', 'volunteer_logs-own:read'],
           },
         },
         validate: { query: { since, until } },
@@ -191,17 +217,17 @@ const routes: [
 
     {
       method: 'PUT',
-      path: '/community-businesses/me/volunteer-logs/{logId}',
+      path: '/community-businesses/me/volunteer-logs/{userId}/{logId}',
       options: {
         description: 'Update volunteer logs noted of specific log id',
         auth: {
           strategy: 'standard',
           access: {
-            scope: ['volunteer_logs-sibling:write', 'volunteer_logs-child:write'],
+            scope: ['volunteer_logs-sibling:write', 'volunteer_logs-child:write', 'volunteer_logs-own:read'],
           },
         },
         validate: {
-          params: { logId: id },
+          params: { userId: userId, logId: id },
           payload: {
             activity: volunteerLogActivity,
             duration: volunteerLogDuration,
@@ -217,14 +243,14 @@ const routes: [
       handler: async (request, h) => {
         const {
           server: { app: { knex } },
-          params: { logId },
+          params: { userId, logId },
           payload,
           pre: { communityBusiness },
         } = request;
 
         const log = await VolunteerLogs.getOne(
           knex,
-          { where: { id: Number(logId), organisationId: communityBusiness.id } }
+          { where: { id: Number(logId), userId: Number(userId), organisationId: communityBusiness.id } }
         );
 
         if (!log) {
@@ -285,7 +311,7 @@ const routes: [
         auth: {
           strategy: 'standard',
           access: {
-            scope: ['volunteer_logs-sibling:delete', 'volunteer_logs-child:delete'],
+            scope: ['volunteer_logs-sibling:delete', 'volunteer_logs-child:delete', 'volunteer_logs-own:read'],
           },
         },
         validate: {
@@ -365,7 +391,8 @@ const routes: [
 
           const hasPermission =
             scope.includes('volunteer_logs-child:write') ||
-            scope.includes('volunteer_logs-sibling:write');
+            scope.includes('volunteer_logs-sibling:write') ||
+            scope.includes('volunteer_logs-own:write');  //for volunteer to write their own, ToDo: need to make sure dont't write for others!!!!
 
           // To continue, userId must correspond to VOLUNTEER/VOLUNTEER_ADMIN
           if (!isTargetVolunteer) {

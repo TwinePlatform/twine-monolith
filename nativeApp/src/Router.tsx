@@ -13,18 +13,26 @@ import AdminRouter from "./screens/admin_views/AdminRouter";
 import SettingsButton from "./lib/ui/SettingsButton";
 import SettingsPage from "./screens/settings_views/SettingsPage/index";
 import AdminEditTime from "./screens/admin_views/Time/EditTime";
+import VolunteerEditTime from "./screens/volunteer_views/Time/EditTime";
 import AdminEditVolunteer from "./screens/admin_views/Volunteers/EditVolunteer";
 import AdminAddVolunteer from "./screens/admin_views/Volunteers/AddVolunteer";
 import AdminAddProject from "./screens/admin_views/Projects/AddProject";
 import AuthenticationLoader from "./authentication/AuthenticationLoader";
 import Profile from "./screens/settings_views/Profile";
 import TnC from "./screens/settings_views/TnC";
+import Error from "./screens/open_views/Error/index";
+import VolunteersBadges from "./screens/volunteer_views/VolunteerHome/VolunteersBadges";
 
 const additionalAdminPages = {
   AdminEditTime,
   AdminEditVolunteer,
   AdminAddVolunteer,
   AdminAddProject,
+};
+
+const additionalVolunteerPages = {
+  VolunteersBadges,
+  VolunteerEditTime,
 };
 
 const sharedNavigationsConfig = {
@@ -67,6 +75,9 @@ const AdminStack = createStackNavigator(
     AdminRouter: {
       screen: AdminRouter,
     },
+    Error: {
+      screen: Error,
+    },
     ...Settings,
     ...additionalAdminPages,
   },
@@ -83,6 +94,10 @@ const VolunteerStack = createStackNavigator(
     VolunteerRouter: {
       screen: VolunteerRouter,
     },
+    Error: {
+      screen: Error,
+    },
+    ...additionalVolunteerPages,
     ...Settings,
   },
   {

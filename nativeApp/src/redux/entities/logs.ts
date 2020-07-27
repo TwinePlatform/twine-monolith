@@ -110,8 +110,14 @@ export const loadLogs = (since?: Date, until?: Date) => (dispatch) => {
   dispatch(loadLogsRequest());
 
   return API.VolunteerLogs.get(since, until)
-    .then((res) => dispatch(loadLogsSuccess(res.data)))
-    .catch((error) => dispatch(loadLogsError(error)));
+    .then((res) => {
+      dispatch(loadLogsSuccess(res.data));
+      return res.data;
+    })
+    .catch((error) => {
+      dispatch(loadLogsError(error));
+      return error;
+    });
 };
 
 export const createLog = (values: Partial<VolunteerLog>) => (dispatch) => {
@@ -121,27 +127,31 @@ export const createLog = (values: Partial<VolunteerLog>) => (dispatch) => {
     .then((result) => {
       dispatch(createLogSuccess());
       dispatch(loadLogs());
-      if(values.note != "")
-        API.Notes.set(values.note, result.data.id, values.activity, values.project, values.startedAt) 
+      if (values.note != "") {
+        API.Notes.set(values.note, result.data.id, values.activity, values.project, values.startedAt)
+      }
+      return result;
     })
     .catch((error) => {
       const errorResponse = getErrorResponse(error);
       dispatch(createLogError(errorResponse));
+      return error.response.data;
     });
 };
 
 
-export const updateLog = (id: number, name: string) => (dispatch) => {
+export const updateLog = (id: number, LogId: number, values: Partial<VolunteerLog>) => (dispatch) => {
   dispatch(updateLogRequest());
-
-  return API.VolunteerLogs.update(id, name)
-    .then(() => {
+  return API.VolunteerLogs.update(id, LogId, values)
+    .then((result) => {
       dispatch(updateLogSuccess());
       dispatch(loadLogs());
+      return result;
     })
     .catch((error) => {
       const errorResponse = getErrorResponse(error);
       dispatch(updateLogError(errorResponse));
+      return error;
     });
 };
 

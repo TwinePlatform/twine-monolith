@@ -15,6 +15,7 @@ import {
   restoreProject,
   selectAllOrderedProjects,
   selectProjectsStatus,
+  createProjectReset,
 } from '../../../redux/entities/projects';
 import Loader from '../../../lib/ui/Loader';
 import { formatDate } from '../../../lib/utils/time';
@@ -71,7 +72,7 @@ const ProjectTab: FC<PropsProjectTab> = ({
         text={confirmationText}
       />
 
-      { projects && projects.map((project) => (
+      {projects && projects.map((project) => (
         <ProjectCard
           key={project.id}
           id={project.id}
@@ -99,7 +100,11 @@ const Projects: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   const projectsRequestStatus = useSelector(selectProjectsStatus, shallowEqual);
   return (
     <Page heading="Projects" withAddBar>
-      <AddBar onPress={() => navigation.navigate('AdminAddProject')} title="Add Project" />
+      <AddBar onPress={() => {
+        dispatch(createProjectReset());
+        console.log('project reset');
+        navigation.navigate('AdminAddProject');
+      }} title="Add Project" />
       <Loader isVisible={projectsRequestStatus.isFetching} />
 
       <Tabs
