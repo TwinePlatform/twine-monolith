@@ -108,7 +108,10 @@ const Stats: FC<Props> = () => {
         <Stat
           heading="TOTAL TIME GIVEN"
           value={hours.toString()}
-          </View>
+          unit="hours"
+          />
+        </Container>
+      </View>
    )
 };
 
