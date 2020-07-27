@@ -9,6 +9,7 @@ import Page from '../../../lib/ui/Page';
 import { FontsEnum } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
 const logo = require('../../../../assets/images/Error.png');
+import { TouchableOpacity } from 'react-native';
 
 /*
  * Types
@@ -48,6 +49,21 @@ const TextBottom = styled.Text`
   fontFamily: ${FontsEnum.regular};
 `
 
+const Submit = styled.View`
+  width: 100%;
+  height: 48px;
+  backgroundColor: ${ColoursEnum.purple};
+  alignItems: center;
+  justifyContent: center;
+  marginTop: 20;
+  marginBottom: ${props => props.marginBottom || 40};
+  border-radius: 5px;
+  box-shadow: 0px 2px 3px #33333333;
+  shadow-radius: 3;
+  elevation: 1;
+  shadow-opacity: 1;
+`;
+
 /*
  * Component
  */
@@ -64,8 +80,23 @@ const Error: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
         <TextAbove>Oops!</TextAbove>
         <Image source={logo} />
         <TextBottom>*Something is not right, please select an option</TextBottom>
-        <SubmitButton marginBottom='10' text="Try Again" onPress={() => onSubmit()} />
-        <SubmitButton text="Home" onPress={() => onSubmit()} />
+
+        <TouchableOpacity
+          onPress={() => onSubmit()}
+        >
+          <Submit marginBottom='10'>
+            <SubmitText >Try Again</SubmitText>
+          </Submit>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => onSubmit()}
+        >
+          <Submit marginBottom='10'>
+            <SubmitText >Home</SubmitText>
+          </Submit>
+        </TouchableOpacity>
+
       </Container>
     </Page>
   )

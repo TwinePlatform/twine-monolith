@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-
+import { NavigationInjectedProps } from 'react-navigation';
 import { Heading as H } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import useToggle from '../../../lib/hooks/useToggle';
@@ -26,18 +26,6 @@ type Props = {
 /*
  * Styles
  */
-
-/*
-const View = styled.ScrollView`
- flexDirection: column;
- alignItems: center;
- paddingTop: 20;
- paddingBottom: 20;
- paddingLeft: 40;
- paddingRight: 40;
- flex: 1;
-`;
-*/
 const View = styled.ScrollView.attrs(() => ({
   contentContainerStyle: {
     flexDirection: 'column',
@@ -61,16 +49,16 @@ const Container = styled.View`
   justifyContent: space-between;`;
 
 const onInvite = () => {
-  console.log("invite pressed");
   return <Heading>invite</Heading>
 }
 /*
  * Component
  */
-const AdminHome: FC<Props> = () => {
+const AdminHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   const [visibleConfirmationModal, toggleInviteVisibility] = useToggle(false);
   const dispatch = useDispatch();
   const [logged, setLogged] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
   const logs = useSelector(selectOrderedLogs, shallowEqual);
   let hours = 0;
@@ -97,6 +85,7 @@ const AdminHome: FC<Props> = () => {
 
   //access fail to send log and try logging them again
   const checkStorage = async () => {
+
     var logStore = await AsyncStorage.getItem('log cache');
     logStore = logStore == null ? [] : JSON.parse(logStore);
     var arr = Object.values(logStore);
@@ -152,6 +141,11 @@ const AdminHome: FC<Props> = () => {
   }
 
   useEffect(() => {
+    AsyncStorage.getItem('HelpSlides').then(val => {
+      if (!val) {
+        navigation.navigate('HelpSlideStack');
+      }
+    })
     checkStorage();
     dispatch(loadLogs());
   }, []);

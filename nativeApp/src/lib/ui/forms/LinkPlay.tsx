@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import { Item as I, Label as L, Button as B } from 'native-base';
-import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import { ColoursEnum } from '../colours';
 
 
@@ -9,8 +9,8 @@ import { ColoursEnum } from '../colours';
  * Types
  */
 type Props = {
-  title: string;
-  onPress: () => void;
+    title: string;
+    onPress: () => void;
 }
 
 /*
@@ -35,14 +35,14 @@ const Button = styled(B)`
 /*
  * Component
  */
-const LinkItem: FC<Props> = ({ title, children: icon, onPress }) => (
-  <Item inlineLabel>
-    <Button transparent onPress={onPress}>
-      {icon}
-      <Label>{title}</Label>
-      <AntDesign name="caretright" size={15} color={ColoursEnum.darkGrey} />
-    </Button>
-  </Item>
+const LinkPlay: FC<Props> = ({ title, children: icon, onPress }) => (
+    <Item inlineLabel>
+        <Button transparent onPress={onPress}>
+            {icon}
+            <Label>{title}</Label>
+            <FontAwesome name="play-circle-o" size={20} color={ColoursEnum.purple} />
+        </Button>
+    </Item>
 );
 
-export default LinkItem;
+export default LinkPlay;

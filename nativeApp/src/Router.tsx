@@ -19,6 +19,7 @@ import AdminAddVolunteer from "./screens/admin_views/Volunteers/AddVolunteer";
 import AdminAddProject from "./screens/admin_views/Projects/AddProject";
 import AuthenticationLoader from "./authentication/AuthenticationLoader";
 import Profile from "./screens/settings_views/Profile";
+import { slide1, slide2, slide3, slide4, slide5, slide6 } from "./screens/settings_views/HelpSlides";
 import TnC from "./screens/settings_views/TnC";
 import Error from "./screens/open_views/Error/index";
 import VolunteersBadges from "./screens/volunteer_views/VolunteerHome/VolunteersBadges";
@@ -108,12 +109,52 @@ const VolunteerStack = createStackNavigator(
   }
 );
 
+const HelpSlideStack = createStackNavigator({
+  slide1: {
+    screen: slide1,
+    navigationOptions: () => ({
+      headerShown: false,
+    }),
+  },
+  slide2: {
+    screen: slide2,
+    navigationOptions: () => ({
+      headerShown: false,
+    }),
+  },
+  slide3: {
+    screen: slide3,
+    navigationOptions: () => ({
+      headerShown: false,
+    }),
+  },
+  slide4: {
+    screen: slide4,
+    navigationOptions: () => ({
+      headerShown: false,
+    }),
+  },
+  slide5: {
+    screen: slide5,
+    navigationOptions: () => ({
+      headerShown: false,
+    }),
+  },
+  slide6: {
+    screen: slide6,
+    navigationOptions: () => ({
+      headerShown: false,
+    }),
+  }
+});
+
 const RootStack = createSwitchNavigator(
   {
     AuthStack,
     AuthenticationLoader,
     AdminStack,
     VolunteerStack,
+    HelpSlideStack,
   },
   {
     initialRouteName: "AuthenticationLoader",
