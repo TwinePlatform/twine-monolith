@@ -12,6 +12,9 @@ import SubmitButton from '../SubmitButton';
 import { User, GenderEnum } from '../../../../../../api/src/models';
 import { ErrorText } from '../../typography';
 
+import { Formik } from 'formik';
+import { TextInput } from "react-native";
+
 /*
  * Types
  */
@@ -51,8 +54,8 @@ const validationSchema = yup.object().shape({
     .min(3, 'Name must be at least 3 lettters')
     .max(30, 'Name cannot be longer than 30 letters')
     // .matches({
-  // regex: /^[a-zA-Z]{2,}\s?[a-zA-z]*['-]?[a-zA-Z]*['\- ]?([a-zA-Z]{1,})?/,
-  // message: 'Name must not contain special characters' })
+    // regex: /^[a-zA-Z]{2,}\s?[a-zA-z]*['-]?[a-zA-Z]*['\- ]?([a-zA-Z]{1,})?/,
+    // message: 'Name must not contain special characters' })
     .required('Name is required'),
   email: yup.string()
     .email('Email must be valid')
@@ -100,72 +103,115 @@ const mergeErrorMessages = (validationErrors, requestErrors) => {
  * Component
  */
 const UserForm: FC<Props> = ({
-  action, onSubmit, defaultValues = {}, requestErrors,
+  action, onSubmit, defaultValues, requestErrors,
 }) => {
-  const {
-    register, setValue, handleSubmit, errors: validationErrors, triggerValidation,
-  } = useForm<FormData>({ defaultValues, validationSchema });
+  // const {
+  //   register, setValue, handleSubmit, errors: validationErrors, triggerValidation,
+  // } = useForm<FormData>({ defaultValues, validationSchema });
 
-  const [errors, setErrors] = useState({});
+  // const [errors, setErrors] = useState({});
 
-  useEffect(() => {
-    setErrors(mergeErrorMessages(validationErrors, requestErrors));
-  }, [validationErrors, requestErrors]);
+
+  // useEffect(() => {
+  //   setErrors(mergeErrorMessages(validationErrors, requestErrors));
+  // }, [validationErrors, requestErrors]);
+  const { name, email, phoneNumber, gender, birthYear, postCode } = defaultValues;
 
   return (
-    <Form>
-      <Input
-        ref={register({ name: 'name' })}
-        label="Full name"
-        onChangeText={(text) => setValue('name', text)}
-        defaultValue={defaultValues.name}
-        onBlur={async () => triggerValidation()}
-        error={Boolean(errors.name)}
-      />
-      <Input
-        ref={register({ name: 'email' })}
-        label="Email"
-        onChangeText={(text) => setValue('email', text)}
-        defaultValue={defaultValues.email}
-        onBlur={async () => triggerValidation()}
-        error={Boolean(errors.email)}
-      />
-      { action === 'update' && <Button label="Password" text="Send password reset email" />}
-      {/* //TODO - need to send password reset email after creation */}
-      <Input
-        ref={register({ name: 'phoneNumber' })}
-        label="Number"
-        onChangeText={(text) => setValue('phoneNumber', text)}
-        defaultValue={defaultValues.phoneNumber}
-        onBlur={async () => triggerValidation()}
-        error={Boolean(errors.phoneNumber)}
-      />
-      <Dropdown
-        ref={register({ name: 'gender' })}
-        label="Gender"
-        options={genders}
-        onValueChange={(text) => setValue('gender', text)}
-        defaultValue={defaultValues.gender}
-      />
-      <Dropdown
-        ref={register({ name: 'birthYear' })}
-        label="Year of birth"
-        options={birthYears}
-        onValueChange={(text) => setValue('birthYear', text)}
-        defaultValue={defaultValues.birthYear && defaultValues.birthYear.toString()}
-      />
-      <Input
-        ref={register({ name: 'postCode' })}
-        label="Post code"
-        onChangeText={(text) => setValue('postCode', text)}
-        defaultValue={defaultValues.postCode}
-        onBlur={async () => triggerValidation()}
-        error={Boolean(errors.postCode)}
-      />
 
-      <SubmitButton text="SAVE" onPress={handleSubmit(onSubmit)} />
-      {Object.keys(errors).map((key) => (<ErrorText key={key}>{errors[key]}</ErrorText>))}
-    </Form>
+    <Formik
+      initialValues={{
+        name: name,
+        email: email,
+        phoneNumber: phoneNumber,
+        gender: gender,
+        birthYear: birthYear,
+        postCode: postCode
+      }}
+      validationSchema={validationSchema}
+      onSubmit={(values) => {
+        console.log(values);
+        onSubmit(values);
+      }}>
+
+      {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+
+        <Form>
+
+          <Input
+            label="Full name"
+            value={values.name}
+            onChangeText={handleChange('name')}
+            onBlur={handleBlur('name')}
+          />
+          {errors.name &&
+            <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.name}</TextInput>
+          }
+
+          <Input
+            label="Email"
+            placeholder={"Email"}
+            onChangeText={handleChange('email')}
+            onBlur={handleBlur('email')}
+            value={values.email}
+          />
+          {errors.email &&
+            <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.email}</TextInput>
+          }
+
+          {action === 'update' && <Button label="Password" text="Send password reset email" />}
+
+          {/* //TODO - need to send password reset email after creation */}
+
+          <Input
+            label="phoneNumber"
+            placeholder={"phoneNumber"}
+            onChangeText={handleChange('phoneNumber')}
+            onBlur={handleBlur('phoneNumber')}
+            value={values.phoneNumber}
+          />
+          {errors.phoneNumber &&
+            <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.phoneNumber}</TextInput>
+          }
+
+
+          <Dropdown
+            label="Gender"
+            options={genders}
+            onValueChange={handleChange('gender')}
+            defaultValue={values.gender && values.gender.toString()}
+          />
+          {errors.gender &&
+            <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.gender}</TextInput>
+          }
+
+          <Dropdown
+            label="Year of birth"
+            options={birthYears}
+            onValueChange={handleChange('birthYear')}
+            defaultValue={values.birthYear && values.birthYear.toString()}
+          />
+          {errors.birthYear &&
+            <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.birthYear}</TextInput>
+          }
+
+          <Input
+            label="postCode"
+            placeholder={"postCode"}
+            onChangeText={handleChange('postCode')}
+            onBlur={handleBlur('postCode')}
+            value={values.postCode}
+          />
+          {errors.postCode &&
+            <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.postCode}</TextInput>
+          }
+
+          <SubmitButton text="SAVE" onPress={handleSubmit} />
+
+        </Form>
+
+      )}
+    </Formik>
   );
 };
 
