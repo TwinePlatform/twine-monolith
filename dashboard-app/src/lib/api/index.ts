@@ -32,15 +32,15 @@ const makeRequest = async <T = any>(params: AxiosRequestConfig) => {
   }
   return axios2.request<T>({ headers, ...params });
 };
-
+/*
 export const Roles = {
   get: () => makeRequest({ method: "GET", url: "/users/me/roles" }),
 };
-
-/*export const Roles = {
+*/
+export const Roles = {
   get: () => axios.get('/users/me/roles'),
 };
-*/
+
 
 export const CbAdmins = {
   get: () => {

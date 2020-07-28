@@ -10,6 +10,8 @@ import { H1 } from '../../../lib/ui/components/Headings';
 import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../../lib/ui/design_system';
+import DownloadModal from '../../../lib/ui/components/DownloadModal';
+import UploadModal from '../../../lib/ui/components/UploadModal';
 import TimeTabs from './TimeTabs';
 import Errors from '../components/Errors';
 import useAggregateDataByTime from './useAggregateDataByTime';
@@ -42,6 +44,8 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [legendData, setLegendData] = useState<LegendData>([]);
+  const [uploadModalVisible, setUploadModalVisible] = useState(false);
+  const [downloadModalVisible, setDownloadModalVisible] = useState(false);
   const { data, loading, error, months } =
     useAggregateDataByTime({ from: fromDate, to: toDate });
 
@@ -87,6 +91,16 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
 
   return (
     <Container>
+      <UploadModal
+        visible={uploadModalVisible}
+        closeFunction={()=>setUploadModalVisible(false)}
+        file={"time"}
+      />
+      <DownloadModal
+        visible={downloadModalVisible}
+        closeFunction={()=>setDownloadModalVisible(false)}
+        filename={"timetemplate.csv"}
+      />
       <Row center="xs">
         <Col>
           <H1>{TitlesCopy.Time.title}</H1>
