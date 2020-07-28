@@ -1,4 +1,4 @@
-import { toCancellable, pairs, reduceVisitorsToFields } from '../util';
+import { toCancellable, pairs, reduceVisitorsToFields, mapValues, combineValues, collectBy, repeat } from '../util';
 
 
 describe('Client utility functions', () => {
@@ -188,6 +188,68 @@ describe('Client utility functions', () => {
 
       expect(reduceVisitorsToFields(input).sort())
         .toEqual(['name', 'email', 'postCode', 'phoneNumber'].sort());
+    });
+  });
+
+  describe('mapValues', () => {
+    test('empty object unchanged', () => {
+      expect(mapValues(() => 1, {})).toEqual({});
+    });
+
+    test('identity function leaves object unchanged', () => {
+      expect(mapValues(a => a, { a: 1, b: 2, c: 3 })).toEqual({ a: 1, b: 2, c: 3 });
+    });
+
+    test('increment values', () => {
+      expect(mapValues(a => a + 1, { a: 0, b: 1, c: 2 })).toEqual({ a: 1, b: 2, c: 3 });
+    });
+  });
+
+  describe('combineValues', () => {
+    test('empty array -> empty object', () => {
+      expect(combineValues([])).toEqual({});
+    });
+
+    test('collects values in identical keys', () => {
+      expect(combineValues([{ a: 1, b: 2, c: 3 }, { a: 1 }, { c: 2 }]))
+        .toEqual({
+          a: [1, 1],
+          b: [2],
+          c: [3, 2],
+        });
+    });
+  });
+
+  describe('collectBy', () => {
+    test('empty array -> empty object', () => {
+      expect(collectBy(() => 1, [])).toEqual({});
+    });
+
+    test('collect by key', () => {
+      expect(collectBy(a => a.key, [{ key: 'a', value: 1 }, { key: 'a', value: 2 }, { key: 'b', value: 3 }]))
+        .toEqual({
+          a: [{ key: 'a', value: 1 }, { key: 'a', value: 2 }],
+          b: [{ key: 'b', value: 3 }],
+        });
+    });
+  });
+
+  describe('repeat', () => {
+    test('0 -> empty array', () => {
+      expect(repeat([1, 2, 3], 0)).toEqual([]);
+    });
+
+    test('n <= length -> part of array', () => {
+      expect(repeat([1, 2, 3], 1)).toEqual([1]);
+      expect(repeat([1, 2, 3], 2)).toEqual([1, 2]);
+      expect(repeat([1, 2, 3], 3)).toEqual([1, 2, 3]);
+    });
+
+    test('n > length -> repeat array', () => {
+      expect(repeat([1, 2, 3], 4)).toEqual([1, 2, 3, 1]);
+      expect(repeat([1, 2, 3], 5)).toEqual([1, 2, 3, 1, 2]);
+      expect(repeat([1, 2, 3], 6)).toEqual([1, 2, 3, 1, 2, 3]);
+      expect(repeat([1, 2, 3], 7)).toEqual([1, 2, 3, 1, 2, 3, 1]);
     });
   });
 });

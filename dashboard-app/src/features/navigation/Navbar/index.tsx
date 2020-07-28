@@ -51,10 +51,10 @@ const Navbar: React.FunctionComponent<Props> = (props) => {
 
   return (
     <PaddedRow middle="xs" between="xs">
-      <Col xs={5} md={7} lg={8}>
+      <Col xs={4} md={6} lg={7}>
         <TextLogo/>
       </Col>
-      <Col xs={7} md={5} lg={4}>
+      <Col xs={8} md={6} lg={5}>
         { isLoggedIn && <NavLinks links={links} withLogout={isLoggedIn}/> }
       </Col>
     </PaddedRow>
