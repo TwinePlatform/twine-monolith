@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { AsyncStorage, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
@@ -72,8 +72,8 @@ const Login: FC<Props> = (props) => {
   const onSubmit = async () => {
     try {
 
-//       const data = await API.Authentication.login({ email, password });
-//       await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.data.token);
+      //       const data = await API.Authentication.login({ email, password });
+      //       await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.data.token);
 
       const { data } = await API.Authentication.login({ email, password });
       await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.token);
@@ -84,6 +84,14 @@ const Login: FC<Props> = (props) => {
       // handle error response
     }
   };
+
+  useEffect(() => {
+    AsyncStorage.getItem('HelpSlides').then(val => {
+      if (!val) {
+        props.navigation.navigate('HelpSlideStack');
+      }
+    })
+  }, []);
 
   if (serverError == 'Unknown account') {
     setError(`This email address doesn’t appear to be registered to Twine Volunteer.`);

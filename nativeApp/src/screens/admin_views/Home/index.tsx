@@ -141,11 +141,6 @@ const AdminHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   }
 
   useEffect(() => {
-    AsyncStorage.getItem('HelpSlides').then(val => {
-      if (!val) {
-        navigation.navigate('HelpSlideStack');
-      }
-    })
     checkStorage();
     dispatch(loadLogs());
   }, []);

@@ -149,7 +149,19 @@ const images = {
 
 const HelpSlidesEnd: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
 
-	AsyncStorage.setItem('HelpSlides', 'loaded');
+	let navigateExit;
+	AsyncStorage.getItem('HelpSlides').then(val => {
+		if (!val) {
+			navigateExit = 'AuthStack'
+			AsyncStorage.setItem('HelpSlides', 'loaded');
+		}
+		else {
+			navigateExit = 'SettingsPage';
+		}
+	})
+
+
+
 
 	return (
 
@@ -159,7 +171,7 @@ const HelpSlidesEnd: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
 				<ImageBackground style={styles.image} source={images['slide2']} >
 
 					<NavBar>
-						<TouchableOpacity onPress={() => navigation.navigate('SettingsPage')}>
+						<TouchableOpacity onPress={() => navigation.navigate(navigateExit)}>
 							<TextRight>X</TextRight>
 						</TouchableOpacity>
 					</NavBar>

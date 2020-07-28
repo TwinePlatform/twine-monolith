@@ -105,7 +105,7 @@ const Stats: FC<Props> = () => {
   return (
     <View>
       <Container>
-      <Stat
+        <Stat
           heading="TOTAL TIME GIVEN"
           value={hours.toString()}
           unit="hours"
@@ -128,9 +128,9 @@ const Stats: FC<Props> = () => {
         >
           <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
         </Stat>
-        </Container>
-      </View>
-   )
+      </Container>
+    </View>
+  )
 };
 
 const badgearray = [BadgeObj.FirstLogBadge, BadgeObj.ThridMonthBadge];
@@ -150,7 +150,7 @@ const BadgeTab: FC<Props> = (props) => {
 // const Badges = [FirstLogCard, InviteMedalCard];
 
 const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
-    const registerForPushNotificationsAsync = async () => {
+  const registerForPushNotificationsAsync = async () => {
 
     // const [expoPushToken, setexpoPushToken] = useState('');
     // const [notification, setnotification] = useState<any>();
@@ -201,8 +201,8 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
     }
   };
 
-  registerForPushNotificationsAsync();       
-     
+  registerForPushNotificationsAsync();
+
   const [stats, setBadge] = useToggle(false);
   const dispatch = useDispatch();
   const [userID, setUserID] = useState('');
