@@ -12,6 +12,7 @@ const routes: [
   Api.CommunityBusinesses.Me.Volunteers.Projects.Id.GET.Route,
   Api.CommunityBusinesses.Me.Volunteers.Projects.Id.PUT.Route,
   Api.CommunityBusinesses.Me.Volunteers.Projects.Id.DELETE.Route,
+  Api.CommunityBusinesses.Me.Volunteers.Projects.Id.Restore.PATCH.Route,
 ] = [
   {
     method: 'GET',
@@ -179,11 +180,54 @@ const routes: [
     },
   },
 
+  
   {
     method: 'DELETE',
     path: '/community-businesses/me/volunteers/projects/{projectId}',
     options: {
       description: 'Mark volunteer logs for own community business as deleted',
+      auth: {
+        strategy: 'standard',
+        access: {
+          scope: [
+            'organisations_volunteers-parent:delete',
+            'organisations_volunteers-own:delete',
+          ],
+        },
+      },
+      validate: {
+        params: { projectId: id },
+      },
+      response: { schema: response },
+      pre: [
+        { method: getCommunityBusiness, assign: 'communityBusiness' },
+      ],
+    },
+    handler: async (request, h) => {
+      const {
+        server: { app: { knex } },
+        params: { projectId },
+        pre: { communityBusiness },
+      } = request;
+
+      const projects = await VolunteerLogs.getProjects(knex, communityBusiness, { where: { deletedAt: null } });
+      const project = projects.find((p) => p.id === Number(projectId));
+
+      if (!project) {
+        return Boom.notFound('No project found with this ID under this organisation');
+      }
+
+      await VolunteerLogs.deleteProject(knex, project);
+
+      return null;
+    },
+  },
+
+  {
+    method: 'PATCH',
+    path: '/community-businesses/me/volunteers/projects/{projectId}/restore',
+    options: {
+      description: 'Restore deleted volunteer logs for own community business as deleted',
       auth: {
         strategy: 'standard',
         access: {
@@ -215,11 +259,16 @@ const routes: [
         return Boom.notFound('No project found with this ID under this organisation');
       }
 
-      await VolunteerLogs.deleteProject(knex, project);
+      if (!project.deletedAt) {
+        return Boom.notFound('Targetted project is not deleted');
+      }
+
+      await VolunteerLogs.restoreProject(knex, project);
 
       return null;
     },
   },
+
 ];
 
 export default routes;

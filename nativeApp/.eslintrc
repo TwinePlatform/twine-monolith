@@ -1,0 +1,63 @@
+{
+  "plugins": [
+    "react",
+    "react-native",
+    "@typescript-eslint/eslint-plugin"
+  ],
+  "extends": [
+    "plugin:react-native/all",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "airbnb"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "jest": true
+  },
+  "rules": {
+    "react-native/no-color-literals": 0,
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "react/prop-types": 0,
+    "react-native/no-raw-text": 0,
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".tsx"
+        ]
+      }
+    ],
+    "import/no-extraneous-dependencies": 0,
+    "react/jsx-pascal-case": 0,
+    "react/jsx-props-no-spreading": 0,
+    "react/state-in-constructor": 0,
+    "import/prefer-default-export": 0,
+    "@typescript-eslint/no-var-requires": 0
+  },
+  "settings": {
+    "import/extensions": [
+      ".js",
+      ".jsx",
+      ".ts",
+      ".tsx"
+    ],
+    "import/parsers": {
+      "@typescript-eslint/parser": [
+        ".ts",
+        ".tsx"
+      ]
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
+      }
+    }
+  }
+}

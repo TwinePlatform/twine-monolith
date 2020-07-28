@@ -30,7 +30,13 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
     path: '/users/register/volunteers',
     options: {
       description: 'Retreive list of all users',
-      auth: false,
+      auth: {
+        mode: 'try',
+        strategy: 'standard',
+        access: {
+          scope: ['user_details-child:write'],
+        }
+      },
       validate: {
         payload: {
           organisationId: id.required(),
@@ -42,7 +48,7 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
           email: email.required(),
           phoneNumber: phoneNumber.allow(''),
           postCode: postCode.allow(''),
-          password: password.required(),
+          password: password,
           emailConsent: isEmailConsentGranted.default(false),
           smsConsent: isSMSConsentGranted.default(false),
         },
@@ -53,11 +59,20 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
       const {
         server: { app: { knex, EmailService, config } },
         payload,
+        auth
       } = request;
       const { email, role, organisationId, adminCode } = payload;
+
       /*
        * Preliminaries
        */
+
+      // Authenticated requests do not need to supply a password https://github.com/TwinePlatform/twine-monolith/issues/401
+      if (!auth.isAuthenticated && !payload.password) {
+        return Boom.badRequest('password is required', {
+          validation: { name: 'is required' }
+        })
+      }
 
       const communityBusiness = await CommunityBusinesses
         .getOne(knex, { where: { id: organisationId, deletedAt: null } });
@@ -70,7 +85,7 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
       if (await Users.exists(knex, { where: { email } })) {
         // VOLUNTEER_ADMIN cannot have a second role
         if (role === RoleEnum.VOLUNTEER_ADMIN) {
-          return Boom.conflict('User with this e-mail already registered');
+          return Boom.conflict('It appears this email is already registered. Try logging in, or speak to an admin if you need help');
         }
         // Registering second role
         const user = await Users.getOne(knex, { where: { email } });
@@ -110,7 +125,7 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
        */
 
       if (role === RoleEnum.VOLUNTEER_ADMIN && !adminCode) {
-        return Boom.badRequest('Missing volunteer admin code');
+        return Boom.badRequest('Registration Unsuccessful: The admin code is for staff members to register admin accounts. If you are a volunteer, just leave it blank. If you are staff, seek assistance from whoever set up Twine at your organisation.');
       }
 
       try {
@@ -124,6 +139,14 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
           return Boom.unauthorized(error.message);
         }
         return error;
+      }
+
+      /*
+       * Auxillary
+       */
+
+      if (auth.isAuthenticated) {
+        //TODO: send email if authenticated
       }
     },
   },

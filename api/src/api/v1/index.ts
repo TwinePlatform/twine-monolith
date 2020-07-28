@@ -16,6 +16,7 @@ import users from './users';
 import regions from './regions';
 import communityBusinesses from './community_businesses';
 import logs from './user_logs';
+import invite from './invite';
 import addLifecycleHooks from './hooks';
 import setupAuthentication from './auth';
 
@@ -56,6 +57,7 @@ export default {
       ...communityBusinesses,
       ...regions,
       ...logs,
+      ...invite,
     ]
       // Ensures failing request validation returns meaningful message in payload
       .map(addFailActionTo('validate'))

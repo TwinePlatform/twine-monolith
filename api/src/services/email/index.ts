@@ -8,22 +8,25 @@ import { AppEnum } from '../../types/internal';
 
 export type EmailService = {
   newVisitor:
-    (c: Config, v: User, a: User, cb: CommunityBusiness, at: string) => Promise<void>
+  (c: Config, v: User, a: User, cb: CommunityBusiness, at: string) => Promise<void>
 
   visitorReminder:
-    (c: Config, v: User, cb: CommunityBusiness, at: string) => Promise<void>
+  (c: Config, v: User, cb: CommunityBusiness, at: string) => Promise<void>
 
   newVolunteer:
-    (c: Config, v: User, a: User, cb: CommunityBusiness) => Promise<void>
+  (c: Config, v: User, a: User, cb: CommunityBusiness) => Promise<void>
 
   newCbAdmin:
-    (c: Config, a: User, cb: CommunityBusiness, t: string) => Promise<void>
+  (c: Config, a: User, cb: CommunityBusiness, t: string) => Promise<void>
 
   addRole:
-    (c: Config, a: User, cb: CommunityBusiness, r: RoleEnum, t: string) => Promise<void>
+  (c: Config, a: User, cb: CommunityBusiness, r: RoleEnum, t: string) => Promise<void>
 
   resetPassword:
-    (c: Config, ap: AppEnum, a: User, t: string) => Promise<void>
+  (c: Config, ap: AppEnum, a: User, t: string) => Promise<void>
+
+  inviteVolunteer:
+  (c: Config, email_add: string, email_subject: string, text_above: string, text_below: string) => Promise<void>
 
   webhooks: {
     onHerokuStagingRelease: (c: Config, appName: string) => Promise<void>
@@ -31,7 +34,7 @@ export type EmailService = {
 };
 
 const webhooks: EmailService['webhooks'] = {
-  async onHerokuStagingRelease (cfg, appName) {
+  async onHerokuStagingRelease(cfg, appName) {
     await EmailDispatcher.sendBatch(cfg, cfg.email.developers.map((email) => ({
       from: cfg.email.fromAddress,
       to: email,
@@ -45,7 +48,7 @@ const webhooks: EmailService['webhooks'] = {
 };
 
 const Service: EmailService = {
-  async newVisitor (cfg, visitor, admin, cb, attachment) {
+  async newVisitor(cfg, visitor, admin, cb, attachment) {
     await EmailDispatcher.sendBatch(cfg, [
       {
         from: cfg.email.fromAddress,
@@ -80,7 +83,7 @@ const Service: EmailService = {
     ]);
   },
 
-  async visitorReminder (cfg, visitor, cb, attachment) {
+  async visitorReminder(cfg, visitor, cb, attachment) {
     await EmailDispatcher.send(cfg, {
       from: cfg.email.fromAddress,
       to: visitor.email,
@@ -98,11 +101,11 @@ const Service: EmailService = {
     });
   },
 
-  async newVolunteer (cfg, volunteer, admin, cb) {
+  async newVolunteer(cfg, volunteer, admin, cb) {
     return null;
   },
 
-  async newCbAdmin (cfg, admin, cb, token) {
+  async newCbAdmin(cfg, admin, cb, token) {
     await EmailDispatcher.send(cfg, {
       from: cfg.email.fromAddress,
       to: admin.email,
@@ -117,7 +120,7 @@ const Service: EmailService = {
     });
   },
 
-  async addRole (cfg, user, cb, role, token) {
+  async addRole(cfg, user, cb, role, token) {
     await EmailDispatcher.send(cfg, {
       from: cfg.email.fromAddress,
       to: user.email,
@@ -134,7 +137,7 @@ const Service: EmailService = {
     });
   },
 
-  async resetPassword (cfg, app, user, token) {
+  async resetPassword(cfg, app, user, token) {
     const templateId = Templates.forPwdReset(app);
     await EmailDispatcher.send(cfg, {
       from: cfg.email.fromAddress,
@@ -147,6 +150,20 @@ const Service: EmailService = {
       },
     });
   },
+
+  async inviteVolunteer(cfg, inviteEmail, email_subject, text_above_link, text_below_link) {
+    const res = await EmailDispatcher.send(cfg, {
+      from: cfg.email.fromAddress,
+      to: inviteEmail,
+      templateId: EmailTemplate.INVITE_VOLUNTEER,
+      templateModel: {
+        "email_subject": email_subject,
+        "text_above_link": text_above_link,
+        "text_below_link": text_below_link
+      },
+    })
+  }
+  ,
   webhooks,
 };
 
