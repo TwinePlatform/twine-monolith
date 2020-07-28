@@ -96,7 +96,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
       <UploadModal
         visible={uploadModalVisible}
         closeFunction={()=>setUploadModalVisible(false)}
-        file={"time"}
+        filetype={"time"}
       />
       <DownloadModal
         visible={downloadModalVisible}

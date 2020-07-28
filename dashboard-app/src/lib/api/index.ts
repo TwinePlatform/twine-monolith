@@ -12,6 +12,7 @@ export const axios = _axios.create({
   paramsSerializer: (params) => qs.stringify(params, { encode: false }),
 });
 
+/*
 const axios2 = _axios.create({
   baseURL,
   paramsSerializer: (params) => qs.stringify(params, { encode: false }),
@@ -32,7 +33,7 @@ const makeRequest = async <T = any>(params: AxiosRequestConfig) => {
   }
   return axios2.request<T>({ headers, ...params });
 };
-/*
+
 export const Roles = {
   get: () => makeRequest({ method: "GET", url: "/users/me/roles" }),
 };
@@ -82,3 +83,17 @@ export const CommunityBusinesses = {
   getVolunteers: () => // NB: fields not currently supported
     axios({ ...CommunityBusinesses.configs.getVolunteers, params: { fields: ['name', 'id'] } }),
 };
+
+
+export const File = {
+  upload: (file: File, destination: string) => {
+    console.log("uploading " + file.toString() + "to /community-businesses/" + destination )
+    /*axios.post('/community-businesses/' + destination, file, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+    })*/
+  }
+
+ 
+}

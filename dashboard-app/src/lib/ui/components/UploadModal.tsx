@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
+import {File} from '../../api';
 
 /*
  * Types
@@ -9,7 +10,7 @@ import { ColoursEnum } from '../design_system';
 type Props = {
   visible: boolean;
   closeFunction: () => void;
-  file: string;
+  filetype: string;
 }
 
 /*
@@ -24,22 +25,25 @@ const Heading2 = styled(H2)`
 
 
 const UploadModal:FC<Props> = (props) => {
+    const [filename, setFilename] = useState("Upload File Here")
 
-    const {visible, closeFunction, file} = props;
+    const {visible, closeFunction, filetype} = props;
 
     const select = () => {
         if(document.getElementById('file-input'))
             document.getElementById('file-input')!.click();
     }
 
-    const upload = () => {
-        console.log("uploading " + file)
-        //API.Invite.byEmail(email);
-    }
-
     const handleUpload = (e: any) => {
-        if(e.target.files[0])
-            console.log(e.target.files[0]);
+        let uploadedFile = e.target.files[0];
+
+        if(uploadedFile){
+            console.log(uploadedFile);
+            setFilename(uploadedFile.name);
+
+            File.upload(uploadedFile,filetype);
+            closeFunction();
+        }
     }
 
     if(visible)
@@ -70,8 +74,9 @@ const UploadModal:FC<Props> = (props) => {
                 <div
                     style={{
                         borderColor: ColoursEnum.mustard,
-                        borderWidth: '2px',
+                        border: '2px',
                         borderRadius: '4px',
+                        flexDirection: 'row',
                         justifyContent: 'space-between',
                         marginTop: '45px',
                         marginLeft: '75px',
@@ -79,7 +84,7 @@ const UploadModal:FC<Props> = (props) => {
                         padding: '12px',
                     }}
                 >
-                    <p>Upload File Here</p>
+                    <p>{filename}</p>
                     <button onClick={select}>Select</button>
                     <input id="file-input" type="file" name="name" style={{display: 'none'}}
                         onChange={e=>handleUpload(e)}
@@ -87,7 +92,7 @@ const UploadModal:FC<Props> = (props) => {
                 </div>
                 <img
                     src={require('../../../assets/uploadbutton.png')}
-                    onClick={()=>{closeFunction();upload()}}
+                    onClick={()=>{select()}}
                 />
             </div>
         );
