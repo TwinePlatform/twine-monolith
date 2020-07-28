@@ -27,9 +27,19 @@ const UploadModal:FC<Props> = (props) => {
 
     const {visible, closeFunction, file} = props;
 
+    const select = () => {
+        if(document.getElementById('file-input'))
+            document.getElementById('file-input').click();
+    }
+
     const upload = () => {
         console.log("uploading " + file)
         //API.Invite.byEmail(email);
+    }
+
+    const handleUpload = (e) => {
+        if(e.target.files[0])
+            console.log(e.target.files[0]);
     }
 
     if(visible)
@@ -70,8 +80,10 @@ const UploadModal:FC<Props> = (props) => {
                     }}
                 >
                     <p>Upload File Here</p>
-                    <button onClick={()=>{document.getElementById('file-input').click()}}>Select</button>
-                    <input id="file-input" type="file" name="name" style={{display: 'none'}}/>
+                    <button onClick={select()}>Select</button>
+                    <input id="file-input" type="file" name="name" style={{display: 'none'}}
+                        onChange={e=>handleUpload(e)}
+                    />
                 </div>
                 <img
                     src={require('../../../assets/uploadbutton.png')}
