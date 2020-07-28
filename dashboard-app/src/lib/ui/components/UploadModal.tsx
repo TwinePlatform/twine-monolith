@@ -20,7 +20,7 @@ type Props = {
 
 const Heading2 = styled(H2)`
   marginBottom: 20;
-  color: ${ColoursEnum.black};
+  color: ${ColoursEnum.white};
 `;
 
 
