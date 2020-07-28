@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Volunteer App",
+    "name": "TWINE Volunteer App",
     "slug": "nativeApp",
     "privacy": "public",
     "sdkVersion": "35.0.0",
@@ -25,6 +25,11 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "android": {
+      "package": "com.powertochange.volunteerapp",
+      "versionCode": 1
+    },
+    "description": "Early published version with error trapping, volunteer stats, push notifications."
   }
 }

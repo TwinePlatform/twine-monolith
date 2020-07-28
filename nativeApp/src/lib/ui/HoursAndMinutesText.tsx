@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
+import { TextInput } from "react-native";
 
 import { ColoursEnum } from './colours';
 import { FontsEnum } from './typography';
@@ -40,10 +41,16 @@ const Unit = styled.Text`
 const Spacer = styled.View`
   width: 5;
 `;
+
 /*
  * Component
  */
-const HourAndMinutesText: FC<Props> = (props) => {
+
+// const minutes(startTime, endTime) = (endTime.getTime() - startTime.getTime()) / (1000 * 60);
+// const hours(startTime, endTime) = (endTime.getTime() - startTime.getTime()) / (1000 * 60));
+
+export const HourAndMinutesText: FC<Props> = (props) => {
+
   const {
     timeValues, align,
   } = props;
@@ -60,4 +67,33 @@ const HourAndMinutesText: FC<Props> = (props) => {
   );
 };
 
-export default HourAndMinutesText;
+// export default HourAndMinutesText;
+
+export const TimeDiff: FC<Props> = (props) => {
+
+  const {
+    timeValues, align,
+  } = props;
+
+  const startTime = timeValues[0];
+  const endTime = timeValues[1];
+
+  const diffTime = startTime - endTime;
+  const hours = Math.floor((endTime - startTime) / (1000 * 60 * 60));
+  const minutes = Math.floor((endTime - startTime) / (1000 * 60) - hours * 60);
+
+  return (
+    <Container align={align}>
+      <Value>{hours}</Value>
+      <Spacer />
+      <Unit>hours</Unit>
+      <Spacer />
+      <Value>{minutes}</Value>
+      <Spacer />
+      <Unit>minutes</Unit>
+      {diffTime == 0 && <TextInput style={{ fontSize: 10, color: 'red' }}>*Please select different times. </TextInput>}
+    </Container>
+
+
+  );
+};

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
 import {
   Item as I, Label as L, Text,
@@ -17,7 +17,7 @@ import { getDateWithCurrentTime } from './util';
  */
 type Props = {
   label: string;
-  mode: 'date' | 'time';
+  mode: 'date' | 'time' | 'datetime';
   value: Date;
   minDate?: Date;
   maxDate?: Date;
@@ -60,6 +60,9 @@ const displayValue = (mode, value: Date) => {
     case 'time':
     default:
       return moment(value).format('LT');
+
+    case 'datetime':
+      return moment(value).format('DD-MM-YY HH:mm');
   }
 };
 
@@ -75,8 +78,9 @@ const DateTimePicker: FC<Props> = (props) => {
   const onConfirmAndHide = (_date: Date) => {
     // NB: server rejects logs with identical times & users as they're
     // believed to be an offline sync issue
-    const date = getDateWithCurrentTime(_date);
-    onConfirm(date);
+    console.log(_date);
+    // const date = getDateWithCurrentTime(_date);
+    onConfirm(_date);
     toggleVisibility();
   };
 
@@ -86,13 +90,14 @@ const DateTimePicker: FC<Props> = (props) => {
       {value
         ? <Value onPress={toggleVisibility}>{displayValue(mode, value)}</Value>
         : <PlaceHolder onPress={toggleVisibility}>{`Select ${mode}`}</PlaceHolder>}
+
       <_DateTimePicker
         minimumDate={minDate}
         maximumDate={maxDate}
         date={value}
         isVisible={isVisible}
         mode={mode}
-        onConfirm={onConfirmAndHide}
+        onConfirm={(values) => onConfirmAndHide(values)}
         onCancel={toggleVisibility}
         titleIOS={`Pick a ${mode}`}
       />

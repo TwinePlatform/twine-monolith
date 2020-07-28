@@ -5,7 +5,7 @@ import { Button as B } from 'native-base';
 
 import { ColoursEnum } from '../colours';
 import {
-  ButtonConfig, ArchiveButtonConfig, DeleteButtonConfig, RestoreButtonConfig, SaveButtonConfig,
+  ButtonConfig, ArchiveButtonConfig, DeleteButtonConfig, RestoreButtonConfig, SaveButtonConfig
 } from './types';
 
 /*

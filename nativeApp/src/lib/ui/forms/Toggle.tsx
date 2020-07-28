@@ -14,12 +14,13 @@ interface Props extends SwitchProps {
  * Styles
  */
 const Item = styled(I)`
-  alignItems: center;
+  alignItems: flex-end;
   marginLeft: 0;
   width:100%;
   paddingTop: 12;
   paddingBottom: 12;
   justifyContent: space-between;
+  marginRight: 0;
 `;
 
 const Label = styled(L)`

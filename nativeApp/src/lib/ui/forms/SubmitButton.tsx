@@ -30,7 +30,6 @@ const SubmitText = styled.Text`
   fontSize: 15;
 `;
 /*
-
 /*
  * Component
  */
