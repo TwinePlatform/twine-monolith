@@ -29,7 +29,7 @@ const UploadModal:FC<Props> = (props) => {
 
     const select = () => {
         if(document.getElementById('file-input'))
-            document.getElementById('file-input').click();
+            document.getElementById('file-input')!.click();
     }
 
     const upload = () => {
@@ -37,7 +37,7 @@ const UploadModal:FC<Props> = (props) => {
         //API.Invite.byEmail(email);
     }
 
-    const handleUpload = (e) => {
+    const handleUpload = (e: any) => {
         if(e.target.files[0])
             console.log(e.target.files[0]);
     }
@@ -80,7 +80,7 @@ const UploadModal:FC<Props> = (props) => {
                     }}
                 >
                     <p>Upload File Here</p>
-                    <button onClick={select()}>Select</button>
+                    <button onClick={select}>Select</button>
                     <input id="file-input" type="file" name="name" style={{display: 'none'}}
                         onChange={e=>handleUpload(e)}
                     />
