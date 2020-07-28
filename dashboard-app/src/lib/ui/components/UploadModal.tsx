@@ -27,8 +27,8 @@ const UploadModal:FC<Props> = (props) => {
 
     const {visible, closeFunction, file} = props;
 
-    const onSend = () => {
-        console.log("email");
+    const upload = () => {
+        console.log("uploading " + file)
         //API.Invite.byEmail(email);
     }
 
@@ -44,11 +44,39 @@ const UploadModal:FC<Props> = (props) => {
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
+                    boxShadow: '2px 3px 6px #00000029',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                 }}
             >
+                <div
+                    style={{
+                        backgroundColor: ColoursEnum.purple,
+                        borderRadius: "8px 8px 0px 0px",
+                    }}
+                >
                 <Heading2>TWINE</Heading2>
-                <p>Enjoy uploading your files here</p>
-                <button onClick={()=>{closeFunction();console.log("uploading " + file)}}>upload file</button>
+                </div>
+                <div
+                    style={{
+                        borderColor: ColoursEnum.mustard,
+                        borderWidth: '2px',
+                        borderRadius: '4px',
+                        justifyContent: 'space-between',
+                        marginTop: '45px',
+                        marginLeft: '75px',
+                        marginRight: '75px',
+                        padding: '12px',
+                    }}
+                >
+                    <p>Upload File Here</p>
+                    <button onClick={()=>{document.getElementById('file-input').click()}}>Select</button>
+                    <input id="file-input" type="file" name="name" style={{display: 'none'}}/>
+                </div>
+                <img
+                    src={require('../../../assets/uploadbutton.png')}
+                    onClick={()=>{closeFunction();upload()}}
+                />
             </div>
         );
     else

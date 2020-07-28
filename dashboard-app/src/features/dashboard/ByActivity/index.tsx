@@ -14,6 +14,7 @@ import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../../lib/ui/design_system';
 import DownloadModal from '../../../lib/ui/components/DownloadModal';
 import UploadModal from '../../../lib/ui/components/UploadModal';
+import { PrimaryButton, SecondaryButton} from '../../../lib/ui/components/Buttons';
 import Errors from '../components/Errors';
 import useAggregateDataByActivity from './useAggregateDataByActivity';
 import { TabGroup } from '../components/Tabs';
@@ -56,6 +57,7 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [downloadModalVisible, setDownloadModalVisible] = useState(false);
+  const [extraButtonsVisible, setExtraButtonsVisible] = useState(false);
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const { loading, error, data, activities } =
     useAggregateDataByActivity({ from: fromDate, to: toDate });
@@ -143,6 +145,36 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
             </Row>
           )
       }
+      {extraButtonsVisible &&
+        <div
+          style={{
+          position: 'fixed', 
+          bottom: 40, 
+          right: 80
+        }}
+        >
+	        <SecondaryButton
+            onClick={()=>setDownloadModalVisible(!downloadModalVisible)} 
+          >
+            Volunteer Template
+          </SecondaryButton>
+        	<SecondaryButton
+            onClick={()=>setUploadModalVisible(!uploadModalVisible)} 
+          >
+            Upload
+          </SecondaryButton>
+        </div>
+      }
+      <PrimaryButton 
+        onClick={()=>setExtraButtonsVisible(!extraButtonsVisible)} 
+        style={{
+          position: 'fixed', 
+          bottom: 20, 
+          right: 30
+        }}
+      >
+        +
+      </PrimaryButton>
     </Container>
   );
 };
