@@ -16,7 +16,7 @@ import { DateRangePickerConstraint, MIN_DATE } from '../components/DatePicker/ty
 //     - (from < to) || from
 
 
-const ActivityConstraints: DateRangePickerConstraint = {
+const TimeConstraints: DateRangePickerConstraint = {
   from: {
     min: () => MIN_DATE.toDate(),
     max: () => moment().endOf('day').toDate(),
@@ -39,4 +39,4 @@ const ActivityConstraints: DateRangePickerConstraint = {
   },
 };
 
-export default ActivityConstraints;
+export default TimeConstraints;

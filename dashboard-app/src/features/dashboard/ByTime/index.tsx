@@ -21,7 +21,7 @@ import { LegendData } from '../components/StackedBarChart/types';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
-import { DashboardContext } from '../../../App';
+import { DashboardContext } from '../context';
 
 
 /**
