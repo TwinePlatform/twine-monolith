@@ -141,17 +141,23 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
         }}
         >
           <SecondaryButton
-            onClick={()=>setInviteModalVisible(!inviteModalVisible)} 
+            onClick={()=>{setInviteModalVisible(!inviteModalVisible)
+              setUploadModalVisible(false)
+              setDownloadModalVisible(false)}} 
           >
             Invite
           </SecondaryButton>
 	        <SecondaryButton
-            onClick={()=>setDownloadModalVisible(!downloadModalVisible)} 
+            onClick={()=>{setDownloadModalVisible(!downloadModalVisible)
+              setUploadModalVisible(false)
+              setInviteModalVisible(false)}} 
           >
             Volunteer Template
           </SecondaryButton>
         	<SecondaryButton
-            onClick={()=>setUploadModalVisible(!uploadModalVisible)} 
+            onClick={()=>{setUploadModalVisible(!uploadModalVisible)
+              setDownloadModalVisible(false)
+              setInviteModalVisible(false)}} 
           >
             Upload
           </SecondaryButton>

@@ -134,12 +134,14 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
         }}
         >
 	        <SecondaryButton
-            onClick={()=>setDownloadModalVisible(!downloadModalVisible)} 
+            onClick={()=>{setDownloadModalVisible(!downloadModalVisible)
+              setUploadModalVisible(false)}} 
           >
-            Volunteer Template
+            Time Template
           </SecondaryButton>
         	<SecondaryButton
-            onClick={()=>setUploadModalVisible(!uploadModalVisible)} 
+            onClick={()=>{setUploadModalVisible(!uploadModalVisible)
+              setDownloadModalVisible(false)}} 
           >
             Upload
           </SecondaryButton>

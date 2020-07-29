@@ -169,12 +169,14 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
         }}
         >
 	        <SecondaryButton
-            onClick={()=>setDownloadModalVisible(!downloadModalVisible)} 
+            onClick={()=>{setDownloadModalVisible(!downloadModalVisible)
+              setUploadModalVisible(false)}} 
           >
-            Volunteer Template
+            Project Template
           </SecondaryButton>
         	<SecondaryButton
-            onClick={()=>setUploadModalVisible(!uploadModalVisible)} 
+            onClick={()=>{setUploadModalVisible(!uploadModalVisible)
+              setDownloadModalVisible(false)}} 
           >
             Upload
           </SecondaryButton>
