@@ -44,12 +44,6 @@ export const Roles = {
 
 
 export const CbAdmins = {
-  get: () => {
-    axios.get<Api.CommunityBusinesses.CbAdmins.GET.Result>('/community-businesses/me/cb-admins')
-      .then((res) => {
-        const x = res.data;
-      });
-  },
   login: ({ email, password }: { email: string, password: string }) =>
     axios.post(
       '/users/login',
@@ -71,6 +65,7 @@ export const CommunityBusinesses = {
     get: { method: 'GET' as Method, url: '/community-businesses/me' },
     getLogs: { method: 'GET' as Method, url: '/community-businesses/me/volunteer-logs' },
     getVolunteerActivities: { method: 'GET' as Method, url: '/volunteer-activities' },
+    getVolunteerProjects: { method: 'GET' as Method, url: '/community-businesses/me/volunteers/projects' },
     getVolunteers: { method: 'GET' as Method, url: '/community-businesses/me/volunteers' },
   },
 
