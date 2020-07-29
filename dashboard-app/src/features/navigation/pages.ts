@@ -6,6 +6,7 @@ import ByActivity from '../dashboard/ByActivity';
 import ByTime from '../dashboard/ByTime';
 import ByVolunteer from '../dashboard/ByVolunteer';
 import ByProject from '../dashboard/ByProject';
+import ByLog from '../dashboard/ByLog';
 import Login from '../auth/pages/Login';
 import ResetPassword from '../auth/pages/ResetPassword';
 import ForgotPassword from '../auth/pages/ForgotPassword';
@@ -34,6 +35,12 @@ export const PagesDict: PagesDictionary = {
     url: '/activities',
     component: ByActivity,
     title: TitlesCopy.Activities.title,
+    protected: true,
+  },
+  Log:{
+    url: '/logs',
+    component: ByLog,
+    title: TitlesCopy.Logs.title,
     protected: true,
   },
   Time: {
@@ -85,6 +92,7 @@ export const PagesDict: PagesDictionary = {
 const NavBarOrder = [
   'Home',
   TitlesCopy.Time.title,
+  TitlesCopy.Logs.title,
   TitlesCopy.Activities.title,
   TitlesCopy.Volunteers.title,
   TitlesCopy.Projects.title,

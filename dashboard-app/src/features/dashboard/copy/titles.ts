@@ -3,6 +3,10 @@ export const TitlesCopy = {
     title: 'Activities',
     subtitle: 'The activities volunteers deliver',
   },
+  Logs:{
+    title: "Log",
+    subtitle: "The individual logs volunteers create",
+  },
   Time: {
     title: 'Time',
     subtitle: 'How much time volunteers give',
