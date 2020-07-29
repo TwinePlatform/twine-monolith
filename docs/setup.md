@@ -7,7 +7,7 @@
 1. [Applications](#applications)
 
 ## Pre-requisites
-* `node` (v10.2.0+) and `npm` (v6+)
+* `node` (v12+) and `npm` (v6+)
 * `lerna` (v3+)
 * `postgresql` (v10+)
 * `redis` (v5+)

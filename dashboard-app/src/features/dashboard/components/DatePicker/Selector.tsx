@@ -31,7 +31,7 @@ const Input = styled.input`
   background: transparent;
   color: ${ColoursEnum.black};
   cursor: pointer;
-  font-size: ${Fonts.size.body}
+  font-size: ${Fonts.size.body};
 `;
 
 
