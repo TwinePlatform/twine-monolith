@@ -51,7 +51,7 @@ const initTableData = { headers: [], rows: [] };
 /**
  * Component
  */
-const ByActivity: FunctionComponent<RouteComponentProps> = () => {
+const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const { unit } = useContext(DashboardContext);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
@@ -181,4 +181,4 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
   );
 };
 
-export default withRouter(ByActivity);
+export default withRouter(ByLog);
