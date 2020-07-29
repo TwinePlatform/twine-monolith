@@ -26,7 +26,7 @@ declare module 'knex' {
  * Describes the transformations of the default configuration object
  * in the various supported deployment environments
  */
-const Configs: { [k in Environment]: DeepPartial<Config> } = {
+const Configs: { [k in Environment]: any } = {
   [Environment.DEVELOPMENT]: configDevelopment,
   [Environment.TESTING]: configTesting,
   [Environment.PRODUCTION]: configProduction,

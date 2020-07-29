@@ -1,7 +1,7 @@
 import * as Knex from 'knex';
 import { assoc, compose, evolve, has, filter, invertObj, omit, pick } from 'ramda';
 import { Objects, Duration, Promises } from 'twine-util';
-import { VolunteerLog, VolunteerLogCollection, RoleEnum, User } from './types';
+import { VolunteerLog, VolunteerLogCollection, RoleEnum, User, VolunteerProject } from './types';
 import { CommunityBusinesses } from './community_business';
 import { applyQueryModifiers } from './applyQueryModifiers';
 import { Dictionary } from '../types/internal';
@@ -10,6 +10,7 @@ import Permissions from './permission';
 import { PermissionLevelEnum } from '../auth';
 import { ResourceEnum, AccessEnum } from '../auth/types';
 import { silent } from 'twine-util/promises';
+import { reset } from 'mockdate';
 
 
 /*
@@ -30,6 +31,14 @@ export const ColumnToModel: Record<string, keyof VolunteerLog> = {
   'volunteer_hours_log.deleted_at': 'deletedAt',
   'volunteer_activity.volunteer_activity_name': 'activity',
   'volunteer_project.volunteer_project_name': 'project',
+};
+export const ProjectsColumnToModel: Record<string, keyof VolunteerProject> = {
+  'volunteer_project.volunteer_hours_log_id': 'id',
+  'volunteer_project.organisation_id': 'organisationId',
+  'volunteer_project.created_at': 'createdAt',
+  'volunteer_project.modified_at': 'modifiedAt',
+  'volunteer_project.deleted_at': 'deletedAt',
+  'volunteer_project.volunteer_project_name': 'name',
 };
 export const ModelToColumn = invertObj(ColumnToModel);
 
@@ -69,7 +78,7 @@ const dropUnwhereableUserFields = omit([
 ]);
 
 export const VolunteerLogs: VolunteerLogCollection = {
-  toColumnNames (o = {}) {
+  toColumnNames(o = {}) {
     return filter(
       (s) => typeof s !== 'undefined',
       Object.entries(ColumnToModel)
@@ -77,7 +86,15 @@ export const VolunteerLogs: VolunteerLogCollection = {
     );
   },
 
-  create (o) {
+  projectToColumnNames(o = {}) {
+    return filter(
+      (s) => typeof s !== 'undefined',
+      Object.entries(ProjectsColumnToModel)
+        .reduce((acc, [k, v]) => has(v, o) ? assoc(k, o[v], acc) : acc, {})
+    );
+  },
+
+  create(o) {
     return {
       id: o.id,
       userId: o.userId,
@@ -92,7 +109,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
     };
   },
 
-  async get (client, q = {}) {
+  async get(client, q = {}) {
     const query = evolve({
       where: VolunteerLogs.toColumnNames,
       whereNot: VolunteerLogs.toColumnNames,
@@ -127,16 +144,29 @@ export const VolunteerLogs: VolunteerLogCollection = {
     );
   },
 
-  async getOne (client, q = {}) {
+  async getOwn(client, cb, q = {}) {
+    return VolunteerLogs.get(client, {
+      ...q,
+      where: {
+        organisationId: cb.id,
+        userId: q.userId,
+        deletedAt: null,
+      },
+      whereBetween: q.since || q.until
+        ? { startedAt: [q.since, q.until] }
+        : undefined,
+    });
+  },
+  async getOne(client, q = {}) {
     const [res] = await VolunteerLogs.get(client, { ...q, limit: 1 });
     return res || null;
   },
 
-  async exists (client, query) {
+  async exists(client, query) {
     return null !== await VolunteerLogs.getOne(client, query);
   },
 
-  async add (client, log) {
+  async add(client, log) {
     const isVolunteer = await Roles.userHasAtCb(client, {
       userId: log.userId,
       organisationId: log.organisationId,
@@ -168,7 +198,9 @@ export const VolunteerLogs: VolunteerLogCollection = {
     return VolunteerLogs.getOne(client, { where: { id } });
   },
 
-  async update (client, log, changes) {
+  async update(client, log, changes) {
+    console.log('this are the changes');
+    console.log(changes);
     const preProcessChangeSet = compose(
       stripTablePrefix,
       transformForeignKeysToSubQueries(client, log.organisationId),
@@ -182,6 +214,9 @@ export const VolunteerLogs: VolunteerLogCollection = {
       dropUnwhereableUserFields
     );
 
+    console.log(preProcessChangeSet(changes));
+    console.log(preProcessLog(log));
+
     const [id] = await client('volunteer_hours_log')
       .update(preProcessChangeSet(changes))
       .where(preProcessLog(log))
@@ -194,7 +229,45 @@ export const VolunteerLogs: VolunteerLogCollection = {
     return VolunteerLogs.getOne(client, { where: { id } });
   },
 
-  async destroy (client, log) {
+  //get the row of log through 
+  async getSimple(client: any, log: any) {
+
+    var notes: any
+    var volunteer_hours_log_id: any
+    var id: number
+    id = parseInt(log, 10);
+
+    // select volunteer_hours_log.notes from volunteer_hours_log where volunteer_hours_log.volunteer_hours_log_id = 3;
+    const res = await client('volunteer_hours_log')
+      .select('notes')
+      .where('volunteer_hours_log_id', id);
+
+    return res;
+
+  },
+
+  // update volunteer_hours_log set notes='psql success' where volunteer_hours_log.volunteer_hours_log_id = '1';
+  async updateNotes(client, log: any, changes: any) {
+
+    // console.log(changes)
+    // console.log(log)
+    var notes: any
+    var volunteer_hours_log_id: any
+    var id: number
+    id = parseInt(log, 10);
+
+    const res = await client('volunteer_hours_log')
+      // .update({ 'notes': 'insert from knex through api using objects' })
+      .update('notes', changes.notes)
+      .where('volunteer_hours_log_id', id);
+
+    // console.log(res);
+    return VolunteerLogs.getOne(client, { where: { id } });
+
+    //return null;
+  },
+
+  async destroy(client, log) {
     const preProcessLog = compose(
       transformForeignKeysToSubQueries(client, log.organisationId),
       (a: Dictionary<any>) => replaceConstantsWithForeignKeys<any>(a),
@@ -209,7 +282,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
       .where(preProcessLog(log));
   },
 
-  async fromUser (client, user, q = {}) {
+  async fromUser(client, user, q = {}) {
     return VolunteerLogs.get(client, {
       where: { userId: user.id, deletedAt: null },
       whereBetween: q.since || q.until
@@ -218,7 +291,9 @@ export const VolunteerLogs: VolunteerLogCollection = {
     });
   },
 
-  async fromCommunityBusiness (client, cb, q = {}) {
+  async fromCommunityBusiness(client, cb, q = {}) {
+
+
     return VolunteerLogs.get(client, {
       ...q,
       where: {
@@ -231,7 +306,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
     });
   },
 
-  async fromUserAtCommunityBusiness (client, user, cb, q = {}) {
+  async fromUserAtCommunityBusiness(client, user, cb, q = {}) {
     return VolunteerLogs.get(client, {
       where: {
         organisationId: cb.id,
@@ -244,7 +319,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
     });
   },
 
-  async recordInvalidLog (client, user, organisation, payload) {
+  async recordInvalidLog(client, user, organisation, payload) {
     return client('invalid_synced_logs_monitoring')
       .insert({
         payload: JSON.stringify(payload),
@@ -253,7 +328,13 @@ export const VolunteerLogs: VolunteerLogCollection = {
       });
   },
 
-  async getProjects (client, cb) {
+  async getProjects(client, cb, q) {
+    const query = evolve({
+      where: VolunteerLogs.projectToColumnNames,
+      whereNot: VolunteerLogs.projectToColumnNames,
+      whereBetween: VolunteerLogs.projectToColumnNames,
+    }, q);
+
     return client('volunteer_project')
       .select({
         id: 'volunteer_project_id',
@@ -265,11 +346,12 @@ export const VolunteerLogs: VolunteerLogCollection = {
       })
       .where({
         organisation_id: cb.id,
-        deleted_at: null,
+        ...query.where
+
       });
   },
 
-  async addProject (client, cb, name) {
+  async addProject(client, cb, name) {
     const { rows: [{ exists }] } = await client.raw('SELECT EXISTS ?', [
       client('volunteer_project')
         .select()
@@ -297,14 +379,13 @@ export const VolunteerLogs: VolunteerLogCollection = {
     return project;
   },
 
-  async updateProject (client, project, changeset) {
+  async updateProject(client, project, changeset) {
     if (changeset.name) {
       const { rows: [{ exists }] } = await client.raw('SELECT EXISTS ?', [
         client('volunteer_project')
           .select()
           .where({
             organisation_id: project.organisationId,
-            deleted_at: null,
             volunteer_project_name: changeset.name,
           })
           .whereNot({ volunteer_project_id: project.id }),
@@ -325,7 +406,6 @@ export const VolunteerLogs: VolunteerLogCollection = {
         volunteer_project_id: project.id,
         volunteer_project_name: project.name,
         organisation_id: project.organisationId,
-        deleted_at: project.deletedAt,
       }))
       .returning([
         'volunteer_project_id AS id',
@@ -337,7 +417,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
       ]);
   },
 
-  async deleteProject (client, project) {
+  async deleteProject(client, project) {
     return client.transaction(async (trx) => {
       const rows = await VolunteerLogs.updateProject(
         trx,
@@ -345,19 +425,27 @@ export const VolunteerLogs: VolunteerLogCollection = {
         { deletedAt: new Date().toISOString() }
       );
 
-      await trx('volunteer_hours_log')
-        .update({ volunteer_project_id: null })
-        .where({ volunteer_project_id: project.id });
+      return rows.length;
+    });
+  },
+
+  async restoreProject(client, project) {
+    return client.transaction(async (trx) => {
+      const rows = await VolunteerLogs.updateProject(
+        trx,
+        project,
+        { deletedAt: null }
+      );
 
       return rows.length;
     });
   },
 
-  async syncLogs (client, communityBusiness, user, logs) {
+  async syncLogs(client, communityBusiness, user, logs) {
     // can user write logs for others?
-    const doAnyLogsTargetOtherUsers = logs.some((log) => log.userId !== user.id);
-    const canUserWriteOthersLogs = await VolunteerLogPermissions.canWriteOthers(client, user);
-    if (doAnyLogsTargetOtherUsers && !canUserWriteOthersLogs) {
+    const doAnyLogsTargetOtherUsers = logs.some((log) => log.userId !== user.id); //check if log userId is not the same
+    const canUserWriteOthersLogs = await VolunteerLogPermissions.canWriteOthers(client, user); //check permission
+    if (doAnyLogsTargetOtherUsers && !canUserWriteOthersLogs) { //if not the same and do not have permission
       throw new Error('Insufficient permissions to write other users logs');
     }
 
@@ -369,6 +457,7 @@ export const VolunteerLogs: VolunteerLogCollection = {
     if (!targetUsersCheck.every((a) => a)) {
       throw new Error('Some users do not have permission to write volunteer logs');
     }
+
 
     const results = await Promises.some(logs.map(async (log) => {
       const existsInDB = log.hasOwnProperty('id');
@@ -425,8 +514,8 @@ export const VolunteerLogs: VolunteerLogCollection = {
 };
 
 
-const VolunteerLogPermissions = {
-  async canWriteOwn (client: Knex, user: User | number) {
+export const VolunteerLogPermissions = {
+  async canWriteOwn(client: Knex, user: User | number) {
     return Permissions.userHas(client, {
       resource: ResourceEnum.VOLUNTEER_LOGS,
       access: AccessEnum.WRITE,
@@ -435,7 +524,7 @@ const VolunteerLogPermissions = {
     });
   },
 
-  async canWriteOthers (client: Knex, user: User) {
+  async canWriteOthers(client: Knex, user: User) {
     const canWrite = await Promise.all(
       [PermissionLevelEnum.SIBLING, PermissionLevelEnum.CHILD]
         .map((permissionLevel) => ({
@@ -449,4 +538,22 @@ const VolunteerLogPermissions = {
 
     return canWrite.some((a) => a);
   },
+
+  async canReadOthers(client: Knex, user: any) {
+    const canWrite = await Promise.all(
+      [PermissionLevelEnum.SIBLING, PermissionLevelEnum.CHILD]
+        .map((permissionLevel) => ({
+          permissionLevel,
+          resource: ResourceEnum.VOLUNTEER_LOGS,
+          access: AccessEnum.READ,
+          userId: user,
+        }))
+        .map((args) => Permissions.userHas(client, args))
+    );
+
+    console.log(canWrite);
+    return canWrite.some((a) => a);
+  }
 };
+
+
