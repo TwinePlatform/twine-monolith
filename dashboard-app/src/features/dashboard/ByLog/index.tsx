@@ -12,8 +12,8 @@ import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
 import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../../lib/ui/design_system';
-import DownloadModal from '../../../lib/ui/components/DownloadModal';
-import UploadModal from '../../../lib/ui/components/UploadModal';
+import ProjectModal from '../../../lib/ui/components/ProjectModal';
+import VolunteerModal from '../../../lib/ui/components/VolunteerModal';
 import { PrimaryButton, SecondaryButton} from '../../../lib/ui/components/Buttons';
 import Errors from '../components/Errors';
 import useAggregateDataByActivity from './useAggregateDataByActivity';
@@ -55,8 +55,8 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const { unit } = useContext(DashboardContext);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
-  const [uploadModalVisible, setUploadModalVisible] = useState(false);
-  const [downloadModalVisible, setDownloadModalVisible] = useState(false);
+  const [volunteerModalVisible, setVolunteerModalVisible] = useState(false);
+  const [projectModalVisible, setProjectModalVisible] = useState(false);
   const [extraButtonsVisible, setExtraButtonsVisible] = useState(false);
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const { loading, error, data, activities } =
@@ -94,15 +94,13 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
 
   return (
     <Container>
-      <UploadModal
-        visible={uploadModalVisible}
-        closeFunction={()=>setUploadModalVisible(false)}
-        filetype={"activity"}
+      <VolunteerModal
+        visible={volunteerModalVisible}
+        closeFunction={()=>setVolunteerModalVisible(false)}
       />
-      <DownloadModal
-        visible={downloadModalVisible}
-        closeFunction={()=>setDownloadModalVisible(false)}
-        filename={"activitytemplate.csv"}
+      <ProjectModal
+        visible={projectModalVisible}
+        closeFunction={()=>setProjectModalVisible(false)}
       />
       <Row center="xs">
         <Col>
@@ -135,14 +133,40 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                     <div>
                         <DataTable
                         {...tableData}
-                        title={getTitleForDayPicker(TitlesCopy.Activities.subtitle, fromDate, toDate)}
+                        title={getTitleForDayPicker("Volunteer Logs", fromDate, toDate)}
                         sortBy={tableData.headers[orderable.sortByIndex]}
                         order={orderable.order}
                         onChangeSortBy={onChangeSortBy}
                         showTotals
                       />
                         <PrimaryButton 
-                            onClick={()=>setExtraButtonsVisible(!extraButtonsVisible)} 
+                            onClick={()=>{setVolunteerModalVisible(!volunteerModalVisible)
+                                setProjectModalVisible(false)}} 
+                            style={{
+                            position: 'fixed', 
+                            bottom: 20, 
+                            right: 30
+                            }}
+                        >
+                            + Create
+                        </PrimaryButton>
+                    </div>
+                    )
+                  }
+                  {
+                    tableData && (
+                    <div>
+                        <DataTable
+                        {...tableData}
+                        title={getTitleForDayPicker("Projects", fromDate, toDate)}
+                        sortBy={tableData.headers[orderable.sortByIndex]}
+                        order={orderable.order}
+                        onChangeSortBy={onChangeSortBy}
+                        showTotals
+                      />
+                        <PrimaryButton 
+                            onClick={()=>{setProjectModalVisible(!projectModalVisible)
+                                setVolunteerModalVisible(false)}} 
                             style={{
                             position: 'fixed', 
                             bottom: 20, 
