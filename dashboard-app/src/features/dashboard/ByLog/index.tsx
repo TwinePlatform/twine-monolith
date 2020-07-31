@@ -132,7 +132,8 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                 >
                   {
                     tableData && (
-                      <DataTable
+                    <div>
+                        <DataTable
                         {...tableData}
                         title={getTitleForDayPicker(TitlesCopy.Activities.subtitle, fromDate, toDate)}
                         sortBy={tableData.headers[orderable.sortByIndex]}
@@ -140,6 +141,17 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                         onChangeSortBy={onChangeSortBy}
                         showTotals
                       />
+                        <PrimaryButton 
+                            onClick={()=>setExtraButtonsVisible(!extraButtonsVisible)} 
+                            style={{
+                            position: 'fixed', 
+                            bottom: 20, 
+                            right: 30
+                            }}
+                        >
+                            + Create
+                        </PrimaryButton>
+                    </div>
                     )
                   }
                 </TabGroup>
@@ -147,38 +159,6 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
             </Row>
           )
       }
-      {extraButtonsVisible &&
-        <div
-          style={{
-          position: 'fixed', 
-          bottom: 40, 
-          right: 80
-        }}
-        >
-	        <SecondaryButton
-            onClick={()=>{setDownloadModalVisible(!downloadModalVisible)
-              setUploadModalVisible(false)}} 
-          >
-            Activity Template
-          </SecondaryButton>
-        	<SecondaryButton
-            onClick={()=>{setUploadModalVisible(!uploadModalVisible)
-              setDownloadModalVisible(false)}} 
-          >
-            Upload
-          </SecondaryButton>
-        </div>
-      }
-      <PrimaryButton 
-        onClick={()=>setExtraButtonsVisible(!extraButtonsVisible)} 
-        style={{
-          position: 'fixed', 
-          bottom: 20, 
-          right: 30
-        }}
-      >
-        +
-      </PrimaryButton>
     </Container>
   );
 };
