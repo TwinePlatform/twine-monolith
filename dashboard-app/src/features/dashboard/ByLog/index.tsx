@@ -106,7 +106,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
       />
       <Row center="xs">
         <Col>
-          <H1>{TitlesCopy.Activities.title}</H1>
+          <H1>{TitlesCopy.Logs.title}</H1>
         </Col>
       </Row>
       <Row center="xs">
@@ -127,7 +127,9 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
             <Row center="xs">
               <Col xs={12}>
                 <Errors errors={errors} />
-                <TabGroup titles={['Table']}>
+                <TabGroup 
+                    titles={['Volunteers','Projects']}
+                >
                   {
                     tableData && (
                       <DataTable
