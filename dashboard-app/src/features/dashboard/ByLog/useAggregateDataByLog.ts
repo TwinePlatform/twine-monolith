@@ -2,10 +2,10 @@ import { DependencyList, useEffect, useState } from 'react';
 import { useBatchRequest } from '../../../lib/hooks';
 import { CommunityBusinesses } from '../../../lib/api';
 import {
-  logsToAggregatedData,
+  logsToAggregatedDataNoX,
   AggregatedData,
   IdAndName,
-} from '../dataManipulation/logsToAggregatedData';
+} from '../dataManipulation/logsToAggregatedDataNoX';
 import { tableType } from '../dataManipulation/tableType';
 
 
@@ -42,7 +42,16 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     updateOn: [...updateOn, from, to],
   });
 
-   const logFieldsData = {data: [{id:1, name: "Name"},{id:2, name: "Project"},{id:3, name: "Data"}]};
+   const logFieldsData = {data: [
+                            {id:1, name: "Name"},
+                            {id:2, name: "Time"},
+                            {id:3, name: "Project"},
+                            {id:4, name: "Activity"},
+                            {id:5, name: "Date"},
+                            {id:6, name: "Total Hours"},
+                            {id:7, name: "View Log"},
+                            ]
+                        };
 
 
   useEffect(() => {
@@ -53,7 +62,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     const logs = logsData.data;
     const volunteers = volunteersData.data as IdAndName[];
 
-    const data = logsToAggregatedData({
+    const data = logsToAggregatedDataNoX({
       logs,
       tableType: tableType.ActivityByName,
       xData: volunteers,
