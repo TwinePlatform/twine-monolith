@@ -4,7 +4,7 @@ import { rgba } from 'polished';
 import { Link } from 'react-router-dom';
 import { ColoursEnum } from '../../../../lib/ui/design_system';
 import DataCell from './DataTableCell';
-import { RowProps } from './types';
+import { LogsRowProps } from './types';
 import { hashJSON } from '../../../../lib/util/hash';
 
 /**
@@ -23,8 +23,10 @@ const TableRow = styled.tr`
 /**
  * Component
  */
-const LogsDataTableRow: React.FunctionComponent<RowProps> = (props) => {
-  const { columns, rowLink, order, onClick } = props;
+const LogsDataTableRow: React.FunctionComponent<LogsRowProps> = (props) => {
+  const { columns, rowLink, order, onClick, setSelectedLog, setLogViewModalVisible} = props;
+
+  console.log(columns);
 
   const inner = (
     <TableRow data-testid="data-table-row">
@@ -33,7 +35,7 @@ const LogsDataTableRow: React.FunctionComponent<RowProps> = (props) => {
           <DataCell content={columns[h].content} onClick={onClick} key={hashJSON(h)}/>
         ))
       }
-      <button>View log</button>
+      <button onClick={()=>setLogViewModalVisible(true)}>View log</button>
     </TableRow>
   );
 

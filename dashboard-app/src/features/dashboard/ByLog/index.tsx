@@ -146,6 +146,8 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                         order={orderable.order}
                         onChangeSortBy={onChangeSortBy}
                         showTotals
+                        setSelectedLog
+                        setLogViewModalVisible
                       />
                         <PrimaryButton 
                             onClick={()=>{setLogCreateModalVisible(!logCreateModalVisible)
@@ -171,6 +173,8 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                         order={orderable.order}
                         onChangeSortBy={onChangeSortBy}
                         showTotals
+                        setSelectedLog
+                        setLogViewModalVisible
                       />
                         <PrimaryButton 
                             onClick={()=>{setProjectModalVisible(!projectModalVisible)

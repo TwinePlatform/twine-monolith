@@ -9,7 +9,7 @@ import Card from '../../../../lib/ui/components/Card';
 import LogsDataTableRow from './LogsDataTableRow';
 import HeaderRow from './DataTableHeaderRow';
 import TotalsRow from './DataTableTotalsRow';
-import { DataTableProps } from './types';
+import { LogsDataTableProps } from './types';
 import { toRowProps } from './util';
 import { hashJSON } from '../../../../lib/util/hash';
 import { FullWidthTextBox } from '../../../../lib/ui/components/FullWidthTextBox';
@@ -34,7 +34,7 @@ const Table = styled.table`
 /*
  * Component
  */
-const LogsDataTable: React.FunctionComponent<DataTableProps> = (props) => {
+const LogsDataTable: React.FunctionComponent<LogsDataTableProps> = (props) => {
   const headers = [
     "Name",
     "Time",
@@ -42,7 +42,6 @@ const LogsDataTable: React.FunctionComponent<DataTableProps> = (props) => {
     "Activity",
     "Date",
     "Total Hours",
-    "View Log",
     ];
 
     const {
@@ -59,7 +58,7 @@ const LogsDataTable: React.FunctionComponent<DataTableProps> = (props) => {
     onChangeSortBy(title);
   }, [onChangeSortBy]);
 
-  const sorter = useCallback((_rows: DataTableProps['rows']) =>
+  const sorter = useCallback((_rows: LogsDataTableProps['rows']) =>
     sort([
       { accessor: pathOr('', ['columns', sortBy, 'content']), order },
       { accessor: pathOr('', ['columns', headers[0], 'content']), order: 'asc' as Order },
@@ -82,6 +81,8 @@ const LogsDataTable: React.FunctionComponent<DataTableProps> = (props) => {
                 columns={row.columns}
                 order={headers}
                 key={hashJSON(row)}
+                setSelectedLog
+                setLogViewModalVisible
               />
             ))
         }
