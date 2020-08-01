@@ -38,7 +38,6 @@ export const CommunityBusinesses = {
   configs: {
     get: { method: 'GET' as Method, url: '/community-businesses/me' },
     getLogs: { method: 'GET' as Method, url: '/community-businesses/me/volunteer-logs' },
-    getLogFields: {method: 'GET' as Method, url: '/community-businesses/me/volunteer-logs-fields'},
     getVolunteerActivities: { method: 'GET' as Method, url: '/volunteer-activities' },
     getVolunteerProjects: { method: 'GET' as Method, url: '/community-businesses/me/volunteers/projects' },
     getVolunteers: { method: 'GET' as Method, url: '/community-businesses/me/volunteers' },
@@ -48,24 +47,24 @@ export const CommunityBusinesses = {
     axios.request<Api.CommunityBusinesses.Me.GET.Result>({ ...CommunityBusinesses.configs.get, params }),
   getLogs: (params?: Pick<AxiosRequestConfig, 'params'>) =>
     axios.request({ ...CommunityBusinesses.configs.getLogs, params }),
-  getLogFields: () =>
-    {return [{id:1, name: "Name"},{id:2, name: "Project"},{id:3, name: "Data"}]},
   getVolunteerActivities: () =>
     axios({ ...CommunityBusinesses.configs.getVolunteerActivities }),
   getVolunteers: () => // NB: fields not currently supported
     axios({ ...CommunityBusinesses.configs.getVolunteers, params: { fields: ['name', 'id'] } }),
 };
 
+export const LogNote = {
+  get: (logID: string) =>
+    axios.get("community-businesses/me/get-volunteer-logs/" + logID)
+}
 
 export const File = {
   upload: (file: File, destination: string) => {
     console.log("uploading " + file.toString() + "to /community-businesses/" + destination )
-    /*axios.post('/community-businesses/' + destination, file, {
+    axios.post('/community-businesses/' + destination, file, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-    })*/
-  }
-
- 
+    })
+  } 
 }

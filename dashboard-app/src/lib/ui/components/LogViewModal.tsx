@@ -1,8 +1,8 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
-import {File} from '../../api';
+import {LogNote} from '../../api'
 
 /*
  * Types
@@ -25,18 +25,13 @@ const Heading2 = styled(H2)`
 
 
 const LogViewModal:FC<Props> = (props) => {
-    const [filename, setFilename] = useState("Upload File Here")
 
     const {visible, closeFunction, log} = props;
 
-    const select = () => {
-        if(document.getElementById('file-input'))
-            document.getElementById('file-input')!.click();
-    }
-
-    const handleUpload = (e: any) => {
-        let uploadedFile = e.target.files[0];
-    }
+    useEffect(()=>{
+        if(log.ID)
+            LogNote.get(log.ID).then(res=>console.log(res.data));
+    })
 
     if(visible)
         return (
@@ -76,11 +71,11 @@ const LogViewModal:FC<Props> = (props) => {
                         padding: '12px',
                     }}
                 >
-                    <p>{filename}</p>
-                    <button onClick={select}>Select</button>
-                    <input id="file-input" type="file" name="name" style={{display: 'none'}}
-                        onChange={e=>handleUpload(e)}
-                    />
+                    <p>Log Details</p>
+                    <p>{log.name}</p>
+                    <button>Edit</button>
+                    <button>Delete</button>
+                    <button onClick={closeFunction}>Close</button>
                 </div>
             </div>
         );

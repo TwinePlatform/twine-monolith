@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
-import {File} from '../../api';
 
 /*
  * Types
@@ -75,11 +74,9 @@ const ProjectModal:FC<Props> = (props) => {
                         padding: '12px',
                     }}
                 >
-                    <p>{filename}</p>
-                    <button onClick={select}>Select</button>
-                    <input id="file-input" type="file" name="name" style={{display: 'none'}}
-                        onChange={e=>handleProject(e)}
-                    />
+                    <p>New Project</p>
+                    <input type="text" placeholder="Project Name"/>
+                    <button></button>
                 </div>
             </div>
         );

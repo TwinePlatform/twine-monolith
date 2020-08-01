@@ -48,7 +48,7 @@ const Container = styled(Grid)`
  */
 const initTableData = { headers: [], rows: [] };
 
-const initSelectedLog = { headers: [], rows: [] };
+const initSelectedLog = { ID: "42", name: "ET" };
 
 /**
  * Component
@@ -60,7 +60,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const [logViewModalVisible, setLogViewModalVisible] = useState(false);
   const [logCreateModalVisible, setLogCreateModalVisible] = useState(false);
   const [projectModalVisible, setProjectModalVisible] = useState(false);
-  const [selectedLog, setSelectedLog] = useState("the log");
+  const [selectedLog, setSelectedLog] = useState(initSelectedLog);
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const { loading, error, data, logFields } =
     useAggregateDataByLog({ from: fromDate, to: toDate });
@@ -149,11 +149,14 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                         onChangeSortBy={onChangeSortBy}
                         showTotals
                         setSelectedLog={setSelectedLog}
-                        setLogViewModalVisible={setLogViewModalVisible}
+                        setLogViewModalVisible={()=>{setLogViewModalVisible(true)
+                            setProjectModalVisible(false)
+                            setLogCreateModalVisible(false)}}
                       />
                         <PrimaryButton 
                             onClick={()=>{setLogCreateModalVisible(!logCreateModalVisible)
-                                setProjectModalVisible(false)}} 
+                                setProjectModalVisible(false)
+                                setLogViewModalVisible(false)}} 
                             style={{
                             position: 'fixed', 
                             bottom: 20, 
@@ -175,12 +178,15 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                         order={orderable.order}
                         onChangeSortBy={onChangeSortBy}
                         showTotals
-                        setSelectedLog
-                        setLogViewModalVisible
+                        setSelectedLog={setSelectedLog}
+                        setLogViewModalVisible={()=>{setLogViewModalVisible(true)
+                            setProjectModalVisible(false)
+                            setLogCreateModalVisible(false)}}
                       />
                         <PrimaryButton 
                             onClick={()=>{setProjectModalVisible(!projectModalVisible)
-                                setLogCreateModalVisible(false)}} 
+                                setLogCreateModalVisible(false)
+                                setLogViewModalVisible(false)}} 
                             style={{
                             position: 'fixed', 
                             bottom: 20, 
