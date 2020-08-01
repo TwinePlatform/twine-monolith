@@ -48,7 +48,8 @@ export const CommunityBusinesses = {
     axios.request<Api.CommunityBusinesses.Me.GET.Result>({ ...CommunityBusinesses.configs.get, params }),
   getLogs: (params?: Pick<AxiosRequestConfig, 'params'>) =>
     axios.request({ ...CommunityBusinesses.configs.getLogs, params }),
-  getLogFields: ()=>{()=>[{id:1, name: "Name"},{id:2, name: "Project"},{id:3, name: "Data"}]},
+  getLogFields: () =>
+    {return [{id:1, name: "Name"},{id:2, name: "Project"},{id:3, name: "Data"}]},
   getVolunteerActivities: () =>
     axios({ ...CommunityBusinesses.configs.getVolunteerActivities }),
   getVolunteers: () => // NB: fields not currently supported
