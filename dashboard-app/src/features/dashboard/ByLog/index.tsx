@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import DatePickerConstraints from './datePickerConstraints';
-import _DataTable from '../components/DataTable';
+import _LogsDataTable from '../components/DataTable/LogsDataTable';
 import UtilityBar from '../components/UtilityBar';
 import { H1 } from '../../../lib/ui/components/Headings';
 import { DataTableProps } from '../components/DataTable/types';
@@ -35,7 +35,7 @@ type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
 /**
  * Styles
  */
-const DataTable = styled(_DataTable)`
+const LogsDataTable = styled(_LogsDataTable)`
   margin-top: 4rem;
 `;
 
@@ -139,7 +139,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                   {
                     tableData && (
                     <div>
-                        <DataTable
+                        <LogsDataTable
                         {...tableData}
                         title={getTitleForDayPicker("Volunteer Logs", fromDate, toDate)}
                         sortBy={tableData.headers[orderable.sortByIndex]}
@@ -164,7 +164,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                   {
                     tableData && (
                     <div>
-                        <DataTable
+                        <LogsDataTable
                         {...tableData}
                         title={getTitleForDayPicker("Projects", fromDate, toDate)}
                         sortBy={tableData.headers[orderable.sortByIndex]}
