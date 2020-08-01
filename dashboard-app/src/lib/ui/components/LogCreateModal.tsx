@@ -23,7 +23,7 @@ const Heading2 = styled(H2)`
 `;
 
 
-const VolunteerModal:FC<Props> = (props) => {
+const LogCreateModal:FC<Props> = (props) => {
     const [filename, setFilename] = useState("Upload File Here")
 
     const {visible, closeFunction,} = props;
@@ -88,4 +88,4 @@ const VolunteerModal:FC<Props> = (props) => {
 
 };
 
-export default VolunteerModal;
+export default LogCreateModal;

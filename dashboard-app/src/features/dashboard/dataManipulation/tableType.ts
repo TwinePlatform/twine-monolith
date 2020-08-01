@@ -13,6 +13,8 @@ interface TableType {
   MonthByName: TableTypeItem;
   ActivityByProject: TableTypeItem;
   ProjectByActivity: TableTypeItem;
+ // LogByName: TableTypeItem;
+//LogByProject: TableTypeItem;
 }
 
 // TODO : get log type from api

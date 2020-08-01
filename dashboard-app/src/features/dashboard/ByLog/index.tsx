@@ -13,10 +13,11 @@ import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../../lib/ui/design_system';
 import ProjectModal from '../../../lib/ui/components/ProjectModal';
-import VolunteerModal from '../../../lib/ui/components/VolunteerModal';
+import LogViewModal from '../../../lib/ui/components/LogViewModal';
+import LogCreateModal from '../../../lib/ui/components/LogCreateModal';
 import { PrimaryButton, SecondaryButton} from '../../../lib/ui/components/Buttons';
 import Errors from '../components/Errors';
-import useAggregateDataByActivity from './useAggregateDataByActivity';
+import useAggregateDataByLog from './useAggregateDataByLog';
 import { TabGroup } from '../components/Tabs';
 import { getTitleForDayPicker } from '../util';
 import { useErrors } from '../../../lib/hooks/useErrors';
@@ -47,6 +48,7 @@ const Container = styled(Grid)`
  */
 const initTableData = { headers: [], rows: [] };
 
+const initSelectedLog = { headers: [], rows: [] };
 
 /**
  * Component
@@ -55,12 +57,13 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const { unit } = useContext(DashboardContext);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
-  const [volunteerModalVisible, setVolunteerModalVisible] = useState(false);
+  const [logViewModalVisible, setLogViewModalVisible] = useState(false);
+  const [logCreateModalVisible, setLogCreateModalVisible] = useState(false);
   const [projectModalVisible, setProjectModalVisible] = useState(false);
-  const [extraButtonsVisible, setExtraButtonsVisible] = useState(false);
+  const [selectedLog, setSelectedLog] = useState(initSelectedLog);
   const [tableData, setTableData] = useState<TableData>(initTableData);
-  const { loading, error, data, activities } =
-    useAggregateDataByActivity({ from: fromDate, to: toDate });
+  const { loading, error, data, logFields } =
+    useAggregateDataByLog({ from: fromDate, to: toDate });
 
   // set and clear errors on response
   const [errors, setErrors] = useErrors(error, data);
@@ -78,10 +81,10 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
 
   // manipulate data for table
   useEffect(() => {
-    if (!loading && data && activities) {
-      setTableData(aggregatedToTableData({ data, unit, yData: activities }));
+    if (!loading && data && logFields) {
+      setTableData(aggregatedToTableData({ data, unit, yData: logFields }));
     }
-  }, [activities, data, loading, unit]);
+  }, [logFields, data, loading, unit]);
 
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
@@ -94,9 +97,14 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
 
   return (
     <Container>
-      <VolunteerModal
-        visible={volunteerModalVisible}
-        closeFunction={()=>setVolunteerModalVisible(false)}
+      <LogViewModal
+        visible={logViewModalVisible}
+        closeFunction={()=>setLogViewModalVisible(false)}
+        log={selectedLog}
+      />
+      <LogCreateModal
+        visible={logCreateModalVisible}
+        closeFunction={()=>setLogCreateModalVisible(false)}
       />
       <ProjectModal
         visible={projectModalVisible}
@@ -140,7 +148,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                         showTotals
                       />
                         <PrimaryButton 
-                            onClick={()=>{setVolunteerModalVisible(!volunteerModalVisible)
+                            onClick={()=>{setLogCreateModalVisible(!logCreateModalVisible)
                                 setProjectModalVisible(false)}} 
                             style={{
                             position: 'fixed', 
@@ -166,7 +174,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                       />
                         <PrimaryButton 
                             onClick={()=>{setProjectModalVisible(!projectModalVisible)
-                                setVolunteerModalVisible(false)}} 
+                                setLogCreateModalVisible(false)}} 
                             style={{
                             position: 'fixed', 
                             bottom: 20, 
