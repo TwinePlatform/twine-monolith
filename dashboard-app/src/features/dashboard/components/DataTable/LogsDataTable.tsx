@@ -51,6 +51,8 @@ const LogsDataTable: React.FunctionComponent<LogsDataTableProps> = (props) => {
     onChangeSortBy = () => { },
     title,
     showTotals = false,
+    setSelectedLog,
+    setLogViewModalVisible,
     ...rest
   } = props;
 
@@ -81,8 +83,8 @@ const LogsDataTable: React.FunctionComponent<LogsDataTableProps> = (props) => {
                 columns={row.columns}
                 order={headers}
                 key={hashJSON(row)}
-                setSelectedLog
-                setLogViewModalVisible
+                setSelectedLog={setSelectedLog}
+                setLogViewModalVisible={setLogViewModalVisible}
               />
             ))
         }

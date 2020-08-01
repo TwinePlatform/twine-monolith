@@ -60,7 +60,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const [logViewModalVisible, setLogViewModalVisible] = useState(false);
   const [logCreateModalVisible, setLogCreateModalVisible] = useState(false);
   const [projectModalVisible, setProjectModalVisible] = useState(false);
-  const [selectedLog, setSelectedLog] = useState(initSelectedLog);
+  const [selectedLog, setSelectedLog] = useState("the log");
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const { loading, error, data, logFields } =
     useAggregateDataByLog({ from: fromDate, to: toDate });
@@ -94,6 +94,8 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
       setErrors({ Download: 'No data available to download' });
     }
   }, [loading, data, fromDate, toDate, unit, orderable, setErrors]);
+
+  console.log("selected log" + selectedLog)
 
   return (
     <Container>
@@ -146,8 +148,8 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                         order={orderable.order}
                         onChangeSortBy={onChangeSortBy}
                         showTotals
-                        setSelectedLog
-                        setLogViewModalVisible
+                        setSelectedLog={setSelectedLog}
+                        setLogViewModalVisible={setLogViewModalVisible}
                       />
                         <PrimaryButton 
                             onClick={()=>{setLogCreateModalVisible(!logCreateModalVisible)
