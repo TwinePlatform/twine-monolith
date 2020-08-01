@@ -21,7 +21,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
 
   const {
     loading,
-    results: [logsData, volunteersData, logFieldsData],
+    results: [logsData, volunteersData],
     error,
   } = useBatchRequest({
     requests: [
@@ -34,16 +34,15 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
         ...CommunityBusinesses.configs.getVolunteers,
         transformResponse: [(res: any) => res.result.map((a: any) => ({ id: a.id, name: a.name }))],
       },
-      {
+    /*  {
         ...CommunityBusinesses.configs.getLogFields,
         transformResponse: [(res: any) => res.result.map((a: any) => ({ id: a.id, name: a.name }))],
-      },
+      },*/
     ],
     updateOn: [...updateOn, from, to],
   });
 
-  console.log("log Fields Data");
-  console.log(logFieldsData);
+   const logFieldsData = {data: [{id:1, name: "Name"},{id:2, name: "Project"},{id:3, name: "Data"}]};
 
 
   useEffect(() => {
