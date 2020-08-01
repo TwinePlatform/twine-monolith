@@ -60,6 +60,8 @@ const LogsDataTable: React.FunctionComponent<LogsDataTableProps> = (props) => {
     onChangeSortBy(title);
   }, [onChangeSortBy]);
 
+  console.log(rows);
+
   const sorter = useCallback((_rows: LogsDataTableProps['rows']) =>
     sort([
       { accessor: pathOr('', ['columns', sortBy, 'content']), order },

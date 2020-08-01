@@ -69,9 +69,6 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       yData: logFieldsData.data,
     });
 
-    console.log("data");
-    console.log(data);
-
     setLogFields(logFieldsData.data);
     setAggregatedData(data);
   }, [logsData, volunteersData, logFieldsData, loading, error]);

@@ -95,8 +95,6 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
     }
   }, [loading, data, fromDate, toDate, unit, orderable, setErrors]);
 
-  console.log("selected log" + selectedLog)
-
   return (
     <Container>
       <LogViewModal
