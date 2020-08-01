@@ -67,13 +67,12 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
 
     const data = logsToAggregatedDataNoX({
       logs,
-      tableType: tableType.ActivityByName,
+      tableType: tableType.LogByName,
       xData: volunteers,
       yData: logFieldsData.data,
     });
 
     console.log(data);
-    
 
     setLogFields(logFieldsData.data);
     setAggregatedData(data);
