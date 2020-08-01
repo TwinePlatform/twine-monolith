@@ -10,7 +10,7 @@ import {File} from '../../api';
 type Props = {
   visible: boolean;
   closeFunction: () => void;
-  filetype: string;
+  destination: string;
 }
 
 /*
@@ -27,7 +27,7 @@ const Heading2 = styled(H2)`
 const UploadModal:FC<Props> = (props) => {
     const [filename, setFilename] = useState("Upload File Here")
 
-    const {visible, closeFunction, filetype} = props;
+    const {visible, closeFunction, destination} = props;
 
     const select = () => {
         if(document.getElementById('file-input'))
@@ -41,7 +41,7 @@ const UploadModal:FC<Props> = (props) => {
             console.log(uploadedFile);
             setFilename(uploadedFile.name);
 
-            File.upload(uploadedFile,filetype);
+            File.upload(uploadedFile,destination);
             closeFunction();
         }
     }

@@ -96,12 +96,12 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
       <UploadModal
         visible={uploadModalVisible}
         closeFunction={()=>setUploadModalVisible(false)}
-        filetype={"time"}
+        destination={"time"}
       />
       <DownloadModal
         visible={downloadModalVisible}
         closeFunction={()=>setDownloadModalVisible(false)}
-        filename={"timetemplate.csv"}
+        destination={"timetemplate.csv"}
       />
       <Row center="xs">
         <Col>

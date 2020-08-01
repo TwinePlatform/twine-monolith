@@ -46,6 +46,8 @@ const getIdAndName = (type: TableTypeItem['xIdFromLogs'], xData: Params['xData']
       return activity
         ? { id: activity.id, name: activity.name }
         : { id: -1, name: 'Unknown Activity' };
+
+    //ADD LOG HERE AND HANDLE THE CASE
   }
 };
 
