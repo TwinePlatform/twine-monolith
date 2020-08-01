@@ -24,18 +24,8 @@ const Heading2 = styled(H2)`
 
 
 const LogCreateModal:FC<Props> = (props) => {
-    const [filename, setFilename] = useState("Upload File Here")
 
     const {visible, closeFunction,} = props;
-
-    const select = () => {
-        if(document.getElementById('file-input'))
-            document.getElementById('file-input')!.click();
-    }
-
-    const handleUpload = (e: any) => {
-        let uploadedFile = e.target.files[0];
-    }
 
     if(visible)
         return (
@@ -75,11 +65,12 @@ const LogCreateModal:FC<Props> = (props) => {
                         padding: '12px',
                     }}
                 >
-                    <p>{filename}</p>
-                    <button onClick={select}>Select</button>
-                    <input id="file-input" type="file" name="name" style={{display: 'none'}}
-                        onChange={e=>handleUpload(e)}
-                    />
+                    <p>Add New Log</p>
+                    <input type="text" placeholder="Name"/>
+                    <input type="text" placeholder="Date"/>
+                    <input type="text" placeholder="Project"/>
+                    <input type="text" placeholder="Activity"/>
+                    <button onClick={select}>Create</button>
                 </div>
             </div>
         );

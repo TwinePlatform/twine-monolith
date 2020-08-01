@@ -76,7 +76,7 @@ const ProjectModal:FC<Props> = (props) => {
                 >
                     <p>New Project</p>
                     <input type="text" placeholder="Project Name"/>
-                    <button></button>
+                    <button>Create</button>
                 </div>
             </div>
         );
