@@ -127,7 +127,7 @@ export const Volunteers: VolunteerCollection = {
   },
 
   async fromProjectWithToken(client, cb, vp) {
-  
+
     // sql: select distinct user_account.push_token from user_account inner join volunteer_hours_log 
     //ON user_account.user_account_id = volunteer_hours_log.user_account_id where volunteer_hours_log.organisation_id = 2
     //AND volunteer_hours_log.volunteer_project_id = 1;
