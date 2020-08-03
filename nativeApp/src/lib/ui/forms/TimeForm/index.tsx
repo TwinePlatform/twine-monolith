@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { StorageValuesEnum } from '../../../../authentication/types';
 import styled from 'styled-components/native';
-import { Form as F, Text } from 'native-base';
+import { Form as F, Text, View } from 'native-base';
 import { NetInfo, Platform, AsyncStorage, TextInput } from "react-native";
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,6 +22,10 @@ import { User } from '../../../../../../api/src/models';
 import SavedModal from '../../modals/SavedModal';
 import NoteModal from '../../modals/NoteModal';
 import useToggle from '../../../hooks/useToggle';
+
+import API from '../../../../api';
+import BadgeModal from '../../modals/BadgeModel';
+import { BadgeObj } from './../../../../screens/volunteer_views/VolunteerHome/BadgeObject';
 
 import * as yup from 'yup';
 import { Formik } from 'formik';
@@ -91,6 +95,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   // local state
   const [responseModal, toggleResponseModal] = useToggle(false);
+  const [badgeModal, setBadgeModal] = useState(false);
   const [noteModalVisible, toggleNoteInvisibility] = useToggle(false);
 
   const [startTime, setStartTime] = useState<Date>(new Date);
@@ -100,6 +105,8 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [minutes, setMinutes] = useState<number>();
   const [note, setNote] = useState('');
   const [userId, setUserID] = useState<number>();
+  const [badge, setBadge] = useState(Object());
+
 
   if (forUser == 'admin') {
     // setUserID(volunteers.find((x) => x.name === volunteer).id);
@@ -157,7 +164,14 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
     if (requestStatus.success) {
       toggleResponseModal();
     }
+    // if (badgeModal != false) {
+    //   setTimeout(() => {
+    //     setBadgeModal(!badgeModal);
+    //   }, 3000);
+    // }
   }, [requestStatus]);
+
+
 
   // handlers
   const onSubmit = async (volunteer, project, activity, startTime, endTime, note) => {
@@ -190,6 +204,23 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
         console.log(res);
       } catch (error) {
         console.log(error);
+      }
+
+      //check for badge acheive and trigger badge reward
+      if (forUser == 'volunteer') {
+        try {
+          const checkBadge = await API.Badges.checkNupdate();
+          Promise.all(checkBadge.map(badge => {
+            setBadge(BadgeObj[badge]);
+            setBadgeModal(true);
+            setTimeout(() => {
+              setBadgeModal(false);
+            }, 3000)
+          }));
+          // ToDo: enable multiple badges to be awarded at the same time
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
 
@@ -244,7 +275,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
     <Formik
       initialValues={{ volunteer: '', project: selectedProject, activity: selectedActivity, note: '' }}
-      validationSchema={validationSchema}
+      // validationSchema={validationSchema}
       onSubmit={(values, date) => {
         onSubmit(values.volunteer, values.project, values.activity, startTime, endTime, values.note);
       }}>
@@ -252,10 +283,17 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
 
         <Form>
+
+          <BadgeModal
+            visible={badgeModal}
+            badge={badge}
+          />
+
           <SavedModal
             isVisible={responseModal}
             onContinue={onContinue}
           />
+
           <NoteModal
             isVisible={noteModalVisible}
             // addNote={setNote}

@@ -133,15 +133,23 @@ const Stats: FC<Props> = () => {
   )
 };
 
-const badgearray = [BadgeObj.FirstLogBadge, BadgeObj.ThridMonthBadge];
-
 const BadgeTab: FC<Props> = (props) => {
   return (
     <CardView>
       {
-        props.badge.map((element) => (
-          <BadgeCard badge={element} />
-        ))
+        props.badge.map((element) => {
+          const awardId = element['award_id'];
+          if (awardId == 100) {
+            return (<BadgeCard badge={BadgeObj['FirstLogBadge']} />)
+          } else if (awardId >> 100) {
+            return (<BadgeCard badge={BadgeObj['FifthLogBadge']} />)
+          } else {
+            const badgename = Object.keys(BadgeObj)[awardId - 1];
+            return (
+              <BadgeCard badge={BadgeObj[badgename]} />
+            )
+          }
+        })
       }
     </CardView >
   );
@@ -207,6 +215,12 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const [userID, setUserID] = useState('');
   const [logged, setLogged] = useState(false);
+  const [badgearray, setbadgearray] = useState([]);
+
+  const getBadge = async () => {
+    const badgeArr = await API.Badges.getBadges();
+    setbadgearray(badgeArr);
+  }
 
   //access fail to send log and try logging them again
   const checkStorage = async () => {
@@ -271,6 +285,7 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
         navigation.navigate('HelpSlideStack');
       }
     })
+    getBadge();
     checkStorage();
     dispatch(loadLogs());
   }, []);
