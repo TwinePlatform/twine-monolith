@@ -54,6 +54,7 @@ export namespace Api {
     }
 
     export namespace Me {
+
       export namespace GET {
         export interface Request extends Hapi.Request {
           query: ApiRequestQuery & Dictionary<any>;
@@ -296,6 +297,25 @@ export namespace Api {
         }
       }
 
+      export namespace Badges {
+        export namespace GET {
+          export interface Request extends Hapi.Request {
+
+          }
+          export type Result = any;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+
+        export namespace POST {
+          export interface Request extends Hapi.Request {
+            userId: 'me';
+            pre: { communityBusiness: CommunityBusiness };
+          }
+          export type Result = any;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+      }
+
       export namespace Visitors {
         export namespace Id {
           export namespace GET {
@@ -431,7 +451,7 @@ export namespace Api {
         export namespace GET {
           export interface Request extends Hapi.Request {
             params: { organisationId: string | 'me' };
-            query: ApiRequestQuery & Dictionary <any>;
+            query: ApiRequestQuery & Dictionary<any>;
             pre: { communityBusiness: CommunityBusiness; isChild: boolean };
           }
           export type Result = User[];
