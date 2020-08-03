@@ -50,28 +50,29 @@ const Image = styled.Image`
  */
 
 const BadgeImages = {
-	FirstLog: require('../../../../assets/Badges/small/Medal1.png'),
-	ThridMonth: require('../../../../assets/Badges/small/3MonthMedal.png'),
-	FifthLog: require('../../../../assets/Badges/small/5thLogMedal.png'),
-	SixthMonth: require('../../../../assets/Badges/small/6MonthMedal.png'),
-	TenthHour: require('../../../../assets/Badges/small/10hoursMedal.png'),
-	twentiethHour: require('../../../../assets/Badges/small/20hoursmedal.png'),
-	fiftiethHour: require('../../../../assets/Badges/small/50hoursmedal.png'),
-	AnnMedal: require('../../../../assets/Badges/small/AnnMedal.png'),
-	InviteMedal: require('../../../../assets/Badges/small/EmailInviteMedal.png'),
+	1: require('../../../../assets/Badges/small/10hoursMedal.png'),
+	2: require('../../../../assets/Badges/small/20hoursmedal.png'),
+	3: require('../../../../assets/Badges/small/50hoursmedal.png'),
+	4: require('../../../../assets/Badges/small/EmailInviteMedal.png'),
+	5: require('../../../../assets/Badges/small/3MonthMedal.png'),
+	6: require('../../../../assets/Badges/small/6MonthMedal.png'),
+	7: require('../../../../assets/Badges/small/AnnMedal.png'),
+	100: require('../../../../assets/Badges/small/Medal1.png'),
+	101: require('../../../../assets/Badges/small/5thLogMedal.png'),
 };
 
 const VolunteersBadgesCard: FC<Props> = (props) => {
-	const { badges, name } = props.details;
+	const { award_id, user_name } = props.details;
+	console.log(award_id);
 	return (
 		<Card>
 			<HeadingContainer>
 				<MaterialIcons name="person-outline" outline size={35} color={ColoursEnum.mustard} />
-				<Heading2>{name}</Heading2>
+				<Heading2>{user_name}</Heading2>
 			</HeadingContainer>
 			<Line />
 			<BadgeIcon>
-				{badges.map((badge) => (
+				{award_id.map((badge) => (
 					<Image source={BadgeImages[badge]} />
 				))}
 			</BadgeIcon>
