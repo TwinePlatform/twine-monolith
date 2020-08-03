@@ -5,6 +5,7 @@ import getEnvVars from "../../environment"; // eslint-disable-line
 import { StorageValuesEnum } from "../authentication/types";
 import { Api } from "../../../api/src/api/v1/types/api";
 import { VolunteerLog } from "../../../api/src/models";
+import { userId } from "../../../api/src/api/v1/schema/request";
 
 /*
  * Types
@@ -148,6 +149,32 @@ const Invite = {
   }
 }
 
+const Badges = {
+  getBadges: () => {
+    const res = makeRequest({
+      method: "GET",
+      url: '/community-businesses/me/getOwnBadges'
+    }).then(result => { return result.data })
+    return res;
+  },
+
+  getCBBadges: () => {
+    const res = makeRequest({
+      method: "GET",
+      url: '/community-businesses/me/getCommunityBadges'
+    }).then(result => { return result.data })
+    return res;
+  },
+
+  checkNupdate: () => {
+    const res = makeRequest({
+      method: "POST",
+      url: "/community-businesses/me/checkBadge"
+    }).then(res => { return res.data; })
+    return res;
+  }
+}
+
 const Users = {
   getPush: (orgId: number, ProjectId: number) =>
     makeRequest({
@@ -202,6 +229,7 @@ const API = {
   Projects,
   Constants,
   Invite,
+  Badges,
   Users,
   Notes
 };
