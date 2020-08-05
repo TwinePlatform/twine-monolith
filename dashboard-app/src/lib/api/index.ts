@@ -12,6 +12,7 @@ export const axios = _axios.create({
   paramsSerializer: (params) => qs.stringify(params, { encode: false }),
 });
 
+/*
 const axios2 = _axios.create({
   baseURL,
   paramsSerializer: (params) => qs.stringify(params, { encode: false }),
@@ -36,19 +37,13 @@ const makeRequest = async <T = any>(params: AxiosRequestConfig) => {
 export const Roles = {
   get: () => makeRequest({ method: "GET", url: "/users/me/roles" }),
 };
-
-/*export const Roles = {
+*/
+export const Roles = {
   get: () => axios.get('/users/me/roles'),
 };
-*/
+
 
 export const CbAdmins = {
-  get: () => {
-    axios.get<Api.CommunityBusinesses.CbAdmins.GET.Result>('/community-businesses/me/cb-admins')
-      .then((res) => {
-        const x = res.data;
-      });
-  },
   login: ({ email, password }: { email: string, password: string }) =>
     axios.post(
       '/users/login',
@@ -70,6 +65,7 @@ export const CommunityBusinesses = {
     get: { method: 'GET' as Method, url: '/community-businesses/me' },
     getLogs: { method: 'GET' as Method, url: '/community-businesses/me/volunteer-logs' },
     getVolunteerActivities: { method: 'GET' as Method, url: '/volunteer-activities' },
+    getVolunteerProjects: { method: 'GET' as Method, url: '/community-businesses/me/volunteers/projects' },
     getVolunteers: { method: 'GET' as Method, url: '/community-businesses/me/volunteers' },
   },
 
@@ -82,3 +78,17 @@ export const CommunityBusinesses = {
   getVolunteers: () => // NB: fields not currently supported
     axios({ ...CommunityBusinesses.configs.getVolunteers, params: { fields: ['name', 'id'] } }),
 };
+
+
+export const File = {
+  upload: (file: File, destination: string) => {
+    console.log("uploading " + file.toString() + "to /community-businesses/" + destination )
+    /*axios.post('/community-businesses/' + destination, file, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+    })*/
+  }
+
+ 
+}
