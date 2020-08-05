@@ -27,7 +27,9 @@ const Scrollable = styled.ScrollView`
 const NavBar = styled.View`
 	width: 100%;
 	height: 24px;
-	marginTop: 10px;
+    marginTop: 10px;
+    position: absolute;
+    top: 30px;
 `;
 
 const TextRight = styled.Text`
@@ -81,7 +83,18 @@ const ContainerFooter = styled.View`
 	width: 100%
 	height: 47px;
 	marginBottom: 20px;
-	flexDirection: row;
+    flexDirection: row;
+    alignItems: center;
+    position: absolute;
+    bottom: 20px;
+`;
+
+const ContainerFooterCenter = styled.View`
+    width: 200px;
+    marginLeft: 80px;
+    flexDirection: row;
+    justifyContent: space-around;
+    alignItems: center;
 `;
 
 const ContainerImageLeft = styled.View`
@@ -128,6 +141,18 @@ const styles = StyleSheet.create({
         height: 47,
         borderRadius: 47 / 2,
         backgroundColor: '#FFFFFF'
+    },
+    circleSmall: {
+        width: 14,
+        height: 14,
+        borderRadius: 14 / 2,
+        backgroundColor: '#707070'
+    },
+    circleSmallCurrent: {
+        width: 14,
+        height: 14,
+        borderRadius: 14 / 2,
+        backgroundColor: '#8000FF'
     }
 });
 
@@ -136,7 +161,7 @@ const styles = StyleSheet.create({
  */
 
 const images = {
-    slide1: require('../../../../assets/HelpSlide/slide1.png'),
+    background: require('../../../../assets/HelpSlide/background.png'),
     imagename: require('../../../../assets/HelpSlide/logo.png'),
 };
 
@@ -147,7 +172,7 @@ const HelpSlidesStart: FC<NavigationInjectedProps & Props> = ({ navigation, text
         <Scrollable>
             <View style={styles.container}>
 
-                <ImageBackground style={styles.image} source={images['slide1']} >
+                <ImageBackground style={styles.image} source={images['background']} >
 
                     <NavBar>
                         <TouchableOpacity onPress={() => navigation.navigate('slide6')}>
@@ -155,7 +180,7 @@ const HelpSlidesStart: FC<NavigationInjectedProps & Props> = ({ navigation, text
                         </TouchableOpacity>
                     </NavBar>
 
-                    <EmptySpace1></EmptySpace1>
+                    {/* <EmptySpace1></EmptySpace1> */}
 
                     <ContainerImage>
                         <Image source={images['imagename']} />
@@ -167,9 +192,44 @@ const HelpSlidesStart: FC<NavigationInjectedProps & Props> = ({ navigation, text
 
                     <TextBottom>Let's get started..</TextBottom>
 
-                    <EmptySpace2></EmptySpace2>
+                    {/* <EmptySpace2></EmptySpace2> */}
 
                     <ContainerFooter>
+
+                        <ContainerFooterCenter>
+
+                            <TouchableOpacity style={styles.circleSmallCurrent}
+                                onPress={() => navigation.navigate('slide1')}
+                            >
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.circleSmall}
+                                onPress={() => navigation.navigate('slide2')}
+                            >
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.circleSmall}
+                                onPress={() => navigation.navigate('slide3')}
+                            >
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.circleSmall}
+                                onPress={() => navigation.navigate('slide4')}
+                            >
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.circleSmall}
+                                onPress={() => navigation.navigate('slide5')}
+                            >
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.circleSmall}
+                                onPress={() => navigation.navigate('slide6')}
+                            >
+                            </TouchableOpacity>
+
+                        </ContainerFooterCenter>
+
                         <ContainerImageRight>
                             <TouchableOpacity style={styles.circle}
                                 onPress={() => navigation.navigate('slide2')}
