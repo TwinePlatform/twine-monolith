@@ -63,7 +63,12 @@ const BadgeImages = {
 
 const VolunteersBadgesCard: FC<Props> = (props) => {
 	const { award_id, user_name } = props.details;
-	console.log(award_id);
+	const award_id_calibrate = award_id.map(x => {
+		if (x > 101) {
+			x = 101
+		};
+		return x;
+	});
 	return (
 		<Card>
 			<HeadingContainer>
@@ -72,7 +77,7 @@ const VolunteersBadgesCard: FC<Props> = (props) => {
 			</HeadingContainer>
 			<Line />
 			<BadgeIcon>
-				{award_id.map((badge) => (
+				{award_id_calibrate.map((badge) => (
 					<Image source={BadgeImages[badge]} />
 				))}
 			</BadgeIcon>

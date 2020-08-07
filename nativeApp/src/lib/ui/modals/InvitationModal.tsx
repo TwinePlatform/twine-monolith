@@ -14,12 +14,16 @@ type Props = {
   isVisible: boolean;
   onSendClose: () => void;
   onCancel: () => void;
+  awardBadge: (awardBadgeState) => boolean;
   title: string;
 }
 
 /*
  * Styles
  */
+const View = styled.View`
+`;
+
 const Heading2 = styled(H2)`
   marginBottom: 20;
   color: ${ColoursEnum.black};
@@ -38,7 +42,7 @@ const ButtonContainer = styled.View`
   marginTop: 10;
 `;
 
-const ButtonText = styled.Text<{buttonType: 'cancel' | 'confirm' }>`
+const ButtonText = styled.Text<{ buttonType: 'cancel' | 'confirm' }>`
   letterSpacing: 1.2;
   fontFamily:${FontsEnum.medium} 
   color: ${({ buttonType }) => (buttonType === 'cancel' ? ColoursEnum.darkGrey : ColoursEnum.purple)};
@@ -52,7 +56,7 @@ const StyledButton = styled(B)`
 
 const Button = ({ onPress, buttonType }) => (
   <StyledButton transparent onPress={onPress}>
-    <ButtonText buttonType={buttonType}>{ buttonType === 'cancel' ? 'Cancel' : 'Send'}</ButtonText>
+    <ButtonText buttonType={buttonType}>{buttonType === 'cancel' ? 'Cancel' : 'Send'}</ButtonText>
   </StyledButton>
 );
 
@@ -62,40 +66,52 @@ const Button = ({ onPress, buttonType }) => (
 
 
 const InvitationModal: FC<Props> = ({
-  isVisible, onSendClose, onCancel, title,
+  isVisible, onSendClose, onCancel, awardBadge, title,
 }) => {
-    const [emailAddress, setEmailAddress] = useState("");
-    const [subject, setSubject] = useState("Twine Sign Up");
-    const [body, setBody] = useState("Dear Volunteer,\n\nI am inviting you to use the TWINE volunteering app.");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [subject, setSubject] = useState("Twine Sign Up");
+  const [body, setBody] = useState("Dear Volunteer,\n\nI am inviting you to use the TWINE volunteering app.");
 
-    const onSend = () => {
-        const email = {
-            address: emailAddress,
-            subject: subject,
-            body: body
-        };
+  const onSend = () => {
+    const email = {
+      address: emailAddress,
+      subject: subject,
+      body: body
+    };
+    API.Invite.byEmail(email);
+  }
 
-        API.Invite.byEmail(email);
-    }
+  return (
 
-return(
-  <Modal isVisible={isVisible}>
-    <Card>
-      <Heading2>{title}</Heading2>
-      <Form>
-      <Textarea rowSpan={1} bordered underline placeholder="address" value={emailAddress} onChangeText={text => setEmailAddress(text)}/>
-      <Textarea rowSpan={1} bordered underline placeholder="subject" value={subject} onChangeText={text => setSubject(text)}/>
-      <Textarea rowSpan={5} bordered underline value={body} onChangeText={text => setBody(text)}/>    
-      </Form>
-      <ButtonContainer>
-        <Button onPress={onCancel} buttonType="cancel" />
-        <Button onPress={()=>{
+    <Modal isVisible={isVisible}>
+      <Card>
+        <Heading2>{title}</Heading2>
+        <Form>
+          <Textarea rowSpan={1} bordered underline placeholder="address" value={emailAddress} onChangeText={text => setEmailAddress(text)} />
+          <Textarea rowSpan={1} bordered underline placeholder="subject" value={subject} onChangeText={text => setSubject(text)} />
+          <Textarea rowSpan={5} bordered underline value={body} onChangeText={text => setBody(text)} />
+        </Form>
+        <ButtonContainer>
+          <Button onPress={onCancel} buttonType="cancel" />
+          {/* <Button onPress={onPress} buttonType="send" /> */}
+          <Button onPress={async () => {
             onSend();
             onSendClose();
-        }} buttonType="send" />
-      </ButtonContainer>
-    </Card>
-  </Modal>
-)};
+            //check if badge exist and call award modal
+            const awardBadgeAPI = await API.Badges.awardInvite();
+            if (awardBadgeAPI != null) {
+              setTimeout(() => { awardBadge(true); }, 1000);
+              setTimeout(() => { awardBadge(false); }, 3000);
+            }
+          }} buttonType="send" />
+        </ButtonContainer>
+      </Card>
+    </Modal>
+
+
+
+
+  )
+};
 
 export default InvitationModal;

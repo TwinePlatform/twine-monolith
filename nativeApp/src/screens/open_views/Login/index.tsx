@@ -87,6 +87,7 @@ const Login: FC<Props> = (props) => {
 
   useEffect(() => {
     AsyncStorage.getItem('HelpSlides').then(val => {
+      console.log(val);
       if (!val) {
         props.navigation.navigate('HelpSlideStack');
       }

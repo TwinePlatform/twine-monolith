@@ -172,6 +172,14 @@ const Badges = {
       url: "/community-businesses/me/checkBadge"
     }).then(res => { return res.data; })
     return res;
+  },
+
+  awardInvite: () => {
+    const res = makeRequest({
+      method: "POST",
+      url: "/community-businesses/me/getInviteBadge"
+    }).then(res => { return res.data; })
+    return res;
   }
 }
 
