@@ -23,7 +23,6 @@ export const badges = {
 	async getAwards(client: Knex, orgId: number, userId?: number) {
 
 		if (userId == undefined) {
-			console.log('here');
 			const res = await client('user_badges')
 				.select('award_id', 'user_account_id')
 				.where({
@@ -31,7 +30,6 @@ export const badges = {
 				})
 				.orderBy('achieved_date');
 			//ToDo: sort acheived date
-
 			return res;
 		} else {
 			const res = await client('user_badges')
@@ -42,21 +40,28 @@ export const badges = {
 				})
 				.orderBy('achieved_date');
 			//ToDo: sort acheived date
-
 			return res;
 		}
 	},
 
 	async updateAwards(client: Knex, userId: number, orgId: number, awardId: number) {
 
-		// insert into user_badges(user_account_id,award_id) values (6,1);
 		const res = await client('user_badges')
 			.insert({ 'user_account_id': userId, 'organisation_id': orgId, 'award_id': awardId });
 
-		//ToDo: sort acheived date
-
 		return res;
+	},
 
+	async checkInvitationBadge(client: Knex, userId: any, orgId: number, awardId: number) {
+		const [res] = await client('user_badges')
+			.select()
+			.where({
+				'user_account_id': userId,
+				'organisation_id': orgId,
+				'award_id': awardId
+			});
+
+		return res || null;
 	},
 
 	async checkLoggedHours(client: Knex, userId: any, orgId: number) {
@@ -67,6 +72,7 @@ export const badges = {
 				'user_account_id': userId,
 				'organisation_id': orgId
 			});
+
 
 		return res;
 

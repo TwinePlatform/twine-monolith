@@ -183,8 +183,9 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                 const orgId = credentials[0].organisation_id;
 
                 //check if badge exist in table using userId and OrganisationId
-                const badgesArray = await badges.getAwards(knex, userId, orgId);
-
+                const badgesArray = await badges.getAwards(knex, orgId, userId);
+                console.log('this is the badge array');
+                console.log(badgesArray);
                 var awardIdArrayList: any = [];
 
                 badgesArray.forEach((awardID: any) => {
@@ -225,7 +226,6 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                 // 100 = 1st log, subsequent logs are increment of 1 every 5 logs 101 = 5, 102 = 10,... 
                 const numLoggedObjArr = await badges.checkNumLog(knex, userId, orgId);
                 const numLogged = numLoggedObjArr[0].num_logs;
-
                 if (!awardIdArrayList.includes(100)) {
                     if (numLogged >= 1) {
                         badges.updateAwards(knex, userId, orgId, 100);
@@ -275,12 +275,24 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                     server: { app: { knex } },
                     pre: { communityBusiness },
                 } = request;
+
                 const token = request.yar.id;
                 const credentials = await userCredentials.get(knex, token);
                 const userId = credentials[0].user_account_id;
                 const orgId = credentials[0].organisation_id;
+
+                const awardExist = await badges.checkInvitationBadge(knex, userId, orgId, 4);
+
+                var result;
                 //update DB with badgeId 4 which is the invitation badge
-                badges.updateAwards(knex, userId, orgId, 4);
+                if (awardExist == null) {
+                    const res = await badges.updateAwards(knex, userId, orgId, 4);
+                    result = res;
+                } else {
+                    result = null;
+                }
+
+                return result;
             }
         },
         {
