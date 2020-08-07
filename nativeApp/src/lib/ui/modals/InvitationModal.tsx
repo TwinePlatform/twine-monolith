@@ -73,12 +73,12 @@ const InvitationModal: FC<Props> = ({
   const [body, setBody] = useState("Dear Volunteer,\n\nI am inviting you to use the TWINE volunteering app.");
 
   const onSend = () => {
-    const email = {
-      address: emailAddress,
-      subject: subject,
-      body: body
-    };
-    API.Invite.byEmail(email);
+    // const email = {
+    //   address: emailAddress,
+    //   subject: subject,
+    //   body: body
+    // };
+    // API.Invite.byEmail(email);
   }
 
   return (
