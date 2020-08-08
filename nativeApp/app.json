@@ -30,6 +30,6 @@
       "package": "com.powertochange.volunteerapp",
       "versionCode": 1
     },
-    "description": "Early published version with error trapping, volunteer stats, push notifications."
+    "description": "added invitation award badge"
   }
 }
