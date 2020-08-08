@@ -87,6 +87,7 @@ const TextBottom = styled.Text`
 const ContainerFooter = styled.View`
 	width: 100%
 	height: 47px;
+	marginTop: 20px;
 	marginBottom: 20px;
     flexDirection: row;
     alignItems: center;
@@ -118,7 +119,7 @@ const ImageArrowLeft = styled.Image`
 	width: 18;
 	height: 29;
 	position: absolute;
-	left:20px;
+	left:11px;
 	bottom: 10px
 `;
 

@@ -108,7 +108,7 @@ const ImageArrowLeft = styled.Image`
     width: 18;
     height: 29;
     position: absolute;
-    left:20px;
+    left:11px;
     bottom: 10px
 `;
 
@@ -116,7 +116,7 @@ const ImageArrowRight = styled.Image`
     width: 18;
     height: 29;
     position: absolute;
-    right:20px;
+    right:11px;
     bottom: 10px
 `;
 
