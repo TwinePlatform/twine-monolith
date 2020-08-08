@@ -24,7 +24,6 @@ type Props = {
 const AddVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
   const dispatch = useDispatch();
   const requestStatus = useSelector(selectCreateVolunteerStatus, shallowEqual);
-
   // TODO modal to confirm save
   useEffect(() => {
     if (requestStatus.success) {
@@ -33,9 +32,19 @@ const AddVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
     }
   }, [requestStatus]);
 
+  const defaultValues = {
+    'name': '',
+    'email': '',
+    'phoneNumber': '',
+    'gender': '',
+    'birthYear': '',
+    'postCode': ''
+  };
+
   const onSubmit = (data: Partial<NewVolunteer>) => {
-    const volunteer = { ...data, role: 'VOLUNTEER' as RoleEnum.VOLUNTEER }; // NB: hack to appease ts & react
-    dispatch(createVolunteer(volunteer));
+    console.log(data);
+    // const volunteer = { ...data, role: 'VOLUNTEER' as RoleEnum.VOLUNTEER }; // NB: hack to appease ts & react
+    dispatch(createVolunteer(data));
   };
 
   // TODO display request errors
@@ -45,6 +54,8 @@ const AddVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
         action="create"
         onSubmit={onSubmit}
         requestErrors={requestStatus.error}
+        defaultValues={defaultValues}
+        from='admin'
       />
     </Page>
   );
