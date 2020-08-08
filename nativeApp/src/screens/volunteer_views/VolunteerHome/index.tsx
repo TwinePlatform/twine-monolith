@@ -156,6 +156,7 @@ const Stats: FC<Props> = () => {
 };
 
 const BadgeTab: FC<Props> = (props) => {
+  console.log(props);
   return (
     <CardView>
       {
@@ -241,6 +242,7 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
 
   const getBadge = async () => {
     const badgeArr = await API.Badges.getBadges();
+    console.log(badgeArr);
     setbadgearray(badgeArr);
   }
 
