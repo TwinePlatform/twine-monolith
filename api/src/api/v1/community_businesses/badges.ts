@@ -54,7 +54,7 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                 const credentials = await userCredentials.get(knex, token);
                 const userId = credentials[0].user_account_id;
                 const orgId = credentials[0].organisation_id;
-
+                console.log(userId);
                 const badgesArray = await badges.getAwards(knex, orgId, userId);
 
 
@@ -87,7 +87,7 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                 const credentials = await userCredentials.get(knex, token);
                 const userId = credentials[0].user_account_id;
                 const orgId = credentials[0].organisation_id;
-
+                console.log(credentials);
                 //get badge of all users from organisation 
                 const badgesArray = await badges.getAwards(knex, orgId);
                 console.log(badgesArray);
