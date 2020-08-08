@@ -154,7 +154,10 @@ const Badges = {
     const res = makeRequest({
       method: "GET",
       url: '/community-businesses/me/getOwnBadges'
-    }).then(result => { return result.data })
+    }).then(result => {
+      console.log(result.data);
+      return result.data
+    })
     return res;
   },
 
