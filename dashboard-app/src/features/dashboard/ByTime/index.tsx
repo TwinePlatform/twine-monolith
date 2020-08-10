@@ -101,7 +101,7 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
       <DownloadModal
         visible={downloadModalVisible}
         closeFunction={()=>setDownloadModalVisible(false)}
-        destination={"timetemplate.csv"}
+        filename={"timetemplate.csv"}
       />
       <Row center="xs">
         <Col>
