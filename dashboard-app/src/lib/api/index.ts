@@ -61,7 +61,7 @@ export const LogNote = {
 export const File = {
   upload: (file: File, destination: string) => {
     console.log("uploading " + file.toString() + "to /community-businesses/" + destination )
-    axios.post('/community-businesses/' + destination, file, {
+    axios.post('/community-businesses/upload/' + destination, file, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
