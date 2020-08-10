@@ -27,6 +27,10 @@ const LogCreateModal:FC<Props> = (props) => {
 
     const {visible, closeFunction,} = props;
 
+    const select = ()=>{
+        console.log("selected")
+    }
+
     if(visible)
         return (
             <div
