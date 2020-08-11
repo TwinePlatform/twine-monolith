@@ -6,6 +6,7 @@ import {
   AggregatedData,
   IdAndName,
 } from '../dataManipulation/logsToAggregatedDataNoX';
+import {logsToAggregatedData} from '../dataManipulation/logsToAggregatedData';
 import { tableType } from '../dataManipulation/tableType';
 
 
@@ -65,7 +66,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     console.log("use aggregate data by log");
     console.log(logs);
 
-    const data = logsToAggregatedDataNoX({
+    const data = logsToAggregatedData({
       logs,
       tableType: tableType.LogByName,
       xData: volunteers,
