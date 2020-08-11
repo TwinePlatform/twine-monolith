@@ -33,7 +33,7 @@ const LogsDataTableRow: React.FunctionComponent<LogsRowProps> = (props) => {
           <DataCell content={columns[h].content} onClick={onClick} key={hashJSON(h)}/>
         ))
       }
-      <button onClick={()=>{setLogViewModalVisible(true);setSelectedLog({id: "43", name: "Kara Thrace"})}}>View log</button>
+      <button  className = "ViewLog" onClick={()=>{setLogViewModalVisible(true);setSelectedLog({id: "43", name: "Kara Thrace"})}}>View log</button>
     </TableRow>
   );
 
