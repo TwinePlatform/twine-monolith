@@ -40,10 +40,8 @@ const UploadModal:FC<Props> = (props) => {
 
     const handleUpload = (e: any) => {
         setUploadedFile(e.target.files[0]);
-
-        if(uploadedFile){
-            setFilename(uploadedFile.name);
-        }
+        setFilename(e.target.files[0].name);
+        
     }
 
     const confirmUpload = () => {
