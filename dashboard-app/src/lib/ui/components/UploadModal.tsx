@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef } from 'react';
+import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
@@ -25,6 +26,9 @@ const Heading2 = styled(H2)`
 
 
 const UploadModal:FC<Props> = (props) => {
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef);
+
     const [filename, setFilename] = useState("Upload File Here")
     const [uploadedFile, setUploadedFile] = useState(new File([""], "filename"));
 
@@ -66,8 +70,7 @@ const UploadModal:FC<Props> = (props) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}
-                tabIndex={0}
-                onBlur={closeFunction}
+                ref={wrapperRef}
             >
                 <div
                     style={{
