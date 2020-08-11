@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
-import {File} from '../../api';
+import {File as F} from '../../api';
 
 /*
  * Types
@@ -26,6 +26,7 @@ const Heading2 = styled(H2)`
 
 const UploadModal:FC<Props> = (props) => {
     const [filename, setFilename] = useState("Upload File Here")
+    const [uploadedFile, setUploadedFile] = useState(new File([""], "filename"));
 
     const {visible, closeFunction, destination} = props;
 
@@ -35,13 +36,16 @@ const UploadModal:FC<Props> = (props) => {
     }
 
     const handleUpload = (e: any) => {
-        let uploadedFile = e.target.files[0];
+        setUploadedFile(e.target.files[0]);
 
         if(uploadedFile){
-            console.log(uploadedFile);
             setFilename(uploadedFile.name);
+        }
+    }
 
-            File.upload(uploadedFile,destination);
+    const confirmUpload = () => {
+        if(filename != "Upload File Here"){
+            F.upload(uploadedFile,destination);
             closeFunction();
         }
     }
@@ -92,7 +96,7 @@ const UploadModal:FC<Props> = (props) => {
                 </div>
                 <img
                     src={require('../../../assets/uploadbutton.png')}
-                    onClick={()=>{select()}}
+                    onClick={confirmUpload}
                 />
             </div>
         );
