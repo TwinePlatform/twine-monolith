@@ -66,6 +66,7 @@ const UploadModal:FC<Props> = (props) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}
+                tabIndex={0}
                 onBlur={closeFunction}
             >
                 <div
