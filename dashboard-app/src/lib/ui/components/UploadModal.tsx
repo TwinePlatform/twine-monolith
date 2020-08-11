@@ -29,7 +29,7 @@ const UploadModal:FC<Props> = (props) => {
     const {visible, closeFunction, destination} = props;
     const [filename, setFilename] = useState("Upload File Here")
     const [uploadedFile, setUploadedFile] = useState(new File([""], "filename"));
-    
+
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, closeFunction);
 
@@ -48,6 +48,7 @@ const UploadModal:FC<Props> = (props) => {
 
     const confirmUpload = () => {
         if(filename != "Upload File Here"){
+            console.log(uploadedFile);
             F.upload(uploadedFile,destination);
             closeFunction();
         }

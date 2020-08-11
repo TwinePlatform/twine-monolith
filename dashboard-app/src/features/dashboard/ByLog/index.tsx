@@ -15,7 +15,7 @@ import { ColoursEnum } from '../../../lib/ui/design_system';
 import ProjectModal from '../../../lib/ui/components/ProjectModal';
 import LogViewModal from '../../../lib/ui/components/LogViewModal';
 import LogCreateModal from '../../../lib/ui/components/LogCreateModal';
-import { PrimaryButton, SecondaryButton} from '../../../lib/ui/components/Buttons';
+import { PrimaryButton} from '../../../lib/ui/components/Buttons';
 import Errors from '../components/Errors';
 import useAggregateDataByLog from './useAggregateDataByLog';
 import { TabGroup } from '../components/Tabs';
