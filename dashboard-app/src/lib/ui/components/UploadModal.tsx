@@ -26,13 +26,12 @@ const Heading2 = styled(H2)`
 
 
 const UploadModal:FC<Props> = (props) => {
-    const wrapperRef = useRef(null);
-    useOutsideAlerter(wrapperRef);
-
+    const {visible, closeFunction, destination} = props;
     const [filename, setFilename] = useState("Upload File Here")
     const [uploadedFile, setUploadedFile] = useState(new File([""], "filename"));
-
-    const {visible, closeFunction, destination} = props;
+    
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef, closeFunction);
 
     const select = () => {
         if(document.getElementById('file-input'))
