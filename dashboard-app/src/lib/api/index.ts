@@ -58,11 +58,13 @@ export const LogNote = {
     axios.get("community-businesses/me/get-volunteer-logs/" + logID)
 }
 
-export const File = {
+export const Files = {
   upload: (file: File, destination: string) => {
     console.log("uploading " + file.name + "to /community-businesses/" + destination )
-    let formData = new FormData();
-    formData.append('csvfile', file);
+    const formData = new FormData();
+    const csvFile = new File ([file],file.name,{type: "text/csv"})
+
+    formData.append('file', csvFile);
 
     axios.post('upload/' + destination, formData, {
         headers: {

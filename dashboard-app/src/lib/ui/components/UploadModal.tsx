@@ -3,7 +3,7 @@ import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
-import {File as F} from '../../api';
+import {Files} from '../../api';
 
 /*
  * Types
@@ -49,7 +49,7 @@ const UploadModal:FC<Props> = (props) => {
     const confirmUpload = () => {
         if(filename != "Upload File Here"){
             console.log(uploadedFile);
-            F.upload(uploadedFile,destination);
+            Files.upload(uploadedFile,destination);
             closeFunction();
         }
     }
