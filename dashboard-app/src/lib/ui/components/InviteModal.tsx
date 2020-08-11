@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef } from 'react';
+import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
@@ -66,6 +67,9 @@ const InviteModal:FC<Props> = (props) => {
 
     const {visible, closeFunction} = props;
 
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef, closeFunction);
+
 
     const [emailAddress, setEmailAddress] = useState("");
     const [subject, setSubject] = useState("Twine Sign Up");
@@ -95,6 +99,7 @@ const InviteModal:FC<Props> = (props) => {
                     borderRadius: "8px",
                     zIndex: 3,
                 }}
+                ref={wrapperRef}
             >
                 <Heading2>TWINE</Heading2>
                 <input type="text" placeholder="email address"></input>

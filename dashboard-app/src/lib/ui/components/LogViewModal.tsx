@@ -1,4 +1,5 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useRef } from 'react';
+import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
@@ -28,6 +29,10 @@ const LogViewModal:FC<Props> = (props) => {
 
     const {visible, closeFunction, log} = props;
 
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef, closeFunction);
+
+
     useEffect(()=>{
         if(log.ID)
             LogNote.get(log.ID).then(res=>console.log(res.data));
@@ -49,6 +54,7 @@ const LogViewModal:FC<Props> = (props) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}
+                ref={wrapperRef}
             >
                 <div
                     style={{

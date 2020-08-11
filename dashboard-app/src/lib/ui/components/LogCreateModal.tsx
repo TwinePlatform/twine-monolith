@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef } from 'react';
+import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
@@ -27,6 +28,9 @@ const LogCreateModal:FC<Props> = (props) => {
 
     const {visible, closeFunction,} = props;
 
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef, closeFunction);
+
     const select = ()=>{
         console.log("selected")
     }
@@ -47,6 +51,7 @@ const LogCreateModal:FC<Props> = (props) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}
+                ref={wrapperRef}
             >
                 <div
                     style={{

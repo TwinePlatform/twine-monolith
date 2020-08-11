@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useRef } from 'react';
+import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
@@ -27,6 +28,9 @@ const DownloadModal:FC<Props> = (props) => {
 
     const {visible, closeFunction, filename} = props;
 
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef, closeFunction);
+
     const onDownload = () => {
         closeFunction();
         console.log("downloading " + filename)
@@ -48,6 +52,7 @@ const DownloadModal:FC<Props> = (props) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}
+                ref={wrapperRef}
             >
                 <div
                     style={{
