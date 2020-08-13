@@ -155,7 +155,6 @@ const Badges = {
       method: "GET",
       url: '/community-businesses/me/getOwnBadges'
     }).then(result => {
-      console.log(result.data);
       return result.data
     })
     return res;
@@ -183,6 +182,16 @@ const Badges = {
       url: "/community-businesses/me/getInviteBadge"
     }).then(res => { return res.data; })
     return res;
+  },
+
+  getLoyalty: (today: Date) => {
+    const res = makeRequest({
+      method: "POST",
+      url: "/community-businesses/me/LoyaltyBadge",
+      data: { 'today': today }
+    }).then(res => { return res.data; })
+
+    return res;
   }
 }
 
@@ -194,7 +203,6 @@ const Users = {
     })
   ,
   pushtoken: (id: number, token: string) => {
-    console.log('updating push token....');
     makeRequest({
       method: "PUT",
       url: `/users/insertpushtoken/${id}`,

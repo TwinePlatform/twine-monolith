@@ -38,7 +38,6 @@ import Invite from '../../../lib/ui/Invite';
 import BadgeModal from '../../../lib/ui/modals/BadgeModel';
 
 
-
 /*
  * Types
  */
@@ -156,7 +155,6 @@ const Stats: FC<Props> = () => {
 };
 
 const BadgeTab: FC<Props> = (props) => {
-  console.log(props);
   return (
     <CardView>
       {
@@ -239,11 +237,24 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   const [userID, setUserID] = useState('');
   const [logged, setLogged] = useState(false);
   const [badgearray, setbadgearray] = useState([]);
+  const [badge, setBadgeObj] = useState(Object());
+  const [badgeModal, setBadgeModal] = useState(false);
+  const today = new Date();
 
   const getBadge = async () => {
     const badgeArr = await API.Badges.getBadges();
-    console.log(badgeArr);
     setbadgearray(badgeArr);
+  }
+
+  const getLoyalty = async () => {
+    const badgeAPIres = await API.Badges.getLoyalty(today);
+    if (badgeAPIres != null) {
+      setBadgeObj(BadgeObj[badgeAPIres[0]]);
+      setBadgeModal(true);
+      setTimeout(() => {
+        setBadgeModal(false);
+      }, 3000)
+    }
   }
 
   //access fail to send log and try logging them again
@@ -312,6 +323,7 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
     getBadge();
     checkStorage();
     dispatch(loadLogs());
+    getLoyalty();
   }, []);
 
   AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(userID))
@@ -319,6 +331,11 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   return (
     <Page heading="Home" withAddBar>
       <AddBar onPress={() => navigation.navigate('VolunteersBadges')} title="Volunteer's Badges" />
+
+      <BadgeModal
+        visible={badgeModal}
+        badge={badge}
+      />
 
       <Tabs
         tabOne={['Stats', Stats, {}]}
