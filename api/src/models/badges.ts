@@ -29,7 +29,7 @@ export const badges = {
 					'organisation_id': orgId
 				})
 				.orderBy('achieved_date');
-			//ToDo: sort acheived date
+
 			return res;
 		} else {
 			const res = await client('user_badges')
@@ -39,7 +39,7 @@ export const badges = {
 					'organisation_id': orgId
 				})
 				.orderBy('achieved_date');
-			//ToDo: sort acheived date
+
 			return res;
 		}
 	},
@@ -91,4 +91,22 @@ export const badges = {
 
 	},
 
+	async checkLoyalty(client: Knex, userId: any, today: Date, months: number) {
+		// SELECT * FROM user_account WHERE created_at >= '2013-05-03'::date - '30 day'::interval AND user_account_id = 3;
+		console.log('checking loyalty');
+		console.log(today);
+		const year = today.getFullYear();
+		const month = today.getMonth();
+		const day = today.getDate();
+		const query = "created_at >= '" + year + "/" + month + "/" + day + "'::date -'" + months + "month'::interval";
+
+		const res = await client('user_account')
+			.select()
+			.whereRaw(query)
+			.where({
+				'user_account_id': userId,
+			});
+
+		return res;
+	}
 }
