@@ -250,7 +250,7 @@ const projectsReducer: Reducer<ProjectsState, Actions> = (state = initialState, 
         ...state,
         updateIsFetching: false,
         updateError: null,
-        createSuccess: false,
+        updateSuccess: false,
       };
 
     // UPDATE

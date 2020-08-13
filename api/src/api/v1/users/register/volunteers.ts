@@ -40,7 +40,7 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
       validate: {
         payload: {
           organisationId: id.required(),
-          // role: Joi.alternatives(RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN).required(),
+          role: Joi.alternatives(RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN).required(),
           adminCode: Joi.string().regex(/^\w{5,8}$/),
           name: userName.required(),
           gender: gender.default('prefer not to say'),
@@ -61,7 +61,7 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
         payload,
         auth
       } = request;
-      const { email, organisationId, adminCode } = payload;
+      const { email, role, organisationId, adminCode } = payload;
 
       /*
        * Preliminaries
@@ -72,13 +72,6 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
         return Boom.badRequest('password is required', {
           validation: { name: 'is required' }
         })
-      }
-
-      let role: RoleEnum;
-      if (adminCode) {
-        role = RoleEnum.VOLUNTEER_ADMIN;
-      } else {
-        role = RoleEnum.VOLUNTEER;
       }
 
       const communityBusiness = await CommunityBusinesses
@@ -131,10 +124,9 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
        * Registration
        */
 
-      // if (role === RoleEnum.VOLUNTEER_ADMIN && !adminCode) {
-      //   return Boom.badRequest('Registration Unsuccessful: The admin code is for staff members to register admin accounts. If you are a volunteer, just leave it blank. If you are staff, seek assistance from whoever set up Twine at your organisation.');
-      // }
-
+      if (role === RoleEnum.VOLUNTEER_ADMIN && !adminCode) {
+        return Boom.badRequest('Registration Unsuccessful: The admin code is for staff members to register admin accounts. If you are a volunteer, just leave it blank. If you are staff, seek assistance from whoever set up Twine at your organisation.');
+      }
 
       try {
         const volunteer =
