@@ -184,9 +184,12 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
 
                 //check if badge exist in table using userId and OrganisationId
                 const badgesArray = await badges.getAwards(knex, orgId, userId);
+                console.log('this is the badge array');
+                console.log(badgesArray);
                 var awardIdArrayList: any = [];
 
                 badgesArray.forEach((awardID: any) => {
+                    console.log(awardID);
                     awardIdArrayList.push(awardID.award_id);
                 })
 
@@ -294,9 +297,9 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
         },
         {
             method: 'POST',
-            path: '/community-businesses/me/LoyaltyBadge',
+            path: '/community-businesses/me/getLoyaltyBadge',
             options: {
-                description: 'check for loyalty badge and update if acheived',
+                description: 'get the invite badge',
                 auth: {
                     strategy: 'standard',
                     access: {
@@ -313,47 +316,28 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                 const {
                     server: { app: { knex } },
                     pre: { communityBusiness },
-                    payload,
                 } = request;
                 const token = request.yar.id;
-
                 const credentials = await userCredentials.get(knex, token);
                 const userId = credentials[0].user_account_id;
                 const orgId = credentials[0].organisation_id;
 
-                const today = new Date(payload.today);
-                const months = 1;
-
-                // check forEach 3,6,12 months not in user_badge table
+                //update DB with badgeId 4 which is the invitation badge
                 const badgesArray = await badges.getAwards(knex, orgId, userId);
 
-                let awardIdArrayList: any = [];
+                var awardIdArrayList: any = [];
 
                 badgesArray.forEach((awardID: any) => {
+                    console.log(awardID);
                     awardIdArrayList.push(awardID.award_id);
                 })
-
-                let result = [];
+                // updateArray.push(badgeCode.fifthlog);
                 //ToDo: if badge == 5,6,7 exist then trigger flag 
-                if (!awardIdArrayList.includes(5)) {
-                    const loyaltyCheckResult = await badges.checkLoyalty(knex, userId, today, 3);
-                    await badges.updateAwards(knex, userId, orgId, 5);
-                    result.push('ThridMonthBadge');
-                } else if (awardIdArrayList.includes(5) && !awardIdArrayList.includes(6)) {
-                    const loyaltyCheckResult = await badges.checkLoyalty(knex, userId, today, 6);
-                    await badges.updateAwards(knex, userId, orgId, 6);
-                    result.push('SixthMonthBadge');
-                } else if (awardIdArrayList.includes(5) && awardIdArrayList.includes(6) && !awardIdArrayList.includes(7)) {
-                    const loyaltyCheckResult = await badges.checkLoyalty(knex, userId, today, 12);
-                    await badges.updateAwards(knex, userId, orgId, 7);
-                    result.push('AnnMedalBadge');
-                } else {
-                    result = null;
-                }
 
-                return result;
             }
         }
     ]
+
+
 
 export default routes;
