@@ -11,5 +11,6 @@ export enum ColoursEnum { //eslint-disable-line
   red = '#F44336',
   mustard = '#FFBF00',
   blue = '#007bff',
-  error = '#E36860'
+  error = '#E36860',
+  yellow = '#FFBF00CC'
 }

@@ -2,7 +2,9 @@ import React, { FC, useState } from 'react';
 import API from '../../../api';
 import styled from 'styled-components/native';
 import Modal from 'react-native-modal';
-import { Button as B, Card as C, Textarea, Form } from 'native-base';
+import { Button as B, Card as C, Textarea as TA, Form } from 'native-base';
+import { image } from 'react-native';
+import { AddNote, Close } from '../AddNote';
 
 import { Heading2 as H2, FontsEnum } from '../typography';
 import { ColoursEnum } from '../colours';
@@ -15,7 +17,6 @@ type Props = {
   onSendClose: () => void;
   onCancel: () => void;
   awardBadge: (awardBadgeState) => boolean;
-  title: string;
 }
 
 /*
@@ -25,19 +26,37 @@ const View = styled.View`
 `;
 
 const Heading2 = styled(H2)`
-  marginBottom: 20;
-  color: ${ColoursEnum.black};
-`;
-
-const Card = styled(C)`
   paddingHorizontal: 15;
   paddingTop: 15;
+  marginBottom: 20;
+  color: ${ColoursEnum.white};
+`;
+
+// const Card = styled(C)`
+//   paddingHorizontal: 15;
+//   paddingTop: 15;
+//   paddingBottom: 10;
+//   borderRadius: 5;
+// `;
+
+const Card = styled(C)`
   paddingBottom: 10;
-  borderRadius: 5;
+  borderRadius: 10;
+`;
+
+const FormContainer = styled.View`
+  paddingTop: 15;
+  paddingHorizontal: 15;
+`;
+
+const FormInput = styled(TA)`
+  borderRadius: 10;
+  border: 2px solid;
 `;
 
 const ButtonContainer = styled.View`
-  justifyContent: center;
+  justifyContent: flex-end;
+  alignItems: flex-end;
   flexDirection: row;
   marginTop: 10;
 `;
@@ -60,17 +79,23 @@ const Button = ({ onPress, buttonType }) => (
   </StyledButton>
 );
 
+const HeadingContainer = styled.View`
+  backgroundColor: ${ColoursEnum.purple};
+  borderTopLeftRadius: 10;
+  borderTopRightRadius: 10;
+`;
+
 /*
  * Component
  */
 
 
 const InvitationModal: FC<Props> = ({
-  isVisible, onSendClose, onCancel, awardBadge, title,
+  isVisible, onSendClose, onCancel, awardBadge
 }) => {
   const [emailAddress, setEmailAddress] = useState("");
-  const [subject, setSubject] = useState("Twine Sign Up");
-  const [body, setBody] = useState("Dear Volunteer,\n\nI am inviting you to use the TWINE volunteering app.");
+  const [subject, setSubject] = useState("Subject: Twine Sign Up");
+  const [body, setBody] = useState("Dear Volunteer,\n\nI am inviting you to use the TWINE volunteering app,please follow the instructions from the links provided to sign up.\n iOS: 'link to iOS store' Android: 'link to app store'\n\n Thanks!\n\n Fellow Twine User");
 
   const onSend = () => {
     // const email = {
@@ -85,16 +110,21 @@ const InvitationModal: FC<Props> = ({
 
     <Modal isVisible={isVisible}>
       <Card>
-        <Heading2>{title}</Heading2>
-        <Form>
-          <Textarea rowSpan={1} bordered underline placeholder="address" value={emailAddress} onChangeText={text => setEmailAddress(text)} />
-          <Textarea rowSpan={1} bordered underline placeholder="subject" value={subject} onChangeText={text => setSubject(text)} />
-          <Textarea rowSpan={5} bordered underline value={body} onChangeText={text => setBody(text)} />
-        </Form>
+        <HeadingContainer>
+          <Heading2>TWINE</Heading2>
+        </HeadingContainer>
+        <FormContainer>
+          <Form>
+            <FormInput rowSpan={1} bordered underline placeholder="To:" value={emailAddress} onChangeText={text => setEmailAddress(text)} />
+            <FormInput rowSpan={1} bordered underline placeholder="Subject: Twine Sign Up" value={subject} onChangeText={text => setSubject(text)} />
+            <FormInput rowSpan={5} bordered underline value={body} onChangeText={text => setBody(text)} />
+          </Form>
+        </FormContainer>
         <ButtonContainer>
-          <Button onPress={onCancel} buttonType="cancel" />
+          {/* <Button onPress={onCancel} buttonType="cancel" /> */}
+          <Close onPress={onCancel} />
           {/* <Button onPress={onPress} buttonType="send" /> */}
-          <Button onPress={async () => {
+          <AddNote text='Send' onPress={async () => {
             onSend();
             onSendClose();
             //check if badge exist and call award modal
@@ -103,7 +133,7 @@ const InvitationModal: FC<Props> = ({
               setTimeout(() => { awardBadge(true); }, 1000);
               setTimeout(() => { awardBadge(false); }, 3000);
             }
-          }} buttonType="send" />
+          }} />
         </ButtonContainer>
       </Card>
     </Modal>

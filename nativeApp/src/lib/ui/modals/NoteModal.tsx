@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
 import Modal from 'react-native-modal';
 import { Card as C, Textarea as T, Form } from 'native-base';
-import AddNote from '../AddNote';
+import { AddNote, Close } from '../AddNote';
 
 import { Heading2 as H2, FontsEnum } from '../typography';
 import { ColoursEnum } from '../colours';
@@ -13,7 +13,7 @@ import { ColoursEnum } from '../colours';
 type Props = {
   isVisible: boolean;
   addNote: React.Dispatch<React.SetStateAction<string>>;
-  onClose: ()=>void;
+  onClose: () => void;
 }
 
 /*
@@ -49,6 +49,7 @@ const ButtonContainer = styled.View`
   justifyContent: flex-end;
   flexDirection: row;
   marginTop: 20;
+  marginBottom:10;
 `;
 
 /*
@@ -59,22 +60,24 @@ const ButtonContainer = styled.View`
 const NoteModal: FC<Props> = ({
   isVisible, addNote, onClose
 }) => {
-    const [note, setNote] = useState("");
+  const [note, setNote] = useState("");
 
-return(
-  <Modal isVisible={isVisible}>
-    <Card>
-      <HeadingContainer>
-        <Heading2>TWINE</Heading2>
-      </HeadingContainer>
-      <Form>
-      <Textarea rowSpan={5}  value={note} onChangeText={text => setNote(text)}/>    
-      </Form>
-      <ButtonContainer>
-        <AddNote onPress={()=> {addNote(note);onClose();}}  />
-      </ButtonContainer>
-    </Card>
-  </Modal>
-)};
+  return (
+    <Modal isVisible={isVisible}>
+      <Card>
+        <HeadingContainer>
+          <Heading2>TWINE</Heading2>
+        </HeadingContainer>
+        <Form>
+          <Textarea rowSpan={5} value={note} onChangeText={text => setNote(text)} />
+        </Form>
+        <ButtonContainer>
+          <Close onPress={() => { onClose(); }} />
+          <AddNote text='Add note' onPress={() => { addNote(note); onClose(); }} />
+        </ButtonContainer>
+      </Card>
+    </Modal>
+  )
+};
 
 export default NoteModal;

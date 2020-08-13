@@ -156,7 +156,6 @@ const AdminHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
         onCancel={toggleInviteVisibility}
         onSendClose={toggleInviteVisibility}
         awardBadge={toggleBadgeVisibility}
-        title="Invite Volunteers By Email"
       />
 
       <BadgeModal
