@@ -45,6 +45,18 @@ export namespace Api {
     }
   }
 
+  export namespace Upload {
+    export namespace Volunteer {
+      export namespace POST {
+        export interface Request extends Hapi.Request {
+          payload: any;
+        }
+        export type Response = any;
+        export type Route = ServerRoute<Request, Response>;
+      }
+    }
+  }
+
   export namespace CommunityBusinesses {
     export namespace GET {
       export interface Request extends Hapi.Request { query: ApiRequestQuery & Dictionary<any> }
