@@ -6,7 +6,7 @@ import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 import { FontsEnum } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import { TouchableOpacity } from 'react-native';
-const arrowRight = require('../../../../assets/HelpSlide/NextArrow.png');
+const arrowRight = require('../../../../assets/HelpSlide/NextArrowRight.png');
 const arrowLeft = require('../../../../assets/HelpSlide/NextArrowLeft.png');
 import Modal from 'react-native-modal';
 
@@ -95,29 +95,25 @@ const ContainerFooterCenter = styled.View`
 const ContainerImageLeft = styled.View`
 	alignItems: center;
 	position: absolute;
-	left:33px;
+    left: 40px;
+    bottom: 0px;
 `;
 
 const ContainerImageRight = styled.View`
 	alignItems: center;
 	position: absolute;
-	right: 33px;
+    right: 40px;
+    bottom: 0px;
 `;
 
 const ImageArrowLeft = styled.Image`
-    width: 18;
-    height: 29;
-    position: absolute;
-    left:11px;
-    bottom: 10px
+    width: 50;
+    height: 50;
 `;
 
 const ImageArrowRight = styled.Image`
-    width: 18;
-    height: 29;
-    position: absolute;
-    right:11px;
-    bottom: 10px
+    width: 50;
+    height: 50;
 `;
 
 const styles = StyleSheet.create({
@@ -130,12 +126,6 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').height,
         resizeMode: "cover",
         justifyContent: "center",
-    },
-    circle: {
-        width: 47,
-        height: 47,
-        borderRadius: 47 / 2,
-        backgroundColor: '#FFFFFF'
     },
     circleSmall: {
         width: 14,
@@ -333,7 +323,7 @@ const HelpSlidesTemplate: FC<NavigationInjectedProps & Props> = ({ navigation, r
 
                         {leftNavigation &&
                             <ContainerImageLeft>
-                                <TouchableOpacity style={styles.circle}
+                                <TouchableOpacity
                                     onPress={() => navigation.navigate(leftNavigation)}
                                 >
                                     <ImageArrowLeft source={arrowLeft} />
@@ -343,7 +333,7 @@ const HelpSlidesTemplate: FC<NavigationInjectedProps & Props> = ({ navigation, r
 
                         {rightNavigation &&
                             <ContainerImageRight>
-                                <TouchableOpacity style={styles.circle}
+                                <TouchableOpacity
                                     onPress={() => navigation.navigate(rightNavigation)}
                                 >
                                     <ImageArrowRight source={arrowRight} />
@@ -354,7 +344,7 @@ const HelpSlidesTemplate: FC<NavigationInjectedProps & Props> = ({ navigation, r
                     </ContainerFooter>
                 </ImageBackground>
             </View>
-        </Scrollable>
+        </Scrollable >
     )
 };
 
