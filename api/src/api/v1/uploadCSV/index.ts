@@ -18,7 +18,7 @@ const routes: [
     = [
         {
             method: 'POST',
-            path: '/community-businesses/project',
+            path: '/upload/project',
             options: {
                 description: 'Upload activity from dashboard using CSV format',
                 auth: {
@@ -78,7 +78,7 @@ const routes: [
         },
         {
             method: 'POST',
-            path: '/community-businesses/activity',
+            path: '/upload/activity',
             options: {
                 description: 'Upload activity from dashboard using CSV format',
                 auth: {
@@ -138,7 +138,7 @@ const routes: [
         },
         {
             method: 'POST',
-            path: '/community-businesses/volunteer',
+            path: '/upload/volunteer',
             options: {
                 description: 'Upload activity from dashboard using CSV format',
                 auth: {
@@ -198,7 +198,7 @@ const routes: [
         },
         {
             method: 'POST',
-            path: '/community-businesses/time',
+            path: '/upload/time',
             options: {
                 description: 'Upload activity from dashboard using CSV format',
                 auth: {
