@@ -7,6 +7,7 @@ import { Serialisers } from '../serialisers';
 // const fs = require('fs');
 // const csv = require('csv-parser');
 // const stripBom = require('strip-bom-stream');	
+const neatCsv = require('neat-csv');
 
 
 const routes: [
@@ -43,7 +44,14 @@ const routes: [
                 console.log('in the project endpoint');
 
                 const csvfile = request.payload;
-                console.log(csvfile);
+                console.log(csvfile['csv']);
+
+                const csv = 'type,part\nunicorn,horn\nrainbow,pink';
+                (async () => {
+                    console.log('printing the neat-csv');
+                    console.log(await neatCsv(csvfile['csv']));
+                    //=> [{type: 'unicorn', part: 'horn'}, {type: 'rainbow', part: 'pink'}]
+                })();
 
                 // const file = fs.createReadStream(csvfile);
                 // const parseCsv = file.pipe(csv.parse());
