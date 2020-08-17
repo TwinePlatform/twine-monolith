@@ -68,13 +68,12 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
   });
 
    const logFieldsData = {data: [
-                            {id:1, name: "Volunteer Name"},
+                            {id:1, name: "Name"},
                             {id:2, name: "Time"},
                             {id:3, name: "Project"},
                             {id:4, name: "Activity"},
                             {id:5, name: "Date"},
-                           // {id:6, name: "Total Hours"},
-                            {id:6, name: "View Log"},
+                            //{id:6, name: "View Log"}
                             ]
                         };
 

@@ -45,6 +45,13 @@ const addColumnsKey = evolve({
 });
 
 export const aggregatedToTableData = ({ data, unit, yData }: Params) => {
+    return pipe(
+      createHeaders(yData),
+    )(data) as Pick<DataTableProps, 'headers' | 'rows'>;
+  };
+
+  /*
+export const aggregatedToTableData = ({ data, unit, yData }: Params) => {
   return pipe(
     createHeaders(yData),
     renameAllNameKeys,
@@ -54,4 +61,4 @@ export const aggregatedToTableData = ({ data, unit, yData }: Params) => {
     addContentObjects as any,
     addColumnsKey
   )(data) as Pick<DataTableProps, 'headers' | 'rows'>;
-};
+};*/
