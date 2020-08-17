@@ -91,6 +91,8 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
     orderable,
   };
 
+  console.log(tableData)
+
   return (
     <Container>
       <UploadModal

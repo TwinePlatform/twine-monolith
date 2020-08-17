@@ -85,6 +85,8 @@ export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params):
     .reduce((acc, [X, Ys]) =>
       acc.concat(Object.assign({}, Ys, getIdAndName(tableType.xIdFromLogs, xData, X))), [] as Row[]);
 
+  console.log(groupByX)
+  console.log(groupByY)
   console.log(rows)
     
   return {
