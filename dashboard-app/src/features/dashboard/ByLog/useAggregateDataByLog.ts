@@ -16,6 +16,16 @@ interface UseAggregatedDataParams {
   updateOn?: DependencyList;
 }
 
+const getRows = (logs: [any]) => {
+  return logs.map(log => {return {columns: {
+                          Name: log.createdBy,
+                          Time: log.duration.hours,
+                          Project: log.project,
+                          Activity: log.activity,
+                          Date: log.createdAt,
+                        }}})
+};
+
 export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
   const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
   const [logFields, setLogFields] = useState<IdAndName[]>();
@@ -49,8 +59,8 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
                             {id:3, name: "Project"},
                             {id:4, name: "Activity"},
                             {id:5, name: "Date"},
-                            {id:6, name: "Total Hours"},
-                            {id:7, name: "View Log"},
+                           // {id:6, name: "Total Hours"},
+                            {id:6, name: "View Log"},
                             ]
                         };
 
@@ -66,12 +76,23 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     console.log("use aggregate data by log");
     console.log(logs);
 
+    /*
     const data = logsToAggregatedData({
       logs,
       tableType: tableType.LogByName,
       xData: volunteers,
       yData: logFieldsData.data,
     });
+    */
+
+    const rowHolder = getRows(logs)
+
+    const data = {
+      groupByX: "Name",
+groupByY: "LogField",
+headers: ["Name","Time","Project","Activty","Date","Total Hours"],
+rows: rowHolder,
+    };
 
     console.log(data);
 
