@@ -37,6 +37,7 @@ const getRows = (logs: [any]) => {
                           Project: log.project,
                           Activity: log.activity,
                           Date: log.createdAt,
+                          ID: log.id,
                         }}})
 };
 
@@ -68,12 +69,13 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
   });
 
    const logFieldsData = {data: [
-                            {id:1, name: "Name"},
-                            {id:2, name: "Time"},
-                            {id:3, name: "Project"},
-                            {id:4, name: "Activity"},
-                            {id:5, name: "Date"},
-                            //{id:6, name: "View Log"}
+                            //{id:1, name: "Name"},
+                            {id:1, name: "Time"},
+                            {id:2, name: "Project"},
+                            {id:3, name: "Activity"},
+                            {id:4, name: "Date"},
+                            {id:5, name: "ID"},
+                            //{id:7, name: "View Log"}
                             ]
                         };
 
