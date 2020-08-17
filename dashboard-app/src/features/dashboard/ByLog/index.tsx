@@ -9,8 +9,8 @@ import UtilityBar from '../components/UtilityBar';
 import { H1 } from '../../../lib/ui/components/Headings';
 import { DataTableProps } from '../components/DataTable/types';
 import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
-import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
-import { downloadCsv } from '../dataManipulation/downloadCsv';
+import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableDataLogs';
+import { downloadCsv } from '../dataManipulation/downloadCsvLogs';
 import { ColoursEnum } from '../../../lib/ui/design_system';
 import ProjectModal from '../../../lib/ui/components/ProjectModal';
 import LogViewModal from '../../../lib/ui/components/LogViewModal';
@@ -20,7 +20,7 @@ import Errors from '../components/Errors';
 import useAggregateDataByLog from './useAggregateDataByLog';
 import { TabGroup } from '../components/Tabs';
 import { getTitleForDayPicker } from '../util';
-import { useErrors } from '../../../lib/hooks/useErrors';
+import { useErrors } from '../../../lib/hooks/useErrorsLogs';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
 import { DashboardContext } from '../context';
@@ -30,6 +30,7 @@ import { DashboardContext } from '../context';
  * Types
  */
 type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
+
 
 
 /**

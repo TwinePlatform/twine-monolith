@@ -3,7 +3,6 @@ import { useBatchRequest } from '../../../lib/hooks';
 import { CommunityBusinesses } from '../../../lib/api';
 import {
   logsToAggregatedDataNoX,
-  AggregatedData,
   IdAndName,
 } from '../dataManipulation/logsToAggregatedDataNoX';
 import {logsToAggregatedData} from '../dataManipulation/logsToAggregatedData';
@@ -14,6 +13,21 @@ interface UseAggregatedDataParams {
   from: Date;
   to: Date;
   updateOn?: DependencyList;
+}
+
+
+interface AggregatedData {
+  groupByX: string;
+  groupByY: string;
+  rows: {
+      columns: {
+          Name: any;
+          Time: any;
+          Project: any;
+          Activity: any;
+          Date: any;
+      };
+  }[]
 }
 
 const getRows = (logs: [any]) => {
@@ -89,9 +103,8 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
 
     const data = {
       groupByX: "Name",
-groupByY: "LogField",
-headers: ["Name","Time","Project","Activty","Date","Total Hours"],
-rows: rowHolder,
+      groupByY: "LogField",
+      rows: rowHolder,
     };
 
     console.log(data);
