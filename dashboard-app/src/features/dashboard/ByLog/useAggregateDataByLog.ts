@@ -20,25 +20,23 @@ interface AggregatedData {
   groupByX: string;
   groupByY: string;
   rows: {
-      columns: {
           Name: any;
           Time: any;
           Project: any;
           Activity: any;
           Date: any;
-      };
   }[]
 }
 
 const getRows = (logs: [any]) => {
-  return logs.map(log => {return {columns: {
+  return logs.map(log => {return {
                           Name: log.createdBy,
                           Time: log.duration.hours,
                           Project: log.project,
                           Activity: log.activity,
                           Date: log.createdAt,
                           ID: log.id,
-                        }}})
+                        }})
 };
 
 export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {

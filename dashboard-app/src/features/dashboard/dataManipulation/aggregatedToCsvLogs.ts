@@ -15,13 +15,11 @@ interface AggregatedData {
     groupByX: string;
     groupByY: string;
     rows: {
-        columns: {
             Name: any;
             Time: any;
             Project: any;
             Activity: any;
             Date: any;
-        };
     }[]
   }
 
