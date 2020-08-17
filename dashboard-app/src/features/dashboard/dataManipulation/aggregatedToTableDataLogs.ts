@@ -46,7 +46,6 @@ export const aggregatedToTableData = ({ data, unit, yData }: Params) => {
     return pipe(
       createHeaders(yData),
       renameAllNameKeys,
-      removeIdInRows,
       addContentObjects as any,
       addColumnsKey,
     )(data) as Pick<DataTableProps, 'headers' | 'rows'>;
