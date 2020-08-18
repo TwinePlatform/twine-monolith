@@ -51,7 +51,7 @@ const LogViewModal:FC<Props> = (props) => {
     console.log(logNote);
     
     useEffect(()=>{
-        if(effectCount<3){
+        if(effectCount<3 && visible){
             getNote();
             setEffectCount(effectCount+1);
         }
