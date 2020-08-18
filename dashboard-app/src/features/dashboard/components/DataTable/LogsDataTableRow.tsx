@@ -27,6 +27,7 @@ const LogsDataTableRow: React.FunctionComponent<LogsRowProps> = (props) => {
   const { columns, rowLink, order, onClick, setSelectedLog, setLogViewModalVisible} = props;
 
   console.log(columns)
+  console.log(order)
 
   const inner = (
     <TableRow data-testid="data-table-row">
