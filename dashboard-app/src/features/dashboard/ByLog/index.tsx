@@ -49,7 +49,7 @@ const Container = styled(Grid)`
  */
 const initTableData = { headers: [], rows: [] };
 
-const initSelectedLog = { ID: "42", name: "ET" };
+const initSelectedLog = { ID: 42, name: "ET" };
 
 /**
  * Component
