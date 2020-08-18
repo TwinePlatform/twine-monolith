@@ -15,7 +15,6 @@ interface UseAggregatedDataParams {
   updateOn?: DependencyList;
 }
 
-
 interface AggregatedData {
   groupByX: string;
   groupByY: string;
@@ -67,13 +66,12 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
   });
 
    const logFieldsData = {data: [
-                            //{id:1, name: "Name"},
                             {id:1, name: "Time"},
                             {id:2, name: "Project"},
                             {id:3, name: "Activity"},
                             {id:4, name: "Date"},
                             {id:5, name: "ID"},
-                            //{id:7, name: "View Log"}
+                            //{id:6, name: "View Log"}
                             ]
                         };
 
@@ -98,15 +96,11 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     });
     */
 
-    const rowHolder = getRows(logs)
-
     const data = {
       groupByX: "Name",
       groupByY: "LogField",
-      rows: rowHolder,
+      rows: getRows(logs),
     };
-
-    console.log(data);
 
     setLogFields(logFieldsData.data);
     setAggregatedData(data);

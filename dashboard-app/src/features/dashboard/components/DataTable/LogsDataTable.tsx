@@ -35,6 +35,7 @@ const Table = styled.table`
  * Component
  */
 const LogsDataTable: React.FunctionComponent<LogsDataTableProps> = (props) => {
+  /*
   const headers = [
     "Name",
     "Time",
@@ -42,9 +43,10 @@ const LogsDataTable: React.FunctionComponent<LogsDataTableProps> = (props) => {
     "Activity",
     "Date",
     "ID",
-    ];
+    ];*/
 
     const {
+    headers,
     rows,
     sortBy = headers[0],
     order = 'desc',
