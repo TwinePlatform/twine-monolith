@@ -100,7 +100,7 @@ const LogViewModal:FC<Props> = (props) => {
                     <p>Date: {log.date}</p>
                     <p>Start Time: {timeMinusHours(log.endTime,log.hours)}</p>
                     <p>End Time: {log.endTime}</p>
-                    <p>Note: {logNote}</p>
+                    <p>Note: {initialised ? logNote : "loading..."}</p>
                     <button>Edit</button>
                     <button>Delete</button>
                 </div>
