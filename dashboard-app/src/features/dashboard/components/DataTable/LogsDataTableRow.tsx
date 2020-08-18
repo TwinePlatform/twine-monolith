@@ -48,7 +48,7 @@ const LogsDataTableRow: React.FunctionComponent<LogsRowProps> = (props) => {
               activity: columns.Activity.content,
               date: columns.Date.content,
               endTime: columns.EndTime.content,
-              duration: columns.Time.content,
+              hours: columns.Hours.content,
               })}}>
           View log
       </button>

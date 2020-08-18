@@ -18,23 +18,17 @@ interface UseAggregatedDataParams {
 interface AggregatedData {
   groupByX: string;
   groupByY: string;
-  rows: {
-          Name: any;
-          Time: any;
-          Project: any;
-          Activity: any;
-          Date: any;
-  }[]
+  rows: any;
 }
 
 const getRows = (logs: [any]) => {
   return logs.map(log => {return {
                           Name: log.createdBy,
-                          Time: log.duration.hours,
+                          Hours: log.duration.hours,
                           Project: log.project,
                           Activity: log.activity,
                           Date: log.createdAt.slice(0,10),
-                          EndTime: log.createdAt.slice(10),
+                          EndTime: log.createdAt.slice(11,16),
                           ID: log.id,
                         }})
 };
@@ -67,7 +61,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
   });
 
    const logFieldsData = {data: [
-                            {id:1, name: "Time"},
+                            {id:1, name: "Hours"},
                             {id:2, name: "Project"},
                             {id:3, name: "Activity"},
                             {id:4, name: "Date"},

@@ -24,6 +24,12 @@ const Heading2 = styled(H2)`
   color: ${ColoursEnum.white};
 `;
 
+const timeMinusHours = (time: string, hours: number) => {
+    let newHour = parseInt(time.slice(0,2)) - hours;
+
+    return newHour + time.slice(2);
+}
+
 const LogViewModal:FC<Props> = (props) => {
 
     const {visible, closeFunction, log} = props;
@@ -82,11 +88,10 @@ const LogViewModal:FC<Props> = (props) => {
                     <p>Project: {log.project}</p>
                     <p>Activity: {log.activity}</p>
                     <p>Date: {log.date}</p>
-                    <p>Start Time: to be added</p>
+                    <p>Start Time: {timeMinusHours(log.endTime,log.hours)}</p>
                     <p>End Time: {log.endTime}</p>
                     <button>Edit</button>
                     <button>Delete</button>
-                    <button onClick={closeFunction}>Close</button>
                 </div>
             </div>
         );
