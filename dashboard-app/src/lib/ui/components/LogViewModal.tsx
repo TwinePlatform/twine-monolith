@@ -24,7 +24,6 @@ const Heading2 = styled(H2)`
   color: ${ColoursEnum.white};
 `;
 
-
 const LogViewModal:FC<Props> = (props) => {
 
     const {visible, closeFunction, log} = props;
@@ -32,11 +31,12 @@ const LogViewModal:FC<Props> = (props) => {
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, closeFunction);
 
-
+    /*
     useEffect(()=>{
         if(log.ID)
             LogNote.get(log.ID).then(res=>console.log(res.data));
     })
+*/
 
     if(visible)
         return (
@@ -78,7 +78,8 @@ const LogViewModal:FC<Props> = (props) => {
                     }}
                 >
                     <p>Log Details</p>
-                    <p>{log.name}</p>
+                    <p>Name: {log.name}</p>
+                    <p>ID: {log.ID}</p>
                     <button>Edit</button>
                     <button>Delete</button>
                     <button onClick={closeFunction}>Close</button>
