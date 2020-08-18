@@ -32,7 +32,7 @@ const routes: [Api.Invite.Email.POST.Route]
           pre: { communityBusiness },
         } = request;
 
-        const result = await EmailService.inviteVolunteer(config, payload.To, payload.email_subject, payload.text_above_link, payload.text_below_link);
+        const result = await EmailService.inviteVolunteer(config, payload.email.To, payload.email.email_subject, payload.email.text_above_link, payload.email.text_below_link);
 
         return null;
       },
