@@ -38,14 +38,18 @@ const LogViewModal:FC<Props> = (props) => {
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, ()=>{closeFunction();setInitialised(false);setLogNote("")});
 
+    const getNote = async () => {
+        let {data} = await LogNote.get(log.ID);
+        console.log(data)
+        if(data)
+            setLogNote(data.notes);
+        setInitialised(true);
+    }
     
     useEffect(()=>{
-        if(!initialised){
+        if(!initialised)
             if(log.ID)
-                LogNote.get(log.ID)
-                .then(res=>{console.log(res);console.log(res.data)});
-            setInitialised(true);
-        }
+                getNote();
     })
 
 
