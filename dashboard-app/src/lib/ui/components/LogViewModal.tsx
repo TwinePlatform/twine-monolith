@@ -44,11 +44,6 @@ const LogViewModal:FC<Props> = (props) => {
         if(data.result[0])
             setLogNote(data.result[0].notes);
     }
-
-    console.log(log);
-    console.log(visible);
-    console.log(effectCount);
-    console.log(logNote);
     
     useEffect(()=>{
         if(effectCount<3 && visible){
@@ -104,7 +99,7 @@ const LogViewModal:FC<Props> = (props) => {
                     <p>Date: {log.date}</p>
                     <p>Start Time: {timeMinusHours(log.endTime,log.hours)}</p>
                     <p>End Time: {log.endTime}</p>
-                    <p>Note: {effectCount<3 ? logNote : "loading..."}</p>
+                    <p>Note: {logNote}</p>
                     <button>Edit</button>
                     <button>Delete</button>
                 </div>
