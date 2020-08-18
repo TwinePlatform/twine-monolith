@@ -39,11 +39,11 @@ const ProjectModal:FC<Props> = (props) => {
     }
 
     const submit = async () => {
-        const result = await Project.add(projectName);
-        console.log(result);
-        //something about if result is good etc
-        setProjectName("");
-        setSuccessMessage("Successfully added project");
+        const {data} = await Project.add(projectName);
+        if(data.result.id){
+            setProjectName("");
+            setSuccessMessage("Successfully added project");
+        }
     }
 
     if(visible)
@@ -86,13 +86,14 @@ const ProjectModal:FC<Props> = (props) => {
                     }}
                 >
                     <p>New Project</p>
-                    <input type="text" placeholder="Project Name" onChange={textHandler}/>
+                    <input value={projectName} type="text" placeholder="Project Name" onChange={textHandler}/>
                     <button 
                         onClick={submit}
                         disabled={projectName.length < 1}
                     >
                         Create
                     </button>
+                    <p>{successMessage}</p>
                 </div>
             </div>
         );
