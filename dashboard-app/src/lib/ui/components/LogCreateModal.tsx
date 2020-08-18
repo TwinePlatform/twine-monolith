@@ -73,11 +73,13 @@ const LogCreateModal:FC<Props> = (props) => {
                         padding: '12px',
                     }}
                 >
-                    <p>Add New Log</p>
+                    <p>Add Time</p>
                     <input type="text" placeholder="Name"/>
-                    <input type="text" placeholder="Date"/>
                     <input type="text" placeholder="Project"/>
                     <input type="text" placeholder="Activity"/>
+                    <input type="text" placeholder="Date"/>
+                    <input type="text" placeholder="Start Time"/>
+                    <input type="text" placeholder="End Time"/>
                     <button onClick={select}>Create</button>
                 </div>
             </div>
