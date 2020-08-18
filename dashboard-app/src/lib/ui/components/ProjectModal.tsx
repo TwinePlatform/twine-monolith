@@ -26,6 +26,7 @@ const Heading2 = styled(H2)`
 
 const ProjectModal:FC<Props> = (props) => {
     const [projectName, setProjectName] = useState("")
+    const [successMessage, setSuccessMessage] = useState("")
 
     const {visible, closeFunction} = props;
 
@@ -37,8 +38,12 @@ const ProjectModal:FC<Props> = (props) => {
         setProjectName(e.target.value);
     }
 
-    const submit = () => {
-        Project.add(projectName);
+    const submit = async () => {
+        const result = await Project.add(projectName);
+        console.log(result);
+        //something about if result is good etc
+        setProjectName("");
+        setSuccessMessage("Successfully added project");
     }
 
     if(visible)
@@ -82,7 +87,12 @@ const ProjectModal:FC<Props> = (props) => {
                 >
                     <p>New Project</p>
                     <input type="text" placeholder="Project Name" onChange={textHandler}/>
-                    <button onClick={submit}>Create</button>
+                    <button 
+                        onClick={submit}
+                        disabled={projectName.length < 1}
+                    >
+                        Create
+                    </button>
                 </div>
             </div>
         );
