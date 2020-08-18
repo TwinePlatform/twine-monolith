@@ -41,7 +41,7 @@ const LogsDataTable: React.FunctionComponent<LogsDataTableProps> = (props) => {
     "Project",
     "Activity",
     "Date",
-    "Total Hours",
+    "ID",
     ];
 
     const {
