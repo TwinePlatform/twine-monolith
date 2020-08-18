@@ -66,9 +66,9 @@ const LogViewModal:FC<Props> = (props) => {
                 </div>
                 <div
                     style={{
-                        borderColor: ColoursEnum.mustard,
+                      /*  borderColor: ColoursEnum.mustard,
                         border: '2px',
-                        borderRadius: '4px',
+                        borderRadius: '4px',*/
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                         marginTop: '45px',
@@ -77,9 +77,13 @@ const LogViewModal:FC<Props> = (props) => {
                         padding: '12px',
                     }}
                 >
-                    <p>Log Details</p>
-                    <p>Name: {log.name}</p>
-                    <p>ID: {log.ID}</p>
+                    <p>Volunteers Time</p>
+                    <p>Volunteer: {log.name}</p>
+                    <p>Project: {log.project}</p>
+                    <p>Activity: {log.activity}</p>
+                    <p>Date: {log.date}</p>
+                    <p>Start Time: to be added</p>
+                    <p>End Time: {log.endTime}</p>
                     <button>Edit</button>
                     <button>Delete</button>
                     <button onClick={closeFunction}>Close</button>

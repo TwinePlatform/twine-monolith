@@ -34,6 +34,7 @@ const getRows = (logs: [any]) => {
                           Project: log.project,
                           Activity: log.activity,
                           Date: log.createdAt.slice(0,10),
+                          EndTime: log.createdAt.slice(10),
                           ID: log.id,
                         }})
 };
@@ -70,7 +71,8 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
                             {id:2, name: "Project"},
                             {id:3, name: "Activity"},
                             {id:4, name: "Date"},
-                            {id:5, name: "ID"},
+                            {id:5, name: "EndTime"},
+                            {id:6, name: "ID"},
                             //{id:6, name: "View Log"}
                             ]
                         };

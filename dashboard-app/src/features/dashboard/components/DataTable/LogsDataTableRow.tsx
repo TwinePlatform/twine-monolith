@@ -37,7 +37,21 @@ const LogsDataTableRow: React.FunctionComponent<LogsRowProps> = (props) => {
           )}
         )
       }
-      <button  className = "ViewLog" onClick={()=>{setLogViewModalVisible(true);setSelectedLog({ID: columns.ID.content, name: columns.Name.content})}}>View log</button>
+      <button  
+        className = "ViewLog" 
+        onClick={()=>{
+            setLogViewModalVisible(true);
+            setSelectedLog({
+              ID: columns.ID.content,
+              name: columns.Name.content,
+              project: columns.Project.content,
+              activity: columns.Activity.content,
+              date: columns.Date.content,
+              endTime: columns.EndTime.content,
+              duration: columns.Time.content,
+              })}}>
+          View log
+      </button>
     </TableRow>
   );
 
