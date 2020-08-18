@@ -31,18 +31,23 @@ const timeMinusHours = (time: string, hours: number) => {
 }
 
 const LogViewModal:FC<Props> = (props) => {
-
     const {visible, closeFunction, log} = props;
+    const [initialised, setInitialised] = useState(false);
+    const [logNote, setLogNote] = useState("");
 
     const wrapperRef = useRef(null);
-    useOutsideAlerter(wrapperRef, closeFunction);
+    useOutsideAlerter(wrapperRef, ()=>{closeFunction();setInitialised(false);setLogNote("")});
 
-    /*
+    
     useEffect(()=>{
-        if(log.ID)
-            LogNote.get(log.ID).then(res=>console.log(res.data));
+        if(!initialised){
+            if(log.ID)
+                LogNote.get(log.ID)
+                .then(res=>{console.log(res);console.log(res.data)});
+            setInitialised(true);
+        }
     })
-*/
+
 
     if(visible)
         return (
@@ -90,6 +95,7 @@ const LogViewModal:FC<Props> = (props) => {
                     <p>Date: {log.date}</p>
                     <p>Start Time: {timeMinusHours(log.endTime,log.hours)}</p>
                     <p>End Time: {log.endTime}</p>
+                    <p>Note: {logNote}</p>
                     <button>Edit</button>
                     <button>Delete</button>
                 </div>
