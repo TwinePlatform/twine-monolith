@@ -80,9 +80,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     const logs = logsData.data;
     const volunteers = volunteersData.data as IdAndName[];
 
-    console.log("use aggregate data by log");
-    console.log(logs);
-
+    
     /*
     const data = logsToAggregatedData({
       logs,

@@ -40,9 +40,9 @@ const LogViewModal:FC<Props> = (props) => {
 
     const getNote = async () => {
         let {data} = await LogNote.get(log.ID);
-        console.log(data)
-        if(data)
-            setLogNote(data.notes);
+        console.log(data.result[0].notes)
+        if(data.result[0].notes)
+            setLogNote(data.result[0].notes);
         setInitialised(true);
     }
     
