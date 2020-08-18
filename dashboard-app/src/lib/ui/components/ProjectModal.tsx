@@ -3,6 +3,7 @@ import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
+import {Project} from '../../api';
 
 /*
  * Types
@@ -24,20 +25,20 @@ const Heading2 = styled(H2)`
 
 
 const ProjectModal:FC<Props> = (props) => {
-    const [filename, setFilename] = useState("Project File Here")
+    const [projectName, setProjectName] = useState("")
 
     const {visible, closeFunction} = props;
 
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, closeFunction);
 
-    const select = () => {
-        if(document.getElementById('file-input'))
-            document.getElementById('file-input')!.click();
+    const textHandler = (e: any) => {
+        console.log(e.target.value);
+        setProjectName(e.target.value);
     }
 
-    const handleProject = (e: any) => {
-        let projectedFile = e.target.files[0];
+    const submit = () => {
+        Project.add(projectName);
     }
 
     if(visible)
@@ -80,8 +81,8 @@ const ProjectModal:FC<Props> = (props) => {
                     }}
                 >
                     <p>New Project</p>
-                    <input type="text" placeholder="Project Name"/>
-                    <button>Create</button>
+                    <input type="text" placeholder="Project Name" onChange={textHandler}/>
+                    <button onClick={submit}>Create</button>
                 </div>
             </div>
         );

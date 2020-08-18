@@ -73,3 +73,7 @@ export const Files = {
     })
   } 
 }
+
+export const Project = {
+  add: (name: string) => axios.post('/community-businesses/me/volunteers/projects',{name}),
+}
