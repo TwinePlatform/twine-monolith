@@ -44,6 +44,11 @@ const LogViewModal:FC<Props> = (props) => {
         if(data.result[0])
             setLogNote(data.result[0].notes);
     }
+
+    console.log(log);
+    console.log(visible);
+    console.log(effectCount);
+    console.log(logNote);
     
     useEffect(()=>{
         if(effectCount<3){
