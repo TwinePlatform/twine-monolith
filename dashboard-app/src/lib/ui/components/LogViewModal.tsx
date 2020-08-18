@@ -43,13 +43,14 @@ const LogViewModal:FC<Props> = (props) => {
         console.log(data.result[0].notes)
         if(data.result[0].notes)
             setLogNote(data.result[0].notes);
-        setInitialised(true);
     }
     
     useEffect(()=>{
-        if(!initialised)
-            if(log.ID)
-                getNote();
+        if(!initialised){
+            getNote();
+            setInitialised(true);
+        }
+                
     })
 
 
