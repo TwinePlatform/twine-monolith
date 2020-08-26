@@ -52,6 +52,16 @@ export const aggregatedToTableData = ({ data, unit, yData }: Params) => {
   };
 
   /*
+  export const aggregatedToTableDataProjects = ({ data, unit, yData }: Params) => {
+    return pipe(
+      createHeaders(yData),
+      renameAllNameKeys,
+      addContentObjects as any,
+      addColumnsKey,
+    )(data) as Pick<DataTableProps, 'headers' | 'rows'>;
+  };*/
+
+  /*
 export const aggregatedToTableData = ({ data, unit, yData }: Params) => {
   return pipe(
     createHeaders(yData),

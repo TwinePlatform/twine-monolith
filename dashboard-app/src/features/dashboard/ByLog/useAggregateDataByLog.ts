@@ -33,9 +33,45 @@ const getRows = (logs: [any]) => {
                         }})
 };
 
+const getProjectRows = (logs: [any]) => {
+  let projects: any = {};
+  let projectNames = logs.map(log=>log.project)
+
+  //remove duplicate names
+  projectNames = projectNames.filter((item, index) => projectNames.indexOf(item) == index)
+
+  console.log(projectNames);
+
+  //create the row objects
+  projectNames.map(projectName=>projects[projectName] = {Hours: 0, Volunteers: 1});
+
+  logs.map((log)=>{
+    projects[log.project].Hours += log.duration.hours
+  })
+
+  let projectRows: any = [];
+
+  for (let project in projects) {
+    projectRows.push({
+      Name: project,
+      Hours: projects.project.Hours,
+      Volunteers: projects.project.Volunteers
+    })
+  }
+
+  console.log(projectRows);
+
+  return projectRows;
+}
+
 export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
   const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
+  const [aggregatedDataProjects, setAggregatedDataProjects] = useState<AggregatedData>();
   const [logFields, setLogFields] = useState<IdAndName[]>();
+  const [projectFields, setProjectFields] = useState<IdAndName[]>([
+    {id:1, name: "Total Hours"},
+    {id:2, name: "Volunteers"}
+    ]);
 
   const {
     loading,
@@ -60,16 +96,19 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     updateOn: [...updateOn, from, to],
   });
 
-   const logFieldsData = {data: [
+   const logFieldsData =  [
                             {id:1, name: "Hours"},
                             {id:2, name: "Project"},
                             {id:3, name: "Activity"},
                             {id:4, name: "Date"},
                             {id:5, name: "EndTime"},
-                            {id:6, name: "ID"},
-                            //{id:6, name: "View Log"}
-                            ]
-                        };
+                            {id:6, name: "ID"}
+                            ];
+
+  const projectFieldsData =  [
+                            {id:1, name: "Total Hours"},
+                            {id:2, name: "Volunteers"}
+                            ];
 
 
   useEffect(() => {
@@ -96,8 +135,16 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       rows: getRows(logs),
     };
 
-    setLogFields(logFieldsData.data);
+    const dataProjects = {
+      groupByX: "Name",
+      groupByY: "ProjectField",
+      rows: getProjectRows(logs),
+    };
+
+    setLogFields(logFieldsData);
+    setProjectFields(projectFieldsData);
     setAggregatedData(data);
+    setAggregatedDataProjects(dataProjects);
   }, [logsData, volunteersData, logFieldsData, loading, error]);
 
 
@@ -111,7 +158,13 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
 
   } else {
 
-    return { loading, data: aggregatedData, error, logFields };
-
+    return { 
+      loading, 
+      data: aggregatedData, 
+      error, 
+      logFields, 
+      projectFields,
+      dataProjects: aggregatedDataProjects, 
+    };
   }
 };

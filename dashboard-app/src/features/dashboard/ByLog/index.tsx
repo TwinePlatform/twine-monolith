@@ -65,7 +65,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const [selectedLog, setSelectedLog] = useState(initSelectedLog);
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [tableDataProjects, setTableDataProjects] = useState<TableData>(initTableData);
-  const { loading, error, data, logFields } =
+  const { loading, error, data, logFields, dataProjects, projectFields } =
     useAggregateDataByLog({ from: fromDate, to: toDate });
 
   // set and clear errors on response
@@ -84,11 +84,11 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
 
   // manipulate data for table
   useEffect(() => {
-    if (!loading && data && logFields) {
+    if (!loading && data && dataProjects && logFields && projectFields) {
       setTableData(aggregatedToTableData({ data, unit, yData: logFields }));
-      setTableDataProjects(aggregatedToTableData({ data, unit, yData: logFields }));
+      setTableDataProjects(aggregatedToTableData({ data: dataProjects, unit, yData: projectFields }));
     }
-  }, [logFields, data, loading, unit]);
+  }, [logFields, data, dataProjects, loading, unit]);
 
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
