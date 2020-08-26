@@ -26,6 +26,7 @@ const TableRow = styled.tr`
 const ProjectsDataTableRow: React.FunctionComponent<ProjectsRowProps> = (props) => {
   const { columns, rowLink, order, onClick} = props;
 
+  console.log(order);
   console.log(columns);
 
   const inner = (
