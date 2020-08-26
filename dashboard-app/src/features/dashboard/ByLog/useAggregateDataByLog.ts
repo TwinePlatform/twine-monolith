@@ -40,14 +40,13 @@ const getProjectRows = (logs: [any]) => {
   //remove duplicate names
   projectNames = projectNames.filter((item, index) => projectNames.indexOf(item) == index)
 
-  console.log(projectNames);
-
-  //create the row objects
   projectNames.map(projectName=>projects[projectName] = {Hours: 0, Volunteers: 1});
 
   logs.map((log)=>{
     projects[log.project].Hours += log.duration.hours
   })
+
+  //need to add some kind of log to count the volunteers. going to be tricky
 
   let projectRows: any = [];
 
@@ -59,8 +58,6 @@ const getProjectRows = (logs: [any]) => {
     })
   }
 
-  console.log(projectRows);
-
   return projectRows;
 }
 
@@ -69,8 +66,9 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
   const [aggregatedDataProjects, setAggregatedDataProjects] = useState<AggregatedData>();
   const [logFields, setLogFields] = useState<IdAndName[]>();
   const [projectFields, setProjectFields] = useState<IdAndName[]>([
-    {id:1, name: "Total Hours"},
-    {id:2, name: "Volunteers"}
+    {id:1, name: "Project"}
+    {id:2, name: "Hours"},
+    {id:3, name: "Volunteers"}
     ]);
 
   const {
