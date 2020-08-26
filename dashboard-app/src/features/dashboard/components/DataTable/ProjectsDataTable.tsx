@@ -8,7 +8,6 @@ import { Order, sort } from 'twine-util/arrays';
 import Card from '../../../../lib/ui/components/Card';
 import ProjectsDataTableRow from './ProjectsDataTableRow';
 import HeaderRow from './DataTableHeaderRow';
-import TotalsRow from './DataTableTotalsRow';
 import { ProjectsDataTableProps } from './types';
 import { toRowProps } from './util';
 import { hashJSON } from '../../../../lib/util/hash';
@@ -77,9 +76,6 @@ const ProjectsDataTable: React.FunctionComponent<ProjectsDataTableProps> = (prop
                 key={hashJSON(row)}
               />
             ))
-        }
-        {
-          showTotals && <TotalsRow rows={rows.map((r) => toRowProps(r, headers))} />
         }
       </tbody>
     </Table>
