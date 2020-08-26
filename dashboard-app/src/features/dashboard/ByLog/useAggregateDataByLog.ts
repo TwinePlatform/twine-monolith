@@ -66,7 +66,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
   const [aggregatedDataProjects, setAggregatedDataProjects] = useState<AggregatedData>();
   const [logFields, setLogFields] = useState<IdAndName[]>();
   const [projectFields, setProjectFields] = useState<IdAndName[]>([
-    {id:1, name: "Project"}
+    {id:1, name: "Project"},
     {id:2, name: "Hours"},
     {id:3, name: "Volunteers"}
     ]);
