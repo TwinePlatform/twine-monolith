@@ -64,6 +64,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const [projectModalVisible, setProjectModalVisible] = useState(false);
   const [selectedLog, setSelectedLog] = useState(initSelectedLog);
   const [tableData, setTableData] = useState<TableData>(initTableData);
+  const [tableDataProjects, setTableDataProjects] = useState<TableData>(initTableData);
   const { loading, error, data, logFields } =
     useAggregateDataByLog({ from: fromDate, to: toDate });
 
@@ -85,6 +86,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   useEffect(() => {
     if (!loading && data && logFields) {
       setTableData(aggregatedToTableData({ data, unit, yData: logFields }));
+      setTableDataProjects(aggregatedToTableData({ data, unit, yData: logFields }));
     }
   }, [logFields, data, loading, unit]);
 
@@ -169,12 +171,12 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                     )
                   }
                   {
-                    tableData && (
+                    tableDataProjects && (
                     <div>
                         <ProjectsDataTable
-                        {...tableData}
+                        {...tableDataProjects}
                         title={getTitleForDayPicker("Projects", fromDate, toDate)}
-                        sortBy={tableData.headers[orderable.sortByIndex]}
+                        sortBy={tableDataProjects.headers[orderable.sortByIndex]}
                         order={orderable.order}
                         onChangeSortBy={onChangeSortBy}
                         showTotals
