@@ -122,7 +122,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     }
 
     const logs = logsData.data;
-    logs[0].createdBy = "different"
+    //logs[0].createdBy = "different"
     const volunteers = volunteersData.data as IdAndName[];
 
     
