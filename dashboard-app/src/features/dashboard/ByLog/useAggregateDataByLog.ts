@@ -37,6 +37,9 @@ const getProjectRows = (logs: [any]) => {
   let projects: any = {};
   let projectNames = logs.map(log=>log.project)
 
+ 
+
+
   //remove duplicate names
   projectNames = projectNames.filter((item, index) => projectNames.indexOf(item) == index)
 
@@ -119,6 +122,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     }
 
     const logs = logsData.data;
+    logs[0].createdBy = "different"
     const volunteers = volunteersData.data as IdAndName[];
 
     
