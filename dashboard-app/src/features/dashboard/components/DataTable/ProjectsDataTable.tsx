@@ -9,7 +9,6 @@ import Card from '../../../../lib/ui/components/Card';
 import ProjectsDataTableRow from './ProjectsDataTableRow';
 import HeaderRow from './DataTableHeaderRow';
 import { ProjectsDataTableProps } from './types';
-import { toRowProps } from './util';
 import { hashJSON } from '../../../../lib/util/hash';
 import { FullWidthTextBox } from '../../../../lib/ui/components/FullWidthTextBox';
 import { Title } from '../Title';

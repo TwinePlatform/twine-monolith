@@ -8,9 +8,7 @@ import { Order, sort } from 'twine-util/arrays';
 import Card from '../../../../lib/ui/components/Card';
 import LogsDataTableRow from './LogsDataTableRow';
 import HeaderRow from './DataTableHeaderRow';
-import TotalsRow from './DataTableTotalsRow';
 import { LogsDataTableProps } from './types';
-import { toRowProps } from './util';
 import { hashJSON } from '../../../../lib/util/hash';
 import { FullWidthTextBox } from '../../../../lib/ui/components/FullWidthTextBox';
 import { Title } from '../Title';
@@ -90,9 +88,6 @@ const LogsDataTable: React.FunctionComponent<LogsDataTableProps> = (props) => {
                 rowNumber={index}
               />
             ))
-        }
-        {
-          showTotals && <TotalsRow rows={rows.map((r) => toRowProps(r, headers))} />
         }
       </tbody>
     </Table>

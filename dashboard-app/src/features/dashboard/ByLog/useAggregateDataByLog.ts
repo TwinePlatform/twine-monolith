@@ -46,7 +46,16 @@ const getProjectRows = (logs: [any]) => {
     projects[log.project].Hours += log.duration.hours
   })
 
-  //need to add some kind of log to count the volunteers. going to be tricky
+  //count how many volunteers are on each project
+  for(let project in projects){
+    let volunteerNames: string[] = [];
+    logs.forEach(log => {
+        if(log.project == project)
+          volunteerNames.push(log.createdBy);
+      })
+    volunteerNames = volunteerNames.filter((item, index) => volunteerNames.indexOf(item) == index)
+    projects[project].Volunteers = volunteerNames.length;
+  }
 
   let projectRows: any = [];
 
