@@ -5,6 +5,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import DatePickerConstraints from './datePickerConstraints';
 import _LogsDataTable from '../components/DataTable/LogsDataTable';
+import ProjectsDataTable from '../components/DataTable/ProjectsDataTable';
 import UtilityBar from '../components/UtilityBar';
 import { H1 } from '../../../lib/ui/components/Headings';
 import { DataTableProps } from '../components/DataTable/types';
@@ -170,17 +171,13 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                   {
                     tableData && (
                     <div>
-                        <LogsDataTable
+                        <ProjectsDataTable
                         {...tableData}
                         title={getTitleForDayPicker("Projects", fromDate, toDate)}
                         sortBy={tableData.headers[orderable.sortByIndex]}
                         order={orderable.order}
                         onChangeSortBy={onChangeSortBy}
                         showTotals
-                        setSelectedLog={setSelectedLog}
-                        setLogViewModalVisible={()=>{setLogViewModalVisible(true)
-                            setProjectModalVisible(false)
-                            setLogCreateModalVisible(false)}}
                       />
                         <PrimaryButton 
                             onClick={()=>{setProjectModalVisible(!projectModalVisible)

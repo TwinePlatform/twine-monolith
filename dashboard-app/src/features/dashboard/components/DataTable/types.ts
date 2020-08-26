@@ -33,6 +33,16 @@ export type LogsDataTableProps = {
   setLogViewModalVisible: any
 };
 
+export type ProjectsDataTableProps = {
+  title?: TitleString
+  headers: string[]
+  sortBy?: string
+  order?: Order
+  onChangeSortBy?: (s: string) => void
+  rows: DataTableRow[]
+  showTotals?: boolean
+};
+
 
 
 export type DataTableContent = number | string;
@@ -75,6 +85,13 @@ export type LogsRowProps = {
   setSelectedLog: any
   setLogViewModalVisible: any
   rowNumber: number
+};
+
+export type ProjectsRowProps = {
+  columns: Dictionary<CellProps>
+  order: string[]
+  rowLink?: string
+  onClick?: DataTableCallback
 };
 
 export type HeaderRowProps = {
