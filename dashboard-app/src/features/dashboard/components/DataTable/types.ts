@@ -74,6 +74,7 @@ export type LogsRowProps = {
   onClick?: DataTableCallback
   setSelectedLog: any
   setLogViewModalVisible: any
+  rowNumber: number
 };
 
 export type HeaderRowProps = {

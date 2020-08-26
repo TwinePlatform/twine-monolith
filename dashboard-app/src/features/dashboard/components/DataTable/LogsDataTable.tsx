@@ -80,13 +80,14 @@ const LogsDataTable: React.FunctionComponent<LogsDataTableProps> = (props) => {
       <tbody>
         {
           sorter(rows)
-            .map((row) => (
+            .map((row,index) => (
               <LogsDataTableRow
                 columns={row.columns}
                 order={headers}
                 key={hashJSON(row)}
                 setSelectedLog={setSelectedLog}
                 setLogViewModalVisible={setLogViewModalVisible}
+                rowNumber={index}
               />
             ))
         }

@@ -24,7 +24,7 @@ const TableRow = styled.tr`
  * Component
  */
 const LogsDataTableRow: React.FunctionComponent<LogsRowProps> = (props) => {
-  const { columns, rowLink, order, onClick, setSelectedLog, setLogViewModalVisible} = props;
+  const { columns, rowLink, order, onClick, setSelectedLog, setLogViewModalVisible, rowNumber} = props;
 
   const inner = (
     <TableRow data-testid="data-table-row">
@@ -35,7 +35,7 @@ const LogsDataTableRow: React.FunctionComponent<LogsRowProps> = (props) => {
         )
       }
       <button  
-        className = "ViewLog" 
+        className = {rowNumber%2==0?"ViewLogYellow":"ViewLog"}
         onClick={()=>{
             setLogViewModalVisible(true);
             setSelectedLog({
