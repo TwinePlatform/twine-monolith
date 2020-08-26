@@ -54,8 +54,8 @@ const getProjectRows = (logs: [any]) => {
   for (let project in projects) {
     projectRows.push({
       Name: project,
-      Hours: projects.project.Hours,
-      Volunteers: projects.project.Volunteers
+      Hours: projects[project].Hours,
+      Volunteers: projects[project].Volunteers
     })
   }
 
