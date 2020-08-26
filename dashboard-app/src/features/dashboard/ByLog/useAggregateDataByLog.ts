@@ -103,11 +103,6 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
                             {id:6, name: "ID"}
                             ];
 
-  const projectFieldsData =  [
-                            {id:1, name: "Total Hours"},
-                            {id:2, name: "Volunteers"}
-                            ];
-
 
   useEffect(() => {
     if (loading || error) {
@@ -140,7 +135,6 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     };
 
     setLogFields(logFieldsData);
-    setProjectFields(projectFieldsData);
     setAggregatedData(data);
     setAggregatedDataProjects(dataProjects);
   }, [logsData, volunteersData, logFieldsData, loading, error]);
