@@ -167,7 +167,6 @@ const UserForm: FC<Props> = ({
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        console.log('submit');
         if (addVolArr == []) {
           onSubmit(values);
         } else if (addVolArr != []) {
