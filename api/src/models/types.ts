@@ -355,6 +355,8 @@ export type CommunityBusinessCollection = Collection<CommunityBusiness> & {
   getVisitActivityById: (k: Knex, c: CommunityBusiness, id: Int) => Promise<Maybe<VisitActivity>>;
   addVisitActivity: (k: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>)
     => Promise<Maybe<VisitActivity>>;
+  addVolunteerActivity: (k: Knex, a: object) => any;
+  addVolunteerProject: (k: Knex, a: object, b: string) => any;
   updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>;
   deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>;
   addVisitLog: (k: Knex, v: VisitActivity, u: Partial<User>, a: 'sign_in_with_name' | 'qr_code') =>

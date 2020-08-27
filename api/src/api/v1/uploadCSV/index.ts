@@ -5,9 +5,11 @@ import { Api } from '../types/api';
 import { Serialisers } from '../serialisers';
 import { any } from '@hapi/joi';
 import { userId } from '../schema/request';
-import { VolunteerLogs, Volunteers, VolunteerLog, VolunteerLogPermissions } from '../../../models';
+import { RoleEnum } from '../../../models/types';
+import { VolunteerLogs, CommunityBusinesses, Volunteers } from '../../../models';
 import Knex = require('knex');
 import { promises } from 'dns';
+import community_businesses from '../regions/community_businesses';
 
 // const fs = require('fs');
 // const csv = require('csv-parser');
@@ -24,7 +26,7 @@ const routes: [
     = [
         {
             method: 'POST',
-            path: '/upload/CSVlogs',
+            path: '/upload/CSVlogs/{organisationId}',
             options: {
                 description: 'Upload activity from dashboard using CSV format',
                 auth: {
@@ -33,14 +35,11 @@ const routes: [
                         scope: ['user_details-own:read'],
                     },
                 },
-                // validate: {	
-                //     query,	
-                // },	
-                // response: { schema: response },	
             },
             handler: async (request, h) => {
 
                 const {
+                    params: { organisationId },
                     server: { app: { knex, config } },
                 } = request;
 
@@ -74,7 +73,7 @@ const routes: [
                         try {
                             const log = await VolunteerLogs.add(knex, {
                                 "userId": user_Id[0].user_account_id,
-                                "organisationId": 2,
+                                "organisationId": parseInt(organisationId),
                                 "project": csvArray[i]['Project'],
                                 "activity": csvArray[i]['Activity'],
                                 "duration": {
@@ -107,13 +106,10 @@ const routes: [
                         scope: ['user_details-own:read'],
                     },
                 },
-                // validate: {	
-                //     query,	
-                // },	
-                // response: { schema: response },	
+
             },
             handler: async (request, h) => {
-                // const { user } = StandardCredentials.fromRequest(request);	
+
                 const {
                     server: { app: { knex, config } },
                 } = request;
@@ -121,15 +117,23 @@ const routes: [
                 console.log('in the activity endpoint');
 
                 const csvfile = request.payload;
-                console.log(csvfile);
+                const csvArray = await neatCsv(csvfile['csv']);
+                console.log(csvArray);
+                let i = 0;
+                let activityArr = [];
+                for (i = 0; i <= csvArray.length - 1; i++) {
+                    const activity = csvArray[i]['Name'];
+                    console.log(activity);
+                    const activityInsert = await CommunityBusinesses.addVolunteerActivity(knex, activity);
+                    activityArr.push(activityInsert);
+                }
 
-
-                return null;
+                return activityArr;
             },
         },
         {
             method: 'POST',
-            path: '/upload/volunteer',
+            path: '/upload/project/{organisationId}',
             options: {
                 description: 'Upload activity from dashboard using CSV format',
                 auth: {
@@ -144,52 +148,33 @@ const routes: [
                 // response: { schema: response },	
             },
             handler: async (request, h) => {
-                // const { user } = StandardCredentials.fromRequest(request);	
-                // const {	
-                //     payload,	
-                //     server: { app: { EmailService, knex, config } },	
-                //     pre: { communityBusiness },	
-                // } = request;	
 
-                console.log('in the volunteer endpoint');
+                const {
+                    params: { organisationId },
+                    server: { app: { knex, config } },
+                } = request;
+
+                console.log('in the project endpoint');
 
                 const csvfile = request.payload;
-                console.log(csvfile);
+                const csvArray = await neatCsv(csvfile['csv']);
+                console.log(organisationId);
+                console.log(csvArray);
+                let i = 0;
+                let projectArr = [];
+                for (i = 0; i <= csvArray.length - 1; i++) {
+                    const project = csvArray[i]['Name'];
+                    console.log(project);
+                    const projectInsert = await CommunityBusinesses.addVolunteerProject(knex, project, organisationId);
+                    projectArr.push(projectInsert);
+                }
 
-                // const file = fs.createReadStream(csvfile);
-                // const parseCsv = file.pipe(csv.parse());
-
-                // console.log(file);
-
-                // // Setup the parse stream to extract the account owner	
-
-                // let accountOwner;
-
-                // parseCsv.on('data', (row: any) => {
-                //     console.log(row);
-                //     //   if (text == row[1]){	
-                //     //     accountOwner = row[2];	
-                //     //   }	
-                // });
-
-                // Wait for the stream to process, or throw on an error	
-                // await Toys.stream(parseCsv);	
-
-                //parse to DB 	
-                // const res = await client('column header[0]')	
-                // .insert({ '[R0][C0]': [Ri][C0], '[R0][C1]': [Ri][C1], '[R0][C2]': [Ri][C2] },...	
-                //{});	
-
-                // return accountOwner;
-
-
-
-                return null;
+                return projectArr;
             },
         },
         {
             method: 'POST',
-            path: '/upload/time',
+            path: '/upload/volunteer/{organisationId}',
             options: {
                 description: 'Upload activity from dashboard using CSV format',
                 auth: {
@@ -198,51 +183,58 @@ const routes: [
                         scope: ['user_details-own:read'],
                     },
                 },
-                // validate: {	
-                //     query,	
-                // },	
-                // response: { schema: response },	
             },
             handler: async (request, h) => {
-                // const { user } = StandardCredentials.fromRequest(request);	
-                // const {	
-                //     payload,	
-                //     server: { app: { EmailService, knex, config } },	
-                //     pre: { communityBusiness },	
-                // } = request;	
+                const {
+                    params: { organisationId },
+                    server: { app: { knex, config } },
+                } = request;
 
-                console.log('in the time endpoint');
+                console.log('in the volunteer registration endpoint');
 
                 const csvfile = request.payload;
-                console.log(csvfile);
+                const csvArray = await neatCsv(csvfile['csv']);
+                const role = RoleEnum.VOLUNTEER;
+                let i = 0;
+                let data = {};
+                for (i = 0; i <= csvArray.length - 1; i++) {
+                    const email = csvArray[i]['Email Address'];
+                    console.log()
+                    const communityBusiness = await CommunityBusinesses
+                        .getOne(knex, { where: { id: parseInt(organisationId), deletedAt: null } });
 
-                // const file = fs.createReadStream(csvfile);
-                // const parseCsv = file.pipe(csv.parse());
+                    console.log(communityBusiness);
 
-                // console.log(file);
+                    data = {
+                        organisationId: organisationId,
+                        role: role,
+                        name: csvArray[i]['Volunteer Name'],
+                        gender: 'prefer not to say',
+                        email: email,
+                        postCode: csvArray[i]['Postcode'],
+                        password: csvArray[i]['Password'],
+                        birthYear: csvArray[i]['Birth year'],
+                    };
 
-                // // Setup the parse stream to extract the account owner	
+                    console.log(data);
 
-                // let accountOwner;
+                    if (await Users.exists(knex, { where: { email } })) {
+                        return Boom.conflict('It appears this email is already registered.');
+                    }
 
-                // parseCsv.on('data', (row: any) => {
-                //     console.log(row);
-                //     //   if (text == row[1]){	
-                //     //     accountOwner = row[2];	
-                //     //   }	
-                // });
+                    try {
+                        const volunteer =
+                            await Volunteers.addWithRole(knex, data, role, communityBusiness);
 
-                // Wait for the stream to process, or throw on an error	
-                // await Toys.stream(parseCsv);	
+                        return Serialisers.volunteers.noSecrets(volunteer);
 
-                //parse to DB 	
-                // const res = await client('column header[0]')	
-                // .insert({ '[R0][C0]': [Ri][C0], '[R0][C1]': [Ri][C1], '[R0][C2]': [Ri][C2] },...	
-                //{});	
-
-                // return accountOwner;
-
-
+                    } catch (error) {
+                        if (error.message === 'Invalid volunteer admin code') {
+                            return Boom.unauthorized(error.message);
+                        }
+                        return error;
+                    }
+                }
 
                 return null;
             },
