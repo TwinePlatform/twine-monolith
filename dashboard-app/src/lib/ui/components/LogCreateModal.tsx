@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {CommunityBusinesses, Project, Logs, LogNote,} from '../../api';
+import { duration } from 'moment';
 
 /*
  * Types
@@ -106,7 +107,7 @@ const LogCreateModal:FC<Props> = (props) => {
 
             console.log(potentialLog);
             //validation code
-            if(true){
+            if(new Date(potentialLog.startedAt && potentialLog.duration.hours!=0)){
                 setLog(potentialLog);
                 setValid(true);
             }
