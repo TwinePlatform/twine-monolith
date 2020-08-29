@@ -1,8 +1,9 @@
-import React, { FC, useState, useRef } from 'react';
+import React, { FC, useState, useRef, useEffect } from 'react';
 import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
+import {CommunityBusinesses, Project, Logs, LogNote,} from '../../api';
 
 /*
  * Types
@@ -23,16 +24,41 @@ const Heading2 = styled(H2)`
 `;
 
 
-const LogCreateModal:FC<Props> = (props) => {
 
+const LogCreateModal:FC<Props> = (props) => {
     const {visible, closeFunction,} = props;
+
+    const [projects, setProjects] = useState(["loading project"]);
+    const [activities, setActivities] = useState(["loading activities"]);
+    const [volunteers, setVolunteers] = useState(["loading volunteers"]);
+    const [loading, setLoading] = useState(true);
 
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, closeFunction);
 
+    useEffect(()=>{
+        if(loading)
+            getOptions();
+    })
+
+    const getOptions = async () => {
+        const options = {
+            projects: await Project.get(),
+            activities: await CommunityBusinesses.getVolunteerActivities(),
+            volunteers: await CommunityBusinesses.getVolunteers()
+        }
+        setProjects(options.projects.data);
+        setActivities(options.activities.data);
+        setVolunteers(options.activities.data);
+
+        console.log(options);
+
+        setLoading(false);
+    }    
+
     const select = ()=>{
         console.log("selected")
-    }
+    };
 
     if(visible)
         return (
@@ -62,8 +88,6 @@ const LogCreateModal:FC<Props> = (props) => {
                 </div>
                 <div
                     style={{
-                        borderColor: ColoursEnum.mustard,
-                        border: '2px',
                         borderRadius: '4px',
                         flexDirection: 'row',
                         justifyContent: 'space-between',
@@ -74,13 +98,24 @@ const LogCreateModal:FC<Props> = (props) => {
                     }}
                 >
                     <p>Add Time</p>
-                    <input type="text" placeholder="Name"/>
-                    <input type="text" placeholder="Project"/>
-                    <input type="text" placeholder="Activity"/>
-                    <input type="text" placeholder="Date"/>
-                    <input type="text" placeholder="Start Time"/>
-                    <input type="text" placeholder="End Time"/>
-                    <button onClick={select}>Create</button>
+                {
+                loading?
+                    <p>loading...</p>
+                :
+                    <div>
+                        <input type="text" placeholder="Name"/>
+                        <input type="text" placeholder="Project"/>
+                        <select id="Projects" name="Projects">
+                            {projects.map(project=>
+                                <option value={project}>{project}</option>)} 
+                        </select>
+                        <input type="text" placeholder="Activity"/>
+                        <input type="text" placeholder="Date"/>
+                        <input type="text" placeholder="Start Time"/>
+                        <input type="text" placeholder="End Time"/>
+                        <button onClick={select}>Create</button>
+                    </div>
+                    }
                 </div>
             </div>
         );

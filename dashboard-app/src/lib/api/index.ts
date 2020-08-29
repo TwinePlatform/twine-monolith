@@ -53,9 +53,23 @@ export const CommunityBusinesses = {
     axios({ ...CommunityBusinesses.configs.getVolunteers, params: { fields: ['name', 'id'] } }),
 };
 
+export const Logs = {
+  add: (values: any) => axios.post( `/community-businesses/me/volunteer-logs`, values),
+  update: (id: any, LogId: any, values: any) => axios.put(`/community-businesses/me/volunteer-logs/${id}/${LogId}`,values),
+  delete: (LogId: any) => axios.delete( `/community-businesses/me/volunteer-logs/${LogId}`)
+}
+
 export const LogNote = {
   get: (logID: string) =>
-    axios.get("community-businesses/me/get-volunteer-logs/" + logID)
+    axios.get("community-businesses/me/get-volunteer-logs/" + logID),
+  update: (note: string, LogId: any, activity: any, project: any, startedAt: any) => axios.put(`community-businesses/me/volunteer-logs-notes/$${LogId}`,
+      {
+        activity: activity,
+        startedAt: startedAt,
+        notes: note,
+        project: project
+      }
+    )
 }
 
 export const Files = {
@@ -75,5 +89,6 @@ export const Files = {
 }
 
 export const Project = {
+  get: () => axios.get( '/community-businesses/me/volunteers/projects'),
   add: (name: string) => axios.post('/community-businesses/me/volunteers/projects',{name}),
 }
