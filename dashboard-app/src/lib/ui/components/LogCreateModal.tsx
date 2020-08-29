@@ -70,6 +70,8 @@ const LogCreateModal:FC<Props> = (props) => {
     const [loading, setLoading] = useState(true);
     const [valid, setValid] = useState(false);
 
+    const today = new Date();
+
     const [log, setLog] = useState({
         userID: 0,
         activity: "",
@@ -179,11 +181,11 @@ const LogCreateModal:FC<Props> = (props) => {
                             {activities.map(activity=>
                                 <option value={activity}>{activity}</option>)} 
                         </select>
-                        <input type="date" id="Date" value={new Date().toLocaleDateString()}
-                            max={new Date().toLocaleDateString()}
+                        <input type="date" id="Date" value={today.getDate()}
+                            max={today.getDate()}
                         />
-                        <input type="time" id="Start Time" value={new Date().toTimeString()}/>
-                        <input type="time" id="End Time" value={new Date().toTimeString()}/>
+                        <input type="time" id="Start Time" value={today.getTime()}/>
+                        <input type="time" id="End Time" value={today.getTime()}/>
                         <input type="text" id="Note" placeholder="Notes"/>
                         <button onClick={select}
                         disabled={!valid}
