@@ -162,7 +162,6 @@ const LogCreateModal:FC<Props> = (props) => {
                         />
                         <input type="time" id="Start Time" value={new Date().toTimeString()}/>
                         <input type="time" id="End Time" value={new Date().toTimeString()}
-                            max={new Date().toTimeString()}
                         />
                         <input type="text" id="Note" placeholder="Notes"/>
                         <button onClick={select}
