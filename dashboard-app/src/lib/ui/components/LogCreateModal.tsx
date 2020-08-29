@@ -51,7 +51,7 @@ const LogCreateModal:FC<Props> = (props) => {
         }
         setProjects(getStringArray(options.projects.data.result));
         setActivities(getStringArray(options.activities.data.result));
-        setVolunteers(options.activities.data.result);
+        setVolunteers(options.volunteers.data.result);
 
         console.log(options);
 
