@@ -27,7 +27,7 @@ const getStringArray = (array: any[]) => {
     return array.map(item =>item.name)
 }
 
-const getSelected = (e: any) => e.options[e.selectedIndex].value;
+const getSelected = (e: any) => e.value;
 
 const getDuration = (startTime: any, endTime: any) => {
     return {hours: 0, minutes: 0, seconds: 0}
