@@ -72,9 +72,9 @@ const LogCreateModal:FC<Props> = (props) => {
     const [loading, setLoading] = useState(true);
     const [valid, setValid] = useState(false);
     const [now, setNow] = useState(new Date());
-    const [date, setDate] = useState();
-    const [startTime, setStartTime] = useState();
-    const [endTime, setEndTime] = useState();
+    const [date, setDate] = useState(new Date().toDateString());
+    const [startTime, setStartTime] = useState(new Date().toTimeString());
+    const [endTime, setEndTime] = useState(new Date().toTimeString());
 
     const currentTime = now.getHours() + ":" + now.getMinutes();
 
