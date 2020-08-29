@@ -71,12 +71,10 @@ const LogCreateModal:FC<Props> = (props) => {
     const [volunteers, setVolunteers] = useState([{id:0 , name:"loading volunteers"}]);
     const [loading, setLoading] = useState(true);
     const [valid, setValid] = useState(false);
-    const [now, setNow] = useState(new Date());
-    const [date, setDate] = useState(new Date().toDateString());
-    const [startTime, setStartTime] = useState(new Date().toTimeString());
-    const [endTime, setEndTime] = useState(new Date().toTimeString());
-
-    const currentTime = now.getHours() + ":" + now.getMinutes();
+    const now = new Date();
+    const [date, setDate] = useState(now.toDateString());
+    const [startTime, setStartTime] = useState(now.getHours() + ":" + now.getMinutes());
+    const [endTime, setEndTime] = useState(now.getHours() + ":" + now.getMinutes());
 
     console.log(now)
     console.log(date)
