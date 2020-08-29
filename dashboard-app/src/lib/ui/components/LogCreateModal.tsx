@@ -29,11 +29,25 @@ const getStringArray = (array: any[]) => {
 
 const getSelected = (e: any) => e.value;
 
-const getDuration = (startTime: any, endTime: any) => {
-    return {hours: 0, minutes: 0, seconds: 0}
+const getDuration = (startTimeElement: any, endTimeElement: any) => {
+    const startTime = startTimeElement.value;
+    const endTime = endTimeElement.value;
+
+
+    console.log(startTime)
+    console.log(endTime)
+
+    //assuming same day, which you kind of
+    const hours = parseInt(endTime.slice(0,2)) - parseInt(startTime.slice(0,2));
+    const minutes = 0;
+    const seconds = 0;
+
+    return {hours, minutes, seconds}
 }
 
 const getDate = (dateElement: any, startTimeElement: any) => {
+    console.log(dateElement.value + startTimeElement.value)
+
     return new Date()
 }
 
@@ -161,8 +175,7 @@ const LogCreateModal:FC<Props> = (props) => {
                             max={new Date().toLocaleDateString()}
                         />
                         <input type="time" id="Start Time" value={new Date().toTimeString()}/>
-                        <input type="time" id="End Time" value={new Date().toTimeString()}
-                        />
+                        <input type="time" id="End Time" value={new Date().toTimeString()}/>
                         <input type="text" id="Note" placeholder="Notes"/>
                         <button onClick={select}
                         disabled={!valid}
