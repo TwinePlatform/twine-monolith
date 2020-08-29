@@ -195,10 +195,10 @@ const LogCreateModal:FC<Props> = (props) => {
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
                         />
-                        <input type="time" id="Start Time" value={currentTime}
+                        <input type="time" id="Start Time" value={startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
-                        <input type="time" id="End Time" value={currentTime}
+                        <input type="time" id="End Time" value={endTime}
                         onChange={(e)=>setEndTime(e.target.value)}
                         />
                         <input type="text" id="Note" placeholder="Notes"/>
