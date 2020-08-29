@@ -63,7 +63,7 @@ const LogCreateModal:FC<Props> = (props) => {
     useEffect(()=>{
         if(loading)
             getOptions();
-        if(!loading){
+        if(!loading && document.getElementById('Log Form')){
             let potentialLog = {
                 userID: getSelected(document.getElementById('Volunteer')),
                 activity: getSelected(document.getElementById('Activity')),
@@ -144,7 +144,7 @@ const LogCreateModal:FC<Props> = (props) => {
                 loading?
                     <p>loading...</p>
                 :
-                    <div>
+                    <div id="Log Form">
                         <select id="Volunteer" name="Volunteer">
                             {volunteers.map(volunteer=>
                                 <option value={volunteer.id}>{volunteer.name}</option>)} 
