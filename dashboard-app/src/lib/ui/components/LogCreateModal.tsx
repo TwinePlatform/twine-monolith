@@ -23,7 +23,7 @@ const Heading2 = styled(H2)`
   color: ${ColoursEnum.white};
 `;
 
-const getStringArray = (array: any) => {
+const getStringArray = (array: any[]) => {
     return array.map(item =>item.name)
 }
 
