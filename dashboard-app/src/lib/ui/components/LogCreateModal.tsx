@@ -48,7 +48,15 @@ const getDuration = (startTimeElement: any, endTimeElement: any) => {
 const getDate = (dateElement: any, startTimeElement: any) => {
     console.log(dateElement.value + startTimeElement.value)
 
-    return new Date()
+    try{
+        let date = new Date(dateElement.value + startTimeElement.value);
+        console.log(date);
+        return date;
+    }
+    catch{
+        console.log("not good");
+        return new Date()
+    }
 }
 
 const getNote = (e: any) => e.value? e.value : ""
