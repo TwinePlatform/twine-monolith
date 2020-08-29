@@ -71,7 +71,7 @@ const LogCreateModal:FC<Props> = (props) => {
     const [valid, setValid] = useState(false);
     const [now, setNow] = useState(new Date());
 
-    const todaysDate = now.getFullYear()+"-"+now.getMonth()+"-"+now.getDate();
+    const todaysDate = now.getDate()+"/"+now.getMonth()+"/"+now.getFullYear();
     const currentTime = now.getHours() + ":" + now.getMinutes();
 
     console.log(now)
