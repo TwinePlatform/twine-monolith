@@ -107,7 +107,7 @@ const LogCreateModal:FC<Props> = (props) => {
 
             console.log(potentialLog);
             //validation code
-            if(new Date(potentialLog.startedAt && potentialLog.duration.hours!=0)){
+            if(new Date(potentialLog.startedAt) && potentialLog.duration.hours!=0){
                 setLog(potentialLog);
                 setValid(true);
             }
