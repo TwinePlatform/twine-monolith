@@ -5,6 +5,7 @@ import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {CommunityBusinesses, Project, Logs, LogNote,} from '../../api';
 import { duration } from 'moment';
+import DataTable from '../../../features/dashboard/components/DataTable';
 
 /*
  * Types
@@ -71,14 +72,16 @@ const LogCreateModal:FC<Props> = (props) => {
     const [loading, setLoading] = useState(true);
     const [valid, setValid] = useState(false);
     const [now, setNow] = useState(new Date());
+    const [date, setDate] = useState();
+    const [startTime, setStartTime] = useState();
+    const [endTime, setEndTime] = useState();
 
-    const todaysDate = now.getDate()+"/"+now.getMonth()+"/"+now.getFullYear();
     const currentTime = now.getHours() + ":" + now.getMinutes();
 
     console.log(now)
-    console.log(todaysDate)
-    console.log(currentTime);
-
+    console.log(date)
+    console.log(startTime);
+    console.log(endTime);
 
     const [log, setLog] = useState({
         userID: 0,
@@ -111,7 +114,6 @@ const LogCreateModal:FC<Props> = (props) => {
                 setLog(potentialLog);
                 setValid(true);
             }
-            
         }
     })
 
@@ -189,11 +191,16 @@ const LogCreateModal:FC<Props> = (props) => {
                             {activities.map(activity=>
                                 <option value={activity}>{activity}</option>)} 
                         </select>
-                        <input type="date" id="Date" value={todaysDate}
-                            max={todaysDate}
+                        <input type="date" id="Date" value={date}
+                            onChange={(e)=>setDate(e.target.value)}
+                            //max={todaysDate}
                         />
-                        <input type="time" id="Start Time" value={currentTime}/>
-                        <input type="time" id="End Time" value={currentTime}/>
+                        <input type="time" id="Start Time" value={currentTime}
+                        onChange={(e)=>setStartTime(e.target.value)}
+                        />
+                        <input type="time" id="End Time" value={currentTime}
+                        onChange={(e)=>setEndTime(e.target.value)}
+                        />
                         <input type="text" id="Note" placeholder="Notes"/>
                         <button onClick={select}
                         disabled={!valid}
