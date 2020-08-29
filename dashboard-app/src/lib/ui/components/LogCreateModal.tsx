@@ -34,7 +34,7 @@ const getDuration = (startTime: any, endTime: any) => {
 }
 
 const getDate = (dateElement: any, startTimeElement: any) => {
-    return new Date
+    return new Date()
 }
 
 const getNote = (e: any) => e.value? e.value : ""
@@ -53,7 +53,7 @@ const LogCreateModal:FC<Props> = (props) => {
         activity: "",
         project: "",
         duration: {hours: 0, minutes: 0, seconds: 0},
-        startedAt: new Date,
+        startedAt: new Date(),
         notes: ""
     })
 
@@ -157,9 +157,13 @@ const LogCreateModal:FC<Props> = (props) => {
                             {activities.map(activity=>
                                 <option value={activity}>{activity}</option>)} 
                         </select>
-                        <input type="date" id="Date"/>
-                        <input type="time" id="Start Time"/>
-                        <input type="time" id="End Time"/>
+                        <input type="date" id="Date" value={new Date().toLocaleDateString()}
+                            max={new Date().toLocaleDateString()}
+                        />
+                        <input type="time" id="Start Time" value={new Date().toTimeString()}/>
+                        <input type="time" id="End Time" value={new Date().toTimeString()}
+                            max={new Date().toTimeString()}
+                        />
                         <input type="text" id="Note" placeholder="Notes"/>
                         <button onClick={select}
                         disabled={!valid}
