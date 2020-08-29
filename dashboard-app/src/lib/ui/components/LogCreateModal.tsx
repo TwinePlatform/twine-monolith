@@ -72,6 +72,10 @@ const LogCreateModal:FC<Props> = (props) => {
 
     const today = new Date();
 
+    console.log(today.getUTCDate())
+    console.log(today.getTime())
+    console.log(today.getUTCHours + ":" + today.getUTCMinutes());
+
     const [log, setLog] = useState({
         userID: 0,
         activity: "",
