@@ -32,7 +32,7 @@ const LogCreateModal:FC<Props> = (props) => {
 
     const [projects, setProjects] = useState(["loading project"]);
     const [activities, setActivities] = useState(["loading activities"]);
-    const [volunteers, setVolunteers] = useState(["loading volunteers"]);
+    const [volunteers, setVolunteers] = useState([{id:0 , name:"loading volunteers"}]);
     const [loading, setLoading] = useState(true);
 
     const wrapperRef = useRef(null);
@@ -51,7 +51,7 @@ const LogCreateModal:FC<Props> = (props) => {
         }
         setProjects(getStringArray(options.projects.data.result));
         setActivities(getStringArray(options.activities.data.result));
-        setVolunteers(getStringArray(options.activities.data.result));
+        setVolunteers(options.activities.data.result);
 
         console.log(options);
 
@@ -105,16 +105,21 @@ const LogCreateModal:FC<Props> = (props) => {
                     <p>loading...</p>
                 :
                     <div>
-                        <input type="text" placeholder="Name"/>
-                        <input type="text" placeholder="Project"/>
-                        <select id="Projects" name="Projects">
+                        <select id="Volunteer" name="Volunteer">
+                            {volunteers.map(volunteer=>
+                                <option value={volunteer.id}>{volunteer.name}</option>)} 
+                        </select>
+                        <select id="Project" name="Project">
                             {projects.map(project=>
                                 <option value={project}>{project}</option>)} 
                         </select>
-                        <input type="text" placeholder="Activity"/>
-                        <input type="text" placeholder="Date"/>
-                        <input type="text" placeholder="Start Time"/>
-                        <input type="text" placeholder="End Time"/>
+                        <select id="Activity" name="Activity">
+                            {activities.map(activity=>
+                                <option value={activity}>{activity}</option>)} 
+                        </select>
+                        <input type="date" name="Date"/>
+                        <input type="time" name="Start Time"/>
+                        <input type="time" name="End Time"/>
                         <button onClick={select}>Create</button>
                     </div>
                     }
