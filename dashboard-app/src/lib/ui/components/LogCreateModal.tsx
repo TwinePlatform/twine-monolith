@@ -69,12 +69,15 @@ const LogCreateModal:FC<Props> = (props) => {
     const [volunteers, setVolunteers] = useState([{id:0 , name:"loading volunteers"}]);
     const [loading, setLoading] = useState(true);
     const [valid, setValid] = useState(false);
+    const [now, setNow] = useState(new Date());
 
-    const today = new Date();
+    const todaysDate = now.getFullYear()+"-"+now.getMonth()+"-"+now.getDate();
+    const currentTime = now.getHours() + ":" + now.getMinutes();
 
-    console.log(today.getUTCDate())
-    console.log(today.getTime())
-    console.log(today.getUTCHours + ":" + today.getUTCMinutes());
+    console.log(now)
+    console.log(todaysDate)
+    console.log(currentTime);
+
 
     const [log, setLog] = useState({
         userID: 0,
@@ -185,11 +188,11 @@ const LogCreateModal:FC<Props> = (props) => {
                             {activities.map(activity=>
                                 <option value={activity}>{activity}</option>)} 
                         </select>
-                        <input type="date" id="Date" value={today.getDate()}
-                            max={today.getDate()}
+                        <input type="date" id="Date" value={todaysDate}
+                            max={todaysDate}
                         />
-                        <input type="time" id="Start Time" value={today.getTime()}/>
-                        <input type="time" id="End Time" value={today.getTime()}/>
+                        <input type="time" id="Start Time" value={currentTime}/>
+                        <input type="time" id="End Time" value={currentTime}/>
                         <input type="text" id="Note" placeholder="Notes"/>
                         <button onClick={select}
                         disabled={!valid}
