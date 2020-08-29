@@ -27,6 +27,18 @@ const getStringArray = (array: any[]) => {
     return array.map(item =>item.name)
 }
 
+const getSelected = (e: any) => e.options[e.selectedIndex].value;
+
+const getDuration = (startTime: any, endTime: any) => {
+    return {hours: 0, minutes: 0, seconds: 0}
+}
+
+const getDate = (dateElement: any, startTimeElement: any) => {
+    return new Date
+}
+
+const getNote = (e: any) => e.value? e.value : ""
+
 const LogCreateModal:FC<Props> = (props) => {
     const {visible, closeFunction,} = props;
 
@@ -34,6 +46,16 @@ const LogCreateModal:FC<Props> = (props) => {
     const [activities, setActivities] = useState(["loading activities"]);
     const [volunteers, setVolunteers] = useState([{id:0 , name:"loading volunteers"}]);
     const [loading, setLoading] = useState(true);
+    const [valid, setValid] = useState(false);
+
+    const [log, setLog] = useState({
+        userID: 0,
+        activity: "",
+        project: "",
+        duration: {hours: 0, minutes: 0, seconds: 0},
+        startedAt: new Date,
+        notes: ""
+    })
 
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, closeFunction);
@@ -41,6 +63,24 @@ const LogCreateModal:FC<Props> = (props) => {
     useEffect(()=>{
         if(loading)
             getOptions();
+        if(!loading){
+            let potentialLog = {
+                userID: getSelected(document.getElementById('Volunteer')),
+                activity: getSelected(document.getElementById('Activity')),
+                project: getSelected(document.getElementById('Project')),
+                duration: getDuration(document.getElementById('Start Time'),document.getElementById('End Time')),
+                startedAt: getDate(document.getElementById("Date"),document.getElementById('Start Time')),
+                notes: getNote(document.getElementById('Note')),
+            };
+
+            console.log(potentialLog);
+            //validation code
+            if(true){
+                setLog(potentialLog);
+                setValid(true);
+            }
+            
+        }
     })
 
     const getOptions = async () => {
@@ -117,10 +157,13 @@ const LogCreateModal:FC<Props> = (props) => {
                             {activities.map(activity=>
                                 <option value={activity}>{activity}</option>)} 
                         </select>
-                        <input type="date" name="Date"/>
-                        <input type="time" name="Start Time"/>
-                        <input type="time" name="End Time"/>
-                        <button onClick={select}>Create</button>
+                        <input type="date" id="Date"/>
+                        <input type="time" id="Start Time"/>
+                        <input type="time" id="End Time"/>
+                        <input type="text" id="Note" placeholder="Notes"/>
+                        <button onClick={select}
+                        disabled={!valid}
+                        >Create</button>
                     </div>
                     }
                 </div>
