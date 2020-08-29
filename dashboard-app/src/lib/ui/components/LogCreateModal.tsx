@@ -23,7 +23,9 @@ const Heading2 = styled(H2)`
   color: ${ColoursEnum.white};
 `;
 
-
+const getStringArray = (array: any) => {
+    return array.map(item =>item.name)
+}
 
 const LogCreateModal:FC<Props> = (props) => {
     const {visible, closeFunction,} = props;
@@ -47,9 +49,9 @@ const LogCreateModal:FC<Props> = (props) => {
             activities: await CommunityBusinesses.getVolunteerActivities(),
             volunteers: await CommunityBusinesses.getVolunteers()
         }
-        setProjects(options.projects.data);
-        setActivities(options.activities.data);
-        setVolunteers(options.activities.data);
+        setProjects(getStringArray(options.projects.data.result));
+        setActivities(getStringArray(options.activities.data.result));
+        setVolunteers(getStringArray(options.activities.data.result));
 
         console.log(options);
 
