@@ -24,8 +24,14 @@ interface AggregatedData {
 
 
 const getRows = (logs: [any], volunteers: IdAndName[]) => {
-  return logs.map(log => {return {
-                          Name: volunteers.find((x) => x.id === log.userId)? volunteers.find((x) => x.id === log.userId)?.name :log.userId,
+  return logs.map(log => {
+                    let volunteerName; 
+                    volunteers.map((x) => {
+                      if(x.id === log.userId)
+                        volunteerName = x.name;
+                    })
+                    return {
+                          Name: volunteerName,
                           Hours: log.duration.hours,
                           Project: log.project,
                           Activity: log.activity,
@@ -129,6 +135,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       yData: logFieldsData.data,
     });
     */
+    console.log(volunteers);
 
     const data = {
       groupByX: "Name",
