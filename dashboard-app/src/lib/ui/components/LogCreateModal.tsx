@@ -138,6 +138,7 @@ const LogCreateModal:FC<Props> = (props) => {
 
     const select = ()=>{
         try{
+            console.log(log);
             Logs.add(log);
         }
         catch(error){

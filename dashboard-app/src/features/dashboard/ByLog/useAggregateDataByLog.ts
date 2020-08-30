@@ -7,6 +7,7 @@ import {
 } from '../dataManipulation/logsToAggregatedDataNoX';
 import {logsToAggregatedData} from '../dataManipulation/logsToAggregatedData';
 import { tableType } from '../dataManipulation/tableType';
+import { VolunteerLogs } from '../../../../../api/src/models';
 
 
 interface UseAggregatedDataParams {
@@ -21,9 +22,10 @@ interface AggregatedData {
   rows: any;
 }
 
-const getRows = (logs: [any]) => {
+
+const getRows = (logs: [any], volunteers: IdAndName[]) => {
   return logs.map(log => {return {
-                          Name: log.createdBy,
+                          Name: volunteers?.find((x) => x.id === log.userId)?.name,
                           Hours: log.duration.hours,
                           Project: log.project,
                           Activity: log.activity,
@@ -36,9 +38,6 @@ const getRows = (logs: [any]) => {
 const getProjectRows = (logs: [any]) => {
   let projects: any = {};
   let projectNames = logs.map(log=>log.project)
-
- 
-
 
   //remove duplicate names
   projectNames = projectNames.filter((item, index) => projectNames.indexOf(item) == index)
@@ -54,7 +53,7 @@ const getProjectRows = (logs: [any]) => {
     let volunteerNames: string[] = [];
     logs.forEach(log => {
         if(log.project == project)
-          volunteerNames.push(log.createdBy);
+          volunteerNames.push(log.userId);
       })
     volunteerNames = volunteerNames.filter((item, index) => volunteerNames.indexOf(item) == index)
     projects[project].Volunteers = volunteerNames.length;
@@ -134,7 +133,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     const data = {
       groupByX: "Name",
       groupByY: "LogField",
-      rows: getRows(logs),
+      rows: getRows(logs, volunteers),
     };
 
     const dataProjects = {
