@@ -95,7 +95,6 @@ const LogCreateModal:FC<Props> = (props) => {
         project: "",
         duration: {hours: 0, minutes: 0, seconds: 0},
         startedAt: new Date(),
-        notes: ""
     })
 
     const wrapperRef = useRef(null);
@@ -111,7 +110,6 @@ const LogCreateModal:FC<Props> = (props) => {
                 project: getSelected(document.getElementById('Project')),
                 duration: getDuration(document.getElementById('Start Time'),document.getElementById('End Time')),
                 startedAt: getDate(document.getElementById("Date"),document.getElementById('Start Time')),
-                notes: getNote(document.getElementById('Note')),
             };
 
             console.log(potentialLog);
