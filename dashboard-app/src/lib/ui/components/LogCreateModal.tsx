@@ -106,7 +106,7 @@ const LogCreateModal:FC<Props> = (props) => {
             getOptions();
         if(!loading && document.getElementById('Log Form')){
             let potentialLog = {
-                userID: getSelected(document.getElementById('Volunteer')),
+                userID: parseInt(getSelected(document.getElementById('Volunteer'))),
                 activity: getSelected(document.getElementById('Activity')),
                 project: getSelected(document.getElementById('Project')),
                 duration: getDuration(document.getElementById('Start Time'),document.getElementById('End Time')),
