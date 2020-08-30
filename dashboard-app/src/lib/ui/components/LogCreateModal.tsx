@@ -90,7 +90,7 @@ const LogCreateModal:FC<Props> = (props) => {
     console.log(endTime);
 
     const [log, setLog] = useState({
-        userID: 0,
+        userId: 0,
         activity: "",
         project: "",
         duration: {hours: 0, minutes: 0, seconds: 0},
@@ -106,7 +106,7 @@ const LogCreateModal:FC<Props> = (props) => {
             getOptions();
         if(!loading && document.getElementById('Log Form')){
             let potentialLog = {
-                userID: parseInt(getSelected(document.getElementById('Volunteer'))),
+                userId: parseInt(getSelected(document.getElementById('Volunteer'))),
                 activity: getSelected(document.getElementById('Activity')),
                 project: getSelected(document.getElementById('Project')),
                 duration: getDuration(document.getElementById('Start Time'),document.getElementById('End Time')),
