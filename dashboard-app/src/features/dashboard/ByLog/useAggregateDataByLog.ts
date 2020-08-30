@@ -25,7 +25,7 @@ interface AggregatedData {
 
 const getRows = (logs: [any], volunteers: IdAndName[]) => {
   return logs.map(log => {return {
-                          Name: volunteers?.find((x) => x.id === log.userId)?.name,
+                          Name: volunteers.find((x) => x.id === log.userId)? volunteers.find((x) => x.id === log.userId)?.name :log.userId,
                           Hours: log.duration.hours,
                           Project: log.project,
                           Activity: log.activity,
