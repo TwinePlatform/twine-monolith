@@ -51,7 +51,13 @@ const getDate = (dateElement: any, startTimeElement: any) => {
     console.log(dateElement.value + startTimeElement.value)
 
     try{
-        let date = new Date(dateElement.value + startTimeElement.value);
+        let date = new Date(
+            dateElement.value.slice(0,4),
+            dateElement.value.slice(5,7),
+            dateElement.value.slice(8,10),
+            startTimeElement.value.slice(0,2),
+            startTimeElement.value.slice(3,5),
+        )
         console.log(date);
         return date;
     }
@@ -72,7 +78,7 @@ const LogCreateModal:FC<Props> = (props) => {
     const [loading, setLoading] = useState(true);
     const [valid, setValid] = useState(false);
     const now = new Date();
-    const [date, setDate] = useState(now.toDateString());
+    const [date, setDate] = useState(now.toISOString().slice(0,10));
     const [startTime, setStartTime] = useState(now.getHours() + ":" + now.getMinutes());
     const [endTime, setEndTime] = useState(now.getHours() + ":" + now.getMinutes());
 
@@ -131,7 +137,13 @@ const LogCreateModal:FC<Props> = (props) => {
     }    
 
     const select = ()=>{
-        console.log("selected")
+        
+        try{
+            Logs.add(log);
+        }
+        catch(error){
+            console.log(error);
+        }
     };
 
     if(visible)
