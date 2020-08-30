@@ -82,6 +82,8 @@ const LogCreateModal:FC<Props> = (props) => {
     const [startTime, setStartTime] = useState(now.getHours() + ":" + now.getMinutes());
     const [endTime, setEndTime] = useState(now.getHours() + ":" + now.getMinutes());
 
+    const[errorMessage, setErrorMessage] = useState("");
+
     console.log(now)
     console.log(date)
     console.log(startTime);
@@ -137,12 +139,13 @@ const LogCreateModal:FC<Props> = (props) => {
     }    
 
     const select = ()=>{
-        
         try{
             Logs.add(log);
         }
         catch(error){
+            console.log("error");
             console.log(error);
+            setErrorMessage(error);
         }
     };
 
@@ -215,6 +218,7 @@ const LogCreateModal:FC<Props> = (props) => {
                         <button onClick={select}
                         disabled={!valid}
                         >Create</button>
+                        <p>{errorMessage}</p>
                     </div>
                     }
                 </div>
