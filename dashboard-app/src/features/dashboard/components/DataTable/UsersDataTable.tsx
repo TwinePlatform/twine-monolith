@@ -66,7 +66,8 @@ const UsersDataTable: React.FunctionComponent<UsersDataTableProps> = (props) => 
     , [sortBy, order, headers]);
 
   const table = (
-    <Table cols={headers.length}>
+    //<Table cols={headers.length}>
+    <Table cols={8}>
       <HeaderRow
         columns={headers.map((name) => ({ content: name }))}
         order={order}
@@ -90,9 +91,6 @@ const UsersDataTable: React.FunctionComponent<UsersDataTableProps> = (props) => 
 
   return (
     <Card {...rest}>
-      {
-        title && <Title title={[title,title]}></Title>
-      }
       <Container>
         {
           rows.length > 0
