@@ -6,7 +6,6 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import DatePickerConstraints from './datePickerConstraints';
 import _LogsDataTable from '../components/DataTable/LogsDataTable';
 import UsersDataTable from '../components/DataTable/UsersDataTable';
-import UtilityBar from '../components/UtilityBar';
 import { H1 } from '../../../lib/ui/components/Headings';
 import { DataTableProps } from '../components/DataTable/types';
 import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
