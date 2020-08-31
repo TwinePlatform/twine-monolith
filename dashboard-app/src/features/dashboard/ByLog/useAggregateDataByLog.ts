@@ -35,7 +35,7 @@ const getRows = (logs: [any], volunteers: IdAndName[]) => {
                           Hours: log.duration.hours,
                           Project: log.project,
                           Activity: log.activity,
-                          Date: log.createdAt.slice(0,10),
+                          Date: log.startedAt.slice(0,10),
                           EndTime: log.createdAt.slice(11,16),
                           ID: log.id,
                         }})

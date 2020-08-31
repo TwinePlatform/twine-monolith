@@ -11,7 +11,6 @@ import HeaderRow from './DataTableHeaderRow';
 import { UsersDataTableProps } from './types';
 import { hashJSON } from '../../../../lib/util/hash';
 import { FullWidthTextBox } from '../../../../lib/ui/components/FullWidthTextBox';
-import { Title } from '../Title';
 
 
 /*
@@ -33,16 +32,6 @@ const Table = styled.table`
  * Component
  */
 const UsersDataTable: React.FunctionComponent<UsersDataTableProps> = (props) => {
-  /*
-  const headers = [
-    "Name",
-    "Time",
-    "Project",
-    "Activity",
-    "Date",
-    "ID",
-    ];*/
-
     const {
     headers,
     rows,
@@ -64,6 +53,8 @@ const UsersDataTable: React.FunctionComponent<UsersDataTableProps> = (props) => 
       { accessor: pathOr('', ['columns', headers[0], 'content']), order: 'asc' as Order },
     ], _rows)
     , [sortBy, order, headers]);
+
+    console.log(rows)
 
   const table = (
     //<Table cols={headers.length}>
