@@ -85,6 +85,8 @@ const ByUser: FunctionComponent<RouteComponentProps> = () => {
     }
   }, [loading, data, fromDate, toDate, unit, orderable, setErrors]);
 
+  console.log(tableData)
+
   return (
     <Container>
       <Row center="xs">

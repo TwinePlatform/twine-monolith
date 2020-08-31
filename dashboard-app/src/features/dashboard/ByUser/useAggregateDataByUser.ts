@@ -73,8 +73,6 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
     //logs[0].createdBy = "different"
     const volunteers = volunteersData.data;
 
-    console.log(volunteers);
-
     const data = {
       groupByX: "Name",
       groupByY: "LogField",
