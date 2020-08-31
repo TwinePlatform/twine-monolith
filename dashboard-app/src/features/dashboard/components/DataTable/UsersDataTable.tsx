@@ -91,7 +91,7 @@ const UsersDataTable: React.FunctionComponent<UsersDataTableProps> = (props) => 
   return (
     <Card {...rest}>
       {
-        title && <Title title={title}></Title>
+        title && <Title title={[title,title]}></Title>
       }
       <Container>
         {
