@@ -54,7 +54,6 @@ const UsersDataTable: React.FunctionComponent<UsersDataTableProps> = (props) => 
     ], _rows)
     , [sortBy, order, headers]);
 
-    console.log(rows)
 
   const table = (
     //<Table cols={headers.length}>
