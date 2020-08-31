@@ -46,8 +46,6 @@ const Container = styled(Grid)`
  */
 const initTableData = { headers: [], rows: [] };
 
-const initSelectedLog = { ID: 42, name: "ET" };
-
 /**
  * Component
  */
@@ -56,8 +54,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
-  const [tableDataProjects, setTableDataProjects] = useState<TableData>(initTableData);
-  const { loading, error, data, logFields, dataProjects, projectFields } =
+  const { loading, error, data, logFields} =
     useAggregateDataByLog({ from: fromDate, to: toDate });
 
   // set and clear errors on response
@@ -76,11 +73,10 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
 
   // manipulate data for table
   useEffect(() => {
-    if (!loading && data && dataProjects && logFields && projectFields) {
+    if (!loading && data && logFields) {
       setTableData(aggregatedToTableData({ data, unit, yData: logFields }));
-      setTableDataProjects(aggregatedToTableData({ data: dataProjects, unit, yData: projectFields }));
     }
-  }, [logFields, data, dataProjects, loading, unit]);
+  }, [logFields, data, loading, unit]);
 
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
@@ -95,7 +91,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
     <Container>
       <Row center="xs">
         <Col>
-          <H1>{TitlesCopy.Logs.title}</H1>
+          <H1>{TitlesCopy.Users.title}</H1>
         </Col>
       </Row>
       <Row center="xs">
@@ -117,7 +113,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
               <Col xs={12}>
                 <Errors errors={errors} />
                 <TabGroup 
-                    titles={['Users','Projects']}
+                    titles={['Users']}
                 >
                   {
                     tableData && (
@@ -133,8 +129,6 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                     </div>
                     )
                   }
-                 
-                  
                 </TabGroup>
               </Col>
             </Row>

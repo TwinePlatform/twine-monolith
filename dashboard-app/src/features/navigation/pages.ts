@@ -62,7 +62,7 @@ export const PagesDict: PagesDictionary = {
     title: TitlesCopy.Projects.title,
     protected: true,
   },
-  Userss: {
+  Users: {
     url: '/users',
     component: ByUser,
     title: TitlesCopy.Users.title,
@@ -103,6 +103,7 @@ const NavBarOrder = [
   TitlesCopy.Activities.title,
   TitlesCopy.Volunteers.title,
   TitlesCopy.Projects.title,
+  TitlesCopy.Users.title,
   'FAQs',
 ];
 
