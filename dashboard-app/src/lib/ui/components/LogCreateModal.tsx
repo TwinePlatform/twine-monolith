@@ -55,8 +55,8 @@ const getDate = (dateElement: any, startTimeElement: any) => {
             parseInt(dateElement.value.slice(0,4)),
             parseInt(dateElement.value.slice(5,7)) - 1,
             parseInt(dateElement.value.slice(8,10)),
-            parseInt(startTimeElement.value.slice(0,2)),
-            parseInt(startTimeElement.value.slice(3,5)),
+            startTimeElement.value.slice(0,2),
+            startTimeElement.value.slice(3,5),
         )
         console.log(date);
         return date;
