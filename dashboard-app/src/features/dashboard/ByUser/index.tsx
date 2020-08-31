@@ -104,7 +104,7 @@ const ByUser: FunctionComponent<RouteComponentProps> = () => {
                     <div>
                         <UsersDataTable
                         {...tableData}
-                        title={"Users"}
+                        title={["Users","Users"]}
                         sortBy={tableData.headers[orderable.sortByIndex]}
                         order={orderable.order}
                         onChangeSortBy={onChangeSortBy}
