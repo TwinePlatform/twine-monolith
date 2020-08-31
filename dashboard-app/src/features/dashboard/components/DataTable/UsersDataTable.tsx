@@ -67,8 +67,7 @@ const UsersDataTable: React.FunctionComponent<UsersDataTableProps> = (props) => 
       <tbody>
         {
           sorter(rows)
-            .map((row,index) => { index > 98? console.log(index):null;
-              return (
+            .map((row,index) => {(
               <UsersDataTableRow
                 columns={row.columns}
                 order={headers}
