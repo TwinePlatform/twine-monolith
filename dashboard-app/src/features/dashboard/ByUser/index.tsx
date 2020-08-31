@@ -14,9 +14,7 @@ import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData
 import { downloadCsv } from '../dataManipulation/downloadCsvLogs';
 import { ColoursEnum } from '../../../lib/ui/design_system';
 import Errors from '../components/Errors';
-import useAggregateDataByLog from './useAggregateDataByLog';
-import { TabGroup } from '../components/Tabs';
-import { getTitleForDayPicker } from '../util';
+import useAggregateDataByUser from './useAggregateDataByUser';
 import { useErrors } from '../../../lib/hooks/useErrorsLogs';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
@@ -49,13 +47,13 @@ const initTableData = { headers: [], rows: [] };
 /**
  * Component
  */
-const ByLog: FunctionComponent<RouteComponentProps> = () => {
+const ByUser: FunctionComponent<RouteComponentProps> = () => {
   const { unit } = useContext(DashboardContext);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const { loading, error, data, logFields} =
-    useAggregateDataByLog({ from: fromDate, to: toDate });
+    useAggregateDataByUser({ from: fromDate, to: toDate });
 
   // set and clear errors on response
   const [errors, setErrors] = useErrors(error, data);
@@ -94,17 +92,6 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
           <H1>{TitlesCopy.Users.title}</H1>
         </Col>
       </Row>
-      <Row center="xs">
-        <Col xs={12}>
-          <UtilityBar
-            dateFilter="day"
-            datePickerConstraint={DatePickerConstraints}
-            onFromDateChange={setFromDate}
-            onToDateChange={setToDate}
-            onDownloadClick={downloadAsCsv}
-          />
-        </Col>
-      </Row>
       {
         loading
           ? (<FullScreenBeatLoader color={ColoursEnum.purple} />)
@@ -112,15 +99,12 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
             <Row center="xs">
               <Col xs={12}>
                 <Errors errors={errors} />
-                <TabGroup 
-                    titles={['Users']}
-                >
                   {
                     tableData && (
                     <div>
                         <UsersDataTable
                         {...tableData}
-                        title={getTitleForDayPicker("Users", fromDate, toDate)}
+                        title={"Users"}
                         sortBy={tableData.headers[orderable.sortByIndex]}
                         order={orderable.order}
                         onChangeSortBy={onChangeSortBy}
@@ -129,7 +113,6 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
                     </div>
                     )
                   }
-                </TabGroup>
               </Col>
             </Row>
           )
@@ -138,4 +121,4 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   );
 };
 
-export default withRouter(ByLog);
+export default withRouter(ByUser);

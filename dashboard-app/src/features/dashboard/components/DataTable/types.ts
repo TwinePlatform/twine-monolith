@@ -44,7 +44,7 @@ export type ProjectsDataTableProps = {
 };
 
 export type UsersDataTableProps = {
-  title?: TitleString
+  title?: string
   headers: string[]
   sortBy?: string
   order?: Order
