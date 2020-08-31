@@ -67,13 +67,13 @@ const UsersDataTable: React.FunctionComponent<UsersDataTableProps> = (props) => 
       <tbody>
         {
           sorter(rows)
-            .map((row,index) => {(
+            .map((row) => (
               <UsersDataTableRow
                 columns={row.columns}
                 order={headers}
                 key={hashJSON(row)}
               />
-            )})
+            ))
         }
       </tbody>
     </Table>
