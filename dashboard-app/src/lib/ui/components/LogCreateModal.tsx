@@ -52,11 +52,11 @@ const getDate = (dateElement: any, startTimeElement: any) => {
 
     try{
         let date = new Date(
-            dateElement.value.slice(0,4),
-            dateElement.value.slice(5,7),
-            dateElement.value.slice(8,10),
-            startTimeElement.value.slice(0,2),
-            startTimeElement.value.slice(3,5),
+            parseInt(dateElement.value.slice(0,4)),
+            parseInt(dateElement.value.slice(5,7)),
+            parseInt(dateElement.value.slice(8,10)),
+            parseInt(startTimeElement.value.slice(0,2)),
+            parseInt(startTimeElement.value.slice(3,5)),
         )
         console.log(date);
         return date;
