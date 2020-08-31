@@ -43,6 +43,16 @@ export type ProjectsDataTableProps = {
   showTotals?: boolean
 };
 
+export type UsersDataTableProps = {
+  title?: TitleString
+  headers: string[]
+  sortBy?: string
+  order?: Order
+  onChangeSortBy?: (s: string) => void
+  rows: DataTableRow[]
+  showTotals?: boolean
+};
+
 
 
 export type DataTableContent = number | string;

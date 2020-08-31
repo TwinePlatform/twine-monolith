@@ -7,6 +7,7 @@ import ByTime from '../dashboard/ByTime';
 import ByVolunteer from '../dashboard/ByVolunteer';
 import ByProject from '../dashboard/ByProject';
 import ByLog from '../dashboard/ByLog';
+import ByUser from '../dashboard/ByUser';
 import Login from '../auth/pages/Login';
 import ResetPassword from '../auth/pages/ResetPassword';
 import ForgotPassword from '../auth/pages/ForgotPassword';
@@ -59,6 +60,12 @@ export const PagesDict: PagesDictionary = {
     url: '/projects',
     component: ByProject,
     title: TitlesCopy.Projects.title,
+    protected: true,
+  },
+  Userss: {
+    url: '/users',
+    component: ByUser,
+    title: TitlesCopy.Users.title,
     protected: true,
   },
   FAQs: {

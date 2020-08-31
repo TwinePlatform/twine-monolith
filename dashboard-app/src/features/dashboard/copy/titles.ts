@@ -19,4 +19,8 @@ export const TitlesCopy = {
     title: 'Projects',
     subtitle: 'See how volunteers spend their time as part of different projects',
   },
+  Users: {
+    title: "Users",
+    subtitle: "See the details of your users",
+  }
 };

@@ -5,6 +5,7 @@ import { Route, Switch, BrowserRouter, withRouter } from 'react-router-dom';
 import PrivateRoute from './features/auth/components/PrivateRoute';
 import HoldingPage from './features/HoldingPage';
 import ByActivity from './features/dashboard/ByActivity/index';
+import ByUser from './features/dashboard/ByUser/index';
 import ByLog from './features/dashboard/ByLog/index';
 import ByTime from './features/dashboard/ByTime/index';
 import ByVolunteer from './features/dashboard/ByVolunteer/index';
@@ -53,6 +54,7 @@ const DashboardRoutes = () => {
         <Route exact path="/time" component={ByTime} />
         <Route exact path="/volunteers" component={ByVolunteer} />
         <Route exact path="/projects" component={ByProject} />
+        <Route exact path="/users" component={ByUser} />
         <Route exact path="/faqs" component={FAQPage} />
       </Switch>
     </DashboardContext.Provider>
