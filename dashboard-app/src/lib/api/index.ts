@@ -12,10 +12,10 @@ export const axios = _axios.create({
   paramsSerializer: (params) => qs.stringify(params, { encode: false }),
 });
 
-
 export const Roles = {
   get: () => axios.get('/users/me/roles'),
 };
+
 
 export const CbAdmins = {
   login: ({ email, password }: { email: string, password: string }) =>
@@ -52,3 +52,43 @@ export const CommunityBusinesses = {
   getVolunteers: () => // NB: fields not currently supported
     axios({ ...CommunityBusinesses.configs.getVolunteers, params: { fields: ['name', 'id'] } }),
 };
+
+export const Logs = {
+  add: (values: any) => axios.post( `/community-businesses/me/volunteer-logs`, values),
+  update: (id: any, LogId: any, values: any) => axios.put(`/community-businesses/me/volunteer-logs/${id}/${LogId}`,values),
+  delete: (LogId: any) => axios.delete( `/community-businesses/me/volunteer-logs/${LogId}`)
+}
+
+export const LogNote = {
+  get: (logID: string) =>
+    axios.get("community-businesses/me/get-volunteer-logs/" + logID),
+  update: (note: string, LogId: any, activity: any, project: any, startedAt: any) => axios.put(`community-businesses/me/volunteer-logs-notes/$${LogId}`,
+      {
+        activity: activity,
+        startedAt: startedAt,
+        notes: note,
+        project: project
+      }
+    )
+}
+
+export const Files = {
+  upload: (file: File, destination: string) => {
+    console.log("uploading " + file.name + "to /community-businesses/" + destination )
+    const formData = new FormData();
+    const csvFile = new File ([file],file.name,{type: "text/csv"})
+
+    formData.append('file', csvFile);
+
+    axios.post('upload/' + destination, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+    })
+  } 
+}
+
+export const Project = {
+  get: () => axios.get( '/community-businesses/me/volunteers/projects'),
+  add: (name: string) => axios.post('/community-businesses/me/volunteers/projects',{name}),
+}

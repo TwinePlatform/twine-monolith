@@ -16,6 +16,9 @@ import { aggregatedToTableData, TableData } from '../dataManipulation/aggregated
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import useAggregateDataByProject from './useAggregateDataByProject';
 import DatePickerConstraints from './datePickerConstraints';
+import DownloadModal from '../../../lib/ui/components/DownloadModal';
+import UploadModal from '../../../lib/ui/components/UploadModal';
+import { PrimaryButton, SecondaryButton} from '../../../lib/ui/components/Buttons';
 import { getTitleForMonthPicker } from '../util';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
@@ -33,6 +36,8 @@ const initTableData = { headers: [], rows: [] };
  * Component
  */
 const ByProjects: FunctionComponent<RouteComponentProps> = () => {
+  const [uploadModalVisible, setUploadModalVisible] = useState(false);
+  const [downloadModalVisible, setDownloadModalVisible] = useState(false);
   const { unit } = useContext(DashboardContext);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
@@ -92,6 +97,16 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
 
   return (
     <Grid>
+      <UploadModal
+        visible={uploadModalVisible}
+        closeFunction={()=>setUploadModalVisible(false)}
+        destination={"project"}
+      />
+      <DownloadModal
+        visible={downloadModalVisible}
+        closeFunction={()=>setDownloadModalVisible(false)}
+        filename={"projecttemplate.csv"}
+      />
       <Row center="xs">
         <Col>
           <H1>{TitlesCopy.Projects.title}</H1>
@@ -144,6 +159,38 @@ const ByProjects: FunctionComponent<RouteComponentProps> = () => {
           </Col>
         </Row>
       </LoadingBoundary>
+      {extraButtonsVisible &&
+        <div
+          style={{
+          position: 'fixed', 
+          bottom: 40, 
+          right: 80
+        }}
+        >
+	        <SecondaryButton
+            onClick={()=>{setDownloadModalVisible(!downloadModalVisible)
+              setUploadModalVisible(false)}} 
+          >
+            Project Template
+          </SecondaryButton>
+        	<SecondaryButton
+            onClick={()=>{setUploadModalVisible(!uploadModalVisible)
+              setDownloadModalVisible(false)}} 
+          >
+            Upload
+          </SecondaryButton>
+        </div>
+      }
+      <PrimaryButton 
+        onClick={()=>setExtraButtonsVisible(!extraButtonsVisible)} 
+        style={{
+          position: 'fixed', 
+          bottom: 20, 
+          right: 30
+        }}
+      >
+        +
+      </PrimaryButton>
     </Grid>
   );
 };

@@ -18,6 +18,8 @@ const TableRow = styled.tr`
 const DataTableTotalsRow: React.FunctionComponent<TotalsRowProps> = ({ rows }) => {
   const totals = calculateTotals(rows);
 
+  console.log(rows)
+
   return (
     <TableRow data-testid="data-table-totals-row">
       {

@@ -23,7 +23,7 @@ import { Serialisers } from '../serialisers';
 interface ServerRoute<
   TRequest extends Hapi.Request,
   TResponse extends Hapi.Lifecycle.ReturnValue
-> extends Hapi.ServerRoute {
+  > extends Hapi.ServerRoute {
   handler: (req: TRequest, h: Hapi.ResponseToolkit, e?: Error) => Promise<Boom<null> | TResponse>;
 }
 
@@ -32,6 +32,18 @@ type ResponsePayload<T, U = null> = U extends null
   : ({ meta: U; result: T } | T);
 
 export namespace Api {
+
+  export namespace Invite {
+    export namespace Email {
+      export namespace POST {
+        export interface Request extends Hapi.Request {
+          payload: any;
+        }
+        export type Response = any;
+        export type Route = ServerRoute<Request, Response>;
+      }
+    }
+  }
 
   export namespace CommunityBusinesses {
     export namespace GET {
@@ -55,7 +67,7 @@ export namespace Api {
       export namespace PUT {
         export interface Request extends Hapi.Request {
           payload:
-            Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
+          Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
           pre: { communityBusiness: CommunityBusiness };
         }
         export type Result = CommunityBusiness;
@@ -202,6 +214,15 @@ export namespace Api {
           export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
 
+        export namespace DELETE {
+          export interface Request extends Hapi.Request {
+            params: { logId: string };
+            pre: { communityBusiness: CommunityBusiness };
+          }
+          export type Result = VolunteerLog;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+
         export namespace sync {
           export namespace POST {
             export interface Request extends Hapi.Request {
@@ -243,7 +264,7 @@ export namespace Api {
 
           export namespace PUT {
             export interface Request extends Hapi.Request {
-              params: { logId: string };
+              params: { userId: string, logId: string };
               payload: Partial<Pick<VolunteerLog, 'activity' | 'duration' | 'project' | 'startedAt'>>;
               pre: {
                 communityBusiness: CommunityBusiness;
@@ -260,6 +281,19 @@ export namespace Api {
             }
             export type Result = null;
             export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+          }
+        }
+
+        export namespace Note {
+          export namespace GET {
+            export interface Request extends Hapi.Request {
+              query: ApiRequestQuery<VolunteerLog> & { since: string; until: string };
+              pre: {
+                communityBusiness: CommunityBusiness;
+              };
+            }
+            export type Result = any;
+            export type Route = ServerRoute<Request, ResponsePayload<Result>>
           }
         }
       }
@@ -337,6 +371,16 @@ export namespace Api {
               export type Result = null;
               export type Route = ServerRoute<Request, ResponsePayload<Result>>;
             }
+            export namespace Restore {
+              export namespace PATCH {
+                export interface Request extends Hapi.Request {
+                  params: { projectId: string };
+                  pre: { communityBusiness: CommunityBusiness };
+                }
+                export type Result = null;
+                export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+              }
+            }
           }
         }
       }
@@ -355,7 +399,7 @@ export namespace Api {
       export namespace PUT {
         export interface Request extends Hapi.Request {
           payload:
-            Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
+          Partial<Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id' | '_360GivingId'>>;
           pre: { communityBusiness: CommunityBusiness };
         }
         export type Result = CommunityBusiness;
@@ -389,18 +433,7 @@ export namespace Api {
         export namespace GET {
           export interface Request extends Hapi.Request {
             params: { organisationId: string | 'me' };
-            query: ApiRequestQuery & {
-              filter?: Partial<{
-                age: [number, number];
-                gender: GenderEnum;
-                name: string;
-                email: string;
-                postCode: string;
-                phoneNumber: string;
-                visitActivity: string;
-              }>;
-              visits?: boolean;
-            };
+            query: ApiRequestQuery & Dictionary <any>;
             pre: { communityBusiness: CommunityBusiness; isChild: boolean };
           }
           export type Result = User[];
@@ -433,18 +466,34 @@ export namespace Api {
           export type Route = ServerRoute<Request, ResponsePayload<Result, Meta>>;
         }
       }
+
+      export namespace PushNotification {
+        export namespace GET {
+          export interface Request extends Hapi.Request {
+            params: {
+              organisationId: string | 'me',
+              projectId: string
+            };
+            query: ApiRequestQuery;
+            pre: { communityBusiness: CommunityBusiness; isChild: boolean };
+          }
+          export type Result = Unpack<ReturnType<typeof Serialisers.volunteers.noSecrets>>[];
+          export type Meta = { total: number };
+          export type Route = ServerRoute<Request, ResponsePayload<Result, Meta>>;
+        }
+      }
     }
 
     export namespace Register {
       export namespace POST {
         export interface Request extends Hapi.Request {
           payload:
-            Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id'>
-            & {
-              orgName: CommunityBusiness['name'];
-              adminName: string;
-              adminEmail: string;
-            };
+          Omit<CommunityBusiness, 'createdAt' | 'modifiedAt' | 'deletedAt' | 'id'>
+          & {
+            orgName: CommunityBusiness['name'];
+            adminName: string;
+            adminEmail: string;
+          };
         }
         export type Result = CommunityBusiness;
         export type Response = ResponsePayload<Result>;
@@ -759,6 +808,12 @@ export namespace Api {
         }
         export type Result = User;
         export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+      }
+      export namespace PUT_simple {
+        export interface Request extends Hapi.Request {
+          payload: any;
+        }
+        export type Route = ServerRoute<Request, ResponsePayload<any>>;
       }
     }
   }

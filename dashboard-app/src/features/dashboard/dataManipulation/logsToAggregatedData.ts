@@ -52,6 +52,7 @@ const getIdAndName = (type: TableTypeItem['xIdFromLogs'], xData: Params['xData']
 export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params): AggregatedData => {
   const { groupByX, groupByY } = tableType;
 
+
   // Collect logs into buckets by X-data
   // Log[] -> { [X]: Log[] }
   const w = collectBy((log: any) => log[tableType.xIdFromLogs], logs);
@@ -69,12 +70,17 @@ export const logsToAggregatedData = ({ logs, tableType, xData, yData }: Params):
   // { [X]: { [Y]: Duration } } -> { [X]: { [Y]: Duration } }
   const z = mapValues((ys) => interpolateObjFrom(yData.map((y) => y.name), Duration.fromSeconds(0), ys), y);
 
+
   // Transform into row
   // { [X]: { [Y]: Duration } } -> ({ [Y]: Duration } & { name: [X], id: number })[]
   const rows = Object.entries(z)
     .reduce((acc, [X, Ys]) =>
       acc.concat(Object.assign({}, Ys, getIdAndName(tableType.xIdFromLogs, xData, X))), [] as Row[]);
 
+  console.log(groupByX)
+  console.log(groupByY)
+  console.log(rows)
+    
   return {
     groupByX,
     groupByY,
