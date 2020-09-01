@@ -92,7 +92,7 @@ const LogViewModal:FC<Props> = (props) => {
                         padding: '12px',
                     }}
                 >
-                    <p>Volunteers Time</p>
+                    <p className = "modalTitle">Volunteers Time</p>
                     <div>
                         <span>
                             <p>Volunteer</p>
