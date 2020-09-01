@@ -163,14 +163,15 @@ const UserForm: FC<Props> = ({
         phoneNumber: phoneNumber,
         gender: gender,
         birthYear: birthYear,
-        postCode: postCode
+        postCode: postCode,
+        role: 'VOLUNTEER',
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
         if (addVolArr == []) {
           onSubmit(values);
         } else if (addVolArr != []) {
-          setAddVolArr(addVolArr => [...addVolArr, values]); //just for animation
+          setAddVolArr(addVolArr => [...addVolArr, values]); //for animation
           const lastState = [...addVolArr, values]
           Promise.all(lastState.map(volunteer => {
             onSubmit(volunteer);
