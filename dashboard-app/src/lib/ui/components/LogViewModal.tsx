@@ -93,15 +93,41 @@ const LogViewModal:FC<Props> = (props) => {
                     }}
                 >
                     <p>Volunteers Time</p>
-                    <p>Volunteer: {log.name}</p>
-                    <p>Project: {log.project}</p>
-                    <p>Activity: {log.activity}</p>
-                    <p>Date: {log.date}</p>
-                    <p>Start Time: {timeMinusHours(log.endTime,log.hours)}</p>
-                    <p>End Time: {log.endTime}</p>
-                    <p>Note: {logNote}</p>
-                    <button>Edit</button>
-                    <button>Delete</button>
+                    <div>
+                        <span>
+                            <p>Volunteer</p>
+                            <p>{log.name}</p>
+                        </span>
+                        <span>
+                            <p>Project</p>
+                            <p>{log.project}</p>
+                        </span>
+                        <span>
+                            <p>Activity</p>
+                            <p>{log.activity}</p>
+                        </span>
+                    </div>
+                    <div>
+                        <span>
+                            <p>Date</p>
+                            <p>{log.date}</p>
+                        </span>
+                        <span>
+                            <p>Start Time</p>
+                            <p>{timeMinusHours(log.endTime,log.hours)}</p>
+                        </span>
+                        <span>
+                            <p>End Time</p>
+                            <p>{log.endTime}</p>
+                        </span>
+                    </div>
+                    <div>
+                        <p>{logNote}</p>
+                    </div>
+                    <div>
+                        <button>Edit</button>
+                        <button>Delete</button>
+                    </div>
                 </div>
             </div>
         );
