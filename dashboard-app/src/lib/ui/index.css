@@ -54,7 +54,11 @@ content: '';
 content: none;
 }
 
-
+.modalTitle 
+ {
+    position: relative;
+    text-align: center;
+}
 
 .ViewLog
 {
