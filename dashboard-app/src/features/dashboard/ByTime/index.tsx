@@ -91,12 +91,14 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
     orderable,
   };
 
+  console.log(tableData)
+
   return (
     <Container>
       <UploadModal
         visible={uploadModalVisible}
         closeFunction={()=>setUploadModalVisible(false)}
-        filetype={"time"}
+        destination={"time"}
       />
       <DownloadModal
         visible={downloadModalVisible}

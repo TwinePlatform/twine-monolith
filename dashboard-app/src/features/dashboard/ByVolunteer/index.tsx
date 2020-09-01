@@ -102,7 +102,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
       <UploadModal
         visible={uploadModalVisible}
         closeFunction={()=>setUploadModalVisible(false)}
-        filetype={"volunteer"}
+        destination={"volunteer"}
       />
       <DownloadModal
         visible={downloadModalVisible}

@@ -4,7 +4,7 @@ import Months from '../../../lib/util/months';
 export interface TableTypeItem {
   groupByX: 'Volunteer Name' | 'Activity' | 'Project';
   groupByY: 'Activity' | 'Month' | 'Project';
-  xIdFromLogs: 'userId' | 'activity' | 'project';
+  xIdFromLogs: 'id' | 'userId' | 'activity' | 'project';
   getYIdFromLogs: (x: any) => string;
 }
 interface TableType {
@@ -13,6 +13,7 @@ interface TableType {
   MonthByName: TableTypeItem;
   ActivityByProject: TableTypeItem;
   ProjectByActivity: TableTypeItem;
+  LogByName: TableTypeItem;
 }
 
 // TODO : get log type from api
@@ -52,5 +53,11 @@ export const tableType: TableType = {
     groupByY: 'Project',
     xIdFromLogs: 'activity',
     getYIdFromLogs: (x: any) => x.project,
+  },
+  LogByName: {
+    groupByX: 'Volunteer Name',
+    groupByY: 'Activity',
+    xIdFromLogs: 'id',
+    getYIdFromLogs: (x: any) => x.activity,
   },
 };

@@ -96,7 +96,7 @@ describe('Visitor model', () => {
       expect(visitors[0].visits).toHaveLength(10);
       expect(visitors[0].visits).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({ visitActivity: 'Free Running' }),
+          expect.objectContaining({ visitActivity: 'Free Running', category: 'Sports' }),
         ])
       );
     });
@@ -121,7 +121,7 @@ describe('Visitor model', () => {
       expect(visitors[0].visits).toHaveLength(10);
       expect(visitors[0].visits).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({ visitActivity: 'Free Running' }),
+          expect.objectContaining({ visitActivity: 'Free Running', category: 'Sports' }),
         ])
       );
       expect(visitors[3]).toEqual({ ...visitor, visits: [] });
