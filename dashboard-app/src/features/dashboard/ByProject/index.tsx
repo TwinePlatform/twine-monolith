@@ -38,7 +38,6 @@ const initTableData = { headers: [], rows: [] };
 const ByProjects: FunctionComponent<RouteComponentProps> = () => {
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [downloadModalVisible, setDownloadModalVisible] = useState(false);
-  const [extraButtonsVisible, setExtraButtonsVisible] = useState(false);
   const { unit } = useContext(DashboardContext);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
