@@ -109,20 +109,20 @@ const LogViewModal:FC<Props> = (props) => {
                         
                     </div>
                     
-                    <div>
-                        <span>
+                    <div className = "DateIime">
+                        
+                            {/* Discuss posiblity of  Merging  Start and Finish Date/Time  */}
                             <p>Date</p>
                             <p>{log.date}</p>
-                        </span>
-                        <span>
+                      
                             <p>Start Time</p>
                             <p>{timeMinusHours(log.endTime,log.hours)}</p>
-                        </span>
-                        <span>
+                       
                             <p>End Time</p>
                             <p>{log.endTime}</p>
-                        </span>
+                        
                     </div>
+
                     <div>
                         <p>{logNote}</p>
                     </div>
