@@ -109,7 +109,7 @@ const LogViewModal:FC<Props> = (props) => {
                         
                     </div>
                     
-                    <div className = "DateIime">
+                    <div className = "DateTime">
                         
                             {/* Discuss posiblity of  Merging  Start and Finish Date/Time  */}
                             <p>Date</p>
