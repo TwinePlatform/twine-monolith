@@ -96,15 +96,15 @@ const LogViewModal:FC<Props> = (props) => {
                     
                     <div className = "ProjectDetails">
                         
-                            <p>Volunteer{log.name}</p>
+                            <p>Volunteer : {log.name}</p>
                             {/* <p>{log.name}</p> */}
                         
                         
-                            <p>Project{log.project}</p>
+                            <p>Project : {log.project}</p>
                             {/* <p>/p> */}
                       
                        
-                            <p>Activity{log.activity}</p>
+                            <p>Activity : {log.activity}</p>
                             {/* <p></p> */}
                         
                     </div>
