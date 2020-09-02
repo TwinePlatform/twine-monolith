@@ -154,6 +154,11 @@ q:after {
   text-align: center;
 }
 
+.ModalControls
+{
+  bottom:0px;
+}
+
 .ViewLog 
 {
   height: 27px;
