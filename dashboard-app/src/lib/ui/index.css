@@ -156,7 +156,13 @@ q:after {
 
 .ModalControls
 {
-  bottom:0px;
+  
+  position: relative;
+  bottom: -169px;
+  padding: -4px;
+  margin: 1px;
+  border:none;
+
 }
 
 .ViewLog 
@@ -177,6 +183,8 @@ q:after {
   border-radius: 20px;
   border: none;
 }
+
+
 
 table {
   border-collapse: collapse;
