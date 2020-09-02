@@ -62,6 +62,14 @@ content: none;
   display: inline-block;
 }
 
+.DateTime
+{
+  right: -298px;
+  position: relative;
+  top: -38px;
+  display: inline-block;
+}
+
 .modalTitle 
  {
     position: relative;
