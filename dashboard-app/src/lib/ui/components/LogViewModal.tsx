@@ -126,7 +126,7 @@ const LogViewModal:FC<Props> = (props) => {
                     <div>
                         <p>{logNote}</p>
                     </div>
-                    <div>
+                    <div className ="ModalControls">
                         <button>Edit</button>
                         <button>Delete</button>
                     </div>
@@ -139,3 +139,4 @@ const LogViewModal:FC<Props> = (props) => {
 };
 
 export default LogViewModal;
+
