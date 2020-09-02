@@ -134,24 +134,28 @@ q:after {
   content: none;
 }
 
-.ProjectDetails .DateTime {
+.ProjectDetails 
+{
   position: relative;
   display: inline-block;
 }
 
-.DateTime {
+.DateTime 
+{
   right: -298px;
   position: relative;
   top: -38px;
   display: inline-block;
 }
 
-.modalTitle {
+.modalTitle 
+{
   position: relative;
   text-align: center;
 }
 
-.ViewLog {
+.ViewLog 
+{
   height: 27px;
   width: 100px;
   background-color: #8000ffcc;
