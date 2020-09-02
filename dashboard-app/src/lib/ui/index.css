@@ -54,6 +54,14 @@ content: '';
 content: none;
 }
 
+
+
+.ProjectDetails
+{
+  position: relative;;
+  display: inline-block;
+}
+
 .modalTitle 
  {
     position: relative;

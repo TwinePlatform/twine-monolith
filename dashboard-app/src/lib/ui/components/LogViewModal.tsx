@@ -93,20 +93,22 @@ const LogViewModal:FC<Props> = (props) => {
                     }}
                 >
                     <p className = "modalTitle">Volunteers Time</p>
-                    <div>
-                        <span>
-                            <p>Volunteer</p>
-                            <p>{log.name}</p>
-                        </span>
-                        <span>
-                            <p>Project</p>
-                            <p>{log.project}</p>
-                        </span>
-                        <span>
-                            <p>Activity</p>
-                            <p>{log.activity}</p>
-                        </span>
+                    
+                    <div className = "ProjectDetails">
+                        
+                            <p>Volunteer{log.name}</p>
+                            {/* <p>{log.name}</p> */}
+                        
+                        
+                            <p>Project{log.project}<</p>
+                            {/* <p>/p> */}
+                      
+                       
+                            <p>Activity{log.activity}</p>
+                            {/* <p></p> */}
+                        
                     </div>
+                    
                     <div>
                         <span>
                             <p>Date</p>
