@@ -100,7 +100,7 @@ const LogViewModal:FC<Props> = (props) => {
                             {/* <p>{log.name}</p> */}
                         
                         
-                            <p>Project{log.project}<</p>
+                            <p>Project{log.project}</p>
                             {/* <p>/p> */}
                       
                        
