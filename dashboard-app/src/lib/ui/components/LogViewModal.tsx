@@ -127,7 +127,7 @@ const LogViewModal:FC<Props> = (props) => {
                         <p>{logNote}</p>
                     </div>
                    
-                    <hr>
+                    <hr />
 
                     <div className ="ModalControls">
                         <button className = "ModalControls"> Edit </button>
