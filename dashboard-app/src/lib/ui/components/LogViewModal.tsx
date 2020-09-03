@@ -133,8 +133,8 @@ const LogViewModal:FC<Props> = (props) => {
                          
                          <hr />
                         
-                        <button className = "ModalControls"> Edit </button>
-                        <button className ="ModalControls"> Delete </button>
+                        <button className = "EditLog"> Edit </button>
+                        <button className ="DeleteLog"> Delete </button>
                    
                     </div>
                 </div>

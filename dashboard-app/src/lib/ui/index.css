@@ -157,11 +157,15 @@ q:after {
 .ModalControls
 {
   position: relative;
-  bottom: -85px;
-  margin-left: 83px;
-  border: none;
+ 
+ 
+  margin-left: 175px;
+  position: relative;
+
+ 
   background: transparent;
-  color: #8000ffcc;
+ 
+ 
 }
 
 .ViewLog 
@@ -172,6 +176,22 @@ q:after {
   color: white;
   border-radius: 20px;
   border: none;
+}
+
+.EditLog
+{
+  position: relative;
+  border: none;
+  color: purple;
+  background: transparent;
+}
+
+.DeleteLog
+{
+  position: relative;
+  border: none;
+  color: purple;
+  background: transparent;
 }
 
 .ViewLogYellow {
