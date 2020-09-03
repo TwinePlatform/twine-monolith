@@ -156,13 +156,12 @@ q:after {
 
 .ModalControls
 {
-  
   position: relative;
-  bottom: -169px;
-  padding: -4px;
-  margin: 1px;
-  border:none;
-
+  bottom: -85px;
+  margin-left: 83px;
+  border: none;
+  background: transparent;
+  color: #8000ffcc;
 }
 
 .ViewLog 
