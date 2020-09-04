@@ -5,7 +5,6 @@ import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {LogNote} from '../../api'
 //Delete Log = require(path to Delete Icon)
-const DeleteLog = require("../../assets/trash.svg");
 //Edit Log = require(path to Edit Icon)
 //
 /*
@@ -55,6 +54,7 @@ const LogViewModal:FC<Props> = (props) => {
         }
     })
 
+    const DeleteLogIcon =require("../..assets/trash.svg");
 
     if(visible)
         return (
@@ -139,7 +139,7 @@ const LogViewModal:FC<Props> = (props) => {
                 <button className = "EditLog"> Edit </button>
                         
                         <button className ="DeleteLog"> 
-                        <img className= "DeleteIcon" src ={DeleteLog} alt="Delete_Log" /> 
+                        <img className= "DeleteIcon" src ={DeleteLogIcon} alt="Delete_Log" /> 
                         Delete </button>
                    
                     </div>
