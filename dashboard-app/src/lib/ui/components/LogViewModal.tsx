@@ -4,7 +4,10 @@ import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {LogNote} from '../../api'
-
+//Delete Log = require(path to Delete Icon)
+const DeleteLog = require("../assets/trash.svg");
+//Edit Log = require(path to Edit Icon)
+//
 /*
  * Types
  */
@@ -133,7 +136,7 @@ const LogViewModal:FC<Props> = (props) => {
                          
                          <hr className = "BottomDivider" />
                         
-                        <button className = "EditLog"> Edit </button>
+                <button className = "EditLog">{DeleteLog}Edit </button>
                         <button className ="DeleteLog"> Delete </button>
                    
                     </div>
