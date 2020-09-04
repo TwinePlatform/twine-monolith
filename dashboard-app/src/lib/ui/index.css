@@ -139,25 +139,34 @@ q:after {
   display: inline-block;
 }
 
-.DateTime {
+.DateTime
+ {
   right: -298px;
   position: relative;
   top: 0px;
   display: inline-block;
 }
 
-.modalTitle {
+.modalTitle 
+{
   position: relative;
   text-align: center;
 }
 
-.ModalControls {
-  position: relative;
 
+.BottomDivider
+{
+  width: 677px;
+}
+
+.ModalControls
+ {
   margin-left: 175px;
   position: relative;
-
   background: transparent;
+  width: 100%;
+  left: -263px;
+  bottom: -144px;
 }
 
 .ViewLog 
@@ -183,6 +192,14 @@ q:after {
 {
   position: relative;
   border: none;
+  color: purple;
+  background: transparent;
+}
+.DeleteLog, .EditLog
+{
+  position: relative;
+  border: none;
+  left: 285px;
   color: purple;
   background: transparent;
 }
