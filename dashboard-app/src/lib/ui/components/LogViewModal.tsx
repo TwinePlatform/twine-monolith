@@ -139,7 +139,7 @@ const LogViewModal:FC<Props> = (props) => {
                 <button className = "EditLog"> Edit </button>
                         
                         <button className ="DeleteLog"> 
-                        <img className= "DelteIcon" src ={DeleteLog} alt="Delete_Log" /> 
+                        <img className= "DeleteIcon" src ={DeleteLog} alt="Delete_Log" /> 
                         Delete </button>
                    
                     </div>
