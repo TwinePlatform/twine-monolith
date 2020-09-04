@@ -5,7 +5,7 @@ import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {LogNote} from '../../api'
 //Delete Log = require(path to Delete Icon)
-const DeleteLog = require("../assets/trash.svg");
+const DeleteLog = require("../../assets/trash.svg");
 //Edit Log = require(path to Edit Icon)
 //
 /*
