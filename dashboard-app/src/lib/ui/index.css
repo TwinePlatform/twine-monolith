@@ -134,38 +134,30 @@ q:after {
   content: none;
 }
 
-.ProjectDetails 
-{
+.ProjectDetails {
   position: relative;
   display: inline-block;
 }
 
-.DateTime 
-{
+.DateTime {
   right: -298px;
   position: relative;
   top: 0px;
   display: inline-block;
 }
 
-.modalTitle 
-{
+.modalTitle {
   position: relative;
   text-align: center;
 }
 
-.ModalControls
-{
+.ModalControls {
   position: relative;
- 
- 
+
   margin-left: 175px;
   position: relative;
 
- 
   background: transparent;
- 
- 
 }
 
 .ViewLog 
@@ -178,8 +170,8 @@ q:after {
   border: none;
 }
 
-
-.EditLog
+/*  Possibly move to  Modal Controls  */
+.EditLog 
 {
   position: relative;
   border: none;
@@ -187,7 +179,7 @@ q:after {
   background: transparent;
 }
 
-.DeleteLog
+.DeleteLog 
 {
   position: relative;
   border: none;
@@ -203,8 +195,6 @@ q:after {
   border-radius: 20px;
   border: none;
 }
-
-
 
 table {
   border-collapse: collapse;
