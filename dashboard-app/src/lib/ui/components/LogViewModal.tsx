@@ -136,8 +136,11 @@ const LogViewModal:FC<Props> = (props) => {
                          
                          <hr className = "BottomDivider" />
                         
-                <button className = "EditLog">{DeleteLog}Edit </button>
-                        <button className ="DeleteLog"> Delete </button>
+                <button className = "EditLog"> Edit </button>
+                        
+                        <button className ="DeleteLog"> 
+                        <img className= "DelteIcon" src ={DeleteLog} alt="Delete_Log" /> 
+                        Delete </button>
                    
                     </div>
                 </div>
