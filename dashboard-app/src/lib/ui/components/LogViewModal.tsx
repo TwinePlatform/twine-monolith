@@ -54,7 +54,7 @@ const LogViewModal:FC<Props> = (props) => {
         }
     })
 
-    const DeleteLogIcon =require("../..assets/trash.svg");
+    const DeleteLogIcon =require("../../assets/trash.svg");
 
     if(visible)
         return (
@@ -139,6 +139,7 @@ const LogViewModal:FC<Props> = (props) => {
                 <button className = "EditLog"> Edit </button>
                         
                         <button className ="DeleteLog"> 
+                        {/* Pushfailed for some reason likely somethinng to do with  the way I improrted the image*/}
                         <img className= "DeleteIcon" src ={DeleteLogIcon} alt="Delete_Log" /> 
                         Delete </button>
                    
