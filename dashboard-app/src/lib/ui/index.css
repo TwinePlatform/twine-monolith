@@ -188,13 +188,21 @@ q:after {
   background: transparent;
 }
 
+/* .DeleteIcon
+{
+  background-image: url(../../assets/trash.svg);
+}
+ */
+
 .DeleteLog 
 {
+ 
   position: relative;
   border: none;
   color: purple;
   background: transparent;
 }
+
 .DeleteLog, .EditLog
 {
   position: relative;
