@@ -54,7 +54,7 @@ const LogViewModal:FC<Props> = (props) => {
         }
     })
 
-    const DeleteLogIcon =require("../../assets/trash.svg");
+    let DeleteLogIcon =require("../../assets/trash.svg");
 
     if(visible)
         return (
