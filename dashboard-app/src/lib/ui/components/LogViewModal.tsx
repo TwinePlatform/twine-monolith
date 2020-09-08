@@ -132,7 +132,7 @@ const LogViewModal:FC<Props> = (props) => {
                         {/* Note textarea goes here  */}
                         <textarea className= "Note_Area">
                         {/* review  possible solution */}
-                        <p>{logNote}</p>
+                        {logNote}
                         </textarea>
                     </div>
                    
