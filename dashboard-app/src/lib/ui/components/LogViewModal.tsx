@@ -140,7 +140,7 @@ const LogViewModal:FC<Props> = (props) => {
                          <hr className = "BottomDivider" />
                         
                 <button className = "EditLog"> 
-                <img className= "EditIcon" src = "../../assets/trash.svg"  alt="Edit_Log" /> 
+                {/* <img className= "EditIcon" src = "../../assets/trash.svg"  alt="Edit_Log" />  */}
                  Edit </button>
 
                         
