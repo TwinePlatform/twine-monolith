@@ -140,15 +140,15 @@ const LogViewModal:FC<Props> = (props) => {
                          <hr className = "BottomDivider" />
                         
                 <button className = "EditLog"> 
-                {/* <img className= "EditIcon" src = "../../assets/trash.svg"  alt="Edit_Log" />  */}
+                <img className= "EditIcon" src = "../../assets/trash.svg"  alt="Edit_Log" /> 
                  Edit </button>
 
                         
                         <button className ="DeleteLog"> 
-                        {/* Push failed for some reason likely somethinng to do with  the way I improrted the image*/}
+                        
                         <img className= "DeleteIcon" src = "../../assets/edit.svg"  alt="Delete_Log" /> 
                         Delete </button>
-                   {/*  */}
+                 
                    {/* dashboard-app\src\assets\trash.svg */}
                     </div>
                 </div>
