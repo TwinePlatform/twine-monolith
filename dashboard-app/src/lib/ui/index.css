@@ -142,7 +142,8 @@ q:after {
   top: -33px;
 }
 
-.DateTime {
+.DateTime
+ {
   right: -249px;
   top: -35px;
   position: relative;
@@ -151,9 +152,11 @@ q:after {
   line-height: 15px;
 }
 
-.modalTitle {
+.modalTitle
+ {
   position: relative;
   text-align: center;
+  top: -34px;
 }
 
 .Note_Area 
@@ -172,11 +175,11 @@ q:after {
 .ModalControls 
 {
   margin-left: 175px;
-  position: relative;
+  position: absolute;
   background: transparent;
   width: 100%;
-  left: -263px;
-  bottom: -144px;
+  left: -176px;
+  bottom: 7px;
 }
 
 .ViewLog 
