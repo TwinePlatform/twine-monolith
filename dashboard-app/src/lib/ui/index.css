@@ -134,21 +134,23 @@ q:after {
   content: none;
 }
 
-.ProjectDetails {
+.ProjectDetails 
+{
   position: relative;
   display: inline-block;
   padding: 17px;
-    line-height: 15px;
+  line-height: 15px;
+    top: -33px;
 }
 
 .DateTime
  {
-  right: -298px;
+  right: -249px;
+  top: -35px;
   position: relative;
-  top: 0px;
   display: inline-block;
   padding: 17px;
-    line-height: 15px;
+  line-height: 15px;
 }
 
 .modalTitle 
