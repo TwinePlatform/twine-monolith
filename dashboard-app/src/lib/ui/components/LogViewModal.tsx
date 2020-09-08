@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {LogNote} from '../../api'
+import trash from '../../assets/trash.svg'
 //Delete Log = require(path to Delete Icon)
 //Edit Log = require(path to Edit Icon)
 //
@@ -54,7 +55,7 @@ const LogViewModal:FC<Props> = (props) => {
         }
     })
 
-    let DeleteLogIcon =require ("../../assets/trash.svg");
+    // let DeleteLogIcon = require ("../../assets/trash.svg");
 
     if(visible)
         return (
@@ -142,7 +143,7 @@ const LogViewModal:FC<Props> = (props) => {
                         
                         <button className ="DeleteLog"> 
                         {/* Push failed for some reason likely somethinng to do with  the way I improrted the image*/}
-                        <img className= "DeleteIcon" src ={DeleteLogIcon} alt="Delete_Log" /> 
+                        <img className= "DeleteIcon" src ={trash} alt="Delete_Log" /> 
                         Delete </button>
                    {/*  */}
                    {/* dashboard-app\src\assets\trash.svg */}
