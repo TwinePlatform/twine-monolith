@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {LogNote} from '../../api'
+// possible location import { Duration } from 'twine-util';
 
 //Delete Log = require(path to Delete Icon)
 //Edit Log = require(path to Edit Icon)
@@ -129,7 +130,7 @@ const LogViewModal:FC<Props> = (props) => {
 
                     <div>
                         {/* Note textarea goes here  */}
-                        <textarea class>
+                        <textarea className= "Note_Area">
                         {/* review  possible solution */}
                         <p>{logNote}</p>
                         </textarea>
