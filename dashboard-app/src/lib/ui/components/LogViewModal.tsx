@@ -146,7 +146,7 @@ const LogViewModal:FC<Props> = (props) => {
                         
                         <button className ="DeleteLog"> 
                         {/* Push failed for some reason likely somethinng to do with  the way I improrted the image*/}
-                        <img className= "DeleteIcon" src = "../../assets/edit.svg"  alt="Edit_Log" /> 
+                        <img className= "DeleteIcon" src = "../../assets/edit.svg"  alt="Delete_Log" /> 
                         Delete </button>
                    {/*  */}
                    {/* dashboard-app\src\assets\trash.svg */}
