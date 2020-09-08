@@ -134,12 +134,14 @@ q:after {
   content: none;
 }
 
-.ProjectDetails {
+.ProjectDetails
+ {
   position: relative;
   display: inline-block;
   padding: 17px;
   line-height: 15px;
   top: -33px;
+  font-size:12px;
 }
 
 .DateTime
