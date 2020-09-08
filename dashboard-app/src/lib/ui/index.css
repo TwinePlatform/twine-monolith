@@ -157,6 +157,13 @@ q:after {
   position: relative;
   text-align: center;
   top: -34px;
+
+  height: 37px;
+
+  font: normal normal 20px/50px Roboto;
+  letter-spacing: 0.6px;
+  color: #000000;
+  opacity: 1;
 }
 
 .Note_Area 
