@@ -127,6 +127,8 @@ const LogViewModal:FC<Props> = (props) => {
                     </div>
 
                     <div>
+                        {/* Note textarea goes here  */}
+                        {/* review  possible solution */}
                         <p>{logNote}</p>
                     </div>
                    
@@ -139,10 +141,11 @@ const LogViewModal:FC<Props> = (props) => {
                 <button className = "EditLog"> Edit </button>
                         
                         <button className ="DeleteLog"> 
-                        {/* Pushfailed for some reason likely somethinng to do with  the way I improrted the image*/}
+                        {/* Push failed for some reason likely somethinng to do with  the way I improrted the image*/}
                         <img className= "DeleteIcon"  alt="Delete_Log" /> 
                         Delete </button>
                    {/* src ={DeleteLogIcon} */}
+                   {/* dashboard-app\src\assets\trash.svg */}
                     </div>
                 </div>
             </div>
