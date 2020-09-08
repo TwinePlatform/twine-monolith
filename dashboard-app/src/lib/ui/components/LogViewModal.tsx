@@ -129,8 +129,10 @@ const LogViewModal:FC<Props> = (props) => {
 
                     <div>
                         {/* Note textarea goes here  */}
+                        <textarea class>
                         {/* review  possible solution */}
                         <p>{logNote}</p>
+                        </textarea>
                     </div>
                    
                    
