@@ -134,17 +134,15 @@ q:after {
   content: none;
 }
 
-.ProjectDetails 
-{
+.ProjectDetails {
   position: relative;
   display: inline-block;
   padding: 17px;
   line-height: 15px;
-    top: -33px;
+  top: -33px;
 }
 
-.DateTime
- {
+.DateTime {
   right: -249px;
   top: -35px;
   position: relative;
@@ -153,20 +151,26 @@ q:after {
   line-height: 15px;
 }
 
-.modalTitle 
-{
+.modalTitle {
   position: relative;
   text-align: center;
 }
 
+.Note_Area 
+{
+  position: relative;
+  top: -23px;
+  left: 169px;
+}
 
-.BottomDivider
+
+.BottomDivider 
 {
   width: 677px;
 }
 
-.ModalControls
- {
+.ModalControls 
+{
   margin-left: 175px;
   position: relative;
   background: transparent;
@@ -186,26 +190,23 @@ q:after {
 }
 
 /*  Possibly move to  Modal Controls  */
-.EditLog 
-{
+.EditLog
+ {
   position: relative;
   border: none;
   color: purple;
   background: transparent;
 }
 
-
-.DeleteLog 
-{
- 
+.DeleteLog {
   position: relative;
   border: none;
   color: purple;
   background: transparent;
 }
 
-.DeleteLog, .EditLog
-{
+.DeleteLog,
+.EditLog {
   position: relative;
   border: none;
   left: 285px;
