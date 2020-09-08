@@ -137,6 +137,8 @@ q:after {
 .ProjectDetails {
   position: relative;
   display: inline-block;
+  padding: 17px;
+    line-height: 15px;
 }
 
 .DateTime
@@ -145,6 +147,8 @@ q:after {
   position: relative;
   top: 0px;
   display: inline-block;
+  padding: 17px;
+    line-height: 15px;
 }
 
 .modalTitle 
