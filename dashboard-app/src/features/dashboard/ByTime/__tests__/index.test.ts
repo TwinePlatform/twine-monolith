@@ -4,7 +4,7 @@ import MockDate from 'mockdate';
 import { renderWithHistory } from '../../../../lib/util/tests';
 import { axios } from '../../../../lib/api';
 import { logs, activities } from '../../__data__/api_data';
-import ByTime from '../../ByTime';
+import ByTime from '..';
 import 'jest-dom/extend-expect';
 
 

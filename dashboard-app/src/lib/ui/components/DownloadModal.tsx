@@ -18,8 +18,8 @@ type Props = {
 
 
 const Heading2 = styled(H2)`
-  marginBottom: 20;
-  color: ${ColoursEnum.white};
+    marginBottom: 20;
+    color: ${ColoursEnum.white};
 `;
 
 
@@ -60,7 +60,7 @@ const DownloadModal:FC<Props> = (props) => {
                 <p
                     style={{
                         fontFamily: 'roboto',
-                        fontSize: '25px'
+                        fontSize: '20px'
                     }}
                 >Are you sure you would like to download?</p>
                 <a href={"/downloads/" + filename} download>

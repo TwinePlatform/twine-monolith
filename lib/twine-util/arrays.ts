@@ -57,3 +57,6 @@ export const truncate = <T>(xs: T[], limit: number, placeholder: T) =>
     : xs;
 
 export const headOrId = <T>(xs: T | T[]) => Array.isArray(xs) ? xs[0] : xs;
+
+export const interpolateObjFrom = <T, U extends object> (xs: string[], zero: T, obj: U) =>
+  xs.reduce((acc, x) => x in acc ? acc : { ...acc, [x]: zero }, obj);

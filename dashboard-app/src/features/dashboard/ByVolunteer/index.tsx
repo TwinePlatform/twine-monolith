@@ -22,7 +22,7 @@ import { LegendData } from '../components/StackedBarChart/types';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
-import { DashboardContext } from '../../../App';
+import { DashboardContext } from '../context';
 
 
 /**
@@ -102,7 +102,7 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
       <UploadModal
         visible={uploadModalVisible}
         closeFunction={()=>setUploadModalVisible(false)}
-        file={"volunteer"}
+        filetype={"volunteer"}
       />
       <DownloadModal
         visible={downloadModalVisible}
@@ -141,17 +141,23 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
         }}
         >
           <SecondaryButton
-            onClick={()=>setInviteModalVisible(!inviteModalVisible)} 
+            onClick={()=>{setInviteModalVisible(!inviteModalVisible)
+              setUploadModalVisible(false)
+              setDownloadModalVisible(false)}} 
           >
             Invite
           </SecondaryButton>
 	        <SecondaryButton
-            onClick={()=>setDownloadModalVisible(!downloadModalVisible)} 
+            onClick={()=>{setDownloadModalVisible(!downloadModalVisible)
+              setUploadModalVisible(false)
+              setInviteModalVisible(false)}} 
           >
             Volunteer Template
           </SecondaryButton>
         	<SecondaryButton
-            onClick={()=>setUploadModalVisible(!uploadModalVisible)} 
+            onClick={()=>{setUploadModalVisible(!uploadModalVisible)
+              setDownloadModalVisible(false)
+              setInviteModalVisible(false)}} 
           >
             Upload
           </SecondaryButton>
