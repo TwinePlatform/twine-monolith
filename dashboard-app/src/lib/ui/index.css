@@ -53,6 +53,29 @@ q:before, q:after {
 content: '';
 content: none;
 }
+
+
+
+.ViewLog
+{
+  height: 27px;  
+  width: 100px;
+  background-color: #8000FFCC;
+  color: white;
+  border-radius: 20px;
+  border:none;
+}
+
+.ViewLogYellow
+{
+  height: 27px;  
+  width: 100px;
+  background-color: #FFBF00CC;
+  color: white;
+  border-radius: 20px;
+  border:none;
+}
+
 table {
 border-collapse: collapse;
 border-spacing: 0;

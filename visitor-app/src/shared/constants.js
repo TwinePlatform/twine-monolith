@@ -68,6 +68,8 @@ export const AgeRange = {
 
   // fromStr :: String -> [Number, Number]
   fromStr: (str) => {
+    if (str === BirthYear.NULL_VALUE) return str;
+
     if (!/^(\d{1,3}-\d{1,3}|\d{1,3}\+)$/.test(str)) {
       throw new Error(`Invalid age range: ${str}`);
     }
@@ -96,6 +98,21 @@ export const AgeRange = {
       ? `${min}+`
       : `${min}-${max}`;
   },
+};
+
+export const createAgeGroups = (groups) => {
+  const ranges = groups.map(AgeRange.fromStr);
+
+  return {
+    fromBirthYear: (year) => {
+      if (year === null || year === BirthYear.NULL_VALUE) return BirthYear.toDisplay(null);
+
+      const age = BirthYear.toAge(year);
+      const range = ranges.find(([min, max]) => min <= age && age <= max);
+      return AgeRange.toStr(range);
+    },
+    toSelectOptions: () => ['All'].concat(groups).map((value, key) => ({ key, value })),
+  };
 };
 
 export const Gender = {

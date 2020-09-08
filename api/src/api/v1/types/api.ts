@@ -169,6 +169,8 @@ export namespace Api {
           export interface Request extends Hapi.Request {
             pre: { communityBusiness: CommunityBusiness };
             query: ApiRequestQuery & Dictionary<any> & {
+              since?: string;
+              until?: string;
               filter?: {
                 age?: [number, number];
                 gender?: GenderEnum;

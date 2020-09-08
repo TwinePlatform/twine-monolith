@@ -12,6 +12,9 @@ import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
 import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../../lib/ui/design_system';
+import DownloadModal from '../../../lib/ui/components/DownloadModal';
+import UploadModal from '../../../lib/ui/components/UploadModal';
+import { PrimaryButton, SecondaryButton} from '../../../lib/ui/components/Buttons';
 import Errors from '../components/Errors';
 import useAggregateDataByActivity from './useAggregateDataByActivity';
 import { TabGroup } from '../components/Tabs';
@@ -19,7 +22,7 @@ import { getTitleForDayPicker } from '../util';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
-import { DashboardContext } from '../../../App';
+import { DashboardContext } from '../context';
 
 
 /**
@@ -52,6 +55,9 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
   const { unit } = useContext(DashboardContext);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
+  const [uploadModalVisible, setUploadModalVisible] = useState(false);
+  const [downloadModalVisible, setDownloadModalVisible] = useState(false);
+  const [extraButtonsVisible, setExtraButtonsVisible] = useState(false);
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const { loading, error, data, activities } =
     useAggregateDataByActivity({ from: fromDate, to: toDate });
@@ -88,6 +94,16 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
 
   return (
     <Container>
+      <UploadModal
+        visible={uploadModalVisible}
+        closeFunction={()=>setUploadModalVisible(false)}
+        destination={"activity"}
+      />
+      <DownloadModal
+        visible={downloadModalVisible}
+        closeFunction={()=>setDownloadModalVisible(false)}
+        filename={"activitytemplate.csv"}
+      />
       <Row center="xs">
         <Col>
           <H1>{TitlesCopy.Activities.title}</H1>
@@ -129,6 +145,38 @@ const ByActivity: FunctionComponent<RouteComponentProps> = () => {
             </Row>
           )
       }
+      {extraButtonsVisible &&
+        <div
+          style={{
+          position: 'fixed', 
+          bottom: 40, 
+          right: 80
+        }}
+        >
+	        <SecondaryButton
+            onClick={()=>{setDownloadModalVisible(!downloadModalVisible)
+              setUploadModalVisible(false)}} 
+          >
+            Activity Template
+          </SecondaryButton>
+        	<SecondaryButton
+            onClick={()=>{setUploadModalVisible(!uploadModalVisible)
+              setDownloadModalVisible(false)}} 
+          >
+            Upload
+          </SecondaryButton>
+        </div>
+      }
+      <PrimaryButton 
+        onClick={()=>setExtraButtonsVisible(!extraButtonsVisible)} 
+        style={{
+          position: 'fixed', 
+          bottom: 20, 
+          right: 30
+        }}
+      >
+        +
+      </PrimaryButton>
     </Container>
   );
 };
