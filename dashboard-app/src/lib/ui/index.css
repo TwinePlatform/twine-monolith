@@ -171,8 +171,10 @@ q:after {
 .Note_Area 
 {
   position: relative;
-  top: -23px;
-  left: 169px;
+  top: -27px;
+  height: auto;
+  left: 17px;
+  width: 530px;
 }
 
 
