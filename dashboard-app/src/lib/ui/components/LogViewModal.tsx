@@ -135,7 +135,11 @@ const LogViewModal:FC<Props> = (props) => {
                         </textarea>
                     </div>
                    
-                   
+                   <div>
+                      <p> Member has volunteered</p>
+                      {/* Show how many hours have been done  */}
+
+                   </div>
 
                     <div className ="ModalControls">
                          
