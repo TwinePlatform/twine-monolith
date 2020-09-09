@@ -100,19 +100,20 @@ const LogViewModal:FC<Props> = (props) => {
                     <p className = "modalTitle">Volunteers Time</p>
                     
                     <div className = "ProjectDetails">
+                        {/* Probably need to find another wway to create spacing between letters */}
                         
                             <p>Volunteer  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  {log.name}</p>
                             {/* <p>{log.name}</p> */}
                         
-                           <hr />
+                           <hr className = "Section_Dividers" />
                             <p>Project  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.project}</p>
                             {/* <p>/p> */}
-                            <hr />
+                            <hr  className = "Section_Dividers"/>
                        
                             <p>Activity   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.activity}</p>
                             {/* <p></p> */}
 
-                            <hr />
+                            <hr className = "Section_Dividers" />
                         
                     </div>
                     
@@ -121,14 +122,14 @@ const LogViewModal:FC<Props> = (props) => {
                             {/* Discuss posiblity of  Merging  Start and Finish Date/Time  */}
                             <p>Date {log.date}</p>
                           
-                              <hr />
+                              <hr  className = "Section_Dividers"/>
                             <p>Start Time {timeMinusHours(log.endTime,log.hours)}</p>
                               
-                              <hr />
+                              <hr  className = "Section_Dividers"/>
                        
                             <p>End Time {log.endTime}</p>
 
-                              <hr />
+                              <hr className = "Section_Dividers" />
                           
                         
                     </div>

@@ -168,6 +168,11 @@ q:after {
   opacity: 1;
 }
 
+.Section_Dividers
+{
+  width: 195px;
+}
+
 .Note_Area 
 {
   position: relative;
