@@ -101,15 +101,15 @@ const LogViewModal:FC<Props> = (props) => {
                     
                     <div className = "ProjectDetails">
                         
-                            <p>Volunteer : {log.name}</p>
+                            <p>Volunteer  {log.name}</p>
                             {/* <p>{log.name}</p> */}
                         
                            <hr />
-                            <p>Project : {log.project}</p>
+                            <p>Project  {log.project}</p>
                             {/* <p>/p> */}
                             <hr />
                        
-                            <p>Activity : {log.activity}</p>
+                            <p>Activity  {log.activity}</p>
                             {/* <p></p> */}
                         
                     </div>
@@ -117,14 +117,14 @@ const LogViewModal:FC<Props> = (props) => {
                     <div className = "DateTime">
                         
                             {/* Discuss posiblity of  Merging  Start and Finish Date/Time  */}
-                            <p>Date: {log.date}</p>
+                            <p>Date {log.date}</p>
                           
                              <hr />
-                            <p>Start Time: {timeMinusHours(log.endTime,log.hours)}</p>
+                            <p>Start Time {timeMinusHours(log.endTime,log.hours)}</p>
                               
                               <hr />
                        
-                            <p>End Time: {log.endTime}</p>
+                            <p>End Time {log.endTime}</p>
                           
                         
                     </div>
