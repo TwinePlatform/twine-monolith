@@ -146,12 +146,13 @@ q:after {
 
 .DateTime
  {
-  right: -249px;
+  right: -125px;
   top: -35px;
   position: relative;
   display: inline-block;
   padding: 17px;
   line-height: 15px;
+  
 }
 
 .modalTitle
