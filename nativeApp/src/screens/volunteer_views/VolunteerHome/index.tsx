@@ -33,7 +33,9 @@ import { Notifications } from 'expo';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import API, { getErrorResponse } from '../../../api';
-
+import InvitationModal from '../../../lib/ui/modals/InvitationModal';
+import Invite from '../../../lib/ui/Invite';
+import BadgeModal from '../../../lib/ui/modals/BadgeModel';
 
 
 
@@ -79,7 +81,8 @@ const Container = styled.View`
 const Stats: FC<Props> = () => {
   // setBadge(false);
   const dispatch = useDispatch();
-
+  const [visibleConfirmationModal, toggleInviteVisibility] = useToggle(false);
+  const [visibleBadge, toggleBadgeVisibility] = useState(false);
   useEffect(() => {
     dispatch(loadLogs());
   }, []);
@@ -98,12 +101,30 @@ const Stats: FC<Props> = () => {
     }
   });
 
+
+  const onInvite = () => {
+    return <Heading>invite</Heading>
+  }
+
   hours = ~~(hours + minutes / 60);
 
   const avgDur = ~~(hours * 60 / logs.length);
 
   return (
     <View>
+      <InvitationModal
+        isVisible={visibleConfirmationModal}
+        onCancel={toggleInviteVisibility}
+        onSendClose={toggleInviteVisibility}
+        awardBadge={toggleBadgeVisibility}
+        title="Invite Volunteers By Email"
+      />
+
+      <BadgeModal
+        visible={visibleBadge}
+        badge={BadgeObj['InviteMedalBadge']}
+      />
+
       <Container>
         <Stat
           heading="TOTAL TIME GIVEN"
@@ -129,19 +150,29 @@ const Stats: FC<Props> = () => {
           <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
         </Stat>
       </Container>
+      <Invite onPress={toggleInviteVisibility} organisation={"aperture science"} />
     </View>
   )
 };
 
-const badgearray = [BadgeObj.FirstLogBadge, BadgeObj.ThridMonthBadge];
-
 const BadgeTab: FC<Props> = (props) => {
+  console.log(props);
   return (
     <CardView>
       {
-        props.badge.map((element) => (
-          <BadgeCard badge={element} />
-        ))
+        props.badge.map((element) => {
+          const awardId = element['award_id'];
+          if (awardId == 100) {
+            return (<BadgeCard badge={BadgeObj['FirstLogBadge']} />)
+          } else if (awardId >> 100) {
+            return (<BadgeCard badge={BadgeObj['FifthLogBadge']} />)
+          } else {
+            const badgename = Object.keys(BadgeObj)[awardId - 1];
+            return (
+              <BadgeCard badge={BadgeObj[badgename]} />
+            )
+          }
+        })
       }
     </CardView >
   );
@@ -207,6 +238,13 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const [userID, setUserID] = useState('');
   const [logged, setLogged] = useState(false);
+  const [badgearray, setbadgearray] = useState([]);
+
+  const getBadge = async () => {
+    const badgeArr = await API.Badges.getBadges();
+    console.log(badgeArr);
+    setbadgearray(badgeArr);
+  }
 
   //access fail to send log and try logging them again
   const checkStorage = async () => {
@@ -271,6 +309,7 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
         navigation.navigate('HelpSlideStack');
       }
     })
+    getBadge();
     checkStorage();
     dispatch(loadLogs());
   }, []);

@@ -17,6 +17,7 @@ import regions from './regions';
 import communityBusinesses from './community_businesses';
 import logs from './user_logs';
 import invite from './invite';
+import uploadCSV from './uploadCSV';
 import addLifecycleHooks from './hooks';
 import setupAuthentication from './auth';
 
@@ -27,8 +28,8 @@ import setupAuthentication from './auth';
 const addFailActionTo: (f: 'validate' | 'response') => (r: Hapi.ServerRoute) => Hapi.ServerRoute =
   (fragment) => (route) =>
     !has('options', route) ||                             // EITHER No options object
-    !has(fragment, path(['options'], route)) ||           // OR No validate/response object
-    has('failAction', path(['options', fragment], route)) // OR failAction already defined
+      !has(fragment, path(['options'], route)) ||           // OR No validate/response object
+      has('failAction', path(['options', fragment], route)) // OR failAction already defined
       ? route
       : assocPath(['options', fragment, 'failAction'], nthArg(2), route);
 
@@ -58,6 +59,7 @@ export default {
       ...regions,
       ...logs,
       ...invite,
+      ...uploadCSV,
     ]
       // Ensures failing request validation returns meaningful message in payload
       .map(addFailActionTo('validate'))

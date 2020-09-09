@@ -154,6 +154,15 @@ export const Users: UserCollection = {
     return res || null;
   },
 
+  async getWithEmail(client, email) {
+
+    const res = await client('user_account')
+      .select('user_account_id')
+      .where('email', email);
+
+    return res;
+  },
+
   async exists(client, query) {
     return null !== await Users.getOne(client, query);
   },
@@ -218,20 +227,12 @@ export const Users: UserCollection = {
   // update user_account set push_token = 'push_token123' where user_account_id = 2;
   async updateToken(client: Knex, user, token) {
 
-    // console.log(changes)
     var token: any
     var volunteer_hours_log_id: any
-    // var id: number
-    // id = parseInt(user.id, 10);
 
     const res = await client('user_account')
       .update('push_token', token.pushtoken)
       .where('user_account_id', user);
-
-    // console.log(res);
-    // return VolunteerLogs.getOne(client, { where: { id } });
-
-    //return null;
   },
 
 

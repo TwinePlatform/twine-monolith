@@ -10,6 +10,7 @@ import volunteerLogs from './volunteer_logs';
 import register from './register';
 import cbAdmins from './cb_admins';
 import temporary from './temporary';
+import badges from './badges';
 
 export default [
   ...get,
@@ -24,4 +25,5 @@ export default [
   ...register,
   ...cbAdmins,
   ...temporary,
+  ...badges,
 ];

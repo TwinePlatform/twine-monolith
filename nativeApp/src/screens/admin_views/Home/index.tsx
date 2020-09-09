@@ -16,7 +16,9 @@ import Invite from '../../../lib/ui/Invite';
 
 import { createLog, loadLogs, selectOrderedLogs } from '../../../redux/entities/logs';
 import { Item } from 'native-base';
-
+import BadgeModal from '../../../lib/ui/modals/BadgeModel';
+import { BadgeObj } from './../../volunteer_views/VolunteerHome/BadgeObject';
+import API from '../../../api';
 /*
  * Types
  */
@@ -59,6 +61,7 @@ const AdminHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const [logged, setLogged] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const [visibleBadge, toggleBadgeVisibility] = useState(false);
 
   const logs = useSelector(selectOrderedLogs, shallowEqual);
   let hours = 0;
@@ -152,8 +155,15 @@ const AdminHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
         isVisible={visibleConfirmationModal}
         onCancel={toggleInviteVisibility}
         onSendClose={toggleInviteVisibility}
+        awardBadge={toggleBadgeVisibility}
         title="Invite Volunteers By Email"
       />
+
+      <BadgeModal
+        visible={visibleBadge}
+        badge={BadgeObj['InviteMedalBadge']}
+      />
+
       <Heading>Week Stats</Heading>
       <Container>
         <Stat

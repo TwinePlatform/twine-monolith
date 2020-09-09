@@ -45,8 +45,8 @@ const sharedNavigationsConfig = {
   headerTintColor: "#fff",
   headerTitleStyle: {
     letterSpacing: 2,
-    fontWeight: "300" as "300",
-    fontFamily: FontsEnum.medium,
+    fontWeight: "400" as "400",
+    fontFamily: FontsEnum.nunito,
   },
 };
 

@@ -36,7 +36,7 @@ const fullpage = styled.View`
 const Settings: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
   const logOut = async () => {
     API.Authentication.logOut().catch(() => { });
-    await AsyncStorage.clear();
+    // await AsyncStorage.clear();
     navigation.navigate("AuthStack");
   };
 
