@@ -102,7 +102,7 @@ const LogViewModal:FC<Props> = (props) => {
                     <div className = "ProjectDetails">
                         {/* Probably need to find another wway to create spacing between letters */}
                         
-                            <p>Volunteer  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  {log.name}</p>
+                            <p>Volunteer  &nbsp; &nbsp; &nbsp; &nbsp;  {log.name}</p>
                             {/* <p>{log.name}</p> */}
                         
                            <hr className = "Section_Dividers" />
