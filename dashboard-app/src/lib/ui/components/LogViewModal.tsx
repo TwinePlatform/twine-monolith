@@ -106,11 +106,11 @@ const LogViewModal:FC<Props> = (props) => {
                             {/* <p>{log.name}</p> */}
                         
                            <hr className = "Section_Dividers" />
-                            <p>Project  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.project}</p>
+                            <p>Project  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.project}</p>
                             {/* <p>/p> */}
                             <hr  className = "Section_Dividers"/>
                        
-                            <p>Activity   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.activity}</p>
+                            <p>Activity   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.activity}</p>
                             {/* <p></p> */}
 
                             <hr className = "Section_Dividers" />
@@ -120,14 +120,14 @@ const LogViewModal:FC<Props> = (props) => {
                     <div className = "DateTime">
                         
                             {/* Discuss posiblity of  Merging  Start and Finish Date/Time  */}
-                            <p>Date {log.date}</p>
+                            <p>Date &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.date}</p>
                           
                               <hr  className = "Section_Dividers"/>
-                            <p>Start Time {timeMinusHours(log.endTime,log.hours)}</p>
+                            <p>Start Time &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {timeMinusHours(log.endTime,log.hours)}</p>
                               
                               <hr  className = "Section_Dividers"/>
                        
-                            <p>End Time {log.endTime}</p>
+                            <p>End Time &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.endTime}</p>
 
                               <hr className = "Section_Dividers" />
                           
