@@ -98,7 +98,7 @@ const LogViewModal:FC<Props> = (props) => {
                     }}
                 >
                     <p className = "modalTitle">Volunteers Time</p>
-                    
+                    {/* Refactor to group both sections into 1 class */}
                     <div className = "ProjectDetails">
                         {/* Probably need to find another wway to create spacing between letters */}
                         
