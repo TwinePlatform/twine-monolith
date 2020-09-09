@@ -134,32 +134,28 @@ q:after {
   content: none;
 }
 
-.ProjectDetails
- {
+.ProjectDetails {
   position: relative;
   display: inline-block;
   padding: 17px;
   line-height: 18px;
-  top: -33px;
-  font-size:12px;
+  top: -62px;
+  font-size: 12px;
 }
 
-.DateTime
- {
+.DateTime {
   right: -86px;
-  top: -31px;
+  top: -59px;
   position: relative;
   display: inline-block;
   padding: 17px;
   line-height: 18px;
-  
 }
 
-.modalTitle
- {
+.modalTitle {
   position: relative;
   text-align: center;
-  top: -34px;
+  top: -55px;
 
   height: 37px;
 
@@ -169,13 +165,11 @@ q:after {
   opacity: 1;
 }
 
-.Section_Dividers
-{
+.Section_Dividers {
   width: 195px;
 }
 
-.Note_Area 
-{
+.Note_Area {
   position: relative;
   top: -27px;
   height: auto;
@@ -183,14 +177,11 @@ q:after {
   width: 530px;
 }
 
-
-.BottomDivider 
-{
+.BottomDivider {
   width: 677px;
 }
 
-.ModalControls 
-{
+.ModalControls {
   margin-left: 175px;
   position: absolute;
   background: transparent;
@@ -199,8 +190,7 @@ q:after {
   bottom: 7px;
 }
 
-.ViewLog 
-{
+.ViewLog {
   height: 27px;
   width: 100px;
   background-color: #8000ffcc;
@@ -210,8 +200,7 @@ q:after {
 }
 
 /*  Possibly move to  Modal Controls  */
-.EditLog
- {
+.EditLog {
   position: relative;
   border: none;
   color: purple;
