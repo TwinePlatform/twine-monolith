@@ -59,8 +59,8 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const { unit } = useContext(DashboardContext);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
-  const [categories, setCategories] = useState<[string]>(["hello","john"]);
-  const [filters, setFilters] = useState<[string]>();
+  const [categories, setCategories] = useState(["hello","john"]);
+  const [filters, setFilters] = useState([]);
   const [logViewModalVisible, setLogViewModalVisible] = useState(false);
   const [logCreateModalVisible, setLogCreateModalVisible] = useState(false);
   const [projectModalVisible, setProjectModalVisible] = useState(false);
