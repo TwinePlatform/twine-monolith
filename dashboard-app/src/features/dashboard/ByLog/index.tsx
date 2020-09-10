@@ -6,7 +6,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import DatePickerConstraints from './datePickerConstraints';
 import _LogsDataTable from '../components/DataTable/LogsDataTable';
 import ProjectsDataTable from '../components/DataTable/ProjectsDataTable';
-import UtilityBar from '../components/UtilityBar';
+import LogsUtilityBar from '../components/LogsUtilityBar';
 import { H1 } from '../../../lib/ui/components/Headings';
 import { DataTableProps } from '../components/DataTable/types';
 import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
@@ -59,6 +59,8 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const { unit } = useContext(DashboardContext);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
+  const [category, setCategory] = useState("");
+  const [filters, setFilters] = useState([""]);
   const [logViewModalVisible, setLogViewModalVisible] = useState(false);
   const [logCreateModalVisible, setLogCreateModalVisible] = useState(false);
   const [projectModalVisible, setProjectModalVisible] = useState(false);
@@ -121,12 +123,16 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
       </Row>
       <Row center="xs">
         <Col xs={12}>
-          <UtilityBar
+          <LogsUtilityBar
             dateFilter="day"
             datePickerConstraint={DatePickerConstraints}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
             onDownloadClick={downloadAsCsv}
+            category
+            filters
+            setCategory
+            setFilters
           />
         </Col>
       </Row>
