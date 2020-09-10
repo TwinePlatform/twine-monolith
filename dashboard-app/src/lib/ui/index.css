@@ -169,6 +169,13 @@ q:after {
   width: 195px;
 }
 
+
+.Duration
+{
+  top: -53px;
+  position: relative;
+}
+
 .Note_Area {
   position: relative;
   top: -65px;
