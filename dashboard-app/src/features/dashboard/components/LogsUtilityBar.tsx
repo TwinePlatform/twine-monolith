@@ -109,7 +109,7 @@ const LogsUtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
       <Col xs={4}>
       <Row>
           <div
-            style={{display: 'flex', justifyContent: 'space-around'}}
+            style={{display: 'flex', justifyContent: 'space-between'}}
           >
               <SearchPicker
                 placeholder={"Category"}

@@ -29,7 +29,8 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
 
     let input = document.getElementById("input"+placeholder);
 
-    input?.addEventListener("keyup", function(event) {
+    if(input)
+    input.addEventListener("keyup",(event) => {
         if (event.keyCode === 13) {
             event.preventDefault();
             setSearches(searches.concat([search]))
