@@ -129,10 +129,10 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
             onDownloadClick={downloadAsCsv}
-            categories
-            filters
-            setCategories
-            setFilters
+            categories={categories}
+            filters={filters}
+            setCategories={setCategories}
+            setFilters={setFilters}
           />
         </Col>
       </Row>
