@@ -102,15 +102,15 @@ const LogViewModal:FC<Props> = (props) => {
                     <div className = "ProjectDetails">
                         {/* Probably need to find another wway to create spacing between letters */}
                         
-                            <p>Volunteer  &nbsp; &nbsp; &nbsp; &nbsp;  {log.name}</p>
+                           <span  className = "SectionTitle"> <p>Volunteer</span> &nbsp; &nbsp; &nbsp; &nbsp;  {log.name}</p>
                             {/* <p>{log.name}</p> */}
                         
                            <hr className = "Section_Dividers" />
-                            <p>Project  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.project}</p>
+                            <span className = "SectionTitle"><p>Project</span>  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.project}</p>
                             {/* <p>/p> */}
                             <hr  className = "Section_Dividers"/>
                        
-                            <p>Activity   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.activity}</p>
+                            <span className = "SectionTitle"><p>Activity</span>  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.activity}</p>
                             {/* <p></p> */}
 
                             <hr className = "Section_Dividers" />
@@ -120,14 +120,16 @@ const LogViewModal:FC<Props> = (props) => {
                     <div className = "DateTime">
                         
                             {/* Discuss posiblity of  Merging  Start and Finish Date/Time  */}
-                            <p>Date &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.date}</p>
+                           <span  className = "SectionTitle"><p>Date </span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.date}</p>
                           
                               <hr  className = "Section_Dividers"/>
-                            <p>Start Time  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; {timeMinusHours(log.endTime,log.hours)}</p>
+
+                           
+                            <span className = "SectionTitle"><p>Start Time</span>  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; {timeMinusHours(log.endTime,log.hours)}</p>
                               
                               <hr  className = "Section_Dividers"/>
                        
-                            <p>End Time &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.endTime}</p>
+                            <span className = "SectionTitle"><p>End Time</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.endTime}</p>
 
                               <hr className = "Section_Dividers" />
                           
@@ -143,7 +145,7 @@ const LogViewModal:FC<Props> = (props) => {
                     </div>
                    
                    <div className="Duration">
-                      <p> Member has volunteered</p>
+                      <span><p> Member has volunteered</p></span>
                       {/* Show how many hours have been done  */}
 
                    </div>

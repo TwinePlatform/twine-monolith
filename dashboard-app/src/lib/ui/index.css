@@ -170,6 +170,11 @@ q:after {
 }
 
 
+.SectionTitle
+{
+  color: grey;
+}
+
 .Duration
 {
   top: -53px;
