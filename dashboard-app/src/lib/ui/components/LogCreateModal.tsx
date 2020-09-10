@@ -144,6 +144,7 @@ const LogCreateModal:FC<Props> = (props) => {
     const submit = ()=>{
         try{
             console.log(log);
+            console.log(note);
             Logs.add(log).then(result=>console.log(result));
             showSuccessMessage();
         }
