@@ -174,7 +174,10 @@ const LogCreateModal:FC<Props> = (props) => {
                 ref={wrapperRef}
             >
                 <h1
-                    style={{position: 'fixed', bottom: '50%', zIndex: 4, color: ColoursEnum.purple}}
+                    style={{
+                        position: 'fixed', bottom: '50%', zIndex: 4, color: ColoursEnum.purple,
+                        textAlign: 'center', 
+                    }}
                 >{successMessage}</h1>
                 <div
                     style={{
