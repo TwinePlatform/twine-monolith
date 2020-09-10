@@ -17,11 +17,14 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
         searches.map((search: any) =>{
             searchBoxes.push(
                 <div
-                    style={{display: 'flex-inline', justifyContent: 'space-between', width: '50%', backgroundColor: colour}}
+                    style={{display: 'inline-flex', justifyContent: 'space-between', width: '50%', backgroundColor: colour}}
      
                 >
                     <p>{search}</p>
-                    <p onClick={()=>setSearches(searches.remove(search))}>x</p>
+                    <p onClick={()=>{
+                        console.log("clicked");
+                        setSearches(searches.remove(search));
+                    }}>x</p>
                 </div>
             )
         })
