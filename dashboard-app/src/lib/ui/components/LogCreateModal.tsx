@@ -83,6 +83,7 @@ const LogCreateModal:FC<Props> = (props) => {
     const [endTime, setEndTime] = useState(now.getHours() + ":" + now.getMinutes());
 
     const[errorMessage, setErrorMessage] = useState("");
+    const[successMessage, setSuccessMessage] = useState("");
 
     console.log(now)
     console.log(date)
@@ -136,10 +137,11 @@ const LogCreateModal:FC<Props> = (props) => {
         setLoading(false);
     }    
 
-    const select = ()=>{
+    const submit = ()=>{
         try{
             console.log(log);
             Logs.add(log);
+            showSuccessMessage();
         }
         catch(error){
             console.log("error");
@@ -147,6 +149,11 @@ const LogCreateModal:FC<Props> = (props) => {
             setErrorMessage(error);
         }
     };
+
+    const showSuccessMessage = ()=>{
+        setSuccessMessage("Log created!");
+        setTimeout(()=>{setSuccessMessage("")},1000);
+    }
 
     if(visible)
         return (
@@ -166,6 +173,9 @@ const LogCreateModal:FC<Props> = (props) => {
                 }}
                 ref={wrapperRef}
             >
+                <h1
+                    style={{position: 'fixed', bottom: '50%', zIndex: 4, color: ColoursEnum.purple}}
+                >{successMessage}</h1>
                 <div
                     style={{
                         backgroundColor: ColoursEnum.purple,
@@ -214,7 +224,7 @@ const LogCreateModal:FC<Props> = (props) => {
                         onChange={(e)=>setEndTime(e.target.value)}
                         />
                         <input type="text" id="Note" placeholder="Notes"/>
-                        <button onClick={select}
+                        <button onClick={submit}
                         disabled={!valid}
                         >Create</button>
                         <p>{errorMessage}</p>
