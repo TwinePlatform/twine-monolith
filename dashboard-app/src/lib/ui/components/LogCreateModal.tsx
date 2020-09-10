@@ -62,8 +62,6 @@ const getDate = (dateElement: any, startTimeElement: any) => {
     }
 }
 
-const getNote = (e: any) => e.value? e.value : ""
-
 const LogCreateModal:FC<Props> = (props) => {
     const {visible, closeFunction,} = props;
 
@@ -129,9 +127,13 @@ const LogCreateModal:FC<Props> = (props) => {
 
     const submit = ()=>{
         try{
-            console.log(log);
-            console.log(note);
-            Logs.add(log).then(result=>console.log(result));
+            Logs.add(log)
+            .then(result=>{
+                const {activity, project, startedAt } = result.data.result;
+                const LogID = result.data.result.id;
+                LogNote.update(note,LogID,activity,project,startedAt).then(result=>console.log(result))
+                }
+            );
             showSuccessMessage();
         }
         catch(error){
