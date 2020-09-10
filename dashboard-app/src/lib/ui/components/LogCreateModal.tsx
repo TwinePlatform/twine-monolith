@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {CommunityBusinesses, Project, Logs, LogNote,} from '../../api';
+import NoteModal from './NoteModal';
 import { duration } from 'moment';
 import DataTable from '../../../features/dashboard/components/DataTable';
 
@@ -85,6 +86,9 @@ const LogCreateModal:FC<Props> = (props) => {
     const[errorMessage, setErrorMessage] = useState("");
     const[successMessage, setSuccessMessage] = useState("");
 
+    const[noteModalVisible, setNoteModalVisible] = useState(false);
+    const[note, setNote] = useState("");
+
     console.log(now)
     console.log(date)
     console.log(startTime);
@@ -140,7 +144,7 @@ const LogCreateModal:FC<Props> = (props) => {
     const submit = ()=>{
         try{
             console.log(log);
-            Logs.add(log);
+            Logs.add(log).then(result=>console.log(result));
             showSuccessMessage();
         }
         catch(error){
@@ -176,9 +180,14 @@ const LogCreateModal:FC<Props> = (props) => {
                 <h1
                     style={{
                         position: 'fixed', bottom: '50%', zIndex: 4, color: ColoursEnum.purple,
-                        textAlign: 'center', 
+                        textAlign: 'center', left: '50%'
                     }}
                 >{successMessage}</h1>
+                <NoteModal
+                visible={noteModalVisible}
+                setNote={setNote}
+                closeFunction={()=>setNoteModalVisible(false)}
+                />
                 <div
                     style={{
                         backgroundColor: ColoursEnum.purple,
@@ -226,7 +235,7 @@ const LogCreateModal:FC<Props> = (props) => {
                         <input type="time" id="End Time" value={endTime}
                         onChange={(e)=>setEndTime(e.target.value)}
                         />
-                        <input type="text" id="Note" placeholder="Notes"/>
+                        <button onClick={()=>setNoteModalVisible(true)}>Add Note</button>
                         <button onClick={submit}
                         disabled={!valid}
                         >Create</button>
