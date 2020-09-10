@@ -62,7 +62,7 @@ export const Logs = {
 export const LogNote = {
   get: (logID: string) =>
     axios.get("community-businesses/me/get-volunteer-logs/" + logID),
-  update: (note: string, LogId: any, activity: any, project: any, startedAt: any) => axios.put(`community-businesses/me/volunteer-logs-notes/$${LogId}`,
+  update: (note: string, LogId: any, activity: any, project: any, startedAt: any) => axios.put(`community-businesses/me/volunteer-logs-notes/${LogId}`,
       {
         activity: activity,
         startedAt: startedAt,
