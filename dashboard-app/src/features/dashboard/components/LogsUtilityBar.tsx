@@ -3,11 +3,14 @@ import moment from 'moment';
 import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
 import DatePicker from './DatePicker';
+import SearchPicker from './SearchPicker';
 import UnitToggle from './UnitToggle';
 import { DurationUnitEnum } from '../../../types';
 import { DownloadButton } from '../../../lib/ui/components/Buttons';
 import { DateRangePickerConstraint } from './DatePicker/types';
 import { DashboardContext } from '../context';
+import { ColoursEnum } from '../../../lib/ui/design_system';
+
 
 
 /**
@@ -23,9 +26,9 @@ type UtilityBarProps = {
   onToDateChange?: (d: Date) => void
   onUnitChange?: (u: DurationUnitEnum) => void
   onDownloadClick?: () => void
-  category: any;
+  categories: any;
   filters: any;
-  setCategory: any;
+  setCategories: any;
   setFilters: any;
 };
 
@@ -49,6 +52,10 @@ const LogsUtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
     onUnitChange = () => { },
     onDownloadClick = () => { },
     customToggle = null,
+    categories,
+    setCategories,
+    filters,
+    setFilters, 
     ...rest
   } = props;
 
@@ -100,9 +107,23 @@ const LogsUtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
         />
       </Col>
       <Col xs={4}>
-      <Row end="xs" middle="xs">
-          <input type="text" placeholder="Category"/>
-          <input type="text" placeholder="Filter"/>
+      <Row>
+          <div
+            style={{display: 'flex', justifyContent: 'space-around'}}
+          >
+              <SearchPicker
+                placeholder={"Category"}
+                searches={categories}
+                setSearches={setCategories}
+                colour={ColoursEnum.orange}
+              />
+              <SearchPicker
+                placeholder={"Filter"}
+                searches={filters}
+                setSearches={setFilters}
+                colour={ColoursEnum.grey}
+              />
+          </div>
         </Row>
       </Col>
       <Col xs={4}>

@@ -59,7 +59,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const { unit } = useContext(DashboardContext);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
-  const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([""]);
   const [filters, setFilters] = useState([""]);
   const [logViewModalVisible, setLogViewModalVisible] = useState(false);
   const [logCreateModalVisible, setLogCreateModalVisible] = useState(false);
@@ -129,9 +129,9 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
             onDownloadClick={downloadAsCsv}
-            category
+            categories
             filters
-            setCategory
+            setCategories
             setFilters
           />
         </Col>
