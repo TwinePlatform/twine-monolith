@@ -135,7 +135,6 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       yData: logFieldsData.data,
     });
     */
-    console.log(volunteers);
 
     const data = {
       groupByX: "Name",

@@ -36,10 +36,6 @@ const getDuration = (startTimeElement: any, endTimeElement: any) => {
     const startTime = startTimeElement.value;
     const endTime = endTimeElement.value;
 
-
-    console.log(startTime)
-    console.log(endTime)
-
     //assuming same day, which you kind of
     const hours = parseInt(endTime.slice(0,2)) - parseInt(startTime.slice(0,2));
     const minutes = 0;
@@ -49,7 +45,6 @@ const getDuration = (startTimeElement: any, endTimeElement: any) => {
 }
 
 const getDate = (dateElement: any, startTimeElement: any) => {
-    console.log(dateElement.value + startTimeElement.value)
 
     try{
         let date = new Date(
@@ -59,7 +54,6 @@ const getDate = (dateElement: any, startTimeElement: any) => {
             startTimeElement.value.slice(0,2),
             startTimeElement.value.slice(3,5),
         )
-        console.log(date);
         return date;
     }
     catch{
@@ -88,11 +82,6 @@ const LogCreateModal:FC<Props> = (props) => {
 
     const[noteModalVisible, setNoteModalVisible] = useState(false);
     const[note, setNote] = useState("");
-
-    console.log(now)
-    console.log(date)
-    console.log(startTime);
-    console.log(endTime);
 
     const [log, setLog] = useState({
         userId: 0,
