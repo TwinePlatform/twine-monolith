@@ -47,10 +47,10 @@ const NoteModal:FC<Props> = (props) => {
             <div
                 style={{
                     position: 'fixed', 
-                    width: "50%", 
-                    height: "50%", 
-                    bottom: "25%", 
-                    right: "25%",
+                    width: "30%", 
+                    height: "30%", 
+                    bottom: "45%", 
+                    right: "45%",
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
@@ -67,6 +67,7 @@ const NoteModal:FC<Props> = (props) => {
                         borderRadius: "8px 8px 0px 0px",
                     }}
                 >
+                    <Heading2>TWINE</Heading2>
                 </div>
                 <div
                     style={{

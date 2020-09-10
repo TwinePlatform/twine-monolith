@@ -117,7 +117,6 @@ const LogCreateModal:FC<Props> = (props) => {
                 startedAt: getDate(document.getElementById("Date"),document.getElementById('Start Time')),
             };
 
-            console.log(potentialLog);
             //validation code
             if(new Date(potentialLog.startedAt) && potentialLog.duration.hours!=0){
                 setLog(potentialLog);
@@ -135,8 +134,6 @@ const LogCreateModal:FC<Props> = (props) => {
         setProjects(getStringArray(options.projects.data.result));
         setActivities(getStringArray(options.activities.data.result));
         setVolunteers(options.volunteers.data.result);
-
-        console.log(options);
 
         setLoading(false);
     }    
