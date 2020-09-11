@@ -32,7 +32,9 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
      
                 >
                     <p style={{color: 'black'}}>{search}</p>
-                    <div onClick={()=>{
+                    <div 
+                    style={{userSelect: 'none'}}
+                    onClick={()=>{
                         onClickX(search);
                     }}>x</div>
                 </div>

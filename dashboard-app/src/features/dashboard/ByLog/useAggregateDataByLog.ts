@@ -14,6 +14,8 @@ interface UseAggregatedDataParams {
   from: Date;
   to: Date;
   updateOn?: DependencyList;
+  categories: any;
+  filters: any;
 }
 
 interface AggregatedData {
@@ -22,6 +24,20 @@ interface AggregatedData {
   rows: any;
 }
 
+const filterLogs = (logs: any[], categories: any, filters: any) => {
+  if(categories.length > 1 && filters.length > 1)
+    return logs;
+
+  let filteredLogs: any = [];
+
+  logs.map(log=>{
+    console.log(log);
+    if(categories.indexOf(log.activity) >= 0)
+      filteredLogs.push(log);
+  })
+
+  return filteredLogs;
+};
 
 const getRows = (logs: [any], volunteers: IdAndName[]) => {
   return logs.map(log => {
@@ -78,7 +94,7 @@ const getProjectRows = (logs: [any]) => {
   return projectRows;
 }
 
-export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
+export default ({ from, to, updateOn = [], categories, filters}: UseAggregatedDataParams) => {
   const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
   const [aggregatedDataProjects, setAggregatedDataProjects] = useState<AggregatedData>();
   const [logFields, setLogFields] = useState<IdAndName[]>();
@@ -99,10 +115,6 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
         ...CommunityBusinesses.configs.getVolunteers,
         transformResponse: [(res: any) => res.result.map((a: any) => ({ id: a.id, name: a.name }))],
       },
-    /*  {
-        ...CommunityBusinesses.configs.getLogFields,
-        transformResponse: [(res: any) => res.result.map((a: any) => ({ id: a.id, name: a.name }))],
-      },*/
     ],
     updateOn: [...updateOn, from, to],
   });
@@ -122,20 +134,10 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       return;
     }
 
-    const logs = logsData.data;
-    //logs[0].createdBy = "different"
+    const logs = filterLogs(logsData.data,categories,filters);
+
     const volunteers = volunteersData.data as IdAndName[];
-
-    
-    /*
-    const data = logsToAggregatedData({
-      logs,
-      tableType: tableType.LogByName,
-      xData: volunteers,
-      yData: logFieldsData.data,
-    });
-    */
-
+ 
     const data = {
       groupByX: "Name",
       groupByY: "LogField",
