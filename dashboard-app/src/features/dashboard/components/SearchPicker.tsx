@@ -11,6 +11,7 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
     const {placeholder, searches, setSearches, colour} = props;
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
+    const [oldSearch, setOldSearch] = useState("");
 
     let searchBoxes = null;
     if(searches.length > 0){
@@ -21,10 +22,12 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
                     style={{display: 'inline-flex', justifyContent: 'space-between', width: '50%', backgroundColor: colour}}
      
                 >
-                    <p>{search}</p>
+                    <p style={{color: 'black'}}>{search}</p>
                     <div onClick={()=>{
                         console.log("clicked");
                         setSearches(searches.splice(searches.indexOf(search),1));
+                        if(searches.length<=1) 
+                            setSearches([]);
                     }}>x</div>
                 </div>
             )
@@ -32,7 +35,7 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
     }
 
     useEffect(()=>{
-        if(loading){
+        if(loading || search != oldSearch){
             let input = document.getElementById("input" + placeholder);
 
             if(input){
@@ -43,11 +46,10 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
                 }
             });
                 setLoading(false);
+                setOldSearch(search);
             }
         }
-    });
-
-    
+    });    
         
     return <div>
                 <input 
