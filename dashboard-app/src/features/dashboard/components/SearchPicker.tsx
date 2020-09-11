@@ -25,10 +25,7 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
                 >
                     <p style={{color: 'black'}}>{search}</p>
                     <div onClick={()=>{
-                        console.log("clicked");
-                        setSearches(searches.splice(searches.indexOf(search),1));
-                        if(searches.length<=1) 
-                            setSearches([]);
+                        onClickX(search);
                     }}>x</div>
                 </div>
             )
@@ -37,9 +34,14 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
 
     const onEnter = (event: any) => {
         if (event.keyCode === 13) {
-            console.log("pressed enter")
             setSearches(searches.concat([search]))
         }
+    }
+
+    const onClickX = (search: any) => {
+        setSearches(searches.splice(searches.indexOf(search),1));
+            if(searches.length<=1) 
+                setSearches([]);
     }
 
     useEffect(()=>{
