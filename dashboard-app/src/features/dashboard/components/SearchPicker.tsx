@@ -20,7 +20,15 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
         searches.map((search: any) =>{
             searchBoxes.push(
                 <div
-                    style={{display: 'inline-flex', justifyContent: 'space-between', width: '50%', backgroundColor: colour}}
+                    style={{
+                        display: 'inline-flex', 
+                        justifyContent: 'space-between', 
+                        width: '50%', 
+                        backgroundColor: colour,
+                        margin: '10px',
+                        padding: '5px',
+                        borderRadius: '5px',
+                    }}
      
                 >
                     <p style={{color: 'black'}}>{search}</p>
@@ -40,6 +48,7 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
     }
 
     const onClickX = (search: any) => {
+        console.log(searches)
         if(searches.length < 2) 
             setSearches([]);
         setSearches(searches.splice(searches.indexOf(search),1));
@@ -58,7 +67,7 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
         }
     );    
         
-    return <div>
+    return <div style={{padding: '10px'}}>
                 <input 
                     id={"input" + placeholder}
                     type="text" 
