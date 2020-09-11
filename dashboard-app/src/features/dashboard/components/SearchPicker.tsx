@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React, { useState, useEffect } from 'react';
 
 type SearchPickerProps = {
     placeholder: string;
@@ -9,6 +9,7 @@ type SearchPickerProps = {
 
 const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) => {
     const {placeholder, searches, setSearches, colour} = props;
+    const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
 
     let searchBoxes = null;
@@ -23,28 +24,34 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
                     <p>{search}</p>
                     <div onClick={()=>{
                         console.log("clicked");
-                        setSearches(searches.remove(search));
+                        setSearches(searches.splice(searches.indexOf(search),1));
                     }}>x</div>
                 </div>
             )
         })
     }
 
-    let input = document.getElementById("input"+placeholder);
+    useEffect(()=>{
+        if(loading){
+            let input = document.getElementById("input" + placeholder);
 
-
-    if(input)
-    input.addEventListener("keyup",(event) => {
-        if (event.keyCode === 13) {
-            console.log("pressed enter")
-            event.preventDefault();
-            setSearches(searches.push([search]))
+            if(input){
+                input.addEventListener("keyup",(event) => {
+                    if (event.keyCode === 13) {
+                    console.log("pressed enter")
+                    setSearches(searches.concat([search]))
+                }
+            });
+                setLoading(false);
+            }
         }
     });
+
+    
         
     return <div>
                 <input 
-                    id={"input"+placeholder}
+                    id={"input" + placeholder}
                     type="text" 
                     placeholder={placeholder} 
                     onChange={e=>setSearch(e.target.value)}
