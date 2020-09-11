@@ -5,7 +5,7 @@ type SearchPickerProps = {
     searches: [string];
     setSearches: any;
     colour: any
-  };
+};
 
 const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) => {
     const {placeholder, searches, setSearches, colour} = props;
@@ -14,6 +14,7 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
     const [oldSearch, setOldSearch] = useState("");
 
     let searchBoxes = null;
+
     if(searches.length > 0){
         searchBoxes=[];
         searches.map((search: any) =>{
@@ -38,6 +39,7 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
         if (event.keyCode === 13) {
             console.log("pressed enter")
             setSearches(searches.concat([search]))
+        }
     }
 
     useEffect(()=>{
@@ -68,7 +70,6 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
                 </div>
             </div>
     
-  
 }
 
 export default SearchPicker;
