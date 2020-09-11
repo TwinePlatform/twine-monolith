@@ -24,16 +24,30 @@ interface AggregatedData {
   rows: any;
 }
 
-const filterLogs = (logs: any[], categories: any, filters: any) => {
+const filterLogs = (logs: any[], categories: any, filters: any, volunteers: IdAndName[]) => {
   if(categories.length < 1 && filters.length < 1)
     return logs;
 
   let filteredLogs: any = [];
+  let alreadyAddedLogs: any = [];
 
-  logs.map(log=>{
-    console.log(log);
-    if(categories.indexOf(log.activity) >= 0)
+  logs.map((log,index)=>{
+
+    //get volunteer name
+    let volunteerName; 
+    volunteers.map((x) => {
+      if(x.id === log.userId)
+        volunteerName = x.name;
+    })
+
+    if(categories.indexOf(log.activity) >= 0 || categories.indexOf(log.project) >= 0 || categories.indexOf(volunteerName) >= 0){
       filteredLogs.push(log);
+      alreadyAddedLogs.push(index);
+    }
+
+    if(alreadyAddedLogs.indexOf(index) <0 && (filters.indexOf(log.activity) >= 0 || filters.indexOf(log.project) >= 0 || filters.indexOf(volunteerName) >= 0) ){
+      filteredLogs.push(log);
+    }
   })
 
   return filteredLogs;
@@ -134,9 +148,9 @@ export default ({ from, to, updateOn = [], categories, filters}: UseAggregatedDa
       return;
     }
 
-    const logs = filterLogs(logsData.data,categories,filters);
-
     const volunteers = volunteersData.data as IdAndName[];
+
+    const logs = filterLogs(logsData.data,categories,filters,volunteers);
  
     const data = {
       groupByX: "Name",

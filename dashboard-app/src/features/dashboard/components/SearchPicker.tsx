@@ -23,7 +23,7 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
                     style={{
                         display: 'inline-flex', 
                         justifyContent: 'space-between', 
-                        width: '50%', 
+                        width: '100%', 
                         backgroundColor: colour,
                         margin: '10px',
                         padding: '5px',
@@ -33,7 +33,7 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
                 >
                     <p style={{color: 'black'}}>{search}</p>
                     <div 
-                    style={{userSelect: 'none'}}
+                    style={{userSelect: 'none', paddingLeft: '10px'}}
                     onClick={()=>{
                         onClickX(search);
                     }}>x</div>
