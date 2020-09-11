@@ -48,10 +48,13 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
     }
 
     const onClickX = (search: any) => {
-        console.log(searches)
+        const removeIndex = searches.indexOf(search);
+        console.log(searches);
+        console.log(removeIndex);
         if(searches.length < 2) 
             setSearches([]);
-        setSearches(searches.splice(searches.indexOf(search),1));
+        else
+            setSearches(searches.slice(0,removeIndex).concat(searches.slice(removeIndex+1)));
     }
 
     useEffect(()=>{
