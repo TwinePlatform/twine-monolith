@@ -21,10 +21,10 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
      
                 >
                     <p>{search}</p>
-                    <p onClick={()=>{
+                    <div onClick={()=>{
                         console.log("clicked");
                         setSearches(searches.remove(search));
-                    }}>x</p>
+                    }}>x</div>
                 </div>
             )
         })
@@ -32,17 +32,15 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
 
     let input = document.getElementById("input"+placeholder);
 
-    console.log(searches)
 
     if(input)
     input.addEventListener("keyup",(event) => {
         if (event.keyCode === 13) {
+            console.log("pressed enter")
             event.preventDefault();
             setSearches(searches.push([search]))
         }
     });
-
-    console.log(searches);
         
     return <div>
                 <input 
@@ -50,8 +48,13 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
                     type="text" 
                     placeholder={placeholder} 
                     onChange={e=>setSearch(e.target.value)}
+                    onKeyUp={e=>console.log(e)}
                 />
-                {searchBoxes}
+                <div
+                    style={{display: 'block'}}
+                >
+                    {searchBoxes}
+                </div>
             </div>
     
   
