@@ -34,17 +34,19 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
         })
     }
 
+    const onEnter = (event: any) => {
+        if (event.keyCode === 13) {
+            console.log("pressed enter")
+            setSearches(searches.concat([search]))
+    }
+
     useEffect(()=>{
         if(loading || search != oldSearch){
             let input = document.getElementById("input" + placeholder);
 
             if(input){
-                input.addEventListener("keyup",(event) => {
-                    if (event.keyCode === 13) {
-                    console.log("pressed enter")
-                    setSearches(searches.concat([search]))
-                }
-            });
+                input.addEventListener("keyup",onEnter)
+            };
                 setLoading(false);
                 setOldSearch(search);
             }
