@@ -34,14 +34,15 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
 
     const onEnter = (event: any) => {
         if (event.keyCode === 13) {
-            setSearches(searches.concat([search]))
+            if(search != "")
+                setSearches(searches.concat([search]))
         }
     }
 
     const onClickX = (search: any) => {
+        if(searches.length < 2) 
+            setSearches([]);
         setSearches(searches.splice(searches.indexOf(search),1));
-            if(searches.length<=1) 
-                setSearches([]);
     }
 
     useEffect(()=>{
