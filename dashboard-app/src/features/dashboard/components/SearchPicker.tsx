@@ -51,7 +51,7 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
                 setOldSearch(search);
             }
         }
-    });    
+    );    
         
     return <div>
                 <input 
