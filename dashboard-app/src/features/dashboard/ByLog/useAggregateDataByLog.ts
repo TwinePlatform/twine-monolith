@@ -25,7 +25,7 @@ interface AggregatedData {
 }
 
 const filterLogs = (logs: any[], categories: any, filters: any) => {
-  if(categories.length > 1 && filters.length > 1)
+  if(categories.length < 1 && filters.length < 1)
     return logs;
 
   let filteredLogs: any = [];
