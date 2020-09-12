@@ -15,6 +15,7 @@
     "make:redux-req": "ts-node ./bin/make_redux_req/index.ts"
   },
   "dependencies": {
+    "@react-native-community/art": "github:react-native-community/art",
     "@react-native-community/datetimepicker": "2.4.0",
     "@types/expo": "^32.0.13",
     "@types/jest": "^24.0.18",
@@ -41,7 +42,7 @@
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-global-props": "^1.1.5",
-    "react-native-indicator": "^1.0.0",
+    "react-native-indicator": "^1.2.2",
     "react-native-modal": "^11.4.0",
     "react-native-modal-datetime-picker": "^7.6.1",
     "react-native-reanimated": "~1.9.0",

@@ -3,7 +3,6 @@
     "name": "TWINE Volunteer App",
     "slug": "nativeApp",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android",
@@ -24,7 +23,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.powertochange.volunteerapp"
     },
     "android": {
       "package": "com.powertochange.volunteerapp",
