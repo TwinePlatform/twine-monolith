@@ -4,7 +4,7 @@
 1. Uploading CSV through the dashboard 
 
 ## Uploading CSV through the dashboard 
-### Mega file will :
+### CSV file will :
 - register volunteer
 - add project
 - add activities 
