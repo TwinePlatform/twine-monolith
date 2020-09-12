@@ -1,4 +1,4 @@
-import { useWith, unapply, identity, equals, always, compose, cond, juxt, flip, T } from 'ramda'
+import { useWith, unapply, identity, equals, always, compose, cond, juxt, flip, T } from 'ramda';
 
 const equalsAndAlways = useWith(unapply(identity), [equals, always]);
 

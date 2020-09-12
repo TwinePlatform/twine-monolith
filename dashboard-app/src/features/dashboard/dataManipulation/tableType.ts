@@ -2,15 +2,18 @@ import moment from 'moment';
 import Months from '../../../lib/util/months';
 
 export interface TableTypeItem {
-  groupByX: string;
-  groupByY: string;
-  xIdFromLogs: string;
+  groupByX: 'Volunteer Name' | 'Activity' | 'Project';
+  groupByY: 'Activity' | 'Month' | 'Project';
+  xIdFromLogs: 'id' | 'userId' | 'activity' | 'project';
   getYIdFromLogs: (x: any) => string;
 }
 interface TableType {
   ActivityByName: TableTypeItem;
   MonthByActivity: TableTypeItem;
   MonthByName: TableTypeItem;
+  ActivityByProject: TableTypeItem;
+  ProjectByActivity: TableTypeItem;
+  LogByName: TableTypeItem;
 }
 
 // TODO : get log type from api
@@ -38,5 +41,23 @@ export const tableType: TableType = {
     groupByY: 'Month',
     xIdFromLogs: 'userId',
     getYIdFromLogs: getMonthColumnId,
+  },
+  ActivityByProject: {
+    groupByX: 'Project',
+    groupByY: 'Activity',
+    xIdFromLogs: 'project',
+    getYIdFromLogs: (x: any) => x.activity,
+  },
+  ProjectByActivity: {
+    groupByX: 'Activity',
+    groupByY: 'Project',
+    xIdFromLogs: 'activity',
+    getYIdFromLogs: (x: any) => x.project,
+  },
+  LogByName: {
+    groupByX: 'Volunteer Name',
+    groupByY: 'Activity',
+    xIdFromLogs: 'id',
+    getYIdFromLogs: (x: any) => x.activity,
   },
 };

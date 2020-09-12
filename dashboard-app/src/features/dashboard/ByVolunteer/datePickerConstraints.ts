@@ -6,9 +6,6 @@ import { DateRangePickerConstraint, MIN_DATE } from '../components/DatePicker/ty
 // - min from: 01 Jan 2017
 // - max from: now
 //
-// - min to: 01 Jan 2017
-// - max to: now
-//
 // - default from: 11 months ago
 // - default to: now
 //

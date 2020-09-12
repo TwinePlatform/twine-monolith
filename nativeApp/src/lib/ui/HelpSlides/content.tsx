@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
-import { Text, View, ImageBackground, StyleSheet, Dimensions } from "react-native";
+import { Text, View, SafeAreaView, ImageBackground, StyleSheet, Dimensions } from "react-native";
 import { NavigationInjectedProps } from 'react-navigation';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 import { FontsEnum } from '../../../lib/ui/typography';
@@ -50,9 +50,10 @@ const EmptySpace = styled.View`
 `;
 
 const ContainerImage = styled.View`
-	alignItems: center;
-	justifyContent: center;
-`;
+    top: 30%;
+	alignItems: center;`
+	//justifyContent: center;
+//`;
 const Image = styled.Image`
   width: 186px;
   height: 315px;
@@ -135,6 +136,7 @@ const styles = StyleSheet.create({
         width: 47,
         height: 47,
         borderRadius: 47 / 2,
+        opacity: 0.53,
         backgroundColor: '#FFFFFF'
     },
     circleSmall: {
@@ -167,8 +169,8 @@ const HelpSlidesTemplate: FC<NavigationInjectedProps & Props> = ({ navigation, r
 
     return (
 
-        <Scrollable>
-            <View style={styles.container}>
+        
+            <SafeAreaView style={styles.container}>
 
                 <ImageBackground style={styles.image} source={images['background']} >
 
@@ -184,7 +186,7 @@ const HelpSlidesTemplate: FC<NavigationInjectedProps & Props> = ({ navigation, r
                         <Image source={images[imagename]} />
                     </ContainerImage>
 
-                    <TextBottom>{text}</TextBottom>
+                    <TextBottom>J{text}</TextBottom>
 
                     <ContainerFooter>
                         {slide == 'slide2' &&
@@ -353,8 +355,8 @@ const HelpSlidesTemplate: FC<NavigationInjectedProps & Props> = ({ navigation, r
 
                     </ContainerFooter>
                 </ImageBackground>
-            </View>
-        </Scrollable>
+            </SafeAreaView>
+   
     )
 };
 

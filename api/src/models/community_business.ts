@@ -428,6 +428,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       .returning([
         'visit_activity_id AS id',
         'visit_activity_name AS name',
+        'visit_activity_category_id AS category_id',
         'monday',
         'tuesday',
         'wednesday',
@@ -438,7 +439,12 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         'created_at AS createdAt',
         'modified_at as modifiedAt',
       ]);
-    return res;
+
+    const [{ category }]: { category: string }[] = await client('visit_activity_category')
+      .select('visit_activity_category_name AS category')
+      .where({ visit_activity_category_id: res.category_id })
+
+    return { ...omit(['category_id'], res) as Omit<VisitActivity, 'category'>, category };
   },
 
   async updateVisitActivity(client, visitActivity) {
@@ -459,6 +465,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       .returning([
         'visit_activity_id AS id',
         'visit_activity_name AS name',
+        'visit_activity_category_id AS cat_id',
         'monday',
         'tuesday',
         'wednesday',
@@ -470,7 +477,17 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         'modified_at AS modifiedAt',
       ]);
 
-    return res ? { ...res, category: visitActivity.category } : null;
+    if (!res) {
+      return null;
+    }
+
+    const [{ category }]: { category: string }[] = await client('visit_activity_category')
+      .select('visit_activity_category_name AS category')
+      .where({ visit_activity_category_id: res.cat_id });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { cat_id, ...activity } = res;
+    return { ...activity, category };
   },
 
   async deleteVisitActivity(client, id) {
@@ -532,7 +549,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       }),
       whereBetween: pipe(
         evolve({ birthYear: AgeList.toBirthYear }),
-        Objects.renameKeys({ birthYear: 'user_account.birth_year' })
+        Objects.renameKeys({ birthYear: 'user_account.birth_year', createdAt: 'visit_log.created_at' })
       ),
     });
     const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);

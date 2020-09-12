@@ -42,7 +42,6 @@ const AddVolunteer: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
   };
 
   const onSubmit = (data: Partial<NewVolunteer>) => {
-    console.log(data);
     // const volunteer = { ...data, role: 'VOLUNTEER' as RoleEnum.VOLUNTEER }; // NB: hack to appease ts & react
     dispatch(createVolunteer(data));
   };

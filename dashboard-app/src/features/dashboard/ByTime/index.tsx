@@ -10,6 +10,9 @@ import { H1 } from '../../../lib/ui/components/Headings';
 import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../../lib/ui/design_system';
+import DownloadModal from '../../../lib/ui/components/DownloadModal';
+import UploadModal from '../../../lib/ui/components/UploadModal';
+import { PrimaryButton, SecondaryButton} from '../../../lib/ui/components/Buttons';
 import TimeTabs from './TimeTabs';
 import Errors from '../components/Errors';
 import useAggregateDataByTime from './useAggregateDataByTime';
@@ -18,7 +21,7 @@ import { LegendData } from '../components/StackedBarChart/types';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
-import { DashboardContext } from '../../../App';
+import { DashboardContext } from '../context';
 
 
 /**
@@ -42,6 +45,9 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [legendData, setLegendData] = useState<LegendData>([]);
+  const [uploadModalVisible, setUploadModalVisible] = useState(false);
+  const [downloadModalVisible, setDownloadModalVisible] = useState(false);
+  const [extraButtonsVisible, setExtraButtonsVisible] = useState(false);
   const { data, loading, error, months } =
     useAggregateDataByTime({ from: fromDate, to: toDate });
 
@@ -85,8 +91,20 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
     orderable,
   };
 
+  console.log(tableData)
+
   return (
     <Container>
+      <UploadModal
+        visible={uploadModalVisible}
+        closeFunction={()=>setUploadModalVisible(false)}
+        destination={"time"}
+      />
+      <DownloadModal
+        visible={downloadModalVisible}
+        closeFunction={()=>setDownloadModalVisible(false)}
+        filename={"timetemplate.csv"}
+      />
       <Row center="xs">
         <Col>
           <H1>{TitlesCopy.Time.title}</H1>
@@ -109,6 +127,38 @@ const ByTime: FunctionComponent<RouteComponentProps> = () => {
           ? <FullScreenBeatLoader color={ColoursEnum.purple} />
           : <TimeTabs {...tabProps} />
       }
+      {extraButtonsVisible &&
+        <div
+          style={{
+          position: 'fixed', 
+          bottom: 40, 
+          right: 80
+        }}
+        >
+	        <SecondaryButton
+            onClick={()=>{setDownloadModalVisible(!downloadModalVisible)
+              setUploadModalVisible(false)}} 
+          >
+            Time Template
+          </SecondaryButton>
+        	<SecondaryButton
+            onClick={()=>{setUploadModalVisible(!uploadModalVisible)
+              setDownloadModalVisible(false)}} 
+          >
+            Upload
+          </SecondaryButton>
+        </div>
+      }
+      <PrimaryButton 
+        onClick={()=>setExtraButtonsVisible(!extraButtonsVisible)} 
+        style={{
+          position: 'fixed', 
+          bottom: 20, 
+          right: 30
+        }}
+      >
+        +
+      </PrimaryButton>
     </Container>
   );
 };
