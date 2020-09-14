@@ -221,6 +221,7 @@ q:after {
 
 .DeleteLog {
   position: relative;
+  left: 373px;
   border: none;
   color: purple;
   background: transparent;
