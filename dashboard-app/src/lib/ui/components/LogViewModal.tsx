@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {LogNote} from '../../api'
+import { DurationUnitEnum } from '../../../types';
 // possible location import { Duration } from 'twine-util';
 
 //Delete Log = require(path to Delete Icon)
@@ -49,6 +50,15 @@ const LogViewModal:FC<Props> = (props) => {
             setLogNote(data.result[0].notes);
     }
     
+    // const  calculateDuration(log.startTime, log.endTime) =>    {
+
+    //     return {
+        //  hours: log.startTime
+        //   minutes : log.endTime
+    // }
+// duration = calculateDuration(startTime,endTime);
+
+    // }
     useEffect(()=>{
         if(effectCount<3 && visible){
             getNote();
@@ -125,7 +135,7 @@ const LogViewModal:FC<Props> = (props) => {
                               <hr  className = "Section_Dividers"/>
 
                            
-                            <p><span className = "SectionTitle">Start Time</span>  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; {timeMinusHours(log.endTime,log.hours)}</p>
+                            <p><span className = "SectionTitle">Start Time</span>  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; {timeMinusHours(log.startTime,log.hours)}</p>
                               
                               <hr  className = "Section_Dividers"/>
                        
@@ -138,14 +148,15 @@ const LogViewModal:FC<Props> = (props) => {
 
                     <div>
                        
-                        <textarea className= "Note_Area">
+                        <section className= "Note_Area">
                         {/* review  possible solution */}
-                        {logNote}
-                        </textarea>
+                        <p>{logNote}</p>
+                        </section>
                     </div>
                    
                    <div className="Duration">
-                      <span><p> Member has volunteered</p></span>
+                      <span><p> Member has volunteered  for  </p></span> <br>
+                      {/* <p> {duration.hours} Hours {duration.minutes} minutes</p> */}
                       {/* Show how many hours have been done  */}
 
                    </div>
