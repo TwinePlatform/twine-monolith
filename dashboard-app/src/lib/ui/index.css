@@ -214,6 +214,7 @@ q:after {
 /*  Possibly move to  Modal Controls  */
 .EditLog {
   position: relative;
+  left: 285px;
   border: none;
   color: purple;
   background: transparent;
@@ -231,7 +232,7 @@ q:after {
 .EditLog {
   position: relative;
   border: none;
-  left: 285px;
+
   color: purple;
   background: transparent;
 }
