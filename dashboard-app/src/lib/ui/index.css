@@ -181,15 +181,18 @@ q:after {
   position: relative;
 }
 
-.Note_Area {
+.Note_Area 
+{
   position: relative;
+  border: 1px solid orange;
   top: -65px;
-  height: auto;
+  /* height: auto; */
   left: 17px;
-  width: 530px;
+  /* width: 530px; */
 }
 
-.BottomDivider {
+.BottomDivider 
+{
   width: 677px;
 }
 
