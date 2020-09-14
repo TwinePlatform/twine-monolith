@@ -184,12 +184,12 @@ q:after {
 .Note_Area 
 {
   position: relative;
-  border: 1px solid orange;
+  border-color: orange;
+  padding-right: 348px;
   top: -65px;
-  /* height: auto; */
   left: 17px;
-  /* width: 530px; */
 }
+
 
 .BottomDivider 
 {
