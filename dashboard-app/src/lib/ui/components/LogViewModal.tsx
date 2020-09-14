@@ -156,13 +156,13 @@ const LogViewModal:FC<Props> = (props) => {
                         
                 <button className = "EditLog"> 
                 <img className= "EditIcon"  src = {require('../../../assets/edit.svg')}  alt="Edit_Log" /> 
-                 Edit </button>
+                &nbsp; Edit </button>
 
                         
                         <button className ="DeleteLog"> 
                         
                         <img className= "DeleteIcon" src = {require('../../../assets/trash.svg')}  alt="Delete_Log" /> 
-                        Delete </button>
+                        &nbsp; Delete </button>
                  
                    {/* dashboard-app\src\assets\trash.svg */}
                     </div>
