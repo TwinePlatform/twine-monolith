@@ -80,7 +80,7 @@ export const Files = {
 
     formData.append('file', csvFile);
 
-    return axios.post('upload/', formData, {
+    return axios.post('upload/CSVlogs/1', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
