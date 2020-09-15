@@ -47,7 +47,7 @@ const UploadModal:FC<Props> = (props) => {
     const confirmUpload = () => {
         if(filename != "Upload File Here"){
             console.log(uploadedFile);
-            Files.upload(uploadedFile,destination);
+            Files.upload(uploadedFile);
             closeFunction();
         }
     }

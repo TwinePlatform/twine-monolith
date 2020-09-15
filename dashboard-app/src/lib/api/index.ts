@@ -73,14 +73,14 @@ export const LogNote = {
 }
 
 export const Files = {
-  upload: (file: File, destination: string) => {
-    console.log("uploading " + file.name + "to /community-businesses/" + destination )
+  upload: (file: File) => {
+    console.log("uploading " + file.name + "to /community-businesses/")
     const formData = new FormData();
     const csvFile = new File ([file],file.name,{type: "text/csv"})
 
     formData.append('file', csvFile);
 
-    axios.post('upload/' + destination, formData, {
+    axios.post('upload/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
