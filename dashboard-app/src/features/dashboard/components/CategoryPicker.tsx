@@ -60,9 +60,9 @@ const CategoryPicker: React.FunctionComponent<CategoryPickerProps> = (props: any
                 onChange={e=>addToSearches(e.target.value)}
                 >
                     <option value="" disabled selected>Category</option>
-                    <option value="name">Name</option>
-                    <option value="project">Project</option>
-                    <option value="activity">Activity</option>
+                    <option value="Name">Name</option>
+                    <option value="Project">Project</option>
+                    <option value="Activity">Activity</option>
                 </select>
                 <div
                     style={{display: 'block'}}

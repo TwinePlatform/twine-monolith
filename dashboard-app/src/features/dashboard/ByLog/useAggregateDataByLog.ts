@@ -168,12 +168,12 @@ export default ({ from, to, updateOn = [], categories, filters}: UseAggregatedDa
 
     const volunteers = volunteersData.data as IdAndName[];
 
-    const logs = filterLogs(logsData.data,categories,filters,volunteers);
+    const logs = filterLogs(getRows(logsData.data, volunteers),categories,filters,volunteers);
  
     const data = {
       groupByX: "Name",
       groupByY: "LogField",
-      rows: getRows(logs, volunteers),
+      rows: logs,
     };
 
     const dataProjects = {
