@@ -13,7 +13,7 @@ import { ColoursEnum } from '../colours';
 type Props = {
   isVisible: boolean;
   addNote: React.Dispatch<React.SetStateAction<string>>;
-  onClose: ()=>void;
+  onClose: () => void;
 }
 
 /*
@@ -59,22 +59,23 @@ const ButtonContainer = styled.View`
 const NoteModal: FC<Props> = ({
   isVisible, addNote, onClose
 }) => {
-    const [note, setNote] = useState("");
+  const [note, setNote] = useState("");
 
-return(
-  <Modal isVisible={isVisible}>
-    <Card>
-      <HeadingContainer>
-        <Heading2>TWINE</Heading2>
-      </HeadingContainer>
-      <Form>
-      <Textarea rowSpan={5}  value={note} onChangeText={text => setNote(text)}/>    
-      </Form>
-      <ButtonContainer>
-        <AddNote onPress={()=> {addNote(note);onClose();}}  />
-      </ButtonContainer>
-    </Card>
-  </Modal>
-)};
+  return (
+    <Modal isVisible={isVisible}>
+      <Card>
+        <HeadingContainer>
+          <Heading2>TWINE</Heading2>
+        </HeadingContainer>
+        <Form>
+          <Textarea rowSpan={5} value={note} onChangeText={text => setNote(text)} />
+        </Form>
+        <ButtonContainer>
+          <AddNote onPress={() => { addNote(note); onClose(); }} />
+        </ButtonContainer>
+      </Card>
+    </Modal>
+  )
+};
 
 export default NoteModal;

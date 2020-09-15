@@ -101,6 +101,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [note, setNote] = useState('');
   const [userId, setUserID] = useState<number>();
 
+
   if (forUser == 'admin') {
     // setUserID(volunteers.find((x) => x.name === volunteer).id);
   }
@@ -221,6 +222,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
     }
   };
 
+  const addNote = (note) => {
+    setNote(note);
+  };
+
 
   const onContinue = () => {
     dispatch(createLogReset());
@@ -246,6 +251,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       initialValues={{ volunteer: '', project: selectedProject, activity: selectedActivity, note: '' }}
       validationSchema={validationSchema}
       onSubmit={(values, date) => {
+        values.note = note;
         onSubmit(values.volunteer, values.project, values.activity, startTime, endTime, values.note);
       }}>
 
@@ -258,8 +264,8 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           />
           <NoteModal
             isVisible={noteModalVisible}
-            // addNote={setNote}
-            addNote={values.note}
+            addNote={addNote}
+            // addNote={values.note}
             onClose={toggleNoteInvisibility}
           />
 
