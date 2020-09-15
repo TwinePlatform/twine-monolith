@@ -23,6 +23,8 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
 
   const [filename, setFilename] = useState("Upload File Here")
   const [uploadedFile, setUploadedFile] = useState(new File([""], "filename"));
+  const [errorText, setErrorText] = useState("");
+  const [uploadState, setUploadState] = useState("unselected");
 
   const select = () => {
         if(document.getElementById('file-input'))
@@ -32,20 +34,58 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
   const handleUpload = (e: any) => {
         setUploadedFile(e.target.files[0]);
         setFilename(e.target.files[0].name);
-        
+        setUploadState("selected");
   }
 
   const confirmUpload = () => {
-        if(filename != "Upload File Here"){
-            console.log(uploadedFile);
-            Files.upload(uploadedFile);
-      }
+      setUploadState("validating");
+      Files.upload(uploadedFile)
+      .then(result=>{
+        console.log(result);
+        setUploadState("success");
+      })
   }
 
   // set and clear errors on response
-  const [error, setError] = useState("");
+  
+  let uploadSection = <div>
+    <Paragraph>{filename}</Paragraph>
+    <button onClick={select}>Select</button>
+    <input id="file-input" type="file" name="name" style={{display: 'none'}}
+      onChange={e=>handleUpload(e)}
+    />
+  </div>
+  
+  if(uploadState == "selected")
+  uploadSection = 
+        <div>
+          <a>
+            <img
+              src={require('../../../assets/uploadbutton.png')}
+              onClick={confirmUpload}
+            />
+          </a>
+      </div>
 
-  //something about the upload state
+  if(uploadState == "validating")
+  uploadSection =
+    <div>
+      <Paragraph>Processing and checking the csv for errors...</Paragraph>
+    </div>
+
+  if(uploadState == "error")
+  uploadSection = 
+    <div>
+      <Paragraph>Sorry, there was an error in the csv</Paragraph>
+      <button onClick={()=>setUploadState("unselected")}>try again</button>
+    </div>
+
+  if(uploadState == "success")
+  uploadSection = 
+  <div>
+    <Paragraph>Well done, your data has been uploaded</Paragraph>
+    <button onClick={()=>setUploadState("unselected")}>upload more past data</button>
+  </div>
 
   return (
     <Container>
@@ -55,26 +95,23 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
           <Paragraph>
               Download the template for uploading your past logs.
           </Paragraph>
-          <a href={"/downloads/upload_data_template"} download>
-                <img
-                    src={require('../../../assets/downloadbutton.png')}
-                />
+          <a href={"/downloads/upload_data_template.csv"} download>
+            <img
+              src={require('../../../assets/downloadbutton.png')}
+            />
           </a>
           <Paragraph>
-              Fill in the tables for both Volunteers and Logs.
-              Then upload them below.
+            Fill in the tables for both Volunteers and Logs.
+            Then upload them below.
           </Paragraph>
-        <div>
-          <p>{filename}</p>
-          <button onClick={select}>Select</button>
-          <input id="file-input" type="file" name="name" style={{display: 'none'}}
+          <div>
+            <Paragraph>{filename}</Paragraph>
+            <button onClick={select}>Select</button>
+            <input id="file-input" type="file" name="name" style={{display: 'none'}}
                 onChange={e=>handleUpload(e)}
-          />
+            />
           </div>
-          <img
-              src={require('../../../assets/uploadbutton.png')}
-              onClick={confirmUpload}
-          />
+          {uploadSection}
         </Col>
       </Row>
       
