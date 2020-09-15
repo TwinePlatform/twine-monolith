@@ -25,7 +25,7 @@ interface AggregatedData {
   rows: any;
 }
 
-const filterLogs = (logs: any[], categories: any[], filters: any[], volunteers: IdAndName[]) => {
+const filterLogs = (logs: any[], categories: any[], filters: any[]) => {
   if(categories.length < 1 || filters.length < 1)
     return logs;
 
@@ -168,7 +168,7 @@ export default ({ from, to, updateOn = [], categories, filters}: UseAggregatedDa
 
     const volunteers = volunteersData.data as IdAndName[];
 
-    const logs = filterLogs(getRows(logsData.data, volunteers),categories,filters,volunteers);
+    const logs = filterLogs(getRows(logsData.data, volunteers),categories,filters);
  
     const data = {
       groupByX: "Name",
@@ -179,7 +179,7 @@ export default ({ from, to, updateOn = [], categories, filters}: UseAggregatedDa
     const dataProjects = {
       groupByX: "Name",
       groupByY: "ProjectField",
-      rows: getProjectRows(logs),
+      rows: getProjectRows(logsData.data),
     };
 
     setLogFields(logFieldsData);
