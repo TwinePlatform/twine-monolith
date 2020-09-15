@@ -130,7 +130,6 @@ const UserForm: FC<Props> = ({
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        console.log(values);
         onSubmit(values);
       }}>
 
@@ -164,7 +163,7 @@ const UserForm: FC<Props> = ({
           {/* //TODO - need to send password reset email after creation */}
 
           <Input
-            label="phoneNumber"
+            label="Phone Number"
             placeholder={"phoneNumber"}
             onChangeText={handleChange('phoneNumber')}
             onBlur={handleBlur('phoneNumber')}
@@ -196,7 +195,7 @@ const UserForm: FC<Props> = ({
           }
 
           <Input
-            label="postCode"
+            label="Post Code"
             placeholder={"postCode"}
             onChangeText={handleChange('postCode')}
             onBlur={handleBlur('postCode')}
