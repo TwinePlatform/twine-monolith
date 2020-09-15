@@ -155,7 +155,7 @@ const LogViewModal:FC<Props> = (props) => {
                     </div>
                    
                    <div className="Duration">
-                      <span><p> Member has volunteered  for  </p></span> <br>
+                      <span><p> Member has volunteered  for  </p></span> <br />
                       {/* <p> {duration.hours} Hours {duration.minutes} minutes</p> */}
                       {/* Show how many hours have been done  */}
 
