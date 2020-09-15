@@ -184,8 +184,9 @@ q:after {
 .Note_Area 
 {
   position: relative;
-  border-color: orange;
+  border: orange solid 3px;
   padding-right: 348px;
+  padding-top: 50px;
   top: -65px;
   left: 17px;
 }
@@ -217,7 +218,7 @@ q:after {
 /*  Possibly move to  Modal Controls  */
 .EditLog {
   position: relative;
-  left: 285px;
+  left: 249px;
   border: none;
   color: purple;
   background: transparent;
@@ -225,7 +226,7 @@ q:after {
 
 .DeleteLog {
   position: relative;
-  left: 373px;
+  left: 336px;
   border: none;
   color: purple;
   background: transparent;
