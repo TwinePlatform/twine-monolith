@@ -3,6 +3,7 @@ import moment from 'moment';
 import styled from 'styled-components';
 import { Row, Col } from 'react-flexbox-grid';
 import DatePicker from './DatePicker';
+import CategoryPicker from './CategoryPicker';
 import SearchPicker from './SearchPicker';
 import UnitToggle from './UnitToggle';
 import { DurationUnitEnum } from '../../../types';
@@ -111,7 +112,7 @@ const LogsUtilityBar: React.FunctionComponent<UtilityBarProps> = (props) => {
           <div
             style={{display: 'flex', justifyContent: 'space-between'}}
           >
-              <SearchPicker
+              <CategoryPicker
                 placeholder={"Category"}
                 searches={categories}
                 setSearches={setCategories}

@@ -24,7 +24,7 @@ interface AggregatedData {
   rows: any;
 }
 
-const filterLogs = (logs: any[], categories: any, filters: any, volunteers: IdAndName[]) => {
+const filterLogs = (logs: any[], categories: any[], filters: any, volunteers: IdAndName[]) => {
   if(categories.length < 1 && filters.length < 1)
     return logs;
 
@@ -40,12 +40,14 @@ const filterLogs = (logs: any[], categories: any, filters: any, volunteers: IdAn
         volunteerName = x.name;
     })
 
+    //if all of the filter terms appear in any of the categories, display the log
+    
     if(categories.indexOf(log.activity) >= 0 || categories.indexOf(log.project) >= 0 || categories.indexOf(volunteerName) >= 0){
       filteredLogs.push(log);
       alreadyAddedLogs.push(index);
     }
 
-    if(alreadyAddedLogs.indexOf(index) <0 && (filters.indexOf(log.activity) >= 0 || filters.indexOf(log.project) >= 0 || filters.indexOf(volunteerName) >= 0) ){
+    if(alreadyAddedLogs.indexOf(index) < 0 && (filters.indexOf(log.activity) >= 0 || filters.indexOf(log.project) >= 0 || filters.indexOf(volunteerName) >= 0) ){
       filteredLogs.push(log);
     }
   })
