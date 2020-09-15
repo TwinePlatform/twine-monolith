@@ -5,6 +5,7 @@ import {
   logsToAggregatedDataNoX,
   IdAndName,
 } from '../dataManipulation/logsToAggregatedDataNoX';
+import Fuse from 'fuse.js';
 import {logsToAggregatedData} from '../dataManipulation/logsToAggregatedData';
 import { tableType } from '../dataManipulation/tableType';
 import { VolunteerLogs } from '../../../../../api/src/models';
@@ -14,6 +15,8 @@ interface UseAggregatedDataParams {
   from: Date;
   to: Date;
   updateOn?: DependencyList;
+  categories: any;
+  filters: any;
 }
 
 interface AggregatedData {
@@ -22,6 +25,51 @@ interface AggregatedData {
   rows: any;
 }
 
+const filterLogs = (logs: any[], categories: any[], filters: any[]) => {
+  if(categories.length < 1 || filters.length < 1)
+    return logs;
+
+  let filteredLogs: any = [];
+  let alreadyAddedLogs: any = [];
+
+  const options = {
+    // isCaseSensitive: false,
+    // includeScore: false,
+    // shouldSort: true,
+    // includeMatches: false,
+    // findAllMatches: false,
+    // minMatchCharLength: 1,
+    // location: 0,
+    // threshold: 0.6,
+    // distance: 100,
+    // useExtendedSearch: false,
+    // ignoreLocation: false,
+    // ignoreFieldNorm: false,
+    keys: categories
+  };
+  
+  const fuse = new Fuse(logs, options);
+  
+  filters.map((filter,index)=>{
+    const searchResults = fuse.search(filter);
+
+    if(index == 0){
+      searchResults.map(result=>{
+        filteredLogs.push(result.item);
+        alreadyAddedLogs.push(result.refIndex);
+      })
+    }
+    else{
+      filteredLogs = [];
+      searchResults.map(result=>{
+        if(alreadyAddedLogs.indexOf(result.refIndex) >= 0)
+          filteredLogs.push(result.item);
+      })
+    }
+  })
+  
+  return filteredLogs;
+};
 
 const getRows = (logs: [any], volunteers: IdAndName[]) => {
   return logs.map(log => {
@@ -78,7 +126,7 @@ const getProjectRows = (logs: [any]) => {
   return projectRows;
 }
 
-export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
+export default ({ from, to, updateOn = [], categories, filters}: UseAggregatedDataParams) => {
   const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
   const [aggregatedDataProjects, setAggregatedDataProjects] = useState<AggregatedData>();
   const [logFields, setLogFields] = useState<IdAndName[]>();
@@ -99,10 +147,6 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
         ...CommunityBusinesses.configs.getVolunteers,
         transformResponse: [(res: any) => res.result.map((a: any) => ({ id: a.id, name: a.name }))],
       },
-    /*  {
-        ...CommunityBusinesses.configs.getLogFields,
-        transformResponse: [(res: any) => res.result.map((a: any) => ({ id: a.id, name: a.name }))],
-      },*/
     ],
     updateOn: [...updateOn, from, to],
   });
@@ -122,31 +166,20 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       return;
     }
 
-    const logs = logsData.data;
-    //logs[0].createdBy = "different"
     const volunteers = volunteersData.data as IdAndName[];
 
-    
-    /*
-    const data = logsToAggregatedData({
-      logs,
-      tableType: tableType.LogByName,
-      xData: volunteers,
-      yData: logFieldsData.data,
-    });
-    */
-    console.log(volunteers);
-
+    const logs = filterLogs(getRows(logsData.data, volunteers),categories,filters);
+ 
     const data = {
       groupByX: "Name",
       groupByY: "LogField",
-      rows: getRows(logs, volunteers),
+      rows: logs,
     };
 
     const dataProjects = {
       groupByX: "Name",
       groupByY: "ProjectField",
-      rows: getProjectRows(logs),
+      rows: getProjectRows(logsData.data),
     };
 
     setLogFields(logFieldsData);

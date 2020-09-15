@@ -44,6 +44,7 @@
     "fast-csv": "^2.5.0",
     "file-saver": "^2.0.2",
     "formik": "^1.5.7",
+    "fuse.js": "^6.4.1",
     "hsts": "^2.2.0",
     "http-proxy-middleware": "^0.19.1",
     "keyboardjs": "^2.5.1",
