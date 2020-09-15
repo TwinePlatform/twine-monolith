@@ -48,13 +48,7 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
 
   // set and clear errors on response
   
-  let uploadSection = <div>
-    <Paragraph>{filename}</Paragraph>
-    <button onClick={select}>Select</button>
-    <input id="file-input" type="file" name="name" style={{display: 'none'}}
-      onChange={e=>handleUpload(e)}
-    />
-  </div>
+  let uploadSection = null;
   
   if(uploadState == "selected")
   uploadSection = 
