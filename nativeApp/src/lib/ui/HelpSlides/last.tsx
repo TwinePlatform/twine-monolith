@@ -37,7 +37,7 @@ const TextRight = styled.Text`
 
 const EmptySpace = styled.View`
 	width: 100%;
-	height: 50px;
+	height: 0px;
 `;
 
 const ContainerImage = styled.View`
