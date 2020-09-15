@@ -5,6 +5,7 @@ import {
   logsToAggregatedDataNoX,
   IdAndName,
 } from '../dataManipulation/logsToAggregatedDataNoX';
+import Fuse from 'fuse.js';
 import {logsToAggregatedData} from '../dataManipulation/logsToAggregatedData';
 import { tableType } from '../dataManipulation/tableType';
 import { VolunteerLogs } from '../../../../../api/src/models';
@@ -24,34 +25,49 @@ interface AggregatedData {
   rows: any;
 }
 
-const filterLogs = (logs: any[], categories: any[], filters: any, volunteers: IdAndName[]) => {
-  if(categories.length < 1 && filters.length < 1)
+const filterLogs = (logs: any[], categories: any[], filters: any[], volunteers: IdAndName[]) => {
+  if(categories.length < 1 || filters.length < 1)
     return logs;
 
   let filteredLogs: any = [];
   let alreadyAddedLogs: any = [];
 
-  logs.map((log,index)=>{
+  const options = {
+    // isCaseSensitive: false,
+    // includeScore: false,
+    // shouldSort: true,
+    // includeMatches: false,
+    // findAllMatches: false,
+    // minMatchCharLength: 1,
+    // location: 0,
+    // threshold: 0.6,
+    // distance: 100,
+    // useExtendedSearch: false,
+    // ignoreLocation: false,
+    // ignoreFieldNorm: false,
+    keys: categories
+  };
+  
+  const fuse = new Fuse(logs, options);
+  
+  filters.map((filter,index)=>{
+    const searchResults = fuse.search(filter);
 
-    //get volunteer name
-    let volunteerName; 
-    volunteers.map((x) => {
-      if(x.id === log.userId)
-        volunteerName = x.name;
-    })
-
-    //if all of the filter terms appear in any of the categories, display the log
-    
-    if(categories.indexOf(log.activity) >= 0 || categories.indexOf(log.project) >= 0 || categories.indexOf(volunteerName) >= 0){
-      filteredLogs.push(log);
-      alreadyAddedLogs.push(index);
+    if(index == 0){
+      searchResults.map(result=>{
+        filteredLogs.push(result.item);
+        alreadyAddedLogs.push(result.refIndex);
+      })
     }
-
-    if(alreadyAddedLogs.indexOf(index) < 0 && (filters.indexOf(log.activity) >= 0 || filters.indexOf(log.project) >= 0 || filters.indexOf(volunteerName) >= 0) ){
-      filteredLogs.push(log);
+    else{
+      filteredLogs = [];
+      searchResults.map(result=>{
+        if(alreadyAddedLogs.indexOf(result.refIndex) >= 0)
+          filteredLogs.push(result.item);
+      })
     }
   })
-
+  
   return filteredLogs;
 };
 
