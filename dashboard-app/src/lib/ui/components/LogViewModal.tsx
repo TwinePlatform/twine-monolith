@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
-import { H2 } from './Headings';
+// import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {LogNote} from '../../api'
 import { DurationUnitEnum } from '../../../types';
@@ -24,10 +24,10 @@ type Props = {
  */
 
 
-const Heading2 = styled(H2)`
-  marginBottom: 20;
-  color: ${ColoursEnum.white};
-`;
+// const Heading2 = styled(H2)`
+//   marginBottom: 20;
+//   color: ${ColoursEnum.white};
+// `;
 
 const timeMinusHours = (time: string, hours: number) => {
     let newHour = parseInt(time.slice(0,2)) - hours;
@@ -92,7 +92,7 @@ const LogViewModal:FC<Props> = (props) => {
                         borderRadius: "8px 8px 0px 0px",
                     }}
                 >
-                <Heading2>TWINE</Heading2>
+                <h2>TWINE</h2>
                 </div>
                 <div
                     style={{
