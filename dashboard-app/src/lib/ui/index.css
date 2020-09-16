@@ -184,6 +184,8 @@ q:after {
 
 .Section_Dividers {
   width: 195px;
+  height: 1px;
+  border-color: #00000029;
 }
 
 
