@@ -225,6 +225,12 @@ q:after {
   bottom: 7px;
 }
 
+.ButtonText
+{
+  position: relative;
+  top: -5px;  
+}
+
 .ViewLog {
   height: 27px;
   width: 100px;
