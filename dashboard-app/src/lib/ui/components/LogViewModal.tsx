@@ -86,13 +86,8 @@ const LogViewModal:FC<Props> = (props) => {
                 }}
                 ref={wrapperRef}
             >
-                <div
-                    style={{
-                        backgroundColor: ColoursEnum.purple,
-                        borderRadius: "8px 8px 0px 0px",
-                    }}
-                >
-                <h2>TWINE</h2>
+                <div className = "Modal_Header">
+                <h6 id = "Modal_Header-Text">TWINE</h6>
                 </div>
                 <div
                     style={{

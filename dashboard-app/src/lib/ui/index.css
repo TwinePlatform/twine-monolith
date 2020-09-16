@@ -134,6 +134,21 @@ q:after {
   content: none;
 }
 
+.Modal_Header
+{
+  height: 27px;
+  border-radius: 8px 8px 0px 0px;
+  background-color: #8000ffcc;
+}
+
+.Modal_Header-Text
+{
+  color: white;
+  position: relative;
+  top: 8px;
+  left: 14px;
+}
+
 .ProjectDetails {
   position: relative;
   display: inline-block;
@@ -142,6 +157,8 @@ q:after {
   top: -62px;
   font-size: 12px;
 }
+
+
 
 .DateTime {
   right: -86px;
