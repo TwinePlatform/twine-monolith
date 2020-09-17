@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import { Button as B, Icon } from 'native-base';
 import { AntDesign } from '@expo/vector-icons';
 import { ColoursEnum } from '../colours';
+import { FontsEnum } from "./../typography";
 
 
 /*
@@ -17,14 +18,15 @@ type Props = {
  * Styles
  */
 const Submit = styled(B)`
-  width: 100;
+  width: 80;
   backgroundColor: ${ColoursEnum.darkGrey};;
   alignItems: center;
   justifyContent: center;
-  marginTop: 20;
   fontSize:15;
-  height:26;
+  height:29;
   width: 145;
+  borderRadius: 10;
+  box-shadow: 2px 2px 2px ${ColoursEnum.grey};
 `;
 
 const VolButton = styled(B)`
@@ -36,10 +38,11 @@ const VolButton = styled(B)`
 `;
 
 const SubmitText = styled.Text`
-  color: ${ColoursEnum.white};
-  fontSize: 15;
-    marginLeft: 5;
-    marginRight: 15;
+    color: ${ColoursEnum.white};
+    fontSize: 15;
+    font-family: ${FontsEnum.medium};
+    marginTop: 1;
+    marginBottom: 1;
 `;
 
 const CloseIcon = styled(Icon)`

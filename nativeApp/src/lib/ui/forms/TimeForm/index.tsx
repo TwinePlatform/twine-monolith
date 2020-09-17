@@ -30,6 +30,8 @@ import { BadgeObj } from './../../../../screens/volunteer_views/VolunteerHome/Ba
 import * as yup from 'yup';
 import { Formik } from 'formik';
 
+import { AddVolunteerButton, VolunteerButton } from '../AddVolunteerButton';
+
 /*
  * Types
  */
@@ -72,9 +74,22 @@ const TimeContainer = styled.View`
   marginTop: 15;
 `;
 
+const TimeContainerItem = styled.View`
+  alignItems: center;
+`;
+
 const NoteContainer = styled.View`
   justifyContent: space-between;
   flexDirection: row;
+  marginTop: 30;
+`;
+
+const AddVolContainer = styled.View`
+  width: 100%;
+  flexWrap: wrap;
+  justifyContent: flex-start;
+  flexDirection: row;
+  marginTop: 10;
 `;
 
 // const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
@@ -106,6 +121,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [note, setNote] = useState('');
   const [userId, setUserID] = useState<number>();
   const [badge, setBadge] = useState(Object());
+  const [addVolArr, setAddVolArr] = useState([]);
 
 
   if (forUser == 'admin') {
@@ -252,6 +268,15 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
     }
   };
 
+  const addVolunteer = (values) => {
+    setAddVolArr(addVolArr => [...addVolArr, values]);
+  }
+
+  const deleteVolunteer = (volunteerName) => {
+    const removed = addVolArr.filter(volunteer => volunteer.name != volunteerName);
+    setAddVolArr(removed);
+  }
+
 
   const onContinue = () => {
     dispatch(createLogReset());
@@ -275,9 +300,15 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
     <Formik
       initialValues={{ volunteer: '', project: selectedProject, activity: selectedActivity, note: '' }}
-      // validationSchema={validationSchema}
+      validationSchema={validationSchema}
       onSubmit={(values, date) => {
-        onSubmit(values.volunteer, values.project, values.activity, startTime, endTime, values.note);
+        if (addVolArr == []) {
+          onSubmit(values.volunteer, values.project, values.activity, startTime, endTime, values.note);
+        } else if (addVolArr != []) {
+          Promise.all(addVolArr.map(volunteer => {
+            onSubmit(volunteer, values.project, values.activity, startTime, endTime, values.note);
+          }));
+        }
       }}>
 
       {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
@@ -312,6 +343,14 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
               value={values.volunteer}
             />
           }
+
+          <AddVolContainer>
+            {addVolArr !== [] && addVolArr.map(volunteer => {
+              return (
+                <VolunteerButton text={volunteer} onPress={() => deleteVolunteer(volunteer)} />
+              )
+            })}
+          </AddVolContainer>
 
           {forUser === 'volunteer' && <Label>What project are you volunteering on?</Label>}
 
@@ -357,12 +396,18 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           />
 
           <NoteContainer>
-            <Label>{getTimeLabel(forUser, values.volunteer)}</Label>
+            <AddVolunteerButton text="Add Another" onPress={() => addVolunteer(values.volunteer)} />
             <NoteButton label={"Add note"} onPress={toggleNoteInvisibility} />
           </NoteContainer>
+
           <TimeContainer>
-            <TimeDiff align="center" timeValues={[startTime.getTime(), endTime.getTime()]} />
+            <Label>{getTimeLabel(forUser, values.volunteer)}</Label>
+            <TimeContainerItem>
+              <TimeDiff align="center" timeValues={[startTime.getTime(), endTime.getTime()]} />
+            </TimeContainerItem>
           </TimeContainer>
+
+          {origin != "addTime" && origin != "editTime" && <SubmitButton text="ADD TIME" onPress={handleSubmit} />}
           {origin === "addTime" && <SubmitButton text="ADD TIME" onPress={handleSubmit} />}
           {origin === "editTime" && <SubmitButton text="EDIT TIME" onPress={handleSubmit} />}
         </Form>

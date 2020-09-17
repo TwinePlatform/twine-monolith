@@ -144,12 +144,9 @@ const UserForm: FC<Props> = ({
 
   const addVolunteer = (values) => {
     setAddVolArr(addVolArr => [...addVolArr, values]);
-    setTimeout(() => { console.log(addVolArr); }, 2000);
   }
 
   const deleteVolunteer = (volunteerName) => {
-    console.log(volunteerName);
-    //remove from the addVolArr
     const removed = addVolArr.filter(volunteer => volunteer.name != volunteerName);
     setAddVolArr(removed);
   }
