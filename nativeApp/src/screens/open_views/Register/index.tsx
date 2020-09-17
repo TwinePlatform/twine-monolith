@@ -136,7 +136,6 @@ const Register: FC<Props> = (props) => {
       .required('Please enter your phone number. If you don’t have one, an administrator can help you register.'),
     AdminCode: yup
       .string()
-      .required()
   });
 
   const onSubmit = () => {
@@ -357,9 +356,6 @@ const Register: FC<Props> = (props) => {
               value={values.AdminCode}
               placeholder='Admin Access Code (Admin Required)'
             />
-            {errors.AdminCode &&
-              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.AdminCode}</TextInput>
-            }
             <Container>
               <SubmitButton text="COMPLETE" onPress={handleSubmit} />
             </Container>

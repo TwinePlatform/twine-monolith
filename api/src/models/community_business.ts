@@ -111,7 +111,7 @@ const preProcessCb = (qb: Knex | Knex.QueryBuilder) => compose(
  * Implementation of the CommunityBusinessCollection type
  */
 export const CommunityBusinesses: CommunityBusinessCollection = {
-  create (a) {
+  create(a) {
     return {
       id: a.id,
       name: a.name,
@@ -132,7 +132,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     };
   },
 
-  toColumnNames (a) {
+  toColumnNames(a) {
     return filter((a) => typeof a !== 'undefined', {
       'community_business.organisation_id': a.id,
       'organisation.organisation_name': a.name,
@@ -152,7 +152,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     });
   },
 
-  async get (client, q = {}) {
+  async get(client, q = {}) {
     const query = evolve({
       where: pipe(CommunityBusinesses.toColumnNames, transformForeignKeysToSubQueries(client)),
       whereNot: CommunityBusinesses.toColumnNames,
@@ -185,12 +185,12 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     );
   },
 
-  async getOne (client, query) {
+  async getOne(client, query) {
     const [res] = await CommunityBusinesses.get(client, { ...query, limit: 1 });
     return res || null;
   },
 
-  async getTemporary (client) {
+  async getTemporary(client) {
     return client('organisation')
       .select({
         id: 'organisation.organisation_id',
@@ -202,12 +202,12 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       .where({ is_temp: true });
   },
 
-  async exists (client, query) {
+  async exists(client, query) {
     const res = await CommunityBusinesses.getOne(client, query);
     return res !== null;
   },
 
-  async add (client, cb) {
+  async add(client, cb) {
     const preProcessCbChangeset = compose(
       Objects.mapKeys((s) => s.replace('community_business.', '')),
       transformForeignKeysToSubQueries(client),
@@ -243,7 +243,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return CommunityBusinesses.getOne(client, { where: { id } });
   },
 
-  async addTemporary (client, name) {
+  async addTemporary(client, name) {
     return CommunityBusinesses.add(client, {
       name,
       region: RegionEnum.TEMPORARY_DATA,
@@ -252,7 +252,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     });
   },
 
-  async update (client, cb, changes) {
+  async update(client, cb, changes) {
     const orgChangeset = preProcessOrgChangeset(changes);
 
     const [{ organisation_id: id }] = await client.transaction(async (trx) => {
@@ -286,13 +286,13 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return CommunityBusinesses.getOne(client, { where: { id } });
   },
 
-  async destroy (client, cb) {
+  async destroy(client, cb) {
     return client('community_business')
       .update({ deleted_at: new Date() })
       .where(preProcessCb(client)(cb));
   },
 
-  async addFeedback (client, cb, score) {
+  async addFeedback(client, cb, score) {
     const [res] = await client('visit_feedback')
       .insert({ score, organisation_id: cb.id })
       .returning([
@@ -307,7 +307,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return res;
   },
 
-  async getFeedback (client, cb, bw?) {
+  async getFeedback(client, cb, bw?) {
     const baseQuery = applyQueryModifiers(
       client('visit_feedback')
         .select({
@@ -329,7 +329,21 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return query;
   },
 
-  async getVisitActivities (client, cb, day?) {
+  async addVolunteerActivity(client, activity) {
+    const res = await client('volunteer_activity')
+      .insert({ volunteer_activity_name: activity });
+
+    return res;
+  },
+
+  async addVolunteerProject(client, project, orgId) {
+    const res = await client('volunteer_project')
+      .insert({ volunteer_project_name: project, organisation_id: orgId });
+
+    return res;
+  },
+
+  async getVisitActivities(client, cb, day?) {
     const baseQuery = client('visit_activity')
       .leftOuterJoin(
         'visit_activity_category',
@@ -358,7 +372,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return query;
   },
 
-  async getVisitActivityById (client, cb, id) {
+  async getVisitActivityById(client, cb, id) {
     const [visitActivity] = await client('visit_activity')
       .leftOuterJoin(
         'visit_activity_category',
@@ -387,7 +401,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return visitActivity || null;
   },
 
-  async addVisitActivity (client, visitActivity, cb) {
+  async addVisitActivity(client, visitActivity, cb) {
     const [res] = await client('visit_activity')
       .insert({
         visit_activity_name: visitActivity.name,
@@ -399,6 +413,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       .returning([
         'visit_activity_id AS id',
         'visit_activity_name AS name',
+        'visit_activity_category_id AS category_id',
         'monday',
         'tuesday',
         'wednesday',
@@ -409,10 +424,15 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         'created_at AS createdAt',
         'modified_at as modifiedAt',
       ]);
-    return res;
+
+    const [{ category }]: { category: string }[] = await client('visit_activity_category')
+      .select('visit_activity_category_name AS category')
+      .where({ visit_activity_category_id: res.category_id })
+
+    return { ...omit(['category_id'], res) as Omit<VisitActivity, 'category'>, category };
   },
 
-  async updateVisitActivity (client, visitActivity) {
+  async updateVisitActivity(client, visitActivity) {
     const transformToColumns = compose(
       evolve({
         visit_activity_category_id: (n) =>
@@ -430,6 +450,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       .returning([
         'visit_activity_id AS id',
         'visit_activity_name AS name',
+        'visit_activity_category_id AS cat_id',
         'monday',
         'tuesday',
         'wednesday',
@@ -441,10 +462,20 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         'modified_at AS modifiedAt',
       ]);
 
-    return res ? { ...res, category: visitActivity.category } : null;
+    if (!res) {
+      return null;
+    }
+
+    const [{ category }]: { category: string }[] = await client('visit_activity_category')
+      .select('visit_activity_category_name AS category')
+      .where({ visit_activity_category_id: res.cat_id });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { cat_id, ...activity } = res;
+    return { ...activity, category };
   },
 
-  async deleteVisitActivity (client, id) {
+  async deleteVisitActivity(client, id) {
     const [res] = await client('visit_activity')
       .where({ visit_activity_id: id, deleted_at: null })
       .update({ deleted_at: new Date() })
@@ -466,7 +497,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return res || null;
   },
 
-  async addVisitLog (client, visitActivity, user, signInType) {
+  async addVisitLog(client, visitActivity, user, signInType) {
     const res = await client.transaction(async (trx) => {
       const [log] = await trx('visit_log')
         .insert({
@@ -495,7 +526,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   },
 
-  async getVisitLogsWithUsers (client, cb, q) {
+  async getVisitLogsWithUsers(client, cb, q) {
     const modifyColumnNames = evolve({
       where: Objects.renameKeys({
         visitActivity: 'visit_activity.visit_activity_name',
@@ -503,7 +534,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       }),
       whereBetween: pipe(
         evolve({ birthYear: AgeList.toBirthYear }),
-        Objects.renameKeys({ birthYear: 'user_account.birth_year' })
+        Objects.renameKeys({ birthYear: 'user_account.birth_year', createdAt: 'visit_log.created_at' })
       ),
     });
     const checkSpecificCb = assocPath(['where', 'visit_activity.organisation_id'], cb.id);
@@ -533,10 +564,10 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         'visit_activity.visit_activity_category_id')
       .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
       .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id'),
-    query);
+      query);
   },
 
-  async getVisitLogAggregates (client, cb, aggs, query) {
+  async getVisitLogAggregates(client, cb, aggs, query) {
     const unsupportedAggregates = difference(aggs, ['age', 'gender', 'visitActivity', 'lastWeek']);
     if (unsupportedAggregates.length > 0) {
       throw new Error(`${unsupportedAggregates.join(', ')} are not supported aggregate fields`);
@@ -583,13 +614,13 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
         .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
         .groupBy('gender.gender_name')
-      , queryMatchOnColumnNames)
+        , queryMatchOnColumnNames)
         .then((rows) => {
           const gender: Dictionary<number> = rows
-            .reduce((acc: Dictionary<number>, row: {gender: string; count: number}) => {
+            .reduce((acc: Dictionary<number>, row: { gender: string; count: number }) => {
               acc[row.gender] = Number(row.count);
               return acc;
-            } , {});
+            }, {});
           return { gender };
         }),
 
@@ -607,10 +638,10 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         .groupBy('visit_activity.visit_activity_name'), queryMatchOnColumnNames)
         .then((rows) => {
           const visitActivity = rows
-            .reduce((acc: Dictionary<number>, row: {activity: string; count: number}) => {
+            .reduce((acc: Dictionary<number>, row: { activity: string; count: number }) => {
               acc[row.activity] = Number(row.count);
               return acc;
-            } , {});
+            }, {});
           return { visitActivity };
         }),
 
@@ -627,7 +658,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
             'FROM visit_log ' +
             'INNER JOIN user_account ON user_account.user_account_id = visit_log.user_account_id')
       )
-      // TODO: generate case statements based on supplied query
+        // TODO: generate case statements based on supplied query
         .innerJoin(
           'visit_activity',
           'visit_activity.visit_activity_id',
@@ -639,10 +670,10 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         .from('age_group_table'), ageQuery)
         .then((rows) => {
           const age = rows
-            .reduce((acc: Dictionary<number>, row: {ageGroup: string; count: number}) => {
+            .reduce((acc: Dictionary<number>, row: { ageGroup: string; count: number }) => {
               acc[row.ageGroup] = Number(row.count);
               return acc;
-            } , {});
+            }, {});
           return { age };
         }),
       lastWeek: applyQueryModifiers(client('visit_log')

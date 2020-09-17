@@ -58,6 +58,8 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       yData: months,
     });
 
+    console.log(data)
+
     setAggregatedData(data);
   }, [logsData, activitiesData, error, loading, months]);
 

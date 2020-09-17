@@ -16,37 +16,32 @@ const LabelledSelectContainer = styled.div`
   width: 100%;
 `;
 
-const LabelledSelect = (props) => {
-  const { id, label, options, error, ...rest } = props;
+const SelectArrow = styled.div`
+  float: right;
+  margin-top: -1em;
+  width: 0;
+  pointer-events: none;
+  border-width: 8px 5px 0 5px;
+  border-style: solid;
+  border-color: #7b7b7b transparent transparent transparent;
+`;
 
-  const SelectArrow = styled.div`
-    float: right;
-    margin-top: -1em;
-    width: 0;
-    pointer-events: none;
-    border-width: 8px 5px 0 5px;
-    border-style: solid;
-    border-color: #7b7b7b transparent transparent transparent;
-  `;
-
-
-  return (
-    <LabelledSelectContainer>
-      <Label htmlFor={id}>{label}</Label>
-      <ErrorText show={error}>{error}</ErrorText>
-      <SelectWrapper>
-        <Select id={id} {...rest}>
-          {options.map(opt => (
-            <Option key={opt.key} value={opt.value}>
-              {opt.content || opt.value}
-            </Option>
-          ))}
-        </Select>
-        <SelectArrow />
-      </SelectWrapper>
-    </LabelledSelectContainer>
-  );
-};
+const LabelledSelect = ({ id, label, options, error, ...rest }) => (
+  <LabelledSelectContainer>
+    <Label htmlFor={id}>{label}</Label>
+    <ErrorText show={error}>{error}</ErrorText>
+    <SelectWrapper>
+      <Select id={id} {...rest}>
+        {options.map(opt => (
+          <Option key={opt.key} value={opt.value}>
+            {opt.content || opt.value}
+          </Option>
+        ))}
+      </Select>
+      <SelectArrow />
+    </SelectWrapper>
+  </LabelledSelectContainer>
+);
 
 LabelledSelect.propTypes = {
   id: PropTypes.string.isRequired,

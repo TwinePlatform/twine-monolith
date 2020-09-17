@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
 import Modal from 'react-native-modal';
 import { Card as C, Textarea as T, Form } from 'native-base';
-import AddNote from '../AddNote';
+import { AddNote, Close } from '../AddNote';
 
 import { Heading2 as H2, FontsEnum } from '../typography';
 import { ColoursEnum } from '../colours';
@@ -49,6 +49,7 @@ const ButtonContainer = styled.View`
   justifyContent: flex-end;
   flexDirection: row;
   marginTop: 20;
+  marginBottom:10;
 `;
 
 /*
@@ -71,7 +72,8 @@ const NoteModal: FC<Props> = ({
           <Textarea rowSpan={5} value={note} onChangeText={text => setNote(text)} />
         </Form>
         <ButtonContainer>
-          <AddNote onPress={() => { addNote(note); onClose(); }} />
+          <Close onPress={() => { onClose(); }} />
+          <AddNote text='Add note' onPress={() => { addNote(note); onClose(); }} />
         </ButtonContainer>
       </Card>
     </Modal>

@@ -19,7 +19,7 @@ interface UseAggregatedDataParams {
 
 export default ({ from, to, updateOn = [], independentVar }: UseAggregatedDataParams) => {
   const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
-  const [yData, setYData] = useState();
+  const [yData, setYData] = useState<IdAndName[]>();
 
   const {
     loading,

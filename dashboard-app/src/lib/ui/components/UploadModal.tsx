@@ -1,8 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef } from 'react';
+import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
-import {File} from '../../api';
+import {Files} from '../../api';
 
 /*
  * Types
@@ -10,7 +11,7 @@ import {File} from '../../api';
 type Props = {
   visible: boolean;
   closeFunction: () => void;
-  filetype: string;
+  destination: string;
 }
 
 /*
@@ -25,9 +26,12 @@ const Heading2 = styled(H2)`
 
 
 const UploadModal:FC<Props> = (props) => {
+    const {visible, closeFunction, destination} = props;
     const [filename, setFilename] = useState("Upload File Here")
+    const [uploadedFile, setUploadedFile] = useState(new File([""], "filename"));
 
-    const {visible, closeFunction, filetype} = props;
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef, closeFunction);
 
     const select = () => {
         if(document.getElementById('file-input'))
@@ -35,13 +39,15 @@ const UploadModal:FC<Props> = (props) => {
     }
 
     const handleUpload = (e: any) => {
-        let uploadedFile = e.target.files[0];
+        setUploadedFile(e.target.files[0]);
+        setFilename(e.target.files[0].name);
+        
+    }
 
-        if(uploadedFile){
+    const confirmUpload = () => {
+        if(filename != "Upload File Here"){
             console.log(uploadedFile);
-            setFilename(uploadedFile.name);
-
-            File.upload(uploadedFile,filetype);
+            Files.upload(uploadedFile);
             closeFunction();
         }
     }
@@ -62,6 +68,7 @@ const UploadModal:FC<Props> = (props) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}
+                ref={wrapperRef}
             >
                 <div
                     style={{
@@ -92,7 +99,7 @@ const UploadModal:FC<Props> = (props) => {
                 </div>
                 <img
                     src={require('../../../assets/uploadbutton.png')}
-                    onClick={()=>{select()}}
+                    onClick={confirmUpload}
                 />
             </div>
         );

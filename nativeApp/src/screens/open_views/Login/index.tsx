@@ -63,8 +63,8 @@ const Form = styled(F)`
  * Component
  */
 const Login: FC<Props> = (props) => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   // const [isLoading, toggleLoading] = useToggle();
   const [serverError, setError] = useState("");
 
@@ -74,7 +74,7 @@ const Login: FC<Props> = (props) => {
 
       //       const data = await API.Authentication.login({ email, password });
       //       await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.data.token);
-
+      
       const { data } = await API.Authentication.login({ email, password });
       await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.token);
       await AsyncStorage.setItem(StorageValuesEnum.USER_ID, data.userId.toString());
@@ -87,6 +87,7 @@ const Login: FC<Props> = (props) => {
 
   useEffect(() => {
     AsyncStorage.getItem('HelpSlides').then(val => {
+      console.log(val);
       if (!val) {
         props.navigation.navigate('HelpSlideStack');
       }
@@ -109,7 +110,7 @@ const Login: FC<Props> = (props) => {
 
       <Container>
         <Form>
-          <Input name="Email" autoCompleteType="email" value={email} onChangeText={setEmail}>
+          <Input name="Email" autoCompleteType="email" value={email} onChangeText={text=>setEmail(text)}>
             <MaterialCommunityIcons name="email-outline" outline size={27} color={ColoursEnum.grey} />
           </Input>
           <Input
@@ -117,7 +118,7 @@ const Login: FC<Props> = (props) => {
             autoCompleteType="password"
             secureTextEntry
             value={password}
-            onChangeText={setPassword}
+            onChangeText={text=>setPassword(text)}
           >
             <MaterialCommunityIcons name="lock-outline" size={27} color={ColoursEnum.grey} />
           </Input>

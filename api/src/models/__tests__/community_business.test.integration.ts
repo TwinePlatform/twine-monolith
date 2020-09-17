@@ -55,14 +55,16 @@ describe('Community Business Model', () => {
           name: 'Aperture Science',
           region: 'London',
           sector: 'Housing',
-          turnoverBand: '£100k-£250k'}),
+          turnoverBand: '£100k-£250k'
+        }),
         expect.objectContaining({
           _360GivingId: 'GB-COH-9302',
           id: 2,
           name: 'Black Mesa Research',
           region: 'London',
           sector: 'Housing',
-          turnoverBand: '£100k-£250k'}),
+          turnoverBand: '£100k-£250k'
+        }),
       ]));
     });
 
@@ -184,7 +186,7 @@ describe('Community Business Model', () => {
     test('update :: invalid foreign value', async () => {
       expect.assertions(1);
 
-      const changeset = <any> { region: 'Narnia' };
+      const changeset = { region: 'Narnia' } as any;
       const org = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
 
       try {
@@ -341,50 +343,103 @@ describe('Community Business Model', () => {
     });
   });
 
-  describe('getVisitActivities', () => {
-    test(':: get all activities for a cb', async () => {
-      const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Aperture Science' } });
-      const activities = await CommunityBusinesses.getVisitActivities(trx, cb);
+  describe('Visit Activities', () => {
+    describe('getVisitActivities', () => {
+      test(':: get all activities for a cb', async () => {
+        const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Aperture Science' } });
+        const activities = await CommunityBusinesses.getVisitActivities(trx, cb);
 
-      expect(activities).toHaveLength(4);
-      expect(activities).toEqual(expect.arrayContaining([
-        expect.objectContaining({
-          name: 'Absailing',
-          category: 'Sports',
-        }),
-      ]));
+        expect(activities).toHaveLength(4);
+        expect(activities).toEqual(expect.arrayContaining([
+          expect.objectContaining({
+            name: 'Absailing',
+            category: 'Sports',
+          }),
+        ]));
+      });
+
+      test(':: get all activities with soft deleted category', async () => {
+        await trx('visit_activity_category')
+          .update({ deleted_at: new Date() })
+          .where({ visit_activity_category_name: 'Sports' });
+        const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Aperture Science' } });
+        const activities = await CommunityBusinesses.getVisitActivities(trx, cb);
+
+        expect(activities).toHaveLength(4);
+        expect(activities).toEqual(expect.arrayContaining([
+          expect.objectContaining({
+            name: 'Absailing',
+            category: 'Sports',
+          }),
+        ]));
+      });
+
+      test(':: get all activities with hard deleted category', async () => {
+        await trx('visit_activity_category')
+          .del()
+          .where({ visit_activity_category_name: 'Sports' });
+        const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Aperture Science' } });
+        const activities = await CommunityBusinesses.getVisitActivities(trx, cb);
+
+        expect(activities).toHaveLength(4);
+        expect(activities).toEqual(expect.arrayContaining([
+          expect.objectContaining({
+            name: 'Absailing',
+            category: null,
+          }),
+        ]));
+      });
     });
 
-    test(':: get all activities with soft deleted category', async () => {
-      await trx('visit_activity_category')
-        .update({ deleted_at: new Date() })
-        .where({ visit_activity_category_name: 'Sports' });
-      const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Aperture Science' } });
-      const activities = await CommunityBusinesses.getVisitActivities(trx, cb);
-
-      expect(activities).toHaveLength(4);
-      expect(activities).toEqual(expect.arrayContaining([
-        expect.objectContaining({
-          name: 'Absailing',
+    describe('addVisitActivity', () => {
+      test('add activity with valid category', async () => {
+        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+        const activity = await CommunityBusinesses.addVisitActivity(
+          trx,
+          { name: 'newActivity', category: 'Sports' },
+          cb
+        );
+        expect(activity).toEqual(expect.objectContaining({
+          name: 'newActivity',
           category: 'Sports',
-        }),
-      ]));
+        }));
+      });
+
+      test('cannot add activity with invalid category', async () => {
+        expect.assertions(1);
+
+        const cb = await CommunityBusinesses.getOne(trx, { where: { id: 1 } });
+
+        try {
+          await CommunityBusinesses.addVisitActivity(
+            trx,
+            { name: 'newActivity', category: 'nope' },
+            cb
+          );
+        } catch (error) {
+          expect(error).toBeTruthy();
+        }
+      });
     });
 
-    test(':: get all activities with hard deleted category', async () => {
-      await trx('visit_activity_category')
-        .del()
-        .where({ visit_activity_category_name: 'Sports' });
-      const cb = await CommunityBusinesses.getOne(trx, { where: { name: 'Aperture Science' } });
-      const activities = await CommunityBusinesses.getVisitActivities(trx, cb);
+    describe('updateVisitActivity', () => {
+      test('update non-linked values', async () => {
+        const x = await CommunityBusinesses.updateVisitActivity(trx, { id: 1, monday: false, tuesday: true });
+        expect(x).toEqual(expect.objectContaining({
+          id: 1,
+          monday: false,
+          tuesday: true,
+          category: 'Sports',
+        }));
+      });
 
-      expect(activities).toHaveLength(4);
-      expect(activities).toEqual(expect.arrayContaining([
-        expect.objectContaining({
-          name: 'Absailing',
-          category: null,
-        }),
-      ]));
+      test('update linked value: category', async () => {
+        const x = await CommunityBusinesses.updateVisitActivity(trx, { id: 1, category: 'Food' });
+        expect(x).toEqual(expect.objectContaining({
+          id: 1,
+          category: 'Food',
+        }));
+      });
     });
   });
 
@@ -412,7 +467,8 @@ describe('Community Business Model', () => {
       expect(logs).toEqual({
         visitActivity: { 'Wear Pink': 4 },
         age: { '18-34': 3, null: 1 },
-        gender: { female: 4 } });
+        gender: { female: 4 }
+      });
     });
 
     test(':: lastWeek field returns total count', async () => {

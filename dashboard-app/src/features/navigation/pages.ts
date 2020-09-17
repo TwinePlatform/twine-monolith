@@ -6,6 +6,9 @@ import ByActivity from '../dashboard/ByActivity';
 import ByTime from '../dashboard/ByTime';
 import ByVolunteer from '../dashboard/ByVolunteer';
 import ByProject from '../dashboard/ByProject';
+import ByLog from '../dashboard/ByLog';
+import ByUser from '../dashboard/ByUser';
+import ByUploadData from '../dashboard/ByUploadData';
 import Login from '../auth/pages/Login';
 import ResetPassword from '../auth/pages/ResetPassword';
 import ForgotPassword from '../auth/pages/ForgotPassword';
@@ -36,6 +39,12 @@ export const PagesDict: PagesDictionary = {
     title: TitlesCopy.Activities.title,
     protected: true,
   },
+  Log:{
+    url: '/logs',
+    component: ByLog,
+    title: TitlesCopy.Logs.title,
+    protected: true,
+  },
   Time: {
     url: '/time',
     component: ByTime,
@@ -52,6 +61,18 @@ export const PagesDict: PagesDictionary = {
     url: '/projects',
     component: ByProject,
     title: TitlesCopy.Projects.title,
+    protected: true,
+  },
+  Users: {
+    url: '/users',
+    component: ByUser,
+    title: TitlesCopy.Users.title,
+    protected: true,
+  },
+  Upload: {
+    url: '/upload',
+    component: ByUploadData,
+    title: TitlesCopy.Upload.title,
     protected: true,
   },
   FAQs: {
@@ -85,9 +106,12 @@ export const PagesDict: PagesDictionary = {
 const NavBarOrder = [
   'Home',
   TitlesCopy.Time.title,
+  TitlesCopy.Logs.title,
   TitlesCopy.Activities.title,
   TitlesCopy.Volunteers.title,
   TitlesCopy.Projects.title,
+  TitlesCopy.Users.title,
+  TitlesCopy.Upload.title,
   'FAQs',
 ];
 

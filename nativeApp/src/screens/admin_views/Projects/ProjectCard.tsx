@@ -237,7 +237,7 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
         onPress={() => setChecked(currentBool => !currentBool)}
       />
       <CheckBox
-        title='Exclude volunteers who logged hours in the past week.'
+        title='Send reminder but exclude volunteers who have logged hours in the past 7 days'
         checked={checkedExclusion}
         onPress={() => setCheckedExclusion(currentBool => !currentBool)}
       />

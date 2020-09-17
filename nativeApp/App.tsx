@@ -27,6 +27,7 @@ export default class App extends Component<NavigationInjectedProp>{
       'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
       'roboto-medium': require('./assets/fonts/Roboto-Medium.ttf'),
       'roboto-bold': require('./assets/fonts/Roboto-Bold.ttf'),
+      'nunito-regular': require('./assets/fonts/Nunito-Regular.ttf'),
       /* eslint-enable */
     });
 

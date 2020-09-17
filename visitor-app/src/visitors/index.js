@@ -1,10 +1,10 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import Home from './pages/homeVisitor';
+import Home from './pages/HomeVisitor';
 import SignUp from './pages/SignUp';
-import Thanks from './pages/thanks';
-import ThanksFeedback from './pages/thank_you_feedback';
-import QrError from './pages/qrerror';
+import Thanks from './pages/Thanks';
+import ThanksFeedback from './pages/ThankYouFeedback';
+import QrError from './pages/QrError';
 import SignIn from './pages/SignIn';
 import ErrorPage from '../shared/pages/Error';
 import redirectAfterTimeout from '../shared/components/hoc/redirect_after_timeout';

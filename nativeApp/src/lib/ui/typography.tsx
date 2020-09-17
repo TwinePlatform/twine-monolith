@@ -23,6 +23,7 @@ export enum FontsEnum {
   regular = 'roboto-regular',
   medium = 'roboto-medium',
   bold = 'roboto-bold',
+  nunito = 'nunito-regular',
 }
 
 export const ErrorText = styled(T)`

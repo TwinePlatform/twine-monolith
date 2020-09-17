@@ -9,6 +9,8 @@ import Button from '../ButtonWithInlineLabel';
 import Dropdown from '../Dropdown';
 import { Forms } from '../enums';
 import SubmitButton from '../SubmitButton';
+import { AddVolunteerButton, VolunteerButton } from '../AddVolunteerButton';
+import { Button as B, Text } from 'native-base';
 import { User, GenderEnum } from '../../../../../../api/src/models';
 import { ErrorText } from '../../typography';
 
@@ -19,10 +21,11 @@ import { TextInput } from "react-native";
  * Types
  */
 type Props = {
-  action: 'create' | 'update';
+  action: 'create' | 'update' | 'add';
   onSubmit: (v: Partial<User>) => void;
   defaultValues?: Partial<User>;
   requestErrors: any;
+  from?: string;
 }
 
 type FormData = {
@@ -40,6 +43,27 @@ type FormData = {
  */
 const Form = styled(F)`
   width: ${Forms.formWidth}
+`;
+
+const AddButton = styled(B)`
+  width: 100;
+`;
+
+const ButtonText = styled.Text`
+
+`;
+
+const AddVolButtonContainer = styled.View`
+  width: 100%;
+  alignItems: flex-end;
+`;
+
+const AddVolContainer = styled.View`
+  width: 100%;
+  flexWrap: wrap;
+  justifyContent: flex-start;
+  flexDirection: row;
+  marginTop: 10;
 `;
 
 
@@ -68,7 +92,6 @@ const validationSchema = yup.object().shape({
     .string()
     .min(4, 'Post code must be at least 4 letters')
     .max(10, 'Post code cannot be longer than 10 letters'),
-  // .matches({ regex: /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i, message: 'Post code must be valid' })
 });
 
 // TODO: get from api
@@ -99,11 +122,12 @@ const mergeErrorMessages = (validationErrors, requestErrors) => {
 
   return errors;
 };
+
 /*
  * Component
  */
 const UserForm: FC<Props> = ({
-  action, onSubmit, defaultValues, requestErrors,
+  action, onSubmit, defaultValues, requestErrors, from
 }) => {
   // const {
   //   register, setValue, handleSubmit, errors: validationErrors, triggerValidation,
@@ -116,6 +140,16 @@ const UserForm: FC<Props> = ({
   //   setErrors(mergeErrorMessages(validationErrors, requestErrors));
   // }, [validationErrors, requestErrors]);
   const { name, email, phoneNumber, gender, birthYear, postCode } = defaultValues;
+  const [addVolArr, setAddVolArr] = useState([]);
+
+  const addVolunteer = (values) => {
+    setAddVolArr(addVolArr => [...addVolArr, values]);
+  }
+
+  const deleteVolunteer = (volunteerName) => {
+    const removed = addVolArr.filter(volunteer => volunteer.name != volunteerName);
+    setAddVolArr(removed);
+  }
 
   return (
 
@@ -126,11 +160,20 @@ const UserForm: FC<Props> = ({
         phoneNumber: phoneNumber,
         gender: gender,
         birthYear: birthYear,
-        postCode: postCode
+        postCode: postCode,
+        role: 'VOLUNTEER',
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        onSubmit(values);
+        if (addVolArr == []) {
+          onSubmit(values);
+        } else if (addVolArr != []) {
+          setAddVolArr(addVolArr => [...addVolArr, values]); //for animation
+          const lastState = [...addVolArr, values]
+          Promise.all(lastState.map(volunteer => {
+            onSubmit(volunteer);
+          }));
+        }
       }}>
 
       {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
@@ -204,6 +247,18 @@ const UserForm: FC<Props> = ({
           {errors.postCode &&
             <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.postCode}</TextInput>
           }
+
+          {from == 'admin' && <AddVolButtonContainer>
+            <AddVolunteerButton text="Add Another" onPress={() => addVolunteer(values)} />
+          </AddVolButtonContainer>}
+
+          <AddVolContainer>
+            {addVolArr !== [] && addVolArr.map(volunteer => {
+              return (
+                <VolunteerButton text={volunteer.name} onPress={() => deleteVolunteer(volunteer.name)} />
+              )
+            })}
+          </AddVolContainer>
 
           <SubmitButton text="SAVE" onPress={handleSubmit} />
 

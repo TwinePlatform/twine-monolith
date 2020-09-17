@@ -6,6 +6,7 @@ export { Organisations } from './organisation';
 export { CommunityBusinesses } from './community_business';
 export { VolunteerLogs, VolunteerLogPermissions } from './volunteer_log';
 export { ApiTokens } from './api_token';
+export { badges } from './badges';
 
 export {
   User,
