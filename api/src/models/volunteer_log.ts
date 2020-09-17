@@ -199,8 +199,6 @@ export const VolunteerLogs: VolunteerLogCollection = {
   },
 
   async update(client, log, changes) {
-    console.log('this are the changes');
-    console.log(changes);
     const preProcessChangeSet = compose(
       stripTablePrefix,
       transformForeignKeysToSubQueries(client, log.organisationId),

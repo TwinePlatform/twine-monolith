@@ -10,6 +10,7 @@ import { H1 } from '../../../lib/ui/components/Headings';
 import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../../lib/ui/design_system';
+import { PrimaryButton, SecondaryButton} from '../../../lib/ui/components/Buttons';
 import TimeTabs from './TimeTabs';
 import Errors from '../components/Errors';
 import useAggregateDataByTime from './useAggregateDataByTime';
@@ -18,7 +19,7 @@ import { LegendData } from '../components/StackedBarChart/types';
 import { useErrors } from '../../../lib/hooks/useErrors';
 import { TitlesCopy } from '../copy/titles';
 import { useOrderable } from '../hooks/useOrderable';
-import { DashboardContext } from '../../../App';
+import { DashboardContext } from '../context';
 
 
 /**

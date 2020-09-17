@@ -2,7 +2,8 @@ import moment from 'moment';
 import {
   timeStatsToProps,
   volunteerStatsToProps,
-  activityStatsToProps
+  activityStatsToProps,
+  projectStatsToProps,
 } from '../useDashboardStatistics';
 
 
@@ -112,7 +113,8 @@ describe('volunteerStatsToProps', () => {
         label: '10 hours each',
         data: ['foo', 'bar'],
         limit: 3,
-        truncationString: '...', },
+        truncationString: '...',
+      },
     });
   });
 
@@ -127,7 +129,8 @@ describe('volunteerStatsToProps', () => {
         label: '10 hours each',
         data: ['foo', 'bar', 'woo'],
         limit: 3,
-        truncationString: '...', },
+        truncationString: '...',
+      },
     });
   });
 
@@ -142,7 +145,8 @@ describe('volunteerStatsToProps', () => {
         label: '10 hours each',
         data: ['foo', 'bar', 'woo', 'war'],
         limit: 3,
-        truncationString: '...', },
+        truncationString: '...',
+      },
     });
   });
 });
@@ -188,7 +192,8 @@ describe('activityStatsToProps', () => {
       },
       right: {
         label: 'hours each',
-        data: 10 },
+        data: 10
+      },
     });
   });
 
@@ -203,7 +208,8 @@ describe('activityStatsToProps', () => {
       },
       right: {
         label: 'hours each',
-        data: 10 },
+        data: 10
+      },
     });
   });
 
@@ -218,7 +224,87 @@ describe('activityStatsToProps', () => {
       },
       right: {
         label: 'hours each',
-        data: 10 },
+        data: 10
+      },
+    });
+  });
+});
+
+describe('projectStatsToProps', () => {
+  test('no arguments', () => {
+    expect(projectStatsToProps()).toEqual({
+      topText: ['During ', moment().format('MMM YYYY')],
+      left: { label: 'No data available', data: [] },
+      right: { label: 'hours', data: 0 },
+    });
+  });
+
+  test('zero data points', () => {
+    expect(projectStatsToProps({ labels: [], value: 0 })).toEqual({
+      topText: ['During ', moment().format('MMM YYYY')],
+      left: { label: 'No data available', data: [], limit: 2, truncationString: '...' },
+      right: { label: 'hours', data: 0 },
+    });
+  });
+
+  test('one data point', () => {
+    expect(projectStatsToProps({ labels: ['foo'], value: 10 })).toEqual({
+      topText: ['During ', moment().format('MMM YYYY')],
+      left: {
+        label: 'Most popular project was',
+        data: ['foo'],
+        limit: 2,
+        truncationString: '...',
+      },
+      right: { label: 'hours', data: 10 },
+    });
+  });
+
+  test('two data points', () => {
+    expect(projectStatsToProps({ labels: ['foo', 'bar'], value: 10 })).toEqual({
+      topText: ['During ', moment().format('MMM YYYY')],
+      left: {
+        label: 'Most popular projects were',
+        data: ['foo', 'bar'],
+        limit: 2,
+        truncationString: '...',
+      },
+      right: {
+        label: 'hours each',
+        data: 10
+      },
+    });
+  });
+
+  test('three data points', () => {
+    expect(projectStatsToProps({ labels: ['foo', 'bar', 'woo'], value: 10 })).toEqual({
+      topText: ['During ', moment().format('MMM YYYY')],
+      left: {
+        label: 'Most popular projects were',
+        data: ['foo', 'bar', 'woo'],
+        limit: 2,
+        truncationString: '...',
+      },
+      right: {
+        label: 'hours each',
+        data: 10
+      },
+    });
+  });
+
+  test('four data points', () => {
+    expect(projectStatsToProps({ labels: ['foo', 'bar', 'woo', 'war'], value: 10 })).toEqual({
+      topText: ['During ', moment().format('MMM YYYY')],
+      left: {
+        label: 'Most popular projects were',
+        data: ['foo', 'bar', 'woo', 'war'],
+        limit: 2,
+        truncationString: '...',
+      },
+      right: {
+        label: 'hours each',
+        data: 10
+      },
     });
   });
 });
