@@ -15,6 +15,7 @@
     "make:redux-req": "ts-node ./bin/make_redux_req/index.ts"
   },
   "dependencies": {
+    "@react-native-community/art": "^1.2.0",
     "@react-native-community/datetimepicker": "2.4.0",
     "@types/expo": "^32.0.13",
     "@types/jest": "^24.0.18",
@@ -27,7 +28,7 @@
     "@types/redux-logger": "^3.0.7",
     "@types/styled-components": "^4.1.19",
     "axios": "^0.19.0",
-    "expo": "^38.0.0",
+    "expo": "^38.0.2",
     "formik": "^2.1.4",
     "fuse.js": "^6.0.0",
     "moment": "^2.24.0",
@@ -37,7 +38,8 @@
     "react": "16.11.0",
     "react-dom": "16.11.0",
     "react-hook-form": "^3.27.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
+    "react-native": "0.62.2",
+    "react-native-appearance": "^0.3.4",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-global-props": "^1.1.5",
