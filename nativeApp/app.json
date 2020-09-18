@@ -3,7 +3,7 @@
     "name": "TWINE Volunteer App",
     "slug": "nativeApp",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
+    "sdkVersion": "38.0.0",
     "platforms": [
       "ios",
       "android",
@@ -24,12 +24,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.powertochange.volunteerapp"
     },
     "android": {
       "package": "com.powertochange.volunteerapp",
       "versionCode": 1
     },
-    "description": "fixed adding volunteer bug "
+    "description": "Early published version with error trapping, volunteer stats, push notifications."
   }
 }

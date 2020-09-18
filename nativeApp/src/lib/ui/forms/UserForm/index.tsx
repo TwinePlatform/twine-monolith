@@ -144,12 +144,9 @@ const UserForm: FC<Props> = ({
 
   const addVolunteer = (values) => {
     setAddVolArr(addVolArr => [...addVolArr, values]);
-    setTimeout(() => { console.log(addVolArr); }, 2000);
   }
 
   const deleteVolunteer = (volunteerName) => {
-    console.log(volunteerName);
-    //remove from the addVolArr
     const removed = addVolArr.filter(volunteer => volunteer.name != volunteerName);
     setAddVolArr(removed);
   }
@@ -209,7 +206,7 @@ const UserForm: FC<Props> = ({
           {/* //TODO - need to send password reset email after creation */}
 
           <Input
-            label="phoneNumber"
+            label="Phone Number"
             placeholder={"phoneNumber"}
             onChangeText={handleChange('phoneNumber')}
             onBlur={handleBlur('phoneNumber')}
@@ -241,7 +238,7 @@ const UserForm: FC<Props> = ({
           }
 
           <Input
-            label="postCode"
+            label="Post Code"
             placeholder={"postCode"}
             onChangeText={handleChange('postCode')}
             onBlur={handleBlur('postCode')}

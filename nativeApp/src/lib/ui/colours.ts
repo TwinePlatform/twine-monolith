@@ -5,10 +5,12 @@ export enum ColoursEnum { //eslint-disable-line
   grey = '#D1D1D1',
   darkGrey = '#707070',
   orange = '#ff8400',
+  orangeRed = '#E36860',
   purple = '#8000FF',
   darkPurple = '#46008c',
   red = '#F44336',
   mustard = '#FFBF00',
   blue = '#007bff',
-  error = '#E36860'
+  error = '#E36860',
+  yellow = '#FFBF00CC'
 }

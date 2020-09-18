@@ -9,6 +9,7 @@ import LinkItem from "../../../lib/ui/forms/LinkItem";
 import LinkPlay from "../../../lib/ui/forms/LinkPlay";
 import Page from "../../../lib/ui/Page";
 import Toggle from "../../../lib/ui/forms/Toggle";
+import LogOutModal from "../../../lib/ui/modals/logout";
 import API from "../../../api";
 
 // import HelpSlidesModal from '../../../lib/ui/HelpSlides/content';
@@ -35,12 +36,20 @@ const fullpage = styled.View`
 
 const Settings: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
   const logOut = async () => {
+    logOutModalVisible();
+  };
+
+  const [logOutVisible, logOutModalVisible] = useToggle(false);
+
+  const onConfirm = () => {
     API.Authentication.logOut().catch(() => { });
     // await AsyncStorage.clear();
     navigation.navigate("AuthStack");
-  };
+  }
 
-  const [modalVisible, setModalVisible] = useToggle(false);
+  const onCancel = () => {
+    logOutModalVisible();
+  }
 
   return (
 
@@ -48,6 +57,12 @@ const Settings: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
       {/* <HelpSlidesModal 
       isVisible = {modalVisible}
       /> */}
+
+      <LogOutModal
+        isVisible={logOutVisible}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+      />
 
       <Form>
         <LinkItem
