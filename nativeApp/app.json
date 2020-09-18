@@ -24,7 +24,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.powertochange.volunteerapp"
     },
     "android": {
       "package": "com.powertochange.volunteerapp",

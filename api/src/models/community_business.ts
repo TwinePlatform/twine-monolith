@@ -336,11 +336,26 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return res;
   },
 
+  async activityExists(client, activity) {
+    const res = await client('volunteer_activity')
+      .where('volunteer_activity_name', activity);
+    return res.length >= 1;
+  },
+
   async addVolunteerProject(client, project, orgId) {
     const res = await client('volunteer_project')
       .insert({ volunteer_project_name: project, organisation_id: orgId });
 
     return res;
+  },
+
+  async projectExists(client, project, orgId) {
+    const res = await client('volunteer_project')
+      .where({
+        volunteer_project_name: project,
+        organisation_id: orgId
+      });
+    return res.length >= 1;
   },
 
   async getVisitActivities(client, cb, day?) {
