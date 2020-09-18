@@ -8,17 +8,19 @@ const NoteText = styled.Text`
   color: ${ColoursEnum.white};
   fontSize: 15;
   font-family: ${FontsEnum.medium};
+  marginTop: 1;
+  marginBottom: 1;
 `;
 
 const BlankNoteButton = styled(B)`
-  height: 20;
+  height: 29;
   width: 30%;
   borderRadius: 10;
   backgroundColor: ${ColoursEnum.purple};
   alignItems: center;
   justifyContent: center;
-  marginTop: 10;
   marginRight: 20;
+  box-shadow: 2px 2px 2px ${ColoursEnum.grey};
 `;
 
 type Props = {
@@ -29,10 +31,10 @@ type Props = {
 
 const NoteButton: FC<Props> = (props) => {
   return <BlankNoteButton
-  onPress={props.onPress}
->
-  <NoteText>{props.label}</NoteText>
-</BlankNoteButton>;
+    onPress={props.onPress}
+  >
+    <NoteText>{props.label}</NoteText>
+  </BlankNoteButton>;
 };
 
 export default NoteButton;

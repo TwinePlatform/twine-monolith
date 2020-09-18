@@ -160,8 +160,8 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
 
   const onSubmit = async () => {
 
-    // const token = await API.Users.getPush(orgIdArr.organisationId, parseInt(`${id}`))
-    const token = await API.Users.getPush(2, 1)
+    const token = await API.Users.getPush(orgIdArr.organisationId, parseInt(`${id}`))
+    // const token = await API.Users.getPush(2, 1)
 
     if (!Array.isArray(token.data) || !token.data.length) {
       Alert.alert(
@@ -199,7 +199,6 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
         )
       }
 
-      console.log(MsgArr);
       sendPushNotification(MsgArr);
     }
     else {
@@ -238,7 +237,7 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
         onPress={() => setChecked(currentBool => !currentBool)}
       />
       <CheckBox
-        title='Exclude volunteers who logged hours in the past week.'
+        title='Send reminder but exclude volunteers who have logged hours in the past 7 days'
         checked={checkedExclusion}
         onPress={() => setCheckedExclusion(currentBool => !currentBool)}
       />

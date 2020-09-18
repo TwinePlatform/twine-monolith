@@ -10,10 +10,8 @@ import { H1 } from '../../../lib/ui/components/Headings';
 import { aggregatedToTableData, TableData } from '../dataManipulation/aggregatedToTableData';
 import { downloadCsv } from '../dataManipulation/downloadCsv';
 import { ColoursEnum } from '../../../lib/ui/design_system';
-import { PrimaryButton, SecondaryButton} from '../../../lib/ui/components/Buttons';
+import { PrimaryButton} from '../../../lib/ui/components/Buttons';
 import InviteModal from '../../../lib/ui/components/InviteModal';
-import UploadModal from '../../../lib/ui/components/UploadModal';
-import DownloadModal from '../../../lib/ui/components/DownloadModal';
 import VolunteerTabs from './VolunteerTabs';
 import Errors from '../components/Errors';
 import useAggregateDataByVolunteer from './useAggregateDataByVolunteer';
@@ -47,9 +45,6 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [legendData, setLegendData] = useState<LegendData>([]);
   const [inviteModalVisible, setInviteModalVisible] = useState(false);
-  const [uploadModalVisible, setUploadModalVisible] = useState(false);
-  const [downloadModalVisible, setDownloadModalVisible] = useState(false);
-  const [extraButtonsVisible, setExtraButtonsVisible] = useState(false);
   const { loading, data, error, months } =
     useAggregateDataByVolunteer({ from: fromDate, to: toDate });
 
@@ -99,16 +94,6 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
         visible={inviteModalVisible}
         closeFunction={()=>setInviteModalVisible(false)}
       />
-      <UploadModal
-        visible={uploadModalVisible}
-        closeFunction={()=>setUploadModalVisible(false)}
-        destination={"volunteer"}
-      />
-      <DownloadModal
-        visible={downloadModalVisible}
-        closeFunction={()=>setDownloadModalVisible(false)}
-        filename={"volunteertemplate.csv"}
-      />
       <Row center="xs">
         <Col>
           <H1>{TitlesCopy.Volunteers.title}</H1>
@@ -132,46 +117,15 @@ const ByVolunteer: FunctionComponent<RouteComponentProps> = () => {
           ? <FullScreenBeatLoader color={ColoursEnum.purple} />
           : <VolunteerTabs {...tabProps} />
       }
-      {extraButtonsVisible &&
-        <div
-          style={{
-          position: 'fixed', 
-          bottom: 40, 
-          right: 80
-        }}
-        >
-          <SecondaryButton
-            onClick={()=>{setInviteModalVisible(!inviteModalVisible)
-              setUploadModalVisible(false)
-              setDownloadModalVisible(false)}} 
-          >
-            Invite
-          </SecondaryButton>
-	        <SecondaryButton
-            onClick={()=>{setDownloadModalVisible(!downloadModalVisible)
-              setUploadModalVisible(false)
-              setInviteModalVisible(false)}} 
-          >
-            Volunteer Template
-          </SecondaryButton>
-        	<SecondaryButton
-            onClick={()=>{setUploadModalVisible(!uploadModalVisible)
-              setDownloadModalVisible(false)
-              setInviteModalVisible(false)}} 
-          >
-            Upload
-          </SecondaryButton>
-        </div>
-      }
       <PrimaryButton 
-        onClick={()=>setExtraButtonsVisible(!extraButtonsVisible)} 
+        onClick={()=>setInviteModalVisible(!inviteModalVisible)} 
         style={{
           position: 'fixed', 
           bottom: 20, 
           right: 30
         }}
       >
-        +
+        Invite
       </PrimaryButton>
     </Container>
   );

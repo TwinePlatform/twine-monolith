@@ -22,5 +22,9 @@ export const TitlesCopy = {
   Users: {
     title: "Users",
     subtitle: "See the details of your users",
+  },
+  Upload: {
+    title:"Upload Data",
+    subtitle: "Upload past data about your volunteers",
   }
 };

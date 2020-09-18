@@ -4,7 +4,12 @@ import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {LogNote} from '../../api'
+import { DurationUnitEnum } from '../../../types';
+// possible location import { Duration } from 'twine-util';
 
+//Delete Log = require(path to Delete Icon)
+//Edit Log = require(path to Edit Icon)
+//
 /*
  * Types
  */
@@ -45,6 +50,15 @@ const LogViewModal:FC<Props> = (props) => {
             setLogNote(data.result[0].notes);
     }
     
+    // const  calculateDuration(log.startTime, log.endTime) =>    {
+
+    //     return {
+        //  hours: log.startTime
+        //   minutes : log.endTime
+    // }
+// duration = calculateDuration(startTime,endTime);
+
+    // }
     useEffect(()=>{
         if(effectCount<3 && visible){
             getNote();
@@ -52,6 +66,7 @@ const LogViewModal:FC<Props> = (props) => {
         }
     })
 
+    // let DeleteLogIcon = require ("../../assets/trash.svg");
 
     if(visible)
         return (
@@ -92,41 +107,75 @@ const LogViewModal:FC<Props> = (props) => {
                         padding: '12px',
                     }}
                 >
-                    <p>Volunteers Time</p>
-                    <div>
-                        <span>
-                            <p>Volunteer</p>
-                            <p>{log.name}</p>
-                        </span>
-                        <span>
-                            <p>Project</p>
-                            <p>{log.project}</p>
-                        </span>
-                        <span>
-                            <p>Activity</p>
-                            <p>{log.activity}</p>
-                        </span>
+                    <p className = "modalTitle">Volunteers Time</p>
+                    {/* Refactor to group both sections into 1 class */}
+                    <div className = "ProjectDetails">
+                        {/* Probably need to find another wway to create spacing between letters */}
+                        
+                            <p><span  className = "SectionTitle">Volunteer</span> &nbsp; &nbsp; &nbsp; &nbsp;  {log.name}</p>
+                            {/* <p>{log.name}</p> */}
+                        
+                           <hr className = "Section_Dividers" />
+                            <p><span className = "SectionTitle">Project</span>  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.project}</p>
+                            {/* <p>/p> */}
+                            <hr  className = "Section_Dividers"/>
+                       
+                            <p><span className = "SectionTitle">Activity</span>  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.activity}</p>
+                            {/* <p></p> */}
+
+                            <hr className = "Section_Dividers" />
+                        
                     </div>
-                    <div>
-                        <span>
-                            <p>Date</p>
-                            <p>{log.date}</p>
-                        </span>
-                        <span>
-                            <p>Start Time</p>
-                            <p>{timeMinusHours(log.endTime,log.hours)}</p>
-                        </span>
-                        <span>
-                            <p>End Time</p>
-                            <p>{log.endTime}</p>
-                        </span>
+                    
+                    <div className = "DateTime">
+                        
+                            {/* Discuss posiblity of  Merging  Start and Finish Date/Time  */}
+                           <p><span  className = "SectionTitle">Date </span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.date}</p>
+                          
+                              <hr  className = "Section_Dividers"/>
+
+                           
+                            <p><span className = "SectionTitle">Start Time</span>  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; {timeMinusHours(log.endTime,log.hours)}</p>
+                              
+                              <hr  className = "Section_Dividers"/>
+                       
+                           <p> <span className = "SectionTitle">End Time</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.endTime}</p>
+
+                              <hr className = "Section_Dividers" />
+                          
+                        
                     </div>
+
                     <div>
+                       
+                        <section className= "Note_Area">
+                        {/* review  possible solution */}
                         <p>{logNote}</p>
+                        </section>
                     </div>
-                    <div>
-                        <button>Edit</button>
-                        <button>Delete</button>
+                   
+                   <div className="Duration">
+                      <span><p> Member has volunteered  for  </p></span> <br />
+                      {/* <p> {duration.hours} Hours {duration.minutes} minutes</p> */}
+                      {/* Show how many hours have been done  */}
+
+                   </div>
+
+                    <div className ="ModalControls">
+                         
+                         <hr className = "BottomDivider" />
+                        
+                <button className = "EditLog"> 
+                <img className= "EditIcon"  src = {require('../../../assets/edit.svg')}  alt="Edit_Log" /> 
+                &nbsp; Edit </button>
+
+                        
+                        <button className ="DeleteLog"> 
+                        
+                        <img className= "DeleteIcon" src = {require('../../../assets/trash.svg')}  alt="Delete_Log" /> 
+                        &nbsp; Delete </button>
+                 
+                   {/* dashboard-app\src\assets\trash.svg */}
                     </div>
                 </div>
             </div>
@@ -137,3 +186,4 @@ const LogViewModal:FC<Props> = (props) => {
 };
 
 export default LogViewModal;
+

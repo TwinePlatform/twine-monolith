@@ -62,7 +62,7 @@ export const Logs = {
 export const LogNote = {
   get: (logID: string) =>
     axios.get("community-businesses/me/get-volunteer-logs/" + logID),
-  update: (note: string, LogId: any, activity: any, project: any, startedAt: any) => axios.put(`community-businesses/me/volunteer-logs-notes/$${LogId}`,
+  update: (note: string, LogId: any, activity: any, project: any, startedAt: any) => axios.put(`community-businesses/me/volunteer-logs-notes/${LogId}`,
       {
         activity: activity,
         startedAt: startedAt,
@@ -73,14 +73,14 @@ export const LogNote = {
 }
 
 export const Files = {
-  upload: (file: File, destination: string) => {
-    console.log("uploading " + file.name + "to /community-businesses/" + destination )
+  upload: (file: File) => {
+    console.log("uploading " + file.name + "to /community-businesses/")
     const formData = new FormData();
     const csvFile = new File ([file],file.name,{type: "text/csv"})
 
     formData.append('file', csvFile);
 
-    axios.post('upload/' + destination, formData, {
+    return axios.post('upload/CSVlogs/1', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
