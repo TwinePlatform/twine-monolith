@@ -269,6 +269,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
     }
   };
 
+  const addNote = (note) => {
+    setNote(note);
+  };
+
   const addVolunteer = (values) => {
     setAddVolArr(addVolArr => [...addVolArr, values]);
   }
@@ -303,6 +307,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       initialValues={{ volunteer: '', project: selectedProject, activity: selectedActivity, note: '' }}
       // validationSchema={validationSchema}
       onSubmit={(values, date) => {
+        values.note = note;
         if (addVolArr == []) {
           onSubmit(values.volunteer, values.project, values.activity, startTime, endTime, values.note);
         } else if (addVolArr != []) {
@@ -328,8 +333,8 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
           <NoteModal
             isVisible={noteModalVisible}
-            // addNote={setNote}
-            addNote={values.note}
+            addNote={addNote}
+            // addNote={values.note}
             onClose={toggleNoteInvisibility}
           />
 

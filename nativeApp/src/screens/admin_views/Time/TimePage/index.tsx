@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import moment from 'moment';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-
+import { Platform } from 'react-native';
 import { loadLogs, selectOrderedLogs, selectLogsStatus, deleteLog } from '../../../../redux/entities/logs';
 import { loadVolunteers, selectVolunteers } from '../../../../redux/entities/volunteers';
 import useToggle from '../../../../lib/hooks/useToggle';
@@ -38,7 +38,7 @@ const getTruncatedLogs = () => {
     }
   }*/
 
-  return logArray.slice(0,slicePoint);
+  return logArray.slice(0, slicePoint);
 };
 
 
@@ -62,10 +62,10 @@ const AdminTime: FC<Props> = () => {
   useEffect(() => {
     dispatch(loadVolunteers());
     dispatch(loadLogs());
-  },[]);
+  }, []);
 
   useEffect(() => {
-    if(!displayedLogs && logs[0]){
+    if (!displayedLogs && logs[0]) {
       const now = moment();
       const lastWeek = moment().subtract(1, 'week');
       const twoWeeksAgo = moment().subtract(2, 'weeks');
@@ -80,7 +80,7 @@ const AdminTime: FC<Props> = () => {
 
       setDateSeparatedLogs(groupedLogs);
       setDisplayedLogs(true);
-    }    
+    }
   });
 
   const onDelete = (id) => {
@@ -102,7 +102,9 @@ const AdminTime: FC<Props> = () => {
         onClose={toggleVisibilityNoteModal}
         note={noteDisplay}
       />
-      <Loader isVisible={logsRequestStatus.isFetching} />
+      {Platform.OS === 'android' &&
+        <Loader isVisible={logsRequestStatus.isFetching} />
+      }
 
       <CardSeparator title="This Week" />
       {

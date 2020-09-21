@@ -17,6 +17,7 @@ import AddBar from '../../../../lib/ui/AddBar';
 import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
 import Loader from '../../../../lib/ui/Loader';
 import { formatDate } from '../../../../lib/utils/time';
+import { Platform } from 'react-native';
 
 /*
  * Types
@@ -75,9 +76,11 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
         onConfirm={onConfirm}
       />
 
-      <Loader isVisible={volunteersRequestStatus.isFetching} />
+      {Platform.OS === 'android' &&
+        <Loader isVisible={volunteersRequestStatus.isFetching} />
+      }
       {/* TODO: create function for loading logic */}
-      { !volunteersRequestStatus.isFetching
+      {!volunteersRequestStatus.isFetching
         && !volunteersRequestStatus.error
         && volunteers.map((volunteer) => (
           <VolunteerCard
