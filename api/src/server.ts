@@ -25,6 +25,8 @@ const init = async (config: Config): Promise<Hapi.Server> => {
 
   setup(server, config);
 
+  const Joi = require("@hapi/joi");
+
   await server.register([
     {
       plugin: Logger,
