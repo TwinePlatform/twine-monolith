@@ -305,7 +305,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
     <Formik
       initialValues={{ volunteer: '', project: selectedProject, activity: selectedActivity, note: '' }}
-      validationSchema={validationSchema}
+      // validationSchema={validationSchema}
       onSubmit={(values, date) => {
         values.note = note;
         if (addVolArr == []) {
