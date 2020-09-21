@@ -68,6 +68,7 @@
     "@hapi/catbox-redis": "^5.0.2",
     "@hapi/hapi": "^20.0.0",
     "@hapi/joi": "^15.1.0",
+    "@hapi/mimos": "^5.0.0",
     "@hapi/validate": "^1.1.2",
     "@hapi/yar": "^9.2.0",
     "@types/axios": "^0.14.0",
