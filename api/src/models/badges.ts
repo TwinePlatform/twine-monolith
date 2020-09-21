@@ -30,6 +30,7 @@ export const badges = {
 				})
 				.orderBy('achieved_date');
 			//ToDo: sort acheived date
+
 			return res;
 		} else {
 			const res = await client('user_badges')
@@ -40,6 +41,7 @@ export const badges = {
 				})
 				.orderBy('achieved_date');
 			//ToDo: sort acheived date
+
 			return res;
 		}
 	},
@@ -62,6 +64,7 @@ export const badges = {
 			});
 
 		return res || null;
+
 	},
 
 	async checkLoggedHours(client: Knex, userId: any, orgId: number) {
@@ -72,7 +75,6 @@ export const badges = {
 				'user_account_id': userId,
 				'organisation_id': orgId
 			});
-
 
 		return res;
 

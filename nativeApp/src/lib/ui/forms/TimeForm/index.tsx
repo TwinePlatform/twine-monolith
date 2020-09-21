@@ -124,6 +124,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [addVolArr, setAddVolArr] = useState([]);
 
 
+
   if (forUser == 'admin') {
     // setUserID(volunteers.find((x) => x.name === volunteer).id);
   }
@@ -300,7 +301,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
     <Formik
       initialValues={{ volunteer: '', project: selectedProject, activity: selectedActivity, note: '' }}
-      validationSchema={validationSchema}
+      // validationSchema={validationSchema}
       onSubmit={(values, date) => {
         if (addVolArr == []) {
           onSubmit(values.volunteer, values.project, values.activity, startTime, endTime, values.note);

@@ -31,12 +31,14 @@ const Heading = styled(H)`
  * Component
  */
 
+
 const VolunteersBadges: FC<Props> = (props) => {
 	const [badgearray, setbadgearray] = useState([]);
 
 	const getBadge = async () => {
 		setbadgearray(await API.Badges.getCBBadges());
 	}
+
 
 	useEffect(() => {
 		getBadge();
@@ -55,3 +57,22 @@ const VolunteersBadges: FC<Props> = (props) => {
 }
 
 export default VolunteersBadges;
+
+
+{/* <CardView>
+{
+  props.badge.map((element) => {
+	const awardId = element['award_id'];
+	if (awardId == 100) {
+	  return (<BadgeCard badge={BadgeObj['FirstLogBadge']} />)
+	} else if (awardId >> 100) {
+	  return (<BadgeCard badge={BadgeObj['FifthLogBadge']} />)
+	} else {
+	  const badgename = Object.keys(BadgeObj)[awardId - 1];
+	  return (
+		<BadgeCard badge={BadgeObj[badgename]} />
+	  )
+	}
+  })
+}
+</CardView > */}
