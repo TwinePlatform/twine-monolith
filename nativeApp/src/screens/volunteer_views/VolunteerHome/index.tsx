@@ -242,7 +242,6 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
 
   const getBadge = async () => {
     const badgeArr = await API.Badges.getBadges();
-    console.log(badgeArr);
     setbadgearray(badgeArr);
   }
 

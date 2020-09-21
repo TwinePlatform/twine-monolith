@@ -1,5 +1,5 @@
 import * as Hapi from '@hapi/hapi';
-import * as Boom from '@hapi/boom';
+import {Boom} from '@hapi/boom';
 import { Dictionary } from 'ramda';
 import { Duration } from 'twine-util/duration';
 import { ApiRequestQuery } from '../schema/request';

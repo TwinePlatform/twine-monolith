@@ -158,6 +158,7 @@ const Badges = {
       console.log(result.data);
       return result.data
     })
+
     return res;
   },
 
@@ -183,6 +184,7 @@ const Badges = {
       url: "/community-businesses/me/getInviteBadge"
     }).then(res => { return res.data; })
     return res;
+
   }
 }
 

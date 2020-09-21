@@ -2,7 +2,7 @@
  * API specific utilities
  */
 import * as Hapi from '@hapi/hapi';
-import * as Boom from '@hapi/boom';
+import {Boom} from '@hapi/boom';
 import * as Joi from '@hapi/joi';
 import { omit } from 'ramda';
 import { ApiResponse } from './schema/response';
