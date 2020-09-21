@@ -33,7 +33,9 @@ import { Notifications } from 'expo';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import API, { getErrorResponse } from '../../../api';
-
+import InvitationModal from '../../../lib/ui/modals/InvitationModal';
+import Invite from '../../../lib/ui/Invite';
+import BadgeModal from '../../../lib/ui/modals/BadgeModel';
 
 
 
@@ -79,7 +81,8 @@ const Container = styled.View`
 const Stats: FC<Props> = () => {
   // setBadge(false);
   const dispatch = useDispatch();
-
+  const [visibleConfirmationModal, toggleInviteVisibility] = useToggle(false);
+  const [visibleBadge, toggleBadgeVisibility] = useState(false);
   useEffect(() => {
     dispatch(loadLogs());
   }, []);
@@ -98,12 +101,30 @@ const Stats: FC<Props> = () => {
     }
   });
 
+
+  const onInvite = () => {
+    return <Heading>invite</Heading>
+  }
+
   hours = ~~(hours + minutes / 60);
 
   const avgDur = ~~(hours * 60 / logs.length);
 
   return (
     <View>
+      <InvitationModal
+        isVisible={visibleConfirmationModal}
+        onCancel={toggleInviteVisibility}
+        onSendClose={toggleInviteVisibility}
+        awardBadge={toggleBadgeVisibility}
+        title="Invite Volunteers By Email"
+      />
+
+      <BadgeModal
+        visible={visibleBadge}
+        badge={BadgeObj['InviteMedalBadge']}
+      />
+
       <Container>
         <Stat
           heading="TOTAL TIME GIVEN"
@@ -129,11 +150,13 @@ const Stats: FC<Props> = () => {
           <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
         </Stat>
       </Container>
+      <Invite onPress={toggleInviteVisibility} organisation={"aperture science"} />
     </View>
   )
 };
 
 const BadgeTab: FC<Props> = (props) => {
+  console.log(props);
   return (
     <CardView>
       {

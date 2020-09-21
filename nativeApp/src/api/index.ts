@@ -154,7 +154,11 @@ const Badges = {
     const res = makeRequest({
       method: "GET",
       url: '/community-businesses/me/getOwnBadges'
-    }).then(result => { return result.data })
+    }).then(result => {
+      console.log(result.data);
+      return result.data
+    })
+
     return res;
   },
 
@@ -172,6 +176,15 @@ const Badges = {
       url: "/community-businesses/me/checkBadge"
     }).then(res => { return res.data; })
     return res;
+  },
+
+  awardInvite: () => {
+    const res = makeRequest({
+      method: "POST",
+      url: "/community-businesses/me/getInviteBadge"
+    }).then(res => { return res.data; })
+    return res;
+
   }
 }
 

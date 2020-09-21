@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useRef } from 'react';
+import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
@@ -18,14 +19,17 @@ type Props = {
 
 
 const Heading2 = styled(H2)`
-  marginBottom: 20;
-  color: ${ColoursEnum.white};
+    marginBottom: 20;
+    color: ${ColoursEnum.white};
 `;
 
 
 const DownloadModal:FC<Props> = (props) => {
 
     const {visible, closeFunction, filename} = props;
+
+    const wrapperRef = useRef(null);
+    useOutsideAlerter(wrapperRef, closeFunction);
 
     const onDownload = () => {
         closeFunction();
@@ -48,6 +52,7 @@ const DownloadModal:FC<Props> = (props) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}
+                ref={wrapperRef}
             >
                 <div
                     style={{
@@ -60,7 +65,7 @@ const DownloadModal:FC<Props> = (props) => {
                 <p
                     style={{
                         fontFamily: 'roboto',
-                        fontSize: '25px'
+                        fontSize: '20px'
                     }}
                 >Are you sure you would like to download?</p>
                 <a href={"/downloads/" + filename} download>

@@ -6,7 +6,7 @@ import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 import { FontsEnum } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import { TouchableOpacity } from 'react-native';
-const arrowRight = require('../../../../assets/HelpSlide/NextArrow.png');
+const arrowRight = require('../../../../assets/HelpSlide/NextArrowRight.png');
 const arrowLeft = require('../../../../assets/HelpSlide/NextArrowLeft.png');
 import Modal from 'react-native-modal';
 
@@ -87,36 +87,44 @@ const TextBottom = styled.Text`
 const ContainerFooter = styled.View`
 	width: 100%
 	height: 47px;
+	marginTop: 20px;
 	marginBottom: 20px;
-	flexDirection: row;
+    flexDirection: row;
+    alignItems: center;
+    position: absolute;
+    bottom: 20px;
+`;
+
+const ContainerFooterCenter = styled.View`
+    width: 200px;
+    marginLeft: 80px;
+    flexDirection: row;
+    justifyContent: space-around;
+    alignItems: center;
 `;
 
 const ContainerImageLeft = styled.View`
 	alignItems: center;
 	position: absolute;
-	left:33px;
+    left:40px;
+    bottom: 0px;
 `;
 
 const ContainerImageRight = styled.View`
 	alignItems: center;
 	position: absolute;
-	right: 33px;
+    right: 40px;
+    bottom: 0px;
 `;
 
 const ImageArrowLeft = styled.Image`
-	width: 18;
-	height: 29;
-	position: absolute;
-	left:20px;
-	bottom: 10px
+    width: 50;
+    height: 50;
 `;
 
 const ImageArrowRight = styled.Image`
-	width: 18;
-	height: 29;
-	position: absolute;
-	right:20px;
-	bottom: 10px
+    width: 50;
+    height: 50;
 `;
 
 const styles = StyleSheet.create({
@@ -130,11 +138,17 @@ const styles = StyleSheet.create({
 		resizeMode: "cover",
 		justifyContent: "center",
 	},
-	circle: {
-		width: 47,
-		height: 47,
-		borderRadius: 47 / 2,
-		backgroundColor: '#FFFFFF'
+	circleSmall: {
+		width: 14,
+		height: 14,
+		borderRadius: 14 / 2,
+		backgroundColor: '#707070'
+	},
+	circleSmallCurrent: {
+		width: 14,
+		height: 14,
+		borderRadius: 14 / 2,
+		backgroundColor: '#8000FF'
 	}
 });
 
@@ -143,7 +157,7 @@ const styles = StyleSheet.create({
  */
 
 const images = {
-	slide2: require('../../../../assets/HelpSlide/slide6.png'),
+	background: require('../../../../assets/HelpSlide/background.png'),
 	imagename: require('../../../../assets/HelpSlide/lastSlide.png'),
 };
 
@@ -168,7 +182,7 @@ const HelpSlidesEnd: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
 		<Scrollable>
 			<View style={styles.container}>
 
-				<ImageBackground style={styles.image} source={images['slide2']} >
+				<ImageBackground style={styles.image} source={images['background']} >
 
 					<NavBar>
 						<TouchableOpacity onPress={() => navigation.navigate(navigateExit)}>
@@ -192,8 +206,42 @@ const HelpSlidesEnd: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
 					</ContainerSub>
 
 					<ContainerFooter>
+
+						<ContainerFooterCenter>
+
+							<TouchableOpacity style={styles.circleSmall}
+								onPress={() => navigation.navigate('slide1')}
+							>
+							</TouchableOpacity>
+
+							<TouchableOpacity style={styles.circleSmall}
+								onPress={() => navigation.navigate('slide2')}
+							>
+							</TouchableOpacity>
+
+							<TouchableOpacity style={styles.circleSmall}
+								onPress={() => navigation.navigate('slide3')}
+							>
+							</TouchableOpacity>
+
+							<TouchableOpacity style={styles.circleSmall}
+								onPress={() => navigation.navigate('slide4')}
+							>
+							</TouchableOpacity>
+
+							<TouchableOpacity style={styles.circleSmall}
+								onPress={() => navigation.navigate('slide5')}
+							>
+							</TouchableOpacity>
+
+							<TouchableOpacity style={styles.circleSmallCurrent}
+								onPress={() => navigation.navigate('slide6')}
+							>
+							</TouchableOpacity>
+
+						</ContainerFooterCenter>
 						<ContainerImageLeft>
-							<TouchableOpacity style={styles.circle}
+							<TouchableOpacity
 								onPress={() => navigation.navigate('slide5')}
 							>
 								<ImageArrowLeft source={arrowLeft} />

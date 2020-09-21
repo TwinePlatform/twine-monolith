@@ -18,7 +18,7 @@ interface Params {
 }
 export type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
 
-export const createHeaders = (yData: {name: string}[]) => (data: AggregatedData) => {
+export const createHeaders = (yData: { name: string }[]) => (data: AggregatedData) => {
   const headers = [data.groupByX, ...yData.map((x) => x.name)];
   return { ...data, headers };
 }; // TODO: add test
@@ -37,7 +37,7 @@ export const aggregatedToTableData = ({ data, unit, yData }: Params) => {
     renameAllNameKeys,
     removeIdInRows,
     calculateTotalsUsing(unit),
-    abbreviateMonths(Months.format.abreviated),
+    abbreviateMonths(Months.format.abbreviated),
     addContentObjects as any,
     addColumnsKey
   )(data) as Pick<DataTableProps, 'headers' | 'rows'>;

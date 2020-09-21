@@ -30,53 +30,19 @@ const Heading = styled(H)`
 /*
  * Component
  */
-// const VBObj = [
-// 	{
-// 		name: 'Kara Thrace',
-// 		badges: [1, 2, 3],
-// 	},
-// 	{
-// 		name: 'Dr. Lee',
-// 		badges: ['ThridMonth', 'AnnMedal', 'SixthMonth', 'TenthHour', 'twentiethHour', 'fiftiethHour', 'InviteMedal'],
-// 	}
-// ]
 
-// {VBObj.map(element) => (
-// 	console.log(element);
-// 	return (
-// 		<VolunteersBadges badges={element}/>
-// 	)
-// )}
 
 const VolunteersBadges: FC<Props> = (props) => {
 	const [badgearray, setbadgearray] = useState([]);
 
-	// [
-	// 	{
-	// 	  award_id: [ 1, 100, 102 ],
-	// 	  user_account_id: 6,
-	// 	  user_name: 'Emma Emmerich'
-	// 	},
-	// 	{ award_id: [ 1 ], user_account_id: 7, user_name: 'Raiden' }
-	//   ]
-
 	const getBadge = async () => {
 		setbadgearray(await API.Badges.getCBBadges());
-		console.log(badgearray);
-		// var VBObj: any = [];
-		// badgeArr.forEach(volunteer => {
-		// 	VBObj.push(volunteer.user_name, volunteer.award_id)
-		// })
-		// setbadgearray(badgeArr);
 	}
+
 
 	useEffect(() => {
 		getBadge();
-	})
-
-	//get volunteers
-	//getbadges for each volunteer 
-	//show badges for each volunteer 
+	}, []);
 
 	return (
 		<View>

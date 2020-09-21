@@ -16,18 +16,32 @@ type Props = {
 /*
  * Styles
  */
+// const Container = styled.View<Pick<Props, 'align'>>`
+//   justifyContent: ${({ align }) => (align === 'center' ? 'center' : 'flex-start')};
+//   width: 100%;
+//   flexDirection: row;
+//   alignItems: flex-end;
+//   marginBottom: 5;
+// `;
 
-const Container = styled.View<Pick<Props, 'align'>>`
-  justifyContent: ${({ align }) => (align === 'center' ? 'center' : 'flex-start')};
+const OuterContainer = styled.View`
+  width: 100%;
+  alignItems: center;
+  marginTop: 20;
+  marginBottom: 5;
+`;
+
+const InnerContainer = styled.View<Pick<Props, 'align'>>`
+  justifyContent: center;
   width: 100%;
   flexDirection: row;
-  alignItems: flex-end;
+  alignItems: center;
   marginBottom: 5;
 `;
 
 const Value = styled.Text`
   color: ${ColoursEnum.darkGrey};
-  fontSize: 25;
+  fontSize: 33;
   font-family: ${FontsEnum.medium};
 `;
 
@@ -35,7 +49,6 @@ const Unit = styled.Text`
   color: ${ColoursEnum.darkGrey};
   fontSize: 18;
   letterSpacing: 1.2;
-  paddingBottom: 2;
 `;
 
 const Spacer = styled.View`
@@ -83,16 +96,18 @@ export const TimeDiff: FC<Props> = (props) => {
   const minutes = Math.floor((endTime - startTime) / (1000 * 60) - hours * 60);
 
   return (
-    <Container align={align}>
-      <Value>{hours}</Value>
-      <Spacer />
-      <Unit>hours</Unit>
-      <Spacer />
-      <Value>{minutes}</Value>
-      <Spacer />
-      <Unit>minutes</Unit>
+    <OuterContainer align={align}>
+      <InnerContainer>
+        <Value>{hours}</Value>
+        <Spacer />
+        <Unit>hours</Unit>
+        <Spacer />
+        <Value>{minutes}</Value>
+        <Spacer />
+        <Unit>minutes</Unit>
+      </InnerContainer>
       {diffTime == 0 && <TextInput style={{ fontSize: 10, color: 'red' }}>*Please select different times. </TextInput>}
-    </Container>
+    </OuterContainer>
 
 
   );

@@ -21,6 +21,40 @@ export type DataTableProps = {
   showTotals?: boolean
 };
 
+export type LogsDataTableProps = {
+  title?: TitleString
+  headers: string[]
+  sortBy?: string
+  order?: Order
+  onChangeSortBy?: (s: string) => void
+  rows: DataTableRow[]
+  showTotals?: boolean
+  setSelectedLog: any
+  setLogViewModalVisible: any
+};
+
+export type ProjectsDataTableProps = {
+  title?: TitleString
+  headers: string[]
+  sortBy?: string
+  order?: Order
+  onChangeSortBy?: (s: string) => void
+  rows: DataTableRow[]
+  showTotals?: boolean
+};
+
+export type UsersDataTableProps = {
+  title?: TitleString
+  headers: string[]
+  sortBy?: string
+  order?: Order
+  onChangeSortBy?: (s: string) => void
+  rows: DataTableRow[]
+  showTotals?: boolean
+};
+
+
+
 export type DataTableContent = number | string;
 
 export type DataTableCallback = (f: DataTableContent) => void;
@@ -32,9 +66,7 @@ export type DataTableCell = {
 
 export type DataTableRow = {
   rowLink?: string
-  columns: {
-    [k in string]: DataTableCell
-  }
+  columns: Dictionary<DataTableCell>
 };
 
 
@@ -55,6 +87,22 @@ export type RowProps = {
   onClick?: DataTableCallback
 };
 
+export type LogsRowProps = {
+  columns: Dictionary<CellProps>
+  order: string[]
+  rowLink?: string
+  onClick?: DataTableCallback
+  setSelectedLog: any
+  setLogViewModalVisible: any
+  rowNumber: number
+};
+
+export type ProjectsRowProps = {
+  columns: Dictionary<CellProps>
+  order: string[]
+  rowLink?: string
+  onClick?: DataTableCallback
+};
 
 export type HeaderRowProps = {
   columns: CellProps[]

@@ -3,5 +3,8 @@
     "private": true,
     "devDependencies": {
         "lerna": "^3.20.2"
+    },
+    "dependencies": {
+        "neat-csv": "^5.2.0"
     }
 }

@@ -217,7 +217,8 @@ export type VisitEvent = Readonly<CommonTimestamps & {
 }>;
 
 export type LinkedVisitEvent = VisitEvent & Readonly<{
-  visitActivity: string;
+  visitActivity: string
+  category: string
 }>;
 
 export type Feedback = Readonly<CommonTimestamps & {
@@ -306,6 +307,7 @@ type UsersBaseCollection = Collection<User>;
 export type UserCollection = UsersBaseCollection & {
   isMemberOf: (k: Knex, u: User, cb: CommunityBusiness) => Promise<boolean>;
   updateToken: (c: Knex, a: any, b: any) => Promise<any>;
+  getWithEmail: (c: Knex, email: any) => Promise<any>;
 };
 
 export type VisitorCollection = UsersBaseCollection & {
@@ -354,6 +356,8 @@ export type CommunityBusinessCollection = Collection<CommunityBusiness> & {
   getVisitActivityById: (k: Knex, c: CommunityBusiness, id: Int) => Promise<Maybe<VisitActivity>>;
   addVisitActivity: (k: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>)
     => Promise<Maybe<VisitActivity>>;
+  addVolunteerActivity: (k: Knex, a: object) => any;
+  addVolunteerProject: (k: Knex, a: object, b: string) => any;
   updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>;
   deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>;
   addVisitLog: (k: Knex, v: VisitActivity, u: Partial<User>, a: 'sign_in_with_name' | 'qr_code') =>
