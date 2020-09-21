@@ -78,7 +78,7 @@
     "@types/hapi__boom": "^9.0.0",
     "@types/hapi__catbox": "^10.2.2",
     "@types/hapi__catbox-redis": "^5.0.0",
-    "@types/hapi__hapi": "18.2.5",
+    "@types/hapi__hapi": "20.0.0",
     "@types/hapi__joi": "^15.0.2",
     "@types/hapi__yar": "^9.2.0",
     "@types/jest": "^24.0.15",
