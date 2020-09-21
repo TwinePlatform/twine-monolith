@@ -82,7 +82,7 @@
     "@types/hapi__joi": "^15.0.2",
     "@types/hapi__yar": "^9.2.0",
     "@types/jest": "^24.0.15",
-    "@types/mime-db": "^1.43.0",
+    "@types/mime-db": "1.27.0",
     "@types/minimist": "^1.2.0",
     "@types/node": "^12.12.6",
     "@types/pdfmake": "^0.1.3",
