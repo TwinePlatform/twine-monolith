@@ -17,15 +17,19 @@ const queryParser = (raw: Dictionary<string>) => qs.parse(qs.stringify(raw));
 
 const init = async (config: Config): Promise<Hapi.Server> => {
 
-  const server = new Hapi.Server({
+  const Hapi = require('@hapi/hapi');
+  const Joi = require("@hapi/joi");
+
+
+  const server = Hapi.Server({
     ...config.web,
     query: { parser: queryParser },
     cache: Caches(config),
   });
 
   setup(server, config);
-
-  const Joi = require("@hapi/joi");
+  
+  server.validator(Joi);
 
   await server.register([
     {
