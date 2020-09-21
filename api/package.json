@@ -63,7 +63,7 @@
     "redis:enable-notify": "npm run exec ./database/redis/configure.ts"
   },
   "dependencies": {
-    "@hapi/boom": "^7.4.2",
+    "@hapi/boom": "^9.0.0",
     "@hapi/catbox": "^10.2.1",
     "@hapi/catbox-redis": "^5.0.2",
     "@hapi/hapi": "^20.0.0",
@@ -97,7 +97,6 @@
     "hapi-pino": "^8.0.1",
     "ioredis": "^4.14.0",
     "knex": "^0.16.5",
-    "mime-db": "^1.44.0",
     "moment": "^2.24.0",
     "neat-csv": "^5.2.0",
     "pdfmake": "^0.1.53",
