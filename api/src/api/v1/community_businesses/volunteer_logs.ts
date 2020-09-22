@@ -28,7 +28,7 @@ import { Unpack } from '../../../types/internal';
 import { Serialisers } from '../serialisers';
 
 
-type SyncLogPayload = Api.CommunityBusinesses.Me.VolunteerLogs.sync.POST.Request['payload'];
+type SyncLogPayload = Api.CommunityBusinesses.Me.VolunteerLogs.sync.POST2.Request['payload'];
 type SyncLogPayloadItem = Unpack<SyncLogPayload>;
 
 
@@ -472,7 +472,7 @@ const routes: [
           { method: getCommunityBusiness, assign: 'communityBusiness' },
         ],
       },
-      handler: async (request, h) => {
+      handler: async (request: any, h: any) => {
         const {
           server: { app: { knex } },
           pre: { communityBusiness },
