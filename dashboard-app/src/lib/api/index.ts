@@ -44,7 +44,7 @@ export const CommunityBusinesses = {
   },
 
   get: (params?: Pick<AxiosRequestConfig, 'params'>) =>
-    axios.request<Api.CommunityBusinesses.Me.GET.Result>({ ...CommunityBusinesses.configs.get, params }),
+    axios.request({ ...CommunityBusinesses.configs.get, params }),
   getLogs: (params?: Pick<AxiosRequestConfig, 'params'>) =>
     axios.request({ ...CommunityBusinesses.configs.getLogs, params }),
   getVolunteerActivities: () =>
