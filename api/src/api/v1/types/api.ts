@@ -59,7 +59,7 @@ export namespace Api {
 
   export namespace CommunityBusinesses {
     export namespace GET {
-      export interface Request extends Hapi.Request { query: ApiRequestQuery & Dictionary<any> }
+      export interface Request extends Hapi.Request { query: any }
       export type Result = CommunityBusiness[];
       export type Response = ResponsePayload<Result>;
       export type Route = ServerRoute<Request, Response>;
