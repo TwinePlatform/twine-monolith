@@ -39,9 +39,9 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
 
   const confirmUpload = async () => {
       setUploadState("validating");
-      const myCommunityBusiness = await CommunityBusinesses.get();
+      const {data: {id}} = await CommunityBusinesses.get();
 
-      console.log(myCommunityBusiness);
+      console.log(id);
 
       Files.upload(uploadedFile)
       .then(result=>{
