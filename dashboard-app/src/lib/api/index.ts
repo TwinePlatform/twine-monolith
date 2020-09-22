@@ -74,7 +74,7 @@ export const LogNote = {
 
 export const Files = {
   upload: (file: File) => {
-    console.log("uploading " + file.name + "to /community-businesses/")
+    console.log("uploading " + file.name + " to /community-businesses/")
     const formData = new FormData();
     const csvFile = new File ([file],file.name,{type: "text/csv"})
 
