@@ -134,6 +134,13 @@ q:after {
   content: none;
 }
 
+
+.Add_Time_Title
+{
+   text-align: center;
+    font-size: 16px;
+}
+
 .Modal_Header
 {
   height: 27px;

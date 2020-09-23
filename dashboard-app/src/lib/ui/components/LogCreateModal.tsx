@@ -185,12 +185,15 @@ const LogCreateModal:FC<Props> = (props) => {
                         padding: '12px',
                     }}
                 >
-                    <p>Add Time</p>
+                    {/* Style Add Time */}
+                    <span className ="Add_Time_Title"> <p>Add Time</p> </span>
                 {
                 loading?
                     <p>loading...</p>
                 :
+                // Add Sections for ProjectDetails and DateTime
                     <div id="Log Form">
+                        {/* Style Dropdowns */}
                         <select id="Volunteer" name="Volunteer">
                             {volunteers.map(volunteer=>
                                 <option value={volunteer.id}>{volunteer.name}</option>)} 
@@ -213,11 +216,14 @@ const LogCreateModal:FC<Props> = (props) => {
                         <input type="time" id="End Time" value={endTime}
                         onChange={(e)=>setEndTime(e.target.value)}
                         />
+
+                        {/* Style Add note button */}
                         <input type="text" id="Note" placeholder="Notes"/>
                         <button onClick={select}
                         disabled={!valid}
                         >Create</button>
                         <p>{errorMessage}</p>
+                        {/* Create Add Time button */}
                     </div>
                     }
                 </div>
