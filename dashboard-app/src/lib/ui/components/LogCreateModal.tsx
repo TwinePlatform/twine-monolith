@@ -223,7 +223,7 @@ const LogCreateModal:FC<Props> = (props) => {
                       </section>
 
                         {/* Style Add note button */}
-                        <input type="text" id="Note" placeholder="Notes"/>
+                        {/* <input type="text" id="Note" placeholder="Notes"/> */}
                         <button onClick={select}
                         disabled={!valid}
                         >Create</button>
