@@ -199,14 +199,21 @@ const LogCreateModal:FC<Props> = (props) => {
                             {volunteers.map(volunteer=>
                                 <option value={volunteer.id}>{volunteer.name}</option>)} 
                         </select>
+                        
+                        <br />
+                     
                         <select id="Project" name="Project">
                             {projects.map(project=>
                                 <option value={project}>{project}</option>)} 
                         </select>
+                        
+                        <br /> 
+
                         <select id="Activity" name="Activity">
                             {activities.map(activity=>
                                 <option value={activity}>{activity}</option>)} 
                         </select>
+                        <br />
                       </section>
 
                       <section className = "DateTime">
