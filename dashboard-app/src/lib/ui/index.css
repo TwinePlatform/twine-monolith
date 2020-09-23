@@ -143,8 +143,16 @@ q:after {
   font-weight: bold;
   position: relative;
   top: -43px;
+}
 
+.Create_ProjectDetails
+{
+position: relative;
+}
 
+.Create_DateTime
+{
+  position: relative;
 }
 
 .Modal_Header

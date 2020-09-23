@@ -194,7 +194,7 @@ const LogCreateModal:FC<Props> = (props) => {
                 // Add Sections for ProjectDetails and DateTime
                     <div id="Log Form">
                         {/* Style Dropdowns */}
-                      <section className = "ProjectDetails">
+                      <section className = "Create_ProjectDetails">
                         <select id="Volunteer" name="Volunteer">
                             {volunteers.map(volunteer=>
                                 <option value={volunteer.id}>{volunteer.name}</option>)} 
