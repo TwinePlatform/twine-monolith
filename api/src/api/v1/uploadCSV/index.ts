@@ -24,6 +24,12 @@ const routes: [
         {
             method: 'POST',
             path: '/upload/CSVlogs/{organisationId}',
+            config: {
+                payload: {
+                    output: 'stream',
+                    allow: 'multipart/form-data' // important
+                }
+            },              
             options: {
                 description: 'Upload activity from dashboard using CSV format',
                 auth: {
@@ -33,7 +39,7 @@ const routes: [
                     },
                 },
             },
-            handler: async (request, h) => {
+            handler: async (request: any, h: any) => {
 
                 const {
                     params: { organisationId },

@@ -52,7 +52,7 @@ export namespace Api {
           payload: any;
         }
         export type Response = any;
-        export type Route = ServerRoute<Request, Response>;
+        export type Route = any;
       }
     }
   }
