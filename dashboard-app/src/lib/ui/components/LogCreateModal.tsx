@@ -194,6 +194,7 @@ const LogCreateModal:FC<Props> = (props) => {
                 // Add Sections for ProjectDetails and DateTime
                     <div id="Log Form">
                         {/* Style Dropdowns */}
+                      <section className = "ProjectDetails">
                         <select id="Volunteer" name="Volunteer">
                             {volunteers.map(volunteer=>
                                 <option value={volunteer.id}>{volunteer.name}</option>)} 
@@ -206,6 +207,9 @@ const LogCreateModal:FC<Props> = (props) => {
                             {activities.map(activity=>
                                 <option value={activity}>{activity}</option>)} 
                         </select>
+                      </section>
+
+                      <section className = "DateTime">
                         <input type="date" id="Date" value={date}
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
@@ -216,6 +220,7 @@ const LogCreateModal:FC<Props> = (props) => {
                         <input type="time" id="End Time" value={endTime}
                         onChange={(e)=>setEndTime(e.target.value)}
                         />
+                      </section>
 
                         {/* Style Add note button */}
                         <input type="text" id="Note" placeholder="Notes"/>
