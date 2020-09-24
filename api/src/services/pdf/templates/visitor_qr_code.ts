@@ -90,7 +90,7 @@ const createDefaultLogoTemplate = (qrCodeDataUrl: string) =>
 
 const createTemplate = async (
   { qrCodeDataUrl, logoUrl }: { qrCodeDataUrl: string; logoUrl?: string }
-) => {
+): Promise<any> => {
   if (logoUrl) {
     if (Url.isDataUrl(logoUrl)) {
       return createCustomLogoTemplate(qrCodeDataUrl, logoUrl);
@@ -103,7 +103,7 @@ const createTemplate = async (
   }
 };
 
-const main: PdfTemplateDefinition = {
+const main: any = {
   fontDescriptors,
   createTemplate,
 };

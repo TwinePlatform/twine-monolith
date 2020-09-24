@@ -59,7 +59,7 @@ export namespace Api {
 
   export namespace CommunityBusinesses {
     export namespace GET {
-      export interface Request extends Hapi.Request { query: ApiRequestQuery & Dictionary<any> }
+      export interface Request extends Hapi.Request { query: any }
       export type Result = CommunityBusiness[];
       export type Response = ResponsePayload<Result>;
       export type Route = ServerRoute<Request, Response>;
@@ -238,6 +238,17 @@ export namespace Api {
 
         export namespace sync {
           export namespace POST {
+            export interface Request extends Hapi.Request {
+              payload: any;
+              pre: { communityBusiness: CommunityBusiness };
+            }
+            export type Result = { ignored: number; synced: number };
+            export type Route = any;
+          }
+        }
+
+        export namespace sync {
+          export namespace POST2 {
             export interface Request extends Hapi.Request {
               payload: (
                 Pick<VolunteerLog, 'id' | 'activity' | 'duration' | 'startedAt' | 'deletedAt' | 'project'> &

@@ -23,7 +23,7 @@ const routes: [
     = [
         {
             method: 'POST',
-            path: '/upload/CSVlogs/{organisationId}',
+            path: '/upload/CSVlogs/{organisationId}',       
             options: {
                 description: 'Upload activity from dashboard using CSV format',
                 auth: {

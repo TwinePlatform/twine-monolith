@@ -153,7 +153,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
   },
 
   async get(client, q = {}) {
-    const query = evolve({
+    const query: any = evolve({
       where: pipe(CommunityBusinesses.toColumnNames, transformForeignKeysToSubQueries(client)),
       whereNot: CommunityBusinesses.toColumnNames,
     }, q);

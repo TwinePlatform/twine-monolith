@@ -11,7 +11,7 @@ export const configureRedis = async (_config?: Config) => {
 
   // Enable keyspace events (see docs/sessions#redis)
   try {
-    await client.config('set', 'notify-keyspace-events', 'AKE');
+    await client.config('SET', 'notify-keyspace-events', 'AKE');
 
   } catch (error) {
     console.error(error);
