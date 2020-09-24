@@ -128,11 +128,13 @@ const LogViewModal:FC<Props> = (props) => {
                            <p><span  className = "SectionTitle">Date </span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.date}</p>
                           
                               <hr  className = "Section_Dividers"/>
-
+                             <br />                   
                            
                             <p><span className = "SectionTitle">Start Time</span>  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; {timeMinusHours(log.endTime,log.hours)}</p>
                               
                               <hr  className = "Section_Dividers"/>
+
+                              <br />
                        
                            <p> <span className = "SectionTitle">End Time</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.endTime}</p>
 

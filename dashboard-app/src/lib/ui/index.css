@@ -152,9 +152,10 @@ position: relative;
 
 .Create_DateTime
 {
-  position: relative;
-  
-  right: -221px;
+  position:relative;
+  right: -71%;
+  top: -70px;
+  display: inline-grid;
 
 }
 
