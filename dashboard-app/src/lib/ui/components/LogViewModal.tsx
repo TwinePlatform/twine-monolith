@@ -104,7 +104,7 @@ const LogViewModal:FC<Props> = (props) => {
                 >
                     <p className = "modalTitle">Volunteers Time</p>
                     {/* Refactor to group both sections into 1 class */}
-                    <div className = "Create_ProjectDetails">
+                    <div className = "ProjectDetails">
                         {/* Probably need to find another wway to create spacing between letters */}
                         
                             <p><span  className = "SectionTitle">Volunteer</span> &nbsp; &nbsp; &nbsp; &nbsp;  {log.name}</p>
@@ -122,7 +122,7 @@ const LogViewModal:FC<Props> = (props) => {
                         
                     </div>
                     
-                    <div className = "Create_DateTime">
+                    <div className = "DateTime">
                         
                             {/* Discuss posiblity of  Merging  Start and Finish Date/Time  */}
                            <p><span  className = "SectionTitle">Date </span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.date}</p>

@@ -216,14 +216,16 @@ const LogCreateModal:FC<Props> = (props) => {
                         <br />
                       </section>
 
-                      <section className = "DateTime">
+                      <section className = "Create_DateTime">
                         <input type="date" id="Date" value={date}
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
                         />
+                        <br />
                         <input type="time" id="Start Time" value={startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
+                        <br />
                         <input type="time" id="End Time" value={endTime}
                         onChange={(e)=>setEndTime(e.target.value)}
                         />
