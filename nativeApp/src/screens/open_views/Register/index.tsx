@@ -262,7 +262,7 @@ const Register: FC<Props> = (props) => {
             //values of drop down
             values.region = region;
             values.YearOfBirth = userYearOfBirth;
-
+            values.organisationId = userOrganisation; //TODO: need to pass the organisation ID here 
             //add volunteer 
             const res = await API.Volunteers.add({
               values
