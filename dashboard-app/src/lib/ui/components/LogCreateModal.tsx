@@ -195,21 +195,21 @@ const LogCreateModal:FC<Props> = (props) => {
                     <div id="Log Form">
                         {/* Style Dropdowns */}
                       <section className = "Create_ProjectDetails">
-                        <select id="Volunteer" name="Volunteer">
+                        <select className ="Create_ProjectDetails"id="Volunteer" name="Volunteer">
                             {volunteers.map(volunteer=>
                                 <option value={volunteer.id}>{volunteer.name}</option>)} 
                         </select>
                         
                         <br />
                      
-                        <select id="Project" name="Project">
+                        <select className ="Create_ProjectDetails"id="Project" name="Project">
                             {projects.map(project=>
                                 <option value={project}>{project}</option>)} 
                         </select>
                         
                         <br /> 
 
-                        <select id="Activity" name="Activity">
+                        <select className ="Create_ProjectDetails"id="Activity" name="Activity">
                             {activities.map(activity=>
                                 <option value={activity}>{activity}</option>)} 
                         </select>
@@ -225,8 +225,9 @@ const LogCreateModal:FC<Props> = (props) => {
                         <input type="time" id="Start Time" value={startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
+                        
                         <br />
-                        <input type="time" id="End Time" value={endTime}
+                        <input  type="time" id="End Time" value={endTime}
                         onChange={(e)=>setEndTime(e.target.value)}
                         />
                       </section>
