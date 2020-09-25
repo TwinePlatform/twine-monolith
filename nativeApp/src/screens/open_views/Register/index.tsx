@@ -132,8 +132,7 @@ const Register: FC<Props> = (props) => {
       .min(3, 'Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)')
       .required('Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)'),
     Phone: yup
-      .number()
-      .required('Please enter your phone number. If you don’t have one, an administrator can help you register.'),
+      .number(),
     AdminCode: yup
       .string()
   });
@@ -169,7 +168,7 @@ const Register: FC<Props> = (props) => {
   if (registrationType === "Organisation")
     return (
       <Formik
-        initialValues={{ OrgName: '', OrgEmail: '', GivingID: '', Name: '', Email: '', Password: '', Phone: '', Postcode: '', AdminCode: '', region: '' }}
+        initialValues={{ OrgName: '', OrgEmail: '', GivingID: '', Name: '', Email: '', Password: '', Phone: '', Postcode: '', AdminCode: '', region: '', YearOfBirth: '' }}
         validationSchema={validationSchemaOrg}
         onSubmit={(values) => {
           // console.log(values);
@@ -258,19 +257,24 @@ const Register: FC<Props> = (props) => {
 
       <Formik
         validationSchema={validationSchemaUser}
-        onSubmit={async () => {
+        onSubmit={async (values) => {
           try {
+            //values of drop down
+            values.region = region;
+            values.YearOfBirth = userYearOfBirth;
+
+            //add volunteer 
             const res = await API.Volunteers.add({
-              "organisationId": "2",
-              "role": "VOLUNTEER",
-              "name": "userName",
-              "gender": "prefer not to say",
-              "email": "1@aperturescience.com",
-              "password": "Password123!?"
+              values
+              // "organisationId": "2",
+              // "role": "VOLUNTEER",
+              // "name": "userName",
+              // "gender": "prefer not to say",
+              // "email": "1@aperturescience.com",
+              // "password": "Password123!?"
             });
           } catch (error) {
             setError(error.response.data.error.message);
-
           }
         }}>
         {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
@@ -360,7 +364,7 @@ const Register: FC<Props> = (props) => {
               <SubmitButton text="COMPLETE" onPress={handleSubmit} />
             </Container>
 
-            <Text>{serverError.toString()}</Text>
+            <Text style={{ fontSize: 10, color: 'red' }}>{serverError.toString()}</Text>
 
             <PrintText>
               By doing this you are agreeing to our
