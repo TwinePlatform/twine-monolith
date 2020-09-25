@@ -202,7 +202,7 @@ const LogCreateModal:FC<Props> = (props) => {
                         </select>
                         
                         <br />
-                        <label for ="Project">Project<label>
+                        <label for ="Project">Project</label>
                         <select className ="Create_ProjectDetails"id="Project" name="Project">
                             {projects.map(project=>
                                 <option value={project}>{project}</option>)} 
