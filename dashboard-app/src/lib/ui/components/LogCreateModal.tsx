@@ -195,21 +195,21 @@ const LogCreateModal:FC<Props> = (props) => {
                     <div id="Log Form">
                         {/* Style Dropdowns */}
                       <section className = "Create_ProjectDetails">
-                        <label for ="Volunteer">Volunteer</label>
-                        <select className ="Create_ProjectDetails"id="Volunteer" name="Volunteer">
+                        <label htmlFor = "Volunteer">Volunteer</label>
+                        <select className ="Create_ProjectDetails" id="Volunteer" name="Volunteer">
                             {volunteers.map(volunteer=>
                                 <option value={volunteer.id}>{volunteer.name}</option>)} 
                         </select>
                         
                         <br />
-                        <label for ="Project">Project</label>
+                        <label htmlFor ="Project">Project</label>
                         <select className ="Create_ProjectDetails"id="Project" name="Project">
                             {projects.map(project=>
                                 <option value={project}>{project}</option>)} 
                         </select>
                         
                         <br /> 
-                        <label for ="Activity "> Activity </label>
+                        <label htmlFor ="Activity "> Activity </label>
                         <select className ="Create_ProjectDetails"id="Activity" name="Activity">
                             {activities.map(activity=>
                                 <option value={activity}>{activity}</option>)} 
@@ -218,19 +218,19 @@ const LogCreateModal:FC<Props> = (props) => {
                       </section>
 
                       <section className = "Create_DateTime">
-                      <label for ="Date">Date</label>
+                      <label htmlFor ="Date">Date</label>
                         <input type="date" id="Date" value={date}
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
                         />
                         <br />
-                        <label for = "Start Time">Start Time</label>
+                        <label htmlFor = "Start Time">Start Time</label>
                         <input type="time" id="Start Time" value={startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
                         
                         <br />
-                        <label for = "End Time">End Time </label>
+                        <label htmlFor = "End Time">End Time </label>
                         <input  type="time" id="End Time" value={endTime}
                         onChange={(e)=>setEndTime(e.target.value)}
                         />
