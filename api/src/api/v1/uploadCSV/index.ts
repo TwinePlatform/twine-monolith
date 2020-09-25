@@ -23,13 +23,21 @@ const routes: [
     = [
         {
             method: 'POST',
-            path: '/upload/CSVlogs/{organisationId}',       
+            path: '/upload/CSVlogs/{organisationId}',
             options: {
                 description: 'Upload activity from dashboard using CSV format',
                 auth: {
                     strategy: 'standard',
                     access: {
                         scope: ['user_details-own:read', 'organisations_volunteers-parent:write'],
+                    },
+                },
+                payload: {
+                    allow: 'multipart/form-data',
+                    maxBytes: 1024 * 1024 * 100,
+                    timeout: false,
+                    multipart: {
+                        output: "data"
                     },
                 },
             },
