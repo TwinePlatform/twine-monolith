@@ -10,7 +10,7 @@ import { Paragraph } from '../../../lib/ui/components/Typography';
 import { TitlesCopy } from '../copy/titles';
 import { DashboardContext } from '../context';
 
-import {Files} from '../../../lib/api';
+import {Files, CommunityBusinesses} from '../../../lib/api';
 
 const Container = styled(Grid)`
 `;
@@ -37,9 +37,11 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
         setUploadState("selected");
   }
 
-  const confirmUpload = () => {
+  const confirmUpload = async () => {
       setUploadState("validating");
-      Files.upload(uploadedFile)
+      const {data: {result: {id}}} = await CommunityBusinesses.get();
+
+      Files.upload(uploadedFile, id)
       .then(result=>{
         console.log(result);
         setUploadState("success");

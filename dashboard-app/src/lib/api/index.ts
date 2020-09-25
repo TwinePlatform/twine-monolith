@@ -44,7 +44,7 @@ export const CommunityBusinesses = {
   },
 
   get: (params?: Pick<AxiosRequestConfig, 'params'>) =>
-    axios.request<Api.CommunityBusinesses.Me.GET.Result>({ ...CommunityBusinesses.configs.get, params }),
+    axios.request({ ...CommunityBusinesses.configs.get, params }),
   getLogs: (params?: Pick<AxiosRequestConfig, 'params'>) =>
     axios.request({ ...CommunityBusinesses.configs.getLogs, params }),
   getVolunteerActivities: () =>
@@ -73,14 +73,14 @@ export const LogNote = {
 }
 
 export const Files = {
-  upload: (file: File) => {
-    console.log("uploading " + file.name + "to /community-businesses/")
+  upload: (file: File, orgID: number) => {
+    console.log("uploading " + file.name + " to /community-businesses/")
     const formData = new FormData();
     const csvFile = new File ([file],file.name,{type: "text/csv"})
 
     formData.append('file', csvFile);
 
-    return axios.post('upload/CSVlogs/1', formData, {
+    return axios.post('upload/CSVlogs/' + orgID, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
