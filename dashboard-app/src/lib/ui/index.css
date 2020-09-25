@@ -148,6 +148,7 @@ q:after {
 .Create_ProjectDetails
 {
 position: relative;
+margin-bottom: 16px;
 }
 
 .Create_DateTime
