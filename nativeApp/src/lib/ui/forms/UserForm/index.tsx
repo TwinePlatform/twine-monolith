@@ -142,6 +142,7 @@ const UserForm: FC<Props> = ({
   const { name, email, phoneNumber, gender, birthYear, postCode } = defaultValues;
   const [addVolArr, setAddVolArr] = useState([]);
 
+
   const addVolunteer = (values) => {
     setAddVolArr(addVolArr => [...addVolArr, values]);
   }
@@ -165,10 +166,15 @@ const UserForm: FC<Props> = ({
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
+        if (action === 'update') {
+          delete values.role;
+        }
         if (addVolArr == []) {
           onSubmit(values);
         } else if (addVolArr != []) {
-          setAddVolArr(addVolArr => [...addVolArr, values]); //for animation
+          if (action != 'update') {
+            setAddVolArr(addVolArr => [...addVolArr, values]); //for animation
+          }
           const lastState = [...addVolArr, values]
           Promise.all(lastState.map(volunteer => {
             onSubmit(volunteer);
