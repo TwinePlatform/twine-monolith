@@ -29,7 +29,8 @@
 
 ### API result Return:	
 - when a column in either table is not filled 	
-    - nothing will be added to the Database	
+    -nothing will be added to the Database	
+```json
 {	
     "result": [	
         "Error: incomplete table",	
@@ -43,6 +44,7 @@
         }	
     ]	
 }	
+```
 - when volunteer is registered 	
     - the only role that can be registered through the dashboard is volunteer 	
     - volunteer should/can change the details (e.g password and gender) after account registration 	
@@ -60,7 +62,7 @@
         - "ethnicity": "prefer not to say",	
         - "disability": "prefer not to say",	
         - "isTemp": false	
-
+```json
 {	
     "error": {	
         "statusCode": 409,	
@@ -68,7 +70,9 @@
         "message": "It appears this1998@blackmesaresearch.comis already registered."	
     }	
 }	
+```
 - volunteer registered 	
+```json
 {	
     "result": [	
         {	
@@ -111,8 +115,9 @@
         }	
     ]	
 }	
-
+```
 - activity added 	
+```json
 {	
     "result": [	
         [	
@@ -122,8 +127,9 @@
         ],	
     ]	
 }	
-
-- project added 	
+```
+- project added 
+```json
 {	
     "result": [	
         [	
@@ -133,11 +139,12 @@
         ],	
     ]	
 }	
-
+```
 - log exist 	
     - would return a error 500 as network error 	
 
 - log logged 	
+```json
 {	
     "result": [	
         {	
@@ -174,8 +181,9 @@
         }	
     ]	
 }	
-
-- both volunteer being registered and log logged	
+```
+- both volunteer being registered and log logged
+```json
 {	
     "result": [	
         {	
@@ -250,3 +258,4 @@
         }	
     ]	
 }
+```
