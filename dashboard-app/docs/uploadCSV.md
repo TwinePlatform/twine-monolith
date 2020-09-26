@@ -27,6 +27,14 @@
 - first and second table are seperated by reserved character '$$$'	
 - make sure all columns are filled 	
 
+### Server Error 500: 
+This can happen on various reasons:
+- serve is down 
+- the log already exist 
+    - in this case, the volunteers would have been registered
+    - expected to get user already registered error on the next upload
+
+
 ### API result Return:	
 - when a column in either table is not filled 	
     -nothing will be added to the Database	
