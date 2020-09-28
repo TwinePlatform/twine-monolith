@@ -15,7 +15,6 @@
     "make:redux-req": "ts-node ./bin/make_redux_req/index.ts"
   },
   "dependencies": {
-    "@react-native-community/art": "github:react-native-community/art",
     "@react-native-community/art": "^1.2.0",
     "@react-native-community/datetimepicker": "2.4.0",
     "@types/expo": "^32.0.13",

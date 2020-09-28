@@ -16,13 +16,13 @@ type Props = {
 /*
  * Styles
  */
-// const Container = styled.View<Pick<Props, 'align'>>`
-//   justifyContent: ${({ align }) => (align === 'center' ? 'center' : 'flex-start')};
-//   width: 100%;
-//   flexDirection: row;
-//   alignItems: flex-end;
-//   marginBottom: 5;
-// `;
+ const Container = styled.View<Pick<Props, 'align'>>`
+   justifyContent: ${({ align }) => (align === 'center' ? 'center' : 'flex-start')};
+   width: 100%;
+   flexDirection: row;
+   alignItems: flex-end;
+   marginBottom: 5;
+ `;
 
 const OuterContainer = styled.View`
   width: 100%;
@@ -96,8 +96,8 @@ export const TimeDiff: FC<Props> = (props) => {
   const minutes = Math.floor((endTime - startTime) / (1000 * 60) - hours * 60);
 
   return (
-    <OuterContainer align={align}>
-      <InnerContainer>
+    <OuterContainer >
+      <InnerContainer align={align}>
         <Value>{hours}</Value>
         <Spacer />
         <Unit>hours</Unit>
