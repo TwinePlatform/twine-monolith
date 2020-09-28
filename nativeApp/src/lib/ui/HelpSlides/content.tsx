@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
-import { Text, View, SafeAreaView, ImageBackground, StyleSheet, Dimensions } from "react-native";
+import { Text, View, ImageBackground, StyleSheet, Dimensions } from "react-native";
 import { NavigationInjectedProps } from 'react-navigation';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 import { FontsEnum } from '../../../lib/ui/typography';
@@ -50,10 +50,11 @@ const EmptySpace = styled.View`
 `;
 
 const ContainerImage = styled.View`
-    top: 30%;
-	alignItems: center;`
-	//justifyContent: center;
-//`;
+
+	alignItems: center;
+    justifyContent: center;
+`;
+
 const Image = styled.Image`
   width: 186px;
   height: 315px;
@@ -158,8 +159,9 @@ const HelpSlidesTemplate: FC<NavigationInjectedProps & Props> = ({ navigation, r
 
     return (
 
-        
-            <SafeAreaView style={styles.container}>
+
+        <Scrollable>
+            <View style={styles.container}>
 
                 <ImageBackground style={styles.image} source={images['background']} >
 
@@ -175,7 +177,7 @@ const HelpSlidesTemplate: FC<NavigationInjectedProps & Props> = ({ navigation, r
                         <Image source={images[imagename]} />
                     </ContainerImage>
 
-                    <TextBottom>J{text}</TextBottom>
+                    <TextBottom>{text}</TextBottom>
 
                     <ContainerFooter>
                         {slide == 'slide2' &&
@@ -344,9 +346,9 @@ const HelpSlidesTemplate: FC<NavigationInjectedProps & Props> = ({ navigation, r
 
                     </ContainerFooter>
                 </ImageBackground>
-            </SafeAreaView>
+            </View>
+        </Scrollable >
     )
 };
 
 export default HelpSlidesTemplate;
-

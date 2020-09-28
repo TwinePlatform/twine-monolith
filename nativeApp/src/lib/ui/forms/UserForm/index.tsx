@@ -81,10 +81,12 @@ const validationSchema = yup.object().shape({
     // regex: /^[a-zA-Z]{2,}\s?[a-zA-z]*['-]?[a-zA-Z]*['\- ]?([a-zA-Z]{1,})?/,
     // message: 'Name must not contain special characters' })
     .required('Name is required'),
-  email: yup.string()
+  email: yup
+    .string()
     .email('Email must be valid')
     .required('Email is required'),
-  phoneNumber: yup.string()
+  phoneNumber: yup
+    .string()
     .min(9, 'Phone number must be at least 9 digits')
     .max(20, 'Phone number cannot be longer than 20 digits'),
   // .matches({ regex: /^\+?[0-9 -]*$/, message: 'Phone number must be valid' }),
@@ -92,6 +94,13 @@ const validationSchema = yup.object().shape({
     .string()
     .min(4, 'Post code must be at least 4 letters')
     .max(10, 'Post code cannot be longer than 10 letters'),
+  gender: yup
+    .string()
+    .required('Gender is required'),
+  birthYear: yup
+    .number()
+    .required('Birth Year is required'),
+
 });
 
 // TODO: get from api
@@ -142,6 +151,7 @@ const UserForm: FC<Props> = ({
   const { name, email, phoneNumber, gender, birthYear, postCode } = defaultValues;
   const [addVolArr, setAddVolArr] = useState([]);
 
+
   const addVolunteer = (values) => {
     setAddVolArr(addVolArr => [...addVolArr, values]);
   }
@@ -165,10 +175,15 @@ const UserForm: FC<Props> = ({
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
+        if (action === 'update') {
+          delete values.role;
+        }
         if (addVolArr == []) {
           onSubmit(values);
         } else if (addVolArr != []) {
-          setAddVolArr(addVolArr => [...addVolArr, values]); //for animation
+          if (action != 'update') {
+            setAddVolArr(addVolArr => [...addVolArr, values]); //for animation
+          }
           const lastState = [...addVolArr, values]
           Promise.all(lastState.map(volunteer => {
             onSubmit(volunteer);
