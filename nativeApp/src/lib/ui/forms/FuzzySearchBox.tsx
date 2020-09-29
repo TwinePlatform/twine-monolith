@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import {View} from 'react-native';
 import styled from 'styled-components/native';
 import { Item as I, Picker, Label as L, Input } from 'native-base';
 import { FlatList as F, Text as T } from 'react-native';
@@ -76,13 +77,18 @@ const FuzzySearchBox: FC<Props> = (props) => {
     setFilteredData(filterData(options, text));
   }
 
+  let rowCounter = 0;
+
   const renderRow = (item) => {
     return <TouchableNativeFeedback
       onPress={() => {
+        console.log("pressed")
         setText(item.name);
         onValueChange(item.name);
+        setTextInputFocus(false);
       }
       }
+      key={rowCounter++}
     >
       <Text>{item.name}</Text>
     </TouchableNativeFeedback>
@@ -96,17 +102,21 @@ const FuzzySearchBox: FC<Props> = (props) => {
           placeholderTextColor={ColoursEnum.grey}
           onChangeText={text => changeText(text)}
           onFocus={() => setTextInputFocus(true)}
-          onBlur={() => setTextInputFocus(false)}
           value={text}
         />
       </Item>
       {textInputFocus &&
+        <View>
+          {filteredData.map(item => renderRow(item))}
+        </View>
+      }
+      {/*textInputFocus &&
         <FlatList
           data={filteredData}
           renderItem={({ item }) => renderRow(item)}
           keyExtractor={(item: any) => item.id.toString()}
         />
-      }
+      */}
     </React.Fragment>
 
   );

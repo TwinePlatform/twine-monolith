@@ -49,6 +49,6 @@ export const Close: FC<Props> = (props) => {
   return <AddCloseButton
     onPress={props.onPress}
   >
-    <AddNoteText>Cancle</AddNoteText>
+    <AddNoteText>Cancel</AddNoteText>
   </AddCloseButton>;
 };

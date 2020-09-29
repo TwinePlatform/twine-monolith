@@ -122,7 +122,9 @@ const Login: FC<Props> = (props) => {
           >
             <MaterialCommunityIcons name="lock-outline" size={27} color={ColoursEnum.grey} />
           </Input>
-          <SubmitButton marginBottom='0' text="LOG IN" onPress={() => onSubmit()} />
+          <SubmitButton 
+          //marginBottom='0' 
+          text="LOG IN" onPress={() => onSubmit()} />
           <ErrorText>*{serverError.toString()}</ErrorText>
         </Form>
         <LinkText onPress={() => props.navigation.navigate('Error')}>

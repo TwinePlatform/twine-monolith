@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState} from 'react';
+import {View, Platform} from 'react-native';
 import styled from 'styled-components/native';
 import {
   Item as I, Label as L, Text,
@@ -14,6 +15,7 @@ import { Forms } from '../enums';
 import { ColoursEnum } from '../../colours';
 import useToggle from '../../../hooks/useToggle';
 import { getDateWithCurrentTime } from './util';
+import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 
 /*
  * Types
@@ -39,6 +41,7 @@ const Value = styled(Text)`
 
 const Item = styled(I)`
   marginLeft: 0;
+  display: flex;
 `;
 
 const Label = styled(L)`
@@ -72,19 +75,19 @@ const displayValue = (mode, value: Date) => {
 /*
  * Component
  */
-const DateTimePicker: FC<Props> = (props) => {
+const TwineDateTimePicker: FC<Props> = (props) => {
   const {
     onConfirm, value, mode, label, minDate, maxDate,
   } = props;
   const [isVisible, toggleVisibility] = useToggle(false);
   const [modeInternal, setModeInternal] = useState(mode);
 
-
   const onConfirmAndHide = (_date: Date) => {
     if(modeInternal == "datetime")
       setModeInternal("time");
-    if(modeInternal == "time")
-      setModeInternal("datetime");
+    else
+      if(modeInternal == "time")
+        setModeInternal("datetime");
 
     // NB: server rejects logs with identical times & users as they're
     // believed to be an offline sync issue
@@ -100,8 +103,7 @@ const DateTimePicker: FC<Props> = (props) => {
       {value
         ? <Value onPress={toggleVisibility}>{displayValue(mode, value)}</Value>
         : <PlaceHolder onPress={toggleVisibility}>{`Select ${mode}`}</PlaceHolder>}
-
-    {isVisible &&
+    {isVisible && Platform.OS == 'android' &&
       <_DateTimePicker
         minimumDate={minDate}
         maximumDate={maxDate}
@@ -112,20 +114,23 @@ const DateTimePicker: FC<Props> = (props) => {
        // titleIOS={`Pick a ${mode}`}
       />
     }
-    {/*isVisible && 
-    <RNDateTimePicker
-      minimumDate={minDate}
-      maximumDate={maxDate}
-      value={value}
-      mode={modeInternal}
-      onChange={(event, values) => onConfirmAndHide(values)}
-      //onCancel={toggleVisibility}
-   // titleIOS={`Pick a ${mode}`}
-    />
-
-    */}
+    {isVisible && Platform.OS == 'ios' &&
+    <View
+        style={{position: 'absolute', width: '100%', backgroundColor: 'white' }}
+      >
+          <_DateTimePicker
+        minimumDate={minDate}
+        maximumDate={maxDate}
+        value={value}
+        mode={"datetime"}
+        onChange={(event, values) => onConfirmAndHide(values)}
+        //onCancel={toggleVisibility}
+        //titleIOS={`Pick a ${mode}`}
+      />
+    </View>
+    }
     </Item>
   );
 };
 
-export default DateTimePicker;
+export default TwineDateTimePicker;
