@@ -14,6 +14,13 @@ body {
    License: none (public domain)
 */
 
+
+
+input[type="date"], input[type ="time"] 
+{
+  border: none;
+}
+
 html,
 body,
 div,
