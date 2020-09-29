@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@react-native-community/art": "^1.2.0",
-    "@react-native-community/datetimepicker": "2.4.0",
+    "@react-native-community/datetimepicker": "^2.4.0",
+    "@react-native-community/netinfo": "^5.9.7",
     "@types/expo": "^32.0.13",
     "@types/jest": "^24.0.18",
     "@types/ramda": "^0.26.33",

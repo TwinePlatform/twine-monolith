@@ -12,12 +12,15 @@ import Fuse from 'fuse.js';
  * Types
  */
 type Props = {
-  ref: (ref: unknown) => void;
+  ref?: (ref: unknown) => void;
   label: string;
   placeholder: string;
-  options: { id: number; name: string }[];
+  options: any[];
   onValueChange: any;
-  defaultValue?: string | number;
+  selectedValue?: any;
+  onBlur: any;
+  value: any;
+  defaultValue?: any;
 }
 
 /*
@@ -45,7 +48,7 @@ const FlatList = styled(F)`
 
 const filterData = (data, filter) => {
   if (filter === "")
-    return data;
+    return data.length < 5 ? data : data.slice(0, 5);;
   const options = {
     keys: [
       "name"
@@ -101,7 +104,7 @@ const FuzzySearchBox: FC<Props> = (props) => {
         <FlatList
           data={filteredData}
           renderItem={({ item }) => renderRow(item)}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={(item: any) => item.id.toString()}
         />
       }
     </React.Fragment>

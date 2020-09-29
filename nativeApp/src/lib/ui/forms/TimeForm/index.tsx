@@ -2,7 +2,8 @@ import React, { FC, useState, useEffect } from 'react';
 import { StorageValuesEnum } from '../../../../authentication/types';
 import styled from 'styled-components/native';
 import { Form as F, Text, View } from 'native-base';
-import { NetInfo, Platform, AsyncStorage, TextInput } from "react-native";
+import { Platform, AsyncStorage, TextInput } from "react-native";
+import NetInfo from "@react-native-community/netinfo";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
@@ -50,7 +51,7 @@ type Props = {
   projects: IdAndName[];
   volunteers?: User[];
   forUser: 'admin' | 'volunteer'; // TODO replace with role enum from api
-  logId: string;
+  logId?: string;
   selectedProject?: string;
   selectedActivity?: string;
   origin: string;
@@ -133,14 +134,14 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   }
 
   const CheckConnectivity = async (logData) => {
-    await NetInfo.isConnected.fetch()
-      .then(isConnected => {
-        if (isConnected) {
+    await NetInfo.fetch()
+      .then(state => {
+        if (state.isConnected) {
           console.log('connected to internet');
         } else {
           cache(logData);
         }
-        return isConnected;
+        return state.isConnected;
       })
   }
 
@@ -153,9 +154,9 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   //function to cache value in asynchstorage
   const cache = async (values) => {
-
-    var cachevalue = await AsyncStorage.getItem('log cache');
-    cachevalue = cachevalue == null ? [] : JSON.parse(cachevalue);
+    let cachevalue;
+    let cachevalueString = await AsyncStorage.getItem('log cache');
+    cachevalue = cachevalueString == null ? [] : JSON.parse(cachevalue);
     cachevalue.push(values);
     await AsyncStorage.setItem(
       'log cache',
@@ -165,9 +166,13 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   }
 
   const cacheforEdit = async (values) => {
+    let cacheValueString = await AsyncStorage.getItem('edit log cache');
+    let cachevalue;
+    if(cacheValueString == null) 
+      cachevalue = [];
+    else
+      cachevalue = JSON.parse(cachevalue);
 
-    var cachevalue = await AsyncStorage.getItem('edit log cache');
-    cachevalue = cachevalue == null ? [] : JSON.parse(cachevalue);
     cachevalue.push(values);
     await AsyncStorage.setItem(
       'edit log cache',
@@ -199,7 +204,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
     const values = {
       project,
       activity,
-      startedAt: date as string,
+      startedAt: date.toISOString(),
       duration: { hours, minutes },
       userId: userId,
       note
@@ -207,18 +212,23 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
     CheckConnectivity(values);
 
+    console.log(origin)
+
     //if timeform is called from add time view 
-    if (origin == "addTime") {
+    if (origin != "editTime") {
       try { //error trapping and cache log when network error
+        console.log("adding time")
         const res = await dispatch(createLog(values));
-        if (res.error.statusCode == 500) {
+        console.log(res)
+        /*
+        if (res.status == 500) {
           cache(values);
         }
-        if (res.error.statusCode == 400) {
-          console.log(res.error.message);
+        if (res.status == 400) {
+          console.log(res.statusText);
           //ToDo: error trapping here 
         }
-        console.log(res);
+        console.log(res);*/
       } catch (error) {
         console.log(error);
       }
@@ -246,23 +256,25 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       const valuesEdit: any = {
         project,
         activity,
-        startedAt: date as string,
+        startedAt: date.toISOString(),
         duration: { hours, minutes },
       };
 
 
       try { //error trapping and cache log when network error
-        const res = await dispatch(updateLog(userId, logId, valuesEdit));
-        if (res.error.statusCode == 500) {
+        const res = await dispatch(updateLog(userId, parseInt(logId), valuesEdit));
+        console.log(res);
+         /*
+        if (res.status == 500) {
           valuesEdit.userId = userId;
           valuesEdit.logId = logId;
           cacheforEdit(valuesEdit);
         }
-        if (res.error.statusCode == 400) {
-          console.log(res.error.message);
+        if (res.status == 400) {
+          console.log(res.statusText);
           //ToDo: error trapping here 
         }
-        console.log(res);
+        console.log(res);*/
       } catch (error) {
         console.log(error);
       }
@@ -307,13 +319,23 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       initialValues={{ volunteer: '', project: selectedProject, activity: selectedActivity, note: '' }}
       // validationSchema={validationSchema}
       onSubmit={(values, date) => {
+        
         values.note = note;
-        if (addVolArr == []) {
+        console.log(addVolArr)
+        if (addVolArr.length == 0) {
+          console.log(values)
           onSubmit(values.volunteer, values.project, values.activity, startTime, endTime, values.note);
-        } else if (addVolArr != []) {
+        } else if (addVolArr.length >= 1) {
+          console.log("submitted and array full")
+          addVolArr.map(volunteer => {
+            console.log("single item submit")
+            onSubmit(volunteer, values.project, values.activity, startTime, endTime, values.note);
+          })
+          /*
           Promise.all(addVolArr.map(volunteer => {
             onSubmit(volunteer, values.project, values.activity, startTime, endTime, values.note);
           }));
+          */
         }
       }}>
 
@@ -375,7 +397,8 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
           {forUser === 'volunteer' && <Label>What activity are you doing?</Label>}
 
-          <Dropdown label="Activity"
+          <Dropdown 
+            label="Activity"
             options={activities}
             selectedValue={values.activity}
             onValueChange={handleChange('activity')}

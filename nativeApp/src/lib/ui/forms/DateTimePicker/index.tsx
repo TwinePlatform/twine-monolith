@@ -5,7 +5,10 @@ import {
 } from 'native-base';
 import moment from 'moment';
 
-import _DateTimePicker from 'react-native-modal-datetime-picker';
+//import _DateTimePicker from 'react-native-modal-datetime-picker';
+import _DateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
+
 
 import { Forms } from '../enums';
 import { ColoursEnum } from '../../colours';
@@ -74,8 +77,15 @@ const DateTimePicker: FC<Props> = (props) => {
     onConfirm, value, mode, label, minDate, maxDate,
   } = props;
   const [isVisible, toggleVisibility] = useToggle(false);
+  const [modeInternal, setModeInternal] = useState(mode);
+
 
   const onConfirmAndHide = (_date: Date) => {
+    if(modeInternal == "datetime")
+      setModeInternal("time");
+    if(modeInternal == "time")
+      setModeInternal("datetime");
+
     // NB: server rejects logs with identical times & users as they're
     // believed to be an offline sync issue
     console.log(_date);
@@ -91,18 +101,30 @@ const DateTimePicker: FC<Props> = (props) => {
         ? <Value onPress={toggleVisibility}>{displayValue(mode, value)}</Value>
         : <PlaceHolder onPress={toggleVisibility}>{`Select ${mode}`}</PlaceHolder>}
 
+    {isVisible &&
       <_DateTimePicker
         minimumDate={minDate}
         maximumDate={maxDate}
-        date={value}
-        isVisible={isVisible}
-        mode={mode}
-        onConfirm={(values) => onConfirmAndHide(values)}
-        onCancel={toggleVisibility}
-        titleIOS={`Pick a ${mode}`}
+        value={value}
+        mode={modeInternal}
+        onChange={(event, values) => onConfirmAndHide(values)}
+        //onCancel={toggleVisibility}
+       // titleIOS={`Pick a ${mode}`}
       />
-    </Item>
+    }
+    {/*isVisible && 
+    <RNDateTimePicker
+      minimumDate={minDate}
+      maximumDate={maxDate}
+      value={value}
+      mode={modeInternal}
+      onChange={(event, values) => onConfirmAndHide(values)}
+      //onCancel={toggleVisibility}
+   // titleIOS={`Pick a ${mode}`}
+    />
 
+    */}
+    </Item>
   );
 };
 

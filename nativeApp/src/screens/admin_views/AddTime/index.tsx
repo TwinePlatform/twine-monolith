@@ -14,6 +14,7 @@ import { selectActiveOrderedProjects, loadProjects } from '../../../redux/entiti
  * Types
  */
 type Props = {
+  navigationOptions: any;
 }
 
 /*
@@ -24,7 +25,7 @@ type Props = {
 /*
  * Component
  */
-const AddTime: FC<NavigationInjectedProps & Props> = () => {
+const AddTime: any = () => {
   // redux
   const dispatch = useDispatch();
 

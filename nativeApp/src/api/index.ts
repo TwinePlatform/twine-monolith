@@ -11,6 +11,7 @@ import { userId } from "../../../api/src/api/v1/schema/request";
  * Types
  */
 export type IdAndName = { id: number; name: string };
+type LogsResult = {error?: any;};
 
 /*
  * Axios
@@ -86,14 +87,14 @@ const VolunteerLogs = {
     },
     ),
   getVolunteerActivities: () => axios.get('/volunteer-activities'),
-  add: (values: Partial<VolunteerLog>) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>( //eslint-disable-line
+  add: (values: Partial<VolunteerLog>) => makeRequest<LogsResult>( //eslint-disable-line
     {
       method: 'POST',
       url: `/community-businesses/me/volunteer-logs`,
       data: values,
     }),
 
-  update: (id, LogId, values: Partial<VolunteerLog>) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>({ //eslint-disable-line
+  update: (id, LogId, values: Partial<VolunteerLog>) => makeRequest({ //eslint-disable-line
     method: "PUT",
     url: `/community-businesses/me/volunteer-logs/${id}/${LogId}`,
     data: values,
