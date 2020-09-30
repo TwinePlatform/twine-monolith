@@ -290,7 +290,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   }
 
   const deleteVolunteer = (volunteerName) => {
-    const removed = addVolArr.filter(volunteer => volunteer.name != volunteerName);
+    const removed = addVolArr.filter(volunteer => volunteer != volunteerName);
     setAddVolArr(removed);
   }
 
@@ -320,22 +320,19 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       // validationSchema={validationSchema}
       onSubmit={(values, date) => {
         
+        
         values.note = note;
         console.log(addVolArr)
         if (addVolArr.length == 0) {
           console.log(values)
           onSubmit(values.volunteer, values.project, values.activity, startTime, endTime, values.note);
         } else if (addVolArr.length >= 1) {
-          console.log("submitted and array full")
+          addVolArr.push(values.volunteer); //add the active volunteer to the array
+
           addVolArr.map(volunteer => {
-            console.log("single item submit")
+            console.log(volunteer)
             onSubmit(volunteer, values.project, values.activity, startTime, endTime, values.note);
           })
-          /*
-          Promise.all(addVolArr.map(volunteer => {
-            onSubmit(volunteer, values.project, values.activity, startTime, endTime, values.note);
-          }));
-          */
         }
       }}>
 
@@ -431,7 +428,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           />
 
           <NoteContainer>
-            <AddVolunteerButton text="Add Another" onPress={() => addVolunteer(values.volunteer)} />
+            {forUser === 'admin' && <AddVolunteerButton text="Add Another" onPress={() => addVolunteer(values.volunteer)} />}
             <NoteButton label={"Add note"} onPress={toggleNoteInvisibility} />
           </NoteContainer>
 
