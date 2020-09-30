@@ -116,12 +116,6 @@ const Register: FC<Props> = (props) => {
       console.log("initial")
       initialiseCommunityBusinessOptions();
 
-      API.CommunityBusiness.get()
-        .then(res => {
-          console.log(res)
-          console.log(res.data)
-          //setOrganisationOptions(res.data)
-        });
       setInitialised(true)
     }
   });
