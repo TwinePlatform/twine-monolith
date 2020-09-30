@@ -4,7 +4,9 @@ import { AsyncStorage } from "react-native";
 import getEnvVars from "../../environment"; // eslint-disable-line
 import { StorageValuesEnum } from "../authentication/types";
 import { Api } from "../../../api/src/api/v1/types/api";
-import { VolunteerLog } from "../../../api/src/models";
+import { 
+  //CommunityBusiness, 
+  VolunteerLog } from "../../../api/src/models";
 import { userId } from "../../../api/src/api/v1/schema/request";
 
 /*
@@ -108,6 +110,10 @@ const VolunteerLogs = {
 
 const CommunityBusiness = {
   get: async (): Promise<any> => axios.get('/community-businesses'),
+  getByRegion: async(regionId)=> makeRequest({
+    method: 'GET',
+    url: `/regions/${regionId}/community-businesses`
+  }),
   register: (data) => { console.log(data) }
 }
 

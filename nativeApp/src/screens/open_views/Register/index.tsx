@@ -26,6 +26,17 @@ type Props = {
 /*
  * Styles
  */
+const SuccessText = (props) => {
+  if(props.visible)
+    return <View
+      style={{position: 'absolute',top: '50%', backgroundColor: 'white'}}
+    >
+      <Text style={{color: ColoursEnum.purple, fontSize: 20, textAlign: 'center'}}>{props.text}</Text>
+          </View>
+  else
+    return null;
+}
+
 const Registration = styled.View`
   alignItems: center;
   width: 30%;
@@ -78,8 +89,8 @@ const PrintText = styled.Text`
 
 const formOptions = [{ id: 1, name: "Organisation" }, { id: 2, name: "User" }];
 const yearOptions = [...Array(100).keys()].map((_, i) => ({ id: i, name: `${2005 - i}` }));
-// const genderOptions = [{ id: 1, name: "East Midlands" }, { id: 2, name: "East of England" }, { id: 3, name: "London" }, { id: 4, name: "North East" }];
-const genderOptions = [{ id: 1, name: "East Midlands" }, { id: 2, name: "East of England" }, { id: 3, name: "London" }, { id: 4, name: "North East" }, { id: 5, name: "North West" }, { id: 6, name: "South East" }, { id: 7, name: "South West" }, { id: 8, name: "West Midlands" }, { id: 9, name: "Yorkshire and The Humber" }];
+// const regionOptions = [{ id: 1, name: "East Midlands" }, { id: 2, name: "East of England" }, { id: 3, name: "London" }, { id: 4, name: "North East" }];
+const regionOptions = [{ id: 1, name: "East Midlands" }, { id: 2, name: "East of England" }, { id: 3, name: "London" }, { id: 4, name: "North East" }, { id: 5, name: "North West" }, { id: 6, name: "South East" }, { id: 7, name: "South West" }, { id: 8, name: "West Midlands" }, { id: 9, name: "Yorkshire and The Humber" }];
 const thankYouMessage = "\nThank you for registering!\nYou should have received\nan email with your admin code.\n\nPlease now register as a user\nand enter your admin code."
 /*
  * Component
@@ -90,24 +101,45 @@ const Register: FC<Props> = (props) => {
   const [initialised, setInitialised] = useState(false);
   const [organisationOptions, setOrganisationOptions] = useState([{ id: 1, name: "loading organisations" }])
 
+  const[successTextVisible, setSuccessTextVisible] = useState(false);
+
   const [userYearOfBirth, setUserYearOfBirth] = useState("");
   const [region, setRegion] = useState("");
-  const [userOrganisation, setUserOrganisation] = useState("");
+  const [userOrganisation, setUserOrganisation] = useState({id: 0, name: "default"});
 
   const [serverError, setError] = useState("");
 
   useEffect(() => {
+    console.log("effect")
+
     if (!initialised) {
+      console.log("initial")
+      initialiseCommunityBusinessOptions();
+
       API.CommunityBusiness.get()
         .then(res => {
+          console.log(res)
           console.log(res.data)
           //setOrganisationOptions(res.data)
         });
       setInitialised(true)
     }
-  }
+  });
 
-  );
+  const initialiseCommunityBusinessOptions = async () => {
+    let listOfCommunityBusinesses= [];
+
+    regionOptions.map(async (region, index) =>{
+      const {data} = await API.CommunityBusiness.getByRegion(region.id);
+
+      listOfCommunityBusinesses = listOfCommunityBusinesses.concat(data);
+
+      if(index == regionOptions.length -1){
+        console.log(listOfCommunityBusinesses);
+        setOrganisationOptions(listOfCommunityBusinesses);
+      }
+    })
+  }
 
   const validationSchemaOrg = yup.object().shape({
     OrgName: yup
@@ -120,14 +152,14 @@ const Register: FC<Props> = (props) => {
   });
 
   const validationSchemaUser = yup.object().shape({
-    Name: yup
+    name: yup
       .string()
       .required('Please enter your full name'),
-    Email: yup
+    email: yup
       .string()
       .email()
       .required('Please enter your email address. If you don’t have one, an administrator can help you register.'),
-    Password: yup
+    password: yup
       .string()
       .min(3, 'Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)')
       .required('Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)'),
@@ -220,7 +252,7 @@ const Register: FC<Props> = (props) => {
               />
 
               <DropdownNoLabel
-                options={genderOptions}
+                options={regionOptions}
                 selectedValue={region}
                 onValueChange={setRegion}
                 placeholder='Region'
@@ -262,9 +294,27 @@ const Register: FC<Props> = (props) => {
             //values of drop down
             values.region = region;
             values.YearOfBirth = userYearOfBirth;
-            values.organisationId = userOrganisation; //TODO: need to pass the organisation ID here 
+            values.organisationId = userOrganisation.id; //TODO: need to pass the organisation ID here 
+
+            if(values.AdminCode.length > 0)
+              values.role = "VOLUNTEER_ADMIN";
+            else
+              values.role = "VOLUNTEER";
+
+            values = {
+              name: values.name,
+              email: values.email,
+              password: values.password,
+              postCode: values.Postcode,
+              phoneNumber: values.Phone,
+              birthYear: parseInt(values.YearOfBirth),
+              organisationId: values.organisationId,
+              role: values.role
+            }
+
+            console.log(values);
             //add volunteer 
-            const res = await API.Volunteers.add({
+            const res = await API.Volunteers.add(
               values
               // "organisationId": "2",
               // "role": "VOLUNTEER",
@@ -272,14 +322,29 @@ const Register: FC<Props> = (props) => {
               // "gender": "prefer not to say",
               // "email": "1@aperturescience.com",
               // "password": "Password123!?"
-            });
+            );
+
+            if(res.status == 200){
+                setSuccessTextVisible(true);
+                setTimeout(()=>{
+                  setSuccessTextVisible(false);
+                  props.navigation.navigate('Login');
+                }
+                  ,700)
+            }
           } catch (error) {
+            console.log(error)
             setError(error.response.data.error.message);
           }
         }}>
         {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-
+          
           <Page heading="Register">
+
+          <SuccessText
+            text="Registration Successful"
+            visible={successTextVisible}
+          />
 
             <Registration>
               <DropdownShort
@@ -288,9 +353,9 @@ const Register: FC<Props> = (props) => {
             </Registration>
 
             <Input
-              onChangeText={handleChange('Name')}
-              onBlur={handleBlur('Name')}
-              value={values.Name}
+              onChangeText={handleChange('name')}
+              onBlur={handleBlur('name')}
+              value={values.name}
               placeholder='Full Name'
             />
             {errors.Name &&
@@ -298,9 +363,9 @@ const Register: FC<Props> = (props) => {
             }
 
             <Input
-              onChangeText={handleChange('Email')}
-              onBlur={handleBlur('Email')}
-              value={values.Email}
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur('email')}
+              value={values.email}
               placeholder='Email'
             />
             {errors.Email &&
@@ -308,9 +373,9 @@ const Register: FC<Props> = (props) => {
             }
 
             <Input
-              onChangeText={handleChange('Password')}
-              onBlur={handleBlur('Password')}
-              value={values.Password}
+              onChangeText={handleChange('password')}
+              onBlur={handleBlur('password')}
+              value={values.password}
               placeholder='Create Password'
             />
             {errors.Password &&
@@ -344,15 +409,24 @@ const Register: FC<Props> = (props) => {
               placeholder='Year of Birth (Optional)'
             />
 
-            <DropdownNoLabel
-              options={genderOptions}
+           {/*
+           <DropdownNoLabel
+              options={regionOptions}
               selectedValue={region}
               onValueChange={setRegion}
               placeholder='Region'
             />
+           */} 
 
 
-            <FuzzySearchBox label="" placeholder={"Find Organisation"} options={organisationOptions} selectedValue={userOrganisation} onValueChange={setUserOrganisation} />
+            <FuzzySearchBox 
+                label="" 
+                placeholder={"Find Organisation"} 
+                options={organisationOptions} 
+                selectedValue={userOrganisation} 
+                onValueChange={(org)=>setUserOrganisation(org)}
+                origin="register" 
+            />
 
             <Input
               onChangeText={handleChange('AdminCode')}

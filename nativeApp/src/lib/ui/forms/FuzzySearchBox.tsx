@@ -22,6 +22,7 @@ type Props = {
   onBlur: any;
   value: any;
   defaultValue?: any;
+  origin?: string;
 }
 
 /*
@@ -66,11 +67,11 @@ const filterData = (data, filter) => {
  */
 const FuzzySearchBox: FC<Props> = (props) => {
   const {
-    label, placeholder, options, onValueChange, defaultValue, ...rest
+    label, placeholder, options, onValueChange, defaultValue, origin, ...rest
   } = props;
   const [text, setText] = useState("");
   const [textInputFocus, setTextInputFocus] = useState(false);
-  const [filteredData, setFilteredData] = useState(options);
+  const [filteredData, setFilteredData] = useState(filterData(options,""));
 
   const changeText = (text: string) => {
     setText(text);
@@ -84,7 +85,7 @@ const FuzzySearchBox: FC<Props> = (props) => {
       onPress={() => {
         console.log("pressed")
         setText(item.name);
-        onValueChange(item.name);
+        onValueChange(origin == 'register'? item: item.name);
         setTextInputFocus(false);
       }
       }
