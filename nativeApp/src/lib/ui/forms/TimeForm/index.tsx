@@ -12,7 +12,7 @@ import FuzzySearchBox from '../FuzzySearchBox';
 import { Forms } from '../enums';
 import DateTimePicker from '../DateTimePicker';
 import { ColoursEnum } from '../../colours';
-import { TimeDiff } from '../../HoursAndMinutesText';
+import { HourAndMinutesText, TimeDiff } from '../../HoursAndMinutesText';
 import SubmitButton from '../SubmitButton';
 import NoteButton from '../../NoteButton';
 
@@ -93,8 +93,8 @@ const AddVolContainer = styled.View`
   marginTop: 10;
 `;
 
-// const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
-// const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
+const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
+const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
 
 /*
  * Component
@@ -118,7 +118,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [endTime, setEndTime] = useState<Date>(new Date);
   const [date, setDate] = useState<Date>(new Date);
   const [hours, setHours] = useState<number>();
-  const [minutes, setMinutes] = useState<number>();
+  const [minutes, setMinutes] = useState<number>(0);
   const [note, setNote] = useState('');
   const [userId, setUserID] = useState<number>();
   const [badge, setBadge] = useState(Object());
@@ -148,7 +148,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const resetForm = () => {
     setDate(new Date);
     setHours(undefined);
-    setMinutes(undefined);
+    setMinutes(0);
     setNote('');
   };
 
@@ -416,12 +416,18 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             maxDate={new Date()}
           />
 
-          <DateTimePicker
-            label="End Time"
-            value={endTime}
-            onConfirm={(newDate) => setEndTime(newDate)}
-            mode="datetime"
-            maxDate={new Date()}
+          <Dropdown
+            label="Hours"
+            options={zeroToNine}
+            selectedValue={hours}
+            onValueChange={setHours}
+          />
+
+          <Dropdown
+            label="Minutes"
+            options={zeroToFiftyNine}
+            selectedValue={minutes}
+            onValueChange={setMinutes}
           />
 
           <NoteContainer>
@@ -431,9 +437,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
           <TimeContainer>
             <Label>{getTimeLabel(forUser, values.volunteer)}</Label>
-            <TimeContainerItem>
-              <TimeDiff align="center" timeValues={[startTime.getTime(), endTime.getTime()]} />
-            </TimeContainerItem>
+            <HourAndMinutesText align="center" timeValues={[hours,minutes]}/>
           </TimeContainer>
 
           {origin != "addTime" && origin != "editTime" && <SubmitButton text="ADD TIME" onPress={handleSubmit} />}
