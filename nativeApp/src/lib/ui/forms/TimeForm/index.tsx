@@ -124,10 +124,12 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [badge, setBadge] = useState(Object());
   const [addVolArr, setAddVolArr] = useState([]);
 
-
+  const getIdFromName = (volunteerName) => {
+    return volunteers.find((x) => x.name === volunteerName).id
+  }
 
   if (forUser == 'admin') {
-    // setUserID(volunteers.find((x) => x.name === volunteer).id);
+    //setUserID(volunteers.find((x) => x.name === volunteer).id);
   }
   if (forUser == 'volunteer') {
     AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(parseInt(userID)))
@@ -206,7 +208,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       activity,
       startedAt: date.toISOString(),
       duration: { hours, minutes },
-      userId: userId,
+      userId: forUser == 'volunteer'? userId : getIdFromName(volunteer),
       note
     };
 
