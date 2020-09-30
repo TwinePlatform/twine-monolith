@@ -16,6 +16,9 @@ type Props = {
     onValueChange: any;
     defaultValue?: string | number;
     name?: string;
+    selectedValue?: any;
+    value?: any;
+    onBlur?: any;
 }
 
 /*	

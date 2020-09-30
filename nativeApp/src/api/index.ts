@@ -4,13 +4,16 @@ import { AsyncStorage } from "react-native";
 import getEnvVars from "../../environment"; // eslint-disable-line
 import { StorageValuesEnum } from "../authentication/types";
 import { Api } from "../../../api/src/api/v1/types/api";
-import { VolunteerLog } from "../../../api/src/models";
+import { 
+  //CommunityBusiness, 
+  VolunteerLog } from "../../../api/src/models";
 import { userId } from "../../../api/src/api/v1/schema/request";
 
 /*
  * Types
  */
 export type IdAndName = { id: number; name: string };
+type LogsResult = {error?: any;};
 
 /*
  * Axios
@@ -86,14 +89,14 @@ const VolunteerLogs = {
     },
     ),
   getVolunteerActivities: () => axios.get('/volunteer-activities'),
-  add: (values: Partial<VolunteerLog>) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>( //eslint-disable-line
+  add: (values: Partial<VolunteerLog>) => makeRequest<LogsResult>( //eslint-disable-line
     {
       method: 'POST',
       url: `/community-businesses/me/volunteer-logs`,
       data: values,
     }),
 
-  update: (id, LogId, values: Partial<VolunteerLog>) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>({ //eslint-disable-line
+  update: (id, LogId, values: Partial<VolunteerLog>) => makeRequest({ //eslint-disable-line
     method: "PUT",
     url: `/community-businesses/me/volunteer-logs/${id}/${LogId}`,
     data: values,
@@ -107,6 +110,10 @@ const VolunteerLogs = {
 
 const CommunityBusiness = {
   get: async (): Promise<any> => axios.get('/community-businesses'),
+  getByRegion: async(regionId)=> makeRequest({
+    method: 'GET',
+    url: `/regions/${regionId}/community-businesses`
+  }),
   register: (data) => { console.log(data) }
 }
 
