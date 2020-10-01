@@ -8,6 +8,7 @@ import { response, cbPayload } from './schema';
 import { userName, email } from '../users/schema';
 import { Tokens } from '../../../models/token';
 import { Serialisers } from '../serialisers';
+import { SectorEnum } from '../../../models/types';
 
 
 const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
@@ -16,12 +17,13 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
     path: '/community-businesses/register',
     options: {
       description: 'Register a new community businesses and invite admin user',
-      // auth: {
-      //   strategy: 'standard',
-      //   access: {
-      //     scope: ['organisations_details-child:write'],
-      //   },
-      // },
+      auth: {
+        mode: 'try',
+        strategy: 'standard',
+        access: {
+          scope: ['user_details-child:write'],
+        }
+      },
       validate: {
         payload: {
           ...omit(['name'], cbPayload),
@@ -52,8 +54,10 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
       } = request;
 
       // Initial checks
-      if (await CommunityBusinesses.exists(knex, { where: { _360GivingId } })) {
-        return Boom.badRequest('360 Giving Id already exists');
+      if (typeof _360GivingId !== 'undefined') {
+        if (await CommunityBusinesses.exists(knex, { where: { _360GivingId } })) {
+          return Boom.badRequest('360 Giving Id already exists');
+        }
       }
 
       if (await Users.exists(knex, { where: { email: adminEmail } })) {
@@ -65,7 +69,7 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
         const cb = await CommunityBusinesses.add(trx, {
           name: orgName,
           region,
-          sector,
+          sector: SectorEnum.TEMPORARY_DATA, //can be enable when required
           address1,
           address2,
           townCity,

@@ -226,6 +226,8 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         .insert(orgChangeset)
         .returning('*');
 
+      console.log(newOrg);
+
       await trx
         .insert({ code, organisation_id: newOrg.organisation_id, })
         .into('volunteer_admin_code')

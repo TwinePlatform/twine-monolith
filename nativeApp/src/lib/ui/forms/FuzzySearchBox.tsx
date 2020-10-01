@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import {View} from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { Item as I, Picker, Label as L, Input } from 'native-base';
 import { FlatList as F, Text as T } from 'react-native';
@@ -71,7 +71,7 @@ const FuzzySearchBox: FC<Props> = (props) => {
   } = props;
   const [text, setText] = useState("");
   const [textInputFocus, setTextInputFocus] = useState(false);
-  const [filteredData, setFilteredData] = useState(filterData(options,""));
+  const [filteredData, setFilteredData] = useState(filterData(options, ""));
 
   const changeText = (text: string) => {
     setText(text);
@@ -83,9 +83,8 @@ const FuzzySearchBox: FC<Props> = (props) => {
   const renderRow = (item) => {
     return <TouchableNativeFeedback
       onPress={() => {
-        console.log("pressed")
         setText(item.name);
-        onValueChange(origin == 'register'? item: item.name);
+        onValueChange(origin == 'register' ? item : item.name);
         setTextInputFocus(false);
       }
       }

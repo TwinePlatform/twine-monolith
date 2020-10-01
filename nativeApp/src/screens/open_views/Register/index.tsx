@@ -27,12 +27,12 @@ type Props = {
  * Styles
  */
 const SuccessText = (props) => {
-  if(props.visible)
+  if (props.visible)
     return <View
-      style={{position: 'absolute',top: '50%', backgroundColor: 'white'}}
+      style={{ position: 'absolute', top: '50%', backgroundColor: 'white' }}
     >
-      <Text style={{color: ColoursEnum.purple, fontSize: 20, textAlign: 'center'}}>{props.text}</Text>
-          </View>
+      <Text style={{ color: ColoursEnum.purple, fontSize: 20, textAlign: 'center' }}>{props.text}</Text>
+    </View>
   else
     return null;
 }
@@ -72,20 +72,6 @@ const PrintText = styled.Text`
   marginBottom: 20px;
 `;
 
-// const Button = StyleSheet.create({
-//   width: '300'
-// });
-
-// const Input = styled(I)`
-//   width: 80%;
-//   borderBottomWidth: 2;
-//   borderBottomColor: ${ColoursEnum.grey};
-// `;
-
-
-// const Text = styled.Text`
-//   font-size: 15;
-// `;
 
 const formOptions = [{ id: 1, name: "Organisation" }, { id: 2, name: "User" }];
 const yearOptions = [...Array(100).keys()].map((_, i) => ({ id: i, name: `${2005 - i}` }));
@@ -101,34 +87,30 @@ const Register: FC<Props> = (props) => {
   const [initialised, setInitialised] = useState(false);
   const [organisationOptions, setOrganisationOptions] = useState([{ id: 1, name: "loading organisations" }])
 
-  const[successTextVisible, setSuccessTextVisible] = useState(false);
+  const [successTextVisible, setSuccessTextVisible] = useState(false);
 
   const [userYearOfBirth, setUserYearOfBirth] = useState("");
   const [region, setRegion] = useState("");
-  const [userOrganisation, setUserOrganisation] = useState({id: 0, name: "default"});
+  const [userOrganisation, setUserOrganisation] = useState({ id: 0, name: "default" });
 
   const [serverError, setError] = useState("");
 
   useEffect(() => {
-    console.log("effect")
-
     if (!initialised) {
-      console.log("initial")
       initialiseCommunityBusinessOptions();
-
       setInitialised(true)
     }
   });
 
   const initialiseCommunityBusinessOptions = async () => {
-    let listOfCommunityBusinesses= [];
+    let listOfCommunityBusinesses = [];
 
-    regionOptions.map(async (region, index) =>{
-      const {data} = await API.CommunityBusiness.getByRegion(region.id);
+    regionOptions.map(async (region, index) => {
+      const { data } = await API.CommunityBusiness.getByRegion(region.id);
 
       listOfCommunityBusinesses = listOfCommunityBusinesses.concat(data);
 
-      if(index == regionOptions.length -1){
+      if (index == regionOptions.length - 1) {
         console.log(listOfCommunityBusinesses);
         setOrganisationOptions(listOfCommunityBusinesses);
       }
@@ -136,12 +118,15 @@ const Register: FC<Props> = (props) => {
   }
 
   const validationSchemaOrg = yup.object().shape({
-    OrgName: yup
+    orgName: yup
       .string()
       .required(),
-    OrgEmail: yup
+    adminEmail: yup
       .string()
       .email()
+      .required(),
+    adminName: yup
+      .string()
       .required()
   });
 
@@ -163,43 +148,27 @@ const Register: FC<Props> = (props) => {
       .string()
   });
 
-  const onSubmit = () => {
-    if (registrationType === "User")
-     /* API.Volunteers.add({
-          organisationId: id.required(),
-          role: Joi.alternatives(RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN).required(),
-          adminCode: Joi.string().regex(/^\w{5,8}$/),
-          name: userName.required(),
-          gender: gender.default('prefer not to say'),
-          birthYear: birthYear.default(null),
-          email: email.required(),
-          phoneNumber: phoneNumber.allow(''),
-          postCode: postCode.allow(''),
-          password: password,
-      });*/ {
-
-
-    }
-    if (registrationType === "Organisation") {
-      /*API.CommunityBusiness.add({
-
-      });
-      toggleOrgModal();*/
-      console.log("name: " + organisationName + "\n" + "email: " + organisationEmail);
-      setOrganisationModalVisible(true);
-    }
-
-  }
-
   if (registrationType === "Organisation")
     return (
       <Formik
-        initialValues={{ OrgName: '', OrgEmail: '', GivingID: '', Name: '', Email: '', Password: '', Phone: '', Postcode: '', AdminCode: '', region: '', YearOfBirth: '' }}
+        initialValues={{ orgName: '', adminEmail: '', adminName: '', orgPostCode: '', _360GivingId: '', Name: '', Email: '', Password: '', Phone: '', Postcode: '', AdminCode: '', region: '', YearOfBirth: '' }}
         validationSchema={validationSchemaOrg}
-        onSubmit={(values) => {
-          // console.log(values);
-          // const res = dispatch(createProject(values.name));
-          // console.log(res);
+        onSubmit={async (values) => {
+          values.region = region;
+          console.log(values);
+          let orgObj = {
+            "orgName": values.orgName,
+            "region": values.region,
+            "postCode": values.orgPostCode,
+            "adminName": values.adminName,
+            "adminEmail": values.adminEmail,
+          }
+          if (values._360GivingId != "") {
+            orgObj._360GivingId = values._360GivingId;
+          }
+          const res = await API.CommunityBusiness.register(orgObj);
+          if (res.status == 200)
+            setOrganisationModalVisible(true);
         }}>
 
         {({ handleChange, handleBlur, handleSubmit, values, errors }) => {
@@ -218,30 +187,51 @@ const Register: FC<Props> = (props) => {
               </Registration>
 
               <Input
-                onChangeText={handleChange('OrgName')}
-                onBlur={handleBlur('OrgName')}
-                value={values.OrgName}
+                onChangeText={handleChange('orgName')}
+                onBlur={handleBlur('orgName')}
+                value={values.orgName}
                 placeholder='Organisation Name'
               />
-              {errors.OrgName &&
-                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.OrgName}</TextInput>
+              {errors.orgName &&
+                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.orgName}</TextInput>
               }
 
               <Input
-                onChangeText={handleChange('OrgEmail')}
-                onBlur={handleBlur('OrgEmail')}
-                value={values.OrgEmail}
+                onChangeText={handleChange('adminName')}
+                onBlur={handleBlur('adminName')}
+                value={values.adminName}
+                placeholder='Admin Name'
+              />
+              {errors.orgName &&
+                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.adminName}</TextInput>
+              }
+
+              <Input
+                onChangeText={handleChange('adminEmail')}
+                onBlur={handleBlur('adminEmail')}
+                value={values.adminEmail}
                 placeholder='Organisation Email'
               />
 
-              {errors.OrgEmail &&
-                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.OrgEmail}</TextInput>
+              {errors.adminEmail &&
+                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.adminEmail}</TextInput>
               }
 
               <Input
-                onChangeText={handleChange('GivingID')}
-                onBlur={handleBlur('GivingID')}
-                value={values.GivingID}
+                onChangeText={handleChange('orgPostCode')}
+                onBlur={handleBlur('orgPostCode')}
+                value={values.orgPostCode}
+                placeholder='Postcode'
+              />
+
+              {errors.orgPostCode &&
+                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.orgPostCode}</TextInput>
+              }
+
+              <Input
+                onChangeText={handleChange('_360GivingId')}
+                onBlur={handleBlur('_360GivingId')}
+                value={values._360GivingId}
                 placeholder='360 Giving ID (Optional)'
               />
 
@@ -253,7 +243,7 @@ const Register: FC<Props> = (props) => {
               />
 
               <Container>
-                <SubmitButton onPress={handleSubmit} text="Complete" />
+                <SubmitButton text="COMPLETE" onPress={handleSubmit} />
               </Container>
 
               <PrintText>
@@ -288,9 +278,8 @@ const Register: FC<Props> = (props) => {
             //values of drop down
             values.region = region;
             values.YearOfBirth = userYearOfBirth;
-            values.organisationId = userOrganisation.id; //TODO: need to pass the organisation ID here 
 
-            if(values.AdminCode.length > 0)
+            if (values.AdminCode.length > 0)
               values.role = "VOLUNTEER_ADMIN";
             else
               values.role = "VOLUNTEER";
@@ -302,7 +291,7 @@ const Register: FC<Props> = (props) => {
               postCode: values.Postcode,
               phoneNumber: values.Phone,
               birthYear: parseInt(values.YearOfBirth),
-              organisationId: values.organisationId,
+              organisationId: userOrganisation.id,
               role: values.role
             }
 
@@ -310,21 +299,15 @@ const Register: FC<Props> = (props) => {
             //add volunteer 
             const res = await API.Volunteers.add(
               values
-              // "organisationId": "2",
-              // "role": "VOLUNTEER",
-              // "name": "userName",
-              // "gender": "prefer not to say",
-              // "email": "1@aperturescience.com",
-              // "password": "Password123!?"
             );
 
-            if(res.status == 200){
-                setSuccessTextVisible(true);
-                setTimeout(()=>{
-                  setSuccessTextVisible(false);
-                  props.navigation.navigate('Login');
-                }
-                  ,700)
+            if (res.status == 200) {
+              setSuccessTextVisible(true);
+              setTimeout(() => {
+                setSuccessTextVisible(false);
+                props.navigation.navigate('Login');
+              }
+                , 700)
             }
           } catch (error) {
             console.log(error)
@@ -332,13 +315,13 @@ const Register: FC<Props> = (props) => {
           }
         }}>
         {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-          
+
           <Page heading="Register">
 
-          <SuccessText
-            text="Registration Successful"
-            visible={successTextVisible}
-          />
+            <SuccessText
+              text="Registration Successful"
+              visible={successTextVisible}
+            />
 
             <Registration>
               <DropdownShort
@@ -403,23 +386,13 @@ const Register: FC<Props> = (props) => {
               placeholder='Year of Birth (Optional)'
             />
 
-           {/*
-           <DropdownNoLabel
-              options={regionOptions}
-              selectedValue={region}
-              onValueChange={setRegion}
-              placeholder='Region'
-            />
-           */} 
-
-
-            <FuzzySearchBox 
-                label="" 
-                placeholder={"Find Organisation"} 
-                options={organisationOptions} 
-                selectedValue={userOrganisation} 
-                onValueChange={(org)=>setUserOrganisation(org)}
-                origin="register" 
+            <FuzzySearchBox
+              label=""
+              placeholder={"Find Organisation"}
+              options={organisationOptions}
+              selectedValue={userOrganisation}
+              onValueChange={(org) => setUserOrganisation(org)}
+              origin="register"
             />
 
             <Input
