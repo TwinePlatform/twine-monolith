@@ -78,7 +78,7 @@ export const Files = {
     const formData = new FormData();
     const csvFile = new File ([file],file.name,{type: "text/csv"})
 
-    formData.append('file', csvFile);
+    formData.append('csv', csvFile);
 
     return axios.post('upload/CSVlogs/' + orgID, formData, {
         headers: {
