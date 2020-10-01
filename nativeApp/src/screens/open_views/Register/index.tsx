@@ -157,9 +157,9 @@ const Register: FC<Props> = (props) => {
       .string()
       .min(3, 'Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)')
       .required('Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)'),
-    Phone: yup
+    phone: yup
       .number(),
-    AdminCode: yup
+    adminCode: yup
       .string()
   });
 
@@ -194,7 +194,7 @@ const Register: FC<Props> = (props) => {
   if (registrationType === "Organisation")
     return (
       <Formik
-        initialValues={{ OrgName: '', OrgEmail: '', GivingID: '', Name: '', Email: '', Password: '', Phone: '', Postcode: '', AdminCode: '', region: '', YearOfBirth: '' }}
+        initialValues={{ OrgName: '', OrgEmail: '', GivingID: '', name: '', email: '', password: '', phone: '', postCode: '', adminCode: '', region: '', birthYear: '' }}
         validationSchema={validationSchemaOrg}
         onSubmit={(values) => {
           // console.log(values);
@@ -353,7 +353,7 @@ const Register: FC<Props> = (props) => {
               placeholder='Full Name'
             />
             {errors.Name &&
-              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.Name}</TextInput>
+              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.name}</TextInput>
             }
 
             <Input
@@ -363,7 +363,7 @@ const Register: FC<Props> = (props) => {
               placeholder='Email'
             />
             {errors.Email &&
-              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.Email}</TextInput>
+              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.email}</TextInput>
             }
 
             <Input
@@ -373,7 +373,7 @@ const Register: FC<Props> = (props) => {
               placeholder='Create Password'
             />
             {errors.Password &&
-              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.Password}</TextInput>
+              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.password}</TextInput>
             }
 
             <Input
@@ -383,7 +383,7 @@ const Register: FC<Props> = (props) => {
               placeholder='Post Code'
             />
             {errors.Postcode &&
-              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.Postcode}</TextInput>
+              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.postCode}</TextInput>
             }
 
             <Input
@@ -393,7 +393,7 @@ const Register: FC<Props> = (props) => {
               placeholder='Phone Number (Optional)'
             />
             {errors.Phone &&
-              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.Phone}</TextInput>
+              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.phone}</TextInput>
             }
 
             <DropdownNoLabel
@@ -425,7 +425,7 @@ const Register: FC<Props> = (props) => {
             <Input
               onChangeText={handleChange('AdminCode')}
               onBlur={handleBlur('AdminCode')}
-              value={values.AdminCode}
+              value={values.adminCode}
               placeholder='Admin Access Code (Admin Required)'
             />
             <Container>
