@@ -212,8 +212,8 @@ project: "Test"
     };
 
     const showSuccessMessage = ()=>{
-        setSuccessMessage("Log created!");
-        setTimeout(()=>{setSuccessMessage("")},1000);
+        setSuccessMessage("Log edited!");
+        setTimeout(()=>{setSuccessMessage("");closeFunction()},1000);
     }
 
     if(visible)
