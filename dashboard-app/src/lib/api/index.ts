@@ -85,11 +85,16 @@ export const Files = {
         headers: {
           'Content-Type': 'multipart/form-data'
         }});
-      return res;
+      return {
+        state: "success",
+        data: res.data
+      }
     }
     catch(error){
-      
-      return error;
+      return {
+        state: "error",
+        data: error
+      }
     }
   }
 }
