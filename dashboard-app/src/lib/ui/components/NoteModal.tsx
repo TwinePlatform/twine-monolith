@@ -11,6 +11,7 @@ type Props = {
   visible: boolean;
   closeFunction: () => void;
   setNote: any;
+  initialNote?: string;
 }
 
 /*
@@ -24,9 +25,9 @@ const Heading2 = styled(H2)`
 `;
 
 const NoteModal:FC<Props> = (props) => {
-    const {visible, closeFunction, setNote} = props;
+    const {visible, closeFunction, setNote, initialNote} = props;
 
-    const [potentialNote, setPotentialNote] = useState("");
+    const [potentialNote, setPotentialNote] = useState(initialNote ? initialNote : "");
    
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, closeFunction);
