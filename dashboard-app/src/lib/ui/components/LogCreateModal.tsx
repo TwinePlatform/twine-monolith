@@ -49,9 +49,14 @@ const getDate = (dateElement: any, startTimeElement: any) => {
         return new Date()
     }
 }
-
+/*
 const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
 const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
+
+*/
+const zeroToNine = [...Array(10).keys()]
+const zeroToFiftyNine = [...Array(60).keys()]
+
 
 const LogCreateModal:FC<Props> = (props) => {
     const {visible, closeFunction,} = props;
