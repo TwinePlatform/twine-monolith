@@ -66,8 +66,6 @@ const getDate = (dateElement: any, startTimeElement: any) => {
 const LogEditModal:FC<Props> = (props) => {
     const {visible, closeFunction, logToEdit} = props;
 
-    console.log(logToEdit);
-
     const [projects, setProjects] = useState(["loading project"]);
     const [activities, setActivities] = useState(["loading activities"]);
     const [volunteers, setVolunteers] = useState([{id:0 , name:"loading volunteers"}]);
@@ -83,6 +81,8 @@ const LogEditModal:FC<Props> = (props) => {
 
     const[noteModalVisible, setNoteModalVisible] = useState(false);
     const[note, setNote] = useState("");
+
+    console.log(logToEdit);
 
     const [log, setLog] = useState({
         userId: 0,
