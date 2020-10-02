@@ -55,7 +55,7 @@ export const CommunityBusinesses = {
 
 export const Logs = {
   add: (values: any) => axios.post( `/community-businesses/me/volunteer-logs`, values),
-  update: (userId, logId: any, values: any) => axios.put(`/community-businesses/me/volunteer-logs/${userId}/${logId}`,values),
+  update: (userId: any, logId: any, values: any) => axios.put(`/community-businesses/me/volunteer-logs/${userId}/${logId}`,values),
   delete: (LogId: any) => axios.delete( `/community-businesses/me/volunteer-logs/${LogId}`)
 }
 
