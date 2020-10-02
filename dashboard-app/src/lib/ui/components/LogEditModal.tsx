@@ -147,9 +147,9 @@ project: "Test"
             activities: await CommunityBusinesses.getVolunteerActivities(),
             volunteers: await CommunityBusinesses.getVolunteers()
         }
-        const res = await Users.getMe();
-        console.log(res);
-        setMyUserId(1);
+        const {data: {result: {id}}} = await Users.getMe();
+        console.log(id);
+        setMyUserId(id);
 
         setProjects(getStringArray(options.projects.data.result));
         setActivities(getStringArray(options.activities.data.result));
