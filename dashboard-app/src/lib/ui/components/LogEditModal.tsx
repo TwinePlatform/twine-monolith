@@ -169,7 +169,20 @@ project: "Test"
     }    
 
     const changeDuration = (event: any) => {
-        console.log(event);
+        console.log(event.target)
+
+        if(event.target.id == "minutes")
+            setDuration({
+                hours: duration.hours,
+                minutes: event.target.value,
+                seconds: duration.seconds
+            })
+        if(event.target.id == "hours")
+            setDuration({
+                hours: event.target.value,
+                minutes: duration.minutes,
+                seconds: duration.seconds
+            })
     }
 
     const submit = ()=>{
@@ -284,11 +297,11 @@ project: "Test"
                         <input type="time" id="Start Time" value={startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
-                        <select id="Hours" name="Hours" onChange={changeDuration}>
+                        <select id="hours" name="Hours" onChange={changeDuration}>
                             {zeroToNine.map(time=>
                                 <option value={time}>{time}</option>)} 
                         </select>
-                        <select id="Minutes" name="Minutes" onChange={changeDuration}>
+                        <select id="minutes" name="Minutes" onChange={changeDuration}>
                             {zeroToFiftyNine.map(time=>
                                 <option value={time}>{time}</option>)} 
                         </select>
