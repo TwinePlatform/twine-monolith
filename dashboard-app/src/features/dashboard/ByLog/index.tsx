@@ -17,6 +17,7 @@ import ProjectModal from '../../../lib/ui/components/ProjectModal';
 import LogViewModal from '../../../lib/ui/components/LogViewModal';
 import LogCreateModal from '../../../lib/ui/components/LogCreateModal';
 import LogEditModal from '../../../lib/ui/components/LogEditModal';
+import DeleteModal from '../../../lib/ui/components/DeleteModal';
 import { PrimaryButton} from '../../../lib/ui/components/Buttons';
 import Errors from '../components/Errors';
 import useAggregateDataByLog from './useAggregateDataByLog';
@@ -121,6 +122,11 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
         visible={logEditModalVisible}
         closeFunction={()=>{setLogEditModalVisible(false);setLogViewModalVisible(true)}}
         logToEdit={selectedLog}
+      />
+      <DeleteModal
+        visible={logDeleteModalVisible}
+        closeFunction={()=>{setLogDeleteModalVisible(false)}}
+        logToDelete={selectedLog}
       />
       <ProjectModal
         visible={projectModalVisible}
