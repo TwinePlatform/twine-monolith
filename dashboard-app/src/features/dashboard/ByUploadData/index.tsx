@@ -43,9 +43,10 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
       const {data: {result: {id}}} = await CommunityBusinesses.get();
 
       
-      const result = Files.upload(uploadedFile, id);
+      const result = await Files.upload(uploadedFile, id);
         
       console.log(result);
+      console.log(typeof result);
       
       //if(result == "error")
       

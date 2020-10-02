@@ -88,11 +88,10 @@ export const Files = {
       return res;
     }
     catch(error){
-      console.log("it went wrong in the api index")
-      console.log("object" + error);
+      
       return error;
     }
-  } 
+  }
 }
 
 export const Project = {
