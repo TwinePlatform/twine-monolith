@@ -80,7 +80,7 @@ const DeleteModal:FC<Props> = (props) => {
                 >
                     <p>Are you sure you want to delete this log?</p>
                     <button onClick={closeFunction}>No</button>
-                    <button onClick={confirm}>Yes</button>
+                    <button onClick={()=>{confirm();closeFunction();}}>Yes</button>
                 </div>
             </div>
         );
