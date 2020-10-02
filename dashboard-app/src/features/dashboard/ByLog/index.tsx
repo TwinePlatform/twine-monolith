@@ -71,8 +71,14 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const [selectedLog, setSelectedLog] = useState(initSelectedLog);
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [tableDataProjects, setTableDataProjects] = useState<TableData>(initTableData);
-  const { loading, error, data, logFields, dataProjects, projectFields } =
+  
+  let { loading, error, data, logFields, dataProjects, projectFields } =
     useAggregateDataByLog({ from: fromDate, to: toDate,  categories, filters  });
+
+  const refresh = () => {
+    let refresh = useAggregateDataByLog({ from: fromDate, to: toDate,  categories, filters  });
+    data = refresh.data;
+  }
 
   // set and clear errors on response
   const [errors, setErrors] = useErrors(error, data);
@@ -120,12 +126,12 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
       />
       <LogEditModal
         visible={logEditModalVisible}
-        closeFunction={()=>{setLogEditModalVisible(false);setLogViewModalVisible(true)}}
+        closeFunction={()=>{setLogEditModalVisible(false);setLogViewModalVisible(true);refresh();}}
         logToEdit={selectedLog}
       />
       <DeleteModal
         visible={logDeleteModalVisible}
-        closeFunction={()=>{setLogDeleteModalVisible(false)}}
+        closeFunction={()=>{setLogDeleteModalVisible(false);refresh();}}
         logToDelete={selectedLog}
       />
       <ProjectModal
