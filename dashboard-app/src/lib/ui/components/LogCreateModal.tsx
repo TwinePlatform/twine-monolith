@@ -32,18 +32,6 @@ const getStringArray = (array: any[]) => {
 
 const getSelected = (e: any) => e.value;
 
-const getDuration = (startTimeElement: any, endTimeElement: any) => {
-    const startTime = startTimeElement.value;
-    const endTime = endTimeElement.value;
-
-    //assuming same day, which you kind of
-    const hours = parseInt(endTime.slice(0,2)) - parseInt(startTime.slice(0,2));
-    const minutes = 0;
-    const seconds = 0;
-
-    return {hours, minutes, seconds}
-}
-
 const getDate = (dateElement: any, startTimeElement: any) => {
 
     try{
@@ -62,6 +50,9 @@ const getDate = (dateElement: any, startTimeElement: any) => {
     }
 }
 
+const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
+const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
+
 const LogCreateModal:FC<Props> = (props) => {
     const {visible, closeFunction,} = props;
 
@@ -73,7 +64,11 @@ const LogCreateModal:FC<Props> = (props) => {
     const now = new Date();
     const [date, setDate] = useState(now.toISOString().slice(0,10));
     const [startTime, setStartTime] = useState(now.getHours() + ":" + now.getMinutes());
-    const [endTime, setEndTime] = useState(now.getHours() + ":" + now.getMinutes());
+    const [duration, setDuration] = useState({
+        hours:0,
+        minutes:0,
+        seconds:0
+    })
 
     const[errorMessage, setErrorMessage] = useState("");
     const[successMessage, setSuccessMessage] = useState("");
@@ -85,7 +80,7 @@ const LogCreateModal:FC<Props> = (props) => {
         userId: 0,
         activity: "",
         project: "",
-        duration: {hours: 0, minutes: 0, seconds: 0},
+        duration: duration,
         startedAt: new Date(),
     })
 
@@ -100,7 +95,7 @@ const LogCreateModal:FC<Props> = (props) => {
                 userId: parseInt(getSelected(document.getElementById('Volunteer'))),
                 activity: getSelected(document.getElementById('Activity')),
                 project: getSelected(document.getElementById('Project')),
-                duration: getDuration(document.getElementById('Start Time'),document.getElementById('End Time')),
+                duration: duration,
                 startedAt: getDate(document.getElementById("Date"),document.getElementById('Start Time')),
             };
 
@@ -123,7 +118,11 @@ const LogCreateModal:FC<Props> = (props) => {
         setVolunteers(options.volunteers.data.result);
 
         setLoading(false);
-    }    
+    }   
+
+    const changeDuration = (event: any) => {
+        console.log(event);
+    }
 
     const submit = ()=>{
         try{
@@ -221,9 +220,14 @@ const LogCreateModal:FC<Props> = (props) => {
                         <input type="time" id="Start Time" value={startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
-                        <input type="time" id="End Time" value={endTime}
-                        onChange={(e)=>setEndTime(e.target.value)}
-                        />
+                        <select id="Hours" name="Hours" onChange={changeDuration}>
+                            {zeroToNine.map(time=>
+                                <option value={time.name}>{time.name}</option>)} 
+                        </select>
+                        <select id="Minutes" name="Minutes" onChange={changeDuration}>
+                            {zeroToFiftyNine.map(time=>
+                                <option value={time.name}>{time.name}</option>)} 
+                        </select>
                         <button onClick={()=>setNoteModalVisible(true)}>Add Note</button>
                         <button onClick={submit}
                         disabled={!valid}
