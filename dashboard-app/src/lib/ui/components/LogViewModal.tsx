@@ -17,6 +17,8 @@ type Props = {
   visible: boolean;
   closeFunction: () => void;
   log: any;
+  onEdit: any;
+  onDelete: any;
 }
 
 /*
@@ -165,12 +167,12 @@ const LogViewModal:FC<Props> = (props) => {
                          
                          <hr className = "BottomDivider" />
                         
-                <button className = "EditLog"> 
+                <button className = "EditLog" onClick={()=>props.onEdit()}> 
                 <img className= "EditIcon"  src = {require('../../../assets/edit.svg')}  alt="Edit_Log" /> 
                 &nbsp; Edit </button>
 
                         
-                        <button className ="DeleteLog"> 
+                        <button className ="DeleteLog" onClick={()=>props.onDelete()}> 
                         
                         <img className= "DeleteIcon" src = {require('../../../assets/trash.svg')}  alt="Delete_Log" /> 
                         &nbsp; Delete </button>

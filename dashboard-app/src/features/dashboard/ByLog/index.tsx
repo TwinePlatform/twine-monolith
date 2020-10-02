@@ -16,6 +16,7 @@ import { ColoursEnum } from '../../../lib/ui/design_system';
 import ProjectModal from '../../../lib/ui/components/ProjectModal';
 import LogViewModal from '../../../lib/ui/components/LogViewModal';
 import LogCreateModal from '../../../lib/ui/components/LogCreateModal';
+import LogEditModal from '../../../lib/ui/components/LogEditModal';
 import { PrimaryButton} from '../../../lib/ui/components/Buttons';
 import Errors from '../components/Errors';
 import useAggregateDataByLog from './useAggregateDataByLog';
@@ -63,6 +64,8 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const [filters, setFilters] = useState([]);
   const [logViewModalVisible, setLogViewModalVisible] = useState(false);
   const [logCreateModalVisible, setLogCreateModalVisible] = useState(false);
+  const [logEditModalVisible, setLogEditModalVisible] = useState(false);
+  const [logDeleteModalVisible, setLogDeleteModalVisible] = useState(false);
   const [projectModalVisible, setProjectModalVisible] = useState(false);
   const [selectedLog, setSelectedLog] = useState(initSelectedLog);
   const [tableData, setTableData] = useState<TableData>(initTableData);
@@ -107,10 +110,17 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
         visible={logViewModalVisible}
         closeFunction={()=>setLogViewModalVisible(false)}
         log={selectedLog}
+        onEdit={()=>setLogEditModalVisible(true)}
+        onDelete={()=>setLogDeleteModalVisible(true)}
       />
       <LogCreateModal
         visible={logCreateModalVisible}
         closeFunction={()=>setLogCreateModalVisible(false)}
+      />
+      <LogEditModal
+        visible={logCreateModalVisible}
+        closeFunction={()=>{setLogEditModalVisible(false);setLogViewModalVisible(true)}}
+        logToEdit={selectedLog}
       />
       <ProjectModal
         visible={projectModalVisible}
