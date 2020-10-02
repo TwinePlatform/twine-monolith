@@ -81,7 +81,7 @@ const LogEditModal:FC<Props> = (props) => {
     const[noteModalVisible, setNoteModalVisible] = useState(false);
     const[note, setNote] = useState("");
 
-    const[myUserId, setMyUserId] = useState(0);
+    //const[myUserId, setMyUserId] = useState(0);
 
     /*
     ID: 6791
@@ -147,9 +147,10 @@ project: "Test"
             activities: await CommunityBusinesses.getVolunteerActivities(),
             volunteers: await CommunityBusinesses.getVolunteers()
         }
+        /*
         const {data: {result: {id}}} = await Users.getMe();
         console.log(id);
-        setMyUserId(id);
+        setMyUserId(id);*/
 
         setProjects(getStringArray(options.projects.data.result));
         setActivities(getStringArray(options.activities.data.result));
@@ -160,7 +161,7 @@ project: "Test"
 
     const submit = ()=>{
         try{
-            Logs.update(myUserId,logToEdit.ID,log)
+            Logs.update(logToEdit.ID,log)
             .then(result=>{
                 const {activity, project, startedAt } = result.data.result;
                 const LogID = result.data.result.id;
