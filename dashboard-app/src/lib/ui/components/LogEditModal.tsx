@@ -160,8 +160,16 @@ project: "Test"
     }    
 
     const submit = ()=>{
+
+        const newValues = {
+            activity: log.activity,
+            duration: log.duration,
+            startedAt: log.startedAt,
+            project: log.project,
+        };
+
         try{
-            Logs.update(logToEdit.ID,log)
+            Logs.update(log.userId,logToEdit.ID,newValues)
             .then(result=>{
                 const {activity, project, startedAt } = result.data.result;
                 const LogID = result.data.result.id;
