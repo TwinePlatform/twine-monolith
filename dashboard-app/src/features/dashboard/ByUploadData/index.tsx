@@ -48,14 +48,10 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
       
       if(result.state == "success")
           setUploadState("success");
-      if(result.state == "error")
-        if(result.data.response.data.error.statusCode == "409"){
-          setUploadState("error");
-          setErrorText(result.data.error.message);
-        }
-          
-      
-      
+      if(result.state == "error"){
+        setUploadState("error");
+        setErrorText(result.data.response.data.error.message);
+      }
   }
 
   // set and clear errors on response
