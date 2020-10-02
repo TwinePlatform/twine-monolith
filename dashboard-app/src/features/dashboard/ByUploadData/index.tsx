@@ -50,6 +50,7 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
         });
       }
       catch(error){
+        console.log("it didn't work in the upload component")
         console.log(error);
         if(error.statusCode == "409"){
           setUploadState("error");

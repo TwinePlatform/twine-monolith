@@ -73,18 +73,25 @@ export const LogNote = {
 }
 
 export const Files = {
-  upload: (file: File, orgID: number) => {
+  upload: async (file: File, orgID: number) => {
     console.log("uploading " + file.name + " to /community-businesses/")
     const formData = new FormData();
     const csvFile = new File ([file],file.name,{type: "text/csv"})
 
     formData.append('csv', csvFile);
 
-    return axios.post('upload/CSVlogs/' + orgID, formData, {
+    try{
+      const res = await axios.post('upload/CSVlogs/' + orgID, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
-        }
-    })
+        }});
+      return res;
+    }
+    catch(error){
+      console.log("it went wrong in the api index")
+      console.log(error);
+      return error;
+    }
   } 
 }
 
