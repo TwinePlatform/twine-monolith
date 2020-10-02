@@ -75,6 +75,7 @@ const LogEditModal:FC<Props> = (props) => {
     const [loading, setLoading] = useState(true);
     const [valid, setValid] = useState(false);
     const [date, setDate] = useState(logToEdit.date);
+    const now = new Date();
     const [startTime, setStartTime] = useState(now.getHours() + ":" + now.getMinutes());
     const [duration, setDuration] = useState({
         hours:0,
