@@ -289,12 +289,12 @@ const Register: FC<Props> = (props) => {
             values.region = region;
             values.YearOfBirth = userYearOfBirth;
 
-            if (values.AdminCode.length > 0)
+            if (values.adminCode.length > 0)
               values.role = "VOLUNTEER_ADMIN";
             else
               values.role = "VOLUNTEER";
 
-            values = {
+            let volunteer_obj = {
               name: values.name,
               email: values.email,
               password: values.password,
@@ -305,11 +305,8 @@ const Register: FC<Props> = (props) => {
               role: values.role
             }
 
-            console.log(values);
             //add volunteer 
-            const res = await API.Volunteers.add(
-              values
-            );
+            const res = await API.Volunteers.add(volunteer_obj);
 
             if (res.status == 200) {
               setSuccessTextVisible(true);
@@ -345,7 +342,7 @@ const Register: FC<Props> = (props) => {
               value={values.name}
               placeholder='Full Name'
             />
-            {errors.Name &&
+            {errors.name &&
               <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.name}</TextInput>
             }
 
@@ -355,7 +352,7 @@ const Register: FC<Props> = (props) => {
               value={values.email}
               placeholder='Email'
             />
-            {errors.Email &&
+            {errors.email &&
               <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.email}</TextInput>
             }
 
@@ -365,24 +362,24 @@ const Register: FC<Props> = (props) => {
               value={values.password}
               placeholder='Create Password'
             />
-            {errors.Password &&
+            {errors.password &&
               <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.password}</TextInput>
             }
 
             <Input
-              onChangeText={handleChange('Postcode')}
-              onBlur={handleBlur('Postcode')}
-              value={values.Postcode}
+              onChangeText={handleChange('postCode')}
+              onBlur={handleBlur('postCode')}
+              value={values.postCode}
               placeholder='Post Code'
             />
-            {errors.Postcode &&
+            {errors.postCode &&
               <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.postCode}</TextInput>
             }
 
             <Input
-              onChangeText={handleChange('Phone')}
-              onBlur={handleBlur('Phone')}
-              value={values.Phone}
+              onChangeText={handleChange('phone')}
+              onBlur={handleBlur('phone')}
+              value={values.phone}
               placeholder='Phone Number (Optional)'
             />
             {errors.Phone &&
