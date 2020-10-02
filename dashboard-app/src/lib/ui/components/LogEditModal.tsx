@@ -71,10 +71,9 @@ const LogEditModal:FC<Props> = (props) => {
     const [volunteers, setVolunteers] = useState([{id:0 , name:"loading volunteers"}]);
     const [loading, setLoading] = useState(true);
     const [valid, setValid] = useState(false);
-    const now = new Date();
-    const [date, setDate] = useState(now.toISOString().slice(0,10));
-    const [startTime, setStartTime] = useState(now.getHours() + ":" + now.getMinutes());
-    const [endTime, setEndTime] = useState(now.getHours() + ":" + now.getMinutes());
+    const [date, setDate] = useState(logToEdit.date);
+    const [startTime, setStartTime] = useState(logToEdit.endTime);
+    const [endTime, setEndTime] = useState(logToEdit.endTime);
 
     const[errorMessage, setErrorMessage] = useState("");
     const[successMessage, setSuccessMessage] = useState("");
@@ -135,8 +134,9 @@ project: "Test"
 
     const getNote = async () => {
         let {data} = await LogNote.get(logToEdit.ID);
-        console.log(data.result[0].notes)
-        if(data.result[0])
+        console.log(data);
+        //console.log(data.result[0].notes)
+        if(data.result[0].notes)
             setNote(data.result[0].notes);
     }
 
@@ -250,7 +250,7 @@ project: "Test"
                                         selected={activity==logToEdit.activity? true: false}
                                 >{activity}</option>)} 
                         </select>
-                        <input type="date" id="Date" value={log.startedAt.toISOString()}
+                        <input type="date" id="Date" value={date}
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
                         />
