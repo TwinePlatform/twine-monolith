@@ -227,11 +227,11 @@ const LogCreateModal:FC<Props> = (props) => {
                         />
                         <select id="Hours" name="Hours" onChange={changeDuration}>
                             {zeroToNine.map(time=>
-                                <option value={time.name}>{time.name}</option>)} 
+                                <option value={time}>{time}</option>)} 
                         </select>
                         <select id="Minutes" name="Minutes" onChange={changeDuration}>
                             {zeroToFiftyNine.map(time=>
-                                <option value={time.name}>{time.name}</option>)} 
+                                <option value={time}>{time}</option>)} 
                         </select>
                         <button onClick={()=>setNoteModalVisible(true)}>Add Note</button>
                         <button onClick={submit}
