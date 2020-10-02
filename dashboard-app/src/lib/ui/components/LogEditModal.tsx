@@ -129,7 +129,7 @@ project: "Test"
                 userId: parseInt(getSelected(document.getElementById('Volunteer'))),
                 activity: getSelected(document.getElementById('Activity')),
                 project: getSelected(document.getElementById('Project')),
-                duration: getDuration(document.getElementById('Start Time'),document.getElementById('End Time')),
+                duration: duration,
                 startedAt: getDate(document.getElementById("Date"),document.getElementById('Start Time')),
             };
 
