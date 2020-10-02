@@ -3,7 +3,7 @@ import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
-import {CommunityBusinesses, Project, Logs, LogNote,} from '../../api';
+import {CommunityBusinesses, Project, Logs, LogNote, Users} from '../../api';
 import NoteModal from './NoteModal';
 import { duration } from 'moment';
 import DataTable from '../../../features/dashboard/components/DataTable';
@@ -81,6 +81,7 @@ const LogEditModal:FC<Props> = (props) => {
     const[noteModalVisible, setNoteModalVisible] = useState(false);
     const[note, setNote] = useState("");
 
+    const[myUserId, setMyUserId] = useState(0);
 
     /*
     ID: 6791
@@ -146,6 +147,10 @@ project: "Test"
             activities: await CommunityBusinesses.getVolunteerActivities(),
             volunteers: await CommunityBusinesses.getVolunteers()
         }
+        const res = await Users.getMe();
+        console.log(res);
+        setMyUserId(1);
+
         setProjects(getStringArray(options.projects.data.result));
         setActivities(getStringArray(options.activities.data.result));
         setVolunteers(options.volunteers.data.result);
@@ -155,7 +160,7 @@ project: "Test"
 
     const submit = ()=>{
         try{
-            Logs.update(log.userId,logToEdit.ID,log)
+            Logs.update(myUserId,logToEdit.ID,log)
             .then(result=>{
                 const {activity, project, startedAt } = result.data.result;
                 const LogID = result.data.result.id;

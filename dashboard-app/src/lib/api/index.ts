@@ -103,3 +103,7 @@ export const Project = {
   get: () => axios.get( '/community-businesses/me/volunteers/projects'),
   add: (name: string) => axios.post('/community-businesses/me/volunteers/projects',{name}),
 }
+
+export const Users = {
+  getMe: () => axios.get( '/users/me'),
+}
