@@ -63,6 +63,9 @@ const getDate = (dateElement: any, startTimeElement: any) => {
     }
 }
 
+const zeroToNine = [...Array(10).keys()];
+const zeroToFiftyNine = [...Array(60).keys()];
+
 const LogEditModal:FC<Props> = (props) => {
     const {visible, closeFunction, logToEdit} = props;
 
@@ -72,8 +75,12 @@ const LogEditModal:FC<Props> = (props) => {
     const [loading, setLoading] = useState(true);
     const [valid, setValid] = useState(false);
     const [date, setDate] = useState(logToEdit.date);
-    const [startTime, setStartTime] = useState(logToEdit.endTime);
-    const [endTime, setEndTime] = useState(logToEdit.endTime);
+    const [startTime, setStartTime] = useState(now.getHours() + ":" + now.getMinutes());
+    const [duration, setDuration] = useState({
+        hours:0,
+        minutes:0,
+        seconds:0
+    })
 
     const[errorMessage, setErrorMessage] = useState("");
     const[successMessage, setSuccessMessage] = useState("");
@@ -137,8 +144,9 @@ project: "Test"
         let {data} = await LogNote.get(logToEdit.ID);
         console.log(data);
         //console.log(data.result[0].notes)
-        if(data.result[0].notes)
-            setNote(data.result[0].notes);
+        if(data.result[0] != null)
+            if(data.result[0].notes != null)
+                setNote(data.result[0].notes);
     }
 
     const getOptions = async () => {
@@ -158,6 +166,10 @@ project: "Test"
 
         setLoading(false);
     }    
+
+    const changeDuration = (event: any) => {
+        console.log(event);
+    }
 
     const submit = ()=>{
 
@@ -271,9 +283,14 @@ project: "Test"
                         <input type="time" id="Start Time" value={startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
-                        <input type="time" id="End Time" value={endTime}
-                        onChange={(e)=>setEndTime(e.target.value)}
-                        />
+                        <select id="Hours" name="Hours" onChange={changeDuration}>
+                            {zeroToNine.map(time=>
+                                <option value={time}>{time}</option>)} 
+                        </select>
+                        <select id="Minutes" name="Minutes" onChange={changeDuration}>
+                            {zeroToFiftyNine.map(time=>
+                                <option value={time}>{time}</option>)} 
+                        </select>
                         <button onClick={()=>setNoteModalVisible(true)}>Edit Note</button>
                         <button onClick={submit}
                         disabled={!valid}
