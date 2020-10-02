@@ -42,22 +42,24 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
 
       const {data: {result: {id}}} = await CommunityBusinesses.get();
 
-      try{
-        Files.upload(uploadedFile, id)
-        .then(result=>{
-          console.log(result);
-          setUploadState("success");
-        });
-      }
-      catch(error){
-        console.log("it didn't work in the upload component")
-        console.log(error);
-        if(error.statusCode == "409"){
+      
+      const result = Files.upload(uploadedFile, id);
+        
+      console.log(result);
+      
+      //if(result == "error")
+      
+      setUploadState("success");
+       
+      
+      /*
+        
+        if(result.statusCode == "409"){
           setUploadState("error");
           setErrorText(error.message);
         }
-          
-      }
+          */
+      
       
   }
 

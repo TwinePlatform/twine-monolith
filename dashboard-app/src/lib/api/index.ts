@@ -89,7 +89,7 @@ export const Files = {
     }
     catch(error){
       console.log("it went wrong in the api index")
-      console.log(error);
+      console.log("object" + error);
       return error;
     }
   } 
