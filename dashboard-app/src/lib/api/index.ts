@@ -73,19 +73,30 @@ export const LogNote = {
 }
 
 export const Files = {
-  upload: (file: File, orgID: number) => {
+  upload: async (file: File, orgID: number) => {
     console.log("uploading " + file.name + " to /community-businesses/")
     const formData = new FormData();
     const csvFile = new File ([file],file.name,{type: "text/csv"})
 
-    formData.append('file', csvFile);
+    formData.append('csv', csvFile);
 
-    return axios.post('upload/CSVlogs/' + orgID, formData, {
+    try{
+      const res = await axios.post('upload/CSVlogs/' + orgID, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
-        }
-    })
-  } 
+        }});
+      return {
+        state: "success",
+        data: res.data
+      }
+    }
+    catch(error){
+      return {
+        state: "error",
+        data: error
+      }
+    }
+  }
 }
 
 export const Project = {

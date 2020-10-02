@@ -39,13 +39,19 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
 
   const confirmUpload = async () => {
       setUploadState("validating");
+
       const {data: {result: {id}}} = await CommunityBusinesses.get();
 
-      Files.upload(uploadedFile, id)
-      .then(result=>{
-        console.log(result);
-        setUploadState("success");
-      })
+      const result = await Files.upload(uploadedFile, id);
+        
+      console.log(result);
+      
+      if(result.state == "success")
+          setUploadState("success");
+      if(result.state == "error"){
+        setUploadState("error");
+        setErrorText(result.data.response.data.error.message);
+      }
   }
 
   // set and clear errors on response
@@ -72,7 +78,7 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
   if(uploadState == "error")
   uploadSection = 
     <div>
-      <Paragraph>Sorry, there was an error in the csv</Paragraph>
+      <Paragraph>{errorText}</Paragraph>
       <button onClick={()=>setUploadState("unselected")}>try again</button>
     </div>
 
