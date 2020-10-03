@@ -45,6 +45,7 @@ const Card = styled.View`
   borderBottomRightRadius: 10;
   background-color: ${ColoursEnum.white};
   alignItems: center;
+  justifyContent: center;
   width: 335;
 `;
 
@@ -53,6 +54,11 @@ const Text = styled.Text`
   color: ${ColoursEnum.orangeRed};
   fontFamily:${FontsEnum.regular};
   marginBottom: 35;
+`;
+
+const ButtonContainer = styled.View`
+    alignItems: center;
+    justifyContent: center;
 `;
 
 const Submit = styled(B)`
@@ -81,18 +87,14 @@ const LogOutModal: FC<Props> = ({
             <Card>
 
                 <Text>Are you sure you want to log out?</Text>
-                <Submit onPress={onConfirm}>
-                    <SubmitText>YES</SubmitText>
-                </Submit>
-                <Submit onPress={onCancel}>
-                    <SubmitText>NO</SubmitText>
-                </Submit>
-                {/* <ButtonContainer>
-                    <Button onPress={onCancel} buttonType="cancel" />
-                </ButtonContainer>
                 <ButtonContainer>
-                    <Button onPress={onConfirm} buttonType="confirm" />
-                </ButtonContainer> */}
+                    <Submit onPress={onConfirm}>
+                        <SubmitText>YES</SubmitText>
+                    </Submit>
+                    <Submit onPress={onCancel}>
+                        <SubmitText>NO</SubmitText>
+                    </Submit>
+                </ButtonContainer>
             </Card>
         </Modal>
     );
