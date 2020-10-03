@@ -22,6 +22,7 @@ import { IdAndName } from '../../../../api';
 import { User } from '../../../../../../api/src/models';
 import SavedModal from '../../modals/SavedModal';
 import NoteModal from '../../modals/NoteModal';
+import MessageModal from '../../modals/MessageModal';
 import useToggle from '../../../hooks/useToggle';
 
 import API from '../../../../api';
@@ -113,11 +114,12 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [responseModal, toggleResponseModal] = useToggle(false);
   const [badgeModal, setBadgeModal] = useState(false);
   const [noteModalVisible, toggleNoteInvisibility] = useToggle(false);
-
+  const [errorModalVisible, toggleErrorInvisibility] = useToggle(false);
+  const durationErrorMessage = "Please select a duration!";
   const [startTime, setStartTime] = useState<Date>(new Date);
   const [endTime, setEndTime] = useState<Date>(new Date);
   const [date, setDate] = useState<Date>(new Date);
-  const [hours, setHours] = useState<number>();
+  const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
   const [note, setNote] = useState('');
   const [userId, setUserID] = useState<number>();
@@ -170,7 +172,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const cacheforEdit = async (values) => {
     let cacheValueString = await AsyncStorage.getItem('edit log cache');
     let cachevalue;
-    if(cacheValueString == null) 
+    if (cacheValueString == null)
       cachevalue = [];
     else
       cachevalue = JSON.parse(cachevalue);
@@ -203,70 +205,71 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
     const hours = Math.floor((endTime - startTime) / (1000 * 60 * 60));
     const minutes = Math.floor((endTime - startTime) / (1000 * 60) - hours * 60);
 
-    const values = {
-      project,
-      activity,
-      startedAt: date.toISOString(),
-      duration: { hours, minutes },
-      userId: forUser == 'volunteer'? userId : getIdFromName(volunteer),
-      note
-    };
-
-    CheckConnectivity(values);
-
-    console.log(origin)
-
-    //if timeform is called from add time view 
-    if (origin != "editTime") {
-      try { //error trapping and cache log when network error
-        console.log("adding time")
-        const res = await dispatch(createLog(values));
-        console.log(res)
-        /*
-        if (res.status == 500) {
-          cache(values);
-        }
-        if (res.status == 400) {
-          console.log(res.statusText);
-          //ToDo: error trapping here 
-        }
-        console.log(res);*/
-      } catch (error) {
-        console.log(error);
-      }
-
-      //check for badge acheive and trigger badge reward
-      if (forUser == 'volunteer') {
-        try {
-          const checkBadge = await API.Badges.checkNupdate();
-          Promise.all(checkBadge.map(badge => {
-            setBadge(BadgeObj[badge]);
-            setBadgeModal(true);
-            setTimeout(() => {
-              setBadgeModal(false);
-            }, 3000)
-          }));
-          // ToDo: enable multiple badges to be awarded at the same time
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-
-    //if timeform is called from edit time view 
-    if (origin == "editTime") {
-      const valuesEdit: any = {
+    if (hours === 0 && minutes === 0) {
+      toggleErrorInvisibility();
+    } else {
+      const values = {
         project,
         activity,
         startedAt: date.toISOString(),
         duration: { hours, minutes },
+        userId: forUser == 'volunteer' ? userId : getIdFromName(volunteer),
+        note
       };
 
+      CheckConnectivity(values);
 
-      try { //error trapping and cache log when network error
-        const res = await dispatch(updateLog(userId, parseInt(logId), valuesEdit));
-        console.log(res);
-         /*
+      //if timeform is called from add time view 
+      if (origin != "editTime") {
+        try { //error trapping and cache log when network error
+          console.log("adding time")
+          const res = await dispatch(createLog(values));
+          console.log(res)
+          /*
+          if (res.status == 500) {
+            cache(values);
+          }
+          if (res.status == 400) {
+            console.log(res.statusText);
+            //ToDo: error trapping here 
+          }
+          console.log(res);*/
+        } catch (error) {
+          console.log(error);
+        }
+
+        //check for badge acheive and trigger badge reward
+        if (forUser == 'volunteer') {
+          try {
+            const checkBadge = await API.Badges.checkNupdate();
+            Promise.all(checkBadge.map(badge => {
+              setBadge(BadgeObj[badge]);
+              setBadgeModal(true);
+              setTimeout(() => {
+                setBadgeModal(false);
+              }, 3000)
+            }));
+            // ToDo: enable multiple badges to be awarded at the same time
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      }
+
+      //if timeform is called from edit time view 
+      if (origin == "editTime") {
+        const valuesEdit: any = {
+          project,
+          activity,
+          startedAt: date.toISOString(),
+          duration: { hours, minutes },
+        };
+
+
+        try { //error trapping and cache log when network error
+          const res = await dispatch(updateLog(userId, parseInt(logId), valuesEdit));
+          console.log(res);
+          /*
         if (res.status == 500) {
           valuesEdit.userId = userId;
           valuesEdit.logId = logId;
@@ -277,8 +280,9 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           //ToDo: error trapping here 
         }
         console.log(res);*/
-      } catch (error) {
-        console.log(error);
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   };
@@ -319,10 +323,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
     <Formik
       initialValues={{ volunteer: '', project: selectedProject, activity: selectedActivity, note: '' }}
-      // validationSchema={validationSchema}
+      validationSchema={validationSchema}
       onSubmit={(values, date) => {
-        
-        
+
+
         values.note = note;
         console.log(addVolArr)
         if (addVolArr.length == 0) {
@@ -357,6 +361,12 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             addNote={addNote}
             // addNote={values.note}
             onClose={toggleNoteInvisibility}
+          />
+
+          <MessageModal
+            isVisible={errorModalVisible}
+            message={durationErrorMessage}
+            onClose={() => { toggleErrorInvisibility(); }}
           />
 
           {forUser === 'admin' &&
@@ -396,7 +406,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
           {forUser === 'volunteer' && <Label>What activity are you doing?</Label>}
 
-          <Dropdown 
+          <Dropdown
             label="Activity"
             options={activities}
             selectedValue={values.activity}
@@ -436,7 +446,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
           <TimeContainer>
             <Label>{getTimeLabel(forUser, values.volunteer)}</Label>
-            <HourAndMinutesText align="center" timeValues={[hours,minutes]}/>
+            <HourAndMinutesText align="center" timeValues={[hours, minutes]} />
+            {hours === 0 && minutes === 0 &&
+              <TextInput style={{ fontSize: 10, color: 'red', textAlign: 'center' }}>Duration cannot be 0</TextInput>
+            }
           </TimeContainer>
 
           {origin != "addTime" && origin != "editTime" && <SubmitButton text="ADD TIME" onPress={handleSubmit} />}
