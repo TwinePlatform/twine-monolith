@@ -17,7 +17,7 @@ export type EmailService = {
   (c: Config, v: User, a: User, cb: CommunityBusiness) => Promise<void>
 
   newCbAdmin:
-  (c: Config, a: User, cb: CommunityBusiness, t: string) => Promise<void>
+  (c: Config, a: User, cb: CommunityBusiness, t: string, code: string) => Promise<void>
 
   addRole:
   (c: Config, a: User, cb: CommunityBusiness, r: RoleEnum, t: string) => Promise<void>
@@ -105,7 +105,7 @@ const Service: EmailService = {
     return null;
   },
 
-  async newCbAdmin(cfg, admin, cb, token) {
+  async newCbAdmin(cfg, admin, cb, token, code) {
     await EmailDispatcher.send(cfg, {
       from: cfg.email.fromAddress,
       to: admin.email,
@@ -116,6 +116,7 @@ const Service: EmailService = {
         email: admin.email,
         organisation: cb.name,
         token,
+        code
       },
     });
   },

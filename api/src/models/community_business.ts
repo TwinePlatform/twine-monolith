@@ -207,15 +207,13 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return res !== null;
   },
 
-  async add(client, cb) {
+  async add(client, cb, code) {
     const preProcessCbChangeset = compose(
       Objects.mapKeys((s) => s.replace('community_business.', '')),
       transformForeignKeysToSubQueries(client),
       CommunityBusinesses.toColumnNames,
       pickCbFields
     );
-
-    const code = randomBytes(4).toString('hex');
 
     const orgChangeset = preProcessOrgChangeset(cb);
     const cbChangeset = preProcessCbChangeset(cb);
@@ -225,8 +223,6 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         .table('organisation')
         .insert(orgChangeset)
         .returning('*');
-
-      console.log(newOrg);
 
       await trx
         .insert({ code, organisation_id: newOrg.organisation_id, })

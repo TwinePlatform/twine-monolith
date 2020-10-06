@@ -9,6 +9,7 @@ import { userName, email } from '../users/schema';
 import { Tokens } from '../../../models/token';
 import { Serialisers } from '../serialisers';
 import { SectorEnum } from '../../../models/types';
+import { randomBytes } from 'crypto';
 
 
 const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
@@ -64,6 +65,7 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
         return Boom.conflict('User already exists with this email');
       }
 
+      const code = randomBytes(4).toString('hex');
       // Create accounts
       const { user, cb, token } = await knex.transaction(async (trx) => {
         const cb = await CommunityBusinesses.add(trx, {
@@ -76,7 +78,8 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
           postCode,
           turnoverBand,
           _360GivingId,
-        });
+        }, code);
+        console.log(cb);
         const user = await CbAdmins.addWithRole(trx, cb, {
           name: adminName,
           email: adminEmail,
@@ -85,7 +88,7 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
         return { user, cb, token };
       });
 
-      await EmailService.newCbAdmin(config, user, cb, token);
+      await EmailService.newCbAdmin(config, user, cb, token, code);
 
       return Serialisers.communityBusinesses.identity(cb);
     },
