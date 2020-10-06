@@ -50,6 +50,7 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
           setUploadState("success");
       if(result.state == "error"){
         setUploadState("error");
+        setUploadedFile((new File([""], "filename"));
         setErrorText(result.data.response.data.error.message);
       }
   }
