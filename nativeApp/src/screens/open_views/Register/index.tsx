@@ -367,14 +367,14 @@ const Register: FC<Props> = (props) => {
             <Text>{serverError.toString()}</Text>
 
             <PrintText>
-              By doing this you are agreeing to our
+              By doing this you are agreeing to our&nbsp;
                 <LinkText onPress={() => props.navigation.navigate('TnC')}>
                 Terms and Conditions
                 </LinkText>
             </PrintText>
 
             <PrintText>
-              Already Registered? Log In
+              Already Registered? Log In&nbsp;
               <LinkText onPress={() => props.navigation.navigate('Login')}>
                 Here
               </LinkText>
