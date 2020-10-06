@@ -39,6 +39,7 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
       input!.value = "";
     }
 
+    setFilename("Upload File Here")
       
   }
 
