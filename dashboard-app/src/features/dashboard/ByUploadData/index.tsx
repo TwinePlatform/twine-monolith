@@ -31,6 +31,17 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
             document.getElementById('file-input')!.click();
   }
 
+  const reset = () => {
+    setUploadedFile((new File([""], "filename")));
+
+    if(document.getElementById("file-input")){
+      const input: HTMLInputElement|null = document.getElementById("file-input") as HTMLInputElement;
+      input!.value = "";
+    }
+
+      
+  }
+
   const handleUpload = (e: any) => {
         setUploadedFile(e.target.files[0]);
         setFilename(e.target.files[0].name);
@@ -50,7 +61,7 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
           setUploadState("success");
       if(result.state == "error"){
         setUploadState("error");
-        setUploadedFile((new File([""], "filename")));
+        reset();
         setErrorText(result.data.response.data.error.message);
         if(result.data.response.data.error.statusCode == 500)
           setErrorText("A server error occured. This is most likely due to one of the logs having the same time as a previous log.");
