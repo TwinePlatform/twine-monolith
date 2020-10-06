@@ -50,8 +50,10 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
           setUploadState("success");
       if(result.state == "error"){
         setUploadState("error");
-        setUploadedFile((new File([""], "filename"));
+        setUploadedFile((new File([""], "filename")));
         setErrorText(result.data.response.data.error.message);
+        if(result.data.response.data.error.statusCode == 500)
+          setErrorText("A server error occured. This is most likely due to one of the logs having the same time as a previous log.");
       }
   }
 
