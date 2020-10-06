@@ -415,8 +415,8 @@ const Register: FC<Props> = (props) => {
               />
 
               <Input
-                onChangeText={handleChange('AdminCode')}
-                onBlur={handleBlur('AdminCode')}
+                onChangeText={handleChange('adminCode')}
+                onBlur={handleBlur('adminCode')}
                 value={values.adminCode}
                 placeholder='Admin Access Code (Admin Required)'
               />
