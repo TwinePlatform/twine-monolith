@@ -49,6 +49,12 @@ const getDate = (dateElement: any, startTimeElement: any) => {
         return new Date()
     }
 }
+
+const isNotZero = (duration: any) => {
+    if(duration.hours == 0 && duration.minutes == 0)
+        return false;
+    return true;
+}
 /*
 const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
 const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
@@ -106,7 +112,7 @@ const LogCreateModal:FC<Props> = (props) => {
 
             console.log(new Date(potentialLog.startedAt));
             //validation code
-            if(new Date(potentialLog.startedAt) && potentialLog.duration.hours!=0){
+            if(new Date(potentialLog.startedAt) && isNotZero(potentialLog.duration)){
                 setLog(potentialLog);
                 setValid(true);
             }
