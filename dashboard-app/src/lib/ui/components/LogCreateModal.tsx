@@ -246,11 +246,11 @@ const LogCreateModal:FC<Props> = (props) => {
                         <input type="time" id="Start Time" value={startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
-                        <select id="hours" name="Hours" onChange={changeDuration}>
+                        <select id="hours" name="Hours" onChange={e=>changeDuration(e)}>
                             {zeroToNine.map(time=>
                                 <option value={time}>{time}</option>)} 
                         </select>
-                        <select id="minutes" name="Minutes" onChange={changeDuration}>
+                        <select id="minutes" name="Minutes" onChange={e=>changeDuration(e)}>
                             {zeroToFiftyNine.map(time=>
                                 <option value={time}>{time}</option>)} 
                         </select>
