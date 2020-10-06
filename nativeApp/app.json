@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -29,8 +29,8 @@
     },
     "android": {
       "package": "com.powertochange.volunteerapp",
-      "versionCode": 2
+      "versionCode": 3
     },
-    "description": "Complete app for internal testing"
+    "description": "Fix registration, keyboard view, logout modal, duration display"
   }
 }
