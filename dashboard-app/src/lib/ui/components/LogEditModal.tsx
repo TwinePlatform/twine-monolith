@@ -288,11 +288,11 @@ const LogEditModal:FC<Props> = (props) => {
                         />
                         <select id="hours" name="Hours" onChange={changeDuration}>
                             {zeroToNine.map(time=>
-                                <option value={time} selected={time == logToEdit.duration.hours}>{time}</option>)} 
+                                <option value={time} selected={time == logToEdit.hours}>{time}</option>)} 
                         </select>
                         <select id="minutes" name="Minutes" onChange={changeDuration}>
                             {zeroToFiftyNine.map(time=>
-                                <option value={time} selected={time == logToEdit.duration.minutes}>{time}</option>)} 
+                                <option value={time} selected={time == logToEdit.minutes}>{time}</option>)} 
                         </select>
                         <button onClick={()=>setNoteModalVisible(true)}>Edit Note</button>
                         <button onClick={submit}
