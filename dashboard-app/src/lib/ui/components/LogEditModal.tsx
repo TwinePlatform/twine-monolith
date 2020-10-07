@@ -100,8 +100,7 @@ const LogEditModal:FC<Props> = (props) => {
         activity: logToEdit.activity,
         project: logToEdit.project,
         duration: {hours: logToEdit.hours, minutes: logToEdit.minutes, seconds: 0},
-        date: new Date(logToEdit.date),
-        startTime: logToEdit.startTime
+        startedAt: getDate(logToEdit.date,logToEdit.startTime),
     })
 
     //close modal if clicked outside of it
@@ -180,7 +179,7 @@ const LogEditModal:FC<Props> = (props) => {
         const newValues = {
             activity: log.activity,
             duration: log.duration,
-            startedAt: getDate(log.date,log.startTime),
+            startedAt: log.startedAt,
             project: log.project,
         };
 
@@ -280,11 +279,11 @@ const LogEditModal:FC<Props> = (props) => {
                                         selected={activity==logToEdit.activity? true: false}
                                 >{activity}</option>)} 
                         </select>
-                        <input type="date" id="Date" value={log.date}
+                        <input type="date" id="Date" value={logToEdit.date}
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
                         />
-                        <input type="time" id="Start Time" value={log.startTime}
+                        <input type="time" id="Start Time" value={logToEdit.startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
                         <select id="hours" name="Hours" onChange={changeDuration}>
