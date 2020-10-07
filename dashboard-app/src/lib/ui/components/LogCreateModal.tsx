@@ -140,7 +140,7 @@ const LogCreateModal:FC<Props> = (props) => {
                 minutes: event.target.value,
                 seconds: duration.seconds
             })
-        if(event.targetid == "hours")
+        if(event.target.id == "hours")
             setDuration({
                 hours: event.target.value,
                 minutes: duration.minutes,
