@@ -80,8 +80,8 @@ const getRows = (logs: [any], volunteers: IdAndName[]) => {
                     })
                     return {
                           Name: volunteerName,
-                          Hours: log.duration.hours,
-                          Minutes: log.duration.minutes,
+                          Hours: log.duration.hours?log.duration.hours:0,
+                          Minutes: log.duration.minutes?log.duration.minutes:0,
                           Project: log.project,
                           Activity: log.activity,
                           Date: log.startedAt.slice(0,10),
