@@ -39,7 +39,7 @@ const LogsDataTableRow: React.FunctionComponent<LogsRowProps> = (props) => {
       <button  
         className = {rowNumber%2==0?"ViewLogYellow":"ViewLog"}
         onClick={()=>{
-            console.log(pressed);
+            console.log("pressed");
             console.log(columns)
             setLogViewModalVisible(true);
             setSelectedLog({
