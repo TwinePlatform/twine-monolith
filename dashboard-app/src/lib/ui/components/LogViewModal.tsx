@@ -42,8 +42,6 @@ const LogViewModal:FC<Props> = (props) => {
     const [effectCount, setEffectCount] = useState(0);
     const [logNote, setLogNote] = useState("");
 
-    console.log(log);
-
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, ()=>{closeFunction();setEffectCount(0);setLogNote("")});
 
