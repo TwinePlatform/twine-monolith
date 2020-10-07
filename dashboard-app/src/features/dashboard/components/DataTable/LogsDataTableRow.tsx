@@ -48,7 +48,7 @@ const LogsDataTableRow: React.FunctionComponent<LogsRowProps> = (props) => {
               project: columns.Project.content,
               activity: columns.Activity.content,
               date: columns.Date.content,
-              startTime: columns.startTime.content,
+              startTime: columns.StartTime.content,
               hours: columns.Hours.content,
               minutes: columns.Hours.content,
               })}}>
