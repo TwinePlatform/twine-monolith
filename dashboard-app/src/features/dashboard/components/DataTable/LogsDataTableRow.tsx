@@ -26,6 +26,8 @@ const TableRow = styled.tr`
 const LogsDataTableRow: React.FunctionComponent<LogsRowProps> = (props) => {
   const { columns, rowLink, order, onClick, setSelectedLog, setLogViewModalVisible, rowNumber} = props;
 
+  console.log(columns)
+
   const inner = (
     <TableRow data-testid="data-table-row">
       {
@@ -44,8 +46,9 @@ const LogsDataTableRow: React.FunctionComponent<LogsRowProps> = (props) => {
               project: columns.Project.content,
               activity: columns.Activity.content,
               date: columns.Date.content,
-              endTime: columns.EndTime.content,
+              startTime: columns.startTime.content,
               hours: columns.Hours.content,
+              minutes: columns.Hours.content,
               })}}>
           View log
       </button>
