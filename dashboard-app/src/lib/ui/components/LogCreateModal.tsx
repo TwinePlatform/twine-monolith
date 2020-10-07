@@ -134,7 +134,7 @@ const LogCreateModal:FC<Props> = (props) => {
     }   
 
     const changeDuration = (event: any) => {
-        console.log(event.target)
+        console.log(duration)
 
         if(event.target.id == "minutes")
             setDuration({
