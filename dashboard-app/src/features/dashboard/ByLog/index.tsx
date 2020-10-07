@@ -52,7 +52,7 @@ const Container = styled(Grid)`
  */
 const initTableData = { headers: [], rows: [] };
 
-const initSelectedLog = { ID: 42, name: "ET" };
+//const initSelectedLog = { ID: 42, name: "ET" };
 
 /**
  * Component
@@ -68,7 +68,8 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const [logEditModalVisible, setLogEditModalVisible] = useState(false);
   const [logDeleteModalVisible, setLogDeleteModalVisible] = useState(false);
   const [projectModalVisible, setProjectModalVisible] = useState(false);
-  const [selectedLog, setSelectedLog] = useState(initSelectedLog);
+  //const [selectedLog, setSelectedLog] = useState(initSelectedLog);
+  const [selectedLog, setSelectedLog] = useState();
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [tableDataProjects, setTableDataProjects] = useState<TableData>(initTableData);
   const [refresh, setRefresh] = useState([0]);
