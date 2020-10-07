@@ -81,7 +81,11 @@ const NoteModal:FC<Props> = (props) => {
                         padding: '12px',
                     }}
                 >
-                    <input type="text" placeholder="Enter note..." onChange={e=>setPotentialNote(e.target.value)}/>
+                    <input 
+                        type="text" 
+                        placeholder="Enter note..." 
+                        value={initialNote ? initialNote : ""}
+                        onChange={e=>setPotentialNote(e.target.value)}/>
                     <button onClick={submit}>Add Note</button>
                 </div>
             </div>

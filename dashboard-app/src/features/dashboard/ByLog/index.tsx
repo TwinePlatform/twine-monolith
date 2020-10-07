@@ -116,8 +116,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
     }
   }, [loading, data, fromDate, toDate, unit, orderable, setErrors]);
 
-  if(selectedLog.ID != 0)
-    console.log(selectedLog)
+  
 
   return (
     <Container>

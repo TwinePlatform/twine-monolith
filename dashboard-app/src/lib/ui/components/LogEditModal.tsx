@@ -89,17 +89,6 @@ const LogEditModal:FC<Props> = (props) => {
     const[noteModalVisible, setNoteModalVisible] = useState(false);
     const[note, setNote] = useState("");
 
-    //const[myUserId, setMyUserId] = useState(0);
-
-    /*
-    ID: 6791
-activity: "Cafe/Catering"
-date: "2020-09-30"
-endTime: "14:16"
-hours: 4
-name: "User 219"
-project: "Test"
-    */
     const getIdFromName = (name: string) => {
         const volunteer = volunteers.find(volunteer => volunteer.name == name);
 
@@ -110,8 +99,9 @@ project: "Test"
         userId: getIdFromName(logToEdit.name),
         activity: logToEdit.activity,
         project: logToEdit.project,
-        duration: {hours: logToEdit.hours, minutes: 0, seconds: 0},
-        startedAt: new Date(logToEdit.date),
+        duration: {hours: logToEdit.hours, minutes: logToEdit.minutes, seconds: 0},
+        date: new Date(logToEdit.date),
+        startTime: logToEdit.startTime
     })
 
     //close modal if clicked outside of it
@@ -190,7 +180,7 @@ project: "Test"
         const newValues = {
             activity: log.activity,
             duration: log.duration,
-            startedAt: log.startedAt,
+            startedAt: getDate(log.date,log.startTime),
             project: log.project,
         };
 
@@ -290,20 +280,20 @@ project: "Test"
                                         selected={activity==logToEdit.activity? true: false}
                                 >{activity}</option>)} 
                         </select>
-                        <input type="date" id="Date" value={date}
+                        <input type="date" id="Date" value={log.date}
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
                         />
-                        <input type="time" id="Start Time" value={startTime}
+                        <input type="time" id="Start Time" value={log.startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
                         <select id="hours" name="Hours" onChange={changeDuration}>
                             {zeroToNine.map(time=>
-                                <option value={time}>{time}</option>)} 
+                                <option value={time} selected={time == logToEdit.duration.hours}>{time}</option>)} 
                         </select>
                         <select id="minutes" name="Minutes" onChange={changeDuration}>
                             {zeroToFiftyNine.map(time=>
-                                <option value={time}>{time}</option>)} 
+                                <option value={time} selected={time == logToEdit.duration.minutes}>{time}</option>)} 
                         </select>
                         <button onClick={()=>setNoteModalVisible(true)}>Edit Note</button>
                         <button onClick={submit}
