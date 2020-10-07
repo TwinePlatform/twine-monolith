@@ -26,6 +26,9 @@ const Heading = styled(H)`
 	marginBottom: 25px;
 `;
 
+const Text = styled.Text`
+  width:100%;
+`;
 
 /*
  * Component
@@ -43,10 +46,11 @@ const VolunteersBadges: FC<Props> = (props) => {
 	useEffect(() => {
 		getBadge();
 	}, []);
-
+	console.log(badgearray);
 	return (
 		<View>
 			<Heading>Volunteer's Badges</Heading>
+			{badgearray == [] && <Text>Loading</Text>}
 			{
 				badgearray.map((element) => (
 					<VolunteersBadgesCard details={element} />

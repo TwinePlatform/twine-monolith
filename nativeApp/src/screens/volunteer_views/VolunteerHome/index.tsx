@@ -74,6 +74,10 @@ const Container = styled.View`
   justifyContent: space-between;
 `;
 
+const Text = styled.Text`
+  width:100%;
+`;
+
 /*
  * Component
  */
@@ -155,10 +159,11 @@ const Stats: FC<Props> = () => {
   )
 };
 
-const BadgeTab: FC<Props> = (props) => {
+const BadgeTab: FC<Props> = (props, loading) => {
   console.log(props);
   return (
     <CardView>
+      {loading === true && <Text>Loading</Text>}
       {
         props.badge.map((element) => {
           const awardId = element['award_id'];
@@ -239,7 +244,7 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   const [userID, setUserID] = useState('');
   const [logged, setLogged] = useState(false);
   const [badgearray, setbadgearray] = useState([]);
-
+  const [loading, setLoading] = useState(true); //ToDo: Check if this is reset when page is loaded
   const getBadge = async () => {
     const badgeArr = await API.Badges.getBadges();
     setbadgearray(badgeArr);
@@ -321,7 +326,7 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
 
       <Tabs
         tabOne={['Stats', Stats, {}]}
-        tabTwo={['Badges', BadgeTab, { badge: badgearray }]}
+        tabTwo={['Badges', BadgeTab, { badge: badgearray, loading }]}
       />
 
     </Page>
