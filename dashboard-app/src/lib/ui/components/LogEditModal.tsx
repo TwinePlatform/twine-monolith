@@ -279,11 +279,11 @@ const LogEditModal:FC<Props> = (props) => {
                                         selected={activity==logToEdit.activity? true: false}
                                 >{activity}</option>)} 
                         </select>
-                        <input type="date" id="Date" value={logToEdit.date}
+                        <input type="date" id="Date" value={log.startedAt.toISOString().slice(0,10)}
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
                         />
-                        <input type="time" id="Start Time" value={logToEdit.startTime}
+                        <input type="time" id="Start Time" value={log.startedAt.toISOString().slice(12,17)}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
                         <select id="hours" name="Hours" onChange={changeDuration}>
