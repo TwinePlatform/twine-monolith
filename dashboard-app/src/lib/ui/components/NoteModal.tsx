@@ -84,7 +84,7 @@ const NoteModal:FC<Props> = (props) => {
                     <input 
                         type="text" 
                         placeholder="Enter note..." 
-                        value={initialNote ? initialNote : ""}
+                        value={potentialNote}
                         onChange={e=>setPotentialNote(e.target.value)}/>
                     <button onClick={submit}>Add Note</button>
                 </div>
