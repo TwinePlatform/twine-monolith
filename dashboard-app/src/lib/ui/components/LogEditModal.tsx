@@ -104,13 +104,11 @@ const LogEditModal:FC<Props> = (props) => {
 
     //close modal if clicked outside of it
     const wrapperRef = useRef(null);
-    useOutsideAlerter(wrapperRef, closeFunction);
+    useOutsideAlerter(wrapperRef, ()=>{closeFunction();setLoading(true)});
 
     useEffect(()=>{
         if(loading){
-            console.log(logToEdit)
             getOptions();
-            getNote();
         }
             
         if(!loading && document.getElementById('Log Form')){
@@ -129,6 +127,12 @@ const LogEditModal:FC<Props> = (props) => {
             }
         }
     })
+
+    useEffect(()=>{
+        setDate(logToEdit.date);
+        setStartTime(logToEdit.startTime);
+        getNote();
+    },[logToEdit])
 
     const getNote = async () => {
         let {data} = await LogNote.get(logToEdit.ID);
