@@ -129,7 +129,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
       />
       <LogCreateModal
         visible={logCreateModalVisible}
-        closeFunction={()=>setLogCreateModalVisible(false)}
+        closeFunction={()=>{setLogCreateModalVisible(false);setRefresh(refresh.concat([1]));}}
       />
       <LogEditModal
         visible={logEditModalVisible}
