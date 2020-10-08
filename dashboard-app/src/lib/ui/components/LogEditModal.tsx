@@ -45,17 +45,16 @@ const getDuration = (startTimeElement: any, endTimeElement: any) => {
     return {hours, minutes, seconds}
 }
 
-const getDate = (dateElement: any, startTimeElement: any) => {
+const getDate = (date: any, startTime: any) => {
 
     try{
-        let date = new Date(
-            parseInt(dateElement.value.slice(0,4)),
+        let startedAt = new Date(date +'T'+startTime);
+           /* parseInt(dateElement.value.slice(0,4)),
             parseInt(dateElement.value.slice(5,7)) - 1,
             parseInt(dateElement.value.slice(8,10)),
             startTimeElement.value.slice(0,2),
-            startTimeElement.value.slice(3,5),
-        )
-        return date;
+            startTimeElement.value.slice(3,5),*/
+        return startedAt;
     }
     catch{
         //console.log("not good");
@@ -173,6 +172,7 @@ const LogEditModal:FC<Props> = (props) => {
     }
 
     const submit = ()=>{
+        console.log(log)
 
         const newValues = {
             activity: log.activity,
