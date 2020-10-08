@@ -57,7 +57,7 @@ const initSelectedLog = {
               name: "none",
               project: "no project",
               activity: "no activity",
-              date: "00-00-0000",
+              date: "2000-01-01",
               startTime: "00:00",
               hours: 0,
               minutes: 0,

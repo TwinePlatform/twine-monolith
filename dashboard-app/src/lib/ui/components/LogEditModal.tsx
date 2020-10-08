@@ -58,7 +58,7 @@ const getDate = (dateElement: any, startTimeElement: any) => {
         return date;
     }
     catch{
-        console.log("not good");
+        //console.log("not good");
         return new Date()
     }
 }
@@ -108,6 +108,7 @@ const LogEditModal:FC<Props> = (props) => {
 
     useEffect(()=>{
         if(loading){
+            console.log(logToEdit)
             getOptions();
             getNote();
         }
