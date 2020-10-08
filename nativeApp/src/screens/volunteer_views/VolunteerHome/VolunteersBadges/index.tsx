@@ -40,7 +40,7 @@ const VolunteersBadges: FC<Props> = (props) => {
 	const [badgearray, setbadgearray] = useState([]);
 
 	const getBadge = async () => {
-		setTimeout(async () => { setbadgearray(await API.Badges.getCBBadges()); }, 3000);
+		setbadgearray(await API.Badges.getCBBadges());
 	}
 
 	useEffect(() => {
