@@ -32,17 +32,11 @@ const getStringArray = (array: any[]) => {
 
 const getSelected = (e: any) => e.value;
 
-const getDate = (dateElement: any, startTimeElement: any) => {
-
+const getDate = (date: any, startTime: any) => {
     try{
-        let date = new Date(
-            parseInt(dateElement.value.slice(0,4)),
-            parseInt(dateElement.value.slice(5,7)) - 1,
-            parseInt(dateElement.value.slice(8,10)),
-            startTimeElement.value.slice(0,2),
-            startTimeElement.value.slice(3,5),
-        )
-        return date;
+        let startedAt = new Date(date+'T'+startTime);
+        
+        return startedAt;
     }
     catch{
         console.log("not good");
@@ -55,13 +49,9 @@ const isNotZero = (duration: any) => {
         return false;
     return true;
 }
-/*
-const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
-const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
 
-*/
-const zeroToNine = [...Array(10).keys()]
-const zeroToFiftyNine = [...Array(60).keys()]
+const zeroToNine = [...Array(10).keys()];
+const zeroToFiftyNine = [...Array(60).keys()];
 
 
 const LogCreateModal:FC<Props> = (props) => {
@@ -74,7 +64,7 @@ const LogCreateModal:FC<Props> = (props) => {
     const [valid, setValid] = useState(false);
     const now = new Date();
     const [date, setDate] = useState(now.toISOString().slice(0,10));
-    const [startTime, setStartTime] = useState(now.getHours() + ":" + now.getMinutes());
+    const [startTime, setStartTime] = useState(now.toISOString().slice(11,16));
     const [duration, setDuration] = useState({
         hours:0,
         minutes:0,
@@ -92,7 +82,7 @@ const LogCreateModal:FC<Props> = (props) => {
         activity: "",
         project: "",
         duration: duration,
-        startedAt: new Date(),
+        startedAt: getDate(date,startTime),
     })
 
     const wrapperRef = useRef(null);
@@ -107,7 +97,7 @@ const LogCreateModal:FC<Props> = (props) => {
                 activity: getSelected(document.getElementById('Activity')),
                 project: getSelected(document.getElementById('Project')),
                 duration: duration,
-                startedAt: getDate(document.getElementById("Date"),document.getElementById('Start Time')),
+                startedAt: getDate(date,startTime),
             };
 
             //validation code

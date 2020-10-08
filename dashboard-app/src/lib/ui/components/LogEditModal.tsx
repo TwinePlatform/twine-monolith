@@ -33,33 +33,22 @@ const getStringArray = (array: any[]) => {
 
 const getSelected = (e: any) => e.value;
 
-const getDuration = (startTimeElement: any, endTimeElement: any) => {
-    const startTime = startTimeElement.value;
-    const endTime = endTimeElement.value;
-
-    //assuming same day, which you kind of
-    const hours = parseInt(endTime.slice(0,2)) - parseInt(startTime.slice(0,2));
-    const minutes = 0;
-    const seconds = 0;
-
-    return {hours, minutes, seconds}
-}
-
 const getDate = (date: any, startTime: any) => {
 
     try{
         let startedAt = new Date(date +'T'+startTime);
-           /* parseInt(dateElement.value.slice(0,4)),
-            parseInt(dateElement.value.slice(5,7)) - 1,
-            parseInt(dateElement.value.slice(8,10)),
-            startTimeElement.value.slice(0,2),
-            startTimeElement.value.slice(3,5),*/
         return startedAt;
     }
     catch{
         //console.log("not good");
         return new Date()
     }
+}
+
+const isNotZero = (duration: any) => {
+    if(duration.hours == 0 && duration.minutes == 0)
+        return false;
+    return true;
 }
 
 const zeroToNine = [...Array(10).keys()];
@@ -120,7 +109,7 @@ const LogEditModal:FC<Props> = (props) => {
             };
 
             //validation code
-            if(new Date(potentialLog.startedAt) && potentialLog.duration.hours!=0){
+            if(new Date(potentialLog.startedAt) && isNotZero(potentialLog.duration)){
                 setLog(potentialLog);
                 setValid(true);
             }
