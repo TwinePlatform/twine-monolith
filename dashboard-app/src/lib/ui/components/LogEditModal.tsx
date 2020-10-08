@@ -75,11 +75,10 @@ const LogEditModal:FC<Props> = (props) => {
     const [loading, setLoading] = useState(true);
     const [valid, setValid] = useState(false);
     const [date, setDate] = useState(logToEdit.date);
-    const now = new Date();
-    const [startTime, setStartTime] = useState(now.getHours() + ":" + now.getMinutes());
+    const [startTime, setStartTime] = useState(logToEdit.startTime);
     const [duration, setDuration] = useState({
-        hours:0,
-        minutes:0,
+        hours: logToEdit.hours,
+        minutes:logToEdit.minutes,
         seconds:0
     })
 
@@ -100,7 +99,7 @@ const LogEditModal:FC<Props> = (props) => {
         activity: logToEdit.activity,
         project: logToEdit.project,
         duration: {hours: logToEdit.hours, minutes: logToEdit.minutes, seconds: 0},
-        startedAt: getDate(logToEdit.date,logToEdit.startTime),
+        startedAt: getDate(date,startTime),
     })
 
     //close modal if clicked outside of it
@@ -119,7 +118,7 @@ const LogEditModal:FC<Props> = (props) => {
                 activity: getSelected(document.getElementById('Activity')),
                 project: getSelected(document.getElementById('Project')),
                 duration: duration,
-                startedAt: getDate(document.getElementById("Date"),document.getElementById('Start Time')),
+                startedAt: getDate(date,startTime),
             };
 
             //validation code
@@ -132,8 +131,6 @@ const LogEditModal:FC<Props> = (props) => {
 
     const getNote = async () => {
         let {data} = await LogNote.get(logToEdit.ID);
-        console.log(data);
-        //console.log(data.result[0].notes)
         if(data.result[0] != null)
             if(data.result[0].notes != null)
                 setNote(data.result[0].notes);
@@ -145,10 +142,6 @@ const LogEditModal:FC<Props> = (props) => {
             activities: await CommunityBusinesses.getVolunteerActivities(),
             volunteers: await CommunityBusinesses.getVolunteers()
         }
-        /*
-        const {data: {result: {id}}} = await Users.getMe();
-        console.log(id);
-        setMyUserId(id);*/
 
         setProjects(getStringArray(options.projects.data.result));
         setActivities(getStringArray(options.activities.data.result));
@@ -279,11 +272,11 @@ const LogEditModal:FC<Props> = (props) => {
                                         selected={activity==logToEdit.activity? true: false}
                                 >{activity}</option>)} 
                         </select>
-                        <input type="date" id="Date" value={log.startedAt.toISOString().slice(0,10)}
+                        <input type="date" id="Date" value={date}
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
                         />
-                        <input type="time" id="Start Time" value={log.startedAt.toISOString().slice(12,17)}
+                        <input type="time" id="Start Time" value={startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
                         <select id="hours" name="Hours" onChange={changeDuration}>
