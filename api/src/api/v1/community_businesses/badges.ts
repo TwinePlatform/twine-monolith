@@ -4,23 +4,11 @@ import { query, response } from './schema';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { Api } from '../types/api';
 import { Serialisers } from '../serialisers';
-import { userCredentials } from '../../../models';
+import { getCredentialsFromRequest } from '../auth';
 import { getCommunityBusiness } from '../prerequisites';
 import * as Knex from 'knex';
 import { element } from 'twine-util/random';
 import { any } from 'ramda';
-
-// const badgeCode = {
-//     "tenthhour": 1,
-//     "twentiethhour": 2,
-//     "fiftiethhour": 3,
-//     "invitation": 4,
-//     "thirdmonth": 5,
-//     "sixthmonth": 6,
-//     "anniversary": 7,
-//     "firstlog": 8,
-//     "fifthlog": 9
-// }
 
 const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
     Api.CommunityBusinesses.Me.Badges.GET.Route,
@@ -50,13 +38,19 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                     server: { app: { knex } },
                     pre: { communityBusiness },
                 } = request;
-                const token = request.yar.id;
-                const credentials = await userCredentials.get(knex, token);
-                const userId = credentials[0].user_account_id;
-                const orgId = credentials[0].organisation_id;
+                // const token = request.yar.id;
+                // const credentials = await userCredentials.get(knex, token);
+                // const userId = credentials[0].user_account_id;
+                // const orgId = credentials[0].organisation_id;
+
+                //get UserId Technical Debt see #573
+                const userId = getCredentialsFromRequest(request).user.id;
+                const orgId = getCredentialsFromRequest(request).organisation.id;
+
+                console.log('In the badges api endpoint' + userId + orgId);
 
                 const badgesArray = await badges.getAwards(knex, orgId, userId);
-
+                console.log('these are the badges Array' + badgesArray);
 
                 return badgesArray;
             }
@@ -83,10 +77,10 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                     server: { app: { knex } },
                     pre: { communityBusiness },
                 } = request;
-                const token = request.yar.id;
-                const credentials = await userCredentials.get(knex, token);
-                const userId = credentials[0].user_account_id;
-                const orgId = credentials[0].organisation_id;
+
+                //get UserId Technical Debt see #573
+                const userId = getCredentialsFromRequest(request).user.id;
+                const orgId = getCredentialsFromRequest(request).organisation.id;
 
                 //get badge of all users from organisation 
                 const badgesArray = await badges.getAwards(knex, orgId);
@@ -175,12 +169,9 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                     pre: { communityBusiness },
                 } = request;
 
-                const token = request.yar.id;
-                console.log(token);
-                //get UserId
-                const credentials = await userCredentials.get(knex, token);
-                const userId = credentials[0].user_account_id;
-                const orgId = credentials[0].organisation_id;
+                //get UserId Technical Debt see #573
+                const userId = getCredentialsFromRequest(request).user.id;
+                const orgId = getCredentialsFromRequest(request).organisation.id;
 
                 //check if badge exist in table using userId and OrganisationId
 
@@ -278,10 +269,9 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                     pre: { communityBusiness },
                 } = request;
 
-                const token = request.yar.id;
-                const credentials = await userCredentials.get(knex, token);
-                const userId = credentials[0].user_account_id;
-                const orgId = credentials[0].organisation_id;
+                //get UserCredentials Technical Debt see #573
+                const userId = getCredentialsFromRequest(request).user.id;
+                const orgId = getCredentialsFromRequest(request).organisation.id;
 
 
                 const awardExist = await badges.checkInvitationBadge(knex, userId, orgId, 4);
@@ -321,10 +311,10 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                     server: { app: { knex } },
                     pre: { communityBusiness },
                 } = request;
-                const token = request.yar.id;
-                const credentials = await userCredentials.get(knex, token);
-                const userId = credentials[0].user_account_id;
-                const orgId = credentials[0].organisation_id;
+
+                //get UserCredentials Technical Debt see #573
+                const userId = getCredentialsFromRequest(request).user.id;
+                const orgId = getCredentialsFromRequest(request).organisation.id;
 
                 //update DB with badgeId 4 which is the invitation badge
                 const badgesArray = await badges.getAwards(knex, orgId, userId);

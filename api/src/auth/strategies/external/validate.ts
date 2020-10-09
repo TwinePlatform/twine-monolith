@@ -1,16 +1,17 @@
 import * as Hapi from '@hapi/hapi';
 import * as Knex from 'knex';
-import { ApiTokens, Organisations } from '../../../models';
+import { ApiTokens, Organisations, Users } from '../../../models';
 
 
 export const ExternalCredentials = {
-  async get (knex: Knex, token: string): Promise<Hapi.AuthCredentials> {
+  async get(knex: Knex, token: string): Promise<Hapi.AuthCredentials> {
     const match = await ApiTokens.find(knex, token);
     const org = await Organisations.getOne(knex, { where: { name: match.name } });
-    return { scope: [match.access], app: { scope: [match.access], organisation: org } };
+    const user = await Users.getOne(knex, { where: { name: match.name } });
+    return { scope: [match.access], app: { scope: [match.access], organisation: org, user: user } };
   },
 
-  fromRequest (req: Hapi.Request) {
+  fromRequest(req: Hapi.Request) {
     return Object.assign({ scope: req.auth.credentials.scope }, req.auth.credentials.app);
   },
 };
