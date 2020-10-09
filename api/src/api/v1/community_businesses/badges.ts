@@ -81,7 +81,8 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                 //get UserId Technical Debt see #573
                 const userId = getCredentialsFromRequest(request).user.id;
                 const orgId = getCredentialsFromRequest(request).organisation.id;
-
+                console.log('userid in community badge endpoint' + userId);
+                console.log('orgid in community badge endpoint' + orgId);
                 //get badge of all users from organisation 
                 const badgesArray = await badges.getAwards(knex, orgId);
                 console.log(badgesArray);
@@ -172,7 +173,8 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                 //get UserId Technical Debt see #573
                 const userId = getCredentialsFromRequest(request).user.id;
                 const orgId = getCredentialsFromRequest(request).organisation.id;
-
+                console.log('userid in community badge endpoint' + userId);
+                console.log('orgid in community badge endpoint' + orgId);
                 //check if badge exist in table using userId and OrganisationId
 
                 const badgesArray = await badges.getAwards(knex, userId, orgId);
@@ -272,7 +274,8 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                 //get UserCredentials Technical Debt see #573
                 const userId = getCredentialsFromRequest(request).user.id;
                 const orgId = getCredentialsFromRequest(request).organisation.id;
-
+                console.log('userid in community badge endpoint' + userId);
+                console.log('orgid in community badge endpoint' + orgId);
 
                 const awardExist = await badges.checkInvitationBadge(knex, userId, orgId, 4);
 
@@ -315,6 +318,8 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                 //get UserCredentials Technical Debt see #573
                 const userId = getCredentialsFromRequest(request).user.id;
                 const orgId = getCredentialsFromRequest(request).organisation.id;
+                console.log('userid in community badge endpoint' + userId);
+                console.log('orgid in community badge endpoint' + orgId);
 
                 //update DB with badgeId 4 which is the invitation badge
                 const badgesArray = await badges.getAwards(knex, orgId, userId);

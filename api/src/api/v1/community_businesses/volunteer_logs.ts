@@ -110,7 +110,7 @@ const routes: [
 
         //get UserId: Technical Debt see #573
         const userId = getCredentialsFromRequest(request).user.id;
-
+        console.log('userId parsed in the volunteerLogs endpoint', userId);
         const queryown = {
           ...requestQueryToModelQuery<VolunteerLog>(_query),
           ...{ userId },
