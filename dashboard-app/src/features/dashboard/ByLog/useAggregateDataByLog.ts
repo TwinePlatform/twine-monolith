@@ -80,11 +80,12 @@ const getRows = (logs: [any], volunteers: IdAndName[]) => {
                     })
                     return {
                           Name: volunteerName,
-                          Hours: log.duration.hours,
+                          Hours: log.duration.hours?log.duration.hours:0,
+                          Minutes: log.duration.minutes?log.duration.minutes:0,
                           Project: log.project,
                           Activity: log.activity,
                           Date: log.startedAt.slice(0,10),
-                          EndTime: log.createdAt.slice(11,16),
+                          StartTime: log.startedAt.slice(11,16),
                           ID: log.id,
                         }})
 };
@@ -153,10 +154,11 @@ export default ({ from, to, updateOn = [], categories, filters}: UseAggregatedDa
 
    const logFieldsData =  [
                             {id:1, name: "Hours"},
+                            {id:2, name: "Minutes"},
                             {id:2, name: "Project"},
                             {id:3, name: "Activity"},
                             {id:4, name: "Date"},
-                            {id:5, name: "EndTime"},
+                            {id:5, name: "StartTime"},
                             {id:6, name: "ID"}
                             ];
 
