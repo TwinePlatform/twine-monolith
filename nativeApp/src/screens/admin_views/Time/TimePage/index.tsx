@@ -12,6 +12,7 @@ import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
 import ViewNoteModal from '../../../../lib/ui/modals/ViewNoteModal';
 import CardSeparator from '../../../../lib/ui/CardSeparator';
 import Loader from '../../../../lib/ui/Loader';
+import { truncate } from 'fs';
 
 /*
  * Types
@@ -24,21 +25,22 @@ type Props = {
  */
 const getTruncatedLogs = () => {
   const thirtyDaysAgo = moment().subtract(30, 'days');
-  let slicePoint = 10;
 
   let logArray = useSelector(selectOrderedLogs, shallowEqual);
 
-  /*
+  let truncatedLogs = [];
 
-  for(let i = 0;i<50 || i<logArray.length;i++){
-    console.log(i)
-    if(moment(logArray[i].createdAt).isBefore(thirtyDaysAgo)){
-      slicePoint = i;
-      break;
+  logArray.map((log,index)=>{
+    console.log(log.startedAt + log.createdAt + " " +index);
+    if(moment(log.startedAt).isAfter(thirtyDaysAgo)){
+      truncatedLogs.push(log)
     }
-  }*/
+  });
 
-  return logArray.slice(0, slicePoint);
+  //if truncatedLogs if over 50, ideally we would cut that down.
+  // but the logs aren't in order despite the name of the function to get them.
+
+  return truncatedLogs;
 };
 
 
@@ -70,9 +72,9 @@ const AdminTime: FC<Props> = () => {
       const lastWeek = moment().subtract(1, 'week');
       const twoWeeksAgo = moment().subtract(2, 'weeks');
       const groupedLogs = logs.reduce((acc, log) => {
-        if (moment(log.createdAt).isBetween(lastWeek, now)) {
+        if (moment(log.startedAt).isBetween(lastWeek, now)) {
           return { ...acc, thisWeek: [...acc.thisWeek, log] };
-        } if (moment(log.createdAt).isBetween(twoWeeksAgo, lastWeek)) {
+        } if (moment(log.startedAt).isBetween(twoWeeksAgo, lastWeek)) {
           return { ...acc, lastWeek: [...acc.lastWeek, log] };
         }
         return { ...acc, rest: [...acc.rest, log] };
