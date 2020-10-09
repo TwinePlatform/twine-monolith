@@ -88,7 +88,7 @@ const thankYouMessage = "\nThank you for registering!\nYou should have received\
  * Component
  */
 const Register: FC<Props> = (props) => {
-  const [registrationType, setRegistrationType] = useState("Organisation");
+  const [registrationType, setRegistrationType] = useState("User");
   const [organisationModalVisible, setOrganisationModalVisible] = useState(false);
   const [initialised, setInitialised] = useState(false);
   const [organisationOptions, setOrganisationOptions] = useState([{ id: 1, name: "loading organisations" }])
@@ -170,7 +170,6 @@ const Register: FC<Props> = (props) => {
         style={styles.container}
       >
         <Formik
-          initialValues={{ orgName: '', adminEmail: '', adminName: '', orgPostCode: '', _360GivingId: '', name: '', email: '', password: '', phone: '', postCode: '', adminCode: '', region: '', birthYear: '' }}
           validationSchema={validationSchemaOrg}
           onSubmit={async (values) => {
             values.region = region;
@@ -294,6 +293,7 @@ const Register: FC<Props> = (props) => {
         style={styles.container}
       >
         <Formik
+          initialValues={{ orgName: '', adminEmail: '', adminName: '', orgPostCode: '', _360GivingId: '', name: '', email: '', password: '', phone: '', postCode: '', adminCode: '', region: '', birthYear: '' }}
           validationSchema={validationSchemaUser}
           onSubmit={async (values) => {
             try {

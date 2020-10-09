@@ -1,4 +1,4 @@
-import React, { FC, useState} from 'react';
+import React, { FC, useState, useEffect} from 'react';
 import {View, Platform} from 'react-native';
 import styled from 'styled-components/native';
 import {
@@ -81,33 +81,62 @@ const TwineDateTimePicker: FC<Props> = (props) => {
   } = props;
   const [isVisible, toggleVisibility] = useToggle(false);
   const [modeInternal, setModeInternal] = useState(mode);
+  const [dateTime, setDateTime] = useState(value);
+  const [androidDate, setAndroidDate] = useState(new Date());
+
+  useEffect(()=>{
+    setDateTime(value);
+  },[value]);
 
   const onConfirmAndHide = (_date: Date) => {
-    if(modeInternal == "datetime")
-      setModeInternal("time");
-    else
-      if(modeInternal == "time")
-        setModeInternal("datetime");
+    if(Platform.OS == "android"){
+      if(modeInternal == "datetime"){
+        setAndroidDate(_date);
+        setDateTime(_date);
+      }
+      else
+        if(modeInternal == "time"){
+          const mergedDateTime = new Date(androidDate.getFullYear(),androidDate.getMonth(),androidDate.getDate(),_date.getHours(),_date.getMinutes());
+  
+          setDateTime(mergedDateTime);
+          onConfirm(mergedDateTime);
+          
+          //setDateTime(new Date(dateTime.getDate(),_date.getTime()));
+        }
 
+      
+      setModeInternal(modeInternal == "datetime"? "time":"datetime");
+      toggleVisibility();
+
+    }
+    else{
+      setDateTime(_date);
+      onConfirm(_date);
+      toggleVisibility();
+    }
+
+    
+        
+    
     // NB: server rejects logs with identical times & users as they're
     // believed to be an offline sync issue
-    console.log(_date);
+
     // const date = getDateWithCurrentTime(_date);
-    onConfirm(_date);
-    toggleVisibility();
+    
+    
   };
 
   return (
     <Item>
       <Label>{label}</Label>
-      {value
-        ? <Value onPress={toggleVisibility}>{displayValue(mode, value)}</Value>
+      {dateTime
+        ? <Value onPress={toggleVisibility}>{displayValue(mode, dateTime)}</Value>
         : <PlaceHolder onPress={toggleVisibility}>{`Select ${mode}`}</PlaceHolder>}
     {isVisible && Platform.OS == 'android' &&
       <_DateTimePicker
         minimumDate={minDate}
         maximumDate={maxDate}
-        value={value}
+        value={dateTime}
         mode={modeInternal}
         onChange={(event, values) => onConfirmAndHide(values)}
         //onCancel={toggleVisibility}
@@ -121,7 +150,7 @@ const TwineDateTimePicker: FC<Props> = (props) => {
           <_DateTimePicker
         minimumDate={minDate}
         maximumDate={maxDate}
-        value={value}
+        value={dateTime}
         mode={"datetime"}
         onChange={(event, values) => onConfirmAndHide(values)}
         //onCancel={toggleVisibility}
