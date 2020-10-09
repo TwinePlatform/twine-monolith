@@ -46,7 +46,7 @@ const Card = styled.View`
   background-color: ${ColoursEnum.white};
   alignItems: center;
   justifyContent: center;
-  width: 335;
+  width: 100%;
 `;
 
 const Text = styled.Text`
