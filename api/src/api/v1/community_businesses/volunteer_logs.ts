@@ -122,7 +122,7 @@ const routes: [
         var logs;
         // if have permission to get others then continue, 
         if (canReadOthers == true) {
-          console.log('canReadOthers');
+          console.log('canReadOthers and this is the console log!!!!');
           logs = await VolunteerLogs.fromCommunityBusiness(knex, communityBusiness, query);
         }
         //else execute the call for just the userId 
