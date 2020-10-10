@@ -33,6 +33,7 @@ import * as yup from 'yup';
 import { Formik } from 'formik';
 
 import { AddVolunteerButton, VolunteerButton } from '../AddVolunteerButton';
+import { AnyAaaaRecord } from 'dns';
 
 /*
  * Types
@@ -116,8 +117,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [noteModalVisible, toggleNoteInvisibility] = useToggle(false);
   const [errorModalVisible, toggleErrorInvisibility] = useToggle(false);
   const durationErrorMessage = "Please select a duration!";
+  const [volunteer, setVolunteer] = useState("");
+  const [project, setProject] = useState(selectedProject);
+  const [activity, setActivity] = useState(selectedActivity);
   const [startTime, setStartTime] = useState<Date>(new Date);
-  const [endTime, setEndTime] = useState<Date>(new Date);
   const [date, setDate] = useState<Date>(new Date);
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
@@ -149,11 +152,17 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       })
   }
 
-  const resetForm = () => {
+  console.log(volunteer)
+
+  const resetValues = () => {
+    console.log("resetting")
+
     setDate(new Date);
-    setHours(undefined);
+    setHours(0);
     setMinutes(0);
     setNote('');
+    setVolunteer("");
+    setAddVolArr([]);
   };
 
   //function to cache value in asynchstorage
@@ -200,10 +209,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
 
   // handlers
-  const onSubmit = async (volunteer, project, activity, startTime, endTime, note) => {
+  const onSubmit = async (volunteer, project, activity, startTime, note) => {
 
-    const hours = Math.floor((endTime - startTime) / (1000 * 60 * 60));
-    const minutes = Math.floor((endTime - startTime) / (1000 * 60) - hours * 60);
+    console.log(startTime);
+    console.log(date.toISOString())
 
     if (hours === 0 && minutes === 0) {
       toggleErrorInvisibility();
@@ -212,7 +221,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
         project,
         activity,
         startedAt: date.toISOString(),
-        duration: { hours, minutes },
+        duration: { hours, minutes, seconds:0 },
         userId: forUser == 'volunteer' ? userId : getIdFromName(volunteer),
         note
       };
@@ -222,10 +231,12 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       //if timeform is called from add time view 
       if (origin != "editTime") {
         try { //error trapping and cache log when network error
-          console.log("adding time")
-          const res = await dispatch(createLog(values));
+          console.log("adding time");
+
+          const res: any = await dispatch(createLog(values));
           console.log(res)
-          /*
+
+          
           if (res.status == 500) {
             cache(values);
           }
@@ -233,7 +244,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             console.log(res.statusText);
             //ToDo: error trapping here 
           }
-          console.log(res);*/
+    
         } catch (error) {
           console.log(error);
         }
@@ -262,14 +273,14 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           project,
           activity,
           startedAt: date.toISOString(),
-          duration: { hours, minutes },
+          duration: { hours, minutes, seconds:0 },
         };
 
 
         try { //error trapping and cache log when network error
-          const res = await dispatch(updateLog(userId, parseInt(logId), valuesEdit));
+          const res: any = await dispatch(updateLog(userId, parseInt(logId), valuesEdit));
           console.log(res);
-          /*
+          
         if (res.status == 500) {
           valuesEdit.userId = userId;
           valuesEdit.logId = logId;
@@ -279,7 +290,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           console.log(res.statusText);
           //ToDo: error trapping here 
         }
-        console.log(res);*/
+        console.log(res);
         } catch (error) {
           console.log(error);
         }
@@ -323,23 +334,24 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
     <Formik
       initialValues={{ volunteer: '', project: selectedProject, activity: selectedActivity, note: '' }}
-      validationSchema={validationSchema}
-      onSubmit={(values, date) => {
+      //validationSchema={validationSchema} removed as there is always an initial project or activity selected
+      onSubmit={(values, date,) => {
 
-
-        values.note = note;
-        console.log(addVolArr)
         if (addVolArr.length == 0) {
           console.log(values)
-          onSubmit(values.volunteer, values.project, values.activity, startTime, endTime, values.note);
+          onSubmit(volunteer, project, activity, startTime, note);
         } else if (addVolArr.length >= 1) {
-          addVolArr.push(values.volunteer); //add the active volunteer to the array
+          if(volunteer != "")
+            addVolArr.push(volunteer); //add the active volunteer to the array
 
           addVolArr.map(volunteer => {
             console.log(volunteer)
-            onSubmit(volunteer, values.project, values.activity, startTime, endTime, values.note);
+            onSubmit(volunteer, project, activity, startTime, note);
           })
         }
+
+        resetValues();
+
       }}>
 
       {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
@@ -374,10 +386,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
               label="Volunteer"
               placeholder={"Search volunteers"}
               options={volunteers}
-              selectedValue={values.volunteer}
-              onValueChange={handleChange('volunteer')}
+              selectedValue={volunteer}
+              onValueChange={volunteer=>{setVolunteer(volunteer)}}
               onBlur={handleBlur('volunteer')}
-              value={values.volunteer}
+              value={volunteer}
             />
           }
 
@@ -394,10 +406,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           <Dropdown
             label="Project"
             options={projects}
-            selectedValue={values.project}
-            onValueChange={handleChange('project')}
+            selectedValue={project}
+            onValueChange={project=>setProject(project)}
             onBlur={handleBlur('project')}
-            value={values.project}
+            value={project}
           />
 
           {errors.project &&
@@ -409,9 +421,9 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           <Dropdown
             label="Activity"
             options={activities}
-            selectedValue={values.activity}
-            onValueChange={handleChange('activity')}
-            value={values.activity}
+            selectedValue={activity}
+            onValueChange={activity=>setActivity(activity)}
+            value={activity}
           />
           {errors.activity &&
             <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.activity}</TextInput>
@@ -440,7 +452,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           />
 
           <NoteContainer>
-            {forUser === 'admin' && <AddVolunteerButton text="Add Another" onPress={() => addVolunteer(values.volunteer)} />}
+            {forUser === 'admin' && <AddVolunteerButton text="Add Another" onPress={() => {addVolunteer(volunteer);setVolunteer("")}} />}
             <NoteButton label={"Add note"} onPress={toggleNoteInvisibility} />
           </NoteContainer>
 

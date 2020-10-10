@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { Item as I, Picker, Label as L, Input } from 'native-base';
@@ -67,11 +67,18 @@ const filterData = (data, filter) => {
  */
 const FuzzySearchBox: FC<Props> = (props) => {
   const {
-    label, placeholder, options, onValueChange, defaultValue, origin, ...rest
+    label, placeholder, options, onValueChange, defaultValue, origin, value, ...rest
   } = props;
   const [text, setText] = useState("");
   const [textInputFocus, setTextInputFocus] = useState(false);
   const [filteredData, setFilteredData] = useState(filterData(options, ""));
+
+  useEffect(()=>{
+    if(origin != 'register'){
+      changeText(value)
+    }
+
+  },[value]);
 
   const changeText = (text: string) => {
     setText(text);
@@ -110,13 +117,6 @@ const FuzzySearchBox: FC<Props> = (props) => {
           {filteredData.map(item => renderRow(item))}
         </View>
       }
-      {/*textInputFocus &&
-        <FlatList
-          data={filteredData}
-          renderItem={({ item }) => renderRow(item)}
-          keyExtractor={(item: any) => item.id.toString()}
-        />
-      */}
     </React.Fragment>
 
   );

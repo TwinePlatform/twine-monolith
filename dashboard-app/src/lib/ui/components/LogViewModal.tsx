@@ -17,6 +17,8 @@ type Props = {
   visible: boolean;
   closeFunction: () => void;
   log: any;
+  onEdit: any;
+  onDelete: any;
 }
 
 /*
@@ -45,28 +47,17 @@ const LogViewModal:FC<Props> = (props) => {
 
     const getNote = async () => {
         let {data} = await LogNote.get(log.ID);
-        console.log(data.result[0].notes)
         if(data.result[0])
             setLogNote(data.result[0].notes);
     }
     
-    // const  calculateDuration(log.startTime, log.endTime) =>    {
 
-    //     return {
-        //  hours: log.startTime
-        //   minutes : log.endTime
-    // }
-// duration = calculateDuration(startTime,endTime);
-
-    // }
     useEffect(()=>{
         if(effectCount<3 && visible){
             getNote();
             setEffectCount(effectCount+1);
         }
     })
-
-    // let DeleteLogIcon = require ("../../assets/trash.svg");
 
     if(visible)
         return (
@@ -135,11 +126,11 @@ const LogViewModal:FC<Props> = (props) => {
                               <hr  className = "Section_Dividers"/>
 
                            
-                            <p><span className = "SectionTitle">Start Time</span>  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; {timeMinusHours(log.endTime,log.hours)}</p>
+                            <p><span className = "SectionTitle">Start Time</span>  &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; {log.startTime}</p>
                               
                               <hr  className = "Section_Dividers"/>
                        
-                           <p> <span className = "SectionTitle">End Time</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.endTime}</p>
+                <p> <span className = "SectionTitle">Duration</span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {log.hours}:{log.minutes<10?"0" + log.minutes: log.minutes}</p>
 
                               <hr className = "Section_Dividers" />
                           
@@ -165,17 +156,16 @@ const LogViewModal:FC<Props> = (props) => {
                          
                          <hr className = "BottomDivider" />
                         
-                <button className = "EditLog"> 
+                <button className = "EditLog" onClick={()=>props.onEdit()}> 
                 <img className= "EditIcon"  src = {require('../../../assets/edit.svg')}  alt="Edit_Log" /> 
                 &nbsp; Edit </button>
 
                         
-                        <button className ="DeleteLog"> 
+                        <button className ="DeleteLog" onClick={()=>props.onDelete()}> 
                         
                         <img className= "DeleteIcon" src = {require('../../../assets/trash.svg')}  alt="Delete_Log" /> 
                         &nbsp; Delete </button>
                  
-                   {/* dashboard-app\src\assets\trash.svg */}
                     </div>
                 </div>
             </div>

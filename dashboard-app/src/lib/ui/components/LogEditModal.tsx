@@ -3,7 +3,7 @@ import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
-import {CommunityBusinesses, Project, Logs, LogNote,} from '../../api';
+import {CommunityBusinesses, Project, Logs, LogNote, Users} from '../../api';
 import NoteModal from './NoteModal';
 import { duration } from 'moment';
 import DataTable from '../../../features/dashboard/components/DataTable';
@@ -14,6 +14,7 @@ import DataTable from '../../../features/dashboard/components/DataTable';
 type Props = {
   visible: boolean;
   closeFunction: () => void;
+  logToEdit: any;
 }
 
 /*
@@ -33,13 +34,13 @@ const getStringArray = (array: any[]) => {
 const getSelected = (e: any) => e.value;
 
 const getDate = (date: any, startTime: any) => {
+
     try{
-        let startedAt = new Date(date+'T'+startTime);
-        
+        let startedAt = new Date(date +'T'+startTime);
         return startedAt;
     }
     catch{
-        console.log("not good");
+        //console.log("not good");
         return new Date()
     }
 }
@@ -53,21 +54,19 @@ const isNotZero = (duration: any) => {
 const zeroToNine = [...Array(10).keys()];
 const zeroToFiftyNine = [...Array(60).keys()];
 
-
-const LogCreateModal:FC<Props> = (props) => {
-    const {visible, closeFunction,} = props;
+const LogEditModal:FC<Props> = (props) => {
+    const {visible, closeFunction, logToEdit} = props;
 
     const [projects, setProjects] = useState(["loading project"]);
     const [activities, setActivities] = useState(["loading activities"]);
     const [volunteers, setVolunteers] = useState([{id:0 , name:"loading volunteers"}]);
     const [loading, setLoading] = useState(true);
     const [valid, setValid] = useState(false);
-    const now = new Date();
-    const [date, setDate] = useState(now.toISOString().slice(0,10));
-    const [startTime, setStartTime] = useState(now.toISOString().slice(11,16));
+    const [date, setDate] = useState(logToEdit.date);
+    const [startTime, setStartTime] = useState(logToEdit.startTime);
     const [duration, setDuration] = useState({
-        hours:0,
-        minutes:0,
+        hours: logToEdit.hours,
+        minutes:logToEdit.minutes,
         seconds:0
     })
 
@@ -77,20 +76,29 @@ const LogCreateModal:FC<Props> = (props) => {
     const[noteModalVisible, setNoteModalVisible] = useState(false);
     const[note, setNote] = useState("");
 
+    const getIdFromName = (name: string) => {
+        const volunteer = volunteers.find(volunteer => volunteer.name == name);
+
+        return volunteer != null? volunteer.id : 0;
+    }
+
     const [log, setLog] = useState({
-        userId: 0,
-        activity: "",
-        project: "",
-        duration: duration,
+        userId: getIdFromName(logToEdit.name),
+        activity: logToEdit.activity,
+        project: logToEdit.project,
+        duration: {hours: logToEdit.hours, minutes: logToEdit.minutes, seconds: 0},
         startedAt: getDate(date,startTime),
     })
 
+    //close modal if clicked outside of it
     const wrapperRef = useRef(null);
-    useOutsideAlerter(wrapperRef, closeFunction);
+    useOutsideAlerter(wrapperRef, ()=>{closeFunction();setLoading(true)});
 
     useEffect(()=>{
-        if(loading)
+        if(loading){
             getOptions();
+        }
+            
         if(!loading && document.getElementById('Log Form')){
             let potentialLog = {
                 userId: parseInt(getSelected(document.getElementById('Volunteer'))),
@@ -108,21 +116,35 @@ const LogCreateModal:FC<Props> = (props) => {
         }
     })
 
+    useEffect(()=>{
+        setDate(logToEdit.date);
+        setStartTime(logToEdit.startTime);
+        getNote();
+    },[logToEdit])
+
+    const getNote = async () => {
+        let {data} = await LogNote.get(logToEdit.ID);
+        if(data.result[0] != null)
+            if(data.result[0].notes != null)
+                setNote(data.result[0].notes);
+    }
+
     const getOptions = async () => {
         const options = {
             projects: await Project.get(),
             activities: await CommunityBusinesses.getVolunteerActivities(),
             volunteers: await CommunityBusinesses.getVolunteers()
         }
+
         setProjects(getStringArray(options.projects.data.result));
         setActivities(getStringArray(options.activities.data.result));
         setVolunteers(options.volunteers.data.result);
 
         setLoading(false);
-    }   
+    }    
 
     const changeDuration = (event: any) => {
-        console.log(duration)
+        console.log(event.target)
 
         if(event.target.id == "minutes")
             setDuration({
@@ -139,8 +161,17 @@ const LogCreateModal:FC<Props> = (props) => {
     }
 
     const submit = ()=>{
+        console.log(log)
+
+        const newValues = {
+            activity: log.activity,
+            duration: log.duration,
+            startedAt: log.startedAt,
+            project: log.project,
+        };
+
         try{
-            Logs.add(log)
+            Logs.update(log.userId,logToEdit.ID,newValues)
             .then(result=>{
                 const {activity, project, startedAt } = result.data.result;
                 const LogID = result.data.result.id;
@@ -157,8 +188,8 @@ const LogCreateModal:FC<Props> = (props) => {
     };
 
     const showSuccessMessage = ()=>{
-        setSuccessMessage("Log created!");
-        setTimeout(()=>{setSuccessMessage("")},1000);
+        setSuccessMessage("Log edited!");
+        setTimeout(()=>{setSuccessMessage("");closeFunction()},1000);
     }
 
     if(visible)
@@ -189,6 +220,7 @@ const LogCreateModal:FC<Props> = (props) => {
                 visible={noteModalVisible}
                 setNote={setNote}
                 closeFunction={()=>setNoteModalVisible(false)}
+                initialNote={note}
                 />
                 <div
                     style={{
@@ -217,15 +249,22 @@ const LogCreateModal:FC<Props> = (props) => {
                     <div id="Log Form">
                         <select id="Volunteer" name="Volunteer">
                             {volunteers.map(volunteer=>
-                                <option value={volunteer.id}>{volunteer.name}</option>)} 
+                                <option value={volunteer.id}
+                                        selected={volunteer.name==logToEdit.name? true: false}
+                                >
+                                    {volunteer.name}</option>)} 
                         </select>
                         <select id="Project" name="Project">
                             {projects.map(project=>
-                                <option value={project}>{project}</option>)} 
+                                <option value={project}
+                                selected={project==logToEdit.project? true: false}
+                                >{project}</option>)} 
                         </select>
                         <select id="Activity" name="Activity">
                             {activities.map(activity=>
-                                <option value={activity}>{activity}</option>)} 
+                                <option value={activity}
+                                        selected={activity==logToEdit.activity? true: false}
+                                >{activity}</option>)} 
                         </select>
                         <input type="date" id="Date" value={date}
                             onChange={(e)=>setDate(e.target.value)}
@@ -234,18 +273,18 @@ const LogCreateModal:FC<Props> = (props) => {
                         <input type="time" id="Start Time" value={startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
-                        <select id="hours" name="Hours" onChange={e=>changeDuration(e)}>
+                        <select id="hours" name="Hours" onChange={changeDuration}>
                             {zeroToNine.map(time=>
-                                <option value={time}>{time}</option>)} 
+                                <option value={time} selected={time == logToEdit.hours}>{time}</option>)} 
                         </select>
-                        <select id="minutes" name="Minutes" onChange={e=>changeDuration(e)}>
+                        <select id="minutes" name="Minutes" onChange={changeDuration}>
                             {zeroToFiftyNine.map(time=>
-                                <option value={time}>{time}</option>)} 
+                                <option value={time} selected={time == logToEdit.minutes}>{time}</option>)} 
                         </select>
-                        <button onClick={()=>setNoteModalVisible(true)}>Add Note</button>
+                        <button onClick={()=>setNoteModalVisible(true)}>Edit Note</button>
                         <button onClick={submit}
                         disabled={!valid}
-                        >Create</button>
+                        >Edit</button>
                         <p>{errorMessage}</p>
                     </div>
                     }
@@ -257,4 +296,4 @@ const LogCreateModal:FC<Props> = (props) => {
 
 };
 
-export default LogCreateModal;
+export default LogEditModal;

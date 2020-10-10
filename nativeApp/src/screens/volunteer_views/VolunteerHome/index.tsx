@@ -159,7 +159,9 @@ const Stats: FC<Props> = () => {
   )
 };
 
+
 const BadgeTab: FC<Props> = (props, loading) => {
+
   console.log(props);
   return (
     <CardView>
@@ -239,6 +241,7 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
 
   registerForPushNotificationsAsync();
 
+
   const [stats, setBadge] = useToggle(false);
   const dispatch = useDispatch();
   const [userID, setUserID] = useState('');
@@ -316,17 +319,18 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
     getBadge();
     checkStorage();
     dispatch(loadLogs());
-  }, []);
+  },[]);
 
   AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(userID))
 
   return (
     <Page heading="Home" withAddBar>
-      <AddBar onPress={() => navigation.navigate('VolunteersBadges')} title="Volunteer's Badges" />
+      <AddBar onPress={() => {navigation.navigate('VolunteersBadges')}} title="Volunteer's Badges" />
 
       <Tabs
         tabOne={['Stats', Stats, {}]}
-        tabTwo={['Badges', BadgeTab, { badge: badgearray, loading }]}
+        tabTwo={['Badges', BadgeTab, { badge: badgearray }]}
+        onSwitch={()=>getBadge()}
       />
 
     </Page>

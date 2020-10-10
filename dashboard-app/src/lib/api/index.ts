@@ -55,7 +55,7 @@ export const CommunityBusinesses = {
 
 export const Logs = {
   add: (values: any) => axios.post( `/community-businesses/me/volunteer-logs`, values),
-  update: (id: any, LogId: any, values: any) => axios.put(`/community-businesses/me/volunteer-logs/${id}/${LogId}`,values),
+  update: (userId: any, logId: any, values: any) => axios.put(`/community-businesses/me/volunteer-logs/${userId}/${logId}`,values),
   delete: (LogId: any) => axios.delete( `/community-businesses/me/volunteer-logs/${LogId}`)
 }
 
@@ -102,4 +102,8 @@ export const Files = {
 export const Project = {
   get: () => axios.get( '/community-businesses/me/volunteers/projects'),
   add: (name: string) => axios.post('/community-businesses/me/volunteers/projects',{name}),
+}
+
+export const Users = {
+  getMe: () => axios.get( '/users/me'),
 }

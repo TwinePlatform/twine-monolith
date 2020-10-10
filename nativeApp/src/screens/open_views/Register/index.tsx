@@ -88,7 +88,7 @@ const thankYouMessage = "\nThank you for registering!\nYou should have received\
  * Component
  */
 const Register: FC<Props> = (props) => {
-  const [registrationType, setRegistrationType] = useState("Organisation");
+  const [registrationType, setRegistrationType] = useState("User");
   const [organisationModalVisible, setOrganisationModalVisible] = useState(false);
   const [initialised, setInitialised] = useState(false);
   const [organisationOptions, setOrganisationOptions] = useState([{ id: 1, name: "loading organisations" }])
@@ -170,7 +170,6 @@ const Register: FC<Props> = (props) => {
         style={styles.container}
       >
         <Formik
-          initialValues={{ orgName: '', adminEmail: '', adminName: '', orgPostCode: '', _360GivingId: '', name: '', email: '', password: '', phone: '', postCode: '', adminCode: '', region: '', birthYear: '' }}
           validationSchema={validationSchemaOrg}
           onSubmit={async (values) => {
             values.region = region;
@@ -185,9 +184,14 @@ const Register: FC<Props> = (props) => {
             if (values._360GivingId != "") {
               orgObj._360GivingId = values._360GivingId;
             }
-            const res = await API.CommunityBusiness.register(orgObj);
-            if (res.status == 200)
+            try{const res = await API.CommunityBusiness.register(orgObj);
+              if (res.status == 200)
               setOrganisationModalVisible(true);
+              initialiseCommunityBusinessOptions();
+            }
+            catch(error){
+              console.log(error)
+            }
           }}>
 
           {({ handleChange, handleBlur, handleSubmit, values, errors }) => {
@@ -266,14 +270,14 @@ const Register: FC<Props> = (props) => {
                 </Container>
 
                 <PrintText>
-                  By doing this you are agreeing to our
+                  By doing this you are agreeing to our&nbsp;
                     <LinkText onPress={() => props.navigation.navigate('TnC')}>
                     Terms and Conditions
                     </LinkText>
                 </PrintText>
 
                 <PrintText>
-                  Already Registered? Log In
+                  Already Registered? Log In&nbsp;
                     <LinkText onPress={() => props.navigation.navigate('Login')}>
                     Here
                     </LinkText>
@@ -294,6 +298,7 @@ const Register: FC<Props> = (props) => {
         style={styles.container}
       >
         <Formik
+          initialValues={{ orgName: '', adminEmail: '', adminName: '', orgPostCode: '', _360GivingId: '', name: '', email: '', password: '', phone: '', postCode: '', adminCode: '', region: '', birthYear: '' }}
           validationSchema={validationSchemaUser}
           onSubmit={async (values) => {
             try {
@@ -427,14 +432,14 @@ const Register: FC<Props> = (props) => {
               <Text style={{ fontSize: 10, color: 'red' }}>{serverError.toString()}</Text>
 
               <PrintText>
-                By doing this you are agreeing to our
+                By doing this you are agreeing to our&nbsp;
                 <LinkText onPress={() => props.navigation.navigate('TnC')}>
                   Terms and Conditions
                 </LinkText>
               </PrintText>
 
               <PrintText>
-                Already Registered? Log In
+                Already Registered? Log In&nbsp;
               <LinkText onPress={() => props.navigation.navigate('Login')}>
                   Here
               </LinkText>

@@ -16,6 +16,8 @@ import { ColoursEnum } from '../../../lib/ui/design_system';
 import ProjectModal from '../../../lib/ui/components/ProjectModal';
 import LogViewModal from '../../../lib/ui/components/LogViewModal';
 import LogCreateModal from '../../../lib/ui/components/LogCreateModal';
+import LogEditModal from '../../../lib/ui/components/LogEditModal';
+import DeleteModal from '../../../lib/ui/components/DeleteModal';
 import { PrimaryButton} from '../../../lib/ui/components/Buttons';
 import Errors from '../components/Errors';
 import useAggregateDataByLog from './useAggregateDataByLog';
@@ -50,7 +52,16 @@ const Container = styled(Grid)`
  */
 const initTableData = { headers: [], rows: [] };
 
-const initSelectedLog = { ID: 42, name: "ET" };
+const initSelectedLog = { 
+              ID: 0,
+              name: "none",
+              project: "no project",
+              activity: "no activity",
+              date: "2000-01-01",
+              startTime: "00:00",
+              hours: 0,
+              minutes: 0,
+ };
 
 /**
  * Component
@@ -63,12 +74,16 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const [filters, setFilters] = useState([]);
   const [logViewModalVisible, setLogViewModalVisible] = useState(false);
   const [logCreateModalVisible, setLogCreateModalVisible] = useState(false);
+  const [logEditModalVisible, setLogEditModalVisible] = useState(false);
+  const [logDeleteModalVisible, setLogDeleteModalVisible] = useState(false);
   const [projectModalVisible, setProjectModalVisible] = useState(false);
   const [selectedLog, setSelectedLog] = useState(initSelectedLog);
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [tableDataProjects, setTableDataProjects] = useState<TableData>(initTableData);
+  const [refresh, setRefresh] = useState([0]);
+
   const { loading, error, data, logFields, dataProjects, projectFields } =
-    useAggregateDataByLog({ from: fromDate, to: toDate,  categories, filters  });
+    useAggregateDataByLog({ from: fromDate, to: toDate, updateOn: refresh, categories, filters  });
 
   // set and clear errors on response
   const [errors, setErrors] = useErrors(error, data);
@@ -101,16 +116,30 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
     }
   }, [loading, data, fromDate, toDate, unit, orderable, setErrors]);
 
+  
+
   return (
     <Container>
       <LogViewModal
         visible={logViewModalVisible}
         closeFunction={()=>setLogViewModalVisible(false)}
         log={selectedLog}
+        onEdit={()=>{setLogViewModalVisible(false);setLogEditModalVisible(true);}}
+        onDelete={()=>setLogDeleteModalVisible(true)}
       />
       <LogCreateModal
         visible={logCreateModalVisible}
-        closeFunction={()=>setLogCreateModalVisible(false)}
+        closeFunction={()=>{setLogCreateModalVisible(false);setRefresh(refresh.concat([1]));}}
+      />
+      <LogEditModal
+        visible={logEditModalVisible}
+        closeFunction={()=>{setLogEditModalVisible(false);setRefresh(refresh.concat([1]));}}
+        logToEdit={selectedLog}
+      />
+      <DeleteModal
+        visible={logDeleteModalVisible}
+        closeFunction={()=>{setLogDeleteModalVisible(false);setRefresh(refresh.concat([1]));}}
+        logToDelete={selectedLog}
       />
       <ProjectModal
         visible={projectModalVisible}

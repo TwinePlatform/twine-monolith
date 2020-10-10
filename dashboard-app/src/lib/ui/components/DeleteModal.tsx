@@ -3,6 +3,7 @@ import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
+import {Logs} from '../../api';
 
 /*
  * Types
@@ -10,8 +11,7 @@ import { ColoursEnum } from '../design_system';
 type Props = {
   visible: boolean;
   closeFunction: () => void;
-  setNote: any;
-  initialNote?: string;
+  logToDelete: any;
 }
 
 /*
@@ -24,18 +24,15 @@ const Heading2 = styled(H2)`
   color: ${ColoursEnum.white};
 `;
 
-const NoteModal:FC<Props> = (props) => {
-    const {visible, closeFunction, setNote, initialNote} = props;
+const DeleteModal:FC<Props> = (props) => {
+    const {visible, closeFunction, logToDelete} = props;
 
-    const [potentialNote, setPotentialNote] = useState(initialNote ? initialNote : "");
-   
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, closeFunction);
 
-    const submit = ()=>{
+    const confirm = ()=>{
         try{
-            setNote(potentialNote);
-            closeFunction();
+            Logs.delete(logToDelete.ID)
         }
         catch(error){
             console.log("error");
@@ -81,12 +78,9 @@ const NoteModal:FC<Props> = (props) => {
                         padding: '12px',
                     }}
                 >
-                    <input 
-                        type="text" 
-                        placeholder="Enter note..." 
-                        value={potentialNote}
-                        onChange={e=>setPotentialNote(e.target.value)}/>
-                    <button onClick={submit}>Add Note</button>
+                    <p>Are you sure you want to delete this log?</p>
+                    <button onClick={closeFunction}>No</button>
+                    <button onClick={()=>{confirm();closeFunction();}}>Yes</button>
                 </div>
             </div>
         );
@@ -95,4 +89,4 @@ const NoteModal:FC<Props> = (props) => {
 
 };
 
-export default NoteModal;
+export default DeleteModal;
