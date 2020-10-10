@@ -184,9 +184,13 @@ const Register: FC<Props> = (props) => {
             if (values._360GivingId != "") {
               orgObj._360GivingId = values._360GivingId;
             }
-            const res = await API.CommunityBusiness.register(orgObj);
-            if (res.status == 200)
+            try{const res = await API.CommunityBusiness.register(orgObj);
+              if (res.status == 200)
               setOrganisationModalVisible(true);
+            }
+            catch(error){
+              console.log(error)
+            }
           }}>
 
           {({ handleChange, handleBlur, handleSubmit, values, errors }) => {
@@ -265,14 +269,14 @@ const Register: FC<Props> = (props) => {
                 </Container>
 
                 <PrintText>
-                  By doing this you are agreeing to our
+                  By doing this you are agreeing to our&nbsp;
                     <LinkText onPress={() => props.navigation.navigate('TnC')}>
                     Terms and Conditions
                     </LinkText>
                 </PrintText>
 
                 <PrintText>
-                  Already Registered? Log In
+                  Already Registered? Log In&nbsp;
                     <LinkText onPress={() => props.navigation.navigate('Login')}>
                     Here
                     </LinkText>
