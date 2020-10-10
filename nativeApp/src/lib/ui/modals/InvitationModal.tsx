@@ -95,15 +95,17 @@ const InvitationModal: FC<Props> = ({
 }) => {
   const [emailAddress, setEmailAddress] = useState("");
   const [subject, setSubject] = useState("Subject: Twine Sign Up");
-  const [body, setBody] = useState("Dear Volunteer,\n\nI am inviting you to use the TWINE volunteering app,please follow the instructions from the links provided to sign up.\n iOS: 'link to iOS store' Android: 'link to app store'\n\n Thanks!\n\n Fellow Twine User");
-
+  const [body, setBody] = useState("Dear Volunteer,\n\nI am inviting you to use the TWINE volunteering app,please follow the instructions from the links provided to sign up.");
+  const [lowerbody, setLowerBody] = useState("iOS: 'link to iOS store' Android: 'link to app store'\n\n Thanks!\n\n Fellow Twine User");
+  const link = "http:twinevolunteerapp.com";
   const onSend = () => {
-    // const email = {
-    //   address: emailAddress,
-    //   subject: subject,
-    //   body: body
-    // };
-    // API.Invite.byEmail(email);
+    const email = {
+      "To": emailAddress,
+      "email_subject": subject,
+      "text_above_link": body,
+      "text_below_link": lowerbody,
+    };
+    API.Invite.byEmail(email);
   }
 
   return (
