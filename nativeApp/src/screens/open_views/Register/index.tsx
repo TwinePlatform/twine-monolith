@@ -187,6 +187,7 @@ const Register: FC<Props> = (props) => {
             try{const res = await API.CommunityBusiness.register(orgObj);
               if (res.status == 200)
               setOrganisationModalVisible(true);
+              initialiseCommunityBusinessOptions();
             }
             catch(error){
               console.log(error)
