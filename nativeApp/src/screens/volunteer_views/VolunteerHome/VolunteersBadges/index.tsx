@@ -26,6 +26,10 @@ const Heading = styled(H)`
 	marginBottom: 25px;
 `;
 
+const Text = styled.Text`
+  width:100%;
+  textAlign: center;
+`;
 
 /*
  * Component
@@ -39,7 +43,6 @@ const VolunteersBadges: FC<Props> = (props) => {
 		setbadgearray(await API.Badges.getCBBadges());
 	}
 
-
 	useEffect(() => {
 		getBadge();
 	}, []);
@@ -47,6 +50,7 @@ const VolunteersBadges: FC<Props> = (props) => {
 	return (
 		<View>
 			<Heading>Volunteer's Badges</Heading>
+			{badgearray.length === 0 && <Text>Loading</Text>}
 			{
 				badgearray.map((element) => (
 					<VolunteersBadgesCard details={element} />

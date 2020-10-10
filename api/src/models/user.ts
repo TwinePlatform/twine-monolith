@@ -266,16 +266,3 @@ export const Users: UserCollection = {
     return currentRoles.every((x) => x.organisationId === cb.id);
   },
 };
-
-
-/*
- * Get data needed for validation
- */
-export const userCredentials = {
-  async get(client: Knex, token: any) {
-    const res = await client('user_session_record')
-      .where('session_id', token);
-
-    return res;
-  },
-}
