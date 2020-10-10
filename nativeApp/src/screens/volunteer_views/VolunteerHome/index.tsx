@@ -76,6 +76,7 @@ const Container = styled.View`
 
 const Text = styled.Text`
   width:100%;
+  textAlign: center;
 `;
 
 /*
@@ -87,9 +88,9 @@ const Stats: FC<Props> = () => {
   const dispatch = useDispatch();
   const [visibleConfirmationModal, toggleInviteVisibility] = useToggle(false);
   const [visibleBadge, toggleBadgeVisibility] = useState(false);
-  useEffect(() => {
-    dispatch(loadLogs());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(loadLogs());
+  // }, []);
 
   const logs = useSelector(selectOrderedLogs, shallowEqual);
   let hours = 0;
@@ -159,13 +160,11 @@ const Stats: FC<Props> = () => {
   )
 };
 
-
-const BadgeTab: FC<Props> = (props, loading) => {
-
+const BadgeTab: FC<Props> = (props) => {
   console.log(props);
   return (
     <CardView>
-      {loading === true && <Text>Loading</Text>}
+      {props.loading === true && <Text>Loading</Text>}
       {
         props.badge.map((element) => {
           const awardId = element['award_id'];
@@ -180,6 +179,9 @@ const BadgeTab: FC<Props> = (props, loading) => {
             )
           }
         })
+      }
+      {
+        props.badge.length === 0 && <Text>No badges yet!</Text>
       }
     </CardView >
   );
@@ -241,16 +243,18 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
 
   registerForPushNotificationsAsync();
 
-
   const [stats, setBadge] = useToggle(false);
   const dispatch = useDispatch();
   const [userID, setUserID] = useState('');
   const [logged, setLogged] = useState(false);
   const [badgearray, setbadgearray] = useState([]);
-  const [loading, setLoading] = useState(true); //ToDo: Check if this is reset when page is loaded
+  const [loading, setLoading] = useState(true);
+
   const getBadge = async () => {
+    console.log('getting own badges in frontend');
     const badgeArr = await API.Badges.getBadges();
     setbadgearray(badgeArr);
+    setLoading(false);
   }
 
   //access fail to send log and try logging them again
@@ -318,19 +322,19 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
     })
     getBadge();
     checkStorage();
+    console.log('load data in useeffect in volunteerHome component'); //not run for some reason
     dispatch(loadLogs());
-  },[]);
+  }, []);
 
   AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(userID))
 
   return (
     <Page heading="Home" withAddBar>
-      <AddBar onPress={() => {navigation.navigate('VolunteersBadges')}} title="Volunteer's Badges" />
+      <AddBar onPress={() => navigation.navigate('VolunteersBadges')} title="Volunteer's Badges" />
 
       <Tabs
         tabOne={['Stats', Stats, {}]}
-        tabTwo={['Badges', BadgeTab, { badge: badgearray }]}
-        onSwitch={()=>getBadge()}
+        tabTwo={['Badges', BadgeTab, { badge: badgearray, loading: loading }]}
       />
 
     </Page>
