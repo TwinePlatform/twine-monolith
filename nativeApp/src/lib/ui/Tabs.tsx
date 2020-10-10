@@ -12,6 +12,7 @@ import { ColoursEnum } from './colours';
 type Props = {
   tabOne: [string, FC<{}>, {}];
   tabTwo: [string, FC<{}>, {}];
+  onSwitch?: any;
 }
 
 /*
@@ -28,12 +29,19 @@ const Tabs: FC<Props> = (props) => {
   const {
     tabOne: [headingOne, ComponentOne, propsOne],
     tabTwo: [headingTwo, ComponentTwo, propsTwo],
+    onSwitch
   } = props;
+
+  
 
   return (
     <_Tabs
       tabContainerStyle={{ height: 40 }} //eslint-disable-line
       tabBarUnderlineStyle={{ backgroundColor: ColoursEnum.purple }}
+      onChangeTab={()=>{
+        if(onSwitch)
+          onSwitch();
+        }}
     >
       <Tab
         heading={headingOne}
