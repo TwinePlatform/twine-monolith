@@ -1,4 +1,4 @@
-export { Users, userCredentials } from './user';
+export { Users } from './user';
 export { Visitors } from './visitor';
 export { Volunteers } from './volunteer';
 export { CbAdmins } from './cb_admin';
