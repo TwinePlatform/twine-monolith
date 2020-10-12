@@ -334,7 +334,8 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
 
       <Tabs
         tabOne={['Stats', Stats, {}]}
-        tabTwo={['Badges', BadgeTab, { badge: badgearray, loading: loading }]}
+        tabTwo={['Badges', BadgeTab, { badge: badgearray }]}
+        onSwitch={()=>{getBadge()}}
       />
 
     </Page>
