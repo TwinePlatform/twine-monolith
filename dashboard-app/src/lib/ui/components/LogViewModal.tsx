@@ -137,18 +137,14 @@ const LogViewModal:FC<Props> = (props) => {
                         
                     </div>
 
-                    <div>
-                       
-                        <section className= "Note_Area">
-                        {/* review  possible solution */}
+                    <section className= "note-area">
                         <p>{logNote}</p>
-                        </section>
-                    </div>
+                    </section>
+                    
                    
-                   <div className="Duration">
-                      <span><p> Member has volunteered  for  </p></span> <br />
-                      <p> {log.hours} Hours {log.minutes} minutes</p> 
-
+                   <div className="duration">
+                      <span><p> Member volunteered  for  </p></span> <br />
+                      <p><span className="number">{log.hours}</span> Hours <span className="number">{log.minutes}</span> minutes</p> 
                    </div>
 
                     <div className ="ModalControls">

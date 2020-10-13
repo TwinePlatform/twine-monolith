@@ -168,7 +168,7 @@ q:after {
 
 .Section_Dividers {
   width: 195px;
-  color: #7070704D;
+  background-color: #7070704D;
 }
 
 
@@ -177,20 +177,27 @@ q:after {
   color: grey;
 }
 
-.Duration
+.duration
 {
   top: -53px;
   position: relative;
+  color: #707070;
+  font-size: 18px;
+  text-align: center;
 }
 
-.Note_Area 
+.number{
+  font-size: 33px;
+}
+
+.note-area 
 {
   position: relative;
-  border: orange solid 3px;
-  padding-right: 348px;
-  padding-top: 50px;
+  border: #FFBF00 solid 2px;
+  padding: 5px;
   top: -65px;
-  left: 17px;
+  left: 50%;
+  transform: translate(-40%,0%);
 }
 
 
