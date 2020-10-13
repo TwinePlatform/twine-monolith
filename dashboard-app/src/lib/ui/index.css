@@ -169,6 +169,7 @@ q:after {
 .Section_Dividers {
   width: 195px;
   height: 1px;
+  border-width:0;
   background-color: #d4d4d4;
 }
 
@@ -207,6 +208,8 @@ q:after {
 {
   width: 117%;
   position: relative;
+  height: 1px;
+  border-width:0;
   top: -20px;
   background-color: #d4d4d4;
 }
@@ -242,7 +245,6 @@ q:after {
 /*  Possibly move to  Modal Controls  */
 .EditLog {
   position: relative;
-  left: 249px;
   border: none;
   color:#8000ffcc;
   background: transparent;
@@ -250,19 +252,19 @@ q:after {
 
 .DeleteLog {
   position: relative;
-  left: 336px;
   border: none;
   color: #8000ffcc;
   background: transparent;
 }
 
-.DeleteLog,
-.EditLog {
+.EditIcon{
   position: relative;
-  border: none;
+  top: 6px;
+}
 
-  color: purple;
-  background: transparent;
+.DeleteIcon{
+  position: relative;
+  top: 6px;
 }
 
 .ViewLogYellow {

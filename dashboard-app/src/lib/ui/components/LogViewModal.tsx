@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
-import { H2 } from './Headings';
+import { H2left } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {LogNote} from '../../api'
 import { DurationUnitEnum } from '../../../types';
@@ -26,7 +26,7 @@ type Props = {
  */
 
 
-const Heading2 = styled(H2)`
+const Heading2 = styled(H2left)`
   marginBottom: 20;
   color: ${ColoursEnum.white};
 `;
