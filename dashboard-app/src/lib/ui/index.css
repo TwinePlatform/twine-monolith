@@ -210,7 +210,7 @@ q:after {
   position: relative;
   height: 1px;
   border-width:0;
-  top: -20px;
+  top: -30px;
   background-color: #d4d4d4;
 }
 
@@ -227,6 +227,7 @@ q:after {
   bottom: 7px;
   display: flex;
   justify-content: space-around;
+  padding-bottom: 10px;
 }
 
 .ViewLog {
