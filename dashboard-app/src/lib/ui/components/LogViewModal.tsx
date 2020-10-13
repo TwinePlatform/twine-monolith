@@ -150,16 +150,18 @@ const LogViewModal:FC<Props> = (props) => {
                 
                 <div className ="ModalControls">
                          
-                <button className = "EditLog" onClick={()=>props.onEdit()}> 
-                <img className= "EditIcon"  src = {require('../../../assets/edit.svg')}  alt="Edit_Log" /> 
-                &nbsp; Edit </button>
+                    <button className = "EditLog" onClick={()=>props.onEdit()}> 
+                        <img className= "EditIcon"  src = {require('../../../assets/edit.svg')}  alt="Edit_Log" /> 
+                        &nbsp; Edit 
+                    </button>
 
-                <div className="vertical-divider"></div>
+                    <span className="vertical-divider"/>
 
-                        <button className ="DeleteLog" onClick={()=>props.onDelete()}> 
+                    <button className ="DeleteLog" onClick={()=>props.onDelete()}> 
                         
                         <img className= "DeleteIcon" src = {require('../../../assets/trash.svg')}  alt="Delete_Log" /> 
-                        &nbsp; Delete </button>
+                        &nbsp; Delete 
+                    </button>
                  
                     </div>
                 </div>

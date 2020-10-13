@@ -169,7 +169,7 @@ q:after {
 .Section_Dividers {
   width: 195px;
   height: 1px;
-  background-color: #7070704D;
+  background-color: #d4d4d4;
 }
 
 
@@ -208,12 +208,13 @@ q:after {
   width: 117%;
   position: relative;
   top: -20px;
+  background-color: #d4d4d4;
 }
 
 .vertical-divider{
-    border-left: 1px solid #38546d;
+    border-left: 1px solid #d4d4d4;
     width: 1px;
-    height: 80px;
+    height: 25px;
 }
 
 .ModalControls {
