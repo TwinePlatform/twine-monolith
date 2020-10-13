@@ -28,6 +28,7 @@ type Props = {
 
 const Heading2 = styled(H2left)`
   marginBottom: 20;
+  padding: 10px;
   color: ${ColoursEnum.white};
 `;
 
