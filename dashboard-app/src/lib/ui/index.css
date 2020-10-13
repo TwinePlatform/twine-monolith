@@ -168,6 +168,7 @@ q:after {
 
 .Section_Dividers {
   width: 195px;
+  height: 1px;
   background-color: #7070704D;
 }
 
@@ -179,10 +180,11 @@ q:after {
 
 .duration
 {
-  top: -53px;
+  bottom: 60px;
+  left: 7%;
   position: relative;
   color: #707070;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
 }
 
@@ -203,16 +205,24 @@ q:after {
 
 .BottomDivider 
 {
-  width: 610px;
+  width: 117%;
+  position: relative;
+  top: -20px;
+}
+
+.vertical-divider{
+    border-left: 1px solid #38546d;
+    width: 1px;
+    height: 80px;
 }
 
 .ModalControls {
-  margin-left: 175px;
   position: absolute;
   background: transparent;
   width: 100%;
-  left: -176px;
   bottom: 7px;
+  display: flex;
+  justify-content: space-around;
 }
 
 .ViewLog {
@@ -233,7 +243,7 @@ q:after {
   position: relative;
   left: 249px;
   border: none;
-  color: purple;
+  color:#8000ffcc;
   background: transparent;
 }
 
@@ -241,7 +251,7 @@ q:after {
   position: relative;
   left: 336px;
   border: none;
-  color: purple;
+  color: #8000ffcc;
   background: transparent;
 }
 
