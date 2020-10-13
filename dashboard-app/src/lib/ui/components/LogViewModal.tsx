@@ -32,12 +32,6 @@ const Heading2 = styled(H2left)`
   color: ${ColoursEnum.white};
 `;
 
-const timeMinusHours = (time: string, hours: number) => {
-    let newHour = parseInt(time.slice(0,2)) - hours;
-
-    return newHour + time.slice(2);
-}
-
 const LogViewModal:FC<Props> = (props) => {
     const {visible, closeFunction, log} = props;
     const [effectCount, setEffectCount] = useState(0);
