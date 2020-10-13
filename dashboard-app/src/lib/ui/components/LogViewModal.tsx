@@ -84,6 +84,7 @@ const LogViewModal:FC<Props> = (props) => {
                 >
                 <Heading2>TWINE</Heading2>
                 </div>
+                <p className = "modal-title">Volunteers Time</p>
                 <div
                     style={{
                       /*  borderColor: ColoursEnum.mustard,
@@ -92,12 +93,12 @@ const LogViewModal:FC<Props> = (props) => {
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                         marginTop: '45px',
-                        marginLeft: '75px',
+                        //marginLeft: '75px',
                         marginRight: '75px',
                         padding: '12px',
                     }}
                 >
-                    <p className = "modalTitle">Volunteers Time</p>
+                    
                     {/* Refactor to group both sections into 1 class */}
                     <div className = "ProjectDetails">
                         {/* Probably need to find another wway to create spacing between letters */}

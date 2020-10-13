@@ -150,15 +150,16 @@ q:after {
   display: inline-block;
   padding: 17px;
   line-height: 18px;
+  font-size: 12px;
 }
 
-.modalTitle {
-  position: relative;
+.modal-title {
+  /*position: relative;*/
   text-align: center;
-  top: -55px;
+ /* top: -55px;
 
-  height: 37px;
-
+  height: 37px;*/
+  padding-bottom: 12px;
   font: normal normal 20px/50px Roboto;
   letter-spacing: 0.6px;
   color: #000000;
@@ -167,6 +168,7 @@ q:after {
 
 .Section_Dividers {
   width: 195px;
+  color: #7070704D;
 }
 
 
