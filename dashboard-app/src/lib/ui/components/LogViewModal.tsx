@@ -64,18 +64,17 @@ const LogViewModal:FC<Props> = (props) => {
             <div
                 style={{
                     position: 'fixed', 
-                    width: "50%", 
-                    height: "50%", 
-                    bottom: "25%", 
-                    right: "25%",
+                    bottom: "50%", 
+                    right: "50%",
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
                     boxShadow: '2px 3px 6px #00000029',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    //justifyContent: 'center',
+                    //alignItems: 'center',
                 }}
                 ref={wrapperRef}
+                className="view-log-modal"
             >
                 <div
                     style={{
@@ -147,8 +146,7 @@ const LogViewModal:FC<Props> = (props) => {
                    
                    <div className="Duration">
                       <span><p> Member has volunteered  for  </p></span> <br />
-                      {/* <p> {duration.hours} Hours {duration.minutes} minutes</p> */}
-                      {/* Show how many hours have been done  */}
+                      <p> {log.hours} Hours {log.minutes} minutes</p> 
 
                    </div>
 
