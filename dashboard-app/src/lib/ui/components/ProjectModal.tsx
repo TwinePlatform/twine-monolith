@@ -70,6 +70,7 @@ const ProjectModal:FC<Props> = (props) => {
                 >
                 <Heading2>TWINE</Heading2>
                 </div>
+                <div style={{display: 'flex', padding: '4px 30px'}}>
                 <p className = "modal-title">Add Project</p>
                 <br/>
                 <input className="log-create-select" value={projectName} type="text" placeholder="Project Name" onChange={textHandler}/>
@@ -79,10 +80,12 @@ const ProjectModal:FC<Props> = (props) => {
                     onClick={submit}
                     disabled={projectName.length < 1}
                     className="create-log-button"
+                    style={{justifySelf: 'center', alignSelf: 'center'}}
                 >
                     SAVE
                 </button>
                 <p>{successMessage}</p>
+                </div>
             </div>
         );
     else
