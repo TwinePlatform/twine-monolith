@@ -233,7 +233,7 @@ const LogCreateModal:FC<Props> = (props) => {
                         <span  className = "section-title-create">Activity</span>
                         <select id="Activity" name="Activity" className="log-create-select">
                             {activities.map(activity=>
-                                <option value={activity}>{activity}</option>)} 
+                                <option value={activity} style={{wordWrap: "normal"}}>{activity}</option>)} 
                         </select>
                         </div>
                         <hr className = "Section_Dividers" />
