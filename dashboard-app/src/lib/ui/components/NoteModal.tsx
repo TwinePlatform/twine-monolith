@@ -70,23 +70,13 @@ const NoteModal:FC<Props> = (props) => {
                 >
                     <Heading2>TWINE</Heading2>
                 </div>
-                <div
-                    style={{
-                        borderRadius: '4px',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        marginTop: '45px',
-                        marginLeft: '75px',
-                        marginRight: '75px',
-                        padding: '12px',
-                    }}
-                >
+                <div style={{display: 'flex', justifyContent: 'space-between' ,padding: '10px'}}>
                     <input 
-                        type="text" 
-                        placeholder="Enter note..." 
-                        value={potentialNote}
-                        onChange={e=>setPotentialNote(e.target.value)}/>
-                    <button onClick={submit}>Add Note</button>
+                    type="text" 
+                    placeholder="Enter note..." 
+                    value={potentialNote}
+                    onChange={e=>setPotentialNote(e.target.value)}/>
+                    <button className="add-note-button" onClick={submit}>Confirm Note</button>
                 </div>
             </div>
         );
