@@ -299,6 +299,11 @@ table {
   display: block;
 }
 
+.log-create-section{
+  display: inline-flex;
+  justify-content: space-between;
+}
+
 /* matches MediaQueriesEnum in design system */
 
 /* large desktop */

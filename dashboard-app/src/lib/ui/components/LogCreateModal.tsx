@@ -203,10 +203,7 @@ const LogCreateModal:FC<Props> = (props) => {
                         borderRadius: '4px',
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        marginTop: '45px',
-                        marginLeft: '75px',
-                        marginRight: '75px',
-                        padding: '12px',
+                        padding: '10px',
                     }}
                 >
                     <p className = "modal-title">Add Time</p>
@@ -216,11 +213,13 @@ const LogCreateModal:FC<Props> = (props) => {
                 :
                     <div id="Log Form" className="log-create-form">
                         <div className="log-create-column">
-                        <span  className = "SectionTitle">Volunteer &nbsp; &nbsp; &nbsp; &nbsp;</span>
-                        <select id="Volunteer" name="Volunteer">
-                            {volunteers.map(volunteer=>
-                                <option value={volunteer.id}>{volunteer.name}</option>)} 
-                        </select>
+                            <div className="log-create-section">
+                                <span  className = "SectionTitle">Volunteer</span>
+                                <select id="Volunteer" name="Volunteer">
+                                    {volunteers.map(volunteer=>
+                                        <option value={volunteer.id}>{volunteer.name}</option>)} 
+                                </select>
+                            </div>
                         <hr className = "Section_Dividers" />
                         <span  className = "SectionTitle">Project &nbsp; &nbsp; &nbsp; &nbsp;</span>
                         <select id="Project" name="Project">
