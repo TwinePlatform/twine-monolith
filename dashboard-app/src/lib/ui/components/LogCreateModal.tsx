@@ -215,7 +215,7 @@ const LogCreateModal:FC<Props> = (props) => {
                         <div className="log-create-column">
                             <div className="log-create-section">
                                 <span  className = "SectionTitle">Volunteer</span>
-                                <select id="Volunteer" name="Volunteer">
+                                <select id="Volunteer" name="Volunteer" className="log-create-select">
                                     {volunteers.map(volunteer=>
                                         <option value={volunteer.id}>{volunteer.name}</option>)} 
                                 </select>
@@ -223,7 +223,7 @@ const LogCreateModal:FC<Props> = (props) => {
                         <hr className = "Section_Dividers" />
                         <div className="log-create-section">
                         <span  className = "SectionTitle">Project</span>
-                        <select id="Project" name="Project">
+                        <select id="Project" name="Project" className="log-create-select">
                             {projects.map(project=>
                                 <option value={project}>{project}</option>)} 
                         </select>
@@ -231,7 +231,7 @@ const LogCreateModal:FC<Props> = (props) => {
                         <hr className = "Section_Dividers" />
                         <div className="log-create-section">
                         <span  className = "SectionTitle">Activity</span>
-                        <select id="Activity" name="Activity">
+                        <select id="Activity" name="Activity" className="log-create-select">
                             {activities.map(activity=>
                                 <option value={activity}>{activity}</option>)} 
                         </select>
@@ -241,7 +241,7 @@ const LogCreateModal:FC<Props> = (props) => {
                         <div className="log-create-column">
                         <div className="log-create-section">
                         <span  className = "SectionTitle">Date</span>
-                        <input type="date" id="Date" value={date}
+                        <input type="date" id="Date" value={date}  className="log-create-select"
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
                         />
@@ -249,14 +249,14 @@ const LogCreateModal:FC<Props> = (props) => {
                         <hr className = "Section_Dividers" />
                         <div className="log-create-section">
                         <span  className = "SectionTitle">Start Time</span>
-                        <input type="time" id="Start Time" value={startTime}
+                        <input type="time" id="Start Time" value={startTime}  className="log-create-select"
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
                         </div>
                         <hr className = "Section_Dividers" />
                         <div className="log-create-section">
                         <span  className = "SectionTitle">Hours</span>
-                        <select id="hours" name="Hours" onChange={e=>changeDuration(e)}>
+                        <select id="hours" name="Hours" onChange={e=>changeDuration(e)} className="log-create-select">
                             {zeroToNine.map(time=>
                                 <option value={time}>{time}</option>)} 
                         </select>
@@ -264,7 +264,8 @@ const LogCreateModal:FC<Props> = (props) => {
                         <hr className = "Section_Dividers" />
                         <div className="log-create-section">
                         <span  className = "SectionTitle">Minutes</span>
-                        <select id="minutes" name="Minutes" onChange={e=>changeDuration(e)}>
+                        <select id="minutes" name="Minutes"  className="log-create-select"
+                        onChange={e=>changeDuration(e)}>
                             {zeroToFiftyNine.map(time=>
                                 <option value={time}>{time}</option>)} 
                         </select>
@@ -273,7 +274,7 @@ const LogCreateModal:FC<Props> = (props) => {
                         </div>   
                     </div>
                     }
-                    <div style={{display: "flex"}}>
+                    <div style={{display: "flex", justifyContent: "flex-end"}}>
                         <button 
                         className="add-note-button"
                         onClick={()=>setNoteModalVisible(true)}>Add Note</button>
@@ -282,10 +283,13 @@ const LogCreateModal:FC<Props> = (props) => {
                         <span><p> Member volunteered  for  </p></span> <br />
                         <p><span className="number">{log.duration.hours}</span> Hours <span className="number">{log.duration.minutes}</span> minutes</p> 
                     </div>  
+                    <div style={{display: "flex", justifyContent: "center"}}>
                     <button onClick={submit}
+                    className="create-log-button"
                         disabled={!valid}
                     >ADD TIME</button>
                     <p>{errorMessage}</p>
+                    </div>
                 </div>
             </div>
         );

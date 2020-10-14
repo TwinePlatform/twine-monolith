@@ -305,6 +305,10 @@ table {
   justify-content: space-between;
 }
 
+.log-create-select{
+  border-width: 0px;
+}
+
 .add-note-button{
     color: white;
     background-color: #8000ffcc;
@@ -312,6 +316,14 @@ table {
     border-width: 0px;
     box-shadow: 0px 3px 6px #00000029;
     justify-content: flex-end;
+}
+
+.create-log-button{
+    color: white;
+    background-color: #8000ffcc;
+    box-shadow: 0px 2px 3px #33333333;
+    border-radius: 5px;
+    padding: 5px 20px 5px 20px;
 }
 
 /* matches MediaQueriesEnum in design system */
