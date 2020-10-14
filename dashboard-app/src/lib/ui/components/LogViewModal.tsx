@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
-import { H2 } from './Headings';
+import { H2left } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {LogNote} from '../../api'
 import { DurationUnitEnum } from '../../../types';
@@ -26,16 +26,11 @@ type Props = {
  */
 
 
-const Heading2 = styled(H2)`
+const Heading2 = styled(H2left)`
   marginBottom: 20;
+  padding: 10px;
   color: ${ColoursEnum.white};
 `;
-
-const timeMinusHours = (time: string, hours: number) => {
-    let newHour = parseInt(time.slice(0,2)) - hours;
-
-    return newHour + time.slice(2);
-}
 
 const LogViewModal:FC<Props> = (props) => {
     const {visible, closeFunction, log} = props;
@@ -64,18 +59,17 @@ const LogViewModal:FC<Props> = (props) => {
             <div
                 style={{
                     position: 'fixed', 
-                    width: "50%", 
-                    height: "50%", 
-                    bottom: "25%", 
-                    right: "25%",
+                    bottom: "50%", 
+                    right: "50%",
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
                     boxShadow: '2px 3px 6px #00000029',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    //justifyContent: 'center',
+                    //alignItems: 'center',
                 }}
                 ref={wrapperRef}
+                className="view-log-modal"
             >
                 <div
                     style={{
@@ -85,6 +79,7 @@ const LogViewModal:FC<Props> = (props) => {
                 >
                 <Heading2>TWINE</Heading2>
                 </div>
+                <p className = "modal-title">Volunteers Time</p>
                 <div
                     style={{
                       /*  borderColor: ColoursEnum.mustard,
@@ -93,12 +88,12 @@ const LogViewModal:FC<Props> = (props) => {
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                         marginTop: '45px',
-                        marginLeft: '75px',
+                        //marginLeft: '75px',
                         marginRight: '75px',
                         padding: '12px',
                     }}
                 >
-                    <p className = "modalTitle">Volunteers Time</p>
+                    
                     {/* Refactor to group both sections into 1 class */}
                     <div className = "ProjectDetails">
                         {/* Probably need to find another wway to create spacing between letters */}
@@ -137,34 +132,31 @@ const LogViewModal:FC<Props> = (props) => {
                         
                     </div>
 
-                    <div>
-                       
-                        <section className= "Note_Area">
-                        {/* review  possible solution */}
+                    <section className= "note-area">
                         <p>{logNote}</p>
-                        </section>
-                    </div>
+                    </section>
+                    
                    
-                   <div className="Duration">
-                      <span><p> Member has volunteered  for  </p></span> <br />
-                      {/* <p> {duration.hours} Hours {duration.minutes} minutes</p> */}
-                      {/* Show how many hours have been done  */}
-
+                   <div className="duration">
+                      <span><p> Member volunteered  for  </p></span> <br />
+                      <p><span className="number">{log.hours}</span> Hours <span className="number">{log.minutes}</span> minutes</p> 
                    </div>
-
-                    <div className ="ModalControls">
+                   <hr className = "BottomDivider" />
+                
+                <div className ="ModalControls">
                          
-                         <hr className = "BottomDivider" />
-                        
-                <button className = "EditLog" onClick={()=>props.onEdit()}> 
-                <img className= "EditIcon"  src = {require('../../../assets/edit.svg')}  alt="Edit_Log" /> 
-                &nbsp; Edit </button>
+                    <button className = "EditLog" onClick={()=>props.onEdit()}> 
+                        <img className= "EditIcon"  src = {require('../../../assets/edit.svg')}  alt="Edit_Log" /> 
+                        &nbsp; Edit 
+                    </button>
 
-                        
-                        <button className ="DeleteLog" onClick={()=>props.onDelete()}> 
+                    <span className="vertical-divider"/>
+
+                    <button className ="DeleteLog" onClick={()=>props.onDelete()}> 
                         
                         <img className= "DeleteIcon" src = {require('../../../assets/trash.svg')}  alt="Delete_Log" /> 
-                        &nbsp; Delete </button>
+                        &nbsp; Delete 
+                    </button>
                  
                     </div>
                 </div>
