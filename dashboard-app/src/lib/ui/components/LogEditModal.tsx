@@ -270,25 +270,6 @@ const LogEditModal:FC<Props> = (props) => {
                         </div>
                         <hr className = "Section_Dividers" />
                         </div>
-                        {/*<select id="Volunteer" name="Volunteer">
-                            {volunteers.map(volunteer=>
-                                <option value={volunteer.id}
-                                        selected={volunteer.name==logToEdit.name? true: false}
-                                >
-                                    {volunteer.name}</option>)} 
-                        </select>
-                        <select id="Project" name="Project">
-                            {projects.map(project=>
-                                <option value={project}
-                                selected={project==logToEdit.project? true: false}
-                                >{project}</option>)} 
-                        </select>
-                        <select id="Activity" name="Activity">
-                            {activities.map(activity=>
-                                <option value={activity}
-                                        selected={activity==logToEdit.activity? true: false}
-                                >{activity}</option>)} 
-                            </select>*/}
                         <div className="log-create-column">
                         <div className="log-create-section">
                         <span  className = "section-title-create">Date</span>
@@ -323,26 +304,6 @@ const LogEditModal:FC<Props> = (props) => {
                         </div>
                         <hr className = "Section_Dividers" />
                         </div>
-                        {/*<input type="date" id="Date" value={date}
-                            onChange={(e)=>setDate(e.target.value)}
-                            //max={todaysDate}
-                        />
-                        <input type="time" id="Start Time" value={startTime}
-                        onChange={(e)=>setStartTime(e.target.value)}
-                        />
-                        <select id="hours" name="Hours" onChange={changeDuration}>
-                            {zeroToNine.map(time=>
-                                <option value={time} selected={time == logToEdit.hours}>{time}</option>)} 
-                        </select>
-                        <select id="minutes" name="Minutes" onChange={changeDuration}>
-                            {zeroToFiftyNine.map(time=>
-                                <option value={time} selected={time == logToEdit.minutes}>{time}</option>)} 
-                            </select>*/}
-                        {/*<button onClick={()=>setNoteModalVisible(true)}>Edit Note</button>
-                        <button onClick={submit}
-                        disabled={!valid}
-                        >Edit</button>
-                        <p>{errorMessage}</p>*/}
                     </div>
                     }
                     <div style={{display: "flex", justifyContent: "flex-end"}}>

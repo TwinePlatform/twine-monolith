@@ -1,7 +1,7 @@
 import React, { FC, useState, useRef, useEffect } from 'react';
 import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
-import { H2 } from './Headings';
+import { H2left } from './Headings';
 import { ColoursEnum } from '../design_system';
 
 /*
@@ -19,9 +19,10 @@ type Props = {
  */
 
 
-const Heading2 = styled(H2)`
+const Heading2 = styled(H2left)`
   marginBottom: 20;
   color: ${ColoursEnum.white};
+  padding: 10px;
 `;
 
 const NoteModal:FC<Props> = (props) => {
@@ -48,20 +49,16 @@ const NoteModal:FC<Props> = (props) => {
             <div
                 style={{
                     position: 'fixed', 
-                    width: "30%", 
                     height: "30%", 
-                    bottom: "45%", 
-                    right: "45%",
+                    bottom: "30%", 
+                    right: "30%",
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
                     boxShadow: '2px 3px 6px #00000029',
-                    justifyContent: 'center',
-                    alignItems: 'center',
                 }}
                 ref={wrapperRef}
             >
-              
                <div
                     style={{
                         backgroundColor: ColoursEnum.purple,
@@ -76,6 +73,7 @@ const NoteModal:FC<Props> = (props) => {
                     placeholder="Enter note..." 
                     value={potentialNote}
                     onChange={e=>setPotentialNote(e.target.value)}/>
+                    <br/>
                     <button className="add-note-button" onClick={submit}>Confirm Note</button>
                 </div>
             </div>
