@@ -221,42 +221,54 @@ const LogCreateModal:FC<Props> = (props) => {
                                 </select>
                             </div>
                         <hr className = "Section_Dividers" />
-                        <span  className = "SectionTitle">Project &nbsp; &nbsp; &nbsp; &nbsp;</span>
+                        <div className="log-create-section">
+                        <span  className = "SectionTitle">Project</span>
                         <select id="Project" name="Project">
                             {projects.map(project=>
                                 <option value={project}>{project}</option>)} 
                         </select>
+                        </div>
                         <hr className = "Section_Dividers" />
-                        <span  className = "SectionTitle">Activity &nbsp; &nbsp; &nbsp; &nbsp;</span>
+                        <div className="log-create-section">
+                        <span  className = "SectionTitle">Activity</span>
                         <select id="Activity" name="Activity">
                             {activities.map(activity=>
                                 <option value={activity}>{activity}</option>)} 
                         </select>
+                        </div>
                         <hr className = "Section_Dividers" />
                         </div>
                         <div className="log-create-column">
-                        <span  className = "SectionTitle">Date &nbsp; &nbsp; &nbsp; &nbsp;</span>
+                        <div className="log-create-section">
+                        <span  className = "SectionTitle">Date</span>
                         <input type="date" id="Date" value={date}
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
                         />
+                        </div>
                         <hr className = "Section_Dividers" />
-                        <span  className = "SectionTitle">Start Time &nbsp; &nbsp; &nbsp; &nbsp;</span>
+                        <div className="log-create-section">
+                        <span  className = "SectionTitle">Start Time</span>
                         <input type="time" id="Start Time" value={startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
+                        </div>
                         <hr className = "Section_Dividers" />
-                        <span  className = "SectionTitle">Hours &nbsp; &nbsp; &nbsp; &nbsp;</span>
+                        <div className="log-create-section">
+                        <span  className = "SectionTitle">Hours</span>
                         <select id="hours" name="Hours" onChange={e=>changeDuration(e)}>
                             {zeroToNine.map(time=>
                                 <option value={time}>{time}</option>)} 
                         </select>
+                        </div>
                         <hr className = "Section_Dividers" />
-                        <span  className = "SectionTitle">Minutes &nbsp; &nbsp; &nbsp; &nbsp;</span>
+                        <div className="log-create-section">
+                        <span  className = "SectionTitle">Minutes</span>
                         <select id="minutes" name="Minutes" onChange={e=>changeDuration(e)}>
                             {zeroToFiftyNine.map(time=>
                                 <option value={time}>{time}</option>)} 
                         </select>
+                        </div>
                         <hr className = "Section_Dividers" />
                         </div>   
                     </div>

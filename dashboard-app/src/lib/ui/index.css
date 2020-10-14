@@ -167,7 +167,6 @@ q:after {
 }
 
 .Section_Dividers {
-  width: 195px;
   height: 1px;
   border-width:0;
   background-color: #d4d4d4;
@@ -297,6 +296,7 @@ table {
 
 .log-create-column{
   display: block;
+  padding: 5px;
 }
 
 .log-create-section{
