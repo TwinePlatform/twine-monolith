@@ -309,7 +309,7 @@ const LogEditModal:FC<Props> = (props) => {
                         <span  className = "section-title-create">Hours</span>
                         <select id="hours" name="Hours" onChange={e=>changeDuration(e)} className="log-create-select">
                             {zeroToNine.map(time=>
-                                <option value={time}>{time}</option>)} 
+                                <option value={time} selected={time == logToEdit.hours}>{time}</option>)} 
                         </select>
                         </div>
                         <hr className = "Section_Dividers" />
@@ -318,7 +318,7 @@ const LogEditModal:FC<Props> = (props) => {
                         <select id="minutes" name="Minutes"  className="log-create-select"
                         onChange={e=>changeDuration(e)}>
                             {zeroToFiftyNine.map(time=>
-                                <option value={time}>{time}</option>)} 
+                                <option value={time}selected={time == logToEdit.minutes}>{time}</option>)} 
                         </select>
                         </div>
                         <hr className = "Section_Dividers" />
