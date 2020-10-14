@@ -273,15 +273,19 @@ const LogCreateModal:FC<Props> = (props) => {
                         </div>   
                     </div>
                     }
+                    <div style={{display: "flex"}}>
+                        <button 
+                        className="add-note-button"
+                        onClick={()=>setNoteModalVisible(true)}>Add Note</button>
+                    </div>
                     <div className="duration-create">
-                            <span><p> Member volunteered  for  </p></span> <br />
-                            <p><span className="number">{log.duration.hours}</span> Hours <span className="number">{log.duration.minutes}</span> minutes</p> 
-                        </div>  
-                        <button onClick={()=>setNoteModalVisible(true)}>Add Note</button>
-                        <button onClick={submit}
+                        <span><p> Member volunteered  for  </p></span> <br />
+                        <p><span className="number">{log.duration.hours}</span> Hours <span className="number">{log.duration.minutes}</span> minutes</p> 
+                    </div>  
+                    <button onClick={submit}
                         disabled={!valid}
-                        >ADD TIME</button>
-                        <p>{errorMessage}</p>
+                    >ADD TIME</button>
+                    <p>{errorMessage}</p>
                 </div>
             </div>
         );

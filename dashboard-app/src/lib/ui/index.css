@@ -176,6 +176,7 @@ q:after {
 .SectionTitle
 {
   color: grey;
+  padding-right: 10px;
 }
 
 .duration
@@ -300,8 +301,17 @@ table {
 }
 
 .log-create-section{
-  display: inline-flex;
+  display: flex;
   justify-content: space-between;
+}
+
+.add-note-button{
+    color: white;
+    background-color: #8000ffcc;
+    border-radius: 20px;
+    border-width: 0px;
+    box-shadow: 0px 3px 6px #00000029;
+    justify-content: flex-end;
 }
 
 /* matches MediaQueriesEnum in design system */
