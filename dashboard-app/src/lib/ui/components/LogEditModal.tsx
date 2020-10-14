@@ -1,7 +1,7 @@
 import React, { FC, useState, useRef, useEffect } from 'react';
 import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
-import { H2 } from './Headings';
+import { H2left } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {CommunityBusinesses, Project, Logs, LogNote, Users} from '../../api';
 import NoteModal from './NoteModal';
@@ -22,9 +22,10 @@ type Props = {
  */
 
 
-const Heading2 = styled(H2)`
+const Heading2 = styled(H2left)`
   marginBottom: 20;
   color: ${ColoursEnum.white};
+  padding: 10px;
 `;
 
 const getStringArray = (array: any[]) => {
@@ -197,10 +198,8 @@ const LogEditModal:FC<Props> = (props) => {
             <div
                 style={{
                     position: 'fixed', 
-                    width: "50%", 
-                    height: "50%", 
-                    bottom: "25%", 
-                    right: "25%",
+                    bottom: "50%", 
+                    right: "50%",
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
@@ -209,6 +208,7 @@ const LogEditModal:FC<Props> = (props) => {
                     alignItems: 'center',
                 }}
                 ref={wrapperRef}
+                className="log-modal"
             >
                 <h1
                     style={{
@@ -235,19 +235,42 @@ const LogEditModal:FC<Props> = (props) => {
                         borderRadius: '4px',
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        marginTop: '45px',
-                        marginLeft: '75px',
-                        marginRight: '75px',
-                        padding: '12px',
+                        padding: '10px',
                     }}
                 >
-                    <p>Add Time</p>
+                    <p className = "modal-title">Edit Time</p>
                 {
                 loading?
                     <p>loading...</p>
                 :
-                    <div id="Log Form">
-                        <select id="Volunteer" name="Volunteer">
+                    <div id="Log Form" className="log-create-form">
+                        <div className="log-create-column">
+                            <div className="log-create-section">
+                                <span  className = "section-title-create">Volunteer</span>
+                                <select id="Volunteer" name="Volunteer" className="log-create-select">
+                                    {volunteers.map(volunteer=>
+                                        <option value={volunteer.id} selected={volunteer.name==logToEdit.name? true: false}>{volunteer.name}</option>)} 
+                                </select>
+                            </div>
+                        <hr className = "Section_Dividers" />
+                        <div className="log-create-section">
+                        <span  className = "section-title-create">Project</span>
+                        <select id="Project" name="Project" className="log-create-select">
+                            {projects.map(project=>
+                                <option value={project} selected={project==logToEdit.project? true: false}>{project}</option>)} 
+                        </select>
+                        </div>
+                        <hr className = "Section_Dividers" />
+                        <div className="log-create-section">
+                        <span  className = "section-title-create">Activity</span>
+                        <select id="Activity" name="Activity" className="log-create-select">
+                            {activities.map(activity=>
+                                <option value={activity} selected={activity==logToEdit.activity? true: false}>{activity}</option>)} 
+                        </select>
+                        </div>
+                        <hr className = "Section_Dividers" />
+                        </div>
+                        {/*<select id="Volunteer" name="Volunteer">
                             {volunteers.map(volunteer=>
                                 <option value={volunteer.id}
                                         selected={volunteer.name==logToEdit.name? true: false}
@@ -265,8 +288,42 @@ const LogEditModal:FC<Props> = (props) => {
                                 <option value={activity}
                                         selected={activity==logToEdit.activity? true: false}
                                 >{activity}</option>)} 
+                            </select>*/}
+                        <div className="log-create-column">
+                        <div className="log-create-section">
+                        <span  className = "section-title-create">Date</span>
+                        <input type="date" id="Date" value={date}  className="log-create-select"
+                            onChange={(e)=>setDate(e.target.value)}
+                            //max={todaysDate}
+                        />
+                        </div>
+                        <hr className = "Section_Dividers" />
+                        <div className="log-create-section">
+                        <span  className = "section-title-create">Start Time</span>
+                        <input type="time" id="Start Time" value={startTime}  className="log-create-select"
+                        onChange={(e)=>setStartTime(e.target.value)}
+                        />
+                        </div>
+                        <hr className = "Section_Dividers" />
+                        <div className="log-create-section">
+                        <span  className = "section-title-create">Hours</span>
+                        <select id="hours" name="Hours" onChange={e=>changeDuration(e)} className="log-create-select">
+                            {zeroToNine.map(time=>
+                                <option value={time}>{time}</option>)} 
                         </select>
-                        <input type="date" id="Date" value={date}
+                        </div>
+                        <hr className = "Section_Dividers" />
+                        <div className="log-create-section">
+                        <span  className = "section-title-create">Minutes</span>
+                        <select id="minutes" name="Minutes"  className="log-create-select"
+                        onChange={e=>changeDuration(e)}>
+                            {zeroToFiftyNine.map(time=>
+                                <option value={time}>{time}</option>)} 
+                        </select>
+                        </div>
+                        <hr className = "Section_Dividers" />
+                        </div>
+                        {/*<input type="date" id="Date" value={date}
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
                         />
@@ -280,14 +337,30 @@ const LogEditModal:FC<Props> = (props) => {
                         <select id="minutes" name="Minutes" onChange={changeDuration}>
                             {zeroToFiftyNine.map(time=>
                                 <option value={time} selected={time == logToEdit.minutes}>{time}</option>)} 
-                        </select>
-                        <button onClick={()=>setNoteModalVisible(true)}>Edit Note</button>
+                            </select>*/}
+                        {/*<button onClick={()=>setNoteModalVisible(true)}>Edit Note</button>
                         <button onClick={submit}
                         disabled={!valid}
                         >Edit</button>
-                        <p>{errorMessage}</p>
+                        <p>{errorMessage}</p>*/}
                     </div>
                     }
+                    <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <button 
+                        className="add-note-button"
+                        onClick={()=>setNoteModalVisible(true)}>Add Note</button>
+                    </div>
+                    <div className="duration-create">
+                        <span><p> Member volunteered  for  </p></span> <br />
+                        <p><span className="number">{log.duration.hours}</span> Hours <span className="number">{log.duration.minutes}</span> minutes</p> 
+                    </div>  
+                    <div style={{display: "flex", justifyContent: "center"}}>
+                    <button onClick={submit}
+                    className="create-log-button"
+                        disabled={!valid}
+                    >EDIT TIME</button>
+                    <p>{errorMessage}</p>
+                    </div>
                 </div>
             </div>
         );
