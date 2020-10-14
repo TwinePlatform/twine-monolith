@@ -239,7 +239,7 @@ q:after {
   border: none;
 }
 
-.view-log-modal {
+.log-modal {
   transform: translate(50%, 50%);
 }
 
@@ -280,6 +280,14 @@ q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
+
+.log-create-form{
+  display: inline;
+}
+
+.log-create-column{
+  display: block;
 }
 
 /* matches MediaQueriesEnum in design system */
