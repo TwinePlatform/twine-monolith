@@ -167,7 +167,6 @@ q:after {
 }
 
 .Section_Dividers {
-  width: 195px;
   height: 1px;
   border-width:0;
   background-color: #d4d4d4;
@@ -177,12 +176,27 @@ q:after {
 .SectionTitle
 {
   color: grey;
+  padding-right: 10px;
+}
+
+.section-title-create{
+  color: grey;
+  padding-right: 10px;
+  margin-top: 4px;
 }
 
 .duration
 {
   bottom: 60px;
   left: 7%;
+  position: relative;
+  color: #707070;
+  font-size: 16px;
+  text-align: center;
+}
+
+.duration-create
+{
   position: relative;
   color: #707070;
   font-size: 16px;
@@ -239,7 +253,7 @@ q:after {
   border: none;
 }
 
-.view-log-modal {
+.log-modal {
   transform: translate(50%, 50%);
 }
 
@@ -280,6 +294,47 @@ q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
+
+.log-create-form{
+  display: inline-flex;
+}
+
+.log-create-column{
+  display: block;
+  padding: 5px;
+}
+
+.log-create-section{
+  display: flex;
+  justify-content: space-between;
+}
+
+.log-create-select{
+  border-width: 0px;
+}
+
+.add-note-button{
+    color: white;
+    background-color: #8000ffcc;
+    border-radius: 20px;
+    border-width: 0px;
+    box-shadow: 0px 3px 6px #00000029;
+    justify-content: flex-end;
+}
+
+.create-log-button{
+    color: white;
+    background-color: #8000ffcc;
+    box-shadow: 0px 2px 3px #33333333;
+    border-radius: 5px;
+    border-width: 0px;
+    padding: 10px 40px;
+    margin-top: 20px;
+}
+
+.create-log-button:disabled{
+  background-color: #8000ff4b;
 }
 
 /* matches MediaQueriesEnum in design system */
