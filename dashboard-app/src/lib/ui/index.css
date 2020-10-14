@@ -179,6 +179,12 @@ q:after {
   padding-right: 10px;
 }
 
+.section-title-create{
+  color: grey;
+  padding-right: 10px;
+  margin-top: 4px;
+}
+
 .duration
 {
   bottom: 60px;
@@ -323,7 +329,13 @@ table {
     background-color: #8000ffcc;
     box-shadow: 0px 2px 3px #33333333;
     border-radius: 5px;
-    padding: 5px 20px 5px 20px;
+    border-width: 0px;
+    padding: 10px 40px;
+    margin-top: 20px;
+}
+
+.create-log-button:disabled{
+  background-color: #8000ff4b;
 }
 
 /* matches MediaQueriesEnum in design system */
