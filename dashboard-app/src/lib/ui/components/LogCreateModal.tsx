@@ -216,17 +216,19 @@ const LogCreateModal:FC<Props> = (props) => {
                 :
                     <div id="Log Form" className="log-create-form">
                         <div className="log-create-column">
-                        <p><span  className = "SectionTitle">Volunteer</span> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+                        <span  className = "SectionTitle">Volunteer &nbsp; &nbsp; &nbsp; &nbsp;</span>
                         <select id="Volunteer" name="Volunteer">
                             {volunteers.map(volunteer=>
                                 <option value={volunteer.id}>{volunteer.name}</option>)} 
                         </select>
                         <hr className = "Section_Dividers" />
+                        <span  className = "SectionTitle">Project &nbsp; &nbsp; &nbsp; &nbsp;</span>
                         <select id="Project" name="Project">
                             {projects.map(project=>
                                 <option value={project}>{project}</option>)} 
                         </select>
                         <hr className = "Section_Dividers" />
+                        <span  className = "SectionTitle">Activity &nbsp; &nbsp; &nbsp; &nbsp;</span>
                         <select id="Activity" name="Activity">
                             {activities.map(activity=>
                                 <option value={activity}>{activity}</option>)} 
@@ -234,27 +236,33 @@ const LogCreateModal:FC<Props> = (props) => {
                         <hr className = "Section_Dividers" />
                         </div>
                         <div className="log-create-column">
+                        <span  className = "SectionTitle">Date &nbsp; &nbsp; &nbsp; &nbsp;</span>
                         <input type="date" id="Date" value={date}
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
                         />
                         <hr className = "Section_Dividers" />
+                        <span  className = "SectionTitle">Start Time &nbsp; &nbsp; &nbsp; &nbsp;</span>
                         <input type="time" id="Start Time" value={startTime}
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
                         <hr className = "Section_Dividers" />
+                        <span  className = "SectionTitle">Hours &nbsp; &nbsp; &nbsp; &nbsp;</span>
                         <select id="hours" name="Hours" onChange={e=>changeDuration(e)}>
                             {zeroToNine.map(time=>
                                 <option value={time}>{time}</option>)} 
                         </select>
                         <hr className = "Section_Dividers" />
+                        <span  className = "SectionTitle">Minutes &nbsp; &nbsp; &nbsp; &nbsp;</span>
                         <select id="minutes" name="Minutes" onChange={e=>changeDuration(e)}>
                             {zeroToFiftyNine.map(time=>
                                 <option value={time}>{time}</option>)} 
                         </select>
                         <hr className = "Section_Dividers" />
-                        </div>
-                        <div className="duration">
+                        </div>   
+                    </div>
+                    }
+                    <div className="duration-create">
                             <span><p> Member volunteered  for  </p></span> <br />
                             <p><span className="number">{log.duration.hours}</span> Hours <span className="number">{log.duration.minutes}</span> minutes</p> 
                         </div>  
@@ -263,8 +271,6 @@ const LogCreateModal:FC<Props> = (props) => {
                         disabled={!valid}
                         >ADD TIME</button>
                         <p>{errorMessage}</p>
-                    </div>
-                    }
                 </div>
             </div>
         );
