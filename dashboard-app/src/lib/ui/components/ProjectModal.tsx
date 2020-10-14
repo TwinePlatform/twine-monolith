@@ -76,7 +76,7 @@ const ProjectModal:FC<Props> = (props) => {
                 <input className="log-create-select" value={projectName} type="text" placeholder="Project Name" onChange={textHandler}/>
                 <hr className = "Section_Dividers"/>
                 <br/>
-                <div style={{display: 'flex', alignItems: 'center'}}>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
                     <button 
                         onClick={submit}
                         disabled={projectName.length < 1}
