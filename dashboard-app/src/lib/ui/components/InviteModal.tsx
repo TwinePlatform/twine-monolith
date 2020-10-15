@@ -42,24 +42,6 @@ const ButtonContainer = styled(Grid)`
   flexDirection: row;
   marginTop: 10;
 `;
-/*
-const ButtonText = styled.Text<{buttonType: 'cancel' | 'confirm' }>`
-  letterSpacing: 1.2;
-  fontFamily:${FontsEnum.medium} 
-  color: ${({ buttonType }) => (buttonType === 'cancel' ? ColoursEnum.darkGrey : ColoursEnum.purple)};
-  fontSize: 18;
-  `;
-
-const StyledButton = styled(B)`
-  width: 100;
-  justifyContent: center;
-`;
-
-const Button = ({ onPress, buttonType }) => (
-  <StyledButton transparent onPress={onPress}>
-    <ButtonText buttonType={buttonType}>{ buttonType === 'cancel' ? 'Cancel' : 'Send'}</ButtonText>
-  </StyledButton>
-);*/
 
 /*
  * Component
