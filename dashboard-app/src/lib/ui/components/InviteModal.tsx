@@ -119,14 +119,14 @@ const InviteModal:FC<Props> = (props) => {
                     <input type="text" className="invite-input" onChange={e=>setSubject(e.target.value)}>{subject}</input>
                 </div>
                 <div className="invite-section">
-                  <textarea 
+                 {/*<textarea 
                   //className="invite-input" 
                   name="body" 
                   //cols="80" rows="15"
                   onChange={e=>setBody(e.target.value)}
                   >
                     {body}
-                  </textarea>
+                  </textarea>*/} 
                 </div>
                 <div style={{display: "flex", justifyContent: "flex-end"}}>
                   <button onClick={onSend} className="send-email-button">Send</button>
