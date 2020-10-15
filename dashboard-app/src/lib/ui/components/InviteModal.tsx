@@ -64,8 +64,8 @@ const Button = ({ onPress, buttonType }) => (
 /*
  * Component
  */
-const upperInviteText = "Dear Volunteer, \n\n I am inviting you to use the TWINE volunteering app, please follow the instructions from the links provided to sign up. \n\n";
-const lowerInviteText = "\n\nThanks! \n\nFellow Twine User";
+const upperInviteText = "Dear Volunteer, \n\n I am inviting you to use the TWINE volunteering app, please follow the instructions from the links provided to sign up.\n";
+const lowerInviteText = "\nThanks! \n\nFellow Twine User";
 
 const InviteModal:FC<Props> = (props) => {
 
@@ -123,24 +123,24 @@ const InviteModal:FC<Props> = (props) => {
                     <p className="invite-text">Subject:</p>
                     <input type="text" className="invite-input" onChange={e=>setSubject(e.target.value)} value={subject}></input>
                 </div>
-                <div className="invite-section">
+                <div className="invite-section" style={{display: "block"}}>
                  <textarea 
                   className="invite-input" 
                   name="body" 
-                  style={{width: "600px", height: "180px", resize: "none"}}
+                  style={{width: "600px", height: "120px", resize: "none"}}
                   onChange={e=>setUpperBody(e.target.value)}
                   >
                     {upperBody}
                   </textarea>
                   <p className="invite-text">
-                    iOS: <a>link to ios store</a>
+                    iOS: <a href="https://www.apple.com">link to ios store</a>
                     <br/>
-                    Android: <a>link to play store</a> 
+                    Android: <a href="https://play.google.com">link to play store</a> 
                   </p>
                   <textarea
                   className="invite-input" 
                   name="body" 
-                  style={{width: "600px", height: "50px", resize: "none"}}
+                  style={{width: "600px", height: "100px", resize: "none"}}
                   onChange={e=>setLowerBody(e.target.value)}
                   >
                     {lowerBody}

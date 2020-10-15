@@ -109,5 +109,5 @@ export const Users = {
 }
 
 export const Invite = {
-  byEmail: (email: any) => axios.post('/invite/email',email),
+  byEmail: (email: any) => axios.post('/invite/email',{email}),
 }
