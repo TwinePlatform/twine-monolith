@@ -120,7 +120,7 @@ const InviteModal:FC<Props> = (props) => {
                 </div>
                 <div className="invite-section">
                   <textarea className="invite-input" name="body" 
-                  cols="80" rows="15"
+                  //cols="80" rows="15"
                   onChange={e=>setBody(e.target.value)}
                   >
                     {body}
