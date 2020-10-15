@@ -348,22 +348,25 @@ table {
 }
 
 .invite-section{
-  display: inline-flex;
+  display: flex;
   border: 1px solid #707070;
   border-radius: 8px;
   background: #F8F8F8;
 }
 
 .invite-text{
-  font: normal normal normal 15px/50px Roboto;
+  font: normal normal normal 15px Roboto;
   letter-spacing: 0.23px;
   color: #707070;
+  padding: 5px;
 }
 
 .invite-input{
-  font: normal normal normal 15px/50px Roboto;
+  font: normal normal normal 15px Roboto;
   letter-spacing: 0.23px;
+  background: #F8F8F8;
   color: #707070;
+  padding: 5px;
   border: none;
 }
 

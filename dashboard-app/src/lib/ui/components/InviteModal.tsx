@@ -24,7 +24,7 @@ const Container = styled(Grid)`
 
 const Heading2 = styled(H2left)`
   marginBottom: 20;
-  color: ${ColoursEnum.black};
+  color: ${ColoursEnum.white};
   padding: 10px;
 `;
  /*
@@ -98,6 +98,7 @@ const InviteModal:FC<Props> = (props) => {
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
+                    boxShadow: '2px 3px 6px #00000029',
                 }}
                 ref={wrapperRef}
                 className="log-modal"
