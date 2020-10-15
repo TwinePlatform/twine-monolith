@@ -3,8 +3,10 @@ import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
-import { H2 } from './Headings';
+import { H2left } from './Headings';
 import { ColoursEnum } from '../design_system';
+
+import {Invite} from '../../api';
 
 /*
  * Types
@@ -22,9 +24,10 @@ const Container = styled(Grid)`
 `;
 
 
-const Heading2 = styled(H2)`
+const Heading2 = styled(H2left)`
   marginBottom: 20;
-  color: ${ColoursEnum.black};
+  color: ${ColoursEnum.white};
+  padding: 10px;
 `;
  /*
 const Card = styled(C)`
@@ -61,7 +64,8 @@ const Button = ({ onPress, buttonType }) => (
 /*
  * Component
  */
-
+const upperInviteText = "I am inviting you to use the TWINE volunteering app, please follow the instructions from the links provided to sign up.\n";
+const lowerInviteText = "\nThanks! \n\nFellow Twine User";
 
 const InviteModal:FC<Props> = (props) => {
 
@@ -70,20 +74,22 @@ const InviteModal:FC<Props> = (props) => {
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, closeFunction);
 
-
     const [emailAddress, setEmailAddress] = useState("");
     const [subject, setSubject] = useState("Twine Sign Up");
-    const [body, setBody] = useState("Dear Volunteer,\n\nI am inviting you to use the TWINE volunteering app.");
+    const [upperBody, setUpperBody] = useState(upperInviteText);
+    const [lowerBody, setLowerBody] = useState(lowerInviteText);
 
     const onSend = () => {
         const email = {
-            address: emailAddress,
-            subject: subject,
-            body: body
+            "To": emailAddress,
+            "email_subject": subject,
+            "text_above_link": upperBody,
+            "text_below_link": lowerBody,
         };
 
         console.log(email);
-        //API.Invite.byEmail(email);
+        closeFunction();
+        Invite.byEmail(email);
     }
 
     if(visible)
@@ -91,46 +97,64 @@ const InviteModal:FC<Props> = (props) => {
             <div
                 style={{
                     position: 'fixed', 
-                    width: "50%", 
-                    height: "50%", 
-                    bottom: "25%", 
-                    right: "25%",
+                    bottom: "50%", 
+                    right: "50%",
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
+                    boxShadow: '2px 3px 6px #00000029',
                 }}
                 ref={wrapperRef}
+                className="log-modal"
             >
+                <div
+                    style={{
+                        backgroundColor: ColoursEnum.purple,
+                        borderRadius: "8px 8px 0px 0px",
+                    }}
+                >
                 <Heading2>TWINE</Heading2>
-                <input type="text" placeholder="email address"></input>
-                <input type="text" placeholder="subject"></input>
-                <input type="text" placeholder="text box"></input>
-                <button onClick={()=>closeFunction()}>close</button>
+                </div>
+                <div className="invite-section">
+                    <p className="invite-text">To:</p>
+                    <input type="text" className="invite-input" onChange={e=>setEmailAddress(e.target.value)} value={emailAddress}></input>
+                </div>
+                <div className="invite-section">
+                    <p className="invite-text">Subject:</p>
+                    <input type="text" className="invite-input" onChange={e=>setSubject(e.target.value)} value={subject}></input>
+                </div>
+                <div className="invite-section" style={{display: "block"}}>
+                <p className="invite-text">Dear Volunteer,</p>
+                <br/>
+                 <textarea 
+                  className="invite-input" 
+                  name="body" 
+                  style={{width: "600px", height: "100px", resize: "none"}}
+                  onChange={e=>setUpperBody(e.target.value)}
+                  >
+                    {upperBody}
+                  </textarea>
+                  <p className="invite-text">
+                    iOS: <a href="https://www.apple.com">link to ios store</a>
+                    <br/>
+                    Android: <a href="https://play.google.com">link to play store</a> 
+                  </p>
+                  <textarea
+                  className="invite-input" 
+                  name="body" 
+                  style={{width: "600px", height: "100px", resize: "none"}}
+                  onChange={e=>setLowerBody(e.target.value)}
+                  >
+                    {lowerBody}
+                  </textarea>
+                </div>
+                <div style={{display: "flex", justifyContent: "flex-end"}}>
+                  <button onClick={onSend} className="send-email-button">Send</button>
+                </div>
             </div>
         );
     else
         return null;
-
-    /*
-return(
-  <Modal isVisible={isVisible}>
-    <Card>
-      <Heading2>{title}</Heading2>
-      <Form>
-      <Textarea rowSpan={1} bordered underline placeholder="address" value={emailAddress} onChangeText={text => setEmailAddress(text)}/>
-      <Textarea rowSpan={1} bordered underline placeholder="subject" value={subject} onChangeText={text => setSubject(text)}/>
-      <Textarea rowSpan={5} bordered underline value={body} onChangeText={text => setBody(text)}/>    
-      </Form>
-      <ButtonContainer>
-        <Button onPress={onCancel} buttonType="cancel" />
-        <Button onPress={()=>{
-            onSend();
-            onSendClose();
-        }} buttonType="send" />
-      </ButtonContainer>
-    </Card>
-  </Modal>
-)*/
 
 };
 

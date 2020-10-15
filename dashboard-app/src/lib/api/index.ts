@@ -107,3 +107,7 @@ export const Project = {
 export const Users = {
   getMe: () => axios.get( '/users/me'),
 }
+
+export const Invite = {
+  byEmail: (email: any) => axios.post('/invite/email',{email}),
+}
