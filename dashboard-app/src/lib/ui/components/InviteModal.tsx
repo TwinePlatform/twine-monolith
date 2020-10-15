@@ -3,7 +3,7 @@ import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
-import { H2 } from './Headings';
+import { H2left } from './Headings';
 import { ColoursEnum } from '../design_system';
 
 /*
@@ -22,9 +22,10 @@ const Container = styled(Grid)`
 `;
 
 
-const Heading2 = styled(H2)`
+const Heading2 = styled(H2left)`
   marginBottom: 20;
   color: ${ColoursEnum.black};
+  padding: 10px;
 `;
  /*
 const Card = styled(C)`
@@ -83,6 +84,7 @@ const InviteModal:FC<Props> = (props) => {
         };
 
         console.log(email);
+        closeFunction();
         //API.Invite.byEmail(email);
     }
 
@@ -91,46 +93,45 @@ const InviteModal:FC<Props> = (props) => {
             <div
                 style={{
                     position: 'fixed', 
-                    width: "50%", 
-                    height: "50%", 
-                    bottom: "25%", 
-                    right: "25%",
+                    bottom: "50%", 
+                    right: "50%",
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
                 }}
                 ref={wrapperRef}
+                className="log-modal"
             >
+                <div
+                    style={{
+                        backgroundColor: ColoursEnum.purple,
+                        borderRadius: "8px 8px 0px 0px",
+                    }}
+                >
                 <Heading2>TWINE</Heading2>
-                <input type="text" placeholder="email address"></input>
-                <input type="text" placeholder="subject"></input>
-                <input type="text" placeholder="text box"></input>
-                <button onClick={()=>closeFunction()}>close</button>
+                </div>
+                <div className="invite-section">
+                    <p className="invite-text">To:</p>
+                    <input type="text" className="invite-input" onChange={e=>setEmailAddress(e.target.value)}>{emailAddress}</input>
+                </div>
+                <div className="invite-section">
+                    <p className="invite-text">Subject:</p>
+                    <input type="text" className="invite-input" onChange={e=>setSubject(e.target.value)}>{subject}</input>
+                </div>
+                <div className="invite-section">
+                  <textarea className="invite-input" name="body" cols={80} rows={15}
+                  onChange={e=>setBody(e.target.value)}
+                  >
+                    {body}
+                  </textarea>
+                </div>
+                <div style={{display: "flex", justifyContent: "flex-end"}}>
+                  <button onClick={onSend} className="send-email-button">Send</button>
+                </div>
             </div>
         );
     else
         return null;
-
-    /*
-return(
-  <Modal isVisible={isVisible}>
-    <Card>
-      <Heading2>{title}</Heading2>
-      <Form>
-      <Textarea rowSpan={1} bordered underline placeholder="address" value={emailAddress} onChangeText={text => setEmailAddress(text)}/>
-      <Textarea rowSpan={1} bordered underline placeholder="subject" value={subject} onChangeText={text => setSubject(text)}/>
-      <Textarea rowSpan={5} bordered underline value={body} onChangeText={text => setBody(text)}/>    
-      </Form>
-      <ButtonContainer>
-        <Button onPress={onCancel} buttonType="cancel" />
-        <Button onPress={()=>{
-            onSend();
-            onSendClose();
-        }} buttonType="send" />
-      </ButtonContainer>
-    </Card>
-  </Modal>
-)*/
 
 };
 
