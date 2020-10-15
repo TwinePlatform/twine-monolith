@@ -64,7 +64,7 @@ const Button = ({ onPress, buttonType }) => (
 /*
  * Component
  */
-const upperInviteText = "Dear Volunteer, \n\n I am inviting you to use the TWINE volunteering app, please follow the instructions from the links provided to sign up.\n";
+const upperInviteText = "I am inviting you to use the TWINE volunteering app, please follow the instructions from the links provided to sign up.\n";
 const lowerInviteText = "\nThanks! \n\nFellow Twine User";
 
 const InviteModal:FC<Props> = (props) => {
@@ -124,10 +124,12 @@ const InviteModal:FC<Props> = (props) => {
                     <input type="text" className="invite-input" onChange={e=>setSubject(e.target.value)} value={subject}></input>
                 </div>
                 <div className="invite-section" style={{display: "block"}}>
+                <p className="invite-text">Dear Volunteer,</p>
+                <br/>
                  <textarea 
                   className="invite-input" 
                   name="body" 
-                  style={{width: "600px", height: "120px", resize: "none"}}
+                  style={{width: "600px", height: "100px", resize: "none"}}
                   onChange={e=>setUpperBody(e.target.value)}
                   >
                     {upperBody}
