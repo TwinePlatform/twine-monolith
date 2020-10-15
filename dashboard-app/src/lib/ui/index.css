@@ -351,18 +351,18 @@ table {
   display: inline-flex;
   border: 1px solid #707070;
   border-radius: 8px;
-  background: #F8F8F8 0% 0% no-repeat padding-box;
+  background: #F8F8F8;
 }
 
 .invite-text{
-  font: normal normal normal 15px/50px Roboto;
-  letter-spacing: 0.23px;
+  /*font: normal normal normal 15px/50px Roboto;
+  letter-spacing: 0.23px;*/
   color: #707070;
 }
 
 .invite-input{
   /*font: normal normal normal 15px/50px Roboto;*/
-  letter-spacing: 0.23px;
+  /*letter-spacing: 0.23px;*/
   color: #707070;
   border: none;
 }
