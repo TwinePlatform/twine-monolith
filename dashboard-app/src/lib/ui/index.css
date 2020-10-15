@@ -355,14 +355,14 @@ table {
 }
 
 .invite-text{
-  /*font: normal normal normal 15px/50px Roboto;
-  letter-spacing: 0.23px;*/
+  font: normal normal normal 15px/50px Roboto;
+  letter-spacing: 0.23px;
   color: #707070;
 }
 
 .invite-input{
-  /*font: normal normal normal 15px/50px Roboto;*/
-  /*letter-spacing: 0.23px;*/
+  font: normal normal normal 15px/50px Roboto;
+  letter-spacing: 0.23px;
   color: #707070;
   border: none;
 }

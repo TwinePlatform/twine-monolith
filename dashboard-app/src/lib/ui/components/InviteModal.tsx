@@ -112,21 +112,21 @@ const InviteModal:FC<Props> = (props) => {
                 </div>
                 <div className="invite-section">
                     <p className="invite-text">To:</p>
-                    <input type="text" className="invite-input" onChange={e=>setEmailAddress(e.target.value)}>{emailAddress}</input>
+                    <input type="text" className="invite-input" onChange={e=>setEmailAddress(e.target.value)} value={emailAddress}></input>
                 </div>
                 <div className="invite-section">
                     <p className="invite-text">Subject:</p>
-                    <input type="text" className="invite-input" onChange={e=>setSubject(e.target.value)}>{subject}</input>
+                    <input type="text" className="invite-input" onChange={e=>setSubject(e.target.value)} value={subject}></input>
                 </div>
                 <div className="invite-section">
-                 {/*<textarea 
-                  //className="invite-input" 
+                 <textarea 
+                  className="invite-input" 
                   name="body" 
                   //cols="80" rows="15"
                   onChange={e=>setBody(e.target.value)}
                   >
                     {body}
-                  </textarea>*/} 
+                  </textarea>
                 </div>
                 <div style={{display: "flex", justifyContent: "flex-end"}}>
                   <button onClick={onSend} className="send-email-button">Send</button>
