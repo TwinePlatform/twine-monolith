@@ -6,6 +6,8 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import { H2left } from './Headings';
 import { ColoursEnum } from '../design_system';
 
+import {Invite} from '../../api';
+
 /*
  * Types
  */
@@ -62,7 +64,8 @@ const Button = ({ onPress, buttonType }) => (
 /*
  * Component
  */
-
+const upperInviteText = "Dear Volunteer, \n\n I am inviting you to use the TWINE volunteering app, please follow the instructions from the links provided to sign up. \n\n";
+const lowerInviteText = "\n\nThanks! \n\nFellow Twine User";
 
 const InviteModal:FC<Props> = (props) => {
 
@@ -71,21 +74,22 @@ const InviteModal:FC<Props> = (props) => {
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, closeFunction);
 
-
     const [emailAddress, setEmailAddress] = useState("");
     const [subject, setSubject] = useState("Twine Sign Up");
-    const [body, setBody] = useState("Dear Volunteer,\n\nI am inviting you to use the TWINE volunteering app.");
+    const [upperBody, setUpperBody] = useState(upperInviteText);
+    const [lowerBody, setLowerBody] = useState(lowerInviteText);
 
     const onSend = () => {
         const email = {
-            address: emailAddress,
-            subject: subject,
-            body: body
+            "To": emailAddress,
+            "email_subject": subject,
+            "text_above_link": upperBody,
+            "text_below_link": lowerBody,
         };
 
         console.log(email);
         closeFunction();
-        //API.Invite.byEmail(email);
+        Invite.byEmail(email);
     }
 
     if(visible)
@@ -123,10 +127,23 @@ const InviteModal:FC<Props> = (props) => {
                  <textarea 
                   className="invite-input" 
                   name="body" 
-                  style={{width: "600px", height: "250px"}}
-                  onChange={e=>setBody(e.target.value)}
+                  style={{width: "600px", height: "180px", resize: "none"}}
+                  onChange={e=>setUpperBody(e.target.value)}
                   >
-                    {body}
+                    {upperBody}
+                  </textarea>
+                  <p className="invite-text">
+                    iOS: <a>link to ios store</a>
+                    <br/>
+                    Android: <a>link to play store</a> 
+                  </p>
+                  <textarea
+                  className="invite-input" 
+                  name="body" 
+                  style={{width: "600px", height: "50px", resize: "none"}}
+                  onChange={e=>setLowerBody(e.target.value)}
+                  >
+                    {lowerBody}
                   </textarea>
                 </div>
                 <div style={{display: "flex", justifyContent: "flex-end"}}>
