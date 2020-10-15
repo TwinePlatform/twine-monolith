@@ -361,7 +361,7 @@ table {
 }
 
 .invite-input{
-  font: normal normal normal 15px/50px Roboto;
+  /*font: normal normal normal 15px/50px Roboto;*/
   letter-spacing: 0.23px;
   color: #707070;
   border: none;
