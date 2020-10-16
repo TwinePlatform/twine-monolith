@@ -1,4 +1,5 @@
 import React, { FC, useEffect } from 'react';
+import { withNavigation, NavigationInjectedProps } from 'react-navigation';
 // import styled from 'styled-components/native';
 import Page from '../../../../lib/ui/Page';
 import TimeForm from '../../../../lib/ui/forms/TimeForm';
@@ -22,8 +23,8 @@ type Props = {
 /*
  * Component
  */
-const EditTime: FC<Props> = (navigation) => {
-    const { labels, logId, timeValues } = navigation.navigation.state.params;
+const EditTime: FC<NavigationInjectedProps & Props> = ({navigation}) => {
+    const { labels, logId, timeValues, startTime, date} = navigation.state.params;
 
     const dispatch = useDispatch();
 
@@ -38,6 +39,8 @@ const EditTime: FC<Props> = (navigation) => {
         dispatch(loadProjects());
     }, []);
 
+    console.log(timeValues)
+
     return (
         //ToDo: Prefield with passed data
         // TODO: Add submit to backend when onSubmit 
@@ -48,14 +51,20 @@ const EditTime: FC<Props> = (navigation) => {
                 projects={projects}
                 activities={activities}
                 volunteers={volunteers}
-                selectedProject={labels[0]}
-                selectedActivity={labels[1]}
-                timeValues={timeValues}
+                editLog={{
+                    volunteer: "",
+                    project: labels[0],
+                    activity: labels[1],
+                    startTime: startTime,
+                    date: date,
+                    hours: timeValues[0],
+                    minutes: timeValues[1],
+                    note: "",
+                  }}
                 origin='editTime'
-                onSubmit={() => { }}
             />
         </Page>
     )
 };
 
-export default EditTime;
+export default withNavigation(EditTime);

@@ -118,6 +118,7 @@ const AdminTime: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
+            startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
             onDelete={() => { onDelete(log.id) }}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
@@ -135,6 +136,7 @@ const AdminTime: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
+            startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
             onDelete={toggleDeleteVisibility}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
@@ -152,6 +154,7 @@ const AdminTime: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
+            startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
             onDelete={toggleDeleteVisibility}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
