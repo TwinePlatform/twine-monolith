@@ -69,7 +69,7 @@ const LogViewModal:FC<Props> = (props) => {
                     //alignItems: 'center',
                 }}
                 ref={wrapperRef}
-                className="view-log-modal"
+                className="log-modal"
             >
                 <div
                     style={{
