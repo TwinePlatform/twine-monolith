@@ -12,7 +12,7 @@ import { ColoursEnum } from '../colours';
 type Props = {
     ref?: (ref: unknown) => void;
     label: string;
-    options: { id: number; name: string }[];
+    options: number[];
     onValueChange: any;
     defaultValue?: string | number;
     name?: string;
@@ -39,12 +39,14 @@ const Label = styled(L)`
 /*	
  * Component	
  */
-const Dropdown: FC<Props> = (props) => {
+const DropdownTime: FC<Props> = (props) => {
     const {
         label, options, onValueChange, defaultValue, name, ...rest
     } = props;
+
     const [value, setValue] = useState(defaultValue);
 
+    console.log(value)
 
     return (
         <Item picker>
@@ -55,15 +57,16 @@ const Dropdown: FC<Props> = (props) => {
                 placeholder="Select"
                 placeholderStyle={{ color: ColoursEnum.grey }}
                 placeholderIconColor={ColoursEnum.grey}
-                selectedValue={value}
+                //selectedValue={value}
+                value={value}
                 onValueChange={(val) => {
                     onValueChange(val);
                     setValue(val);
                 }}
                 {...rest}
             >
-                {options.map(({ id, name }) => (
-                    <Picker.Item label={name} value={name} key={id} />
+                {options.map(time => (
+                    <Picker.Item label={''+time} value={time} key={time} />
                 ))}
 
             </Picker>
@@ -71,4 +74,4 @@ const Dropdown: FC<Props> = (props) => {
     );
 };
 
-export default Dropdown;
+export default DropdownTime;

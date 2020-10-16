@@ -8,6 +8,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
 import Dropdown from '../Dropdown';
+import DropdownTime from '../DropdownTime';
 import FuzzySearchBox from '../FuzzySearchBox';
 import { Forms } from '../enums';
 import DateTimePicker from '../DateTimePicker';
@@ -57,7 +58,7 @@ type Props = {
   selectedProject?: string;
   selectedActivity?: string;
   origin: string;
-
+  editLog?: any;
 }
 
 /*
@@ -95,15 +96,17 @@ const AddVolContainer = styled.View`
   marginTop: 10;
 `;
 
-const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
-const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
+//const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
+//const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
 
+const zeroToNine = [...Array(10).keys()];
+const zeroToFiftyNine = [...Array(60).keys()];
 /*
  * Component
  */
 const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const {
-    forUser, logId, origin, activities, projects, volunteers, selectedProject, selectedActivity //, timeValues
+    forUser, logId, origin, activities, projects, volunteers, selectedProject, selectedActivity, editLog //, timeValues
   } = props;
 
   // redux
@@ -117,14 +120,41 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [noteModalVisible, toggleNoteInvisibility] = useToggle(false);
   const [errorModalVisible, toggleErrorInvisibility] = useToggle(false);
   const durationErrorMessage = "Please select a duration!";
-  const [volunteer, setVolunteer] = useState("");
-  const [project, setProject] = useState(selectedProject);
-  const [activity, setActivity] = useState(selectedActivity);
-  const [startTime, setStartTime] = useState<Date>(new Date);
-  const [date, setDate] = useState<Date>(new Date);
-  const [hours, setHours] = useState<number>(0);
-  const [minutes, setMinutes] = useState<number>(0);
-  const [note, setNote] = useState('');
+
+  let volunteer, setVolunteer;
+  let project, setProject;
+  let activity, setActivity;
+  let startTime, setStartTime;
+  let date, setDate;
+  let hours, setHours;
+  let minutes, setMinutes;
+  let note, setNote;
+
+  if( origin == 'editTime'){
+    //console.log(new Date(editLog.date + 'T' + editLog.startTime));
+
+    console.log(editLog);
+
+    [volunteer, setVolunteer] = useState(editLog.volunteer);
+    [project, setProject] = useState(editLog.project);
+    [activity, setActivity] = useState(editLog.activity);
+    [startTime, setStartTime] = useState<Date>(new Date(editLog.startTime));
+    [date, setDate] = useState<Date>(new Date(editLog.date));
+    [hours, setHours] = useState<number>(editLog.hours);
+    [minutes, setMinutes] = useState<number>(editLog.minutes);
+    [note, setNote] = useState(editLog.note);
+  }
+  else{
+    [volunteer, setVolunteer] = useState("");
+    [project, setProject] = useState(selectedProject);
+    [activity, setActivity] = useState(selectedActivity);
+    [startTime, setStartTime] = useState<Date>(new Date);
+    [date, setDate] = useState<Date>(new Date);
+    [hours, setHours] = useState<number>(0);
+    [minutes, setMinutes] = useState<number>(0);
+    [note, setNote] = useState('');
+  }
+
   const [userId, setUserID] = useState<number>();
   const [badge, setBadge] = useState(Object());
   const [addVolArr, setAddVolArr] = useState([]);
@@ -151,8 +181,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
         return state.isConnected;
       })
   }
-
-  console.log(volunteer)
 
   const resetValues = () => {
     console.log("resetting")
@@ -211,8 +239,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   // handlers
   const onSubmit = async (volunteer, project, activity, startTime, note) => {
 
-    console.log(startTime);
-    console.log(date.toISOString())
+    console.log(startTime.toISOString());
 
     if (hours === 0 && minutes === 0) {
       toggleErrorInvisibility();
@@ -220,7 +247,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       const values = {
         project,
         activity,
-        startedAt: date.toISOString(),
+        startedAt: startTime.toISOString(),
         duration: { hours, minutes, seconds:0 },
         userId: forUser == 'volunteer' ? userId : getIdFromName(volunteer),
         note
@@ -269,13 +296,19 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
       //if timeform is called from edit time view 
       if (origin == "editTime") {
+        if(forUser == "admin")
+          setUserID(getIdFromName(volunteer));
+
         const valuesEdit: any = {
           project,
           activity,
-          startedAt: date.toISOString(),
+          startedAt: startTime.toISOString(),
           duration: { hours, minutes, seconds:0 },
+          note
         };
 
+        console.log(valuesEdit)
+        console.log("userID" + userId)
 
         try { //error trapping and cache log when network error
           const res: any = await dispatch(updateLog(userId, parseInt(logId), valuesEdit));
@@ -333,7 +366,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   return (
 
     <Formik
-      initialValues={{ volunteer: '', project: selectedProject, activity: selectedActivity, note: '' }}
+      initialValues={{ volunteer: '', project: selectedProject, activity: selectedActivity, note: '', hours,minutes }}
       //validationSchema={validationSchema} removed as there is always an initial project or activity selected
       onSubmit={(values, date,) => {
 
@@ -371,7 +404,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           <NoteModal
             isVisible={noteModalVisible}
             addNote={addNote}
-            // addNote={values.note}
+            initialNote={note}
             onClose={toggleNoteInvisibility}
           />
 
@@ -437,23 +470,30 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             maxDate={new Date()}
           />
 
-          <Dropdown
+          {console.log(hours)}
+
+          <DropdownTime
             label="Hours"
             options={zeroToNine}
             selectedValue={hours}
             onValueChange={setHours}
+            defaultValue={hours}
           />
 
-          <Dropdown
+          <DropdownTime
             label="Minutes"
             options={zeroToFiftyNine}
             selectedValue={minutes}
             onValueChange={setMinutes}
+            defaultValue={minutes}
           />
 
           <NoteContainer>
-            {forUser === 'admin' && <AddVolunteerButton text="Add Another" onPress={() => {addVolunteer(volunteer);setVolunteer("")}} />}
-            <NoteButton label={"Add note"} onPress={toggleNoteInvisibility} />
+            {forUser === 'admin' && origin!="editTime" && <AddVolunteerButton text="Add Another" onPress={() => {addVolunteer(volunteer);setVolunteer("")}} />}
+            {origin =="editTime"?
+              <NoteButton label={"Edit note"} onPress={toggleNoteInvisibility} />
+            :
+              <NoteButton label={"Add note"} onPress={toggleNoteInvisibility} />}
           </NoteContainer>
 
           <TimeContainer>

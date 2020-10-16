@@ -187,7 +187,7 @@ const routes: [
         auth: {
           strategy: 'standard',
           access: {
-            scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read'],
+            scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read','volunteer_logs-own:read'],
           },
         },
         // validate: { query: { since, until } },

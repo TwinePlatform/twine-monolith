@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import moment from 'moment';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
@@ -7,6 +7,7 @@ import Page from '../../../lib/ui/Page';
 import CardSeparator from '../../../lib/ui/CardSeparator';
 import ConfirmationModal from '../../../lib/ui/modals/ConfirmationModal';
 import BadgeModal from '../../../lib/ui/modals/BadgeModel';
+import ViewNoteModal from '../../../lib/ui/modals/ViewNoteModal';
 import useToggle from '../../../lib/hooks/useToggle';
 import { loadLogs, selectOrderedLogs, selectLogsStatus, deleteLog } from '../../../redux/entities/logs';
 
@@ -34,6 +35,8 @@ const Time: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
   const [visibleBadgeModal, toggleVisibility] = useToggle(false);
   const logs = useSelector(selectOrderedLogs, shallowEqual);
+  const [visibleNoteModal, toggleVisibilityNoteModal] = useToggle(false);
+  const [noteDisplay, setNoteDisplay] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -78,6 +81,12 @@ const Time: FC<Props> = () => {
         text="Are you sure you want to delete this time?"
       />
 
+      <ViewNoteModal
+        isVisible={visibleNoteModal}
+        onClose={toggleVisibilityNoteModal}
+        note={noteDisplay}
+      />
+
       {/* TODO separate logs into time bands */}
       <CardSeparator title="Yesterday" />
       {
@@ -87,8 +96,11 @@ const Time: FC<Props> = () => {
             id={log.id}
             timeValues={[log.duration.hours || 0, log.duration.minutes || 0]}
             labels={[log.project || 'General', log.activity]}
+            startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
             date={moment(log.startedAt).format('DD/MM/YY')}
             onDelete={() => { onDelete(log.id) }}
+            toggleVisibilityNoteModal={toggleVisibilityNoteModal}
+            setNoteDisplay={setNoteDisplay}
             navigationPage='VolunteerEditTime'
           />
         ))
