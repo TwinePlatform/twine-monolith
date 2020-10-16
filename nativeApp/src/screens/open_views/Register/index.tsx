@@ -184,12 +184,13 @@ const Register: FC<Props> = (props) => {
             if (values._360GivingId != "") {
               orgObj._360GivingId = values._360GivingId;
             }
-            try{const res = await API.CommunityBusiness.register(orgObj);
+            try {
+              const res = await API.CommunityBusiness.register(orgObj);
               if (res.status == 200)
-              setOrganisationModalVisible(true);
+                setOrganisationModalVisible(true);
               initialiseCommunityBusinessOptions();
             }
-            catch(error){
+            catch (error) {
               console.log(error)
             }
           }}>
@@ -306,23 +307,24 @@ const Register: FC<Props> = (props) => {
               values.region = region;
               values.YearOfBirth = userYearOfBirth;
 
-              if (values.adminCode.length > 0)
-                values.role = "VOLUNTEER_ADMIN";
-              else
-                values.role = "VOLUNTEER";
-
-              let volunteer_obj = {
+              var volunteer_obj = {
                 name: values.name,
                 email: values.email,
                 password: values.password,
                 postCode: values.Postcode,
                 phoneNumber: values.Phone,
                 birthYear: parseInt(values.YearOfBirth),
-                organisationId: userOrganisation.id,
-                role: values.role
+                organisationId: userOrganisation.id
               }
 
-              //add volunteer 
+              if (values.adminCode.length > 0) {
+                volunteer_obj.role = "VOLUNTEER_ADMIN";
+                volunteer_obj.adminCode = values.adminCode;
+              } else {
+                volunteer_obj.role = "VOLUNTEER";
+              }
+
+              //add volunteer
               const res = await API.Volunteers.add(volunteer_obj);
 
               if (res.status == 200) {
@@ -450,7 +452,7 @@ const Register: FC<Props> = (props) => {
 
           )}
         </Formik>
-      </KeyboardAvoidingView>
+      </KeyboardAvoidingView >
     );
 }
 

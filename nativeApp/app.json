@@ -31,6 +31,6 @@
       "package": "com.powertochange.volunteerapp",
       "versionCode": 7
     },
-    "description": "First version of production app"
+    "description": "Fix registration with adminCode, "
   }
 }
