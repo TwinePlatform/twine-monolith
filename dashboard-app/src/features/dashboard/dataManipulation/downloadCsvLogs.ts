@@ -33,6 +33,9 @@ export const downloadCsv = async ({ data: aggData, fromDate, toDate, fileName, u
   }
 
   try {
+    console.log("aggData")
+    console.log(aggData)
+
     const csv = await aggregatedToCsv(aggData, unit, orderable);
     const from = moment(fromDate).format(Months.format.filename);
     const to = moment(toDate).format(Months.format.filename);

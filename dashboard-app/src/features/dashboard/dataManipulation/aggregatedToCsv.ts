@@ -23,6 +23,10 @@ export const aggregatedToCsv = async (data: AggregatedData, unit: DurationUnitEn
       calculateTotalsUsing(unit),
       abbreviateMonths(Months.format.verbose)
     )(data);
+
+    console.log("non log rows")
+    console.log(rows)
+
     const groupBy = data.groupByX;
     const rowKeys = Months.sortFormatted(Object.keys(rows[0]));
     const totalHeader = getStringContainingTotal(rowKeys);
