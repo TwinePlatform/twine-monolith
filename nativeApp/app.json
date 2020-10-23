@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.6",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -29,8 +29,8 @@
     },
     "android": {
       "package": "com.powertochange.volunteerapp",
-      "versionCode": 7
+      "versionCode": 8
     },
-    "description": "Fix registration with adminCode, "
+    "description": "Add the logo and edit view fixes"
   }
 }
