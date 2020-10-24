@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.7",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -24,7 +24,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.powertochange.volunteerapp"
     },
     "android": {
