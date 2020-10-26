@@ -38,6 +38,7 @@ const Text = styled.Text`
 
 const VolunteersBadges: FC<Props> = (props) => {
 	const [badgearray, setbadgearray] = useState([]);
+	const [done, setDone] = useState(false);
 
 	const getBadge = async () => {
 		setbadgearray(await API.Badges.getCBBadges());
@@ -45,12 +46,14 @@ const VolunteersBadges: FC<Props> = (props) => {
 
 	useEffect(() => {
 		getBadge();
+		setDone(true);
 	}, []);
 
 	return (
 		<View>
 			<Heading>Volunteer's Badges</Heading>
-			{badgearray.length === 0 && <Text>Loading</Text>}
+			{badgearray.length === 0 && !done && <Text>Loading</Text>}
+			{badgearray.length === 0 && done && <Text>There are no badges from your organisation to display.</Text>}
 			{
 				badgearray.map((element) => (
 					<VolunteersBadgesCard details={element} />
