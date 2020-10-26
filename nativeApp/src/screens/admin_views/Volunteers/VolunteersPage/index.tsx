@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
+import {View} from 'react-native';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { NavigationFocusInjectedProps } from 'react-navigation';
 
@@ -18,6 +19,8 @@ import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
 import Loader from '../../../../lib/ui/Loader';
 import { formatDate } from '../../../../lib/utils/time';
 import { Platform } from 'react-native';
+import { SearchBar } from '../../../../lib/ui/SearchBar';
+import Fuse from 'fuse.js';
 
 /*
  * Types
@@ -32,6 +35,23 @@ type Props = {
 /*
  * Component
  */
+
+const filterVolunteers = (volunteers, filter) => {
+  if(filter=="")
+    return volunteers;
+  else{
+    const options = {
+      keys: [
+        "name"
+      ]
+    };
+    const fuse = new Fuse(volunteers, options);
+    let output = [];
+    fuse.search(filter).map(item => output.push(item.item));
+    return output;
+  }
+}
+
 const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) => {
   // Redux
   const dispatch = useDispatch();
@@ -46,6 +66,12 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
   // React State
   const [deleteModalVisibility, toggleDeleteModalVisibility] = useToggle(false);
   const [activeCard, setActiveCard] = useState(null);
+  const [filter, setFilter] = useState("");
+  const [filteredVolunteers, setFilteredVolunteers] = useState(volunteers);
+
+  useEffect(()=>{
+    setFilteredVolunteers(filterVolunteers(volunteers,filter));
+  },[filter])
 
   // Handlers
   const onEdit = (volunteer: User) => {
@@ -66,7 +92,16 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
   // TODO: error handling
   return (
     <Page heading="Volunteers" withAddBar>
-      <AddBar title="Add Volunteer" onPress={() => navigation.navigate('AdminAddVolunteer')} />
+      <View style={{
+        //flexDirection: 'row',
+         width: '100%'}}>
+        <SearchBar
+          placeholder="Search Volunteers"
+          onChangeText={text=>setFilter(text)}
+        />
+        <AddBar title="Add Volunteer" onPress={() => navigation.navigate('AdminAddVolunteer')} />
+      </View>
+      
       {/* TODO: look into Portals for potential modal replacement */}
       <ConfirmationModal
         isVisible={deleteModalVisibility}
@@ -82,7 +117,7 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
       {/* TODO: create function for loading logic */}
       {!volunteersRequestStatus.isFetching
         && !volunteersRequestStatus.error
-        && volunteers.map((volunteer) => (
+        && filteredVolunteers.map((volunteer) => (
           <VolunteerCard
             key={volunteer.id}
             id={volunteer.id}
