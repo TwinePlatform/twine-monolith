@@ -8,7 +8,7 @@ import DropdownNoLabel from '../../../lib/ui/forms/DropdownNoLabel';
 import FuzzySearchBox from '../../../lib/ui/forms/FuzzySearchBox';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 import MessageModal from '../../../lib/ui/modals/MessageModal';
-
+import { ErrorText } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import Page from '../../../lib/ui/Page';
 import API from '../../../api';
@@ -92,7 +92,7 @@ const Register: FC<Props> = (props) => {
   const [organisationModalVisible, setOrganisationModalVisible] = useState(false);
   const [initialised, setInitialised] = useState(false);
   const [organisationOptions, setOrganisationOptions] = useState([{ id: 1, name: "loading organisations" }])
-
+  const [serverMsg, setServerMsg] = useState("");
   const [successTextVisible, setSuccessTextVisible] = useState(false);
 
   const [userYearOfBirth, setUserYearOfBirth] = useState("");
@@ -191,7 +191,8 @@ const Register: FC<Props> = (props) => {
               initialiseCommunityBusinessOptions();
             }
             catch (error) {
-              console.log(error)
+              console.log('registration failed');
+              setServerMsg(error.response.data.error.message);
             }
           }}>
 
@@ -265,6 +266,8 @@ const Register: FC<Props> = (props) => {
                   onValueChange={setRegion}
                   placeholder='Region'
                 />
+
+                <ErrorText>{serverMsg}</ErrorText>
 
                 <Container>
                   <SubmitButton text="COMPLETE" onPress={handleSubmit} />
