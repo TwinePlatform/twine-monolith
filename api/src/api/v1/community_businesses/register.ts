@@ -18,13 +18,13 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
     path: '/community-businesses/register',
     options: {
       description: 'Register a new community businesses and invite admin user',
-      // auth: {
-      //   mode: 'try',
-      //   strategy: 'standard',
-      //   access: {
-      //     scope: ['user_details-child:write'],
-      //   }
-      // },
+      auth: {
+        mode: 'try',
+        strategy: 'standard',
+        access: {
+          scope: ['user_details-child:write'],
+        }
+      },
       validate: {
         payload: {
           ...omit(['name'], cbPayload),
@@ -54,6 +54,7 @@ const routes: [Api.CommunityBusinesses.Register.POST.Route] = [
         },
       } = request;
 
+      console.log('Registering new organisation');
       // Initial checks
       if (typeof _360GivingId !== 'undefined') {
         if (await CommunityBusinesses.exists(knex, { where: { _360GivingId } })) {
