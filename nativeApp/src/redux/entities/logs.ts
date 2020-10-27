@@ -127,9 +127,6 @@ export const createLog = (values: Partial<VolunteerLog>) => (dispatch) => {
     .then((result) => {
       dispatch(createLogSuccess());
       dispatch(loadLogs());
-      if (values.note != "") {
-        API.Notes.set(values.note, result.data.id, values.activity, values.project, values.startedAt)
-      }
       return result;
     })
     .catch((error) => {
@@ -146,9 +143,6 @@ export const updateLog = (id: number, LogId: number, values: Partial<VolunteerLo
     .then((result) => {
       dispatch(updateLogSuccess());
       dispatch(loadLogs());
-      if (values.note != "") {
-        API.Notes.set(values.note, result.data.id, values.activity, values.project, values.startedAt)
-      }
       return result;
     })
     .catch((error) => {

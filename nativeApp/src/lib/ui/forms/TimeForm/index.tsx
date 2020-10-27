@@ -96,11 +96,8 @@ const AddVolContainer = styled.View`
   marginTop: 10;
 `;
 
-//const zeroToNine = [...Array(10).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
-//const zeroToFiftyNine = [...Array(60).keys()].map((_, i) => ({ id: i, name: `${parseInt(i)}` }));
-
-const zeroToNine = [...Array(10).keys()];
-const zeroToFiftyNine = [...Array(60).keys()];
+const zeroToNine = [0,1,2,3,4,5,6,7,8,9];
+const zeroToFiftyFive = [0,5,10,15,20,25,30,35,40,45,50,55];
 /*
  * Component
  */
@@ -113,9 +110,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const dispatch = useDispatch();
 
   const requestStatus = useSelector(selectCreateLogStatus);
+  const [logSent, setLogSent] = useState(0); //when logs are sent using the form, this increases, triggering the saved modal to check if it should be on. 
 
   // local state
-  const [responseModal, toggleResponseModal] = useToggle(false);
+  const [responseModal, setResponseModal] = useState(false);
   const [badgeModal, setBadgeModal] = useState(false);
   const [noteModalVisible, toggleNoteInvisibility] = useToggle(false);
   const [errorModalVisible, toggleErrorInvisibility] = useToggle(false);
@@ -129,6 +127,9 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   let hours, setHours;
   let minutes, setMinutes;
   let note, setNote;
+
+  console.log(selectedProject);
+  console.log(selectedActivity);
 
   if( origin == 'editTime'){
     //console.log(new Date(editLog.date + 'T' + editLog.startTime));
@@ -186,6 +187,8 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
     console.log("resetting")
 
     setDate(new Date);
+    setProject(selectedProject);
+    setActivity(selectedActivity);
     setHours(0);
     setMinutes(0);
     setNote('');
@@ -224,20 +227,24 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   // hooks
   useEffect(() => {
+    console.log(requestStatus)
+
     if (requestStatus.success) {
-      toggleResponseModal();
+      setResponseModal(true);
     }
     // if (badgeModal != false) {
     //   setTimeout(() => {
     //     setBadgeModal(!badgeModal);
     //   }, 3000);
     // }
-  }, [requestStatus]);
+  }, [logSent]);
 
 
 
   // handlers
   const onSubmit = async (volunteer, project, activity, startTime, note) => {
+
+    
 
     console.log(startTime.toISOString());
 
@@ -261,7 +268,15 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           console.log("adding time");
 
           const res: any = await dispatch(createLog(values));
+          setLogSent(logSent+1);
+
           console.log(res)
+
+          if(res.status == 200){
+            if (values.note != "") {
+              API.Notes.set(values.note, res.data.id, values.activity, values.project, values.startedAt)
+            }
+          }
 
           
           if (res.status == 500) {
@@ -312,7 +327,14 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
         try { //error trapping and cache log when network error
           const res: any = await dispatch(updateLog(userId, parseInt(logId), valuesEdit));
+          setLogSent(logSent+1);
           console.log(res);
+
+          if(res.status == 200){
+            if (valuesEdit.note != "") {
+              API.Notes.set(valuesEdit.note, res.data.id, valuesEdit.activity, valuesEdit.project, valuesEdit.startedAt)
+            }
+          }
           
         if (res.status == 500) {
           valuesEdit.userId = userId;
@@ -348,7 +370,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const onContinue = () => {
     dispatch(createLogReset());
     // resetForm();
-    // toggleResponseModal(); ??
+    setResponseModal(false);
   };
 
   const validationSchema = yup.object().shape({
@@ -470,8 +492,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             maxDate={new Date()}
           />
 
-          {console.log(hours)}
-
           <DropdownTime
             label="Hours"
             options={zeroToNine}
@@ -482,7 +502,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
           <DropdownTime
             label="Minutes"
-            options={zeroToFiftyNine}
+            options={zeroToFiftyFive}
             selectedValue={minutes}
             onValueChange={setMinutes}
             defaultValue={minutes}

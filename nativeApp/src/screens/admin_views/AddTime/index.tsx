@@ -40,6 +40,7 @@ const AddTime: any = () => {
     dispatch(loadProjects());
   }, []);
 
+
   return (
     <Page heading="Add Time">
       <TimeForm
@@ -47,6 +48,8 @@ const AddTime: any = () => {
         projects={projects}
         activities={activities}
         volunteers={volunteers}
+        selectedProject={projects[0]?projects[0].name:null}
+        selectedActivity={activities[0]?activities[0].name:null}
         origin='addTime'
       />
     </Page>
