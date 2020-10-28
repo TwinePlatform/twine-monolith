@@ -44,8 +44,8 @@ const AddTime: FC<NavigationInjectedProps & Props> = () => {
         forUser="volunteer"
         projects={projects}
         activities={activities}
-        selectedProject={projects[0].name}
-        selectedActivity={activities[0].name}
+        selectedProject={projects[0]?projects[0].name:null}
+        selectedActivity={activities[0]?activities[0].name:null}
         volunteers={volunteers}
         origin='addTime'
       />
