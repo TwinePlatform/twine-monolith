@@ -30,7 +30,9 @@ const View = styled.View`
  * Component
  */
 const Page: FC<Props> = ({ heading, children, withAddBar }) => (
-  <Scrollable>
+  <Scrollable
+    keyboardShouldPersistTaps={'handled'}
+  >
     <View>
       <Heading withAddBar={withAddBar}>{heading}</Heading>
       {children}
