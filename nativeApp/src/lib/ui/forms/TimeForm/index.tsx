@@ -11,7 +11,7 @@ import Dropdown from '../Dropdown';
 import DropdownTime from '../DropdownTime';
 import FuzzySearchBox from '../FuzzySearchBox';
 import { Forms } from '../enums';
-import DateTimePicker from '../DateTimePicker';
+import DatePicker from '../DatePicker';
 import { ColoursEnum } from '../../colours';
 import { HourAndMinutesText, TimeDiff } from '../../HoursAndMinutesText';
 import SubmitButton from '../SubmitButton';
@@ -113,6 +113,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [logSent, setLogSent] = useState(0); //when logs are sent using the form, this increases, triggering the saved modal to check if it should be on. 
 
   // local state
+  const [pickerVisible, setPickerVisible] = useState(false);
   const [responseModal, setResponseModal] = useState(false);
   const [badgeModal, setBadgeModal] = useState(false);
   const [noteModalVisible, toggleNoteInvisibility] = useToggle(false);
@@ -206,7 +207,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       'log cache',
       JSON.stringify(cachevalue)
     );
-
   }
 
   const cacheforEdit = async (values) => {
@@ -243,8 +243,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   // handlers
   const onSubmit = async (volunteer, project, activity, startTime, note) => {
-
-    
 
     console.log(startTime.toISOString());
 
@@ -484,12 +482,15 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.activity}</TextInput>
           }
 
-          <DateTimePicker
-            label="Start Time"
+          <DatePicker
+            label="Start Date"
             value={startTime}
             onConfirm={(newDate) => setStartTime(newDate)}
-            mode="datetime"
+            mode="date"
             maxDate={new Date()}
+            pickerVisible={pickerVisible}
+            openPicker={()=>setPickerVisible(true)}
+            closePicker={()=>setPickerVisible(false)}
           />
 
           <DropdownTime
