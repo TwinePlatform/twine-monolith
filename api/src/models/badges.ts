@@ -21,18 +21,17 @@ export const badges = {
 	},
 
 	async getAwards(client: Knex, orgId: number, userId?: number) {
-
-		if (userId == undefined) {
+		//to get all the badges from organisation
+		if (userId === undefined) {
 			const res = await client('user_badges')
 				.select('award_id', 'user_account_id')
 				.where({
 					'organisation_id': orgId
 				})
 				.orderBy('achieved_date');
-			//ToDo: sort acheived date
-
 			return res;
 		} else {
+			//to get badges for individuals
 			const res = await client('user_badges')
 				.select('award_id')
 				.where({
@@ -40,8 +39,6 @@ export const badges = {
 					'organisation_id': orgId
 				})
 				.orderBy('achieved_date');
-			//ToDo: sort acheived date
-
 			return res;
 		}
 	},
