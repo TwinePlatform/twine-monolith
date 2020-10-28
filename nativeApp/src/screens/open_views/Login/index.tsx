@@ -65,8 +65,9 @@ const Form = styled(F)`
 const Login: FC<Props> = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [isLoading, toggleLoading] = useToggle();
   const [serverError, setError] = useState("");
+
+  const [initialised,setInitialised] = useState(false);
 
 
   const onSubmit = async () => {
@@ -78,6 +79,7 @@ const Login: FC<Props> = (props) => {
       const { data } = await API.Authentication.login({ email, password });
       await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.token);
       await AsyncStorage.setItem(StorageValuesEnum.USER_ID, data.userId.toString());
+      await AsyncStorage.setItem(StorageValuesEnum.RECENT_LOGIN,`{"email": "${email}", "password": "${password}"}`)
       props.navigation.navigate('AuthenticationLoader');
     } catch (error) {
       setError(error.response.data.error.message);
@@ -86,6 +88,21 @@ const Login: FC<Props> = (props) => {
   };
 
   useEffect(() => {
+    console.log(initialised)
+
+    if(!initialised){
+      AsyncStorage.getItem(StorageValuesEnum.RECENT_LOGIN).then(values => {
+        console.log(values);
+        if(values != null){
+          const json = JSON.parse(values);
+          setEmail(json.email);
+          setPassword(json.password);
+        }
+      });
+
+      setInitialised(true);
+    }
+
     AsyncStorage.getItem('HelpSlides').then(val => {
       console.log(val);
       if (!val) {
