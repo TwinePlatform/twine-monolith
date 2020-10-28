@@ -103,7 +103,7 @@ const zeroToFiftyFive = [0,5,10,15,20,25,30,35,40,45,50,55];
  */
 const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const {
-    forUser, logId, origin, activities, projects, volunteers, selectedProject, selectedActivity, editLog //, timeValues
+    forUser, logId, origin, activities, projects, volunteers, selectedProject, selectedActivity, editLog, navigation //, timeValues
   } = props;
 
   // redux
@@ -348,6 +348,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           console.log(error);
         }
       }
+    }
+
+    if (forUser == 'volunteer') {
+      navigation.navigate('Home');
     }
   };
 
