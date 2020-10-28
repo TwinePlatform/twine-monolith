@@ -173,17 +173,16 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                 //get UserId Technical Debt see #573
                 const userId = getCredentialsFromRequest(request).user.id;
                 const orgId = getCredentialsFromRequest(request).organisation.id;
+                console.log('in the checkBadge endpoint');
                 console.log('userid in community badge endpoint' + userId);
                 console.log('orgid in community badge endpoint' + orgId);
                 //check if badge exist in table using userId and OrganisationId
 
-                const badgesArray = await badges.getAwards(knex, userId, orgId);
-
+                const badgesArray = await badges.getAwards(knex, orgId, userId);
 
                 var awardIdArrayList: any = [];
 
                 badgesArray.forEach((awardID: any) => {
-                    console.log(awardID);
                     awardIdArrayList.push(awardID.award_id);
                 })
 
@@ -192,7 +191,7 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                 const hoursLoggedObjArr = await badges.checkLoggedHours(knex, userId, orgId);
                 const hoursLogged = hoursLoggedObjArr[0].total_duration.hours;
                 var updateArray = [];
-                if (!awardIdArrayList.includes(1)) {
+                if (!awardIdArrayList.includes(1) && !awardIdArrayList.includes(2) && !awardIdArrayList.includes(3)) {
                     if (hoursLogged >= 10) {
                         console.log('got more than 10 hours');
                         badges.updateAwards(knex, userId, orgId, 1);
@@ -200,7 +199,7 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                     }
                 }
 
-                if (awardIdArrayList.includes(1) && !awardIdArrayList.includes(1)) {
+                if (awardIdArrayList.includes(1) && !awardIdArrayList.includes(2) && !awardIdArrayList.includes(3)) {
                     if (hoursLogged >= 20) {
                         console.log('got more than 20 hours');
                         badges.updateAwards(knex, userId, orgId, 2);
@@ -232,9 +231,10 @@ const routes: [Api.CommunityBusinesses.Me.Badges.GET.Route,
                     // take largest award_id-100 >= numLog/5 round down 
                     // if false then insert 100 + numLog/5
                     const numofFifthLog = Math.floor(numLogged / 5);
-                    const maxIdNormalized = (Math.max(...awardIdArrayList) - 100) / 5;
+                    const maxIdNormalized = (Math.max(...awardIdArrayList) - 100 + 1); //the number of fifth logs needed for next badge to be awarded
                     if (maxIdNormalized <= numofFifthLog) {
                         const newAward = 100 + numofFifthLog;
+                        console.log('rewardId ' + newAward + ' is awarded');
                         badges.updateAwards(knex, userId, orgId, newAward);
                         updateArray.push('FifthLogBadge');
                     }
