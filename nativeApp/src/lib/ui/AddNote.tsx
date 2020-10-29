@@ -35,11 +35,14 @@ const AddCloseButton = styled(B)`
 type Props = {
   text: string;
   onPress: () => void;
+  disabled: boolean;
 };
 
 export const AddNote: FC<Props> = (props) => {
   return <AddNoteButton
     onPress={props.onPress}
+    disabled={props.disabled}
+    style={{opacity: props.disabled?0.3:1}}
   >
     <AddNoteText>{props.text}</AddNoteText>
   </AddNoteButton>;
