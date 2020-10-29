@@ -43,6 +43,8 @@ const UsersDataTable: React.FunctionComponent<UsersDataTableProps> = (props) => 
     ...rest
   } = props;
 
+  console.log(rows)
+
   const onHeaderClick = useCallback((title) => {
     onChangeSortBy(title);
   }, [onChangeSortBy]);
