@@ -33,7 +33,7 @@ const getRows = (volunteers: any[]) => {
 
 export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
   const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
-  const [logFields, setLogFields] = useState<IdAndName[]>();
+  const [userFields, setUserFields] = useState<IdAndName[]>();
 
   const {
     loading,
@@ -79,7 +79,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       rows: getRows(volunteers),
     };
 
-    setLogFields(userFieldsData);
+    setUserFields(userFieldsData);
     setAggregatedData(data);
   }, [logsData, volunteersData, userFieldsData, loading, error]);
 
@@ -98,7 +98,7 @@ export default ({ from, to, updateOn = [] }: UseAggregatedDataParams) => {
       loading, 
       data: aggregatedData, 
       error, 
-      logFields, 
+      userFields, 
     };
   }
 };

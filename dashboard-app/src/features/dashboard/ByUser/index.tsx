@@ -51,7 +51,7 @@ const ByUser: FunctionComponent<RouteComponentProps> = () => {
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
   const [tableData, setTableData] = useState<TableData>(initTableData);
-  const { loading, error, data, logFields} =
+  const { loading, error, data, userFields} =
     useAggregateDataByUser({ from: fromDate, to: toDate });
 
   // set and clear errors on response
@@ -70,10 +70,10 @@ const ByUser: FunctionComponent<RouteComponentProps> = () => {
 
   // manipulate data for table
   useEffect(() => {
-    if (!loading && data && logFields) {
-      setTableData(aggregatedToTableData({ data, unit, yData: logFields }));
+    if (!loading && data && userFields) {
+      setTableData(aggregatedToTableData({ data, unit, yData: userFields }));
     }
-  }, [logFields, data, loading, unit]);
+  }, [userFields, data, loading, unit]);
 
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
@@ -83,6 +83,8 @@ const ByUser: FunctionComponent<RouteComponentProps> = () => {
       setErrors({ Download: 'No data available to download' });
     }
   }, [loading, data, fromDate, toDate, unit, orderable, setErrors]);
+
+  console.log(tableData)
 
   return (
     <Container>
