@@ -28,29 +28,63 @@ const Text = styled.Text`
   marginTop: 10;
 `;
 
+const getTruncatedLogs = () => {
+  const thirtyDaysAgo = moment().subtract(30, 'days');
+
+  let logArray = useSelector(selectOrderedLogs, shallowEqual);
+
+  let truncatedLogs = [];
+
+  logArray.map((log,index)=>{
+    console.log(log.startedAt + log.createdAt + " " +index);
+    if(moment(log.startedAt).isAfter(thirtyDaysAgo)){
+      truncatedLogs.push(log)
+    }
+  });
+
+  //if truncatedLogs if over 50, ideally we would cut that down.
+  // but the logs aren't in order despite the name of the function to get them.
+
+  return truncatedLogs;
+};
+
 /*
  * Component
  */
 const Time: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
-  const [visibleBadgeModal, toggleVisibility] = useToggle(false);
-  const logs = useSelector(selectOrderedLogs, shallowEqual);
+  const [displayedLogs, setDisplayedLogs] = useState(false);
+  const logs = getTruncatedLogs();
   const [visibleNoteModal, toggleVisibilityNoteModal] = useToggle(false);
   const [noteDisplay, setNoteDisplay] = useState('');
   const dispatch = useDispatch();
+
+  const [dateSeparatedLogs, setDateSeparatedLogs] = useState({
+    thisWeek: [], lastWeek: [], rest: [],
+  });
 
   useEffect(() => {
     dispatch(loadLogs());
   }, []);
 
-  // const SeeModel = () => {
-  //   toggleVisibility();
-  //   setTimeout(() => {
-  //     toggleVisibility();
-  //   }, 3000);
-  // }
+  useEffect(() => {
+    if (!displayedLogs && logs[0]) {
+      const now = moment();
+      const lastWeek = moment().subtract(1, 'week');
+      const twoWeeksAgo = moment().subtract(2, 'weeks');
+      const groupedLogs = logs.reduce((acc, log) => {
+        if (moment(log.startedAt).isBetween(lastWeek, now)) {
+          return { ...acc, thisWeek: [...acc.thisWeek, log] };
+        } if (moment(log.startedAt).isBetween(twoWeeksAgo, lastWeek)) {
+          return { ...acc, lastWeek: [...acc.lastWeek, log] };
+        }
+        return { ...acc, rest: [...acc.rest, log] };
+      }, { thisWeek: [], lastWeek: [], rest: [] });
 
-  // const badge = BadgeObj.FirstLogBadge;
+      setDateSeparatedLogs(groupedLogs);
+      setDisplayedLogs(true);
+    }
+  });
 
   const onDelete = (id) => {
     toggleDeleteVisibility;
@@ -59,19 +93,6 @@ const Time: FC<Props> = () => {
 
   return (
     <Page heading="My Time">
-
-      {/* <TouchableHighlight
-        onPress={() => {
-          SeeModel();
-        }}
-      >
-        <Text>Pop up</Text>
-      </TouchableHighlight>
-
-      <BadgeModal
-        isVisible={visibleBadgeModal}
-        badge={badge}
-      /> */}
 
       <ConfirmationModal
         isVisible={visibleConfirmationModal}
@@ -87,10 +108,43 @@ const Time: FC<Props> = () => {
         note={noteDisplay}
       />
 
-      {/* TODO separate logs into time bands */}
-      <CardSeparator title="Yesterday" />
+      <CardSeparator title="This Week" />
       {
-        logs.map((log) => (
+        dateSeparatedLogs.thisWeek.map((log) => (
+          <TimeCard
+            key={log.id}
+            id={log.id}
+            timeValues={[log.duration.hours || 0, log.duration.minutes || 0]}
+            labels={[log.project || 'General', log.activity]}
+            startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
+            date={moment(log.startedAt).format('DD/MM/YY')}
+            onDelete={() => { onDelete(log.id) }}
+            toggleVisibilityNoteModal={toggleVisibilityNoteModal}
+            setNoteDisplay={setNoteDisplay}
+            navigationPage='VolunteerEditTime'
+          />
+        ))
+      }
+      <CardSeparator title="Last Week" />
+      {
+        dateSeparatedLogs.lastWeek.map((log) => (
+          <TimeCard
+            key={log.id}
+            id={log.id}
+            timeValues={[log.duration.hours || 0, log.duration.minutes || 0]}
+            labels={[log.project || 'General', log.activity]}
+            startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
+            date={moment(log.startedAt).format('DD/MM/YY')}
+            onDelete={() => { onDelete(log.id) }}
+            toggleVisibilityNoteModal={toggleVisibilityNoteModal}
+            setNoteDisplay={setNoteDisplay}
+            navigationPage='VolunteerEditTime'
+          />
+        ))
+      }
+      <CardSeparator title="Older Logs" />
+      {
+        dateSeparatedLogs.rest.map((log) => (
           <TimeCard
             key={log.id}
             id={log.id}
