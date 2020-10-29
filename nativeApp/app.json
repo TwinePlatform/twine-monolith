@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.8",
+    "version": "1.0.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -29,9 +29,9 @@
     },
     "android": {
       "package": "com.powertochange.volunteerapp",
-      "versionCode": 8,
+      "versionCode": 9,
       "softwareKeyboardLayoutMode": "pan"
     },
-    "description": "Add the logo and edit view fixes"
+    "description": "Fixes:badges api that caused app crash, fixed save model bug, fix log view for admin, fix keyboard block on android, return to homepage for volunteers"
   }
 }
