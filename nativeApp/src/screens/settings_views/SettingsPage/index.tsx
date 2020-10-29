@@ -8,7 +8,6 @@ import { Forms } from "../../../lib/ui/forms/enums";
 import LinkItem from "../../../lib/ui/forms/LinkItem";
 import LinkPlay from "../../../lib/ui/forms/LinkPlay";
 import Page from "../../../lib/ui/Page";
-import Toggle from "../../../lib/ui/forms/Toggle";
 import LogOutModal from "../../../lib/ui/modals/logout";
 import API from "../../../api";
 
@@ -69,8 +68,6 @@ const Settings: FC<NavigationInjectedProps & Props> = ({ navigation }) => {
           title="Profile"
           onPress={() => navigation.navigate("Profile")}
         />
-        <Toggle style={{ transform: [{ scaleX: .7 }, { scaleY: .7 }] }} label="Locations reminders" />
-
 
         <LinkItem
           title="Terms & Conditions"

@@ -7,6 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { withNavigation, NavigationInjectedProps } from "react-navigation";
 import { CheckBox } from 'react-native-elements'
 import SubmitButton from "../../../lib/ui/CardWithButtons/NotificationButton";
+import ConfirmationModal from '../../../lib/ui/modals/ConfirmationModal';
 import { ColoursEnum } from "../../../lib/ui/colours";
 import CardWithButtons from "../../../lib/ui/CardWithButtons";
 import { FontsEnum, Heading2 as H2 } from "../../../lib/ui/typography";
@@ -108,12 +109,15 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
   const iconColour = getIconColor(buttonType, active);
   const orgIdArr = useSelector(selectCurrentUser);
 
+  const [sendModalVisible, setSendModalVisible] = useState(false);
+
   // TODO: error message on save/edit error
   const onSave = () => {
     dispatch(updateProject(id, value));
     toggle();
   };
 
+  const confirmationText = "Are you sure you want to send these reminders?";
   // const projects = useSelector(selectAllOrderedProjects, shallowEqual);
 
   // useEffect(() => {
@@ -217,6 +221,13 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
     <CardWithButtons
       buttonConfig={getButtonConfig(buttonType, active, buttonConfigs)}
     >
+      <ConfirmationModal
+        isVisible={sendModalVisible}
+        onCancel={()=>setSendModalVisible(false)}
+        onConfirm={()=>{onSubmit();setSendModalVisible(false)}}
+        title="Send Reminders"
+        text={confirmationText}
+      />
       <HeadingContainer>
         <MaterialIcons name="assignment" outline size={35} color={iconColour} />
         {active ? (
@@ -241,7 +252,7 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
         checked={checkedExclusion}
         onPress={() => setCheckedExclusion(currentBool => !currentBool)}
       />
-      <SubmitButton text="Send" onPress={(createTwoButtonAlert) => onSubmit()} />
+      <SubmitButton text="Send" onPress={()=>setSendModalVisible(true)} />
 
 
       {deletedDate && <Description>{`Deleted: ${deletedDate}`}</Description>}
