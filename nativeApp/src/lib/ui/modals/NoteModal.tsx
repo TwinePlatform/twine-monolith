@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
 import Modal from 'react-native-modal';
 import {Content, Card as C, Textarea as T, Form } from 'native-base';
-import {ScrollView, Dimensions} from 'react-native';
+import {View, Dimensions, Text} from 'react-native';
 import { AddNote, Close } from '../AddNote';
 
 import { Heading2 as H2, FontsEnum } from '../typography';
@@ -34,12 +34,9 @@ const Heading2 = styled(H2)`
   color: ${ColoursEnum.white};
 `;
 
-const cardHeight = Dimensions.get('window').height*0.45;
-
 const Card = styled(C)`
   paddingBottom: 10;
   borderRadius: 10;
-  height: ${cardHeight};
 `;
 
 const Textarea = styled(T)`
@@ -70,18 +67,25 @@ const NoteModal: FC<Props> = ({
   return (
     <Modal isVisible={isVisible}>
       <Card>
-        <ScrollView keyboardShouldPersistTaps={'handled'}>
         <HeadingContainer>
           <Heading2>TWINE</Heading2>
         </HeadingContainer>
         <Form>
-          <Textarea rowSpan={5} value={note} onChangeText={text => setNote(text)} />
+          <Textarea rowSpan={5} value={note} onChangeText={text => setNote(text)} 
+          //editable={note.length <= 500}
+          />
         </Form>
+        <View
+          style={{flexDirection: 'row-reverse'}}
+        >
+          <Text
+            style={{color: note.length>500?'red':'black', marginRight: 20}}
+          >Characters left: {500-note.length}</Text>
+        </View>
         <ButtonContainer>
           <Close onPress={() => { onClose(); }} />
-          <AddNote text='Add note' onPress={() => { addNote(note); onClose(); }} />
+          <AddNote disabled={note.length>500} text='Add note' onPress={() => { addNote(note); onClose(); }} />
         </ButtonContainer>
-        </ScrollView>
       </Card>
     </Modal>
   )
