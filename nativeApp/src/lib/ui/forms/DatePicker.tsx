@@ -91,7 +91,7 @@ const DatePicker: FC<Props> = (props) => {
     if(_date){
         const _now = new Date();
 
-        const date = new Date(_date.getFullYear(),_date.getMonth(),_date.getDate(),_now.getHours(),_now.getMinutes());
+        const date = new Date(_date.getFullYear(),_date.getMonth(),_date.getDate(),_now.getHours(),_now.getMinutes(),now.getSeconds());
   
         setDateTime(date);
         onConfirm(date);
