@@ -491,6 +491,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             value={startTime}
             onConfirm={(newDate) => setStartTime(newDate)}
             mode="date"
+            forUser={forUser}
             maxDate={new Date()}
             pickerVisible={pickerVisible}
             openPicker={()=>setPickerVisible(true)}

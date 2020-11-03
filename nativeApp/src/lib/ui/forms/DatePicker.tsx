@@ -25,6 +25,7 @@ type Props = {
   minDate?: Date;
   maxDate?: Date;
   onConfirm: (d: Date) => void;
+  forUser?: string;
 }
 
 /*
@@ -75,9 +76,13 @@ const displayValue = (mode, value: Date) => {
  */
 const DatePicker: FC<Props> = (props) => {
   const {
-    onConfirm, value, mode, label, minDate, pickerVisible, openPicker, closePicker
+    onConfirm, value, mode, label, forUser, pickerVisible, openPicker, closePicker
   } = props;
   const [dateTime, setDateTime] = useState(value);
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(),now.getMonth(),1);
+  const startOfNextMonth =  moment(startOfMonth).add(1,'month');
+  const endOfMonth = moment(startOfNextMonth).subtract(1,'day').toDate();
 
   const onConfirmAndHide = (_date: Date) => {
     closePicker();
@@ -104,7 +109,8 @@ const DatePicker: FC<Props> = (props) => {
         style={{position: 'absolute', width: '100%', backgroundColor: 'white' }}
       >
         <_DateTimePicker
-        minimumDate={minDate}
+        minimumDate={forUser==="volunteer"?startOfMonth:null}
+        maximumDate={forUser==="volunteer"?endOfMonth:null}
         value={dateTime}
         mode={mode}
         onChange={(event, values) => onConfirmAndHide(values)}
