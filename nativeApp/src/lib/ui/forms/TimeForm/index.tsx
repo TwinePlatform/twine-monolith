@@ -187,6 +187,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const resetValues = () => {
     console.log("resetting")
 
+    setStartTime(new Date());
     setDate(new Date);
     setProject(selectedProject);
     setActivity(selectedActivity);
@@ -275,8 +276,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
               API.Notes.set(values.note, res.data.id, values.activity, values.project, values.startedAt)
             }
           }
-
-          
           if (res.status == 500) {
             cache(values);
           }
@@ -348,11 +347,13 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           console.log(error);
         }
       }
+   
+      if (forUser == 'volunteer') {
+        navigation.navigate('Home');
+      }
+   
     }
-
-    if (forUser == 'volunteer') {
-      navigation.navigate('Home');
-    }
+    
   };
 
   const addNote = (note) => {
@@ -491,6 +492,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             value={startTime}
             onConfirm={(newDate) => setStartTime(newDate)}
             mode="date"
+            forUser={forUser}
             maxDate={new Date()}
             pickerVisible={pickerVisible}
             openPicker={()=>setPickerVisible(true)}
@@ -524,9 +526,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           <TimeContainer>
             <Label>{getTimeLabel(forUser, values.volunteer)}</Label>
             <HourAndMinutesText align="center" timeValues={[hours, minutes]} />
-            {hours === 0 && minutes === 0 &&
-              <TextInput style={{ fontSize: 10, color: 'red', textAlign: 'center' }}>Duration cannot be 0</TextInput>
-            }
           </TimeContainer>
 
           {origin != "addTime" && origin != "editTime" && <SubmitButton text="ADD TIME" onPress={handleSubmit} />}
