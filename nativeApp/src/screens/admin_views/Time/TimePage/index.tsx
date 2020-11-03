@@ -37,8 +37,8 @@ const getTruncatedLogs = () => {
     }
   });
 
-  //if truncatedLogs if over 50, ideally we would cut that down.
-  // but the logs aren't in order despite the name of the function to get them.
+  //only show most recent 50 logs
+  truncatedLogs = truncatedLogs.slice(0,50);
 
   return truncatedLogs;
 };
