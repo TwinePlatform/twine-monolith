@@ -276,7 +276,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
               API.Notes.set(values.note, res.data.id, values.activity, values.project, values.startedAt)
             }
           }
-          
           if (res.status == 500) {
             cache(values);
           }
