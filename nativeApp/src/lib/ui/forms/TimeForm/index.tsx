@@ -347,11 +347,13 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           console.log(error);
         }
       }
+   
+      if (forUser == 'volunteer') {
+        navigation.navigate('Home');
+      }
+   
     }
-
-    if (forUser == 'volunteer') {
-      navigation.navigate('Home');
-    }
+    
   };
 
   const addNote = (note) => {
@@ -524,9 +526,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           <TimeContainer>
             <Label>{getTimeLabel(forUser, values.volunteer)}</Label>
             <HourAndMinutesText align="center" timeValues={[hours, minutes]} />
-            {hours === 0 && minutes === 0 &&
-              <TextInput style={{ fontSize: 10, color: 'red', textAlign: 'center' }}>Duration cannot be 0</TextInput>
-            }
           </TimeContainer>
 
           {origin != "addTime" && origin != "editTime" && <SubmitButton text="ADD TIME" onPress={handleSubmit} />}
