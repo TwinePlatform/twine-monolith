@@ -12,6 +12,7 @@ interface Props extends TextInputProps {
   name: string;
   value?: string;
   error?: boolean;
+  onFocus?: any;
 }
 
 /*
@@ -27,12 +28,12 @@ const Item = styled(I)`
  */
 const Input: FC<Props> = (props) => {
   const {
-    children: icon, name, value, error, ...rest
+    children: icon, name, value, error, onFocus, ...rest
   } = props;
   return (
     <Item error={error}>
       {icon}
-      <_Input placeholder={name} placeholderTextColor={ColoursEnum.grey} {...rest}>{value}</_Input>
+      <_Input onFocus={onFocus} placeholder={name} placeholderTextColor={ColoursEnum.grey} {...rest}>{value}</_Input>
     </Item>
   );
 };

@@ -139,7 +139,8 @@ export const VolunteerLogs: VolunteerLogCollection = {
         )
         .select(query.fields
           ? pick(query.fields, { ...ModelToColumn, ...optionalFields })
-          : ModelToColumn),
+          : ModelToColumn)
+        .orderBy('started_at', 'desc'),
       query
     );
   },

@@ -63,6 +63,7 @@ const Form = styled(F)`
  * Component
  */
 const Login: FC<Props> = (props) => {
+  const [logoVisible, setLogoVisible] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [serverError, setError] = useState("");
@@ -121,13 +122,20 @@ const Login: FC<Props> = (props) => {
 
   return (
     <Page>
-      <Container>
-        <Image source={logo} />
-      </Container>
+      {logoVisible && <Container>
+        <Image source={logo} 
+        />
+      </Container>}
 
       <Container>
         <Form>
-          <Input name="Email" autoCompleteType="email" value={email} onChangeText={text=>setEmail(text)}>
+          <Input 
+            name="Email" 
+            autoCompleteType="email" 
+            value={email} 
+            onChangeText={text=>setEmail(text)}
+            onFocus={()=>setLogoVisible(false)} 
+          >
             <MaterialCommunityIcons name="email-outline" outline size={27} color={ColoursEnum.grey} />
           </Input>
           <Input
@@ -136,6 +144,7 @@ const Login: FC<Props> = (props) => {
             secureTextEntry
             value={password}
             onChangeText={text=>setPassword(text)}
+            onFocus={()=>setLogoVisible(false)} 
           >
             <MaterialCommunityIcons name="lock-outline" size={27} color={ColoursEnum.grey} />
           </Input>
