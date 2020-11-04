@@ -23,10 +23,10 @@ type Props = {
 /*
  * Styles
  */
-const getTruncatedLogs = () => {
+const truncateLogs = (logs) => {
   const thirtyDaysAgo = moment().subtract(30, 'days');
 
-  let logArray = useSelector(selectOrderedLogs, shallowEqual);
+  let logArray = logs;
 
   let truncatedLogs = [];
 
@@ -51,7 +51,7 @@ const AdminTime: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
   const [visibleNoteModal, toggleVisibilityNoteModal] = useToggle(false);
   const [displayedLogs, setDisplayedLogs] = useState(false);
-  const logs = getTruncatedLogs();
+  const logs = useSelector(selectOrderedLogs, shallowEqual);
   const [noteDisplay, setNoteDisplay] = useState('');
   const logsRequestStatus = useSelector(selectLogsStatus, shallowEqual);
   const volunteers = useSelector(selectVolunteers, shallowEqual);
@@ -71,7 +71,7 @@ const AdminTime: FC<Props> = () => {
       const now = moment();
       const lastWeek = moment().subtract(1, 'week');
       const twoWeeksAgo = moment().subtract(2, 'weeks');
-      const groupedLogs = logs.reduce((acc, log) => {
+      const groupedLogs = truncateLogs(logs).reduce((acc, log) => {
         if (moment(log.startedAt).isBetween(lastWeek, now)) {
           return { ...acc, thisWeek: [...acc.thisWeek, log] };
         } if (moment(log.startedAt).isBetween(twoWeeksAgo, lastWeek)) {
