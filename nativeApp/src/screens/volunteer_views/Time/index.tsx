@@ -28,10 +28,10 @@ const Text = styled.Text`
   marginTop: 10;
 `;
 
-const getTruncatedLogs = () => {
+const truncateLogs = (logs) => {
   const thirtyDaysAgo = moment().subtract(30, 'days');
 
-  let logArray = useSelector(selectOrderedLogs, shallowEqual);
+  let logArray = logs;
 
   let truncatedLogs = [];
 
@@ -53,8 +53,7 @@ const getTruncatedLogs = () => {
  */
 const Time: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
-  const [displayedLogs, setDisplayedLogs] = useState(false);
-  const logs = getTruncatedLogs();
+  const logs = useSelector(selectOrderedLogs, shallowEqual);
   const [visibleNoteModal, toggleVisibilityNoteModal] = useToggle(false);
   const [noteDisplay, setNoteDisplay] = useState('');
   const dispatch = useDispatch();
@@ -68,11 +67,11 @@ const Time: FC<Props> = () => {
   }, []);
 
   useEffect(() => {
-    if (!displayedLogs && logs[0]) {
+    if (logs[0]) {
       const now = moment();
       const lastWeek = moment().subtract(1, 'week');
       const twoWeeksAgo = moment().subtract(2, 'weeks');
-      const groupedLogs = logs.reduce((acc, log) => {
+      const groupedLogs = truncateLogs(logs).reduce((acc, log) => {
         if (moment(log.startedAt).isBetween(lastWeek, now)) {
           return { ...acc, thisWeek: [...acc.thisWeek, log] };
         } if (moment(log.startedAt).isBetween(twoWeeksAgo, lastWeek)) {
@@ -82,9 +81,8 @@ const Time: FC<Props> = () => {
       }, { thisWeek: [], lastWeek: [], rest: [] });
 
       setDateSeparatedLogs(groupedLogs);
-      setDisplayedLogs(true);
     }
-  });
+  },[logs]);
 
   const onDelete = (id) => {
     toggleDeleteVisibility;

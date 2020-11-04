@@ -1,6 +1,6 @@
 
 import React, { FC, useEffect, useState } from 'react';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, View } from 'react-native';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import styled from 'styled-components/native';
@@ -48,30 +48,23 @@ type Props = {
 /*
  * Styles
  */
-const View = styled.View`
-  flexDirection: column;
-  alignItems: center;
+const StatsView = styled.ScrollView`
+  height: 50%;
+  /*alignItems: center;*/
   paddingTop: 20;
   paddingBottom: 20;
   paddingLeft: 40;
   paddingRight: 40;
-  flex: 1;
 `;
 
 const CardView = styled.View`
-  flexDirection: column;
+  /*flexDirection: column;*/
   alignItems: center;
   flex: 1;
 `;
 
 const Heading = styled(H)`
   flexGrow: 0;
-`;
-
-const Container = styled.View`
-  width: 100%;
-  flexGrow: 1;
-  justifyContent: space-between;
 `;
 
 const Text = styled.Text`
@@ -86,11 +79,7 @@ const Text = styled.Text`
 const Stats: FC<Props> = () => {
   // setBadge(false);
   const dispatch = useDispatch();
-  const [visibleConfirmationModal, toggleInviteVisibility] = useToggle(false);
-  const [visibleBadge, toggleBadgeVisibility] = useState(false);
-  // useEffect(() => {
-  //   dispatch(loadLogs());
-  // }, []);
+
 
   const logs = useSelector(selectOrderedLogs, shallowEqual);
   let hours = 0;
@@ -106,31 +95,12 @@ const Stats: FC<Props> = () => {
     }
   });
 
-
-  const onInvite = () => {
-    return <Heading>invite</Heading>
-  }
-
   hours = ~~(hours + minutes / 60);
 
   const avgDur = ~~(hours * 60 / logs.length);
 
   return (
-    <View>
-      <InvitationModal
-        isVisible={visibleConfirmationModal}
-        onCancel={toggleInviteVisibility}
-        onSendClose={toggleInviteVisibility}
-        awardBadge={toggleBadgeVisibility}
-        title="Invite Volunteers By Email"
-      />
-
-      <BadgeModal
-        visible={visibleBadge}
-        badge={BadgeObj['InviteMedalBadge']}
-      />
-
-      <Container>
+    <StatsView>
         <Stat
           heading="TOTAL TIME GIVEN"
           value={hours.toString()}
@@ -141,7 +111,7 @@ const Stats: FC<Props> = () => {
         <Line />
         <Stat
           heading="TIMES VOLUNTEERED"
-          value={logs.length}
+          value={''+logs.length}
           unit="visits"
         >
           <MaterialCommunityIcons name="calendar-blank" outline size={35} color={ColoursEnum.mustard} />
@@ -154,9 +124,7 @@ const Stats: FC<Props> = () => {
         >
           <MaterialCommunityIcons name="timer" outline size={35} color={ColoursEnum.mustard} />
         </Stat>
-      </Container>
-      <Invite onPress={toggleInviteVisibility} organisation={"aperture science"} />
-    </View>
+    </StatsView>
   )
 };
 
@@ -186,8 +154,6 @@ const BadgeTab: FC<Props> = (props) => {
     </CardView >
   );
 };
-
-// const Badges = [FirstLogCard, InviteMedalCard];
 
 const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   const registerForPushNotificationsAsync = async () => {
@@ -243,6 +209,8 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
 
   registerForPushNotificationsAsync();
 
+  const [visibleInvitationModal, toggleInviteVisibility] = useToggle(false);
+  const [visibleBadge, toggleBadgeVisibility] = useState(false);
   const [stats, setBadge] = useToggle(false);
   const dispatch = useDispatch();
   const [userID, setUserID] = useState('');
@@ -329,16 +297,32 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
   AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(userID))
 
   return (
+    <View>
     <Page heading="Home" withAddBar>
-      <AddBar onPress={() => navigation.navigate('VolunteersBadges')} title="Volunteer's Badges" />
+     <InvitationModal
+        isVisible={visibleInvitationModal}
+        onCancel={toggleInviteVisibility}
+        onSendClose={toggleInviteVisibility}
+        awardBadge={toggleBadgeVisibility}
+        title={"Invite Volunteers By Email"}
+      />
+      <BadgeModal
+        visible={visibleBadge}
+        badge={BadgeObj['InviteMedalBadge']}
+      />
+     
 
+      <AddBar onPress={() => navigation.navigate('VolunteersBadges')} title="Volunteer's Badges" />
+      
       <Tabs
-        tabOne={['Stats', Stats, {}]}
+        tabOne={['Stats', Stats,{}]}
         tabTwo={['Badges', BadgeTab, { badge: badgearray }]}
         onSwitch={()=>{getBadge()}}
       />
-
+      
     </Page>
+    <Invite onPress={toggleInviteVisibility} organisation={"aperture science"} />
+    </View>
   );
 }
 export default VolunteerHome;

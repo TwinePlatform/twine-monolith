@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import {Dimensions} from 'react-native';
 import styled from "styled-components/native";
 import { ColoursEnum } from "./colours";
 import { FontsEnum } from "./typography";
@@ -10,6 +11,8 @@ const InviteText = styled.Text`
   font-family: ${FontsEnum.medium};
 `;
 
+const distanceFromTop = Dimensions.get('window').height * 0.60;
+
 const InviteButton = styled(B)`
   width: 30%;
   borderRadius: 15;
@@ -19,7 +22,7 @@ const InviteButton = styled(B)`
   marginTop: 20;
   marginBottom: 30;
   position: absolute;
-  bottom: 0;
+  top: ${distanceFromTop};
   right: 5%;
 `;
 

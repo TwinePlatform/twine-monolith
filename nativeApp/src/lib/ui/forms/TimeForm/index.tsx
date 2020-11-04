@@ -110,8 +110,10 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const dispatch = useDispatch();
 
   const requestStatus = useSelector(selectCreateLogStatus);
+  
   const [logSent, setLogSent] = useState(0); //when logs are sent using the form, this increases, triggering the saved modal to check if it should be on. 
-
+  const [logJustSent, setLogJustSent] = useState(false); //tracks whether it was sent in the last 2 seconds.
+ 
   // local state
   const [pickerVisible, setPickerVisible] = useState(false);
   const [responseModal, setResponseModal] = useState(false);
@@ -129,8 +131,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   let minutes, setMinutes;
   let note, setNote;
 
-  console.log(selectedProject);
-  console.log(selectedActivity);
+   
 
   if( origin == 'editTime'){
     //console.log(new Date(editLog.date + 'T' + editLog.startTime));
@@ -228,16 +229,9 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   // hooks
   useEffect(() => {
-    console.log(requestStatus)
-
-    if (requestStatus.success) {
+    if (logJustSent && requestStatus.success)
       setResponseModal(true);
-    }
-    // if (badgeModal != false) {
-    //   setTimeout(() => {
-    //     setBadgeModal(!badgeModal);
-    //   }, 3000);
-    // }
+
   }, [logSent]);
 
 
@@ -267,6 +261,9 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           console.log("adding time");
 
           const res: any = await dispatch(createLog(values));
+          
+          setLogJustSent(true);
+          setTimeout(()=>setLogJustSent(false),2000);
           setLogSent(logSent+1);
 
           console.log(res)
@@ -324,7 +321,11 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
         try { //error trapping and cache log when network error
           const res: any = await dispatch(updateLog(userId, parseInt(logId), valuesEdit));
+          
+          setLogJustSent(true);
+          setTimeout(()=>setLogJustSent(false),2000);
           setLogSent(logSent+1);
+
           console.log(res);
 
           if(res.status == 200){
@@ -349,11 +350,12 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       }
    
       if (forUser == 'volunteer') {
-        navigation.navigate('Home');
+        setTimeout(()=>{
+          setResponseModal(false);
+          navigation.navigate('Home');
+        },1000);
       }
-   
     }
-    
   };
 
   const addNote = (note) => {
