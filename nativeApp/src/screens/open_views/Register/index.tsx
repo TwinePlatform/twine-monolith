@@ -130,6 +130,11 @@ const Register: FC<Props> = (props) => {
       .string()
       .email()
       .required(),
+    confirmAdminEmail: yup
+      .string()
+      .email()
+      .required()
+      .oneOf([yup.ref('adminEmail'), null], 'email addresses must match'),
     adminName: yup
       .string()
       .required(),
@@ -247,6 +252,7 @@ const Register: FC<Props> = (props) => {
                   onBlur={handleBlur('confirmAdminEmail')}
                   value={values.confirmAdminEmail}
                   placeholder='Confirm Organisation Email'
+                  contextMenuHidden={true}
                 />
 
                 {errors.confirmAdminEmail &&
