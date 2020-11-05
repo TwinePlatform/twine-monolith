@@ -153,6 +153,11 @@ const Register: FC<Props> = (props) => {
       .string()
       .email()
       .required('Please enter your email address. If you don’t have one, an administrator can help you register.'),
+    confirmEmail: yup
+      .string()
+      .email()
+      .required()
+      .oneOf([yup.ref('email'), null], 'email addresses must match'),
     password: yup
       .string()
       .min(3, 'Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)')
@@ -393,6 +398,16 @@ const Register: FC<Props> = (props) => {
               />
               {errors.email &&
                 <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.email}</TextInput>
+              }
+
+              <Input
+                onChangeText={handleChange('confirmEmail')}
+                onBlur={handleBlur('confirmEmail')}
+                value={values.confirmEmail}
+                placeholder='Confirm Email'
+              />
+              {errors.confirmEmail &&
+                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.confirmEmail}</TextInput>
               }
 
               <Input
