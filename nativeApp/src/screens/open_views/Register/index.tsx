@@ -324,7 +324,7 @@ const Register: FC<Props> = (props) => {
         style={styles.container}
       >
         <Formik
-          initialValues={{ orgName: '', adminEmail: '', adminName: '', orgPostCode: '', _360GivingId: '', name: '', email: '', password: '', phone: '', postCode: '', adminCode: '', region: '', birthYear: '' }}
+          initialValues={{ orgName: '', adminEmail: '', confirmEmail: '', adminName: '', orgPostCode: '', _360GivingId: '', name: '', email: '', password: '', phone: '', postCode: '', adminCode: '', region: '', birthYear: '' }}
           validationSchema={validationSchemaUser}
           onSubmit={async (values) => {
             try {
@@ -405,6 +405,7 @@ const Register: FC<Props> = (props) => {
                 onBlur={handleBlur('confirmEmail')}
                 value={values.confirmEmail}
                 placeholder='Confirm Email'
+                contextMenuHidden={true}
               />
               {errors.confirmEmail &&
                 <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.confirmEmail}</TextInput>
