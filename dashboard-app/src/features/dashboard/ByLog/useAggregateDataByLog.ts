@@ -85,7 +85,7 @@ const getRows = (logs: [any], volunteers: IdAndName[]) => {
                           Project: log.project,
                           Activity: log.activity,
                           Date: log.startedAt.slice(0,10),
-                          StartTime: log.startedAt.slice(11,16),
+                          //StartTime: log.startedAt.slice(11,16),
                           ID: log.id,
                         }})
 };
@@ -158,8 +158,8 @@ export default ({ from, to, updateOn = [], categories, filters}: UseAggregatedDa
                             {id:2, name: "Project"},
                             {id:3, name: "Activity"},
                             {id:4, name: "Date"},
-                            {id:5, name: "StartTime"},
-                            {id:6, name: "ID"}
+                           // {id:5, name: "StartTime"},
+                            {id:5, name: "ID"}
                             ];
 
 

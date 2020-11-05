@@ -130,6 +130,11 @@ const Register: FC<Props> = (props) => {
       .string()
       .email()
       .required(),
+    confirmAdminEmail: yup
+      .string()
+      .email()
+      .required()
+      .oneOf([yup.ref('adminEmail'), null], 'email addresses must match'),
     adminName: yup
       .string()
       .required(),
@@ -240,6 +245,18 @@ const Register: FC<Props> = (props) => {
 
                 {errors.adminEmail &&
                   <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.adminEmail}</TextInput>
+                }
+
+                <Input
+                  onChangeText={handleChange('confirmAdminEmail')}
+                  onBlur={handleBlur('confirmAdminEmail')}
+                  value={values.confirmAdminEmail}
+                  placeholder='Confirm Organisation Email'
+                  contextMenuHidden={true}
+                />
+
+                {errors.confirmAdminEmail &&
+                  <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.confirmAdminEmail}</TextInput>
                 }
 
                 <Input
