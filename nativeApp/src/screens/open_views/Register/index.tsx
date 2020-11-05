@@ -243,6 +243,17 @@ const Register: FC<Props> = (props) => {
                 }
 
                 <Input
+                  onChangeText={handleChange('confirmAdminEmail')}
+                  onBlur={handleBlur('confirmAdminEmail')}
+                  value={values.confirmAdminEmail}
+                  placeholder='Confirm Organisation Email'
+                />
+
+                {errors.confirmAdminEmail &&
+                  <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.confirmAdminEmail}</TextInput>
+                }
+
+                <Input
                   onChangeText={handleChange('orgPostCode')}
                   onBlur={handleBlur('orgPostCode')}
                   value={values.orgPostCode}
