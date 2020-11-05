@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
 import Modal from 'react-native-modal';
 import {Content, Card as C, Textarea as T, Form } from 'native-base';
-import {View, Dimensions, Text} from 'react-native';
+import {View, KeyboardAvoidingView, Dimensions, Text} from 'react-native';
 import { AddNote, Close } from '../AddNote';
 
 import { Heading2 as H2, FontsEnum } from '../typography';
@@ -66,6 +66,7 @@ const NoteModal: FC<Props> = ({
 
   return (
     <Modal isVisible={isVisible}>
+      <KeyboardAvoidingView>
       <Card>
         <HeadingContainer>
           <Heading2>TWINE</Heading2>
@@ -87,6 +88,7 @@ const NoteModal: FC<Props> = ({
           <AddNote disabled={note.length>500} text='Add note' onPress={() => { addNote(note); onClose(); }} />
         </ButtonContainer>
       </Card>
+      </KeyboardAvoidingView>
     </Modal>
   )
 };
