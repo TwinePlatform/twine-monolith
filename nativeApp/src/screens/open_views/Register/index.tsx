@@ -78,6 +78,14 @@ const PrintText = styled.Text`
   marginBottom: 20px;
 `;
 
+const FormErrorText = styled.Text`
+  width: 80%
+  fontSize: 10;
+  color: red;
+  flex: 1;
+  flexWrap: wrap;
+`;
+
 
 const formOptions = [{ id: 1, name: "Organisation" }, { id: 2, name: "User" }];
 const yearOptions = [...Array(100).keys()].map((_, i) => ({ id: i, name: `${2005 - i}` }));
@@ -94,6 +102,7 @@ const Register: FC<Props> = (props) => {
   const [organisationOptions, setOrganisationOptions] = useState([{ id: 1, name: "loading organisations" }])
   const [serverMsg, setServerMsg] = useState("");
   const [successTextVisible, setSuccessTextVisible] = useState(false);
+  const [submitPressed, setSubmitPressed] = useState(false);
 
   const [userYearOfBirth, setUserYearOfBirth] = useState("");
   const [region, setRegion] = useState("");
@@ -160,7 +169,7 @@ const Register: FC<Props> = (props) => {
       .oneOf([yup.ref('email'), null], 'email addresses must match'),
     password: yup
       .string()
-      .min(3, 'Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)')
+      .min(6, 'Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)')
       .required('Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)'),
     phone: yup
       .number(),
@@ -170,8 +179,14 @@ const Register: FC<Props> = (props) => {
       .string()
       .min(4)
       .max(10)
-      .required()
+      .required('Postcode is required')
   });
+
+  const registrationTypeDropdown = <Registration>
+    <DropdownShort
+      options={formOptions} selectedValue={registrationType} onValueChange={value=>{setRegistrationType(value);setSubmitPressed(false)}}
+    />
+  </Registration>;
 
   if (registrationType === "Organisation")
     return (
@@ -215,11 +230,7 @@ const Register: FC<Props> = (props) => {
                   message={thankYouMessage}
                   onClose={() => { setOrganisationModalVisible(false); setRegistrationType("User"); }} />
 
-                <Registration>
-                  <DropdownShort
-                    options={formOptions} selectedValue={registrationType} onValueChange={setRegistrationType}
-                  />
-                </Registration>
+                {registrationTypeDropdown}
 
                 <Input
                   onChangeText={handleChange('orgName')}
@@ -227,8 +238,8 @@ const Register: FC<Props> = (props) => {
                   value={values.orgName}
                   placeholder='Organisation Name'
                 />
-                {errors.orgName &&
-                  <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.orgName}</TextInput>
+                {errors.orgName && submitPressed &&
+                  <FormErrorText>{errors.orgName}</FormErrorText>
                 }
 
                 <Input
@@ -237,8 +248,8 @@ const Register: FC<Props> = (props) => {
                   value={values.adminName}
                   placeholder='Admin Name'
                 />
-                {errors.orgName &&
-                  <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.adminName}</TextInput>
+                {errors.orgName && submitPressed &&
+                  <FormErrorText>{errors.adminName}</FormErrorText>
                 }
 
                 <Input
@@ -248,8 +259,8 @@ const Register: FC<Props> = (props) => {
                   placeholder='Organisation Email'
                 />
 
-                {errors.adminEmail &&
-                  <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.adminEmail}</TextInput>
+                {errors.adminEmail && submitPressed &&
+                  <FormErrorText>{errors.adminEmail}</FormErrorText>
                 }
 
                 <Input
@@ -260,8 +271,8 @@ const Register: FC<Props> = (props) => {
                   contextMenuHidden={true}
                 />
 
-                {errors.confirmAdminEmail &&
-                  <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.confirmAdminEmail}</TextInput>
+                {errors.confirmAdminEmail && submitPressed &&
+                  <FormErrorText>{errors.confirmAdminEmail}</FormErrorText>
                 }
 
                 <Input
@@ -271,8 +282,8 @@ const Register: FC<Props> = (props) => {
                   placeholder='Postcode'
                 />
 
-                {errors.orgPostCode &&
-                  <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.orgPostCode}</TextInput>
+                {errors.orgPostCode && submitPressed &&
+                  <FormErrorText>{errors.orgPostCode}</FormErrorText>
                 }
 
                 <Input
@@ -292,7 +303,7 @@ const Register: FC<Props> = (props) => {
                 <ErrorText>{serverMsg}</ErrorText>
 
                 <Container>
-                  <SubmitButton text="COMPLETE" onPress={handleSubmit} />
+                  <SubmitButton text="COMPLETE" onPress={()=>{setSubmitPressed(true);handleSubmit()}} />
                 </Container>
 
                 <PrintText>
@@ -374,11 +385,7 @@ const Register: FC<Props> = (props) => {
                 visible={successTextVisible}
               />
 
-              <Registration>
-                <DropdownShort
-                  options={formOptions} selectedValue={registrationType} onValueChange={setRegistrationType}
-                />
-              </Registration>
+              {registrationTypeDropdown}
 
               <Input
                 onChangeText={handleChange('name')}
@@ -386,8 +393,8 @@ const Register: FC<Props> = (props) => {
                 value={values.name}
                 placeholder='Full Name'
               />
-              {errors.name &&
-                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.name}</TextInput>
+              {errors.name && submitPressed &&
+                <FormErrorText>{errors.name}</FormErrorText>
               }
 
               <Input
@@ -396,8 +403,8 @@ const Register: FC<Props> = (props) => {
                 value={values.email}
                 placeholder='Email'
               />
-              {errors.email &&
-                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.email}</TextInput>
+              {errors.email && submitPressed &&
+                <FormErrorText>{errors.email}</FormErrorText>
               }
 
               <Input
@@ -407,8 +414,8 @@ const Register: FC<Props> = (props) => {
                 placeholder='Confirm Email'
                 contextMenuHidden={true}
               />
-              {errors.confirmEmail &&
-                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.confirmEmail}</TextInput>
+              {errors.confirmEmail && submitPressed &&
+                <FormErrorText>{errors.confirmEmail}</FormErrorText>
               }
 
               <Input
@@ -417,8 +424,8 @@ const Register: FC<Props> = (props) => {
                 value={values.password}
                 placeholder='Create Password'
               />
-              {errors.password &&
-                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.password}</TextInput>
+              {errors.password && 
+                <FormErrorText>{errors.password}</FormErrorText>
               }
 
               <Input
@@ -427,8 +434,8 @@ const Register: FC<Props> = (props) => {
                 value={values.postCode}
                 placeholder='Post Code'
               />
-              {errors.postCode &&
-                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.postCode}</TextInput>
+              {errors.postCode && submitPressed &&
+                <FormErrorText>{errors.postCode}</FormErrorText>
               }
 
               <Input
@@ -437,8 +444,8 @@ const Register: FC<Props> = (props) => {
                 value={values.phone}
                 placeholder='Phone Number (Optional)'
               />
-              {errors.Phone &&
-                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.phone}</TextInput>
+              {errors.Phone && submitPressed &&
+                <FormErrorText>{errors.phone}</FormErrorText>
               }
 
               <DropdownNoLabel
@@ -450,7 +457,7 @@ const Register: FC<Props> = (props) => {
 
               <FuzzySearchBox
                 label=""
-                placeholder={"Find Organisation"}
+                placeholder={"Search for your Organisation"}
                 options={organisationOptions}
                 selectedValue={userOrganisation}
                 onValueChange={(org) => setUserOrganisation(org)}
@@ -464,10 +471,10 @@ const Register: FC<Props> = (props) => {
                 placeholder='Admin Access Code (Admin Required)'
               />
               <Container>
-                <SubmitButton text="COMPLETE" onPress={handleSubmit} />
+                <SubmitButton text="COMPLETE" onPress={()=>{setSubmitPressed(true);handleSubmit()}} />
               </Container>
 
-              <Text style={{ fontSize: 10, color: 'red' }}>{serverError.toString()}</Text>
+              <FormErrorText>{serverError.toString()}</FormErrorText>
 
               <PrintText>
                 By doing this you are agreeing to our&nbsp;
