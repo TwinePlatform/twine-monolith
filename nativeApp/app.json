@@ -31,7 +31,8 @@
       "package": "com.powertochange.volunteerapp",
       "versionCode": 11,
       "softwareKeyboardLayoutMode": "pan",
-      "permissions": []
+      "permissions": [],
+      "googleServicesFile": "./google-services.json"
     },
     "description": "Preview of build 8"
   }
