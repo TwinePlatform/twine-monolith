@@ -27,7 +27,6 @@ const InviteButton = styled(B)`
 `;
 
 type Props = {
-  organisation: string;
   onPress: () => void;
 };
 

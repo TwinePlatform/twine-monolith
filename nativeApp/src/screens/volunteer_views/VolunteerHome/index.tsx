@@ -321,7 +321,7 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
       />
       
     </Page>
-    <Invite onPress={toggleInviteVisibility} organisation={"aperture science"} />
+    <Invite onPress={toggleInviteVisibility}/>
     </View>
   );
 }
