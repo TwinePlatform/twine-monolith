@@ -164,7 +164,14 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
 
   const onSubmit = async () => {
 
-    const token = await API.Users.getPush(orgIdArr.organisationId, parseInt(`${id}`))
+    var token;
+    if (checkedExclusion == false) {
+      token = await API.Users.getPush(orgIdArr.organisationId, parseInt(`${id}`))
+    } else {
+      token = await API.Users.getPushOld(orgIdArr.organisationId, parseInt(`${id}`))
+    }
+
+    console.log(token);
     // const token = await API.Users.getPush(2, 1)
 
     if (!Array.isArray(token.data) || !token.data.length) {
@@ -223,8 +230,8 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
     >
       <ConfirmationModal
         isVisible={sendModalVisible}
-        onCancel={()=>setSendModalVisible(false)}
-        onConfirm={()=>{onSubmit();setSendModalVisible(false)}}
+        onCancel={() => setSendModalVisible(false)}
+        onConfirm={() => { onSubmit(); setSendModalVisible(false) }}
         title="Send Reminders"
         text={confirmationText}
       />
@@ -252,7 +259,7 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
         checked={checkedExclusion}
         onPress={() => setCheckedExclusion(currentBool => !currentBool)}
       />
-      <SubmitButton text="Send" onPress={()=>setSendModalVisible(true)} />
+      <SubmitButton text="Send" onPress={() => setSendModalVisible(true)} />
 
 
       {deletedDate && <Description>{`Deleted: ${deletedDate}`}</Description>}
