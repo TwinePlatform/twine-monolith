@@ -129,8 +129,8 @@ export const Volunteers: VolunteerCollection = {
   async fromProjectWithToken(client, cb, vp) {
 
     // sql: select distinct user_account.push_token from user_account inner join volunteer_hours_log 
-    //ON user_account.user_account_id = volunteer_hours_log.user_account_id where volunteer_hours_log.organisation_id = 2
-    //AND volunteer_hours_log.volunteer_project_id = 1;
+    // ON user_account.user_account_id = volunteer_hours_log.user_account_id where volunteer_hours_log.organisation_id = 2
+    // AND volunteer_hours_log.volunteer_project_id = 1;
 
     const res = await client('user_account')
       .distinct('push_token')
@@ -141,6 +141,26 @@ export const Volunteers: VolunteerCollection = {
         'volunteer_hours_log.volunteer_project_id': vp
       });
 
+    return res;
+  },
+
+  async fromRecentProjectWithToken(client, cb, vp) {
+
+    // sql: select distinct user_account.push_token from user_account inner join volunteer_hours_log 
+    // ON user_account.user_account_id = volunteer_hours_log.user_account_id where volunteer_hours_log.organisation_id = 2
+    // AND volunteer_hours_log.volunteer_project_id = 1 AND volunteer_hours_log.created_at > (now() - interval'7 days');
+
+    const res = await client('user_account')
+      .distinct('push_token')
+      .from('user_account')
+      .join('volunteer_hours_log', 'user_account.user_account_id', '=', 'volunteer_hours_log.user_account_id')
+      .where({
+        'volunteer_hours_log.organisation_id': cb.id,
+        'volunteer_hours_log.volunteer_project_id': vp
+      })
+      .whereRaw(`volunteer_hours_log.created_at > (now() - interval'7 days')`);
+
+    console.log(res);
     return res;
   },
 

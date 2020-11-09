@@ -325,6 +325,7 @@ export type VolunteerCollection = UsersBaseCollection & {
   fromProjectWithToken: (client: Knex, c: CommunityBusiness, vp: string) =>
     // fromProjectWithToken: (client: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
     Promise<Partial<User>[]>;
+  fromRecentProjectWithToken: (client: Knex, c: CommunityBusiness, vp: string) => Promise<any>;
   addWithRole: (
     k: Knex,
     u: Partial<User>,
