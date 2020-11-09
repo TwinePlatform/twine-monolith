@@ -71,7 +71,7 @@ const Volunteers: FC<NavigationFocusInjectedProps & Props> = ({ navigation }) =>
 
   useEffect(()=>{
     setFilteredVolunteers(filterVolunteers(volunteers,filter));
-  },[filter])
+  },[volunteers,filter])
 
   // Handlers
   const onEdit = (volunteer: User) => {
