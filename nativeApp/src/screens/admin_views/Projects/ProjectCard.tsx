@@ -259,7 +259,7 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
         checked={checkedExclusion}
         onPress={() => setCheckedExclusion(currentBool => !currentBool)}
       />
-      <SubmitButton text="Send" onPress={() => setSendModalVisible(true)} />
+      <SubmitButton disabled={!checked} text="Send" onPress={() => setSendModalVisible(true)} />
 
 
       {deletedDate && <Description>{`Deleted: ${deletedDate}`}</Description>}
