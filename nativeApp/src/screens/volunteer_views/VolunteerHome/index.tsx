@@ -310,7 +310,6 @@ const VolunteerHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
         visible={visibleBadge}
         badge={BadgeObj['InviteMedalBadge']}
       />
-     
 
       <AddBar onPress={() => navigation.navigate('VolunteersBadges')} title="Volunteer's Badges" />
       

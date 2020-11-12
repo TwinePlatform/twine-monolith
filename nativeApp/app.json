@@ -32,7 +32,8 @@
       "versionCode": 11,
       "softwareKeyboardLayoutMode": "pan",
       "permissions": [],
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true
     },
     "description": "Preview of build 8"
   }
