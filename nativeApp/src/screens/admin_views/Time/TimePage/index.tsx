@@ -50,8 +50,8 @@ const truncateLogs = (logs) => {
 const AdminTime: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
   const [visibleNoteModal, toggleVisibilityNoteModal] = useToggle(false);
-  const [displayedLogs, setDisplayedLogs] = useState(false);
   const logs = useSelector(selectOrderedLogs, shallowEqual);
+  const [activeLogId, setActiveLogId] = useState(0);
   const [noteDisplay, setNoteDisplay] = useState('');
   const logsRequestStatus = useSelector(selectLogsStatus, shallowEqual);
   const volunteers = useSelector(selectVolunteers, shallowEqual);
@@ -67,7 +67,7 @@ const AdminTime: FC<Props> = () => {
   }, []);
 
   useEffect(() => {
-    if (!displayedLogs && logs[0]) {
+    if (logs[0]) {
       const now = moment();
       const lastWeek = moment().subtract(1, 'week');
       const twoWeeksAgo = moment().subtract(2, 'weeks');
@@ -81,13 +81,12 @@ const AdminTime: FC<Props> = () => {
       }, { thisWeek: [], lastWeek: [], rest: [] });
 
       setDateSeparatedLogs(groupedLogs);
-      setDisplayedLogs(true);
     }
-  });
+  },[logs]);
 
-  const onDelete = (id) => {
-    toggleDeleteVisibility;
-    dispatch(deleteLog(id));
+  const onDelete = () => {
+    toggleDeleteVisibility();
+    dispatch(deleteLog(activeLogId));
   }
 
   return (
@@ -95,9 +94,9 @@ const AdminTime: FC<Props> = () => {
       <ConfirmationModal
         isVisible={visibleConfirmationModal}
         onCancel={toggleDeleteVisibility}
-        onConfirm={toggleDeleteVisibility}
+        onConfirm={onDelete}
         title="Delete"
-        text="Are you sure you want to delete this time?"
+        text="Are you sure you want to delete this log?"
       />
       <ViewNoteModal
         isVisible={visibleNoteModal}
@@ -119,7 +118,7 @@ const AdminTime: FC<Props> = () => {
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
             startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
-            onDelete={() => { onDelete(log.id) }}
+            onDelete={() => { setActiveLogId(log.id);toggleDeleteVisibility() }}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
             navigationPage='AdminEditTime'
@@ -137,7 +136,7 @@ const AdminTime: FC<Props> = () => {
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
             startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
-            onDelete={toggleDeleteVisibility}
+            onDelete={()=>{setActiveLogId(log.id);toggleDeleteVisibility()}}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
             navigationPage='AdminEditTime'
@@ -155,7 +154,7 @@ const AdminTime: FC<Props> = () => {
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
             startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
-            onDelete={toggleDeleteVisibility}
+            onDelete={()=>{setActiveLogId(log.id);toggleDeleteVisibility()}}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
             navigationPage='AdminEditTime'

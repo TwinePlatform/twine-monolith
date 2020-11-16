@@ -54,6 +54,7 @@ const truncateLogs = (logs) => {
 const Time: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
   const logs = useSelector(selectOrderedLogs, shallowEqual);
+  const [activeLogId, setActiveLogId] = useState(0);
   const [visibleNoteModal, toggleVisibilityNoteModal] = useToggle(false);
   const [noteDisplay, setNoteDisplay] = useState('');
   const dispatch = useDispatch();
@@ -84,9 +85,9 @@ const Time: FC<Props> = () => {
     }
   },[logs]);
 
-  const onDelete = (id) => {
-    toggleDeleteVisibility;
-    dispatch(deleteLog(id));
+  const onDelete = () => {
+    toggleDeleteVisibility();
+    dispatch(deleteLog(activeLogId));
   }
 
   return (
@@ -95,9 +96,9 @@ const Time: FC<Props> = () => {
       <ConfirmationModal
         isVisible={visibleConfirmationModal}
         onCancel={toggleDeleteVisibility}
-        onConfirm={toggleDeleteVisibility}
+        onConfirm={onDelete}
         title="Delete"
-        text="Are you sure you want to delete this time?"
+        text="Are you sure you want to delete this log?"
       />
 
       <ViewNoteModal
@@ -116,7 +117,7 @@ const Time: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
             date={moment(log.startedAt).format('DD/MM/YY')}
-            onDelete={() => { onDelete(log.id) }}
+            onDelete={() => { setActiveLogId(log.id);toggleDeleteVisibility() }}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
             navigationPage='VolunteerEditTime'
@@ -133,7 +134,7 @@ const Time: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
             date={moment(log.startedAt).format('DD/MM/YY')}
-            onDelete={() => { onDelete(log.id) }}
+            onDelete={() => { setActiveLogId(log.id);toggleDeleteVisibility() }}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
             navigationPage='VolunteerEditTime'
@@ -150,7 +151,7 @@ const Time: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
             date={moment(log.startedAt).format('DD/MM/YY')}
-            onDelete={() => { onDelete(log.id) }}
+            onDelete={() => { setActiveLogId(log.id);toggleDeleteVisibility() }}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
             navigationPage='VolunteerEditTime'
