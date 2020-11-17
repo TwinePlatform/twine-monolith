@@ -208,6 +208,12 @@ const Users = {
       url: `/community-businesses/${orgId}/push/${ProjectId}`
     })
   ,
+  getPushOld: (orgId: number, ProjectId: number) =>
+    makeRequest({
+      method: 'GET',
+      url: `/community-businesses/${orgId}/push/${ProjectId}/old`
+    })
+  ,
   pushtoken: (id: number, token: string) => {
     console.log('updating push token....');
     makeRequest({

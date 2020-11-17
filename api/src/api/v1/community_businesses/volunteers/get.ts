@@ -13,6 +13,7 @@ import { Serialisers } from '../../serialisers';
 const routes: [
   Api.CommunityBusinesses.Id.Volunteers.GET.Route,
   Api.CommunityBusinesses.Id.PushNotification.GET.Route,
+  Api.CommunityBusinesses.Id.PushNotification.GET.Route,
 ] = [
     {
       method: 'GET',
@@ -111,6 +112,54 @@ const routes: [
 
         return {
           result: await Promise.all(volunteers.map(Serialisers.volunteers.noSecrets)),
+          meta: { total: 0 },
+        };
+      },
+    },
+    {
+      method: 'GET',
+      path: '/community-businesses/{organisationId}/push/{projectId}/old',
+      options: {
+        description: 'Retreive list of push notification token of all volunteers from a specific project besides those with a log past 7 days',
+        auth: {
+          strategy: 'standard',
+          access: {
+            scope: ['user_details-child:read', 'user_details-sibling:read'],
+          },
+        },
+        validate: {
+          params: {
+            organisationId: meOrId.required(),
+            projectId: id.required()
+          },
+          query: {
+            ...query,
+          },
+        },
+        response: { schema: response },
+        pre: [
+          { method: getCommunityBusiness, assign: 'communityBusiness' },
+          { method: isChildOrganisation, assign: 'isChild' },
+        ],
+      },
+      handler: async (request, h) => {
+        const {
+          query,
+          pre: { communityBusiness, isChild },
+          server: { app: { knex } },
+          params: { projectId },
+        } = request;
+
+        const volunteers = await Volunteers.fromProjectWithToken(knex, communityBusiness, projectId);
+
+        //get tokens that are log in the past 7 days
+        const recent_volunteers = await Volunteers.fromRecentProjectWithToken(knex, communityBusiness, projectId);
+
+        //remove the tokens that has a log for the past 7 days
+        const finalarr = volunteers.filter(val => recent_volunteers.includes(val));
+
+        return {
+          result: await Promise.all(finalarr.map(Serialisers.volunteers.noSecrets)),
           meta: { total: 0 },
         };
       },

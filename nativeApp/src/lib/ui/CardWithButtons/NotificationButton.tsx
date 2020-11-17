@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import { Button as B } from 'native-base';
-
+import { StyleSheet } from "react-native";
 import { ColoursEnum } from '../colours';
 
 
@@ -11,6 +11,7 @@ import { ColoursEnum } from '../colours';
 type Props = {
     onPress: () => void;
     text: string;
+    disabled: boolean;
 }
 
 /*
@@ -33,16 +34,27 @@ const SubmitText = styled.Text`
   color: ${ColoursEnum.white};
   fontSize: 10;
 `;
+
+const styles = StyleSheet.create({
+    enable: {
+        backgroundColor: ColoursEnum.purple
+    },
+    disable: {
+        backgroundColor: ColoursEnum.grey
+    }
+});
 /*
 
 /*
  * Component
  */
 const NotificationButton: FC<Props> = (props) => {
-    const { onPress, text } = props;
+    const { onPress, text, disabled } = props;
     return (
         <Submit
             onPress={onPress}
+            disabled={disabled}
+            style={[disabled ? styles.disable : styles.enable]}
         >
             <SubmitText>{text}</SubmitText>
         </Submit>
