@@ -29,12 +29,12 @@
     },
     "android": {
       "package": "com.powertochange.volunteerapp",
-      "versionCode": 11,
+      "versionCode": 13,
       "softwareKeyboardLayoutMode": "pan",
       "permissions": [],
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true
     },
-    "description": "Preview of build 8"
+    "description": "Android push notifications"
   }
 }
