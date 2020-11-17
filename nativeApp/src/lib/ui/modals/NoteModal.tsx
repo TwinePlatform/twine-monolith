@@ -80,13 +80,6 @@ const NoteModal: FC<Props> = ({
   const [note, setNote] = useState(initialNote);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
-  const dismissKeyboard = () => {
-    if(keyboardVisible){
-      Keyboard.dismiss()
-      setKeyboardVisible(false);
-    }
-  }
-
   //tapping on the modal dismisses the keyboard
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -109,7 +102,7 @@ const NoteModal: FC<Props> = ({
   }, []);
 
   const modalContent = (<Card
-    onTouchEnd={dismissKeyboard}
+    onTouchEnd={keyboardVisible?Keyboard.dismiss:()=>{}}
   >
   <HeadingContainer>
     <Heading2>TWINE</Heading2>
