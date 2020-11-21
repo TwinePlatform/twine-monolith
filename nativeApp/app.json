@@ -29,12 +29,12 @@
     },
     "android": {
       "package": "com.powertochange.volunteerapp",
-      "versionCode": 13,
+      "versionCode": 14,
       "softwareKeyboardLayoutMode": "pan",
       "permissions": [],
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true
     },
-    "description": "Android push notifications"
+    "description": "Enable push notification for android devices"
   }
 }
