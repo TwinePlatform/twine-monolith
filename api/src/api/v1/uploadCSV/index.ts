@@ -59,17 +59,22 @@ const routes: [
                 let ResultArr: any = [];
                 var errorArr: any = ["Error: incomplete table"];
                 var rowNum = 1;
-                //loop through the first table and check if everything is properly populated
-                arr1.forEach((row: any) => {
-                    rowNum++;
-                    for (const [key, value] of Object.entries(row)) {
-                        // - check if field is populated 
-                        if (!value) {
-                            const obj = { rowNum, key };
-                            errorArr.push(obj);
+
+                //if the first table is filled 
+                if (arr1.length > 1) {
+                    //loop through the first table and check if everything is properly populated
+                    arr1.forEach((row: any) => {
+                        rowNum++;
+                        for (const [key, value] of Object.entries(row)) {
+                            // - check if field is populated 
+                            if (!value) {
+                                const obj = { rowNum, key };
+                                errorArr.push(obj);
+                            }
                         }
-                    }
-                });
+                    });
+                }
+
 
                 //second table in the csv file 
                 const csvArray = await neatCsv(csvfile['csv'], { skipLines: arr1.length + 2 });
@@ -86,58 +91,60 @@ const routes: [
                     }
                 });
 
+
                 // variables needed to register volunteers 
                 const communityBusiness = await CommunityBusinesses
                     .getOne(knex, { where: { id: parseInt(organisationId), deletedAt: null } });
                 const role = RoleEnum.VOLUNTEER;
 
-                //TODO if arr1.length < 2 => no volunteer 
-                if (errorArr.length > 1) {
-                    return errorArr;
-                    //else log and return the logged array
-                } else {
-                    let i = 0;
+                //if the first table is filled 
+                if (arr1.length > 1) {
+                    if (errorArr.length > 1) {
+                        return errorArr;
+                        //else log and return the logged array
+                    } else {
+                        let i = 0;
 
-                    //check if user is already registred
-                    for (i = 0; i <= arr1.length - 1; i++) {
-                        const email = arr1[i]['Email Address'];
+                        //check if user is already registred
+                        for (i = 0; i <= arr1.length - 1; i++) {
+                            const email = arr1[i]['Email Address'];
 
-                        if (await Users.exists(knex, { where: { email } })) {
-                            return Boom.conflict('It appears this ' + email + ' is already registered.');
-                        }
-                    }
-
-                    //registers volunteers 
-                    for (i = 0; i <= arr1.length - 1; i++) {
-                        const email = arr1[i]['Email Address'];
-
-                        let data = {};
-                        data = {
-                            organisationId: organisationId,
-                            role: role,
-                            name: arr1[i]['Volunteer Name'],
-                            gender: 'prefer not to say',
-                            email: email,
-                            postCode: arr1[i]['Postcode'],
-                            password: arr1[i]['Password'],
-                            birthYear: arr1[i]['Birth year'],
-                        };
-
-                        try {
-                            const volunteer = await Volunteers.addWithRole(knex, data, role, communityBusiness);
-                            ResultArr.push(Serialisers.volunteers.noSecrets(volunteer));
-                            // return Serialisers.volunteers.noSecrets(volunteer);
-
-                        } catch (error) {
-
-                            if (error.message === 'Invalid volunteer admin code') {
-                                return Boom.unauthorized(error.message);
+                            if (await Users.exists(knex, { where: { email } })) {
+                                return Boom.conflict('It appears this ' + email + ' is already registered.');
                             }
+                        }
 
-                            return error;
+                        //registers volunteers 
+                        for (i = 0; i <= arr1.length - 1; i++) {
+                            const email = arr1[i]['Email Address'];
+
+                            let data = {};
+                            data = {
+                                organisationId: organisationId,
+                                role: role,
+                                name: arr1[i]['Volunteer Name'],
+                                gender: 'prefer not to say',
+                                email: email,
+                                postCode: arr1[i]['Postcode'],
+                                password: arr1[i]['Password'],
+                                birthYear: arr1[i]['Birth year'],
+                            };
+
+                            try {
+                                const volunteer = await Volunteers.addWithRole(knex, data, role, communityBusiness);
+                                ResultArr.push(Serialisers.volunteers.noSecrets(volunteer));
+                                // return Serialisers.volunteers.noSecrets(volunteer);
+
+                            } catch (error) {
+
+                                if (error.message === 'Invalid volunteer admin code') {
+                                    return Boom.unauthorized(error.message);
+                                }
+
+                                return error;
+                            }
                         }
                     }
-
                 }
 
                 //if table is incomplete return row and column that's incomplete
@@ -149,6 +156,7 @@ const routes: [
                     for (i = 0; i <= csvArray.length - 1; i++) {
                         const email = csvArray[i]['Volunteer Email'];
                         const user_Id = await Users.getWithEmail(knex, email);
+                        console.log(user_Id);
 
                         if (user_Id.length < 1) {
                             return 'check if user has registered in the organisation';
@@ -167,6 +175,8 @@ const routes: [
                             const projectInsert = await CommunityBusinesses.addVolunteerProject(knex, csvArray[i]['Project'], organisationId);
                             ResultArr.push(ResultArr.push([{ "Project inserted": csvArray[i]['Project'] }]));
                         }
+
+                        console.log(organisationId);
 
                         // add logs using 
                         try {
