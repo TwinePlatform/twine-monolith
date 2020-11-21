@@ -59,15 +59,14 @@ const routes: [
                 let ResultArr: any = [];
                 var errorArr: any = ["Error: incomplete table"];
                 var rowNum = 1;
-
                 //if the first table is filled 
-                if (arr1.length > 1) {
+                if (arr1.length >= 1) {
                     //loop through the first table and check if everything is properly populated
                     arr1.forEach((row: any) => {
                         rowNum++;
                         for (const [key, value] of Object.entries(row)) {
                             // - check if field is populated 
-                            if (!value) {
+                            if (!value && key != 'Phone number' && key != 'gender') {
                                 const obj = { rowNum, key };
                                 errorArr.push(obj);
                             }
@@ -78,13 +77,12 @@ const routes: [
 
                 //second table in the csv file 
                 const csvArray = await neatCsv(csvfile['csv'], { skipLines: arr1.length + 2 });
-
                 //loop through the second table and check if everything is properly populated
                 csvArray.forEach((row: any) => {
                     rowNum++;
                     for (const [key, value] of Object.entries(row)) {
                         // - check if field is populated 
-                        if (!value) {
+                        if (!value && key != 'empty column') {
                             const obj = { rowNum, key };
                             errorArr.push(obj);
                         }
@@ -98,7 +96,7 @@ const routes: [
                 const role = RoleEnum.VOLUNTEER;
 
                 //if the first table is filled 
-                if (arr1.length > 1) {
+                if (arr1.length >= 1) {
                     if (errorArr.length > 1) {
                         return errorArr;
                         //else log and return the logged array
@@ -123,11 +121,12 @@ const routes: [
                                 organisationId: organisationId,
                                 role: role,
                                 name: arr1[i]['Volunteer Name'],
-                                gender: 'prefer not to say',
+                                gender: arr1[i]['Gender'] ?? 'prefer not to say',
                                 email: email,
                                 postCode: arr1[i]['Postcode'],
                                 password: arr1[i]['Password'],
                                 birthYear: arr1[i]['Birth year'],
+                                phoneNumber: arr1[i]['Phone number'] ?? 'N/A',
                             };
 
                             try {
@@ -156,7 +155,6 @@ const routes: [
                     for (i = 0; i <= csvArray.length - 1; i++) {
                         const email = csvArray[i]['Volunteer Email'];
                         const user_Id = await Users.getWithEmail(knex, email);
-                        console.log(user_Id);
 
                         if (user_Id.length < 1) {
                             return 'check if user has registered in the organisation';
@@ -175,8 +173,6 @@ const routes: [
                             const projectInsert = await CommunityBusinesses.addVolunteerProject(knex, csvArray[i]['Project'], organisationId);
                             ResultArr.push(ResultArr.push([{ "Project inserted": csvArray[i]['Project'] }]));
                         }
-
-                        console.log(organisationId);
 
                         // add logs using 
                         try {
