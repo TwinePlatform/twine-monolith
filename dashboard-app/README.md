@@ -9,19 +9,21 @@ See [project documentation](./docs/README.md)
 1. Uploading CSV through the dashboard 	
 
 ## Uploading CSV through the dashboard 	
-### Mega file will :	
+### Mega file can be found [here](./public/downloads/upload_data_template.csv) and it will :	
 - register volunteer	
 - add project	
 - add activities 	
 - add logs 	
 
 ### Before submitting:	
-- make sure the first table has columns, leave the row 2 blank if no volunteers are to be added:	
+- make sure the first table has columns, delete row 2 if no volunteers are to be added:	
     - Volunteer Name	
     - Email Address		
     - Postcode		
     - Birth year	
     - Password	
+    - Phone number (optional)
+    - Gender (optional or choose either: female,male,prefer not to say,non-binary,intersex or other)
     - Role (has to be volunteer)	
 - make sure second table has columns: 	
     - Volunteer Email	
@@ -29,8 +31,11 @@ See [project documentation](./docs/README.md)
     - Date (format: MM/DD/YYYYThh:mm:ssZ)	
     - Duration (hours)	
     - Duration (minutes)	
+    - empty column
+    - empty column
 - first and second table are seperated by reserved character '$$$'	
-- make sure all columns are filled 	
+- make sure all columns are filled 
+- empty columns are to be left blank 
 
 ### API result Return:	
 - when a column in either table is not filled 	
