@@ -28,10 +28,10 @@ const Text = styled.Text`
   marginTop: 10;
 `;
 
-const getTruncatedLogs = () => {
+const truncateLogs = (logs) => {
   const thirtyDaysAgo = moment().subtract(30, 'days');
 
-  let logArray = useSelector(selectOrderedLogs, shallowEqual);
+  let logArray = logs;
 
   let truncatedLogs = [];
 
@@ -53,8 +53,8 @@ const getTruncatedLogs = () => {
  */
 const Time: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
-  const [displayedLogs, setDisplayedLogs] = useState(false);
-  const logs = getTruncatedLogs();
+  const logs = useSelector(selectOrderedLogs, shallowEqual);
+  const [activeLogId, setActiveLogId] = useState(0);
   const [visibleNoteModal, toggleVisibilityNoteModal] = useToggle(false);
   const [noteDisplay, setNoteDisplay] = useState('');
   const dispatch = useDispatch();
@@ -68,11 +68,11 @@ const Time: FC<Props> = () => {
   }, []);
 
   useEffect(() => {
-    if (!displayedLogs && logs[0]) {
+    if (logs[0]) {
       const now = moment();
       const lastWeek = moment().subtract(1, 'week');
       const twoWeeksAgo = moment().subtract(2, 'weeks');
-      const groupedLogs = logs.reduce((acc, log) => {
+      const groupedLogs = truncateLogs(logs).reduce((acc, log) => {
         if (moment(log.startedAt).isBetween(lastWeek, now)) {
           return { ...acc, thisWeek: [...acc.thisWeek, log] };
         } if (moment(log.startedAt).isBetween(twoWeeksAgo, lastWeek)) {
@@ -82,13 +82,12 @@ const Time: FC<Props> = () => {
       }, { thisWeek: [], lastWeek: [], rest: [] });
 
       setDateSeparatedLogs(groupedLogs);
-      setDisplayedLogs(true);
     }
-  });
+  },[logs]);
 
-  const onDelete = (id) => {
-    toggleDeleteVisibility;
-    dispatch(deleteLog(id));
+  const onDelete = () => {
+    toggleDeleteVisibility();
+    dispatch(deleteLog(activeLogId));
   }
 
   return (
@@ -97,9 +96,9 @@ const Time: FC<Props> = () => {
       <ConfirmationModal
         isVisible={visibleConfirmationModal}
         onCancel={toggleDeleteVisibility}
-        onConfirm={toggleDeleteVisibility}
+        onConfirm={onDelete}
         title="Delete"
-        text="Are you sure you want to delete this time?"
+        text="Are you sure you want to delete this log?"
       />
 
       <ViewNoteModal
@@ -118,7 +117,7 @@ const Time: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
             date={moment(log.startedAt).format('DD/MM/YY')}
-            onDelete={() => { onDelete(log.id) }}
+            onDelete={() => { setActiveLogId(log.id);toggleDeleteVisibility() }}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
             navigationPage='VolunteerEditTime'
@@ -135,7 +134,7 @@ const Time: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
             date={moment(log.startedAt).format('DD/MM/YY')}
-            onDelete={() => { onDelete(log.id) }}
+            onDelete={() => { setActiveLogId(log.id);toggleDeleteVisibility() }}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
             navigationPage='VolunteerEditTime'
@@ -152,7 +151,7 @@ const Time: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
             date={moment(log.startedAt).format('DD/MM/YY')}
-            onDelete={() => { onDelete(log.id) }}
+            onDelete={() => { setActiveLogId(log.id);toggleDeleteVisibility() }}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
             navigationPage='VolunteerEditTime'

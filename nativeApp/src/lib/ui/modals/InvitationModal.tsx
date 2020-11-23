@@ -3,7 +3,7 @@ import API from '../../../api';
 import styled from 'styled-components/native';
 import Modal from 'react-native-modal';
 import { Button as B, Card as C, Textarea as TA, Form } from 'native-base';
-import { image } from 'react-native';
+import { Image } from 'react-native';
 import { AddNote, Close } from '../AddNote';
 
 import { Heading2 as H2, FontsEnum } from '../typography';

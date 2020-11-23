@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "38545735981",
+    "firebase_url": "https://twine-app-a93e3.firebaseio.com",
+    "project_id": "twine-app-a93e3",
+    "storage_bucket": "twine-app-a93e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:38545735981:android:ca1f4d11befdda347593a4",
+        "android_client_info": {
+          "package_name": "com.powertochange.volunteerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "38545735981-p3et22lgrae05hh5g8tqobb1q0e8mo6o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtTcKapUzQT5xb7bHGd7f1p_Lk-2RPvMs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "38545735981-p3et22lgrae05hh5g8tqobb1q0e8mo6o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

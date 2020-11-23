@@ -65,7 +65,7 @@ const LogCreateModal:FC<Props> = (props) => {
     const [valid, setValid] = useState(false);
     const now = new Date();
     const [date, setDate] = useState(now.toISOString().slice(0,10));
-    const [startTime, setStartTime] = useState(now.toISOString().slice(11,16));
+    const startTime = now.toISOString().slice(11,16);
     const [duration, setDuration] = useState({
         hours:0,
         minutes:0,
@@ -247,13 +247,13 @@ const LogCreateModal:FC<Props> = (props) => {
                         />
                         </div>
                         <hr className = "Section_Dividers" />
-                        <div className="log-create-section">
+                        {/*<div className="log-create-section">
                         <span  className = "section-title-create">Start Time</span>
                         <input type="time" id="Start Time" value={startTime}  className="log-create-select"
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
                         </div>
-                        <hr className = "Section_Dividers" />
+                        <hr className = "Section_Dividers" />*/}
                         <div className="log-create-section">
                         <span  className = "section-title-create">Hours</span>
                         <select id="hours" name="Hours" onChange={e=>changeDuration(e)} className="log-create-select">

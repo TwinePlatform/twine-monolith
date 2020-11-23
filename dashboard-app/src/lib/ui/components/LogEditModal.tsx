@@ -64,7 +64,7 @@ const LogEditModal:FC<Props> = (props) => {
     const [loading, setLoading] = useState(true);
     const [valid, setValid] = useState(false);
     const [date, setDate] = useState(logToEdit.date);
-    const [startTime, setStartTime] = useState(logToEdit.startTime);
+    const startTime = new Date().toISOString().slice(11,16);
     const [duration, setDuration] = useState({
         hours: logToEdit.hours,
         minutes:logToEdit.minutes,
@@ -119,7 +119,6 @@ const LogEditModal:FC<Props> = (props) => {
 
     useEffect(()=>{
         setDate(logToEdit.date);
-        setStartTime(logToEdit.startTime);
         getNote();
     },[logToEdit])
 
@@ -279,13 +278,13 @@ const LogEditModal:FC<Props> = (props) => {
                         />
                         </div>
                         <hr className = "Section_Dividers" />
-                        <div className="log-create-section">
+                        {/*<div className="log-create-section">
                         <span  className = "section-title-create">Start Time</span>
                         <input type="time" id="Start Time" value={startTime}  className="log-create-select"
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
                         </div>
-                        <hr className = "Section_Dividers" />
+                            <hr className = "Section_Dividers" />*/}
                         <div className="log-create-section">
                         <span  className = "section-title-create">Hours</span>
                         <select id="hours" name="Hours" onChange={e=>changeDuration(e)} className="log-create-select">

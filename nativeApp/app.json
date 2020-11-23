@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.9",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -29,9 +29,12 @@
     },
     "android": {
       "package": "com.powertochange.volunteerapp",
-      "versionCode": 9,
-      "softwareKeyboardLayoutMode": "pan"
+      "versionCode": 14,
+      "softwareKeyboardLayoutMode": "pan",
+      "permissions": [],
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true
     },
-    "description": "Preview of build 8"
+    "description": "Enable push notification for android devices"
   }
 }
