@@ -42,6 +42,15 @@ type EmailConfig = {
 type AuthConfig = {
   schema: {
     session_cookie: {
+      options: Yar.YarOptions
+    }
+  }
+};
+
+/*
+type AuthConfig = {
+  schema: {
+    session_cookie: {
       options: { name: string,
       maxCookieSize: number,
       cookieOptions: {
@@ -53,7 +62,7 @@ type AuthConfig = {
       cache: { cache: string },}
     }
   }
-};
+};*/
 
 type QrCodeConfig = {
   secret: string

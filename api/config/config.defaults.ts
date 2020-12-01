@@ -9,7 +9,7 @@ import { Environment, Config } from './types';
 import { DeepPartial, AppEnum } from '../src/types/internal';
 import { envOr, envListOr } from './util';
 
-const config: DeepPartial<Config> = {
+const config: any = {
   root: path.resolve(__dirname, '..'),
   env: Environment.DEVELOPMENT,
   web: {
