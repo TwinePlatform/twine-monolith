@@ -99,7 +99,7 @@ export default Joi.object({
             password: Joi.string().min(32).required(),
             ttl: Joi.number().integer().positive(),
             isSecure: Joi.only(true),
-            isHttpOnly: Joi.boolean(),
+            isHttpOnly: Joi.only(false),
             //isSameSite: Joi.only([false, 'Lax', 'Strict']),
             isSameSite: Joi.only('Strict'),
             path: Joi.string(),
