@@ -98,10 +98,10 @@ export default Joi.object({
           cookieOptions: Joi.object({
             password: Joi.string().min(32).required(),
             ttl: Joi.number().integer().positive(),
-            isSecure: Joi.boolean(),
+            isSecure: Joi.only(true),
             isHttpOnly: Joi.boolean(),
-           // isSameSite: Joi.only([false, 'Lax', 'Strict']),
-            //isSameSite: Joi.only([false,'None']),
+            //isSameSite: Joi.only([false, 'Lax', 'Strict']),
+            isSameSite: Joi.only(['None']),
             path: Joi.string(),
           }),
         }),
