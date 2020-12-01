@@ -1,6 +1,7 @@
 # Permissions
+The Role Based Access Controll (RBAC) is implemented. Users and organisations are given permission/privileges via static defined roles. E.g.  CBadmin will be allow to access all volunteers data from the same community business but volunteers are only allow to see their own data. The user, organisation and access role relationship is stored in the user_account_access_role table. 
 
-## User Permissions
+## User Permissions/Roles
 ### Resources and their ownership
 | Resource | Owner | Description |
 |----------|-------|-------------|
@@ -17,11 +18,28 @@
 * In the application, the "Organisation" is represented by `CB_ADMIN` users.
 * The resource `users_details_anonymised` is not currently used but may be needed for funding bodies to access anonymised user data.
 
-### Permission flags
+### Permission/role flags
 * `*-children` - data of all child catagories
 * `*-parent` - data of all parent catagories
 * `*-own` - data directly owned by user
 * `*-sibling` - data owned by a sibling (same level) user
+
+### Access
+* Read
+* Write
+* Delete?
+
+### Validation
+These roles are checked at the api entry point of the hapiJS authentification access check:
+`
+auth: {
+    ...
+    access: {
+        scope: ['organisations_details-child:read'],
+    },
+},
+`
+through the scope. They have the format: resource-permissionLevel:access
 
 ## API Token Permissions
 API tokens (currently) use a different set of permissions. This is simply to make the initial implementation simple. In future, as third-party access to the API is widened, it may be beneficial for API tokens to use the same permission set as regular users.
