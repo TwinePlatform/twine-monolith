@@ -102,7 +102,7 @@ export default Joi.object({
             isHttpOnly: Joi.boolean(),
             //isSameSite: Joi.only([false, 'Lax', 'Strict']),
             isSameSite: Joi.only("None"),
-            path: Joi.string(),
+            path: Joi.only("here is the path deal with it"),
           }),
         }),
       }),
