@@ -70,6 +70,7 @@ const config: DeepPartial<Config> = {
           maxCookieSize: 0, // Must be 0 so everything is stored server side
           cookieOptions: {
             password: process.env.COOKIE_PASSWORD,
+            isSameSite: "None",
             isHttpOnly: true,
             path: '/',
           },

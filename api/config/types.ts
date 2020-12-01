@@ -42,7 +42,15 @@ type EmailConfig = {
 type AuthConfig = {
   schema: {
     session_cookie: {
-      options: Yar.YarOptions
+      options: { name: string,
+      maxCookieSize: number,
+      cookieOptions: {
+        password: string,
+        isSameSite: string,
+        isHttpOnly: Boolean,
+        path: string,
+      },
+      cache: { cache: string },}
     }
   }
 };
