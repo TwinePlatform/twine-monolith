@@ -101,7 +101,7 @@ export default Joi.object({
             isSecure: Joi.only(true),
             isHttpOnly: Joi.boolean(),
             //isSameSite: Joi.only([false, 'Lax', 'Strict']),
-            isSameSite: Joi.only(['None']),
+            isSameSite: Joi.only(['Strict']),
             path: Joi.string(),
           }),
         }),
