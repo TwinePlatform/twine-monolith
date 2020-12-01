@@ -42,7 +42,11 @@ const FormContainer = styled.div`
 const createSubmitHandler = (props: LoginProps) =>
   (values: FormValues, actions: FormikActions<FormValues>) =>
     CbAdmins.login(values)
-      .then(() => props.history.push('/'))
+      .then((response) => {
+        props.history.push('/');
+        console.log(response);
+
+      })
       .catch((error) => {
         const res = error.response;
 

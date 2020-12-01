@@ -16,7 +16,6 @@ export const Roles = {
   get: () => axios.get('/users/me/roles'),
 };
 
-
 export const CbAdmins = {
   login: ({ email, password }: { email: string, password: string }) =>
     axios.post(
