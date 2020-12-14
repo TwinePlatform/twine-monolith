@@ -35,8 +35,7 @@ const truncateLogs = (logs) => {
 
   let truncatedLogs = [];
 
-  logArray.map((log,index)=>{
-    console.log(log.startedAt + log.createdAt + " " +index);
+  logArray.map((log)=>{
     if(moment(log.startedAt).isAfter(thirtyDaysAgo)){
       truncatedLogs.push(log)
     }

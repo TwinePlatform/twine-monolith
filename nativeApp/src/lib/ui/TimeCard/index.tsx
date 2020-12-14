@@ -69,9 +69,10 @@ const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
   const {
     id, timeValues, startTime, date, labels, volunteer, navigation, onDelete, setNoteDisplay, toggleVisibilityNoteModal, navigationPage
   } = props;
+
   const [noteExists, setNoteExist] = useState(false);
   const [note, setNote] = useState("");
-  const [initialised, setInitialsed] = useState(false);
+  const [initialised, setInitialised] = useState(false);
 
   useEffect(()=>{
     if(!initialised)
@@ -81,7 +82,7 @@ const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
           setNote(returnedNote);
           setNoteExist(true);
       }
-      setInitialsed(true);
+      setInitialised(true);
     })
   });
 
