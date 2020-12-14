@@ -26,7 +26,8 @@
     "eject": "react-scripts eject",
     "copy": "cp ./public/_redirects ./build/_redirects",
     "serve": "node index.js",
-    "deploy": "PORT=3200 react-scripts start"
+    "deploy": "PORT=3200 react-scripts start",
+    "heroku-postbuild": "echo Skip builds on Heroku"
   },
   "eslintConfig": {
     "extends": "react-app"
