@@ -27,7 +27,7 @@
     "copy": "cp ./public/_redirects ./build/_redirects",
     "serve": "node index.js",
     "deploy": "node index.js",
-    "heroku-postbuild": "echo Skip builds on Heroku"
+    "heroku-postbuild": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
