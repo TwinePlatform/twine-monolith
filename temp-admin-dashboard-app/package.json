@@ -25,6 +25,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "copy": "cp ./public/_redirects ./build/_redirects",
+    "serve": "node index.js",
     "deploy": "PORT=3200 react-scripts start"
   },
   "eslintConfig": {
