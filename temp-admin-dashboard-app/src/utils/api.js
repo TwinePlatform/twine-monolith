@@ -4,7 +4,7 @@ import { RoleEnum } from './enums'
 const baseURL =
   process.env && process.env.NODE_ENV === 'development'
     ? 'https://twine-api-staging.herokuapp.com/v1'
-    : 'https://api.twine-together.com/v1';
+    : 'https://twine-api-staging.herokuapp.com/v1';
 
 const axios = _axios.create({
   baseURL,
