@@ -13,7 +13,7 @@ const axios = _axios.create({
 
 export const api = {
   login: ({ email, password }) => {
-    return axios.post('/users/login', { email, password, restrict: RoleEnum.TwineAdmin })
+    return axios.post('/users/login', { email, password, type: 'cookie', restrict: RoleEnum.TwineAdmin })
   },
   forgot: ({ email }) => {
     return axios.post('/users/password/forgot', { email, redirect: 'ADMIN_APP' })
