@@ -5,8 +5,6 @@ import { H2left } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {CommunityBusinesses, Project, Logs, LogNote,} from '../../api';
 import NoteModal from './NoteModal';
-import { duration } from 'moment';
-import DataTable from '../../../features/dashboard/components/DataTable';
 
 /*
  * Types
@@ -46,7 +44,7 @@ const getDate = (date: any, startTime: any) => {
 }
 
 const isNotZero = (duration: any) => {
-    if(duration.hours == 0 && duration.minutes == 0)
+    if(duration.hours === 0 && duration.minutes === 0)
         return false;
     return true;
 }
@@ -107,7 +105,7 @@ const LogCreateModal:FC<Props> = (props) => {
                 setValid(true);
             }
         }
-    })
+    },[loading, duration, date, startTime])
 
     const getOptions = async () => {
         const options = {
@@ -125,13 +123,13 @@ const LogCreateModal:FC<Props> = (props) => {
     const changeDuration = (event: any) => {
         console.log(duration)
 
-        if(event.target.id == "minutes")
+        if(event.target.id === "minutes")
             setDuration({
                 hours: duration.hours,
                 minutes: event.target.value,
                 seconds: duration.seconds
             })
-        if(event.target.id == "hours")
+        if(event.target.id === "hours")
             setDuration({
                 hours: event.target.value,
                 minutes: duration.minutes,

@@ -1,15 +1,9 @@
-import React, { FC, useState, useEffect, useRef } from 'react';
+import React, { FC, useState, useEffect, useRef, useCallback } from 'react';
 import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2left } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {LogNote} from '../../api'
-import { DurationUnitEnum } from '../../../types';
-// possible location import { Duration } from 'twine-util';
-
-//Delete Log = require(path to Delete Icon)
-//Edit Log = require(path to Edit Icon)
-//
 /*
  * Types
  */
@@ -40,19 +34,18 @@ const LogViewModal:FC<Props> = (props) => {
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, ()=>{closeFunction();setEffectCount(0);setLogNote("")});
 
-    const getNote = async () => {
+    const getNote = useCallback( async () => {
         let {data} = await LogNote.get(log.ID);
         if(data.result[0])
             setLogNote(data.result[0].notes);
-    }
-    
+    },[log])
 
     useEffect(()=>{
         if(effectCount<3 && visible){
             getNote();
             setEffectCount(effectCount+1);
         }
-    })
+    },[effectCount, visible, getNote])
 
     if(visible)
         return (

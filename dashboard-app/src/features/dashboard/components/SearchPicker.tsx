@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 type SearchPickerProps = {
     placeholder: string;
@@ -18,7 +18,7 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
     if(searches.length > 0){
         searchBoxes=[];
         searches.map((search: any) =>{
-            searchBoxes.push(
+            return searchBoxes.push(
                 <div
                     style={{
                         display: 'inline-flex', 
@@ -38,16 +38,16 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
                         onClickX(search);
                     }}>x</div>
                 </div>
-            )
+            );
         })
     }
 
-    const onEnter = (event: any) => {
+    const onEnter = useCallback((event: any) => {
         if (event.keyCode === 13) {
-            if(search != "")
+            if(search !== "")
                 setSearches(searches.concat([search]))
         }
-    }
+    },[search, searches, setSearches])
 
     const onClickX = (search: any) => {
         const removeIndex = searches.indexOf(search);
@@ -60,7 +60,7 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
     }
 
     useEffect(()=>{
-        if(loading || search != oldSearch){
+        if(loading || search !== oldSearch){
             let input = document.getElementById("input" + placeholder);
 
             if(input){
@@ -70,7 +70,7 @@ const SearchPicker: React.FunctionComponent<SearchPickerProps> = (props: any) =>
                 setOldSearch(search);
             }
         }
-    );    
+    ,[loading, search, oldSearch, placeholder, onEnter]);    
         
     return <div style={{padding: '10px'}}>
                 <input 

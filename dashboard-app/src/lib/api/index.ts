@@ -1,5 +1,4 @@
 import _axios, { AxiosRequestConfig, Method } from 'axios';
-import { Api } from '../../../../api/src/api/v1/types/api';
 import qs from 'qs';
 
 const baseURL = process.env.REACT_APP_API_HOST_DOMAIN ?

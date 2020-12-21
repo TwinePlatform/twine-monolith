@@ -105,7 +105,7 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
       setTableData(aggregatedToTableData({ data, unit, yData: logFields}));
       setTableDataProjects(aggregatedToTableData({ data: dataProjects, unit, yData: projectFields }));
     }
-  }, [logFields, data, dataProjects, loading, unit]);
+  }, [logFields, data, projectFields, dataProjects, loading, unit]);
 
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
