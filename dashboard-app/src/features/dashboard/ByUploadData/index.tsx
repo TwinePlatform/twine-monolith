@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FunctionComponent, useContext } from 'react';
+import React, { useState, FunctionComponent } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import styled from 'styled-components';
 import { Grid, Row, Col } from 'react-flexbox-grid';
@@ -8,7 +8,6 @@ import { Paragraph } from '../../../lib/ui/components/Typography';
 
 
 import { TitlesCopy } from '../copy/titles';
-import { DashboardContext } from '../context';
 
 import {Files, CommunityBusinesses} from '../../../lib/api';
 
@@ -19,8 +18,6 @@ const Container = styled(Grid)`
  * Component
  */
 const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
-  const { unit } = useContext(DashboardContext);
-
   const [filename, setFilename] = useState("Upload File Here")
   const [uploadedFile, setUploadedFile] = useState(new File([""], "filename"));
   const [errorText, setErrorText] = useState("");
@@ -58,13 +55,13 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
         
       console.log(result);
       
-      if(result.state == "success")
+      if(result.state === "success")
           setUploadState("success");
-      if(result.state == "error"){
+      if(result.state === "error"){
         setUploadState("error");
         reset();
         setErrorText(result.data.response.data.error.message);
-        if(result.data.response.data.error.statusCode == 500)
+        if(result.data.response.data.error.statusCode === 500)
           setErrorText("A server error occured. This is most likely due to one of the logs having the same time as a previous log.");
       }
   }
@@ -73,31 +70,31 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
   
   let uploadSection = null;
   
-  if(uploadState == "selected")
+  if(uploadState === "selected")
   uploadSection = 
         <div>
-          <a>
             <img
               src={require('../../../assets/uploadbutton.png')}
               onClick={confirmUpload}
+              alt={"Upload Data"}
+              style={{cursor: 'pointer'}}
             />
-          </a>
       </div>
 
-  if(uploadState == "validating")
+  if(uploadState === "validating")
   uploadSection =
     <div>
       <Paragraph>Processing and checking the csv for errors...</Paragraph>
     </div>
 
-  if(uploadState == "error")
+  if(uploadState === "error")
   uploadSection = 
     <div>
       <Paragraph>{errorText}</Paragraph>
       <button onClick={()=>setUploadState("unselected")}>try again</button>
     </div>
 
-  if(uploadState == "success")
+  if(uploadState === "success")
   uploadSection = 
   <div>
     <Paragraph>Well done, your data has been uploaded</Paragraph>
@@ -115,6 +112,7 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
           <a href={"/downloads/upload_data_template.csv"} download>
             <img
               src={require('../../../assets/downloadbutton.png')}
+              alt="download the template"
             />
           </a>
           <Paragraph>
@@ -130,8 +128,7 @@ const ByUploadData: FunctionComponent<RouteComponentProps> = () => {
           </div>
           {uploadSection}
         </Col>
-      </Row>
-      
+      </Row> 
     </Container>
   );
 };

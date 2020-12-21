@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 type CategoryPickerProps = {
     placeholder: string;
@@ -9,14 +9,13 @@ type CategoryPickerProps = {
 
 const CategoryPicker: React.FunctionComponent<CategoryPickerProps> = (props: any) => {
     const {placeholder, searches, setSearches, colour} = props;
-    const [loading, setLoading] = useState(true);
 
     let searchBoxes = null;
 
     if(searches.length > 0){
         searchBoxes=[];
         searches.map((search: any) =>{
-            searchBoxes.push(
+            return searchBoxes.push(
                 <div
                     style={{
                         display: 'inline-flex', 
@@ -27,7 +26,6 @@ const CategoryPicker: React.FunctionComponent<CategoryPickerProps> = (props: any
                         padding: '5px',
                         borderRadius: '5px',
                     }}
-     
                 >
                     <p style={{color: 'black'}}>{search}</p>
                     <div 
@@ -42,7 +40,7 @@ const CategoryPicker: React.FunctionComponent<CategoryPickerProps> = (props: any
 
     const addToSearches = (search: string) => {
         if (searches.indexOf(search) < 0) {
-            if(search != "")
+            if(search !== "")
                 setSearches(searches.concat([search]))
         }
     }

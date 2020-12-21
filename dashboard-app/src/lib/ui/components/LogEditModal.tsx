@@ -1,12 +1,10 @@
-import React, { FC, useState, useRef, useEffect } from 'react';
+import React, { FC, useState, useRef, useEffect,useCallback } from 'react';
 import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2left } from './Headings';
 import { ColoursEnum } from '../design_system';
-import {CommunityBusinesses, Project, Logs, LogNote, Users} from '../../api';
+import {CommunityBusinesses, Project, Logs, LogNote} from '../../api';
 import NoteModal from './NoteModal';
-import { duration } from 'moment';
-import DataTable from '../../../features/dashboard/components/DataTable';
 
 /*
  * Types
@@ -47,7 +45,7 @@ const getDate = (date: any, startTime: any) => {
 }
 
 const isNotZero = (duration: any) => {
-    if(duration.hours == 0 && duration.minutes == 0)
+    if(duration.hours === 0 && duration.minutes === 0)
         return false;
     return true;
 }
@@ -78,7 +76,7 @@ const LogEditModal:FC<Props> = (props) => {
     const[note, setNote] = useState("");
 
     const getIdFromName = (name: string) => {
-        const volunteer = volunteers.find(volunteer => volunteer.name == name);
+        const volunteer = volunteers.find(volunteer => volunteer.name === name);
 
         return volunteer != null? volunteer.id : 0;
     }
@@ -115,19 +113,19 @@ const LogEditModal:FC<Props> = (props) => {
                 setValid(true);
             }
         }
-    })
+    },[loading, duration, date, startTime])
 
-    useEffect(()=>{
-        setDate(logToEdit.date);
-        getNote();
-    },[logToEdit])
-
-    const getNote = async () => {
+    const getNote = useCallback(async () => {
         let {data} = await LogNote.get(logToEdit.ID);
         if(data.result[0] != null)
             if(data.result[0].notes != null)
                 setNote(data.result[0].notes);
-    }
+    },[logToEdit]);
+
+    useEffect(()=>{
+        setDate(logToEdit.date);
+        getNote();
+    },[logToEdit,getNote])
 
     const getOptions = async () => {
         const options = {
@@ -146,13 +144,13 @@ const LogEditModal:FC<Props> = (props) => {
     const changeDuration = (event: any) => {
         console.log(event.target)
 
-        if(event.target.id == "minutes")
+        if(event.target.id === "minutes")
             setDuration({
                 hours: duration.hours,
                 minutes: event.target.value,
                 seconds: duration.seconds
             })
-        if(event.target.id == "hours")
+        if(event.target.id === "hours")
             setDuration({
                 hours: event.target.value,
                 minutes: duration.minutes,
@@ -248,7 +246,7 @@ const LogEditModal:FC<Props> = (props) => {
                                 <span  className = "section-title-create">Volunteer</span>
                                 <select id="Volunteer" name="Volunteer" className="log-create-select">
                                     {volunteers.map(volunteer=>
-                                        <option value={volunteer.id} selected={volunteer.name==logToEdit.name? true: false}>{volunteer.name}</option>)} 
+                                        <option value={volunteer.id} selected={volunteer.name===logToEdit.name? true: false}>{volunteer.name}</option>)} 
                                 </select>
                             </div>
                         <hr className = "Section_Dividers" />
@@ -256,7 +254,7 @@ const LogEditModal:FC<Props> = (props) => {
                         <span  className = "section-title-create">Project</span>
                         <select id="Project" name="Project" className="log-create-select">
                             {projects.map(project=>
-                                <option value={project} selected={project==logToEdit.project? true: false}>{project}</option>)} 
+                                <option value={project} selected={project===logToEdit.project? true: false}>{project}</option>)} 
                         </select>
                         </div>
                         <hr className = "Section_Dividers" />
@@ -264,7 +262,7 @@ const LogEditModal:FC<Props> = (props) => {
                         <span  className = "section-title-create">Activity</span>
                         <select id="Activity" name="Activity" className="log-create-select">
                             {activities.map(activity=>
-                                <option value={activity} selected={activity==logToEdit.activity? true: false}>{activity}</option>)} 
+                                <option value={activity} selected={activity===logToEdit.activity? true: false}>{activity}</option>)} 
                         </select>
                         </div>
                         <hr className = "Section_Dividers" />
@@ -278,18 +276,11 @@ const LogEditModal:FC<Props> = (props) => {
                         />
                         </div>
                         <hr className = "Section_Dividers" />
-                        {/*<div className="log-create-section">
-                        <span  className = "section-title-create">Start Time</span>
-                        <input type="time" id="Start Time" value={startTime}  className="log-create-select"
-                        onChange={(e)=>setStartTime(e.target.value)}
-                        />
-                        </div>
-                            <hr className = "Section_Dividers" />*/}
                         <div className="log-create-section">
                         <span  className = "section-title-create">Hours</span>
                         <select id="hours" name="Hours" onChange={e=>changeDuration(e)} className="log-create-select">
                             {zeroToNine.map(time=>
-                                <option value={time} selected={time == logToEdit.hours}>{time}</option>)} 
+                                <option value={time} selected={time === logToEdit.hours}>{time}</option>)} 
                         </select>
                         </div>
                         <hr className = "Section_Dividers" />
@@ -298,7 +289,7 @@ const LogEditModal:FC<Props> = (props) => {
                         <select id="minutes" name="Minutes"  className="log-create-select"
                         onChange={e=>changeDuration(e)}>
                             {zeroToFiftyNine.map(time=>
-                                <option value={time}selected={time == logToEdit.minutes}>{time}</option>)} 
+                                <option value={time}selected={time === logToEdit.minutes}>{time}</option>)} 
                         </select>
                         </div>
                         <hr className = "Section_Dividers" />

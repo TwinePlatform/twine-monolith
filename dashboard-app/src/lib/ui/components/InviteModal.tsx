@@ -1,7 +1,6 @@
 import React, { FC, useState, useRef } from 'react';
 import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
-import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import { H2left } from './Headings';
 import { ColoursEnum } from '../design_system';
@@ -19,29 +18,13 @@ type Props = {
 /*
  * Styles
  */
-const Container = styled(Grid)`
-
-`;
-
 
 const Heading2 = styled(H2left)`
   marginBottom: 20;
   color: ${ColoursEnum.white};
   padding: 10px;
 `;
- /*
-const Card = styled(C)`
-  paddingHorizontal: 15;
-  paddingTop: 15;
-  paddingBottom: 10;
-  borderRadius: 5;
-`;*/
 
-const ButtonContainer = styled(Grid)`
-  justifyContent: center;
-  flexDirection: row;
-  marginTop: 10;
-`;
 
 /*
  * Component

@@ -2,7 +2,6 @@ import moment from 'moment';
 import { aggregatedToCsv } from './aggregatedToCsvLogs';
 import Months from '../../../lib/util/months';
 import { saveAs } from 'file-saver';
-import {isDataEmpty } from './logsToAggregatedData';
 import { DurationUnitEnum } from '../../../types';
 import { Orderable } from '../hooks/useOrderable';
 

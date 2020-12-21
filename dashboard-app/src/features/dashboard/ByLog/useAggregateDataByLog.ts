@@ -2,13 +2,10 @@ import { DependencyList, useEffect, useState } from 'react';
 import { useBatchRequest } from '../../../lib/hooks';
 import { CommunityBusinesses } from '../../../lib/api';
 import {
-  logsToAggregatedDataNoX,
   IdAndName,
 } from '../dataManipulation/logsToAggregatedDataNoX';
 import Fuse from 'fuse.js';
-import {logsToAggregatedData} from '../dataManipulation/logsToAggregatedData';
-import { tableType } from '../dataManipulation/tableType';
-import { VolunteerLogs } from '../../../../../api/src/models';
+
 
 
 interface UseAggregatedDataParams {
@@ -33,37 +30,26 @@ const filterLogs = (logs: any[], categories: any[], filters: any[]) => {
   let alreadyAddedLogs: any = [];
 
   const options = {
-    // isCaseSensitive: false,
-    // includeScore: false,
-    // shouldSort: true,
-    // includeMatches: false,
-    // findAllMatches: false,
-    // minMatchCharLength: 1,
-    // location: 0,
-    // threshold: 0.6,
-    // distance: 100,
-    // useExtendedSearch: false,
-    // ignoreLocation: false,
-    // ignoreFieldNorm: false,
     keys: categories
   };
   
   const fuse = new Fuse(logs, options);
   
-  filters.map((filter,index)=>{
+  filters.forEach((filter,index)=>{
     const searchResults = fuse.search(filter);
 
-    if(index == 0){
-      searchResults.map(result=>{
+    if(index === 0){
+      searchResults.forEach(result=>{
         filteredLogs.push(result.item);
         alreadyAddedLogs.push(result.refIndex);
       })
     }
     else{
       filteredLogs = [];
-      searchResults.map(result=>{
+      searchResults.forEach(result=>{
         if(alreadyAddedLogs.indexOf(result.refIndex) >= 0)
           filteredLogs.push(result.item);
+        return;
       })
     }
   })
@@ -74,7 +60,7 @@ const filterLogs = (logs: any[], categories: any[], filters: any[]) => {
 const getRows = (logs: [any], volunteers: IdAndName[]) => {
   return logs.map(log => {
                     let volunteerName; 
-                    volunteers.map((x) => {
+                    volunteers.forEach(x=>{
                       if(x.id === log.userId)
                         volunteerName = x.name;
                     })
@@ -85,7 +71,6 @@ const getRows = (logs: [any], volunteers: IdAndName[]) => {
                           Project: log.project,
                           Activity: log.activity,
                           Date: log.startedAt.slice(0,10),
-                          //StartTime: log.startedAt.slice(11,16),
                           ID: log.id,
                         }})
 };
@@ -95,22 +80,23 @@ const getProjectRows = (logs: [any]) => {
   let projectNames = logs.map(log=>log.project)
 
   //remove duplicate names
-  projectNames = projectNames.filter((item, index) => projectNames.indexOf(item) == index)
+  projectNames = projectNames.filter((item, index) => projectNames.indexOf(item) === index)
 
   projectNames.map(projectName=>projects[projectName] = {Hours: 0, Volunteers: 1});
 
   logs.map((log)=>{
-    projects[log.project].Hours += log.duration.hours
+    return projects[log.project].Hours += log.duration.hours;
   })
 
   //count how many volunteers are on each project
   for(let project in projects){
     let volunteerNames: string[] = [];
     logs.forEach(log => {
-        if(log.project == project)
+        if(log.project === project)
           volunteerNames.push(log.userId);
-      })
-    volunteerNames = volunteerNames.filter((item, index) => volunteerNames.indexOf(item) == index)
+        return;
+      });
+    volunteerNames = volunteerNames.filter((item, index) => volunteerNames.indexOf(item) === index)
     projects[project].Volunteers = volunteerNames.length;
   }
 
@@ -131,7 +117,7 @@ export default ({ from, to, updateOn = [], categories, filters}: UseAggregatedDa
   const [aggregatedData, setAggregatedData] = useState<AggregatedData>();
   const [aggregatedDataProjects, setAggregatedDataProjects] = useState<AggregatedData>();
   const [logFields, setLogFields] = useState<IdAndName[]>();
-  const [projectFields, setProjectFields] = useState<IdAndName[]>([{id:1, name: "Hours"},{id:2, name: "Volunteers"}]);
+  const projectFields = [{id:1, name: "Hours"},{id:2, name: "Volunteers"}];
 
   const {
     loading,
@@ -187,7 +173,7 @@ export default ({ from, to, updateOn = [], categories, filters}: UseAggregatedDa
     setLogFields(logFieldsData);
     setAggregatedData(data);
     setAggregatedDataProjects(dataProjects);
-  }, [logsData, volunteersData, logFieldsData, loading, error]);
+  }, [logsData, volunteersData, logFieldsData, loading, error, categories, filters]);
 
 
   if (loading) {

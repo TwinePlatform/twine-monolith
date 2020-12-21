@@ -37,7 +37,7 @@ const LogsDataTableRow: React.FunctionComponent<LogsRowProps> = (props) => {
         )
       }
       <button  
-        className = {rowNumber%2==0?"ViewLogYellow":"ViewLog"}
+        className = {rowNumber%2===0?"ViewLogYellow":"ViewLog"}
         onClick={()=>{
             console.log("pressed");
             console.log(columns);
