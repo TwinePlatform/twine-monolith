@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { AsyncStorage, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
 

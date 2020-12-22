@@ -3,7 +3,6 @@ import styled from "styled-components/native";
 
 import { Form as F } from "native-base";
 import { NavigationInjectedProps } from "react-navigation";
-import { AsyncStorage } from "react-native";
 import { Forms } from "../../../lib/ui/forms/enums";
 import LinkItem from "../../../lib/ui/forms/LinkItem";
 import LinkPlay from "../../../lib/ui/forms/LinkPlay";
