@@ -1,6 +1,7 @@
 
 import React, { FC, useEffect, useState } from 'react';
-import { AsyncStorage, View } from 'react-native';
+import { View } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import styled from 'styled-components/native';

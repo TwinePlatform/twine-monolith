@@ -1,22 +1,23 @@
 import React, { FC, useState, useEffect } from 'react';
-import { StorageValuesEnum } from '../../../../authentication/types';
-import styled from 'styled-components/native';
-import { Form as F, Text, View } from 'native-base';
-import { Platform, AsyncStorage, TextInput } from "react-native";
-import NetInfo from "@react-native-community/netinfo";
-
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
+import AsyncStorage from '@react-native-community/async-storage';
+import { Formik } from 'formik';
+import NetInfo from "@react-native-community/netinfo";
+import {TextInput } from "react-native";
+import styled from 'styled-components/native';
+import { Form as F, Text} from 'native-base';
+import { StorageValuesEnum } from '../../../../authentication/types';
 import Dropdown from '../Dropdown';
 import DropdownTime from '../DropdownTime';
 import FuzzySearchBox from '../FuzzySearchBox';
 import { Forms } from '../enums';
 import DatePicker from '../DatePicker';
 import { ColoursEnum } from '../../colours';
-import { HourAndMinutesText, TimeDiff } from '../../HoursAndMinutesText';
+import { HourAndMinutesText} from '../../HoursAndMinutesText';
 import SubmitButton from '../SubmitButton';
 import NoteButton from '../../NoteButton';
-
+import { AddVolunteerButton, VolunteerButton } from '../AddVolunteerButton';
 import { getTimeLabel } from './helpers';
 import { createLog, selectCreateLogStatus, createLogReset, updateLog } from '../../../../redux/entities/logs';
 import { IdAndName } from '../../../../api';
@@ -25,16 +26,10 @@ import SavedModal from '../../modals/SavedModal';
 import NoteModal from '../../modals/NoteModal';
 import MessageModal from '../../modals/MessageModal';
 import useToggle from '../../../hooks/useToggle';
-
 import API from '../../../../api';
 import BadgeModal from '../../modals/BadgeModel';
 import { BadgeObj } from './../../../../screens/volunteer_views/VolunteerHome/BadgeObject';
-
-import * as yup from 'yup';
-import { Formik } from 'formik';
-
-import { AddVolunteerButton, VolunteerButton } from '../AddVolunteerButton';
-import { AnyAaaaRecord } from 'dns';
+import {cacheLog, cacheEditedLog} from '../../../utils/cache';
 
 /*
  * Types
@@ -78,10 +73,6 @@ const TimeContainer = styled.View`
   marginTop: 15;
 `;
 
-const TimeContainerItem = styled.View`
-  alignItems: center;
-`;
-
 const NoteContainer = styled.View`
   justifyContent: space-between;
   flexDirection: row;
@@ -111,8 +102,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
 
   const requestStatus = useSelector(selectCreateLogStatus);
   
-  const [logSent, setLogSent] = useState(0); //when logs are sent using the form, this increases, triggering the saved modal to check if it should be on. 
-  const [logJustSent, setLogJustSent] = useState(false); //tracks whether it was sent in the last 2 seconds.
+  const [logJustSent, setLogJustSent] = useState(false); //tracks whether a log was was sent in the last 2 seconds.
  
   // local state
   const [pickerVisible, setPickerVisible] = useState(false);
@@ -122,41 +112,25 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [errorModalVisible, toggleErrorInvisibility] = useToggle(false);
   const durationErrorMessage = "Please select a duration!";
 
-  let volunteer, setVolunteer;
-  let project, setProject;
-  let activity, setActivity;
-  let startTime, setStartTime;
-  let date, setDate;
-  let hours, setHours;
-  let minutes, setMinutes;
-  let note, setNote;
+  const [volunteer, setVolunteer] = useState("");
+  const [project, setProject] = useState(selectedProject);
+  const [activity, setActivity] = useState(selectedActivity);
+  const [startTime, setStartTime] = useState<Date>(new Date);
+  const [hours, setHours] = useState<number>(0);
+  const [minutes, setMinutes] = useState<number>(0);
+  const [note, setNote] = useState('');
 
-   
-
-  if( origin == 'editTime'){
-    //console.log(new Date(editLog.date + 'T' + editLog.startTime));
-
-    console.log(editLog);
-
-    [volunteer, setVolunteer] = useState(editLog.volunteer);
-    [project, setProject] = useState(editLog.project);
-    [activity, setActivity] = useState(editLog.activity);
-    [startTime, setStartTime] = useState<Date>(new Date(editLog.startTime));
-    [date, setDate] = useState<Date>(new Date(editLog.date));
-    [hours, setHours] = useState<number>(editLog.hours);
-    [minutes, setMinutes] = useState<number>(editLog.minutes);
-    [note, setNote] = useState(editLog.note);
-  }
-  else{
-    [volunteer, setVolunteer] = useState("");
-    [project, setProject] = useState(selectedProject);
-    [activity, setActivity] = useState(selectedActivity);
-    [startTime, setStartTime] = useState<Date>(new Date);
-    [date, setDate] = useState<Date>(new Date);
-    [hours, setHours] = useState<number>(0);
-    [minutes, setMinutes] = useState<number>(0);
-    [note, setNote] = useState('');
-  }
+  useEffect(()=>{
+    if(origin === "editTime"){
+      setVolunteer(editLog.volunteer);
+      setProject(editLog.project);
+      setActivity(editLog.activity);
+      setStartTime(new Date(editLog.startTime));
+      setHours(editLog.hours);
+      setMinutes(editLog.minutes);
+      setNote(editLog.note);
+    }
+  },[origin]);
 
   const [userId, setUserID] = useState<number>();
   const [badge, setBadge] = useState(Object());
@@ -166,30 +140,14 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
     return volunteers.find((x) => x.name === volunteerName).id
   }
 
-  if (forUser == 'admin') {
-    //setUserID(volunteers.find((x) => x.name === volunteer).id);
-  }
   if (forUser == 'volunteer') {
     AsyncStorage.getItem(StorageValuesEnum.USER_ID).then(userID => setUserID(parseInt(userID)))
-  }
-
-  const CheckConnectivity = async (logData) => {
-    await NetInfo.fetch()
-      .then(state => {
-        if (state.isConnected) {
-          console.log('connected to internet');
-        } else {
-          cache(logData);
-        }
-        return state.isConnected;
-      })
   }
 
   const resetValues = () => {
     console.log("resetting")
 
     setStartTime(new Date());
-    setDate(new Date);
     setProject(selectedProject);
     setActivity(selectedActivity);
     setHours(0);
@@ -199,47 +157,13 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
     setAddVolArr([]);
   };
 
-  //function to cache value in asynchstorage
-  const cache = async (values) => {
-    let cachevalue;
-    let cachevalueString = await AsyncStorage.getItem('log cache');
-    cachevalue = cachevalueString == null ? [] : JSON.parse(cachevalue);
-    cachevalue.push(values);
-    await AsyncStorage.setItem(
-      'log cache',
-      JSON.stringify(cachevalue)
-    );
-  }
-
-  const cacheforEdit = async (values) => {
-    let cacheValueString = await AsyncStorage.getItem('edit log cache');
-    let cachevalue;
-    if (cacheValueString == null)
-      cachevalue = [];
-    else
-      cachevalue = JSON.parse(cachevalue);
-
-    cachevalue.push(values);
-    await AsyncStorage.setItem(
-      'edit log cache',
-      JSON.stringify(cachevalue)
-    );
-
-  }
-
   // hooks
   useEffect(() => {
-    if (logJustSent && requestStatus.success)
-      setResponseModal(true);
-
-  }, [logSent]);
-
-
+    setResponseModal(logJustSent && requestStatus.success);
+  }, [logJustSent]);
 
   // handlers
   const onSubmit = async (volunteer, project, activity, startTime, note) => {
-
-    console.log(startTime.toISOString());
 
     if (hours === 0 && minutes === 0) {
       toggleErrorInvisibility();
@@ -253,10 +177,12 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
         note
       };
 
-      CheckConnectivity(values);
-
-      //if timeform is called from add time view 
-      if (origin != "editTime") {
+    if (origin != "editTime") {
+      let {isConnected} = await NetInfo.fetch();
+      if(isConnected === false){
+        cacheLog(values);
+        return;
+      }
         try { //error trapping and cache log when network error
           console.log("adding time");
 
@@ -264,7 +190,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           
           setLogJustSent(true);
           setTimeout(()=>setLogJustSent(false),2000);
-          setLogSent(logSent+1);
 
           console.log(res)
 
@@ -274,7 +199,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             }
           }
           if (res.status == 500) {
-            cache(values);
+            cacheLog(values);
           }
           if (res.status == 400) {
             console.log(res.statusText);
@@ -285,7 +210,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           console.log(error);
         }
 
-        //check for badge acheive and trigger badge reward
+        //check for badge achieve and trigger badge reward
         if (forUser == 'volunteer') {
           try {
             const checkBadge = await API.Badges.checkNupdate();
@@ -316,15 +241,17 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           note
         };
 
-        console.log(valuesEdit)
-        console.log("userID" + userId)
+        let {isConnected} = await NetInfo.fetch();
+        if(isConnected === false){
+          cacheEditedLog(valuesEdit);
+          return;
+        }
 
         try { //error trapping and cache log when network error
           const res: any = await dispatch(updateLog(userId, parseInt(logId), valuesEdit));
           
           setLogJustSent(true);
           setTimeout(()=>setLogJustSent(false),2000);
-          setLogSent(logSent+1);
 
           console.log(res);
 
@@ -337,7 +264,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
         if (res.status == 500) {
           valuesEdit.userId = userId;
           valuesEdit.logId = logId;
-          cacheforEdit(valuesEdit);
+          cacheEditedLog(valuesEdit);
         }
         if (res.status == 400) {
           console.log(res.statusText);
@@ -358,10 +285,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
     }
   };
 
-  const addNote = (note) => {
-    setNote(note);
-  };
-
   const addVolunteer = (values) => {
     setAddVolArr(addVolArr => [...addVolArr, values]);
   }
@@ -371,70 +294,46 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
     setAddVolArr(removed);
   }
 
-
   const onContinue = () => {
     dispatch(createLogReset());
-    // resetForm();
     setResponseModal(false);
   };
 
-  const validationSchema = yup.object().shape({
-    // yup.object().shape({
-    project: yup
-      .string()
-      .min(3, 'error')
-      .required('enter a project'),
-    activity: yup
-      .string()
-      .min(3, 'error')
-      .required('enter an activity'),
-  });
-
   return (
-
     <Formik
       initialValues={{ volunteer: '', project: selectedProject, activity: selectedActivity, note: '', hours,minutes }}
-      //validationSchema={validationSchema} removed as there is always an initial project or activity selected
-      onSubmit={(values, date,) => {
-
+      onSubmit={() => {
         if (addVolArr.length == 0) {
-          console.log(values)
           onSubmit(volunteer, project, activity, startTime, note);
         } else if (addVolArr.length >= 1) {
           if(volunteer != "")
             addVolArr.push(volunteer); //add the active volunteer to the array
 
-          addVolArr.map(volunteer => {
+          addVolArr.forEach(volunteer => {
             console.log(volunteer)
             onSubmit(volunteer, project, activity, startTime, note);
           })
         }
-
         resetValues();
-
       }}>
 
-      {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+      {({handleBlur, handleSubmit, errors }) => (
 
         <Form>
-
           <BadgeModal
             visible={badgeModal}
             badge={badge}
           />
-
           <SavedModal
             isVisible={responseModal}
             onContinue={onContinue}
           />
-
           <NoteModal
             isVisible={noteModalVisible}
-            addNote={addNote}
+            addNote={note=>setNote(note)}
             initialNote={note}
             onClose={toggleNoteInvisibility}
           />
-
           <MessageModal
             isVisible={errorModalVisible}
             message={durationErrorMessage}
@@ -526,7 +425,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           </NoteContainer>
 
           <TimeContainer>
-            <Label>{getTimeLabel(forUser, values.volunteer)}</Label>
+            <Label>{getTimeLabel(forUser, volunteer)}</Label>
             <HourAndMinutesText align="center" timeValues={[hours, minutes]} />
           </TimeContainer>
 
@@ -534,7 +433,6 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
           {origin === "addTime" && <SubmitButton text="ADD TIME" onPress={handleSubmit} />}
           {origin === "editTime" && <SubmitButton text="EDIT TIME" onPress={handleSubmit} />}
         </Form>
-
       )}
     </Formik>
   );
