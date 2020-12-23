@@ -6,14 +6,11 @@ import TimeCard from '../../../lib/ui/TimeCard';
 import Page from '../../../lib/ui/Page';
 import CardSeparator from '../../../lib/ui/CardSeparator';
 import ConfirmationModal from '../../../lib/ui/modals/ConfirmationModal';
-import BadgeModal from '../../../lib/ui/modals/BadgeModel';
 import ViewNoteModal from '../../../lib/ui/modals/ViewNoteModal';
 import useToggle from '../../../lib/hooks/useToggle';
-import { loadLogs, selectOrderedLogs, selectLogsStatus, deleteLog } from '../../../redux/entities/logs';
+import { loadLogs, selectOrderedLogs, deleteLog } from '../../../redux/entities/logs';
 
-import { TouchableHighlight, Alert } from "react-native";
 import styled from 'styled-components/native';
-import { BadgeObj } from './../VolunteerHome/BadgeObject';
 
 /*
  * Types

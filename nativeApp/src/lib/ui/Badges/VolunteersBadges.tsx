@@ -79,8 +79,8 @@ const VolunteersBadgesCard: FC<Props> = (props) => {
 			</HeadingContainer>
 			<Line />
 			<BadgeIcon>
-				{award_id_calibrate.map((badge) => (
-					<Image source={BadgeImages[badge]} />
+				{award_id_calibrate.map((badge,i) => (
+					<Image source={BadgeImages[badge]} key={i}/>
 				))}
 			</BadgeIcon>
 		</Card>

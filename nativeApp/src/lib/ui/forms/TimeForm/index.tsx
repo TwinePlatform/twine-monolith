@@ -28,7 +28,7 @@ import MessageModal from '../../modals/MessageModal';
 import useToggle from '../../../hooks/useToggle';
 import API from '../../../../api';
 import BadgeModal from '../../modals/BadgeModel';
-import { BadgeObj } from './../../../../screens/volunteer_views/VolunteerHome/BadgeObject';
+import { BadgeObj } from '../../Badges/BadgeObject';
 import {cacheLog, cacheEditedLog} from '../../../utils/cache';
 
 /*
@@ -178,11 +178,12 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
       };
 
     if (origin != "editTime") {
-      let {isConnected} = await NetInfo.fetch();
-      if(isConnected === false){
-        cacheLog(values);
-        return;
-      }
+        let {isConnected} = await NetInfo.fetch();
+        if(isConnected === false){
+          cacheLog(values);
+          return;
+        }
+
         try { //error trapping and cache log when network error
           console.log("adding time");
 

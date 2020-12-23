@@ -1,7 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-
-import Page from '../../../../lib/ui/Page';
 import { Heading as H } from '../../../../lib/ui/typography';
 import VolunteersBadgesCard from './../../../../lib/ui/Badges/VolunteersBadges'
 import API from '../../../../api';
@@ -55,8 +53,10 @@ const VolunteersBadges: FC<Props> = (props) => {
 			{badgearray.length === 0 && !done && <Text>Loading</Text>}
 			{badgearray.length === 0 && done && <Text>There are no badges from your organisation to display.</Text>}
 			{
-				badgearray.map((element) => (
-					<VolunteersBadgesCard details={element} />
+				badgearray.map((element, i) => (
+					<VolunteersBadgesCard 
+					key={i}
+					details={element} />
 
 				))}
 		</View>
@@ -64,22 +64,3 @@ const VolunteersBadges: FC<Props> = (props) => {
 }
 
 export default VolunteersBadges;
-
-
-{/* <CardView>
-{
-  props.badge.map((element) => {
-	const awardId = element['award_id'];
-	if (awardId == 100) {
-	  return (<BadgeCard badge={BadgeObj['FirstLogBadge']} />)
-	} else if (awardId >> 100) {
-	  return (<BadgeCard badge={BadgeObj['FifthLogBadge']} />)
-	} else {
-	  const badgename = Object.keys(BadgeObj)[awardId - 1];
-	  return (
-		<BadgeCard badge={BadgeObj[badgename]} />
-	  )
-	}
-  })
-}
-</CardView > */}

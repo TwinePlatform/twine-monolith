@@ -17,7 +17,7 @@ import Invite from '../../../lib/ui/Invite';
 import { createLog, loadLogs, selectOrderedLogs } from '../../../redux/entities/logs';
 import { Item } from 'native-base';
 import BadgeModal from '../../../lib/ui/modals/BadgeModel';
-import { BadgeObj } from './../../volunteer_views/VolunteerHome/BadgeObject';
+import { BadgeObj } from '../../../lib/ui/Badges/BadgeObject';
 import API from '../../../api';
 /*
  * Types
