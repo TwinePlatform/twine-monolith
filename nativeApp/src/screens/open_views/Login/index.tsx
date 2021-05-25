@@ -1,4 +1,5 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect} from 'react';
+import {Linking} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
@@ -153,7 +154,7 @@ const Login: FC<Props> = (props) => {
           text="LOG IN" onPress={() => onSubmit()} />
           <ErrorText>*{serverError.toString()}</ErrorText>
         </Form>
-        <LinkText onPress={() => props.navigation.navigate('Error')}>
+        <LinkText onPress={() => Linking.openURL('https://data.twine-together.com/password/forgot')}>
           Forgot password
         </LinkText>
       </Container>
