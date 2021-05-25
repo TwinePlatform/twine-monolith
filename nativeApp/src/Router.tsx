@@ -11,6 +11,7 @@ import Register from "./screens/open_views/Register";
 import VolunteerRouter from "./screens/volunteer_views/VolunteerRouter";
 import AdminRouter from "./screens/admin_views/AdminRouter";
 import SettingsButton from "./lib/ui/SettingsButton";
+import HeaderButtons from "./lib/ui/HeaderButtons";
 import SettingsPage from "./screens/settings_views/SettingsPage/index";
 import AdminEditTime from "./screens/admin_views/Time/EditTime";
 import VolunteerEditTime from "./screens/volunteer_views/Time/EditTime";
@@ -85,7 +86,7 @@ const AdminStack = createStackNavigator(
   {
     defaultNavigationOptions: {
       ...sharedNavigationsConfig,
-      headerRight: <SettingsButton />,
+      headerRight: <HeaderButtons/>,
     },
   }
 );
@@ -104,7 +105,7 @@ const VolunteerStack = createStackNavigator(
   {
     defaultNavigationOptions: {
       ...sharedNavigationsConfig,
-      headerRight: <SettingsButton />,
+      headerRight: <HeaderButtons/>,
     },
   }
 );

@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import { Heading as H } from '../../../../lib/ui/typography';
 import VolunteersBadgesCard from './../../../../lib/ui/Badges/VolunteersBadges'
 import API from '../../../../api';
+import PageNoHeading from '../../../../lib/ui/PageNoHeading';
 
 /*
  * Types
@@ -48,6 +49,7 @@ const VolunteersBadges: FC<Props> = (props) => {
 	}, []);
 
 	return (
+	<PageNoHeading>
 		<View>
 			<Heading>Volunteer's Badges</Heading>
 			{badgearray.length === 0 && !done && <Text>Loading</Text>}
@@ -60,6 +62,7 @@ const VolunteersBadges: FC<Props> = (props) => {
 
 				))}
 		</View>
+	</PageNoHeading>
 	);
 }
 

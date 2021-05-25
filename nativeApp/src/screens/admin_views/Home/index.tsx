@@ -8,6 +8,7 @@ import { NavigationInjectedProps } from 'react-navigation';
 import { Heading as H } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import useToggle from '../../../lib/hooks/useToggle';
+import PageNoHeading from '../../../lib/ui/PageNoHeading';
 import InvitationModal from '../../../lib/ui/modals/InvitationModal';
 import Stat from '../../../lib/ui/Stat';
 import Line from '../../../lib/ui/Line';
@@ -150,7 +151,8 @@ const AdminHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
 
   return (
 
-    <View>
+    <PageNoHeading>
+      <View>
       <InvitationModal
         isVisible={visibleConfirmationModal}
         onCancel={toggleInviteVisibility}
@@ -190,7 +192,8 @@ const AdminHome: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
         </Stat>
       </Container>
       <Invite onPress={toggleInviteVisibility} organisation={"aperture science"} />
-    </View>
+      </View>
+    </PageNoHeading>
   );
 }
 

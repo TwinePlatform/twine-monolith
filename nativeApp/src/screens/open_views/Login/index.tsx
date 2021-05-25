@@ -3,10 +3,13 @@ import {Linking} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
+import {useSelector, useDispatch, shallowEqual } from 'react-redux';
+import {openModal, closeModal, selectModalStatus} from '../../../redux/entities/support';
 
 import { Form as F } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import SupportModal from '../../../lib/ui/modals/SupportModal';
 import Input from '../../../lib/ui/forms/InputWithIcon';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
@@ -33,15 +36,15 @@ const Page = styled.View`
 `;
 
 const Container = styled.View`
-  flex: 2;
+  flex: 3;
   justifyContent: center;
   width: 100%;
   alignItems: center;
 `;
 
 const BottomContainer = styled(Container)`
-  flex: 1;
-  justifyContent: flex-end;
+  flex: 2;
+  justifyContent: space-between;
   paddingBottom: 20;
 `;
 
@@ -71,6 +74,8 @@ const Login: FC<Props> = (props) => {
 
   const [initialised,setInitialised] = useState(false);
 
+  const dispatch = useDispatch();
+  const {modalOpen} = useSelector(selectModalStatus,shallowEqual);
 
   const onSubmit = async () => {
     try {
@@ -123,6 +128,7 @@ const Login: FC<Props> = (props) => {
 
   return (
     <Page>
+      <SupportModal isVisible={modalOpen} closeFunction={()=>dispatch(closeModal())}/>
       {logoVisible && <Container>
         <Image source={logo} 
         />
@@ -152,19 +158,22 @@ const Login: FC<Props> = (props) => {
           <SubmitButton 
           //marginBottom='0' 
           text="LOG IN" onPress={() => onSubmit()} />
-          <ErrorText>*{serverError.toString()}</ErrorText>
+          {serverError.length > 0 && 
+            <ErrorText>*{serverError.toString()}</ErrorText>
+          }
         </Form>
+      </Container>
+      <BottomContainer>
+        <LinkText onPress={() => dispatch(openModal())}>
+          Having technical issues with TWINE?
+        </LinkText>
         <LinkText onPress={() => Linking.openURL('https://data.twine-together.com/password/forgot')}>
           Forgot password
         </LinkText>
-      </Container>
-
-      <BottomContainer>
         <LinkText onPress={() => props.navigation.navigate('Register')}>
           Register here
         </LinkText>
       </BottomContainer>
-
     </Page>
   );
 };
