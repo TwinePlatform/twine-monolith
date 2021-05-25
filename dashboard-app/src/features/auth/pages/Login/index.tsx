@@ -88,7 +88,7 @@ const Login: React.FunctionComponent<LoginProps> = (props) => (
         </Row>
         <Row center="xs">
           <Paragraph>
-            Don't have an account? <a href="mailto:powertochange@gmail.com">Contact us</a>
+            Don't have an account? <a href="https://www.twine-together.com/sign-up/">Register here</a>
           </Paragraph>
         </Row>
         <RowLeftAlignText center="xs">
