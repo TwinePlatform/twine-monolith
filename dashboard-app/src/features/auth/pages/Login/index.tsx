@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
@@ -12,6 +12,7 @@ import { Paragraph } from '../../../../lib/ui/components/Typography';
 import L from '../../../../lib/ui/components/Link';
 import { redirectOnError, getQueryObjectFromProps } from '../../../../lib/util/routing';
 import { SpacingEnum, ColoursEnum } from '../../../../lib/ui/design_system';
+import SupportModal from '../../../../lib/ui/components/SupportModal';
 
 
 /*
@@ -29,6 +30,12 @@ const RowLeftAlignText = styled(Row)`
 
 const Link = styled(L)`
   margin-top: ${SpacingEnum.small};
+`;
+
+const TextButton = styled(Paragraph)`
+  margin-top: ${SpacingEnum.medium};
+  cursor:pointer;
+  text-decoration:underline;
 `;
 
 const FormContainer = styled.div`
@@ -79,8 +86,18 @@ const getMessage = (props: LoginProps) => {
 /*
  * Component
  */
-const Login: React.FunctionComponent<LoginProps> = (props) => (
+const Login: React.FunctionComponent<LoginProps> = (props) => {
+  const [supportModalVisible, setSupportModalVisible] = useState(false);
+
+  const toggleSupportModal = () => {
+
+    console.log("support modal was " + supportModalVisible + "and is now " + !supportModalVisible)
+    setSupportModalVisible(!supportModalVisible);
+  }
+
+  return (
   <Grid>
+    <SupportModal visible={supportModalVisible} closeFunction={()=>setSupportModalVisible(false)}/>
     <Row center="xs">
       <Col xs={12} lg={6}>
         <Row center="xs">
@@ -88,7 +105,7 @@ const Login: React.FunctionComponent<LoginProps> = (props) => (
         </Row>
         <Row center="xs">
           <Paragraph>
-            Don't have an account? <a href="mailto:powertochange@gmail.com">Contact us</a>
+            Don't have an account? <a href="https://www.twine-together.com/sign-up/">Register here</a>
           </Paragraph>
         </Row>
         <RowLeftAlignText center="xs">
@@ -96,6 +113,7 @@ const Login: React.FunctionComponent<LoginProps> = (props) => (
             <FormContainer>
               <LoginForm onSubmit={createSubmitHandler(props)} />
               <Link to="/password/forgot">Forgot your password?</Link>
+              <TextButton onClick={()=>toggleSupportModal()}>Having technical issues with Twine?</TextButton>
             </FormContainer>
           </Col>
         </RowLeftAlignText>
@@ -115,6 +133,6 @@ const Login: React.FunctionComponent<LoginProps> = (props) => (
       </Col>
     </Row>
   </Grid>
-);
+)};
 
 export default withRouter(Login);
