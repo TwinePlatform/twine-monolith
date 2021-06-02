@@ -16,6 +16,9 @@ type Props = {
     onValueChange: any;
     defaultValue?: string | number;
     name?: string;
+    selectedValue?: any;
+    value?: any;
+    onBlur?: any;
 }
 
 /*	
@@ -41,6 +44,8 @@ const Dropdown: FC<Props> = (props) => {
         label, options, onValueChange, defaultValue, name, ...rest
     } = props;
     const [value, setValue] = useState(defaultValue);
+
+
     return (
         <Item picker>
             <Label>{label}</Label>

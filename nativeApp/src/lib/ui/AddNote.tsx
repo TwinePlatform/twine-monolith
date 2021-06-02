@@ -11,7 +11,7 @@ const AddNoteText = styled.Text`
 `;
 
 const AddNoteButton = styled(B)`
-  height: 20;
+  height: 26;
   width: 30%;
   borderRadius: 10;
   backgroundColor: ${ColoursEnum.purple};
@@ -21,16 +21,37 @@ const AddNoteButton = styled(B)`
   marginRight: 20;
 `;
 
+const AddCloseButton = styled(B)`
+  height: 26;
+  width: 30%;
+  borderRadius: 10;
+  backgroundColor: ${ColoursEnum.yellow};
+  alignItems: center;
+  justifyContent: center;
+  marginTop: 10;
+  marginRight: 20;
+`;
+
 type Props = {
+  text: string;
   onPress: () => void;
+  disabled: boolean;
 };
 
-const AddNote: FC<Props> = (props) => {
+export const AddNote: FC<Props> = (props) => {
   return <AddNoteButton
-  onPress={props.onPress}
->
-  <AddNoteText>Add note</AddNoteText>
-</AddNoteButton>;
+    onPress={props.onPress}
+    disabled={props.disabled}
+    style={{opacity: props.disabled?0.3:1}}
+  >
+    <AddNoteText>{props.text}</AddNoteText>
+  </AddNoteButton>;
 };
 
-export default AddNote;
+export const Close: FC<Props> = (props) => {
+  return <AddCloseButton
+    onPress={props.onPress}
+  >
+    <AddNoteText>Cancel</AddNoteText>
+  </AddCloseButton>;
+};

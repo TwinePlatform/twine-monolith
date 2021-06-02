@@ -87,3 +87,5 @@ HEROKU_WEBHOOK_SECRET=
 
 ### Note
 On Windows, it is not possible to create a file with the name `.env`. Instead create a file with the name `.env.` (note the trailing dot).
+
+The redis URL needs to be updated from time to time, a change would be needed when a server error occurs with code that was working fine before. 

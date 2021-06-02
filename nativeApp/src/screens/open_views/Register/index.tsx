@@ -1,14 +1,14 @@
 import React, { useState, FC, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
-import { Picker, TextInput, View, Text, StyleSheet } from 'react-native';
+import { Picker, TextInput, View, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { Input as I } from 'native-base';
 import DropdownShort from '../../../lib/ui/forms/DropdownShort';
 import DropdownNoLabel from '../../../lib/ui/forms/DropdownNoLabel';
 import FuzzySearchBox from '../../../lib/ui/forms/FuzzySearchBox';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 import MessageModal from '../../../lib/ui/modals/MessageModal';
-
+import { ErrorText } from '../../../lib/ui/typography';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import Page from '../../../lib/ui/Page';
 import API from '../../../api';
@@ -26,6 +26,23 @@ type Props = {
 /*
  * Styles
  */
+const SuccessText = (props) => {
+  if (props.visible)
+    return <View
+      style={{ position: 'absolute', top: '50%', backgroundColor: 'white' }}
+    >
+      <Text style={{ color: ColoursEnum.purple, fontSize: 20, textAlign: 'center' }}>{props.text}</Text>
+    </View>
+  else
+    return null;
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+})
+
 const Registration = styled.View`
   alignItems: center;
   width: 30%;
@@ -61,330 +78,424 @@ const PrintText = styled.Text`
   marginBottom: 20px;
 `;
 
-// const Button = StyleSheet.create({
-//   width: '300'
-// });
+const FormErrorText = styled.Text`
+  width: 80%
+  fontSize: 10;
+  color: red;
+  flex: 1;
+  flexWrap: wrap;
+`;
 
-// const Input = styled(I)`
-//   width: 80%;
-//   borderBottomWidth: 2;
-//   borderBottomColor: ${ColoursEnum.grey};
-// `;
-
-
-// const Text = styled.Text`
-//   font-size: 15;
-// `;
 
 const formOptions = [{ id: 1, name: "Organisation" }, { id: 2, name: "User" }];
 const yearOptions = [...Array(100).keys()].map((_, i) => ({ id: i, name: `${2005 - i}` }));
-// const genderOptions = [{ id: 1, name: "East Midlands" }, { id: 2, name: "East of England" }, { id: 3, name: "London" }, { id: 4, name: "North East" }];
-const genderOptions = [{ id: 1, name: "East Midlands" }, { id: 2, name: "East of England" }, { id: 3, name: "London" }, { id: 4, name: "North East" }, { id: 5, name: "North West" }, { id: 6, name: "South East" }, { id: 7, name: "South West" }, { id: 8, name: "West Midlands" }, { id: 9, name: "Yorkshire and The Humber" }];
+// const regionOptions = [{ id: 1, name: "East Midlands" }, { id: 2, name: "East of England" }, { id: 3, name: "London" }, { id: 4, name: "North East" }];
+const regionOptions = [{ id: 1, name: "East Midlands" }, { id: 2, name: "East of England" }, { id: 3, name: "London" }, { id: 4, name: "North East" }, { id: 5, name: "North West" }, { id: 6, name: "South East" }, { id: 7, name: "South West" }, { id: 8, name: "West Midlands" }, { id: 9, name: "Yorkshire and The Humber" }, { id: 11, name: "Scotland" }, { id: 12, name: "Wales" }, { id: 13, name: "Northern Ireland" }];
 const thankYouMessage = "\nThank you for registering!\nYou should have received\nan email with your admin code.\n\nPlease now register as a user\nand enter your admin code."
 /*
  * Component
  */
 const Register: FC<Props> = (props) => {
-  const [registrationType, setRegistrationType] = useState("Organisation");
+  const [registrationType, setRegistrationType] = useState("User");
   const [organisationModalVisible, setOrganisationModalVisible] = useState(false);
   const [initialised, setInitialised] = useState(false);
   const [organisationOptions, setOrganisationOptions] = useState([{ id: 1, name: "loading organisations" }])
+  const [serverMsg, setServerMsg] = useState("");
+  const [successTextVisible, setSuccessTextVisible] = useState(false);
+  const [submitPressed, setSubmitPressed] = useState(false);
 
   const [userYearOfBirth, setUserYearOfBirth] = useState("");
   const [region, setRegion] = useState("");
-  const [userOrganisation, setUserOrganisation] = useState("");
+  const [userOrganisation, setUserOrganisation] = useState({ id: 0, name: "default" });
 
   const [serverError, setError] = useState("");
 
   useEffect(() => {
     if (!initialised) {
-      API.CommunityBusiness.get()
-        .then(res => {
-          console.log(res.data)
-          //setOrganisationOptions(res.data)
-        });
+      initialiseCommunityBusinessOptions();
       setInitialised(true)
     }
+  });
+
+  const initialiseCommunityBusinessOptions = async () => {
+    let listOfCommunityBusinesses = [];
+
+    regionOptions.map(async (region, index) => {
+      const { data } = await API.CommunityBusiness.getByRegion(region.id);
+      listOfCommunityBusinesses = listOfCommunityBusinesses.concat(data);
+
+      if (index == regionOptions.length - 1) {
+        // console.log(listOfCommunityBusinesses);
+        setOrganisationOptions(listOfCommunityBusinesses);
+      }
+    })
   }
 
-  );
-
   const validationSchemaOrg = yup.object().shape({
-    OrgName: yup
+    orgName: yup
       .string()
       .required(),
-    OrgEmail: yup
+    adminEmail: yup
       .string()
       .email()
+      .required(),
+    confirmAdminEmail: yup
+      .string()
+      .email()
+      .required()
+      .oneOf([yup.ref('adminEmail'), null], 'email addresses must match'),
+    adminName: yup
+      .string()
+      .required(),
+    orgPostCode: yup
+      .string()
+      .min(4)
+      .max(10)
       .required()
   });
 
   const validationSchemaUser = yup.object().shape({
-    Name: yup
+    name: yup
       .string()
       .required('Please enter your full name'),
-    Email: yup
+    email: yup
       .string()
       .email()
       .required('Please enter your email address. If you don’t have one, an administrator can help you register.'),
-    Password: yup
+    confirmEmail: yup
       .string()
-      .min(3, 'Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)')
-      .required('Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)'),
-    Phone: yup
-      .number()
-      .required('Please enter your phone number. If you don’t have one, an administrator can help you register.'),
-    AdminCode: yup
-      .string()
+      .email()
       .required()
+      .oneOf([yup.ref('email'), null], 'email addresses must match'),
+    password: yup
+      .string()
+      .min(6, 'Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)')
+      .required('Please enter a password of at least 6 characters, including one digit (e.g. 1, 2, 3) and one symbol (e.g. !, ?, £)'),
+    phone: yup
+      .number(),
+    adminCode: yup
+      .string(),
+    postCode: yup
+      .string()
+      .min(4)
+      .max(10)
+      .required('Postcode is required')
   });
 
-  const onSubmit = () => {
-    if (registrationType === "User")
-     /* API.Volunteers.add({
-          organisationId: id.required(),
-          role: Joi.alternatives(RoleEnum.VOLUNTEER, RoleEnum.VOLUNTEER_ADMIN).required(),
-          adminCode: Joi.string().regex(/^\w{5,8}$/),
-          name: userName.required(),
-          gender: gender.default('prefer not to say'),
-          birthYear: birthYear.default(null),
-          email: email.required(),
-          phoneNumber: phoneNumber.allow(''),
-          postCode: postCode.allow(''),
-          password: password,
-      });*/ {
-
-
-    }
-    if (registrationType === "Organisation") {
-      /*API.CommunityBusiness.add({
-
-      });
-      toggleOrgModal();*/
-      console.log("name: " + organisationName + "\n" + "email: " + organisationEmail);
-      setOrganisationModalVisible(true);
-    }
-
-  }
+  const registrationTypeDropdown = <Registration>
+    <DropdownShort
+      options={formOptions} selectedValue={registrationType} onValueChange={value=>{setRegistrationType(value);setSubmitPressed(false)}}
+    />
+  </Registration>;
 
   if (registrationType === "Organisation")
     return (
-      <Formik
-        initialValues={{ OrgName: '', OrgEmail: '', GivingID: '', Name: '', Email: '', Password: '', Phone: '', Postcode: '', AdminCode: '', region: '' }}
-        validationSchema={validationSchemaOrg}
-        onSubmit={(values) => {
-          // console.log(values);
-          // const res = dispatch(createProject(values.name));
-          // console.log(res);
-        }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <Formik
+          validationSchema={validationSchemaOrg}
+          onSubmit={async (values) => {
+            values.region = region;
+            console.log(values);
+            let orgObj = {
+              "orgName": values.orgName,
+              "region": values.region,
+              "postCode": values.orgPostCode,
+              "adminName": values.adminName,
+              "adminEmail": values.adminEmail,
+            }
+            if (values._360GivingId != "") {
+              orgObj._360GivingId = values._360GivingId;
+            }
+            try {
+              const res = await API.CommunityBusiness.register(orgObj);
+              if (res.status == 200)
+                setOrganisationModalVisible(true);
+              initialiseCommunityBusinessOptions();
+            }
+            catch (error) {
+              console.log('registration failed');
+              setServerMsg(error.response.data.error.message);
+            }
+          }}>
 
-        {({ handleChange, handleBlur, handleSubmit, values, errors }) => {
-          return (
-            <Page heading="Register">
+          {({ handleChange, handleBlur, handleSubmit, values, errors }) => {
+            return (
+              <Page heading="Register">
 
-              <MessageModal
-                isVisible={organisationModalVisible}
-                message={thankYouMessage}
-                onClose={() => { setOrganisationModalVisible(false); setRegistrationType("User"); }} />
+                <MessageModal
+                  isVisible={organisationModalVisible}
+                  message={thankYouMessage}
+                  onClose={() => { setOrganisationModalVisible(false); setRegistrationType("User"); }} />
 
-              <Registration>
-                <DropdownShort
-                  options={formOptions} selectedValue={registrationType} onValueChange={setRegistrationType}
+                {registrationTypeDropdown}
+
+                <Input
+                  onChangeText={handleChange('orgName')}
+                  onBlur={handleBlur('orgName')}
+                  value={values.orgName}
+                  placeholder='Organisation Name'
                 />
-              </Registration>
+                {errors.orgName && submitPressed &&
+                  <FormErrorText>{errors.orgName}</FormErrorText>
+                }
 
-              <Input
-                onChangeText={handleChange('OrgName')}
-                onBlur={handleBlur('OrgName')}
-                value={values.OrgName}
-                placeholder='Organisation Name'
-              />
-              {errors.OrgName &&
-                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.OrgName}</TextInput>
-              }
+                <Input
+                  onChangeText={handleChange('adminName')}
+                  onBlur={handleBlur('adminName')}
+                  value={values.adminName}
+                  placeholder='Admin Name'
+                />
+                {errors.orgName && submitPressed &&
+                  <FormErrorText>{errors.adminName}</FormErrorText>
+                }
 
-              <Input
-                onChangeText={handleChange('OrgEmail')}
-                onBlur={handleBlur('OrgEmail')}
-                value={values.OrgEmail}
-                placeholder='Organisation Email'
-              />
+                <Input
+                  onChangeText={handleChange('adminEmail')}
+                  onBlur={handleBlur('adminEmail')}
+                  value={values.adminEmail}
+                  placeholder='Organisation Email'
+                />
 
-              {errors.OrgEmail &&
-                <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.OrgEmail}</TextInput>
-              }
+                {errors.adminEmail && submitPressed &&
+                  <FormErrorText>{errors.adminEmail}</FormErrorText>
+                }
 
-              <Input
-                onChangeText={handleChange('GivingID')}
-                onBlur={handleBlur('GivingID')}
-                value={values.GivingID}
-                placeholder='360 Giving ID (Optional)'
-              />
+                <Input
+                  onChangeText={handleChange('confirmAdminEmail')}
+                  onBlur={handleBlur('confirmAdminEmail')}
+                  value={values.confirmAdminEmail}
+                  placeholder='Confirm Organisation Email'
+                  contextMenuHidden={true}
+                />
 
-              <DropdownNoLabel
-                options={genderOptions}
-                selectedValue={region}
-                onValueChange={setRegion}
-                placeholder='Region'
-              />
+                {errors.confirmAdminEmail && submitPressed &&
+                  <FormErrorText>{errors.confirmAdminEmail}</FormErrorText>
+                }
 
-              <Container>
-                <SubmitButton onPress={handleSubmit} text="Complete" />
-              </Container>
+                <Input
+                  onChangeText={handleChange('orgPostCode')}
+                  onBlur={handleBlur('orgPostCode')}
+                  value={values.orgPostCode}
+                  placeholder='Postcode'
+                />
 
-              <PrintText>
-                By doing this you are agreeing to our
-                  <LinkText onPress={() => props.navigation.navigate('TnC')}>
-                  Terms and Conditions
-                  </LinkText>
-              </PrintText>
+                {errors.orgPostCode && submitPressed &&
+                  <FormErrorText>{errors.orgPostCode}</FormErrorText>
+                }
 
-              <PrintText>
-                Already Registered? Log In
-                  <LinkText onPress={() => props.navigation.navigate('Login')}>
-                  Here
-                  </LinkText>
-              </PrintText>
+                <Input
+                  onChangeText={handleChange('_360GivingId')}
+                  onBlur={handleBlur('_360GivingId')}
+                  value={values._360GivingId}
+                  placeholder='360 Giving ID (Optional)'
+                />
 
-            </Page>
-          )
-        }}
-      </Formik>
+                <DropdownNoLabel
+                  options={regionOptions}
+                  selectedValue={region}
+                  onValueChange={setRegion}
+                  placeholder='Region'
+                />
 
+                <ErrorText>{serverMsg}</ErrorText>
+
+                <Container>
+                  <SubmitButton text="COMPLETE" onPress={()=>{setSubmitPressed(true);handleSubmit()}} />
+                </Container>
+
+                <PrintText>
+                  By doing this you are agreeing to our&nbsp;
+                    <LinkText onPress={() => props.navigation.navigate('TnC')}>
+                    Terms and Conditions
+                    </LinkText>
+                </PrintText>
+
+                <PrintText>
+                  Already Registered? Log In&nbsp;
+                    <LinkText onPress={() => props.navigation.navigate('Login')}>
+                    Here
+                    </LinkText>
+                </PrintText>
+
+              </Page>
+            )
+          }}
+        </Formik>
+      </KeyboardAvoidingView>
 
     );
 
   if (registrationType === "User")
     return (
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <Formik
+          initialValues={{ orgName: '', adminEmail: '', confirmEmail: '', adminName: '', orgPostCode: '', _360GivingId: '', name: '', email: '', password: '', phone: '', postCode: '', adminCode: '', region: '', birthYear: '' }}
+          validationSchema={validationSchemaUser}
+          onSubmit={async (values) => {
+            try {
+              //values of drop down
+              values.region = region;
+              values.YearOfBirth = userYearOfBirth;
 
-      <Formik
-        validationSchema={validationSchemaUser}
-        onSubmit={async () => {
-          try {
-            const res = await API.Volunteers.add({
-              "organisationId": "2",
-              "role": "VOLUNTEER",
-              "name": "userName",
-              "gender": "prefer not to say",
-              "email": "1@aperturescience.com",
-              "password": "Password123!?"
-            });
-          } catch (error) {
-            setError(error.response.data.error.message);
+              var volunteer_obj = {
+                name: values.name,
+                email: values.email,
+                password: values.password,
+                postCode: values.Postcode,
+                phoneNumber: values.Phone,
+                birthYear: parseInt(values.YearOfBirth),
+                organisationId: userOrganisation.id
+              }
 
-          }
-        }}>
-        {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+              if (values.adminCode.length > 0) {
+                volunteer_obj.role = "VOLUNTEER_ADMIN";
+                volunteer_obj.adminCode = values.adminCode;
+              } else {
+                volunteer_obj.role = "VOLUNTEER";
+              }
 
-          <Page heading="Register">
+              //add volunteer
+              const res = await API.Volunteers.add(volunteer_obj);
 
-            <Registration>
-              <DropdownShort
-                options={formOptions} selectedValue={registrationType} onValueChange={setRegistrationType}
+              if (res.status == 200) {
+                setSuccessTextVisible(true);
+                setTimeout(() => {
+                  setSuccessTextVisible(false);
+                  props.navigation.navigate('Login');
+                }
+                  , 700)
+              }
+            } catch (error) {
+              console.log(error)
+              setError(error.response.data.error.message);
+            }
+          }}>
+          {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+
+            <Page heading="Register">
+
+              <SuccessText
+                text="Registration Successful"
+                visible={successTextVisible}
               />
-            </Registration>
 
-            <Input
-              onChangeText={handleChange('Name')}
-              onBlur={handleBlur('Name')}
-              value={values.Name}
-              placeholder='Full Name'
-            />
-            {errors.Name &&
-              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.Name}</TextInput>
-            }
+              {registrationTypeDropdown}
 
-            <Input
-              onChangeText={handleChange('Email')}
-              onBlur={handleBlur('Email')}
-              value={values.Email}
-              placeholder='Email'
-            />
-            {errors.Email &&
-              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.Email}</TextInput>
-            }
+              <Input
+                onChangeText={handleChange('name')}
+                onBlur={handleBlur('name')}
+                value={values.name}
+                placeholder='Full Name'
+              />
+              {errors.name && submitPressed &&
+                <FormErrorText>{errors.name}</FormErrorText>
+              }
 
-            <Input
-              onChangeText={handleChange('Password')}
-              onBlur={handleBlur('Password')}
-              value={values.Password}
-              placeholder='Create Password'
-            />
-            {errors.Password &&
-              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.Password}</TextInput>
-            }
+              <Input
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                value={values.email}
+                placeholder='Email'
+              />
+              {errors.email && submitPressed &&
+                <FormErrorText>{errors.email}</FormErrorText>
+              }
 
-            <Input
-              onChangeText={handleChange('Postcode')}
-              onBlur={handleBlur('Postcode')}
-              value={values.Postcode}
-              placeholder='Post Code'
-            />
-            {errors.Postcode &&
-              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.Postcode}</TextInput>
-            }
+              <Input
+                onChangeText={handleChange('confirmEmail')}
+                onBlur={handleBlur('confirmEmail')}
+                value={values.confirmEmail}
+                placeholder='Confirm Email'
+                contextMenuHidden={true}
+              />
+              {errors.confirmEmail && submitPressed &&
+                <FormErrorText>{errors.confirmEmail}</FormErrorText>
+              }
 
-            <Input
-              onChangeText={handleChange('Phone')}
-              onBlur={handleBlur('Phone')}
-              value={values.Phone}
-              placeholder='Phone Number (Optional)'
-            />
-            {errors.Phone &&
-              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.Phone}</TextInput>
-            }
+              <Input
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                value={values.password}
+                placeholder='Create Password'
+              />
+              {errors.password && 
+                <FormErrorText>{errors.password}</FormErrorText>
+              }
 
-            <DropdownNoLabel
-              options={yearOptions}
-              selectedValue={userYearOfBirth}
-              onValueChange={setUserYearOfBirth}
-              placeholder='Year of Birth (Optional)'
-            />
+              <Input
+                onChangeText={handleChange('postCode')}
+                onBlur={handleBlur('postCode')}
+                value={values.postCode}
+                placeholder='Post Code'
+              />
+              {errors.postCode && submitPressed &&
+                <FormErrorText>{errors.postCode}</FormErrorText>
+              }
 
-            <DropdownNoLabel
-              options={genderOptions}
-              selectedValue={region}
-              onValueChange={setRegion}
-              placeholder='Region'
-            />
+              <Input
+                onChangeText={handleChange('phone')}
+                onBlur={handleBlur('phone')}
+                value={values.phone}
+                placeholder='Phone Number (Optional)'
+              />
+              {errors.Phone && submitPressed &&
+                <FormErrorText>{errors.phone}</FormErrorText>
+              }
 
+              <DropdownNoLabel
+                options={yearOptions}
+                selectedValue={userYearOfBirth}
+                onValueChange={setUserYearOfBirth}
+                placeholder='Year of Birth (Optional)'
+              />
 
-            <FuzzySearchBox label="" placeholder={"Find Organisation"} options={organisationOptions} selectedValue={userOrganisation} onValueChange={setUserOrganisation} />
+              <FuzzySearchBox
+                label=""
+                placeholder={"Search for your Organisation"}
+                options={organisationOptions}
+                selectedValue={userOrganisation}
+                onValueChange={(org) => setUserOrganisation(org)}
+                origin="register"
+              />
 
-            <Input
-              onChangeText={handleChange('AdminCode')}
-              onBlur={handleBlur('AdminCode')}
-              value={values.AdminCode}
-              placeholder='Admin Access Code (Admin Required)'
-            />
-            {errors.AdminCode &&
-              <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.AdminCode}</TextInput>
-            }
-            <Container>
-              <SubmitButton text="COMPLETE" onPress={handleSubmit} />
-            </Container>
+              <Input
+                onChangeText={handleChange('adminCode')}
+                onBlur={handleBlur('adminCode')}
+                value={values.adminCode}
+                placeholder='Admin Access Code (Admin Required)'
+              />
+              <Container>
+                <SubmitButton text="COMPLETE" onPress={()=>{setSubmitPressed(true);handleSubmit()}} />
+              </Container>
 
-            <Text>{serverError.toString()}</Text>
+              <FormErrorText>{serverError.toString()}</FormErrorText>
 
-            <PrintText>
-              By doing this you are agreeing to our
+              <PrintText>
+                By doing this you are agreeing to our&nbsp;
                 <LinkText onPress={() => props.navigation.navigate('TnC')}>
-                Terms and Conditions
+                  Terms and Conditions
                 </LinkText>
-            </PrintText>
+              </PrintText>
 
-            <PrintText>
-              Already Registered? Log In
+              <PrintText>
+                Already Registered? Log In&nbsp;
               <LinkText onPress={() => props.navigation.navigate('Login')}>
-                Here
+                  Here
               </LinkText>
-            </PrintText>
+              </PrintText>
 
 
-          </Page>
+            </Page>
 
-        )}
-      </Formik>
+          )}
+        </Formik>
+      </KeyboardAvoidingView >
     );
 }
 

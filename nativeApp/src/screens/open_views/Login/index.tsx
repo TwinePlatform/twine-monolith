@@ -1,11 +1,15 @@
-import React, { FC, useState, useEffect } from 'react';
-import { AsyncStorage, TouchableOpacity } from 'react-native';
+import React, { FC, useState, useEffect} from 'react';
+import {Linking} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
+import {useSelector, useDispatch, shallowEqual } from 'react-redux';
+import {openModal, closeModal, selectModalStatus} from '../../../redux/entities/support';
 
 import { Form as F } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import SupportModal from '../../../lib/ui/modals/SupportModal';
 import Input from '../../../lib/ui/forms/InputWithIcon';
 import { ColoursEnum } from '../../../lib/ui/colours';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
@@ -32,15 +36,15 @@ const Page = styled.View`
 `;
 
 const Container = styled.View`
-  flex: 2;
+  flex: 3;
   justifyContent: center;
   width: 100%;
   alignItems: center;
 `;
 
 const BottomContainer = styled(Container)`
-  flex: 1;
-  justifyContent: flex-end;
+  flex: 2;
+  justifyContent: space-between;
   paddingBottom: 20;
 `;
 
@@ -63,21 +67,26 @@ const Form = styled(F)`
  * Component
  */
 const Login: FC<Props> = (props) => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  // const [isLoading, toggleLoading] = useToggle();
+  const [logoVisible, setLogoVisible] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [serverError, setError] = useState("");
 
+  const [initialised,setInitialised] = useState(false);
+
+  const dispatch = useDispatch();
+  const {modalOpen} = useSelector(selectModalStatus,shallowEqual);
 
   const onSubmit = async () => {
     try {
 
       //       const data = await API.Authentication.login({ email, password });
       //       await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.data.token);
-
+      
       const { data } = await API.Authentication.login({ email, password });
       await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.token);
       await AsyncStorage.setItem(StorageValuesEnum.USER_ID, data.userId.toString());
+      await AsyncStorage.setItem(StorageValuesEnum.RECENT_LOGIN,`{"email": "${email}", "password": "${password}"}`)
       props.navigation.navigate('AuthenticationLoader');
     } catch (error) {
       setError(error.response.data.error.message);
@@ -86,7 +95,23 @@ const Login: FC<Props> = (props) => {
   };
 
   useEffect(() => {
+    console.log(initialised)
+
+    if(!initialised){
+      AsyncStorage.getItem(StorageValuesEnum.RECENT_LOGIN).then(values => {
+        console.log(values);
+        if(values != null){
+          const json = JSON.parse(values);
+          setEmail(json.email);
+          setPassword(json.password);
+        }
+      });
+
+      setInitialised(true);
+    }
+
     AsyncStorage.getItem('HelpSlides').then(val => {
+      console.log(val);
       if (!val) {
         props.navigation.navigate('HelpSlideStack');
       }
@@ -103,13 +128,21 @@ const Login: FC<Props> = (props) => {
 
   return (
     <Page>
-      <Container>
-        <Image source={logo} />
-      </Container>
+      <SupportModal isVisible={modalOpen} closeFunction={()=>dispatch(closeModal())}/>
+      {logoVisible && <Container>
+        <Image source={logo} 
+        />
+      </Container>}
 
       <Container>
         <Form>
-          <Input name="Email" autoCompleteType="email" value={email} onChangeText={setEmail}>
+          <Input 
+            name="Email" 
+            autoCompleteType="email" 
+            value={email} 
+            onChangeText={text=>setEmail(text)}
+            onFocus={()=>setLogoVisible(false)} 
+          >
             <MaterialCommunityIcons name="email-outline" outline size={27} color={ColoursEnum.grey} />
           </Input>
           <Input
@@ -117,24 +150,30 @@ const Login: FC<Props> = (props) => {
             autoCompleteType="password"
             secureTextEntry
             value={password}
-            onChangeText={setPassword}
+            onChangeText={text=>setPassword(text)}
+            onFocus={()=>setLogoVisible(false)} 
           >
             <MaterialCommunityIcons name="lock-outline" size={27} color={ColoursEnum.grey} />
           </Input>
-          <SubmitButton marginBottom='0' text="LOG IN" onPress={() => onSubmit()} />
-          <ErrorText>*{serverError.toString()}</ErrorText>
+          <SubmitButton 
+          //marginBottom='0' 
+          text="LOG IN" onPress={() => onSubmit()} />
+          {serverError.length > 0 && 
+            <ErrorText>*{serverError.toString()}</ErrorText>
+          }
         </Form>
-        <LinkText onPress={() => props.navigation.navigate('Error')}>
+      </Container>
+      <BottomContainer>
+        <LinkText onPress={() => dispatch(openModal())}>
+          Having technical issues with TWINE?
+        </LinkText>
+        <LinkText onPress={() => Linking.openURL('https://data.twine-together.com/password/forgot')}>
           Forgot password
         </LinkText>
-      </Container>
-
-      <BottomContainer>
         <LinkText onPress={() => props.navigation.navigate('Register')}>
           Register here
         </LinkText>
       </BottomContainer>
-
     </Page>
   );
 };

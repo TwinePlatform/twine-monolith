@@ -3,8 +3,8 @@ import { RoleEnum } from './enums'
 
 const baseURL =
   process.env && process.env.NODE_ENV === 'development'
-    ? 'http://localhost:4000/v1'
-    : 'https://api.twine-together.com/v1';
+    ? 'https://twine-api-staging.herokuapp.com/v1'
+    : 'https://twine-api.herokuapp.com/v1';
 
 const axios = _axios.create({
   baseURL,
@@ -13,7 +13,7 @@ const axios = _axios.create({
 
 export const api = {
   login: ({ email, password }) => {
-    return axios.post('/users/login', { email, password, restrict: RoleEnum.TwineAdmin })
+    return axios.post('/users/login', { email, password, type: 'cookie', restrict: RoleEnum.TwineAdmin })
   },
   forgot: ({ email }) => {
     return axios.post('/users/password/forgot', { email, redirect: 'ADMIN_APP' })

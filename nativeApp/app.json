@@ -3,13 +3,13 @@
     "name": "TWINE Volunteer App",
     "slug": "nativeApp",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
+    "sdkVersion": "38.0.0",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.0.0",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -24,12 +24,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.powertochange.volunteerapp"
     },
     "android": {
       "package": "com.powertochange.volunteerapp",
-      "versionCode": 1
+      "versionCode": 14,
+      "softwareKeyboardLayoutMode": "pan",
+      "permissions": [],
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true
     },
-    "description": "Early published version with error trapping, volunteer stats, push notifications."
+    "description": "Enable push notification for android devices"
   }
 }

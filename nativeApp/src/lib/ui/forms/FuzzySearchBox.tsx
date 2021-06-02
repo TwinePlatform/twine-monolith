@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
+import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { Item as I, Picker, Label as L, Input } from 'native-base';
 import { FlatList as F, Text as T } from 'react-native';
@@ -12,12 +13,16 @@ import Fuse from 'fuse.js';
  * Types
  */
 type Props = {
-  ref: (ref: unknown) => void;
+  ref?: (ref: unknown) => void;
   label: string;
   placeholder: string;
-  options: { id: number; name: string }[];
+  options: any[];
   onValueChange: any;
-  defaultValue?: string | number;
+  selectedValue?: any;
+  onBlur: any;
+  value: any;
+  defaultValue?: any;
+  origin?: string;
 }
 
 /*
@@ -45,7 +50,7 @@ const FlatList = styled(F)`
 
 const filterData = (data, filter) => {
   if (filter === "")
-    return data;
+    return data.length < 5 ? data : data.slice(0, 5);;
   const options = {
     keys: [
       "name"
@@ -62,24 +67,35 @@ const filterData = (data, filter) => {
  */
 const FuzzySearchBox: FC<Props> = (props) => {
   const {
-    label, placeholder, options, onValueChange, defaultValue, ...rest
+    label, placeholder, options, onValueChange, defaultValue, origin, value, ...rest
   } = props;
   const [text, setText] = useState("");
   const [textInputFocus, setTextInputFocus] = useState(false);
-  const [filteredData, setFilteredData] = useState(options);
+  const [filteredData, setFilteredData] = useState(filterData(options, ""));
+
+  useEffect(()=>{
+    if(origin != 'register'){
+      changeText(value)
+    }
+
+  },[value]);
 
   const changeText = (text: string) => {
     setText(text);
     setFilteredData(filterData(options, text));
   }
 
+  let rowCounter = 0;
+
   const renderRow = (item) => {
     return <TouchableNativeFeedback
       onPress={() => {
         setText(item.name);
-        onValueChange(item.name);
+        onValueChange(origin == 'register' ? item : item.name);
+        setTextInputFocus(false);
       }
       }
+      key={rowCounter++}
     >
       <Text>{item.name}</Text>
     </TouchableNativeFeedback>
@@ -93,16 +109,13 @@ const FuzzySearchBox: FC<Props> = (props) => {
           placeholderTextColor={ColoursEnum.grey}
           onChangeText={text => changeText(text)}
           onFocus={() => setTextInputFocus(true)}
-          onBlur={() => setTextInputFocus(false)}
           value={text}
         />
       </Item>
       {textInputFocus &&
-        <FlatList
-          data={filteredData}
-          renderItem={({ item }) => renderRow(item)}
-          keyExtractor={item => item.id.toString()}
-        />
+        <View>
+          {filteredData.map(item => renderRow(item))}
+        </View>
       }
     </React.Fragment>
 

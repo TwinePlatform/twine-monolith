@@ -4,13 +4,11 @@ import styled from 'styled-components';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import DatePickerConstraints from './datePickerConstraints';
-import _LogsDataTable from '../components/DataTable/LogsDataTable';
 import UsersDataTable from '../components/DataTable/UsersDataTable';
 import { H1 } from '../../../lib/ui/components/Headings';
 import { DataTableProps } from '../components/DataTable/types';
 import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
 import { aggregatedToTableData } from '../dataManipulation/aggregatedToTableDataLogs';
-import { downloadCsv } from '../dataManipulation/downloadCsvLogs';
 import { ColoursEnum } from '../../../lib/ui/design_system';
 import Errors from '../components/Errors';
 import useAggregateDataByUser from './useAggregateDataByUser';
@@ -30,10 +28,6 @@ type TableData = Pick<DataTableProps, 'headers' | 'rows'>;
 /**
  * Styles
  */
-const LogsDataTable = styled(_LogsDataTable)`
-  margin-top: 4rem;
-`;
-
 const Container = styled(Grid)`
 `;
 
@@ -48,14 +42,14 @@ const initTableData = { headers: [], rows: [] };
  */
 const ByUser: FunctionComponent<RouteComponentProps> = () => {
   const { unit } = useContext(DashboardContext);
-  const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
-  const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
+  const fromDate = DatePickerConstraints.from.default();
+  const toDate = DatePickerConstraints.to.default();
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const { loading, error, data, logFields} =
     useAggregateDataByUser({ from: fromDate, to: toDate });
 
   // set and clear errors on response
-  const [errors, setErrors] = useErrors(error, data);
+  const [errors] = useErrors(error, data);
 
   // get sorting state values
   const { orderable, onChangeOrderable } = useOrderable({
@@ -74,15 +68,6 @@ const ByUser: FunctionComponent<RouteComponentProps> = () => {
       setTableData(aggregatedToTableData({ data, unit, yData: logFields }));
     }
   }, [logFields, data, loading, unit]);
-
-  const downloadAsCsv = useCallback(() => {
-    if (!loading && data) {
-      downloadCsv({ data, fromDate, toDate, fileName: 'activity', unit, orderable })
-        .catch((error) => setErrors({ Download: error.message }));
-    } else {
-      setErrors({ Download: 'No data available to download' });
-    }
-  }, [loading, data, fromDate, toDate, unit, orderable, setErrors]);
 
   return (
     <Container>

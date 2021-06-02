@@ -111,7 +111,7 @@ const preProcessCb = (qb: Knex | Knex.QueryBuilder) => compose(
  * Implementation of the CommunityBusinessCollection type
  */
 export const CommunityBusinesses: CommunityBusinessCollection = {
-  create (a) {
+  create(a) {
     return {
       id: a.id,
       name: a.name,
@@ -132,7 +132,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     };
   },
 
-  toColumnNames (a) {
+  toColumnNames(a) {
     return filter((a) => typeof a !== 'undefined', {
       'community_business.organisation_id': a.id,
       'organisation.organisation_name': a.name,
@@ -152,8 +152,8 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     });
   },
 
-  async get (client, q = {}) {
-    const query = evolve({
+  async get(client, q = {}) {
+    const query: any = evolve({
       where: pipe(CommunityBusinesses.toColumnNames, transformForeignKeysToSubQueries(client)),
       whereNot: CommunityBusinesses.toColumnNames,
     }, q);
@@ -185,12 +185,12 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     );
   },
 
-  async getOne (client, query) {
+  async getOne(client, query) {
     const [res] = await CommunityBusinesses.get(client, { ...query, limit: 1 });
     return res || null;
   },
 
-  async getTemporary (client) {
+  async getTemporary(client) {
     return client('organisation')
       .select({
         id: 'organisation.organisation_id',
@@ -202,20 +202,18 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
       .where({ is_temp: true });
   },
 
-  async exists (client, query) {
+  async exists(client, query) {
     const res = await CommunityBusinesses.getOne(client, query);
     return res !== null;
   },
 
-  async add (client, cb) {
+  async add(client, cb, code) {
     const preProcessCbChangeset = compose(
       Objects.mapKeys((s) => s.replace('community_business.', '')),
       transformForeignKeysToSubQueries(client),
       CommunityBusinesses.toColumnNames,
       pickCbFields
     );
-
-    const code = randomBytes(4).toString('hex');
 
     const orgChangeset = preProcessOrgChangeset(cb);
     const cbChangeset = preProcessCbChangeset(cb);
@@ -243,7 +241,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return CommunityBusinesses.getOne(client, { where: { id } });
   },
 
-  async addTemporary (client, name) {
+  async addTemporary(client, name) {
     return CommunityBusinesses.add(client, {
       name,
       region: RegionEnum.TEMPORARY_DATA,
@@ -252,7 +250,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     });
   },
 
-  async update (client, cb, changes) {
+  async update(client, cb, changes) {
     const orgChangeset = preProcessOrgChangeset(changes);
 
     const [{ organisation_id: id }] = await client.transaction(async (trx) => {
@@ -286,13 +284,13 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return CommunityBusinesses.getOne(client, { where: { id } });
   },
 
-  async destroy (client, cb) {
+  async destroy(client, cb) {
     return client('community_business')
       .update({ deleted_at: new Date() })
       .where(preProcessCb(client)(cb));
   },
 
-  async addFeedback (client, cb, score) {
+  async addFeedback(client, cb, score) {
     const [res] = await client('visit_feedback')
       .insert({ score, organisation_id: cb.id })
       .returning([
@@ -307,7 +305,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return res;
   },
 
-  async getFeedback (client, cb, bw?) {
+  async getFeedback(client, cb, bw?) {
     const baseQuery = applyQueryModifiers(
       client('visit_feedback')
         .select({
@@ -329,7 +327,36 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return query;
   },
 
-  async getVisitActivities (client, cb, day?) {
+  async addVolunteerActivity(client, activity) {
+    const res = await client('volunteer_activity')
+      .insert({ volunteer_activity_name: activity });
+
+    return res;
+  },
+
+  async activityExists(client, activity) {
+    const res = await client('volunteer_activity')
+      .where('volunteer_activity_name', activity);
+    return res.length >= 1;
+  },
+
+  async addVolunteerProject(client, project, orgId) {
+    const res = await client('volunteer_project')
+      .insert({ volunteer_project_name: project, organisation_id: orgId });
+
+    return res;
+  },
+
+  async projectExists(client, project, orgId) {
+    const res = await client('volunteer_project')
+      .where({
+        volunteer_project_name: project,
+        organisation_id: orgId
+      });
+    return res.length >= 1;
+  },
+
+  async getVisitActivities(client, cb, day?) {
     const baseQuery = client('visit_activity')
       .leftOuterJoin(
         'visit_activity_category',
@@ -358,7 +385,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return query;
   },
 
-  async getVisitActivityById (client, cb, id) {
+  async getVisitActivityById(client, cb, id) {
     const [visitActivity] = await client('visit_activity')
       .leftOuterJoin(
         'visit_activity_category',
@@ -387,7 +414,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return visitActivity || null;
   },
 
-  async addVisitActivity (client, visitActivity, cb) {
+  async addVisitActivity(client, visitActivity, cb) {
     const [res] = await client('visit_activity')
       .insert({
         visit_activity_name: visitActivity.name,
@@ -418,7 +445,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return { ...omit(['category_id'], res) as Omit<VisitActivity, 'category'>, category };
   },
 
-  async updateVisitActivity (client, visitActivity) {
+  async updateVisitActivity(client, visitActivity) {
     const transformToColumns = compose(
       evolve({
         visit_activity_category_id: (n) =>
@@ -461,7 +488,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return { ...activity, category };
   },
 
-  async deleteVisitActivity (client, id) {
+  async deleteVisitActivity(client, id) {
     const [res] = await client('visit_activity')
       .where({ visit_activity_id: id, deleted_at: null })
       .update({ deleted_at: new Date() })
@@ -483,7 +510,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return res || null;
   },
 
-  async addVisitLog (client, visitActivity, user, signInType) {
+  async addVisitLog(client, visitActivity, user, signInType) {
     const res = await client.transaction(async (trx) => {
       const [log] = await trx('visit_log')
         .insert({
@@ -512,7 +539,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
 
   },
 
-  async getVisitLogsWithUsers (client, cb, q) {
+  async getVisitLogsWithUsers(client, cb, q) {
     const modifyColumnNames = evolve({
       where: Objects.renameKeys({
         visitActivity: 'visit_activity.visit_activity_name',
@@ -550,10 +577,10 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         'visit_activity.visit_activity_category_id')
       .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
       .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id'),
-    query);
+      query);
   },
 
-  async getVisitLogAggregates (client, cb, aggs, query) {
+  async getVisitLogAggregates(client, cb, aggs, query) {
     const unsupportedAggregates = difference(aggs, ['age', 'gender', 'visitActivity', 'lastWeek']);
     if (unsupportedAggregates.length > 0) {
       throw new Error(`${unsupportedAggregates.join(', ')} are not supported aggregate fields`);
@@ -600,7 +627,7 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
         .innerJoin('user_account', 'user_account.user_account_id', 'visit_log.user_account_id')
         .innerJoin('gender', 'gender.gender_id', 'user_account.gender_id')
         .groupBy('gender.gender_name')
-      , queryMatchOnColumnNames)
+        , queryMatchOnColumnNames)
         .then((rows) => {
           const gender: Dictionary<number> = rows
             .reduce((acc: Dictionary<number>, row: { gender: string; count: number }) => {

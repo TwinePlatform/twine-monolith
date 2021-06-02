@@ -1,11 +1,10 @@
 import React, { FC, useState, useRef, useEffect } from 'react';
 import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
-import { H2 } from './Headings';
+import { H2left } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {CommunityBusinesses, Project, Logs, LogNote,} from '../../api';
-import { duration } from 'moment';
-import DataTable from '../../../features/dashboard/components/DataTable';
+import NoteModal from './NoteModal';
 
 /*
  * Types
@@ -20,9 +19,10 @@ type Props = {
  */
 
 
-const Heading2 = styled(H2)`
+const Heading2 = styled(H2left)`
   marginBottom: 20;
   color: ${ColoursEnum.white};
+  padding: 10px;
 `;
 
 const getStringArray = (array: any[]) => {
@@ -31,35 +31,11 @@ const getStringArray = (array: any[]) => {
 
 const getSelected = (e: any) => e.value;
 
-const getDuration = (startTimeElement: any, endTimeElement: any) => {
-    const startTime = startTimeElement.value;
-    const endTime = endTimeElement.value;
-
-
-    console.log(startTime)
-    console.log(endTime)
-
-    //assuming same day, which you kind of
-    const hours = parseInt(endTime.slice(0,2)) - parseInt(startTime.slice(0,2));
-    const minutes = 0;
-    const seconds = 0;
-
-    return {hours, minutes, seconds}
-}
-
-const getDate = (dateElement: any, startTimeElement: any) => {
-    console.log(dateElement.value + startTimeElement.value)
-
+const getDate = (date: any, startTime: any) => {
     try{
-        let date = new Date(
-            parseInt(dateElement.value.slice(0,4)),
-            parseInt(dateElement.value.slice(5,7)) - 1,
-            parseInt(dateElement.value.slice(8,10)),
-            startTimeElement.value.slice(0,2),
-            startTimeElement.value.slice(3,5),
-        )
-        console.log(date);
-        return date;
+        let startedAt = new Date(date+'T'+startTime);
+        
+        return startedAt;
     }
     catch{
         console.log("not good");
@@ -67,7 +43,15 @@ const getDate = (dateElement: any, startTimeElement: any) => {
     }
 }
 
-const getNote = (e: any) => e.value? e.value : ""
+const isNotZero = (duration: any) => {
+    if(duration.hours === 0 && duration.minutes === 0)
+        return false;
+    return true;
+}
+
+const zeroToNine = [...Array(10).keys()];
+const zeroToFiftyNine = [...Array(60).keys()];
+
 
 const LogCreateModal:FC<Props> = (props) => {
     const {visible, closeFunction,} = props;
@@ -79,22 +63,25 @@ const LogCreateModal:FC<Props> = (props) => {
     const [valid, setValid] = useState(false);
     const now = new Date();
     const [date, setDate] = useState(now.toISOString().slice(0,10));
-    const [startTime, setStartTime] = useState(now.getHours() + ":" + now.getMinutes());
-    const [endTime, setEndTime] = useState(now.getHours() + ":" + now.getMinutes());
+    const startTime = now.toISOString().slice(11,16);
+    const [duration, setDuration] = useState({
+        hours:0,
+        minutes:0,
+        seconds:0
+    })
 
     const[errorMessage, setErrorMessage] = useState("");
+    const[successMessage, setSuccessMessage] = useState("");
 
-    console.log(now)
-    console.log(date)
-    console.log(startTime);
-    console.log(endTime);
+    const[noteModalVisible, setNoteModalVisible] = useState(false);
+    const[note, setNote] = useState("");
 
     const [log, setLog] = useState({
         userId: 0,
         activity: "",
         project: "",
-        duration: {hours: 0, minutes: 0, seconds: 0},
-        startedAt: new Date(),
+        duration: duration,
+        startedAt: getDate(date,startTime),
     })
 
     const wrapperRef = useRef(null);
@@ -108,18 +95,17 @@ const LogCreateModal:FC<Props> = (props) => {
                 userId: parseInt(getSelected(document.getElementById('Volunteer'))),
                 activity: getSelected(document.getElementById('Activity')),
                 project: getSelected(document.getElementById('Project')),
-                duration: getDuration(document.getElementById('Start Time'),document.getElementById('End Time')),
-                startedAt: getDate(document.getElementById("Date"),document.getElementById('Start Time')),
+                duration: duration,
+                startedAt: getDate(date,startTime),
             };
 
-            console.log(potentialLog);
             //validation code
-            if(new Date(potentialLog.startedAt) && potentialLog.duration.hours!=0){
+            if(new Date(potentialLog.startedAt) && isNotZero(potentialLog.duration)){
                 setLog(potentialLog);
                 setValid(true);
             }
         }
-    })
+    },[loading, duration, date, startTime])
 
     const getOptions = async () => {
         const options = {
@@ -131,15 +117,36 @@ const LogCreateModal:FC<Props> = (props) => {
         setActivities(getStringArray(options.activities.data.result));
         setVolunteers(options.volunteers.data.result);
 
-        console.log(options);
-
         setLoading(false);
-    }    
+    }   
 
-    const select = ()=>{
+    const changeDuration = (event: any) => {
+        console.log(duration)
+
+        if(event.target.id === "minutes")
+            setDuration({
+                hours: duration.hours,
+                minutes: event.target.value,
+                seconds: duration.seconds
+            })
+        if(event.target.id === "hours")
+            setDuration({
+                hours: event.target.value,
+                minutes: duration.minutes,
+                seconds: duration.seconds
+            })
+    }
+
+    const submit = ()=>{
         try{
-            console.log(log);
-            Logs.add(log);
+            Logs.add(log)
+            .then(result=>{
+                const {activity, project, startedAt } = result.data.result;
+                const LogID = result.data.result.id;
+                LogNote.update(note,LogID,activity,project,startedAt).then(result=>console.log(result))
+                }
+            );
+            showSuccessMessage();
         }
         catch(error){
             console.log("error");
@@ -148,15 +155,18 @@ const LogCreateModal:FC<Props> = (props) => {
         }
     };
 
+    const showSuccessMessage = ()=>{
+        setSuccessMessage("Log created!");
+        setTimeout(()=>{setSuccessMessage("")},1000);
+    }
+
     if(visible)
         return (
             <div
                 style={{
                     position: 'fixed', 
-                    width: "50%", 
-                    height: "50%", 
-                    bottom: "25%", 
-                    right: "25%",
+                    bottom: "50%", 
+                    right: "50%",
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
@@ -165,7 +175,19 @@ const LogCreateModal:FC<Props> = (props) => {
                     alignItems: 'center',
                 }}
                 ref={wrapperRef}
+                className="log-modal"
             >
+                <h1
+                    style={{
+                        position: 'fixed', bottom: '50%', zIndex: 4, color: ColoursEnum.purple,
+                        textAlign: 'center', left: '50%'
+                    }}
+                >{successMessage}</h1>
+                <NoteModal
+                visible={noteModalVisible}
+                setNote={setNote}
+                closeFunction={()=>setNoteModalVisible(false)}
+                />
                 <div
                     style={{
                         backgroundColor: ColoursEnum.purple,
@@ -179,47 +201,93 @@ const LogCreateModal:FC<Props> = (props) => {
                         borderRadius: '4px',
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        marginTop: '45px',
-                        marginLeft: '75px',
-                        marginRight: '75px',
-                        padding: '12px',
+                        padding: '10px',
                     }}
                 >
-                    <p>Add Time</p>
+                    <p className = "modal-title">Add Time</p>
                 {
                 loading?
                     <p>loading...</p>
                 :
-                    <div id="Log Form">
-                        <select id="Volunteer" name="Volunteer">
-                            {volunteers.map(volunteer=>
-                                <option value={volunteer.id}>{volunteer.name}</option>)} 
-                        </select>
-                        <select id="Project" name="Project">
+                    <div id="Log Form" className="log-create-form">
+                        <div className="log-create-column">
+                            <div className="log-create-section">
+                                <span  className = "section-title-create">Volunteer</span>
+                                <select id="Volunteer" name="Volunteer" className="log-create-select">
+                                    {volunteers.map(volunteer=>
+                                        <option value={volunteer.id}>{volunteer.name}</option>)} 
+                                </select>
+                            </div>
+                        <hr className = "Section_Dividers" />
+                        <div className="log-create-section">
+                        <span  className = "section-title-create">Project</span>
+                        <select id="Project" name="Project" className="log-create-select">
                             {projects.map(project=>
                                 <option value={project}>{project}</option>)} 
                         </select>
-                        <select id="Activity" name="Activity">
+                        </div>
+                        <hr className = "Section_Dividers" />
+                        <div className="log-create-section">
+                        <span  className = "section-title-create">Activity</span>
+                        <select id="Activity" name="Activity" className="log-create-select">
                             {activities.map(activity=>
                                 <option value={activity}>{activity}</option>)} 
                         </select>
-                        <input type="date" id="Date" value={date}
+                        </div>
+                        <hr className = "Section_Dividers" />
+                        </div>
+                        <div className="log-create-column">
+                        <div className="log-create-section">
+                        <span  className = "section-title-create">Date</span>
+                        <input type="date" id="Date" value={date}  className="log-create-select"
                             onChange={(e)=>setDate(e.target.value)}
                             //max={todaysDate}
                         />
-                        <input type="time" id="Start Time" value={startTime}
+                        </div>
+                        <hr className = "Section_Dividers" />
+                        {/*<div className="log-create-section">
+                        <span  className = "section-title-create">Start Time</span>
+                        <input type="time" id="Start Time" value={startTime}  className="log-create-select"
                         onChange={(e)=>setStartTime(e.target.value)}
                         />
-                        <input type="time" id="End Time" value={endTime}
-                        onChange={(e)=>setEndTime(e.target.value)}
-                        />
-                        <input type="text" id="Note" placeholder="Notes"/>
-                        <button onClick={select}
-                        disabled={!valid}
-                        >Create</button>
-                        <p>{errorMessage}</p>
+                        </div>
+                        <hr className = "Section_Dividers" />*/}
+                        <div className="log-create-section">
+                        <span  className = "section-title-create">Hours</span>
+                        <select id="hours" name="Hours" onChange={e=>changeDuration(e)} className="log-create-select">
+                            {zeroToNine.map(time=>
+                                <option value={time}>{time}</option>)} 
+                        </select>
+                        </div>
+                        <hr className = "Section_Dividers" />
+                        <div className="log-create-section">
+                        <span  className = "section-title-create">Minutes</span>
+                        <select id="minutes" name="Minutes"  className="log-create-select"
+                        onChange={e=>changeDuration(e)}>
+                            {zeroToFiftyNine.map(time=>
+                                <option value={time}>{time}</option>)} 
+                        </select>
+                        </div>
+                        <hr className = "Section_Dividers" />
+                        </div>   
                     </div>
                     }
+                    <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <button 
+                        className="add-note-button"
+                        onClick={()=>setNoteModalVisible(true)}>Add Note</button>
+                    </div>
+                    <div className="duration-create">
+                        <span><p> Member volunteered  for  </p></span> <br />
+                        <p><span className="number">{log.duration.hours}</span> Hours <span className="number">{log.duration.minutes}</span> minutes</p> 
+                    </div>  
+                    <div style={{display: "flex", justifyContent: "center"}}>
+                    <button onClick={submit}
+                    className="create-log-button"
+                        disabled={!valid}
+                    >ADD TIME</button>
+                    <p>{errorMessage}</p>
+                    </div>
                 </div>
             </div>
         );

@@ -22,6 +22,7 @@ interface LinkProps {
 
 const Link = styled(L)`
   padding: 0.5rem;
+  margin-right: 3.5rem;
   border-bottom: ${(props: LinkProps) => props.isActive
     ? `1.5px solid ${ColoursEnum.white}` : 'none'};
 `;

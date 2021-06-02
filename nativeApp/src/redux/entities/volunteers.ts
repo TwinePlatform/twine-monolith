@@ -213,6 +213,7 @@ const volunteersReducer: Reducer<VolunteersState, Actions> = (state = initialSta
         ...state,
         updateIsFetching: false,
         updateError: null,
+        createSuccess: false,
         updateSuccess: false,
       };
 

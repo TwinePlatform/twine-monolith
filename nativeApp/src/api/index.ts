@@ -1,15 +1,20 @@
 import _axios, { AxiosRequestConfig, AxiosError } from "axios";
 import qs from "qs";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 import getEnvVars from "../../environment"; // eslint-disable-line
 import { StorageValuesEnum } from "../authentication/types";
 import { Api } from "../../../api/src/api/v1/types/api";
-import { VolunteerLog } from "../../../api/src/models";
+import {
+  //CommunityBusiness, 
+  VolunteerLog
+} from "../../../api/src/models";
+import { userId } from "../../../api/src/api/v1/schema/request";
 
 /*
  * Types
  */
 export type IdAndName = { id: number; name: string };
+type LogsResult = { error?: any; };
 
 /*
  * Axios
@@ -85,14 +90,14 @@ const VolunteerLogs = {
     },
     ),
   getVolunteerActivities: () => axios.get('/volunteer-activities'),
-  add: (values: Partial<VolunteerLog>) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>( //eslint-disable-line
+  add: (values: Partial<VolunteerLog>) => makeRequest<LogsResult>( //eslint-disable-line
     {
       method: 'POST',
       url: `/community-businesses/me/volunteer-logs`,
       data: values,
     }),
 
-  update: (id, LogId, values: Partial<VolunteerLog>) => makeRequest<Api.CommunityBusinesses.Me.VolunteerLogs.POST.Result>({ //eslint-disable-line
+  update: (id, LogId, values: Partial<VolunteerLog>) => makeRequest({ //eslint-disable-line
     method: "PUT",
     url: `/community-businesses/me/volunteer-logs/${id}/${LogId}`,
     data: values,
@@ -106,7 +111,16 @@ const VolunteerLogs = {
 
 const CommunityBusiness = {
   get: async (): Promise<any> => axios.get('/community-businesses'),
-  register: (data) => { console.log(data) }
+  getByRegion: async (regionId) => makeRequest({
+    method: 'GET',
+    url: `/regions/${regionId}/community-businesses`
+  }),
+  register: (data) => makeRequest({
+    method: 'POST',
+    url: "/community-businesses/register",
+    data: { ...data },
+  },
+  ),
 }
 
 const Projects = {
@@ -148,11 +162,56 @@ const Invite = {
   }
 }
 
+const Badges = {
+  getBadges: () => {
+    const res = makeRequest({
+      method: "GET",
+      url: '/community-businesses/me/getOwnBadges'
+    }).then(result => {
+      console.log(result.data);
+      return result.data
+    })
+
+    return res;
+  },
+
+  getCBBadges: () => {
+    const res = makeRequest({
+      method: "GET",
+      url: '/community-businesses/me/getCommunityBadges'
+    }).then(result => { return result.data })
+    return res;
+  },
+
+  checkNupdate: () => {
+    const res = makeRequest({
+      method: "POST",
+      url: "/community-businesses/me/checkBadge"
+    }).then(res => { return res.data; })
+    return res;
+  },
+
+  awardInvite: () => {
+    const res = makeRequest({
+      method: "POST",
+      url: "/community-businesses/me/getInviteBadge"
+    }).then(res => { return res.data; })
+    return res;
+
+  }
+}
+
 const Users = {
   getPush: (orgId: number, ProjectId: number) =>
     makeRequest({
       method: 'GET',
       url: `/community-businesses/${orgId}/push/${ProjectId}`
+    })
+  ,
+  getPushOld: (orgId: number, ProjectId: number) =>
+    makeRequest({
+      method: 'GET',
+      url: `/community-businesses/${orgId}/push/${ProjectId}/old`
     })
   ,
   pushtoken: (id: number, token: string) => {
@@ -202,6 +261,7 @@ const API = {
   Projects,
   Constants,
   Invite,
+  Badges,
   Users,
   Notes
 };

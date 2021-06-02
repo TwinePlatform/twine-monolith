@@ -11,7 +11,7 @@
  * See also: https://hapijs.com/api#request-lifecycle
  */
 import * as Hapi from '@hapi/hapi';
-import * as Boom from '@hapi/boom';
+import {Boom} from '@hapi/boom';
 import { formatBoom, BoomWithValidation } from '../utils';
 import { Environment } from '../../../../config';
 

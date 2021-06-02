@@ -260,7 +260,7 @@ export type VolunteerLog = Readonly<CommonTimestamps & {
   project?: string;
   duration: Duration.Duration;
   startedAt: string;
-  notes?: string;
+  note?: string;
 }>;
 
 export type ApiToken = Readonly<CommonTimestamps & {
@@ -298,7 +298,7 @@ export type Collection<T extends Model> = {
   get: (c: Knex, a?: ModelQuery<T>) => Promise<T[]>;
   getOne: (c: Knex, a?: ModelQuery<T>) => Promise<Maybe<T>>;
   update: (c: Knex, a: Partial<T>, b: Partial<T>) => Promise<T>;
-  add: (c: Knex, a: Partial<T>) => Promise<T>;
+  add: (c: Knex, a: Partial<T>, b?: string) => Promise<T>;
   destroy: (c: Knex, a: Partial<T>) => Promise<Int>;
 };
 
@@ -307,6 +307,7 @@ type UsersBaseCollection = Collection<User>;
 export type UserCollection = UsersBaseCollection & {
   isMemberOf: (k: Knex, u: User, cb: CommunityBusiness) => Promise<boolean>;
   updateToken: (c: Knex, a: any, b: any) => Promise<any>;
+  getWithEmail: (c: Knex, email: any) => Promise<any>;
 };
 
 export type VisitorCollection = UsersBaseCollection & {
@@ -324,6 +325,7 @@ export type VolunteerCollection = UsersBaseCollection & {
   fromProjectWithToken: (client: Knex, c: CommunityBusiness, vp: string) =>
     // fromProjectWithToken: (client: Knex, c: CommunityBusiness, q?: ModelQuery<User>) =>
     Promise<Partial<User>[]>;
+  fromRecentProjectWithToken: (client: Knex, c: CommunityBusiness, vp: string) => Promise<any>;
   addWithRole: (
     k: Knex,
     u: Partial<User>,
@@ -355,6 +357,10 @@ export type CommunityBusinessCollection = Collection<CommunityBusiness> & {
   getVisitActivityById: (k: Knex, c: CommunityBusiness, id: Int) => Promise<Maybe<VisitActivity>>;
   addVisitActivity: (k: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>)
     => Promise<Maybe<VisitActivity>>;
+  addVolunteerActivity: (k: Knex, a: object) => any;
+  addVolunteerProject: (k: Knex, a: object, b: string) => any;
+  activityExists: (k: Knex, b: string) => any;
+  projectExists: (k: Knex, b: string, orgId: any) => any;
   updateVisitActivity: (k: Knex, a: Partial<VisitActivity>) => Promise<Maybe<VisitActivity>>;
   deleteVisitActivity: (k: Knex, i: Int) => Promise<Maybe<VisitActivity>>;
   addVisitLog: (k: Knex, v: VisitActivity, u: Partial<User>, a: 'sign_in_with_name' | 'qr_code') =>

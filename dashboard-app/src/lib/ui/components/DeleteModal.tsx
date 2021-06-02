@@ -1,9 +1,9 @@
-import React, { FC, useState, useRef } from 'react';
+import React, { FC, useRef} from 'react';
 import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
 import { H2 } from './Headings';
 import { ColoursEnum } from '../design_system';
-import {Files} from '../../api';
+import {Logs} from '../../api';
 
 /*
  * Types
@@ -11,7 +11,7 @@ import {Files} from '../../api';
 type Props = {
   visible: boolean;
   closeFunction: () => void;
-  destination: string;
+  logToDelete: any;
 }
 
 /*
@@ -24,43 +24,31 @@ const Heading2 = styled(H2)`
   color: ${ColoursEnum.white};
 `;
 
-
-const UploadModal:FC<Props> = (props) => {
-    const {visible, closeFunction, destination} = props;
-    const [filename, setFilename] = useState("Upload File Here")
-    const [uploadedFile, setUploadedFile] = useState(new File([""], "filename"));
+const DeleteModal:FC<Props> = (props) => {
+    const {visible, closeFunction, logToDelete} = props;
 
     const wrapperRef = useRef(null);
     useOutsideAlerter(wrapperRef, closeFunction);
 
-    const select = () => {
-        if(document.getElementById('file-input'))
-            document.getElementById('file-input')!.click();
-    }
-
-    const handleUpload = (e: any) => {
-        setUploadedFile(e.target.files[0]);
-        setFilename(e.target.files[0].name);
-        
-    }
-
-    const confirmUpload = () => {
-        if(filename != "Upload File Here"){
-            console.log(uploadedFile);
-            Files.upload(uploadedFile,destination);
-            closeFunction();
+    const confirm = ()=>{
+        try{
+            Logs.delete(logToDelete.ID)
         }
-    }
+        catch(error){
+            console.log("error");
+            console.log(error);
+        }
+    };
 
     if(visible)
         return (
             <div
                 style={{
                     position: 'fixed', 
-                    width: "50%", 
-                    height: "50%", 
-                    bottom: "25%", 
-                    right: "25%",
+                    width: "30%", 
+                    height: "30%", 
+                    bottom: "45%", 
+                    right: "45%",
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
@@ -70,18 +58,17 @@ const UploadModal:FC<Props> = (props) => {
                 }}
                 ref={wrapperRef}
             >
-                <div
+              
+               <div
                     style={{
                         backgroundColor: ColoursEnum.purple,
                         borderRadius: "8px 8px 0px 0px",
                     }}
                 >
-                <Heading2>TWINE</Heading2>
+                    <Heading2>TWINE</Heading2>
                 </div>
                 <div
                     style={{
-                        borderColor: ColoursEnum.mustard,
-                        border: '2px',
                         borderRadius: '4px',
                         flexDirection: 'row',
                         justifyContent: 'space-between',
@@ -91,16 +78,10 @@ const UploadModal:FC<Props> = (props) => {
                         padding: '12px',
                     }}
                 >
-                    <p>{filename}</p>
-                    <button onClick={select}>Select</button>
-                    <input id="file-input" type="file" name="name" style={{display: 'none'}}
-                        onChange={e=>handleUpload(e)}
-                    />
+                    <p>Are you sure you want to delete this log?</p>
+                    <button onClick={closeFunction}>No</button>
+                    <button onClick={()=>{confirm();closeFunction();}}>Yes</button>
                 </div>
-                <img
-                    src={require('../../../assets/uploadbutton.png')}
-                    onClick={confirmUpload}
-                />
             </div>
         );
     else
@@ -108,4 +89,4 @@ const UploadModal:FC<Props> = (props) => {
 
 };
 
-export default UploadModal;
+export default DeleteModal;

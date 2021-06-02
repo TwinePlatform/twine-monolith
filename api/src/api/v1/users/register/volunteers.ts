@@ -34,7 +34,13 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
         mode: 'try',
         strategy: 'standard',
         access: {
-          scope: ['user_details-child:write'],
+          scope: ['user_details-child:write', 'organisations_details-parent:read',
+            'organisations_volunteers-parent:read',
+            'user_details-own:read',
+            'user_details-own:write',
+            'volunteer_logs-own:read',
+            'volunteer_logs-own:write',
+            'volunteer_logs-own:delete'],
         }
       },
       validate: {
@@ -74,6 +80,7 @@ const routes: [Api.Users.Register.Volunteers.POST.Route] = [
         })
       }
 
+      console.log(payload);
       const communityBusiness = await CommunityBusinesses
         .getOne(knex, { where: { id: organisationId, deletedAt: null } });
 

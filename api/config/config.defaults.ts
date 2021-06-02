@@ -9,7 +9,7 @@ import { Environment, Config } from './types';
 import { DeepPartial, AppEnum } from '../src/types/internal';
 import { envOr, envListOr } from './util';
 
-const config: DeepPartial<Config> = {
+const config: any = {
   root: path.resolve(__dirname, '..'),
   env: Environment.DEVELOPMENT,
   web: {
@@ -70,6 +70,7 @@ const config: DeepPartial<Config> = {
           maxCookieSize: 0, // Must be 0 so everything is stored server side
           cookieOptions: {
             password: process.env.COOKIE_PASSWORD,
+            isSameSite: "None",
             isHttpOnly: true,
             path: '/',
           },

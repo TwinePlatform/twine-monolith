@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-
-import Page from '../../../../lib/ui/Page';
 import { Heading as H } from '../../../../lib/ui/typography';
 import VolunteersBadgesCard from './../../../../lib/ui/Badges/VolunteersBadges'
+import API from '../../../../api';
+import PageNoHeading from '../../../../lib/ui/PageNoHeading';
 
 /*
  * Types
@@ -25,36 +25,44 @@ const Heading = styled(H)`
 	marginBottom: 25px;
 `;
 
+const Text = styled.Text`
+  width:100%;
+  textAlign: center;
+`;
 
 /*
  * Component
  */
-const VBObj = [
-	{
-		name: 'Kara Thrace',
-		badges: ['FirstLog', 'ThridMonth', 'FifthLog'],
-	},
-	{
-		name: 'Dr. Lee',
-		badges: ['ThridMonth', 'AnnMedal', 'SixthMonth', 'TenthHour', 'twentiethHour', 'fiftiethHour', 'InviteMedal'],
-	}
-]
 
-// {VBObj.map(element) => (
-// 	console.log(element);
-// 	return (
-// 		<VolunteersBadges badges={element}/>
-// 	)
-// )}
 
 const VolunteersBadges: FC<Props> = (props) => {
+	const [badgearray, setbadgearray] = useState([]);
+	const [done, setDone] = useState(false);
+
+	const getBadge = async () => {
+		setbadgearray(await API.Badges.getCBBadges());
+	}
+
+	useEffect(() => {
+		getBadge();
+		setDone(true);
+	}, []);
+
 	return (
+	<PageNoHeading>
 		<View>
 			<Heading>Volunteer's Badges</Heading>
-			{VBObj.map((element) => (
-				<VolunteersBadgesCard details={element} />
-			))}
+			{badgearray.length === 0 && !done && <Text>Loading</Text>}
+			{badgearray.length === 0 && done && <Text>There are no badges from your organisation to display.</Text>}
+			{
+				badgearray.map((element, i) => (
+					<VolunteersBadgesCard 
+					key={i}
+					details={element} />
+
+				))}
 		</View>
+	</PageNoHeading>
 	);
 }
 

@@ -17,7 +17,6 @@ import {
 } from './schema';
 import Roles from '../../../models/role';
 import { VolunteerLogs, Volunteers, VolunteerLog, VolunteerLogPermissions } from '../../../models';
-import { userCredentials } from '../../../models';
 import { getCommunityBusiness } from '../prerequisites';
 import { Api } from '../types/api';
 import { requestQueryToModelQuery } from '../utils';
@@ -26,9 +25,10 @@ import { Credentials as StandardCredentials } from '../../../auth/strategies/sta
 import { RoleEnum, User } from '../../../models/types';
 import { Unpack } from '../../../types/internal';
 import { Serialisers } from '../serialisers';
+import { getCredentialsFromRequest } from '../auth';
 
 
-type SyncLogPayload = Api.CommunityBusinesses.Me.VolunteerLogs.sync.POST.Request['payload'];
+type SyncLogPayload = Api.CommunityBusinesses.Me.VolunteerLogs.sync.POST2.Request['payload'];
 type SyncLogPayloadItem = Unpack<SyncLogPayload>;
 
 
@@ -107,10 +107,10 @@ const routes: [
         };
 
         const token = request.yar.id;
-        //get UserId
-        const credentials = await userCredentials.get(knex, token);
-        const userId = credentials[0].user_account_id;
 
+        //get UserId: Technical Debt see #573
+        const userId = getCredentialsFromRequest(request).user.id;
+        console.log('userId parsed in the volunteerLogs endpoint', userId);
         const queryown = {
           ...requestQueryToModelQuery<VolunteerLog>(_query),
           ...{ userId },
@@ -118,17 +118,16 @@ const routes: [
 
         // use permission to check for only own 
         const canReadOthers = await VolunteerLogPermissions.canReadOthers(knex, userId);
-        console.log(canReadOthers);
 
         var logs;
         // if have permission to get others then continue, 
         if (canReadOthers == true) {
-          console.log('canReadOthers');
+          console.log('canReadOthers and this is the console log!!!!');
           logs = await VolunteerLogs.fromCommunityBusiness(knex, communityBusiness, query);
         }
         //else execute the call for just the userId 
         else {
-          console.log('reading own...');
+          console.log('getting own logs...');
           logs = await VolunteerLogs.getOwn(knex, communityBusiness, queryown);
         }
         //if userId != call userId boom 
@@ -188,7 +187,7 @@ const routes: [
         auth: {
           strategy: 'standard',
           access: {
-            scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read'],
+            scope: ['volunteer_logs-sibling:read', 'volunteer_logs-child:read', 'volunteer_logs-own:read'],
           },
         },
         // validate: { query: { since, until } },
@@ -271,7 +270,7 @@ const routes: [
         auth: {
           strategy: 'standard',
           access: {
-            scope: ['volunteer_logs-sibling:write', 'volunteer_logs-child:write'],
+            scope: ['volunteer_logs-sibling:write', 'volunteer_logs-child:write', 'volunteer_logs-own:write'],
           },
         },
         validate: {
@@ -472,7 +471,7 @@ const routes: [
           { method: getCommunityBusiness, assign: 'communityBusiness' },
         ],
       },
-      handler: async (request, h) => {
+      handler: async (request: any, h: any) => {
         const {
           server: { app: { knex } },
           pre: { communityBusiness },

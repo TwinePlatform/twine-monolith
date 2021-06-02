@@ -1,7 +1,7 @@
 import React, { FC, useState, useRef } from 'react';
 import {useOutsideAlerter} from '../../hooks/useOutsideAlerter';
 import styled from 'styled-components';
-import { H2 } from './Headings';
+import { H2left } from './Headings';
 import { ColoursEnum } from '../design_system';
 import {Project} from '../../api';
 
@@ -18,9 +18,10 @@ type Props = {
  */
 
 
-const Heading2 = styled(H2)`
+const Heading2 = styled(H2left)`
   marginBottom: 20;
   color: ${ColoursEnum.white};
+  padding: 10px;
 `;
 
 
@@ -51,18 +52,15 @@ const ProjectModal:FC<Props> = (props) => {
             <div
                 style={{
                     position: 'fixed', 
-                    width: "50%", 
-                    height: "50%", 
-                    bottom: "25%", 
-                    right: "25%",
+                    bottom: "50%", 
+                    right: "50%",
                     backgroundColor: "white",
                     borderRadius: "8px",
                     zIndex: 3,
                     boxShadow: '2px 3px 6px #00000029',
-                    justifyContent: 'center',
-                    alignItems: 'center',
                 }}
                 ref={wrapperRef}
+                className="log-modal"
             >
                 <div
                     style={{
@@ -72,28 +70,23 @@ const ProjectModal:FC<Props> = (props) => {
                 >
                 <Heading2>TWINE</Heading2>
                 </div>
-                <div
-                    style={{
-                        borderColor: ColoursEnum.mustard,
-                        border: '2px',
-                        borderRadius: '4px',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        marginTop: '45px',
-                        marginLeft: '75px',
-                        marginRight: '75px',
-                        padding: '12px',
-                    }}
-                >
-                    <p>New Project</p>
-                    <input value={projectName} type="text" placeholder="Project Name" onChange={textHandler}/>
+                <div style={{padding: '15px 80px'}}>
+                <p className = "modal-title">Add Project</p>
+                <br/>
+                <input className="log-create-select" value={projectName} type="text" placeholder="Project Name" onChange={textHandler}/>
+                <hr className = "Section_Dividers"/>
+                <br/>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
                     <button 
                         onClick={submit}
                         disabled={projectName.length < 1}
+                        className="create-log-button"
                     >
-                        Create
+                        SAVE
                     </button>
                     <p>{successMessage}</p>
+                </div>
+                
                 </div>
             </div>
         );

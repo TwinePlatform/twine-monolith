@@ -1,5 +1,5 @@
 import * as Hapi from '@hapi/hapi';
-import * as Boom from '@hapi/boom';
+import {Boom} from '@hapi/boom';
 import { Dictionary } from 'ramda';
 import { Duration } from 'twine-util/duration';
 import { ApiRequestQuery } from '../schema/request';
@@ -45,15 +45,28 @@ export namespace Api {
     }
   }
 
+  export namespace Upload {
+    export namespace Volunteer {
+      export namespace POST {
+        export interface Request extends Hapi.Request {
+          payload: any;
+        }
+        export type Response = any;
+        export type Route = ServerRoute<Request, Response>;
+      }
+    }
+  }
+
   export namespace CommunityBusinesses {
     export namespace GET {
-      export interface Request extends Hapi.Request { query: ApiRequestQuery & Dictionary<any> }
+      export interface Request extends Hapi.Request { query: any }
       export type Result = CommunityBusiness[];
       export type Response = ResponsePayload<Result>;
       export type Route = ServerRoute<Request, Response>;
     }
 
     export namespace Me {
+
       export namespace GET {
         export interface Request extends Hapi.Request {
           query: ApiRequestQuery & Dictionary<any>;
@@ -226,6 +239,17 @@ export namespace Api {
         export namespace sync {
           export namespace POST {
             export interface Request extends Hapi.Request {
+              payload: any;
+              pre: { communityBusiness: CommunityBusiness };
+            }
+            export type Result = { ignored: number; synced: number };
+            export type Route = any;
+          }
+        }
+
+        export namespace sync {
+          export namespace POST2 {
+            export interface Request extends Hapi.Request {
               payload: (
                 Pick<VolunteerLog, 'id' | 'activity' | 'duration' | 'startedAt' | 'deletedAt' | 'project'> &
                 Pick<VolunteerLog, 'project' | 'startedAt' | 'deletedAt'> &
@@ -295,6 +319,25 @@ export namespace Api {
             export type Result = any;
             export type Route = ServerRoute<Request, ResponsePayload<Result>>
           }
+        }
+      }
+
+      export namespace Badges {
+        export namespace GET {
+          export interface Request extends Hapi.Request {
+
+          }
+          export type Result = any;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
+        }
+
+        export namespace POST {
+          export interface Request extends Hapi.Request {
+            userId: 'me';
+            pre: { communityBusiness: CommunityBusiness };
+          }
+          export type Result = any;
+          export type Route = ServerRoute<Request, ResponsePayload<Result>>;
         }
       }
 
@@ -433,7 +476,7 @@ export namespace Api {
         export namespace GET {
           export interface Request extends Hapi.Request {
             params: { organisationId: string | 'me' };
-            query: ApiRequestQuery & Dictionary <any>;
+            query: ApiRequestQuery & Dictionary<any>;
             pre: { communityBusiness: CommunityBusiness; isChild: boolean };
           }
           export type Result = User[];

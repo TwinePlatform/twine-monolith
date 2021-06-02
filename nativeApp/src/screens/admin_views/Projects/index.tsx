@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-
+import { Platform } from 'react-native';
 import styled from 'styled-components/native';
 import { NavigationInjectedProps } from 'react-navigation';
 import Tabs from '../../../lib/ui/Tabs';
@@ -105,7 +105,9 @@ const Projects: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
         console.log('project reset');
         navigation.navigate('AdminAddProject');
       }} title="Add Project" />
-      <Loader isVisible={projectsRequestStatus.isFetching} />
+      {Platform.OS === 'android' &&
+        <Loader isVisible={projectsRequestStatus.isFetching} />
+      }
 
       <Tabs
         tabOne={['Active', ProjectTab, {

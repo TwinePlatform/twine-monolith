@@ -39,7 +39,6 @@ const UsersDataTable: React.FunctionComponent<UsersDataTableProps> = (props) => 
     order = 'desc',
     onChangeSortBy = () => { },
     title,
-    showTotals = false,
     ...rest
   } = props;
 

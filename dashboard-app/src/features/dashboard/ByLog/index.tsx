@@ -6,7 +6,7 @@ import { Grid, Row, Col } from 'react-flexbox-grid';
 import DatePickerConstraints from './datePickerConstraints';
 import _LogsDataTable from '../components/DataTable/LogsDataTable';
 import ProjectsDataTable from '../components/DataTable/ProjectsDataTable';
-import UtilityBar from '../components/UtilityBar';
+import LogsUtilityBar from '../components/LogsUtilityBar';
 import { H1 } from '../../../lib/ui/components/Headings';
 import { DataTableProps } from '../components/DataTable/types';
 import { FullScreenBeatLoader } from '../../../lib/ui/components/Loaders';
@@ -16,6 +16,8 @@ import { ColoursEnum } from '../../../lib/ui/design_system';
 import ProjectModal from '../../../lib/ui/components/ProjectModal';
 import LogViewModal from '../../../lib/ui/components/LogViewModal';
 import LogCreateModal from '../../../lib/ui/components/LogCreateModal';
+import LogEditModal from '../../../lib/ui/components/LogEditModal';
+import DeleteModal from '../../../lib/ui/components/DeleteModal';
 import { PrimaryButton} from '../../../lib/ui/components/Buttons';
 import Errors from '../components/Errors';
 import useAggregateDataByLog from './useAggregateDataByLog';
@@ -50,7 +52,16 @@ const Container = styled(Grid)`
  */
 const initTableData = { headers: [], rows: [] };
 
-const initSelectedLog = { ID: 42, name: "ET" };
+const initSelectedLog = { 
+              ID: 0,
+              name: "none",
+              project: "no project",
+              activity: "no activity",
+              date: "2000-01-01",
+              startTime: "00:00",
+              hours: 0,
+              minutes: 0,
+ };
 
 /**
  * Component
@@ -59,14 +70,20 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   const { unit } = useContext(DashboardContext);
   const [fromDate, setFromDate] = useState<Date>(DatePickerConstraints.from.default());
   const [toDate, setToDate] = useState<Date>(DatePickerConstraints.to.default());
+  const [categories, setCategories] = useState([]);
+  const [filters, setFilters] = useState([]);
   const [logViewModalVisible, setLogViewModalVisible] = useState(false);
   const [logCreateModalVisible, setLogCreateModalVisible] = useState(false);
+  const [logEditModalVisible, setLogEditModalVisible] = useState(false);
+  const [logDeleteModalVisible, setLogDeleteModalVisible] = useState(false);
   const [projectModalVisible, setProjectModalVisible] = useState(false);
   const [selectedLog, setSelectedLog] = useState(initSelectedLog);
   const [tableData, setTableData] = useState<TableData>(initTableData);
   const [tableDataProjects, setTableDataProjects] = useState<TableData>(initTableData);
+  const [refresh, setRefresh] = useState([0]);
+
   const { loading, error, data, logFields, dataProjects, projectFields } =
-    useAggregateDataByLog({ from: fromDate, to: toDate });
+    useAggregateDataByLog({ from: fromDate, to: toDate, updateOn: refresh, categories, filters  });
 
   // set and clear errors on response
   const [errors, setErrors] = useErrors(error, data);
@@ -85,10 +102,10 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
   // manipulate data for table
   useEffect(() => {
     if (!loading && data && dataProjects && logFields && projectFields) {
-      setTableData(aggregatedToTableData({ data, unit, yData: logFields }));
+      setTableData(aggregatedToTableData({ data, unit, yData: logFields}));
       setTableDataProjects(aggregatedToTableData({ data: dataProjects, unit, yData: projectFields }));
     }
-  }, [logFields, data, dataProjects, loading, unit]);
+  }, [logFields, data, projectFields, dataProjects, loading, unit]);
 
   const downloadAsCsv = useCallback(() => {
     if (!loading && data) {
@@ -99,16 +116,30 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
     }
   }, [loading, data, fromDate, toDate, unit, orderable, setErrors]);
 
+  
+
   return (
     <Container>
       <LogViewModal
         visible={logViewModalVisible}
         closeFunction={()=>setLogViewModalVisible(false)}
         log={selectedLog}
+        onEdit={()=>{setLogViewModalVisible(false);setLogEditModalVisible(true);}}
+        onDelete={()=>setLogDeleteModalVisible(true)}
       />
       <LogCreateModal
         visible={logCreateModalVisible}
-        closeFunction={()=>setLogCreateModalVisible(false)}
+        closeFunction={()=>{setLogCreateModalVisible(false);setRefresh(refresh.concat([1]));}}
+      />
+      <LogEditModal
+        visible={logEditModalVisible}
+        closeFunction={()=>{setLogEditModalVisible(false);setRefresh(refresh.concat([1]));}}
+        logToEdit={selectedLog}
+      />
+      <DeleteModal
+        visible={logDeleteModalVisible}
+        closeFunction={()=>{setLogDeleteModalVisible(false);setRefresh(refresh.concat([1]));}}
+        logToDelete={selectedLog}
       />
       <ProjectModal
         visible={projectModalVisible}
@@ -121,12 +152,16 @@ const ByLog: FunctionComponent<RouteComponentProps> = () => {
       </Row>
       <Row center="xs">
         <Col xs={12}>
-          <UtilityBar
+          <LogsUtilityBar
             dateFilter="day"
             datePickerConstraint={DatePickerConstraints}
             onFromDateChange={setFromDate}
             onToDateChange={setToDate}
             onDownloadClick={downloadAsCsv}
+            categories={categories}
+            filters={filters}
+            setCategories={setCategories}
+            setFilters={setFilters}
           />
         </Col>
       </Row>

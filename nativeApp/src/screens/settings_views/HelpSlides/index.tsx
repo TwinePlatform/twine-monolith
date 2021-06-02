@@ -42,7 +42,7 @@ export const slide2: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
 				navigation={navigation}
 				rightNavigation='slide3'
 				leftNavigation='slide1'
-				backgroundname='slide2'
+				slide='slide2'
 				imagename='addTime'
 				text='Add your hours..'
 			/>
@@ -56,7 +56,7 @@ export const slide3: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
 		<View>
 			<HelpSlidesTemplate
 				navigation={navigation}
-				backgroundname='slide3'
+				slide='slide3'
 				rightNavigation='slide4'
 				leftNavigation='slide2'
 				imagename='addTimedetails'
@@ -72,7 +72,7 @@ export const slide4: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
 		<View>
 			<HelpSlidesTemplate
 				navigation={navigation}
-				backgroundname='slide4'
+				slide='slide4'
 				rightNavigation='slide5'
 				leftNavigation='slide3'
 				imagename='addTimedetails'
@@ -88,7 +88,7 @@ export const slide5: FC<Props & NavigationInjectedProps> = ({ navigation }) => {
 		<View>
 			<HelpSlidesTemplate
 				navigation={navigation}
-				backgroundname='slide5'
+				slide='slide5'
 				rightNavigation='slide6'
 				leftNavigation='slide4'
 				imagename='editTime'

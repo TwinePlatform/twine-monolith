@@ -55,6 +55,10 @@ export type ProjectsState = RequestState<VolunteerProject> & {
   deleteError: Error;
 }
 
+export type SupportState = {
+  modalOpen: boolean;
+}
+
 export type CurrentUserState = { data: CurrentUser }
 
 export type State = {
@@ -64,6 +68,7 @@ export type State = {
     volunteers: VolunteersState;
     currentUser: CurrentUserState;
     projects: ProjectsState;
+    support: SupportState,
   };
   constants: {
     activities: ActivitiesState;

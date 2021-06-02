@@ -1,9 +1,7 @@
 import { DependencyList, useEffect, useState } from 'react';
 import { useBatchRequest } from '../../../lib/hooks';
 import { CommunityBusinesses } from '../../../lib/api';
-import {IdAndName, logsToAggregatedData} from '../dataManipulation/logsToAggregatedData';
-import { tableType } from '../dataManipulation/tableType';
-import { VolunteerLogs } from '../../../../../api/src/models';
+import {IdAndName} from '../dataManipulation/logsToAggregatedData';
 
 
 interface UseAggregatedDataParams {

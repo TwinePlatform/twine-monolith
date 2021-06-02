@@ -42,7 +42,6 @@ const ProjectsDataTable: React.FunctionComponent<ProjectsDataTableProps> = (prop
     order = 'desc',
     onChangeSortBy = () => { },
     title,
-    showTotals = false,
     ...rest
   } = props;
 

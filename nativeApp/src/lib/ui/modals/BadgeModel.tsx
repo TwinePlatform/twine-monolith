@@ -17,11 +17,8 @@ import {
  * Types
  */
 type Props = {
-	isVisible: boolean;
-	onConfirm: () => void;
-	onCancel: () => void;
-	title: string;
-	text: string;
+	visible: boolean;
+	badge: object;
 }
 
 /*
@@ -109,27 +106,30 @@ const BadgeImages = {
 /*
  * Component
  */
-const ConfirmationModal: FC<Props> = ({
-	isVisible, badge
-}) => (
+const BadgeModal: FC<Props> = ({
+	visible, badge
+}) => {
+	const { title, text, img } = badge;
+	return (
 		<View style={styles.centeredView}>
 			<Modal
-				isVisible={isVisible}
+				visible={visible}
 				transparent={true}
 			>
 				<View style={styles.modalView}>
 					<Card>
 						<BadgeIcon>
-							<Image source={BadgeImages.FirstLog} />
+							<Image source={BadgeImages[img]} />
 						</BadgeIcon>
 						<BadgeDetails>
-							<BadgeTitle> {badge.title}</BadgeTitle>
-							<BadgeText> {badge.text}</BadgeText>
+							<BadgeTitle> {title}</BadgeTitle>
+							<BadgeText> {text}</BadgeText>
 						</BadgeDetails>
 					</Card>
 				</View>
 			</Modal>
 		</View>
-	);
+	)
+};
 
-export default ConfirmationModal;
+export default BadgeModal;

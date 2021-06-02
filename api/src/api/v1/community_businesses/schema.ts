@@ -50,7 +50,7 @@ export const cbPayload = {
   townCity: Joi.string().min(1).trim(),
   postCode: Joi.string().min(6).max(10).trim(),
   turnoverBand: Joi.string().min(5).max(11).trim(),
-  _360GivingId: Joi.string().min(5).trim(),
+  _360GivingId: Joi.string().trim(),
 };
 
 export const meOrId = id.allow('me');

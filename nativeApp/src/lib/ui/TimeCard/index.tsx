@@ -17,6 +17,7 @@ type Props = {
   id: number;
   volunteer?: string;
   timeValues: [number, number];
+  startTime: string;
   date: string;
   labels: [string, string];
   onDelete: () => void;
@@ -66,11 +67,12 @@ const getNote = async (id) => {
  */
 const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
   const {
-    id, timeValues, date, labels, volunteer, navigation, onDelete, setNoteDisplay, toggleVisibilityNoteModal, navigationPage
+    id, timeValues, startTime, date, labels, volunteer, navigation, onDelete, setNoteDisplay, toggleVisibilityNoteModal, navigationPage
   } = props;
-  const [ifNoteExists, setNoteExist] = useState(false);
+
+  const [noteExists, setNoteExist] = useState(false);
   const [note, setNote] = useState("");
-  const [initialised, setInitialsed] = useState(false);
+  const [initialised, setInitialised] = useState(false);
 
   useEffect(()=>{
     if(!initialised)
@@ -80,7 +82,7 @@ const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
           setNote(returnedNote);
           setNoteExist(true);
       }
-      setInitialsed(true);
+      setInitialised(true);
     })
   });
 
@@ -90,7 +92,12 @@ const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
     onEdit: () => {
       navigation.navigate(navigationPage, {
         logId: id,
-        labels: labels,
+        labels,
+        volunteer,
+        startTime,
+        date,
+        note,
+        timeValues,
       });
     },
   };
@@ -108,7 +115,7 @@ const TimeCard: FC<NavigationInjectedProps & Props> = (props) => {
           <Label textAlign="right" bold>{labels[1]}</Label>
         </LabelContainer>
       </DetailsContainer>
-      {ifNoteExists && <NoteContainer>
+      {noteExists && <NoteContainer>
           <NoteButton label={"View note"} onPress={()=>{setNoteDisplay(note);toggleVisibilityNoteModal();}}/>
       </NoteContainer>}
     </CardWithButtons>

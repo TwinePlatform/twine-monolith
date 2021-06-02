@@ -9,104 +9,395 @@ body {
   overflow-x: hidden;
 }
 
-
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-margin: 0;
-padding: 0;
-border: 0;
-font: inherit;
-vertical-align: baseline;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-display: block;
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
 }
 body {
-line-height: 1;
+  line-height: 1;
 }
-ol, ul {
-list-style: none;
+ol,
+ul {
+  list-style: none;
 }
-blockquote, q {
-quotes: none;
+blockquote,
+q {
+  quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
-content: '';
-content: none;
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+
+.ProjectDetails {
+  position: relative;
+  display: inline-block;
+  padding: 17px;
+  line-height: 18px;
+  top: -62px;
+  font-size: 12px;
+}
+
+.DateTime {
+  right: -86px;
+  top: -59px;
+  position: relative;
+  display: inline-block;
+  padding: 17px;
+  line-height: 18px;
+  font-size: 12px;
+}
+
+.modal-title {
+  /*position: relative;*/
+  text-align: center;
+ /* top: -55px;
+
+  height: 37px;*/
+  padding-bottom: 12px;
+  font: normal normal 20px/50px Roboto;
+  letter-spacing: 0.6px;
+  color: #000000;
+  opacity: 1;
+}
+
+.Section_Dividers {
+  height: 1px;
+  border-width:0;
+  background-color: #d4d4d4;
 }
 
 
-
-.ViewLog
+.SectionTitle
 {
-  height: 27px;  
+  color: grey;
+  padding-right: 10px;
+}
+
+.section-title-create{
+  color: grey;
+  padding-right: 10px;
+  margin-top: 4px;
+}
+
+.duration
+{
+  bottom: 60px;
+  left: 7%;
+  position: relative;
+  color: #707070;
+  font-size: 16px;
+  text-align: center;
+}
+
+.duration-create
+{
+  position: relative;
+  color: #707070;
+  font-size: 16px;
+  text-align: center;
+}
+
+.number{
+  font-size: 33px;
+}
+
+.note-area 
+{
+  position: relative;
+  border: #FFBF00 solid 2px;
+  padding: 5px;
+  top: -65px;
+  left: 50%;
+  transform: translate(-40%,0%);
+}
+
+
+.BottomDivider 
+{
+  width: 117%;
+  position: relative;
+  height: 1px;
+  border-width:0;
+  top: -30px;
+  background-color: #d4d4d4;
+}
+
+.vertical-divider{
+    border-left: 1px solid #d4d4d4;
+    width: 1px;
+    height: 25px;
+}
+
+.ModalControls {
+  position: absolute;
+  background: transparent;
+  width: 100%;
+  bottom: 7px;
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 10px;
+}
+
+.ViewLog {
+  height: 27px;
   width: 100px;
-  background-color: #8000FFCC;
+  background-color: #8000ffcc;
   color: white;
   border-radius: 20px;
-  border:none;
+  border: none;
 }
 
-.ViewLogYellow
-{
-  height: 27px;  
+.log-modal {
+  transform: translate(50%, 50%);
+}
+
+/*  Possibly move to  Modal Controls  */
+.EditLog {
+  position: relative;
+  border: none;
+  color:#8000ffcc;
+  background: transparent;
+}
+
+.DeleteLog {
+  position: relative;
+  border: none;
+  color: #8000ffcc;
+  background: transparent;
+}
+
+.EditIcon{
+  position: relative;
+  top: 6px;
+}
+
+.DeleteIcon{
+  position: relative;
+  top: 6px;
+}
+
+.ViewLogYellow {
+  height: 27px;
   width: 100px;
-  background-color: #FFBF00CC;
+  background-color: #ffbf00cc;
   color: white;
   border-radius: 20px;
-  border:none;
+  border: none;
 }
 
 table {
-border-collapse: collapse;
-border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.log-create-form{
+  display: inline-flex;
+}
+
+.log-create-column{
+  display: block;
+  padding: 5px;
+}
+
+.log-create-section{
+  display: flex;
+  justify-content: space-between;
+}
+
+.log-create-select{
+  border-width: 0px;
+}
+
+.add-note-button{
+    color: white;
+    background-color: #8000ffcc;
+    border-radius: 20px;
+    border-width: 0px;
+    box-shadow: 0px 3px 6px #00000029;
+    justify-content: flex-end;
+}
+
+.create-log-button{
+    color: white;
+    background-color: #8000ffcc;
+    box-shadow: 0px 2px 3px #33333333;
+    border-radius: 5px;
+    border-width: 0px;
+    padding: 10px 40px;
+    margin-top: 20px;
+}
+
+.create-log-button:disabled{
+  background-color: #8000ff4b;
+}
+
+.send-email-button{
+  color: white;
+    background-color: #8000ffcc;
+    border-radius: 10px;
+    border-width: 0px;
+    box-shadow: 0px 3px 6px #00000029;
+    justify-content: flex-end;
+    padding: 5px 20px;
+    margin: 0px 15px 10px;
+}
+
+.invite-section{
+  display: flex;
+  border: 1px solid #707070;
+  border-radius: 8px;
+  background: #F8F8F8;
+  margin: 15px;
+}
+
+.invite-text{
+  font: normal normal normal 15px Roboto;
+  letter-spacing: 0.23px;
+  color: #707070;
+  padding: 5px;
+}
+
+.invite-input{
+  font: normal normal normal 15px Roboto;
+  letter-spacing: 0.23px;
+  width: 100%;
+  background: #F8F8F8;
+  color: #707070;
+  padding: 5px;
+  border: none;
 }
 
 /* matches MediaQueriesEnum in design system */
 
-
 /* large desktop */
-@media (max-width: 4200px){
+@media (max-width: 4200px) {
   html {
     font-size: 16px;
   }
 }
 
 /* standard desktop */
-@media (max-width: 1800px){
+@media (max-width: 1800px) {
   html {
     font-size: 14px;
   }
 }
 
 /* tablet */
-@media (max-width: 1200px){
+@media (max-width: 1200px) {
   html {
     font-size: 12px;
   }
 }
 
 /* mobile (currently not supported) */
-@media (max-width: 900px){
+@media (max-width: 900px) {
   html {
     font-size: 10px;
   }

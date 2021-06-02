@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import moment from 'moment';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-
+import { Platform } from 'react-native';
 import { loadLogs, selectOrderedLogs, selectLogsStatus, deleteLog } from '../../../../redux/entities/logs';
 import { loadVolunteers, selectVolunteers } from '../../../../redux/entities/volunteers';
 import useToggle from '../../../../lib/hooks/useToggle';
@@ -12,6 +12,7 @@ import ConfirmationModal from '../../../../lib/ui/modals/ConfirmationModal';
 import ViewNoteModal from '../../../../lib/ui/modals/ViewNoteModal';
 import CardSeparator from '../../../../lib/ui/CardSeparator';
 import Loader from '../../../../lib/ui/Loader';
+import { truncate } from 'fs';
 
 /*
  * Types
@@ -22,23 +23,24 @@ type Props = {
 /*
  * Styles
  */
-const getTruncatedLogs = () => {
+const truncateLogs = (logs) => {
   const thirtyDaysAgo = moment().subtract(30, 'days');
-  let slicePoint = 10;
 
-  let logArray = useSelector(selectOrderedLogs, shallowEqual);
+  let logArray = logs;
 
-  /*
+  let truncatedLogs = [];
 
-  for(let i = 0;i<50 || i<logArray.length;i++){
-    console.log(i)
-    if(moment(logArray[i].createdAt).isBefore(thirtyDaysAgo)){
-      slicePoint = i;
-      break;
+  logArray.map((log,index)=>{
+    console.log(log.startedAt + log.createdAt + " " +index);
+    if(moment(log.startedAt).isAfter(thirtyDaysAgo)){
+      truncatedLogs.push(log)
     }
-  }*/
+  });
 
-  return logArray.slice(0,slicePoint);
+  //only show most recent 50 logs
+  truncatedLogs = truncatedLogs.slice(0,50);
+
+  return truncatedLogs;
 };
 
 
@@ -48,8 +50,8 @@ const getTruncatedLogs = () => {
 const AdminTime: FC<Props> = () => {
   const [visibleConfirmationModal, toggleDeleteVisibility] = useToggle(false);
   const [visibleNoteModal, toggleVisibilityNoteModal] = useToggle(false);
-  const [displayedLogs, setDisplayedLogs] = useState(false);
-  const logs = getTruncatedLogs();
+  const logs = useSelector(selectOrderedLogs, shallowEqual);
+  const [activeLogId, setActiveLogId] = useState(0);
   const [noteDisplay, setNoteDisplay] = useState('');
   const logsRequestStatus = useSelector(selectLogsStatus, shallowEqual);
   const volunteers = useSelector(selectVolunteers, shallowEqual);
@@ -62,30 +64,29 @@ const AdminTime: FC<Props> = () => {
   useEffect(() => {
     dispatch(loadVolunteers());
     dispatch(loadLogs());
-  },[]);
+  }, []);
 
   useEffect(() => {
-    if(!displayedLogs && logs[0]){
+    if (logs[0]) {
       const now = moment();
       const lastWeek = moment().subtract(1, 'week');
       const twoWeeksAgo = moment().subtract(2, 'weeks');
-      const groupedLogs = logs.reduce((acc, log) => {
-        if (moment(log.createdAt).isBetween(lastWeek, now)) {
+      const groupedLogs = truncateLogs(logs).reduce((acc, log) => {
+        if (moment(log.startedAt).isBetween(lastWeek, now)) {
           return { ...acc, thisWeek: [...acc.thisWeek, log] };
-        } if (moment(log.createdAt).isBetween(twoWeeksAgo, lastWeek)) {
+        } if (moment(log.startedAt).isBetween(twoWeeksAgo, lastWeek)) {
           return { ...acc, lastWeek: [...acc.lastWeek, log] };
         }
         return { ...acc, rest: [...acc.rest, log] };
       }, { thisWeek: [], lastWeek: [], rest: [] });
 
       setDateSeparatedLogs(groupedLogs);
-      setDisplayedLogs(true);
-    }    
-  });
+    }
+  },[logs]);
 
-  const onDelete = (id) => {
-    toggleDeleteVisibility;
-    dispatch(deleteLog(id));
+  const onDelete = () => {
+    toggleDeleteVisibility();
+    dispatch(deleteLog(activeLogId));
   }
 
   return (
@@ -93,16 +94,18 @@ const AdminTime: FC<Props> = () => {
       <ConfirmationModal
         isVisible={visibleConfirmationModal}
         onCancel={toggleDeleteVisibility}
-        onConfirm={toggleDeleteVisibility}
+        onConfirm={onDelete}
         title="Delete"
-        text="Are you sure you want to delete this time?"
+        text="Are you sure you want to delete this log?"
       />
       <ViewNoteModal
         isVisible={visibleNoteModal}
         onClose={toggleVisibilityNoteModal}
         note={noteDisplay}
       />
-      <Loader isVisible={logsRequestStatus.isFetching} />
+      {Platform.OS === 'android' &&
+        <Loader isVisible={logsRequestStatus.isFetching} />
+      }
 
       <CardSeparator title="This Week" />
       {
@@ -114,7 +117,8 @@ const AdminTime: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
-            onDelete={() => { onDelete(log.id) }}
+            startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
+            onDelete={() => { setActiveLogId(log.id);toggleDeleteVisibility() }}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
             navigationPage='AdminEditTime'
@@ -131,7 +135,8 @@ const AdminTime: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
-            onDelete={toggleDeleteVisibility}
+            startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
+            onDelete={()=>{setActiveLogId(log.id);toggleDeleteVisibility()}}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
             navigationPage='AdminEditTime'
@@ -148,7 +153,8 @@ const AdminTime: FC<Props> = () => {
             labels={[log.project || 'General', log.activity]}
             volunteer={volunteers[log.userId] ? volunteers[log.userId].name : 'Deleted User'}
             date={moment(log.startedAt).format('DD/MM/YY')}
-            onDelete={toggleDeleteVisibility}
+            startTime={moment(log.startedAt).format('YYYY-MM-DDTHH:mm:ss')}
+            onDelete={()=>{setActiveLogId(log.id);toggleDeleteVisibility()}}
             toggleVisibilityNoteModal={toggleVisibilityNoteModal}
             setNoteDisplay={setNoteDisplay}
             navigationPage='AdminEditTime'

@@ -76,6 +76,7 @@ const BadgeImages = {
 
 export const BadgeCard = (props) => {
 	const { image, text, title } = props.badge;
+	console.log('in the badgeCard');
 	const badgeimage = props.badge.img; //Fix: somehow destructing the image didn't work 
 	return (
 		<Card>

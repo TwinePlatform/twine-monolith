@@ -9,6 +9,8 @@ import Button from '../ButtonWithInlineLabel';
 import Dropdown from '../Dropdown';
 import { Forms } from '../enums';
 import SubmitButton from '../SubmitButton';
+import { AddVolunteerButton, VolunteerButton } from '../AddVolunteerButton';
+import { Button as B, Text } from 'native-base';
 import { User, GenderEnum } from '../../../../../../api/src/models';
 import { ErrorText } from '../../typography';
 
@@ -19,10 +21,11 @@ import { TextInput } from "react-native";
  * Types
  */
 type Props = {
-  action: 'create' | 'update';
+  action: 'create' | 'update' | 'add';
   onSubmit: (v: Partial<User>) => void;
   defaultValues?: Partial<User>;
   requestErrors: any;
+  from?: string;
 }
 
 type FormData = {
@@ -42,6 +45,27 @@ const Form = styled(F)`
   width: ${Forms.formWidth}
 `;
 
+const AddButton = styled(B)`
+  width: 100;
+`;
+
+const ButtonText = styled.Text`
+
+`;
+
+const AddVolButtonContainer = styled.View`
+  width: 100%;
+  alignItems: flex-end;
+`;
+
+const AddVolContainer = styled.View`
+  width: 100%;
+  flexWrap: wrap;
+  justifyContent: flex-start;
+  flexDirection: row;
+  marginTop: 10;
+`;
+
 
 /*
  * Helpers
@@ -57,10 +81,12 @@ const validationSchema = yup.object().shape({
     // regex: /^[a-zA-Z]{2,}\s?[a-zA-z]*['-]?[a-zA-Z]*['\- ]?([a-zA-Z]{1,})?/,
     // message: 'Name must not contain special characters' })
     .required('Name is required'),
-  email: yup.string()
+  email: yup
+    .string()
     .email('Email must be valid')
     .required('Email is required'),
-  phoneNumber: yup.string()
+  phoneNumber: yup
+    .string()
     .min(9, 'Phone number must be at least 9 digits')
     .max(20, 'Phone number cannot be longer than 20 digits'),
   // .matches({ regex: /^\+?[0-9 -]*$/, message: 'Phone number must be valid' }),
@@ -68,7 +94,13 @@ const validationSchema = yup.object().shape({
     .string()
     .min(4, 'Post code must be at least 4 letters')
     .max(10, 'Post code cannot be longer than 10 letters'),
-  // .matches({ regex: /^[a-z]{1,2}\d[a-z\d]?\s*\d[a-z]{2}$/i, message: 'Post code must be valid' })
+  gender: yup
+    .string()
+    .required('Gender is required'),
+  birthYear: yup
+    .number()
+    .required('Birth Year is required'),
+
 });
 
 // TODO: get from api
@@ -99,11 +131,12 @@ const mergeErrorMessages = (validationErrors, requestErrors) => {
 
   return errors;
 };
+
 /*
  * Component
  */
 const UserForm: FC<Props> = ({
-  action, onSubmit, defaultValues, requestErrors,
+  action, onSubmit, defaultValues, requestErrors, from
 }) => {
   // const {
   //   register, setValue, handleSubmit, errors: validationErrors, triggerValidation,
@@ -116,6 +149,17 @@ const UserForm: FC<Props> = ({
   //   setErrors(mergeErrorMessages(validationErrors, requestErrors));
   // }, [validationErrors, requestErrors]);
   const { name, email, phoneNumber, gender, birthYear, postCode } = defaultValues;
+  const [addVolArr, setAddVolArr] = useState([]);
+
+
+  const addVolunteer = (values) => {
+    setAddVolArr(addVolArr => [...addVolArr, values]);
+  }
+
+  const deleteVolunteer = (volunteerName) => {
+    const removed = addVolArr.filter(volunteer => volunteer.name != volunteerName);
+    setAddVolArr(removed);
+  }
 
   return (
 
@@ -126,12 +170,25 @@ const UserForm: FC<Props> = ({
         phoneNumber: phoneNumber,
         gender: gender,
         birthYear: birthYear,
-        postCode: postCode
+        postCode: postCode,
+        role: 'VOLUNTEER',
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        console.log(values);
-        onSubmit(values);
+        if (action === 'update') {
+          delete values.role;
+        }
+        if (addVolArr == []) {
+          onSubmit(values);
+        } else if (addVolArr != []) {
+          if (action != 'update') {
+            setAddVolArr(addVolArr => [...addVolArr, values]); //for animation
+          }
+          const lastState = [...addVolArr, values]
+          Promise.all(lastState.map(volunteer => {
+            onSubmit(volunteer);
+          }));
+        }
       }}>
 
       {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
@@ -164,7 +221,7 @@ const UserForm: FC<Props> = ({
           {/* //TODO - need to send password reset email after creation */}
 
           <Input
-            label="phoneNumber"
+            label="Phone Number"
             placeholder={"phoneNumber"}
             onChangeText={handleChange('phoneNumber')}
             onBlur={handleBlur('phoneNumber')}
@@ -196,7 +253,7 @@ const UserForm: FC<Props> = ({
           }
 
           <Input
-            label="postCode"
+            label="Post Code"
             placeholder={"postCode"}
             onChangeText={handleChange('postCode')}
             onBlur={handleBlur('postCode')}
@@ -205,6 +262,18 @@ const UserForm: FC<Props> = ({
           {errors.postCode &&
             <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.postCode}</TextInput>
           }
+
+          {from == 'admin' && <AddVolButtonContainer>
+            <AddVolunteerButton text="Add Another" onPress={() => addVolunteer(values)} />
+          </AddVolButtonContainer>}
+
+          <AddVolContainer>
+            {addVolArr !== [] && addVolArr.map(volunteer => {
+              return (
+                <VolunteerButton text={volunteer.name} onPress={() => deleteVolunteer(volunteer.name)} />
+              )
+            })}
+          </AddVolContainer>
 
           <SubmitButton text="SAVE" onPress={handleSubmit} />
 

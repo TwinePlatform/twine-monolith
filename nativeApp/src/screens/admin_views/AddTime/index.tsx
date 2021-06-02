@@ -14,6 +14,7 @@ import { selectActiveOrderedProjects, loadProjects } from '../../../redux/entiti
  * Types
  */
 type Props = {
+  navigationOptions: any;
 }
 
 /*
@@ -24,7 +25,7 @@ type Props = {
 /*
  * Component
  */
-const AddTime: FC<NavigationInjectedProps & Props> = () => {
+const AddTime: any = () => {
   // redux
   const dispatch = useDispatch();
 
@@ -39,6 +40,7 @@ const AddTime: FC<NavigationInjectedProps & Props> = () => {
     dispatch(loadProjects());
   }, []);
 
+
   return (
     <Page heading="Add Time">
       <TimeForm
@@ -46,6 +48,9 @@ const AddTime: FC<NavigationInjectedProps & Props> = () => {
         projects={projects}
         activities={activities}
         volunteers={volunteers}
+        selectedProject={projects[0]?projects[0].name:null}
+        selectedActivity={activities[0]?activities[0].name:null}
+        origin='addTime'
       />
     </Page>
   );

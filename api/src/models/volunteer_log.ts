@@ -139,7 +139,8 @@ export const VolunteerLogs: VolunteerLogCollection = {
         )
         .select(query.fields
           ? pick(query.fields, { ...ModelToColumn, ...optionalFields })
-          : ModelToColumn),
+          : ModelToColumn)
+        .orderBy('started_at', 'desc'),
       query
     );
   },
@@ -199,8 +200,6 @@ export const VolunteerLogs: VolunteerLogCollection = {
   },
 
   async update(client, log, changes) {
-    console.log('this are the changes');
-    console.log(changes);
     const preProcessChangeSet = compose(
       stripTablePrefix,
       transformForeignKeysToSubQueries(client, log.organisationId),

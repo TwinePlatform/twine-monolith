@@ -15,6 +15,8 @@ const config: DeepPartial<Config> = {
           'https://admin.twine-together.com',
           'https://visitor.twine-together.com',
           'https://data.twine-toghether.com',
+          'https://twine-admin-dashboard-staging.herokuapp.com',
+          'https://twine-admin-dashboard.herokuapp.com'
         ]),
       },
     },

@@ -1,5 +1,4 @@
 import _axios, { AxiosRequestConfig, Method } from 'axios';
-import { Api } from '../../../../api/src/api/v1/types/api';
 import qs from 'qs';
 
 const baseURL = process.env.REACT_APP_API_HOST_DOMAIN ?
@@ -15,7 +14,6 @@ export const axios = _axios.create({
 export const Roles = {
   get: () => axios.get('/users/me/roles'),
 };
-
 
 export const CbAdmins = {
   login: ({ email, password }: { email: string, password: string }) =>
@@ -44,7 +42,7 @@ export const CommunityBusinesses = {
   },
 
   get: (params?: Pick<AxiosRequestConfig, 'params'>) =>
-    axios.request<Api.CommunityBusinesses.Me.GET.Result>({ ...CommunityBusinesses.configs.get, params }),
+    axios.request({ ...CommunityBusinesses.configs.get, params }),
   getLogs: (params?: Pick<AxiosRequestConfig, 'params'>) =>
     axios.request({ ...CommunityBusinesses.configs.getLogs, params }),
   getVolunteerActivities: () =>
@@ -55,14 +53,14 @@ export const CommunityBusinesses = {
 
 export const Logs = {
   add: (values: any) => axios.post( `/community-businesses/me/volunteer-logs`, values),
-  update: (id: any, LogId: any, values: any) => axios.put(`/community-businesses/me/volunteer-logs/${id}/${LogId}`,values),
+  update: (userId: any, logId: any, values: any) => axios.put(`/community-businesses/me/volunteer-logs/${userId}/${logId}`,values),
   delete: (LogId: any) => axios.delete( `/community-businesses/me/volunteer-logs/${LogId}`)
 }
 
 export const LogNote = {
   get: (logID: string) =>
     axios.get("community-businesses/me/get-volunteer-logs/" + logID),
-  update: (note: string, LogId: any, activity: any, project: any, startedAt: any) => axios.put(`community-businesses/me/volunteer-logs-notes/$${LogId}`,
+  update: (note: string, LogId: any, activity: any, project: any, startedAt: any) => axios.put(`community-businesses/me/volunteer-logs-notes/${LogId}`,
       {
         activity: activity,
         startedAt: startedAt,
@@ -73,22 +71,41 @@ export const LogNote = {
 }
 
 export const Files = {
-  upload: (file: File, destination: string) => {
-    console.log("uploading " + file.name + "to /community-businesses/" + destination )
+  upload: async (file: File, orgID: number) => {
+    console.log("uploading " + file.name + " to /community-businesses/")
     const formData = new FormData();
     const csvFile = new File ([file],file.name,{type: "text/csv"})
 
-    formData.append('file', csvFile);
+    formData.append('csv', csvFile);
 
-    axios.post('upload/' + destination, formData, {
+    try{
+      const res = await axios.post('upload/CSVlogs/' + orgID, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
-        }
-    })
-  } 
+        }});
+      return {
+        state: "success",
+        data: res.data
+      }
+    }
+    catch(error){
+      return {
+        state: "error",
+        data: error
+      }
+    }
+  }
 }
 
 export const Project = {
   get: () => axios.get( '/community-businesses/me/volunteers/projects'),
   add: (name: string) => axios.post('/community-businesses/me/volunteers/projects',{name}),
+}
+
+export const Users = {
+  getMe: () => axios.get( '/users/me'),
+}
+
+export const Invite = {
+  byEmail: (email: any) => axios.post('/invite/email',{email}),
 }

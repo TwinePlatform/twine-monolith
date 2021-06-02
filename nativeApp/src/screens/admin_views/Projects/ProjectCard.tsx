@@ -7,6 +7,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { withNavigation, NavigationInjectedProps } from "react-navigation";
 import { CheckBox } from 'react-native-elements'
 import SubmitButton from "../../../lib/ui/CardWithButtons/NotificationButton";
+import ConfirmationModal from '../../../lib/ui/modals/ConfirmationModal';
 import { ColoursEnum } from "../../../lib/ui/colours";
 import CardWithButtons from "../../../lib/ui/CardWithButtons";
 import { FontsEnum, Heading2 as H2 } from "../../../lib/ui/typography";
@@ -108,12 +109,15 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
   const iconColour = getIconColor(buttonType, active);
   const orgIdArr = useSelector(selectCurrentUser);
 
+  const [sendModalVisible, setSendModalVisible] = useState(false);
+
   // TODO: error message on save/edit error
   const onSave = () => {
     dispatch(updateProject(id, value));
     toggle();
   };
 
+  const confirmationText = "Are you sure you want to send these reminders?";
   // const projects = useSelector(selectAllOrderedProjects, shallowEqual);
 
   // useEffect(() => {
@@ -160,8 +164,15 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
 
   const onSubmit = async () => {
 
-    // const token = await API.Users.getPush(orgIdArr.organisationId, parseInt(`${id}`))
-    const token = await API.Users.getPush(2, 1)
+    var token;
+    if (checkedExclusion == false) {
+      token = await API.Users.getPush(orgIdArr.organisationId, parseInt(`${id}`))
+    } else {
+      token = await API.Users.getPushOld(orgIdArr.organisationId, parseInt(`${id}`))
+    }
+
+    console.log(token);
+    // const token = await API.Users.getPush(2, 1)
 
     if (!Array.isArray(token.data) || !token.data.length) {
       Alert.alert(
@@ -199,7 +210,6 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
         )
       }
 
-      console.log(MsgArr);
       sendPushNotification(MsgArr);
     }
     else {
@@ -218,6 +228,13 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
     <CardWithButtons
       buttonConfig={getButtonConfig(buttonType, active, buttonConfigs)}
     >
+      <ConfirmationModal
+        isVisible={sendModalVisible}
+        onCancel={() => setSendModalVisible(false)}
+        onConfirm={() => { onSubmit(); setSendModalVisible(false) }}
+        title="Send Reminders"
+        text={confirmationText}
+      />
       <HeadingContainer>
         <MaterialIcons name="assignment" outline size={35} color={iconColour} />
         {active ? (
@@ -238,11 +255,11 @@ const ProjectCard: FC<NavigationInjectedProps & Props> = ({
         onPress={() => setChecked(currentBool => !currentBool)}
       />
       <CheckBox
-        title='Exclude volunteers who logged hours in the past week.'
+        title='Send reminder but exclude volunteers who have logged hours in the past 7 days'
         checked={checkedExclusion}
         onPress={() => setCheckedExclusion(currentBool => !currentBool)}
       />
-      <SubmitButton text="Send" onPress={(createTwoButtonAlert) => onSubmit()} />
+      <SubmitButton disabled={!checked} text="Send" onPress={() => setSendModalVisible(true)} />
 
 
       {deletedDate && <Description>{`Deleted: ${deletedDate}`}</Description>}
