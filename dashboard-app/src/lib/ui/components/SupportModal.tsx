@@ -25,7 +25,7 @@ const ModalContainer = styled.div`
     right: 5%;
     background-color: white;
     border-radius: 8px;
-    boxShadow: 2px 3px 6px #00000029;
+    box-shadow: 2px 3px 6px #00000029;
 `;
 
 const HeaderContainer = styled.div`
