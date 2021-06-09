@@ -29,7 +29,7 @@
     },
     "android": {
       "package": "com.powertochange.volunteerapp",
-      "versionCode": 14,
+      "versionCode": 15,
       "softwareKeyboardLayoutMode": "pan",
       "permissions": [],
       "googleServicesFile": "./google-services.json",
