@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import styled from 'styled-components';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
@@ -17,12 +17,19 @@ import {
   RedirectHttpErrorBoundary,
   RenderErrorBoundary
 } from '../../../lib/ui/components/Boundaries';
+import { PrimaryButton} from '../../../lib/ui/components/Buttons';
+import SupportModal from '../../../lib/ui/components/SupportModal';
+import {Fonts} from '../../../lib/ui/design_system';
 
 /*
  * Styles
  */
 const H1 = styled(Heading1)`
   margin-bottom: 3rem;
+`;
+
+const SupportIcon = styled.img`
+  height: ${Fonts.size.emphasis}
 `;
 
 /*
@@ -46,9 +53,11 @@ const ProjectTile: React.FC<{ stats: any }> = ({ stats }) => (
 
 const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
   const { loading, error, data } = useDashboardStatistics();
+  const [supportModalVisible, setSupportModalVisible] = useState(false);
 
   return (
     <Grid>
+      <SupportModal visible={supportModalVisible} closeFunction={()=>setSupportModalVisible(false)}/>
       <Row center="xs">
         <Col xs={6}>
           <H1>The Twine Volunteer Dashboard shows how volunteers help your organisation</H1>
@@ -114,6 +123,16 @@ const Dashboard: React.FunctionComponent<RouteComponentProps> = (props) => {
           </Col>
         </RedirectHttpErrorBoundary>
       </Row>
+      <PrimaryButton 
+          onClick={()=>{setSupportModalVisible(!supportModalVisible)}} 
+          style={{
+              position: 'fixed', 
+              bottom: 20, 
+              right: 30
+          }}
+      >
+        <SupportIcon src={require('../../../assets/support_icon.png')}/> Support
+      </PrimaryButton>
     </Grid>
   );
 };

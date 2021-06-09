@@ -28,7 +28,7 @@ export const AccessibilityButton = styled.button`
 export const PrimaryButton = styled(Button)`
   background-color: ${ColoursEnum.purple};
   transition: background-color ease 0.3s;
-  font-size: ${Fonts.size.body};
+  font-size: ${Fonts.size.emphasis};
 
   &:hover {
     background-color: ${rgba(ColoursEnum.purple, 0.8)};
