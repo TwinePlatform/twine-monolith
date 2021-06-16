@@ -3,7 +3,6 @@
     "name": "TWINE Volunteer App",
     "slug": "nativeApp",
     "privacy": "public",
-    "sdkVersion": "38.0.0",
     "platforms": [
       "ios",
       "android",

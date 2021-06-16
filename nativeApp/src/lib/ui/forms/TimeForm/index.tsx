@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Formik } from 'formik';
 import NetInfo from "@react-native-community/netinfo";
 import {TextInput } from "react-native";
@@ -120,6 +120,8 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
   const [minutes, setMinutes] = useState<number>(0);
   const [note, setNote] = useState('');
 
+  const [language, setLanguage] = useState("java");
+
   useEffect(()=>{
     if(origin === "editTime"){
       setVolunteer(editLog.volunteer);
@@ -176,6 +178,8 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
         userId: forUser == 'volunteer' ? userId : getIdFromName(volunteer),
         note
       };
+
+      console.log(values)
 
     if (origin != "editTime") {
         let {isConnected} = await NetInfo.fetch();
@@ -370,6 +374,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             onValueChange={project=>setProject(project)}
             onBlur={handleBlur('project')}
             value={project}
+            defaultValue={project}
           />
 
           {errors.project &&
@@ -384,6 +389,7 @@ const TimeForm: FC<Props & NavigationInjectedProps> = (props) => {
             selectedValue={activity}
             onValueChange={activity=>setActivity(activity)}
             value={activity}
+            defaultValue={activity}
           />
           {errors.activity &&
             <TextInput style={{ fontSize: 10, color: 'red' }}>{errors.activity}</TextInput>

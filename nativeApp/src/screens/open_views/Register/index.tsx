@@ -184,7 +184,9 @@ const Register: FC<Props> = (props) => {
 
   const registrationTypeDropdown = <Registration>
     <DropdownShort
-      options={formOptions} selectedValue={registrationType} onValueChange={value=>{setRegistrationType(value);setSubmitPressed(false)}}
+      options={formOptions} 
+      defaultValue={registrationType} 
+      onValueChange={value=>{setRegistrationType(value);setSubmitPressed(false)}}
     />
   </Registration>;
 
@@ -217,6 +219,7 @@ const Register: FC<Props> = (props) => {
             }
             catch (error) {
               console.log('registration failed');
+              console.log(error)
               setServerMsg(error.response.data.error.message);
             }
           }}>
@@ -295,7 +298,7 @@ const Register: FC<Props> = (props) => {
 
                 <DropdownNoLabel
                   options={regionOptions}
-                  selectedValue={region}
+                  defaultValue={""}
                   onValueChange={setRegion}
                   placeholder='Region'
                 />
@@ -450,7 +453,7 @@ const Register: FC<Props> = (props) => {
 
               <DropdownNoLabel
                 options={yearOptions}
-                selectedValue={userYearOfBirth}
+                defaultValue={""}
                 onValueChange={setUserYearOfBirth}
                 placeholder='Year of Birth (Optional)'
               />

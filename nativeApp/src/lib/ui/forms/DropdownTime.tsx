@@ -1,10 +1,8 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
-import { Item as I, Picker, Label as L } from 'native-base';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Item as I, Label as L } from 'native-base';
+import {Picker} from '@react-native-community/picker';
 import { Forms } from './enums';
-import { ColoursEnum } from '../colours';
-
 
 /*	
  * Types	
@@ -39,6 +37,7 @@ const Label = styled(L)`
 /*	
  * Component	
  */
+
 const DropdownTime: FC<Props> = (props) => {
     const {
         label, options, onValueChange, defaultValue, name, ...rest
@@ -46,35 +45,21 @@ const DropdownTime: FC<Props> = (props) => {
 
     const [value, setValue] = useState(defaultValue);
 
-    console.log(value)
-
     return (
         <Item picker>
             <Label>{label}</Label>
-            {
-                /*
-                 <Picker
-                mode="dropdown"
-                iosIcon={<MaterialIcons name="keyboard-arrow-down" />}
-                placeholder="Select"
-                placeholderStyle={{ color: ColoursEnum.grey }}
-                placeholderIconColor={ColoursEnum.grey}
-                //selectedValue={value}
-                value={value}
-                onValueChange={(val) => {
-                    onValueChange(val);
-                    setValue(val);
+            <Picker
+                selectedValue={value}
+                style={{height: 50, width: 200}}
+                onValueChange={itemValue => {
+                    onValueChange(itemValue)
+                    setValue(itemValue)
                 }}
-                {...rest}
             >
                 {options.map(time => (
                     <Picker.Item label={''+time} value={time} key={time} />
                 ))}
-
             </Picker>
-                */
-            }
-           
         </Item>
     );
 };

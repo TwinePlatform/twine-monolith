@@ -1,6 +1,6 @@
 import _axios, { AxiosRequestConfig, AxiosError } from "axios";
 import qs from "qs";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import getEnvVars from "../../environment"; // eslint-disable-line
 import { StorageValuesEnum } from "../authentication/types";
 import { Api } from "../../../api/src/api/v1/types/api";
