@@ -43,6 +43,10 @@ const getEnvVars = () => {
   if (__DEV__) {
     return ENV.dev;
   }
+  else
+    return ENV.prod;
+
+  //simplify to sort a problem with the Constants.manifest file
 
   try {
     const env = Constants.manifest.releaseChannel
@@ -53,7 +57,7 @@ const getEnvVars = () => {
     }
   } catch(e) {
     // fallback if no release channel is set
-    return ENV.staging;
+    return ENV.prod;
   }
 };
 

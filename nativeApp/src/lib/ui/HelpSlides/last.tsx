@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import { Text, View, ImageBackground, StyleSheet, Dimensions, Linking} from "react-native";
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationInjectedProps } from 'react-navigation';
 import SubmitButton from '../../../lib/ui/forms/SubmitButton';
 import { FontsEnum } from '../../../lib/ui/typography';

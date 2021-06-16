@@ -1,19 +1,17 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
-import { Item as I, Picker as P } from 'native-base';
-import { MaterialIcons, AntDesign } from '@expo/vector-icons';
-import { Forms } from './enums';
-import { ColoursEnum } from '../colours';
-
+import { Item as I} from 'native-base';
+import {Picker as P} from '@react-native-community/picker';
 
 /*
  * Types
  */
 type Props = {
-  ref: (ref: unknown) => void;
+  ref?: (ref: unknown) => void;
   options: { id: number; name: string }[];
   onValueChange: any;
   defaultValue?: string | number;
+  placeholder?: string;
 }
 
 /*
@@ -29,7 +27,8 @@ const Item = styled(I)`
 `;
 
 const Picker = styled(P)`
-  width: 300px;
+  width: 100%;
+  height: 35px;
   paddingLeft: 0;
   marginRight: 0;
 `;
@@ -38,31 +37,26 @@ const Picker = styled(P)`
  * Component
  */
 const DropdownNoLabel: FC<Props> = (props) => {
-  const { options, onValueChange, defaultValue, ...rest
+  const { options, onValueChange, defaultValue, placeholder, ...rest
   } = props;
 
-  const [value, setValue] = useState();
+  const [value, setValue] = useState(defaultValue);
+
   return (
     <Item picker>
-      <Picker
-        mode="dropdown"
-        // iosIcon={<MaterialIcons name="keyboard-arrow-down" />}
-        iosIcon={<AntDesign style={{ fontSize: 10 }} name="caretdown" />}
-        placeholder="ORANISATION"
-        placeholderStyle={{ color: ColoursEnum.grey }}
-        placeholderIconColor={ColoursEnum.grey}
-        selectedValue={value}
-        onValueChange={(val) => {
-          onValueChange(val);
-          setValue(val);
-        }}
-        {...rest}
-      >
-        {options.map(({ id, name }) => (
-          <Picker.Item label={name} value={name} key={id} />
-        ))}
-
-      </Picker>
+        <Picker
+            selectedValue={value}
+            style={{color: value===""? 'lightgrey' : 'black'}}
+            onValueChange={val => {	
+				  	    onValueChange(val);
+					      setValue(val);
+				    }}
+        >
+            <Picker.Item label={placeholder} value={""} key={"place"}/>
+            {options.map(({ id, name }) => (
+                <Picker.Item label={name} value={name} key={id} />
+            ))}
+        </Picker>
     </Item >
   );
 };

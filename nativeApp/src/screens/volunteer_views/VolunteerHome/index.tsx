@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import {View} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 import {NavigationInjectedProps } from 'react-navigation';
 import API from '../../../api';
