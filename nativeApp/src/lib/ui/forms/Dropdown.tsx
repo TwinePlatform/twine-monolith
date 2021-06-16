@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components/native';
 import { Item as I, Picker, Label as L } from 'native-base';
+//import {Picker} from '@react-native-community/picker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Forms } from './enums';
 import { ColoursEnum } from '../colours';
@@ -36,6 +37,11 @@ const Label = styled(L)`
   width: ${Forms.labelWidth};	
 `;
 
+const MyPicker = styled.Picker`
+`;
+
+
+
 /*	
  * Component	
  */
@@ -49,6 +55,7 @@ const Dropdown: FC<Props> = (props) => {
     return (
         <Item picker>
             <Label>{label}</Label>
+            {/*
             <Picker
                 mode="dropdown"
                 iosIcon={<MaterialIcons name="keyboard-arrow-down" />}
@@ -67,6 +74,26 @@ const Dropdown: FC<Props> = (props) => {
                 ))}
 
             </Picker>
+            */}
+            <MyPicker
+                mode="dropdown"
+                iosIcon={<MaterialIcons name="keyboard-arrow-down" />}
+                placeholder="Select"
+                placeholderStyle={{ color: ColoursEnum.grey }}
+                placeholderIconColor={ColoursEnum.grey}
+                selectedValue={value}
+                selectedValue={value}
+                onValueChange={(val) => {
+                    onValueChange(val);
+                    setValue(val);
+                }}
+                {...rest}
+            >
+                {options.map(({ id, name }) => (
+                    <Picker.Item label={name} value={name} key={id} />
+                ))}
+            </MyPicker>
+            
         </Item>
     );
 };

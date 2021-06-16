@@ -51,7 +51,9 @@ const DropdownTime: FC<Props> = (props) => {
     return (
         <Item picker>
             <Label>{label}</Label>
-            <Picker
+            {
+                /*
+                 <Picker
                 mode="dropdown"
                 iosIcon={<MaterialIcons name="keyboard-arrow-down" />}
                 placeholder="Select"
@@ -70,6 +72,9 @@ const DropdownTime: FC<Props> = (props) => {
                 ))}
 
             </Picker>
+                */
+            }
+           
         </Item>
     );
 };

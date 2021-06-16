@@ -1,7 +1,7 @@
 import React, { useState, FC, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
-import { Picker, TextInput, View, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import {Picker, TextInput, View, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { Input as I } from 'native-base';
 import DropdownShort from '../../../lib/ui/forms/DropdownShort';
 import DropdownNoLabel from '../../../lib/ui/forms/DropdownNoLabel';
