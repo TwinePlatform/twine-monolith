@@ -8,7 +8,7 @@
       "android",
       "web"
     ],
-    "version": "1.1.1",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -28,7 +28,7 @@
     },
     "android": {
       "package": "com.powertochange.volunteerapp",
-      "versionCode": 17,
+      "versionCode": 18,
       "softwareKeyboardLayoutMode": "pan",
       "permissions": [],
       "googleServicesFile": "./google-services.json",
