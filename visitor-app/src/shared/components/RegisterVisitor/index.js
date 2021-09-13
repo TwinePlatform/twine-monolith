@@ -11,6 +11,7 @@ import { assocPath } from 'ramda';
 import { Form as FM, FormSection } from '../form/base';
 import LabelledInput from '../form/LabelledInput';
 import LabelledSelect from '../form/LabelledSelect';
+import StyledLabelledCheckbox from '../form/StyledLabelledCheckbox';
 import { VISITOR_NAME_INVALID } from '../../../cb_admin/constants/error_text';
 import { status } from '../../../util';
 import { SubmitButton, DisabledButton } from './buttons';
@@ -102,6 +103,12 @@ class SignupForm extends React.Component {
                 confirmAge={confirmAge}
                 cbName={cbName}
                 error={errors.ageCheck}
+              />
+              <StyledLabelledCheckbox
+                id="smsCheckboxInput"
+                name="isSMSConsentGranted"
+                label="I consent to being contacted by SMS"
+                data-testid="smsConsent"
               />
             </div>
             {
