@@ -118,6 +118,7 @@ export default class VisitorDetailsPage extends React.Component {
 
     Visitors.get({}, params)
       .then((res) => {
+        console.log(res)
         const csvData = res.data.result.map(x =>
           pipe(
             pick([
