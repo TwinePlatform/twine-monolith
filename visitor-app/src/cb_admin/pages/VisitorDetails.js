@@ -118,7 +118,6 @@ export default class VisitorDetailsPage extends React.Component {
 
     Visitors.get({}, params)
       .then((res) => {
-        console.log(res)
         const csvData = res.data.result.map(x =>
           pipe(
             pick([
@@ -127,6 +126,8 @@ export default class VisitorDetailsPage extends React.Component {
               'gender',
               'birthYear',
               'email',
+              'phoneNumber',
+              'postCode',
               'createdAt',
               'isEmailConsentGranted',
               'isSMSConsentGranted',
@@ -143,6 +144,8 @@ export default class VisitorDetailsPage extends React.Component {
             gender: 'Gender',
             birthYear: 'Year of Birth',
             email: 'Email',
+            phoneNumber: 'Phone number',
+            postCode: 'Postcode',
             createdAtDate: 'Register Date',
             createdAtTime: 'Register Time',
             isEmailConsentGranted: 'Email Opt-in',
