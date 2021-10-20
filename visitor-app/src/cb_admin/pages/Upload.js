@@ -20,6 +20,23 @@ const DownloadButton = styled('button')`
   border: solid 1px black;
 `
 
+const LineContainer = styled('div')`
+    display: flex;
+`
+
+const Circle = styled('span')`
+`
+
+const Line = styled('span')`
+`
+
+const Niceline = () => 
+<LineContainer>
+    <Circle/>
+    <Line/>
+    <Circle/>
+</LineContainer>
+
 const UploadTab = () => {
     const [filename, setFilename] = useState("Please select the file that you wish to upload.")
     const [uploadedFile, setUploadedFile] = useState(new File([""], "filename"));
@@ -174,6 +191,7 @@ const Upload = () => {
         :
             <DownloadTab/>
         }
+        <Niceline/>
         <img alt="twine logo" src={require('../assets/icons/logo_image.svg')}/>
         </div>
     )

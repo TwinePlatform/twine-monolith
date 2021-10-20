@@ -25,6 +25,12 @@ export const axios = create({
         : evolve({ result: evolve({ birthYear: BirthYear.toDisplay }) }, data)),
 });
 
+export const axios2 = _axios.create({
+  baseURL,
+  withCredentials: true,
+  paramsSerializer: (params) => qs.stringify(params, { encode: false }),
+});
+
 export const Activities = {
   categories: () => axios.get('/visit_activity_categories'),
 
@@ -220,10 +226,10 @@ export const Files = {
 
     formData.append('csv', csvFile);
 
+    console.log(formData)
+
     try{
-      const res = await axios.post('upload/CSVvisits/' + orgID, formData, {
-        headers: {..._axios.defaults.headers}
-      });
+      const res = await axios2.post('upload/CSVvisits/' + orgID, formData);
       return {
         state: "success",
         data: res.data
