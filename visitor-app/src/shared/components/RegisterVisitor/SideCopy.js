@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Paragraph, Heading2, Link } from '../text/base';
+import { Paragraph, Heading2 } from '../text/base';
 import { FormSection } from '../form/base';
 import StyledLabelledCheckbox from '../form/StyledLabelledCheckbox';
 import Copy from './copy.json';
@@ -43,7 +43,7 @@ const SideCopy = ({ cbName, forMinor }) => (
       data-testid="emailConsent"
     />
     <Text>
-      If you would like more information please see our <Link to="http://twine-together.com/privacy-policy/">Data Protection Policy</Link>
+      If you would like more information please see our <a href="http://twine-together.com/privacy-policy/">Data Protection Policy</a>
     </Text>
   </FormSection>
 );

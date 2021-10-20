@@ -1,4 +1,5 @@
 /*
+import { isSMSConsentGranted } from "./v1/invite/schema";
  * Twine API interface
  */
 import _axios, { create } from 'axios';
@@ -69,13 +70,12 @@ export const Visitors = {
       email,
       phoneNumber,
       isEmailConsentGranted,
-      isSmsConsentGranted,
+      isSMSConsentGranted,
       organisationId,
       isAnonymous,
       postCode,
     } = {},
-  ) =>
-    axios.post(
+  ) => axios.post(
       '/users/register/visitors',
       filter(Boolean, {
         name,
@@ -84,7 +84,7 @@ export const Visitors = {
         email,
         phoneNumber,
         isEmailConsentGranted,
-        isSmsConsentGranted,
+        isSMSConsentGranted,
         organisationId,
         isAnonymous,
         postCode,
