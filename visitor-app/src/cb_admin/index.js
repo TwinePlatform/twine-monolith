@@ -8,6 +8,7 @@ import VisitorDetails from './pages/VisitorDetails';
 import VisitsData from './pages/VisitsData';
 import Settings from './pages/Settings';
 import Feedback from './pages/Feedback';
+import Upload from './pages/Upload';
 import AnonUser from './pages/AnonUser';
 import RegisterU13 from './pages/RegisterU13';
 import ErrorPage from '../shared/pages/Error';
@@ -32,6 +33,7 @@ export default class CbAdminRoutes extends React.Component {
         <Route exact path="/admin/visitors/:id" component={Visitor} />
         <Route exact path="/admin/settings" component={Settings} />
         <Route exact path="/admin/feedback" component={Feedback} />
+        <Route exact path="/admin/upload" component={Upload} />
         <Route exact path="/admin" component={Dashboard} />
         <Route render={() => <ErrorPage code={404} />} />
       </Switch>)

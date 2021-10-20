@@ -58,6 +58,7 @@ const tilesCopy = [
   { title: 'Feedback', caption: 'See how your visitors feel about your business', link: '/admin/feedback' },
   { title: 'Create Anon Visitor', caption: 'Create a new anonymous account', link: '/admin/visitors/anonymous' },
   { title: 'Under 13 Sign Up', caption: 'For visitors who are under 13 years of age', link: '/admin/visitors/u-13' },
+  { title: 'Upload Data', caption: 'Upload your CSV data', link: '/admin/upload' },
 ];
 
 export default class Dashboard extends React.Component {

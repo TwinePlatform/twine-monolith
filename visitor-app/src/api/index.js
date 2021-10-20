@@ -212,3 +212,29 @@ export const ErrorUtils = {
 export const ResponseUtils = {
   getResponse: (obj, maybeArray = []) => pathOr(null, ['data', 'result', ...maybeArray], obj),
 };
+
+export const Files = {
+  upload: async (file, orgID) => {
+    const formData = new FormData();
+    const csvFile = new File ([file],file.name,{type: "text/csv"})
+
+    formData.append('csv', csvFile);
+
+    try{
+      const res = await axios.post('upload/CSVvisits/' + orgID, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }});
+      return {
+        state: "success",
+        data: res.data
+      }
+    }
+    catch(error){
+      return {
+        state: "error",
+        data: error
+      }
+    }
+  }
+}
