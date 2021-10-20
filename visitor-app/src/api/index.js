@@ -223,7 +223,7 @@ export const Files = {
     try{
       const res = await axios.post('upload/CSVvisits/' + orgID, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'form-data'
         }});
       return {
         state: "success",

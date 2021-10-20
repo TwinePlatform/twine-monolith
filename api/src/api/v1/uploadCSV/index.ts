@@ -218,7 +218,7 @@ const routes: [
                     },
                 },
                 payload: {
-                    allow: 'multipart/form-data',
+                    allow: 'form-data',
                     maxBytes: 1024 * 1024 * 100,
                     timeout: false,
                     multipart: {
