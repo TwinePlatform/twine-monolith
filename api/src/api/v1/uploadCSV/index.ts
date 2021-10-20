@@ -218,7 +218,7 @@ const routes: [
                     },
                 },
                 payload: {
-                    allow: 'form-data',
+                    allow: 'multipart/form-data',
                     maxBytes: 1024 * 1024 * 100,
                     timeout: false,
                     multipart: {
@@ -235,11 +235,10 @@ const routes: [
 
                 const csvfile = request.payload;
 
-                const splited = csvfile.csv.split('$$$');
 
 
                 //first table in the csv file 
-                const arr1 = await neatCsv(splited[0]);
+                const arr1 = await neatCsv(csvfile);
 
                 let ResultArr: any = [];
                 var errorArr: any = ["Error: incomplete table"];
