@@ -233,12 +233,13 @@ const routes: [
                     server: { app: { knex, config } },
                 } = request;
 
-                const csvFile = request.payload;
+                const csvfile = request.payload;
 
-                console.log(csvFile)
+                const splited = csvfile.csv.split('$$$');
+
 
                 //first table in the csv file 
-                const arr1 = await neatCsv(csvFile);
+                const arr1 = await neatCsv(splited[0]);
 
                 console.log(arr1)
 
@@ -248,7 +249,7 @@ const routes: [
 
                 //return success or helpful error message
 
-                /*
+                
 
                 let ResultArr: any = [];
                 var errorArr: any = ["Error: incomplete table"];
@@ -397,9 +398,6 @@ const routes: [
 
                     return ResultArr;
                 }
-                */
-
-                return {data: "success"};
             }
         }
     ]

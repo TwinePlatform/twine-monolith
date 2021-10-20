@@ -4,30 +4,70 @@ import { CommunityBusiness, Files } from '../../api';
 import NavHeader from '../../shared/components/NavHeader';
 
 const Paragraph = styled('p')`
-  text-align: left;
   margin: 1rem 0rem;
 `;
 
-const SelectButton = styled('button')`
-  background-color: white;
-  color: #707070;
-  border: solid 1px black;
+const TabOption = styled.p`
+    display: inline;
+    margin: 0rem 2rem;
+    text-decoration: ${props => (props.active ? 
+        'underline 5px #ffbf00' 
+    : 
+        'none')};
+`
+
+const UploadContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6rem;
+`
+
+const SelectButton = styled.button`
+    background: #F8F8F8 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000029;
+    border: 1px solid #707070;
+    border-radius: 5px;
+    &:hover{
+        opacity: 0.75;
+        cursor: pointer;
+    }
 `
 
 const DownloadButton = styled('button')`
-  background-color: grey;
-  color: white;
-  border: solid 1px black;
+    background: #707070 0% 0% no-repeat padding-box;
+    color: white;
+    box-shadow: 0px 3px 6px #00000029;
+    border: 1px solid #707070;
+    border-radius: 5px;
+    &:hover{
+        opacity: 0.75;
+        cursor: pointer;
+    }
 `
 
 const LineContainer = styled('div')`
     display: flex;
+    margin-top: 2px;
 `
 
 const Circle = styled('span')`
+    height: 7px;
+    width: 7px;
+    background-color: #ffbf00;
+    border-radius: 50%;
+    margin-top: -2px;
 `
 
 const Line = styled('span')`
+    width: 100%;
+    height: 2px;
+    background-color: #ffbf00;
+`
+
+const TwineLogo = styled('img')`
+    margin-left: 47%;
+    width: 6%;
 `
 
 const Niceline = () => 
@@ -56,7 +96,8 @@ const UploadTab = () => {
         input.value = "";
         }
 
-    setFilename("Please select the file that you wish to upload.");
+        setFilename("Please select the file that you wish to upload.");
+        setUploadState("unselected");
     }
 
   const handleUpload = (e) => {
@@ -80,7 +121,6 @@ const UploadTab = () => {
       }
       if(result.state === "error"){
         setUploadState("error");
-        reset();
         setErrorText(result.data.response.data.error.message);
         if(result.data.response.status === 404)
             setErrorText("Couldn't reach the server.");
@@ -137,7 +177,7 @@ display =
       style={{height: '100px', width: '100px'}}
   />
   <Paragraph>{errorText}</Paragraph>
-  <button onClick={()=>setUploadState("unselected")}>try again</button>
+  <button onClick={reset}>try again</button>
 </>
 
 if(uploadState === "success")
@@ -153,19 +193,21 @@ display =
 </>
 
 
-    return (<div>
+    return (<UploadContainer>
         <Paragraph>{filename}</Paragraph>
             {display}
-        </div>
+        </UploadContainer>
     )
 }
 
 const DownloadTab = () => {
-    return (<div>
+    return (<UploadContainer>
             <Paragraph>Download the template for uploading your past visits</Paragraph>
             <img alt="download template" src={require('../assets/icons/downloadbutton.png')}/>
-            <DownloadButton>Download</DownloadButton>
-        </div>
+            <a href={"/downloads/past_visits_template.csv"} download>
+                <DownloadButton>Download</DownloadButton>
+            </a>
+        </UploadContainer>
     )
 }
     
@@ -183,16 +225,22 @@ const Upload = () => {
           centerContent="Upload Data"
         />
         <div>
-            <p onClick={()=>setSelected("download")}>download</p>
-            <p onClick={()=>setSelected("upload")}>upload</p>
+            <TabOption 
+                onClick={()=>setSelected("download")}
+                active={selected === "download"}
+            >Download</TabOption>
+            <TabOption 
+                onClick={()=>setSelected("upload")}
+                active={selected === "upload"}
+            >Upload</TabOption>
+            <Niceline/>
         </div>
         {selected === "upload"?
             <UploadTab/>
         :
             <DownloadTab/>
         }
-        <Niceline/>
-        <img alt="twine logo" src={require('../assets/icons/logo_image.svg')}/>
+        <TwineLogo alt="twine logo" src={require('../assets/icons/logo_image.svg')}/>
         </div>
     )
 }
