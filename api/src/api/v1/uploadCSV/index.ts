@@ -236,10 +236,12 @@ const routes: [
 
                 const tables: string[] = csv.split('$$$');
 
-                console.log(tables[1])
+                console.log(tables[0]);
+                const reformatedTable = tables[1].split(",,,,,,,").join("").split(",,,,,,").join("");
+                console.log(reformatedTable);
 
                 const visitorTable = await neatCsv(tables[0]);
-                const visitsTable = await neatCsv(tables[1].split(",,,,,,,").join("").split(",,,,,,").join(","));
+                const visitsTable = await neatCsv(reformatedTable);
 
                 console.log(visitorTable);
                 console.log(visitsTable);
