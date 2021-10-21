@@ -66,7 +66,9 @@ const Line = styled('span')`
 `
 
 const TwineLogo = styled('img')`
-    margin-left: 47%;
+    position: absolute;
+    left: 47%;
+    bottom: 10%;
     width: 6%;
 `
 

@@ -36,7 +36,7 @@ const config: DeepPartial<Config> = {
             session_cookie: {
                 options: {
                     cookieOptions: {
-                        isSecure: false,
+                        isSecure: true,
                     },
                     cache: {
                         cache: 'session', // Must match one of the caches

@@ -25,7 +25,8 @@ export const axios = create({
         : evolve({ result: evolve({ birthYear: BirthYear.toDisplay }) }, data)),
 });
 
-export const axios2 = _axios.create({
+//I don't know why, but sending form data requires this kind of axios
+export const axiosFormData = _axios.create({
   baseURL,
   withCredentials: true,
   paramsSerializer: (params) => qs.stringify(params, { encode: false }),
@@ -226,10 +227,9 @@ export const Files = {
 
     formData.append('csv', csvFile);
 
-    console.log(formData)
-
     try{
-      const res = await axios2.post('upload/CSVvisits/' + orgID, formData);
+      const res = await axiosFormData.post('upload/CSVvisits/' + orgID, formData);
+      console.log(res)
       return {
         state: "success",
         data: res.data
