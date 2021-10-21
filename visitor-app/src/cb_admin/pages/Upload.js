@@ -207,7 +207,7 @@ const DownloadTab = () => {
                 <DownloadButton>Download</DownloadButton>
             </a>
             <Paragraph>
-                1. Please ensure that you are filling in the table for visits and logs
+                1. Please ensure that you are filling in the table for visitors and visits
             </Paragraph>
             <Paragraph>
                 2. Even if you are only filling in one section of the sheet, leave the other columns intact with empty rows
