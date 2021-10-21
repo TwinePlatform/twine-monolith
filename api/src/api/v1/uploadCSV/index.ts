@@ -239,7 +239,7 @@ const routes: [
                 console.log(tables[1])
 
                 const visitorTable = await neatCsv(tables[0]);
-                const visitsTable = await neatCsv(tables[1]);
+                const visitsTable = await neatCsv(tables[1].replaceAll(",,,,,,,",""));
 
                 console.log(visitorTable);
                 console.log(visitsTable);
