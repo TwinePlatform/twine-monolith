@@ -234,18 +234,18 @@ const routes: [
 
                 const {csv} = request.payload;
 
-                const tables = csv.split('$$$');
+                const tables: string[] = csv.split('$$$');
 
                 console.log(tables[1])
 
                 const visitorTable = await neatCsv(tables[0]);
-                const visitsTable = await neatCsv(tables[1].replaceAll(",,,,,,,",""));
+                const visitsTable = await neatCsv(tables[1].split(",,,,,,,").join(""));
 
                 console.log(visitorTable);
                 console.log(visitsTable);
 
                 //validate the tables                
-                let errors: [any?] = [];
+                let errors: any[] = [];
 
                 if (visitorTable.length >= 1) {
                     //loop through the first table and check if everything is properly populated
@@ -294,7 +294,7 @@ const routes: [
                     .getOne(knex, { where: { id: parseInt(organisationId), deletedAt: null } });
                 const role = RoleEnum.VOLUNTEER;
 
-                let results: [any?] = [];
+                let results: any[] = [];
 
                 //if the first table is filled 
                 if (visitorTable.length >= 1) {                   
