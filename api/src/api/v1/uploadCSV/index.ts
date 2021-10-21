@@ -1,10 +1,11 @@
 import * as Boom from '@hapi/boom';
-import { Users } from '../../../models';
+import { Users, Visitors } from '../../../models';
 import { Credentials as StandardCredentials } from '../../../auth/strategies/standard';
 import { Api } from '../types/api';
 import { Serialisers } from '../serialisers';
 import { any } from '@hapi/joi';
 import { userId } from '../schema/request';
+import Roles from '../../../models/role';
 import { RoleEnum } from '../../../models/types';
 import { VolunteerLogs, CommunityBusinesses, Volunteers } from '../../../models';
 import Knex = require('knex');
@@ -236,163 +237,116 @@ const routes: [
 
                 const tables: string[] = csv.split('$$$');
 
-                console.log(tables[0]);
-                const reformatedTable = tables[1].split(",,,,,,,").join("").split(",,,,,,").join("").replace("\n","");
-                console.log(reformatedTable);
+                //reformat the second table to account for the difference in column number
+                const reformatedTable = tables[1].split(",,,,,,,").join("").split(",,,,,,").join("").replace("\r\n","");
 
                 const visitorTable = await neatCsv(tables[0]);
                 const visitsTable = await neatCsv(reformatedTable);
 
-                console.log(visitorTable);
-                console.log(visitsTable);
+                //check if the first row of the table is empty
+                if(!visitorTable[0]['Visitor name'])
+                    visitorTable.length = 0;
+
+                if(!visitsTable[0]['Visitor name'])
+                    visitsTable.length = 0;
 
                 //validate the tables                
                 let errors: any[] = [];
 
                 if (visitorTable.length >= 1) {
-                    //loop through the first table and check if everything is properly populated
                     visitorTable.forEach((row: any, index: number) => {
                         for (const column in row) {
                             // - check if field is populated 
                             if (!row[column]) {
-                                const errorCell = { 
-                                    error: "no value in this cell",
-                                    tableRowNumber: index + 1,
-                                    totalRowNumber: index + 1,
-                                    column 
-                                };
-                                errors.push(errorCell);
+                                const errorMessage = `no value in row ${index + 2} ${column}`;
+                                errors.push(errorMessage);
                             }
                         }
                     });
                 }
                 
-                visitsTable.forEach((row: any, index: number) => {
-                    for (const column in row) {
-                        // - check if field is populated 
-                        if (!row[column] && column != 'empty column') {
-                            const errorCell = {
-                                error: "no value in this cell",
-                                tableRowNumber: index + 1,
-                                totalRowNumber: index + 1 + visitorTable.length,
-                                column
-                            };
-                            errors.push(errorCell);
+                if (visitsTable.length >= 1) {
+                    visitsTable.forEach((row: any, index: number) => {
+                        for (const column in row) {
+                            // - check if field is populated 
+                            if (!row[column]) {
+                                const errorMessage = `no value in row ${index + 2 + visitorTable.length} ${column}`;
+                                errors.push(errorMessage);
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
-                if (errors.length > 0)
-                    return h.response(errors).code(400);                
+                if (errors.length > 0){
+                    const errorMessages = "Detected errors in the csv:\n" + errors.join("\n");
+                    return Boom.badData(errorMessages);
+                }
 
-                //register the visitors
-
-                //log the visits
-
-                //return success or helpful error message
-
-                // variables needed to register volunteers 
                 const communityBusiness = await CommunityBusinesses
                     .getOne(knex, { where: { id: parseInt(organisationId), deletedAt: null } });
-                const role = RoleEnum.VOLUNTEER;
 
                 let results: any[] = [];
 
-                //if the first table is filled 
-                if (visitorTable.length >= 1) {                   
-                        let i = 0;
+                //register new visitors
+                for(const visitor of visitorTable){
+                    const name = visitor['Visitor name'];
 
-                        //check if user is already registred
-                        for (i = 0; i <= visitorTable.length - 1; i++) {
-                            const email = visitorTable[i]['Email Address'];
+                    if (await Visitors.exists(knex, { where: { name } })) {
+                        return Boom.conflict('It appears ' + name + ' is already registered.');
+                    }
 
-                            if (await Users.exists(knex, { where: { email } })) {
-                                return Boom.conflict('It appears this ' + email + ' is already registered.');
-                            }
+                    const visitorInfo = {
+                        organisationId: organisationId,
+                        name,
+                        email: visitor['Email address'],
+                        isEmailConsentGranted: (visitor['Email consent'].toLowerCase() == 'true'),
+                        phoneNumber: visitor['Phone number'] ?? 'N/A',
+                        isSMSConsentGranted: (visitor['SMS consent'].toLowerCase() == 'true'),
+                        postCode: visitor['Postcode'],
+                        birthYear: visitor['Birth year'],
+                        gender: visitor['Gender'] ?? 'prefer not to say',
+                        isAnonymous: false
+                    };
+
+                    try {
+                        const visitor = Visitors.create(visitorInfo);
+                        const visitorWithRole = await Visitors.addWithRole(knex, communityBusiness, visitor);
+                        results.push(Serialisers.visitors.noSecrets(visitorWithRole));
+                    } 
+                    catch (error) {
+                        if (error.message === 'Invalid volunteer admin code') {
+                            return Boom.unauthorized(error.message);
                         }
 
-                        //registers volunteers 
-                        for (i = 0; i <= visitorTable.length - 1; i++) {
-                            const email = visitorTable[i]['Email Address'];
-
-                            let data = {};
-                            data = {
-                                organisationId: organisationId,
-                                role: role,
-                                name: visitorTable[i]['Volunteer Name'],
-                                gender: visitorTable[i]['Gender'] ?? 'prefer not to say',
-                                email: email,
-                                postCode: visitorTable[i]['Postcode'],
-                                password: visitorTable[i]['Password'],
-                                birthYear: visitorTable[i]['Birth year'],
-                                phoneNumber: visitorTable[i]['Phone number'] ?? 'N/A',
-                            };
-
-                            try {
-                                const volunteer = await Volunteers.addWithRole(knex, data, role, communityBusiness);
-                                results.push(Serialisers.volunteers.noSecrets(volunteer));
-                                // return Serialisers.volunteers.noSecrets(volunteer);
-
-                            } catch (error) {
-
-                                if (error.message === 'Invalid volunteer admin code') {
-                                    return Boom.unauthorized(error.message);
-                                }
-
-                                return error;
-                            }
-                        }
+                        return error;
+                    }
                 }
 
-                //if table is incomplete return row and column that's incomplete
-                if (visitsTable.length > 1)  {
-                    let i = 0;
-                    for (i = 0; i <= visitsTable.length - 1; i++) {
-                        const email = visitsTable[i]['Volunteer Email'];
-                        const user_Id = await Users.getWithEmail(knex, email);
+                //add visit logs
+                for(const visit of visitsTable){
+                    const visitor = await Visitors.getOne(knex, { where: { name: visit['Visitor name'] } });
 
-                        if (user_Id.length < 1) {
-                            return 'check if user has registered in the organisation';
-                        }
+                    const isRegisteredVisitorAtCb = await Roles.userHasAtCb(knex, {
+                        userId: visitor.id,
+                        organisationId,
+                        role: RoleEnum.VISITOR,
+                    });
 
-                        //check if project and activity exist, if no add them 
-                        const activityExists = await CommunityBusinesses.activityExists(knex, visitsTable[i]['Activity']);
-                        const projectExists = await CommunityBusinesses.projectExists(knex, visitsTable[i]['Project'], organisationId);
-
-                        if (!activityExists) {
-                            const activityInsert = await CommunityBusinesses.addVolunteerActivity(knex, visitsTable[i]['Activity']);
-                            results.push([{ "Activity inserted": visitsTable[i]['Activity'] }]);
-                        }
-
-                        if (!projectExists) {
-                            const projectInsert = await CommunityBusinesses.addVolunteerProject(knex, visitsTable[i]['Project'], organisationId);
-                            results.push(results.push([{ "Project inserted": visitsTable[i]['Project'] }]));
-                        }
-
-                        // add logs using 
-                        try {
-                            const log = await VolunteerLogs.add(knex, {
-                                "userId": user_Id[0].user_account_id,
-                                "organisationId": parseInt(organisationId),
-                                "project": visitsTable[i]['Project'],
-                                "activity": visitsTable[i]['Activity'],
-                                "duration": {
-                                    "hours": visitsTable[i]['Duration (hours)'],
-                                    "minutes": visitsTable[i]['Duration (minutes)']
-                                },
-                                "startedAt": visitsTable[i]['Date'],
-                            });
-
-                            results.push(log);
-
-
-                        } catch (error) {
-                            if (error.code === '23502') { // Violation of null constraint implies invalid activity
-                                return Boom.badRequest('Invalid activity or project');
-                            }
-                            throw error;
-                        }
+                    if (!isRegisteredVisitorAtCb) {
+                        return Boom.forbidden('Visitor is not registered at Community Business');
                     }
+
+                    const activity = await CommunityBusinesses.getVisitActivityByName(
+                        knex,
+                        communityBusiness,
+                        visit['Visit activity name']
+                    );
+
+                    if (!activity) {
+                        return Boom.badRequest('Activity not associated to Community Business');
+                    }
+
+                    results.push(await CommunityBusinesses.addVisitLog(knex, activity, visitor, 'sign_in_with_name'));
                 }
 
                 return results;

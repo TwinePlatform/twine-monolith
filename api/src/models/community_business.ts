@@ -414,6 +414,35 @@ export const CommunityBusinesses: CommunityBusinessCollection = {
     return visitActivity || null;
   },
 
+  async getVisitActivityByName(client, cb, name) {
+    const [visitActivity] = await client('visit_activity')
+      .leftOuterJoin(
+        'visit_activity_category',
+        'visit_activity_category.visit_activity_category_id',
+        'visit_activity.visit_activity_category_id')
+      .select({
+        id: 'visit_activity_id',
+        name: 'visit_activity_name',
+        category: 'visit_activity_category.visit_activity_category_name',
+        monday: 'monday',
+        tuesday: 'tuesday',
+        wednesday: 'wednesday',
+        thursday: 'thursday',
+        friday: 'friday',
+        saturday: 'saturday',
+        sunday: 'sunday',
+        createdAt: 'visit_activity.created_at',
+        modifiedAt: 'visit_activity.modified_at',
+      })
+      .where({
+        visit_activity_name: name,
+        'visit_activity.deleted_at': null,
+        organisation_id: cb.id,
+      });
+
+    return visitActivity || null;
+  },
+
   async addVisitActivity(client, visitActivity, cb) {
     const [res] = await client('visit_activity')
       .insert({

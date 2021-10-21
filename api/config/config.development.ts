@@ -9,7 +9,7 @@ const config: DeepPartial<Config> = {
     web: {
         // address: envOr('HOST_ADDRESS', 'localhost','172.20.10.2'),
         // address: envOr('HOST_ADDRESS', '172.20.10.2'),
-        address: envOr('HOST_ADDRESS', '192.168.1.91'),
+        address: envOr('HOST_ADDRESS', 'localhost'),
         port: 4000,
         routes: {
             cors: { // Local dev servers for:

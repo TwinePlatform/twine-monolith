@@ -73,11 +73,11 @@ const TwineLogo = styled('img')`
 `
 
 const Niceline = () => 
-<LineContainer>
-    <Circle/>
-    <Line/>
-    <Circle/>
-</LineContainer>
+    <LineContainer>
+        <Circle/>
+        <Line/>
+        <Circle/>
+    </LineContainer>
 
 const UploadTab = () => {
     const [filename, setFilename] = useState("Please select the file that you wish to upload.")
@@ -102,108 +102,105 @@ const UploadTab = () => {
         setUploadState("unselected");
     }
 
-  const handleUpload = (e) => {
+    const handleUpload = (e) => {
         setUploadedFile(e.target.files[0]);
         setFilename(e.target.files[0].name);
         setUploadState("selected");
-  }
+    }
 
-  const confirmUpload = async () => {
-      setUploadState("validating");
+    const confirmUpload = async () => {
+          setUploadState("validating");
 
-      const {data: {result: {id}}} = await CommunityBusiness.get();
+        const {data: {result: {id}}} = await CommunityBusiness.get();
 
-      const result = await Files.upload(uploadedFile, id);
-        
-      console.log(result);
+        const result = await Files.upload(uploadedFile, id);
       
-      if(result.state === "success"){
-        setUploadState("success");
-        setFilename("")
-      }
-      if(result.state === "error"){
-        setUploadState("error");
-        setErrorText(result.data.response.data.error.message);
-        if(result.data.response.status === 404)
-            setErrorText("Couldn't reach the server.");
-        if(result.data.response.data.error.statusCode === 500)
-            setErrorText("A server error occured. This is most likely due to one of the visits having the same time as a previous visit.");
-      }
-  }
+        if(result.state === "success"){
+            setUploadState("success");
+            setFilename("")
+        }
+        if(result.state === "error"){
+            setUploadState("error");
+            const errorText = result.data.response.data.error.message.replaceAll("\n","\n")
+            setErrorText(errorText);
+            if(result.data.response.status === 404)
+                setErrorText("Couldn't reach the server.");
+            if(result.data.response.data.error.statusCode === 500)
+                setErrorText("A server error occured. This is most likely due to one of the visits having the same time as a previous visit.");
+        }
+    }
 
 
-let display = <>
-<img
-              src={require('../assets/icons/uploadbutton.png')}
-              alt="upload the completed template"
-              style={{height: '100px', width: '100px'}}
-          />
-<SelectButton onClick={select}>Select</SelectButton>
-<input id="file-input" type="file" name="name" style={{display: 'none'}}
-    onChange={e=>handleUpload(e)}
-/>
-</>;
+    let display = <>
+        <img
+            src={require('../assets/icons/uploadbutton.png')}
+            alt="upload the completed template"
+            style={{height: '100px', width: '100px'}}
+        />
+        <SelectButton onClick={select}>Select</SelectButton>
+        <input id="file-input" type="file" name="name" style={{display: 'none'}}
+            onChange={e=>handleUpload(e)}
+        />
+    </>;
 
-if(uploadState === "selected")
-display = 
-<>
-      <img
-              src={require('../assets/icons/uploadbutton.png')}
-              alt="upload the completed template"
-              style={{height: '100px', width: '100px'}}
-          />
-        <SelectButton
-          onClick={confirmUpload}
-        >
-          Upload
-        </SelectButton>
-  </>
+    if(uploadState === "selected")
+        display = <>
+            <img
+                src={require('../assets/icons/uploadbutton.png')}
+                alt="upload the completed template"
+                style={{height: '100px', width: '100px'}}
+            />
+            <SelectButton
+                onClick={confirmUpload}
+            >
+                Upload
+            </SelectButton>
+        </>
 
-if(uploadState === "validating")
-display =
-<>
-  <img
-      src={require('../assets/icons/uploadbutton.png')}
-      alt="upload the completed template"
-      style={{height: '100px', width: '100px'}}
-  />
-  <Paragraph>Processing and checking the csv for errors...</Paragraph>
-</>
+    if(uploadState === "validating")
+        display = <>
+            <img
+                src={require('../assets/icons/uploadbutton.png')}
+                alt="upload the completed template"
+                style={{height: '100px', width: '100px'}}
+            />
+            <Paragraph>Processing and checking the csv for errors...</Paragraph>
+        </>
 
-if(uploadState === "error")
-display = 
-<>
-  <img
-      src={require('../assets/icons/uploadbutton.png')}
-      alt="upload the completed template"
-      style={{height: '100px', width: '100px'}}
-  />
-  <Paragraph>{errorText}</Paragraph>
-  <button onClick={reset}>try again</button>
-</>
+    if(uploadState === "error")
+        display = <>
+            <img
+                src={require('../assets/icons/uploadbutton.png')}
+                alt="upload the completed template"
+                style={{height: '100px', width: '100px'}}
+            />
+            <Paragraph>{errorText}</Paragraph>
+            <button onClick={reset}>try again</button>
+        </>
 
-if(uploadState === "success")
-display = 
-<>
-<img
-              src={require('../assets/icons/upload_complete.png')}
-              alt="completed upload"
-              style={{height: '100px', width: '100px'}}
-          />
-<Paragraph>Well done, your data has been uploaded</Paragraph>
-<SelectButton onClick={()=>{setUploadState("unselected");reset()}}>upload more past data</SelectButton>
-</>
+    if(uploadState === "success")
+        display = <>
+            <img
+                src={require('../assets/icons/upload_complete.png')}
+                alt="completed upload"
+                style={{height: '100px', width: '100px'}}
+            />
+            <Paragraph>Your data has been uploaded</Paragraph>
+            <SelectButton onClick={()=>{setUploadState("unselected");reset()}}>upload more past data</SelectButton>
+        </>
 
 
-    return (<UploadContainer>
-        <Paragraph>{filename}</Paragraph>
+    return (
+        <UploadContainer>
+            <Paragraph>{filename}</Paragraph>
             {display}
         </UploadContainer>
     )
 }
 
 const DownloadTab = () => {
-    return (<UploadContainer>
+    return (
+        <UploadContainer>
             <Paragraph>Download the template for uploading your past visits</Paragraph>
             <img alt="download template" src={require('../assets/icons/downloadbutton.png')}/>
             <a href={"/downloads/past_visits_template.csv"} download>
@@ -216,8 +213,6 @@ const DownloadTab = () => {
 
 const Upload = () => {
     const [selected, setSelected] = useState("upload");
-
-
 
     return (
         <div>

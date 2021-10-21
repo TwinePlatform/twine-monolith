@@ -355,6 +355,7 @@ export type CommunityBusinessCollection = Collection<CommunityBusiness> & {
   ) => Promise<LinkedFeedback[]>;
   getVisitActivities: (k: Knex, c: CommunityBusiness, d?: Weekday) => Promise<VisitActivity[]>;
   getVisitActivityById: (k: Knex, c: CommunityBusiness, id: Int) => Promise<Maybe<VisitActivity>>;
+  getVisitActivityByName: (k: Knex, c: CommunityBusiness, name: string) => Promise<Maybe<VisitActivity>>;
   addVisitActivity: (k: Knex, v: Partial<VisitActivity>, c: Partial<CommunityBusiness>)
     => Promise<Maybe<VisitActivity>>;
   addVolunteerActivity: (k: Knex, a: object) => any;
