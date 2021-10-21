@@ -206,13 +206,25 @@ const DownloadTab = () => {
             <a href={"/downloads/past_visits_template.csv"} download>
                 <DownloadButton>Download</DownloadButton>
             </a>
+            <Paragraph>
+                1. Please ensure that you are filling in the table for visits and logs
+            </Paragraph>
+            <Paragraph>
+                2. Even if you are only filling in one section of the sheet, leave the other columns intact with empty rows
+            </Paragraph>
+            <Paragraph>
+                3. Please keep the dividing $$$ as symbols
+            </Paragraph>
+            <Paragraph>
+                4. When you're ready, select the upload tab above and select the correct file
+            </Paragraph>
         </UploadContainer>
     )
 }
     
 
 const Upload = () => {
-    const [selected, setSelected] = useState("upload");
+    const [selected, setSelected] = useState("download");
 
     return (
         <div>
