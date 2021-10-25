@@ -30,7 +30,7 @@
     "@types/redux-actions": "^2.6.1",
     "@types/redux-logger": "^3.0.7",
     "@types/styled-components": "^4.1.19",
-    "axios": "^0.19.0",
+    "axios": "^0.21.2",
     "expo": "^41.0.0",
     "formik": "^2.1.4",
     "fuse.js": "^6.0.0",
