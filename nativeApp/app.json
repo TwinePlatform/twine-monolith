@@ -3,13 +3,12 @@
     "name": "TWINE Volunteer App",
     "slug": "nativeApp",
     "privacy": "public",
-    "sdkVersion": "38.0.0",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.1.1",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -29,7 +28,7 @@
     },
     "android": {
       "package": "com.powertochange.volunteerapp",
-      "versionCode": 14,
+      "versionCode": 18,
       "softwareKeyboardLayoutMode": "pan",
       "permissions": [],
       "googleServicesFile": "./google-services.json",

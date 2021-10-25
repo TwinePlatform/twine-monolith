@@ -8,14 +8,11 @@ import moment from 'moment';
 
 //import _DateTimePicker from 'react-native-modal-datetime-picker';
 import _DateTimePicker from '@react-native-community/datetimepicker';
-import RNDateTimePicker from '@react-native-community/datetimepicker';
 
 
 import { Forms } from '../enums';
 import { ColoursEnum } from '../../colours';
 import useToggle from '../../../hooks/useToggle';
-import { getDateWithCurrentTime } from './util';
-import { TouchableNativeFeedback } from 'react-native-gesture-handler';
 
 /*
  * Types

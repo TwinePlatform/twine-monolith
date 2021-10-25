@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect} from 'react';
 import {Linking} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styled from 'styled-components/native';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
 import {useSelector, useDispatch, shallowEqual } from 'react-redux';
@@ -78,11 +78,11 @@ const Login: FC<Props> = (props) => {
   const {modalOpen} = useSelector(selectModalStatus,shallowEqual);
 
   const onSubmit = async () => {
-    try {
 
+    try {
       //       const data = await API.Authentication.login({ email, password });
       //       await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.data.token);
-      
+
       const { data } = await API.Authentication.login({ email, password });
       await AsyncStorage.setItem(StorageValuesEnum.USER_TOKEN, data.token);
       await AsyncStorage.setItem(StorageValuesEnum.USER_ID, data.userId.toString());

@@ -1,4 +1,5 @@
 /*
+import { isSMSConsentGranted } from "./v1/invite/schema";
  * Twine API interface
  */
 import _axios, { create } from 'axios';
@@ -22,6 +23,13 @@ export const axios = create({
       : Array.isArray(data.result)
         ? evolve({ result: map(evolve({ birthYear: BirthYear.toDisplay })) }, data)
         : evolve({ result: evolve({ birthYear: BirthYear.toDisplay }) }, data)),
+});
+
+//I don't know why, but sending form data requires this kind of axios
+export const axiosFormData = _axios.create({
+  baseURL,
+  withCredentials: true,
+  paramsSerializer: (params) => qs.stringify(params, { encode: false }),
 });
 
 export const Activities = {
@@ -69,13 +77,12 @@ export const Visitors = {
       email,
       phoneNumber,
       isEmailConsentGranted,
-      isSmsConsentGranted,
+      isSMSConsentGranted,
       organisationId,
       isAnonymous,
       postCode,
     } = {},
-  ) =>
-    axios.post(
+  ) => axios.post(
       '/users/register/visitors',
       filter(Boolean, {
         name,
@@ -84,7 +91,7 @@ export const Visitors = {
         email,
         phoneNumber,
         isEmailConsentGranted,
-        isSmsConsentGranted,
+        isSMSConsentGranted,
         organisationId,
         isAnonymous,
         postCode,
@@ -212,3 +219,27 @@ export const ErrorUtils = {
 export const ResponseUtils = {
   getResponse: (obj, maybeArray = []) => pathOr(null, ['data', 'result', ...maybeArray], obj),
 };
+
+export const Files = {
+  upload: async (file, orgID) => {
+    const formData = new FormData();
+    const csvFile = new File ([file],file.name,{type: "text/csv"})
+
+    formData.append('csv', csvFile);
+
+    try{
+      const res = await axiosFormData.post('upload/CSVvisits/' + orgID, formData);
+      console.log(res)
+      return {
+        state: "success",
+        data: res.data
+      }
+    }
+    catch(error){
+      return {
+        state: "error",
+        data: error
+      }
+    }
+  }
+}
