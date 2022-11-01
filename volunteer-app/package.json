@@ -20,7 +20,7 @@
     "ionic-plugin-keyboard": "~2.2.1"
   },
   "devDependencies": {
-    "@ionic/v1-toolkit": "1.0.8",
+    "@ionic/v1-toolkit": "3.2.20",
     "angular-mocks": "^1.4.3",
     "eslint": "^5.16.0",
     "jest": "^24.7.1"
