@@ -5,7 +5,7 @@
   "dependencies": {
     "angular": "^1.4.3",
     "cordova-android": "7.0.0",
-    "cordova-browser": "5.0.4",
+    "cordova-browser": "6.0.0",
     "cordova-ios": "4.4.0",
     "cordova-plugin-add-swift-support": "~1.7.2",
     "cordova-plugin-compat": "^1.2.0",
